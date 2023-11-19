@@ -1,46 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877D210A13;
-	Sun, 19 Nov 2023 15:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB5413FEA;
+	Sun, 19 Nov 2023 16:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D9TIrUEM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VjzyiIUC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700408774; x=1731944774;
+  t=1700410475; x=1731946475;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=302Aflj3ws0Hxs0S8EhbF+tblRc/7wupiTjgvvQ0sxo=;
-  b=D9TIrUEMD07J81Ao/nk+sij1SN+zy4OHp8BwoxrtDnX1BkC4mBqtfMMH
-   JKlv0oHhUVvO9ZiFnjuHkdU9Ykj/l5lJ4pps+/IVx1Pfo+vwqIqHvDcJq
-   b+WKX7fTaxMfNBslZyJ09us1g0j7CnEVyJ+45oROHEPJsKHlI5wZ9yfPO
-   jWrfJHyF7NpsrcHpijqvI2QdDwXk7k9GTGeZ0z9wPFNkzvFFiGkUCpsml
-   Eo4GciEUTm6jHYz/sNKYz7+lECm28mFqLyutg20eUjCCN3JuXSEhOha4L
-   uRcSAMEdt3kgQ5iXOoiejBMwQbCsLMRkbc6keNshtZpidCpYUuqOeOj64
+  bh=vOWSJJLttvNSlQq1NM1W57poEmhFiXEfXLcrmWvNL4k=;
+  b=VjzyiIUCTDdhg6Y9wZDfE1o40/uhID5YNU6fMttsY7tEBvLCxKrJ/GY0
+   ePmU/BewvIG2qtlz0FlPs5c8E72Z/Wqn7SJiKRKL5Rj1l8AjFsB8le3WS
+   FF2YC/7nfqdWwhI5YG7NODKDOrjZ8uhbUgxzhE34OtyoJfm/On256EQtU
+   TaOjwDPxRD8ymCCVrY+3LilfRqSvcgiWPoAd/MZJF7dTiVlggkf9Irr6m
+   rknD+G8FSJ1Rsw4T8BFo26zEpVnpds63P6VDTkxn9aNAASjgMgvuN/Tqw
+   KmWKO4fQ/mQofr8xgJmvnWTn6aQkM8bJ4YOJ/B2rLoxMpkW+e2el670cQ
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="10168465"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="4616285"
 X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
-   d="scan'208";a="10168465"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 07:46:13 -0800
+   d="scan'208";a="4616285"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 08:14:34 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="800924797"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="856783533"
 X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
-   d="scan'208";a="800924797"
+   d="scan'208";a="856783533"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 19 Nov 2023 07:46:11 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Nov 2023 08:14:32 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r4jzt-0005FD-09;
-	Sun, 19 Nov 2023 15:46:09 +0000
-Date: Sun, 19 Nov 2023 23:45:52 +0800
+	id 1r4kRK-0005Gu-2A;
+	Sun, 19 Nov 2023 16:14:30 +0000
+Date: Mon, 20 Nov 2023 00:14:18 +0800
 From: kernel test robot <lkp@intel.com>
 To: Hector Martin <marcan@marcan.st>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/070-audio 69/100] sound/soc/apple/macaudio.c:198:6:
- warning: no previous prototype for function 'macaudio_vlimit_unlock'
-Message-ID: <202311192331.yeJphl26-lkp@intel.com>
+Subject: [asahilinux:bits/020-dart 35/40] drivers/iommu/apple-dart.c:779:16:
+ warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka
+ 'unsigned int') changes value from 18446744073709551615 to 4294967295
+Message-ID: <202311200000.oP0nHoZN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,166 +51,133 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   1c71b1fa2c491cc29c94d29f1a450dba39f27557
-commit: 4a448b9f1c264f3e73a32e569b519d3b0054ad30 [69/100] macaudio: speaker volume safety interlocks
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231119/202311192331.yeJphl26-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux bits/020-dart
+head:   29d9d098a7ff41f82efd8eb40f24f29e5dd6b2fe
+commit: e53d630a41ea20440f6af6417371b2de7d91bdc9 [35/40] iommu: apple-dart: Support specifying the DMA aperture in the DT
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231120/202311200000.oP0nHoZN-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311192331.yeJphl26-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200000.oP0nHoZN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311192331.yeJphl26-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311200000.oP0nHoZN-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> sound/soc/apple/macaudio.c:198:6: warning: no previous prototype for function 'macaudio_vlimit_unlock' [-Wmissing-prototypes]
-   void macaudio_vlimit_unlock(struct macaudio_snd_data *ma, bool unlock)
-        ^
-   sound/soc/apple/macaudio.c:198:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void macaudio_vlimit_unlock(struct macaudio_snd_data *ma, bool unlock)
-   ^
-   static 
->> sound/soc/apple/macaudio.c:220:6: warning: no previous prototype for function 'macaudio_vlimit_update' [-Wmissing-prototypes]
-   void macaudio_vlimit_update(struct macaudio_snd_data *ma)
-        ^
-   sound/soc/apple/macaudio.c:220:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void macaudio_vlimit_update(struct macaudio_snd_data *ma)
-   ^
-   static 
-   sound/soc/apple/macaudio.c:1317:5: warning: no previous prototype for function 'macaudio_sss_info' [-Wmissing-prototypes]
-   int macaudio_sss_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_info *uinfo)
-       ^
-   sound/soc/apple/macaudio.c:1317:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int macaudio_sss_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_info *uinfo)
-   ^
-   static 
-   sound/soc/apple/macaudio.c:1327:5: warning: no previous prototype for function 'macaudio_sss_get' [-Wmissing-prototypes]
-   int macaudio_sss_get(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *uvalue)
-       ^
-   sound/soc/apple/macaudio.c:1327:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int macaudio_sss_get(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *uvalue)
-   ^
-   static 
->> sound/soc/apple/macaudio.c:1342:5: warning: no previous prototype for function 'macaudio_slk_info' [-Wmissing-prototypes]
-   int macaudio_slk_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_info *uinfo)
-       ^
-   sound/soc/apple/macaudio.c:1342:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int macaudio_slk_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_info *uinfo)
-   ^
-   static 
->> sound/soc/apple/macaudio.c:1352:5: warning: no previous prototype for function 'macaudio_slk_put' [-Wmissing-prototypes]
-   int macaudio_slk_put(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *uvalue)
-       ^
-   sound/soc/apple/macaudio.c:1352:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int macaudio_slk_put(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *uvalue)
-   ^
-   static 
->> sound/soc/apple/macaudio.c:1384:5: warning: no previous prototype for function 'macaudio_slk_lock' [-Wmissing-prototypes]
-   int macaudio_slk_lock(struct snd_kcontrol *kcontrol, struct snd_ctl_file *owner)
-       ^
-   sound/soc/apple/macaudio.c:1384:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int macaudio_slk_lock(struct snd_kcontrol *kcontrol, struct snd_ctl_file *owner)
-   ^
-   static 
->> sound/soc/apple/macaudio.c:1403:6: warning: no previous prototype for function 'macaudio_slk_unlock' [-Wmissing-prototypes]
-   void macaudio_slk_unlock(struct snd_kcontrol *kcontrol)
-        ^
-   sound/soc/apple/macaudio.c:1403:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void macaudio_slk_unlock(struct snd_kcontrol *kcontrol)
-   ^
-   static 
-   8 warnings generated.
+>> drivers/iommu/apple-dart.c:779:16: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+                                           dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
+                                                   ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   drivers/iommu/apple-dart.c:1345:18: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+           dart->dma_max = DMA_BIT_MASK(dart->ias);
+                         ~ ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   2 warnings generated.
 
 
-vim +/macaudio_vlimit_unlock +198 sound/soc/apple/macaudio.c
+vim +779 drivers/iommu/apple-dart.c
 
-   197	
- > 198	void macaudio_vlimit_unlock(struct macaudio_snd_data *ma, bool unlock)
-   199	{
-   200		int i, ret, max;
-   201	
-   202		for (i = 0; i < ARRAY_SIZE(ma->cfg->limits); i++) {
-   203			const struct macaudio_limit_cfg *limit = &ma->cfg->limits[i];
-   204	
-   205			if (!limit->match)
-   206				break;
-   207	
-   208			if (unlock)
-   209				max = limit->max_unlimited;
-   210			else
-   211				max = limit->max_limited;
-   212	
-   213			ret = snd_soc_limit_volume(&ma->card, limit->match, max);
-   214			if (ret < 0)
-   215				dev_err(ma->card.dev, "Failed to %slock volume %s: %d\n",
-   216					unlock ? "un" : "", limit->match, ret);
-   217		}
-   218	}
-   219	
- > 220	void macaudio_vlimit_update(struct macaudio_snd_data *ma)
-   221	{
-   222		int i;
-   223		bool unlock = true;
-   224		struct snd_kcontrol *kctl;
-   225		const char *reason;
-   226	
-   227		/* Do nothing if there are no limits configured */
-   228		if (!ma->cfg->limits[0].match)
-   229			return;
-   230	
-   231		/* Check that someone is holding the main lock */
-   232		if (!ma->speaker_lock_owner) {
-   233			reason = "Main control not locked";
-   234			unlock = false;
-   235		}
-   236	
-   237		/* Check that the control has been pinged within the timeout */
-   238		if (ma->speaker_lock_remain <= 0) {
-   239			reason = "Lock timeout";
-   240			unlock = false;
-   241		}
-   242	
-   243		/* Check that *every* limited control is locked by the same owner */
-   244		list_for_each_entry(kctl, &ma->card.snd_card->controls, list) {
-   245			bool is_limit = false;
-   246	
-   247			for (i = 0; i < ARRAY_SIZE(ma->cfg->limits); i++) {
-   248				const struct macaudio_limit_cfg *limit = &ma->cfg->limits[i];
-   249				if (!limit->match)
-   250					break;
-   251	
-   252				is_limit = snd_soc_control_matches(kctl, limit->match);
-   253				if (is_limit)
-   254					break;
-   255			}
-   256	
-   257			if (!is_limit)
-   258				continue;
-   259	
-   260			for (i = 0; i < kctl->count; i++) {
-   261				if (kctl->vd[i].owner != ma->speaker_lock_owner) {
-   262					reason = "Not all child controls locked by the same process";
-   263					unlock = false;
-   264				}
-   265			}
-   266		}
-   267	
-   268	
-   269		if (unlock != ma->speaker_volume_unlocked) {
-   270			if (unlock) {
-   271				dev_info(ma->card.dev, "Speaker volumes unlocked\n");
-   272			} else  {
-   273				dev_info(ma->card.dev, "Speaker volumes locked: %s\n", reason);
-   274				ma->speaker_volume_was_locked = true;
-   275			}
-   276	
-   277			macaudio_vlimit_unlock(ma, unlock);
-   278			ma->speaker_volume_unlocked = unlock;
-   279		}
-   280	}
-   281	
+   721	
+   722	static int apple_dart_finalize_domain(struct iommu_domain *domain,
+   723					      struct device *dev,
+   724					      struct apple_dart_master_cfg *cfg)
+   725	{
+   726		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
+   727		struct apple_dart *dart = cfg->stream_maps[0].dart;
+   728		struct io_pgtable_cfg pgtbl_cfg;
+   729		dma_addr_t dma_max = dart->dma_max;
+   730		u32 ias = min_t(u32, dart->ias, fls64(dma_max));
+   731		int ret = 0;
+   732		int i, j;
+   733	
+   734		mutex_lock(&dart_domain->init_lock);
+   735	
+   736		if (dart_domain->finalized)
+   737			goto done;
+   738	
+   739		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
+   740			dart_domain->stream_maps[i].dart = cfg->stream_maps[i].dart;
+   741			for (j = 0; j < BITS_TO_LONGS(dart->num_streams); j++)
+   742				atomic_long_set(&dart_domain->stream_maps[i].sidmap[j],
+   743						cfg->stream_maps[i].sidmap[j]);
+   744		}
+   745	
+   746		pgtbl_cfg = (struct io_pgtable_cfg){
+   747			.pgsize_bitmap = dart->pgsize,
+   748			.ias = ias,
+   749			.oas = dart->oas,
+   750			.coherent_walk = 1,
+   751			.iommu_dev = dart->dev,
+   752		};
+   753	
+   754		if (dart->locked) {
+   755			unsigned long *sidmap;
+   756			int sid;
+   757			u32 ttbr;
+   758	
+   759			/* Locked DARTs can only have a single stream bound */
+   760			sidmap = cfg->stream_maps[0].sidmap;
+   761			sid = find_first_bit(sidmap, dart->num_streams);
+   762	
+   763			WARN_ON((sid < 0) || bitmap_weight(sidmap, dart->num_streams) > 1);
+   764			ttbr = readl(dart->regs + DART_TTBR(dart, sid, 0));
+   765	
+   766			WARN_ON(!(ttbr & dart->hw->ttbr_valid));
+   767	
+   768			/* If the DART is locked, we need to keep the translation level count. */
+   769			if (dart->hw->tcr_4level && dart->ias > 36) {
+   770				if (readl(dart->regs + DART_TCR(dart, sid)) & dart->hw->tcr_4level) {
+   771					if (ias < 37) {
+   772						dev_info(dart->dev, "Expanded to ias=37 due to lock\n");
+   773						pgtbl_cfg.ias = 37;
+   774					}
+   775				} else if (ias > 36) {
+   776					dev_info(dart->dev, "Limited to ias=36 due to lock\n");
+   777					pgtbl_cfg.ias = 36;
+   778					if (dart->dma_min == 0 && dma_max == DMA_BIT_MASK(dart->ias)) {
+ > 779						dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
+   780					} else if ((dart->dma_min ^ dma_max) & ~DMA_BIT_MASK(36)) {
+   781						dev_err(dart->dev,
+   782							"Invalid DMA range for locked 3-level PT\n");
+   783						ret = -ENOMEM;
+   784						goto done;
+   785					}
+   786				}
+   787			}
+   788		}
+   789	
+   790		dart_domain->pgtbl_ops =
+   791			alloc_io_pgtable_ops(dart->hw->fmt, &pgtbl_cfg, domain);
+   792		if (!dart_domain->pgtbl_ops) {
+   793			ret = -ENOMEM;
+   794			goto done;
+   795		}
+   796	
+   797		if (pgtbl_cfg.pgsize_bitmap == SZ_4K)
+   798			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 32));
+   799		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 3)
+   800			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 36));
+   801		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 4)
+   802			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 47));
+   803	
+   804		domain->pgsize_bitmap = pgtbl_cfg.pgsize_bitmap;
+   805		domain->geometry.aperture_start = dart->dma_min;
+   806		domain->geometry.aperture_end = dma_max;
+   807		domain->geometry.force_aperture = true;
+   808	
+   809		dart_domain->finalized = true;
+   810	
+   811		ret = apple_dart_setup_resv_locked(domain, dev, dart->pgsize);
+   812	done:
+   813		mutex_unlock(&dart_domain->init_lock);
+   814		return ret;
+   815	}
+   816	
 
 -- 
 0-DAY CI Kernel Test Service
