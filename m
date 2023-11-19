@@ -1,180 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA761847;
-	Sun, 19 Nov 2023 03:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398A34A21
+	for <llvm@lists.linux.dev>; Sun, 19 Nov 2023 03:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crKG24SE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700363662; x=1731899662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DgMR+20joI22QFpxuYG34MFkzxuJ+eU5dAVuggNsAkY=;
-  b=crKG24SEVzDB+/qpn5UkJtaCvz4M5b+dCf1WRzbgH/97u50JW2nzuMR2
-   OsiyuOcCJqNzgEKS7AzwKzQUzoQm5dN2FmgRCakBDYJATQjlVWC39UQl0
-   O+WjvD0TTEcmq6wZwUePSt61/FoKDnFL8BkLoEj67fJgmUla1hTxflQro
-   0it5PAlXhVj/JDPWqnCgUUGK5DpHc74ShAz7iAqoMTAIXKkJkhbsaqp4W
-   om2CW063g7wFvgC1mfE8i5jsOx1+jwrA5bVPjkPiY1/tk2oYMR+JiIQ1/
-   kmW07znCra8rmfHDNFj8/dRKLsgP1N56aEksIrEjn/TZ8DEGcxXyK29Fu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="370812190"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="370812190"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 19:14:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="800823006"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="800823006"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 18 Nov 2023 19:14:14 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r4YGC-0004aP-0K;
-	Sun, 19 Nov 2023 03:14:12 +0000
-Date: Sun, 19 Nov 2023 11:13:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kefeng Wang <wangkefeng.wang@huawei.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	linux-hexagon@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	linux-m68k@lists.linux-m68k.org,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	linux-arm-kernel@lists.infradead.org,
-	Brian Cain <bcain@quicinc.com>, linux-parisc@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and
- unxlate_dev_mem_ptr()
-Message-ID: <202311191145.pppExJS6-lkp@intel.com>
-References: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VUGSmLQ4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700365885;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=v6mjMO7m/pxES9DWK2smQjhenewCSZNje/Tzy0sP0is=;
+	b=VUGSmLQ4QtSFZcNJZFEfwIgGaBIADe+boldxojGp1H+Wrlr5K0Y9hgIKR58kFv0tWbaMks
+	mdr8TXq+ldRQx4FoEimqO676SV/VLxKdzUtNnXNBpyR2rxXEZPoGA2rA5jkiD95efd6ZIP
+	b4bamlStKNCYZ1PLbLSJGpoOTC8/ZgU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-532-BukLUvmuNRmkoS69OykPEg-1; Sat, 18 Nov 2023 22:51:22 -0500
+X-MC-Unique: BukLUvmuNRmkoS69OykPEg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 91001101A529
+	for <llvm@lists.linux.dev>; Sun, 19 Nov 2023 03:51:22 +0000 (UTC)
+Received: from [172.64.4.47] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 787552026D4C;
+	Sun, 19 Nov 2023 03:51:22 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc1,
+ mainline.kernel.org-clang, b8f1fa24)
+Date: Sun, 19 Nov 2023 03:51:22 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231118100827.1599422-1-wangkefeng.wang@huawei.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <12081.123111822512200555@us-mta-532.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kefeng,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on geert-m68k/for-next geert-m68k/for-linus deller-parisc/for-next powerpc/next powerpc/fixes linus/master v6.7-rc1 next-20231117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/asm-io-remove-unnecessary-xlate_dev_mem_ptr-and-unxlate_dev_mem_ptr/20231118-183038
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20231118100827.1599422-1-wangkefeng.wang%40huawei.com
-patch subject: [PATCH] asm/io: remove unnecessary xlate_dev_mem_ptr() and unxlate_dev_mem_ptr()
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191145.pppExJS6-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'xfs-6.7-fixes-1' of git://git.kernel.org/pub=
+/scm/fs/xfs/xfs-linux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311191145.pppExJS6-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/115472
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
->> drivers/char/mem.c:159:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ptr = xlate_dev_mem_ptr(p);
-                                 ^
->> drivers/char/mem.c:159:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-                           ptr = xlate_dev_mem_ptr(p);
-                               ^ ~~~~~~~~~~~~~~~~~~~~
->> drivers/char/mem.c:164:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           unxlate_dev_mem_ptr(p, ptr);
-                           ^
-   drivers/char/mem.c:235:10: error: call to undeclared function 'xlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ptr = xlate_dev_mem_ptr(p);
-                                 ^
-   drivers/char/mem.c:235:8: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-                           ptr = xlate_dev_mem_ptr(p);
-                               ^ ~~~~~~~~~~~~~~~~~~~~
-   drivers/char/mem.c:243:4: error: call to undeclared function 'unxlate_dev_mem_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           unxlate_dev_mem_ptr(p, ptr);
-                           ^
-   6 errors generated.
 
 
-vim +/xlate_dev_mem_ptr +159 drivers/char/mem.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-^1da177e4c3f41 Linus Torvalds                2005-04-16  133  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  134  	bounce = kmalloc(PAGE_SIZE, GFP_KERNEL);
-22ec1a2aea73b9 Kees Cook                     2017-12-01  135  	if (!bounce)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  136  		return -ENOMEM;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  137  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  138  	while (count > 0) {
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  139  		unsigned long remaining;
-b5b38200ebe548 Kees Cook                     2018-03-27  140  		int allowed, probe;
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  141  
-f222318e9c3a31 Wu Fengguang                  2009-12-14  142  		sz = size_inside_page(p, count);
-^1da177e4c3f41 Linus Torvalds                2005-04-16  143  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  144  		err = -EPERM;
-a4866aa812518e Kees Cook                     2017-04-05  145  		allowed = page_is_allowed(p >> PAGE_SHIFT);
-a4866aa812518e Kees Cook                     2017-04-05  146  		if (!allowed)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  147  			goto failed;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  148  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  149  		err = -EFAULT;
-a4866aa812518e Kees Cook                     2017-04-05  150  		if (allowed == 2) {
-a4866aa812518e Kees Cook                     2017-04-05  151  			/* Show zeros for restricted memory. */
-a4866aa812518e Kees Cook                     2017-04-05  152  			remaining = clear_user(buf, sz);
-a4866aa812518e Kees Cook                     2017-04-05  153  		} else {
-^1da177e4c3f41 Linus Torvalds                2005-04-16  154  			/*
-a4866aa812518e Kees Cook                     2017-04-05  155  			 * On ia64 if a page has been mapped somewhere as
-a4866aa812518e Kees Cook                     2017-04-05  156  			 * uncached, then it must also be accessed uncached
-a4866aa812518e Kees Cook                     2017-04-05  157  			 * by the kernel or data corruption may occur.
-^1da177e4c3f41 Linus Torvalds                2005-04-16  158  			 */
-^1da177e4c3f41 Linus Torvalds                2005-04-16 @159  			ptr = xlate_dev_mem_ptr(p);
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  160  			if (!ptr)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  161  				goto failed;
-a4866aa812518e Kees Cook                     2017-04-05  162  
-fe557319aa06c2 Christoph Hellwig             2020-06-17  163  			probe = copy_from_kernel_nofault(bounce, ptr, sz);
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18 @164  			unxlate_dev_mem_ptr(p, ptr);
-b5b38200ebe548 Kees Cook                     2018-03-27  165  			if (probe)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  166  				goto failed;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  167  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  168  			remaining = copy_to_user(buf, bounce, sz);
-a4866aa812518e Kees Cook                     2017-04-05  169  		}
-a4866aa812518e Kees Cook                     2017-04-05  170  
-fa29e97bb8c70f Wu Fengguang                  2009-12-14  171  		if (remaining)
-22ec1a2aea73b9 Kees Cook                     2017-12-01  172  			goto failed;
-e045fb2a988a9a venkatesh.pallipadi@intel.com 2008-03-18  173  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  174  		buf += sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  175  		p += sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  176  		count -= sz;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  177  		read += sz;
-8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  178  		if (should_stop_iteration())
-8619e5bdeee8b2 Tetsuo Handa                  2019-08-26  179  			break;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  180  	}
-22ec1a2aea73b9 Kees Cook                     2017-12-01  181  	kfree(bounce);
-^1da177e4c3f41 Linus Torvalds                2005-04-16  182  
-^1da177e4c3f41 Linus Torvalds                2005-04-16  183  	*ppos += read;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  184  	return read;
-22ec1a2aea73b9 Kees Cook                     2017-12-01  185  
-22ec1a2aea73b9 Kees Cook                     2017-12-01  186  failed:
-22ec1a2aea73b9 Kees Cook                     2017-12-01  187  	kfree(bounce);
-22ec1a2aea73b9 Kees Cook                     2017-12-01  188  	return err;
-^1da177e4c3f41 Linus Torvalds                2005-04-16  189  }
-^1da177e4c3f41 Linus Torvalds                2005-04-16  190  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
