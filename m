@@ -1,56 +1,49 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573BE1D6A9;
-	Mon, 20 Nov 2023 23:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2542F3B2B8;
+	Mon, 20 Nov 2023 23:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VK4HaVtd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ThPn1wwH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700523604; x=1732059604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gp1wbrJ6oJSN+w/KtUYVHSAUTDc/TxqBc/emsqqKEac=;
-  b=VK4HaVtdTI04YNV7OG+VhzykzHWE9MLZO7otT6sfoLwuG55lSQ5AhKnF
-   0/XVodWH50tVbvHU2KTiBPzm01Uar+Ah9UaVZj2FpHOkVGH94iJQISJVn
-   6gS6HnjMIdPYWx6R0oHEKoXym9Sn/cb9nxVC79aX/ALT6jc/fZ29RMmnM
-   AktO6m/Dbdwq2TMHc/d6yqySAm3fGAsfGnLYJJkGhOuVD92WqKdkgK7Ig
-   m0CM3V38wbqQ+6rco9LC9jwQ6lH2UfX1/dQ2ydh22pVQsytdrCtUzqX/G
-   PBVEtPONzOm7K9hrELZf/kcBnfJq4nDAnfkIcxTJGw/5KeN5VqpoDItlJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371067855"
+  t=1700523667; x=1732059667;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=on1VkK/ckQrjQ7/gZOs2HBXM/dnxe8jUZZQUZoBRg2k=;
+  b=ThPn1wwHxKmNXMC0i4wquu7Tc9mXOVln2Fl9ps4VZnzbAt6FoZYY4VNz
+   o7xuVvjkqUZWtCboob+OLAp3zC19AnuvZqyZGHYMpkKrtWxiF0ztK2uFp
+   GmEWSWXNUfPpT6Taf/Z1vk25fP75E4XMhcbqBPV2E1Ib9iSxy3r+Azho1
+   ujqgj/G94Pq1d0B54P5aXBF40Zrt/fKAILGr1zcNmW+v8wRSHM3QJqAYO
+   4xX+3V9Z8Tf1slaKz/6C4/arDcrWgPhpGKOxNsFm5vxEuUuTI62o2JtZM
+   BkCIFx60mYUtP1CCBgszAyBE6SRQSkj2dm/HYbblRReJJZT/oblRCN17H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371067953"
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="371067855"
+   d="scan'208";a="371067953"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 15:40:03 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 15:41:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="910279769"
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="910280036"
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="910279769"
+   d="scan'208";a="910280036"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Nov 2023 15:40:00 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 20 Nov 2023 15:41:00 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r5Drx-00074E-16;
-	Mon, 20 Nov 2023 23:39:57 +0000
-Date: Tue, 21 Nov 2023 07:39:54 +0800
+	id 1r5Dsw-00074R-0T;
+	Mon, 20 Nov 2023 23:40:58 +0000
+Date: Tue, 21 Nov 2023 07:40:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [rft, PATCH v1 1/1] pinctrl: qcom: lpass-lpi: Remove unused
- member in struct lpi_pingroup
-Message-ID: <202311210748.H9kflJ6K-lkp@intel.com>
-References: <20231120193353.1670732-1-andriy.shevchenko@linux.intel.com>
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:v10_20231118_amit_kumar_mahapatra_spi_add_support_for_stacked_parallel_memories
+ 1/2] sound/pci/hda/cs35l56_hda_spi.c:32:42: error: incompatible pointer to
+ integer conversion passing 'u8[4]' (aka 'unsigned char[4]') to parameter of
+ type 'int'
+Message-ID: <202311210744.QdYLCBZT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,203 +52,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231120193353.1670732-1-andriy.shevchenko@linux.intel.com>
 
-Hi Andy,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linusw-pinctrl/for-next linus/master v6.7-rc2 next-20231120]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/pinctrl-qcom-lpass-lpi-Remove-unused-member-in-struct-lpi_pingroup/20231121-034448
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20231120193353.1670732-1-andriy.shevchenko%40linux.intel.com
-patch subject: [rft, PATCH v1 1/1] pinctrl: qcom: lpass-lpi: Remove unused member in struct lpi_pingroup
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311210748.H9kflJ6K-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v10_20231118_amit_kumar_mahapatra_spi_add_support_for_stacked_parallel_memories
+head:   28c84457d889d997b2cfefd7f6967dc919bdf628
+commit: eb12970007184e2e5c6eae6ef1b32eee13480811 [1/2] spi: Add multi-cs memories support in SPI core
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311210744.QdYLCBZT-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210748.H9kflJ6K-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210744.QdYLCBZT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311210748.H9kflJ6K-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311210744.QdYLCBZT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:55:12: warning: unused variable 'gpio0_pins' [-Wunused-variable]
-   static int gpio0_pins[] = { 0 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:56:12: warning: unused variable 'gpio1_pins' [-Wunused-variable]
-   static int gpio1_pins[] = { 1 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:57:12: warning: unused variable 'gpio2_pins' [-Wunused-variable]
-   static int gpio2_pins[] = { 2 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:58:12: warning: unused variable 'gpio3_pins' [-Wunused-variable]
-   static int gpio3_pins[] = { 3 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:59:12: warning: unused variable 'gpio4_pins' [-Wunused-variable]
-   static int gpio4_pins[] = { 4 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:60:12: warning: unused variable 'gpio5_pins' [-Wunused-variable]
-   static int gpio5_pins[] = { 5 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:61:12: warning: unused variable 'gpio6_pins' [-Wunused-variable]
-   static int gpio6_pins[] = { 6 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:62:12: warning: unused variable 'gpio7_pins' [-Wunused-variable]
-   static int gpio7_pins[] = { 7 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:63:12: warning: unused variable 'gpio8_pins' [-Wunused-variable]
-   static int gpio8_pins[] = { 8 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:64:12: warning: unused variable 'gpio9_pins' [-Wunused-variable]
-   static int gpio9_pins[] = { 9 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:65:12: warning: unused variable 'gpio10_pins' [-Wunused-variable]
-   static int gpio10_pins[] = { 10 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:66:12: warning: unused variable 'gpio11_pins' [-Wunused-variable]
-   static int gpio11_pins[] = { 11 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:67:12: warning: unused variable 'gpio12_pins' [-Wunused-variable]
-   static int gpio12_pins[] = { 12 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:68:12: warning: unused variable 'gpio13_pins' [-Wunused-variable]
-   static int gpio13_pins[] = { 13 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:69:12: warning: unused variable 'gpio14_pins' [-Wunused-variable]
-   static int gpio14_pins[] = { 14 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:70:12: warning: unused variable 'gpio15_pins' [-Wunused-variable]
-   static int gpio15_pins[] = { 15 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:71:12: warning: unused variable 'gpio16_pins' [-Wunused-variable]
-   static int gpio16_pins[] = { 16 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:72:12: warning: unused variable 'gpio17_pins' [-Wunused-variable]
-   static int gpio17_pins[] = { 17 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:73:12: warning: unused variable 'gpio18_pins' [-Wunused-variable]
-   static int gpio18_pins[] = { 18 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:74:12: warning: unused variable 'gpio19_pins' [-Wunused-variable]
-   static int gpio19_pins[] = { 19 };
-              ^
-   drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:75:12: warning: unused variable 'gpio20_pins' [-Wunused-variable]
-   static int gpio20_pins[] = { 20 };
-              ^
-   drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:76:12: warning: unused variable 'gpio21_pins' [-Wunused-variable]
-   static int gpio21_pins[] = { 21 };
-              ^
-   drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c:77:12: warning: unused variable 'gpio22_pins' [-Wunused-variable]
-   static int gpio22_pins[] = { 22 };
-              ^
-   23 warnings generated.
+>> sound/pci/hda/cs35l56_hda_spi.c:32:42: error: incompatible pointer to integer conversion passing 'u8[4]' (aka 'unsigned char[4]') to parameter of type 'int' [-Wint-conversion]
+           ret = cs35l56_hda_common_probe(cs35l56, spi->chip_select);
+                                                   ^~~~~~~~~~~~~~~~
+   sound/pci/hda/cs35l56_hda.h:45:63: note: passing argument to parameter 'id' here
+   int cs35l56_hda_common_probe(struct cs35l56_hda *cs35l56, int id);
+                                                                 ^
+   1 error generated.
 --
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:57:12: warning: unused variable 'gpio0_pins' [-Wunused-variable]
-   static int gpio0_pins[] = { 0 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:58:12: warning: unused variable 'gpio1_pins' [-Wunused-variable]
-   static int gpio1_pins[] = { 1 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:59:12: warning: unused variable 'gpio2_pins' [-Wunused-variable]
-   static int gpio2_pins[] = { 2 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:60:12: warning: unused variable 'gpio3_pins' [-Wunused-variable]
-   static int gpio3_pins[] = { 3 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:61:12: warning: unused variable 'gpio4_pins' [-Wunused-variable]
-   static int gpio4_pins[] = { 4 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:62:12: warning: unused variable 'gpio5_pins' [-Wunused-variable]
-   static int gpio5_pins[] = { 5 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:63:12: warning: unused variable 'gpio6_pins' [-Wunused-variable]
-   static int gpio6_pins[] = { 6 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:64:12: warning: unused variable 'gpio7_pins' [-Wunused-variable]
-   static int gpio7_pins[] = { 7 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:65:12: warning: unused variable 'gpio8_pins' [-Wunused-variable]
-   static int gpio8_pins[] = { 8 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:66:12: warning: unused variable 'gpio9_pins' [-Wunused-variable]
-   static int gpio9_pins[] = { 9 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:67:12: warning: unused variable 'gpio10_pins' [-Wunused-variable]
-   static int gpio10_pins[] = { 10 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:68:12: warning: unused variable 'gpio11_pins' [-Wunused-variable]
-   static int gpio11_pins[] = { 11 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:69:12: warning: unused variable 'gpio12_pins' [-Wunused-variable]
-   static int gpio12_pins[] = { 12 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:70:12: warning: unused variable 'gpio13_pins' [-Wunused-variable]
-   static int gpio13_pins[] = { 13 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:71:12: warning: unused variable 'gpio14_pins' [-Wunused-variable]
-   static int gpio14_pins[] = { 14 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:72:12: warning: unused variable 'gpio15_pins' [-Wunused-variable]
-   static int gpio15_pins[] = { 15 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:73:12: warning: unused variable 'gpio16_pins' [-Wunused-variable]
-   static int gpio16_pins[] = { 16 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:74:12: warning: unused variable 'gpio17_pins' [-Wunused-variable]
-   static int gpio17_pins[] = { 17 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:75:12: warning: unused variable 'gpio18_pins' [-Wunused-variable]
-   static int gpio18_pins[] = { 18 };
-              ^
->> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:76:12: warning: unused variable 'gpio19_pins' [-Wunused-variable]
-   static int gpio19_pins[] = { 19 };
-              ^
-   drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:77:12: warning: unused variable 'gpio20_pins' [-Wunused-variable]
-   static int gpio20_pins[] = { 20 };
-              ^
-   drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:78:12: warning: unused variable 'gpio21_pins' [-Wunused-variable]
-   static int gpio21_pins[] = { 21 };
-              ^
-   drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:79:12: warning: unused variable 'gpio22_pins' [-Wunused-variable]
-   static int gpio22_pins[] = { 22 };
-              ^
-   23 warnings generated.
+>> drivers/mfd/tps6594-spi.c:101:11: error: incompatible pointer to integer conversion assigning to 'unsigned short' from 'u8[4]' (aka 'unsigned char[4]') [-Wint-conversion]
+           tps->reg = spi->chip_select;
+                    ^ ~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/gpio0_pins +55 drivers/pinctrl/qcom/pinctrl-sm8550-lpass-lpi.c
+vim +32 sound/pci/hda/cs35l56_hda_spi.c
 
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03  54  
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @55  static int gpio0_pins[] = { 0 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @56  static int gpio1_pins[] = { 1 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @57  static int gpio2_pins[] = { 2 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @58  static int gpio3_pins[] = { 3 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @59  static int gpio4_pins[] = { 4 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @60  static int gpio5_pins[] = { 5 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @61  static int gpio6_pins[] = { 6 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @62  static int gpio7_pins[] = { 7 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @63  static int gpio8_pins[] = { 8 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @64  static int gpio9_pins[] = { 9 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @65  static int gpio10_pins[] = { 10 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @66  static int gpio11_pins[] = { 11 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @67  static int gpio12_pins[] = { 12 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @68  static int gpio13_pins[] = { 13 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @69  static int gpio14_pins[] = { 14 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @70  static int gpio15_pins[] = { 15 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @71  static int gpio16_pins[] = { 16 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @72  static int gpio17_pins[] = { 17 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @73  static int gpio18_pins[] = { 18 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @74  static int gpio19_pins[] = { 19 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @75  static int gpio20_pins[] = { 20 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @76  static int gpio21_pins[] = { 21 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03 @77  static int gpio22_pins[] = { 22 };
-5a6ca1f240d6a2 Krzysztof Kozlowski 2023-02-03  78  
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  13  
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  14  static int cs35l56_hda_spi_probe(struct spi_device *spi)
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  15  {
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  16  	struct cs35l56_hda *cs35l56;
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  17  	int ret;
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  18  
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  19  	cs35l56 = devm_kzalloc(&spi->dev, sizeof(*cs35l56), GFP_KERNEL);
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  20  	if (!cs35l56)
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  21  		return -ENOMEM;
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  22  
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  23  	cs35l56->base.dev = &spi->dev;
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  24  	cs35l56->base.regmap = devm_regmap_init_spi(spi, &cs35l56_regmap_spi);
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  25  	if (IS_ERR(cs35l56->base.regmap)) {
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  26  		ret = PTR_ERR(cs35l56->base.regmap);
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  27  		dev_err(cs35l56->base.dev, "Failed to allocate register map: %d\n",
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  28  			ret);
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  29  		return ret;
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  30  	}
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  31  
+73cfbfa9caea8ed Simon Trimmer 2023-07-21 @32  	ret = cs35l56_hda_common_probe(cs35l56, spi->chip_select);
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  33  	if (ret)
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  34  		return ret;
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  35  	ret = cs35l56_irq_request(&cs35l56->base, spi->irq);
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  36  	if (ret < 0)
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  37  		cs35l56_hda_remove(cs35l56->base.dev);
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  38  
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  39  	return ret;
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  40  }
+73cfbfa9caea8ed Simon Trimmer 2023-07-21  41  
+
+:::::: The code at line 32 was first introduced by commit
+:::::: 73cfbfa9caea8eda54b4c6e49a9555533660aa1e ALSA: hda/cs35l56: Add driver for Cirrus Logic CS35L56 amplifier
+
+:::::: TO: Simon Trimmer <simont@opensource.cirrus.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
