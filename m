@@ -1,74 +1,34 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A9939864;
-	Mon, 20 Nov 2023 22:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B5F38DF8;
+	Mon, 20 Nov 2023 23:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FYceWNAm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700520504; x=1732056504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fTRRJlE/QbOq1AY/NZVPgjpWsBGhsZKTJso+C3zB68Y=;
-  b=FYceWNAm3FxsNile2LQa73XiAFod4K/XXvi6V5s6CGAKYNeN17G2OQp+
-   wKso7kAtZebja2OgziYQtMn7Yik0o7htksmfUZsch4Vfqw0BlbUPkDh6h
-   htKthh1aYTZ1HMpkaF0MvbKzzUkFl7qc8qO5eM1CVJhiQ2WeaP9HTbJjM
-   reCPHq6y3SvzYbHaph2vMXyd+C6Jm/lKZ9MBqWunAk4bQ/z9YIOR9Grpu
-   ut0tyd51yY3qvPQ59yaKes/gj+dDXOqZ8z/WSOQnd84gzMLC/3YL1WDwd
-   5dtC9Vt31/1tKz1pdTHJd4tv0zwb1wjjtYmhdNGoFcfG8SLS2BacZUiY2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="4913018"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="4913018"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 14:48:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="939914968"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="939914968"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Nov 2023 14:48:15 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5D3t-00071M-1K;
-	Mon, 20 Nov 2023 22:48:13 +0000
-Date: Tue, 21 Nov 2023 06:47:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Valentin Schneider <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-arch@vger.kernel.org, x86@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Feng Tang <feng.tang@intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	David Hildenbrand <david@redhat.com>,
-	"ndesaulniers@google.com" <ndesaulniers@google.com>,
-	Michael Kelley <mikelley@microsoft.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [PATCH 1/5] jump_label,module: Don't alloc static_key_mod for
- __ro_after_init keys
-Message-ID: <202311210601.9dbatTYU-lkp@intel.com>
-References: <20231120105528.760306-2-vschneid@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pm0ocCOu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B7BC433C8;
+	Mon, 20 Nov 2023 23:08:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700521699;
+	bh=CFqoX8V2WNEiSzZISkGpjZgqDIO60dgqCnVyQdufY0k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pm0ocCOuOM935pl00FZ7y8WqMAQHOpgOGaD6c9Umz3wSPv+b+ywRvOFVrGqJDsjpe
+	 MOsKExWGV46pb4wNHQhYNdmWdwFDRVCR/NvTlAfJC8ZM0zlAVG239yHgDJBfDTh0wJ
+	 5LibP1FfBpF5Cnazh/45hzIPRACn0/CDLcwOYP6Iqmd1SaJ5Oc2HzW07QFFy7Nslwn
+	 Tn0X8yTzXAP70Gn8/WJ9CKIXnxzSTXPbukl5EMSXBQ6uXbqxGX11uklzQfh/I/Hux8
+	 f4kJEYXAQR/Hsg36Qvqtp9TMUhuYYzAyQubKIN/oQJclZXgxyXYXTm0EuwEnbzWrhY
+	 YXmhg5H72w8Jw==
+Date: Mon, 20 Nov 2023 16:08:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: WANG Rui <wangrui@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+	Jinyang He <hejinyang@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] LoongArch: Record pc instead of offset in la-abs
+ relocation
+Message-ID: <20231120230817.GA2116806@dev-arch.thelio-3990X>
+References: <20231116130331.241395-1-wangrui@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,76 +37,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231120105528.760306-2-vschneid@redhat.com>
+In-Reply-To: <20231116130331.241395-1-wangrui@loongson.cn>
 
-Hi Valentin,
+Hi Rui,
 
-kernel test robot noticed the following build errors:
+On Thu, Nov 16, 2023 at 09:03:31PM +0800, WANG Rui wrote:
+> To clarify, the previous version functioned flawlessly. However, it's
+> worth noting that the LLVM's LoongArch backend currently lacks support
+> for cross-section label calculations. With this patch, we enable the use
+> of clang to compile relocatable kernels.
+> 
+> Signed-off-by: WANG Rui <wangrui@loongson.cn>
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on linus/master v6.7-rc2 next-20231120]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks a lot for the patch! This fixes the CONFIG_RELOCATABLE build for
+me as well.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Valentin-Schneider/jump_label-module-Don-t-alloc-static_key_mod-for-__ro_after_init-keys/20231120-190044
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20231120105528.760306-2-vschneid%40redhat.com
-patch subject: [PATCH 1/5] jump_label,module: Don't alloc static_key_mod for __ro_after_init keys
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20231121/202311210601.9dbatTYU-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311210601.9dbatTYU-lkp@intel.com/reproduce)
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311210601.9dbatTYU-lkp@intel.com/
+Something I noticed while testing is that a kernel linked with ld.lld
+does not boot while one linked with ld.bfd did. I think this might be
+the same issue that Xuerui filed on our issue tracker but I figured I
+would mention it in case not:
+https://github.com/ClangBuiltLinux/linux/issues/1883
 
-All errors (new ones prefixed by >>):
+Cheers,
+Nathan
 
->> init/main.c:1406:3: error: call to undeclared function 'jump_label_ro'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   jump_label_ro();
-                   ^
-   init/main.c:1406:3: note: did you mean 'jump_label_lock'?
-   include/linux/jump_label.h:315:20: note: 'jump_label_lock' declared here
-   static inline void jump_label_lock(void) {}
-                      ^
-   1 error generated.
-
-
-vim +/jump_label_ro +1406 init/main.c
-
-  1394	
-  1395	#ifdef CONFIG_STRICT_KERNEL_RWX
-  1396	static void mark_readonly(void)
-  1397	{
-  1398		if (rodata_enabled) {
-  1399			/*
-  1400			 * load_module() results in W+X mappings, which are cleaned
-  1401			 * up with call_rcu().  Let's make sure that queued work is
-  1402			 * flushed so that we don't hit false positives looking for
-  1403			 * insecure pages which are W+X.
-  1404			 */
-  1405			rcu_barrier();
-> 1406			jump_label_ro();
-  1407			mark_rodata_ro();
-  1408			rodata_test();
-  1409		} else
-  1410			pr_info("Kernel memory protection disabled.\n");
-  1411	}
-  1412	#elif defined(CONFIG_ARCH_HAS_STRICT_KERNEL_RWX)
-  1413	static inline void mark_readonly(void)
-  1414	{
-  1415		pr_warn("Kernel memory protection not selected by kernel config.\n");
-  1416	}
-  1417	#else
-  1418	static inline void mark_readonly(void)
-  1419	{
-  1420		pr_warn("This architecture does not have kernel memory protection.\n");
-  1421	}
-  1422	#endif
-  1423	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  arch/loongarch/include/asm/asmmacro.h | 3 +--
+>  arch/loongarch/include/asm/setup.h    | 2 +-
+>  arch/loongarch/kernel/relocate.c      | 2 +-
+>  3 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
+> index c9544f358c33..655db7d7a427 100644
+> --- a/arch/loongarch/include/asm/asmmacro.h
+> +++ b/arch/loongarch/include/asm/asmmacro.h
+> @@ -609,8 +609,7 @@
+>  	lu32i.d	\reg, 0
+>  	lu52i.d	\reg, \reg, 0
+>  	.pushsection ".la_abs", "aw", %progbits
+> -	768:
+> -	.dword	768b-766b
+> +	.dword	766b
+>  	.dword	\sym
+>  	.popsection
+>  #endif
+> diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
+> index a0bc159ce8bd..ee52fb1e9963 100644
+> --- a/arch/loongarch/include/asm/setup.h
+> +++ b/arch/loongarch/include/asm/setup.h
+> @@ -25,7 +25,7 @@ extern void set_merr_handler(unsigned long offset, void *addr, unsigned long len
+>  #ifdef CONFIG_RELOCATABLE
+>  
+>  struct rela_la_abs {
+> -	long offset;
+> +	long pc;
+>  	long symvalue;
+>  };
+>  
+> diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
+> index 6c3eff9af9fb..288b739ca88d 100644
+> --- a/arch/loongarch/kernel/relocate.c
+> +++ b/arch/loongarch/kernel/relocate.c
+> @@ -52,7 +52,7 @@ static inline void __init relocate_absolute(long random_offset)
+>  	for (p = begin; (void *)p < end; p++) {
+>  		long v = p->symvalue;
+>  		uint32_t lu12iw, ori, lu32id, lu52id;
+> -		union loongarch_instruction *insn = (void *)p - p->offset;
+> +		union loongarch_instruction *insn = (void *)p->pc;
+>  
+>  		lu12iw = (v >> 12) & 0xfffff;
+>  		ori    = v & 0xfff;
+> -- 
+> 2.42.1
+> 
+> 
