@@ -1,46 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FAC17F9;
-	Mon, 20 Nov 2023 01:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE40C1FA4;
+	Mon, 20 Nov 2023 03:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V+zeYibE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XI2zyvIp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700442603; x=1731978603;
+  t=1700450997; x=1731986997;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wOo2QT/NnC9M6IOpkn/O0Chgt1Du/PriY70CcWWH6/w=;
-  b=V+zeYibEd5OEyY+QO+PcG8zzt7wB1f9+Ldd5Imen8F/oRAfNPWym1HuF
-   XVBy3OkhYw+tHSaTXORuOX1FOdff+9wuz4/ZnCLdzXMb9PgP8V4DaYFwC
-   rCti3EYOR+ZPdZPYA5uiCjRrgQV2BlgQ7mjEOAqIVw8fFbMyQa1/QjCpB
-   QlyyzTqsT7jxsyphFOCQ2cDxagoTBJnsxe0K6x9PmiCy9qegx5PV7sMUF
-   NStTO2TuzxOKgs8JuxkQdcAX4vCR6Xe5OX0ZyhDb4gs7iB9YIYVzNKfzZ
-   qBmvoDRZAv+drlqNQsS8iMKsZ771PWEiRos2Tg74CxeQ5qXFl0XRjSY5X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="370874338"
+  bh=mUFH7HJz2VnguPIdRQpTb795Z3AIeEjT1F+7rTNguW0=;
+  b=XI2zyvIpndhc/dBsqalNo+718u+vuazKFDYJx0JYh+aj0HSVYf8VKY/R
+   xnTwNtN0BxxKadRLv9Z+oDMm93pcLoPuDGin9iLJcoT5n4pZLwXxdWUdo
+   T5SvlfkvOEWQ4xU1ohL+lEN+jAe6mYojw1nLS3tcWMHWnPTYkBEmICw7e
+   IwVu1j8TdWLDSTxaM6yJ16cKX7yOw+hyJZKssXMUCn0f28aD7WekOnkfx
+   CHtsrMrrERdV3Qah4zlWIenXw96qM8Pl/0gMI0Vho0WLC3A0x7ZRUmtAD
+   XATyyw67H/a5yGe8WF/c/2UdMeUaDp9GrKsVi/8YGIF0Fc9qeD/Q3uTfX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="455865165"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="370874338"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 17:09:57 -0800
+   d="scan'208";a="455865165"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 19:29:23 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="1097630072"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="7545596"
+   d="scan'208";a="1097630072"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 19 Nov 2023 17:09:56 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 19 Nov 2023 19:29:22 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r4snR-0005mV-1l;
-	Mon, 20 Nov 2023 01:09:53 +0000
-Date: Mon, 20 Nov 2023 09:09:25 +0800
+	id 1r4uyN-0005th-2D;
+	Mon, 20 Nov 2023 03:29:19 +0000
+Date: Mon, 20 Nov 2023 11:26:50 +0800
 From: kernel test robot <lkp@intel.com>
 To: Christian Brauner <brauner@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:vfs.mount 14/14] fs/namespace.c:4896:6: warning:
- variable 'ret' is used uninitialized whenever 'if' condition is false
-Message-ID: <202311200943.kXUP5jUl-lkp@intel.com>
+Subject: [brauner-vfs:vfs.mount 14/14] fs/namespace.c:4969:1: warning: stack
+ frame size (1048) exceeds limit (1024) in '__se_sys_statmount'
+Message-ID: <202311201110.549Sj1SK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,178 +54,177 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.mount
 head:   bbaba842df6d93fa0fbcf8bc8341a352f6189c6c
 commit: bbaba842df6d93fa0fbcf8bc8341a352f6189c6c [14/14] statmount: simplify string option retrieval
-config: i386-buildonly-randconfig-002-20231120 (https://download.01.org/0day-ci/archive/20231120/202311200943.kXUP5jUl-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200943.kXUP5jUl-lkp@intel.com/reproduce)
+config: arm-randconfig-001-20231120 (https://download.01.org/0day-ci/archive/20231120/202311201110.549Sj1SK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311201110.549Sj1SK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311200943.kXUP5jUl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311201110.549Sj1SK-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/namespace.c:4896:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (sm->mask & STMT_FS_TYPE) {
-               ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/namespace.c:4896:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    4896 |         if (sm->mask & STMT_FS_TYPE) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
    fs/namespace.c:4902:7: note: uninitialized use occurs here
-           if (!ret && sm->mask & STMT_MNT_ROOT) {
-                ^~~
+    4902 |         if (!ret && sm->mask & STMT_MNT_ROOT) {
+         |              ^~~
    fs/namespace.c:4896:2: note: remove the 'if' if its condition is always true
-           if (sm->mask & STMT_FS_TYPE) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    4896 |         if (sm->mask & STMT_FS_TYPE) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    fs/namespace.c:4894:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> fs/namespace.c:4969:1: warning: stack frame size (1036) exceeds limit (1024) in '__ia32_sys_statmount' [-Wframe-larger-than]
-   SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
-   ^
+    4894 |         int ret;
+         |                ^
+         |                 = 0
+>> fs/namespace.c:4969:1: warning: stack frame size (1048) exceeds limit (1024) in '__se_sys_statmount' [-Wframe-larger-than]
+    4969 | SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
+         | ^
    include/linux/syscalls.h:224:36: note: expanded from macro 'SYSCALL_DEFINE4'
-   #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-                                      ^
+     224 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
+         |                                    ^
    include/linux/syscalls.h:232:2: note: expanded from macro 'SYSCALL_DEFINEx'
-           __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-           ^
-   arch/x86/include/asm/syscall_wrapper.h:232:2: note: expanded from macro '__SYSCALL_DEFINEx'
-           __IA32_SYS_STUBx(x, name, __VA_ARGS__)                          \
-           ^
-   arch/x86/include/asm/syscall_wrapper.h:117:2: note: expanded from macro '__IA32_SYS_STUBx'
-           __SYS_STUBx(ia32, sys##name,                                    \
-           ^
-   arch/x86/include/asm/syscall_wrapper.h:77:7: note: expanded from macro '__SYS_STUBx'
-           long __##abi##_##name(const struct pt_regs *regs)               \
-                ^
-   <scratch space>:78:1: note: expanded from here
-   __ia32_sys_statmount
-   ^
-   36/1036 (3.47%) spills, 1000/1036 (96.53%) variables
+     232 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DEFINEx'
+     251 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
+         |                         ^
+   <scratch space>:154:1: note: expanded from here
+     154 | __se_sys_statmount
+         | ^
    2 warnings generated.
 
 
-vim +4896 fs/namespace.c
+vim +/__se_sys_statmount +4969 fs/namespace.c
 
-  4888	
-  4889	static int copy_statmount_to_user(struct kstatmount *s)
-  4890	{
-  4891		struct statmount *sm = &s->sm;
-  4892		struct seq_file *seq;
-  4893		size_t copysize = min_t(size_t, s->bufsize, sizeof(*sm));
-  4894		int ret;
-  4895	
-> 4896		if (sm->mask & STMT_FS_TYPE) {
-  4897			seq = &s->fs_type;
-  4898			ret = copy_to_user(s->buf->str + sm->fs_type,
-  4899					   seq->buf, seq->count);
-  4900		}
-  4901	
-  4902		if (!ret && sm->mask & STMT_MNT_ROOT) {
-  4903			seq = &s->mnt_root;
-  4904			ret = copy_to_user(s->buf->str + sm->mnt_root,
-  4905					   seq->buf, seq->count);
-  4906		}
-  4907	
-  4908		if (!ret && sm->mask & STMT_MNT_POINT) {
-  4909			seq = &s->mnt_point;
-  4910			ret = copy_to_user(s->buf->str + sm->mnt_point,
-  4911					   seq->buf, seq->count);
-  4912		}
-  4913	
-  4914		if (ret)
-  4915			return -EFAULT;
-  4916	
-  4917		/* Return the number of bytes copied to the buffer */
-  4918		sm->size = copysize + s->pos;
-  4919		if (copy_to_user(s->buf, sm, copysize))
-  4920			return -EFAULT;
-  4921	
-  4922		return 0;
-  4923	}
-  4924	
-  4925	static int do_statmount(struct kstatmount *s)
-  4926	{
-  4927		struct mount *m = real_mount(s->mnt);
-  4928		int err;
-  4929	
-  4930		if (!capable(CAP_SYS_ADMIN) &&
-  4931		    !is_path_reachable(m, m->mnt.mnt_root, &s->root))
-  4932			return -EPERM;
-  4933	
-  4934		err = security_sb_statfs(s->mnt->mnt_root);
-  4935		if (err)
-  4936			return err;
-  4937	
-  4938		if (s->mask & STMT_SB_BASIC)
-  4939			stmt_sb_basic(s);
-  4940	
-  4941		if (s->mask & STMT_MNT_BASIC)
-  4942			stmt_mnt_basic(s);
-  4943	
-  4944		if (s->mask & STMT_PROPAGATE_FROM)
-  4945			stmt_propagate_from(s);
-  4946	
-  4947		if (s->mask & STMT_FS_TYPE)
-  4948			err = stmt_string(s, STMT_FS_TYPE);
-  4949	
-  4950		if (!err && s->mask & STMT_MNT_ROOT)
-  4951			err = stmt_string(s, STMT_MNT_ROOT);
-  4952	
-  4953		if (!err && s->mask & STMT_MNT_POINT)
-  4954			err = stmt_string(s, STMT_MNT_POINT);
-  4955	
-  4956		if (err)
-  4957			return err;
-  4958	
-  4959		return 0;
-  4960	}
-  4961	
-  4962	static inline void drop_kstatmount(struct kstatmount *ks)
-  4963	{
-  4964		__putname(ks->fs_type.buf);
-  4965		__putname(ks->mnt_root.buf);
-  4966		__putname(ks->mnt_point.buf);
-  4967	}
-  4968	
-> 4969	SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
-  4970			struct statmount __user *, buf, size_t, bufsize,
-  4971			unsigned int, flags)
-  4972	{
-  4973		struct vfsmount *mnt;
-  4974		struct mnt_id_req kreq;
-  4975		struct kstatmount *ks;
-  4976		int ret;
-  4977	
-  4978		if (flags)
-  4979			return -EINVAL;
-  4980	
-  4981		if (copy_from_user(&kreq, req, sizeof(kreq)))
-  4982			return -EFAULT;
-  4983	
-  4984		down_read(&namespace_sem);
-  4985		mnt = lookup_mnt_in_ns(kreq.mnt_id, current->nsproxy->mnt_ns);
-  4986		if (!mnt) {
-  4987			up_read(&namespace_sem);
-  4988			return -ENOENT;
-  4989		}
-  4990	
-  4991		ks = &(struct kstatmount){
-  4992			.mask		= kreq.request_mask,
-  4993			.buf		= buf,
-  4994			.bufsize	= bufsize,
-  4995			.mnt		= mnt,
-  4996		};
-  4997	
-  4998		get_fs_root(current->fs, &ks->root);
-  4999		ret = do_statmount(ks);
-  5000		path_put(&ks->root);
-  5001		up_read(&namespace_sem);
-  5002	
-  5003		if (!ret)
-  5004			ret = copy_statmount_to_user(ks);
-  5005		drop_kstatmount(ks);
-  5006		return ret;
-  5007	}
-  5008	
+bbaba842df6d93 Christian Brauner 2023-11-19  4888  
+bbaba842df6d93 Christian Brauner 2023-11-19  4889  static int copy_statmount_to_user(struct kstatmount *s)
+bbaba842df6d93 Christian Brauner 2023-11-19  4890  {
+bbaba842df6d93 Christian Brauner 2023-11-19  4891  	struct statmount *sm = &s->sm;
+bbaba842df6d93 Christian Brauner 2023-11-19  4892  	struct seq_file *seq;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4893  	size_t copysize = min_t(size_t, s->bufsize, sizeof(*sm));
+bbaba842df6d93 Christian Brauner 2023-11-19  4894  	int ret;
+bbaba842df6d93 Christian Brauner 2023-11-19  4895  
+bbaba842df6d93 Christian Brauner 2023-11-19 @4896  	if (sm->mask & STMT_FS_TYPE) {
+bbaba842df6d93 Christian Brauner 2023-11-19  4897  		seq = &s->fs_type;
+bbaba842df6d93 Christian Brauner 2023-11-19  4898  		ret = copy_to_user(s->buf->str + sm->fs_type,
+bbaba842df6d93 Christian Brauner 2023-11-19  4899  				   seq->buf, seq->count);
+bbaba842df6d93 Christian Brauner 2023-11-19  4900  	}
+bbaba842df6d93 Christian Brauner 2023-11-19  4901  
+bbaba842df6d93 Christian Brauner 2023-11-19  4902  	if (!ret && sm->mask & STMT_MNT_ROOT) {
+bbaba842df6d93 Christian Brauner 2023-11-19  4903  		seq = &s->mnt_root;
+bbaba842df6d93 Christian Brauner 2023-11-19  4904  		ret = copy_to_user(s->buf->str + sm->mnt_root,
+bbaba842df6d93 Christian Brauner 2023-11-19  4905  				   seq->buf, seq->count);
+bbaba842df6d93 Christian Brauner 2023-11-19  4906  	}
+bbaba842df6d93 Christian Brauner 2023-11-19  4907  
+bbaba842df6d93 Christian Brauner 2023-11-19  4908  	if (!ret && sm->mask & STMT_MNT_POINT) {
+bbaba842df6d93 Christian Brauner 2023-11-19  4909  		seq = &s->mnt_point;
+bbaba842df6d93 Christian Brauner 2023-11-19  4910  		ret = copy_to_user(s->buf->str + sm->mnt_point,
+bbaba842df6d93 Christian Brauner 2023-11-19  4911  				   seq->buf, seq->count);
+bbaba842df6d93 Christian Brauner 2023-11-19  4912  	}
+bbaba842df6d93 Christian Brauner 2023-11-19  4913  
+bbaba842df6d93 Christian Brauner 2023-11-19  4914  	if (ret)
+bbaba842df6d93 Christian Brauner 2023-11-19  4915  		return -EFAULT;
+bbaba842df6d93 Christian Brauner 2023-11-19  4916  
+bbaba842df6d93 Christian Brauner 2023-11-19  4917  	/* Return the number of bytes copied to the buffer */
+bbaba842df6d93 Christian Brauner 2023-11-19  4918  	sm->size = copysize + s->pos;
+bbaba842df6d93 Christian Brauner 2023-11-19  4919  	if (copy_to_user(s->buf, sm, copysize))
+bbaba842df6d93 Christian Brauner 2023-11-19  4920  		return -EFAULT;
+bbaba842df6d93 Christian Brauner 2023-11-19  4921  
+bbaba842df6d93 Christian Brauner 2023-11-19  4922  	return 0;
+bbaba842df6d93 Christian Brauner 2023-11-19  4923  }
+bbaba842df6d93 Christian Brauner 2023-11-19  4924  
+bbaba842df6d93 Christian Brauner 2023-11-19  4925  static int do_statmount(struct kstatmount *s)
+bbaba842df6d93 Christian Brauner 2023-11-19  4926  {
+bbaba842df6d93 Christian Brauner 2023-11-19  4927  	struct mount *m = real_mount(s->mnt);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4928  	int err;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4929  
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4930  	if (!capable(CAP_SYS_ADMIN) &&
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4931  	    !is_path_reachable(m, m->mnt.mnt_root, &s->root))
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4932  		return -EPERM;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4933  
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4934  	err = security_sb_statfs(s->mnt->mnt_root);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4935  	if (err)
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4936  		return err;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4937  
+e3da02da05b8cb Christian Brauner 2023-11-19  4938  	if (s->mask & STMT_SB_BASIC)
+e3da02da05b8cb Christian Brauner 2023-11-19  4939  		stmt_sb_basic(s);
+e3da02da05b8cb Christian Brauner 2023-11-19  4940  
+e3da02da05b8cb Christian Brauner 2023-11-19  4941  	if (s->mask & STMT_MNT_BASIC)
+e3da02da05b8cb Christian Brauner 2023-11-19  4942  		stmt_mnt_basic(s);
+e3da02da05b8cb Christian Brauner 2023-11-19  4943  
+e3da02da05b8cb Christian Brauner 2023-11-19  4944  	if (s->mask & STMT_PROPAGATE_FROM)
+e3da02da05b8cb Christian Brauner 2023-11-19  4945  		stmt_propagate_from(s);
+e3da02da05b8cb Christian Brauner 2023-11-19  4946  
+bbaba842df6d93 Christian Brauner 2023-11-19  4947  	if (s->mask & STMT_FS_TYPE)
+bbaba842df6d93 Christian Brauner 2023-11-19  4948  		err = stmt_string(s, STMT_FS_TYPE);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4949  
+bbaba842df6d93 Christian Brauner 2023-11-19  4950  	if (!err && s->mask & STMT_MNT_ROOT)
+bbaba842df6d93 Christian Brauner 2023-11-19  4951  		err = stmt_string(s, STMT_MNT_ROOT);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4952  
+bbaba842df6d93 Christian Brauner 2023-11-19  4953  	if (!err && s->mask & STMT_MNT_POINT)
+bbaba842df6d93 Christian Brauner 2023-11-19  4954  		err = stmt_string(s, STMT_MNT_POINT);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4955  
+bbaba842df6d93 Christian Brauner 2023-11-19  4956  	if (err)
+bbaba842df6d93 Christian Brauner 2023-11-19  4957  		return err;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4958  
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4959  	return 0;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4960  }
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4961  
+bbaba842df6d93 Christian Brauner 2023-11-19  4962  static inline void drop_kstatmount(struct kstatmount *ks)
+bbaba842df6d93 Christian Brauner 2023-11-19  4963  {
+bbaba842df6d93 Christian Brauner 2023-11-19  4964  	__putname(ks->fs_type.buf);
+bbaba842df6d93 Christian Brauner 2023-11-19  4965  	__putname(ks->mnt_root.buf);
+bbaba842df6d93 Christian Brauner 2023-11-19  4966  	__putname(ks->mnt_point.buf);
+bbaba842df6d93 Christian Brauner 2023-11-19  4967  }
+bbaba842df6d93 Christian Brauner 2023-11-19  4968  
+bb0f527b929c6a Miklos Szeredi    2023-10-25 @4969  SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4970  		struct statmount __user *, buf, size_t, bufsize,
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4971  		unsigned int, flags)
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4972  {
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4973  	struct vfsmount *mnt;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4974  	struct mnt_id_req kreq;
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4975  	struct kstatmount *ks;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4976  	int ret;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4977  
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4978  	if (flags)
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4979  		return -EINVAL;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4980  
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4981  	if (copy_from_user(&kreq, req, sizeof(kreq)))
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4982  		return -EFAULT;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4983  
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4984  	down_read(&namespace_sem);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4985  	mnt = lookup_mnt_in_ns(kreq.mnt_id, current->nsproxy->mnt_ns);
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4986  	if (!mnt) {
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4987  		up_read(&namespace_sem);
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4988  		return -ENOENT;
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4989  	}
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4990  
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4991  	ks = &(struct kstatmount){
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4992  		.mask		= kreq.request_mask,
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4993  		.buf		= buf,
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4994  		.bufsize	= bufsize,
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4995  		.mnt		= mnt,
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4996  	};
+bb0f527b929c6a Miklos Szeredi    2023-10-25  4997  
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4998  	get_fs_root(current->fs, &ks->root);
+e9b3e0e86c7961 Christian Brauner 2023-11-19  4999  	ret = do_statmount(ks);
+e9b3e0e86c7961 Christian Brauner 2023-11-19  5000  	path_put(&ks->root);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  5001  	up_read(&namespace_sem);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  5002  
+bbaba842df6d93 Christian Brauner 2023-11-19  5003  	if (!ret)
+bbaba842df6d93 Christian Brauner 2023-11-19  5004  		ret = copy_statmount_to_user(ks);
+bbaba842df6d93 Christian Brauner 2023-11-19  5005  	drop_kstatmount(ks);
+bb0f527b929c6a Miklos Szeredi    2023-10-25  5006  	return ret;
+bb0f527b929c6a Miklos Szeredi    2023-10-25  5007  }
+bb0f527b929c6a Miklos Szeredi    2023-10-25  5008  
+
+:::::: The code at line 4969 was first introduced by commit
+:::::: bb0f527b929c6ab105d80eaac03399bcee6b047e add statmount(2) syscall
+
+:::::: TO: Miklos Szeredi <mszeredi@redhat.com>
+:::::: CC: Christian Brauner <brauner@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
