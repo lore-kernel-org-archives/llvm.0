@@ -1,165 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0C5F4F5
-	for <llvm@lists.linux.dev>; Mon, 20 Nov 2023 10:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392D211C91;
+	Mon, 20 Nov 2023 10:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IqvZ5p5Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700474485;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=n4Nu2oAm+sjfh3X88p2WfBlXYnH7+4A4aRCOlJ+hrdE=;
-	b=IqvZ5p5ZbVpHrzqx9nfG+8HbirsENkhz9yaP0E0JEXgQxqqoBNNK203YVeX7ZdPxrsoZ8L
-	t+CfG3+YRbk7l1v4BtrMqDZdgm3mIIoPwDzAhLhyFXvanocnzOlIPjVPiBN6QcbKmUiI0W
-	BXQeA0Wh2udZr/6noTyd/to4Dc4jn1g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-106-m-ozjM8tP0yBQWnHSkuCWA-1; Mon, 20 Nov 2023 05:01:22 -0500
-X-MC-Unique: m-ozjM8tP0yBQWnHSkuCWA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77BA9101A52D
-	for <llvm@lists.linux.dev>; Mon, 20 Nov 2023 10:01:22 +0000 (UTC)
-Received: from [172.64.4.47] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 62DB0C1596F;
-	Mon, 20 Nov 2023 10:01:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0-rc2,
- mainline.kernel.org-clang, 98b1cc82)
-Date: Mon, 20 Nov 2023 10:01:22 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qg3+xKVh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3207DC433C7;
+	Mon, 20 Nov 2023 10:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1700474574;
+	bh=cHimYpMhUep/CZIA34BYn3fN2F5JRYJOp6C9HTy9Kyg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Qg3+xKVhl3cPufNUbrh2VSLXFNldK96+YpJvA8DbDkkpeMp+Hx5ksGncTNmrmcl40
+	 ueSj7yj7matXWd0Jclb+dv+XnCNlKTTYridjT7lcAXzl0UsJAz9jOev0hji2Bsyu51
+	 Mzp/1zhn7NNHV2GI6uzOqUT3Gip1yGTSUq/UHXKs=
+Date: Mon, 20 Nov 2023 11:02:51 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Su Hui <suhui@nfschina.com>
+Cc: tomas.winkler@intel.com, arnd@arndb.de, nathan@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] misc: mei: client.c: fix problem of return
+ '-EOVERFLOW' in mei_cl_write
+Message-ID: <2023112042-napped-snoring-b766@gregkh>
+References: <20231120095523.178385-1-suhui@nfschina.com>
+ <20231120095523.178385-2-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <51537.123112005012200243@us-mta-106.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231120095523.178385-2-suhui@nfschina.com>
 
-Hi, we tested your kernel and here are the results:
+On Mon, Nov 20, 2023 at 05:55:26PM +0800, Su Hui wrote:
+> Clang static analyzer complains that value stored to 'rets' is never
+> read.Let 'buf_len = -EOVERFLOW' to make sure we can return '-EOVERFLOW'.
+> 
+> Fixes: 8c8d964ce90f ("mei: move hbuf_depth from the mei device to the hw modules")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+> v2: split v1 patch to different patches
+> v1: https://lore.kernel.org/all/5c98fc07-36a9-92cc-f8d6-c4efdc0c34aa@nfschina.com/
+> 
+>  drivers/misc/mei/client.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
+> index 7ea80779a0e2..9d090fa07516 100644
+> --- a/drivers/misc/mei/client.c
+> +++ b/drivers/misc/mei/client.c
+> @@ -2032,7 +2032,7 @@ ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long time
+>  
+>  	hbuf_slots = mei_hbuf_empty_slots(dev);
+>  	if (hbuf_slots < 0) {
+> -		rets = -EOVERFLOW;
+> +		buf_len = -EOVERFLOW;
+>  		goto out;
+>  	}
+>  
+> -- 
+> 2.30.2
+> 
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Kernel information:
-    Commit message: Linux 6.7-rc2
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/115539
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10369854
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10369857
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
-            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
-XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+thanks,
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+greg k-h's patch email bot
