@@ -1,115 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B5F38DF8;
-	Mon, 20 Nov 2023 23:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260EA3B285
+	for <llvm@lists.linux.dev>; Mon, 20 Nov 2023 23:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pm0ocCOu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B7BC433C8;
-	Mon, 20 Nov 2023 23:08:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8jniV24"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25B3C433C8;
+	Mon, 20 Nov 2023 23:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700521699;
-	bh=CFqoX8V2WNEiSzZISkGpjZgqDIO60dgqCnVyQdufY0k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pm0ocCOuOM935pl00FZ7y8WqMAQHOpgOGaD6c9Umz3wSPv+b+ywRvOFVrGqJDsjpe
-	 MOsKExWGV46pb4wNHQhYNdmWdwFDRVCR/NvTlAfJC8ZM0zlAVG239yHgDJBfDTh0wJ
-	 5LibP1FfBpF5Cnazh/45hzIPRACn0/CDLcwOYP6Iqmd1SaJ5Oc2HzW07QFFy7Nslwn
-	 Tn0X8yTzXAP70Gn8/WJ9CKIXnxzSTXPbukl5EMSXBQ6uXbqxGX11uklzQfh/I/Hux8
-	 f4kJEYXAQR/Hsg36Qvqtp9TMUhuYYzAyQubKIN/oQJclZXgxyXYXTm0EuwEnbzWrhY
-	 YXmhg5H72w8Jw==
-Date: Mon, 20 Nov 2023 16:08:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: WANG Rui <wangrui@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-	Jinyang He <hejinyang@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] LoongArch: Record pc instead of offset in la-abs
- relocation
-Message-ID: <20231120230817.GA2116806@dev-arch.thelio-3990X>
-References: <20231116130331.241395-1-wangrui@loongson.cn>
+	s=k20201202; t=1700522644;
+	bh=67KEhLI0mEivJdbrkeCl+vFBBtgFo5YzYmUACDBON68=;
+	h=From:To:Cc:Subject:Date:From;
+	b=H8jniV24tZu68db9VGGm2q1zQTL4/mK90DWnFoovUtdjLOvX2sQaRAW9tq1BGVaOj
+	 7qX3z2eK3d6lvNNIKtJbLJ2Iw6euVJSNcBNlnv+gaQPgDbbDNXtCt6jA+iyW4IO6VF
+	 7m73afQT36H+vXmRCSH6nm2IjaNzTcC3ZhCVDkOaspknxf90tcCYnday6+8h5BfdBt
+	 wAl5D26oA/ehLsMMoHU5dV8CgCujZme+ru+sGtfkmjw6neS289tR8vbajgFjncYRxV
+	 JeGody4kjKgtnTgAbfwsz//Tmoq8zfFqKBbk7I1ak4r57jtbn+mag/3++tZF5bz1dT
+	 qAH0aq2JpD5mw==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linuxppc-dev@lists.ozlabs.org
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] powerpc: add crtsavres.o to always-y instead of extra-y
+Date: Tue, 21 Nov 2023 08:23:32 +0900
+Message-Id: <20231120232332.4100288-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231116130331.241395-1-wangrui@loongson.cn>
+Content-Transfer-Encoding: 8bit
 
-Hi Rui,
+crtsavres.o is linked to modules. However, as explained in commit
+d0e628cd817f ("kbuild: doc: clarify the difference between extra-y
+and always-y"), 'make modules' does not build extra-y.
 
-On Thu, Nov 16, 2023 at 09:03:31PM +0800, WANG Rui wrote:
-> To clarify, the previous version functioned flawlessly. However, it's
-> worth noting that the LLVM's LoongArch backend currently lacks support
-> for cross-section label calculations. With this patch, we enable the use
-> of clang to compile relocatable kernels.
-> 
-> Signed-off-by: WANG Rui <wangrui@loongson.cn>
+For example, the following command fails:
 
-Thanks a lot for the patch! This fixes the CONFIG_RELOCATABLE build for
-me as well.
+  $ make ARCH=powerpc LLVM=1 KBUILD_MODPOST_WARN=1 mrproper ps3_defconfig modules
+    [snip]
+    LD [M]  arch/powerpc/platforms/cell/spufs/spufs.ko
+  ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such file or directory
+  make[3]: *** [scripts/Makefile.modfinal:56: arch/powerpc/platforms/cell/spufs/spufs.ko] Error 1
+  make[2]: *** [Makefile:1844: modules] Error 2
+  make[1]: *** [/home/masahiro/workspace/linux-kbuild/Makefile:350: __build_one_by_one] Error 2
+  make: *** [Makefile:234: __sub-make] Error 2
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Something I noticed while testing is that a kernel linked with ld.lld
-does not boot while one linked with ld.bfd did. I think this might be
-the same issue that Xuerui filed on our issue tracker but I figured I
-would mention it in case not:
-https://github.com/ClangBuiltLinux/linux/issues/1883
+ arch/powerpc/lib/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-Nathan
+diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
+index 51ad0397c17a..6eac63e79a89 100644
+--- a/arch/powerpc/lib/Makefile
++++ b/arch/powerpc/lib/Makefile
+@@ -45,7 +45,7 @@ obj-$(CONFIG_FUNCTION_ERROR_INJECTION)	+= error-inject.o
+ # so it is only needed for modules, and only for older linkers which
+ # do not support --save-restore-funcs
+ ifndef CONFIG_LD_IS_BFD
+-extra-$(CONFIG_PPC64)	+= crtsavres.o
++always-$(CONFIG_PPC64)	+= crtsavres.o
+ endif
+ 
+ obj-$(CONFIG_PPC_BOOK3S_64) += copyuser_power7.o copypage_power7.o \
+-- 
+2.40.1
 
-> ---
->  arch/loongarch/include/asm/asmmacro.h | 3 +--
->  arch/loongarch/include/asm/setup.h    | 2 +-
->  arch/loongarch/kernel/relocate.c      | 2 +-
->  3 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
-> index c9544f358c33..655db7d7a427 100644
-> --- a/arch/loongarch/include/asm/asmmacro.h
-> +++ b/arch/loongarch/include/asm/asmmacro.h
-> @@ -609,8 +609,7 @@
->  	lu32i.d	\reg, 0
->  	lu52i.d	\reg, \reg, 0
->  	.pushsection ".la_abs", "aw", %progbits
-> -	768:
-> -	.dword	768b-766b
-> +	.dword	766b
->  	.dword	\sym
->  	.popsection
->  #endif
-> diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-> index a0bc159ce8bd..ee52fb1e9963 100644
-> --- a/arch/loongarch/include/asm/setup.h
-> +++ b/arch/loongarch/include/asm/setup.h
-> @@ -25,7 +25,7 @@ extern void set_merr_handler(unsigned long offset, void *addr, unsigned long len
->  #ifdef CONFIG_RELOCATABLE
->  
->  struct rela_la_abs {
-> -	long offset;
-> +	long pc;
->  	long symvalue;
->  };
->  
-> diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-> index 6c3eff9af9fb..288b739ca88d 100644
-> --- a/arch/loongarch/kernel/relocate.c
-> +++ b/arch/loongarch/kernel/relocate.c
-> @@ -52,7 +52,7 @@ static inline void __init relocate_absolute(long random_offset)
->  	for (p = begin; (void *)p < end; p++) {
->  		long v = p->symvalue;
->  		uint32_t lu12iw, ori, lu32id, lu52id;
-> -		union loongarch_instruction *insn = (void *)p - p->offset;
-> +		union loongarch_instruction *insn = (void *)p->pc;
->  
->  		lu12iw = (v >> 12) & 0xfffff;
->  		ori    = v & 0xfff;
-> -- 
-> 2.42.1
-> 
-> 
