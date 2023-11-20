@@ -1,41 +1,41 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D602ED8;
-	Mon, 20 Nov 2023 00:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADE815D2;
+	Mon, 20 Nov 2023 01:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J/mmIKU5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gLq2T5hL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700439717; x=1731975717;
+  t=1700442480; x=1731978480;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=m61ys6ij2lMA40cF9dqNMdfXSO3dycrKevx21VdZ2zs=;
-  b=J/mmIKU5U51eEhWTg9la2f9cCjLO70b902Fi6dEkL9HuODXkx5axuVOB
-   zsxBCI+6yd6oUjbKg3fSh6sNbv+3b/XCK1tfvD6mN78ehLyuFmQLgjr/B
-   ZPXntvOSGOA9a/Jb6qrxJiyvlAM8IjPOZ0F54WQFkCjnnT+TLjc/Xy3Xm
-   6TU9VkO9jvn8sVQ4/ylzi4kbqpcF6VUIt0/P+G5SVs3W3c6bbCDF8Tt/n
-   hVhaw9M3ott1rRRkJJzKFJJQ8kmGc2S2+Ws/USfwH+BSa9yqX3mMof5oB
-   U7gtwE2HBZGJ2YeERgCv7eWKDiwyomegn6gQ5fErFwuaoZGh3V4uf18Xf
+  bh=Afwg7Fdj8Ft7cQDd8qfi6qWAHO+5mdbO4VPlEFQ6/MY=;
+  b=gLq2T5hLUAhLqoU2noNZ0pathr3MhBz88y5WaLt0H8NUUTq6c3x7Trfa
+   3vLfrzUQ6xlHmq4dwZi9HzxA1360mvuQs2AIoXIjRsAD2ClhKUFuRJbs1
+   aNAbFyjAUSAUj3729ar7VriGcEu2Du6W75sAW/9Wc+/n+vf7WaIxm08+Z
+   A+1kw0Gd+/BIeqLVtj0q9Dez0v2MvNJ67DyDpniqjKekcdPBSQ3issNsq
+   ynUpjAN78bMRzO6bk4q2zDEfa3fQ/gQCQtfMAJNBHJFlxdNC2m5TL6OQe
+   B+EFB82lZ54eE0cfP7rozXNxmD2jT7z13MT6tp3XBoJX3wJJYEX8YvrpR
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="390389465"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="422627221"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="390389465"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 16:21:56 -0800
+   d="scan'208";a="422627221"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 17:07:59 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="800989011"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="939646615"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="800989011"
+   d="scan'208";a="939646615"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 19 Nov 2023 16:21:52 -0800
+  by orsmga005.jf.intel.com with ESMTP; 19 Nov 2023 17:07:55 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r4s2u-0005kS-1u;
-	Mon, 20 Nov 2023 00:21:49 +0000
-Date: Mon, 20 Nov 2023 08:20:54 +0800
+	id 1r4slV-0005mJ-1C;
+	Mon, 20 Nov 2023 01:07:53 +0000
+Date: Mon, 20 Nov 2023 09:07:27 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -48,9 +48,9 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Matthew Wilcox <willy@infradead.org>,
 	Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
 	Kairui Song <kasong@tencent.com>
-Subject: Re: [PATCH 06/24] swap: rework swapin_no_readahead arguments
-Message-ID: <202311200826.8Nl5w3h8-lkp@intel.com>
-References: <20231119194740.94101-7-ryncsn@gmail.com>
+Subject: Re: [PATCH 18/24] mm/swap: introduce a helper non fault swapin
+Message-ID: <202311200850.FrQj7bMD-lkp@intel.com>
+References: <20231119194740.94101-19-ryncsn@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,88 +59,163 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231119194740.94101-7-ryncsn@gmail.com>
+In-Reply-To: <20231119194740.94101-19-ryncsn@gmail.com>
 
 Hi Kairui,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.7-rc2 next-20231117]
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.7-rc2 next-20231117]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swap-fix-a-potential-undefined-behavior-issue/20231120-035926
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231119194740.94101-7-ryncsn%40gmail.com
-patch subject: [PATCH 06/24] swap: rework swapin_no_readahead arguments
-config: i386-buildonly-randconfig-003-20231120 (https://download.01.org/0day-ci/archive/20231120/202311200826.8Nl5w3h8-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20231119194740.94101-19-ryncsn%40gmail.com
+patch subject: [PATCH 18/24] mm/swap: introduce a helper non fault swapin
+config: i386-buildonly-randconfig-002-20231120 (https://download.01.org/0day-ci/archive/20231120/202311200850.FrQj7bMD-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200826.8Nl5w3h8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200850.FrQj7bMD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311200826.8Nl5w3h8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311200850.FrQj7bMD-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/swap_state.c:872: warning: Function parameter or member 'mpol' not described in 'swapin_no_readahead'
->> mm/swap_state.c:872: warning: Function parameter or member 'ilx' not described in 'swapin_no_readahead'
->> mm/swap_state.c:872: warning: Function parameter or member 'mm' not described in 'swapin_no_readahead'
->> mm/swap_state.c:872: warning: Excess function parameter 'vmf' description in 'swapin_no_readahead'
+   In file included from mm/shmem.c:43:
+   mm/swap.h:105:31: warning: declaration of 'enum swap_cache_result' will not be visible outside of this function [-Wvisibility]
+                           struct vm_fault *vmf, enum swap_cache_result *result)
+                                                      ^
+   mm/swap.h:112:8: warning: declaration of 'enum swap_cache_result' will not be visible outside of this function [-Wvisibility]
+                   enum swap_cache_result *result)
+                        ^
+>> mm/shmem.c:1841:25: error: variable has incomplete type 'enum swap_cache_result'
+           enum swap_cache_result result;
+                                  ^
+   mm/shmem.c:1841:7: note: forward declaration of 'enum swap_cache_result'
+           enum swap_cache_result result;
+                ^
+>> mm/shmem.c:1870:31: error: use of undeclared identifier 'SWAP_CACHE_HIT'
+                   if (fault_type && result != SWAP_CACHE_HIT) {
+                                               ^
+>> mm/shmem.c:1879:17: error: use of undeclared identifier 'SWAP_CACHE_BYPASS'
+           if ((result != SWAP_CACHE_BYPASS && !folio_test_swapcache(folio)) ||
+                          ^
+   2 warnings and 3 errors generated.
 
 
-vim +872 mm/swap_state.c
+vim +1841 mm/shmem.c
 
-d9bfcfdc41e8e5 Huang Ying  2017-09-06  859  
-19f582d2684e47 Kairui Song 2023-11-20  860  /**
-19f582d2684e47 Kairui Song 2023-11-20  861   * swapin_no_readahead - swap in pages skipping swap cache and readahead
-19f582d2684e47 Kairui Song 2023-11-20  862   * @entry: swap entry of this memory
-19f582d2684e47 Kairui Song 2023-11-20  863   * @gfp_mask: memory allocation flags
-19f582d2684e47 Kairui Song 2023-11-20  864   * @vmf: fault information
-19f582d2684e47 Kairui Song 2023-11-20  865   *
-19f582d2684e47 Kairui Song 2023-11-20  866   * Returns the struct page for entry and addr after the swap entry is read
-19f582d2684e47 Kairui Song 2023-11-20  867   * in.
-19f582d2684e47 Kairui Song 2023-11-20  868   */
-598f2616cde014 Kairui Song 2023-11-20  869  static struct page *swapin_no_readahead(swp_entry_t entry, gfp_t gfp_mask,
-2538a5e96fe62f Kairui Song 2023-11-20  870  					struct mempolicy *mpol, pgoff_t ilx,
-2538a5e96fe62f Kairui Song 2023-11-20  871  					struct mm_struct *mm)
-19f582d2684e47 Kairui Song 2023-11-20 @872  {
-19f582d2684e47 Kairui Song 2023-11-20  873  	struct folio *folio;
-2538a5e96fe62f Kairui Song 2023-11-20  874  	struct page *page;
-19f582d2684e47 Kairui Song 2023-11-20  875  	void *shadow = NULL;
-19f582d2684e47 Kairui Song 2023-11-20  876  
-2538a5e96fe62f Kairui Song 2023-11-20  877  	page = alloc_pages_mpol(gfp_mask, 0, mpol, ilx, numa_node_id());
-2538a5e96fe62f Kairui Song 2023-11-20  878  	folio = (struct folio *)page;
-19f582d2684e47 Kairui Song 2023-11-20  879  	if (folio) {
-2538a5e96fe62f Kairui Song 2023-11-20  880  		if (mem_cgroup_swapin_charge_folio(folio, mm,
-c2ac0dcbf9ab6a Kairui Song 2023-11-20  881  						   GFP_KERNEL, entry)) {
-19f582d2684e47 Kairui Song 2023-11-20  882  			folio_put(folio);
-19f582d2684e47 Kairui Song 2023-11-20  883  			return NULL;
-19f582d2684e47 Kairui Song 2023-11-20  884  		}
-c2ac0dcbf9ab6a Kairui Song 2023-11-20  885  
-c2ac0dcbf9ab6a Kairui Song 2023-11-20  886  		__folio_set_locked(folio);
-c2ac0dcbf9ab6a Kairui Song 2023-11-20  887  		__folio_set_swapbacked(folio);
-c2ac0dcbf9ab6a Kairui Song 2023-11-20  888  
-19f582d2684e47 Kairui Song 2023-11-20  889  		mem_cgroup_swapin_uncharge_swap(entry);
-19f582d2684e47 Kairui Song 2023-11-20  890  
-19f582d2684e47 Kairui Song 2023-11-20  891  		shadow = get_shadow_from_swap_cache(entry);
-19f582d2684e47 Kairui Song 2023-11-20  892  		if (shadow)
-19f582d2684e47 Kairui Song 2023-11-20  893  			workingset_refault(folio, shadow);
-19f582d2684e47 Kairui Song 2023-11-20  894  
-19f582d2684e47 Kairui Song 2023-11-20  895  		folio_add_lru(folio);
-19f582d2684e47 Kairui Song 2023-11-20  896  
-19f582d2684e47 Kairui Song 2023-11-20  897  		/* To provide entry to swap_readpage() */
-19f582d2684e47 Kairui Song 2023-11-20  898  		folio->swap = entry;
-19f582d2684e47 Kairui Song 2023-11-20  899  		swap_readpage(page, true, NULL);
-19f582d2684e47 Kairui Song 2023-11-20  900  		folio->private = NULL;
-19f582d2684e47 Kairui Song 2023-11-20  901  	}
-19f582d2684e47 Kairui Song 2023-11-20  902  
-19f582d2684e47 Kairui Song 2023-11-20  903  	return page;
-19f582d2684e47 Kairui Song 2023-11-20  904  }
-19f582d2684e47 Kairui Song 2023-11-20  905  
+  1827	
+  1828	/*
+  1829	 * Swap in the folio pointed to by *foliop.
+  1830	 * Caller has to make sure that *foliop contains a valid swapped folio.
+  1831	 * Returns 0 and the folio in foliop if success. On failure, returns the
+  1832	 * error code and NULL in *foliop.
+  1833	 */
+  1834	static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+  1835				     struct folio **foliop, enum sgp_type sgp,
+  1836				     gfp_t gfp, struct mm_struct *fault_mm,
+  1837				     vm_fault_t *fault_type)
+  1838	{
+  1839		struct address_space *mapping = inode->i_mapping;
+  1840		struct shmem_inode_info *info = SHMEM_I(inode);
+> 1841		enum swap_cache_result result;
+  1842		struct folio *folio = NULL;
+  1843		struct mempolicy *mpol;
+  1844		struct page *page;
+  1845		swp_entry_t swap;
+  1846		pgoff_t ilx;
+  1847		int error;
+  1848	
+  1849		VM_BUG_ON(!*foliop || !xa_is_value(*foliop));
+  1850		swap = radix_to_swp_entry(*foliop);
+  1851		*foliop = NULL;
+  1852	
+  1853		if (is_poisoned_swp_entry(swap))
+  1854			return -EIO;
+  1855	
+  1856		mpol = shmem_get_pgoff_policy(info, index, 0, &ilx);
+  1857		page = swapin_page_non_fault(swap, gfp, mpol, ilx, fault_mm, &result);
+  1858		mpol_cond_put(mpol);
+  1859	
+  1860		if (PTR_ERR(page) == -EBUSY) {
+  1861			if (!shmem_confirm_swap(mapping, index, swap))
+  1862				return -EEXIST;
+  1863			else
+  1864				return -EINVAL;
+  1865		} else if (!page) {
+  1866			error = -ENOMEM;
+  1867			goto failed;
+  1868		} else {
+  1869			folio = page_folio(page);
+> 1870			if (fault_type && result != SWAP_CACHE_HIT) {
+  1871				*fault_type |= VM_FAULT_MAJOR;
+  1872				count_vm_event(PGMAJFAULT);
+  1873				count_memcg_event_mm(fault_mm, PGMAJFAULT);
+  1874			}
+  1875		}
+  1876	
+  1877		/* We have to do this with folio locked to prevent races */
+  1878		folio_lock(folio);
+> 1879		if ((result != SWAP_CACHE_BYPASS && !folio_test_swapcache(folio)) ||
+  1880		    folio->swap.val != swap.val ||
+  1881		    !shmem_confirm_swap(mapping, index, swap)) {
+  1882			error = -EEXIST;
+  1883			goto unlock;
+  1884		}
+  1885		if (!folio_test_uptodate(folio)) {
+  1886			error = -EIO;
+  1887			goto failed;
+  1888		}
+  1889		folio_wait_writeback(folio);
+  1890	
+  1891		/*
+  1892		 * Some architectures may have to restore extra metadata to the
+  1893		 * folio after reading from swap.
+  1894		 */
+  1895		arch_swap_restore(swap, folio);
+  1896	
+  1897		if (shmem_should_replace_folio(folio, gfp)) {
+  1898			error = shmem_replace_folio(&folio, gfp, info, index);
+  1899			if (error)
+  1900				goto failed;
+  1901		}
+  1902	
+  1903		error = shmem_add_to_page_cache(folio, mapping, index,
+  1904						swp_to_radix_entry(swap), gfp);
+  1905		if (error)
+  1906			goto failed;
+  1907	
+  1908		shmem_recalc_inode(inode, 0, -1);
+  1909	
+  1910		if (sgp == SGP_WRITE)
+  1911			folio_mark_accessed(folio);
+  1912	
+  1913		delete_from_swap_cache(folio);
+  1914		folio_mark_dirty(folio);
+  1915		swap_free(swap);
+  1916	
+  1917		*foliop = folio;
+  1918		return 0;
+  1919	failed:
+  1920		if (!shmem_confirm_swap(mapping, index, swap))
+  1921			error = -EEXIST;
+  1922		if (error == -EIO)
+  1923			shmem_set_folio_swapin_error(inode, index, folio, swap);
+  1924	unlock:
+  1925		if (folio) {
+  1926			folio_unlock(folio);
+  1927			folio_put(folio);
+  1928		}
+  1929	
+  1930		return error;
+  1931	}
+  1932	
 
 -- 
 0-DAY CI Kernel Test Service
