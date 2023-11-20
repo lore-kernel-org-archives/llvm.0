@@ -1,57 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55991FC2;
-	Mon, 20 Nov 2023 03:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AB21FC8;
+	Mon, 20 Nov 2023 03:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nQwAIm6W"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PyQjCPxB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700451000; x=1731987000;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=09C+JX3EQpOVjp6ooinVdw2ACy+xGuGZ0pAKM2YA3j0=;
-  b=nQwAIm6WSkHtYKCojbGgYOd3ADRVYRvSPTYCm06oYNr8xkCewaB7TY9N
-   rRixIinW1VsTXA5X0TEwgEa2Xs81F8ETvfTMMpqOToEuPxEud4RwxP5Fw
-   420kS47pHarNEPTdU4uAzCdchXqOuWiZ0k8HN14Mmz/9ZMLsuOVCMMHvq
-   h6dtLwIgpawitcKEp/gdgg8L5ut3jU18PkUTti7mh5ZNMO3/CwUgCvdwF
-   hzWKc4rivxPKuI+8N6NhSqhiQ+NjzU4S4uDYl7NoXMU2jZuwXB8yjk1c9
-   wZR2qacW93xL6t1tl2TK8WG3uYpKSIznPAoojspW2TPqk/Fs0TCMmy6q1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="455865173"
+  t=1700451658; x=1731987658;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IlPqiDrz3tKuyD7L4wQ6R/Nl5fvYg+pnDt+lTYjtfrU=;
+  b=PyQjCPxBDkv9fMLDCGsl4ODRiRuLTz3hQVG02ZdFOeD8vg/0O2JIF6eq
+   nQGnJatD9A5DD2KflkcC+mGkken8pHcZpH4QMvyFv7Ficq8O347gC+EWX
+   th3RYHnos4Cr8IhBMuz3MvZmcWVnLbtvgGeVyqoDzNEDsR8jf84Cc+tMf
+   zTVW9gdJAcIkVoZmoT+eQ+2stG/2m9EqR6UaW98S+YTLvGYI0HuYMH1gH
+   pkucc5REZL0vdah8CQuDR7m5pWcPQjH4Ex1C3GhnRgTTDo5grc/s4MBfe
+   R1u9rDfMNfN5pV9ihwP5rsMXY8N0pRPG7YmvtTAuvsqb+xyislunCo1K0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="370887641"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="455865173"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 19:29:23 -0800
+   d="scan'208";a="370887641"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 19:40:57 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="1097630069"
 X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="1097630069"
+   d="scan'208";a="7427393"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Nov 2023 19:29:21 -0800
+  by orviesa002.jf.intel.com with ESMTP; 19 Nov 2023 19:40:56 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r4uyM-0005tX-2L;
-	Mon, 20 Nov 2023 03:29:18 +0000
-Date: Mon, 20 Nov 2023 11:28:42 +0800
+	id 1r4v9Y-0005uZ-2Z;
+	Mon, 20 Nov 2023 03:40:52 +0000
+Date: Mon, 20 Nov 2023 11:40:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Neil Armstrong <neil.armstrong@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v2 4/8] arm64: dts: qcom: sm8650: add initial SM8650 MTP
- dts
-Message-ID: <202311201131.R9DpSKl2-lkp@intel.com>
-References: <20231106-topic-sm8650-upstream-dt-v2-4-44d6f9710fa7@linaro.org>
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	Aravind Iddamsetty <aravind.iddamsetty@intel.com>
+Subject: [drm-intel:for-linux-next-gt 1/6]
+ drivers/gpu/drm/i915/i915_drm_client.h:81:1: warning: non-void function does
+ not return a value
+Message-ID: <202311201118.Jmt74ras-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,55 +51,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231106-topic-sm8650-upstream-dt-v2-4-44d6f9710fa7@linaro.org>
 
-Hi Neil,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on fe1998aa935b44ef873193c0772c43bce74f17dc]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Neil-Armstrong/dt-bindings-arm-qcom-document-SM8650-and-the-reference-boards/20231106-170959
-base:   fe1998aa935b44ef873193c0772c43bce74f17dc
-patch link:    https://lore.kernel.org/r/20231106-topic-sm8650-upstream-dt-v2-4-44d6f9710fa7%40linaro.org
-patch subject: [PATCH v2 4/8] arm64: dts: qcom: sm8650: add initial SM8650 MTP dts
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231120/202311201131.R9DpSKl2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311201131.R9DpSKl2-lkp@intel.com/reproduce)
+tree:   git://anongit.freedesktop.org/drm-intel for-linux-next-gt
+head:   3c7a5eb700661e8905ab4e50c2d09c6568125280
+commit: e4ae85e364fc652ea15d85b0f3a6da304c9b5ce7 [1/6] drm/i915: Add ability for tracking buffer objects per client
+config: i386-buildonly-randconfig-006-20231120 (https://download.01.org/0day-ci/archive/20231120/202311201118.Jmt74ras-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311201118.Jmt74ras-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311201131.R9DpSKl2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311201118.Jmt74ras-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm64/boot/dts/qcom/sm8650-mtp.dts:9:
->> arch/arm64/boot/dts/qcom/sm8650.dtsi:7:10: fatal error: 'dt-bindings/clock/qcom,sm8650-dispcc.h' file not found
-       7 | #include <dt-bindings/clock/qcom,sm8650-dispcc.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   warning: unknown warning option '-Wrestrict' [-Wunknown-warning-option]
+   warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
+   warning: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+   warning: unknown warning option '-Wformat-truncation' [-Wunknown-warning-option]
+   warning: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+   warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
+   In file included from drivers/gpu/drm/i915/i915_debugfs_params.c:11:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:54:
+>> drivers/gpu/drm/i915/i915_drm_client.h:81:1: warning: non-void function does not return a value [-Wreturn-type]
+   }
+   ^
+   7 warnings generated.
 
 
-vim +7 arch/arm64/boot/dts/qcom/sm8650.dtsi
+vim +81 drivers/gpu/drm/i915/i915_drm_client.h
 
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  @7  #include <dt-bindings/clock/qcom,sm8650-dispcc.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06   8  #include <dt-bindings/clock/qcom,sm8650-gcc.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06   9  #include <dt-bindings/clock/qcom,sm8650-gpucc.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  10  #include <dt-bindings/clock/qcom,sm8650-tcsr.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  11  #include <dt-bindings/dma/qcom-gpi.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  12  #include <dt-bindings/firmware/qcom,scm.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  13  #include <dt-bindings/gpio/gpio.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  14  #include <dt-bindings/interrupt-controller/arm-gic.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  15  #include <dt-bindings/mailbox/qcom-ipcc.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  16  #include <dt-bindings/phy/phy-qcom-qmp.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  17  #include <dt-bindings/power/qcom,rpmhpd.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  18  #include <dt-bindings/power/qcom-rpmpd.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  19  #include <dt-bindings/reset/qcom,sm8650-gpucc.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  20  #include <dt-bindings/soc/qcom,gpr.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  21  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  22  #include <dt-bindings/thermal/thermal.h>
-e7ea17c3abdf54 Neil Armstrong 2023-11-06  23  
+    78	
+    79	static inline bool i915_drm_client_remove_object(struct drm_i915_gem_object *obj)
+    80	{
+  > 81	}
+    82	#endif
+    83	
 
 -- 
 0-DAY CI Kernel Test Service
