@@ -1,31 +1,48 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392D211C91;
-	Mon, 20 Nov 2023 10:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52096134B0;
+	Mon, 20 Nov 2023 10:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qg3+xKVh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3207DC433C7;
-	Mon, 20 Nov 2023 10:02:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700474574;
-	bh=cHimYpMhUep/CZIA34BYn3fN2F5JRYJOp6C9HTy9Kyg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Qg3+xKVhl3cPufNUbrh2VSLXFNldK96+YpJvA8DbDkkpeMp+Hx5ksGncTNmrmcl40
-	 ueSj7yj7matXWd0Jclb+dv+XnCNlKTTYridjT7lcAXzl0UsJAz9jOev0hji2Bsyu51
-	 Mzp/1zhn7NNHV2GI6uzOqUT3Gip1yGTSUq/UHXKs=
-Date: Mon, 20 Nov 2023 11:02:51 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Su Hui <suhui@nfschina.com>
-Cc: tomas.winkler@intel.com, arnd@arndb.de, nathan@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] misc: mei: client.c: fix problem of return
- '-EOVERFLOW' in mei_cl_write
-Message-ID: <2023112042-napped-snoring-b766@gregkh>
-References: <20231120095523.178385-1-suhui@nfschina.com>
- <20231120095523.178385-2-suhui@nfschina.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T8n0rpMK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700476352; x=1732012352;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ywRsmRUzuJdLlCTjeuJHtRBSm+sGyVxn8YL3h99U0ZA=;
+  b=T8n0rpMKK4WxZl/xHf+dg/v0WNOCk295j4XtLP97tkxO/YtsTH1o3BcX
+   OVyuzgFTdEEqRc3T41Nroyl9loBBZ1xDDTByt9GBWnYF1rIQOX2P19QSR
+   vzsTjBCumiPeNZHea0v7GAZH46pFfBepPUj04QJVFPWUVgID0qlf6Wb2G
+   +3N8Ek6s1xJuD2+ber+wmlD/DuQIt1VJEyHptgzIfiM0VLJ64xovSs0gO
+   1CoiLKIkQJi4tXQ/XLb4Pevuu/1bPMkCbkmY6v/QTM9qTnEt/wAzEp9r+
+   bXIOa8wZC8fnrTWSMsYz+iwIXXZPpJejj52q+Zj7wyzgL6hvS4NnDkn/Y
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="381983093"
+X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
+   d="scan'208";a="381983093"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 02:32:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
+   d="scan'208";a="14104664"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 20 Nov 2023 02:32:30 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r51Zq-0006Mf-23;
+	Mon, 20 Nov 2023 10:32:26 +0000
+Date: Mon, 20 Nov 2023 18:31:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew Sakai <msakai@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dm-devel@lists.linux.dev, Mike Snitzer <snitzer@kernel.org>,
+	"J. corwin Coburn" <corwin@hurlbutnet.net>,
+	John Wiele <jwiele@redhat.com>
+Subject: [device-mapper-dm:dm-vdo 45/51] ld.lld: error: undefined symbol:
+ vdo_initialize_layout
+Message-ID: <202311201808.GSxJeVFR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,64 +51,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231120095523.178385-2-suhui@nfschina.com>
 
-On Mon, Nov 20, 2023 at 05:55:26PM +0800, Su Hui wrote:
-> Clang static analyzer complains that value stored to 'rets' is never
-> read.Let 'buf_len = -EOVERFLOW' to make sure we can return '-EOVERFLOW'.
-> 
-> Fixes: 8c8d964ce90f ("mei: move hbuf_depth from the mei device to the hw modules")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
-> v2: split v1 patch to different patches
-> v1: https://lore.kernel.org/all/5c98fc07-36a9-92cc-f8d6-c4efdc0c34aa@nfschina.com/
-> 
->  drivers/misc/mei/client.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
-> index 7ea80779a0e2..9d090fa07516 100644
-> --- a/drivers/misc/mei/client.c
-> +++ b/drivers/misc/mei/client.c
-> @@ -2032,7 +2032,7 @@ ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long time
->  
->  	hbuf_slots = mei_hbuf_empty_slots(dev);
->  	if (hbuf_slots < 0) {
-> -		rets = -EOVERFLOW;
-> +		buf_len = -EOVERFLOW;
->  		goto out;
->  	}
->  
-> -- 
-> 2.30.2
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git dm-vdo
+head:   19b93e634cff09b45c7825804ff65ed4b58b631f
+commit: 07ca0024cbfae90b461baa0a4cd0a6081d2cd4bd [45/51] dm vdo: enable configuration and building of dm-vdo
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20231120/202311201808.GSxJeVFR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311201808.GSxJeVFR-lkp@intel.com/reproduce)
 
-Hi,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311201808.GSxJeVFR-lkp@intel.com/
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+All errors (new ones prefixed by >>):
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+>> ld.lld: error: undefined symbol: vdo_initialize_layout
+   >>> referenced by dm-vdo-target.c
+   >>>               drivers/md/dm-vdo-target.o:(vdo_ctr) in archive vmlinux.a
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
