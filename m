@@ -1,94 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AB21FC8;
-	Mon, 20 Nov 2023 03:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PyQjCPxB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700451658; x=1731987658;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IlPqiDrz3tKuyD7L4wQ6R/Nl5fvYg+pnDt+lTYjtfrU=;
-  b=PyQjCPxBDkv9fMLDCGsl4ODRiRuLTz3hQVG02ZdFOeD8vg/0O2JIF6eq
-   nQGnJatD9A5DD2KflkcC+mGkken8pHcZpH4QMvyFv7Ficq8O347gC+EWX
-   th3RYHnos4Cr8IhBMuz3MvZmcWVnLbtvgGeVyqoDzNEDsR8jf84Cc+tMf
-   zTVW9gdJAcIkVoZmoT+eQ+2stG/2m9EqR6UaW98S+YTLvGYI0HuYMH1gH
-   pkucc5REZL0vdah8CQuDR7m5pWcPQjH4Ex1C3GhnRgTTDo5grc/s4MBfe
-   R1u9rDfMNfN5pV9ihwP5rsMXY8N0pRPG7YmvtTAuvsqb+xyislunCo1K0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="370887641"
-X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="370887641"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 19:40:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,212,1695711600"; 
-   d="scan'208";a="7427393"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 19 Nov 2023 19:40:56 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r4v9Y-0005uZ-2Z;
-	Mon, 20 Nov 2023 03:40:52 +0000
-Date: Mon, 20 Nov 2023 11:40:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	Aravind Iddamsetty <aravind.iddamsetty@intel.com>
-Subject: [drm-intel:for-linux-next-gt 1/6]
- drivers/gpu/drm/i915/i915_drm_client.h:81:1: warning: non-void function does
- not return a value
-Message-ID: <202311201118.Jmt74ras-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C9220E4;
+	Mon, 20 Nov 2023 03:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SYXvg0j31zRj3H;
+	Mon, 20 Nov 2023 11:25:35 +0800 (CST)
+Received: from [10.67.121.177] (10.67.121.177) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 20 Nov 2023 11:29:49 +0800
+CC: <yangyicong@hisilicon.com>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, <dietmar.eggemann@arm.com>,
+	<gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+	<jonathan.cameron@huawei.com>, <prime.zeng@hisilicon.com>,
+	<linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] arch_topology: Support basic SMT control for the
+ driver
+To: kernel test robot <lkp@intel.com>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <sudeep.holla@arm.com>,
+	<linux-arm-kernel@lists.infradead.org>
+References: <20231114040110.54590-2-yangyicong@huawei.com>
+ <202311152356.OWWDpFRB-lkp@intel.com>
+From: Yicong Yang <yangyicong@huawei.com>
+Message-ID: <0ef6d426-1b35-5455-5f97-b2f03b042560@huawei.com>
+Date: Mon, 20 Nov 2023 11:29:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <202311152356.OWWDpFRB-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.121.177]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
 
-tree:   git://anongit.freedesktop.org/drm-intel for-linux-next-gt
-head:   3c7a5eb700661e8905ab4e50c2d09c6568125280
-commit: e4ae85e364fc652ea15d85b0f3a6da304c9b5ce7 [1/6] drm/i915: Add ability for tracking buffer objects per client
-config: i386-buildonly-randconfig-006-20231120 (https://download.01.org/0day-ci/archive/20231120/202311201118.Jmt74ras-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311201118.Jmt74ras-lkp@intel.com/reproduce)
+On 2023/11/15 23:23, kernel test robot wrote:
+> Hi Yicong,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on arm64/for-next/core]
+> [also build test WARNING on driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus arm/for-next kvmarm/next soc/for-next linus/master arm/fixes v6.7-rc1 next-20231115]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yicong-Yang/arch_topology-Support-basic-SMT-control-for-the-driver/20231114-120544
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+> patch link:    https://lore.kernel.org/r/20231114040110.54590-2-yangyicong%40huawei.com
+> patch subject: [PATCH v3 1/4] arch_topology: Support basic SMT control for the driver
+> config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20231115/202311152356.OWWDpFRB-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231115/202311152356.OWWDpFRB-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202311152356.OWWDpFRB-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/base/arch_topology.c:32:12: warning: unused variable 'topology_smt_num_threads' [-Wunused-variable]
+>       32 | static int topology_smt_num_threads = 1;
+>          |            ^
+>    1 warning generated.
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311201118.Jmt74ras-lkp@intel.com/
+This variable needs to be protected by CONFIG_HOTPLUG_SMT, otherwise it'll be unused
+if architecture like arm/parisc selects CONFIG_GENERIC_ARCH_TOPOLOGY but not
+CONFIG_HOTPLUG_SMT.
 
-All warnings (new ones prefixed by >>):
-
-   warning: unknown warning option '-Wrestrict' [-Wunknown-warning-option]
-   warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
-   warning: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
-   warning: unknown warning option '-Wformat-truncation' [-Wunknown-warning-option]
-   warning: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
-   warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
-   In file included from drivers/gpu/drm/i915/i915_debugfs_params.c:11:
-   In file included from drivers/gpu/drm/i915/i915_drv.h:54:
->> drivers/gpu/drm/i915/i915_drm_client.h:81:1: warning: non-void function does not return a value [-Wreturn-type]
-   }
-   ^
-   7 warnings generated.
-
-
-vim +81 drivers/gpu/drm/i915/i915_drm_client.h
-
-    78	
-    79	static inline bool i915_drm_client_remove_object(struct drm_i915_gem_object *obj)
-    80	{
-  > 81	}
-    82	#endif
-    83	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> vim +/topology_smt_num_threads +32 drivers/base/arch_topology.c
+> 
+>     30	
+>     31	/* Maximum threads number per-Core */
+>   > 32	static int topology_smt_num_threads = 1;
+>     33	
+> 
