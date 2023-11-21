@@ -1,176 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4546348CD2;
-	Tue, 21 Nov 2023 13:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991CD43169;
+	Tue, 21 Nov 2023 14:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDpQK5zo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7789EC433C8;
-	Tue, 21 Nov 2023 13:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700572481;
-	bh=sde8UH1s+S4ZJXYAO43tWVBaZyVwRo176bP2DijjLOI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GDpQK5zo9UpeD6GkT0WYJk0auFna8sxeBC4CdhCQMBp49+MoYKwjHAGpgOvsAEPNg
-	 fCqE40vgBm7by3wYeVxKARR21bCTugAiNX2my51TLcaJ8QbOzU3jgIXvfLmsa57jYm
-	 v+BfyGsD59pQoFcD2opzjY5rtDJlYlFmfJ9VdHeeVNi5QaXEh0d1+ZLsp7ovuPxjXs
-	 staHh5fbiivWv9bHPX3P1x1e2LwXdkAyWW4yLs6UymSS/rvQcqPvPoBaeW4dxD9OOc
-	 bY5HZ9TPwh3nbaDJ7/umMYtNYjbvzP9hWLeM0duhJiie4u33DwomW9AATV9/TQLV/7
-	 3GZuKf/TNC4Iw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 0C86440094; Tue, 21 Nov 2023 10:14:39 -0300 (-03)
-Date: Tue, 21 Nov 2023 10:14:38 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev, linux-pm@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
-	Todd E Brandt <todd.e.brandt@linux.intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2 5/7] tools/perf: fix Python string escapes
-Message-ID: <ZVytPl1AjNw3IzSu@kernel.org>
-References: <20230912060801.95533-1-bgray@linux.ibm.com>
- <20230912060801.95533-6-bgray@linux.ibm.com>
- <340eae90-d270-5e52-4982-a67459bc46dd@intel.com>
- <d603d3b3-7563-d1c9-5086-c5bb78ea2e52@linux.ibm.com>
- <592b8fd2-bfe3-0f8d-2814-d8340bbc75ee@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GK8A6Nhr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700575487; x=1732111487;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ev5J9pqM959jLPv9OxsMqh6WPAkw7w5WSOvzKMBKQ6A=;
+  b=GK8A6NhrMptIlpeVRcTltwWCRtDiqyt4+aev7VZI2tOXiyxgJke5mkkx
+   amjSgtWplP5g2+TbneVAvH5EgfD5y7H7MPvVa40UkJmc45UXdINNe8TYd
+   moX9YN3mNXn+SJ+zTprLKbAd5LNC0lUu9X6eRIDM4MB5ny0ZO6nVLH1Py
+   HNiXhEb6vtvwhEQg9NgarNByts7OvdqcF9PHCj2vhDliIy9vnrmlinhYo
+   9G8frjeXFswY59Xw3nuauvVSn6+1vVLG/kMVWolujdocbcksvdQ39jCXB
+   UKpT4jkDyp+O+daYTBPC7rsq8s3amxDWcvyu2uPr1BEBKuf7NuFuMcfQ7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="422939266"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="422939266"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 06:04:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="890261426"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="890261426"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Nov 2023 06:04:39 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5RMj-0007tc-0O;
+	Tue, 21 Nov 2023 14:04:37 +0000
+Date: Tue, 21 Nov 2023 22:04:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Romain Gantois <romain.gantois@bootlin.com>, davem@davemloft.net,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Romain Gantois <romain.gantois@bootlin.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+	Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Luka Perkov <luka.perkov@sartura.hr>,
+	Robert Marko <robert.marko@sartura.hr>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH net-next v3 5/8] net: qualcomm: ipqess: add bridge
+ offloading features to the IPQESS driver
+Message-ID: <202311212153.jL7dVRss-lkp@intel.com>
+References: <20231114105600.1012056-6-romain.gantois@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <592b8fd2-bfe3-0f8d-2814-d8340bbc75ee@intel.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20231114105600.1012056-6-romain.gantois@bootlin.com>
 
-Em Wed, Sep 13, 2023 at 08:53:26AM +0300, Adrian Hunter escreveu:
-> On 13/09/23 03:26, Benjamin Gray wrote:
-> > On 12/9/23 8:56 pm, Adrian Hunter wrote:
-> >> On 12/09/23 09:07, Benjamin Gray wrote:
-> >>> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> >>> index a7e88332276d..980f080a5a2c 100755
-> >>> --- a/tools/perf/pmu-events/jevents.py
-> >>> +++ b/tools/perf/pmu-events/jevents.py
-> >>> @@ -83,7 +83,7 @@ def c_len(s: str) -> int:
-> >>>     """Return the length of s a C string
-> >>>       This doesn't handle all escape characters properly. It first assumes
-> >>> -  all \ are for escaping, it then adjusts as it will have over counted
-> >>> +  all \\ are for escaping, it then adjusts as it will have over counted
-> >>
-> >> It looks like the whole string should be a raw string
-> >>
-> > ...
-> >>> -                s = value.replace("%", "\%")
-> >>> -                s = s.replace("_", "\_")
-> >>> +                s = value.replace("%", "\\%")
-> >>> +                s = s.replace("_", "\\_")
-> >>
-> >> Raw strings seem more readable, so could be
-> >> used here too
-> > 
-> > Yeah, sounds good. I normally use r strings only for regex, but there shouldn't be any ambiguity here (it might have been misleading if the search argument to replace looked like a regex).
-> > 
-> > Having the docstring be an r string is a good catch. There's probably a few like that in the kernel, but finding them is a little more complicated because they might be 'valid' syntax (e.g., the '\000' just becomes a null byte. This series is focused on the syntax errors though, so I'll just leave it be.
-> > 
-> > How is the following?
-> > ---
-> > Subject: [PATCH] tools/perf: fix Python string escapes
-> > 
-> > Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
-> > This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
-> > be a syntax error.
-> > 
-> > Fix these now to get ahead of it before it's an error.
-> > 
-> > Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
-> 
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Hi Romain,
 
-applied the tools/perf one.
+kernel test robot noticed the following build warnings:
 
-- Arnaldo
- 
-> > ---
-> >  tools/perf/pmu-events/jevents.py                 | 2 +-
-> >  tools/perf/scripts/python/arm-cs-trace-disasm.py | 4 ++--
-> >  tools/perf/scripts/python/compaction-times.py    | 2 +-
-> >  tools/perf/scripts/python/exported-sql-viewer.py | 4 ++--
-> >  4 files changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> > index a7e88332276d..1b4519333a28 100755
-> > --- a/tools/perf/pmu-events/jevents.py
-> > +++ b/tools/perf/pmu-events/jevents.py
-> > @@ -80,7 +80,7 @@ def file_name_to_table_name(prefix: str, parents: Sequence[str],
-> > 
-> > 
-> >  def c_len(s: str) -> int:
-> > -  """Return the length of s a C string
-> > +  r"""Return the length of s a C string
-> > 
-> >    This doesn't handle all escape characters properly. It first assumes
-> >    all \ are for escaping, it then adjusts as it will have over counted
-> > diff --git a/tools/perf/scripts/python/arm-cs-trace-disasm.py b/tools/perf/scripts/python/arm-cs-trace-disasm.py
-> > index d59ff53f1d94..de58991c78bb 100755
-> > --- a/tools/perf/scripts/python/arm-cs-trace-disasm.py
-> > +++ b/tools/perf/scripts/python/arm-cs-trace-disasm.py
-> > @@ -45,8 +45,8 @@ parser = OptionParser(option_list=option_list)
-> >  # Initialize global dicts and regular expression
-> >  disasm_cache = dict()
-> >  cpu_data = dict()
-> > -disasm_re = re.compile("^\s*([0-9a-fA-F]+):")
-> > -disasm_func_re = re.compile("^\s*([0-9a-fA-F]+)\s.*:")
-> > +disasm_re = re.compile(r"^\s*([0-9a-fA-F]+):")
-> > +disasm_func_re = re.compile(r"^\s*([0-9a-fA-F]+)\s.*:")
-> >  cache_size = 64*1024
-> > 
-> >  glb_source_file_name    = None
-> > diff --git a/tools/perf/scripts/python/compaction-times.py b/tools/perf/scripts/python/compaction-times.py
-> > index 2560a042dc6f..9401f7c14747 100644
-> > --- a/tools/perf/scripts/python/compaction-times.py
-> > +++ b/tools/perf/scripts/python/compaction-times.py
-> > @@ -260,7 +260,7 @@ def pr_help():
-> > 
-> >  comm_re = None
-> >  pid_re = None
-> > -pid_regex = "^(\d*)-(\d*)$|^(\d*)$"
-> > +pid_regex = r"^(\d*)-(\d*)$|^(\d*)$"
-> > 
-> >  opt_proc = popt.DISP_DFL
-> >  opt_disp = topt.DISP_ALL
-> > diff --git a/tools/perf/scripts/python/exported-sql-viewer.py b/tools/perf/scripts/python/exported-sql-viewer.py
-> > index 13f2d8a81610..78763531fe5a 100755
-> > --- a/tools/perf/scripts/python/exported-sql-viewer.py
-> > +++ b/tools/perf/scripts/python/exported-sql-viewer.py
-> > @@ -677,8 +677,8 @@ class CallGraphModelBase(TreeModel):
-> >              #   sqlite supports GLOB (text only) which uses * and ? and is case sensitive
-> >              if not self.glb.dbref.is_sqlite3:
-> >                  # Escape % and _
-> > -                s = value.replace("%", "\%")
-> > -                s = s.replace("_", "\_")
-> > +                s = value.replace("%", r"\%")
-> > +                s = s.replace("_", r"\_")
-> >                  # Translate * and ? into SQL LIKE pattern characters % and _
-> >                  trans = string.maketrans("*?", "%_")
-> >                  match = " LIKE '" + str(s).translate(trans) + "'"
-> 
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Romain-Gantois/dt-bindings-net-Introduce-the-Qualcomm-IPQESS-Ethernet-switch/20231114-185953
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231114105600.1012056-6-romain.gantois%40bootlin.com
+patch subject: [PATCH net-next v3 5/8] net: qualcomm: ipqess: add bridge offloading features to the IPQESS driver
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231121/202311212153.jL7dVRss-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311212153.jL7dVRss-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311212153.jL7dVRss-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/dsa/qca/qca8k-8xxx.c:1982:5: warning: no previous prototype for function 'qca8k_dsa_port_fdb_dump' [-Wmissing-prototypes]
+    1982 | int qca8k_dsa_port_fdb_dump(struct dsa_switch *ds, int port,
+         |     ^
+   drivers/net/dsa/qca/qca8k-8xxx.c:1982:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1982 | int qca8k_dsa_port_fdb_dump(struct dsa_switch *ds, int port,
+         | ^
+         | static 
+>> drivers/net/dsa/qca/qca8k-8xxx.c:1988:6: warning: no previous prototype for function 'qca8k_dsa_port_stp_state_set' [-Wmissing-prototypes]
+    1988 | void qca8k_dsa_port_stp_state_set(struct dsa_switch *ds, int port,
+         |      ^
+   drivers/net/dsa/qca/qca8k-8xxx.c:1988:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1988 | void qca8k_dsa_port_stp_state_set(struct dsa_switch *ds, int port,
+         | ^
+         | static 
+>> drivers/net/dsa/qca/qca8k-8xxx.c:1995:6: warning: no previous prototype for function 'qca8k_dsa_port_fast_age' [-Wmissing-prototypes]
+    1995 | void qca8k_dsa_port_fast_age(struct dsa_switch *ds, int port)
+         |      ^
+   drivers/net/dsa/qca/qca8k-8xxx.c:1995:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1995 | void qca8k_dsa_port_fast_age(struct dsa_switch *ds, int port)
+         | ^
+         | static 
+>> drivers/net/dsa/qca/qca8k-8xxx.c:2000:5: warning: no previous prototype for function 'qca8k_dsa_set_ageing_time' [-Wmissing-prototypes]
+    2000 | int qca8k_dsa_set_ageing_time(struct dsa_switch *ds, unsigned int msecs)
+         |     ^
+   drivers/net/dsa/qca/qca8k-8xxx.c:2000:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2000 | int qca8k_dsa_set_ageing_time(struct dsa_switch *ds, unsigned int msecs)
+         | ^
+         | static 
+>> drivers/net/dsa/qca/qca8k-8xxx.c:2005:5: warning: no previous prototype for function 'qca8k_dsa_port_vlan_filtering' [-Wmissing-prototypes]
+    2005 | int qca8k_dsa_port_vlan_filtering(struct dsa_switch *ds, int port,
+         |     ^
+   drivers/net/dsa/qca/qca8k-8xxx.c:2005:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2005 | int qca8k_dsa_port_vlan_filtering(struct dsa_switch *ds, int port,
+         | ^
+         | static 
+>> drivers/net/dsa/qca/qca8k-8xxx.c:2012:5: warning: no previous prototype for function 'qca8k_dsa_vlan_add' [-Wmissing-prototypes]
+    2012 | int qca8k_dsa_vlan_add(struct dsa_switch *ds, int port,
+         |     ^
+   drivers/net/dsa/qca/qca8k-8xxx.c:2012:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2012 | int qca8k_dsa_vlan_add(struct dsa_switch *ds, int port,
+         | ^
+         | static 
+   6 warnings generated.
+
+
+vim +/qca8k_dsa_port_fdb_dump +1982 drivers/net/dsa/qca/qca8k-8xxx.c
+
+  1981	
+> 1982	int qca8k_dsa_port_fdb_dump(struct dsa_switch *ds, int port,
+  1983				    dsa_fdb_dump_cb_t *cb, void *data)
+  1984	{
+  1985		return qca8k_port_fdb_dump(ds->priv, port, cb, data);
+  1986	}
+  1987	
+> 1988	void qca8k_dsa_port_stp_state_set(struct dsa_switch *ds, int port,
+  1989					  u8 state)
+  1990	{
+  1991		qca8k_port_stp_state_set(ds->priv, port, state,
+  1992					 dsa_to_port(ds, port)->learning, true);
+  1993	}
+  1994	
+> 1995	void qca8k_dsa_port_fast_age(struct dsa_switch *ds, int port)
+  1996	{
+  1997		qca8k_port_fast_age(ds->priv, port);
+  1998	}
+  1999	
+> 2000	int qca8k_dsa_set_ageing_time(struct dsa_switch *ds, unsigned int msecs)
+  2001	{
+  2002		return qca8k_set_ageing_time(ds->priv, msecs);
+  2003	}
+  2004	
+> 2005	int qca8k_dsa_port_vlan_filtering(struct dsa_switch *ds, int port,
+  2006					  bool vlan_filtering,
+  2007					  struct netlink_ext_ack *extack)
+  2008	{
+  2009		return qca8k_port_vlan_filtering(ds->priv, port, vlan_filtering);
+  2010	}
+  2011	
+> 2012	int qca8k_dsa_vlan_add(struct dsa_switch *ds, int port,
+  2013			       const struct switchdev_obj_port_vlan *vlan,
+  2014			       struct netlink_ext_ack *extack)
+  2015	{
+  2016		return qca8k_port_vlan_add(ds->priv, port, vlan, extack);
+  2017	}
+  2018	
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
