@@ -1,114 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2A81CF9A;
-	Tue, 21 Nov 2023 07:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BM0zDAa3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700550136; x=1732086136;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pJYZ1j71i4St9wQRuF3Og2ivToBkBIotpIMkRk/1i04=;
-  b=BM0zDAa3QCf6UxJdDscV1A+bg8hMNpl5hkk+bXY/ye4KNINOQlyAJDRt
-   kt9fzTVG25f8bQHsFtJ5/KJXLzzibT5f5S8TUMrXBJO155IyCu+qxvQki
-   vBdCgPhTgkCr/puCehcec+TNPxSnZ9C/GiV+l458Gih6yQO7i5fmAIg25
-   parZ2e2d1A8o3bRc3PtmnzLff0Nk9AFgO7NHAH9jKt20CLgiH6uB9agi0
-   97RQgF3kVtL0bNoZd5f1UBysIB6zBfdVbrcKiXrYOHfcY6DKvbWGtRixE
-   cpn56suYGh6RTbaeeT0Cm3v8aBLIMtGO/I3wyDvtWzjZZNz3GAWYrQxBw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371951483"
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="371951483"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 23:02:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="7803212"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 20 Nov 2023 23:02:12 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5Klg-0007TJ-1E;
-	Tue, 21 Nov 2023 07:01:59 +0000
-Date: Tue, 21 Nov 2023 15:00:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Inki Dae <inki.dae@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [daeinki-drm-exynos:exynos-drm-fixes 2/2]
- drivers/gpu/drm/exynos/exynos_drm_dma.c:119:19: warning: incompatible
- integer to pointer conversion passing 'int' to parameter of type 'const void
- *'
-Message-ID: <202311211403.ZKszRGRN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35D41F933
+	for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 07:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r5Ksp-0008AB-GM; Tue, 21 Nov 2023 08:09:19 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r5Kso-00AWnv-MC; Tue, 21 Nov 2023 08:09:18 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r5Kso-004pby-Cy; Tue, 21 Nov 2023 08:09:18 +0100
+Date: Tue, 21 Nov 2023 08:09:18 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: sre@kernel.org, nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] power: reset: at91: Drop '__init' from
+ at91_wakeup_status()
+Message-ID: <20231121070918.xsjpdmfnrd563xok@pengutronix.de>
+References: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2f2ll4udxq7343yq"
 Content-Disposition: inline
-
-tree:   https://git.kernel.org:/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-fixes
-head:   a30ba4bd7cdb5726d86a557c5df8df71c7bc7fad
-commit: 9f6ed6faadde040e556880ade6881b3ad92861a3 [2/2] drm/exynos: fix a wrong error checking
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20231121/202311211403.ZKszRGRN-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211403.ZKszRGRN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311211403.ZKszRGRN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/exynos/exynos_drm_dma.c:119:19: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
-                           return PTR_ERR(-ENODEV);
-                                          ^~~~~~~
-   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
-   static inline long __must_check PTR_ERR(__force const void *ptr)
-                                                               ^
-   1 warning generated.
+In-Reply-To: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
 
-vim +119 drivers/gpu/drm/exynos/exynos_drm_dma.c
+--2f2ll4udxq7343yq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    94	
-    95	int exynos_drm_register_dma(struct drm_device *drm, struct device *dev,
-    96				    void **dma_priv)
-    97	{
-    98		struct exynos_drm_private *priv = drm->dev_private;
-    99	
-   100		if (!priv->dma_dev) {
-   101			priv->dma_dev = dev;
-   102			DRM_INFO("Exynos DRM: using %s device for DMA mapping operations\n",
-   103				 dev_name(dev));
-   104		}
-   105	
-   106		if (!IS_ENABLED(CONFIG_EXYNOS_IOMMU))
-   107			return 0;
-   108	
-   109		if (!priv->mapping) {
-   110			void *mapping = NULL;
-   111	
-   112			if (IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU))
-   113				mapping = arm_iommu_create_mapping(&platform_bus_type,
-   114					EXYNOS_DEV_ADDR_START, EXYNOS_DEV_ADDR_SIZE);
-   115			else if (IS_ENABLED(CONFIG_IOMMU_DMA))
-   116				mapping = iommu_get_domain_for_dev(priv->dma_dev);
-   117	
-   118			if (!mapping)
- > 119				return PTR_ERR(-ENODEV);
-   120			priv->mapping = mapping;
-   121		}
-   122	
-   123		return drm_iommu_attach_device(drm, dev, dma_priv);
-   124	}
-   125	
+On Mon, Nov 20, 2023 at 03:35:32PM -0700, Nathan Chancellor wrote:
+> When building with clang, there are two section mismatch warnings:
+>=20
+>   WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff=
+_probe+0x7c (section: .text) -> at91_wakeup_status (section: .init.text)
+>   WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_pr=
+obe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
+>=20
+> Drop '__init' from at91_wakeup_status() to clear up the mismatch.
+>=20
+> Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module=
+_platform_driver_probe()")
+> Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_plat=
+form_driver_probe()")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks.
+
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--2f2ll4udxq7343yq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVcV50ACgkQj4D7WH0S
+/k6i7QgAjsgw7n9dc9ir6cJZCu+PqNKZsiedUBAktzbcC66zMgVG/8wj+eGdfh0O
+uqVHPQTSkSB2j7I2RJ5GO7t5sZQcCPAvMCuEtQ1t3JjRtOjW7akVbQU1QGTgL5J9
+gjce8YieAb32Ay0evFzY+1fRgShuKbzVWabFqvu1Q+s3K4A787yDapbNShsS7iCB
+0P4qPRbakATfOb03UI43w8rPRlOy1Bn9bCtTWQp9VCmBUOchp+3PZxjDXbfHhxN1
+IlckFADdhQGr8fMd5X9+JDRSUSqHNAX12pka+a8KUilNT/N32VrsTxqqeGU6PHuC
+tP53uVK8Ah58s2KP+IEzNUkJLzCkWQ==
+=EwAJ
+-----END PGP SIGNATURE-----
+
+--2f2ll4udxq7343yq--
