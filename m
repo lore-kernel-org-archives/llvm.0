@@ -1,236 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAB218640;
-	Tue, 21 Nov 2023 05:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0C419BCA;
+	Tue, 21 Nov 2023 05:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gig0Evtt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700544105; x=1732080105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U/vzE5xUw7htLBY4ClpNy7HJvmH36d/i2p290QfaiAQ=;
-  b=Gig0EvttTd9J6Ni4bsvovFH9DUxs2f5V3aSxNrl3AejAKu+icfpIeRtB
-   JzgAdVc1No2Ezj2ckU+NWQn5wT9A9BkVl8aCDTQfhOCPu56KGYSbu1iQS
-   u3nHvWOOorps6xWIda9t5Ey4FeVI+/+jCEl47FRCjDRbd6UYb8QIqBESp
-   htp/zcptl3k2iN7C6h0ClA46kZZlQKT3hON07XEoDsfY3Xm36ssd+HUnb
-   +gct41oi+GYWyV6XmzWU9735zjV42ixGuDKuEKVAU0nzgF7ttrlJFsAm0
-   BxY+uaFwosCzUGQ/FL8KyLuEu47zEiyqCCt6cLSnB42yXeU/KwHU9e+uP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="458263439"
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="458263439"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 21:21:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="7781920"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 20 Nov 2023 21:21:40 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5JCY-0007Ky-1x;
-	Tue, 21 Nov 2023 05:21:34 +0000
-Date: Tue, 21 Nov 2023 13:17:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-	bpf@vger.kernel.org
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="likLLOTk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1700545049; x=1732081049;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/zrryXpKWKQAyrCPZGj07xxabi8IACpWZDfQTkTD2cw=;
+  b=likLLOTk+eHaEyvJeOnOTUF7jmxnvAanWC8ApaH1s5HahXiTQhxg8ZQ5
+   2+yqLsYfDCxXFApE5aLzK+fNJe5q2Cc1e/nW00pRPo9N96YF+iJKyUoSw
+   ksa1sqZT892qz4RccZ7QHjus3rrU45LBLXJJ+hbwtxHSkH7iofLYfY2DU
+   I=;
+X-IronPort-AV: E=Sophos;i="6.04,215,1695686400"; 
+   d="scan'208";a="364017441"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 05:37:24 +0000
+Received: from smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev (pdx2-ws-svc-p26-lb5-vlan2.pdx.amazon.com [10.39.38.66])
+	by email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com (Postfix) with ESMTPS id C90CBA049D;
+	Tue, 21 Nov 2023 05:37:22 +0000 (UTC)
+Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:39084]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.8.2:2525] with esmtp (Farcaster)
+ id 940a4e78-2f4b-4cb0-b273-910cbf05cc9c; Tue, 21 Nov 2023 05:37:22 +0000 (UTC)
+X-Farcaster-Flow-ID: 940a4e78-2f4b-4cb0-b273-910cbf05cc9c
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Tue, 21 Nov 2023 05:37:22 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.171.26) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.39;
+ Tue, 21 Nov 2023 05:37:17 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <lkp@intel.com>
+CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+	<daniel@iogearbox.net>, <davem@davemloft.net>, <dsahern@kernel.org>,
+	<edumazet@google.com>, <haoluo@google.com>, <john.fastabend@gmail.com>,
+	<jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
+	<kuniyu@amazon.com>, <llvm@lists.linux.dev>, <martin.lau@linux.dev>,
+	<mykolal@fb.com>, <netdev@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
+	<pabeni@redhat.com>, <sdf@google.com>, <song@kernel.org>,
+	<yonghong.song@linux.dev>
 Subject: Re: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
-Message-ID: <202311211310.E8pJEsnT-lkp@intel.com>
-References: <20231120222341.54776-11-kuniyu@amazon.com>
+Date: Mon, 20 Nov 2023 21:37:09 -0800
+Message-ID: <20231121053709.91149-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <202311211310.E8pJEsnT-lkp@intel.com>
+References: <202311211310.E8pJEsnT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231120222341.54776-11-kuniyu@amazon.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.187.171.26]
+X-ClientProxiedBy: EX19D036UWB004.ant.amazon.com (10.13.139.170) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Precedence: Bulk
 
-Hi Kuniyuki,
+From: kernel test robot <lkp@intel.com>
+Date: Tue, 21 Nov 2023 13:17:40 +0800
+> Hi Kuniyuki,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on bpf-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Clean-up-reverse-xmas-tree-in-cookie_v-46-_check/20231121-063036
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20231120222341.54776-11-kuniyu%40amazon.com
+> patch subject: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
+> config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202311211310.E8pJEsnT-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from net/core/sock.c:142:
+>    In file included from include/net/tcp.h:32:
+> >> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
+>                            skb->destructor = sock_pfree;
+>                                              ^
 
-kernel test robot noticed the following build errors:
+Ok, sock_pfree is available with CONFIG_INET.
 
-[auto build test ERROR on bpf-next/master]
+I'll guard the req->syncookie part in inet6?_steal_sock() by
+CONFIG_SYN_COOKIE too.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Clean-up-reverse-xmas-tree-in-cookie_v-46-_check/20231121-063036
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20231120222341.54776-11-kuniyu%40amazon.com
-patch subject: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
-config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311211310.E8pJEsnT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from net/core/sock.c:142:
-   In file included from include/net/tcp.h:32:
->> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
-                           skb->destructor = sock_pfree;
-                                             ^
-   1 error generated.
---
-   In file included from net/core/filter.c:39:
-   In file included from include/linux/skmsg.h:13:
-   In file included from include/net/tcp.h:32:
->> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
-                           skb->destructor = sock_pfree;
-                                             ^
-   net/core/filter.c:11812:13: warning: declaration of 'struct tcp_cookie_attributes' will not be visible outside of this function [-Wvisibility]
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11821:24: error: invalid application of 'sizeof' to an incomplete type 'struct tcp_cookie_attributes'
-           if (attr__sz != sizeof(*attr))
-                                 ^~~~~~~
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11851:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           if (attr->tcp_opt.mss_clamp < min_mss) {
-               ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11856:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           if (attr->tcp_opt.wscale_ok &&
-               ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11857:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
-               attr->tcp_opt.snd_wscale > TCP_MAX_WSCALE) {
-               ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11875:17: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           req->mss = attr->tcp_opt.mss_clamp;
-                      ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11877:25: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           ireq->snd_wscale = attr->tcp_opt.snd_wscale;
-                              ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11878:24: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           ireq->wscale_ok = attr->tcp_opt.wscale_ok;
-                             ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11879:24: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           ireq->tstamp_ok = attr->tcp_opt.tstamp_ok;
-                             ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11880:22: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           ireq->sack_ok = attr->tcp_opt.sack_ok;
-                           ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11881:21: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           ireq->ecn_ok = attr->ecn_ok;
-                          ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
-   net/core/filter.c:11883:26: error: incomplete definition of type 'struct tcp_cookie_attributes'
-           treq->req_usec_ts = attr->usec_ts_ok;
-                               ~~~~^
-   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
-                                           struct tcp_cookie_attributes *attr,
-                                                  ^
->> net/core/filter.c:11887:20: error: use of undeclared identifier 'sock_pfree'
-           skb->destructor = sock_pfree;
-                             ^
-   1 warning and 13 errors generated.
-
-
-vim +/sock_pfree +472 include/net/inet_hashtables.h
-
-   451	
-   452	static inline
-   453	struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
-   454				     const __be32 saddr, const __be16 sport,
-   455				     const __be32 daddr, const __be16 dport,
-   456				     bool *refcounted, inet_ehashfn_t *ehashfn)
-   457	{
-   458		struct sock *sk, *reuse_sk;
-   459		bool prefetched;
-   460	
-   461		sk = skb_steal_sock(skb, refcounted, &prefetched);
-   462		if (!sk)
-   463			return NULL;
-   464	
-   465		if (!prefetched)
-   466			return sk;
-   467	
-   468		if (sk->sk_state == TCP_NEW_SYN_RECV) {
-   469			if (inet_reqsk(sk)->syncookie) {
-   470				*refcounted = false;
-   471				skb->sk = sk;
- > 472				skb->destructor = sock_pfree;
-   473				return inet_reqsk(sk)->rsk_listener;
-   474			}
-   475			return sk;
-   476		} else if (sk->sk_state == TCP_TIME_WAIT) {
-   477			return sk;
-   478		}
-   479	
-   480		if (sk->sk_protocol == IPPROTO_TCP) {
-   481			if (sk->sk_state != TCP_LISTEN)
-   482				return sk;
-   483		} else if (sk->sk_protocol == IPPROTO_UDP) {
-   484			if (sk->sk_state != TCP_CLOSE)
-   485				return sk;
-   486		} else {
-   487			return sk;
-   488		}
-   489	
-   490		reuse_sk = inet_lookup_reuseport(net, sk, skb, doff,
-   491						 saddr, sport, daddr, ntohs(dport),
-   492						 ehashfn);
-   493		if (!reuse_sk)
-   494			return sk;
-   495	
-   496		/* We've chosen a new reuseport sock which is never refcounted. This
-   497		 * implies that sk also isn't refcounted.
-   498		 */
-   499		WARN_ON_ONCE(*refcounted);
-   500	
-   501		return reuse_sk;
-   502	}
-   503	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---8<---
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index b6c0ed5a1e3c..9a67f47a5e64 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -120,12 +120,14 @@ struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 		return sk;
+ 
+ 	if (sk->sk_state == TCP_NEW_SYN_RECV) {
++#if IS_ENABLED(CONFIG_SYN_COOKIE)
+ 		if (inet_reqsk(sk)->syncookie) {
+ 			*refcounted = false;
+ 			skb->sk = sk;
+ 			skb->destructor = sock_pfree;
+ 			return inet_reqsk(sk)->rsk_listener;
+ 		}
++#endif
+ 		return sk;
+ 	} else if (sk->sk_state == TCP_TIME_WAIT) {
+ 		return sk;
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index 0f4091112967..36609656a047 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -466,12 +466,14 @@ struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 		return sk;
+ 
+ 	if (sk->sk_state == TCP_NEW_SYN_RECV) {
++#if IS_ENABLED(CONFIG_SYN_COOKIE)
+ 		if (inet_reqsk(sk)->syncookie) {
+ 			*refcounted = false;
+ 			skb->sk = sk;
+ 			skb->destructor = sock_pfree;
+ 			return inet_reqsk(sk)->rsk_listener;
+ 		}
++#endif
+ 		return sk;
+ 	} else if (sk->sk_state == TCP_TIME_WAIT) {
+ 		return sk;
+---8<---
