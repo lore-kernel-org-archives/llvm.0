@@ -1,47 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC5518621;
-	Tue, 21 Nov 2023 05:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAB218640;
+	Tue, 21 Nov 2023 05:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PVNmtci5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gig0Evtt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700543217; x=1732079217;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=04KqZl1G1+fBQJI3RnSh7y+srxH1479j7GO1vnyZFOk=;
-  b=PVNmtci5dE/kUknTnp2Gi8dtB3L9GjhwFAyC+jj05XMW0ym1tefZpa6l
-   mp+x3ad+v3y9CAZLczfnFlpvz5TQoAJMkhojLfYUVEYTtBqNnob+TE3rb
-   RnR+xa4sC4SkVM6ewEYZkvSa7w2mqqxr/2BMRaYx5O0uTbuREOccK5yFg
-   WgDt45+XCeSxloA/5Zu0UVpasp6wQ97x18w4laRbVDn+2V+ON4R/SVwK/
-   Z3Wxx22xmtdYk2aSoI2Sv6milmLCPxrCjqZNk5bfAzXCkRWsZ7g2F07r/
-   iIinH/8ZaDo2CR2gfKFE143UZ+yTFNAKo2nZe9FGHrIhE/1t6hCdW++Qn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371937455"
+  t=1700544105; x=1732080105;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U/vzE5xUw7htLBY4ClpNy7HJvmH36d/i2p290QfaiAQ=;
+  b=Gig0EvttTd9J6Ni4bsvovFH9DUxs2f5V3aSxNrl3AejAKu+icfpIeRtB
+   JzgAdVc1No2Ezj2ckU+NWQn5wT9A9BkVl8aCDTQfhOCPu56KGYSbu1iQS
+   u3nHvWOOorps6xWIda9t5Ey4FeVI+/+jCEl47FRCjDRbd6UYb8QIqBESp
+   htp/zcptl3k2iN7C6h0ClA46kZZlQKT3hON07XEoDsfY3Xm36ssd+HUnb
+   +gct41oi+GYWyV6XmzWU9735zjV42ixGuDKuEKVAU0nzgF7ttrlJFsAm0
+   BxY+uaFwosCzUGQ/FL8KyLuEu47zEiyqCCt6cLSnB42yXeU/KwHU9e+uP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="458263439"
 X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="371937455"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 21:06:56 -0800
+   d="scan'208";a="458263439"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 21:21:45 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="836946216"
 X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="836946216"
+   d="scan'208";a="7781920"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Nov 2023 21:06:55 -0800
+  by orviesa002.jf.intel.com with ESMTP; 20 Nov 2023 21:21:40 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r5IyL-0007KQ-10;
-	Tue, 21 Nov 2023 05:06:53 +0000
-Date: Tue, 21 Nov 2023 13:06:16 +0800
+	id 1r5JCY-0007Ky-1x;
+	Tue, 21 Nov 2023 05:21:34 +0000
+Date: Tue, 21 Nov 2023 13:17:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robertosassu:ima-evm-lsms-v6-devel-v4 22/26]
- security/integrity/evm/evm_main.c:1061:12: warning: no previous prototype
- for function 'init_evm_lsm'
-Message-ID: <202311211244.2uqAiAnr-lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
+Message-ID: <202311211310.E8pJEsnT-lkp@intel.com>
+References: <20231120222341.54776-11-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,46 +64,172 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231120222341.54776-11-kuniyu@amazon.com>
 
-tree:   https://github.com/robertosassu/linux ima-evm-lsms-v6-devel-v4
-head:   58605e8f9256d446ad8fa46474f4a402a68715a5
-commit: ab43d28d22d09d87c91646df14890fa542f9dc3d [22/26] evm: Move to LSM infrastructure
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311211244.2uqAiAnr-lkp@intel.com/config)
+Hi Kuniyuki,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Clean-up-reverse-xmas-tree-in-cookie_v-46-_check/20231121-063036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20231120222341.54776-11-kuniyu%40amazon.com
+patch subject: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
+config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211244.2uqAiAnr-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311211244.2uqAiAnr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311211310.E8pJEsnT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> security/integrity/evm/evm_main.c:1061:12: warning: no previous prototype for function 'init_evm_lsm' [-Wmissing-prototypes]
-   int __init init_evm_lsm(void)
-              ^
-   security/integrity/evm/evm_main.c:1061:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init init_evm_lsm(void)
-   ^
-   static 
-   1 warning generated.
+   In file included from net/core/sock.c:142:
+   In file included from include/net/tcp.h:32:
+>> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
+                           skb->destructor = sock_pfree;
+                                             ^
+   1 error generated.
+--
+   In file included from net/core/filter.c:39:
+   In file included from include/linux/skmsg.h:13:
+   In file included from include/net/tcp.h:32:
+>> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
+                           skb->destructor = sock_pfree;
+                                             ^
+   net/core/filter.c:11812:13: warning: declaration of 'struct tcp_cookie_attributes' will not be visible outside of this function [-Wvisibility]
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11821:24: error: invalid application of 'sizeof' to an incomplete type 'struct tcp_cookie_attributes'
+           if (attr__sz != sizeof(*attr))
+                                 ^~~~~~~
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11851:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           if (attr->tcp_opt.mss_clamp < min_mss) {
+               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11856:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           if (attr->tcp_opt.wscale_ok &&
+               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11857:10: error: incomplete definition of type 'struct tcp_cookie_attributes'
+               attr->tcp_opt.snd_wscale > TCP_MAX_WSCALE) {
+               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11875:17: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           req->mss = attr->tcp_opt.mss_clamp;
+                      ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11877:25: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->snd_wscale = attr->tcp_opt.snd_wscale;
+                              ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11878:24: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->wscale_ok = attr->tcp_opt.wscale_ok;
+                             ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11879:24: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->tstamp_ok = attr->tcp_opt.tstamp_ok;
+                             ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11880:22: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->sack_ok = attr->tcp_opt.sack_ok;
+                           ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11881:21: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           ireq->ecn_ok = attr->ecn_ok;
+                          ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+   net/core/filter.c:11883:26: error: incomplete definition of type 'struct tcp_cookie_attributes'
+           treq->req_usec_ts = attr->usec_ts_ok;
+                               ~~~~^
+   net/core/filter.c:11812:13: note: forward declaration of 'struct tcp_cookie_attributes'
+                                           struct tcp_cookie_attributes *attr,
+                                                  ^
+>> net/core/filter.c:11887:20: error: use of undeclared identifier 'sock_pfree'
+           skb->destructor = sock_pfree;
+                             ^
+   1 warning and 13 errors generated.
 
 
-vim +/init_evm_lsm +1061 security/integrity/evm/evm_main.c
+vim +/sock_pfree +472 include/net/inet_hashtables.h
 
-  1054	
-  1055	/*
-  1056	 * Since with the LSM_ORDER_LAST there is no guarantee about the ordering
-  1057	 * within the .lsm_info.init section, ensure that IMA hooks are before EVM
-  1058	 * ones, by letting the 'integrity' LSM call init_evm_lsm() to initialize the
-  1059	 * 'ima' and 'evm' LSMs in this sequence.
-  1060	 */
-> 1061	int __init init_evm_lsm(void)
-  1062	{
-  1063		security_add_hooks(evm_hooks, ARRAY_SIZE(evm_hooks), &evm_lsmid);
-  1064		return 0;
-  1065	}
-  1066	
+   451	
+   452	static inline
+   453	struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+   454				     const __be32 saddr, const __be16 sport,
+   455				     const __be32 daddr, const __be16 dport,
+   456				     bool *refcounted, inet_ehashfn_t *ehashfn)
+   457	{
+   458		struct sock *sk, *reuse_sk;
+   459		bool prefetched;
+   460	
+   461		sk = skb_steal_sock(skb, refcounted, &prefetched);
+   462		if (!sk)
+   463			return NULL;
+   464	
+   465		if (!prefetched)
+   466			return sk;
+   467	
+   468		if (sk->sk_state == TCP_NEW_SYN_RECV) {
+   469			if (inet_reqsk(sk)->syncookie) {
+   470				*refcounted = false;
+   471				skb->sk = sk;
+ > 472				skb->destructor = sock_pfree;
+   473				return inet_reqsk(sk)->rsk_listener;
+   474			}
+   475			return sk;
+   476		} else if (sk->sk_state == TCP_TIME_WAIT) {
+   477			return sk;
+   478		}
+   479	
+   480		if (sk->sk_protocol == IPPROTO_TCP) {
+   481			if (sk->sk_state != TCP_LISTEN)
+   482				return sk;
+   483		} else if (sk->sk_protocol == IPPROTO_UDP) {
+   484			if (sk->sk_state != TCP_CLOSE)
+   485				return sk;
+   486		} else {
+   487			return sk;
+   488		}
+   489	
+   490		reuse_sk = inet_lookup_reuseport(net, sk, skb, doff,
+   491						 saddr, sport, daddr, ntohs(dport),
+   492						 ehashfn);
+   493		if (!reuse_sk)
+   494			return sk;
+   495	
+   496		/* We've chosen a new reuseport sock which is never refcounted. This
+   497		 * implies that sk also isn't refcounted.
+   498		 */
+   499		WARN_ON_ONCE(*refcounted);
+   500	
+   501		return reuse_sk;
+   502	}
+   503	
 
 -- 
 0-DAY CI Kernel Test Service
