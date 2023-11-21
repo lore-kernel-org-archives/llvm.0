@@ -1,107 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0769584CC;
-	Tue, 21 Nov 2023 21:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094A5584DB
+	for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 21:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SGviCvAK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700602065; x=1732138065;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aErFLE5NRGJiThILQEDiUIBkEQRBIqvv5llIdQo0VWw=;
-  b=SGviCvAKFFfeHc5TwgW2TsqBEWSKkf5eUAF60BMyqbKkADyMHbaD86U4
-   dIM99RLLGwi3mqW3+nIpYk5V4nmoYpqHkLkKT1Pl7rrGe7h0lD9M4dcsA
-   8cjpe8xM1YiFyem6mtigePVBGd19YbGuT28SiU5gQ8sj3k7/v/eFLay7p
-   A67zQKWOlO8VcT1+hSbeXwBmeI0YMGphzo9W8IiL2UOYzOEDkhH1tsdQf
-   lupJEp2rl7WqZY166i47Cl6NmX/moo8vTMyzPSKQzeddQUcuIdZU+zZx/
-   UuKawrwBksPnhbIBneurWFIUwXcw1q2hG5JI1EOU5eSFlmcJbDOcFvOr+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="390788284"
-X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
-   d="scan'208";a="390788284"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 13:27:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="857442535"
-X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
-   d="scan'208";a="857442535"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Nov 2023 13:27:44 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5YHV-0008HJ-2Y;
-	Tue, 21 Nov 2023 21:27:41 +0000
-Date: Wed, 22 Nov 2023 05:27:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/200-dcp 95/145]
- drivers/gpu/drm/apple/iomfb.c:221:6: warning: no previous prototype for
- function 'dcp_sleep'
-Message-ID: <202311220556.u1bKa9r1-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U6WCyGTk"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-548db776f6cso649a12.1
+        for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 13:30:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700602246; x=1701207046; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RXRXOHrIRmnNFfmvROVe8lKDFwRW7hSZ8Iy3oG731k4=;
+        b=U6WCyGTkC322R3kcz8XfZAS2DnoRU7c2pKSyTXjpB4sRQ+PEcPzy8Rre10LS7cE00t
+         2X1B0oWrkkAeueVRZfwzmXWyvDYGhIuFG7oVBeX0+ysax9obuyOdd933mCwjP8DK7k00
+         auT9ThqS3vPQIR785ycHqywLVxZgebJrBQHZ6319FpI/Xh24Ni0z4LEhl+ypCSxlOQiy
+         RePT77PwYJVHWPPWfLPctTHAyH7xA+BQQmrNs/9UFC2SXDDWclLOywdXLyM/0WCiyGwX
+         TPuOyiljJf795ovl3fIEoIvoQokDSU+RLvDnWOvhr/1ArJL2KJYKoyllpSSN4H2YOVsm
+         T9aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700602246; x=1701207046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RXRXOHrIRmnNFfmvROVe8lKDFwRW7hSZ8Iy3oG731k4=;
+        b=CTl8VvA230F7BAPR+wcIDGvEZySElT8eH4pvp7Oulrent9pklGbYhPjaO671xVTfan
+         bcDs3fBcTz7BQ3QPbYCtCwbtIQrhdFvDEI9LJy99nqhaaPa3r1QpqOPt8ts7q+8kJbHl
+         3aIHcUFXHHqUK8q0u/HHAbFpXL7ybUmvQ5IETTOfXxg0Z9BtLhjrXfBsSSNjLtYMa0MK
+         Tog8//9Mw98AgDT/9YVjRnPS5yW02WxGFWsThFWh+bBD3Y9Mdg+vDsMocJ2IAqPQtqKu
+         2yN/Vce7ammsz6daM/JX8hT/7K/1m7j101IOZWr+sLj5YFG0hOF3iS4ManXtYSknj+GU
+         Aj3w==
+X-Gm-Message-State: AOJu0YyRfoB1yZAWLWQgmtuDkLu5ciyoXYcNa28fJkXpwoWy6SVQkBpc
+	VTf4u8W/1857bYC6VUOuCtpY8EjW92P9f/2g8mUz
+X-Google-Smtp-Source: AGHT+IHOtAA86g7jwkpaavoDBRqXKPir59yYYqgAnqkDI3hxqIE8E0l3kuP8HHpkUDJfRxjrgyK41yk/p5NeVcpEmRU=
+X-Received: by 2002:a05:6402:27cd:b0:547:e5b:6e17 with SMTP id
+ c13-20020a05640227cd00b005470e5b6e17mr56442ede.2.1700602246100; Tue, 21 Nov
+ 2023 13:30:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20231117-maintainers-v1-1-85f2a7422ed9@google.com> <CA+icZUXFGp-yoWUHhbowz6YJyoULCgtjSZ-fTpRg8YvVD9V5gg@mail.gmail.com>
+In-Reply-To: <CA+icZUXFGp-yoWUHhbowz6YJyoULCgtjSZ-fTpRg8YvVD9V5gg@mail.gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Tue, 21 Nov 2023 13:30:27 -0800
+Message-ID: <CAGG=3QUTLTiD=4aj62YXUvLy0jCufMY_-+G-dYrtqN8i=tcqmA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: refresh LLVM support
+To: sedat.dilek@gmail.com
+Cc: ndesaulniers@google.com, Kees Cook <keescook@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Justin Stitt <justinstitt@google.com>, Tom Rix <trix@redhat.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/200-dcp
-head:   e3a82f03cd81edb4608ab6dde0e073ac91e2fdb8
-commit: 4508d91b634778cc472055cdbc9032d7a57dc530 [95/145] drm/apple: Add support for the macOS 13.2 DCP firmware
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231122/202311220556.u1bKa9r1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220556.u1bKa9r1-lkp@intel.com/reproduce)
+On Tue, Nov 21, 2023 at 2:58=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.com>=
+ wrote:
+>
+> On Fri, Nov 17, 2023 at 8:24=E2=80=AFPM <ndesaulniers@google.com> wrote:
+> >
+> > As discussed at the ClangBuiltLinux '23 meetup (co-located with Linux P=
+lumbers
+> > Conf '23), I'll be taking a step back from kernel work to focus on my g=
+rowing
+> > family and helping Google figure out its libc story. So I think it's ti=
+me to
+> > formally hand over the reigns to my co-maintainer Nathan.
+> >
+>
+> Hi Nick,
+>
+> WoW (C)lang(B)uilt(L)inux baby coming soon - your best patch well done!
+> (  "Catherine Beatrix Luana" might be a good first-name (my
+> Suggested-by when it's female) ).
+>
+I vote for Ada Grace or Emmy Sophia, in honor of some amazing women
+mathematicians. (I'm trying to get my friends' children to become
+mathematicians!)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311220556.u1bKa9r1-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/apple/iomfb.c:221:6: warning: no previous prototype for function 'dcp_sleep' [-Wmissing-prototypes]
-     221 | void dcp_sleep(struct apple_dcp *dcp)
-         |      ^
-   drivers/gpu/drm/apple/iomfb.c:221:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     221 | void dcp_sleep(struct apple_dcp *dcp)
-         | ^
-         | static 
->> drivers/gpu/drm/apple/iomfb.c:518:6: warning: no previous prototype for function 'iomfb_start' [-Wmissing-prototypes]
-     518 | void iomfb_start(struct apple_dcp *dcp)
-         |      ^
-   drivers/gpu/drm/apple/iomfb.c:518:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     518 | void iomfb_start(struct apple_dcp *dcp)
-         | ^
-         | static 
-   2 warnings generated.
-
-
-vim +/dcp_sleep +221 drivers/gpu/drm/apple/iomfb.c
-
-   220	
- > 221	void dcp_sleep(struct apple_dcp *dcp)
-   222	{
-   223		switch (dcp->fw_compat) {
-   224		case DCP_FIRMWARE_V_12_3:
-   225			iomfb_sleep_v12_3(dcp);
-   226			break;
-   227		case DCP_FIRMWARE_V_13_2:
-   228			iomfb_sleep_v13_2(dcp);
-   229			break;
-   230		default:
-   231			WARN_ONCE(true, "Unexpected firmware version: %u\n", dcp->fw_compat);
-   232			break;
-   233		}
-   234	}
-   235	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-bw
