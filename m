@@ -1,141 +1,114 @@
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0C419BCA;
-	Tue, 21 Nov 2023 05:37:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C871D534;
+	Tue, 21 Nov 2023 06:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="likLLOTk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1700545049; x=1732081049;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/zrryXpKWKQAyrCPZGj07xxabi8IACpWZDfQTkTD2cw=;
-  b=likLLOTk+eHaEyvJeOnOTUF7jmxnvAanWC8ApaH1s5HahXiTQhxg8ZQ5
-   2+yqLsYfDCxXFApE5aLzK+fNJe5q2Cc1e/nW00pRPo9N96YF+iJKyUoSw
-   ksa1sqZT892qz4RccZ7QHjus3rrU45LBLXJJ+hbwtxHSkH7iofLYfY2DU
-   I=;
-X-IronPort-AV: E=Sophos;i="6.04,215,1695686400"; 
-   d="scan'208";a="364017441"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 05:37:24 +0000
-Received: from smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev (pdx2-ws-svc-p26-lb5-vlan2.pdx.amazon.com [10.39.38.66])
-	by email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com (Postfix) with ESMTPS id C90CBA049D;
-	Tue, 21 Nov 2023 05:37:22 +0000 (UTC)
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:39084]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.8.2:2525] with esmtp (Farcaster)
- id 940a4e78-2f4b-4cb0-b273-910cbf05cc9c; Tue, 21 Nov 2023 05:37:22 +0000 (UTC)
-X-Farcaster-Flow-ID: 940a4e78-2f4b-4cb0-b273-910cbf05cc9c
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Tue, 21 Nov 2023 05:37:22 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.187.171.26) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.39;
- Tue, 21 Nov 2023 05:37:17 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <lkp@intel.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-	<daniel@iogearbox.net>, <davem@davemloft.net>, <dsahern@kernel.org>,
-	<edumazet@google.com>, <haoluo@google.com>, <john.fastabend@gmail.com>,
-	<jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
-	<kuniyu@amazon.com>, <llvm@lists.linux.dev>, <martin.lau@linux.dev>,
-	<mykolal@fb.com>, <netdev@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
-	<pabeni@redhat.com>, <sdf@google.com>, <song@kernel.org>,
-	<yonghong.song@linux.dev>
-Subject: Re: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
-Date: Mon, 20 Nov 2023 21:37:09 -0800
-Message-ID: <20231121053709.91149-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <202311211310.E8pJEsnT-lkp@intel.com>
-References: <202311211310.E8pJEsnT-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ToPgXOA6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700548518; x=1732084518;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cAvE01Gy59dT0s7TmFJTt5t5hBBdSGQLw6TX3/o0uHQ=;
+  b=ToPgXOA6hTndOShQcLIaN1VwGwa8zXGthpgHKz7YBgEa44VOcif4CX+4
+   IX6wDK4Y04Ni2LvnbhbLAnYstPkxHUaP23aJHv7XhSuO6OsuLxvA+CweP
+   PAO7I6XDfZ9GIQfPWSqFhxH1lrZJOGrjpLZAxUlgr6Eks9cagjlIdPXnE
+   evpAy/E3iycoMzCaOzxgw8SJTQJ41HMY1ieuBYih+4kyAHZCcOTnm+YFd
+   /b3/2OR5RxuwwJWpBk4EkZcPMoVdWXjgpUNHXD+J8jzdOStrqxhI+cPdc
+   PiAntIQghdO02WpVwJ8R2ouiS7kmI9jizGOM3k5QDvLdfHgGYxLDtB6uR
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="394618242"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="394618242"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 22:35:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="742940224"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="742940224"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 20 Nov 2023 22:35:16 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5KLQ-0007QW-1Z;
+	Tue, 21 Nov 2023 06:34:57 +0000
+Date: Tue, 21 Nov 2023 14:22:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Inki Dae <inki.dae@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [daeinki-drm-exynos:exynos-drm-fixes 2/2]
+ drivers/gpu/drm/exynos/exynos_drm_dma.c:119:19: error: incompatible integer
+ to pointer conversion passing 'int' to parameter of type 'const void *'
+Message-ID: <202311211435.3Bgnf3Jv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.171.26]
-X-ClientProxiedBy: EX19D036UWB004.ant.amazon.com (10.13.139.170) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-Precedence: Bulk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: kernel test robot <lkp@intel.com>
-Date: Tue, 21 Nov 2023 13:17:40 +0800
-> Hi Kuniyuki,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on bpf-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Clean-up-reverse-xmas-tree-in-cookie_v-46-_check/20231121-063036
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20231120222341.54776-11-kuniyu%40amazon.com
-> patch subject: [PATCH v2 bpf-next 10/11] bpf: tcp: Support arbitrary SYN Cookie.
-> config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211310.E8pJEsnT-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202311211310.E8pJEsnT-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from net/core/sock.c:142:
->    In file included from include/net/tcp.h:32:
-> >> include/net/inet_hashtables.h:472:22: error: use of undeclared identifier 'sock_pfree'
->                            skb->destructor = sock_pfree;
->                                              ^
+tree:   https://git.kernel.org:/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-fixes
+head:   a30ba4bd7cdb5726d86a557c5df8df71c7bc7fad
+commit: 9f6ed6faadde040e556880ade6881b3ad92861a3 [2/2] drm/exynos: fix a wrong error checking
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311211435.3Bgnf3Jv-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211435.3Bgnf3Jv-lkp@intel.com/reproduce)
 
-Ok, sock_pfree is available with CONFIG_INET.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311211435.3Bgnf3Jv-lkp@intel.com/
 
-I'll guard the req->syncookie part in inet6?_steal_sock() by
-CONFIG_SYN_COOKIE too.
+All errors (new ones prefixed by >>):
 
----8<---
-diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index b6c0ed5a1e3c..9a67f47a5e64 100644
---- a/include/net/inet6_hashtables.h
-+++ b/include/net/inet6_hashtables.h
-@@ -120,12 +120,14 @@ struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
- 		return sk;
- 
- 	if (sk->sk_state == TCP_NEW_SYN_RECV) {
-+#if IS_ENABLED(CONFIG_SYN_COOKIE)
- 		if (inet_reqsk(sk)->syncookie) {
- 			*refcounted = false;
- 			skb->sk = sk;
- 			skb->destructor = sock_pfree;
- 			return inet_reqsk(sk)->rsk_listener;
- 		}
-+#endif
- 		return sk;
- 	} else if (sk->sk_state == TCP_TIME_WAIT) {
- 		return sk;
-diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-index 0f4091112967..36609656a047 100644
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -466,12 +466,14 @@ struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
- 		return sk;
- 
- 	if (sk->sk_state == TCP_NEW_SYN_RECV) {
-+#if IS_ENABLED(CONFIG_SYN_COOKIE)
- 		if (inet_reqsk(sk)->syncookie) {
- 			*refcounted = false;
- 			skb->sk = sk;
- 			skb->destructor = sock_pfree;
- 			return inet_reqsk(sk)->rsk_listener;
- 		}
-+#endif
- 		return sk;
- 	} else if (sk->sk_state == TCP_TIME_WAIT) {
- 		return sk;
----8<---
+>> drivers/gpu/drm/exynos/exynos_drm_dma.c:119:19: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+                           return PTR_ERR(-ENODEV);
+                                          ^~~~~~~
+   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
+   static inline long __must_check PTR_ERR(__force const void *ptr)
+                                                               ^
+   1 error generated.
+
+
+vim +119 drivers/gpu/drm/exynos/exynos_drm_dma.c
+
+    94	
+    95	int exynos_drm_register_dma(struct drm_device *drm, struct device *dev,
+    96				    void **dma_priv)
+    97	{
+    98		struct exynos_drm_private *priv = drm->dev_private;
+    99	
+   100		if (!priv->dma_dev) {
+   101			priv->dma_dev = dev;
+   102			DRM_INFO("Exynos DRM: using %s device for DMA mapping operations\n",
+   103				 dev_name(dev));
+   104		}
+   105	
+   106		if (!IS_ENABLED(CONFIG_EXYNOS_IOMMU))
+   107			return 0;
+   108	
+   109		if (!priv->mapping) {
+   110			void *mapping = NULL;
+   111	
+   112			if (IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU))
+   113				mapping = arm_iommu_create_mapping(&platform_bus_type,
+   114					EXYNOS_DEV_ADDR_START, EXYNOS_DEV_ADDR_SIZE);
+   115			else if (IS_ENABLED(CONFIG_IOMMU_DMA))
+   116				mapping = iommu_get_domain_for_dev(priv->dma_dev);
+   117	
+   118			if (!mapping)
+ > 119				return PTR_ERR(-ENODEV);
+   120			priv->mapping = mapping;
+   121		}
+   122	
+   123		return drm_iommu_attach_device(drm, dev, dma_priv);
+   124	}
+   125	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
