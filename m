@@ -1,96 +1,118 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35D41F933
-	for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 07:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5Ksp-0008AB-GM; Tue, 21 Nov 2023 08:09:19 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5Kso-00AWnv-MC; Tue, 21 Nov 2023 08:09:18 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r5Kso-004pby-Cy; Tue, 21 Nov 2023 08:09:18 +0100
-Date: Tue, 21 Nov 2023 08:09:18 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: sre@kernel.org, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] power: reset: at91: Drop '__init' from
- at91_wakeup_status()
-Message-ID: <20231121070918.xsjpdmfnrd563xok@pengutronix.de>
-References: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3666B1CFBE
+	for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 07:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mMNLUTLR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE98C433CA;
+	Tue, 21 Nov 2023 07:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700551374;
+	bh=rTUDuCw0+yacO1VkcLXeIh3RHyma9O/gexWOtY1atkE=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+	b=mMNLUTLRp90G0p8qEBvndw7PFpfeyjlIgQ4HzPyhnjy1/62WeS+GNT4Iyn2aMsOrk
+	 JPFDHLAkbNzPeK9d41gITvmH8sUo7y62gvpS81jfH7NVZJSGe5h/mRQU6XW7xaxmCS
+	 TwhO/fvRchxY0+okPLx+/yvEJyKL5U7Wogicmj6zoMKlisrhLDHZh8gGWm8zb5LMdm
+	 X2aPuSgPYuSYlJn9pBg6AgvOmi+8fMeXAcD5XnMvkoOiXaHDQp1tnxuIof+cpWqDNB
+	 kSa/xPOwxKA5i4MBAXUQWz+ACx9BTCDdmCMgcVVTqKXfqI+2TuG6R76+OogI3OWeA5
+	 iDJDo+ZlEz+5Q==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailauth.nyi.internal (Postfix) with ESMTP id DF16A27C0054;
+	Tue, 21 Nov 2023 02:22:52 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 21 Nov 2023 02:22:52 -0500
+X-ME-Sender: <xms:ylpcZTWnurYmR8idzEPtriSzAnbz9nyGasSk6OlgWccnwLpyIffG_g>
+    <xme:ylpcZbnrhOLjpk0YqBDgIEllOEXndfk340hKfKLrCyshjl4k-jEgnXdfzZNGH0cMB
+    Ff6qeHVRXKRSLCXxdc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudegkedguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpeelvefgudeiheefledttedthfffgfekudegkeelffdtiedvgfevieet
+    teekheffveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgruhht
+    hhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrghrnh
+    gupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ylpcZfbrTJL1Wj2Z7dzzyyRZDVZllpgQ2FtharPzmPcYaPq64dJf8w>
+    <xmx:ylpcZeXnaobuhvRmaDGaSf2W3r0E8GtXWYxnhLD8Y9DxhCQLJNNZiw>
+    <xmx:ylpcZdk-POFyxRFJ1f3uy81gSDJbHbtHGyDHyO6iuH5PYAdkKEq6ig>
+    <xmx:zFpcZR0B15GtGRA_MB4JMve6blPc_4ynSfvQlSJaOmIHmdl2FjUpEGkVBXIfEVT_>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 6A5E6B60089; Tue, 21 Nov 2023 02:22:50 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2f2ll4udxq7343yq"
-Content-Disposition: inline
-In-Reply-To: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+Message-Id: <7f16795c-ec35-4fe5-86e7-6fb36b05cfc5@app.fastmail.com>
+In-Reply-To: <202311211441.4LgOiu32-lkp@intel.com>
+References: <20231120215945.52027-3-pstanner@redhat.com>
+ <202311211441.4LgOiu32-lkp@intel.com>
+Date: Tue, 21 Nov 2023 08:22:29 +0100
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "kernel test robot" <lkp@intel.com>,
+ "Philipp Stanner" <pstanner@redhat.com>,
+ "Bjorn Helgaas" <helgaas@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Randy Dunlap" <rdunlap@infradead.org>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Eric Auger" <eric.auger@redhat.com>, "Kent Overstreet" <kmo@daterainc.com>,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>, "Neil Brown" <neilb@suse.de>,
+ "John Sanpe" <sanpeqf@gmail.com>, "Dave Jiang" <dave.jiang@intel.com>,
+ "Yury Norov" <yury.norov@gmail.com>, "Kees Cook" <keescook@chromium.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>, "David Gow" <davidgow@google.com>,
+ "Herbert Xu" <herbert@gondor.apana.org.au>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "wuqiang.matt" <wuqiang.matt@bytedance.com>,
+ "Jason Baron" <jbaron@akamai.com>, "Ben Dooks" <ben.dooks@codethink.co.uk>,
+ "Danilo Krummrich" <dakr@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Linux Memory Management List" <linux-mm@kvack.org>,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 1/4] lib: move pci_iomap.c to drivers/pci/
+Content-Type: text/plain
 
+On Tue, Nov 21, 2023, at 07:48, kernel test robot wrote:
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new 
+> version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: 
+> https://lore.kernel.org/oe-kbuild-all/202311211441.4LgOiu32-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    drivers/pci/iomap.c:27:15: error: redefinition of 'pci_iomap_range'
+>    void __iomem *pci_iomap_range(struct pci_dev *dev,
+>                  ^
+>    include/asm-generic/pci_iomap.h:44:29: note: previous definition is here
+>    static inline void __iomem *pci_iomap_range(struct pci_dev *dev, int bar,
+>                                ^
+>>> drivers/pci/iomap.c:43:10: error: call to undeclared function '__pci_ioport_map'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                    return __pci_ioport_map(dev, start, len);
 
---2f2ll4udxq7343yq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From what I can tell looking at the header, I think we can
+just remove the "#elif defined(CONFIG_GENERIC_PCI_IOMAP)"
+bit entirely, as it no longer serves the purpose it originally
+had.
 
-On Mon, Nov 20, 2023 at 03:35:32PM -0700, Nathan Chancellor wrote:
-> When building with clang, there are two section mismatch warnings:
->=20
->   WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff=
-_probe+0x7c (section: .text) -> at91_wakeup_status (section: .init.text)
->   WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_pr=
-obe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
->=20
-> Drop '__init' from at91_wakeup_status() to clear up the mismatch.
->=20
-> Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module=
-_platform_driver_probe()")
-> Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_plat=
-form_driver_probe()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+It also looks like s390 is the only architecture that actually
+uses a custom implementation of pci_iomap*(), and this already has
 
-Thanks.
+#define pci_iomap pci_iomap
+#define pci_iomap_range pci_iomap_range
+#define pci_iounmap pci_iounmap
+#define pci_iomap_wc pci_iomap_wc
+#define pci_iomap_wc_range pci_iomap_wc_range
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+so the entire CONFIG_GENERIC_PCI_IOMAP symbol can probably
+be replaced with individual checks here, using CONFIG_PCI
+as the conditional in the Makefile.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---2f2ll4udxq7343yq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVcV50ACgkQj4D7WH0S
-/k6i7QgAjsgw7n9dc9ir6cJZCu+PqNKZsiedUBAktzbcC66zMgVG/8wj+eGdfh0O
-uqVHPQTSkSB2j7I2RJ5GO7t5sZQcCPAvMCuEtQ1t3JjRtOjW7akVbQU1QGTgL5J9
-gjce8YieAb32Ay0evFzY+1fRgShuKbzVWabFqvu1Q+s3K4A787yDapbNShsS7iCB
-0P4qPRbakATfOb03UI43w8rPRlOy1Bn9bCtTWQp9VCmBUOchp+3PZxjDXbfHhxN1
-IlckFADdhQGr8fMd5X9+JDRSUSqHNAX12pka+a8KUilNT/N32VrsTxqqeGU6PHuC
-tP53uVK8Ah58s2KP+IEzNUkJLzCkWQ==
-=EwAJ
------END PGP SIGNATURE-----
-
---2f2ll4udxq7343yq--
+    Arnd
