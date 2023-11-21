@@ -1,64 +1,143 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CDD48796;
-	Tue, 21 Nov 2023 11:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49627495DF;
+	Tue, 21 Nov 2023 12:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Oxnot+Sy"
-Received: from [100.107.97.3] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 6A6066607286;
-	Tue, 21 Nov 2023 11:40:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1700566801;
-	bh=QN8sfdw9pnigmly++dHM3DUPO6tyeN0rwNsDLLFnGR8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Oxnot+Sy9mksXa2n3vPiHZ8pmFaTRp2nCaqFDjBqLfGsHAtFDNBKgFcd/PStdzanb
-	 tOo0S2KoUrTfEaPZwxERa/Dq8HAaWlskN5DqWq1/pasqOAhQWwJmhyDNgn+jUUdFee
-	 eCwHOTrEMhu9Bsj9AVRSdaVH8Wao6UBS4XA7F52MKzBZMYVQOCsykJLHYZmpFek+Hk
-	 b1i2pWPkLcXCQP6QZgvAflrEMCh3sG2rSiSUdBTTFY5nIB420tvt9HC3M/wlU+JDAl
-	 VYL/0Nt/NizwVUFrW+KV1b1jOGOa+jPtF6hGoHWjdZRz/Mk59M1LS5NXd+VBxwgSJD
-	 btUvhe65z/i8A==
-Message-ID: <060248c3-38c0-4896-b01a-59c19ff7c6d6@collabora.com>
-Date: Tue, 21 Nov 2023 12:39:58 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dMcB1hlR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700569144; x=1732105144;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TH4Q5+J9vXx35s84udmwuHt+PL6CcAyQU4u+aC3JSRs=;
+  b=dMcB1hlR1wJcjf/s8t4D3iymcM86Cr+D8/VwdhZaeM8L7vsUi5EqyK5l
+   1+FZqbpzCvE15GKfWI2vYJDmFIF2UcN18JD7IStsNRT7Q2YFfZYquh/ho
+   IVFlffXHjUUGZqy8Jzhtl11r+P+bzrK69+j84S+rQpBVPjnyH/oRAB+dW
+   ZtON1K+9g+5834pYEYCkj+vWfV0g6m+WGhgA3KnUT+w01kpzPVw9EL6Zq
+   9qftgb729h3NNTACEZHkEEfY3DaKFf3IP7XGfHLyIutThQZ3Hvygh/O1L
+   71vSREvIqxfGiLWF5Ps4S0jj0TN41RQ8TdpskHXUIG9XjEQOzWctcw4AQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="458325780"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="458325780"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 04:19:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="1098043400"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="1098043400"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Nov 2023 04:18:57 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5PiP-0007mU-29;
+	Tue, 21 Nov 2023 12:18:54 +0000
+Date: Tue, 21 Nov 2023 20:18:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Romain Gantois <romain.gantois@bootlin.com>, davem@davemloft.net,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Romain Gantois <romain.gantois@bootlin.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+	Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Luka Perkov <luka.perkov@sartura.hr>,
+	Robert Marko <robert.marko@sartura.hr>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH net-next v3 4/8] net: qualcomm: ipqess: Add Ethtool ops
+ to IPQESS port netdevices
+Message-ID: <202311211930.FOMUSlbU-lkp@intel.com>
+References: <20231114105600.1012056-5-romain.gantois@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [mediatek:v6.7-tmp/soc 7/7]
- drivers/soc/mediatek/mt8188-mmsys.h:126:3: error: use of undeclared
- identifier 'MT8188_VDO0_RST_DISP_OVL0'
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>,
- Hsiao Chien Sung <shawn.sung@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <202311211559.hXmHshEO-lkp@intel.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <202311211559.hXmHshEO-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231114105600.1012056-5-romain.gantois@bootlin.com>
 
-Il 21/11/23 08:21, kernel test robot ha scritto:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git v6.7-tmp/soc
-> head:   c1b652b84e6a779e670bac250d80ef2f2d4a45d9
-> commit: c1b652b84e6a779e670bac250d80ef2f2d4a45d9 [7/7] soc: mediatek: Add MT8188 VDOSYS reset bit map
-> config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311211559.hXmHshEO-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211559.hXmHshEO-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202311211559.hXmHshEO-lkp@intel.com/
-> 
+Hi Romain,
 
-No action required. This is because this branch needs commits from v6.7-tmp/dts64.
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Romain-Gantois/dt-bindings-net-Introduce-the-Qualcomm-IPQESS-Ethernet-switch/20231114-185953
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231114105600.1012056-5-romain.gantois%40bootlin.com
+patch subject: [PATCH net-next v3 4/8] net: qualcomm: ipqess: Add Ethtool ops to IPQESS port netdevices
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231121/202311211930.FOMUSlbU-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211930.FOMUSlbU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311211930.FOMUSlbU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/qualcomm/ipqess/ipqess_ethtool.c:165:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     165 |                 return ret;
+         |                        ^~~
+   drivers/net/ethernet/qualcomm/ipqess/ipqess_ethtool.c:152:9: note: initialize the variable 'ret' to silence this warning
+     152 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +/ret +165 drivers/net/ethernet/qualcomm/ipqess/ipqess_ethtool.c
+
+   148	
+   149	static int ipqess_port_set_eee(struct net_device *dev, struct ethtool_eee *eee)
+   150	{
+   151		struct ipqess_port *port = netdev_priv(dev);
+   152		int ret;
+   153		u32 lpi_en = QCA8K_REG_EEE_CTRL_LPI_EN(port->index);
+   154		struct qca8k_priv *priv = port->sw->priv;
+   155		u32 lpi_ctl1;
+   156	
+   157		/* Port's PHY and MAC both need to be EEE capable */
+   158		if (!dev->phydev || !port->pl)
+   159			return -ENODEV;
+   160	
+   161		mutex_lock(&priv->reg_mutex);
+   162		lpi_ctl1 = qca8k_read(priv, QCA8K_REG_EEE_CTRL, &lpi_ctl1);
+   163		if (lpi_ctl1 < 0) {
+   164			mutex_unlock(&priv->reg_mutex);
+ > 165			return ret;
+   166		}
+   167	
+   168		if (eee->tx_lpi_enabled && eee->eee_enabled)
+   169			lpi_ctl1 |= lpi_en;
+   170		else
+   171			lpi_ctl1 &= ~lpi_en;
+   172		ret = qca8k_write(priv, QCA8K_REG_EEE_CTRL, lpi_ctl1);
+   173		mutex_unlock(&priv->reg_mutex);
+   174	
+   175		if (ret)
+   176			return ret;
+   177	
+   178		return phylink_ethtool_set_eee(port->pl, eee);
+   179	}
+   180	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
