@@ -1,47 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521951548F;
-	Tue, 21 Nov 2023 02:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC5518621;
+	Tue, 21 Nov 2023 05:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M0WqcxlV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PVNmtci5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700533970; x=1732069970;
+  t=1700543217; x=1732079217;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I0adLWEBneurJj9g7I2Wrt1d9aNHr68JhevZImN9BQo=;
-  b=M0WqcxlVW0ID5NgBR9n0MSBV6XnqjnwUt9YKLXzogFRvsXXw/fLbFY+Y
-   q2WACpY1muYY+W155jVMNDJ3PlMhbZq6+cMbmTmrpFpqMUKHagFSd7HTR
-   yFq35JtVN/mkB7hTZrGXhB1o++JC0pAQN8zJ2Y2uSoMZXvC4Ugd0vJpH5
-   Wg1QDbrjIdAE2v3rVPeUZVbLg2DDgFytnab7USei+nvxhpIDarNzFhRmz
-   6ziclWzLlZKLn3ZVCyLXEiCwpXTCMXhkNKDdWnWDHB66cntC2/6JO/Ygi
-   sypblVKoPCEXESt09p9PF0gLmYw4iHzO9ZPc4ywH21mdHulB4IItkEjrw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371090885"
+  bh=04KqZl1G1+fBQJI3RnSh7y+srxH1479j7GO1vnyZFOk=;
+  b=PVNmtci5dE/kUknTnp2Gi8dtB3L9GjhwFAyC+jj05XMW0ym1tefZpa6l
+   mp+x3ad+v3y9CAZLczfnFlpvz5TQoAJMkhojLfYUVEYTtBqNnob+TE3rb
+   RnR+xa4sC4SkVM6ewEYZkvSa7w2mqqxr/2BMRaYx5O0uTbuREOccK5yFg
+   WgDt45+XCeSxloA/5Zu0UVpasp6wQ97x18w4laRbVDn+2V+ON4R/SVwK/
+   Z3Wxx22xmtdYk2aSoI2Sv6milmLCPxrCjqZNk5bfAzXCkRWsZ7g2F07r/
+   iIinH/8ZaDo2CR2gfKFE143UZ+yTFNAKo2nZe9FGHrIhE/1t6hCdW++Qn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371937455"
 X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="371090885"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 18:32:47 -0800
+   d="scan'208";a="371937455"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 21:06:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="939959221"
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="836946216"
 X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="939959221"
+   d="scan'208";a="836946216"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Nov 2023 18:32:45 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 20 Nov 2023 21:06:55 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r5GZ9-0007CE-1m;
-	Tue, 21 Nov 2023 02:32:43 +0000
-Date: Tue, 21 Nov 2023 10:32:29 +0800
+	id 1r5IyL-0007KQ-10;
+	Tue, 21 Nov 2023 05:06:53 +0000
+Date: Tue, 21 Nov 2023 13:06:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Roberto Sassu <roberto.sassu@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robertosassu:ima-evm-lsms-v6-devel-v4 20/26]
- security/integrity/ima/ima_main.c:1181:12: warning: no previous prototype
- for function 'init_ima_lsm'
-Message-ID: <202311211018.agzm5mHK-lkp@intel.com>
+Subject: [robertosassu:ima-evm-lsms-v6-devel-v4 22/26]
+ security/integrity/evm/evm_main.c:1061:12: warning: no previous prototype
+ for function 'init_evm_lsm'
+Message-ID: <202311211244.2uqAiAnr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,43 +53,43 @@ Content-Disposition: inline
 
 tree:   https://github.com/robertosassu/linux ima-evm-lsms-v6-devel-v4
 head:   58605e8f9256d446ad8fa46474f4a402a68715a5
-commit: 80b2cd5f40c944e0de9fc1840034e825b159fd50 [20/26] ima: Move to LSM infrastructure
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311211018.agzm5mHK-lkp@intel.com/config)
+commit: ab43d28d22d09d87c91646df14890fa542f9dc3d [22/26] evm: Move to LSM infrastructure
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311211244.2uqAiAnr-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211018.agzm5mHK-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311211244.2uqAiAnr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311211018.agzm5mHK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311211244.2uqAiAnr-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> security/integrity/ima/ima_main.c:1181:12: warning: no previous prototype for function 'init_ima_lsm' [-Wmissing-prototypes]
-   int __init init_ima_lsm(void)
+>> security/integrity/evm/evm_main.c:1061:12: warning: no previous prototype for function 'init_evm_lsm' [-Wmissing-prototypes]
+   int __init init_evm_lsm(void)
               ^
-   security/integrity/ima/ima_main.c:1181:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init init_ima_lsm(void)
+   security/integrity/evm/evm_main.c:1061:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init init_evm_lsm(void)
    ^
    static 
    1 warning generated.
 
 
-vim +/init_ima_lsm +1181 security/integrity/ima/ima_main.c
+vim +/init_evm_lsm +1061 security/integrity/evm/evm_main.c
 
-  1174	
-  1175	/*
-  1176	 * Since with the LSM_ORDER_LAST there is no guarantee about the ordering
-  1177	 * within the .lsm_info.init section, ensure that IMA hooks are before EVM
-  1178	 * ones, by letting the 'integrity' LSM call init_ima_lsm() to initialize the
-  1179	 * 'ima' and 'evm' LSMs in this sequence.
-  1180	 */
-> 1181	int __init init_ima_lsm(void)
-  1182	{
-  1183		security_add_hooks(ima_hooks, ARRAY_SIZE(ima_hooks), &ima_lsmid);
-  1184		return 0;
-  1185	}
-  1186	
+  1054	
+  1055	/*
+  1056	 * Since with the LSM_ORDER_LAST there is no guarantee about the ordering
+  1057	 * within the .lsm_info.init section, ensure that IMA hooks are before EVM
+  1058	 * ones, by letting the 'integrity' LSM call init_evm_lsm() to initialize the
+  1059	 * 'ima' and 'evm' LSMs in this sequence.
+  1060	 */
+> 1061	int __init init_evm_lsm(void)
+  1062	{
+  1063		security_add_hooks(evm_hooks, ARRAY_SIZE(evm_hooks), &evm_lsmid);
+  1064		return 0;
+  1065	}
+  1066	
 
 -- 
 0-DAY CI Kernel Test Service
