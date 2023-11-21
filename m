@@ -1,52 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF23A154AB;
-	Tue, 21 Nov 2023 15:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0925812F;
+	Tue, 21 Nov 2023 15:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CuDJBjya"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U7o0Um8Y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700582271; x=1732118271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=49M9Oew0DdxgYWQvk9O06uOPIWnVNtnr8w/4okhcBTY=;
-  b=CuDJBjya9CkGg6erbkfyV57hII6n/mvOZEHPXFsWUHQROO4XdSfqzhs8
-   klqfFSLbLtXNLgMfyH2wnHP+buE6uH+vbd2zxEjx11r1hoo8EVCjLvE8Q
-   SPZppDJDfNFY+guBac/YBLetwQiaJTbk8V9ZBq7KZ1jFWhT9iYVjwrVfV
-   RSnAnWOGK5hXzcSKypuBXc0SFoUNN6Q7k1CYJT8VfgI9423H9sp/jNdaN
-   h80Oxpu2Z73l/eL5xmLa6YwCbxA3/XIOG5jBmTAd0nCtG1/8Gbeo+o8ed
-   cA+r7ncUEj9JkNxlpeExVMQi5sh/9Wt+n3gLsY7xjx6gf46aXzDjU69p1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="382261969"
+  t=1700582276; x=1732118276;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0AVzwq7cpyclPUh7cjO7Y4G2ZBF5bOS2+E3WRyl9meA=;
+  b=U7o0Um8YoeWTf5NtS1w2Ks5KsfBjDTVf7ZJzc1KbMc2j4uKXCB4Fd0Ew
+   J7QfAbNnDnyWN8/oLsnjrI95mDPKhkPuw4kf4urgIg9B86NTSsbJGy9l5
+   MQYLx8worr+fl/mqZWV36+v+1eo0p/9xNzjeNE448smbQ0HQ4QL2oU928
+   mz3D0LxyddeXeMuHVYB7VSU92RO8FFcRt4702FF5+Rl17R6nl4tolrbJZ
+   OSXH6nxLYtyqogGUl+aj0084ELDzrvWUOKCidk0wOE4YACEeYBPbRZSSf
+   ZrMXvAs7unz2nWQIdliwp1OYZBvgZHxi0hQiK8cW+OPBqWKpmXpgpkfmI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="389016665"
 X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
-   d="scan'208";a="382261969"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 07:57:49 -0800
+   d="scan'208";a="389016665"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 07:57:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="716576255"
 X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
-   d="scan'208";a="716576255"
+   d="scan'208";a="14946575"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 21 Nov 2023 07:57:46 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 21 Nov 2023 07:57:54 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r5T8B-0007yk-2Q;
-	Tue, 21 Nov 2023 15:57:43 +0000
-Date: Tue, 21 Nov 2023 23:56:54 +0800
+	id 1r5T8K-0007yr-1j;
+	Tue, 21 Nov 2023 15:57:52 +0000
+Date: Tue, 21 Nov 2023 23:57:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
-	robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org
+To: Marc Zyngier <maz@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, marius.cristea@microchip.com
-Subject: Re: [PATCH v3 2/2] iio: adc: adding support for PAC193x
-Message-ID: <202311212310.QEKkmOfh-lkp@intel.com>
-References: <20231115134453.6656-3-marius.cristea@microchip.com>
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm-platforms:kvm-arm64/nv-6.8-nv2-only 3/50]
+ arch/arm64/kernel/cpufeature.c:2084:10: warning: use of bitwise '|' with
+ boolean operands
+Message-ID: <202311212300.V9r9WIaO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,142 +50,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231115134453.6656-3-marius.cristea@microchip.com>
 
-Hi,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 5e99f692d4e32e3250ab18d511894ca797407aec]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/marius-cristea-microchip-com/dt-bindings-iio-adc-adding-support-for-PAC193X/20231115-214733
-base:   5e99f692d4e32e3250ab18d511894ca797407aec
-patch link:    https://lore.kernel.org/r/20231115134453.6656-3-marius.cristea%40microchip.com
-patch subject: [PATCH v3 2/2] iio: adc: adding support for PAC193x
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231121/202311212310.QEKkmOfh-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/nv-6.8-nv2-only
+head:   759d2e18f8954f4c76eb1772f38301df6ed8fa5d
+commit: 05f8126eff48f8833c39f3dfbd7124047fc9af98 [3/50] arm64: cpufeatures: Restrict NV support to FEAT_NV2
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231121/202311212300.V9r9WIaO-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311212310.QEKkmOfh-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231121/202311212300.V9r9WIaO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311212310.QEKkmOfh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311212300.V9r9WIaO-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iio/adc/pac1934.c:1239:3: warning: variable 'cnt' is incremented both in the loop header and in the loop body [-Wfor-loop-analysis]
-    1239 |                 cnt++;
-         |                 ^
-   drivers/iio/adc/pac1934.c:1236:44: note: incremented here
-    1236 |         for (cnt = 0;  cnt < info->phys_channels; cnt++) {
-         |                                                   ^
+>> arch/arm64/kernel/cpufeature.c:2084:10: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+    2084 |         return (__system_matches_cap(ARM64_HAS_NV2) |
+         |                ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                     ||
+    2085 |                 __system_matches_cap(ARM64_HAS_NV2_ONLY));
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/cpufeature.c:2084:10: note: cast one or both operands to int to silence this warning
    1 warning generated.
 
 
-vim +/cnt +1239 drivers/iio/adc/pac1934.c
+vim +2084 arch/arm64/kernel/cpufeature.c
 
-  1226	
-  1227	static int pac1934_chip_configure(struct pac1934_chip_info *info)
-  1228	{
-  1229		int cnt, ret;
-  1230		struct i2c_client *client = info->client;
-  1231		u8 regs[PAC1934_CTRL_STATUS_INFO_LEN], idx, ctrl_reg;
-  1232		u32 wait_time;
-  1233	
-  1234		cnt = 0;
-  1235		info->chip_reg_data.num_enabled_channels = 0;
-  1236		for (cnt = 0;  cnt < info->phys_channels; cnt++) {
-  1237			if (info->active_channels[cnt])
-  1238				info->chip_reg_data.num_enabled_channels++;
-> 1239			cnt++;
-  1240		}
-  1241	
-  1242		/*
-  1243		 * read whatever information was gathered before the driver was loaded
-  1244		 * establish which channels are enabled/disabled and then establish the
-  1245		 * information retrieval mode (using SKIP or no).
-  1246		 * Read the chip ID values
-  1247		 */
-  1248		ret = i2c_smbus_read_i2c_block_data(client, PAC1934_CTRL_STAT_REGS_ADDR,
-  1249						    sizeof(regs),
-  1250						    (u8 *)regs);
-  1251		if (ret < 0) {
-  1252			dev_err_probe(&client->dev, ret,
-  1253				      "%s - cannot read regs from 0x%02X\n",
-  1254				      __func__, PAC1934_CTRL_STAT_REGS_ADDR);
-  1255			return ret;
-  1256		}
-  1257	
-  1258		/* write the CHANNEL_DIS and the NEG_PWR registers */
-  1259		regs[PAC1934_CHANNEL_DIS_REG_OFF] =
-  1260			FIELD_PREP(PAC1934_CHAN_DIS_CH1_OFF_MASK, !(info->active_channels[PAC1934_CH_1])) |
-  1261			FIELD_PREP(PAC1934_CHAN_DIS_CH2_OFF_MASK, !(info->active_channels[PAC1934_CH_2])) |
-  1262			FIELD_PREP(PAC1934_CHAN_DIS_CH3_OFF_MASK, !(info->active_channels[PAC1934_CH_3])) |
-  1263			FIELD_PREP(PAC1934_CHAN_DIS_CH4_OFF_MASK, !(info->active_channels[PAC1934_CH_4])) |
-  1264			FIELD_PREP(PAC1934_SMBUS_TIMEOUT_MASK, 0) |
-  1265			FIELD_PREP(PAC1934_SMBUS_BYTECOUNT_MASK, 0) |
-  1266			FIELD_PREP(PAC1934_SMBUS_NO_SKIP_MASK, 0);
-  1267	
-  1268		regs[PAC1934_NEG_PWR_REG_OFF] =
-  1269			FIELD_PREP(PAC1934_NEG_PWR_CH1_BIDI_MASK, info->bi_dir[PAC1934_CH_1]) |
-  1270			FIELD_PREP(PAC1934_NEG_PWR_CH2_BIDI_MASK, info->bi_dir[PAC1934_CH_2]) |
-  1271			FIELD_PREP(PAC1934_NEG_PWR_CH3_BIDI_MASK, info->bi_dir[PAC1934_CH_3]) |
-  1272			FIELD_PREP(PAC1934_NEG_PWR_CH4_BIDI_MASK, info->bi_dir[PAC1934_CH_4]) |
-  1273			FIELD_PREP(PAC1934_NEG_PWR_CH1_BIDV_MASK, info->bi_dir[PAC1934_CH_1]) |
-  1274			FIELD_PREP(PAC1934_NEG_PWR_CH2_BIDV_MASK, info->bi_dir[PAC1934_CH_2]) |
-  1275			FIELD_PREP(PAC1934_NEG_PWR_CH3_BIDV_MASK, info->bi_dir[PAC1934_CH_3]) |
-  1276			FIELD_PREP(PAC1934_NEG_PWR_CH4_BIDV_MASK, info->bi_dir[PAC1934_CH_4]);
-  1277	
-  1278		/* no SLOW triggered REFRESH, clear POR */
-  1279		regs[PAC1934_SLOW_REG_OFF] = 0;
-  1280	
-  1281		ret =  i2c_smbus_write_block_data(client, PAC1934_CTRL_STAT_REGS_ADDR, 3, (u8 *)regs);
-  1282		if (ret)
-  1283			return ret;
-  1284	
-  1285		ctrl_reg = FIELD_PREP(PAC1934_CRTL_SAMPLE_RATE_MASK, info->crt_samp_spd_bitfield);
-  1286	
-  1287		ret = i2c_smbus_write_byte_data(client, PAC1934_CTRL_REG_ADDR, ctrl_reg);
-  1288		if (ret)
-  1289			return ret;
-  1290	
-  1291		/*
-  1292		 * send a REFRESH to the chip, so the new settings take place
-  1293		 * as well as resetting the accumulators
-  1294		 */
-  1295		ret = i2c_smbus_write_byte(client, PAC1934_REFRESH_REG_ADDR);
-  1296		if (ret) {
-  1297			dev_err(&client->dev,
-  1298				"%s - cannot send 0x%02X\n",
-  1299				__func__, PAC1934_REFRESH_REG_ADDR);
-  1300			return ret;
-  1301		}
-  1302	
-  1303		/*
-  1304		 * get the current(in the chip) sampling speed and compute the
-  1305		 * required timeout based on its value
-  1306		 * the timeout is 1/sampling_speed
-  1307		 */
-  1308		idx = regs[PAC1934_CTRL_ACT_REG_OFF] >> PAC1934_SAMPLE_RATE_SHIFT;
-  1309		wait_time = (1024 / samp_rate_map_tbl[idx]) * 1000;
-  1310	
-  1311		/*
-  1312		 * wait the maximum amount of time to be on the safe side
-  1313		 * the maximum wait time is for 8sps
-  1314		 */
-  1315		usleep_range(wait_time, wait_time + 100);
-  1316	
-  1317		INIT_DELAYED_WORK(&info->work_chip_rfsh, pac1934_work_periodic_rfsh);
-  1318		/* Setup the latest moment for reading the regs before saturation */
-  1319		schedule_delayed_work(&info->work_chip_rfsh,
-  1320				      msecs_to_jiffies(PAC1934_MAX_RFSH_LIMIT_MS));
-  1321	
-  1322		devm_add_action_or_reset(&client->dev, pac1934_cancel_delayed_work,
-  1323					 &info->work_chip_rfsh);
-  1324	
-  1325		return 0;
-  1326	}
-  1327	
+  2077	
+  2078	static bool has_nested_virt_support(const struct arm64_cpu_capabilities *cap,
+  2079					    int scope)
+  2080	{
+  2081		if (kvm_get_mode() != KVM_MODE_NV)
+  2082			return false;
+  2083	
+> 2084		return (__system_matches_cap(ARM64_HAS_NV2) |
+  2085			__system_matches_cap(ARM64_HAS_NV2_ONLY));
+  2086	}
+  2087	
 
 -- 
 0-DAY CI Kernel Test Service
