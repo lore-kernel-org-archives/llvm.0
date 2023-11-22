@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E0A7477;
-	Wed, 22 Nov 2023 02:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5967749F;
+	Wed, 22 Nov 2023 02:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hgPH2iHm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZfRYaTV9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700618603; x=1732154603;
+  t=1700619177; x=1732155177;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KmomHtCj6nESx87+Js1u9Z2YNV0lNh6hqZAaci012Sw=;
-  b=hgPH2iHmC+pVtObyZEPpsxJcqLdritY6qmGi58pBpqhNQfaEyc5hcU0W
-   E1hdhI/9jIkifl3K3TpxE1XKaEH5HlznuQFl6QsLY5TOhwnhguG3rc1nt
-   xi5Xa0hIjW9x/zg8WIIDL/xs2LMvn3xZSybAZuWmFVendtYIuDeiY2zta
-   /LmEROeZdSOrbWwMtGTzjQd6ovHB1Nt9liu0I7EZknJqv0zMeZih5zQiB
-   M6/hViRgJ2FtlAys1qv0XNjCHmoghrFXx0ItmLjTKFBRiexpCLTXvkcEF
-   3kynO6qMuRy72/YZ17uK8IvTnOMahxh7HFisrUeaaeTlQbBC/D26C65ex
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="372138333"
+  bh=vGgCVJZAzwFeJ/BnDdyLhuK1uu1PtrJEymLox/XM/rA=;
+  b=ZfRYaTV9Cxm4PqMtbcm1BpC4ZgDiIpUrKyf/hUizcl7Qnqi9/EIJDGmy
+   jjuMbXTztpG3+kJ9zeEx9bFN85Xcso9iGJF/9+hIYiiNcWnmJpzsaA4Cf
+   p+Dx+k96f0jtHPpXr3FqfhaWfFKRk0t65VaX+SaqZtagPX2bbSrTWZEM+
+   29Iaxv11mpm3G6rBupwBmjHaAHZffsUBN4dIq/tcefg1NIymkUt1e32E0
+   2qr6KxzOBjuU44Za5bGX4K68DSgGBulHJWCE0Rc+zxnUEsl1TnkRcz9Jc
+   HQSZzKEVyzG8bLl2yRC0ojMQDMg4ilKA8dbryuUwtHpbxPTebtfY2f0Ai
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="423054763"
 X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="372138333"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 18:03:22 -0800
+   d="scan'208";a="423054763"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 18:12:56 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="940275900"
 X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="14720458"
+   d="scan'208";a="940275900"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 21 Nov 2023 18:03:14 -0800
+  by orsmga005.jf.intel.com with ESMTP; 21 Nov 2023 18:12:50 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r5ca8-0008WH-1J;
-	Wed, 22 Nov 2023 02:03:12 +0000
-Date: Wed, 22 Nov 2023 09:59:32 +0800
+	id 1r5cj6-0008XB-1W;
+	Wed, 22 Nov 2023 02:12:39 +0000
+Date: Wed, 22 Nov 2023 10:11:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: shiju.jose@huawei.com, linux-cxl@vger.kernel.org, linux-mm@kvack.org,
-	dave@stgolabs.net, jonathan.cameron@huawei.com,
-	dave.jiang@intel.com, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com,
-	dan.j.williams@intel.com
+To: Tomer Maimon <tmaimon77@gmail.com>, davem@davemloft.net,
+	edumazet@google.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, alexandre.torgue@foss.st.com,
+	peppe.cavallaro@st.com, joabreu@synopsys.com,
+	mcoquelin.stm32@gmail.com, avifishman70@gmail.com,
+	tali.perry1@gmail.com, joel@jms.id.au, andrew@codeconstruct.com.au,
+	venture@google.com, yuenn@google.com, benjaminfair@google.com,
+	j.neuschaefer@gmx.net
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	david@redhat.com, Vilas.Sridharan@amd.com, leo.duran@amd.com,
-	Yazen.Ghannam@amd.com, rientjes@google.com, jiaqiyan@google.com,
-	tony.luck@intel.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	rafael@kernel.org, lenb@kernel.org, naoya.horiguchi@nec.com,
-	james.morse@arm.com, jthoughton@google.com, somasundaram.a@hpe.com,
-	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
-	mike.malvestuto@intel.com
-Subject: Re: [PATCH v2 06/10] memory: scrub: Add scrub driver supports
- configuring memory scrubbers in the system
-Message-ID: <202311220944.tcffRUl0-lkp@intel.com>
-References: <20231121101844.1161-7-shiju.jose@huawei.com>
+	openbmc@lists.ozlabs.org, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Tomer Maimon <tmaimon77@gmail.com>
+Subject: Re: [PATCH v1 2/2] net: stmmac: Add NPCM support
+Message-ID: <202311221011.bsAmeQ6v-lkp@intel.com>
+References: <20231121151733.2015384-3-tmaimon77@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,54 +62,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231121101844.1161-7-shiju.jose@huawei.com>
+In-Reply-To: <20231121151733.2015384-3-tmaimon77@gmail.com>
 
-Hi,
+Hi Tomer,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.7-rc2 next-20231121]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on net-next/main net/main linus/master v6.7-rc2 next-20231121]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/shiju-jose-huawei-com/cxl-mbox-Add-GET_SUPPORTED_FEATURES-mailbox-command/20231121-182247
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231121101844.1161-7-shiju.jose%40huawei.com
-patch subject: [PATCH v2 06/10] memory: scrub: Add scrub driver supports configuring memory scrubbers in the system
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231122/202311220944.tcffRUl0-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tomer-Maimon/dt-bindings-net-Add-support-NPCM-dwmac/20231121-231908
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20231121151733.2015384-3-tmaimon77%40gmail.com
+patch subject: [PATCH v1 2/2] net: stmmac: Add NPCM support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231122/202311221011.bsAmeQ6v-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220944.tcffRUl0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311221011.bsAmeQ6v-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311220944.tcffRUl0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311221011.bsAmeQ6v-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/memory/scrub/memory-scrub.c:71:48: warning: comparison of array 'scrub_dev->name' equal to a null pointer is always false [-Wtautological-pointer-compare]
-           if (attr == &dev_attr_name.attr && scrub_dev->name == NULL)
-                                              ~~~~~~~~~~~^~~~    ~~~~
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-npcm.c:53:6: warning: no previous prototype for function 'npcm_dwmac_pcs_init' [-Wmissing-prototypes]
+   void npcm_dwmac_pcs_init(struct npcm_dwmac *dwmac, struct device *dev,
+        ^
+   drivers/net/ethernet/stmicro/stmmac/dwmac-npcm.c:53:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void npcm_dwmac_pcs_init(struct npcm_dwmac *dwmac, struct device *dev,
+   ^
+   static 
    1 warning generated.
 
 
-vim +71 drivers/memory/scrub/memory-scrub.c
+vim +/npcm_dwmac_pcs_init +53 drivers/net/ethernet/stmicro/stmmac/dwmac-npcm.c
 
-    64	
-    65	static umode_t scrub_dev_attr_is_visible(struct kobject *kobj,
-    66						    struct attribute *attr, int n)
-    67	{
-    68		struct device *dev = kobj_to_dev(kobj);
-    69		struct scrub_device *scrub_dev = to_scrub_device(dev);
-    70	
-  > 71		if (attr == &dev_attr_name.attr && scrub_dev->name == NULL)
-    72			return 0;
-    73	
-    74		return attr->mode;
-    75	}
-    76	
+    52	
+  > 53	void npcm_dwmac_pcs_init(struct npcm_dwmac *dwmac, struct device *dev,
+    54				 struct plat_stmmacenet_data *plat_dat)
+    55	{
+    56		u16 val;
+    57	
+    58		iowrite16((u16)(SR_MII_CTRL >> 9), dwmac->reg + IND_AC_BA_REG);
+    59		val = ioread16(dwmac->reg + PCS_SR_MII_CTRL_REG);
+    60		val |= PCS_RST;
+    61		iowrite16(val, dwmac->reg + PCS_SR_MII_CTRL_REG);
+    62	
+    63		while (val & PCS_RST)
+    64			val = ioread16(dwmac->reg + PCS_SR_MII_CTRL_REG);
+    65	
+    66		val &= ~(PCS_AN_ENABLE);
+    67		iowrite16(val, dwmac->reg + PCS_SR_MII_CTRL_REG);
+    68	}
+    69	
 
 -- 
 0-DAY CI Kernel Test Service
