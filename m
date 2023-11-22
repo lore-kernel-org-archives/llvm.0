@@ -1,105 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B27E23DF
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 03:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475472BB0B;
+	Wed, 22 Nov 2023 04:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jq3m3PfJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8877C433C7
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 03:09:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlzj0bYD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97637C433C8;
+	Wed, 22 Nov 2023 04:47:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700622584;
-	bh=qdLHRBoKEw4gFMfVFRwpwvnicE8hhhtpNM9aNH2gRU8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Jq3m3PfJbSX+yRjZLK2B59ZrYeuva4W0cT1Sai+cg+WfR2XEw8E/X9nbeYhwJzSav
-	 ZXnK1rKg8cXcz4ErBDe+qQMJ6PUqMO1WNGAqiziL6SsxbXfT76gt/fZmJ5ZrGpMMgP
-	 87WIuYwfbeQiMKtyu6y1yryDCJmub3H81IQT+fqMA8mdEDhYYZj0kPKGG/M4W1OXIw
-	 oPV6ScXTQxPw6+E/N10A5MFMi0FhNo65cKxm283zOnE9J2PmBoeKmf4c6N1EsZmsGI
-	 8EjhJQybncfkQf+zm1LoKDdcrOPluGIBnLVN+wuFEj/2g7Ghpb+2FhpG1oTalGecFo
-	 s5VOk134bwjFQ==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1ea98ad294cso2963436fac.3
-        for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 19:09:44 -0800 (PST)
-X-Gm-Message-State: AOJu0YwDui9cN1COPjsW/zfSpSvo1fmol4yEE1dfQS/Y6JvM5h37QMjG
-	MWkwXvHwSrJ+LokTfNqmTJTschktgQF4SOYDa9U=
-X-Google-Smtp-Source: AGHT+IHCfjburBQ1UdmjywweePttcXq8IzEtQKzgns2nPfAmlJiNNiQj6TYBr2fVJWJRAVnlcJyJRUk5V/ku2eUIpJU=
-X-Received: by 2002:a05:6870:8e0b:b0:1f9:5ae9:bb6e with SMTP id
- lw11-20020a0568708e0b00b001f95ae9bb6emr1378749oab.32.1700622584238; Tue, 21
- Nov 2023 19:09:44 -0800 (PST)
+	s=k20201202; t=1700628462;
+	bh=RI6M9xEbhPfKHmCxWYgz352YqmJ/ZLpTnwPJ8ATtxVI=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=dlzj0bYDKXeSVNOhbvioDXzV3bJiD78y6ilyFp/Hx/QEr4f6hCdTHbUmZfcntzMC2
+	 JAGHW8ONV+8tsKkdFTS8qSAFT3heCDTtMdVH6SDzNhHNiAGOJtZwCg+OQXyRbcUD2B
+	 vqm2c3+e0QzKNl4I9pAMlpckLVrYyjtlCTaeoORi9jztHJGZLZL9bST6nQ62YpvdKs
+	 NpSbm7gLGysuZok1YAdYshmS6oUwq9/iJ/V5l8yG02v22U2rJ2PIIQ+UlAPVe0N/86
+	 yrfP0WOX5Qlo0EyflIGCDolPdpc5Kzaqqwp3HvDY0Qa01KWOEXVT3pfLIoLNpazyZ6
+	 vH5kwLNzXekfg==
+Date: Tue, 21 Nov 2023 20:47:40 -0800
+From: Kees Cook <kees@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>, ndesaulniers@google.com
+CC: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+ llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: refresh LLVM support
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAK7LNARAvH=tWpsXJ640y04Ju8UbPmDze_NC6ax1EKK4Xy73fw@mail.gmail.com>
+References: <20231117-maintainers-v1-1-85f2a7422ed9@google.com> <CAK7LNARAvH=tWpsXJ640y04Ju8UbPmDze_NC6ax1EKK4Xy73fw@mail.gmail.com>
+Message-ID: <5EB120AB-1F30-4403-B652-DC0D2772B25E@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231120232332.4100288-1-masahiroy@kernel.org>
- <CX42TU4QHS1Z.A0UUHMDAMZOL@wheely> <87bkbnsa5r.fsf@kernel.org>
-In-Reply-To: <87bkbnsa5r.fsf@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 22 Nov 2023 12:09:07 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT-_07_h1_jG606VX0WjJq8dEW+C_4E0f28mjyqFnCWFw@mail.gmail.com>
-Message-ID: <CAK7LNAT-_07_h1_jG606VX0WjJq8dEW+C_4E0f28mjyqFnCWFw@mail.gmail.com>
-Subject: Re: [PATCH] powerpc: add crtsavres.o to always-y instead of extra-y
-To: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-Cc: Nicholas Piggin <npiggin@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, linuxppc-dev@lists.ozlabs.org, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 21, 2023 at 6:55=E2=80=AFPM Aneesh Kumar K.V
-<aneesh.kumar@kernel.org> wrote:
->
-> "Nicholas Piggin" <npiggin@gmail.com> writes:
->
-> > On Tue Nov 21, 2023 at 9:23 AM AEST, Masahiro Yamada wrote:
-> >> crtsavres.o is linked to modules. However, as explained in commit
-> >> d0e628cd817f ("kbuild: doc: clarify the difference between extra-y
-> >> and always-y"), 'make modules' does not build extra-y.
-> >>
-> >> For example, the following command fails:
-> >>
-> >>   $ make ARCH=3Dpowerpc LLVM=3D1 KBUILD_MODPOST_WARN=3D1 mrproper ps3_=
-defconfig modules
-> >>     [snip]
-> >>     LD [M]  arch/powerpc/platforms/cell/spufs/spufs.ko
-> >>   ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such fil=
-e or directory
-> >>   make[3]: *** [scripts/Makefile.modfinal:56: arch/powerpc/platforms/c=
-ell/spufs/spufs.ko] Error 1
-> >>   make[2]: *** [Makefile:1844: modules] Error 2
-> >>   make[1]: *** [/home/masahiro/workspace/linux-kbuild/Makefile:350: __=
-build_one_by_one] Error 2
-> >>   make: *** [Makefile:234: __sub-make] Error 2
-> >>
-> >
-> > Thanks. Is this the correct Fixes tag?
-> >
-> > Fixes: d0e628cd817f ("powerpc/64: Do not link crtsavres.o in vmlinux")
-> >
->
-> I am finding a different commit ID:
->
-> commit baa25b571a168aff5a13bfdc973f1229e2b12b63
-> Author: Nicholas Piggin <npiggin@gmail.com>
-> Date:   Fri May 12 01:56:49 2017 +1000
->
->     powerpc/64: Do not link crtsavres.o in vmlinux
->
->     The 64-bit linker creates save/restore functions on demand with final
->     links, so vmlinux does not require crtsavres.o.
->
->
-> -aneesh
 
 
+On November 19, 2023 9:17:20 AM PST, Masahiro Yamada <masahiroy@kernel=2Eo=
+rg> wrote:
+>On Sat, Nov 18, 2023 at 4:24=E2=80=AFAM <ndesaulniers@google=2Ecom> wrote=
+:
+>>
+>> [=2E=2E=2E]
+>> Wake me when you need me=2E
+>>
+>> Signed-off-by: Nick Desaulniers <ndesaulniers@google=2Ecom>
+>
+> [=2E=2E=2E]
+>(The patch was addressed to Kees, so I will not touch it=2E
+>I think he will pick it up=2E)
 
-Yeah, I think the correct tag is:
+Yeah, I will snag this soon: I'm out this week for US Thanksgiving, but wi=
+ll get it to Linus shortly=2E (Unless someone else picks it up before then=
+=2E)
 
-
-Fixes: baa25b571a16 ("powerpc/64: Do not link crtsavres.o in vmlinux")
-
+-Kees
 
 --=20
-Best Regards
-Masahiro Yamada
+Kees Cook
