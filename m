@@ -1,160 +1,417 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F357F20300
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 10:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24F921352
+	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 11:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H2o6//UB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700648493;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=X6DkIU/SM1sTO10IgOdGwxi80qfnMceItD9C0MIvh3o=;
-	b=H2o6//UBdPlxasbr5B95Y8psOvn7AZ917SwhBqw7DZJAD1KhfbaHZKEECXkKWQFmveqeWi
-	j0uIis+sa+S4fmDmcz3EkQLhLvFy1h/5Xn4mVgfTGbvTcHausR6guIXPSgbnpOY6kXc2Sv
-	26/QZDlTeQE02rMu3AepztX/DniR/4I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-80-S1gqHDDbPTqbRtXmK2U_9g-1; Wed, 22 Nov 2023 05:21:29 -0500
-X-MC-Unique: S1gqHDDbPTqbRtXmK2U_9g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2AE2E811E7B
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 10:21:29 +0000 (UTC)
-Received: from [172.64.3.60] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1508540C6EB9;
-	Wed, 22 Nov 2023 10:21:29 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc2,
- mainline.kernel.org-clang, c2d5304e)
-Date: Wed, 22 Nov 2023 10:21:29 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UBmw8unh"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=X4yB6hUSYr9jLERDuqGa1fayu3rTs8QJXDlK1nr5N+I=; b=UBmw8unhwdh3vhYMvpMxm3Fv1U
+	k9cPMen7Pu7uoW1AdLnAV8UUEPAL3olyL0aLCaD39m5BkE2ZJvNOW7tfVHvOf14uqfjug8oqBGo83
+	AsoenSS39FQdhv8Gp7xoZrY6vY44mLQDUiPzG6ymHjv244RQjHuoOhf9z9oNb+VvP0FAfbcB/cbE+
+	taHeuBMLLvLU06Osy+46TxfajXY5WveGOQmelOB8DTQlzh31RW+28Vr7hZuMSRS38Jlc6GuV0xf9v
+	QNi9xc7kf4tVPBV3Y1ZCq+Ho2us10TaF9XmEDzxL7ui5n5VEXUJHmm1NYlAomD6Hi6ay5m/aUR0R2
+	GPGbTN3w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1r5lCR-00CII2-1s;
+	Wed, 22 Nov 2023 11:15:20 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 2CF283005AA; Wed, 22 Nov 2023 12:15:17 +0100 (CET)
+Date: Wed, 22 Nov 2023 12:15:17 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
+	ndesaulniers@google.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, jpoimboe@kernel.org, joao@overdrivepizza.com,
+	mark.rutland@arm.com
+Subject: Re: [PATCH 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <20231122111517.GR8262@noisy.programming.kicks-ass.net>
+References: <20231120144642.591358648@infradead.org>
+ <20231120154948.708762225@infradead.org>
+ <20231122021817.ggym3biyfeksiplo@macbook-pro-49.dhcp.thefacebook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <95525.123112205212900357@us-mta-80.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122021817.ggym3biyfeksiplo@macbook-pro-49.dhcp.thefacebook.com>
 
-Hi, we tested your kernel and here are the results:
+On Tue, Nov 21, 2023 at 06:18:17PM -0800, Alexei Starovoitov wrote:
+> On Mon, Nov 20, 2023 at 03:46:44PM +0100, Peter Zijlstra wrote:
+> > +
+> > +#ifdef CONFIG_CFI_CLANG
+> > +struct bpf_insn;
+> > +
+> > +extern unsigned int bpf_func_proto(const void *ctx,
+> > +				   const struct bpf_insn *insn);
+> 
+> To make it more obvious what is going on could you rename it to
+> __bpf_prog_runX()
+> and add a comment that its prototype should match exactly
+> bpf interpreters created by DEFINE_BPF_PROG_RUN() macro,
+> otherwise cfi will explode.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Sure.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+> 
+> > +
+> > +__ADDRESSABLE(bpf_func_proto);
+> > +
+> > +asm (
+> > +"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"
+> > +"	.type	cfi_bpf_hash,@object				\n"
+> > +"	.globl	cfi_bpf_hash					\n"
+> > +"	.p2align	2, 0x0					\n"
+> > +"cfi_bpf_hash:							\n"
+> > +"	.long	__kcfi_typeid_bpf_func_proto			\n"
+> 
+> Took me some time to grok this.
+> Cannot you use __CFI_TYPE() macro here ?
 
-Kernel information:
-    Commit message: Merge tag 'platform-drivers-x86-v6.7-2' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+__CFI_TYPE() creates the content of the __cfi_foo prefix symbol, which
+is different from what the above does. The above is basically:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/115968
+u32 __ro_after_init cfi_bpf_hash = __kcfi_typeid_bpf_func_proto;
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
-            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
-XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
-            Affected tests:
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+Except I need to do that in asm because __kcfi_typeid magic only works
+in asm. I'll put the C version in a comment on top.
 
+> > +"	.size	cfi_bpf_hash, 4					\n"
+> > +"	.popsection						\n"
+> > +);
+> > +#endif
+> ...
+> > +static int emit_fineibt(u8 **pprog)
+> > +{
+> > +	u8 *prog = *pprog;
+> > +
+> > +	EMIT_ENDBR();
+> > +	EMIT3_off32(0x41, 0x81, 0xea, cfi_bpf_hash);
+> > +	EMIT2(0x74, 0x07);
+> > +	EMIT2(0x0f, 0x0b);
+> > +	EMIT1(0x90);
+> > +	EMIT_ENDBR_POISON();
+> 
+> Please add comments what this asm does. No one can read hex.
+
+Well, I've stared at this so very long that I can in fact get quite a
+long way with just hex :-/ But point taken. My only problem here is that
+this file uses Intel syntax, and that melts my brain.
+
+Would it be acceptable to have AT&T syntax comments?
+
+> > +
+> > +	*pprog = prog;
+> > +	return 16;
+> 
+> 16 means "the caller of this code will jump to endbr_poison", right?
+
+Ah, so the way FineIBT works is that direct calls go to foo()+0, as
+normal. However the indirect calls will target foo()-16. The 16 bytes
+preceding every symbol will contain the FineIBT landing pad.
+
+As such, we need to offset prog->bpf_func by the expected amount,
+otherwise foo()-16 will land in outer space and things go *boom*.
+
+To be very explicit, let me list all the various forms of function
+calls:
+
+Traditional:
+
+foo:
+  ... code here ...
+  ret
+
+direct caller:
+
+  call foo
+
+indirect caller:
+
+  lea foo(%rip), %r11
+  call *%r11
+
+IBT:
+
+foo:
+  endbr64
+  ... code here ...
+  ret
+
+direct caller:
+
+  call foo / call foo+4
+
+indirect caller:
+
+  lea foo(%rip), %r11
+  ...
+  call *%r11
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+kCFI:
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+__cfi_foo:
+  movl $0x12345678, %rax
+  (11 nops when CALL_PADDING)
+foo:
+  endbr64 (when also IBT)
+  ... code here ...
+  ret
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+direct caller:
+
+  call foo / call foo+4
+
+indirect caller:
+
+  lea foo(%rip), %r11
+  ...
+  movl $(-0x12345678), %r10d
+  addl -15(%r11), %r10d (or -4 without CALL_PADDING)
+  je 1f
+  ud2
+1:call *%r11
+
+
+FineIBT (builds as kCFI + CALL_PADDING + IBT + RETPOLINE and runtime
+patches things to look like):
+
+__cfi_foo:
+  endbr64
+  subl $0x12345678, %r10d
+  jz foo
+  ud2
+  nop
+foo:
+  osp nop3 (was endbr64)
+  ... code here ...
+  ret
+
+direct caller:
+
+  call foo / call foo+4
+
+indirect caller:
+
+  lea foo(%rip), %r11
+  ...
+  movl $0x12345678, %r10d
+  subl $16, %r11
+  nop4
+  call *%r11
+
+
+As can be seen, both kCFI and FineIBT use the prefix __cfi symbol /
+negative offsets.
+
+To make this work the JIT starts by emitting the prefix text but then
+offsets prog->bpf_func to point to the 'real' begin.
+
+> > +}
+> > +
+> > +static int emit_kcfi(u8 **pprog)
+> > +{
+> > +	u8 *prog = *pprog;
+> > +	int offset = 5;
+> > +
+> > +	EMIT1_off32(0xb8, cfi_bpf_hash);
+> 
+> and here too.
+> 
+> > +#ifdef CONFIG_CALL_PADDING
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	EMIT1(0x90);
+> > +	offset += 11;
+> > +#endif
+> > +	EMIT_ENDBR();
+> > +
+> > +	*pprog = prog;
+> > +	return offset;
+> 
+> 5 or 16 would mean "jump to endbr" ?
+
+It's the size of the prefix symbol.
+
+> > +}
+> > +
+> > +static int emit_cfi(u8 **pprog)
+> > +{
+> > +	u8 *prog = *pprog;
+> > +	int offset = 0;
+> > +
+> > +	switch (cfi_mode) {
+> > +	case CFI_FINEIBT:
+> > +		offset = emit_fineibt(&prog);
+> > +		break;
+> > +
+> > +	case CFI_KCFI:
+> > +		offset = emit_kcfi(&prog);
+> > +		break;
+> > +
+> > +	default:
+> > +		EMIT_ENDBR();
+> > +		break;
+> > +	}
+> > +
+> > +	*pprog = prog;
+> > +	return offset;
+> > +}
+> > +
+> >  /*
+> >   * Emit x86-64 prologue code for BPF program.
+> >   * bpf_tail_call helper will skip the first X86_TAIL_CALL_OFFSET bytes
+> >   * while jumping to another program
+> >   */
+> > -static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
+> > -			  bool tail_call_reachable, bool is_subprog,
+> > -			  bool is_exception_cb)
+> > +static int emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
+> > +			 bool tail_call_reachable, bool is_subprog,
+> > +			 bool is_exception_cb)
+> >  {
+> >  	u8 *prog = *pprog;
+> > +	int offset;
+> >  
+> > +	offset = emit_cfi(&prog);
+> 
+> I'm not sure doing cfi_bpf_hash check in JITed code is completely solving the problem.
+> From bpf_dispatcher_*_func() calling into JITed will work,
+> but this emit_prologue() is doing the same job for all bpf progs.
+> Some bpf progs call each other directly and indirectly.
+> bpf_dispatcher_*_func() -> JITed_BPF_A -> JITed_BPF_B.
+> A into B can be a direct call (which cfi doesn't care about) and
+> indirect via emit_bpf_tail_call_indirect()->emit_indirect_jump().
+> Should we care about fineibt/kcfi there too?
+
+The way I understood the tail-call thing to work is that it jumps to
+bpf_prog + X86_TAIL_CALL_OFFSET, we already emit an extra ENDBR there to
+make this work.
+
+So the A -> B indirect call is otherwise unadornen and only needs ENDBR.
+
+Ideally that would use kCFI/FineIBT but since it also skips some of the
+setup, this gets to be non-trivial, so I've let this be as is.
+
+> >  	/* BPF trampoline can be made to work without these nops,
+> >  	 * but let's waste 5 bytes for now and optimize later
+> >  	 */
+> > -	EMIT_ENDBR();
+> >  	memcpy(prog, x86_nops[5], X86_PATCH_SIZE);
+> >  	prog += X86_PATCH_SIZE;
+> >  	if (!ebpf_from_cbpf) {
+> > @@ -357,6 +426,8 @@ static void emit_prologue(u8 **pprog, u3
+> >  	if (tail_call_reachable)
+> >  		EMIT1(0x50);         /* push rax */
+> >  	*pprog = prog;
+> > +
+> > +	return offset;
+> >  }
+> >  
+> >  static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
+> > @@ -1083,8 +1154,8 @@ static int do_jit(struct bpf_prog *bpf_p
+> >  	bool tail_call_seen = false;
+> >  	bool seen_exit = false;
+> >  	u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
+> > -	int i, excnt = 0;
+> >  	int ilen, proglen = 0;
+> > +	int i, excnt = 0;
+> >  	u8 *prog = temp;
+> >  	int err;
+> >  
+> > @@ -1094,9 +1165,12 @@ static int do_jit(struct bpf_prog *bpf_p
+> >  	/* tail call's presence in current prog implies it is reachable */
+> >  	tail_call_reachable |= tail_call_seen;
+> >  
+> > -	emit_prologue(&prog, bpf_prog->aux->stack_depth,
+> > -		      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
+> > -		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
+> > +	ctx->prog_offset = emit_prologue(&prog, bpf_prog->aux->stack_depth,
+> > +					 bpf_prog_was_classic(bpf_prog),
+> > +					 tail_call_reachable,
+> > +					 bpf_is_subprog(bpf_prog),
+> > +					 bpf_prog->aux->exception_cb);
+> > +
+> >  	/* Exception callback will clobber callee regs for its own use, and
+> >  	 * restore the original callee regs from main prog's stack frame.
+> >  	 */
+> > @@ -2935,9 +3009,9 @@ struct bpf_prog *bpf_int_jit_compile(str
+> >  			jit_data->header = header;
+> >  			jit_data->rw_header = rw_header;
+> >  		}
+> > -		prog->bpf_func = (void *)image;
+> > +		prog->bpf_func = (void *)image + ctx.prog_offset;
+> 
+> I don't understand this.
+
+> Is it a some clang thing that knows to offset indirect jump by
+> exactly that many hard coded bytes ?
+> Something in the clang does ptr -= 16 in case of fineibt and just
+> jumps there ? and ptr -= 5 for kcfi ?
+
+Yep, that. I hope my earlier explanation clarified this.
+
+> If so, please add a giant comment explaining that.
+> No one should be reverse engineering such intricate details.
+
+So the kCFI thing is 'new' but readily inspected by objdump or godbolt:
+
+  https://godbolt.org/z/sGe18z3ca
+
+(@Sami, that .Ltmp15 thing, I don't see that in the kernel, what
+compiler flag makes that go away?)
+
+As to FineIBT, that has a big comment in arch/x86/kernel/alternative.c
+where I rewrite the kCFI thing into FineIBT. I can refer there to avoid
+duplicating comments, would that work?
+
+> 
+> >  		prog->jited = 1;
+> > -		prog->jited_len = proglen;
+> > +		prog->jited_len = proglen - ctx.prog_offset; // XXX?
+> 
+> jited_len is used later to cover the whole generated code.
+> See bpf_prog_ksym_set_addr():
+>         prog->aux->ksym.start = (unsigned long) prog->bpf_func;
+>         prog->aux->ksym.end   = prog->aux->ksym.start + prog->jited_len;
+> we definitely want ksym [start, end] to cover every useful byte
+> of JITed code in case IRQ happens on that byte.
+> Without covering cfi prologue the stack dump will be wrong for that frame.
+> I guess if xdp_dispatcher with fineibt=on jumps into prog->bpf_func - 16
+> and IRQ fires we don't care that much about accurate stack of last frame ?
+> I guess it's acceptable, but a comment is necessary.
+
+Ah, so normally the __cfi_foo symbol would catch those, lemme see what I
+can do here.
+
+Thanks!
+
 
