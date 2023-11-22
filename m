@@ -1,85 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B125FC158
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 05:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GaRMpUoa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2783DC433C8
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 05:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700629616;
-	bh=SMGTFpMUFlePRZDNEdBRTyt1TtPx97T5y1jxAfBIUSM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GaRMpUoaPyy3aSywdp6J6l22pCBtNs3hRaJQRZASU9tAnhti0l0mDlEsIkQc3GhO6
-	 djblblh5NoFSagsCE/4PaWxFrKAXRQTDNvB2ORoFb7XFDBuOIG2gNWcSUYnsGfH19O
-	 o3Tj9tPXQ2vdFB8dwERopYuVdeonl4vsXhE6RmUio3mNsoA7NCrzbOkpwPv3RcYILo
-	 Fu4qP1eqiXSIpa+ehx/y4X24in0Hj0vGNLv8qKKSXDzZtcC5S8kbOQLVc3BkizmB7o
-	 qInxZYnJ0WLCVT2RdvOYERGmFmfhjNBB0Sbh6JtiAnZYzmun6u2mBF8xF5v5I10lLK
-	 cV0ya4BLlKAbA==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1f0f94a08a0so3785486fac.2
-        for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 21:06:56 -0800 (PST)
-X-Gm-Message-State: AOJu0Yy+WrLY3fQazJsX/gCWhpFw8dNZ3y30BipYL0+4mxSdkplrbiXx
-	OSTHDX2cto4hEH1wYC/kWuD6M3XAma/XLISwJuE=
-X-Google-Smtp-Source: AGHT+IFfI0wltrJTCmjSnaFWjgTR0bE9i7u+a83ILZJxT8zkqo4A5hXAfq7+yqFlRkIw3OdhdV+yCULgGoDc4ULVp+o=
-X-Received: by 2002:a05:6870:1612:b0:1f9:67db:2d51 with SMTP id
- b18-20020a056870161200b001f967db2d51mr1686219oae.31.1700629615555; Tue, 21
- Nov 2023 21:06:55 -0800 (PST)
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id A20DB156CE
+	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 06:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id E795A606AC67E;
+	Wed, 22 Nov 2023 14:59:53 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: kvalo@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com
+Cc: Su Hui <suhui@nfschina.com>,
+	yangyingliang@huawei.com,
+	libertas-dev@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH wireless-next] wifi: libertas: if_usb: remove some useless code in if_usb_prog_firmware
+Date: Wed, 22 Nov 2023 14:59:09 +0800
+Message-Id: <20231122065908.907045-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231117-maintainers-v1-1-85f2a7422ed9@google.com>
- <CAK7LNARAvH=tWpsXJ640y04Ju8UbPmDze_NC6ax1EKK4Xy73fw@mail.gmail.com> <5EB120AB-1F30-4403-B652-DC0D2772B25E@kernel.org>
-In-Reply-To: <5EB120AB-1F30-4403-B652-DC0D2772B25E@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 22 Nov 2023 14:06:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARV5aCbvVr4GxWCorGbH-vvXy0NbbW1G6W4a0POGg=wZQ@mail.gmail.com>
-Message-ID: <CAK7LNARV5aCbvVr4GxWCorGbH-vvXy0NbbW1G6W4a0POGg=wZQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: refresh LLVM support
-To: Kees Cook <kees@kernel.org>
-Cc: ndesaulniers@google.com, Kees Cook <keescook@chromium.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Tom Rix <trix@redhat.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 22, 2023 at 1:47=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
->
->
->
-> On November 19, 2023 9:17:20 AM PST, Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
-> >On Sat, Nov 18, 2023 at 4:24=E2=80=AFAM <ndesaulniers@google.com> wrote:
-> >>
-> >> [...]
-> >> Wake me when you need me.
-> >>
-> >> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > [...]
-> >(The patch was addressed to Kees, so I will not touch it.
-> >I think he will pick it up.)
->
-> Yeah, I will snag this soon: I'm out this week for US Thanksgiving, but w=
-ill get it to Linus shortly. (Unless someone else picks it up before then.)
->
-> -Kees
->
-> --
-> Kees Cook
+Clang static checker complains that value stored to 'ret' is never read.
+Remove these useless code to save space.
 
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/net/wireless/marvell/libertas/if_usb.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-For the "KERNEL BUILD + files below scripts/" bit,
+diff --git a/drivers/net/wireless/marvell/libertas/if_usb.c b/drivers/net/wireless/marvell/libertas/if_usb.c
+index 2240b4db8c03..77cc55616ef5 100644
+--- a/drivers/net/wireless/marvell/libertas/if_usb.c
++++ b/drivers/net/wireless/marvell/libertas/if_usb.c
+@@ -830,10 +830,8 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
+ 	}
+ 
+ 	cardp->fw = fw;
+-	if (check_fwfile_format(cardp->fw->data, cardp->fw->size)) {
+-		ret = -EINVAL;
++	if (check_fwfile_format(cardp->fw->data, cardp->fw->size))
+ 		goto done;
+-	}
+ 
+ 	/* Cancel any pending usb business */
+ 	usb_kill_urb(cardp->rx_urb);
+@@ -848,7 +846,6 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
+ restart:
+ 	if (if_usb_submit_rx_urb_fwload(cardp) < 0) {
+ 		lbs_deb_usbd(&cardp->udev->dev, "URB submission is failed\n");
+-		ret = -EIO;
+ 		goto done;
+ 	}
+ 
+@@ -866,18 +863,15 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
+ 
+ 	if (cardp->bootcmdresp == BOOT_CMD_RESP_NOT_SUPPORTED) {
+ 		/* Return to normal operation */
+-		ret = -EOPNOTSUPP;
+ 		usb_kill_urb(cardp->rx_urb);
+ 		usb_kill_urb(cardp->tx_urb);
+-		if (if_usb_submit_rx_urb(cardp) < 0)
+-			ret = -EIO;
++		if_usb_submit_rx_urb(cardp);
+ 		goto done;
+ 	} else if (cardp->bootcmdresp <= 0) {
+ 		if (--reset_count >= 0) {
+ 			if_usb_reset_device(cardp);
+ 			goto restart;
+ 		}
+-		ret = -EIO;
+ 		goto done;
+ 	}
+ 
+@@ -908,7 +902,6 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
+ 		}
+ 
+ 		pr_info("FW download failure, time = %d ms\n", i * 100);
+-		ret = -EIO;
+ 		goto done;
+ 	}
+ 
+-- 
+2.30.2
 
-
-Acked-by: Masahiro Yamada <masahiroy@kernel.org>
-
---=20
-Best Regards
-Masahiro Yamada
