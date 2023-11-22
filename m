@@ -1,115 +1,140 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056664E624;
-	Wed, 22 Nov 2023 16:15:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4EE24B2F;
+	Wed, 22 Nov 2023 16:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OFYNZMKG"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2c5039d4e88so88651961fa.3;
-        Wed, 22 Nov 2023 08:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700669751; x=1701274551; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HaNA+1kUhGp1TWlPIHpnCP3XDdAFKSdhNs80LYurPRo=;
-        b=OFYNZMKGHz3/KUmZLZkDEeUcgped9McHpe0RNUVaRMt2T1UaRB/ByGUIhOkjINLTAv
-         cvercr4SqZWJxAjhWcJKHS5lHsM1bFJQis300mDqD5pcyQBnvZ42tdNUXNShbIfiA5XS
-         Xh7Nxa7UekqiD4xak+3Pi0IiDe6fxIh91sb7wm8wXNo/L+l1nPqltrejnNysg19t7G65
-         s8Hdp95Y9Jj7heyzQe/8dpHb8nHOcOsO9ihH7lUIFaXNE2kvwoV4FuC+E/U3+xiS7M4k
-         cgnJAfdMUwflvHcmv1pIS6CQFSgyua7KzJo/VEkqrSYrjO/DDSKI77YcwKwSn4vXX1BT
-         8YqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700669751; x=1701274551;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HaNA+1kUhGp1TWlPIHpnCP3XDdAFKSdhNs80LYurPRo=;
-        b=S8dhKBSNXyw/JTEOWdg5DtuRD2PfyUpjvkBCZenSQLL50NQ9T5+9t+Sx0rFrUpHnsp
-         Awsfnzr42CM6HY2MD1G+SeqYvKQGvZ9Im1aa5O5BQCDQkORzWKgczADVonwOkTxo929K
-         6iHK10C5INXsDuhEym+Oj0sbxSbHjUxIu86mL6BSy1jCgG0W/lUbxOgUAlFEwxBqoWcj
-         ZmYwb7mx1GVNWRMhFusiXqOtVMap5RVi9QmBq679lKzfytuj+IXBRxvEhQnh4TxwaQQe
-         l3P9pRhucpU1LafvuFstg5902J3C4zBgWCNPZHmfJAPqO7Vch+NeVCmCsnH2HfAGWdoi
-         xksg==
-X-Gm-Message-State: AOJu0YwDNI/2Pus1CMioipdiakD43EYc9DqvemCqTjzTrdK6PnHZTtJZ
-	hvxajHN1v0uxLwvCFUa07Uc=
-X-Google-Smtp-Source: AGHT+IFN4P3XRSZ/At5FqUEE8wIqo3jMlcrSAt8vmgIza+s/70PuIihltvHjFK4RjasOXMgJPAr91w==
-X-Received: by 2002:a2e:3513:0:b0:2c7:b9b6:85ff with SMTP id z19-20020a2e3513000000b002c7b9b685ffmr1935778ljz.36.1700669750755;
-        Wed, 22 Nov 2023 08:15:50 -0800 (PST)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id d1-20020a5d5381000000b0032f7f4d008dsm17543459wrv.20.2023.11.22.08.15.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 08:15:50 -0800 (PST)
-Subject: Re: drivers/net/ethernet/sfc/selftest.c:48:16: warning: field ip
- within 'struct efx_loopback_payload::(anonymous at
- drivers/net/ethernet/sfc/selftest.c:46:2)' is less aligned than 'struct
- iphdr' and is usually due to 'struct efx_loopback_payload::(anonymous a...
-To: kernel test robot <lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ijOQkT5v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700670528; x=1732206528;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dVkBwGDQh0KTnGcPQwyuRgxpErlDOtTG1iq22743jm4=;
+  b=ijOQkT5vHSG9PlytsQn72OjtCpG2owvJazDDuSTqMMBw0kM4J4ZlDbJn
+   uQ7iKkRsXgjLOlGMqlHAcuxGy8QLkoD+Psito9MNWd4rANB8WwOiuM4bx
+   C8mp7VcHVG7RtxdfI3S++2bS3Aff6nkBJ3/JZSJfLFJn4WhOWYGjbpeI2
+   ZLxdXtiAuN8EiDMHVfsGVVPgMK9G/5pqPr/88dymrLgPkoGij638I4kVg
+   nyXIbEJhSC6L55w2qGZyqYseBE3jfAxcQvBdx+o4j/Y+Zj9r5pP8lRaR1
+   PtvmzW++eFINeImWcegO4+HLTKVyDPcnAmBwzxBAN96j9Fj77ciFjHnI5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="382491237"
+X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
+   d="scan'208";a="382491237"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 08:27:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="1098488560"
+X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
+   d="scan'208";a="1098488560"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Nov 2023 08:27:46 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5q4l-0000gG-2y;
+	Wed, 22 Nov 2023 16:27:43 +0000
+Date: Thu, 23 Nov 2023 00:26:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raju Rangoju <Raju.Rangoju@amd.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
- Andy Moreton <andy.moreton@amd.com>, Simon Horman <simon.horman@corigine.com>
-References: <202311220537.geMTr31W-lkp@intel.com>
-From: Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <3f42dee6-a6e2-1b35-674f-309aae042ae7@gmail.com>
-Date: Wed, 22 Nov 2023 16:15:49 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, Shyam-sundar.S-k@amd.com,
+	Raju Rangoju <Raju.Rangoju@amd.com>
+Subject: Re: [PATCH v2 net-next 4/4] amd-xgbe: use smn functions to avoid race
+Message-ID: <202311222227.RtqixHxt-lkp@intel.com>
+References: <20231116135416.3371367-5-Raju.Rangoju@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202311220537.geMTr31W-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231116135416.3371367-5-Raju.Rangoju@amd.com>
 
-On 21/11/2023 21:25, kernel test robot wrote:
-> Hi Edward,
-> 
-> FYI, the error/warning still remains.
+Hi Raju,
 
-As I've argued previously, this is a false positive / compiler bug,
- and there is no way to resolve it without making the code strictly
- worse.
+kernel test robot noticed the following build errors:
 
-This:
->>> drivers/net/ethernet/sfc/selftest.c:48:16: warning: field ip within 'struct efx_loopback_payload::(anonymous at drivers/net/ethernet/sfc/selftest.c:46:2)' is less aligned than 'struct iphdr' and is usually due to 'struct efx_loopback_payload::(anonymous at drivers/net/ethernet/sfc/selftest.c:46:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
- is complaining about alignment within an anonymous struct, which
- only ever appears embedded within a larger struct in a way which
- maintains the correct alignment.
+[auto build test ERROR on net-next/main]
 
-#ifdef RANT
+url:    https://github.com/intel-lab-lkp/linux/commits/Raju-Rangoju/amd-xgbe-reorganize-the-code-of-XPCS-access/20231116-215630
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231116135416.3371367-5-Raju.Rangoju%40amd.com
+patch subject: [PATCH v2 net-next 4/4] amd-xgbe: use smn functions to avoid race
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231122/202311222227.RtqixHxt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311222227.RtqixHxt-lkp@intel.com/reproduce)
 
-Indeed, the only way we even *could* create an unaligned access
- out of this code would be via a declaration like
-    typeof(*(((struct efx_loopback_payload *)0)->packet)) bad;
- because *the struct is anonymous*.  And if that happened, the
- bad declaration would be the place to warn, both because it's
- incredibly ugly and because it's the place that's actually
- wrong.  The struct definition itself is entirely *fine*.
-The compiler should be able to detect that, and if it's not smart
- enough to do so then it shouldn't be trying to warn in the first
- place.  Quoth Linus[1]:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311222227.RtqixHxt-lkp@intel.com/
 
- "And if the compiler isn't good enough to do it, then the compiler
-  shouldn't be warning about something that it hasn't got a clue about."
+All errors (new ones prefixed by >>):
 
-The anonymous struct has to be there so that we can placate the
- memcpy hardening, and it has to contain a struct iphdr at a
- 4n+2 offset because that's what shape the on-the-wire packet
- *is*.  To avoid the warning we would need to lose __packed and
- memcpy all of the members in and out of the buffer individually
- to explicitly-calculated offsets, which is worse code.
+>> drivers/net/ethernet/amd/xgbe/xgbe-dev.c:1194:2: error: call to undeclared function 'amd_smn_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1194 |         amd_smn_write(0, (pdata->smn_base + pdata->xpcs_window_sel_reg), index);
+         |         ^
+   drivers/net/ethernet/amd/xgbe/xgbe-dev.c:1194:2: note: did you mean 'pmd_mkwrite'?
+   include/linux/pgtable.h:610:21: note: 'pmd_mkwrite' declared here
+     610 | static inline pmd_t pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
+         |                     ^
+>> drivers/net/ethernet/amd/xgbe/xgbe-dev.c:1195:2: error: call to undeclared function 'amd_smn_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1195 |         amd_smn_read(0, pdata->smn_base + offset, &mmd_data);
+         |         ^
+   drivers/net/ethernet/amd/xgbe/xgbe-dev.c:1224:2: error: call to undeclared function 'amd_smn_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1224 |         amd_smn_write(0, (pdata->smn_base + pdata->xpcs_window_sel_reg), index);
+         |         ^
+   drivers/net/ethernet/amd/xgbe/xgbe-dev.c:1225:2: error: call to undeclared function 'amd_smn_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1225 |         amd_smn_read(0, pdata->smn_base + offset, &ctr_mmd_data);
+         |         ^
+   4 errors generated.
+--
+>> drivers/net/ethernet/amd/xgbe/xgbe-pci.c:316:3: error: call to undeclared function 'amd_smn_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     316 |                 amd_smn_read(0, pdata->smn_base + (pdata->xpcs_window_def_reg), &reg);
+         |                 ^
+   1 error generated.
 
-#endif
 
-Either fix the compiler to not warn, or fix your automation to
- ignore this instance of the warning.
+vim +/amd_smn_write +1194 drivers/net/ethernet/amd/xgbe/xgbe-dev.c
 
--ed
+  1172	
+  1173	static int xgbe_read_mmd_regs_v3(struct xgbe_prv_data *pdata, int prtad,
+  1174					 int mmd_reg)
+  1175	{
+  1176		unsigned int mmd_address, index, offset;
+  1177		unsigned long flags;
+  1178		int mmd_data;
+  1179	
+  1180		mmd_address = get_mmd_address(pdata, mmd_reg);
+  1181	
+  1182		/* The PCS registers are accessed using mmio. The underlying
+  1183		 * management interface uses indirect addressing to access the MMD
+  1184		 * register sets. This requires accessing of the PCS register in two
+  1185		 * phases, an address phase and a data phase.
+  1186		 *
+  1187		 * The mmio interface is based on 16-bit offsets and values. All
+  1188		 * register offsets must therefore be adjusted by left shifting the
+  1189		 * offset 1 bit and reading 16 bits of data.
+  1190		 */
+  1191		offset = get_index_offset(pdata, mmd_address, &index);
+  1192	
+  1193		spin_lock_irqsave(&pdata->xpcs_lock, flags);
+> 1194		amd_smn_write(0, (pdata->smn_base + pdata->xpcs_window_sel_reg), index);
+> 1195		amd_smn_read(0, pdata->smn_base + offset, &mmd_data);
+  1196		mmd_data = (offset % 4) ? FIELD_GET(XGBE_GEN_HI_MASK, mmd_data) :
+  1197					  FIELD_GET(XGBE_GEN_LO_MASK, mmd_data);
+  1198	
+  1199		spin_unlock_irqrestore(&pdata->xpcs_lock, flags);
+  1200	
+  1201		return mmd_data;
+  1202	}
+  1203	
 
-[1]: https://yarchive.net/comp/linux/gcc.html#13
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
