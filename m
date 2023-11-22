@@ -1,52 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA9625D908;
-	Wed, 22 Nov 2023 20:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBF15C8EC;
+	Wed, 22 Nov 2023 20:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CHPdezc1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mfeVsdFk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700684630; x=1732220630;
+  t=1700684633; x=1732220633;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=uMaYkdk7ELFbFc/sQHKRfNTGUIp0Gihc+5+qFcwD0bQ=;
-  b=CHPdezc1uPyIDMHRuGytJHJYYOUh8D6eg8eboKePfoQxKrM1BWYqfLoq
-   olhlxHO7kyz081ts3/sn0PBsjmBtPsrHB8PDYj1pVQg4BHpSxUUP05D0g
-   wAMVX3vxFOaDAjxv7OQLwpS83Z01AbqB8KHpsSf2fPeyVLzwLU/P3O6FP
-   bido6J2DsrTAimsSvatoW+Y+6vu9vEDHO7WAPvZylvWFdQGNCWWHsw0I4
-   whJz6VotWDohsE1+Q2oRFTZu1NyKXZWW0DaZsPMAxw7lPi3SkunCloY9W
-   sOBogg1sMNHmlnSbxZCVWCX3YM38K4EKgs44YdKZv3LnVGuq99F0bzbWv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="478336634"
+  bh=0hV/4dxSkvkv58x8jhfB0rBCjxCGhFBbb9yCA58ugb0=;
+  b=mfeVsdFk55yvkVi7VsDzkt/4tNFJMxuSqYfQIri3u4yh2fPyPJMbm3l4
+   bmil0U2qk/tGk+2vahopzc4SYTafTLeZnWTpFnYL2D0vK066pqMk8ovuV
+   hYWS4UxGVHdvu1L1MJHxMDh04FblKgGniqwyJOx76KfZ2Xbwqhizb0aev
+   EWVppUjbTKi8lt58F6IqOiNyYECUCkOcvZwxyNcdCkktKayBpQra1/09K
+   pVnwjQ8LiUCYGi26Vv6mlj4r+kRa9UIpjHsC56IGiH5tkyMoNunYxSpIU
+   pXo8p9UK6gl97ZKfFMo/WWYMicF/g6/iJ0secki8b7TEsJ/mph2OVFSJr
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="389295079"
 X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
-   d="scan'208";a="478336634"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 12:23:49 -0800
+   d="scan'208";a="389295079"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 12:23:52 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="833188356"
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="940392899"
 X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
-   d="scan'208";a="833188356"
+   d="scan'208";a="940392899"
 Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Nov 2023 12:23:47 -0800
+  by orsmga005.jf.intel.com with ESMTP; 22 Nov 2023 12:23:48 -0800
 Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r5tlA-0000qm-36;
-	Wed, 22 Nov 2023 20:23:44 +0000
-Date: Thu, 23 Nov 2023 04:23:17 +0800
+	id 1r5tlC-0000qp-1t;
+	Wed, 22 Nov 2023 20:23:46 +0000
+Date: Thu, 23 Nov 2023 04:23:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+To: Samuel Holland <samuel.holland@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+	linux-riscv@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Ivan Babrou <ivan@cloudflare.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: Re: [PATCH v1 net-next 4/4] af_unix: Try to run GC async.
-Message-ID: <202311230220.WfMchMxF-lkp@intel.com>
-References: <20231122013629.28554-5-kuniyu@amazon.com>
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	David Airlie <airlied@gmail.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Pan Xinhui <Xinhui.Pan@amd.com>, Daniel Vetter <daniel@ffwll.ch>,
+	amd-gfx@lists.freedesktop.org,
+	Samuel Holland <samuel.holland@sifive.com>
+Subject: Re: [PATCH 1/3] riscv: Add support for kernel-mode FPU
+Message-ID: <202311230215.DBFyWPqb-lkp@intel.com>
+References: <20231122030621.3759313-2-samuel.holland@sifive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,32 +62,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231122013629.28554-5-kuniyu@amazon.com>
+In-Reply-To: <20231122030621.3759313-2-samuel.holland@sifive.com>
 
-Hi Kuniyuki,
+Hi Samuel,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.7-rc2 next-20231122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/af_unix-Do-not-use-atomic-ops-for-unix_sk-sk-inflight/20231122-094214
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20231122013629.28554-5-kuniyu%40amazon.com
-patch subject: [PATCH v1 net-next 4/4] af_unix: Try to run GC async.
-config: x86_64-buildonly-randconfig-006-20231122 (https://download.01.org/0day-ci/archive/20231123/202311230220.WfMchMxF-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231123/202311230220.WfMchMxF-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/riscv-Add-support-for-kernel-mode-FPU/20231122-111015
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20231122030621.3759313-2-samuel.holland%40sifive.com
+patch subject: [PATCH 1/3] riscv: Add support for kernel-mode FPU
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20231123/202311230215.DBFyWPqb-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231123/202311230215.DBFyWPqb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311230220.WfMchMxF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311230215.DBFyWPqb-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: unix_get_socket
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(__scm_send)
+>> arch/riscv/kernel/process.c:229:19: error: use of undeclared identifier '__fstate_save'
+     229 | EXPORT_SYMBOL_GPL(__fstate_save);
+         |                   ^
+>> arch/riscv/kernel/process.c:230:19: error: use of undeclared identifier '__fstate_restore'
+     230 | EXPORT_SYMBOL_GPL(__fstate_restore);
+         |                   ^
+   2 errors generated.
+
+
+vim +/__fstate_save +229 arch/riscv/kernel/process.c
+
+   228	
+ > 229	EXPORT_SYMBOL_GPL(__fstate_save);
+ > 230	EXPORT_SYMBOL_GPL(__fstate_restore);
 
 -- 
 0-DAY CI Kernel Test Service
