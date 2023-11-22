@@ -1,98 +1,225 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id A20DB156CE
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 06:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id E795A606AC67E;
-	Wed, 22 Nov 2023 14:59:53 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: kvalo@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com
-Cc: Su Hui <suhui@nfschina.com>,
-	yangyingliang@huawei.com,
-	libertas-dev@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH wireless-next] wifi: libertas: if_usb: remove some useless code in if_usb_prog_firmware
-Date: Wed, 22 Nov 2023 14:59:09 +0800
-Message-Id: <20231122065908.907045-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1294718624;
+	Wed, 22 Nov 2023 07:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LUWY748k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700637595; x=1732173595;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KvIjd3WcQUTAQZL0HXjLGHIwhv87e45Kod3du9RH8i4=;
+  b=LUWY748kgBXpFbtJLpZdZLz2TANBeyYyNjIdKJVGxHr4KkQeSGUbWTTk
+   gL+8hPT4V2Vc0TXxkr7Zf34AxdcsHESMJpj4CnSH4m9/NCY1Yx86IUide
+   Cxhy04QvQgWlwmW1Diaez+BkjZvH3ZOQEYvG9zngH1JkVu8qgm5FseASA
+   Ybuw8LSUYMcJaAaKgdDMM/MjxPirubiuiRRqMoWt0qW5Kr8lohYHtIMJ2
+   i3tPlgS/Bn4i34F7OGpDIluj4Ac5pe8XFjZmCKlnSRIUIS2gzJJRNeDN6
+   yXPMYn9aUWmBCWikcg4gnXvs069qomFP71lSW5VKc00rlsI0zB+nhKsP6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="371350512"
+X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
+   d="scan'208";a="371350512"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 23:19:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="795997236"
+X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
+   d="scan'208";a="795997236"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Nov 2023 23:19:46 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5hWR-0000Bf-2l;
+	Wed, 22 Nov 2023 07:19:43 +0000
+Date: Wed, 22 Nov 2023 15:19:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: shiju.jose@huawei.com, linux-cxl@vger.kernel.org, linux-mm@kvack.org,
+	dave@stgolabs.net, jonathan.cameron@huawei.com,
+	dave.jiang@intel.com, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com,
+	dan.j.williams@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	david@redhat.com, Vilas.Sridharan@amd.com, leo.duran@amd.com,
+	Yazen.Ghannam@amd.com, rientjes@google.com, jiaqiyan@google.com,
+	tony.luck@intel.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
+	rafael@kernel.org, lenb@kernel.org, naoya.horiguchi@nec.com,
+	james.morse@arm.com, jthoughton@google.com, somasundaram.a@hpe.com,
+	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
+	mike.malvestuto@intel.com
+Subject: Re: [PATCH v2 07/10] cxl/memscrub: Register CXL device patrol scrub
+ with scrub configure driver
+Message-ID: <202311221316.CqzLVodA-lkp@intel.com>
+References: <20231121101844.1161-8-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231121101844.1161-8-shiju.jose@huawei.com>
 
-Clang static checker complains that value stored to 'ret' is never read.
-Remove these useless code to save space.
+Hi,
 
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/net/wireless/marvell/libertas/if_usb.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/net/wireless/marvell/libertas/if_usb.c b/drivers/net/wireless/marvell/libertas/if_usb.c
-index 2240b4db8c03..77cc55616ef5 100644
---- a/drivers/net/wireless/marvell/libertas/if_usb.c
-+++ b/drivers/net/wireless/marvell/libertas/if_usb.c
-@@ -830,10 +830,8 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
- 	}
- 
- 	cardp->fw = fw;
--	if (check_fwfile_format(cardp->fw->data, cardp->fw->size)) {
--		ret = -EINVAL;
-+	if (check_fwfile_format(cardp->fw->data, cardp->fw->size))
- 		goto done;
--	}
- 
- 	/* Cancel any pending usb business */
- 	usb_kill_urb(cardp->rx_urb);
-@@ -848,7 +846,6 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
- restart:
- 	if (if_usb_submit_rx_urb_fwload(cardp) < 0) {
- 		lbs_deb_usbd(&cardp->udev->dev, "URB submission is failed\n");
--		ret = -EIO;
- 		goto done;
- 	}
- 
-@@ -866,18 +863,15 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
- 
- 	if (cardp->bootcmdresp == BOOT_CMD_RESP_NOT_SUPPORTED) {
- 		/* Return to normal operation */
--		ret = -EOPNOTSUPP;
- 		usb_kill_urb(cardp->rx_urb);
- 		usb_kill_urb(cardp->tx_urb);
--		if (if_usb_submit_rx_urb(cardp) < 0)
--			ret = -EIO;
-+		if_usb_submit_rx_urb(cardp);
- 		goto done;
- 	} else if (cardp->bootcmdresp <= 0) {
- 		if (--reset_count >= 0) {
- 			if_usb_reset_device(cardp);
- 			goto restart;
- 		}
--		ret = -EIO;
- 		goto done;
- 	}
- 
-@@ -908,7 +902,6 @@ static void if_usb_prog_firmware(struct lbs_private *priv, int ret,
- 		}
- 
- 		pr_info("FW download failure, time = %d ms\n", i * 100);
--		ret = -EIO;
- 		goto done;
- 	}
- 
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.7-rc2 next-20231121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/shiju-jose-huawei-com/cxl-mbox-Add-GET_SUPPORTED_FEATURES-mailbox-command/20231121-182247
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231121101844.1161-8-shiju.jose%40huawei.com
+patch subject: [PATCH v2 07/10] cxl/memscrub: Register CXL device patrol scrub with scrub configure driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231122/202311221316.CqzLVodA-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311221316.CqzLVodA-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311221316.CqzLVodA-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/cxl/core/memscrub.c:330:9: warning: no previous prototype for function 'cxl_mem_patrol_scrub_is_visible' [-Wmissing-prototypes]
+   umode_t cxl_mem_patrol_scrub_is_visible(const void *drv_data, u32 attr, int region_id)
+           ^
+   drivers/cxl/core/memscrub.c:330:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   umode_t cxl_mem_patrol_scrub_is_visible(const void *drv_data, u32 attr, int region_id)
+   ^
+   static 
+>> drivers/cxl/core/memscrub.c:361:5: warning: no previous prototype for function 'cxl_mem_patrol_scrub_read' [-Wmissing-prototypes]
+   int cxl_mem_patrol_scrub_read(struct device *dev, u32 attr, int region_id, u64 *val)
+       ^
+   drivers/cxl/core/memscrub.c:361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int cxl_mem_patrol_scrub_read(struct device *dev, u32 attr, int region_id, u64 *val)
+   ^
+   static 
+>> drivers/cxl/core/memscrub.c:381:5: warning: no previous prototype for function 'cxl_mem_patrol_scrub_write' [-Wmissing-prototypes]
+   int cxl_mem_patrol_scrub_write(struct device *dev, u32 attr, int region_id, u64 val)
+       ^
+   drivers/cxl/core/memscrub.c:381:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int cxl_mem_patrol_scrub_write(struct device *dev, u32 attr, int region_id, u64 val)
+   ^
+   static 
+>> drivers/cxl/core/memscrub.c:402:5: warning: no previous prototype for function 'cxl_mem_patrol_scrub_read_strings' [-Wmissing-prototypes]
+   int cxl_mem_patrol_scrub_read_strings(struct device *dev, u32 attr, int region_id,
+       ^
+   drivers/cxl/core/memscrub.c:402:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int cxl_mem_patrol_scrub_read_strings(struct device *dev, u32 attr, int region_id,
+   ^
+   static 
+   drivers/cxl/core/memscrub.c:584:12: warning: unused function 'cxl_mem_ecs_set_attrbs' [-Wunused-function]
+   static int cxl_mem_ecs_set_attrbs(struct device *dev, int fru_id,
+              ^
+   5 warnings generated.
+
+
+vim +/cxl_mem_patrol_scrub_is_visible +330 drivers/cxl/core/memscrub.c
+
+   320	
+   321	/**
+   322	 * cxl_mem_patrol_scrub_is_visible() - Callback to return attribute visibility
+   323	 * @drv_data: Pointer to driver-private data structure passed
+   324	 *	      as argument to devm_scrub_device_register().
+   325	 * @attr: Scrub attribute
+   326	 * @region_id: ID of the memory region
+   327	 *
+   328	 * Returns: 0 on success, an error otherwise
+   329	 */
+ > 330	umode_t cxl_mem_patrol_scrub_is_visible(const void *drv_data, u32 attr, int region_id)
+   331	{
+   332		const struct cxl_patrol_scrub_context *cxl_ps_ctx = drv_data;
+   333	
+   334		if (attr == scrub_speed_available ||
+   335		    attr == scrub_speed) {
+   336			if (!cxl_ps_ctx->scrub_cycle_changable)
+   337				return 0;
+   338		}
+   339	
+   340		switch (attr) {
+   341		case scrub_speed_available:
+   342			return 0444;
+   343		case scrub_enable:
+   344			return 0200;
+   345		case scrub_speed:
+   346			return 0644;
+   347		default:
+   348			return 0;
+   349		}
+   350	}
+   351	
+   352	/**
+   353	 * cxl_mem_patrol_scrub_read() - Read callback for data attributes
+   354	 * @dev: Pointer to scrub device
+   355	 * @attr: Scrub attribute
+   356	 * @region_id: ID of the memory region
+   357	 * @val: Pointer to the returned data
+   358	 *
+   359	 * Returns: 0 on success, an error otherwise
+   360	 */
+ > 361	int cxl_mem_patrol_scrub_read(struct device *dev, u32 attr, int region_id, u64 *val)
+   362	{
+   363	
+   364		switch (attr) {
+   365		case scrub_speed:
+   366			return cxl_mem_ps_speed_read(dev->parent, val);
+   367		default:
+   368			return -ENOTSUPP;
+   369		}
+   370	}
+   371	
+   372	/**
+   373	 * cxl_mem_patrol_scrub_write() - Write callback for data attributes
+   374	 * @dev: Pointer to scrub device
+   375	 * @attr: Scrub attribute
+   376	 * @region_id: ID of the memory region
+   377	 * @val: Value to write
+   378	 *
+   379	 * Returns: 0 on success, an error otherwise
+   380	 */
+ > 381	int cxl_mem_patrol_scrub_write(struct device *dev, u32 attr, int region_id, u64 val)
+   382	{
+   383		switch (attr) {
+   384		case scrub_enable:
+   385			return cxl_mem_ps_enable_write(dev->parent, val);
+   386		case scrub_speed:
+   387			return cxl_mem_ps_speed_write(dev->parent, val);
+   388		default:
+   389			return -ENOTSUPP;
+   390		}
+   391	}
+   392	
+   393	/**
+   394	 * cxl_mem_patrol_scrub_read_strings() - Read callback for string attributes
+   395	 * @dev: Pointer to scrub device
+   396	 * @attr: Scrub attribute
+   397	 * @region_id: ID of the memory region
+   398	 * @buf: Pointer to the buffer for copying returned string
+   399	 *
+   400	 * Returns: 0 on success, an error otherwise
+   401	 */
+ > 402	int cxl_mem_patrol_scrub_read_strings(struct device *dev, u32 attr, int region_id,
+   403					      char *buf)
+   404	{
+   405		switch (attr) {
+   406		case scrub_speed_available:
+   407			return cxl_mem_ps_speed_available_read(dev->parent, buf);
+   408		default:
+   409			return -ENOTSUPP;
+   410		}
+   411	}
+   412	
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
