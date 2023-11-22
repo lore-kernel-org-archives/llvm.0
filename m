@@ -1,53 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EBE15B2;
-	Wed, 22 Nov 2023 01:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5160C17CD
+	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 01:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IWDpGbMV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700616332; x=1732152332;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t8oT6RUsi73gqqA7YznCIrpliumT0ylzF6sXsPx7xLk=;
-  b=IWDpGbMV8Aznxb5ray1RiHFReSyUrH8CvHmH/dMVJ+GHkUTOH5GjOaGE
-   PuYApMyJzEc+iPwMmS8UnkAa+eRQQMxyPdKCP3qFdDG+uFQHhMdO5R8So
-   wK+4pbJiJWVfJ4AevqJDogw9SGStV1JSquhApVI28HQols+EuVq7hbvyY
-   JoyHFGcY74XfgSlGxOlSFjP3DN6/5k8wXpUl+yW9Ug4US2O9442dCMns9
-   VWstMHaPGQo0ZZYESz99D0bPzB/TxjcefQnCK3UdiIatScrXRXiT45TK4
-   KOIZBHzUbVIdI6bOZBajldQhRq19eXR+u/5dh90Ny3KmdbHgDyoRRHCCl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="382354356"
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="382354356"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 17:25:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="766827289"
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="766827289"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Nov 2023 17:25:27 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5bzH-0008UM-0y;
-	Wed, 22 Nov 2023 01:25:24 +0000
-Date: Wed, 22 Nov 2023 09:24:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sanath S <Sanath.S@amd.com>, andreas.noever@gmail.com,
-	michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sanath S <Sanath.S@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	stable@vger.kernel.org
-Subject: Re: [Patch] thunderbolt: Add quirk to reset downstream port
-Message-ID: <202311220931.2IqiKNXr-lkp@intel.com>
-References: <20231121174701.3922587-1-Sanath.S@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YUBKU6L3"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6cb55001124so277025b3a.0
+        for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 17:41:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700617273; x=1701222073; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
+        b=YUBKU6L39hix9NNN2RT2nknmWPPbKeiLCnLYSDLBYjtdaRaAX5e7XQdqNWh6WQiilt
+         EfK6N9z4+IFY8UQSr4Gb0iU2Y3FrushwU4l7j62LNARdRk5KVDUzDJm7qE/k1WPlufss
+         mOuHIRX1Vilp/SqXm3dWgRgKZ7aGSe+WniPVnhh2bCEZW6zGOY2L7RO9cGBOBjL7TN1u
+         f6qXZjkVnaqPxJZclwf2EAWTpiTRHCIem55fZ26IWTpJ2/9bJQW+JLvQ/ApICdENshL4
+         moCtXrCTX3MJY5HDxvzlAPjks46A3IjHyEBqq6ptwltigR0/sT2+r7wf1NfQnaMWcyCQ
+         FTDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700617273; x=1701222073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
+        b=VimCXqtZjb9ZAUMYaPSrNBNJbyGq73KH36TWSIs1aCwAOb5H+G1JoKDW+yNweDtS7g
+         Pgboz7kZKfIiYB3i1bVrDXIuSfDaglmvAzSulvVuopn8k4wrQYzUvznDJ/mBtAUL5nXz
+         Z2Lek6uDFOIVyS31V8/NmEsVVhileTvvxtu37Y6ujBgNC4jzTpO1n6izIWp3jjhJQbeP
+         61ljQ0jkDYB/JMzuJXee5t3jAA5mRp0d9p5DD+C5I1Jpf3YML6POmo3JTfSrUgZKX6du
+         EMLe3Za4THKEA4VOki/+h9BNJUsutYqlr95GlLN9FrGt2LHPiaDcatdAwEgbZWWWPyHm
+         j+2Q==
+X-Gm-Message-State: AOJu0YyK3ecriM4lEjzJuh4CjJ3nLFOAkbPRBXtTDrga9quoEG7NUyqL
+	bNIns+xOfOJQg+9qTCOfr4o=
+X-Google-Smtp-Source: AGHT+IHAMbcH80Qv38sfnNHrOUL21YxFpmpRBj4ZbJPJ09PEy1rp7PPEr4++1O5WoMpvW2iMsf+Omg==
+X-Received: by 2002:a05:6a21:a59b:b0:187:962d:746b with SMTP id gd27-20020a056a21a59b00b00187962d746bmr1839947pzc.9.1700617273489;
+        Tue, 21 Nov 2023 17:41:13 -0800 (PST)
+Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::4:da69])
+        by smtp.gmail.com with ESMTPSA id v4-20020aa78504000000b006cb884c0362sm5005865pfn.87.2023.11.21.17.41.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 17:41:12 -0800 (PST)
+Date: Tue, 21 Nov 2023 17:41:07 -0800
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
+	ndesaulniers@google.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, jpoimboe@kernel.org, joao@overdrivepizza.com,
+	mark.rutland@arm.com
+Subject: Re: [PATCH 0/2] x86/bpf: Fix FineIBT vs eBPF
+Message-ID: <20231122014107.p5zf4o6kjanypla4@macbook-pro-49.dhcp.thefacebook.com>
+References: <20231120144642.591358648@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,76 +69,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231121174701.3922587-1-Sanath.S@amd.com>
+In-Reply-To: <20231120144642.591358648@infradead.org>
 
-Hi Sanath,
+On Mon, Nov 20, 2023 at 03:46:42PM +0100, Peter Zijlstra wrote:
+> Hi!
+> 
+> There's a problem with FineIBT and eBPF using __nocfi when
+> CONFIG_BPF_JIT_ALWAYS_ON=n, in which case the __nocfi indirect call can target
+> a normal function like __bpf_prog_run32().
 
-kernel test robot noticed the following build warnings:
+The lack (or partially broken) cfi in the kernel built with
+CONFIG_BPF_JIT_ALWAYS_ON=n is probably the last of people security concerns.
+We introduced CONFIG_BPF_JIT_ALWAYS_ON=y to remove the interpreter,
+since mere presence of _any_ interpreter in the kernel (bpf and any other)
+is an attack vector. As it was demonstrated during spectre days an interpreter
+sitting in executable part of vmlinux .text tremendously helps to craft
+a speculative execution exploit.
 
-[auto build test WARNING on westeri-thunderbolt/next]
-[also build test WARNING on linus/master v6.7-rc2 next-20231121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Anyway, motivation aside, more comments in the patch 2...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sanath-S/thunderbolt-Add-quirk-to-reset-downstream-port/20231122-014913
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-patch link:    https://lore.kernel.org/r/20231121174701.3922587-1-Sanath.S%40amd.com
-patch subject: [Patch] thunderbolt: Add quirk to reset downstream port
-config: x86_64-buildonly-randconfig-003-20231122 (https://download.01.org/0day-ci/archive/20231122/202311220931.2IqiKNXr-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220931.2IqiKNXr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311220931.2IqiKNXr-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thunderbolt/switch.c:1556:2: warning: variable 'ret' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           tb_switch_for_each_port(sw, port) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/tb.h:821:7: note: expanded from macro 'tb_switch_for_each_port'
-                (p) <= &(sw)->ports[(sw)->config.max_port_number]; (p)++)
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/switch.c:1564:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/thunderbolt/switch.c:1556:2: note: remove the condition if it is always true
-           tb_switch_for_each_port(sw, port) {
-           ^
-   drivers/thunderbolt/tb.h:821:7: note: expanded from macro 'tb_switch_for_each_port'
-                (p) <= &(sw)->ports[(sw)->config.max_port_number]; (p)++)
-                ^
-   drivers/thunderbolt/switch.c:1554:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +1556 drivers/thunderbolt/switch.c
-
-  1549	
-  1550	static int tb_switch_reset_downstream_port(struct tb_switch *sw)
-  1551	{
-  1552		struct tb_port *port;
-  1553		uint32_t val = 0;
-  1554		int ret;
-  1555	
-> 1556		tb_switch_for_each_port(sw, port) {
-  1557			if (port->config.type == TB_TYPE_PORT) {
-  1558				val = val | PORT_CS_19_DPR;
-  1559				ret = tb_port_write(port, &val, TB_CFG_PORT,
-  1560						port->cap_usb4 + PORT_CS_19, 1);
-  1561				break;
-  1562			}
-  1563		}
-  1564		return ret;
-  1565	}
-  1566	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Specifically the various preambles look like:
+> 
+>    FineIBT				JIT
+> 
+>    __cfi_foo:
+>       endbr64
+>       subl	$hash, %r10d
+>       jz	1f
+>       ud2
+>    1: nop
+>    foo:					foo:
+>       osp nop3				   endbr64
+>       ...				   ...
+> 
+> So while bpf_dispatcher_*_func() does a __nocfi call to foo()+0 and this
+> matches what the JIT generates, it does not work for regular FineIBT functions,
+> since their +0 endbr got poisoned and things go *boom*.
+> 
+> Cure this by teaching the BPF JIT about all the various CFI forms. Notably this
+> removes the last __nocfi call on x86.
+> 
+> If the BPF folks agree (and the robots don't find fail) I'd like to take this
+> through the x86 tree, because I have a few more patches that turn the non-fatal
+> 'osp nop3' poison into a 4 byte ud1 instruction which is rather fatal. As a
+> result this problem will also surface on !IBT hardware.
+> 
