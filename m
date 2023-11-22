@@ -1,87 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DD0184C;
-	Wed, 22 Nov 2023 02:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iLI6k+HL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700621122; x=1732157122;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+SRKTY82F5RwG3K6X109BY32eywlj2KI1nBKJq1iZnY=;
-  b=iLI6k+HLttu6hnVsm1bRyy/yj5tsStz+GkduVFOLPjNKYJn7rMuzkxaS
-   DNB+999qhlv5/fnFVcQoHG7ThDgwCYDh80GZ/2pAeg+sR71QTsoqhrXR2
-   FXifE0zQb/SoQJHxwcTUyyuPIkAOp420EZMHhH4XH4qRjXtCUmKq9fICR
-   XF8NECPfIHpoHLehDkTNqYVataQLIr6iXf2hVVyaIbE291baUMP8cQhXn
-   XcF3C2uJXMmJjc8j19lRR3w+Gq/a1ZuPtQEklkpaDLYf69f5i5DBOvRF3
-   CFHTE5Vo5VoAqzLW/LA/hAW//kutPTN9ht6y8PJoKUYmgOl7XXeg4TgcS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="372142830"
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="372142830"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 18:45:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="760300438"
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="760300438"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2023 18:45:19 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5dDQ-0008ZA-0e;
-	Wed, 22 Nov 2023 02:44:42 +0000
-Date: Wed, 22 Nov 2023 10:36:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>, linux-doc@vger.kernel.org
-Subject: [asahilinux:bits/200-dcp 126/145]
- drivers/mux/apple-display-crossbar.c:22: warning: This comment starts with
- '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202311221053.cOjeBbia-lkp@intel.com>
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 5945E17CB
+	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 03:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from [172.30.11.106] (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id B38D060621C85;
+	Wed, 22 Nov 2023 11:06:31 +0800 (CST)
+Message-ID: <22c4788d-1ba4-52c7-4ddc-5a3b0ec2acb3@nfschina.com>
+Date: Wed, 22 Nov 2023 11:06:31 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] misc: mei: client.c: fix some error code problem in
+ mei_cl_write
+Content-Language: en-US
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: tomas.winkler@intel.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+ nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ alexander.usyskin@intel.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+In-Reply-To: <92972476-0b1f-4d0a-9951-af3fc8bc6e65@suswa.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/AsahiLinux/linux bits/200-dcp
-head:   e3a82f03cd81edb4608ab6dde0e073ac91e2fdb8
-commit: 592b58213f6556b76911d71b22f1d1de1e1a88ac [126/145] mux: apple dp crossbar: Support t602x DP cross bar variant
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231122/202311221053.cOjeBbia-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311221053.cOjeBbia-lkp@intel.com/reproduce)
+On 2023/11/20 23:03, Dan Carpenter wrote:
+> On Mon, Nov 20, 2023 at 04:53:45PM +0800, Su Hui wrote:
+>> Clang static analyzer complains that value stored to 'rets' is never
+>> read. Remove some useless code, and let 'buf_len = -EOVERFLOW' to make
+>> sure we can return '-EOVERFLOW'.
+>>
+>> mei_msg_hdr_init() return negative error code, rets should be
+>> 'PTR_ERR(mei_hdr)' rather than '-PTR_ERR(mei_hdr)'.
+>>
+>> Fixes: 0cd7c01a60f8 ("mei: add support for mei extended header.")
+>> Fixes: 8c8d964ce90f ("mei: move hbuf_depth from the mei device to the hw modules")
+>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>> ---
+>>   drivers/misc/mei/client.c | 6 ++----
+>>   1 file changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
+>> index 9c8fc87938a7..00dac0a47da0 100644
+>> --- a/drivers/misc/mei/client.c
+>> +++ b/drivers/misc/mei/client.c
+>> @@ -2011,7 +2011,7 @@ ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long time
+>>   
+>>   	mei_hdr = mei_msg_hdr_init(cb);
+>>   	if (IS_ERR(mei_hdr)) {
+>> -		rets = -PTR_ERR(mei_hdr);
+>> +		rets = PTR_ERR(mei_hdr);
+> KTODO: write a static checker rule which complains -PTR_ERR()
+>
+> This might be complicated because there are parts of networking where
+> we store error codes as positive values.  But there is enough context in
+> this function to create some sort of warning about this code.  "Mixing
+> positive and negative error codes" perhaps?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311221053.cOjeBbia-lkp@intel.com/
+Maybe add a check in checkpatch.pl is a good idea?
 
-All warnings (new ones prefixed by >>):
+>
+> $ git grep -n '\-PTR_ERR'
+> block/partitions/core.c:574:                   disk->disk_name, p, -PTR_ERR(part));
+> drivers/infiniband/ulp/ipoib/ipoib_multicast.c:291:                        -PTR_ERR(ah));
+> drivers/misc/mei/client.c:2014:         rets = -PTR_ERR(mei_hdr);
+> drivers/net/ethernet/intel/igb/igb_main.c:8963:                 unsigned int xdp_res = -PTR_ERR(skb);
+> drivers/net/ethernet/intel/igc/igc_main.c:2639:                 unsigned int xdp_res = -PTR_ERR(skb);
+> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:2348:                     unsigned int xdp_res = -PTR_ERR(skb);
+> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:5431:                         unsigned int xdp_res = -PTR_ERR(skb);
+> drivers/phy/sunplus/phy-sunplus-usb2.c:278:             ret = -PTR_ERR(phy);
+> drivers/scsi/libfc/fc_elsct.c:86:               switch (-PTR_ERR(fp)) {
+> drivers/scsi/libfc/fc_lport.c:1081:                  IS_ERR(fp) ? -PTR_ERR(fp) : 0, fc_lport_state(lport),
+> fs/ext4/indirect.c:1042:                                ext4_error_inode_block(inode, nr, -PTR_ERR(bh),
+> fs/jffs2/background.c:48:                       -PTR_ERR(tsk));
+> fs/ntfs/dir.c:92:                               -PTR_ERR(m));
+> fs/ntfs/dir.c:312:                              -PTR_ERR(page));
+> fs/ntfs/dir.c:643:                              -PTR_ERR(m));
+> fs/ntfs/dir.c:790:                              -PTR_ERR(page));
+> fs/ntfs/index.c:141:                            -PTR_ERR(m));
+> fs/ntfs/index.c:268:                            -PTR_ERR(page));
+> fs/ntfs/mft.c:162:      ntfs_error(ni->vol->sb, "Failed with error code %lu.", -PTR_ERR(m));
+> fs/ntfs/mft.c:289:                              "mft record, error code %ld.", -PTR_ERR(m));
+> net/ipv6/af_inet6.c:852:                        WRITE_ONCE(sk->sk_err_soft, -PTR_ERR(dst));
+> net/ipv6/inet6_connection_sock.c:123:           WRITE_ONCE(sk->sk_err_soft, -PTR_ERR(dst));
+> tools/lib/bpf/libbpf.c:10044:           errno = -PTR_ERR(ptr);
+> tools/lib/bpf/libbpf_internal.h:520:            errno = -PTR_ERR(ret);
+> tools/testing/selftests/bpf/prog_tests/btf_dump.c:59:           err = -PTR_ERR(btf);
+> tools/testing/selftests/bpf/prog_tests/sk_lookup.c:483:         errno = -PTR_ERR(link);
+>
+> Quite a few of those were in printks and it might be an opportunity to
+> use %pe to print the ENOMEM etc strings instead of the number.
 
->> drivers/mux/apple-display-crossbar.c:22: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * T602x register interface is cleary different so most of the nemes below are
-   drivers/mux/apple-display-crossbar.c:44: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * T8013, T600x, T8112 dp crossbar registers.
+I will try sending some patch for this.
 
+Thanks for your suggestions.
 
-vim +22 drivers/mux/apple-display-crossbar.c
+Su Hui
 
-    20	
-    21	/**
-  > 22	 * T602x register interface is cleary different so most of the nemes below are
-    23	 * probly wrong.
-    24	 */
-    25	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
