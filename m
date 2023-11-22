@@ -1,66 +1,49 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5160C17CD
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 01:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9264409;
+	Wed, 22 Nov 2023 01:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YUBKU6L3"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6cb55001124so277025b3a.0
-        for <llvm@lists.linux.dev>; Tue, 21 Nov 2023 17:41:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700617273; x=1701222073; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
-        b=YUBKU6L39hix9NNN2RT2nknmWPPbKeiLCnLYSDLBYjtdaRaAX5e7XQdqNWh6WQiilt
-         EfK6N9z4+IFY8UQSr4Gb0iU2Y3FrushwU4l7j62LNARdRk5KVDUzDJm7qE/k1WPlufss
-         mOuHIRX1Vilp/SqXm3dWgRgKZ7aGSe+WniPVnhh2bCEZW6zGOY2L7RO9cGBOBjL7TN1u
-         f6qXZjkVnaqPxJZclwf2EAWTpiTRHCIem55fZ26IWTpJ2/9bJQW+JLvQ/ApICdENshL4
-         moCtXrCTX3MJY5HDxvzlAPjks46A3IjHyEBqq6ptwltigR0/sT2+r7wf1NfQnaMWcyCQ
-         FTDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700617273; x=1701222073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wZkVnSThHSQ0nduxa23VteQPHRdj2Ex/elZXOf6IRxQ=;
-        b=VimCXqtZjb9ZAUMYaPSrNBNJbyGq73KH36TWSIs1aCwAOb5H+G1JoKDW+yNweDtS7g
-         Pgboz7kZKfIiYB3i1bVrDXIuSfDaglmvAzSulvVuopn8k4wrQYzUvznDJ/mBtAUL5nXz
-         Z2Lek6uDFOIVyS31V8/NmEsVVhileTvvxtu37Y6ujBgNC4jzTpO1n6izIWp3jjhJQbeP
-         61ljQ0jkDYB/JMzuJXee5t3jAA5mRp0d9p5DD+C5I1Jpf3YML6POmo3JTfSrUgZKX6du
-         EMLe3Za4THKEA4VOki/+h9BNJUsutYqlr95GlLN9FrGt2LHPiaDcatdAwEgbZWWWPyHm
-         j+2Q==
-X-Gm-Message-State: AOJu0YyK3ecriM4lEjzJuh4CjJ3nLFOAkbPRBXtTDrga9quoEG7NUyqL
-	bNIns+xOfOJQg+9qTCOfr4o=
-X-Google-Smtp-Source: AGHT+IHAMbcH80Qv38sfnNHrOUL21YxFpmpRBj4ZbJPJ09PEy1rp7PPEr4++1O5WoMpvW2iMsf+Omg==
-X-Received: by 2002:a05:6a21:a59b:b0:187:962d:746b with SMTP id gd27-20020a056a21a59b00b00187962d746bmr1839947pzc.9.1700617273489;
-        Tue, 21 Nov 2023 17:41:13 -0800 (PST)
-Received: from macbook-pro-49.dhcp.thefacebook.com ([2620:10d:c090:400::4:da69])
-        by smtp.gmail.com with ESMTPSA id v4-20020aa78504000000b006cb884c0362sm5005865pfn.87.2023.11.21.17.41.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 17:41:12 -0800 (PST)
-Date: Tue, 21 Nov 2023 17:41:07 -0800
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	jolsa@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
-	ndesaulniers@google.com, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, jpoimboe@kernel.org, joao@overdrivepizza.com,
-	mark.rutland@arm.com
-Subject: Re: [PATCH 0/2] x86/bpf: Fix FineIBT vs eBPF
-Message-ID: <20231122014107.p5zf4o6kjanypla4@macbook-pro-49.dhcp.thefacebook.com>
-References: <20231120144642.591358648@infradead.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iknPA2iI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700617466; x=1732153466;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oVDrmCWgjC19bPboAFQw1X17VEU/l7u0ewuo8hoqECQ=;
+  b=iknPA2iIpeXH4BIclZ27INAMlXlWyccD8X8yK9kYoVTTzGodJsSb6Ryr
+   x4rq6SXmpxTYLSgPKlybVMyi1HmpJ1EC8q7viASSnX/5IJnfnV8aCCDf6
+   3lq17GZLSc/2VU8dpUJjBKVlXJFWUJws2oTkMoirfg4o8MccDr44cq5VS
+   Op3CL/jfLEu596KHfStcyswRRPHFn6o6PV7ENF428lo0Hw+HE9smZKhVU
+   HoLog/en45YxqCd3dIPldMROSo3p/Wn0P5PA9kezuqzE7QdGR0yqLVhj4
+   NTcUKXjcWduUIfqKZIwtQBUgYtuLtw0mWtkuIEBcZ9Ok4rGC5w7vqKjzg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="395879099"
+X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
+   d="scan'208";a="395879099"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 17:44:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="716683246"
+X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
+   d="scan'208";a="716683246"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 21 Nov 2023 17:44:22 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5cGa-0008VB-1C;
+	Wed, 22 Nov 2023 01:43:01 +0000
+Date: Wed, 22 Nov 2023 09:41:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew Sakai <msakai@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dm-devel@lists.linux.dev, Mike Snitzer <snitzer@kernel.org>,
+	"J. corwin Coburn" <corwin@hurlbutnet.net>,
+	John Wiele <jwiele@redhat.com>
+Subject: [device-mapper-dm:dm-vdo 45/51] ld.lld: error: undefined symbol:
+ __uds_log_message
+Message-ID: <202311220946.0nYi10v2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,48 +52,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231120144642.591358648@infradead.org>
 
-On Mon, Nov 20, 2023 at 03:46:42PM +0100, Peter Zijlstra wrote:
-> Hi!
-> 
-> There's a problem with FineIBT and eBPF using __nocfi when
-> CONFIG_BPF_JIT_ALWAYS_ON=n, in which case the __nocfi indirect call can target
-> a normal function like __bpf_prog_run32().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git dm-vdo
+head:   19b93e634cff09b45c7825804ff65ed4b58b631f
+commit: 07ca0024cbfae90b461baa0a4cd0a6081d2cd4bd [45/51] dm vdo: enable configuration and building of dm-vdo
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231122/202311220946.0nYi10v2-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220946.0nYi10v2-lkp@intel.com/reproduce)
 
-The lack (or partially broken) cfi in the kernel built with
-CONFIG_BPF_JIT_ALWAYS_ON=n is probably the last of people security concerns.
-We introduced CONFIG_BPF_JIT_ALWAYS_ON=y to remove the interpreter,
-since mere presence of _any_ interpreter in the kernel (bpf and any other)
-is an attack vector. As it was demonstrated during spectre days an interpreter
-sitting in executable part of vmlinux .text tremendously helps to craft
-a speculative execution exploit.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311220946.0nYi10v2-lkp@intel.com/
 
-Anyway, motivation aside, more comments in the patch 2...
+All errors (new ones prefixed by >>):
 
-> Specifically the various preambles look like:
-> 
->    FineIBT				JIT
-> 
->    __cfi_foo:
->       endbr64
->       subl	$hash, %r10d
->       jz	1f
->       ud2
->    1: nop
->    foo:					foo:
->       osp nop3				   endbr64
->       ...				   ...
-> 
-> So while bpf_dispatcher_*_func() does a __nocfi call to foo()+0 and this
-> matches what the JIT generates, it does not work for regular FineIBT functions,
-> since their +0 endbr got poisoned and things go *boom*.
-> 
-> Cure this by teaching the BPF JIT about all the various CFI forms. Notably this
-> removes the last __nocfi call on x86.
-> 
-> If the BPF folks agree (and the robots don't find fail) I'd like to take this
-> through the x86 tree, because I have a few more patches that turn the non-fatal
-> 'osp nop3' poison into a 4 byte ud1 instruction which is rather fatal. As a
-> result this problem will also surface on !IBT hardware.
-> 
+>> ld.lld: error: undefined symbol: __uds_log_message
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_module_destroy)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_module_destroy)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced 50 more times
+--
+>> ld.lld: error: undefined symbol: uds_free
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_module_destroy)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced 31 more times
+--
+>> ld.lld: error: undefined symbol: __uds_log_strerror
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_postsuspend)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_preresume)
+   >>> referenced 8 more times
+--
+>> ld.lld: error: undefined symbol: vdo_make
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+--
+>> ld.lld: error: undefined symbol: vdo_destroy
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_dtr)
+--
+>> ld.lld: error: undefined symbol: vdo_prepare_to_grow_block_map
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+--
+>> ld.lld: error: undefined symbol: vdo_map_to_system_error
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_preresume)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_message)
+--
+>> ld.lld: error: undefined symbol: uds_unregister_thread_device_id
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_dtr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_postsuspend)
+   >>> referenced 3 more times
+--
+>> ld.lld: error: undefined symbol: uds_unregister_allocating_thread
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_dtr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_message)
+--
+>> ld.lld: error: undefined symbol: vdo_get_known_partition
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+   >>> referenced 11 more times
+--
+>> ld.lld: error: undefined symbol: vdo_prepare_to_grow_slab_depot
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(vdo_ctr)
+..
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
