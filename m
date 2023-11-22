@@ -1,179 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D34210FB;
-	Wed, 22 Nov 2023 08:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hzW3QJjN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700640544; x=1732176544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Olh97AEw3cHh3CcGD8iy2jgIvgYXVQ7jajDoWvg/CKc=;
-  b=hzW3QJjNiP2+BFNFWuMMVxNJ6dhIBElfY2aCrSnAjKqUxWIHT65jrPo1
-   dz04rRTQodKIN2sucluPyiuJe4rmzlfXBiQqVNSes8DuYFcuXqXMk5JnR
-   BbOUbTT7p5Mimdcr350KquIEw2b5rMwIO6t3n2ecR03E16rv5ZFSW3tSs
-   nBoc4iD7kg4ctgrikrMoiihR8m9+i6+FCgJkJjvbLARumkKnmGkzQ9zHO
-   KOjTKhr6D3K9lS66gF/a2/t+E7mSbYZcHXSFdWF5Dho9GSM2jOzNKOOPO
-   WL3mRAZ/iPLMWIolcyPuU8TsdaSm1AuBfghiEsq1KffxKcm+0/qh9oFVO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="10670220"
-X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
-   d="scan'208";a="10670220"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 00:08:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="743319818"
-X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
-   d="scan'208";a="743319818"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Nov 2023 00:08:56 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5iI1-0000Fa-2Z;
-	Wed, 22 Nov 2023 08:08:53 +0000
-Date: Wed, 22 Nov 2023 16:08:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: syzbot <syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] Tried to correct
-Message-ID: <202311221446.bQ7tsWmE-lkp@intel.com>
-References: <000000000000c0be0d060aae7c5b@google.com>
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id CF9A28F42
+	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 09:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id CC8F86075452A;
+	Wed, 22 Nov 2023 17:02:52 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: pkshih@realtek.com,
+	kvalo@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com
+Cc: Su Hui <suhui@nfschina.com>,
+	lizetao1@huawei.com,
+	linux-wireless@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH wireless-next 1/2] rtlwifi: rtl8821ae: phy: remove some useless code
+Date: Wed, 22 Nov 2023 17:02:10 +0800
+Message-Id: <20231122090210.951185-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000c0be0d060aae7c5b@google.com>
+Content-Transfer-Encoding: 8bit
 
-Hi syzbot,
+Clang static checker warning:
+Value stored to 'v1' is never read [deadcode.DeadStores]
+Value stored to 'channel' is never read [deadcode.DeadStores]
 
-kernel test robot noticed the following build warnings:
+Remove them to save some place.
 
-[auto build test WARNING on hid/for-next]
-[also build test WARNING on linus/master v6.7-rc2 next-20231122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/syzbot/Tried-to-correct/20231122-032130
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/000000000000c0be0d060aae7c5b%40google.com
-patch subject: [PATCH] Tried to correct
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231122/202311221446.bQ7tsWmE-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311221446.bQ7tsWmE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311221446.bQ7tsWmE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hid/usbhid/hid-core.c:1026:3: warning: misleading indentation; statement is not part of the previous 'for' [-Wmisleading-indentation]
-                   if (hdesc->desc[n].bDescriptorType == HID_DT_REPORT)
-                   ^
-   drivers/hid/usbhid/hid-core.c:1023:2: note: previous statement is here
-           for (n = 0; n < num_descriptors; n++)
-           ^
-   1 warning generated.
-
-
-vim +/for +1026 drivers/hid/usbhid/hid-core.c
-
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16   978  
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16   979  static int usbhid_parse(struct hid_device *hid)
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16   980  {
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16   981  	struct usb_interface *intf = to_usb_interface(hid->dev.parent);
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16   982  	struct usb_host_interface *interface = intf->cur_altsetting;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16   983  	struct usb_device *dev = interface_to_usbdev (intf);
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16   984  	struct hid_descriptor *hdesc;
-2eb5dc30eb87aa drivers/hid/usbhid/hid-core.c Paul Walmsley      2007-04-19   985  	u32 quirks = 0;
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16   986  	unsigned int rsize = 0;
-c5b7c7c395a34f drivers/usb/input/hid-core.c  Dmitry Torokhov    2005-09-15   987  	char *rdesc;
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16   988  	int ret, n;
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28   989  	int num_descriptors;
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28   990  	size_t offset = offsetof(struct hid_descriptor, desc);
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16   991  
-d5d3e202753cc0 drivers/hid/usbhid/hid-core.c Benjamin Tissoires 2017-11-20   992  	quirks = hid_lookup_quirk(hid);
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16   993  
-6f4303fb2ec680 drivers/hid/usbhid/hid-core.c Jiri Kosina        2009-01-29   994  	if (quirks & HID_QUIRK_IGNORE)
-6f4303fb2ec680 drivers/hid/usbhid/hid-core.c Jiri Kosina        2009-01-29   995  		return -ENODEV;
-6f4303fb2ec680 drivers/hid/usbhid/hid-core.c Jiri Kosina        2009-01-29   996  
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15   997  	/* Many keyboards and mice don't like to be polled for reports,
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15   998  	 * so we will always set the HID_QUIRK_NOGET flag for them. */
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15   999  	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15  1000  		if (interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_KEYBOARD ||
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15  1001  			interface->desc.bInterfaceProtocol == USB_INTERFACE_PROTOCOL_MOUSE)
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15  1002  				quirks |= HID_QUIRK_NOGET;
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15  1003  	}
-0f28b55db54300 drivers/usb/input/hid-core.c  Alan Stern         2006-05-15  1004  
-c5b7c7c395a34f drivers/usb/input/hid-core.c  Dmitry Torokhov    2005-09-15  1005  	if (usb_get_extra_descriptor(interface, HID_DT_HID, &hdesc) &&
-c5b7c7c395a34f drivers/usb/input/hid-core.c  Dmitry Torokhov    2005-09-15  1006  	    (!interface->desc.bNumEndpoints ||
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1007  	     usb_get_extra_descriptor(&interface->endpoint[0], HID_DT_HID, &hdesc))) {
-58037eb961f859 drivers/hid/usbhid/hid-core.c Jiri Kosina        2007-05-30  1008  		dbg_hid("class descriptor not present\n");
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1009  		return -ENODEV;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1010  	}
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1011  
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1012  	if (hdesc->bLength < sizeof(struct hid_descriptor)) {
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1013  		dbg_hid("hid descriptor is too short\n");
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1014  		return -EINVAL;
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1015  	}
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1016  
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1017  	hid->version = le16_to_cpu(hdesc->bcdHID);
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1018  	hid->country = hdesc->bCountryCode;
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1019  
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1020  	num_descriptors = min_t(int, hdesc->bNumDescriptors,
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1021  	       (hdesc->bLength - offset) / sizeof(struct hid_class_descriptor));
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1022  
-f043bfc98c193c drivers/hid/usbhid/hid-core.c Jaejoong Kim       2017-09-28  1023  	for (n = 0; n < num_descriptors; n++)
-6d33ae790f1855 drivers/hid/usbhid/hid-core.c syzbot             2023-11-21  1024  		if (n >= ARRAY_SIZE(hdesc->desc))
-6d33ae790f1855 drivers/hid/usbhid/hid-core.c syzbot             2023-11-21  1025  			break;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16 @1026  		if (hdesc->desc[n].bDescriptorType == HID_DT_REPORT)
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1027  			rsize = le16_to_cpu(hdesc->desc[n].wDescriptorLength);
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1028  
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1029  	if (!rsize || rsize > HID_MAX_DESCRIPTOR_SIZE) {
-58037eb961f859 drivers/hid/usbhid/hid-core.c Jiri Kosina        2007-05-30  1030  		dbg_hid("weird size of report descriptor (%u)\n", rsize);
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1031  		return -EINVAL;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1032  	}
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1033  
-52150c78270db5 drivers/hid/usbhid/hid-core.c Joe Perches        2017-03-01  1034  	rdesc = kmalloc(rsize, GFP_KERNEL);
-52150c78270db5 drivers/hid/usbhid/hid-core.c Joe Perches        2017-03-01  1035  	if (!rdesc)
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1036  		return -ENOMEM;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1037  
-854561b019285a drivers/usb/input/hid-core.c  Vojtech Pavlik     2005-05-29  1038  	hid_set_idle(dev, interface->desc.bInterfaceNumber, 0, 0);
-854561b019285a drivers/usb/input/hid-core.c  Vojtech Pavlik     2005-05-29  1039  
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1040  	ret = hid_get_class_descriptor(dev, interface->desc.bInterfaceNumber,
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1041  			HID_DT_REPORT, rdesc, rsize);
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1042  	if (ret < 0) {
-58037eb961f859 drivers/hid/usbhid/hid-core.c Jiri Kosina        2007-05-30  1043  		dbg_hid("reading report descriptor failed\n");
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1044  		kfree(rdesc);
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1045  		goto err;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1046  	}
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1047  
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1048  	ret = hid_parse_report(hid, rdesc, rsize);
-85cdaf524b7dda drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1049  	kfree(rdesc);
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1050  	if (ret) {
-58037eb961f859 drivers/hid/usbhid/hid-core.c Jiri Kosina        2007-05-30  1051  		dbg_hid("parsing report descriptor failed\n");
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1052  		goto err;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1053  	}
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1054  
-f5208997087e6e drivers/hid/usbhid/hid-core.c Zoltan Karcagi     2009-05-06  1055  	hid->quirks |= quirks;
-^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds     2005-04-16  1056  
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1057  	return 0;
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1058  err:
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1059  	return ret;
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1060  }
-c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby         2008-05-16  1061  
-
+diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+index 5323ead30db0..6df270e29e66 100644
+--- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
++++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+@@ -2038,15 +2038,9 @@ static bool _rtl8821ae_phy_config_bb_with_pgheaderfile(struct ieee80211_hw *hw,
+ 			 /*don't need the hw_body*/
+ 			if (!_rtl8821ae_check_condition(hw, v1)) {
+ 				i += 2; /* skip the pair of expression*/
+-				v1 = array[i];
+ 				v2 = array[i+1];
+-				v3 = array[i+2];
+-				while (v2 != 0xDEAD) {
++				while (v2 != 0xDEAD)
+ 					i += 3;
+-					v1 = array[i];
+-					v2 = array[i+1];
+-					v3 = array[i+2];
+-				}
+ 			}
+ 		}
+ 	}
+@@ -3543,7 +3537,6 @@ u8 rtl8821ae_phy_sw_chnl(struct ieee80211_hw *hw)
+ 	struct rtl_phy *rtlphy = &rtlpriv->phy;
+ 	struct rtl_hal *rtlhal = rtl_hal(rtl_priv(hw));
+ 	u32 timeout = 1000, timecount = 0;
+-	u8 channel = rtlphy->current_channel;
+ 
+ 	if (rtlphy->sw_chnl_inprogress)
+ 		return 0;
+@@ -3566,8 +3559,6 @@ u8 rtl8821ae_phy_sw_chnl(struct ieee80211_hw *hw)
+ 		rtl8821ae_phy_switch_wirelessband(hw, BAND_ON_2_4G);
+ 
+ 	rtlphy->sw_chnl_inprogress = true;
+-	if (channel == 0)
+-		channel = 1;
+ 
+ 	rtl_dbg(rtlpriv, COMP_SCAN, DBG_TRACE,
+ 		"switch to channel%d, band type is %d\n",
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.30.2
+
