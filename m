@@ -1,105 +1,80 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 0F6E72BAEA
-	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 09:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id ACEC660754528;
-	Wed, 22 Nov 2023 17:02:59 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: pkshih@realtek.com,
-	kvalo@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com
-Cc: Su Hui <suhui@nfschina.com>,
-	lizetao1@huawei.com,
-	linville@tuxdriver.com,
-	Larry.Finger@lwfinger.net,
-	linux-wireless@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH wireless-next 2/2] rtlwifi: rtl8821ae: phy: fix an undefined bitwise shift behavior
-Date: Wed, 22 Nov 2023 17:02:12 +0800
-Message-Id: <20231122090210.951185-2-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20231122090210.951185-1-suhui@nfschina.com>
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C7C3C09B
+	for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 10:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="O+hU/Zmo"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7ns1+cR2VXPOP7AtcgbUoX/3v+cYI/iZR3J+PNLyhLY=; b=O+hU/ZmoJE29I5i9Ev5JyQQwhh
+	kTVdews5WMgHNE8ZMQT9ewLjcYO6JYSW1cWeW15gT+VYEIUgYEaT0jOcV3tHGRa9C4Su3wSjKYJwn
+	fSNhPH65Q3vCZrJjz9Azga2/9K0xQhmo+V9OaeidKlIsBtjZWwIe+4aVuKhRLJPsTbNemJDogqfmC
+	cysbk2u5eN59DuzUHqg8Oup6bTBdAfwUZSY8AnoIwV6tY5JKgzaC3unAqS82D0sIZ5AhyqQRCTJo7
+	yF1FIDfULSv3FB/rlz5PHkNd4qL+sLBtHn7lyUBjE9udLXfLk8qEELcf/zfwmg9ibR0Sc7yGHxKEe
+	dclXpLGQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1r5kIF-00CHKw-20;
+	Wed, 22 Nov 2023 10:17:15 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 445093005AA; Wed, 22 Nov 2023 11:17:15 +0100 (CET)
+Date: Wed, 22 Nov 2023 11:17:15 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	samitolvanen@google.com, keescook@chromium.org, nathan@kernel.org,
+	ndesaulniers@google.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, jpoimboe@kernel.org, joao@overdrivepizza.com,
+	mark.rutland@arm.com
+Subject: Re: [PATCH 0/2] x86/bpf: Fix FineIBT vs eBPF
+Message-ID: <20231122101715.GQ8262@noisy.programming.kicks-ass.net>
+References: <20231120144642.591358648@infradead.org>
+ <20231122014107.p5zf4o6kjanypla4@macbook-pro-49.dhcp.thefacebook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122014107.p5zf4o6kjanypla4@macbook-pro-49.dhcp.thefacebook.com>
 
-Clang staic checker warning:
-drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c:184:49:
-	The result of the left shift is undefined due to shifting by '32',
-	which is greater or equal to the width of type 'u32'.
-	[core.UndefinedBinaryOperatorResult]
+On Tue, Nov 21, 2023 at 05:41:07PM -0800, Alexei Starovoitov wrote:
+> On Mon, Nov 20, 2023 at 03:46:42PM +0100, Peter Zijlstra wrote:
+> > Hi!
+> > 
+> > There's a problem with FineIBT and eBPF using __nocfi when
+> > CONFIG_BPF_JIT_ALWAYS_ON=n, in which case the __nocfi indirect call can target
+> > a normal function like __bpf_prog_run32().
+> 
+> The lack (or partially broken) cfi in the kernel built with
+> CONFIG_BPF_JIT_ALWAYS_ON=n is probably the last of people security concerns.
+> We introduced CONFIG_BPF_JIT_ALWAYS_ON=y to remove the interpreter,
+> since mere presence of _any_ interpreter in the kernel (bpf and any other)
+> is an attack vector. As it was demonstrated during spectre days an interpreter
+> sitting in executable part of vmlinux .text tremendously helps to craft
+> a speculative execution exploit.
 
-If the value of the right operand is negative or is greater than or
-equal to the width of the promoted left operand, the behavior is
-undefined.[1][2]
+Oh, no argument there. I always have JIT_ALWAYS_ON=y (when I have BPF at
+all) which is why it took me so long to actually trip over this.
 
-For example, when using different gcc's compilation optimizaation options
-(-O0 or -O2), the result of '(u32)data << 32' is different. One is 0, the
-other is old value of data. Adding an u64 cast to fix this problem.
+This was a test script systematically build/boot a bunch of configs and
+going unexpectedly *splat*.
 
-[1]:https://stackoverflow.com/questions/11270492/what-does-the-c-
-standard-say-about-bitshifting-more-bits-than-the-width-of-type
-[2]:https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
-
-Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-index 6df270e29e66..89713e0587b5 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-@@ -106,7 +106,7 @@ u32 rtl8821ae_phy_query_bb_reg(struct ieee80211_hw *hw, u32 regaddr,
- 		regaddr, bitmask);
- 	originalvalue = rtl_read_dword(rtlpriv, regaddr);
- 	bitshift = _rtl8821ae_phy_calculate_bit_shift(bitmask);
--	returnvalue = (originalvalue & bitmask) >> bitshift;
-+	returnvalue = (u64)(originalvalue & bitmask) >> bitshift;
- 
- 	rtl_dbg(rtlpriv, COMP_RF, DBG_TRACE,
- 		"BBR MASK=0x%x Addr[0x%x]=0x%x\n",
-@@ -128,7 +128,7 @@ void rtl8821ae_phy_set_bb_reg(struct ieee80211_hw *hw,
- 		originalvalue = rtl_read_dword(rtlpriv, regaddr);
- 		bitshift = _rtl8821ae_phy_calculate_bit_shift(bitmask);
- 		data = ((originalvalue & (~bitmask)) |
--			((data << bitshift) & bitmask));
-+			(((u64)data << bitshift) & bitmask));
- 	}
- 
- 	rtl_write_dword(rtlpriv, regaddr, data);
-@@ -153,7 +153,7 @@ u32 rtl8821ae_phy_query_rf_reg(struct ieee80211_hw *hw,
- 
- 	original_value = _rtl8821ae_phy_rf_serial_read(hw, rfpath, regaddr);
- 	bitshift = _rtl8821ae_phy_calculate_bit_shift(bitmask);
--	readback_value = (original_value & bitmask) >> bitshift;
-+	readback_value = (u64)(original_value & bitmask) >> bitshift;
- 
- 	spin_unlock(&rtlpriv->locks.rf_lock);
- 
-@@ -181,7 +181,7 @@ void rtl8821ae_phy_set_rf_reg(struct ieee80211_hw *hw,
- 		original_value =
- 		   _rtl8821ae_phy_rf_serial_read(hw, rfpath, regaddr);
- 		bitshift = _rtl8821ae_phy_calculate_bit_shift(bitmask);
--		data = ((original_value & (~bitmask)) | (data << bitshift));
-+		data = ((original_value & (~bitmask)) | ((u64)data << bitshift));
- 	}
- 
- 	_rtl8821ae_phy_rf_serial_write(hw, rfpath, regaddr, data);
--- 
-2.30.2
+But it was a good excuse to spend time fixing it.
 
