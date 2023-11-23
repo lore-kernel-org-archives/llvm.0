@@ -1,44 +1,44 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35E81115
-	for <llvm@lists.linux.dev>; Thu, 23 Nov 2023 00:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC93399
+	for <llvm@lists.linux.dev>; Thu, 23 Nov 2023 00:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AjnSSN0I"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33139ecdca7so215319f8f.0
-        for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 16:43:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qrp32VaO"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-32f8441dfb5so204466f8f.0
+        for <llvm@lists.linux.dev>; Wed, 22 Nov 2023 16:51:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700700197; x=1701304997; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1700700695; x=1701305495; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I4mDM3fOhLxMKv9Qsj/stPbdPgmQsMFznGIuQOD753M=;
-        b=AjnSSN0IJ5t5owSBWVtNoRmjBNA4bJIKDR7cInzBETHurZ92MBtX7W9698hovKFnZd
-         PC8wT0kheDD1XCokY4Zhs3dAtEx0+IU8ePaQKGPt02QnexoCXNQIr/xtYYrsJgdZtB6y
-         m4zlQb8rS73hWzxsldzApiMZpbFGH7REFZtQyKpI3pw08DKGrzOYbntXm4J9ONvhlT2n
-         gJ0PGrrWKin1tcLFT9yRT59+N2Uirou2SA4FoXp6ItqFfB7tjUJeuh2v4kkk1svsYqYr
-         c3qMFYqvkUu5cVegcI8AX4gWL5RYFZ4u71FMdhMm3MyW7+qEWwy5HkDxijFct1RhfaNG
-         yb8Q==
+        bh=FFSRqxyM60XZYlWMe+LxLHgfBXsOYKs0Arhl5TpCQS8=;
+        b=Qrp32VaOhwToTjsgLY7h7p5q8uipJRz8wfmK9NHpSiQxhqtnBCAF0ZzqCaMGXFMIXP
+         6w/Zr/h2E0EIIdhD6FU9U4IALDtB/3xyao+Bb/sDj3C9CZkT4N0ZReDFzBYPKnzi2Jwh
+         0DjAprBvKCePe+fRguuSb7Zq/EqcRUeByc6Ny/H5oRfH0wQ09HE4UQcCGG/lmhFu2vaW
+         KjvTtPI81mgHTwaSMXABbBdwWlLrxk7w1KSSSK9eGDllv5ikvwRysja5CaGcvprB/ix1
+         hPrPAyKQqzs1MttskXcMRkGf0W6iYNJZY9pEyWpG+JR2T6ABLIblnaVhUXn3vzaKiOxQ
+         eisQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700700197; x=1701304997;
+        d=1e100.net; s=20230601; t=1700700695; x=1701305495;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I4mDM3fOhLxMKv9Qsj/stPbdPgmQsMFznGIuQOD753M=;
-        b=HywIYu+290TFR5/r4BRN00q1fNXbOAfmGdM3Hg+z1TnAfd+9N7Ws6zPe2NEGmW9oCO
-         nI4cnbMtzTWJBB+fq29Xhkiztb/PVOzsPsAjeeqstLqZ6nQgLZFY2XDXQtkev6fhwuWx
-         Oxw1srrV8wcihazuQt18CtPHarvJBZ2441EQA4MU9s1h/fL+9/Z5qJfxIztwl2El6bIf
-         qxAC2j0dEJX4eS1sKcbWZ5OBoM/7rs7ouHRYWfjcyBSzRc4kROvksC0iHxdalrZdLThi
-         hjq0Uw76KFRLe8TwIA+U6pf/q68ZekIM4jS31uJ4iphBjj/rQ4LHMvlm6Nw9BNCpZAb3
-         xbOg==
-X-Gm-Message-State: AOJu0YwXnGhox9hAGvqCB/rlCF855PFFbmivDTlMUZANnb6t97L6E/e9
-	OYqO+rcSZoKO8E/iRwF3KOOpHpOCUZHROTr4Hfo=
-X-Google-Smtp-Source: AGHT+IFaGuLwN1xpFTtgde8hjR8udeumSPNXj31L06f21NbuevuO4pwK/eQWIUQlq/PJPmsAyg32Y1iA4ZTIjeNqURg=
-X-Received: by 2002:a05:6000:128d:b0:332:cc15:6bae with SMTP id
- f13-20020a056000128d00b00332cc156baemr2454118wrx.20.1700700196781; Wed, 22
- Nov 2023 16:43:16 -0800 (PST)
+        bh=FFSRqxyM60XZYlWMe+LxLHgfBXsOYKs0Arhl5TpCQS8=;
+        b=HOUmrpO3MHH9FRFNNT6LjA5cq3GqRf09Hisvv6B63SaripwDyUSI9wI1IwdpyCMwhU
+         FZy/Wqejj6XSI+MHWVzvPYNKHSnYwKWmQvPTk8AL9eC12R8uWGCV3Y6sEdZSNYbWquDs
+         TysCeHUwWRUeT4oL9dTJoldAQFcdXG91UrcMTtQGl3j2IvMd5YrRCGSi+y9DBis8QdNM
+         6t2tH7yzZhirwJQcqFTvb26zVrLKvmUaMu+21o+/YeifjuaJxBhhPhrRG3XHLP+IBovk
+         0suLjOwjIcYy9NHEXdVzjLWCqsCjZTX8I8aegU/NrGmcAHX7xpTPQD1+AOO/IioxVQl0
+         t9jw==
+X-Gm-Message-State: AOJu0Yw3TK0RZ3lMafI6van8WI9WEbxcJgViaSBsVwGo2HOjOWujVlhP
+	TzpqZBlqFR1cKMJY6U4sdIiA057g7K2Raf8UqYM=
+X-Google-Smtp-Source: AGHT+IFsZynBqDZU07UjtjyWcGDEoU4r8+d4uBQx87ACMaj5T1mQc/a3y5MZDETnfbK00TiUJQ8Ke8+6cd2ruagK5V8=
+X-Received: by 2002:a05:6000:144f:b0:332:caa9:72b2 with SMTP id
+ v15-20020a056000144f00b00332caa972b2mr3445384wrx.3.1700700695019; Wed, 22 Nov
+ 2023 16:51:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,11 +46,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20231120144642.591358648@infradead.org> <20231120154948.708762225@infradead.org>
- <20231122021817.ggym3biyfeksiplo@macbook-pro-49.dhcp.thefacebook.com> <20231122111517.GR8262@noisy.programming.kicks-ass.net>
-In-Reply-To: <20231122111517.GR8262@noisy.programming.kicks-ass.net>
+ <20231122021817.ggym3biyfeksiplo@macbook-pro-49.dhcp.thefacebook.com>
+ <20231122111517.GR8262@noisy.programming.kicks-ass.net> <20231122124134.GP4779@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231122124134.GP4779@noisy.programming.kicks-ass.net>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 22 Nov 2023 16:43:05 -0800
-Message-ID: <CAADnVQLhWFKcxno53zqGtuiWwUcw+TU8gB2eCBRPQC=2y5vrFw@mail.gmail.com>
+Date: Wed, 22 Nov 2023 16:51:23 -0800
+Message-ID: <CAADnVQKhpjt0pojdYGXpeyMvJnCUVvyrRKCmHg3cKYjAs-HDmA@mail.gmail.com>
 Subject: Re: [PATCH 2/2] x86/cfi,bpf: Fix BPF JIT call
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
@@ -73,140 +74,74 @@ Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 22, 2023 at 3:15=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+On Wed, Nov 22, 2023 at 4:41=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
 g> wrote:
 >
 >
-> To be very explicit, let me list all the various forms of function
-> calls:
->
-> Traditional:
->
-> foo:
->   ... code here ...
->   ret
->
-> direct caller:
->
->   call foo
->
-> indirect caller:
->
->   lea foo(%rip), %r11
->   call *%r11
->
-> IBT:
->
-> foo:
->   endbr64
->   ... code here ...
->   ret
->
-> direct caller:
->
->   call foo / call foo+4
->
-> indirect caller:
->
->   lea foo(%rip), %r11
->   ...
->   call *%r11
->
->
-> kCFI:
->
-> __cfi_foo:
->   movl $0x12345678, %rax
->   (11 nops when CALL_PADDING)
-> foo:
->   endbr64 (when also IBT)
->   ... code here ...
->   ret
->
-> direct caller:
->
->   call foo / call foo+4
->
-> indirect caller:
->
->   lea foo(%rip), %r11
->   ...
->   movl $(-0x12345678), %r10d
->   addl -15(%r11), %r10d (or -4 without CALL_PADDING)
->   je 1f
->   ud2
-> 1:call *%r11
->
->
-> FineIBT (builds as kCFI + CALL_PADDING + IBT + RETPOLINE and runtime
-> patches things to look like):
->
-> __cfi_foo:
->   endbr64
->   subl $0x12345678, %r10d
->   jz foo
->   ud2
->   nop
-> foo:
->   osp nop3 (was endbr64)
->   ... code here ...
->   ret
->
-> direct caller:
->
->   call foo / call foo+4
->
-> indirect caller:
->
->   lea foo(%rip), %r11
->   ...
->   movl $0x12345678, %r10d
->   subl $16, %r11
->   nop4
->   call *%r11
+> +/*
+> + * Emit the various CFI preambles, see the large comment about FineIBT
+> + * in arch/x86/kernel/alternative.c
 
-Got it. That helps a lot!
-You kind of have this comment scattered through arch/x86/kernel/alternative=
-.c
-but having it in one place like above would go a long way.
-Could you please add it to arch/x86/net/bpf_jit_comp.c
-or arch/x86/include/asm/cfi.h next to enum cfi_mode ?
+.. and in cfi.h ..
+which will have a copy-paste from your other email?
 
-> > I'm not sure doing cfi_bpf_hash check in JITed code is completely solvi=
-ng the problem.
-> > From bpf_dispatcher_*_func() calling into JITed will work,
-> > but this emit_prologue() is doing the same job for all bpf progs.
-> > Some bpf progs call each other directly and indirectly.
-> > bpf_dispatcher_*_func() -> JITed_BPF_A -> JITed_BPF_B.
-> > A into B can be a direct call (which cfi doesn't care about) and
-> > indirect via emit_bpf_tail_call_indirect()->emit_indirect_jump().
-> > Should we care about fineibt/kcfi there too?
+>                 prog->bpf_func =3D (void *)image + ctx.prog_offset;
+>                 prog->jited =3D 1;
+>                 prog->jited_len =3D proglen - ctx.prog_offset; // XXX?
+
+Just drop XXX.
+
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1431,6 +1431,9 @@ struct bpf_prog_aux {
+>         struct bpf_kfunc_desc_tab *kfunc_tab;
+>         struct bpf_kfunc_btf_tab *kfunc_btf_tab;
+>         u32 size_poke_tab;
+> +#ifdef CONFIG_FINEIBT
+> +       struct bpf_ksym ksym_prefix;
+> +#endif
+>         struct bpf_ksym ksym;
+>         const struct bpf_prog_ops *ops;
+>         struct bpf_map **used_maps;
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -683,6 +683,23 @@ void bpf_prog_kallsyms_add(struct bpf_pr
+>         fp->aux->ksym.prog =3D true;
 >
-> The way I understood the tail-call thing to work is that it jumps to
-> bpf_prog + X86_TAIL_CALL_OFFSET, we already emit an extra ENDBR there to
-> make this work.
+>         bpf_ksym_add(&fp->aux->ksym);
+> +
+> +#ifdef CONFIG_FINEIBT
+> +       /*
+> +        * When FineIBT, code in the __cfi_foo() symbols can get executed
+> +        * and hence unwinder needs help.
+> +        */
+
+I like the idea!
+
+> +       if (cfi_mode !=3D CFI_FINEIBT)
+> +               return;
+
+The cfi_mode var needs to be global along with enum ?
+Or some new helper function from arch/x86 ?
+
+> +
+> +       snprintf(fp->aux->ksym_prefix.name, KSYM_NAME_LEN,
+> +                "__cfi_%s", fp->aux->ksym.name);
+> +
+> +       prog->aux->ksym_prefix.start =3D (unsigned long) prog->bpf_func -=
+ 16;
+> +       prog->aux->ksym_prefix.end   =3D (unsigned long) prog->bpf_func;
+> +
+> +       bpf_ksym_add(&fp->aux->ksym_prefix);
+> +#endif
+>  }
 >
-> So the A -> B indirect call is otherwise unadornen and only needs ENDBR.
->
-> Ideally that would use kCFI/FineIBT but since it also skips some of the
-> setup, this gets to be non-trivial, so I've let this be as is.
+>  void bpf_prog_kallsyms_del(struct bpf_prog *fp)
 
-I see. yeah. The setup is not trivial indeed. Keep as-is is fine.
+and handle deletion of ksym_prefix here.
 
-> So the kCFI thing is 'new' but readily inspected by objdump or godbolt:
->
->   https://godbolt.org/z/sGe18z3ca
->
-> (@Sami, that .Ltmp15 thing, I don't see that in the kernel, what
-> compiler flag makes that go away?)
-
-I also noticed this discrepancy. It doesn't seem to be used.
-Looks weird to spend 8 bytes to store -sizeof(ud2)
-
-> As to FineIBT, that has a big comment in arch/x86/kernel/alternative.c
-> where I rewrite the kCFI thing into FineIBT. I can refer there to avoid
-> duplicating comments, would that work?
-
-Just the above comment somewhere would work.
-I wouldn't worry about duplication. This is tricky stuff.
-When gcc folks get around implementing kcfi they will find it useful too.
+I think it's shaping up nicely.
+Pls resend both patches as a set and cc bpf @ vger.
+BPF CI will pick it up and test on arm64, x86-64, s390 with gcc and clang.
+We don't do CONFIG_*IBT testing automatically, but
+I can manually try that after the holidays.
