@@ -1,200 +1,191 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E2E6128;
-	Thu, 23 Nov 2023 03:09:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4C98828;
+	Thu, 23 Nov 2023 03:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e2Z9Wwf9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1yR1pwa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700708992; x=1732244992;
+  t=1700709142; x=1732245142;
   h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=6HiWc0Y2Or+HKIYJ1R1mwDL71QlvJXrlLDQQf6jaUKY=;
-  b=e2Z9Wwf98HjNNnjgrV3vUQkR4XaicCvS6BzmQtso6tfBSwpzBRnxTnMZ
-   T66PI5rR8TU5UOduB+wG0UJDdIAMha73PQjvPG+/FyvxVvdHZiHN4xVXf
-   aikkphG670Bvy96k1N0b/6CZ1OsWxMtX6gLIzNK0rXbH8pFchPZvTv95H
-   jDIr4snPEs7leu+3UCib73kefcsOBv2OhqfNUyE3NwdrHedXU+pp09Y4T
-   OJ5ldNHuYcxvYWBqoXLf5bZVloxF1g4w0xGTnBi0094GWkTZjpmHfdQdw
-   YwW8CecabyA1R3pT3c+0FwdfWPUgSjukpH5qN8G8DkHSqlgM8dRe6kMs2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="396098273"
+   mime-version:in-reply-to;
+  bh=UnGQBf6lO2CjcsVhvS6vUPaT2j1YbZBexAjYz4DyprU=;
+  b=I1yR1pwaKdHVoXDejrbL6aHmyTeIuwTDb9hN8wdUdxBALB3QkxC8N3Xv
+   kCA+pSMcBBg/apLLIyX9G/fHgB220wbabaUdyDAuqwsCkTXZ/Taqxhlxb
+   885v2X3swhjOUeYnf0TsLq0K+pLNF67x19OMlvnINfAhA0tcbeXtlI1vT
+   xnJoLDymQe3rvQ4XFSSkhl71PFYpvY7RvYRd2Dafz6VUKQPIIkvP/Jgar
+   BdnD2NCoK8AMY+rvsHvkC76XlkjiEJ+1ii0TdL+I2SwcjmmRGFJzbgJTP
+   nwpQNygh7ZHtvC3EZ4RADxUqEkG40UhiO0jmFApIJSMSj9sFSf2CNlX5t
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="458685603"
 X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="396098273"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 19:09:43 -0800
+   d="scan'208";a="458685603"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 19:12:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="767081616"
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="716933921"
 X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="767081616"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 22 Nov 2023 19:09:43 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 22 Nov 2023 19:09:43 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 22 Nov 2023 19:09:43 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Wed, 22 Nov 2023 19:09:43 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Wed, 22 Nov 2023 19:09:42 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ai4QZZY6HCz2B6g2lljR0QgoUSxlF3ulwtOqMJm7wfqlfZTVu44+eKXpVUJECpSt7EqDCImoenhg70YnaOz5DK66i/SV6Z3T3pDwA5N2szfadyChNU5m0jp2oOMFJ1/Mkz4g5to/7QNUNZCO8YPmWoPtL6vQJad2WEhH6MqQ1aah1bZltNlsPViH0MS5aslvzIQ5nPwM247UaxKTVzBOc1OKqsfpHEVxxTy9X6xDHKfXi0h87f9UCGMz8tL7BftfkzXSaCa4xvJsl7hRQ9UQYIdY1YCzSi35moq0n9lof0KgrQ2LEGHsyfgAc8k1dRjCX6td0+JsfVVJcLftf4lrwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JeHlC0uCaBqISTh7BrJ4aTk61wtDIMxyV1Glbd/Zqmc=;
- b=kXYTNMXppmevU/aydB6NtwwxXL0syNhs6kClLDu+W0eBRmbkuV7jQjEJpPzjbjpiGQxq/HYdReGuoBxKkcCwk5Nq6PfiPib+jzpJfYfmoHCzeDHTRGYVzhIMm+JsX+7Cw1KHSJ7sCPOeglYGxCrsDT5mWDEOFoe9bEMlAHZ5EHQmVmAibkyvpWEEPvzEQbutzHYOh1s2fg5UqDG862u3oYIVY3PBLxoV1J3G0cpg2yADQRIKy76ipz5WMj2TEqrtXWPB5OyVFlcxIygypIGa8mbn0dt7c3uD248h2866TEbD6rlJL9w+s2TXLYE75TitWNu/PfL1R1ocWnEFtebClA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by SN7PR11MB6947.namprd11.prod.outlook.com (2603:10b6:806:2aa::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Thu, 23 Nov
- 2023 03:09:41 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::15d3:7425:a09e:1c86]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::15d3:7425:a09e:1c86%4]) with mapi id 15.20.7025.017; Thu, 23 Nov 2023
- 03:09:40 +0000
-Date: Thu, 23 Nov 2023 11:05:01 +0800
-From: Yujie Liu <yujie.liu@intel.com>
-To: Edward Cree <ecree.xilinx@gmail.com>
-CC: kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, Andy Moreton <andy.moreton@amd.com>, "Simon
- Horman" <simon.horman@corigine.com>
-Subject: Re: drivers/net/ethernet/sfc/selftest.c:48:16: warning: field ip
- within 'struct efx_loopback_payload::(anonymous at
- drivers/net/ethernet/sfc/selftest.c:46:2)' is less aligned than 'struct
- iphdr' and is usually due to 'struct efx_loopback_payload::(anonymous a...
-Message-ID: <ZV7BXZ/CtxzJzBuh@yujie-X299>
-References: <202311220537.geMTr31W-lkp@intel.com>
- <3f42dee6-a6e2-1b35-674f-309aae042ae7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <3f42dee6-a6e2-1b35-674f-309aae042ae7@gmail.com>
-X-ClientProxiedBy: SG2PR01CA0178.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::34) To CY5PR11MB6392.namprd11.prod.outlook.com
- (2603:10b6:930:37::15)
+   d="scan'208";a="716933921"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Nov 2023 19:12:12 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r608Q-0001AC-0r;
+	Thu, 23 Nov 2023 03:12:10 +0000
+Date: Thu, 23 Nov 2023 11:11:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Jianlong Huang <jianlong.huang@starfivetech.com>,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	openbmc@lists.ozlabs.org, linux-mips@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Sean Wang <sean.wang@kernel.org>,
+	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Subject: Re: [PATCH v1 01/17] pinctrl: equilibrium: Convert to use struct
+ pingroup
+Message-ID: <202311230820.oBQop844-lkp@intel.com>
+References: <20231122164040.2262742-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|SN7PR11MB6947:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19cbd5d8-3e08-4515-4c60-08dbebd1a232
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xIYl9535N9fpf1zbQXKfCfO2ymdh9nbgq9yQKwDwJJiLvU1Nig4MMU78CRNOXp9k+Fm8M91dpF+aofO5Shwr6AGerJNrLxrywl+xgRimdsxnGNlAYAJo5wBp+q5Ij/CTTcWPU6YYTXtX1IkPjMJGhremY8tATLzRzZQVb85tVNU6WU5ZZk2WIgTPfSclFb4vhcA0pydM6g//RMIqbwUtHnYExC3qiwtRS6YoypDPmpgwba3bIhlJZyAyJJLVsuLt34YTstsvnAk/devMQWKoYIPqWgN/LiHM42xmKaLBB34dzEEHzhdYFetP+yGvZ+Swrspt63EosYs9QDVklz3Gqd3VVcv4VwtqlGm0WSEWphScYmU1nck+jINZGH5ZA3gAZPIlWbNaMZJ3NGFiHRExRnbO+0pr830faFYZs96kYDyADyWgi78OBsPz6xY8wpIM0/m7/jlSQdeWkJnw5gmnPJBv7VEAz7wYSOJVStVbUuBsJHMJ2La4SX3QuxPXhMbRkvMlxfvfyd65RwQBZi80ohJzx8huFdDLS5exPbnUs3ItSzS7CzQg1iFj0naX3cyENjjiE/tgXF7QgC0O5+cIEvAqmZ0dM8ifuZ8v1tUfbrCQKYcJz6IDpJnmx1/wodLyYwTaDgYJQI/b49VEB6qDYQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(346002)(396003)(376002)(136003)(366004)(230173577357003)(230273577357003)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(2906002)(41300700001)(5660300002)(966005)(86362001)(4326008)(66946007)(8936002)(38100700002)(6916009)(54906003)(316002)(8676002)(44832011)(66556008)(478600001)(66476007)(6486002)(83380400001)(53546011)(26005)(82960400001)(6506007)(6666004)(33716001)(9686003)(6512007)(219693005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n+nKLy06UM+vJCMZubdhEunl4XOsvp6WYvJZ6AoXhr727s3xx3P0vbnAenNX?=
- =?us-ascii?Q?nMhkSi5K5qWuTmDBbOYmEuljSQwB48iYVfdHygN1WTJSQ8HaxXEvfNW7RkAP?=
- =?us-ascii?Q?XRz26GUs9Mri58WSkoYfu13I58EasThiP4cSoDoRRtdEVgM+3CuiDsSmp0m3?=
- =?us-ascii?Q?5GRcfQblgfhrAmEdcN0PcR9ukPYaYWncZSQweV+pWuPQf8BuFyTnG1IJ4REK?=
- =?us-ascii?Q?+uQ2kXuXPvpE9BQDdOFum3Z+O44MtvIGURwky00LH+7HWS/igtPTOf+Qz4Q3?=
- =?us-ascii?Q?8cUTw2xA73dxePqg6nktTn6jSQE3VT9T2gnOMFommGJQmnMzPUqxT9seovlY?=
- =?us-ascii?Q?8gQ3WPwC3DEXNVGEtSpLKZVID27qIBQJB5Oaby+FRzoiLCWZr2x2vtiahC+a?=
- =?us-ascii?Q?hXQTwkyV5WKVD4Of6fYB85dXerPS4RtMQmOYCSgYRQFtwag2ZpfH/2Ufy2x9?=
- =?us-ascii?Q?wRanI+QWL9X/xK/O9nvemWFYsi+ypxeSL9KoCyuTUT/RfhycA6F77ih6dFpw?=
- =?us-ascii?Q?7NK5SUXENOyFQmbT3q7m9k0heLr7pg/DJRciINraPmu2V+OcQMKXBg4Epnsc?=
- =?us-ascii?Q?ecGReDN5O2jBpPs9AC9Y1adT23jlSSymF5aVZ5POZxiMfUpvVWQVFbh1DyhN?=
- =?us-ascii?Q?6dkbLla8wphsDJeE+eo2RSCmaQtiUt+AZPzmCwAjZBDb6FWKtU2YHM8gg17T?=
- =?us-ascii?Q?U3wT5y1NnaqMCPIM/js/8i+tVsJOSd+MJmLoyOGAM5lqPVdeeI87egY3EOwS?=
- =?us-ascii?Q?pW1LHgQCge33NAx+UOaUEHeCUvp5hI8jssJRR9j4jL0whH7Ek+pxHvA9y9ia?=
- =?us-ascii?Q?U+FWmGHd/aZLUSrKFbRGeqv0JYtKDHoRW0h8MKraUiHEAXnE0RNe5tNzSZrV?=
- =?us-ascii?Q?IK6haFW7Ced2XVMQImGsYALzB6HErU8FeNspbMx5q+dTZdNcEf1ULvF1kMvy?=
- =?us-ascii?Q?SieKlGasDSRv1YQdxpDSQaA5N1wPhk0535pdxUZkrceSGrzAyusDA3XDwUzx?=
- =?us-ascii?Q?T51gw6G7VK54nRNL4Ij5HonGIbmVdplvfA4E94IWpWf91dASa05CkhDcZHfl?=
- =?us-ascii?Q?E5zUJbGqBO6AjHjjfK9On9RyPxUNSUSfDgajxjx7YxCp1f8y5eBbtTDKkbDA?=
- =?us-ascii?Q?UJXjzlM9AVWPDD1wIDa6ElkfLGaMJi6x1Uig8LufDKrG6885MH8WYPQo0eDQ?=
- =?us-ascii?Q?ZVeRwP0TcPCJKf6A8AlDqxw6ddm1AjtKWOl8M75/a5vHJAfIYeyV5asyHoQl?=
- =?us-ascii?Q?V+ODQjRCqDJbmCDCgrRu8p2PxJcOUgAb9EZCH+oZc4+BVZukwZcOjrfdlZBB?=
- =?us-ascii?Q?KR/Bl4yAPyY65HY2/yDnDYZa65wHr2dl4sLq7tnmI3OJnfDH66fSNLoFBLk0?=
- =?us-ascii?Q?zJzf36TTaQTFfTP17aRS8fBC9YQ7oQd0xDix9KujOCOYLcHP+OjizOwmafh+?=
- =?us-ascii?Q?ZgeZAOB590GTHVwWPESZxTPNlopROyRe7OZII+9EPU0Die2L5re5tptCpSrD?=
- =?us-ascii?Q?pH5DtpLmpSqC1lzwYjWn8skyMil0Fl8MAykUVXQ6kGdjSBoVi+gmkfiaeXGB?=
- =?us-ascii?Q?r24SjoEaB+W6/pEOXju+ZyDhwXPSJYeF2lbogJaL?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19cbd5d8-3e08-4515-4c60-08dbebd1a232
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2023 03:09:40.5984
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZaWG0EWgR8ISvRHyu4t9TsgB/4+6ofOCi0fYGOZrQvjELu3ljEFK4orGVB0+msC+sff6FH22DHhFgyw8HMHBrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6947
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122164040.2262742-2-andriy.shevchenko@linux.intel.com>
 
-On Wed, Nov 22, 2023 at 04:15:49PM +0000, Edward Cree wrote:
-> On 21/11/2023 21:25, kernel test robot wrote:
-> > Hi Edward,
-> > 
-> > FYI, the error/warning still remains.
-> 
-> As I've argued previously, this is a false positive / compiler bug,
->  and there is no way to resolve it without making the code strictly
->  worse.
-> 
-> This:
-> >>> drivers/net/ethernet/sfc/selftest.c:48:16: warning: field ip within 'struct efx_loopback_payload::(anonymous at drivers/net/ethernet/sfc/selftest.c:46:2)' is less aligned than 'struct iphdr' and is usually due to 'struct efx_loopback_payload::(anonymous at drivers/net/ethernet/sfc/selftest.c:46:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->  is complaining about alignment within an anonymous struct, which
->  only ever appears embedded within a larger struct in a way which
->  maintains the correct alignment.
-> 
-> #ifdef RANT
-> 
-> Indeed, the only way we even *could* create an unaligned access
->  out of this code would be via a declaration like
->     typeof(*(((struct efx_loopback_payload *)0)->packet)) bad;
->  because *the struct is anonymous*.  And if that happened, the
->  bad declaration would be the place to warn, both because it's
->  incredibly ugly and because it's the place that's actually
->  wrong.  The struct definition itself is entirely *fine*.
-> The compiler should be able to detect that, and if it's not smart
->  enough to do so then it shouldn't be trying to warn in the first
->  place.  Quoth Linus[1]:
-> 
->  "And if the compiler isn't good enough to do it, then the compiler
->   shouldn't be warning about something that it hasn't got a clue about."
-> 
-> The anonymous struct has to be there so that we can placate the
->  memcpy hardening, and it has to contain a struct iphdr at a
->  4n+2 offset because that's what shape the on-the-wire packet
->  *is*.  To avoid the warning we would need to lose __packed and
->  memcpy all of the members in and out of the buffer individually
->  to explicitly-calculated offsets, which is worse code.
-> 
-> #endif
-> 
-> Either fix the compiler to not warn, or fix your automation to
->  ignore this instance of the warning.
+Hi Andy,
 
-Hi Edward,
+kernel test robot noticed the following build errors:
 
-Thanks a lot for the detailed explanation. We've configured the robot
-to ignore the "unaligned access" warning for this specific case.
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on linusw-pinctrl/for-next geert-renesas-drivers/renesas-pinctrl pinctrl-samsung/for-next linus/master v6.7-rc2 next-20231122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Best Regards,
-Yujie
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/pinctrl-equilibrium-Convert-to-use-struct-pingroup/20231123-005932
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20231122164040.2262742-2-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 01/17] pinctrl: equilibrium: Convert to use struct pingroup
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231123/202311230820.oBQop844-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231123/202311230820.oBQop844-lkp@intel.com/reproduce)
 
-> -ed
-> 
-> [1]: https://yarchive.net/comp/linux/gcc.html#13
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311230820.oBQop844-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pinctrl/pinctrl-equilibrium.c:750:17: error: read-only variable is not assignable
+                           grp->pins[j] = pin_id;
+                           ~~~~~~~~~~~~ ^
+>> drivers/pinctrl/pinctrl-equilibrium.c:761:23: error: no member named 'num_pins' in 'struct pingroup'
+                                                   grp->pins, grp->num_pins,
+                                                              ~~~  ^
+   2 errors generated.
+
+
+vim +750 drivers/pinctrl/pinctrl-equilibrium.c
+
+   702	
+   703	static int eqbr_build_groups(struct eqbr_pinctrl_drv_data *drvdata)
+   704	{
+   705		struct device *dev = drvdata->dev;
+   706		struct device_node *node = dev->of_node;
+   707		unsigned int *pinmux, pin_id, pinmux_id;
+   708		struct pingroup group, *grp = &group;
+   709		struct device_node *np;
+   710		struct property *prop;
+   711		int j, err;
+   712	
+   713		for_each_child_of_node(node, np) {
+   714			prop = of_find_property(np, "groups", NULL);
+   715			if (!prop)
+   716				continue;
+   717	
+   718			grp->npins = of_property_count_u32_elems(np, "pins");
+   719			if (grp->npins < 0) {
+   720				dev_err(dev, "No pins in the group: %s\n", prop->name);
+   721				of_node_put(np);
+   722				return -EINVAL;
+   723			}
+   724			grp->name = prop->value;
+   725			grp->pins = devm_kcalloc(dev, grp->npins, sizeof(*grp->pins), GFP_KERNEL);
+   726			if (!grp->pins) {
+   727				of_node_put(np);
+   728				return -ENOMEM;
+   729			}
+   730	
+   731			pinmux = devm_kcalloc(dev, grp->npins, sizeof(*pinmux), GFP_KERNEL);
+   732			if (!pinmux) {
+   733				of_node_put(np);
+   734				return -ENOMEM;
+   735			}
+   736	
+   737			for (j = 0; j < grp->npins; j++) {
+   738				if (of_property_read_u32_index(np, "pins", j, &pin_id)) {
+   739					dev_err(dev, "Group %s: Read intel pins id failed\n",
+   740						grp->name);
+   741					of_node_put(np);
+   742					return -EINVAL;
+   743				}
+   744				if (pin_id >= drvdata->pctl_desc.npins) {
+   745					dev_err(dev, "Group %s: Invalid pin ID, idx: %d, pin %u\n",
+   746						grp->name, j, pin_id);
+   747					of_node_put(np);
+   748					return -EINVAL;
+   749				}
+ > 750				grp->pins[j] = pin_id;
+   751				if (of_property_read_u32_index(np, "pinmux", j, &pinmux_id)) {
+   752					dev_err(dev, "Group %s: Read intel pinmux id failed\n",
+   753						grp->name);
+   754					of_node_put(np);
+   755					return -EINVAL;
+   756				}
+   757				pinmux[j] = pinmux_id;
+   758			}
+   759	
+   760			err = pinctrl_generic_add_group(drvdata->pctl_dev, grp->name,
+ > 761							grp->pins, grp->num_pins,
+   762							pinmux);
+   763			if (err < 0) {
+   764				dev_err(dev, "Failed to register group %s\n", grp->name);
+   765				of_node_put(np);
+   766				return err;
+   767			}
+   768			memset(&group, 0, sizeof(group));
+   769			pinmux = NULL;
+   770		}
+   771	
+   772		return 0;
+   773	}
+   774	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
