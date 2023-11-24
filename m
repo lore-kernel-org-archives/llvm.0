@@ -1,118 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D849131726;
-	Fri, 24 Nov 2023 15:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CAD2FE17
+	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 15:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gZXYgUvi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700840615; x=1732376615;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HDhPesSks06sdPaid5+HzFR21An8ZemK23RUOa3luX8=;
-  b=gZXYgUvisoZlH9ZCXVLEvm6sHguWF3BkH2GBRomUXTAwEpLCvZwHA2YU
-   P1PtFcWG1PqvnTZkNLRjH698gXgPdebOljQCx62WBEUJvVzCBQFlhQJnF
-   Ytzkd16Z5yAWs9taeAPkPVev2tA/HMvnKNoiQxmsnev2MiF9HUuNJIqqr
-   EhSi67FjxiYyaMrVDfOf3UB0Ekifnd4i5EX/lWhV5sNer+EP+GetuJ87O
-   eS+BHMpeHsPLn3VEp2DMFcWIFNbQFCzonzQZj/b3gUY9QwkHSmyWZwbgf
-   zRAVsDwfwdT9Prb+sIb+YLZieCnUSf3ZOjoEJ34BEPMBh+5t4u8EfEgBT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="5662521"
-X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="5662521"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 07:43:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="16005219"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 24 Nov 2023 07:43:27 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r6YKy-0002z1-34;
-	Fri, 24 Nov 2023 15:43:24 +0000
-Date: Fri, 24 Nov 2023 23:42:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Donald Robson <donald.robson@imgtec.com>,
-	Sarah Walker <sarah.walker@imgtec.com>,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	frank.binns@imgtec.com, matt.coster@imgtec.com,
-	boris.brezillon@collabora.com, faith.ekstrand@collabora.com,
-	airlied@gmail.com, daniel@ffwll.ch,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, afd@ti.com, hns@goldelico.com,
-	matthew.brost@intel.com, christian.koenig@amd.com,
-	luben.tuikov@amd.com, dakr@redhat.com, linux-kernel@vger.kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org, corbet@lwn.net,
-	linux-doc@vger.kernel.org, Sarah Walker <sarah.walker@imgtec.com>
-Subject: Re: [PATCH v9 11/20] drm/imagination: Add GEM and VM related code
-Message-ID: <202311242159.hh8MWiAm-lkp@intel.com>
-References: <3c96dd170efe759b73897e3675d7310a7c4b06d0.1700668843.git.donald.robson@imgtec.com>
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="Sf8zUpPP"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6cb9dd2ab56so1820821b3a.3
+        for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 07:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1700840623; x=1701445423; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ccxLVdh5QHe0sHWS5YZYhy7xD8GTlMefO9eHp9CVDBo=;
+        b=Sf8zUpPPS3Z7LJVmG2NuHYMdiEsI2jqwKyDXtTeYmE5r1Ux7GIG1Geopjto6/3F1rE
+         GkU0C8K75P+u1hkX2U88YBTqZwyhQlCUXcKgPK54qOBPxfo6LKjf/s/52VW/gmhXD+h+
+         bQQTmOvEmjT4GrzbPeB6ccWqZx6amDdd06PJ5deoUzAl0f3mNMFH0+28/GsO2VZIba3G
+         LKZsalv4YoA/mPQ03t+LlfqNB59tn5xXH8le0fQXLWcXgM3eT7rBihlo5sJmQlSq5P6V
+         2r8libu1faCvBRjBJzNvBOStxdj7geuJWTBpJHFwZ1+rnbPTbMHCBW1v9pyolI8wKLhx
+         FumQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700840623; x=1701445423;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ccxLVdh5QHe0sHWS5YZYhy7xD8GTlMefO9eHp9CVDBo=;
+        b=TpSoqT+GeBQxxfJLihfKRkv/LjGfme3V1s+QtjPG8eIv/ozR2fa6w278UxUBNpuiXc
+         xuFzq08HU8cYuVZw+wH1wRmXbUW5Lyw84rqmlc8Xj5mB9S+jxaizSAPO6r8o3CzE5Y4w
+         Khc0w8bZt1z+Qfxp/4Bn6yWJg6lU24ysIgMxdSZEre+9JgiJ6Mo9Oz58pqKiRt7eTISZ
+         pWUbZzTS05jaynYyApPNEGiY/oagCeC2pKEPoc51p/xZZHEtvfv8VEoq5NWLnoTkzQYZ
+         jBRyWuCQ8MZbsCubiLjEEUhcfbHsnOp7IVs6xlRctEZWTcIyAvQ7ccT4HxoxKOxm2dwT
+         4GGg==
+X-Gm-Message-State: AOJu0YzVQntg9QlSGKkQCqSbHKHXukUmVev9dPzU9T/L6iGUQ5Gc3Khn
+	1184O4heeIWTNUL3Kgkxwb2cvw==
+X-Google-Smtp-Source: AGHT+IH+F0/Tog/V3FPqwi/5b1xKQK3dDLRA2Wcasoy71mHr8RXKzKbvMnbhRmUo3wvfIHhrPbPX7g==
+X-Received: by 2002:a17:902:c945:b0:1cf:a2aa:2360 with SMTP id i5-20020a170902c94500b001cfa2aa2360mr2442643pla.28.1700840623514;
+        Fri, 24 Nov 2023 07:43:43 -0800 (PST)
+Received: from rogue-one.tail33bf8.ts.net ([201.17.86.134])
+        by smtp.gmail.com with ESMTPSA id g6-20020a170902740600b001cf9eac2d3asm1919743pll.118.2023.11.24.07.43.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Nov 2023 07:43:43 -0800 (PST)
+From: Pedro Tammela <pctammela@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Pedro Tammela <pctammela@mojatatu.com>
+Subject: [PATCH net-next 0/5] selftests: tc-testing: updates and cleanups for tdc
+Date: Fri, 24 Nov 2023 12:42:43 -0300
+Message-Id: <20231124154248.315470-1-pctammela@mojatatu.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c96dd170efe759b73897e3675d7310a7c4b06d0.1700668843.git.donald.robson@imgtec.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Donald Sarah,
+Address the recommendations from the previous series and cleanup some
+leftovers.
 
-kernel test robot noticed the following build warnings:
+Pedro Tammela (5):
+  selftests: tc-testing: remove buildebpf plugin
+  selftests: tc-testing: remove unnecessary time.sleep
+  selftests: tc-testing: prefix iproute2 functions with "ipr2"
+  selftests: tc-testing: cleanup on Ctrl-C
+  selftests: tc-testing: remove unused import
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes linus/master v6.7-rc2]
-[cannot apply to drm/drm-next drm-tip/drm-tip next-20231124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Donald-Robson/drm-gpuvm-Helper-to-get-range-of-unmap-from-a-remap-op/20231123-013514
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/3c96dd170efe759b73897e3675d7310a7c4b06d0.1700668843.git.donald.robson%40imgtec.com
-patch subject: [PATCH v9 11/20] drm/imagination: Add GEM and VM related code
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231124/202311242159.hh8MWiAm-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231124/202311242159.hh8MWiAm-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311242159.hh8MWiAm-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/imagination/pvr_vm.c:531:6: warning: no previous prototype for function 'pvr_gpuvm_free' [-Wmissing-prototypes]
-     531 | void pvr_gpuvm_free(struct drm_gpuvm *gpuvm)
-         |      ^
-   drivers/gpu/drm/imagination/pvr_vm.c:531:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     531 | void pvr_gpuvm_free(struct drm_gpuvm *gpuvm)
-         | ^
-         | static 
-   drivers/gpu/drm/imagination/pvr_vm.c:112:22: warning: unused function 'to_pvr_vm_gpuva' [-Wunused-function]
-     112 | struct pvr_vm_gpuva *to_pvr_vm_gpuva(struct drm_gpuva *gpuva)
-         |                      ^
-   2 warnings generated.
---
->> drivers/gpu/drm/imagination/pvr_mmu.c:285: warning: Function parameter or member 'flags' not described in 'pvr_mmu_backing_page_sync'
---
->> drivers/gpu/drm/imagination/pvr_vm.c:65: warning: Function parameter or member 'gpuvm_mgr' not described in 'pvr_vm_context'
-
-
-vim +/pvr_gpuvm_free +531 drivers/gpu/drm/imagination/pvr_vm.c
-
-   530	
- > 531	void pvr_gpuvm_free(struct drm_gpuvm *gpuvm)
-   532	{
-   533	
+ tools/testing/selftests/tc-testing/Makefile   |  29 +-------
+ tools/testing/selftests/tc-testing/README     |   2 -
+ .../testing/selftests/tc-testing/action-ebpf  | Bin 0 -> 856 bytes
+ .../tc-testing/plugin-lib/buildebpfPlugin.py  |  67 ------------------
+ .../tc-testing/plugin-lib/nsPlugin.py         |  20 +++---
+ .../tc-testing/tc-tests/actions/bpf.json      |  14 ++--
+ .../tc-testing/tc-tests/filters/bpf.json      |  10 ++-
+ tools/testing/selftests/tc-testing/tdc.py     |  11 ++-
+ tools/testing/selftests/tc-testing/tdc.sh     |   2 +-
+ 9 files changed, 25 insertions(+), 130 deletions(-)
+ create mode 100644 tools/testing/selftests/tc-testing/action-ebpf
+ delete mode 100644 tools/testing/selftests/tc-testing/plugin-lib/buildebpfPlugin.py
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.40.1
+
