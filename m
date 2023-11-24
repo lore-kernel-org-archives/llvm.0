@@ -1,244 +1,136 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8752524A06
-	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 14:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716A31D554
+	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 14:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YbKwZhiM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700835096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rInDH5blJlN40Bq7V5IYFTm1xIVGc5w3/Eg3PJtQK4E=;
-	b=YbKwZhiMgVIvQXYqs3UQsCnjcG3N3cQf/261wHoW8vSiyw98CrVQUK6IefPQXo4zl9nwzS
-	r674dxf96bSaKJ4gd+O10q0Q5OmWFezsf3cUMCuLFDGYst5pcfRPTsycV1zHMFAvBJWwOF
-	zU325wZoaJahE0OhglIzjd31P7jubZY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-662-9Kg9fVIIPE2M0o6jd5Z8pg-1; Fri, 24 Nov 2023 09:11:35 -0500
-X-MC-Unique: 9Kg9fVIIPE2M0o6jd5Z8pg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF4F1101A52D
-	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 14:11:34 +0000 (UTC)
-Received: from [172.64.3.60] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A996D492BFE;
-	Fri, 24 Nov 2023 14:11:34 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 229): Test report for master
- (6.7.0-rc2, mainline.kernel.org-clang, f1a09972)
-Date: Fri, 24 Nov 2023 14:11:34 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NY34R66O"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RzjFwFjbtdrMI2bjmQtwbii3vc8w+X1/x2+Q8o/718Sv1k1TuJ1vWpEXHdeXj8aDLivF/0scMfzVJfLLEYdBaBcxNhqcym3ucvaDS1onqE9ML05GzoIhPqI/gUo7QH8mP4D2ZB2PGCSmysGN7uB/ZQClrp6eE2a2d89r/W7q7PTP3yxsB4OVguzVBOyj5nUUdwuMHHjqR4oyhIDqh8WNeK+wpwSIqDumjnpbgpd8bSdEU66tT+N4loXEQHG5soWmIPpgTD3HmwpuAQ6hNHzDzb2MXjvQbt0AOsh51EvDOSkeVttGxmcFq1yYIyo23piQjD3zKmOU4Dwfioqjhxtdzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=htV2ZQdXGzZnztDxCHBzqJeJxqpQzwMQmLUMcmpmqYo=;
+ b=AOKabLvmo7z0wr+JKrULGIAoEmMsYYxsA1ADQtqEPyeV4kD4gpxR5bUx4q5xWZQd7+57D+FcwDmN2IJZnGohEiLN+/41fS7YusgWmxs1DN3ykajdWcAwqyaKDculqJxRf2TMzwWabIv2eKdYC2OmSnzUg+KoHcJXqJwfhkzYCQ6wMrl0YaAxU6KmBnH9omxUlcM07eCgR3dOVMSw216erTyfVoEz+NrqrzLALu+3QOmCMfaKbCCULbdQY5vOuFDY/U26+sRvF4kzdSrt2WSJTq68vZ2k5dFTcgnzbUalnIxiDAo4z8Kprv+WfyYzNw3C5GG8e8g151Xua3Y1CKHLiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=htV2ZQdXGzZnztDxCHBzqJeJxqpQzwMQmLUMcmpmqYo=;
+ b=NY34R66OnhZaxc+HBk55vfF3eUIEhVXqwfY+55YMTTUzIVGk1heMbReth3ZrwErvsNWTNHe11FC+hlphYfDo++g3BbvnyaOOtPfTGyVkI0B+VnVpUvYT/iW/D4wcWlUEOykMEFRHp1Zy4PUsaOLQpZWGLEg/NUKc14lU66uK4HrHo7AC2xm9r93oQQMM5YKCKAY8SPyHrZVxVpR2S8EC9i8lSz3D/c35IUlKMh/iU7dEdqmtm6T+hTh4zj4lLHxN29elD0fs3g5+oZCVLLhenpqQ6Y1vrZuO4IWjNdHD3wpyQJ1j9I8DLbqD3tBRlmhHN6+t1ccBYEXZx4fCn9jytw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW6PR12MB8952.namprd12.prod.outlook.com (2603:10b6:303:246::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.20; Fri, 24 Nov
+ 2023 14:20:50 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7025.020; Fri, 24 Nov 2023
+ 14:20:50 +0000
+Date: Fri, 24 Nov 2023 10:20:49 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <20231124142049.GF436702@nvidia.com>
+References: <cover.1700766072.git.leon@kernel.org>
+ <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+ <c102bdef10b280f47f5fe4538eb168ac730d7644.camel@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c102bdef10b280f47f5fe4538eb168ac730d7644.camel@linux.ibm.com>
+X-ClientProxiedBy: SA9PR11CA0013.namprd11.prod.outlook.com
+ (2603:10b6:806:6e::18) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <35517.123112409113500149@us-mta-662.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW6PR12MB8952:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7cc6b50e-f847-4981-b6dc-08dbecf88f4e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	mbcVasuz/AC+ws7VeW5ytxzkbrofzqXF51MvfjRB7ilT+SH/yZdrCcJEQ6a3j7r/QXqHdbWoy+0pm1/l1Ls41GMcAqAEes63TYAjYqrNwqJAMGNsiD8oRaja+3PQY4NIunU3DX41QBpp8STyQkNr48CaM4Q6KhrJlJ7dwLRUPaM/gvE68WTaVHOUiyEYsp7zoE67QGRkQD1pMjZrgnqXPf9xYniIRGlkSddGu4Gza+rAILjWg/RSIuW8z0bCzGRWoD0g8nYmFDjH+rDc8fRqW9ZMVfOuXNk8Xh7nfprsiEknV4iASYhT5615VCqU3DBeW09axFIA8UQrrtRf417UiQUMMsOp8Z0o8iHeQfRUTgPh/au8h+mQNb5rwgnjwyYaxCm3E0NzLfaVOJit0qZv5lWOxBPcmbdQ9EG2zX2mBqX7rpQhvCmwhenB99EL+bymYJGFEI2aGBWsELoj644GFDKF9OhOiAPDK9TjSautZjbvsWX8HPaeZoUHUv9q/28mDgnEn3WYk/KrI4YSI4rGxhrQN/FukvZueJlagmYJxca9FV7FviI82Lg99dhNfWIR7B9iFIrIleqCtxXnT6kwaQ4HK3OIaWpIjF9rTBVT3Ps=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(396003)(346002)(366004)(39860400002)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(2616005)(6512007)(1076003)(26005)(316002)(478600001)(6916009)(7416002)(6506007)(5660300002)(2906002)(4744005)(6486002)(66946007)(41300700001)(66556008)(66476007)(8936002)(4326008)(8676002)(54906003)(83380400001)(38100700002)(36756003)(33656002)(86362001)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?CNd/nGMfIEGCROprDa4MZwawCTzu5p9S2NiomAm7vH+sEXiCM1FOGeaLXqsI?=
+ =?us-ascii?Q?36yc65zPmGzdi5UvcNvE+3kpeBqCdqGzZunxH+1HKchGsPlikpzuX75jBujf?=
+ =?us-ascii?Q?+o3aXUVrXC6CElKdpq+3DCa4opo4rEabUXlV1BhafNliENNP94GwSFR5FHgc?=
+ =?us-ascii?Q?yv/M2Lsus+L0+usbwe6IlGMCb2FUp1V2uD1IhF/vW/nHsfmBPFbSQs7oQiJe?=
+ =?us-ascii?Q?uN4umUVrgwa4LIimp9mtESnJhqoOtk0hwKFQnn7XRrKX+KPVaGGu2AXMI4xE?=
+ =?us-ascii?Q?ac/bBXvBzHztsIZgC0vGnJTPr42FKQ5D1FlEDRqPQ/ahasDiImUyPPMZL0uk?=
+ =?us-ascii?Q?X7lBgJrHxfemKAhs49/R/db3BBTmu9okrDT7mZ7cLsh7GvUfklEw+72HSeXb?=
+ =?us-ascii?Q?MU5yo1SuYLl1CglZdcLhv9L8d+blG5M60mD7MkaDQISVqnZc4t/0GuWi//MX?=
+ =?us-ascii?Q?mXbFGrVcEP4hu0NCGao57Qgd5r+F7nQHKMFexr3tk/F7kraA/1nCLKxulDlt?=
+ =?us-ascii?Q?wdskAnVaPKc5ykWjgNV+m1L22OODjbIuKBE6fnj4YcAEwXWE/IwA5jQUCo4H?=
+ =?us-ascii?Q?P/wEozqh64XaWPvqQbEMtSUPCMZdKvTJGmWJymCcw5Ig7ki/ig6hDesGwWra?=
+ =?us-ascii?Q?W5QZMXfJjeHb/WLI4AJWaUYmXYv3AApjIMuQtY8YJYj+dBqw32roD9iaJzzM?=
+ =?us-ascii?Q?y4n7mk/3DCVjxlc1OHs1qcgE/HA5+NwuuULtL+cguzjO8hToewmt9fMdrWaA?=
+ =?us-ascii?Q?WvkW65hlmoko3fYEyxe8LwYs5OA/SM7MjUcz0f+W1FnqgNvAj9V5Rx4IiVmK?=
+ =?us-ascii?Q?G3kA4aQ9vygYTT5We2MyymFU7GVrt39FDfz5u7xDzGV5iWPcsko0PKO2cmhO?=
+ =?us-ascii?Q?aLFRP2gvwCwqd0xTiuqllal0VMuPnuFB9rtsz7OdyJsY4kC3S1g5bMbEklZ9?=
+ =?us-ascii?Q?clIUVMcnmZIlKDY6uHOkrvf7YGHDtkcfkuKSzMVbS/wnJ82orOJAY6JnlOgL?=
+ =?us-ascii?Q?wzkOq89fu5nYE/6l6BFDMUod+mNZtQE2e4ulgY/ZlXlDxZsEiOL4zb5fd6Ub?=
+ =?us-ascii?Q?htIClpqz1WPdTaXgHx1GAO2I2ziQAicGt22p4s4DChCJ5XZSvWyhKRsi88fn?=
+ =?us-ascii?Q?z9HW7rTMVy5EQYbCvBr2A0sp6taHtoyb0uPjDHr9VBrAUK1SSPJLTjWIZIKZ?=
+ =?us-ascii?Q?zmnrhp4vP0FO+kaJ4G2xeD+yNg9lNX33pzeZmUKMiVnFdEzlHIeVG55HmTPH?=
+ =?us-ascii?Q?zc4JGk4Cv+Wc+ljGx5eqqhqJ8tWdlEG6sIOxXkw5psnic5mQMguQZA7YTKRM?=
+ =?us-ascii?Q?2tB/QXZqkNs+snNRTktxEAOAeGflyCzS8ZQeAXQ0IdYM3AIc7RsFjhGd/r4r?=
+ =?us-ascii?Q?VaomY1ffDkM2CTw1ZfJSxTeojFiLjOmX5wkeUy9bP9dw+iQ++GoIOlnN5Uf7?=
+ =?us-ascii?Q?zWqfMdFMA8FLR8xkwlkSSkNqljhHCTawDwFghhe5G8sy7HGucXE0NrM1iQSr?=
+ =?us-ascii?Q?MU1mC/tLeOiFDlEqDHuBKExvLQB6ZUgcCKE2dZXqAI4v9nogDjE03e0wh1a1?=
+ =?us-ascii?Q?B/rXR2HZ8rhZvjJvZ29UCK89rpFYzOxKWAXg/LF2?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7cc6b50e-f847-4981-b6dc-08dbecf88f4e
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2023 14:20:50.4596
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LLJ2P9sle+jCUNnPLC5Wm+inAxkdMWLxDqELlbKvUtSW5YaRBgxycaEpcKYevusl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8952
 
-Hi, we tested your kernel and here are the results:
+On Fri, Nov 24, 2023 at 03:10:29PM +0100, Niklas Schnelle wrote:
+ 
+> What's the reasoning behind not using the existing memcpy_toio()
+> here?
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Going forward CPUs are implementing an instruction to do a 64 byte
+aligned store, this is a wrapper for exactly that operation.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+memcpy_toio() is much more general, it allows unaligned buffers and
+non-multiples of 64. Adapting the general version to generate the
+optimized version in the cases it can is complex and has a codegen
+penalty..
 
-Kernel information:
-    Commit message: Merge tag 'ata-6.7-rc3' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/dlemoal/libata
+> For s390 the above generic variant would do 8 of our special PCI store
+> instructions while memcpy_toio() is defined to zpci_memcpy_toio() which
+> can do the same as a single PCI store block instruction. Now of course
+> we could provide our own memcpy_toio_64() but that would end up the
+> same as just doing memcpy_toio(addr, buffer, 64) here.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/116269
+This is probably better?
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
-d, map_write access on the bpf labeled init_t.
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
-            Affected tests:
-                 aarch64 - machineinfo
-                 aarch64 - Boot test
-                 aarch64 - Hardware - IPMItool loop stress test
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - block - filesystem fio test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                 aarch64 - Reboot test
-                 aarch64 - Hardware - ACPI table test
-                 aarch64 - POSIX pjd-fstest suites
-                 aarch64 - Filesystem - Loopdev Sanity
-                 aarch64 - Memory function: memfd_create
-                 aarch64 - AMTU (Abstract Machine Test Utility)
-                 aarch64 - Networking - Ethernet drivers sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - Networking vnic: ipvlan/basic
-                 aarch64 - Libkcapi AF_ALG test
-                 aarch64 - Storage - multipath mapping test
-                 aarch64 - Hardware - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Memory function: memfd_create
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Storage - multipath mapping test
-                  x86_64 - machineinfo
-                  x86_64 - Boot test
-                  x86_64 - Hardware - CPU: Die Test
-                  x86_64 - Hardware - IPMI driver test
-                  x86_64 - Hardware - IPMItool loop stress test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - block - filesystem fio test
-                  x86_64 - Storage - block - queue scheduler test
-                  x86_64 - Storage - swraid scsi_raid
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Reboot test
-                  x86_64 - Hardware - ACPI table test
-                  x86_64 - POSIX pjd-fstest suites
-                  x86_64 - Filesystem - Loopdev Sanity
-                  x86_64 - Memory function: memfd_create
-                  x86_64 - AMTU (Abstract Machine Test Utility)
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - Networking vnic: ipvlan/basic
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 - Hardware - pciutils: sanity smoke test
-                  x86_64 - Storage - multipath mapping test
-                  x86_64 - kselftests upstream - net
-                  x86_64 - kselftests upstream - bpf_test_progs
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - machineinfo
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Storage - swraid scsi_raid
-                  x86_64 (debug) - Reboot test
-                  x86_64 (debug) - Hardware - ACPI table test
-                  x86_64 (debug) - POSIX pjd-fstest suites
-                  x86_64 (debug) - Filesystem - Loopdev Sanity
-                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: blktests block/024 failed
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
-au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
-            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
-913cfd3efb.camel@intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-
-Tests that were not ran because of internal issues:=20
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Jason
