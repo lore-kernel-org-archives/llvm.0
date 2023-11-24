@@ -1,126 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04DD249E6;
-	Fri, 24 Nov 2023 14:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5055F2C870
+	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 14:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NEjoKDuV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700836816; x=1732372816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/Uxc0d4c4aiMUWgnl/99+3ExpFREygOtI/KFwWyU28A=;
-  b=NEjoKDuVz8OZTiDpHL9s4ibHaaPW34onG3CILNKJwiIOUGt1fb8O1vqJ
-   XMKBxAEy8DPjSX/qMQzUg7DvewjCW0r4b6sCInD57k68eeDaNLKLbk0e7
-   I/Gr0yzzvfmKNuZJC1lRiQad5ryuEIXRRbeJ+F5oDw63fceT3obWYB2/w
-   1nTLbc93CrYD7hhypEwTwYYRFN7dzRJVBV7r1ycvN4AEEh4FeOJW2yZ/d
-   tLD7Ow4AJCjpTUklxulRFnZJIdFgsf73WmOtKe1hV+ajtQr4GT3pQKBBs
-   3YQofo5uM0ivqlfZOie03YpycC4WBHr0Fe3+yn9o8vHm2fF8ugSR7VYCa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="395249016"
-X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="395249016"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 06:40:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="760975142"
-X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="760975142"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 24 Nov 2023 06:40:10 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r6XLi-0002tp-2p;
-	Fri, 24 Nov 2023 14:40:06 +0000
-Date: Fri, 24 Nov 2023 22:39:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Suraj Jaiswal <quic_jsuraj@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Prasad Sodagudi <psodagud@quicinc.com>,
-	Andrew Halaney <ahalaney@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, kernel@quicinc.com
-Subject: Re: [PATCH net-next v3 3/3] net: stmmac: Add driver support for
- DWMAC5 fault IRQ Support
-Message-ID: <202311241513.D6JpHWGg-lkp@intel.com>
-References: <62eaaace3713751cb1ecac3163e857737107ca0e.1700737841.git.quic_jsuraj@quicinc.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AQyPYsMd"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AOEROsH030664;
+	Fri, 24 Nov 2023 14:48:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=WqQVGO5bjgS3k2Tjkuek+o1+AkyMRpQvZNxP1S5gEt8=;
+ b=AQyPYsMdSBOlm0kTekR7Nuj5+AuQ5mDFFuP5SGhb6LXRv/61T7uG3BmwyBTF6tKKLE22
+ VMIavvKoLNCdtYiW21YlmQAmRCuHRYiD5oX2KQlD+wfx9Ht8nKO3LX6SEtB3caMSCYbn
+ TzrgdXzSplpQ/Jy+daCJ+zDy3Lp+OmQUtwhj1F7XX8/gSxJMaZw/o+8/q8gYjXJ1UwrS
+ 0pB+XNffWklFXiBRCoxFX9UEUjkuaX0h5qjx9CXI66Bla8LMi2xs1VBu1sqGC73WolRJ
+ veuF1XtXJ7R3UxADzwYItOfzi26luBcgDPsv78El9WBvTzaJ+BIa+C+yInHAJHI36EQF FA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ujwkw0mtm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 14:48:26 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AOET0La002906;
+	Fri, 24 Nov 2023 14:48:25 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ujwkw0mtc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 14:48:25 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AOCIsGC027825;
+	Fri, 24 Nov 2023 14:48:24 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uf7ktph5s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 14:48:24 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AOEmNds6947516
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 24 Nov 2023 14:48:23 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1107B20067;
+	Fri, 24 Nov 2023 14:48:23 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C48A02005A;
+	Fri, 24 Nov 2023 14:48:22 +0000 (GMT)
+Received: from [9.152.212.236] (unknown [9.152.212.236])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 24 Nov 2023 14:48:22 +0000 (GMT)
+Message-ID: <14103e31e0c47c0594e7479126ce7fe34f2de467.camel@linux.ibm.com>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+From: Niklas Schnelle <schnelle@linux.ibm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
+        llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
+        Nathan
+ Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>
+Date: Fri, 24 Nov 2023 15:48:22 +0100
+In-Reply-To: <20231124142049.GF436702@nvidia.com>
+References: <cover.1700766072.git.leon@kernel.org>
+	 <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+	 <c102bdef10b280f47f5fe4538eb168ac730d7644.camel@linux.ibm.com>
+	 <20231124142049.GF436702@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62eaaace3713751cb1ecac3163e857737107ca0e.1700737841.git.quic_jsuraj@quicinc.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: yVvdn8pt5Jds8ImHQT3KGWGHYXQL3zCC
+X-Proofpoint-ORIG-GUID: JQX0uRX_3M1hZ1FoS7wh4fKnkficpaOO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-24_01,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=879 clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 mlxscore=0 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311240115
 
-Hi Suraj,
+On Fri, 2023-11-24 at 10:20 -0400, Jason Gunthorpe wrote:
+> On Fri, Nov 24, 2023 at 03:10:29PM +0100, Niklas Schnelle wrote:
+> =20
+> > What's the reasoning behind not using the existing memcpy_toio()
+> > here?
+>=20
+> Going forward CPUs are implementing an instruction to do a 64 byte
+> aligned store, this is a wrapper for exactly that operation.
+>=20
+> memcpy_toio() is much more general, it allows unaligned buffers and
+> non-multiples of 64. Adapting the general version to generate the
+> optimized version in the cases it can is complex and has a codegen
+> penalty..
 
-kernel test robot noticed the following build warnings:
+I think you misunderstood me. I understand why you want a separate
+memcpy_toio_64(). I just wonder if its generic implementation shouldn't
+just be a define or inline wrapper for memcpy_toio(addr, buffer, 64).
 
-[auto build test WARNING on net-next/main]
+For s390 that would already result in a single PCI store block which
+for us is much much better than 8 consecutive __raw_writeq(). Our
+zpci_memcpy_toio() still has some extra code to ensure alignment and
+break it up in supported sizes that we could get rid of with our own
+memcpy_toio_64() of course. I suspect though that since it's all inline
+functions the compiler seeing the constant 64 might already eliminate
+some of the extra code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suraj-Jaiswal/dt-bindings-net-qcom-ethqos-add-binding-doc-for-fault-IRQ-for-sa8775p/20231123-202252
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/62eaaace3713751cb1ecac3163e857737107ca0e.1700737841.git.quic_jsuraj%40quicinc.com
-patch subject: [PATCH net-next v3 3/3] net: stmmac: Add driver support for DWMAC5 fault IRQ Support
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20231124/202311241513.D6JpHWGg-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231124/202311241513.D6JpHWGg-lkp@intel.com/reproduce)
+Also seeing the second patch of course that would no longer really test
+for write combining for us which we can also do but I think that's okay
+and you're probably going to use memcpy_toio_64() in more places and
+there we really want the PCI store block.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311241513.D6JpHWGg-lkp@intel.com/
+Thanks,
+Niklas
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c:693:5: warning: no previous prototype for function 'stmmac_get_fault_intr_config' [-Wmissing-prototypes]
-   int stmmac_get_fault_intr_config(struct platform_device *pdev, struct stmmac_resources *res)
-       ^
-   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c:693:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int stmmac_get_fault_intr_config(struct platform_device *pdev, struct stmmac_resources *res)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/stmmac_get_fault_intr_config +693 drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-
-   692	
- > 693	int stmmac_get_fault_intr_config(struct platform_device *pdev, struct stmmac_resources *res)
-   694	{
-   695		int ret = 0;
-   696	
-   697		res->safety_common_intr = platform_get_irq_byname(pdev, "safety");
-   698	
-   699		if (res->safety_common_intr < 0) {
-   700			if (res->safety_common_intr != -EPROBE_DEFER)
-   701				dev_err(&pdev->dev, "safety IRQ configuration information not found\n");
-   702			ret = 1;
-   703		}
-   704	
-   705		return ret;
-   706	}
-   707	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
