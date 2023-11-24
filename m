@@ -1,162 +1,99 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1665199A7
-	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 10:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12621CF81
+	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 11:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 536F21063;
-	Fri, 24 Nov 2023 02:17:06 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.42.51])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07E0D3F7A6;
-	Fri, 24 Nov 2023 02:16:17 -0800 (PST)
-Date: Fri, 24 Nov 2023 10:16:15 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <ZWB373y5XuZDultf@FVFF77S0Q05N>
-References: <cover.1700766072.git.leon@kernel.org>
- <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3AOBJODR03677396, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3AOBJODR03677396
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 24 Nov 2023 19:19:24 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Fri, 24 Nov 2023 19:19:24 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 24 Nov 2023 19:19:23 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Fri, 24 Nov 2023 19:19:23 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: "kvalo@kernel.org" <kvalo@kernel.org>,
+        "nathan@kernel.org"
+	<nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "suhui@nfschina.com" <suhui@nfschina.com>,
+        "dan.carpenter@linaro.org"
+	<dan.carpenter@linaro.org>,
+        "trix@redhat.com" <trix@redhat.com>
+CC: "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linville@tuxdriver.com"
+	<linville@tuxdriver.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "lizetao1@huawei.com" <lizetao1@huawei.com>
+Subject: Re: [PATCH v2 2/2] wifi: rtlwifi: rtl8821ae: phy: fix an undefined bitwise shift behavior
+Thread-Topic: [PATCH v2 2/2] wifi: rtlwifi: rtl8821ae: phy: fix an undefined
+ bitwise shift behavior
+Thread-Index: AQHaHnqh3ek0X9cmrkSIvDKQ0v3B9rCJKRKA//+Pj4CAABQ4gA==
+Date: Fri, 24 Nov 2023 11:19:23 +0000
+Message-ID: <02f0a505b3a02a3c5e29ac1e327acd1fc946188c.camel@realtek.com>
+References: <cb551005-eff0-1391-92a0-d956b3d2b930@nfschina.com>
+In-Reply-To: <cb551005-eff0-1391-92a0-d956b3d2b930@nfschina.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+user-agent: Evolution 3.36.1-2 
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <73149C689BB72D4CB2935FF1489D3537@realtek.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-On Thu, Nov 23, 2023 at 09:04:31PM +0200, Leon Romanovsky wrote:
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> 
-> The kernel supports write combining IO memory which is commonly used to
-> generate 64 byte TLPs in a PCIe environment. On many CPUs this mechanism
-> is pretty tolerant and a simple C loop will suffice to generate a 64 byte
-> TLP.
-> 
-> However modern ARM64 CPUs are quite sensitive and a compiler generated
-> loop is not enough to reliably generate a 64 byte TLP. Especially given
-> the ARM64 issue that writel() does not codegen anything other than "[xN]"
-> as the address calculation.
-> 
-> These newer CPUs require an orderly consecutive block of stores to work
-> reliably. This is best done with four STP integer instructions (perhaps
-> ST64B in future), or a single ST4 vector instruction.
-> 
-> Provide a new generic function memcpy_toio_64() which should reliably
-> generate the needed instructions for the architecture, assuming address
-> alignment. As the usual need for this operation is performance sensitive a
-> fast inline implementation is preferred.
-
-There is *no* architectural sequence that is guaranteed to reliably generate a
-64-byte TLP, and this sequence won't guarnatee that (e.g. even if the CPU
-*always* merged adjacent stores, we can take an interrupt mid-sequence that
-would prevent that).
-
-What's the actual requirement here? Is this just for performance?
-
-Mark.
-
-> Implement an optimized version on ARM that is a block of 4 STP
-> instructions.
-> 
-> The generic implementation is just a simple loop. x86-64 (clang 16)
-> compiles this into an unrolled loop of 16 movq pairs.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> ---
->  arch/arm64/include/asm/io.h | 20 ++++++++++++++++++++
->  include/asm-generic/io.h    | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 50 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-> index 3b694511b98f..73ab91913790 100644
-> --- a/arch/arm64/include/asm/io.h
-> +++ b/arch/arm64/include/asm/io.h
-> @@ -135,6 +135,26 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
->  #define memcpy_fromio(a,c,l)	__memcpy_fromio((a),(c),(l))
->  #define memcpy_toio(c,a,l)	__memcpy_toio((c),(a),(l))
->  
-> +static inline void __memcpy_toio_64(volatile void __iomem *to, const void *from)
-> +{
-> +	const u64 *from64 = from;
-> +
-> +	/*
-> +	 * Newer ARM core have sensitive write combining buffers, it is
-> +	 * important that the stores be contiguous blocks of store instructions.
-> +	 * Normal memcpy does not work reliably.
-> +	 */
-> +	asm volatile("stp %x0, %x1, [%8, #16 * 0]\n"
-> +		     "stp %x2, %x3, [%8, #16 * 1]\n"
-> +		     "stp %x4, %x5, [%8, #16 * 2]\n"
-> +		     "stp %x6, %x7, [%8, #16 * 3]\n"
-> +		     :
-> +		     : "rZ"(from64[0]), "rZ"(from64[1]), "rZ"(from64[2]),
-> +		       "rZ"(from64[3]), "rZ"(from64[4]), "rZ"(from64[5]),
-> +		       "rZ"(from64[6]), "rZ"(from64[7]), "r"(to));
-> +}
-> +#define memcpy_toio_64(to, from) __memcpy_toio_64(to, from)
-> +
->  /*
->   * I/O memory mapping functions.
->   */
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index bac63e874c7b..2d6d60ed2128 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1202,6 +1202,36 @@ static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
->  }
->  #endif
->  
-> +#ifndef memcpy_toio_64
-> +#define memcpy_toio_64 memcpy_toio_64
-> +/**
-> + * memcpy_toio_64	Copy 64 bytes of data into I/O memory
-> + * @dst:		The (I/O memory) destination for the copy
-> + * @src:		The (RAM) source for the data
-> + * @count:		The number of bytes to copy
-> + *
-> + * dst and src must be aligned to 8 bytes. This operation copies exactly 64
-> + * bytes. It is intended to be used for write combining IO memory. The
-> + * architecture should provide an implementation that has a high chance of
-> + * generating a single combined transaction.
-> + */
-> +static inline void memcpy_toio_64(volatile void __iomem *addr,
-> +				  const void *buffer)
-> +{
-> +	unsigned int i = 0;
-> +
-> +#if BITS_PER_LONG == 64
-> +	for (; i != 8; i++)
-> +		__raw_writeq(((const u64 *)buffer)[i],
-> +			     ((u64 __iomem *)addr) + i);
-> +#else
-> +	for (; i != 16; i++)
-> +		__raw_writel(((const u32 *)buffer)[i],
-> +			     ((u32 __iomem *)addr) + i);
-> +#endif
-> +}
-> +#endif
-> +
->  extern int devmem_is_allowed(unsigned long pfn);
->  
->  #endif /* __KERNEL__ */
-> -- 
-> 2.42.0
-> 
-> 
+T24gRnJpLCAyMDIzLTExLTI0IGF0IDE4OjA2ICswODAwLCBTdSBIdWkgd3JvdGU6DQo+IA0KPiBP
+biAyMDIzLzExLzI0IDE2OjUxLCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+ID4gU3ViamVjdDogW1BB
+VENIIHYyIDIvMl0gd2lmaTogcnRsd2lmaTogcnRsODgyMWFlOiBwaHk6IGZpeCBhbiB1bmRlZmlu
+ZWQgYml0d2lzZSBzaGlmdCBiZWhhdmlvcg0KPiA+IA0KPiA+IFsuLi5dDQo+ID4gPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3aWZpL3J0bDg4MjFhZS9waHku
+Yw0KPiA+ID4gYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bHdpZmkvcnRsODgyMWFl
+L3BoeS5jDQo+ID4gPiBpbmRleCA2ZGYyNzBlMjllNjYuLjUyYWIxYjA3NjFjMCAxMDA2NDQNCj4g
+PiA+IC0tLSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9ydGw4ODIxYWUv
+cGh5LmMNCj4gPiA+ICsrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9y
+dGw4ODIxYWUvcGh5LmMNCj4gPiA+IEBAIC0zMSw3ICszMSwxMiBAQCBzdGF0aWMgdTMyIF9ydGw4
+ODIxYWVfcGh5X2NhbGN1bGF0ZV9iaXRfc2hpZnQodTMyIGJpdG1hc2spDQo+ID4gPiAgIHsNCj4g
+PiA+ICAgICAgICAgIHUzMiBpID0gZmZzKGJpdG1hc2spOw0KPiA+ID4gDQo+ID4gPiAtICAgICAg
+IHJldHVybiBpID8gaSAtIDEgOiAzMjsNCj4gPiA+ICsgICAgICAgaWYgKCFpKSB7DQo+ID4gPiAr
+ICAgICAgICAgICAgICAgV0FSTl9PTl9PTkNFKDEpOw0KPiA+ID4gKyAgICAgICAgICAgICAgIHJl
+dHVybiAwOw0KPiA+ID4gKyAgICAgICB9DQo+ID4gPiArDQo+ID4gPiArICAgICAgIHJldHVybiBp
+IC0gMTsNCj4gPiA+ICAgfQ0KPiA+IFBlcnNvbmFsbHksIEkgcHJlZmVyIHRvIHVzZSBfX2Zmcygp
+LCBiZWNhdXNlIGluIG5vcm1hbCBjYXNlIG5vIG5lZWQgYWRkaXRpb25hbCAnLTEnLA0KPiA+IGFu
+ZCBhYm5vcm1hbCBjYXNlcyBzaG91bGQgbm90IGhhcHBlbi4NCj4gDQo+IEhpLCAgUGluZy1LZQ0K
+PiANCj4gUmVwbGFjZSBfcnRsODgyMWFlX3BoeV9jYWxjdWxhdGVfYml0X3NoaWZ0KCkgYnkgX19m
+ZnMoYml0bWFzaykgaXMgYmV0dGVyLA0KPiBidXQgSSdtIG5vdCBzdXJlIHdoYXQgY2FsbGVycyBz
+aG91bGQgZG8gd2hlbiBjYWxsZXJzIGNoZWNrIGJpdG1hc2sgaXMgMCBiZWZvcmUgY2FsbGluZy4N
+Cj4gTWF5YmUgdGhpcyBjaGVjayBpcyB1c2VsZXNzPw0KPiANCj4gSSBjYW4gc2VuZCBhIHYzIHBh
+dGNoIGlmIHVzaW5nICBfX2ZmcyhiaXRtYXNrKSBhbmQgbm8gY2hlY2sgZm9yIGJpdG1hc2sgaXMg
+ZmluZS4NCj4gT3IgY291bGQgeW91IHNlbmQgdGhpcyBwYXRjaCBpZiB5b3UgaGF2ZSBhIGJldHRl
+ciBpZGVhPw0KPiBUaGFua3MgZm9yIHlvdXIgc3VnZ2VzdGlvbiENCj4gDQoNCkNhbiB0aGlzIHdv
+cmsgdG8geW91PyANCg0Kc3RhdGljIHUzMiBfcnRsODgyMWFlX3BoeV9jYWxjdWxhdGVfYml0X3No
+aWZ0KHUzMiBiaXRtYXNrKQ0Kew0KCWlmIChXQVJOX09OX09OQ0UoIWJpdG1hc2spKQ0KCQlyZXR1
+cm4gMDsNCg0KCXJldHVybiBfX2ZmcyhiaXRtYXNrKTsNCn0NCg0KDQo=
