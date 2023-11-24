@@ -1,155 +1,242 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB18E1D55E
-	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 12:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 54BF31063;
-	Fri, 24 Nov 2023 04:59:01 -0800 (PST)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BDAF3F6C4;
-	Fri, 24 Nov 2023 04:58:13 -0800 (PST)
-Message-ID: <2fccdb30-aad0-4334-89d1-d4c86d17c9fc@arm.com>
-Date: Fri, 24 Nov 2023 12:58:11 +0000
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9115F28694
+	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 13:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QwhToKye"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700830910;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GmjVxlS/Hgy5AESzY38tQjRA6TCKoXekRZ+mZ5me9Hg=;
+	b=QwhToKyeSJVFRJukUFXv/HDKItdtjFmwnkKWqD2suFzB95LRF/9+7BBJZQgiImB3V5oEy1
+	UEOrP35kuuDrzuJvw5SH/t7nE9+EpnP6StHBSv/YPvqbL0qYiVVrW457bGekjQwkR8n3Kl
+	t18HW5JMlw4pJh06iK6CJEXDo4Rm9AM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-245-QOnqAJP_OwiZbq4ZgnyjcA-1; Fri, 24 Nov 2023 08:01:46 -0500
+X-MC-Unique: QOnqAJP_OwiZbq4ZgnyjcA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40757803E09
+	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 13:01:46 +0000 (UTC)
+Received: from [172.64.3.60] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2D07F40C6EBB;
+	Fri, 24 Nov 2023 13:01:46 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc2,
+ mainline.kernel.org-clang, d3fa86b1)
+Date: Fri, 24 Nov 2023 13:01:46 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Content-Language: en-GB
-To: Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
- Michael Guralnik <michaelgur@mellanox.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Will Deacon <will@kernel.org>
-References: <cover.1700766072.git.leon@kernel.org>
- <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
-From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <60297.123112408014600743@us-mta-245.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 23/11/2023 7:04 pm, Leon Romanovsky wrote:
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> 
-> The kernel supports write combining IO memory which is commonly used to
-> generate 64 byte TLPs in a PCIe environment. On many CPUs this mechanism
-> is pretty tolerant and a simple C loop will suffice to generate a 64 byte
-> TLP.
-> 
-> However modern ARM64 CPUs are quite sensitive and a compiler generated
-> loop is not enough to reliably generate a 64 byte TLP. Especially given
-> the ARM64 issue that writel() does not codegen anything other than "[xN]"
-> as the address calculation.
-> 
-> These newer CPUs require an orderly consecutive block of stores to work
-> reliably. This is best done with four STP integer instructions (perhaps
-> ST64B in future), or a single ST4 vector instruction.
-> 
-> Provide a new generic function memcpy_toio_64() which should reliably
-> generate the needed instructions for the architecture, assuming address
-> alignment. As the usual need for this operation is performance sensitive a
-> fast inline implementation is preferred.
-> 
-> Implement an optimized version on ARM that is a block of 4 STP
-> instructions.
-> 
-> The generic implementation is just a simple loop. x86-64 (clang 16)
-> compiles this into an unrolled loop of 16 movq pairs.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> ---
->   arch/arm64/include/asm/io.h | 20 ++++++++++++++++++++
->   include/asm-generic/io.h    | 30 ++++++++++++++++++++++++++++++
->   2 files changed, 50 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-> index 3b694511b98f..73ab91913790 100644
-> --- a/arch/arm64/include/asm/io.h
-> +++ b/arch/arm64/include/asm/io.h
-> @@ -135,6 +135,26 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
->   #define memcpy_fromio(a,c,l)	__memcpy_fromio((a),(c),(l))
->   #define memcpy_toio(c,a,l)	__memcpy_toio((c),(a),(l))
->   
-> +static inline void __memcpy_toio_64(volatile void __iomem *to, const void *from)
-> +{
-> +	const u64 *from64 = from;
-> +
-> +	/*
-> +	 * Newer ARM core have sensitive write combining buffers, it is
-> +	 * important that the stores be contiguous blocks of store instructions.
-> +	 * Normal memcpy does not work reliably.
-> +	 */
-> +	asm volatile("stp %x0, %x1, [%8, #16 * 0]\n"
-> +		     "stp %x2, %x3, [%8, #16 * 1]\n"
-> +		     "stp %x4, %x5, [%8, #16 * 2]\n"
-> +		     "stp %x6, %x7, [%8, #16 * 3]\n"
-> +		     :
-> +		     : "rZ"(from64[0]), "rZ"(from64[1]), "rZ"(from64[2]),
-> +		       "rZ"(from64[3]), "rZ"(from64[4]), "rZ"(from64[5]),
-> +		       "rZ"(from64[6]), "rZ"(from64[7]), "r"(to));
+Hi, we tested your kernel and here are the results:
 
-Is this correct for big-endian? LDP/STP are kinda tricksy in that regard.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Thanks,
-Robin.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-> +}
-> +#define memcpy_toio_64(to, from) __memcpy_toio_64(to, from)
-> +
->   /*
->    * I/O memory mapping functions.
->    */
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index bac63e874c7b..2d6d60ed2128 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1202,6 +1202,36 @@ static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
->   }
->   #endif
->   
-> +#ifndef memcpy_toio_64
-> +#define memcpy_toio_64 memcpy_toio_64
-> +/**
-> + * memcpy_toio_64	Copy 64 bytes of data into I/O memory
-> + * @dst:		The (I/O memory) destination for the copy
-> + * @src:		The (RAM) source for the data
-> + * @count:		The number of bytes to copy
-> + *
-> + * dst and src must be aligned to 8 bytes. This operation copies exactly 64
-> + * bytes. It is intended to be used for write combining IO memory. The
-> + * architecture should provide an implementation that has a high chance of
-> + * generating a single combined transaction.
-> + */
-> +static inline void memcpy_toio_64(volatile void __iomem *addr,
-> +				  const void *buffer)
-> +{
-> +	unsigned int i = 0;
-> +
-> +#if BITS_PER_LONG == 64
-> +	for (; i != 8; i++)
-> +		__raw_writeq(((const u64 *)buffer)[i],
-> +			     ((u64 __iomem *)addr) + i);
-> +#else
-> +	for (; i != 16; i++)
-> +		__raw_writel(((const u32 *)buffer)[i],
-> +			     ((u32 __iomem *)addr) + i);
-> +#endif
-> +}
-> +#endif
-> +
->   extern int devmem_is_allowed(unsigned long pfn);
->   
->   #endif /* __KERNEL__ */
+Kernel information:
+    Commit message: Merge tag 'net-6.7-rc3' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/116256
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - IPMItool loop stress test
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - block - queue scheduler test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Reboot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - Memory function: memfd_create
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking - Ethernet drivers sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - Hardware - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
+                  x86_64 - Hardware - IPMI driver test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - kselftests upstream - net
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking - Ethernet drivers sanity
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: blktests nvme/tcp failed on the latest linux-block/for-next
+            URL: https://lore.kernel.org/linux-nvme/CAFL455kTFgx++rYHoUda_r=
+XY2f12MOMwKsB75NewZukH7E3ceg@mail.gmail.com/#t
+            Affected tests:
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
