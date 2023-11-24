@@ -1,34 +1,29 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id BD5213C1C
-	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 02:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35BE6138C;
+	Fri, 24 Nov 2023 03:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 55569602610F3;
-	Fri, 24 Nov 2023 10:04:25 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: dan.carpenter@linaro.org,
-	pkshih@realtek.com,
-	kvalo@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com
-Cc: Su Hui <suhui@nfschina.com>,
-	lizetao1@huawei.com,
-	linville@tuxdriver.com,
-	Larry.Finger@lwfinger.net,
-	linux-wireless@vger.kernel.org,
+Received: from loongson.cn (unknown [112.22.232.197])
+	by gateway (Coremail) with SMTP id _____8CxfOrXHmBlpHk8AA--.27216S3;
+	Fri, 24 Nov 2023 11:56:08 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.22.232.197])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxO9zUHmBljVhLAA--.34762S2;
+	Fri, 24 Nov 2023 11:56:06 +0800 (CST)
+From: WANG Rui <wangrui@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>,
+	Xi Ruoyao <xry111@xry111.site>,
 	linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kbuild@vger.kernel.org,
 	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH v2 2/2] wifi: rtlwifi: rtl8821ae: phy: fix an undefined bitwise shift behavior
-Date: Fri, 24 Nov 2023 10:03:54 +0800
-Message-Id: <20231124020352.1660621-2-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20231124020352.1660621-1-suhui@nfschina.com>
+	loongson-kernel@lists.loongnix.cn,
+	WANG Rui <wangrui@loongson.cn>
+Subject: [PATCH] LoongArch: Apply dynamic relocations for LLD
+Date: Fri, 24 Nov 2023 11:55:34 +0800
+Message-ID: <20231124035534.70432-1-wangrui@loongson.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,58 +31,73 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8CxO9zUHmBljVhLAA--.34762S2
+X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KryrJF18Aw47ury7Zw4DZFc_yoW8XrW5pr
+	Wfur1UZw4kWryIqw1Dtw17Xw4UZ3W8GFnruF17Kry8AF9rXF93Xw4ktrsxWas3C395Wa40
+	v3W5GFnF9F15J3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jjQ6JUUUUU=
 
-Clang staic checker warning:
-drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c:184:49:
-	The result of the left shift is undefined due to shifting by '32',
-	which is greater or equal to the width of type 'u32'.
-	[core.UndefinedBinaryOperatorResult]
+For the following assembly code:
 
-If the value of the right operand is negative or is greater than or
-equal to the width of the promoted left operand, the behavior is
-undefined.[1][2]
+     .text
+     .global func
+ func:
+     nop
 
-For example, when using different gcc's compilation optimizaation options
-(-O0 or -O2), the result of '(u32)data << 32' is different. One is 0, the
-other is old value of data. Let _rtl8821ae_phy_calculate_bit_shift()'s
-return value less than 32 to fix this problem. Warn if bitmask is zero.
+     .data
+ var:
+     .dword func
 
-[1]:https://stackoverflow.com/questions/11270492/what-does-the-c-
-standard-say-about-bitshifting-more-bits-than-the-width-of-type
-[2]:https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
+When linked with `-pie`, GNU LD populates the `var` variable with the
+pre-relocated value of `func`. However, LLVM LLD does not exhibit the
+same behavior. This issue also arises with the `kernel_entry` in
+arch/loongarch/kernel/head.S:
 
-Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
-Signed-off-by: Su Hui <suhui@nfschina.com>
+ _head:
+     .word   MZ_MAGIC                /* "MZ", MS-DOS header */
+     .org    0x8
+     .dword  kernel_entry            /* Kernel entry point */
+
+The correct kernel entry from the MS-DOS header is crucial for jumping
+to vmlinux from zboot. This necessity is why the compressed kernel
+compiled by Clang encounters difficulties in booting.
+
+To address this problem, it is proposed to apply dynamic relocations to
+place with `--apply-dynamic-relocs`.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1962
+Signed-off-by: WANG Rui <wangrui@loongson.cn>
 ---
-v2: 
- - fix the subject prefix problem
- - silence the warning by not return 32 bits rather than adding a type cast.(Thanks to Dan and Ping-Ke)
+ arch/loongarch/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-By the way, there some similar problems in
-_rtl88e_phy_calculate_bit_shift(), _rtl92c_phy_calculate_bit_shift() and
-so on...
-
- drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-index 6df270e29e66..52ab1b0761c0 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-@@ -31,7 +31,12 @@ static u32 _rtl8821ae_phy_calculate_bit_shift(u32 bitmask)
- {
- 	u32 i = ffs(bitmask);
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index 1f0d74403419..05ab85118212 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -83,7 +83,7 @@ endif
  
--	return i ? i - 1 : 32;
-+	if (!i) {
-+		WARN_ON_ONCE(1);
-+		return 0;
-+	}
-+
-+	return i - 1;
- }
- static bool _rtl8821ae_phy_bb8821a_config_parafile(struct ieee80211_hw *hw);
- /*static bool _rtl8812ae_phy_config_mac_with_headerfile(struct ieee80211_hw *hw);*/
+ ifeq ($(CONFIG_RELOCATABLE),y)
+ KBUILD_CFLAGS_KERNEL		+= -fPIE
+-LDFLAGS_vmlinux			+= -static -pie --no-dynamic-linker -z notext
++LDFLAGS_vmlinux			+= -static -pie --no-dynamic-linker -z notext $(call ld-option, --apply-dynamic-relocs)
+ endif
+ 
+ cflags-y += $(call cc-option, -mno-check-zero-division)
 -- 
-2.30.2
+2.43.0
 
