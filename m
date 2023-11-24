@@ -1,94 +1,158 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A1C33CC1
-	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 15:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464A833082
+	for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 15:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="PdKuq95P"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1ce656b9780so14922035ad.2
-        for <llvm@lists.linux.dev>; Fri, 24 Nov 2023 07:44:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1700840644; x=1701445444; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XxH4h/fUgyjGMKXsAUdrvTbwQh/c4Jyei7tUpRPE518=;
-        b=PdKuq95PCZO8c2BRI2J+wxfs/QilcLiNFa8N0iVTCQxj2K1bbbVGyy2VfKToUsyDU8
-         8WnaVh8YpRfjlL9ReLzXdZ30H8oLv0qJ7qOSW19CXae3kdjhSON12u/3Js0cTIMQr5tk
-         RuJ88XLWpqwoEk7eVJ1WFi03eF/i6ImnnDhU0yjWYaV3ZqsKSbXOGkhy7O8tmijDqMh3
-         4VVb9rBMgKtbzsHjHV2WXRHjk+VnVVbV4sWlQMYNKm1V5/PmbIyzwM8JIvz0inmjESNL
-         QXShwxCCpJUQ4p8FwU2WMa4mlULC3SCK+pOt1uN178w4ikiogrpWMuZsJvS+KirfK8o6
-         LJnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700840644; x=1701445444;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XxH4h/fUgyjGMKXsAUdrvTbwQh/c4Jyei7tUpRPE518=;
-        b=YEYaqxEM+GKkH0ejcn7Uv+dYUYkYfTiGHojudYCyPrIRvm9MgU168Ipj+b46yzn/9B
-         wtuqLT6csdpvisLvedQGqQemUxtE3IzyTb3vjVhVkvL8K+73vC6mYe4X9ACiJzp4SZzd
-         VUnSUKVoSulMwx+b2xd7AjzkjhM4hEKTb7uQwNeiFvBgCqY5Yg7YUyNflEO4ayRtGd1S
-         zcnJY1pZ/HkMcqbkkhDktqdV+t9qinF4kNRgSf4SPZyeRsde+oYPSi9DXHzHlGlATIk3
-         H2A4q5997mL8ttyLezEPf4omXkesq7nIHfvwz02Yirc6TIvZkTckhTb8vY76R23j5oDR
-         QHHA==
-X-Gm-Message-State: AOJu0YwGZONWPi5+PHAzsUPxO/pwAp9mvkOFCeIurHT/hdjCreyyT7iF
-	mNCSgVVQjy/sshY6CGdBKzBKEw==
-X-Google-Smtp-Source: AGHT+IESTfwIV1Y4e9dxiuOb6Fx6zh8dfzPm+t7NgGLnsuKfIve4gS4FKHwaEbYY0Jg2cMPODWHT/A==
-X-Received: by 2002:a17:902:7d8a:b0:1c9:ca02:645c with SMTP id a10-20020a1709027d8a00b001c9ca02645cmr2977675plm.36.1700840643802;
-        Fri, 24 Nov 2023 07:44:03 -0800 (PST)
-Received: from rogue-one.tail33bf8.ts.net ([201.17.86.134])
-        by smtp.gmail.com with ESMTPSA id g6-20020a170902740600b001cf9eac2d3asm1919743pll.118.2023.11.24.07.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 07:44:03 -0800 (PST)
-From: Pedro Tammela <pctammela@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Pedro Tammela <pctammela@mojatatu.com>
-Subject: [PATCH net-next 5/5] selftests: tc-testing: remove unused import
-Date: Fri, 24 Nov 2023 12:42:48 -0300
-Message-Id: <20231124154248.315470-6-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231124154248.315470-1-pctammela@mojatatu.com>
-References: <20231124154248.315470-1-pctammela@mojatatu.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FvHJjHxZ"
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AOFv2lX015477;
+	Fri, 24 Nov 2023 15:59:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=rnorhOgJqTAhJ2ff91jA+Eihqw7bxMBbiU6K3KlQoiY=;
+ b=FvHJjHxZO1InjBWtTGTI30is4uOBHWOyOp6bV551FD0+YTRF+W+/tLYyvGuLpvqgB0xX
+ 7BYq345nQ/2pLZKLIvMr73mFM14zZQFXoblTfWVP/yCHnJhHZy3mKzrn9NSNnnkDeCh+
+ DEzK63fhOQPAHJMAXrCGndH695gHWu0s5gAEPbagASHalAsBWIEqJmdnM7L8leeWaKdE
+ wwXeKbCR7TTQ5LoAiihSw7Y8xGk3vkDBoMZvnV9Si6eo0tDKqJ3A0jVm0zC/k9uF7WwE
+ JjCI/H7d1949eBtjGYVVi3fNrJ4qi/AHPt47APPNgfmAbLQLKR1830aMqgp56fpWk9kX yA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ujxx101t4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 15:59:42 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AOFxEqk021637;
+	Fri, 24 Nov 2023 15:59:42 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ujxx101sa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 15:59:42 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AOF5xbU015327;
+	Fri, 24 Nov 2023 15:59:40 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uf8006tda-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 15:59:40 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AOFxcnA18088654
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 24 Nov 2023 15:59:38 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8E8BF20043;
+	Fri, 24 Nov 2023 15:59:38 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4EAB420040;
+	Fri, 24 Nov 2023 15:59:38 +0000 (GMT)
+Received: from [9.152.212.236] (unknown [9.152.212.236])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 24 Nov 2023 15:59:38 +0000 (GMT)
+Message-ID: <b3250b9a9af2f29ee3d06830746fb6e8ac49271d.camel@linux.ibm.com>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+From: Niklas Schnelle <schnelle@linux.ibm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
+        llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
+        Nathan
+ Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>
+Date: Fri, 24 Nov 2023 16:59:38 +0100
+In-Reply-To: <20231124145529.GG436702@nvidia.com>
+References: <cover.1700766072.git.leon@kernel.org>
+	 <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+	 <c102bdef10b280f47f5fe4538eb168ac730d7644.camel@linux.ibm.com>
+	 <20231124142049.GF436702@nvidia.com>
+	 <14103e31e0c47c0594e7479126ce7fe34f2de467.camel@linux.ibm.com>
+	 <20231124145529.GG436702@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3KltwUJsWxyHpdOewx-yp-U8XnIdt2m9
+X-Proofpoint-GUID: Bk8fkUCCN1I4BSgtnI337b9eqIR7URmK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-24_02,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311240125
 
-Remove this leftover from the times we pre-allocated everything
+On Fri, 2023-11-24 at 10:55 -0400, Jason Gunthorpe wrote:
+> On Fri, Nov 24, 2023 at 03:48:22PM +0100, Niklas Schnelle wrote:
+> > On Fri, 2023-11-24 at 10:20 -0400, Jason Gunthorpe wrote:
+> > > On Fri, Nov 24, 2023 at 03:10:29PM +0100, Niklas Schnelle wrote:
+> > > =20
+> > > > What's the reasoning behind not using the existing memcpy_toio()
+> > > > here?
+> > >=20
+> > > Going forward CPUs are implementing an instruction to do a 64 byte
+> > > aligned store, this is a wrapper for exactly that operation.
+> > >=20
+> > > memcpy_toio() is much more general, it allows unaligned buffers and
+> > > non-multiples of 64. Adapting the general version to generate the
+> > > optimized version in the cases it can is complex and has a codegen
+> > > penalty..
+> >=20
+> > I think you misunderstood me. I understand why you want a separate
+> > memcpy_toio_64(). I just wonder if its generic implementation shouldn't
+> > just be a define or inline wrapper for memcpy_toio(addr, buffer, 64).
+>=20
+> Oh, yes, I totally did.
+>=20
+> I'm worried that x86 will less reliably generate write combining with
+> it's memcpy_toio implemention. It codegens byte copies for that
+> function :(
 
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
- tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py | 2 --
- 1 file changed, 2 deletions(-)
+Oh ok I see what you mean.
 
-diff --git a/tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py b/tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py
-index 77b1106b8388..bb19b8b76d3b 100644
---- a/tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py
-+++ b/tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py
-@@ -23,8 +23,6 @@ class SubPlugin(TdcPlugin):
-         super().__init__()
- 
-     def pre_suite(self, testcount, testlist):
--        from itertools import cycle
--
-         super().pre_suite(testcount, testlist)
- 
-     def prepare_test(self, test):
--- 
-2.40.1
+>=20
+> > Also seeing the second patch of course that would no longer really test
+> > for write combining for us which we can also do but I think that's okay
+> > and you're probably going to use memcpy_toio_64() in more places and
+> > there we really want the PCI store block.
+>=20
+> Right now we don't have in-kernel performance use cases for write
+> combining for mlx5.
 
+Is the code in patch 2 performance critical?
+
+>=20
+> Userspace uses the WC and we already have the special 390 instructions
+> for batching in rdma-core already, IIRC.
+
+Yes, I added that support to rdma-core :-)
+
+>=20
+> So it would be appropriate for s390 to use a consistent path.
+>=20
+> Jason
+
+This should be as easy as adding
+
+#define memcpy_toio_64(to, from) zpci_memcpy_toio(to, from, 64)
+
+to arch/s390/include/asm/io.h. I'm wondering if we should do that as
+part of this series. It's not as good as a special case but probably
+better than the existing loop.
+
+I don't think we have any existing in-kernel users of memcpy_toio() on
+s390 so far though so I'd like to give this some extra testing. Could
+you share instructions on how to exercise the code path of patch 2 on a
+ConnectX-5 or 6? Is this exercised e.g. when using NVMe-oF RDMA?
+
+Thanks,
+Niklas
