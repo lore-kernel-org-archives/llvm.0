@@ -1,169 +1,246 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9C88F60;
-	Sat, 25 Nov 2023 07:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53489443
+	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 08:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fr2/+oZ4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700898229; x=1732434229;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yt9bbEYTnowa33Q1DzxBnJOXuyoDRd4nGLcJUFg9Pk8=;
-  b=Fr2/+oZ4jrA2P/U5xbq/o8dXA3KAkoSfceHeFLceU7gH6jj/wEbY4OWl
-   UijtOhUr2uM8434wlrng5QwoiMZEOGMuugmJ3kNsxiohASbqm4GDyRYgH
-   NopcyrCNX2RYYsdHB88Rr4RCQ7L1Bi+mnO39QnxaJpMU46HgokF/CS/UZ
-   6VC/IvZg2YrgVpsyInltInpR7PhGrxumWq/tmbDZ7WyUEasAvo1JHMDtr
-   kvkRFuBC2llsWsysCH2tzsRfKr4qZ2/nCBgC7fO9n68loeL4WOVQ0OMaU
-   QI9628MyIuKVAY4JKsp8F5XWDW1pJF8PJCxjo1Mc8AMaRoqityyjQMPtW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="392266114"
-X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
-   d="scan'208";a="392266114"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 23:43:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="911623526"
-X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
-   d="scan'208";a="911623526"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Nov 2023 23:43:40 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r6nKE-0003kE-1q;
-	Sat, 25 Nov 2023 07:43:38 +0000
-Date: Sat, 25 Nov 2023 15:42:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:x86/ibt 7/10] arch/x86/kernel/smpboot.c:338:5: error:
- expected string literal in 'asm'
-Message-ID: <202311251405.w5BcBApc-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fsPLZQeM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700900503;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gMl0J2+RHD4jUY3KiZViynDvxTbIoOijDjgvwGKENpw=;
+	b=fsPLZQeMMOntpwdmZVpT4hEirv5aGrV33Ha6AHXqfO970DFhw+NKI3v229yyGs19pZZC9h
+	Ae/Pt0Ne8TVkd1tbsTob28CRp4rTkrBsH+y+QhADNyGdEpxSjtefiWfpw/FCWrQmsOFTKG
+	cmEB6ErthFjJ/+6BGHm1z1Zq9PzNNr4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-634-UVDbxK5GOT-prfMqd68RBA-1; Sat, 25 Nov 2023 03:21:41 -0500
+X-MC-Unique: UVDbxK5GOT-prfMqd68RBA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC39F185A781
+	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 08:21:41 +0000 (UTC)
+Received: from [172.64.3.60] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 63C3940C6EB9;
+	Sat, 25 Nov 2023 08:21:41 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 6 of 229): Test report for master
+ (6.7.0-rc2, mainline.kernel.org-clang, 5b7ad877)
+Date: Sat, 25 Nov 2023 08:21:41 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <49079.123112503214100402@us-mta-634.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
-head:   9ba52bc66d03d8fa986fb5a6d5a026702eb90747
-commit: 3957c7e9f1b4bc3d2062c09d19f16e9bf8451bbc [7/10] x86/boot: Mark start_secondary() with __noendbr
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231125/202311251405.w5BcBApc-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231125/202311251405.w5BcBApc-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311251405.w5BcBApc-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> arch/x86/kernel/smpboot.c:338:5: error: expected string literal in 'asm'
-   asm(__ANNOTATE_NOENDBR(start_secondary));
-       ^
-   1 error generated.
+Kernel information:
+    Commit message: Merge tag 'afs-fixes-20231124' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/dhowells/linux-fs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/116364
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - IPMItool loop stress test
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - block - queue scheduler test
+                 aarch64 - Storage - swraid scsi_raid
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Reboot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - Hardware - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                   s390x - Storage - lvm thinp sanity
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking - Ethernet drivers sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - kselftests upstream - net
+                  x86_64 - kselftests upstream - bpf
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Hardware - CPU: Die Test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking - Ethernet drivers sanity
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
+au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
+            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
+913cfd3efb.camel@intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+Tests that were not ran because of internal issues:=20
+     ppc64le - Networking vnic: ipvlan/basic
+     ppc64le - Libkcapi AF_ALG test
+     ppc64le - Storage - multipath mapping test
+     ppc64le - Storage - dm/common
+     ppc64le - Storage - lvm thinp sanity
+     ppc64le - Reboot test
 
 
-vim +/asm +338 arch/x86/kernel/smpboot.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   249	
-   250	/*
-   251	 * Activate a secondary processor.
-   252	 */
-   253	static void notrace __noendbr start_secondary(void *unused)
-   254	{
-   255		/*
-   256		 * Don't put *anything* except direct CPU state initialization
-   257		 * before cpu_init(), SMP booting is too fragile that we want to
-   258		 * limit the things done here to the most necessary things.
-   259		 */
-   260		cr4_init();
-   261	
-   262		/*
-   263		 * 32-bit specific. 64-bit reaches this code with the correct page
-   264		 * table established. Yet another historical divergence.
-   265		 */
-   266		if (IS_ENABLED(CONFIG_X86_32)) {
-   267			/* switch away from the initial page table */
-   268			load_cr3(swapper_pg_dir);
-   269			__flush_tlb_all();
-   270		}
-   271	
-   272		cpu_init_exception_handling();
-   273	
-   274		/*
-   275		 * Load the microcode before reaching the AP alive synchronization
-   276		 * point below so it is not part of the full per CPU serialized
-   277		 * bringup part when "parallel" bringup is enabled.
-   278		 *
-   279		 * That's even safe when hyperthreading is enabled in the CPU as
-   280		 * the core code starts the primary threads first and leaves the
-   281		 * secondary threads waiting for SIPI. Loading microcode on
-   282		 * physical cores concurrently is a safe operation.
-   283		 *
-   284		 * This covers both the Intel specific issue that concurrent
-   285		 * microcode loading on SMT siblings must be prohibited and the
-   286		 * vendor independent issue`that microcode loading which changes
-   287		 * CPUID, MSRs etc. must be strictly serialized to maintain
-   288		 * software state correctness.
-   289		 */
-   290		load_ucode_ap();
-   291	
-   292		/*
-   293		 * Synchronization point with the hotplug core. Sets this CPUs
-   294		 * synchronization state to ALIVE and spin-waits for the control CPU to
-   295		 * release this CPU for further bringup.
-   296		 */
-   297		cpuhp_ap_sync_alive();
-   298	
-   299		cpu_init();
-   300		fpu__init_cpu();
-   301		rcutree_report_cpu_starting(raw_smp_processor_id());
-   302		x86_cpuinit.early_percpu_clock_init();
-   303	
-   304		ap_starting();
-   305	
-   306		/* Check TSC synchronization with the control CPU. */
-   307		check_tsc_sync_target();
-   308	
-   309		/*
-   310		 * Calibrate the delay loop after the TSC synchronization check.
-   311		 * This allows to skip the calibration when TSC is synchronized
-   312		 * across sockets.
-   313		 */
-   314		ap_calibrate_delay();
-   315	
-   316		speculative_store_bypass_ht_init();
-   317	
-   318		/*
-   319		 * Lock vector_lock, set CPU online and bring the vector
-   320		 * allocator online. Online must be set with vector_lock held
-   321		 * to prevent a concurrent irq setup/teardown from seeing a
-   322		 * half valid vector space.
-   323		 */
-   324		lock_vector_lock();
-   325		set_cpu_online(smp_processor_id(), true);
-   326		lapic_online();
-   327		unlock_vector_lock();
-   328		x86_platform.nmi_init();
-   329	
-   330		/* enable local interrupts */
-   331		local_irq_enable();
-   332	
-   333		x86_cpuinit.setup_percpu_clockev();
-   334	
-   335		wmb();
-   336		cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
-   337	}
- > 338	asm(__ANNOTATE_NOENDBR(start_secondary));
-   339	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
