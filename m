@@ -1,243 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6538C79C4
-	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 07:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8659079E4;
+	Sat, 25 Nov 2023 07:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y7DHtlDl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700898100;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pTfws1diuhFInqVJ7nx0ZPqDczT36aTVDgP+W/Djj1c=;
-	b=Y7DHtlDl2BDALaEh3v6sYt2RKseSBXXVtgEKNMdERoV4frV/W7wk7Eh8CdS6SRfxf8/Gtu
-	cjDiRj7WBYYFFBjGNKmSNAMdR6tHDRLk7MqxDG7Kk408TBRrMqD1WYEA8zsD+nXB+lcfkJ
-	6EYPTE6bht3eIZ7KbiwrnPk02BfvAok=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-93-TTjwcr_YP5Scaxy9mx3NQA-1; Sat,
- 25 Nov 2023 02:41:39 -0500
-X-MC-Unique: TTjwcr_YP5Scaxy9mx3NQA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15BA11C041B6
-	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 07:41:39 +0000 (UTC)
-Received: from [172.64.3.60] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DA4DA1C060B0;
-	Sat, 25 Nov 2023 07:41:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc2,
- mainline.kernel.org-clang, 0f5cc96c)
-Date: Sat, 25 Nov 2023 07:41:38 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G03DLTJo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700898225; x=1732434225;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Bb9FXwRuLyTWwaMz6jNEuebAer5qBwmm7TosoOJwHzk=;
+  b=G03DLTJozAzkodAmom+NQrdB/9yWA72GtBbl6c/W2cAwuag7mQi9M2bH
+   ccaymIWtq+zyKkx5JfDYwg0yJeJgROZbj5L74kAjIse0VIfP/ramuqIcl
+   45TYoDCRmjJINYDudygzP60Kpe+Cxsq0l5GiP+8AAqqf/qfDwHbryi+iL
+   ByP5YspETWeS9t/avYlLvQpCf2pfq0vlXuPoqVSA7yW7OHoAFQ9SJc/Mo
+   t8O+ltn4hLQALWsPYPht1I0321ktPjjkLwe/vXzWP4rtfiipeciMJK60k
+   9uJJeiNLvC2Mhfg9HSyRIuQWh70GDDeRJ+E7fJubtmkpx+SLh2uaBjPkU
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="395321541"
+X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
+   d="scan'208";a="395321541"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 23:43:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
+   d="scan'208";a="9329657"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 24 Nov 2023 23:43:41 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r6nKE-0003kH-24;
+	Sat, 25 Nov 2023 07:43:38 +0000
+Date: Sat, 25 Nov 2023 15:42:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:iommu_fwspec 10/41] drivers/acpi/arm64/iort.c:2014:18:
+ warning: implicit conversion from 'unsigned long long' to 'phys_addr_t' (aka
+ 'unsigned int') changes value from 18446744073709551615 to 4294967295
+Message-ID: <202311251401.PhjhNVYJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <69348.123112502413900169@us-mta-93.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Jason,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+First bad commit (maybe != root cause):
 
-Tested-by: CKI Project <cki-project@redhat.com>
+tree:   https://github.com/jgunthorpe/linux iommu_fwspec
+head:   c87a72108f7683a608ec2eb459ee92b3eeca7406
+commit: bee383fcba7cb2817bb5971e7e600ade21b0f096 [10/41] ACPI: IORT: Allow COMPILE_TEST of IORT
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231125/202311251401.PhjhNVYJ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231125/202311251401.PhjhNVYJ-lkp@intel.com/reproduce)
 
-Kernel information:
-    Commit message: Merge tag 's390-6.7-3' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/s390/linux
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311251401.PhjhNVYJ-lkp@intel.com/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/116370
+All warnings (new ones prefixed by >>):
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
-d, map_write access on the bpf labeled init_t.
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
-            Affected tests:
-                 aarch64 - machineinfo
-                 aarch64 - Boot test
-                 aarch64 - Hardware - IPMItool loop stress test
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - block - filesystem fio test
-                 aarch64 - Storage - block - queue scheduler test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                 aarch64 - Reboot test
-                 aarch64 - Hardware - ACPI table test
-                 aarch64 - POSIX pjd-fstest suites
-                 aarch64 - Filesystem - Loopdev Sanity
-                 aarch64 - AMTU (Abstract Machine Test Utility)
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - Networking vnic: ipvlan/basic
-                 aarch64 - Libkcapi AF_ALG test
-                 aarch64 - Storage - multipath mapping test
-                 aarch64 - Storage - lvm thinp sanity
-                 aarch64 - Hardware - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - Memory function: memfd_create
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Storage - multipath mapping test
-                  x86_64 - machineinfo
-                  x86_64 - Boot test
-                  x86_64 - Hardware - CPU: Die Test
-                  x86_64 - Hardware - IPMItool loop stress test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - block - queue scheduler test
-                  x86_64 - Storage - swraid scsi_raid
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Reboot test
-                  x86_64 - Hardware - ACPI table test
-                  x86_64 - POSIX pjd-fstest suites
-                  x86_64 - Filesystem - Loopdev Sanity
-                  x86_64 - Memory function: memfd_create
-                  x86_64 - AMTU (Abstract Machine Test Utility)
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - Networking vnic: ipvlan/basic
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 - Hardware - pciutils: sanity smoke test
-                  x86_64 - Storage - multipath mapping test
-                  x86_64 - kselftests upstream - net
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - machineinfo
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Hardware - CPU: Die Test
-                  x86_64 (debug) - Storage - swraid scsi_raid
-                  x86_64 (debug) - Reboot test
-                  x86_64 (debug) - Hardware - ACPI table test
-                  x86_64 (debug) - POSIX pjd-fstest suites
-                  x86_64 (debug) - Filesystem - Loopdev Sanity
-                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-                  x86_64 (debug) - Networking - Ethernet drivers sanity
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
-                  x86_64 (debug) - Storage - lvm thinp sanity
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
-au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
-            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
-913cfd3efb.camel@intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+>> drivers/acpi/arm64/iort.c:2014:18: warning: implicit conversion from 'unsigned long long' to 'phys_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+                           local_limit = DMA_BIT_MASK(ncomp->memory_address_limit);
+                                       ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   drivers/acpi/arm64/iort.c:2023:18: warning: implicit conversion from 'unsigned long long' to 'phys_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+                           local_limit = DMA_BIT_MASK(rc->memory_address_limit);
+                                       ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   2 warnings generated.
 
 
+vim +2014 drivers/acpi/arm64/iort.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1978  
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1979  #ifdef CONFIG_ZONE_DMA
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1980  /*
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1981   * Extract the highest CPU physical address accessible to all DMA masters in
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1982   * the system. PHYS_ADDR_MAX is returned when no constrained device is found.
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1983   */
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1984  phys_addr_t __init acpi_iort_dma_get_max_cpu_address(void)
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1985  {
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1986  	phys_addr_t limit = PHYS_ADDR_MAX;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1987  	struct acpi_iort_node *node, *end;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1988  	struct acpi_table_iort *iort;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1989  	acpi_status status;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1990  	int i;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1991  
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1992  	if (acpi_disabled)
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1993  		return limit;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1994  
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1995  	status = acpi_get_table(ACPI_SIG_IORT, 0,
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1996  				(struct acpi_table_header **)&iort);
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1997  	if (ACPI_FAILURE(status))
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1998  		return limit;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  1999  
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2000  	node = ACPI_ADD_PTR(struct acpi_iort_node, iort, iort->node_offset);
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2001  	end = ACPI_ADD_PTR(struct acpi_iort_node, iort, iort->header.length);
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2002  
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2003  	for (i = 0; i < iort->node_count; i++) {
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2004  		if (node >= end)
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2005  			break;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2006  
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2007  		switch (node->type) {
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2008  			struct acpi_iort_named_component *ncomp;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2009  			struct acpi_iort_root_complex *rc;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2010  			phys_addr_t local_limit;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2011  
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2012  		case ACPI_IORT_NODE_NAMED_COMPONENT:
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19  2013  			ncomp = (struct acpi_iort_named_component *)node->node_data;
+2b8652936f0ca9 Ard Biesheuvel 2020-11-19 @2014  			local_limit = DMA_BIT_MASK(ncomp->memory_address_limit);
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 2014 was first introduced by commit
+:::::: 2b8652936f0ca9ca2e6c984ae76c7bfcda1b3f22 arm64: mm: Set ZONE_DMA size based on early IORT scan
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Ard Biesheuvel <ardb@kernel.org>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
