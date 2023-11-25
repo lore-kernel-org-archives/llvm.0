@@ -1,242 +1,248 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85FB23B0;
-	Sat, 25 Nov 2023 06:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B303F23C1
+	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 07:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BPlr4Ov/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700893279; x=1732429279;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YHJFsRDZmGbTw/ab1NTnvNsGcBmbe3O7cYS67aw2GNE=;
-  b=BPlr4Ov/dGMHdR5hC06cHOme5yyssy3X5G2fyu3JsgUonUIiL3dV4HxM
-   9R6+qKU5xT2vKZ8koCXNAARznslRfpQyGIc+ssOMtCqRYKw23y1wT3gxD
-   lvWlkrVtut+ZnI26ypS8W0fC6t55hXypJHCWorOJyoG5lAN5AcJugUPo8
-   KXz9x4W6bgx0XioduIcL+alcA1IXBbz2nbWXPftujOBFJ8cHpKDUycqS8
-   lEIlFkLjfFLQGNMKiaFDQcMjWwKqNzLp6pi4eW6FOgrYGbuDndK1rCVzK
-   OTO07CieF8sQs867dWahy+QBEk7qbOVjXVlODBaFIUzvg02u+a6VSfOSB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="478702437"
-X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
-   d="scan'208";a="478702437"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 22:21:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="911613422"
-X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
-   d="scan'208";a="911613422"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Nov 2023 22:21:09 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r6m2M-0003gz-37;
-	Sat, 25 Nov 2023 06:21:06 +0000
-Date: Sat, 25 Nov 2023 14:20:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:vfs.mount 6/11] fs/namespace.c:4957:1: warning: stack
- frame size (1392) exceeds limit (1024) in 'sys_statmount'
-Message-ID: <202311251133.eWacwEik-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y0MORMt5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700896901;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bP2QUtzsOIZRRauHTRd2jyAn4uZ2zgLkFaHk/PMuwBw=;
+	b=Y0MORMt5royCRVLP8leocS3L1b/KhEIzWHjsVCxcy7VPkmvSzpeHuG4zxPNuUjNvInyHiS
+	PdYi5qHmVw5K8vEqg2aB7RYh5Pdk61JKIKbw98Ed04DVV1vhg2wEJJqHA6FFrnC+gYf5JT
+	zzlWQAx5tPB3vBqv5f4OpvdBIKqy7M0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-227-pGc1U-YZM7mRiHpp6mLJOg-1; Sat, 25 Nov 2023 02:21:35 -0500
+X-MC-Unique: pGc1U-YZM7mRiHpp6mLJOg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AC7F811000
+	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 07:21:35 +0000 (UTC)
+Received: from [172.64.3.60] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4E3F336E2;
+	Sat, 25 Nov 2023 07:21:32 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 4 of 229): Test report for master
+ (6.7.0-rc2, mainline.kernel.org-clang, fa2b906f)
+Date: Sat, 25 Nov 2023 07:21:32 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <63874.123112502213500289@us-mta-227.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.mount
-head:   229dc17d71b0e6b647d2fe00278da6ec25e6aafe
-commit: 7a345f533f6c7ee7456e767b182ece39627f7c44 [6/11] statmount: simplify string option retrieval
-config: powerpc-gamecube_defconfig (https://download.01.org/0day-ci/archive/20231125/202311251133.eWacwEik-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231125/202311251133.eWacwEik-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311251133.eWacwEik-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:37:1: note: expanded from here
-      37 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:610:56: note: expanded from macro '__do_insw'
-     610 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:92:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:39:1: note: expanded from here
-      39 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:92:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:41:1: note: expanded from here
-      41 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:92:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:43:1: note: expanded from here
-      43 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from fs/namespace.c:11:
-   In file included from include/linux/syscalls.h:92:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:45:1: note: expanded from here
-      45 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
->> fs/namespace.c:4957:1: warning: stack frame size (1392) exceeds limit (1024) in 'sys_statmount' [-Wframe-larger-than]
-    4957 | SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
-         | ^
-   include/linux/syscalls.h:224:36: note: expanded from macro 'SYSCALL_DEFINE4'
-     224 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:232:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     232 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   arch/powerpc/include/asm/syscall_wrapper.h:23:7: note: expanded from macro '__SYSCALL_DEFINEx'
-      23 |         long sys##name(const struct pt_regs *regs)                      \
-         |              ^
-   <scratch space>:139:1: note: expanded from here
-     139 | sys_statmount
-         | ^
-   7 warnings generated.
+Kernel information:
+    Commit message: Merge tag 'vfs-6.7-rc3.fixes' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/vfs/vfs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/116360
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - IPMItool loop stress test
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - block - filesystem fio test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Reboot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - Memory function: memfd_create
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - Hardware - Firmware test suite
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - block - queue scheduler test
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - Storage - lvm thinp sanity
+                  x86_64 - kselftests upstream - net
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Hardware - CPU: Die Test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking - Ethernet drivers sanity
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
+au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
+            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
+913cfd3efb.camel@intel.com/
+            Affected tests:
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - xfstests - ext4
+     aarch64 - xfstests - xfs
+     aarch64 - xfstests - btrfs
+     aarch64 - Reboot test
 
 
-vim +/sys_statmount +4957 fs/namespace.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4956  
-e9b59e661906d7 Miklos Szeredi    2023-10-25 @4957  SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4958  		struct statmount __user *, buf, size_t, bufsize,
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4959  		unsigned int, flags)
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4960  {
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4961  	struct vfsmount *mnt;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4962  	struct mnt_id_req kreq;
-7a345f533f6c7e Christian Brauner 2023-11-19  4963  	struct kstatmount ks;
-7a345f533f6c7e Christian Brauner 2023-11-19  4964  	/* We currently support retrieval of 3 strings. */
-7a345f533f6c7e Christian Brauner 2023-11-19  4965  	size_t seq_size = 3 * PATH_MAX;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4966  	int ret;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4967  
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4968  	if (flags)
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4969  		return -EINVAL;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4970  
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4971  	if (copy_from_user(&kreq, req, sizeof(kreq)))
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4972  		return -EFAULT;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4973  
-7a345f533f6c7e Christian Brauner 2023-11-19  4974  retry:
-7a345f533f6c7e Christian Brauner 2023-11-19  4975  	ret = prepare_kstatmount(&ks, &kreq, buf, bufsize, seq_size);
-7a345f533f6c7e Christian Brauner 2023-11-19  4976  	if (ret)
-7a345f533f6c7e Christian Brauner 2023-11-19  4977  		return ret;
-7a345f533f6c7e Christian Brauner 2023-11-19  4978  
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4979  	down_read(&namespace_sem);
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4980  	mnt = lookup_mnt_in_ns(kreq.mnt_id, current->nsproxy->mnt_ns);
-7a345f533f6c7e Christian Brauner 2023-11-19  4981  	if (!mnt) {
-7a345f533f6c7e Christian Brauner 2023-11-19  4982  		up_read(&namespace_sem);
-7a345f533f6c7e Christian Brauner 2023-11-19  4983  		kvfree(ks.seq.buf);
-7a345f533f6c7e Christian Brauner 2023-11-19  4984  		return -ENOENT;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4985  	}
-7a345f533f6c7e Christian Brauner 2023-11-19  4986  
-7a345f533f6c7e Christian Brauner 2023-11-19  4987  	ks.mnt = mnt;
-7a345f533f6c7e Christian Brauner 2023-11-19  4988  	get_fs_root(current->fs, &ks.root);
-7a345f533f6c7e Christian Brauner 2023-11-19  4989  	ret = do_statmount(&ks);
-7a345f533f6c7e Christian Brauner 2023-11-19  4990  	path_put(&ks.root);
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4991  	up_read(&namespace_sem);
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4992  
-7a345f533f6c7e Christian Brauner 2023-11-19  4993  	if (!ret)
-7a345f533f6c7e Christian Brauner 2023-11-19  4994  		ret = copy_statmount_to_user(&ks);
-7a345f533f6c7e Christian Brauner 2023-11-19  4995  	kvfree(ks.seq.buf);
-7a345f533f6c7e Christian Brauner 2023-11-19  4996  	if (retry_statmount(ret, &seq_size))
-7a345f533f6c7e Christian Brauner 2023-11-19  4997  		goto retry;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4998  	return ret;
-e9b59e661906d7 Miklos Szeredi    2023-10-25  4999  }
-e9b59e661906d7 Miklos Szeredi    2023-10-25  5000  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: The code at line 4957 was first introduced by commit
-:::::: e9b59e661906d7565680cb9e2bbb3fa3360ab2ce add statmount(2) syscall
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-:::::: TO: Miklos Szeredi <mszeredi@redhat.com>
-:::::: CC: Christian Brauner <brauner@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
