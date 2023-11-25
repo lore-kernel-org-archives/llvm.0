@@ -1,48 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5324379F2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9C88F60;
 	Sat, 25 Nov 2023 07:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a6oKtAF0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fr2/+oZ4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1700898229; x=1732434229;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PUotlKVbKNCg36X6xDAsXFx5MD+HjusfkFLH3NXqtis=;
-  b=a6oKtAF0/RrSk4gMrn6uUP3gSzHNiU7dQq4iqcOxiU6pyEZ+/FFbdLc8
-   ADH2V0yvX881pDHXqCoDCffQfdjuJzwoOjKeSMIchSR5zPGdte5+Rgh+0
-   x0p5fquyaDxzX4AP39JulbMBPTpubuvsqZOcnPdt+UC5cj7cBVdXln1mn
-   qyg4hS5KL3PYTQH5CKszRi9EXu3gtu38UGt3y8e71QDiRDJ10MtXv+1Jf
-   kBl3ZXtnxK+q6nTbr+/5hZ1fHbQmnX9CF0mGr57VaqGPatClDChKWCd5w
-   suJqiAoeBl6zxWOtmezntitkSa0YDjSFhP8z7TR9HLIoVA7No9V7slxAZ
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yt9bbEYTnowa33Q1DzxBnJOXuyoDRd4nGLcJUFg9Pk8=;
+  b=Fr2/+oZ4jrA2P/U5xbq/o8dXA3KAkoSfceHeFLceU7gH6jj/wEbY4OWl
+   UijtOhUr2uM8434wlrng5QwoiMZEOGMuugmJ3kNsxiohASbqm4GDyRYgH
+   NopcyrCNX2RYYsdHB88Rr4RCQ7L1Bi+mnO39QnxaJpMU46HgokF/CS/UZ
+   6VC/IvZg2YrgVpsyInltInpR7PhGrxumWq/tmbDZ7WyUEasAvo1JHMDtr
+   kvkRFuBC2llsWsysCH2tzsRfKr4qZ2/nCBgC7fO9n68loeL4WOVQ0OMaU
+   QI9628MyIuKVAY4JKsp8F5XWDW1pJF8PJCxjo1Mc8AMaRoqityyjQMPtW
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="392266113"
+X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="392266114"
 X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
-   d="scan'208";a="392266113"
+   d="scan'208";a="392266114"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 23:43:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="911623524"
+X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="911623526"
 X-IronPort-AV: E=Sophos;i="6.04,225,1695711600"; 
-   d="scan'208";a="911623524"
+   d="scan'208";a="911623526"
 Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
   by fmsmga001.fm.intel.com with ESMTP; 24 Nov 2023 23:43:40 -0800
 Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r6nKE-0003k8-15;
+	id 1r6nKE-0003kE-1q;
 	Sat, 25 Nov 2023 07:43:38 +0000
-Date: Sat, 25 Nov 2023 15:42:37 +0800
+Date: Sat, 25 Nov 2023 15:42:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiqian Chen <Jiqian.Chen@amd.com>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC KERNEL PATCH v2 2/3] xen/pvh: Unmask irq for passthrough
- device in PVH dom0
-Message-ID: <202311251435.j0xYajwA-lkp@intel.com>
-References: <20231124103123.3263471-3-Jiqian.Chen@amd.com>
+Subject: [peterz-queue:x86/ibt 7/10] arch/x86/kernel/smpboot.c:338:5: error:
+ expected string literal in 'asm'
+Message-ID: <202311251405.w5BcBApc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,129 +49,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231124103123.3263471-3-Jiqian.Chen@amd.com>
 
-Hi Jiqian,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v6.7-rc1]
-[also build test ERROR on next-20231124]
-[cannot apply to xen-tip/linux-next tip/irq/core tip/x86/core linus/master v6.7-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiqian-Chen/xen-pci-Add-xen_reset_device_state-function/20231124-183607
-base:   v6.7-rc1
-patch link:    https://lore.kernel.org/r/20231124103123.3263471-3-Jiqian.Chen%40amd.com
-patch subject: [RFC KERNEL PATCH v2 2/3] xen/pvh: Unmask irq for passthrough device in PVH dom0
-config: hexagon-randconfig-002-20231125 (https://download.01.org/0day-ci/archive/20231125/202311251435.j0xYajwA-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
+head:   9ba52bc66d03d8fa986fb5a6d5a026702eb90747
+commit: 3957c7e9f1b4bc3d2062c09d19f16e9bf8451bbc [7/10] x86/boot: Mark start_secondary() with __noendbr
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231125/202311251405.w5BcBApc-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231125/202311251435.j0xYajwA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231125/202311251405.w5BcBApc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311251435.j0xYajwA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311251405.w5BcBApc-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/hexagon/kernel/irq_cpu.c:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from arch/hexagon/kernel/irq_cpu.c:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from arch/hexagon/kernel/irq_cpu.c:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> arch/hexagon/kernel/irq_cpu.c:22:13: error: static declaration of 'unmask_irq' follows non-static declaration
-   static void unmask_irq(struct irq_data *data)
-               ^
-   include/linux/irq.h:662:13: note: previous declaration is here
-   extern void unmask_irq(struct irq_desc *desc);
-               ^
->> arch/hexagon/kernel/irq_cpu.c:48:16: error: incompatible function pointer types initializing 'void (*)(struct irq_data *)' with an expression of type 'void (struct irq_desc *)' [-Wincompatible-function-pointer-types]
-           .irq_unmask     = unmask_irq,
-                             ^~~~~~~~~~
-   6 warnings and 2 errors generated.
+>> arch/x86/kernel/smpboot.c:338:5: error: expected string literal in 'asm'
+   asm(__ANNOTATE_NOENDBR(start_secondary));
+       ^
+   1 error generated.
 
 
-vim +/unmask_irq +22 arch/hexagon/kernel/irq_cpu.c
+vim +/asm +338 arch/x86/kernel/smpboot.c
 
-2ac211bc423a0e Richard Kuo 2011-10-31  21  
-2ac211bc423a0e Richard Kuo 2011-10-31 @22  static void unmask_irq(struct irq_data *data)
-2ac211bc423a0e Richard Kuo 2011-10-31  23  {
-2ac211bc423a0e Richard Kuo 2011-10-31  24  	__vmintop_locen((long) data->irq);
-2ac211bc423a0e Richard Kuo 2011-10-31  25  }
-2ac211bc423a0e Richard Kuo 2011-10-31  26  
-2ac211bc423a0e Richard Kuo 2011-10-31  27  /*  This is actually all we need for handle_fasteoi_irq  */
-2ac211bc423a0e Richard Kuo 2011-10-31  28  static void eoi_irq(struct irq_data *data)
-2ac211bc423a0e Richard Kuo 2011-10-31  29  {
-2ac211bc423a0e Richard Kuo 2011-10-31  30  	__vmintop_globen((long) data->irq);
-2ac211bc423a0e Richard Kuo 2011-10-31  31  }
-2ac211bc423a0e Richard Kuo 2011-10-31  32  
-2ac211bc423a0e Richard Kuo 2011-10-31  33  /* Power mamangement wake call. We don't need this, however,
-2ac211bc423a0e Richard Kuo 2011-10-31  34   * if this is absent, then an -ENXIO error is returned to the
-2ac211bc423a0e Richard Kuo 2011-10-31  35   * msm_serial driver, and it fails to correctly initialize.
-2ac211bc423a0e Richard Kuo 2011-10-31  36   * This is a bug in the msm_serial driver, but, for now, we
-2ac211bc423a0e Richard Kuo 2011-10-31  37   * work around it here, by providing this bogus handler.
-2ac211bc423a0e Richard Kuo 2011-10-31  38   * XXX FIXME!!! remove this when msm_serial is fixed.
-2ac211bc423a0e Richard Kuo 2011-10-31  39   */
-2ac211bc423a0e Richard Kuo 2011-10-31  40  static int set_wake(struct irq_data *data, unsigned int on)
-2ac211bc423a0e Richard Kuo 2011-10-31  41  {
-2ac211bc423a0e Richard Kuo 2011-10-31  42  	return 0;
-2ac211bc423a0e Richard Kuo 2011-10-31  43  }
-2ac211bc423a0e Richard Kuo 2011-10-31  44  
-2ac211bc423a0e Richard Kuo 2011-10-31  45  static struct irq_chip hexagon_irq_chip = {
-2ac211bc423a0e Richard Kuo 2011-10-31  46  	.name		= "HEXAGON",
-2ac211bc423a0e Richard Kuo 2011-10-31  47  	.irq_mask	= mask_irq,
-2ac211bc423a0e Richard Kuo 2011-10-31 @48  	.irq_unmask	= unmask_irq,
-2ac211bc423a0e Richard Kuo 2011-10-31  49  	.irq_set_wake	= set_wake,
-2ac211bc423a0e Richard Kuo 2011-10-31  50  	.irq_eoi	= eoi_irq
-2ac211bc423a0e Richard Kuo 2011-10-31  51  };
-2ac211bc423a0e Richard Kuo 2011-10-31  52  
+   249	
+   250	/*
+   251	 * Activate a secondary processor.
+   252	 */
+   253	static void notrace __noendbr start_secondary(void *unused)
+   254	{
+   255		/*
+   256		 * Don't put *anything* except direct CPU state initialization
+   257		 * before cpu_init(), SMP booting is too fragile that we want to
+   258		 * limit the things done here to the most necessary things.
+   259		 */
+   260		cr4_init();
+   261	
+   262		/*
+   263		 * 32-bit specific. 64-bit reaches this code with the correct page
+   264		 * table established. Yet another historical divergence.
+   265		 */
+   266		if (IS_ENABLED(CONFIG_X86_32)) {
+   267			/* switch away from the initial page table */
+   268			load_cr3(swapper_pg_dir);
+   269			__flush_tlb_all();
+   270		}
+   271	
+   272		cpu_init_exception_handling();
+   273	
+   274		/*
+   275		 * Load the microcode before reaching the AP alive synchronization
+   276		 * point below so it is not part of the full per CPU serialized
+   277		 * bringup part when "parallel" bringup is enabled.
+   278		 *
+   279		 * That's even safe when hyperthreading is enabled in the CPU as
+   280		 * the core code starts the primary threads first and leaves the
+   281		 * secondary threads waiting for SIPI. Loading microcode on
+   282		 * physical cores concurrently is a safe operation.
+   283		 *
+   284		 * This covers both the Intel specific issue that concurrent
+   285		 * microcode loading on SMT siblings must be prohibited and the
+   286		 * vendor independent issue`that microcode loading which changes
+   287		 * CPUID, MSRs etc. must be strictly serialized to maintain
+   288		 * software state correctness.
+   289		 */
+   290		load_ucode_ap();
+   291	
+   292		/*
+   293		 * Synchronization point with the hotplug core. Sets this CPUs
+   294		 * synchronization state to ALIVE and spin-waits for the control CPU to
+   295		 * release this CPU for further bringup.
+   296		 */
+   297		cpuhp_ap_sync_alive();
+   298	
+   299		cpu_init();
+   300		fpu__init_cpu();
+   301		rcutree_report_cpu_starting(raw_smp_processor_id());
+   302		x86_cpuinit.early_percpu_clock_init();
+   303	
+   304		ap_starting();
+   305	
+   306		/* Check TSC synchronization with the control CPU. */
+   307		check_tsc_sync_target();
+   308	
+   309		/*
+   310		 * Calibrate the delay loop after the TSC synchronization check.
+   311		 * This allows to skip the calibration when TSC is synchronized
+   312		 * across sockets.
+   313		 */
+   314		ap_calibrate_delay();
+   315	
+   316		speculative_store_bypass_ht_init();
+   317	
+   318		/*
+   319		 * Lock vector_lock, set CPU online and bring the vector
+   320		 * allocator online. Online must be set with vector_lock held
+   321		 * to prevent a concurrent irq setup/teardown from seeing a
+   322		 * half valid vector space.
+   323		 */
+   324		lock_vector_lock();
+   325		set_cpu_online(smp_processor_id(), true);
+   326		lapic_online();
+   327		unlock_vector_lock();
+   328		x86_platform.nmi_init();
+   329	
+   330		/* enable local interrupts */
+   331		local_irq_enable();
+   332	
+   333		x86_cpuinit.setup_percpu_clockev();
+   334	
+   335		wmb();
+   336		cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
+   337	}
+ > 338	asm(__ANNOTATE_NOENDBR(start_secondary));
+   339	
 
 -- 
 0-DAY CI Kernel Test Service
