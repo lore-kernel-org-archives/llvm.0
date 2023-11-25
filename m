@@ -1,246 +1,472 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53489443
-	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 08:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91913C2D6;
+	Sat, 25 Nov 2023 09:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fsPLZQeM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700900503;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gMl0J2+RHD4jUY3KiZViynDvxTbIoOijDjgvwGKENpw=;
-	b=fsPLZQeMMOntpwdmZVpT4hEirv5aGrV33Ha6AHXqfO970DFhw+NKI3v229yyGs19pZZC9h
-	Ae/Pt0Ne8TVkd1tbsTob28CRp4rTkrBsH+y+QhADNyGdEpxSjtefiWfpw/FCWrQmsOFTKG
-	cmEB6ErthFjJ/+6BGHm1z1Zq9PzNNr4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-634-UVDbxK5GOT-prfMqd68RBA-1; Sat, 25 Nov 2023 03:21:41 -0500
-X-MC-Unique: UVDbxK5GOT-prfMqd68RBA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC39F185A781
-	for <llvm@lists.linux.dev>; Sat, 25 Nov 2023 08:21:41 +0000 (UTC)
-Received: from [172.64.3.60] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 63C3940C6EB9;
-	Sat, 25 Nov 2023 08:21:41 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 6 of 229): Test report for master
- (6.7.0-rc2, mainline.kernel.org-clang, 5b7ad877)
-Date: Sat, 25 Nov 2023 08:21:41 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nlxAzeqw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700905822; x=1732441822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TCt+iEfaSGWgIQZIfzmbjrCV+kFWZ7dJ6VUTIeE/jX0=;
+  b=nlxAzeqwrgwe1kRU/mlfrSvlHYrZcKPbyRY4H7FyxmnJr9ad9a46UN/r
+   y1SOAyv7H0oVzDNEAUfELCPTLkec5/y2CxDd5Lx8iJJLwWZhZRE+D/G5q
+   PIfwsMRML9QdtUkQTFk3ln0LDzjwBuQebZLpW8LcphjxZ20Y3tf1Xhh9k
+   kVX9vgSD68qz2RJ/EqfwbftHQHSY61OdHXL3zYeX74xn/Kelzfra4FwJc
+   fzDdFMztDDWvvPf3mAK5U4+JLHeYUfcADF4nKMInL/o9AKzlzo64HX1vM
+   vBKlCmpAOnd3tWNqqA2Y+qGqd3bc996ExgPKjweziGK7HxQNNbIHar2yU
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="389656146"
+X-IronPort-AV: E=Sophos;i="6.04,226,1695711600"; 
+   d="scan'208";a="389656146"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2023 01:50:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10904"; a="885477614"
+X-IronPort-AV: E=Sophos;i="6.04,226,1695711600"; 
+   d="scan'208";a="885477614"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Nov 2023 01:50:13 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r6pIh-0003rB-0h;
+	Sat, 25 Nov 2023 09:50:11 +0000
+Date: Sat, 25 Nov 2023 17:49:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: guoren@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+	keescook@chromium.org, paulmck@kernel.org, ubizjak@gmail.com,
+	tglx@linutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2] locking/atomic: scripts: Increase template priority
+ in order variants
+Message-ID: <202311251758.xmI3qAhf-lkp@intel.com>
+References: <20231125013025.3620560-1-guoren@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <49079.123112503214100402@us-mta-634.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231125013025.3620560-1-guoren@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on kees/for-next/pstore]
+[also build test ERROR on kees/for-next/kspp]
+[cannot apply to linus/master v6.7-rc2 next-20231124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'afs-fixes-20231124' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/dhowells/linux-fs
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/locking-atomic-scripts-Increase-template-priority-in-order-variants/20231125-093207
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+patch link:    https://lore.kernel.org/r/20231125013025.3620560-1-guoren%40kernel.org
+patch subject: [PATCH V2] locking/atomic: scripts: Increase template priority in order variants
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231125/202311251758.xmI3qAhf-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231125/202311251758.xmI3qAhf-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/116364
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311251758.xmI3qAhf-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
-d, map_write access on the bpf labeled init_t.
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
-            Affected tests:
-                 aarch64 - machineinfo
-                 aarch64 - Boot test
-                 aarch64 - Hardware - IPMItool loop stress test
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - block - queue scheduler test
-                 aarch64 - Storage - swraid scsi_raid
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                 aarch64 - Reboot test
-                 aarch64 - Hardware - ACPI table test
-                 aarch64 - POSIX pjd-fstest suites
-                 aarch64 - Filesystem - Loopdev Sanity
-                 aarch64 - AMTU (Abstract Machine Test Utility)
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - Networking vnic: ipvlan/basic
-                 aarch64 - Libkcapi AF_ALG test
-                 aarch64 - Storage - multipath mapping test
-                 aarch64 - Hardware - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - Memory function: memfd_create
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Storage - multipath mapping test
-                   s390x - Storage - lvm thinp sanity
-                  x86_64 - machineinfo
-                  x86_64 - Boot test
-                  x86_64 - Hardware - CPU: Die Test
-                  x86_64 - Hardware - IPMItool loop stress test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - block - filesystem fio test
-                  x86_64 - Storage - swraid scsi_raid
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Reboot test
-                  x86_64 - Hardware - ACPI table test
-                  x86_64 - POSIX pjd-fstest suites
-                  x86_64 - Filesystem - Loopdev Sanity
-                  x86_64 - Memory function: memfd_create
-                  x86_64 - AMTU (Abstract Machine Test Utility)
-                  x86_64 - Networking - Ethernet drivers sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - Networking vnic: ipvlan/basic
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 - Hardware - pciutils: sanity smoke test
-                  x86_64 - Storage - multipath mapping test
-                  x86_64 - kselftests upstream - net
-                  x86_64 - kselftests upstream - bpf
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - machineinfo
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Hardware - CPU: Die Test
-                  x86_64 (debug) - Storage - swraid scsi_raid
-                  x86_64 (debug) - Reboot test
-                  x86_64 (debug) - Hardware - ACPI table test
-                  x86_64 (debug) - POSIX pjd-fstest suites
-                  x86_64 (debug) - Filesystem - Loopdev Sanity
-                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-                  x86_64 (debug) - Networking - Ethernet drivers sanity
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
-                  x86_64 (debug) - Storage - lvm thinp sanity
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
-au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
-            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
-913cfd3efb.camel@intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+All errors (new ones prefixed by >>):
 
-Tests that were not ran because of internal issues:=20
-     ppc64le - Networking vnic: ipvlan/basic
-     ppc64le - Libkcapi AF_ALG test
-     ppc64le - Storage - multipath mapping test
-     ppc64le - Storage - dm/common
-     ppc64le - Storage - lvm thinp sanity
-     ppc64le - Reboot test
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+>> include/linux/atomic/atomic-arch-fallback.h:3961:9: error: invalid output size for constraint '+q'
+           return raw_xchg_acquire(&v->counter, new);
+                  ^
+   include/linux/atomic/atomic-arch-fallback.h:27:26: note: expanded from macro 'raw_xchg_acquire'
+   #define raw_xchg_acquire arch_xchg
+                            ^
+   arch/x86/include/asm/cmpxchg.h:78:27: note: expanded from macro 'arch_xchg'
+   #define arch_xchg(ptr, v)       __xchg_op((ptr), (v), xchg, "")
+                                   ^
+   arch/x86/include/asm/cmpxchg.h:48:19: note: expanded from macro '__xchg_op'
+                                         : "+q" (__ret), "+m" (*(ptr))     \
+                                                 ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+   include/linux/atomic/atomic-arch-fallback.h:3985:9: error: invalid output size for constraint '+q'
+           return raw_xchg_release(&v->counter, new);
+                  ^
+   include/linux/atomic/atomic-arch-fallback.h:39:26: note: expanded from macro 'raw_xchg_release'
+   #define raw_xchg_release arch_xchg
+                            ^
+   arch/x86/include/asm/cmpxchg.h:78:27: note: expanded from macro 'arch_xchg'
+   #define arch_xchg(ptr, v)       __xchg_op((ptr), (v), xchg, "")
+                                   ^
+   arch/x86/include/asm/cmpxchg.h:48:19: note: expanded from macro '__xchg_op'
+                                         : "+q" (__ret), "+m" (*(ptr))     \
+                                                 ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+   include/linux/atomic/atomic-arch-fallback.h:4006:9: error: invalid output size for constraint '+q'
+           return raw_xchg_relaxed(&v->counter, new);
+                  ^
+   include/linux/atomic/atomic-arch-fallback.h:48:26: note: expanded from macro 'raw_xchg_relaxed'
+   #define raw_xchg_relaxed arch_xchg
+                            ^
+   arch/x86/include/asm/cmpxchg.h:78:27: note: expanded from macro 'arch_xchg'
+   #define arch_xchg(ptr, v)       __xchg_op((ptr), (v), xchg, "")
+                                   ^
+   arch/x86/include/asm/cmpxchg.h:48:19: note: expanded from macro '__xchg_op'
+                                         : "+q" (__ret), "+m" (*(ptr))     \
+                                                 ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+>> include/linux/atomic/atomic-arch-fallback.h:4060:9: error: invalid output size for constraint '=a'
+           return raw_cmpxchg_acquire(&v->counter, old, new);
+                  ^
+   include/linux/atomic/atomic-arch-fallback.h:70:29: note: expanded from macro 'raw_cmpxchg_acquire'
+   #define raw_cmpxchg_acquire arch_cmpxchg
+                               ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+           __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+           __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:95:17: note: expanded from macro '__raw_cmpxchg'
+                                : "=a" (__ret), "+m" (*__ptr)              \
+                                        ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+>> include/linux/atomic/atomic-arch-fallback.h:4060:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-arch-fallback.h:70:29: note: expanded from macro 'raw_cmpxchg_acquire'
+   #define raw_cmpxchg_acquire arch_cmpxchg
+                               ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+           __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+           __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:104:17: note: expanded from macro '__raw_cmpxchg'
+                                : "=a" (__ret), "+m" (*__ptr)              \
+                                        ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+>> include/linux/atomic/atomic-arch-fallback.h:4060:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-arch-fallback.h:70:29: note: expanded from macro 'raw_cmpxchg_acquire'
+   #define raw_cmpxchg_acquire arch_cmpxchg
+                               ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+           __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+           __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:113:17: note: expanded from macro '__raw_cmpxchg'
+                                : "=a" (__ret), "+m" (*__ptr)              \
+                                        ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+>> include/linux/atomic/atomic-arch-fallback.h:4060:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-arch-fallback.h:70:29: note: expanded from macro 'raw_cmpxchg_acquire'
+   #define raw_cmpxchg_acquire arch_cmpxchg
+                               ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+           __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+           __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:122:17: note: expanded from macro '__raw_cmpxchg'
+                                : "=a" (__ret), "+m" (*__ptr)              \
+                                        ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+   include/linux/atomic/atomic-arch-fallback.h:4085:9: error: invalid output size for constraint '=a'
+           return raw_cmpxchg_release(&v->counter, old, new);
+                  ^
+   include/linux/atomic/atomic-arch-fallback.h:82:29: note: expanded from macro 'raw_cmpxchg_release'
+   #define raw_cmpxchg_release arch_cmpxchg
+                               ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+           __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+           __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:95:17: note: expanded from macro '__raw_cmpxchg'
+                                : "=a" (__ret), "+m" (*__ptr)              \
+                                        ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+   include/linux/atomic/atomic-arch-fallback.h:4085:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-arch-fallback.h:82:29: note: expanded from macro 'raw_cmpxchg_release'
+   #define raw_cmpxchg_release arch_cmpxchg
+                               ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+           __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+           __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:104:17: note: expanded from macro '__raw_cmpxchg'
+                                : "=a" (__ret), "+m" (*__ptr)              \
+                                        ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+   include/linux/atomic/atomic-arch-fallback.h:4085:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-arch-fallback.h:82:29: note: expanded from macro 'raw_cmpxchg_release'
+   #define raw_cmpxchg_release arch_cmpxchg
+                               ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+           __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+           __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:113:17: note: expanded from macro '__raw_cmpxchg'
+                                : "=a" (__ret), "+m" (*__ptr)              \
+                                        ^
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+   In file included from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:80:
+   include/linux/atomic/atomic-arch-fallback.h:4085:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-arch-fallback.h:82:29: note: expanded from macro 'raw_cmpxchg_release'
+   #define raw_cmpxchg_release arch_cmpxchg
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +3961 include/linux/atomic/atomic-arch-fallback.h
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3939  
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3940  /**
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3941   * raw_atomic64_xchg_acquire() - atomic exchange with acquire ordering
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3942   * @v: pointer to atomic64_t
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3943   * @new: s64 value to assign
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3944   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3945   * Atomically updates @v to @new with acquire ordering.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3946   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3947   * Safe to use in noinstr code; prefer atomic64_xchg_acquire() elsewhere.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3948   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3949   * Return: The original value of @v.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3950   */
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3951  static __always_inline s64
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3952  raw_atomic64_xchg_acquire(atomic64_t *v, s64 new)
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3953  {
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3954  #if defined(arch_atomic64_xchg_acquire)
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3955  	return arch_atomic64_xchg_acquire(v, new);
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3956  #elif defined(arch_atomic64_xchg_relaxed)
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3957  	s64 ret = arch_atomic64_xchg_relaxed(v, new);
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3958  	__atomic_acquire_fence();
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3959  	return ret;
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3960  #else
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05 @3961  	return raw_xchg_acquire(&v->counter, new);
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3962  #endif
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3963  }
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3964  
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3965  /**
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3966   * raw_atomic64_xchg_release() - atomic exchange with release ordering
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3967   * @v: pointer to atomic64_t
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3968   * @new: s64 value to assign
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3969   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3970   * Atomically updates @v to @new with release ordering.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3971   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3972   * Safe to use in noinstr code; prefer atomic64_xchg_release() elsewhere.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3973   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3974   * Return: The original value of @v.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3975   */
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3976  static __always_inline s64
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3977  raw_atomic64_xchg_release(atomic64_t *v, s64 new)
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3978  {
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3979  #if defined(arch_atomic64_xchg_release)
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3980  	return arch_atomic64_xchg_release(v, new);
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3981  #elif defined(arch_atomic64_xchg_relaxed)
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3982  	__atomic_release_fence();
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3983  	return arch_atomic64_xchg_relaxed(v, new);
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3984  #else
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3985  	return raw_xchg_release(&v->counter, new);
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  3986  #endif
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3987  }
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  3988  
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3989  /**
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3990   * raw_atomic64_xchg_relaxed() - atomic exchange with relaxed ordering
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3991   * @v: pointer to atomic64_t
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3992   * @new: s64 value to assign
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3993   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3994   * Atomically updates @v to @new with relaxed ordering.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3995   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3996   * Safe to use in noinstr code; prefer atomic64_xchg_relaxed() elsewhere.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3997   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3998   * Return: The original value of @v.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  3999   */
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4000  static __always_inline s64
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4001  raw_atomic64_xchg_relaxed(atomic64_t *v, s64 new)
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4002  {
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4003  #if defined(arch_atomic64_xchg_relaxed)
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4004  	return arch_atomic64_xchg_relaxed(v, new);
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4005  #else
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4006  	return raw_xchg_relaxed(&v->counter, new);
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4007  #endif
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4008  }
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4009  
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4010  /**
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4011   * raw_atomic64_cmpxchg() - atomic compare and exchange with full ordering
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4012   * @v: pointer to atomic64_t
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4013   * @old: s64 value to compare with
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4014   * @new: s64 value to assign
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4015   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4016   * If (@v == @old), atomically updates @v to @new with full ordering.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4017   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4018   * Safe to use in noinstr code; prefer atomic64_cmpxchg() elsewhere.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4019   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4020   * Return: The original value of @v.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4021   */
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4022  static __always_inline s64
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4023  raw_atomic64_cmpxchg(atomic64_t *v, s64 old, s64 new)
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4024  {
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4025  #if defined(arch_atomic64_cmpxchg)
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4026  	return arch_atomic64_cmpxchg(v, old, new);
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4027  #elif defined(arch_atomic64_cmpxchg_relaxed)
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4028  	s64 ret;
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4029  	__atomic_pre_full_fence();
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4030  	ret = arch_atomic64_cmpxchg_relaxed(v, old, new);
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4031  	__atomic_post_full_fence();
+37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  4032  	return ret;
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4033  #else
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4034  	return raw_cmpxchg(&v->counter, old, new);
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4035  #endif
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4036  }
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4037  
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4038  /**
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4039   * raw_atomic64_cmpxchg_acquire() - atomic compare and exchange with acquire ordering
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4040   * @v: pointer to atomic64_t
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4041   * @old: s64 value to compare with
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4042   * @new: s64 value to assign
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4043   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4044   * If (@v == @old), atomically updates @v to @new with acquire ordering.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4045   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4046   * Safe to use in noinstr code; prefer atomic64_cmpxchg_acquire() elsewhere.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4047   *
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4048   * Return: The original value of @v.
+ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4049   */
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4050  static __always_inline s64
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4051  raw_atomic64_cmpxchg_acquire(atomic64_t *v, s64 old, s64 new)
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4052  {
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4053  #if defined(arch_atomic64_cmpxchg_acquire)
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4054  	return arch_atomic64_cmpxchg_acquire(v, old, new);
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4055  #elif defined(arch_atomic64_cmpxchg_relaxed)
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4056  	s64 ret = arch_atomic64_cmpxchg_relaxed(v, old, new);
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4057  	__atomic_acquire_fence();
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4058  	return ret;
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4059  #else
+9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05 @4060  	return raw_cmpxchg_acquire(&v->counter, old, new);
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4061  #endif
+1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4062  }
+d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  4063  
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
