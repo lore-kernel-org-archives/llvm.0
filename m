@@ -1,135 +1,154 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA670405F2;
-	Mon, 27 Nov 2023 20:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05A048CE2;
+	Mon, 27 Nov 2023 22:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="s62PHsID"
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARKAl5D001494;
-	Mon, 27 Nov 2023 20:20:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=ROsI72neNiMsrbDjpDAbOmRQTD42BFapmOHkosJ6S28=;
- b=s62PHsIDGV/1pFHXVtgSalIU+nDmEDRR9XERvpOLopQPCVhW11tdWq+3a7Pg501zObLG
- LBnzlsP2CDQWo+ygMT3SH/qBuYmhPzqXZ36uLo+rIDvglzC2C8XTOD5tOc7YF8B6ZFp4
- Xr0UhTTgyz5dK1j8zDOqdXPvBF8q/yLoTuHAADsECFo2hGWQscXIayYlwb9ZZ/jf9o8I
- jkNH9QKty9D0U/zelt7RD8bI1PmicW7wxKUxpnQz58caj/5EMyuD5gDhO3sjg21xNHzB
- Ha6NM1DbVQPjlSv7SWDSYxGC0owfXnOJ2USOQSHBZ7VaxWsXSvttQpMDetAreei5w7YB mQ== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3un0mdjdbj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 20:20:56 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARJchIK018544;
-	Mon, 27 Nov 2023 20:20:55 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ukwfjtrc3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 20:20:55 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARKKsw821168714
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Nov 2023 20:20:54 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6026958057;
-	Mon, 27 Nov 2023 20:20:54 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4DB9758058;
-	Mon, 27 Nov 2023 20:20:54 +0000 (GMT)
-Received: from localhost (unknown [9.41.178.242])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 27 Nov 2023 20:20:54 +0000 (GMT)
-From: Nathan Lynch <nathanl@linux.ibm.com>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linuxppc-dev
- <linuxppc-dev@lists.ozlabs.org>,
-        lkft-triage@lists.linaro.org, clang-built-linux <llvm@lists.linux.dev>,
-        regressions@lists.linux.dev, open list <linux-kernel@vger.kernel.org>
-Cc: Benjamin Gray <bgray@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell
- <anders.roxell@linaro.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: Powerpc: maple_defconfig: kernel/rtas_pci.c:46:5: error: no
- previous prototype for function 'rtas_read_config'
- [-Werror,-Wmissing-prototypes]
-In-Reply-To: <CA+G9fYt0LLXtjSz+Hkf3Fhm-kf0ZQanrhUS+zVZGa3O+Wt2+vg@mail.gmail.com>
-References: <CA+G9fYt0LLXtjSz+Hkf3Fhm-kf0ZQanrhUS+zVZGa3O+Wt2+vg@mail.gmail.com>
-Date: Mon, 27 Nov 2023 14:20:54 -0600
-Message-ID: <875y1n2bix.fsf@li-e15d104c-2135-11b2-a85c-d7ef17e56be6.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AwxDQvYh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701124470; x=1732660470;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ts77A1VNiEc2CT8sAwLfGF3duEMUZ+i3j/tFM1XLqJM=;
+  b=AwxDQvYheNxk5PpJM9MeOtrqnj9g/dSOdAT7gTLTpWmgBhn+78TQzU8P
+   TI7POBG2RBEGlOPDxcSfcOH1fxGn62RASKcydoefKVNEYvh9c+W7uNy8s
+   oellzRYzPwKBaCRLWb2Vg3o4C9hdR9b3hlwPjgdwk0KtD/SV0Huo6Brhl
+   N5jddgLxB0CiFpTbxT31jfez1rvyLIEYnmACdJRZXOMM5L86/ksT53DwF
+   EEvevC119a6/1NqDpmGLPQkLzIQ1H9qw1Ujpaf/4eRcb6ihWws+qbEHpa
+   HLEz3N4/zQMBtvpaCc9l4AUBSB2zgehg66UTyL+5yavkNpbhO5FmbP7xq
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="392557647"
+X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
+   d="scan'208";a="392557647"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 14:34:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="1099898612"
+X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
+   d="scan'208";a="1099898612"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Nov 2023 14:34:27 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r7kBN-0006j2-0f;
+	Mon, 27 Nov 2023 22:34:25 +0000
+Date: Tue, 28 Nov 2023 06:33:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, s.shtylyov@omp.ru,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH net-next 8/9] net: rswitch: Add jumbo frames handling for
+ TX
+Message-ID: <202311280447.HzrM7Jdd-lkp@intel.com>
+References: <20231127115334.3670790-9-yoshihiro.shimoda.uh@renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tX3c5ral_rPt_9wQ1R492hQBUM4oY95E
-X-Proofpoint-GUID: tX3c5ral_rPt_9wQ1R492hQBUM4oY95E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-27_19,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311270141
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231127115334.3670790-9-yoshihiro.shimoda.uh@renesas.com>
 
-Naresh Kamboju <naresh.kamboju@linaro.org> writes:
-> Following Powerpc maple_defconfig and other builds failed with gcc-13 / 8
-> and clang toolchains on Linux next-20231127 tag.
->
->   build:
->     * gcc-8-cell_defconfig
->     * gcc-8-maple_defconfig
->     * gcc-8-tinyconfig
->     * gcc-13-tinyconfig
->     * gcc-13-cell_defconfig
->     * gcc-13-maple_defconfig
->     * clang-17-cell_defconfig
->     * clang-17-tinyconfig
->     * clang-17-maple_defconfig
->     * clang-nightly-cell_defconfig
->     * clang-nightly-maple_defconfig
->     * clang-nightly-tinyconfig
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Build logs:
-> -----------
-> arch/powerpc/kernel/rtas_pci.c:46:5: error: no previous prototype for
-> function 'rtas_read_config' [-Werror,-Wmissing-prototypes]
->    46 | int rtas_read_config(struct pci_dn *pdn, int where, int size, u32 *val)
->       |     ^
-> arch/powerpc/kernel/rtas_pci.c:46:1: note: declare 'static' if the
-> function is not intended to be used outside of this translation unit
->    46 | int rtas_read_config(struct pci_dn *pdn, int where, int size, u32 *val)
->       | ^
->       | static
-> arch/powerpc/kernel/rtas_pci.c:98:5: error: no previous prototype for
-> function 'rtas_write_config' [-Werror,-Wmissing-prototypes]
->    98 | int rtas_write_config(struct pci_dn *pdn, int where, int size, u32 val)
->       |     ^
-> arch/powerpc/kernel/rtas_pci.c:98:1: note: declare 'static' if the
-> function is not intended to be used outside of this translation unit
->    98 | int rtas_write_config(struct pci_dn *pdn, int where, int size, u32 val)
->       | ^
->       | static
-> 2 errors generated.
-> make[5]: *** [scripts/Makefile.build:243:
-> arch/powerpc/kernel/rtas_pci.o] Error 1
+Hi Yoshihiro,
 
-This appears to be a latent issue in this code... the prototypes for
-rtas_read_config() and rtas_write_config() in asm/ppc-pci.h are guarded
-by #ifdef CONFIG_EEH for some reason. So I would expect this to happen
-whenever it is built with CONFIG_EEH disabled and -Wmissing-prototypes.
+kernel test robot noticed the following build warnings:
 
-So I guess it's fallout from commit c6345dfa6e3e ("Makefile.extrawarn:
-turn on missing-prototypes globally").
+[auto build test WARNING on net/main]
+[cannot apply to net-next/main linus/master horms-ipvs/master v6.7-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Unfortunately the resolution isn't as simple as moving the prototypes
-out of the CONFIG_EEH-guarded region, but I think I'll have a fix for
-this later today.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yoshihiro-Shimoda/net-rswitch-Drop-unused-argument-return-value/20231127-195705
+base:   net/main
+patch link:    https://lore.kernel.org/r/20231127115334.3670790-9-yoshihiro.shimoda.uh%40renesas.com
+patch subject: [PATCH net-next 8/9] net: rswitch: Add jumbo frames handling for TX
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231128/202311280447.HzrM7Jdd-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311280447.HzrM7Jdd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311280447.HzrM7Jdd-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/renesas/rswitch.c:1680:42: warning: variable 'dma_addr' is uninitialized when used here [-Wuninitialized]
+    1680 |         if (dma_mapping_error(ndev->dev.parent, dma_addr))
+         |                                                 ^~~~~~~~
+   drivers/net/ethernet/renesas/rswitch.c:1663:21: note: initialize the variable 'dma_addr' to silence this warning
+    1663 |         dma_addr_t dma_addr, dma_addr_orig;
+         |                            ^
+         |                             = 0
+   1 warning generated.
+
+
+vim +/dma_addr +1680 drivers/net/ethernet/renesas/rswitch.c
+
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1658  
+8e0aa1ff44ca30b Nathan Chancellor 2022-11-03  1659  static netdev_tx_t rswitch_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1660  {
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1661  	struct rswitch_device *rdev = netdev_priv(ndev);
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1662  	struct rswitch_gwca_queue *gq = rdev->tx_queue;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1663  	dma_addr_t dma_addr, dma_addr_orig;
+109b25d13e00543 Yoshihiro Shimoda 2023-11-22  1664  	netdev_tx_t ret = NETDEV_TX_OK;
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1665  	struct rswitch_ext_desc *desc;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1666  	unsigned int i, nr_desc;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1667  	u8 die_dt;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1668  	u16 len;
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1669  
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1670  	nr_desc = (skb->len - 1) / RSWITCH_DESC_BUF_SIZE + 1;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1671  	if (rswitch_get_num_cur_queues(gq) >= gq->ring_size - nr_desc) {
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1672  		netif_stop_subqueue(ndev, 0);
+a60caf039e96d80 Yoshihiro Shimoda 2023-05-29  1673  		return NETDEV_TX_BUSY;
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1674  	}
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1675  
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1676  	if (skb_put_padto(skb, ETH_ZLEN))
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1677  		return ret;
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1678  
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1679  	dma_addr_orig = dma_map_single(ndev->dev.parent, skb->data, skb->len, DMA_TO_DEVICE);
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22 @1680  	if (dma_mapping_error(ndev->dev.parent, dma_addr))
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1681  		goto err_kfree;
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1682  
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1683  	gq->skbs[gq->cur] = skb;
+e0e4f789171ba70 Yoshihiro Shimoda 2023-11-27  1684  	gq->unmap_addrs[gq->cur] = dma_addr;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1685  
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1686  	/* DT_FSTART should be set at last. So, this is reverse order. */
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1687  	for (i = nr_desc; i-- > 0; ) {
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1688  		desc = &gq->tx_ring[rswitch_next_queue_index(gq, true, i)];
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1689  		die_dt = rswitch_ext_desc_get_die_dt(nr_desc, i);
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1690  		dma_addr = dma_addr_orig + i * RSWITCH_DESC_BUF_SIZE;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1691  		len = rswitch_ext_desc_get_len(die_dt, skb->len);
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1692  		if (!rswitch_ext_desc_set(rdev, skb, desc, dma_addr, len, die_dt))
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1693  			goto err_unmap;
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1694  	}
+33f5d733b589031 Yoshihiro Shimoda 2023-02-09  1695  
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1696  	wmb();	/* gq->cur must be incremented after die_dt was set */
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1697  
+9ce54e0ed5479a1 Yoshihiro Shimoda 2023-11-27  1698  	gq->cur = rswitch_next_queue_index(gq, true, nr_desc);
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1699  	rswitch_modify(rdev->addr, GWTRC(gq->index), 0, BIT(gq->index % 32));
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1700  
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1701  	return ret;
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1702  
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1703  err_unmap:
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1704  	dma_unmap_single(ndev->dev.parent, dma_addr, skb->len, DMA_TO_DEVICE);
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1705  
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1706  err_kfree:
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1707  	dev_kfree_skb_any(skb);
+782486af9b5b764 Yoshihiro Shimoda 2023-11-22  1708  
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1709  	return ret;
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1710  }
+3590918b5d07aa5 Yoshihiro Shimoda 2022-10-31  1711  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
