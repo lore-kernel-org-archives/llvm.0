@@ -1,146 +1,247 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB39171C6;
-	Sun, 26 Nov 2023 23:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D767E
+	for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 00:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="istwF3Wo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701041543; x=1732577543;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sX5xVwqRXIsF6CBEM3D5DwfYSIWpXhFypi7fVenWT6s=;
-  b=istwF3WoHGtP0NAcbHoyvthPrn9r22ptCxpJ+KIimabhQ5HyuqQAnipr
-   1PgMrZN5zz8MqDZcggr1r/1zdKYSIZ6Hhjb27wk21uMyTTvsXX52ufeWk
-   Spu5hQxPF4/g4XpOGrBRkIP5U/28xucTsivgou1MTBN2telgEPjCVd5EV
-   3BHRaE1Uc6aJqJA5SqeBnGCcEPDKk0DLCP1k/2SG564M7p+z9U/axTRS8
-   L179Ot5jPvnK5xNuEcG/oj1ZYARI36TjzCvYfjf2tfCcupJ5x/uqXsWVu
-   ESIOPtugFnaFZs/t6FlKac/BaCpP9ogf4LUXxb8+OaSLVB7F8+wchja4A
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10906"; a="372768308"
-X-IronPort-AV: E=Sophos;i="6.04,229,1695711600"; 
-   d="scan'208";a="372768308"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2023 15:32:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10906"; a="858862275"
-X-IronPort-AV: E=Sophos;i="6.04,229,1695711600"; 
-   d="scan'208";a="858862275"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Nov 2023 15:32:17 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r7Obn-0005d5-0p;
-	Sun, 26 Nov 2023 23:32:15 +0000
-Date: Mon, 27 Nov 2023 07:31:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [sailus-media-tree:test 19/20]
- drivers/media/v4l2-core/v4l2-subdev.c:1473:6: warning: variable 'ret' is
- uninitialized when used here
-Message-ID: <202311270412.AMfCcbby-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BLIjUnbd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701044502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kG0ASOb8YPiSqIFtP9BhWJlSvwQh+Ztks/6A4bXP9j8=;
+	b=BLIjUnbdC++QjpM0AQ6g5m9wSXTIf0eL9W9hinD4P9v2ipelFURjf4XeAxXKkQKe0ivzj7
+	Gz0YRoOpOJYnt7AoAZU4FLOHLta6trzFO2Jo6BTZPqreE2wIEJcDe2yNaIiLjgeV+6ud86
+	ngStaLTPAlgvMmyN3p0hRbEtVfIwo5A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-371-WwgC4ScJMIK7u8hnee7w7Q-1; Sun, 26 Nov 2023 19:21:39 -0500
+X-MC-Unique: WwgC4ScJMIK7u8hnee7w7Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79BB08007B3
+	for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 00:21:39 +0000 (UTC)
+Received: from [172.64.3.60] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 619391C060BB;
+	Mon, 27 Nov 2023 00:21:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc2,
+ mainline.kernel.org-clang, 090472ed)
+Date: Mon, 27 Nov 2023 00:21:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <54144.123112619213900188@us-mta-371.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://linuxtv.org/sailus/media_tree.git test
-head:   1c12986c58defb1d262ac0fa851066fc724e617e
-commit: 4c7fd566e013fd0ec5cfc3243b63bf2804c4e9fe [19/20] media: v4l2-subdev: Rename .init_cfg() operation to .init_state()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231127/202311270412.AMfCcbby-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231127/202311270412.AMfCcbby-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311270412.AMfCcbby-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> drivers/media/v4l2-core/v4l2-subdev.c:1473:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           if (ret < 0 && ret != -ENOIOCTLCMD)
-               ^~~
-   drivers/media/v4l2-core/v4l2-subdev.c:1439:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+Kernel information:
+    Commit message: Merge tag 'usb-6.7-rc3' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/gregkh/usb
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/116427
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - IPMItool loop stress test
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - block - filesystem fio test
+                 aarch64 - Storage - block - queue scheduler test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Reboot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - Memory function: memfd_create
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking - Ethernet drivers sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - Storage - lvm thinp sanity
+                 aarch64 - Hardware - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - block - queue scheduler test
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking - Ethernet drivers sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - kselftests upstream - net
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Hardware - CPU: Die Test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking - Ethernet drivers sanity
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
+au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
+            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
+913cfd3efb.camel@intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
-vim +/ret +1473 drivers/media/v4l2-core/v4l2-subdev.c
 
-33c0ddbe56905c Tomi Valkeinen   2021-07-15  1433  
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1434  struct v4l2_subdev_state *
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1435  __v4l2_subdev_state_alloc(struct v4l2_subdev *sd, const char *lock_name,
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1436  			  struct lock_class_key *lock_key)
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1437  {
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1438  	struct v4l2_subdev_state *state;
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1439  	int ret;
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1440  
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1441  	state = kzalloc(sizeof(*state), GFP_KERNEL);
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1442  	if (!state)
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1443  		return ERR_PTR(-ENOMEM);
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1444  
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1445  	__mutex_init(&state->_lock, lock_name, lock_key);
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1446  	if (sd->state_lock)
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1447  		state->lock = sd->state_lock;
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1448  	else
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1449  		state->lock = &state->_lock;
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1450  
-52c2575db8faa1 Sakari Ailus     2023-10-13  1451  	state->sd = sd;
-52c2575db8faa1 Sakari Ailus     2023-10-13  1452  
-2f91e10ee6fd4c Tomi Valkeinen   2021-12-21  1453  	/* Drivers that support streams do not need the legacy pad config */
-2f91e10ee6fd4c Tomi Valkeinen   2021-12-21  1454  	if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS) && sd->entity.num_pads) {
-8af592e2ecbcd2 Hans Verkuil     2022-05-02  1455  		state->pads = kvcalloc(sd->entity.num_pads,
-8af592e2ecbcd2 Hans Verkuil     2022-05-02  1456  				       sizeof(*state->pads), GFP_KERNEL);
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1457  		if (!state->pads) {
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1458  			ret = -ENOMEM;
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1459  			goto err;
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1460  		}
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1461  	}
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1462  
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1463  	/*
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1464  	 * There can be no race at this point, but we lock the state anyway to
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1465  	 * satisfy lockdep checks.
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1466  	 */
-4c7fd566e013fd Laurent Pinchart 2023-11-26  1467  	if (sd->internal_ops && sd->internal_ops->init_state) {
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1468  		v4l2_subdev_lock_state(state);
-4c7fd566e013fd Laurent Pinchart 2023-11-26  1469  		sd->internal_ops->init_state(sd, state);
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1470  		v4l2_subdev_unlock_state(state);
-4c7fd566e013fd Laurent Pinchart 2023-11-26  1471  	}
-ed647ea668fb27 Tomi Valkeinen   2022-04-12  1472  
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10 @1473  	if (ret < 0 && ret != -ENOIOCTLCMD)
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1474  		goto err;
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1475  
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1476  	return state;
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1477  
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1478  err:
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1479  	if (state && state->pads)
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1480  		kvfree(state->pads);
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1481  
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1482  	kfree(state);
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1483  
-0d346d2a6f54f0 Tomi Valkeinen   2021-06-10  1484  	return ERR_PTR(ret);
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1485  }
-40aaab9d773b07 Tomi Valkeinen   2022-04-12  1486  EXPORT_SYMBOL_GPL(__v4l2_subdev_state_alloc);
-9b02cbb3ede89b Laurent Pinchart 2015-04-24  1487  
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-:::::: The code at line 1473 was first introduced by commit
-:::::: 0d346d2a6f54f06f36b224fd27cd6eafe8c83be9 media: v4l2-subdev: add subdev-wide state struct
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: TO: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
