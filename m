@@ -1,141 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E703714E;
-	Mon, 27 Nov 2023 17:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B08241FB
+	for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 17:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y15kz/Q+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701105526; x=1732641526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IeWgMNYJbeQkrdFCwUKq5pjzWu7XROofYR8g0Wh0qeQ=;
-  b=Y15kz/Q+lFiQox3cmzFUsYrXQ5hX8hQUgo7pMWIQd324XS3X0Cu0DUIS
-   2qUQESi9ZyIj1L0n7vx1ix0wHv082YyWw/rrG6SEyq/B1wcZy4jgQCF22
-   ZwNRhJ66Ftl3ge3wWYi6aNXQkJobxascSNHkfzJgN0uu0QGQazyW6jNwU
-   SpKQMeE9O52ebqs/o48h5jmM7GkgUHTO/Xm0uUELgZmuB7XITCrMAZxyf
-   0SMJReqckt46qclZphm+WymBLc0kaKBwQivjZBIjz1e1oyq11T4dBV09s
-   yyDi9vb29LalYaEfogI7JcFyl/xuux7UpPkD+12/qavFIWjDbf1dFb3C/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="383136135"
-X-IronPort-AV: E=Sophos;i="6.04,231,1695711600"; 
-   d="scan'208";a="383136135"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 09:18:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="718096243"
-X-IronPort-AV: E=Sophos;i="6.04,231,1695711600"; 
-   d="scan'208";a="718096243"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Nov 2023 09:18:44 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r7fFq-0006Us-0V;
-	Mon, 27 Nov 2023 17:18:42 +0000
-Date: Tue, 28 Nov 2023 01:18:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peng Liu <pngliu@hotmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	frederic@kernel.org, tglx@linutronix.de, mingo@kernel.org,
-	linux-kernel@vger.kernel.org, liupeng17@lenovo.com
-Subject: Re: [PATCH 1/2] tick/nohz: Remove duplicate between
- tick_nohz_switch_to_nohz() and tick_setup_sched_timer()
-Message-ID: <202311272337.qYKX6cSh-lkp@intel.com>
-References: <TYCP286MB21464B3653B956AF71806931C6BDA@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="feIF0PY5"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARHed0U001128;
+	Mon, 27 Nov 2023 17:45:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=lzqj58I3IPFrtKe4S8rNaZ4kZ62EXnfUaMFKX5my+LU=;
+ b=feIF0PY5+um4MebiA8jlFX3aHG2Ss612jVt0ln8mqQnDDxOl8SfctHc0x954bYkr+kv0
+ CrFXhe3FWqtpNe/Gy0yWJ/T5Vr9UNpqTn3VoQBZxkEG6IKGNaBOJSWDi53B5DeBYK65W
+ crDbe+xSTUpKM88r4rZELhkYKIx1hlQDP2S53I4mOekJ9U8e3Wq5UNKKdBUG35hMx8TB
+ TjqNC7hTIxf7pUbdNVmQvdZahzrevJogueSGunAssN9gkNsCNtVq96pkRYuZaTxlqGiU
+ IgNJ4J8+vCgyex8P8naDKu6A0VPoZ3i/83jcYeVoXLjMK6qHhtS5GjAAMZn3enq0mWYe 9g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umxd52vr0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Nov 2023 17:45:48 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ARGqxI1010012;
+	Mon, 27 Nov 2023 17:45:47 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umxd52vhf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Nov 2023 17:45:47 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARGtRpk009198;
+	Mon, 27 Nov 2023 17:43:14 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukumyaftk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Nov 2023 17:43:14 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARHhCIC20185812
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 27 Nov 2023 17:43:12 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 61DD42004B;
+	Mon, 27 Nov 2023 17:43:12 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7E09820040;
+	Mon, 27 Nov 2023 17:43:11 +0000 (GMT)
+Received: from [9.179.10.95] (unknown [9.179.10.95])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 27 Nov 2023 17:43:11 +0000 (GMT)
+Message-ID: <637dcc4d69c380bd939dfdd1b14a5c82c2ddfaa4.camel@linux.ibm.com>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+From: Niklas Schnelle <schnelle@linux.ibm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
+        llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
+        Nathan
+ Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>, Gerd Bayer <gbayer@linux.ibm.com>
+Date: Mon, 27 Nov 2023 18:43:11 +0100
+In-Reply-To: <20231124160627.GH436702@nvidia.com>
+References: <cover.1700766072.git.leon@kernel.org>
+	 <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+	 <c102bdef10b280f47f5fe4538eb168ac730d7644.camel@linux.ibm.com>
+	 <20231124142049.GF436702@nvidia.com>
+	 <14103e31e0c47c0594e7479126ce7fe34f2de467.camel@linux.ibm.com>
+	 <20231124145529.GG436702@nvidia.com>
+	 <b3250b9a9af2f29ee3d06830746fb6e8ac49271d.camel@linux.ibm.com>
+	 <20231124160627.GH436702@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCP286MB21464B3653B956AF71806931C6BDA@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _M3XpV3w84E_3d-YkVQ8I7sJh5H0Q7He
+X-Proofpoint-GUID: lQohcn7e8AuOM97Z7HR6-FkciDH-UZJt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-27_16,2023-11-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ mlxlogscore=566 impostorscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311270122
 
-Hi Peng,
+On Fri, 2023-11-24 at 12:06 -0400, Jason Gunthorpe wrote:
+> On Fri, Nov 24, 2023 at 04:59:38PM +0100, Niklas Schnelle wrote:
+> =20
+> > This should be as easy as adding
+> >=20
+> > #define memcpy_toio_64(to, from) zpci_memcpy_toio(to, from, 64)
+> >=20
+> > to arch/s390/include/asm/io.h. I'm wondering if we should do that as
+> > part of this series. It's not as good as a special case but probably
+> > better than the existing loop.
+>=20
+> Makes sense
 
-kernel test robot noticed the following build errors:
+Ok, I overlooked the obvious. Let's make that:
 
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master v6.7-rc3 next-20231127]
-[cannot apply to tip/timers/nohz]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+#define memcpy_toio_64(dst, src)       zpci_write_block(dst, src, 64)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Liu/tick-nohz-Remove-duplicate-between-tick_nohz_lowres_handler-and-tick_nohz_highres_handler/20231127-163637
-base:   tip/timers/core
-patch link:    https://lore.kernel.org/r/TYCP286MB21464B3653B956AF71806931C6BDA%40TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
-patch subject: [PATCH 1/2] tick/nohz: Remove duplicate between tick_nohz_switch_to_nohz() and tick_setup_sched_timer()
-config: x86_64-randconfig-004-20231127 (https://download.01.org/0day-ci/archive/20231127/202311272337.qYKX6cSh-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231127/202311272337.qYKX6cSh-lkp@intel.com/reproduce)
+>=20
+> > I don't think we have any existing in-kernel users of memcpy_toio() on
+> > s390 so far though so I'd like to give this some extra testing. Could
+> > you share instructions on how to exercise the code path of patch 2 on a
+> > ConnectX-5 or 6? Is this exercised e.g. when using NVMe-oF RDMA?
+>=20
+> Simply boot and look at pr_debug from mlx5 to see if writecombining is
+> on or off - you want to see on.
+>=20
+> Thanks,
+> Jason
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311272337.qYKX6cSh-lkp@intel.com/
+With the above zpci_write_block(dst, src, 64) we get a PCI store block
+without any extra alignment treatment i.e. exactly what we want for
+memcpy_toio_64(). If the alignment is wrong the PCI store block
+instruction will fail the PCI function will be isolated and we log an
+error so I don't see a need for checks there either. On an aside it
+looks like our zpci_memcpy_toio() is wrongly looking for tighter than 8
+byte alignment on the source address and would issue a series of 8
+stores. Still looking into that. I also tested this with our only
+privileged (kernel only) PCI stores and that works too.
 
-All errors (new ones prefixed by >>):
+Also it turns out the writeq() loop we had so far does not produce the
+needed 64 byte TLP on s390 either so this actually makes us newly pass
+this test.
 
-   kernel/time/tick-sched.c:1546:30: error: use of undeclared identifier 'tick_nohz_highres_handler'; did you mean 'tick_nohz_lowres_handler'?
-                   ts->sched_timer.function = tick_nohz_highres_handler;
-                                              ^~~~~~~~~~~~~~~~~~~~~~~~~
-                                              tick_nohz_lowres_handler
-   kernel/time/tick-sched.c:1395:13: note: 'tick_nohz_lowres_handler' declared here
-   static void tick_nohz_lowres_handler(struct clock_event_device *dev)
-               ^
->> kernel/time/tick-sched.c:1552:6: error: use of undeclared identifier 'sched_skew_tick'; did you mean 'scheduler_tick'?
-           if (sched_skew_tick) {
-               ^~~~~~~~~~~~~~~
-               scheduler_tick
-   include/linux/sched.h:294:13: note: 'scheduler_tick' declared here
-   extern void scheduler_tick(void);
-               ^
-   2 errors generated.
+Thanks,
+Niklas
 
-
-vim +1552 kernel/time/tick-sched.c
-
-62cf20b32aee4a Thomas Gleixner           2012-05-25  1533  
-de667c3b095eed Peng Liu                  2023-11-27  1534  #if defined CONFIG_NO_HZ_COMMON || defined CONFIG_HIGH_RES_TIMERS
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1535  /**
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1536   * tick_setup_sched_timer - setup the tick emulation timer
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1537   */
-de667c3b095eed Peng Liu                  2023-11-27  1538  void tick_setup_sched_timer(int mode)
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1539  {
-22127e93c587af Christoph Lameter         2014-08-17  1540  	struct tick_sched *ts = this_cpu_ptr(&tick_cpu_sched);
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1541  	ktime_t now = ktime_get();
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1542  
-6c774377359923 Ingo Molnar               2023-09-28  1543  	/* Emulate tick processing via per-CPU hrtimers: */
-902a9f9c509053 Sebastian Andrzej Siewior 2019-07-26  1544  	hrtimer_init(&ts->sched_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_HARD);
-de667c3b095eed Peng Liu                  2023-11-27  1545  	if (mode == NOHZ_MODE_HIGHRES)
-dba428a678c726 Frederic Weisbecker       2023-09-12  1546  		ts->sched_timer.function = tick_nohz_highres_handler;
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1547  
-0de7611a1031f2 Ingo Molnar               2016-07-01  1548  	/* Get the next period (per-CPU) */
-cc584b213f252b Arjan van de Ven          2008-09-01  1549  	hrtimer_set_expires(&ts->sched_timer, tick_init_jiffy_update());
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1550  
-6c774377359923 Ingo Molnar               2023-09-28  1551  	/* Offset the tick to avert 'jiffies_lock' contention. */
-5307c9556bc17e Mike Galbraith            2012-05-08 @1552  	if (sched_skew_tick) {
-b9965449164299 Thomas Gleixner           2020-11-17  1553  		u64 offset = TICK_NSEC >> 1;
-5307c9556bc17e Mike Galbraith            2012-05-08  1554  		do_div(offset, num_possible_cpus());
-5307c9556bc17e Mike Galbraith            2012-05-08  1555  		offset *= smp_processor_id();
-5307c9556bc17e Mike Galbraith            2012-05-08  1556  		hrtimer_add_expires_ns(&ts->sched_timer, offset);
-5307c9556bc17e Mike Galbraith            2012-05-08  1557  	}
-5307c9556bc17e Mike Galbraith            2012-05-08  1558  
-b9965449164299 Thomas Gleixner           2020-11-17  1559  	hrtimer_forward(&ts->sched_timer, now, TICK_NSEC);
-de667c3b095eed Peng Liu                  2023-11-27  1560  	if (mode == NOHZ_MODE_HIGHRES)
-902a9f9c509053 Sebastian Andrzej Siewior 2019-07-26  1561  		hrtimer_start_expires(&ts->sched_timer, HRTIMER_MODE_ABS_PINNED_HARD);
-de667c3b095eed Peng Liu                  2023-11-27  1562  	else
-de667c3b095eed Peng Liu                  2023-11-27  1563  		tick_program_event(hrtimer_get_expires(&ts->sched_timer), 1);
-de667c3b095eed Peng Liu                  2023-11-27  1564  	tick_nohz_activate(ts, mode);
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1565  }
-3c4fbe5e01d7e5 Miao Xie                  2008-08-20  1566  #endif /* HIGH_RES_TIMERS */
-79bf2bb335b85d Thomas Gleixner           2007-02-16  1567  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
