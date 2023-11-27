@@ -1,39 +1,39 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D767E
-	for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 00:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BC562F
+	for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 00:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BLIjUnbd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cDZcZ6dC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701044502;
+	s=mimecast20190719; t=1701046295;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=kG0ASOb8YPiSqIFtP9BhWJlSvwQh+Ztks/6A4bXP9j8=;
-	b=BLIjUnbdC++QjpM0AQ6g5m9wSXTIf0eL9W9hinD4P9v2ipelFURjf4XeAxXKkQKe0ivzj7
-	Gz0YRoOpOJYnt7AoAZU4FLOHLta6trzFO2Jo6BTZPqreE2wIEJcDe2yNaIiLjgeV+6ud86
-	ngStaLTPAlgvMmyN3p0hRbEtVfIwo5A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-371-WwgC4ScJMIK7u8hnee7w7Q-1; Sun, 26 Nov 2023 19:21:39 -0500
-X-MC-Unique: WwgC4ScJMIK7u8hnee7w7Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	bh=rpUdKJ7p4qqbTrpui2eqbR7K6+aKgAt9R1nWBG/mjcg=;
+	b=cDZcZ6dCntnLebKQ5hIhK7v/OS7Tm7ZWRe1d4k2eyVyMvN/YjL18hcKuPt+SzWfVSlQzeG
+	imc3e6xFeYN4ZlwFGc2NdncQyVCbrXUJsc9UMLI3d33pa++TU4KoWemPq95fTRpg6zIsqj
+	TZ7lFqfQznIM6lrOAIy/lZpvUpMnBaU=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-219-F9l9mY2yMh2jwZf0-qCp0Q-1; Sun,
+ 26 Nov 2023 19:51:34 -0500
+X-MC-Unique: F9l9mY2yMh2jwZf0-qCp0Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79BB08007B3
-	for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 00:21:39 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D7BF28237C2
+	for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 00:51:34 +0000 (UTC)
 Received: from [172.64.3.60] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 619391C060BB;
-	Mon, 27 Nov 2023 00:21:39 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 09BF12166B26;
+	Mon, 27 Nov 2023 00:51:33 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0-rc2,
- mainline.kernel.org-clang, 090472ed)
-Date: Mon, 27 Nov 2023 00:21:39 -0000
+ mainline.kernel.org-clang, 4892711a)
+Date: Mon, 27 Nov 2023 00:51:33 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -41,8 +41,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <54144.123112619213900188@us-mta-371.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Message-Id: <87527.123112619513400103@us-mta-219.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -58,11 +58,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'usb-6.7-rc3' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/gregkh/usb
+    Commit message: Merge tag 'x86-urgent-2023-11-26' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/116427
+    https://datawarehouse.cki-project.org/kcidb/checkouts/116454
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -76,7 +76,6 @@ d, map_write access on the bpf labeled init_t.
                  aarch64 - Hardware - IPMItool loop stress test
                  aarch64 - Storage - blktests - blk
                  aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - block - filesystem fio test
                  aarch64 - Storage - block - queue scheduler test
                  aarch64 - stress: stress-ng - cpu-cache
                  aarch64 - stress: stress-ng - memory
@@ -86,12 +85,10 @@ d, map_write access on the bpf labeled init_t.
                  aarch64 - Filesystem - Loopdev Sanity
                  aarch64 - Memory function: memfd_create
                  aarch64 - AMTU (Abstract Machine Test Utility)
-                 aarch64 - Networking - Ethernet drivers sanity
                  aarch64 - Networking cki netfilter test
                  aarch64 - Networking vnic: ipvlan/basic
                  aarch64 - Libkcapi AF_ALG test
                  aarch64 - Storage - multipath mapping test
-                 aarch64 - Storage - lvm thinp sanity
                  aarch64 - Hardware - Firmware test suite
                  aarch64 - xfstests - ext4
                  aarch64 - xfstests - xfs
@@ -105,7 +102,6 @@ d, map_write access on the bpf labeled init_t.
                    s390x - stress: stress-ng - memory
                    s390x - Reboot test
                    s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
                    s390x - Memory function: memfd_create
                    s390x - AMTU (Abstract Machine Test Utility)
                    s390x - Networking cki netfilter test
@@ -114,13 +110,11 @@ d, map_write access on the bpf labeled init_t.
                    s390x - Storage - multipath mapping test
                   x86_64 - machineinfo
                   x86_64 - Boot test
-                  x86_64 - Hardware - CPU: Die Test
                   x86_64 - Hardware - IPMItool loop stress test
                   x86_64 - Storage - blktests - blk
                   x86_64 - Storage - blktests - nvme-tcp
                   x86_64 - Storage - block - filesystem fio test
                   x86_64 - Storage - block - queue scheduler test
-                  x86_64 - Storage - swraid scsi_raid
                   x86_64 - stress: stress-ng - cpu-cache
                   x86_64 - stress: stress-ng - memory
                   x86_64 - Reboot test
@@ -143,7 +137,6 @@ d, map_write access on the bpf labeled init_t.
                   x86_64 - xfstests - cifsv3.11
                   x86_64 (debug) - machineinfo
                   x86_64 (debug) - Boot test
-                  x86_64 (debug) - Hardware - CPU: Die Test
                   x86_64 (debug) - Storage - swraid scsi_raid
                   x86_64 (debug) - Reboot test
                   x86_64 (debug) - Hardware - ACPI table test
@@ -160,6 +153,25 @@ d, map_write access on the bpf labeled init_t.
                   x86_64 (debug) - xfstests - ext4
                   x86_64 (debug) - xfstests - xfs
                   x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
                   x86_64 (debug) - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - cifsv3.11
         Issue: nvme authentication setup failed observed during blktests nv=
@@ -180,50 +192,24 @@ l-tests/-/issues/1752
                  aarch64 - stress: stress-ng - memory
                    s390x - stress: stress-ng - memory
                   x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
         Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
 ': No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1544
             Affected tests:
                  aarch64 - Hardware - Firmware test suite
-        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
-au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
-            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
-913cfd3efb.camel@intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
+l-tests/-/issues/1267
             Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
 
 
 
