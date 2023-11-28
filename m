@@ -1,103 +1,117 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A19134A0
-	for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 07:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE6C15AEA;
+	Tue, 28 Nov 2023 08:12:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sv0dW4Q9"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-db410931c23so6274588276.2
-        for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 23:24:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701156274; x=1701761074; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hL9Tqag7AJX6zAdbbkbaDwLX0iVjHOEY+HYssYNlBSs=;
-        b=sv0dW4Q9ASYjQi8fGEQRT6e2TCn5E1LXlR7js7cOTeGhLQII31V8X1ZqWPwiZjBCNf
-         kxDXjwewFoHa7JnJMW892yjL+ZU9QaHRnCq0r/LtivsXHdlXELQySi3fmfr5AIA+c+pO
-         sMB9Q51+DocPNyuy+coGItoiTY4Af23lBr1Ho7wuF+1nk4h5Y+QMnC6GjgqjlSN6Er7Z
-         LquAtQvj9o6JTzk2mEn+PSi8985MWF/Z69aQLdBW2F6Vpn3bgxm/2JzAW7sr291jyN75
-         9CDAUEdWVpY2yHqGPJln0AmQzPl8x5zI128SgMO6wJ+JG1fzFhCCNMHKyGAgVLBHV2DW
-         6rHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701156274; x=1701761074;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hL9Tqag7AJX6zAdbbkbaDwLX0iVjHOEY+HYssYNlBSs=;
-        b=WM+EbEH/N1EDlV/7ChnRjjJDBw/Mxa2F0dz93LxzHBLar16mjlYhYfOD+CMNLoN0fE
-         G+8TWK7X39hG18mU+FnQlP/HhKbNhE5ww39ZuB43d3barhp+ZLn+MqnYtVez6d5nXZTL
-         2xD6BhHwP4DEPKD5Ha3K9xpkHdBHCMQSKIbywx3QREinXnwiynZePnod74w95MNpdFWb
-         50ynrvnS1kFpHNOlWqGHxv6Fbux3IpnfmYQVZ5iHCxmnsSp+jtY1AEBR9RW/32R/B3fr
-         QJ9P/DUhwTs8SWz4MDekwIpp2w1pfcOFjzAouLzQIOc3MKpFq8VaP0+ro00ZgegQs9C3
-         PFYw==
-X-Gm-Message-State: AOJu0YzBhxEw+HqK1gpB5jf53+UmAA8vS9Ta6G4zJiMVme8mztaw6/Sm
-	cICvfM4cdJ2QXzdWQqQWGDDTi8QRXDsGTQ==
-X-Google-Smtp-Source: AGHT+IGoRIHKr3JyrbM3tkKrf0PmKkWlRFIRiSnxD6FAHnrPxKsZM4C/FRkjkDW0SuhziYxtsE89EeXxGNnLEA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:3741:0:b0:db5:2a4:aef1 with SMTP id
- e62-20020a253741000000b00db502a4aef1mr30191yba.13.1701156274525; Mon, 27 Nov
- 2023 23:24:34 -0800 (PST)
-Date: Tue, 28 Nov 2023 15:24:07 +0800
-In-Reply-To: <20231128072410.952662-1-davidgow@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bt9gn6Cn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701159143; x=1732695143;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AGYpkcwM+QbY4uebWNvZsCySwRDqsGt8liWhbUR8B6M=;
+  b=Bt9gn6CnKQsuFZ0YoHimpm7PwJ3WiSbnxLvDwDbV7zonPzEQol9AUcUf
+   0hQ1URA4MyyyoNAVnR9oL4wUDJ9NAVK/3O8WWaIZvQmFO0Fni2r3VqPO6
+   c/vSg0kyXOyN0unBJD5uqpJp5dD06Rlq1aVRJpPWGWt7SKgea89WAamJW
+   70XQVofzOBy2e7NJjMGhj+qI/sWMa1279WIjcIdM6qXaOjBCE7/byx6ke
+   7OWih2yYBh2TtBiLtv1VHfjHqnbVgYLkIhqJm0BZpYc7EinyDjr7d2GJs
+   bTsfgXmZ9WCYplt46V7WojBf2uwAgLGJSrGFHV6XfJmDciCZt7diSQIRM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="377902491"
+X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
+   d="scan'208";a="377902491"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 00:12:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="859344712"
+X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
+   d="scan'208";a="859344712"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Nov 2023 00:12:08 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r7tCQ-0007I4-0L;
+	Tue, 28 Nov 2023 08:12:06 +0000
+Date: Tue, 28 Nov 2023 16:11:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Ogness <john.ogness@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-6.5.y-rt 44/87] kernel/printk/printk.c:3361:6:
+ warning: no previous prototype for function 'console_bkl_kthread_create'
+Message-ID: <202311281428.tmjA6dLT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20231128072410.952662-1-davidgow@google.com>
-X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
-Message-ID: <20231128072410.952662-3-davidgow@google.com>
-Subject: [PATCH v2 3/3] drm/vc4: tests: Use KUNIT_DEFINE_ACTION_WRAPPER
-From: David Gow <davidgow@google.com>
-To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, dlatypov@google.com
-Cc: David Gow <davidgow@google.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Richard Fitzgerald <rf@opensource.cirrus.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In order to pass functions to kunit_add_action(), they need to be of the
-kunit_action_t type. While casting the function pointer can work, it
-will break control-flow integrity.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-6.5.y-rt
+head:   7f033c046085109bf6044730509ba1395afc0230
+commit: 184530c511550e6ddeacb1d86df7b8c0b923e0bc [44/87] printk: Add threaded printing support for BKL consoles.
+config: i386-buildonly-randconfig-003-20231128 (https://download.01.org/0day-ci/archive/20231128/202311281428.tmjA6dLT-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311281428.tmjA6dLT-lkp@intel.com/reproduce)
 
-vc4_mock already defines such a wrapper for drm_dev_unregister(), but it
-involves less boilerplate to use the new macro, so replace the manual
-implementation.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311281428.tmjA6dLT-lkp@intel.com/
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+All warnings (new ones prefixed by >>):
 
-No changes since v1:
-https://lore.kernel.org/linux-kselftest/20231110200830.1832556-3-davidgow@google.com/
+>> kernel/printk/printk.c:3361:6: warning: no previous prototype for function 'console_bkl_kthread_create' [-Wmissing-prototypes]
+   void console_bkl_kthread_create(void)
+        ^
+   kernel/printk/printk.c:3361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void console_bkl_kthread_create(void)
+   ^
+   static 
+   1 warning generated.
 
----
- drivers/gpu/drm/vc4/tests/vc4_mock.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/tests/vc4_mock.c b/drivers/gpu/drm/vc4/tests/vc4_mock.c
-index 63ca46f4cb35..becb3dbaa548 100644
---- a/drivers/gpu/drm/vc4/tests/vc4_mock.c
-+++ b/drivers/gpu/drm/vc4/tests/vc4_mock.c
-@@ -153,12 +153,9 @@ static int __build_mock(struct kunit *test, struct drm_device *drm,
- 	return 0;
- }
- 
--static void kunit_action_drm_dev_unregister(void *ptr)
--{
--	struct drm_device *drm = ptr;
--
--	drm_dev_unregister(drm);
--}
-+KUNIT_DEFINE_ACTION_WRAPPER(kunit_action_drm_dev_unregister,
-+			    drm_dev_unregister,
-+			    struct drm_device *);
- 
- static struct vc4_dev *__mock_device(struct kunit *test, bool is_vc5)
- {
+vim +/console_bkl_kthread_create +3361 kernel/printk/printk.c
+
+  3360	
+> 3361	void console_bkl_kthread_create(void)
+  3362	{
+  3363		struct task_struct *kt;
+  3364		struct console *c;
+  3365	
+  3366		lockdep_assert_held(&console_mutex);
+  3367	
+  3368		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+  3369			return;
+  3370	
+  3371		if (!printk_threads_enabled || console_bkl_kthread)
+  3372			return;
+  3373	
+  3374		for_each_console(c) {
+  3375			if (c->flags & CON_BOOT)
+  3376				return;
+  3377		}
+  3378	
+  3379		kt = kthread_run(console_bkl_kthread_func, NULL, "pr/bkl");
+  3380		if (IS_ERR(kt)) {
+  3381			pr_err("unable to start BKL printing thread\n");
+  3382			return;
+  3383		}
+  3384	
+  3385		console_bkl_kthread = kt;
+  3386	
+  3387		/*
+  3388		 * It is important that console printing threads are scheduled
+  3389		 * shortly after a printk call and with generous runtime budgets.
+  3390		 */
+  3391		sched_set_normal(console_bkl_kthread, -20);
+  3392	}
+  3393	
+
 -- 
-2.43.0.rc1.413.gea7ed67945-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
