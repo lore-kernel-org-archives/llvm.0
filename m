@@ -1,47 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101EDD29A;
-	Tue, 28 Nov 2023 09:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F3946530;
+	Tue, 28 Nov 2023 11:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N6SfYkpO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bSQmVb0/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701164608; x=1732700608;
+  t=1701171919; x=1732707919;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=47Ej6yoMs5q0oT/KAkqfjhy0ayMFym0CVVhgfEHM5kA=;
-  b=N6SfYkpO692biSs1BbTNJ2ZGyqYfSBmV41R99wm347GhLC2ubxgId8oJ
-   bFjzGeZCGMvAYTyiQsViPlxGZ25lvGI+Q3/J5ZUfjCO14oHd0gR/wL/o3
-   OghuSE/YFxWHBHOjwK3DbNu24Y2LbJmXZGy8VBfhBWrwSW/Gcq5jO21si
-   FJv7jQ9FFRaTLqRWf65oxYT0LXSqhcvi+PD1slPwHU1mN4Ur9mAvcIKVT
-   mSyOHioiYjC23LTtj+PLFCA4GGw27DYxU9vRfZ2hF2SBlvA6c1RpniajX
-   965Sq3j9qv176P1YUMtXV1YWShKwz0IQVym/w/uzBowvUDAFQzSrwRZ6I
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="424041077"
+  bh=7qYyCP8MhKknRBAyUu6IhgiQV29YDWwg8zFyW7waXmY=;
+  b=bSQmVb0/3cpvk4V7HHQTF6hamO7VqaPIkOQETd7lYGClgtta4hO9uuqo
+   M1ip3gVosORg/OnkR4vdP2KrDOqR1ieH20NBFg9Y9kl+EaZA9Dnl3NbNf
+   pc3FlrfIDKWJ7riJP6Dt+btwRZy/DsE0QXOHblVp2ExXLzFYBA+dEiPFP
+   g4Szevva8vWm0LqxVNu6cTASAEje+e/V5nUmv8foM3zuj3v1dfRdJHxeE
+   /cwxC0dOOAA7av1ydk1WQWmYWJcQrAH+AChdxLWqcf9crRCJE6Oe7F1c4
+   qh0lgvGujKkcjdIchM+c5JOLOXY9A3dISCsnGwJ4Hk65VxwCNOhXzRjLf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="391777740"
 X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
-   d="scan'208";a="424041077"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 01:43:27 -0800
+   d="scan'208";a="391777740"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 03:45:17 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="772281741"
 X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
-   d="scan'208";a="10066780"
+   d="scan'208";a="772281741"
 Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Nov 2023 01:43:26 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 28 Nov 2023 03:45:15 -0800
 Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r7ucm-0007Nb-0l;
-	Tue, 28 Nov 2023 09:43:24 +0000
-Date: Tue, 28 Nov 2023 17:43:17 +0800
+	id 1r7wWe-0007WJ-3D;
+	Tue, 28 Nov 2023 11:45:13 +0000
+Date: Tue, 28 Nov 2023 19:45:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC][PATCH] tracing: Allow creating instances with specified
- system events
-Message-ID: <202311281631.XZ2umoXl-lkp@intel.com>
-References: <20231127174108.3c331c9c@gandalf.local.home>
+To: Sagi Maimon <maimon.sagi@gmail.com>, richardcochran@gmail.com,
+	reibax@gmail.com, davem@davemloft.net, rrameshbabu@nvidia.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	maheshb@google.com, maimon.sagi@gmail.com
+Subject: Re: [PATCH v2] posix-timers: add multi_clock_gettime system call
+Message-ID: <202311281817.puU0ujYG-lkp@intel.com>
+References: <20231127153901.6399-1-maimon.sagi@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,82 +53,198 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231127174108.3c331c9c@gandalf.local.home>
+In-Reply-To: <20231127153901.6399-1-maimon.sagi@gmail.com>
 
-Hi Steven,
+Hi Sagi,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next linus/master v6.7-rc3 next-20231128]
+[auto build test WARNING on arnd-asm-generic/master]
+[also build test WARNING on tip/timers/core linus/master v6.7-rc3]
+[cannot apply to tip/x86/asm next-20231128]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Allow-creating-instances-with-specified-system-events/20231128-064317
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20231127174108.3c331c9c%40gandalf.local.home
-patch subject: [RFC][PATCH] tracing: Allow creating instances with specified system events
-config: i386-buildonly-randconfig-005-20231128 (https://download.01.org/0day-ci/archive/20231128/202311281631.XZ2umoXl-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311281631.XZ2umoXl-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sagi-Maimon/posix-timers-add-multi_clock_gettime-system-call/20231128-000215
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/20231127153901.6399-1-maimon.sagi%40gmail.com
+patch subject: [PATCH v2] posix-timers: add multi_clock_gettime system call
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20231128/202311281817.puU0ujYG-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311281817.puU0ujYG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311281631.XZ2umoXl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311281817.puU0ujYG-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/trace/trace.c:9640: warning: Function parameter or member 'systems' not described in 'trace_array_get_by_name'
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> kernel/time/posix-timers.c:1429:1: warning: stack frame size (2040) exceeds limit (1024) in '__se_sys_multi_clock_gettime' [-Wframe-larger-than]
+    1429 | SYSCALL_DEFINE1(multi_clock_gettime, struct __ptp_multi_clock_get __user *, ptp_multi_clk_get)
+         | ^
+   include/linux/syscalls.h:219:36: note: expanded from macro 'SYSCALL_DEFINE1'
+     219 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:230:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:249:18: note: expanded from macro '__SYSCALL_DEFINEx'
+     249 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
+         |                         ^
+   <scratch space>:122:1: note: expanded from here
+     122 | __se_sys_multi_clock_gettime
+         | ^
+>> kernel/time/posix-timers.c:1460:1: warning: stack frame size (2040) exceeds limit (1024) in '__se_sys_multi_clock_gettime32' [-Wframe-larger-than]
+    1460 | SYSCALL_DEFINE1(multi_clock_gettime32, struct __ptp_multi_clock_get32 __user *, ptp_multi_clk_get)
+         | ^
+   include/linux/syscalls.h:219:36: note: expanded from macro 'SYSCALL_DEFINE1'
+     219 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:230:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     230 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:249:18: note: expanded from macro '__SYSCALL_DEFINEx'
+     249 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
+         |                         ^
+   <scratch space>:147:1: note: expanded from here
+     147 | __se_sys_multi_clock_gettime32
+         | ^
+   14 warnings generated.
 
 
-vim +9640 kernel/trace/trace.c
+vim +/__se_sys_multi_clock_gettime +1429 kernel/time/posix-timers.c
 
-277ba04461c274 Steven Rostedt          2012-08-03  9622  
-28879787147358 Divya Indi              2019-11-20  9623  /**
-28879787147358 Divya Indi              2019-11-20  9624   * trace_array_get_by_name - Create/Lookup a trace array, given its name.
-28879787147358 Divya Indi              2019-11-20  9625   * @name: The name of the trace array to be looked up/created.
-28879787147358 Divya Indi              2019-11-20  9626   *
-28879787147358 Divya Indi              2019-11-20  9627   * Returns pointer to trace array with given name.
-28879787147358 Divya Indi              2019-11-20  9628   * NULL, if it cannot be created.
-28879787147358 Divya Indi              2019-11-20  9629   *
-28879787147358 Divya Indi              2019-11-20  9630   * NOTE: This function increments the reference counter associated with the
-28879787147358 Divya Indi              2019-11-20  9631   * trace array returned. This makes sure it cannot be freed while in use.
-28879787147358 Divya Indi              2019-11-20  9632   * Use trace_array_put() once the trace array is no longer needed.
-28394da2588816 Steven Rostedt (VMware  2020-01-24  9633)  * If the trace_array is to be freed, trace_array_destroy() needs to
-28394da2588816 Steven Rostedt (VMware  2020-01-24  9634)  * be called after the trace_array_put(), or simply let user space delete
-28394da2588816 Steven Rostedt (VMware  2020-01-24  9635)  * it from the tracefs instances directory. But until the
-28394da2588816 Steven Rostedt (VMware  2020-01-24  9636)  * trace_array_put() is called, user space can not delete it.
-28879787147358 Divya Indi              2019-11-20  9637   *
-28879787147358 Divya Indi              2019-11-20  9638   */
-d0f64c321316b8 Steven Rostedt (Google  2023-11-27  9639) struct trace_array *trace_array_get_by_name(const char *name, const char *systems)
-f45d1225adb047 Divya Indi              2019-03-20 @9640  {
-28879787147358 Divya Indi              2019-11-20  9641  	struct trace_array *tr;
-28879787147358 Divya Indi              2019-11-20  9642  
-28879787147358 Divya Indi              2019-11-20  9643  	mutex_lock(&event_mutex);
-28879787147358 Divya Indi              2019-11-20  9644  	mutex_lock(&trace_types_lock);
-28879787147358 Divya Indi              2019-11-20  9645  
-28879787147358 Divya Indi              2019-11-20  9646  	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
-28879787147358 Divya Indi              2019-11-20  9647  		if (tr->name && strcmp(tr->name, name) == 0)
-28879787147358 Divya Indi              2019-11-20  9648  			goto out_unlock;
-28879787147358 Divya Indi              2019-11-20  9649  	}
-28879787147358 Divya Indi              2019-11-20  9650  
-d0f64c321316b8 Steven Rostedt (Google  2023-11-27  9651) 	tr = trace_array_create_systems(name, systems);
-28879787147358 Divya Indi              2019-11-20  9652  
-28879787147358 Divya Indi              2019-11-20  9653  	if (IS_ERR(tr))
-28879787147358 Divya Indi              2019-11-20  9654  		tr = NULL;
-28879787147358 Divya Indi              2019-11-20  9655  out_unlock:
-28879787147358 Divya Indi              2019-11-20  9656  	if (tr)
-28879787147358 Divya Indi              2019-11-20  9657  		tr->ref++;
-28879787147358 Divya Indi              2019-11-20  9658  
-28879787147358 Divya Indi              2019-11-20  9659  	mutex_unlock(&trace_types_lock);
-28879787147358 Divya Indi              2019-11-20  9660  	mutex_unlock(&event_mutex);
-28879787147358 Divya Indi              2019-11-20  9661  	return tr;
-277ba04461c274 Steven Rostedt          2012-08-03  9662  }
-28879787147358 Divya Indi              2019-11-20  9663  EXPORT_SYMBOL_GPL(trace_array_get_by_name);
-277ba04461c274 Steven Rostedt          2012-08-03  9664  
+  1428	
+> 1429	SYSCALL_DEFINE1(multi_clock_gettime, struct __ptp_multi_clock_get __user *, ptp_multi_clk_get)
+  1430	{
+  1431		const struct k_clock *kc;
+  1432		struct timespec64 kernel_tp;
+  1433		struct __ptp_multi_clock_get multi_clk_get;
+  1434		int error;
+  1435		unsigned int i, j;
+  1436	
+  1437		if (copy_from_user(&multi_clk_get, ptp_multi_clk_get, sizeof(multi_clk_get)))
+  1438			return -EFAULT;
+  1439	
+  1440		if (multi_clk_get.n_samples > MULTI_PTP_MAX_SAMPLES)
+  1441			return -EINVAL;
+  1442		if (multi_clk_get.n_clocks > MULTI_PTP_MAX_CLOCKS)
+  1443			return -EINVAL;
+  1444	
+  1445		for (j = 0; j < multi_clk_get.n_samples; j++) {
+  1446			for (i = 0; i < multi_clk_get.n_clocks; i++) {
+  1447				kc = clockid_to_kclock(multi_clk_get.clkid_arr[i]);
+  1448				if (!kc)
+  1449					return -EINVAL;
+  1450				error = kc->clock_get_timespec(multi_clk_get.clkid_arr[i], &kernel_tp);
+  1451				if (!error && put_timespec64(&kernel_tp, (struct __kernel_timespec __user *)
+  1452							     &ptp_multi_clk_get->ts[j][i]))
+  1453					error = -EFAULT;
+  1454			}
+  1455		}
+  1456	
+  1457		return error;
+  1458	}
+  1459	
+> 1460	SYSCALL_DEFINE1(multi_clock_gettime32, struct __ptp_multi_clock_get32 __user *, ptp_multi_clk_get)
+  1461	{
+  1462		const struct k_clock *kc;
+  1463		struct timespec64 kernel_tp;
+  1464		struct __ptp_multi_clock_get multi_clk_get;
+  1465		int error;
+  1466		unsigned int i, j;
+  1467	
+  1468		if (copy_from_user(&multi_clk_get, ptp_multi_clk_get, sizeof(multi_clk_get)))
+  1469			return -EFAULT;
+  1470	
+  1471		if (multi_clk_get.n_samples > MULTI_PTP_MAX_SAMPLES)
+  1472			return -EINVAL;
+  1473		if (multi_clk_get.n_clocks > MULTI_PTP_MAX_CLOCKS)
+  1474			return -EINVAL;
+  1475	
+  1476		for (j = 0; j < multi_clk_get.n_samples; j++) {
+  1477			for (i = 0; i < multi_clk_get.n_clocks; i++) {
+  1478				kc = clockid_to_kclock(multi_clk_get.clkid_arr[i]);
+  1479				if (!kc)
+  1480					return -EINVAL;
+  1481				error = kc->clock_get_timespec(multi_clk_get.clkid_arr[i], &kernel_tp);
+  1482				if (!error && put_old_timespec32(&kernel_tp, (struct old_timespec32 __user *)
+  1483								&ptp_multi_clk_get->ts[j][i]))
+  1484					error = -EFAULT;
+  1485			}
+  1486		}
+  1487	
+  1488		return error;
+  1489	}
+  1490	
 
 -- 
 0-DAY CI Kernel Test Service
