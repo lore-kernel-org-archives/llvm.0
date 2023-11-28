@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DF344395;
-	Tue, 28 Nov 2023 21:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6CC42A8E;
+	Tue, 28 Nov 2023 21:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PP6HR+FP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390FAC43391;
-	Tue, 28 Nov 2023 21:08:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7wT6f5Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26658C433A9;
+	Tue, 28 Nov 2023 21:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701205686;
-	bh=yFXeZFzrBMhAgfi/v3PgoyaosZfMWqxXdzBpoTYJsks=;
+	s=k20201202; t=1701205734;
+	bh=f1gzDelGg4oWJgujz2chwopJdsVltC23ldrlMx+lJtU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PP6HR+FPIAS7ZSgkJqFMCewPalc3qz2lhJA7FZOs8f1xGZu11GEWfJg8TvMWcRy20
-	 gHbyXwZs98Nkh+2cMEd3IeiLx3aIpWJowIs51gq1mMwgnL2Nxl6SIFIHigEYYVQfMd
-	 BTF44+lgNL0mgu8Na00ZdbEWYMTf9oKRA/2KvFI+UknFhMNNLvV8jcRl4JW2mz0TZK
-	 7UiOLRSjjMSk63S2zNBZg0STZn5uE9Hn6fpz9YP9luCsFlWiEqmU7KxgHnHhkFqBL7
-	 V11HSw/72DZHHrgj2RU0sQygr5/4Qa/zKbnhL6uNhsK2w/9oFmsciqTcQyqxD0VUCx
-	 YKAASNP2iY9yw==
+	b=X7wT6f5Z/K99+OFjMnJJ3R7JuSUe6CZUmaikEgSuv8ARr/C4tbfDFU7KrcQxGIsU3
+	 5qd+82MRZgoWrg2tYG6+9IcDK8rYDPixGi/JRtqh64m5U5usGeWuHUUXSf+UFAjUEO
+	 gsbmUUyUna8aG0K37PPCMMSl/qt7Jib2I27YcNv9EngZPwjlUj744kIavKSPtZQ8po
+	 jjyLrZwdcmQFtQlo4+MC6B5YQPBHLlAtPJco77ZOTufxMFCbbxBALwZOas43hwTUur
+	 MRyc5JeHMXyeCLCLqG7Fkz4E2s7i4YRnbVMl8nMIvdDvJM0sLKH14Q6RTiQLnBpq3x
+	 DG2ZabsAQ5yUQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -29,12 +29,12 @@ Cc: Colin Ian King <colin.i.king@gmail.com>,
 	ndesaulniers@google.com,
 	linux-bcache@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 07/25] bcache: remove redundant assignment to variable cur_idx
-Date: Tue, 28 Nov 2023 16:07:23 -0500
-Message-ID: <20231128210750.875945-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 06/15] bcache: remove redundant assignment to variable cur_idx
+Date: Tue, 28 Nov 2023 16:08:27 -0500
+Message-ID: <20231128210843.876493-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231128210750.875945-1-sashal@kernel.org>
-References: <20231128210750.875945-1-sashal@kernel.org>
+In-Reply-To: <20231128210843.876493-1-sashal@kernel.org>
+References: <20231128210843.876493-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,7 +43,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.64
+X-stable-base: Linux 5.15.140
 Content-Transfer-Encoding: 8bit
 
 From: Colin Ian King <colin.i.king@gmail.com>
@@ -68,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/md/bcache/writeback.c b/drivers/md/bcache/writeback.c
-index 7bac2a88b794a..e6d77aaea56bc 100644
+index 4dcbaf9a2149d..1866aa1c08bba 100644
 --- a/drivers/md/bcache/writeback.c
 +++ b/drivers/md/bcache/writeback.c
-@@ -913,7 +913,7 @@ static int bch_dirty_init_thread(void *arg)
+@@ -903,7 +903,7 @@ static int bch_dirty_init_thread(void *arg)
  	int cur_idx, prev_idx, skip_nr;
  
  	k = p = NULL;
