@@ -1,47 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084F244367;
-	Tue, 28 Nov 2023 21:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DF344395;
+	Tue, 28 Nov 2023 21:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJwLSoz/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA97BC433BA;
-	Tue, 28 Nov 2023 21:06:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PP6HR+FP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390FAC43391;
+	Tue, 28 Nov 2023 21:08:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701205619;
-	bh=X6PK4oBFo/KwYkDeQ/y95m2BXrZFZdq9RKhHH1b3Ycg=;
+	s=k20201202; t=1701205686;
+	bh=yFXeZFzrBMhAgfi/v3PgoyaosZfMWqxXdzBpoTYJsks=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kJwLSoz/hojYq3yJZkbkmwjvC0x/glN70tyFJ6kX2rRpc079OtNFQv3QarLDfNUCP
-	 9Aa/HzK/Z7IYDcUwYoRF32Oom36FA+CNO787BmDSKyZc5+yM5bxG9sYW9IG+CHG+U+
-	 LTolSAAVK5NXcXPslfExwncrjfrN5F9LaZuKbVFjGhoUJbRV0/DMa7uY7jPNbJLcv1
-	 MeiwLRr+C0k+qRH3qjy7cz+YdBVvcn7Q2nX5cB2vesRFT1awQ8zSTwHGw+zpe1hQJy
-	 fxsXY/9YPZ7mQzSP26eg2krpmkzKysr6+veUsLqWunWxmTG+NQnEUPeK9rqMY/8AcW
-	 zK7Kc/pJlMtGw==
+	b=PP6HR+FPIAS7ZSgkJqFMCewPalc3qz2lhJA7FZOs8f1xGZu11GEWfJg8TvMWcRy20
+	 gHbyXwZs98Nkh+2cMEd3IeiLx3aIpWJowIs51gq1mMwgnL2Nxl6SIFIHigEYYVQfMd
+	 BTF44+lgNL0mgu8Na00ZdbEWYMTf9oKRA/2KvFI+UknFhMNNLvV8jcRl4JW2mz0TZK
+	 7UiOLRSjjMSk63S2zNBZg0STZn5uE9Hn6fpz9YP9luCsFlWiEqmU7KxgHnHhkFqBL7
+	 V11HSw/72DZHHrgj2RU0sQygr5/4Qa/zKbnhL6uNhsK2w/9oFmsciqTcQyqxD0VUCx
+	 YKAASNP2iY9yw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: WANG Rui <wangrui@loongson.cn>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Huacai Chen <chenhuacai@loongson.cn>,
+Cc: Colin Ian King <colin.i.king@gmail.com>,
+	Coly Li <colyli@suse.de>,
+	Jens Axboe <axboe@kernel.dk>,
 	Sasha Levin <sashal@kernel.org>,
-	chenhuacai@kernel.org,
+	kent.overstreet@gmail.com,
+	nathan@kernel.org,
 	ndesaulniers@google.com,
-	tangyouling@loongson.cn,
-	git@xen0n.name,
-	huqi@loongson.cn,
-	xry111@xry111.site,
-	zhoubinbin@loongson.cn,
-	zhangqing@loongson.cn,
-	chenfeiyang@loongson.cn,
-	hejinyang@loongson.cn,
-	loongarch@lists.linux.dev,
+	linux-bcache@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 19/40] LoongArch: Record pc instead of offset in la_abs relocation
-Date: Tue, 28 Nov 2023 16:05:25 -0500
-Message-ID: <20231128210615.875085-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 07/25] bcache: remove redundant assignment to variable cur_idx
+Date: Tue, 28 Nov 2023 16:07:23 -0500
+Message-ID: <20231128210750.875945-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231128210615.875085-1-sashal@kernel.org>
-References: <20231128210615.875085-1-sashal@kernel.org>
+In-Reply-To: <20231128210750.875945-1-sashal@kernel.org>
+References: <20231128210750.875945-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,68 +43,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.3
+X-stable-base: Linux 6.1.64
 Content-Transfer-Encoding: 8bit
 
-From: WANG Rui <wangrui@loongson.cn>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-[ Upstream commit aa0cbc1b506b090c3a775b547c693ada108cc0d7 ]
+[ Upstream commit be93825f0e6428c2d3f03a6e4d447dc48d33d7ff ]
 
-To clarify, the previous version functioned flawlessly. However, it's
-worth noting that the LLVM's LoongArch backend currently lacks support
-for cross-section label calculations. With this patch, we enable the use
-of clang to compile relocatable kernels.
+Variable cur_idx is being initialized with a value that is never read,
+it is being re-assigned later in a while-loop. Remove the redundant
+assignment. Cleans up clang scan build warning:
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: WANG Rui <wangrui@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+drivers/md/bcache/writeback.c:916:2: warning: Value stored to 'cur_idx'
+is never read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reviewed-by: Coly Li <colyli@suse.de>
+Signed-off-by: Coly Li <colyli@suse.de>
+Link: https://lore.kernel.org/r/20231120052503.6122-4-colyli@suse.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/loongarch/include/asm/asmmacro.h | 3 +--
- arch/loongarch/include/asm/setup.h    | 2 +-
- arch/loongarch/kernel/relocate.c      | 2 +-
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ drivers/md/bcache/writeback.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
-index c9544f358c339..655db7d7a4279 100644
---- a/arch/loongarch/include/asm/asmmacro.h
-+++ b/arch/loongarch/include/asm/asmmacro.h
-@@ -609,8 +609,7 @@
- 	lu32i.d	\reg, 0
- 	lu52i.d	\reg, \reg, 0
- 	.pushsection ".la_abs", "aw", %progbits
--	768:
--	.dword	768b-766b
-+	.dword	766b
- 	.dword	\sym
- 	.popsection
- #endif
-diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-index a0bc159ce8bdc..ee52fb1e99631 100644
---- a/arch/loongarch/include/asm/setup.h
-+++ b/arch/loongarch/include/asm/setup.h
-@@ -25,7 +25,7 @@ extern void set_merr_handler(unsigned long offset, void *addr, unsigned long len
- #ifdef CONFIG_RELOCATABLE
+diff --git a/drivers/md/bcache/writeback.c b/drivers/md/bcache/writeback.c
+index 7bac2a88b794a..e6d77aaea56bc 100644
+--- a/drivers/md/bcache/writeback.c
++++ b/drivers/md/bcache/writeback.c
+@@ -913,7 +913,7 @@ static int bch_dirty_init_thread(void *arg)
+ 	int cur_idx, prev_idx, skip_nr;
  
- struct rela_la_abs {
--	long offset;
-+	long pc;
- 	long symvalue;
- };
+ 	k = p = NULL;
+-	cur_idx = prev_idx = 0;
++	prev_idx = 0;
  
-diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-index 6c3eff9af9fb1..288b739ca88dd 100644
---- a/arch/loongarch/kernel/relocate.c
-+++ b/arch/loongarch/kernel/relocate.c
-@@ -52,7 +52,7 @@ static inline void __init relocate_absolute(long random_offset)
- 	for (p = begin; (void *)p < end; p++) {
- 		long v = p->symvalue;
- 		uint32_t lu12iw, ori, lu32id, lu52id;
--		union loongarch_instruction *insn = (void *)p - p->offset;
-+		union loongarch_instruction *insn = (void *)p->pc;
- 
- 		lu12iw = (v >> 12) & 0xfffff;
- 		ori    = v & 0xfff;
+ 	bch_btree_iter_init(&c->root->keys, &iter, NULL);
+ 	k = bch_btree_iter_next_filter(&iter, &c->root->keys, bch_ptr_bad);
 -- 
 2.42.0
 
