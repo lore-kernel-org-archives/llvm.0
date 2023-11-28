@@ -1,60 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5213258AA1;
-	Tue, 28 Nov 2023 14:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6221E48B;
+	Tue, 28 Nov 2023 15:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="den1Frdv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IgeKUq8R"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701183535; x=1732719535;
+  t=1701186047; x=1732722047;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MmtHq2AXw3e0z60hXa4rJ0joKeClbwyrFO4/JVmK7So=;
-  b=den1FrdvHvwJ1TmR4oA8E/48cIcrozJlqjewdrru04uweIIkljWdZn9m
-   YsaxSs4PnzvMPH7HfprbqxTPMVyjhqSMlmRMwQCvsxVqWs1avM/+/eJNW
-   jsjUCc58mlbwNiIsJtzAcnS6EZHXcdO0BIuNbYVP/mujo7OImevdAqQSh
-   ff3aCHTenIiXAppeRW+z0eSe8+YCL5LKww5dDjEQ3MzFPQ45ViKHRcjg7
-   NTaPrc62Gi8DwwJ6ssMhIwD3POS5dqWN7u+aOSziAh9Zpdh0+TOYoc6iK
-   8m80dmGbM8gzerlodiDQtYpHtKhjgPiSrxvLWThsK+tQIeeIm03TNX01R
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="459442642"
+  bh=8nepXDDKpUSmzaNbaV5Vy4HTg1gPIixShnpwMbGkYOo=;
+  b=IgeKUq8RpYD3nUhjRTsGJZl/o2N0Egvw7mTY4CyEAhFBstvwH2AC4tfL
+   WsGMQsFC2+VbpEtyRtB+80tC9DfcxirA96nZImypopab2WaMxS9Izt1ud
+   eE4ZgBw9NHWPGka+fpKpS7VqC2Lo4dSOSRGVRIztY1bYtjKX+TU5jSqZC
+   T/bgmUOMDGRF+aByDiSpI/Xme/3ZWkqtgW0aRZxPssfJceoMbpA0yyNBX
+   eE3QD1tdObHcPMiWc8Hlo/0C924/6jgJLEfVBmC/bYSYhO4yEKEXDJL73
+   zwJv1l3/SOtVF6j9Pa00UiodHDlYZqjY0lPyfJ/+V25YtMMKO/Zov92z4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="6205959"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="459442642"
+   d="scan'208";a="6205959"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 06:58:54 -0800
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 07:40:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="9971128"
+   d="scan'208";a="9985751"
 Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 28 Nov 2023 06:58:48 -0800
+  by orviesa002.jf.intel.com with ESMTP; 28 Nov 2023 07:40:28 -0800
 Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r7zXy-0007eq-14;
-	Tue, 28 Nov 2023 14:58:46 +0000
-Date: Tue, 28 Nov 2023 22:57:51 +0800
+	id 1r80CH-0007gS-0j;
+	Tue, 28 Nov 2023 15:40:25 +0000
+Date: Tue, 28 Nov 2023 23:40:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <mripard@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Emma Anholt <emma@anholt.net>, Jonathan Corbet <corbet@lwn.net>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	airlied@gmail.com, hi@alyssa.is, daniel@ffwll.ch,
+	javierm@redhat.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH v4 03/45] drm/tests: Add helper to create mock plane
-Message-ID: <202311282223.mefGp1S5-lkp@intel.com>
-References: <20231128-kms-hdmi-connector-state-v4-3-c7602158306e@kernel.org>
+	stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v3] drm/atomic-helpers: Invoke end_fb_access while owning
+ plane state
+Message-ID: <202311282308.nZrBqKpT-lkp@intel.com>
+References: <20231128090158.15564-1-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,106 +55,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231128-kms-hdmi-connector-state-v4-3-c7602158306e@kernel.org>
+In-Reply-To: <20231128090158.15564-1-tzimmermann@suse.de>
 
-Hi Maxime,
+Hi Thomas,
 
 kernel test robot noticed the following build warnings:
 
 [auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on sunxi/sunxi/for-next drm/drm-next linus/master v6.7-rc3 next-20231128]
+[also build test WARNING on drm-intel/for-linux-next drm-intel/for-linux-next-fixes linus/master v6.7-rc3 next-20231128]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-helpers-Add-atomic-helpers/20231128-193409
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-atomic-helpers-Invoke-end_fb_access-while-owning-plane-state/20231128-170429
 base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20231128-kms-hdmi-connector-state-v4-3-c7602158306e%40kernel.org
-patch subject: [PATCH v4 03/45] drm/tests: Add helper to create mock plane
-config: i386-buildonly-randconfig-002-20231128 (https://download.01.org/0day-ci/archive/20231128/202311282223.mefGp1S5-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20231128090158.15564-1-tzimmermann%40suse.de
+patch subject: [PATCH v3] drm/atomic-helpers: Invoke end_fb_access while owning plane state
+config: i386-buildonly-randconfig-002-20231128 (https://download.01.org/0day-ci/archive/20231128/202311282308.nZrBqKpT-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311282223.mefGp1S5-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231128/202311282308.nZrBqKpT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311282223.mefGp1S5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311282308.nZrBqKpT-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/tests/drm_kunit_helpers.c:290: warning: Function parameter or member 'num_formats' not described in 'drm_kunit_helper_create_primary_plane'
->> drivers/gpu/drm/tests/drm_kunit_helpers.c:290: warning: Excess function parameter 'format_count' description in 'drm_kunit_helper_create_primary_plane'
+>> drivers/gpu/drm/drm_atomic_helper.c:2665: warning: Function parameter or member 'state' not described in 'drm_atomic_helper_unprepare_planes'
+>> drivers/gpu/drm/drm_atomic_helper.c:2665: warning: Excess function parameter 'old_state' description in 'drm_atomic_helper_unprepare_planes'
 
 
-vim +290 drivers/gpu/drm/tests/drm_kunit_helpers.c
+vim +2665 drivers/gpu/drm/drm_atomic_helper.c
 
-   257	
-   258	/**
-   259	 * drm_kunit_helper_create_primary_plane - Creates a mock primary plane for a KUnit test
-   260	 * @test: The test context object
-   261	 * @drm: The device to alloc the plane for
-   262	 * @funcs: Callbacks for the new plane. Optional.
-   263	 * @helper_funcs: Helpers callbacks for the new plane. Optional.
-   264	 * @formats: array of supported formats (DRM_FORMAT\_\*). Optional.
-   265	 * @format_count: number of elements in @formats
-   266	 * @modifiers: array of struct drm_format modifiers terminated by
-   267	 *             DRM_FORMAT_MOD_INVALID. Optional.
-   268	 *
-   269	 * This allocates and initializes a mock struct &drm_plane meant to be
-   270	 * part of a mock device for a KUnit test.
-   271	 *
-   272	 * Resources will be cleaned up automatically.
-   273	 *
-   274	 * @funcs will default to the default helpers implementations.
-   275	 * @helper_funcs will default to an empty implementation. @formats will
-   276	 * default to XRGB8888 only. @modifiers will default to a linear
-   277	 * modifier only.
-   278	 *
-   279	 * Returns:
-   280	 * A pointer to the new plane, or an ERR_PTR() otherwise.
-   281	 */
-   282	struct drm_plane *
-   283	drm_kunit_helper_create_primary_plane(struct kunit *test,
-   284					      struct drm_device *drm,
-   285					      const struct drm_plane_funcs *funcs,
-   286					      const struct drm_plane_helper_funcs *helper_funcs,
-   287					      const uint32_t *formats,
-   288					      unsigned int num_formats,
-   289					      const uint64_t *modifiers)
- > 290	{
-   291		struct drm_plane *plane;
-   292	
-   293		if (!funcs)
-   294			funcs = &default_plane_funcs;
-   295	
-   296		if (!helper_funcs)
-   297			helper_funcs = &default_plane_helper_funcs;
-   298	
-   299		if (!formats || !num_formats) {
-   300			formats = default_plane_formats;
-   301			num_formats = ARRAY_SIZE(default_plane_formats);
-   302		}
-   303	
-   304		if (!modifiers)
-   305			modifiers = default_plane_modifiers;
-   306	
-   307		plane = __drmm_universal_plane_alloc(drm,
-   308						     sizeof(struct drm_plane), 0,
-   309						     0,
-   310						     funcs,
-   311						     formats,
-   312						     num_formats,
-   313						     default_plane_modifiers,
-   314						     DRM_PLANE_TYPE_PRIMARY,
-   315						     NULL);
-   316		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, plane);
-   317	
-   318		drm_plane_helper_add(plane, helper_funcs);
-   319	
-   320		return plane;
-   321	}
-   322	EXPORT_SYMBOL_GPL(drm_kunit_helper_create_primary_plane);
-   323	
+  2652	
+  2653	/**
+  2654	 * drm_atomic_helper_unprepare_planes - release plane resources on aborts
+  2655	 * @dev: DRM device
+  2656	 * @old_state: atomic state object with old state structures
+  2657	 *
+  2658	 * This function cleans up plane state, specifically framebuffers, from the
+  2659	 * atomic state. It undoes the effects of drm_atomic_helper_prepare_planes()
+  2660	 * when aborting an atomic commit. For cleaning up after a successful commit
+  2661	 * use drm_atomic_helper_cleanup_planes().
+  2662	 */
+  2663	void drm_atomic_helper_unprepare_planes(struct drm_device *dev,
+  2664						struct drm_atomic_state *state)
+> 2665	{
+  2666		struct drm_plane *plane;
+  2667		struct drm_plane_state *new_plane_state;
+  2668		int i;
+  2669	
+  2670		for_each_new_plane_in_state(state, plane, new_plane_state, i) {
+  2671			const struct drm_plane_helper_funcs *funcs = plane->helper_private;
+  2672	
+  2673			if (funcs->end_fb_access)
+  2674				funcs->end_fb_access(plane, new_plane_state);
+  2675		}
+  2676	
+  2677		for_each_new_plane_in_state(state, plane, new_plane_state, i) {
+  2678			const struct drm_plane_helper_funcs *funcs = plane->helper_private;
+  2679	
+  2680			if (funcs->cleanup_fb)
+  2681				funcs->cleanup_fb(plane, new_plane_state);
+  2682		}
+  2683	}
+  2684	EXPORT_SYMBOL(drm_atomic_helper_unprepare_planes);
+  2685	
 
 -- 
 0-DAY CI Kernel Test Service
