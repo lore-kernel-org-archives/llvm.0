@@ -1,70 +1,57 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id D206C10EE
-	for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 01:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 946E9604B3FD4;
-	Tue, 28 Nov 2023 09:45:36 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: alexander.usyskin@intel.com,
-	tomas.winkler@intel.com,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com
-Cc: Su Hui <suhui@nfschina.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH v3] misc: mei: client.c: fix problem of return '-EOVERFLOW' in mei_cl_write
-Date: Tue, 28 Nov 2023 09:45:08 +0800
-Message-Id: <20231128014507.418254-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D6020E5;
+	Tue, 28 Nov 2023 02:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uEw0olYp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7249CC433C7;
+	Tue, 28 Nov 2023 02:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701137729;
+	bh=XfJwlAwJtcgZM2kH0vH5xqAnbMPT8rha/PkVQK+7j9M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uEw0olYpKxEmA/M0Qq5UT/ckq6DKdhxOr/lbSRS7jI8DWBNYFiGzEb9s3541kpcqG
+	 vLIXH7B0JZEl75RiD/3nN/OQiE34CbZqG6QpvJ5l7kZY4DDTEuIXbUWjUKw3qo3SrL
+	 9lpub5+3MNRtSt0X/sNEAxiIWgulV+RRLuc55Y97yhfUDnEj1ZnOPWnyOw6X7et/fx
+	 ZS0YDkbs+FJeUk6iAPCIgkqHifW/ZjjoBxDi8Te8LKGSpNmmP0zGhjQfR6pcPU9fJi
+	 lwcWXCqENtfCmlsQGC0igjBNjg16lY8DA2+kh+0F4WNGp0EU//WQU0rdmRrT0FOLup
+	 GqWpNEc5MAiEA==
+Date: Mon, 27 Nov 2023 18:15:27 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Pedro Tammela <pctammela@mojatatu.com>
+Cc: netdev@vger.kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, pabeni@redhat.com,
+ edumazet@google.com, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ llvm@lists.linux.dev, Davide Caratti <dcaratti@redhat.com>
+Subject: Re: [PATCH net-next 1/5] selftests: tc-testing: remove buildebpf
+ plugin
+Message-ID: <20231127181527.1101e015@kernel.org>
+In-Reply-To: <20231124154248.315470-2-pctammela@mojatatu.com>
+References: <20231124154248.315470-1-pctammela@mojatatu.com>
+	<20231124154248.315470-2-pctammela@mojatatu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Clang static analyzer complains that value stored to 'rets' is never
-read.Using 'goto err' to go to the error path and fix this problem.
+On Fri, 24 Nov 2023 12:42:44 -0300 Pedro Tammela wrote:
+> diff --git a/tools/testing/selftests/tc-testing/Makefile b/tools/testing/selftests/tc-testing/Makefile
+> index b1fa2e177e2f..e8b3dde4fa16 100644
+> --- a/tools/testing/selftests/tc-testing/Makefile
+> +++ b/tools/testing/selftests/tc-testing/Makefile
+> @@ -1,31 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -include ../../../scripts/Makefile.include
+>  
+> -top_srcdir = $(abspath ../../../..)
+> -APIDIR := $(top_scrdir)/include/uapi
+> -TEST_GEN_FILES = action.o
+> +TEST_PROGS += ./tdc.sh
 
-Fixes: 8c8d964ce90f ("mei: move hbuf_depth from the mei device to the hw modules")
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
-v3: 
- - using 'goto err' rather than 'buf_len=-EOVERFLOW'.(Thanks to Sasha)
-
-v2:
- - split v1 patch to different patches
-https://lore.kernel.org/all/20231120095523.178385-2-suhui@nfschina.com/
-
-v1:
-https://lore.kernel.org/all/5c98fc07-36a9-92cc-f8d6-c4efdc0c34aa@nfschina.com/
-
- drivers/misc/mei/client.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
-index 7ea80779a0e2..0489bec4fded 100644
---- a/drivers/misc/mei/client.c
-+++ b/drivers/misc/mei/client.c
-@@ -2033,7 +2033,7 @@ ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long time
- 	hbuf_slots = mei_hbuf_empty_slots(dev);
- 	if (hbuf_slots < 0) {
- 		rets = -EOVERFLOW;
--		goto out;
-+		goto err;
- 	}
- 
- 	hbuf_len = mei_slots2data(hbuf_slots) & MEI_MSG_MAX_LEN_MASK;
--- 
-2.30.2
-
+nit: could you try to remove the ./ prefix, as a follow up? 
+     I think it's not necessary and it confuses one of patchwork checks.
