@@ -1,108 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394CD481C4;
-	Tue, 28 Nov 2023 23:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8OY25HX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E808C433C8;
-	Tue, 28 Nov 2023 23:55:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701215758;
-	bh=nG35m4Vhxm9XNz4uNcrivh81CH8gXfwdbwOCLLaDjvc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=H8OY25HXkY/+389x+INNuMR+qeYUfXBigl+TQ7yAxhaZCU2brkK4nogY/bpNaednx
-	 eyA8WkmW9/XasYQRRbV6/fe0ZtW7HhsdUDbnsUvXTGsCwaEa3fJqMJ+qFsagq+T5gp
-	 lGcZpOVRCfS+Umh3ydNyuzYAycGIBI+GWma7AcfXrkFXHdfR0ytlq57gbopfowsNOf
-	 b3p+enhLs9ZST689HKcd26/WSI4vLmFCtTevslR76NUgCqL5kWh5navmy875BjRrxt
-	 RSu0jCUVT9ZozQjrpLxS64m+XTeE6Ihup65O7D1z+27s9hnWdWjyASyJdXX1msEOyS
-	 rG5QV+USiLINw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 28 Nov 2023 16:55:43 -0700
-Subject: [PATCH] buffer: Add cast in grow_buffers() to avoid a
- multiplication libcall
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B57481C4
+	for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 23:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1cfc42c748eso33125815ad.0
+        for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 15:57:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701215825; x=1701820625;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vN2Ir+Y4JmS/bZdrwe9hRvn9LSobTrbuzI+1V9ZVUoI=;
+        b=lq8ZBnltZ+ZGhDzigtzXVTCGFcIV8hlF/09iZ+RVwV6aRnT8qZGuNqXOHEwoRCMv4k
+         U4xsyS5IJVBjQQGOtGSaLrvM4MU/mmdmQdBAlubCf4EIVlXRaI9gOK3u8ir2UQ8VVaVo
+         Ku3fgkF2gJwtRZ5+8l32PVFPqlKkbzTvE8J8vk1rZDPqocOt3lLTwkw9t7FG/mJ4OjH1
+         w49SVame2hA0MECV0VfIZEX4uq9ZQC7TwiN2tFoU1Y1xm9m5Hj818tvXVGJISWuu827U
+         DV6RSPMOxrqvm5fFfvDMRbwG0ZkAeG/2s090NJX/QUMi41X6ajsH/KVt3r1wFbZo+NPk
+         8RnQ==
+X-Gm-Message-State: AOJu0YyX8qdnANE2cpC3CPh2qs9AQaCuqki8X2e2VqeJTpdGweQ5oJGG
+	hY/tPPMzlFKPkVEG7xEXCenmRGWAOqtjfFdWR3nhr8iqOO9T
+X-Google-Smtp-Source: AGHT+IEBmKxuYKtQ/S0w/Sxr+C51n7BNjuA3UdTFIXPrhy6pf4y+36y7PctlYRTxRWgVazDQbWRHjB0qaDOjWNcdvHmORUl52cwI
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231128-avoid-muloti4-grow_buffers-v1-1-bc3d0f0ec483@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAP59ZmUC/x3MSwqDMBAA0KvIrDtgxijqVYoUrRMdUCOT+gHx7
- g0u3+ZdEFiFA9TJBcq7BPFLhHkl8B3bZWCUPhoopcwYKrHdvfQ4b5P/icVB/fHpNudYA+ZFYSm
- 1LrdUQQxWZSfnk7+b+/4DPVXPLWwAAAA=
-To: akpm@linux-foundation.org
-Cc: willy@infradead.org, ndesaulniers@google.com, 
- linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2587; i=nathan@kernel.org;
- h=from:subject:message-id; bh=nG35m4Vhxm9XNz4uNcrivh81CH8gXfwdbwOCLLaDjvc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKlpdXztleunX9qzhVOy9p1PwwUxDZcIfr4gH47l9UYWy
- au1A+U7SlkYxLgYZMUUWaofqx43NJxzlvHGqUkwc1iZQIYwcHEKwEQcZzL8FTQ6/lwk/XxE19F7
- 888s45repZ9x9tWDORZ/2feuuL5yoiIjw8xI/6QEJVeNr7IKusv42E9tfqIae+iJtXvb2SqjmPg
- fnAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Received: by 2002:a17:903:4282:b0:1cc:2f2a:7d33 with SMTP id
+ ju2-20020a170903428200b001cc2f2a7d33mr3456055plb.2.1701215825023; Tue, 28 Nov
+ 2023 15:57:05 -0800 (PST)
+Date: Tue, 28 Nov 2023 15:57:04 -0800
+In-Reply-To: <000000000000efc64705ff8286a1@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000efd864060b3f2cf0@google.com>
+Subject: Re: [syzbot] [wireless?] WARNING in rate_control_rate_init (2)
+From: syzbot <syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com>
+To: davem@davemloft.net, edumazet@google.com, johannes.berg@intel.com, 
+	johannes@sipsolutions.net, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-When building with clang after commit 697607935295 ("buffer: fix
-grow_buffers() for block size > PAGE_SIZE"), there is an error at link
-time due to the generation of a 128-bit multiplication libcall:
+syzbot has bisected this issue to:
 
-  ld.lld: error: undefined symbol: __muloti4
-  >>> referenced by buffer.c:0 (fs/buffer.c:0)
-  >>>               fs/buffer.o:(bdev_getblk) in archive vmlinux.a
+commit b303835dabe0340f932ebb4e260d2229f79b0684
+Author: Johannes Berg <johannes.berg@intel.com>
+Date:   Sat Jul 23 20:08:49 2022 +0000
 
-Due to the width mismatch between the factors and the sign mismatch
-between the factors and the result, clang generates IR that performs
-this overflow check with 65-bit signed multiplication and LLVM does not
-improve on it during optimization, so the 65-bit multiplication is
-extended to 128-bit during legalization, resulting in the libcall on
-most targets.
+    wifi: mac80211: accept STA changes without link changes
 
-To avoid the initial situation that causes clang to generate the
-problematic IR, cast size (which is an 'unsigned int') to the same
-type/width as block (which is currently a 'u64'/'unsigned long long').
-GCC appears to already do this internally because there is no binary
-difference with the cast for arm, arm64, riscv, or x86_64.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=125a86dce80000
+start commit:   a214724554ae Merge tag 'wireless-next-2023-11-27' of git:/..
+git tree:       net-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=115a86dce80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=165a86dce80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=abf6d5a82dab01fe
+dashboard link: https://syzkaller.appspot.com/bug?extid=62d7eef57b09bfebcd84
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10a4fc64e80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1363b22ce80000
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1958
-Link: https://github.com/llvm/llvm-project/issues/38013
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Closes: https://lore.kernel.org/CA+G9fYuA_PTd7R2NsBvtNb7qjwp4avHpCmWi4=OmY4jndDcQYA@mail.gmail.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I am aware the hash in the commit message is not stable due to being on
-the mm-unstable branch but I figured I would write the commit message as
-if it would be standalone, in case this should not be squashed into the
-original change. I did not add a comment to the source around this
-workaround but I can if so desired.
----
- fs/buffer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reported-by: syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com
+Fixes: b303835dabe0 ("wifi: mac80211: accept STA changes without link changes")
 
-diff --git a/fs/buffer.c b/fs/buffer.c
-index 4eb44ccdc6be..3a8c8322ed28 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -1091,7 +1091,7 @@ static bool grow_buffers(struct block_device *bdev, sector_t block,
- 	 * Check for a block which lies outside our maximum possible
- 	 * pagecache index.
- 	 */
--	if (check_mul_overflow(block, size, &pos) || pos > MAX_LFS_FILESIZE) {
-+	if (check_mul_overflow(block, (sector_t)size, &pos) || pos > MAX_LFS_FILESIZE) {
- 		printk(KERN_ERR "%s: requested out-of-range block %llu for device %pg\n",
- 			__func__, (unsigned long long)block,
- 			bdev);
-
----
-base-commit: 5cdba94229e58a39ca389ad99763af29e6b0c5a5
-change-id: 20231128-avoid-muloti4-grow_buffers-5664204f5429
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
