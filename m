@@ -1,64 +1,29 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB31515B9
-	for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 00:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA63C37B;
+	Tue, 28 Nov 2023 00:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="j9xqDRMp"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6cd8c3a9edaso1531388b3a.2
-        for <llvm@lists.linux.dev>; Mon, 27 Nov 2023 16:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701131658; x=1701736458; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xYiTIXqRTDarNbi0aa1f81qxroNRuY69MIWNnPKjAyY=;
-        b=j9xqDRMpp9FKDhfIjs1zN4CSJfBR76rTm0NzSYCAYVf3wOcX/umfhI4UyVG6Rka06C
-         NxCoFSuILa4Ybd3qPB+IjSs1buvb4AYD0frXjkR0zVSvaeZ5JmbKFZU35Pz5RdtZmaaV
-         0TH49eUBZ4zNgkSSkBP5xCxIGGDdw9vw3Pa+4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701131658; x=1701736458;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xYiTIXqRTDarNbi0aa1f81qxroNRuY69MIWNnPKjAyY=;
-        b=AMHSXJoKIcAT+yQulz17cb3fECJRQxEBpd0DVeYOkoA8p09J4yMPhi3hOXwfgXfAb1
-         a9xvUCcjDlJnKQuFStMpyC8nOMs9Xqz5wFJK8hv1HZCGx3tOz4K1lRmm3Lz4Y+rRHpKM
-         MZPqHlBegGIhMxyLLzC7iE7KNBBUeKulnYfq0Ey85+/mQ5tGsg9IGWrI0b8bQBHEMcV+
-         NUIF0RmqjJKaWI5bugfFbKACCj4h3OukCH5uudNMnAY6HyzriZwCZLamqiojb2AhhNyr
-         gABv4f97YkobW6Ay5/JBpR8LSkHpGc12zWvYROED0wvUCn5Fcj6bPcfPea2fYYiMsY9S
-         C6kw==
-X-Gm-Message-State: AOJu0YyoyQ0UUxIezl2Fn/5vDux5+qlDXaCpsqx/j+pQBbirVOe5OLyI
-	5FnLOWKP1ddK6hLKVTt6n/GULA==
-X-Google-Smtp-Source: AGHT+IE1qopXbd9oTJotAIwAhuzGIfmugcli9ua2BkHYosf3Vb/rPrjdoH2dQ3EIE9Fwv7Aw8jhVSA==
-X-Received: by 2002:a05:6a20:144b:b0:18c:382e:48fe with SMTP id a11-20020a056a20144b00b0018c382e48femr11176362pzi.15.1701131658027;
-        Mon, 27 Nov 2023 16:34:18 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 102-20020a17090a09ef00b002800e0b4852sm9214040pjo.22.2023.11.27.16.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Nov 2023 16:34:17 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: ndesaulniers@google.com
-Cc: Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: refresh LLVM support
-Date: Mon, 27 Nov 2023 16:34:11 -0800
-Message-Id: <170113164796.1670732.18133777682518787773.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231117-maintainers-v1-1-85f2a7422ed9@google.com>
-References: <20231117-maintainers-v1-1-85f2a7422ed9@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NJA7Odak"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 247C8C433C7;
+	Tue, 28 Nov 2023 00:40:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701132038;
+	bh=MdyQiFcxFvhv7Vq9MsjoGjqD7+bkRxAbVVAo+rygz+A=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=NJA7OdakXn+Ewaeesnc4Yjc8o+PLJx31jYK5HvbN49p0UFywSlot9oUxbaK3hkvFR
+	 aL1aXmn0cyFbomhiTFl/NwMUYodlZPRiBaZvhFzr6ofvJCiFgtvo8iNmSdImYybiDk
+	 kfAyIgSDdNWxrYHnFs3csM/MLJBI01l696lTFY/xJJVYS99GW7dEQNOppamG+StMlY
+	 gHAcgg0ZEM7I46nlPyPx9NhO1WJ8gI13jjhLOIaWl4OiLnhWWQnjaumIwLVaPrE+tY
+	 oOJh1mMYOrGreev/+TAxlVMbZ5w7U36O5uHywh0jGezHBmidVO1yrRC8pAjX6Zx8T1
+	 YNhB38PNRdp9Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 022D0C4167B;
+	Tue, 28 Nov 2023 00:40:38 +0000 (UTC)
+From: Nathan Lynch via B4 Relay <devnull+nathanl.linux.ibm.com@kernel.org>
+Date: Mon, 27 Nov 2023 18:40:09 -0600
+Subject: [PATCH] powerpc/rtas_pci: rename and properly expose config access
+ APIs
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,28 +31,225 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231127-rtas-pci-rw-config-v1-1-385d29ace3df@linux.ibm.com>
+X-B4-Tracking: v=1; b=H4sIAOk2ZWUC/x3MMQqAMAxA0atIZgNtRAWvIg6lppqllVRUKN7d4
+ viG/wtkVuEMU1NA+ZIsKVbYtgG/u7gxyloNZKizlkbU02U8vKDe6FMMsiEZ1w/WBFq7Hmp4KAd
+ 5/um8vO8Hvq+MEGQAAAA=
+To: Michael Ellerman <mpe@ellerman.id.au>, 
+ Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
+ Palmer Dabbelt <palmer@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Kees Cook <keescook@chromium.org>
+Cc: lkft-triage@lists.linaro.org, Benjamin Gray <bgray@linux.ibm.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+ Anders Roxell <anders.roxell@linaro.org>, 
+ Dan Carpenter <dan.carpenter@linaro.org>, linuxppc-dev@lists.ozlabs.org, 
+ linux-kernel@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+ regressions@lists.linux.dev, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ Nathan Lynch <nathanl@linux.ibm.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1701132037; l=7740;
+ i=nathanl@linux.ibm.com; s=20230817; h=from:subject:message-id;
+ bh=jedyw4vu/T4uAMv9jtKkjATg+3BmdKuMIcKlpdHEM+E=;
+ b=z9fpMpvCrtxWqHhOrHpwe2l+zQKGqgpGR+iOa/99ZkVdBd411YMCgseolqFW5xzSQIscfzo9M
+ BCg5/0hmGOTDxE4jTzvqHC1Kj/iqOCcVRhFNLd0PHr7StGVwpdMk31l
+X-Developer-Key: i=nathanl@linux.ibm.com; a=ed25519;
+ pk=jPDF44RvT+9DGFOH3NGoIu1xN9dF+82pjdpnKjXfoJ0=
+X-Endpoint-Received:
+ by B4 Relay for nathanl@linux.ibm.com/20230817 with auth_id=78
+X-Original-From: Nathan Lynch <nathanl@linux.ibm.com>
+Reply-To: <nathanl@linux.ibm.com>
 
-On Fri, 17 Nov 2023 11:24:02 -0800, ndesaulniers@google.com wrote:
-> As discussed at the ClangBuiltLinux '23 meetup (co-located with Linux Plumbers
-> Conf '23), I'll be taking a step back from kernel work to focus on my growing
-> family and helping Google figure out its libc story. So I think it's time to
-> formally hand over the reigns to my co-maintainer Nathan.
-> 
-> As such, remove myself from reviewer for:
-> - CLANG CONTROL FLOW INTEGRITY SUPPORT
-> - COMPILER ATTRIBUTES
-> - KERNEL BUILD
-> 
-> [...]
+From: Nathan Lynch <nathanl@linux.ibm.com>
 
-Applied to for-linus/hardening, thanks!
+The rtas_read_config() and rtas_write_config() functions in
+kernel/rtas_pci.c have external linkage and two users in arch/powerpc:
+the rtas_pci code itself and the pseries platform's "enhanced error
+handling" (EEH) support code.
 
-[1/1] MAINTAINERS: refresh LLVM support
-      https://git.kernel.org/kees/c/9099184dec26
+The prototypes for these functions in asm/ppc-pci.h have until now
+been guarded by CONFIG_EEH since the only external caller is the
+pseries EEH code. However, this presumably has always generated
+warnings when built with !CONFIG_EEH and -Wmissing-prototypes:
 
-Take care,
+  arch/powerpc/kernel/rtas_pci.c:46:5: error: no previous prototype for
+  function 'rtas_read_config' [-Werror,-Wmissing-prototypes]
+     46 | int rtas_read_config(struct pci_dn *pdn, int where,
+                               int size, u32 *val)
 
+  arch/powerpc/kernel/rtas_pci.c:98:5: error: no previous prototype for
+  function 'rtas_write_config' [-Werror,-Wmissing-prototypes]
+     98 | int rtas_write_config(struct pci_dn *pdn, int where,
+                                int size, u32 val)
+
+The introduction of commit c6345dfa6e3e ("Makefile.extrawarn: turn on
+missing-prototypes globally") forces the issue.
+
+The efika and chrp platform code have (static) functions with the same
+names but different signatures. We may as well eliminate the potential
+for conflicts and confusion by renaming the globally visible versions
+as their prototypes get moved out of the CONFIG_EEH-guarded region;
+their current names are too generic anyway. Since they operate on
+objects of the type 'struct pci_dn *', give them the slightly more
+verbose prefix "rtas_pci_dn_" and fix up all the call sites.
+
+Fixes: c6345dfa6e3e ("Makefile.extrawarn: turn on missing-prototypes globally")
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Closes: https://lore.kernel.org/linuxppc-dev/CA+G9fYt0LLXtjSz+Hkf3Fhm-kf0ZQanrhUS+zVZGa3O+Wt2+vg@mail.gmail.com/
+Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
+---
+ arch/powerpc/include/asm/ppc-pci.h           |  5 +++--
+ arch/powerpc/kernel/rtas_pci.c               |  8 ++++----
+ arch/powerpc/platforms/pseries/eeh_pseries.c | 18 +++++++++---------
+ 3 files changed, 16 insertions(+), 15 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/ppc-pci.h b/arch/powerpc/include/asm/ppc-pci.h
+index d9fcff575027..ce2b1b5eebdd 100644
+--- a/arch/powerpc/include/asm/ppc-pci.h
++++ b/arch/powerpc/include/asm/ppc-pci.h
+@@ -35,6 +35,9 @@ extern void init_pci_config_tokens (void);
+ extern unsigned long get_phb_buid (struct device_node *);
+ extern int rtas_setup_phb(struct pci_controller *phb);
+ 
++int rtas_pci_dn_read_config(struct pci_dn *pdn, int where, int size, u32 *val);
++int rtas_pci_dn_write_config(struct pci_dn *pdn, int where, int size, u32 val);
++
+ #ifdef CONFIG_EEH
+ 
+ void eeh_addr_cache_insert_dev(struct pci_dev *dev);
+@@ -44,8 +47,6 @@ void eeh_slot_error_detail(struct eeh_pe *pe, int severity);
+ int eeh_pci_enable(struct eeh_pe *pe, int function);
+ int eeh_pe_reset_full(struct eeh_pe *pe, bool include_passed);
+ void eeh_save_bars(struct eeh_dev *edev);
+-int rtas_write_config(struct pci_dn *, int where, int size, u32 val);
+-int rtas_read_config(struct pci_dn *, int where, int size, u32 *val);
+ void eeh_pe_state_mark(struct eeh_pe *pe, int state);
+ void eeh_pe_mark_isolated(struct eeh_pe *pe);
+ void eeh_pe_state_clear(struct eeh_pe *pe, int state, bool include_passed);
+diff --git a/arch/powerpc/kernel/rtas_pci.c b/arch/powerpc/kernel/rtas_pci.c
+index e1fdc7473b72..fccf96e897f6 100644
+--- a/arch/powerpc/kernel/rtas_pci.c
++++ b/arch/powerpc/kernel/rtas_pci.c
+@@ -43,7 +43,7 @@ static inline int config_access_valid(struct pci_dn *dn, int where)
+ 	return 0;
+ }
+ 
+-int rtas_read_config(struct pci_dn *pdn, int where, int size, u32 *val)
++int rtas_pci_dn_read_config(struct pci_dn *pdn, int where, int size, u32 *val)
+ {
+ 	int returnval = -1;
+ 	unsigned long buid, addr;
+@@ -87,7 +87,7 @@ static int rtas_pci_read_config(struct pci_bus *bus,
+ 	pdn = pci_get_pdn_by_devfn(bus, devfn);
+ 
+ 	/* Validity of pdn is checked in here */
+-	ret = rtas_read_config(pdn, where, size, val);
++	ret = rtas_pci_dn_read_config(pdn, where, size, val);
+ 	if (*val == EEH_IO_ERROR_VALUE(size) &&
+ 	    eeh_dev_check_failure(pdn_to_eeh_dev(pdn)))
+ 		return PCIBIOS_DEVICE_NOT_FOUND;
+@@ -95,7 +95,7 @@ static int rtas_pci_read_config(struct pci_bus *bus,
+ 	return ret;
+ }
+ 
+-int rtas_write_config(struct pci_dn *pdn, int where, int size, u32 val)
++int rtas_pci_dn_write_config(struct pci_dn *pdn, int where, int size, u32 val)
+ {
+ 	unsigned long buid, addr;
+ 	int ret;
+@@ -134,7 +134,7 @@ static int rtas_pci_write_config(struct pci_bus *bus,
+ 	pdn = pci_get_pdn_by_devfn(bus, devfn);
+ 
+ 	/* Validity of pdn is checked in here. */
+-	return rtas_write_config(pdn, where, size, val);
++	return rtas_pci_dn_write_config(pdn, where, size, val);
+ }
+ 
+ static struct pci_ops rtas_pci_ops = {
+diff --git a/arch/powerpc/platforms/pseries/eeh_pseries.c b/arch/powerpc/platforms/pseries/eeh_pseries.c
+index def184da51cf..b1ae0c0d1187 100644
+--- a/arch/powerpc/platforms/pseries/eeh_pseries.c
++++ b/arch/powerpc/platforms/pseries/eeh_pseries.c
+@@ -252,7 +252,7 @@ static int pseries_eeh_cap_start(struct pci_dn *pdn)
+ 	if (!pdn)
+ 		return 0;
+ 
+-	rtas_read_config(pdn, PCI_STATUS, 2, &status);
++	rtas_pci_dn_read_config(pdn, PCI_STATUS, 2, &status);
+ 	if (!(status & PCI_STATUS_CAP_LIST))
+ 		return 0;
+ 
+@@ -270,11 +270,11 @@ static int pseries_eeh_find_cap(struct pci_dn *pdn, int cap)
+ 		return 0;
+ 
+         while (cnt--) {
+-		rtas_read_config(pdn, pos, 1, &pos);
++		rtas_pci_dn_read_config(pdn, pos, 1, &pos);
+ 		if (pos < 0x40)
+ 			break;
+ 		pos &= ~3;
+-		rtas_read_config(pdn, pos + PCI_CAP_LIST_ID, 1, &id);
++		rtas_pci_dn_read_config(pdn, pos + PCI_CAP_LIST_ID, 1, &id);
+ 		if (id == 0xff)
+ 			break;
+ 		if (id == cap)
+@@ -294,7 +294,7 @@ static int pseries_eeh_find_ecap(struct pci_dn *pdn, int cap)
+ 
+ 	if (!edev || !edev->pcie_cap)
+ 		return 0;
+-	if (rtas_read_config(pdn, pos, 4, &header) != PCIBIOS_SUCCESSFUL)
++	if (rtas_pci_dn_read_config(pdn, pos, 4, &header) != PCIBIOS_SUCCESSFUL)
+ 		return 0;
+ 	else if (!header)
+ 		return 0;
+@@ -307,7 +307,7 @@ static int pseries_eeh_find_ecap(struct pci_dn *pdn, int cap)
+ 		if (pos < 256)
+ 			break;
+ 
+-		if (rtas_read_config(pdn, pos, 4, &header) != PCIBIOS_SUCCESSFUL)
++		if (rtas_pci_dn_read_config(pdn, pos, 4, &header) != PCIBIOS_SUCCESSFUL)
+ 			break;
+ 	}
+ 
+@@ -412,8 +412,8 @@ static void pseries_eeh_init_edev(struct pci_dn *pdn)
+ 	if ((pdn->class_code >> 8) == PCI_CLASS_BRIDGE_PCI) {
+ 		edev->mode |= EEH_DEV_BRIDGE;
+ 		if (edev->pcie_cap) {
+-			rtas_read_config(pdn, edev->pcie_cap + PCI_EXP_FLAGS,
+-					 2, &pcie_flags);
++			rtas_pci_dn_read_config(pdn, edev->pcie_cap + PCI_EXP_FLAGS,
++						2, &pcie_flags);
+ 			pcie_flags = (pcie_flags & PCI_EXP_FLAGS_TYPE) >> 4;
+ 			if (pcie_flags == PCI_EXP_TYPE_ROOT_PORT)
+ 				edev->mode |= EEH_DEV_ROOT_PORT;
+@@ -676,7 +676,7 @@ static int pseries_eeh_read_config(struct eeh_dev *edev, int where, int size, u3
+ {
+ 	struct pci_dn *pdn = eeh_dev_to_pdn(edev);
+ 
+-	return rtas_read_config(pdn, where, size, val);
++	return rtas_pci_dn_read_config(pdn, where, size, val);
+ }
+ 
+ /**
+@@ -692,7 +692,7 @@ static int pseries_eeh_write_config(struct eeh_dev *edev, int where, int size, u
+ {
+ 	struct pci_dn *pdn = eeh_dev_to_pdn(edev);
+ 
+-	return rtas_write_config(pdn, where, size, val);
++	return rtas_pci_dn_write_config(pdn, where, size, val);
+ }
+ 
+ #ifdef CONFIG_PCI_IOV
+
+---
+base-commit: 0d555b57ee660d8a871781c0eebf006e855e918d
+change-id: 20231127-rtas-pci-rw-config-20a5610f2d35
+
+Best regards,
 -- 
-Kees Cook
+Nathan Lynch <nathanl@linux.ibm.com>
 
