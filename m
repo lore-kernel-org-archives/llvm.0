@@ -1,171 +1,99 @@
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50075E0A1
-	for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 17:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884D941C78
+	for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 17:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Wufyli4R";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="y5wRvLz4"
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 84CC8580546;
-	Tue, 28 Nov 2023 12:54:55 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 28 Nov 2023 12:54:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1701194095; x=
-	1701201295; bh=dglH5gXWrAma2xG/u6UyN2gBVthWUPYa50A8Hb6InUE=; b=W
-	ufyli4REJ6JnBRtaCU0Pz86CKsnf932Pu+Z1cKsmfMjG+Ci4d7bs9UUBeQFI2a3Z
-	8XUw42JDgjOHCUPM3IqNgQMLNWZZBE5mt7sCPf5c/ysdk++c7IoenDZg4nBbOHgK
-	b9IZnrV6XiK0nqYbArcBNb84FCOoqEtRH0UyQl56be+MlJddD5cNNA3uURFbIVQ9
-	K5KOpbQzaNS7V84uasdXFWMEdArjFCSVP7ZNZ3te7gFsthpvlohNiLJLLqAgZhF5
-	KUceYnLFE63tbc7oQuSWRgc8+PLMOovz3AwuVJzUPYagEBjCQ86VfUz3SMNvKPpm
-	ncjiXkY5X+M9c8irtsWsA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1701194095; x=
-	1701201295; bh=dglH5gXWrAma2xG/u6UyN2gBVthWUPYa50A8Hb6InUE=; b=y
-	5wRvLz4my7qdH4DHDizhlFoKpOIq6VA5lVQT2dAdB9OCLcoHpLR2/h0Ya2qG5SXF
-	lrr7hXSr1D61GEM6vFPQYc55luZEnd/oNsvWfA6lBCoTuSinKaDEhPF7E3VvImCG
-	t6exMEvJQ3gChzFrKv9T6gjnoqsnCCFTjk7Q+eVc7xINCj4UrYNRrvqhVjrPJxQb
-	GQr6pK+b45s7QtsFOCBOeVBSkDUZou2MeHBjateUWZuvq6JFP+GyeAGpl974niC/
-	AfCOMPr2zLvHhDZKlvRYJrshrkjlk3DyUJMn8Im9dU7FDs7CAHXkeEJUkMo8D4PW
-	BVQwi6K/oLv8bMcVsxPng==
-X-ME-Sender: <xms:bylmZWO4XUb9EqEM6kK8jyLoBBMWTq5gDHokmdt7hRMZDiDnJd-v9A>
-    <xme:bylmZU-QykbjCCqzLdHG23jCSf3ylOUY8PtbySJa4j30eZHmyhjBFxToH6rhANTHs
-    jGmldZoGmRuWjUJ1Q>
-X-ME-Received: <xmr:bylmZdTDGqQivf7yrOZDNNv2HTLOCBS9VyVVUwlm7Rd5M0V72OLDfYafMtxCbYktMIFeRI39Zz36nptph-Ruqkwm2w2r5fBpykwFSWBeLhvmAQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeifedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeigeffteehteffhe
-    ejkeefjeeuudfgvdekkeetudeghedugffgleffhefgjeevgfenucffohhmrghinheplhhl
-    vhhmrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:bylmZWtFqY_DIcSfbFUCTdRsfZhPtVOkkehK_kjwG5GUiD4K65Cl2A>
-    <xmx:bylmZed0WETNxDW3GiDSQZmCAZbiA6Hk64YnwvkRrqha2IVhKQ_APA>
-    <xmx:bylmZa3siyrx_9Djkorp1ValDwlR-pkwuJWvHBND0_0U_APEgit68Q>
-    <xmx:bylmZaFLmtqr7-sonV0zW190AeyfNWycjj9dIAL-ZnKr-gGpSUvKEA>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Nov 2023 12:54:53 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: ndesaulniers@google.com,
-	andrii@kernel.org,
-	nathan@kernel.org,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	steffen.klassert@secunet.com,
-	antony.antony@secunet.com,
-	alexei.starovoitov@gmail.com,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	trix@redhat.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	devel@linux-ipsec.org,
-	netdev@vger.kernel.org
-Subject: [PATCH ipsec-next v2 3/6] libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
-Date: Tue, 28 Nov 2023 10:54:23 -0700
-Message-ID: <ed7920365daf5eff1c82892b57e918d3db786ac7.1701193577.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <cover.1701193577.git.dxu@dxuuu.xyz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ie28Oy0s"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-54b0073d50fso5758965a12.2
+        for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 09:59:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701194344; x=1701799144; darn=lists.linux.dev;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6sdNoskqMew+HpExOfScjyA4mWrsG/qt11aXDDvMoFM=;
+        b=ie28Oy0sfOt7TJ7Un9ZsGwR6yYu/JtkcXZ292ZHc51lSXniis/g+AjSJZroeD+DXwr
+         m+Kr+ExNotF4DkUfJ+uuSmnV22Oa4fCo3SK2MiFusAeoAXaiqdUh3pxHvi/XRfqGnDNL
+         LXUiatIDlviq6WJjDn5eHBSJE7Ocn3K5knBoKH2jyrLY6bHx0Fek7c6nFYqNbrdGGKOA
+         1mWFfsyzc4xUu74SOmD3i348inpdSRrUbVCUVArIBB9PFsj2QCqyHVw2zDAC/6mTyD6W
+         0ocZvLLYBLRyGhFbToBmUcB+ttWA+GUBdrg0duYAxMy7DLj5SywjMxBUMtpxSlijBfJg
+         EhEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701194344; x=1701799144;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6sdNoskqMew+HpExOfScjyA4mWrsG/qt11aXDDvMoFM=;
+        b=ktExY5WaHnirvPNl5BDKdILyHWKxbqFOoF7Zds/jLuPDSJiuFyfNnD56L6ccDcx1uP
+         +gFo2Jb1vB2Z2D36O8z6mA/33sfk6LDHb2/0gXhQDoo9CuGcmloNddoii04PhM8oFUEG
+         Vk6v0Ed3VQbr5Lc6VuS8vQPm0lk0Y7N1KfU0sM/kTK/lhPmJqF/Kr3ZK6tD+tLLyW2G3
+         xkb7h7uMxpel65a1+CIbsGRgRTStEzfPVB0/xG+oQzZh9rny6zDkisaWAeIgCq+fiezy
+         uy/1j0My1EnfAwoFdhFwouLNlR951k43p3O+A74aJZ7CZoPDFPL5lrmchEZBmdOIR1tf
+         2qXw==
+X-Gm-Message-State: AOJu0YzYK3vmwEX0u0Kk3+DLA5Au6vhyVzr+c5xrDOxDqfaBzbm7NhtZ
+	1Z99D+pa6Idx9yEeVqwz6FE=
+X-Google-Smtp-Source: AGHT+IHcpvtkJ+/6Ab8l0lMASvhL/2FhG4i1AyR4GuDleSu00vZSOO7uh9rtEwq21nDBa7iakhIbDQ==
+X-Received: by 2002:a50:d55e:0:b0:53d:b839:2045 with SMTP id f30-20020a50d55e000000b0053db8392045mr12185509edj.25.1701194343503;
+        Tue, 28 Nov 2023 09:59:03 -0800 (PST)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id eh9-20020a0564020f8900b005486f7f654dsm6617724edb.7.2023.11.28.09.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Nov 2023 09:59:03 -0800 (PST)
+Message-ID: <20c593b6f31720a3d24d75e5e5cc3245b67249d1.camel@gmail.com>
+Subject: Re: [PATCH ipsec-next v2 3/6] libbpf: Add BPF_CORE_WRITE_BITFIELD()
+ macro
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Xu <dxu@dxuuu.xyz>, ndesaulniers@google.com, andrii@kernel.org, 
+	nathan@kernel.org, daniel@iogearbox.net, ast@kernel.org, 
+	steffen.klassert@secunet.com, antony.antony@secunet.com, 
+	alexei.starovoitov@gmail.com, yonghong.song@linux.dev
+Cc: martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
+	trix@redhat.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, devel@linux-ipsec.org, netdev@vger.kernel.org
+Date: Tue, 28 Nov 2023 19:59:01 +0200
+In-Reply-To: <ed7920365daf5eff1c82892b57e918d3db786ac7.1701193577.git.dxu@dxuuu.xyz>
 References: <cover.1701193577.git.dxu@dxuuu.xyz>
+	 <ed7920365daf5eff1c82892b57e918d3db786ac7.1701193577.git.dxu@dxuuu.xyz>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Similar to reading from CO-RE bitfields, we need a CO-RE aware bitfield
-writing wrapper to make the verifier happy.
+On Tue, 2023-11-28 at 10:54 -0700, Daniel Xu wrote:
+> Similar to reading from CO-RE bitfields, we need a CO-RE aware bitfield
+> writing wrapper to make the verifier happy.
+>=20
+> Two alternatives to this approach are:
+>=20
+> 1. Use the upcoming `preserve_static_offset` [0] attribute to disable
+>    CO-RE on specific structs.
+> 2. Use broader byte-sized writes to write to bitfields.
+>=20
+> (1) is a bit a bit hard to use. It requires specific and
+> not-very-obvious annotations to bpftool generated vmlinux.h. It's also
+> not generally available in released LLVM versions yet.
+>=20
+> (2) makes the code quite hard to read and write. And especially if
+> BPF_CORE_READ_BITFIELD() is already being used, it makes more sense to
+> to have an inverse helper for writing.
+>=20
+> [0]: https://reviews.llvm.org/D133361
+> From: Eduard Zingerman <eddyz87@gmail.com>
+>=20
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
 
-Two alternatives to this approach are:
-
-1. Use the upcoming `preserve_static_offset` [0] attribute to disable
-   CO-RE on specific structs.
-2. Use broader byte-sized writes to write to bitfields.
-
-(1) is a bit a bit hard to use. It requires specific and
-not-very-obvious annotations to bpftool generated vmlinux.h. It's also
-not generally available in released LLVM versions yet.
-
-(2) makes the code quite hard to read and write. And especially if
-BPF_CORE_READ_BITFIELD() is already being used, it makes more sense to
-to have an inverse helper for writing.
-
-[0]: https://reviews.llvm.org/D133361
-From: Eduard Zingerman <eddyz87@gmail.com>
-
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/lib/bpf/bpf_core_read.h | 36 +++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
-
-diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
-index 1ac57bb7ac55..7a764f65d299 100644
---- a/tools/lib/bpf/bpf_core_read.h
-+++ b/tools/lib/bpf/bpf_core_read.h
-@@ -111,6 +111,42 @@ enum bpf_enum_value_kind {
- 	val;								      \
- })
- 
-+/*
-+ * Write to a bitfield, identified by s->field.
-+ * This is the inverse of BPF_CORE_WRITE_BITFIELD().
-+ */
-+#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({			\
-+	void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);	\
-+	unsigned int byte_size = __CORE_RELO(s, field, BYTE_SIZE);	\
-+	unsigned int lshift = __CORE_RELO(s, field, LSHIFT_U64);	\
-+	unsigned int rshift = __CORE_RELO(s, field, RSHIFT_U64);	\
-+	unsigned int bit_size = (rshift - lshift);			\
-+	unsigned long long nval, val, hi, lo;				\
-+									\
-+	asm volatile("" : "+r"(p));					\
-+									\
-+	switch (byte_size) {						\
-+	case 1: val = *(unsigned char *)p; break;			\
-+	case 2: val = *(unsigned short *)p; break;			\
-+	case 4: val = *(unsigned int *)p; break;			\
-+	case 8: val = *(unsigned long long *)p; break;			\
-+	}								\
-+	hi = val >> (bit_size + rshift);				\
-+	hi <<= bit_size + rshift;					\
-+	lo = val << (bit_size + lshift);				\
-+	lo >>= bit_size + lshift;					\
-+	nval = new_val;							\
-+	nval <<= lshift;						\
-+	nval >>= rshift;						\
-+	val = hi | nval | lo;						\
-+	switch (byte_size) {						\
-+	case 1: *(unsigned char *)p      = val; break;			\
-+	case 2: *(unsigned short *)p     = val; break;			\
-+	case 4: *(unsigned int *)p       = val; break;			\
-+	case 8: *(unsigned long long *)p = val; break;			\
-+	}								\
-+})
-+
- #define ___bpf_field_ref1(field)	(field)
- #define ___bpf_field_ref2(type, field)	(((typeof(type) *)0)->field)
- #define ___bpf_field_ref(args...)					    \
--- 
-2.42.1
-
+Could you please also add a selftest (or several) using __retval()
+annotation for this macro?
