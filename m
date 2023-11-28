@@ -1,172 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A8F50254;
-	Tue, 28 Nov 2023 22:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394CD481C4;
+	Tue, 28 Nov 2023 23:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZsXKRquf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701211872; x=1732747872;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EIWKmpw10W2gy/QBlGnv98l25AschMZIIelg6y9oG0E=;
-  b=ZsXKRqufVkM1hSQdUfJXUSUT+Ik3WUEwJiHPYN0FBjtKXXxWHYhe/5am
-   Ba/0HkCnC4GaUGNszPnO5oA0pR3jDPc0FYUmvJlf9kolO0vqjS+BEfFfx
-   pvnCxfJNeR2Fy+o9PK2DLXcVF2vDbrJVQDM0E96arcE/mto4mtFjUxoBj
-   ixoacNp0xhqe3p5aUYzszt7bwUQpJOwPqTNU8iAEfLWPKlNP81YwEtLMR
-   uybOURVqV6L/rjpWMmYTUv3wvgnElEU6HCyeoSXISFR9+iAc3nYSt5mr6
-   4TmqDr7UmsoPMf+j39MAmDCRBOd430OGju1Uter1WhzU89RwkAv0maj4e
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="392797062"
-X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="392797062"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 14:51:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="942106666"
-X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="942106666"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Nov 2023 14:51:06 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r86v2-0008E2-10;
-	Tue, 28 Nov 2023 22:51:04 +0000
-Date: Wed, 29 Nov 2023 06:50:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nikunj A Dadhania <nikunj@amd.com>, linux-kernel@vger.kernel.org,
-	thomas.lendacky@amd.com, x86@kernel.org, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bp@alien8.de,
-	mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
-	dionnaglaze@google.com, pgonda@google.com, seanjc@google.com,
-	pbonzini@redhat.com, nikunj@amd.com
-Subject: Re: [PATCH v6 07/16] x86/sev: Move and reorganize sev guest request
- api
-Message-ID: <202311290340.dJ5EmU8J-lkp@intel.com>
-References: <20231128125959.1810039-8-nikunj@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8OY25HX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E808C433C8;
+	Tue, 28 Nov 2023 23:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701215758;
+	bh=nG35m4Vhxm9XNz4uNcrivh81CH8gXfwdbwOCLLaDjvc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=H8OY25HXkY/+389x+INNuMR+qeYUfXBigl+TQ7yAxhaZCU2brkK4nogY/bpNaednx
+	 eyA8WkmW9/XasYQRRbV6/fe0ZtW7HhsdUDbnsUvXTGsCwaEa3fJqMJ+qFsagq+T5gp
+	 lGcZpOVRCfS+Umh3ydNyuzYAycGIBI+GWma7AcfXrkFXHdfR0ytlq57gbopfowsNOf
+	 b3p+enhLs9ZST689HKcd26/WSI4vLmFCtTevslR76NUgCqL5kWh5navmy875BjRrxt
+	 RSu0jCUVT9ZozQjrpLxS64m+XTeE6Ihup65O7D1z+27s9hnWdWjyASyJdXX1msEOyS
+	 rG5QV+USiLINw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 28 Nov 2023 16:55:43 -0700
+Subject: [PATCH] buffer: Add cast in grow_buffers() to avoid a
+ multiplication libcall
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231128125959.1810039-8-nikunj@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231128-avoid-muloti4-grow_buffers-v1-1-bc3d0f0ec483@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAP59ZmUC/x3MSwqDMBAA0KvIrDtgxijqVYoUrRMdUCOT+gHx7
+ g0u3+ZdEFiFA9TJBcq7BPFLhHkl8B3bZWCUPhoopcwYKrHdvfQ4b5P/icVB/fHpNudYA+ZFYSm
+ 1LrdUQQxWZSfnk7+b+/4DPVXPLWwAAAA=
+To: akpm@linux-foundation.org
+Cc: willy@infradead.org, ndesaulniers@google.com, 
+ linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2587; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=nG35m4Vhxm9XNz4uNcrivh81CH8gXfwdbwOCLLaDjvc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKlpdXztleunX9qzhVOy9p1PwwUxDZcIfr4gH47l9UYWy
+ au1A+U7SlkYxLgYZMUUWaofqx43NJxzlvHGqUkwc1iZQIYwcHEKwEQcZzL8FTQ6/lwk/XxE19F7
+ 888s45repZ9x9tWDORZ/2feuuL5yoiIjw8xI/6QEJVeNr7IKusv42E9tfqIae+iJtXvb2SqjmPg
+ fnAA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Nikunj,
+When building with clang after commit 697607935295 ("buffer: fix
+grow_buffers() for block size > PAGE_SIZE"), there is an error at link
+time due to the generation of a 128-bit multiplication libcall:
 
-kernel test robot noticed the following build warnings:
+  ld.lld: error: undefined symbol: __muloti4
+  >>> referenced by buffer.c:0 (fs/buffer.c:0)
+  >>>               fs/buffer.o:(bdev_getblk) in archive vmlinux.a
 
-[auto build test WARNING on tip/x86/mm]
-[also build test WARNING on linus/master v6.7-rc3 next-20231128]
-[cannot apply to tip/x86/core kvm/queue kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Due to the width mismatch between the factors and the sign mismatch
+between the factors and the result, clang generates IR that performs
+this overflow check with 65-bit signed multiplication and LLVM does not
+improve on it during optimization, so the 65-bit multiplication is
+extended to 128-bit during legalization, resulting in the libcall on
+most targets.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/virt-sev-guest-Move-mutex-to-SNP-guest-device-structure/20231128-220026
-base:   tip/x86/mm
-patch link:    https://lore.kernel.org/r/20231128125959.1810039-8-nikunj%40amd.com
-patch subject: [PATCH v6 07/16] x86/sev: Move and reorganize sev guest request api
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231129/202311290340.dJ5EmU8J-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311290340.dJ5EmU8J-lkp@intel.com/reproduce)
+To avoid the initial situation that causes clang to generate the
+problematic IR, cast size (which is an 'unsigned int') to the same
+type/width as block (which is currently a 'u64'/'unsigned long long').
+GCC appears to already do this internally because there is no binary
+difference with the cast for arm, arm64, riscv, or x86_64.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311290340.dJ5EmU8J-lkp@intel.com/
+Link: https://github.com/ClangBuiltLinux/linux/issues/1958
+Link: https://github.com/llvm/llvm-project/issues/38013
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Closes: https://lore.kernel.org/CA+G9fYuA_PTd7R2NsBvtNb7qjwp4avHpCmWi4=OmY4jndDcQYA@mail.gmail.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+I am aware the hash in the commit message is not stable due to being on
+the mm-unstable branch but I figured I would write the commit message as
+if it would be standalone, in case this should not be squashed into the
+original change. I did not add a comment to the source around this
+workaround but I can if so desired.
+---
+ fs/buffer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
+diff --git a/fs/buffer.c b/fs/buffer.c
+index 4eb44ccdc6be..3a8c8322ed28 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -1091,7 +1091,7 @@ static bool grow_buffers(struct block_device *bdev, sector_t block,
+ 	 * Check for a block which lies outside our maximum possible
+ 	 * pagecache index.
+ 	 */
+-	if (check_mul_overflow(block, size, &pos) || pos > MAX_LFS_FILESIZE) {
++	if (check_mul_overflow(block, (sector_t)size, &pos) || pos > MAX_LFS_FILESIZE) {
+ 		printk(KERN_ERR "%s: requested out-of-range block %llu for device %pg\n",
+ 			__func__, (unsigned long long)block,
+ 			bdev);
 
->> drivers/virt/coco/sev-guest/sev-guest.c:450:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!snp_dev->certs_data)
-               ^~~~~~~~~~~~~~~~~~~~
-   drivers/virt/coco/sev-guest/sev-guest.c:480:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/virt/coco/sev-guest/sev-guest.c:450:2: note: remove the 'if' if its condition is always false
-           if (!snp_dev->certs_data)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/virt/coco/sev-guest/sev-guest.c:424:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+---
+base-commit: 5cdba94229e58a39ca389ad99763af29e6b0c5a5
+change-id: 20231128-avoid-muloti4-grow_buffers-5664204f5429
 
-
-vim +450 drivers/virt/coco/sev-guest/sev-guest.c
-
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  418  
-2bf93ffbb97e06 drivers/virt/coco/sevguest/sevguest.c   Tom Lendacky          2022-04-20  419  static int __init sev_guest_probe(struct platform_device *pdev)
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  420  {
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  421  	struct device *dev = &pdev->dev;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  422  	struct snp_guest_dev *snp_dev;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  423  	struct miscdevice *misc;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  424  	int ret;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  425  
-d6fd48eff7506b drivers/virt/coco/sev-guest/sev-guest.c Borislav Petkov (AMD  2023-02-15  426) 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-d6fd48eff7506b drivers/virt/coco/sev-guest/sev-guest.c Borislav Petkov (AMD  2023-02-15  427) 		return -ENODEV;
-d6fd48eff7506b drivers/virt/coco/sev-guest/sev-guest.c Borislav Petkov (AMD  2023-02-15  428) 
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  429  	snp_dev = devm_kzalloc(&pdev->dev, sizeof(struct snp_guest_dev), GFP_KERNEL);
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  430  	if (!snp_dev)
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  431  		return -ENOMEM;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  432  
-523ae6405daace drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  433  	if (!snp_assign_vmpck(snp_dev, vmpck_id)) {
-523ae6405daace drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  434  		dev_err(dev, "invalid vmpck id %u\n", vmpck_id);
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  435  		ret = -EINVAL;
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  436  		goto e_free_snpdev;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  437  	}
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  438  
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  439  	if (snp_setup_psp_messaging(snp_dev)) {
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  440  		dev_err(dev, "Unable to setup PSP messaging vmpck id %u\n", snp_dev->vmpck_id);
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  441  		ret = -ENODEV;
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  442  		goto e_free_snpdev;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  443  	}
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  444  
-4ec0ddf1cc3c0c drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  445  	mutex_init(&snp_dev->cmd_mutex);
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  446  	platform_set_drvdata(pdev, snp_dev);
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  447  	snp_dev->dev = dev;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  448  
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  449  	snp_dev->certs_data = alloc_shared_pages(SEV_FW_BLOB_MAX_SIZE);
-d80b494f712317 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07 @450  	if (!snp_dev->certs_data)
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  451  		goto e_free_ctx;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  452  
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  453  	misc = &snp_dev->misc;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  454  	misc->minor = MISC_DYNAMIC_MINOR;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  455  	misc->name = DEVICE_NAME;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  456  	misc->fops = &snp_guest_fops;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  457  
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  458  	ret = tsm_register(&sev_tsm_ops, snp_dev, &tsm_report_extra_type);
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  459  	if (ret)
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  460  		goto e_free_cert_data;
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  461  
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  462  	ret = devm_add_action_or_reset(&pdev->dev, unregister_sev_tsm, NULL);
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  463  	if (ret)
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  464  		goto e_free_cert_data;
-f47906782c7629 drivers/virt/coco/sev-guest/sev-guest.c Dan Williams          2023-10-10  465  
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  466  	ret =  misc_register(misc);
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  467  	if (ret)
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  468  		goto e_free_cert_data;
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  469  
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  470  	dev_info(dev, "Initialized SEV guest driver (using vmpck_id %u)\n", snp_dev->vmpck_id);
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  471  
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  472  	return 0;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  473  
-d80b494f712317 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  474  e_free_cert_data:
-d80b494f712317 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  475  	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  476  e_free_ctx:
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  477  	kfree(snp_dev->ctx);
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  478  e_free_snpdev:
-81b918a5844565 drivers/virt/coco/sev-guest/sev-guest.c Nikunj A Dadhania     2023-11-28  479  	kfree(snp_dev);
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  480  	return ret;
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  481  }
-fce96cf0443083 drivers/virt/coco/sevguest/sevguest.c   Brijesh Singh         2022-03-07  482  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
