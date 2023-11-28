@@ -1,45 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC0835273
-	for <llvm@lists.linux.dev>; Tue, 28 Nov 2023 19:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B83240BF2;
+	Tue, 28 Nov 2023 21:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uVRZfQyN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA540C433C9;
-	Tue, 28 Nov 2023 19:49:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gs1hUyiu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D266BC433CB;
+	Tue, 28 Nov 2023 21:06:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701200952;
-	bh=0qWlYEm567iXs2eilOwywh8HaHw/1Ci10DOobagq90w=;
-	h=Date:From:To:Subject:From;
-	b=uVRZfQyNaIY1fO+CxL69EMBilKbmSRNS4PeKDEu/nfose8V4S6AXiNSMapCSNNnzk
-	 BPc1dq5kaFAcN/dSRkN3W1QkXhMJ+uUPJkaeoDBstvAHnbDi1S4cYUjkxcuhSYD8wW
-	 q/3E9wCYqLoloKlW3YdRjamsIBJgsqTcRg3GKLJ53qpU6h0rWfKBq4Z2pNqwJKCKth
-	 CHaFi0t+kMYBkzbm4LRad7Kz1FNpFzjnsXbhRW62La4PWxc/HJ8G+Mi5UF+KaQDZ5Q
-	 TKon4Fo/JeobuWmY8tWT9Qnhy/yy4reA1WNy31CEwDKYSGImyz5nTTA1xe7/NLAbnu
-	 f0Mf9rt+EXl1A==
-Date: Tue, 28 Nov 2023 12:49:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Prebuilt LLVM 17.0.6 uploaded
-Message-ID: <20231128194910.GA3062541@dev-arch.thelio-3990X>
+	s=k20201202; t=1701205594;
+	bh=2rhaJ0HB8GuEVIPSqohYD64j1QFkH4NYFmviT6cUuCg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gs1hUyiuwXOqPwB7fodgDLUW/na3yIWw4AvVZQuqfvACFlEThVDiyYtVjj+wsqmIn
+	 6HUlFDVKOVs3P83Kzg1OJhjEhiJT4fV1cxEssmJKqHNDPEKBnTUwsJsj1Yb1biO173
+	 LCO6FBWA07e9YzCiZRs49PZ3vJG1tDANI6+jwQqLEjl/ed4heXA2zq3MyrZX9ZTC/S
+	 AEBu/E0MjyyYZ6vgXnyV3U9cFykhKC+39GJjpBS8kx/dZL+BiAQPFCL3YMA9/70Oaq
+	 E43l5W0GJtoC4kJEHM1fRveplAbgIh1wlPEQsHOr0GR5ngDDHCYuxAz5aqLVzRTjgd
+	 /jNBSZ8JB06iw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Colin Ian King <colin.i.king@gmail.com>,
+	Coly Li <colyli@suse.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	Sasha Levin <sashal@kernel.org>,
+	kent.overstreet@gmail.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	linux-bcache@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.6 08/40] bcache: remove redundant assignment to variable cur_idx
+Date: Tue, 28 Nov 2023 16:05:14 -0500
+Message-ID: <20231128210615.875085-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231128210615.875085-1-sashal@kernel.org>
+References: <20231128210615.875085-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.3
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+From: Colin Ian King <colin.i.king@gmail.com>
 
-I have built and uploaded LLVM 17.0.6 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+[ Upstream commit be93825f0e6428c2d3f03a6e4d447dc48d33d7ff ]
 
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new. 17.0.6 will be the
-final 17.x release before 18.0.0 in a couple of months, unless there is
-some critical issue uncovered between now and then.
+Variable cur_idx is being initialized with a value that is never read,
+it is being re-assigned later in a while-loop. Remove the redundant
+assignment. Cleans up clang scan build warning:
 
-Cheers,
-Nathan
+drivers/md/bcache/writeback.c:916:2: warning: Value stored to 'cur_idx'
+is never read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reviewed-by: Coly Li <colyli@suse.de>
+Signed-off-by: Coly Li <colyli@suse.de>
+Link: https://lore.kernel.org/r/20231120052503.6122-4-colyli@suse.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/md/bcache/writeback.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/md/bcache/writeback.c b/drivers/md/bcache/writeback.c
+index 24c049067f61a..c3e872e0a6f2c 100644
+--- a/drivers/md/bcache/writeback.c
++++ b/drivers/md/bcache/writeback.c
+@@ -913,7 +913,7 @@ static int bch_dirty_init_thread(void *arg)
+ 	int cur_idx, prev_idx, skip_nr;
+ 
+ 	k = p = NULL;
+-	cur_idx = prev_idx = 0;
++	prev_idx = 0;
+ 
+ 	bch_btree_iter_init(&c->root->keys, &iter, NULL);
+ 	k = bch_btree_iter_next_filter(&iter, &c->root->keys, bch_ptr_bad);
+-- 
+2.42.0
+
