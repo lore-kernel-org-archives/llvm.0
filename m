@@ -1,87 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD441878;
-	Wed, 29 Nov 2023 01:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242421874;
+	Wed, 29 Nov 2023 02:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="OFbO5Iiq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04455C433C8;
-	Wed, 29 Nov 2023 01:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1701222025;
-	bh=HmNrww6d/IdSj6VMUUS4+C7kZBzUcs1stKqAd+f2GDI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OFbO5Iiq4NbCDQDMOhXa48gf5AnMFz/E6NkY5oxwaV9edgoiICl8AUF/smuB8h+2v
-	 UaIKsc7ZGPmkHitOViAsmLbJ3iQCjPZ9v75p2KYfbaegY2nLGYd152PLhUbaf+It3j
-	 zNIuiFDzfx7R8k9tDRpTaWBowNIC6Ul2gIzvowu8=
-Date: Tue, 28 Nov 2023 17:40:24 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: willy@infradead.org, ndesaulniers@google.com,
- linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH] buffer: Add cast in grow_buffers() to avoid a
- multiplication libcall
-Message-Id: <20231128174024.a74bfa551718082ca8808a98@linux-foundation.org>
-In-Reply-To: <20231128-avoid-muloti4-grow_buffers-v1-1-bc3d0f0ec483@kernel.org>
-References: <20231128-avoid-muloti4-grow_buffers-v1-1-bc3d0f0ec483@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q0HGjJjq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701225725; x=1732761725;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Mubz9Exmpr4/3rGVakHcVmpeHzDMQMlVnqjaNJ8UhQY=;
+  b=Q0HGjJjqJ9WgQFN/VsxjFZWMEfGzA//CLMGVGkUsbQCS3krmGDNwG03t
+   uzM/jQvnm+Dqo4G09A8e94kawVk1atwjdivzzNb5PTI10IzWjzh1niLTW
+   e/lyX1rLPvpQmeU5Zg+nPUaKfzIS4hhgOTl146kL15WCwwDsgwY69Am+i
+   xUIVgXH7ubbNGsnEYr8T+nisGcbkuNbzg6r9KUqbwyY4QfmGMt86z+sBy
+   wKnMS3haQuPF+O9BDkzS930r9oXruihQfs3Zq5bqg5fJELqfSA4XMmkPD
+   gc8U+wGe+u7tz0q4OxZRO0XIb9/REEt8UKAovFFZNE13X0YmfI5iNNoca
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="395897470"
+X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
+   d="scan'208";a="395897470"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 18:42:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="768749641"
+X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
+   d="scan'208";a="768749641"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Nov 2023 18:42:00 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r8AWU-0008SR-29;
+	Wed, 29 Nov 2023 02:41:58 +0000
+Date: Wed, 29 Nov 2023 10:40:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nikunj A Dadhania <nikunj@amd.com>, linux-kernel@vger.kernel.org,
+	thomas.lendacky@amd.com, x86@kernel.org, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bp@alien8.de,
+	mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
+	dionnaglaze@google.com, pgonda@google.com, seanjc@google.com,
+	pbonzini@redhat.com, nikunj@amd.com
+Subject: Re: [PATCH v6 07/16] x86/sev: Move and reorganize sev guest request
+ api
+Message-ID: <202311290851.yrAyZYIl-lkp@intel.com>
+References: <20231128125959.1810039-8-nikunj@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231128125959.1810039-8-nikunj@amd.com>
 
-On Tue, 28 Nov 2023 16:55:43 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
+Hi Nikunj,
 
-> When building with clang after commit 697607935295 ("buffer: fix
-> grow_buffers() for block size > PAGE_SIZE"), there is an error at link
-> time due to the generation of a 128-bit multiplication libcall:
-> 
->   ld.lld: error: undefined symbol: __muloti4
->   >>> referenced by buffer.c:0 (fs/buffer.c:0)
->   >>>               fs/buffer.o:(bdev_getblk) in archive vmlinux.a
-> 
-> Due to the width mismatch between the factors and the sign mismatch
-> between the factors and the result, clang generates IR that performs
-> this overflow check with 65-bit signed multiplication and LLVM does not
-> improve on it during optimization, so the 65-bit multiplication is
-> extended to 128-bit during legalization, resulting in the libcall on
-> most targets.
-> 
-> To avoid the initial situation that causes clang to generate the
-> problematic IR, cast size (which is an 'unsigned int') to the same
-> type/width as block (which is currently a 'u64'/'unsigned long long').
-> GCC appears to already do this internally because there is no binary
-> difference with the cast for arm, arm64, riscv, or x86_64.
-> 
-> ...
->
-> I am aware the hash in the commit message is not stable due to being on
-> the mm-unstable branch but I figured I would write the commit message as
-> if it would be standalone, in case this should not be squashed into the
-> original change. I did not add a comment to the source around this
-> workaround but I can if so desired.
+kernel test robot noticed the following build warnings:
 
-That's good.  Yes, I'll squash it into the base patch, but the Link: to
-this fix will appear in the permanent record, for the inquisitive.
+[auto build test WARNING on tip/x86/mm]
+[also build test WARNING on linus/master v6.7-rc3 next-20231128]
+[cannot apply to tip/x86/core kvm/queue kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> --- a/fs/buffer.c
-> +++ b/fs/buffer.c
-> @@ -1091,7 +1091,7 @@ static bool grow_buffers(struct block_device *bdev, sector_t block,
->  	 * Check for a block which lies outside our maximum possible
->  	 * pagecache index.
->  	 */
-> -	if (check_mul_overflow(block, size, &pos) || pos > MAX_LFS_FILESIZE) {
-> +	if (check_mul_overflow(block, (sector_t)size, &pos) || pos > MAX_LFS_FILESIZE) {
->  		printk(KERN_ERR "%s: requested out-of-range block %llu for device %pg\n",
->  			__func__, (unsigned long long)block,
->  			bdev);
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/virt-sev-guest-Move-mutex-to-SNP-guest-device-structure/20231128-220026
+base:   tip/x86/mm
+patch link:    https://lore.kernel.org/r/20231128125959.1810039-8-nikunj%40amd.com
+patch subject: [PATCH v6 07/16] x86/sev: Move and reorganize sev guest request api
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231129/202311290851.yrAyZYIl-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311290851.yrAyZYIl-lkp@intel.com/reproduce)
 
-This seems appropriate.  Changing the type of incoming arg `size' feels
-a bit fake - this is the per-bdev buffer_head size and expressing that
-as a sector_t is misleading and unrealistic.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311290851.yrAyZYIl-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/sev.c:2404:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!pdata->layout) {
+               ^~~~~~~~~~~~~~
+   arch/x86/kernel/sev.c:2446:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   arch/x86/kernel/sev.c:2404:2: note: remove the 'if' if its condition is always false
+           if (!pdata->layout) {
+           ^~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/sev.c:2380:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +2404 arch/x86/kernel/sev.c
+
+  2376	
+  2377	int snp_setup_psp_messaging(struct snp_guest_dev *snp_dev)
+  2378	{
+  2379		struct sev_guest_platform_data *pdata;
+  2380		int ret;
+  2381	
+  2382		if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
+  2383			pr_err("SNP not supported\n");
+  2384			return 0;
+  2385		}
+  2386	
+  2387		if (platform_data) {
+  2388			pr_debug("SNP platform data already initialized.\n");
+  2389			goto create_ctx;
+  2390		}
+  2391	
+  2392		if (!secrets_pa) {
+  2393			pr_err("SNP secrets page not found\n");
+  2394			return -ENODEV;
+  2395		}
+  2396	
+  2397		pdata = kzalloc(sizeof(struct sev_guest_platform_data), GFP_KERNEL);
+  2398		if (!pdata) {
+  2399			pr_err("Allocation of SNP guest platform data failed\n");
+  2400			return -ENOMEM;
+  2401		}
+  2402	
+  2403		pdata->layout = (__force void *)ioremap_encrypted(secrets_pa, PAGE_SIZE);
+> 2404		if (!pdata->layout) {
+  2405			pr_err("Failed to map SNP secrets page.\n");
+  2406			goto e_free_pdata;
+  2407		}
+  2408	
+  2409		ret = -ENOMEM;
+  2410		/* Allocate the shared page used for the request and response message. */
+  2411		pdata->request = alloc_shared_pages(sizeof(struct snp_guest_msg));
+  2412		if (!pdata->request)
+  2413			goto e_unmap;
+  2414	
+  2415		pdata->response = alloc_shared_pages(sizeof(struct snp_guest_msg));
+  2416		if (!pdata->response)
+  2417			goto e_free_request;
+  2418	
+  2419		/* initial the input address for guest request */
+  2420		pdata->input.req_gpa = __pa(pdata->request);
+  2421		pdata->input.resp_gpa = __pa(pdata->response);
+  2422		platform_data = pdata;
+  2423	
+  2424	create_ctx:
+  2425		ret = -EIO;
+  2426		snp_dev->ctx = snp_init_crypto(snp_dev->vmpck_id);
+  2427		if (!snp_dev->ctx) {
+  2428			pr_err("SNP crypto context initialization failed\n");
+  2429			platform_data = NULL;
+  2430			goto e_free_response;
+  2431		}
+  2432	
+  2433		snp_dev->pdata = platform_data;
+  2434	
+  2435		return 0;
+  2436	
+  2437	e_free_response:
+  2438		free_shared_pages(pdata->response, sizeof(struct snp_guest_msg));
+  2439	e_free_request:
+  2440		free_shared_pages(pdata->request, sizeof(struct snp_guest_msg));
+  2441	e_unmap:
+  2442		iounmap(pdata->layout);
+  2443	e_free_pdata:
+  2444		kfree(pdata);
+  2445	
+  2446		return ret;
+  2447	}
+  2448	EXPORT_SYMBOL_GPL(snp_setup_psp_messaging);
+  2449	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
