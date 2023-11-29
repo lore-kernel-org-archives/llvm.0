@@ -1,47 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CA51E4B9;
-	Wed, 29 Nov 2023 13:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1997134CEB;
+	Wed, 29 Nov 2023 15:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RiRV1CF8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gPB1OU2W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701265322; x=1732801322;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=61ZB83b2A7RpRcEVNxAByX7887YRtGAbLaPvEFN+FJQ=;
-  b=RiRV1CF896lbTyAm/wMg/5/5uuW3ewww/UHmKqKHSR9AOXtPqGsyMWpm
-   JfrDE4+b/icRFeW/OzELl8hDtkbK6ViorkPS6X67Z5vSSZp1SeLeVkLTJ
-   L8g1d0dngwayg8Ir+ae/RWbBhk6Ak7kKL1YDF4G2ksd0ytLXw3LEwDPyt
-   WqHXGAy3krJQo6iwrYv+FIFASihx3zHZCHm0FIneIAxx+hi1MGUviiI6d
-   Xcv4hPRmI1roEIUhcc05XnCWSbbUbOyEOFQlilckHW7hmeLjIgz0jOpGs
-   B72T6Wl8uzKQkBlCJ17S98XNFogsoqzwCdjpT2ohsZ0f6eiMuaEdN7/SR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="11867339"
+  t=1701272552; x=1732808552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QiyXou6E8XmzV1Lkd+K2NH2kAgeGJ5XMMDCOjzZ30v8=;
+  b=gPB1OU2WoeqfzybsPBkA3CCtdZpOEPE5xzWgxVU9Lg8RuGspinMU3MtI
+   Jg0oaUTN7oGICOkzg0DzJpy+wanpnbWrY/lub2J9YySa/vOIZJ1KoBPT9
+   eoYS6eMV/70M3kqsQ/pa0byeW3+3mTGDFRqa82grhAWn6Egk712Z7FpOL
+   Ila3x3mZU1T9LMeZp41urEV0GK5R3oeuQFew9Kpx7PN/CC+3S7HOnTr1w
+   05fMpSsCBY1XlQyy4VIW1OoD1o4p//eMjYdriDlI9Plq5qCiMesY+rJQ7
+   HhTl+2BW8LqgEsM/0Ihic8/4z48luJ8l2PeyWsRfAtiuHfKZw0WXZZlum
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="392925318"
 X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
-   d="scan'208";a="11867339"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 05:41:44 -0800
+   d="scan'208";a="392925318"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 07:42:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="892454968"
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="772724283"
 X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
-   d="scan'208";a="892454968"
+   d="scan'208";a="772724283"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2023 05:41:42 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 29 Nov 2023 07:42:26 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r8Kok-0000I0-1Z;
-	Wed, 29 Nov 2023 13:41:34 +0000
-Date: Wed, 29 Nov 2023 21:40:59 +0800
+	id 1r8Mhb-0000OZ-1t;
+	Wed, 29 Nov 2023 15:42:17 +0000
+Date: Wed, 29 Nov 2023 23:42:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:uclamp-max-aggregation 9/11]
- kernel/sched/core.c:1410:1: error: type specifier missing, defaults to
- 'int'; ISO C99 and later do not support implicit int
-Message-ID: <202311292106.24uQ9OWs-lkp@intel.com>
+To: Jorge Ramirez-Ortiz <jorge@foundries.io>, ulf.hansson@linaro.org,
+	adrian.hunter@intel.com, CLoehle@hyperstone.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, axboe@kernel.dk,
+	jinpu.wang@ionos.com, beanhuo@micron.com, yibin.ding@unisoc.com,
+	f.fainelli@gmail.com, asuk4.q@gmail.com,
+	victor.shih@genesyslogic.com.tw, marex@denx.de,
+	rafael.beims@toradex.com, robimarko@gmail.com, ricardo@foundries.io
+Subject: Re: [PATCH] mmc: rpmb: add quirk MMC_QUIRK_BROKEN_RPMB_RETUNE
+Message-ID: <202311292124.O8uscyp0-lkp@intel.com>
+References: <20231129094350.2605322-1-jorge@foundries.io>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,148 +55,124 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231129094350.2605322-1-jorge@foundries.io>
 
-tree:   https://github.com/qais-yousef/linux uclamp-max-aggregation
-head:   eb0c51750b3bf5ac41d3f628fd05e22a5426a759
-commit: 1184db07bd011cf19005485e643f767d12c33184 [9/11] sched/uclamp: Remove rq max aggregation
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231129/202311292106.24uQ9OWs-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311292106.24uQ9OWs-lkp@intel.com/reproduce)
+Hi Jorge,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.7-rc3 next-20231129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jorge-Ramirez-Ortiz/mmc-rpmb-add-quirk-MMC_QUIRK_BROKEN_RPMB_RETUNE/20231129-181517
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231129094350.2605322-1-jorge%40foundries.io
+patch subject: [PATCH] mmc: rpmb: add quirk MMC_QUIRK_BROKEN_RPMB_RETUNE
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231129/202311292124.O8uscyp0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311292124.O8uscyp0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311292106.24uQ9OWs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311292124.O8uscyp0-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/sched/core.c:1410:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   update_uclamp_req(struct task_struct *p, enum uclamp_id clamp_id,
-   ^
-   int
->> kernel/sched/core.c:1413:16: error: passing 'struct uclamp_se' to parameter of incompatible type 'struct uclamp_se *'; take the address with &
-           uclamp_se_set(p->uclamp_req[clamp_id], value, user_defined);
-                         ^~~~~~~~~~~~~~~~~~~~~~~
-                         &
-   kernel/sched/core.c:1402:52: note: passing argument to parameter 'uc_se' here
-   static inline void uclamp_se_set(struct uclamp_se *uc_se,
-                                                      ^
->> kernel/sched/core.c:1414:37: error: call to undeclared function 'uclamp_eff_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           uclamp_se_set(p->uclamp[clamp_id], uclamp_eff_get(p, clamp_id), user_defined);
-                                              ^
-   kernel/sched/core.c:1414:37: note: did you mean 'uclamp_se_set'?
-   kernel/sched/core.c:1402:20: note: 'uclamp_se_set' declared here
-   static inline void uclamp_se_set(struct uclamp_se *uc_se,
-                      ^
-   kernel/sched/core.c:1414:16: error: passing 'struct uclamp_se' to parameter of incompatible type 'struct uclamp_se *'; take the address with &
-           uclamp_se_set(p->uclamp[clamp_id], uclamp_eff_get(p, clamp_id), user_defined);
-                         ^~~~~~~~~~~~~~~~~~~
-                         &
-   kernel/sched/core.c:1402:52: note: passing argument to parameter 'uc_se' here
-   static inline void uclamp_se_set(struct uclamp_se *uc_se,
-                                                      ^
-   kernel/sched/core.c:1410:1: warning: no previous prototype for function 'update_uclamp_req' [-Wmissing-prototypes]
-   update_uclamp_req(struct task_struct *p, enum uclamp_id clamp_id,
-   ^
-   kernel/sched/core.c:1410:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   update_uclamp_req(struct task_struct *p, enum uclamp_id clamp_id,
-                    ^
-                    static 
->> kernel/sched/core.c:1480:1: error: static declaration of 'uclamp_eff_get' follows non-static declaration
-   uclamp_eff_get(struct task_struct *p, enum uclamp_id clamp_id)
-   ^
-   kernel/sched/core.c:1414:37: note: previous implicit declaration is here
-           uclamp_se_set(p->uclamp[clamp_id], uclamp_eff_get(p, clamp_id), user_defined);
-                                              ^
-   1 warning and 5 errors generated.
+   In file included from drivers/mmc/core/mmc.c:27:
+   drivers/mmc/core/quirks.h:137:22: error: use of undeclared identifier 'CIF_MANFID_SANDISK2'
+           MMC_FIXUP("DG4064", CIF_MANFID_SANDISK2, 0x100, add_quirk_mmc,
+                               ^
+>> drivers/mmc/core/mmc.c:115:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   card->cid.serial        = UNSTUFF_BITS(resp, 16, 32);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/mmc.c:57:39: note: expanded from macro 'UNSTUFF_BITS'
+                   const u32 __mask = (__size < 32 ? 1 << __size : 0) - 1; \
+                                                       ^  ~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/int +1410 kernel/sched/core.c
+vim +115 drivers/mmc/core/mmc.c
 
-  1408	
-  1409	/* Update p->uclamp_req and effective p->uclamp in one go */
-> 1410	update_uclamp_req(struct task_struct *p, enum uclamp_id clamp_id,
-  1411			  unsigned int value, bool user_defined)
-  1412	{
-> 1413		uclamp_se_set(p->uclamp_req[clamp_id], value, user_defined);
-> 1414		uclamp_se_set(p->uclamp[clamp_id], uclamp_eff_get(p, clamp_id), user_defined);
-  1415	}
-  1416	
-  1417	static void __uclamp_update_util_min_rt_default(struct task_struct *p)
-  1418	{
-  1419		unsigned int default_util_min;
-  1420		struct uclamp_se *uc_se;
-  1421	
-  1422		lockdep_assert_held(&p->pi_lock);
-  1423	
-  1424		uc_se = &p->uclamp_req[UCLAMP_MIN];
-  1425	
-  1426		/* Only sync if user didn't override the default */
-  1427		if (uc_se->user_defined)
-  1428			return;
-  1429	
-  1430		default_util_min = sysctl_sched_uclamp_util_min_rt_default;
-  1431		uclamp_se_set(uc_se, default_util_min, false);
-  1432	}
-  1433	
-  1434	static void uclamp_update_util_min_rt_default(struct task_struct *p)
-  1435	{
-  1436		if (!rt_task(p))
-  1437			return;
-  1438	
-  1439		/* Protect updates to p->uclamp_* */
-  1440		guard(task_rq_lock)(p);
-  1441		__uclamp_update_util_min_rt_default(p);
-  1442	}
-  1443	
-  1444	static inline struct uclamp_se
-  1445	uclamp_tg_restrict(struct task_struct *p, enum uclamp_id clamp_id)
-  1446	{
-  1447		/* Copy by value as we could modify it */
-  1448		struct uclamp_se uc_req = p->uclamp_req[clamp_id];
-  1449	#ifdef CONFIG_UCLAMP_TASK_GROUP
-  1450		unsigned int tg_min, tg_max, value;
-  1451	
-  1452		/*
-  1453		 * Tasks in autogroups or root task group will be
-  1454		 * restricted by system defaults.
-  1455		 */
-  1456		if (task_group_is_autogroup(task_group(p)))
-  1457			return uc_req;
-  1458		if (task_group(p) == &root_task_group)
-  1459			return uc_req;
-  1460	
-  1461		tg_min = task_group(p)->uclamp[UCLAMP_MIN].value;
-  1462		tg_max = task_group(p)->uclamp[UCLAMP_MAX].value;
-  1463		value = uc_req.value;
-  1464		value = clamp(value, tg_min, tg_max);
-  1465		uclamp_se_set(&uc_req, value, false);
-  1466	#endif
-  1467	
-  1468		return uc_req;
-  1469	}
-  1470	
-  1471	/*
-  1472	 * The effective clamp bucket index of a task depends on, by increasing
-  1473	 * priority:
-  1474	 * - the task specific clamp value, when explicitly requested from userspace
-  1475	 * - the task group effective clamp value, for tasks not either in the root
-  1476	 *   group or in an autogroup
-  1477	 * - the system default clamp value, defined by the sysadmin
-  1478	 */
-  1479	static inline unsigned long
-> 1480	uclamp_eff_get(struct task_struct *p, enum uclamp_id clamp_id)
-  1481	{
-  1482		struct uclamp_se uc_req = uclamp_tg_restrict(p, clamp_id);
-  1483		struct uclamp_se uc_max = uclamp_default[clamp_id];
-  1484	
-  1485		/* System default restrictions always apply */
-  1486		if (unlikely(uc_req.value > uc_max.value))
-  1487			return uc_max.value;
-  1488	
-  1489		return uc_req.value;
-  1490	}
-  1491	
+7ea239d9e6d699 Pierre Ossman      2006-12-31   53  
+7ea239d9e6d699 Pierre Ossman      2006-12-31   54  #define UNSTUFF_BITS(resp,start,size)					\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   55  	({								\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   56  		const int __size = size;				\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   57  		const u32 __mask = (__size < 32 ? 1 << __size : 0) - 1;	\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   58  		const int __off = 3 - ((start) / 32);			\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   59  		const int __shft = (start) & 31;			\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   60  		u32 __res;						\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   61  									\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   62  		__res = resp[__off] >> __shft;				\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   63  		if (__size + __shft > 32)				\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   64  			__res |= resp[__off-1] << ((32 - __shft) % 32);	\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   65  		__res & __mask;						\
+7ea239d9e6d699 Pierre Ossman      2006-12-31   66  	})
+7ea239d9e6d699 Pierre Ossman      2006-12-31   67  
+7ea239d9e6d699 Pierre Ossman      2006-12-31   68  /*
+7ea239d9e6d699 Pierre Ossman      2006-12-31   69   * Given the decoded CSD structure, decode the raw CID to our CID structure.
+7ea239d9e6d699 Pierre Ossman      2006-12-31   70   */
+bd766312618d2e Pierre Ossman      2007-05-01   71  static int mmc_decode_cid(struct mmc_card *card)
+7ea239d9e6d699 Pierre Ossman      2006-12-31   72  {
+7ea239d9e6d699 Pierre Ossman      2006-12-31   73  	u32 *resp = card->raw_cid;
+7ea239d9e6d699 Pierre Ossman      2006-12-31   74  
+ac9d25557dcc9f Linus Walleij      2022-04-25   75  	/*
+ac9d25557dcc9f Linus Walleij      2022-04-25   76  	 * Add the raw card ID (cid) data to the entropy pool. It doesn't
+ac9d25557dcc9f Linus Walleij      2022-04-25   77  	 * matter that not all of it is unique, it's just bonus entropy.
+ac9d25557dcc9f Linus Walleij      2022-04-25   78  	 */
+ac9d25557dcc9f Linus Walleij      2022-04-25   79  	add_device_randomness(&card->raw_cid, sizeof(card->raw_cid));
+ac9d25557dcc9f Linus Walleij      2022-04-25   80  
+7ea239d9e6d699 Pierre Ossman      2006-12-31   81  	/*
+7ea239d9e6d699 Pierre Ossman      2006-12-31   82  	 * The selection of the format here is based upon published
+7ea239d9e6d699 Pierre Ossman      2006-12-31   83  	 * specs from sandisk and from what people have reported.
+7ea239d9e6d699 Pierre Ossman      2006-12-31   84  	 */
+7ea239d9e6d699 Pierre Ossman      2006-12-31   85  	switch (card->csd.mmca_vsn) {
+7ea239d9e6d699 Pierre Ossman      2006-12-31   86  	case 0: /* MMC v1.0 - v1.2 */
+7ea239d9e6d699 Pierre Ossman      2006-12-31   87  	case 1: /* MMC v1.4 */
+7ea239d9e6d699 Pierre Ossman      2006-12-31   88  		card->cid.manfid	= UNSTUFF_BITS(resp, 104, 24);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   89  		card->cid.prod_name[0]	= UNSTUFF_BITS(resp, 96, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   90  		card->cid.prod_name[1]	= UNSTUFF_BITS(resp, 88, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   91  		card->cid.prod_name[2]	= UNSTUFF_BITS(resp, 80, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   92  		card->cid.prod_name[3]	= UNSTUFF_BITS(resp, 72, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   93  		card->cid.prod_name[4]	= UNSTUFF_BITS(resp, 64, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   94  		card->cid.prod_name[5]	= UNSTUFF_BITS(resp, 56, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   95  		card->cid.prod_name[6]	= UNSTUFF_BITS(resp, 48, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   96  		card->cid.hwrev		= UNSTUFF_BITS(resp, 44, 4);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   97  		card->cid.fwrev		= UNSTUFF_BITS(resp, 40, 4);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   98  		card->cid.serial	= UNSTUFF_BITS(resp, 16, 24);
+7ea239d9e6d699 Pierre Ossman      2006-12-31   99  		card->cid.month		= UNSTUFF_BITS(resp, 12, 4);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  100  		card->cid.year		= UNSTUFF_BITS(resp, 8, 4) + 1997;
+7ea239d9e6d699 Pierre Ossman      2006-12-31  101  		break;
+7ea239d9e6d699 Pierre Ossman      2006-12-31  102  
+7ea239d9e6d699 Pierre Ossman      2006-12-31  103  	case 2: /* MMC v2.0 - v2.2 */
+7ea239d9e6d699 Pierre Ossman      2006-12-31  104  	case 3: /* MMC v3.1 - v3.3 */
+7ea239d9e6d699 Pierre Ossman      2006-12-31  105  	case 4: /* MMC v4 */
+7ea239d9e6d699 Pierre Ossman      2006-12-31  106  		card->cid.manfid	= UNSTUFF_BITS(resp, 120, 8);
+421b605edb1ce6 Dominique Martinet 2023-11-03  107  		card->cid.oemid		= UNSTUFF_BITS(resp, 104, 16);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  108  		card->cid.prod_name[0]	= UNSTUFF_BITS(resp, 96, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  109  		card->cid.prod_name[1]	= UNSTUFF_BITS(resp, 88, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  110  		card->cid.prod_name[2]	= UNSTUFF_BITS(resp, 80, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  111  		card->cid.prod_name[3]	= UNSTUFF_BITS(resp, 72, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  112  		card->cid.prod_name[4]	= UNSTUFF_BITS(resp, 64, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  113  		card->cid.prod_name[5]	= UNSTUFF_BITS(resp, 56, 8);
+51e7e8b632d8e5 Bernie Thompson    2013-02-27  114  		card->cid.prv		= UNSTUFF_BITS(resp, 48, 8);
+7ea239d9e6d699 Pierre Ossman      2006-12-31 @115  		card->cid.serial	= UNSTUFF_BITS(resp, 16, 32);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  116  		card->cid.month		= UNSTUFF_BITS(resp, 12, 4);
+7ea239d9e6d699 Pierre Ossman      2006-12-31  117  		card->cid.year		= UNSTUFF_BITS(resp, 8, 4) + 1997;
+7ea239d9e6d699 Pierre Ossman      2006-12-31  118  		break;
+7ea239d9e6d699 Pierre Ossman      2006-12-31  119  
+7ea239d9e6d699 Pierre Ossman      2006-12-31  120  	default:
+a3c76eb9d4a1e6 Girish K S         2011-10-11  121  		pr_err("%s: card has unknown MMCA version %d\n",
+7ea239d9e6d699 Pierre Ossman      2006-12-31  122  			mmc_hostname(card->host), card->csd.mmca_vsn);
+bd766312618d2e Pierre Ossman      2007-05-01  123  		return -EINVAL;
+7ea239d9e6d699 Pierre Ossman      2006-12-31  124  	}
+bd766312618d2e Pierre Ossman      2007-05-01  125  
+bd766312618d2e Pierre Ossman      2007-05-01  126  	return 0;
+7ea239d9e6d699 Pierre Ossman      2006-12-31  127  }
+7ea239d9e6d699 Pierre Ossman      2006-12-31  128  
 
 -- 
 0-DAY CI Kernel Test Service
