@@ -1,103 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4431C68E;
-	Wed, 29 Nov 2023 23:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733B24CB3D;
+	Wed, 29 Nov 2023 23:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R/7qXNE1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701299717; x=1732835717;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oshx3fgiU+1xnFMMtoAuzWS1fyMm+0Zwhw8f8FuPRgk=;
-  b=R/7qXNE1sUR5Z3JFy3MyQUIXQHVvgFxdCgmx3sWjzNKY0zAD9LxQeJyg
-   krwjj14QmkkqkbvX1RMR7VU9ZTeB2xnHHEC4ZnLxdsPj3aSiQkzm/zOSR
-   IOSFJsFUpxnuarZDBxr1Vzt7ix3zN92RV41NZxzfxqW8eYEL3/QRsh89B
-   FjMrpS7pWlgAfGWRm4dfijEy229gvnV3X/AIM7NAxdC+zgevuodV9guky
-   VZstvlO9XE93WsW43bROYVe2h+r+onRh1PG99RIIi41DT13zaEMmVWbiG
-   Ymkvn42MaWijYazQZtspBD2XyR5rKEbZ87A6A82ZI8AIDgVk9y/1d1rMh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="397133086"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="397133086"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 15:15:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="839601027"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="839601027"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Nov 2023 15:15:15 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r8Tlx-00014M-1x;
-	Wed, 29 Nov 2023 23:15:13 +0000
-Date: Thu, 30 Nov 2023 07:14:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: kernel/time/hrtimer.c:1876:20: error: unused function
- '__hrtimer_peek_ahead_timers'
-Message-ID: <202311300441.Pn3mlj4p-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMheO98f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D53C433C7;
+	Wed, 29 Nov 2023 23:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701300603;
+	bh=SkLsMu3Rty3isSC0Z5GyFZX6XuqhUs1znj+pThA/4jw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=OMheO98fL0KVjOHUecQQmELTMVNw+EZNbXgDquWeoCUgyK9h2zXfXFoDC+l5hLgjw
+	 H40ExQ2yBouWEwBOhT9F0BuLOxGEm66S8AMrxe6x79MOKTw8VWIkdX9WuKTVsNIB+7
+	 kHOWkwpuAnhPyKQ8ulBq4zaEoMYiK5F5G7QwCOCp2AhDrLhrV4J9Z8N1qD/2bxyI8P
+	 7xnzDCGDua7HkWlWOo9seEcALqEBjuW6R5Alirr1nlvqZIZVvN2EflBHVRNW6IXXSb
+	 f9Mw3vayyXtDbq17FGmX+TKrVF8nV8SXkjvQAqeP26bd2+91mtP8r8C9WfKFICsjo6
+	 2oLXwwU5U3Ouw==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] RISC-V: Disable DWARF5 with known broken LLVM versions
+Date: Wed, 29 Nov 2023 16:29:46 -0700
+Message-Id: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGvJZ2UC/x3MwQqDMAwA0F+RnA3YTtH6K7JDW6MGnJOkdAPx3
+ 1d2fJd3gZIwKYzVBUKZld9HgakriJs/VkKei8E29mGMdSisMaOQJuGYcP54WTrc9/xC7wbbhuD
+ 6NgYowSm08PefT8/7/gERRGEWbAAAAA==
+To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+ conor@kernel.org
+Cc: maskray@google.com, ndesaulniers@google.com, 
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=961; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=SkLsMu3Rty3isSC0Z5GyFZX6XuqhUs1znj+pThA/4jw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKnpJ6v09+0p3xu/XT/22JnnEYEzDYrOT152wehtquXU6
+ ONVc/l6O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEzAwYGZb+4jwmsVHPMfxQ
+ 40btU45xqj12k5btMVXa2L8r5/Z0ByOGf9p73m976b5wUabbBWbl9zsP6AtEaj2dpakSuUzwu92
+ fSk4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3b47bc037bd44f142ac09848e8d3ecccc726be99
-commit: 5c0930ccaad5a74d74e8b18b648c5eb21ed2fe94 hrtimers: Push pending hrtimers away from outgoing CPU earlier
-date:   3 weeks ago
-config: x86_64-sof-customedconfig-fuzz-defconfig (https://download.01.org/0day-ci/archive/20231130/202311300441.Pn3mlj4p-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231130/202311300441.Pn3mlj4p-lkp@intel.com/reproduce)
+Hi all,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311300441.Pn3mlj4p-lkp@intel.com/
+This series disables DWARF5 for LLVM versions where it is known to be
+broken due to linker relaxation:
 
-All errors (new ones prefixed by >>):
+https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc21dd18e5b0918f6
 
-   kernel/time/hrtimer.c:147:20: error: unused function 'is_migration_base' [-Werror,-Wunused-function]
-   static inline bool is_migration_base(struct hrtimer_clock_base *base)
-                      ^
->> kernel/time/hrtimer.c:1876:20: error: unused function '__hrtimer_peek_ahead_timers' [-Werror,-Wunused-function]
-   static inline void __hrtimer_peek_ahead_timers(void)
-                      ^
-   2 errors generated.
+If I understand correctly, it sounds like GNU binutils has a similar
+issue but I am not sure of the status of the fixes and such, so I did
+not bother with checking for it but it should be easy to add if so
+desired.
 
+Cheers,
+Nathan
 
-vim +/__hrtimer_peek_ahead_timers +1876 kernel/time/hrtimer.c
+---
+Nathan Chancellor (2):
+      riscv: Hoist linker relaxation disabling logic into Kconfig
+      riscv: Restrict DWARF5 when building with LLVM to known working versions
 
-54cdfdb47f73b5 kernel/hrtimer.c      Thomas Gleixner   2007-02-16  1874  
-016da20148a169 kernel/time/hrtimer.c Stephen Boyd      2017-03-16  1875  /* called with interrupts disabled */
-c6eb3f70d44828 kernel/time/hrtimer.c Thomas Gleixner   2015-04-14 @1876  static inline void __hrtimer_peek_ahead_timers(void)
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1877  {
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1878  	struct tick_device *td;
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1879  
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1880  	if (!hrtimer_hres_active())
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1881  		return;
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1882  
-22127e93c587af kernel/time/hrtimer.c Christoph Lameter 2014-08-17  1883  	td = this_cpu_ptr(&tick_cpu_device);
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1884  	if (td && td->evtdev)
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1885  		hrtimer_interrupt(td->evtdev);
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1886  }
-8bdec955b0da2f kernel/hrtimer.c      Thomas Gleixner   2009-01-05  1887  
+ arch/riscv/Kconfig  | 14 ++++++++++++++
+ arch/riscv/Makefile |  4 +---
+ lib/Kconfig.debug   |  1 +
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+---
+base-commit: 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab
+change-id: 20231129-riscv-restrict-dwarf5-llvm-a9824bb974cb
 
-:::::: The code at line 1876 was first introduced by commit
-:::::: c6eb3f70d4482806dc2d3e1e3c7736f497b1d418 hrtimer: Get rid of hrtimer softirq
-
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
