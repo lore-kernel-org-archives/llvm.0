@@ -1,93 +1,108 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4669125A6
-	for <llvm@lists.linux.dev>; Wed, 29 Nov 2023 08:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F03125B1
+	for <llvm@lists.linux.dev>; Wed, 29 Nov 2023 09:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="HolRzC/x"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=iL44Hr2Utbt8Rb40hYFfR3Yl3GOU2Y+nYu/SSloZ/X0=;
-	t=1701246809; x=1702456409; b=HolRzC/xyyhPD6IocMaYZpNFfmF+155NP0EfjwPXIeFoI1u
-	MovAwRJfSoCgCv6SJ4gygc9EBivdAYrNfjfDRbk3Nc851qx7D7lTDECXF8KNk7tICJHckbLHkzwsY
-	cCYDOi0d8w8EjdXWjgPYxK4Z5Jn5TZoQp2/TC5O43g8I+72f42h2/qjdNyCXbB41U2a2wwplPx2It
-	vaxD0j+6UF7pLeVdD7dlR3dRinwK3VehD6maTjgX5RUIxOalSuVCxbA4CTomh4q+TSNGaL8ealNUo
-	8GoBhccmy+Pt0gMAF1hisZ9idBcV5l8QNcBb+fAebJqwupibJnhQoHX3x84u0KGQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1r8G0b-00000008abj-0RXH;
-	Wed, 29 Nov 2023 09:33:25 +0100
-Message-ID: <56d8b3b9099d3935a7b53e976fa998f06fbfd9a5.camel@sipsolutions.net>
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="W3/XRah6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1701248785; bh=Xk1r4MKViKZ7+K/uenq6FuE6+PsSkXPe5XNBpnfJRBI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=W3/XRah6DHbjgO7GltZ7DwSXca3HIotSOvyUEsI3LnGGGLeANCJ+pnoklzUkXVylF
+	 qST8j+G6X6a3GWiElVzqfsZzjL9WSxmj7RGM8A9bxvoV09fdNuwoPE8acDnlZQaVCE
+	 2p27zZYX+i9llH+kRdPJ1vFkKrlXOP0j8y2v+2Bc=
+Received: from pek-lxu-l1.wrs.com ([111.198.228.56])
+	by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+	id C2D3D61D; Wed, 29 Nov 2023 16:48:45 +0800
+X-QQ-mid: xmsmtpt1701247725tk0ncglh8
+Message-ID: <tencent_6E9CA7EF46E452C90650899D2ECFEEFE4C06@qq.com>
+X-QQ-XMAILINFO: OZZSS56D9fAjWVaB4PHNJb8tsTqNPxKnsmpxg/CWpO1uIz/88+WpUBbId7L5Mf
+	 JCB41rIfjxdNfx/YEReganC6bVYF565SBtQaTWRbgHiSfo4g2dpz6OiOCQNO7U3IuN4/YV5r6iwx
+	 h/NmRHfIgkxRnJJjooXW5DwDNb1WXenPRVBwo8OvoXT4kl6M21LVslH4cFX4DiOFeXI7F4DwGNfC
+	 AAD9Vk+oY7f3Z9p834tHGTMlR5NO+a+77NkETksN7kXVnQL5MfrKb7OVKwohB8e3MflXd+f/+RhL
+	 MSQ9TLhSK/p9gjUOZoGXVJu6xUzufamFhU8RfWo4obqZk3nikaFioex2+SZ6ag8Dpzy2SKDmorCL
+	 2pq/4Zgz+pRWMjNLwBT2vE2FrWs2qvmR0/IZM3LlKuX4GBsfFE3lsLcT97c17bOsZ2dekThBq8lK
+	 1GbcKZJoDIrpfzjwlfLpofh7pd7ehQakDwSPrOQhzfY0Bwa0pQgAH0pIGnO7OK7rIzcYdZlUK7C9
+	 4F1Nx3cOhhwmMDMKQpWw1ttUW3I2FYXhsL5oXHumAAnFGLPgGLOpWNgJZBuN/MtapDhwyo5TY4BJ
+	 0zGjRK4JcoRUHa77S6jSJiEMkfS+gPYfrYprp/E4WRoUYUg3SQDyB7uulquZFK8aYjTWFA4PiSTS
+	 yWq9ndILBFpt4yxOxIqaBflSEUdNpmQsVrCJKurw16gd3KWydZdk61gNINTdUoXGp1n2IoxoxYyM
+	 2fKM7j+TQ0VJXixi/ZpTBDkiZolZcsXg1yNKcKoXslnmwkMY9yvhxUeZoIz70OOCxFW4UNOAeiKy
+	 WULJxJMhoZKzVF475Sgz/QVBWaxW9qNOzUhKmMyuz3yEDFDWFPzUe2FPNiV9Bncmw0knFQvis3RQ
+	 rbVJY9SsbiNcOs8kM09pD6b5RL2K9biCTDNXxt3S9rfZacvCbWN9RHpPZ6OjoaLroE17E8l5zq5z
+	 777jVfBaWAHPwWFqSUjw==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: Edward Adam Davis <eadavis@qq.com>
+To: johannes@sipsolutions.net
+Cc: davem@davemloft.net,
+	eadavis@qq.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	trix@redhat.com
 Subject: Re: [PATCH] wifi: mac80211: sband's null check should precede params
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, pabeni@redhat.com, 
-	syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Date: Wed, 29 Nov 2023 09:33:23 +0100
-In-Reply-To: <tencent_DE78F66DB82F496F9894B8E826EC8ACE0C0A@qq.com>
-References: 
-	<6c7765f13b715e67637438c6dffaa5a369758519.camel@sipsolutions.net>
-	 <tencent_DE78F66DB82F496F9894B8E826EC8ACE0C0A@qq.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+Date: Wed, 29 Nov 2023 16:48:46 +0800
+X-OQ-MSGID: <20231129084845.3875870-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <56d8b3b9099d3935a7b53e976fa998f06fbfd9a5.camel@sipsolutions.net>
+References: <56d8b3b9099d3935a7b53e976fa998f06fbfd9a5.camel@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2023-11-29 at 16:18 +0800, Edward Adam Davis wrote:
-> On Wed, 29 Nov 2023 07:57:07 +0100, Johannes Berg wrote:
-> > > [Analysis]
-> > > When ieee80211_get_link_sband() fails to find a valid sband and first=
- checks
-> > > for params in sta_link_apply_parameters(), it will return 0 due to ne=
-w_link
-> > > being 0, which will lead to an incorrect process after sta_apply_para=
-meters().
-> > >=20
-> > > [Fix]
-> > > First obtain sband and perform a non null check before checking the p=
-arams.
-> >=20
-> > Not sure I can even disagree with that analysis, it seems right, but ..=
-.
-> >=20
-> > > +	if (!link || !link_sta)
-> > > +		return -EINVAL;
-> > > +
-> > > +	sband =3D ieee80211_get_link_sband(link);
-> > > +	if (!sband)
-> > > +		return -EINVAL;
-> > > +
-> > >  	/*
-> > >  	 * If there are no changes, then accept a link that doesn't exist,
-> > >  	 * unless it's a new link.
-> >=20
-> > There's a comment here which is clearly not true after this change,
-> > since you've already returned for !link_sta?
-> No, after applying my patch, it will return due to !sband.
->=20
+On Wed, 29 Nov 2023 09:33:23 +0100, Johannes Berg wrote:
+> > > > [Analysis]
+> > > > When ieee80211_get_link_sband() fails to find a valid sband and first checks
+> > > > for params in sta_link_apply_parameters(), it will return 0 due to new_link
+> > > > being 0, which will lead to an incorrect process after sta_apply_parameters().
+> > > > 
+> > > > [Fix]
+> > > > First obtain sband and perform a non null check before checking the params.
+> > > 
+> > > Not sure I can even disagree with that analysis, it seems right, but ...
+> > > 
+> > > > +	if (!link || !link_sta)
+> > > > +		return -EINVAL;
+> > > > +
+> > > > +	sband = ieee80211_get_link_sband(link);
+> > > > +	if (!sband)
+> > > > +		return -EINVAL;
+> > > > +
+> > > >  	/*
+> > > >  	 * If there are no changes, then accept a link that doesn't exist,
+> > > >  	 * unless it's a new link.
+> > > 
+> > > There's a comment here which is clearly not true after this change,
+> > > since you've already returned for !link_sta?
+> > No, after applying my patch, it will return due to !sband.
+> > 
+> 
+> Right, OK, but the way I read the comment (now) is that it wanted to
+> accept it in that case?
+> 
+> That said, I just threw the patch into our internal testing machinery
+> quickly (probably has more MLO tests than upstream hostap for now), and
+> it worked just fine ...
+> 
+> Maybe we should just remove the comment?
+Do you mean to delete the comments below?
+   3         /*
+   2          * If there are no changes, then accept a link that doesn't exist,
+   1          * unless it's a new link.
+1800          */
 
-Right, OK, but the way I read the comment (now) is that it wanted to
-accept it in that case?
+Edward
 
-That said, I just threw the patch into our internal testing machinery
-quickly (probably has more MLO tests than upstream hostap for now), and
-it worked just fine ...
-
-Maybe we should just remove the comment?
-
-johannes
