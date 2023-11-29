@@ -1,52 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242421874;
-	Wed, 29 Nov 2023 02:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CBB44397;
+	Wed, 29 Nov 2023 04:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q0HGjJjq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J9uzGQx+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701225725; x=1732761725;
+  t=1701231285; x=1732767285;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Mubz9Exmpr4/3rGVakHcVmpeHzDMQMlVnqjaNJ8UhQY=;
-  b=Q0HGjJjqJ9WgQFN/VsxjFZWMEfGzA//CLMGVGkUsbQCS3krmGDNwG03t
-   uzM/jQvnm+Dqo4G09A8e94kawVk1atwjdivzzNb5PTI10IzWjzh1niLTW
-   e/lyX1rLPvpQmeU5Zg+nPUaKfzIS4hhgOTl146kL15WCwwDsgwY69Am+i
-   xUIVgXH7ubbNGsnEYr8T+nisGcbkuNbzg6r9KUqbwyY4QfmGMt86z+sBy
-   wKnMS3haQuPF+O9BDkzS930r9oXruihQfs3Zq5bqg5fJELqfSA4XMmkPD
-   gc8U+wGe+u7tz0q4OxZRO0XIb9/REEt8UKAovFFZNE13X0YmfI5iNNoca
+  bh=YIvS4LQS2PhkCaZ4Tm+YeCL2w5fycapLbYdyhJloM5U=;
+  b=J9uzGQx+hmJ8aEANUYc5BNRzvdyGgjtEoFqZHd7tu856txYS9HJVS+Cj
+   vrxBrE5ZIhiBg9pvfEie5O0yodYQXIxStxHN16PMN+Hz4qvzkFeFt5lIT
+   Jm7zTwTczkrEBGU5uHOhZKVj9riSgoJZfm+UNYRUdST/NFB05Yxio7N32
+   Wk5gfyz8H+1D7xabVsOO8NPptT/Gn8+x8CycARBsVk9nWXLLwOiq33oub
+   sJYduCWw4MwbrWRbLa8V212dKrZOaw20LQ8rAMA7OlCuFUJOrtt40kw2J
+   m5lEROFyt94LMQ2VsF7zrJlJNDRDeGlLEvKSnKk1M0uZRRUfI+SWffU48
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="395897470"
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="383483242"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="395897470"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 18:42:04 -0800
+   d="scan'208";a="383483242"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 20:14:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="768749641"
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="892314394"
 X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
-   d="scan'208";a="768749641"
+   d="scan'208";a="892314394"
 Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Nov 2023 18:42:00 -0800
+  by orsmga004.jf.intel.com with ESMTP; 28 Nov 2023 20:14:41 -0800
 Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r8AWU-0008SR-29;
-	Wed, 29 Nov 2023 02:41:58 +0000
-Date: Wed, 29 Nov 2023 10:40:31 +0800
+	id 1r8ByA-0008Xk-24;
+	Wed, 29 Nov 2023 04:14:38 +0000
+Date: Wed, 29 Nov 2023 12:13:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nikunj A Dadhania <nikunj@amd.com>, linux-kernel@vger.kernel.org,
-	thomas.lendacky@amd.com, x86@kernel.org, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bp@alien8.de,
-	mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
-	dionnaglaze@google.com, pgonda@google.com, seanjc@google.com,
-	pbonzini@redhat.com, nikunj@amd.com
-Subject: Re: [PATCH v6 07/16] x86/sev: Move and reorganize sev guest request
- api
-Message-ID: <202311290851.yrAyZYIl-lkp@intel.com>
-References: <20231128125959.1810039-8-nikunj@amd.com>
+To: Thomas Richard <thomas.richard@bootlin.com>, rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+	gregory.clement@bootlin.com, theo.lebrun@bootlin.com,
+	u-kumar1@ti.com, Thomas Richard <thomas.richard@bootlin.com>
+Subject: Re: [PATCH] thermal: k3_j72xx_bandgap: implement suspend/resume
+ support
+Message-ID: <202311291148.HMS1dKk0-lkp@intel.com>
+References: <20231128130332.584127-1-thomas.richard@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,126 +56,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231128125959.1810039-8-nikunj@amd.com>
+In-Reply-To: <20231128130332.584127-1-thomas.richard@bootlin.com>
 
-Hi Nikunj,
+Hi Thomas,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on tip/x86/mm]
-[also build test WARNING on linus/master v6.7-rc3 next-20231128]
-[cannot apply to tip/x86/core kvm/queue kvm/linux-next]
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.7-rc3 next-20231128]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/virt-sev-guest-Move-mutex-to-SNP-guest-device-structure/20231128-220026
-base:   tip/x86/mm
-patch link:    https://lore.kernel.org/r/20231128125959.1810039-8-nikunj%40amd.com
-patch subject: [PATCH v6 07/16] x86/sev: Move and reorganize sev guest request api
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231129/202311290851.yrAyZYIl-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311290851.yrAyZYIl-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Richard/thermal-k3_j72xx_bandgap-implement-suspend-resume-support/20231128-211217
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20231128130332.584127-1-thomas.richard%40bootlin.com
+patch subject: [PATCH] thermal: k3_j72xx_bandgap: implement suspend/resume support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20231129/202311291148.HMS1dKk0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311291148.HMS1dKk0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311290851.yrAyZYIl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311291148.HMS1dKk0-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/sev.c:2404:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!pdata->layout) {
-               ^~~~~~~~~~~~~~
-   arch/x86/kernel/sev.c:2446:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   arch/x86/kernel/sev.c:2404:2: note: remove the 'if' if its condition is always false
-           if (!pdata->layout) {
-           ^~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/sev.c:2380:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+   In file included from drivers/thermal/k3_j72xx_bandgap.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/thermal/k3_j72xx_bandgap.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/thermal/k3_j72xx_bandgap.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/thermal/k3_j72xx_bandgap.c:604:17: error: use of undeclared identifier 'k3_j72xx_bandgap_pm_ops'; did you mean 'k3_j72xx_bandgap_probe'?
+     604 |                 .pm = pm_ptr(&k3_j72xx_bandgap_pm_ops),
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~
+         |                               k3_j72xx_bandgap_probe
+   include/linux/pm.h:475:53: note: expanded from macro 'pm_ptr'
+     475 | #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+         |                                                     ^
+   include/linux/kernel.h:54:38: note: expanded from macro 'PTR_IF'
+      54 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^
+   drivers/thermal/k3_j72xx_bandgap.c:376:12: note: 'k3_j72xx_bandgap_probe' declared here
+     376 | static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+         |            ^
+>> drivers/thermal/k3_j72xx_bandgap.c:604:9: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'int (*)(struct platform_device *)' [-Werror,-Wincompatible-pointer-types]
+     604 |                 .pm = pm_ptr(&k3_j72xx_bandgap_pm_ops),
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:475:22: note: expanded from macro 'pm_ptr'
+     475 | #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:54:27: note: expanded from macro 'PTR_IF'
+      54 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   6 warnings and 2 errors generated.
 
 
-vim +2404 arch/x86/kernel/sev.c
+vim +604 drivers/thermal/k3_j72xx_bandgap.c
 
-  2376	
-  2377	int snp_setup_psp_messaging(struct snp_guest_dev *snp_dev)
-  2378	{
-  2379		struct sev_guest_platform_data *pdata;
-  2380		int ret;
-  2381	
-  2382		if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-  2383			pr_err("SNP not supported\n");
-  2384			return 0;
-  2385		}
-  2386	
-  2387		if (platform_data) {
-  2388			pr_debug("SNP platform data already initialized.\n");
-  2389			goto create_ctx;
-  2390		}
-  2391	
-  2392		if (!secrets_pa) {
-  2393			pr_err("SNP secrets page not found\n");
-  2394			return -ENODEV;
-  2395		}
-  2396	
-  2397		pdata = kzalloc(sizeof(struct sev_guest_platform_data), GFP_KERNEL);
-  2398		if (!pdata) {
-  2399			pr_err("Allocation of SNP guest platform data failed\n");
-  2400			return -ENOMEM;
-  2401		}
-  2402	
-  2403		pdata->layout = (__force void *)ioremap_encrypted(secrets_pa, PAGE_SIZE);
-> 2404		if (!pdata->layout) {
-  2405			pr_err("Failed to map SNP secrets page.\n");
-  2406			goto e_free_pdata;
-  2407		}
-  2408	
-  2409		ret = -ENOMEM;
-  2410		/* Allocate the shared page used for the request and response message. */
-  2411		pdata->request = alloc_shared_pages(sizeof(struct snp_guest_msg));
-  2412		if (!pdata->request)
-  2413			goto e_unmap;
-  2414	
-  2415		pdata->response = alloc_shared_pages(sizeof(struct snp_guest_msg));
-  2416		if (!pdata->response)
-  2417			goto e_free_request;
-  2418	
-  2419		/* initial the input address for guest request */
-  2420		pdata->input.req_gpa = __pa(pdata->request);
-  2421		pdata->input.resp_gpa = __pa(pdata->response);
-  2422		platform_data = pdata;
-  2423	
-  2424	create_ctx:
-  2425		ret = -EIO;
-  2426		snp_dev->ctx = snp_init_crypto(snp_dev->vmpck_id);
-  2427		if (!snp_dev->ctx) {
-  2428			pr_err("SNP crypto context initialization failed\n");
-  2429			platform_data = NULL;
-  2430			goto e_free_response;
-  2431		}
-  2432	
-  2433		snp_dev->pdata = platform_data;
-  2434	
-  2435		return 0;
-  2436	
-  2437	e_free_response:
-  2438		free_shared_pages(pdata->response, sizeof(struct snp_guest_msg));
-  2439	e_free_request:
-  2440		free_shared_pages(pdata->request, sizeof(struct snp_guest_msg));
-  2441	e_unmap:
-  2442		iounmap(pdata->layout);
-  2443	e_free_pdata:
-  2444		kfree(pdata);
-  2445	
-  2446		return ret;
-  2447	}
-  2448	EXPORT_SYMBOL_GPL(snp_setup_psp_messaging);
-  2449	
+   597	
+   598	static struct platform_driver k3_j72xx_bandgap_sensor_driver = {
+   599		.probe = k3_j72xx_bandgap_probe,
+   600		.remove_new = k3_j72xx_bandgap_remove,
+   601		.driver = {
+   602			.name = "k3-j72xx-soc-thermal",
+   603			.of_match_table	= of_k3_j72xx_bandgap_match,
+ > 604			.pm = pm_ptr(&k3_j72xx_bandgap_pm_ops),
+   605		},
+   606	};
+   607	
 
 -- 
 0-DAY CI Kernel Test Service
