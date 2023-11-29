@@ -1,122 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918EE4CB40;
-	Wed, 29 Nov 2023 22:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2988C3B198;
+	Wed, 29 Nov 2023 23:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DgKRw0Wc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9A3C433C8;
-	Wed, 29 Nov 2023 22:17:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701296280;
-	bh=x4TBp4Z9XhIDLhh0xttndJ/PopPagvhZ0Lb2IMMCW4U=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=DgKRw0WcZAGYG6wH2WUqROmzHkf+woNvutMXXI8fghOo3fmrd7MvoqIFR1ntnbhRe
-	 438ZPSoguk3VbBFQkIvvNb4oG4jexfiXAZ9X9DRnPUGSs+WG5muABqId2ZOhJFXMZx
-	 V2NAQk+g+qfLPher6FKc1PoxXkDsnqxD2+fwKsZLvDDmi9XOVW6cU0Yk8SuT+NTn3s
-	 OAnjn8KhEjzc+i1z1aT/iWJkguGGrFd/JAXR72xCt/vpRBuY7cVoP4XaUn0tJPcqXX
-	 uZ8ujdu1DtAGZR9DPDKHd7xFEk6LaliHetyFbSEZKp+NipFuwvlRu98bwI6DvASNED
-	 IIWikr5ga4PiQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 29 Nov 2023 15:17:43 -0700
-Subject: [PATCH v3 3/3] x86/tools: Remove chkobjdump.awk
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CUcl0Ii/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701299425; x=1732835425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wAisHvcC6UE6L2dy6Apps3oV2ZTlJuG1aYg+w33NB3A=;
+  b=CUcl0Ii/hvAiy49F0G13FKYGcwTNG3jT7HrcUGyWU+sOr0lXElahAY6k
+   14Zg/K9FUVZNNjeTPcpXH30O3spm6Qu7jyUcQTjYkSh0CZbT+sa5iAJO8
+   D15zFReOXr6oktMpnBmmmncyvKreQ/0jOg128Qf9HSDn9r2dwT5yzm0mE
+   qN38QBSF2eQ0jrJPixP8NPHhciodug9U4b8fv8CgYIWsuhj90aCVSgg5r
+   gZGU4g2iMLBUHjF5lPbpFJthwL/mVYgOHzXBQ4tsNkBs9UAdSqA6t7Xy2
+   ILsWJCwsfPe+azBv6j0Gf5HrBWtZFcIV4rRCEz7HiEwyWIj3HmzQojQjR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="383637557"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="383637557"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 15:10:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="892609109"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="892609109"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2023 15:10:20 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r8ThB-00013u-33;
+	Wed, 29 Nov 2023 23:10:17 +0000
+Date: Thu, 30 Nov 2023 07:09:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alain Volmat <alain.volmat@foss.st.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Valentin Caron <valentin.caron@foss.st.com>,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] i2c: stm32f7: add support for stm32mp25 soc
+Message-ID: <202311300357.qiYAoEvz-lkp@intel.com>
+References: <20231129125920.1702497-5-alain.volmat@foss.st.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231129-objdump-reformat-llvm-v3-3-0d855e79314d@kernel.org>
-References: <20231129-objdump-reformat-llvm-v3-0-0d855e79314d@kernel.org>
-In-Reply-To: <20231129-objdump-reformat-llvm-v3-0-0d855e79314d@kernel.org>
-To: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
- dave.hansen@linux.intel.com
-Cc: x86@kernel.org, ndesaulniers@google.com, keescook@chromium.org, 
- samuelzeter@gmail.com, mhiramat@kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2562; i=nathan@kernel.org;
- h=from:subject:message-id; bh=x4TBp4Z9XhIDLhh0xttndJ/PopPagvhZ0Lb2IMMCW4U=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKnpO6acFV/52cUv7O85hTX/f2uwvFNNe1awYMVhnWQ91
- wOZGkpTO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEZA0Z/see2H/ywST2UN5r
- Suy9ctuEt148t0Fjl2C976+3H1Ll5n9j+CvI0Zbz5dC3TNHZVe2NCtdyly570pC7bvPN1ut9jpF
- bn/MBAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231129125920.1702497-5-alain.volmat@foss.st.com>
 
-This check is superfluous now that the minimum version of binutils to
-build the kernel is 2.25. This also fixes an error seen with
-llvm-objdump because it does not support '-v' prior to LLVM 13:
+Hi Alain,
 
-  llvm-objdump: error: unknown argument '-v'
+kernel test robot noticed the following build warnings:
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1362
-Link: https://github.com/llvm/llvm-project/commit/dde24a87c55f82d8c7b3bf3eafb10f2b9b2b9a01
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/tools/Makefile       |  2 +-
- arch/x86/tools/chkobjdump.awk | 34 ----------------------------------
- 2 files changed, 1 insertion(+), 35 deletions(-)
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on atorgue-stm32/stm32-next robh/for-next linus/master v6.7-rc3 next-20231129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/arch/x86/tools/Makefile b/arch/x86/tools/Makefile
-index 90e820ac9771..7278e2545c35 100644
---- a/arch/x86/tools/Makefile
-+++ b/arch/x86/tools/Makefile
-@@ -17,7 +17,7 @@ reformatter = $(srctree)/arch/x86/tools/objdump_reformat.awk
- chkobjdump = $(srctree)/arch/x86/tools/chkobjdump.awk
- 
- quiet_cmd_posttest = TEST    $@
--      cmd_posttest = ($(OBJDUMP) -v | $(AWK) -f $(chkobjdump)) || $(OBJDUMP) -d -j .text $(objtree)/vmlinux | $(AWK) -f $(reformatter) | $(obj)/insn_decoder_test $(posttest_64bit) $(posttest_verbose)
-+      cmd_posttest = $(OBJDUMP) -d -j .text $(objtree)/vmlinux | $(AWK) -f $(reformatter) | $(obj)/insn_decoder_test $(posttest_64bit) $(posttest_verbose)
- 
- quiet_cmd_sanitytest = TEST    $@
-       cmd_sanitytest = $(obj)/insn_sanity $(posttest_64bit) -m 1000000
-diff --git a/arch/x86/tools/chkobjdump.awk b/arch/x86/tools/chkobjdump.awk
-deleted file mode 100644
-index a4cf678cf5c8..000000000000
---- a/arch/x86/tools/chkobjdump.awk
-+++ /dev/null
-@@ -1,34 +0,0 @@
--# GNU objdump version checker
--#
--# Usage:
--# objdump -v | awk -f chkobjdump.awk
--BEGIN {
--	# objdump version 2.19 or later is OK for the test.
--	od_ver = 2;
--	od_sver = 19;
--}
--
--/^GNU objdump/ {
--	verstr = ""
--	gsub(/\(.*\)/, "");
--	for (i = 3; i <= NF; i++)
--		if (match($(i), "^[0-9]")) {
--			verstr = $(i);
--			break;
--		}
--	if (verstr == "") {
--		printf("Warning: Failed to find objdump version number.\n");
--		exit 0;
--	}
--	split(verstr, ver, ".");
--	if (ver[1] > od_ver ||
--	    (ver[1] == od_ver && ver[2] >= od_sver)) {
--		exit 1;
--	} else {
--		printf("Warning: objdump version %s is older than %d.%d\n",
--		       verstr, od_ver, od_sver);
--		print("Warning: Skipping posttest.");
--		# Logic is inverted, because we just skip test without error.
--		exit 0;
--	}
--}
+url:    https://github.com/intel-lab-lkp/linux/commits/Alain-Volmat/i2c-stm32f7-perform-most-of-irq-job-in-threaded-handler/20231129-210806
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/20231129125920.1702497-5-alain.volmat%40foss.st.com
+patch subject: [PATCH 4/7] i2c: stm32f7: add support for stm32mp25 soc
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231130/202311300357.qiYAoEvz-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231130/202311300357.qiYAoEvz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311300357.qiYAoEvz-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-stm32f7.c:2029:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (i2c_dev->setup.fmp_cr1_bit) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-stm32f7.c:2044:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/i2c/busses/i2c-stm32f7.c:2029:2: note: remove the 'if' if its condition is always false
+           if (i2c_dev->setup.fmp_cr1_bit) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-stm32f7.c:2022:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +2029 drivers/i2c/busses/i2c-stm32f7.c
+
+  2018	
+  2019	static int stm32f7_i2c_write_fm_plus_bits(struct stm32f7_i2c_dev *i2c_dev,
+  2020						  bool enable)
+  2021	{
+  2022		int ret;
+  2023	
+  2024		if (i2c_dev->bus_rate <= I2C_MAX_FAST_MODE_FREQ ||
+  2025		    (!i2c_dev->setup.fmp_cr1_bit && IS_ERR_OR_NULL(i2c_dev->regmap)))
+  2026			/* Optional */
+  2027			return 0;
+  2028	
+> 2029		if (i2c_dev->setup.fmp_cr1_bit) {
+  2030			if (enable)
+  2031				stm32f7_i2c_set_bits(i2c_dev->base + STM32F7_I2C_CR1, STM32_I2C_CR1_FMP);
+  2032			else
+  2033				stm32f7_i2c_clr_bits(i2c_dev->base + STM32F7_I2C_CR1, STM32_I2C_CR1_FMP);
+  2034		} else {
+  2035			if (i2c_dev->fmp_sreg == i2c_dev->fmp_creg)
+  2036				ret = regmap_update_bits(i2c_dev->regmap, i2c_dev->fmp_sreg,
+  2037							 i2c_dev->fmp_mask, enable ? i2c_dev->fmp_mask : 0);
+  2038			else
+  2039				ret = regmap_write(i2c_dev->regmap,
+  2040						   enable ? i2c_dev->fmp_sreg : i2c_dev->fmp_creg,
+  2041						   i2c_dev->fmp_mask);
+  2042		}
+  2043	
+  2044		return ret;
+  2045	}
+  2046	
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
