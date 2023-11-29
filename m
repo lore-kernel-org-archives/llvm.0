@@ -1,124 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A971867;
-	Wed, 29 Nov 2023 00:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698FF1850;
+	Wed, 29 Nov 2023 01:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J0vX5mPQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F100C433C9;
-	Wed, 29 Nov 2023 00:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701218222;
-	bh=4QzmELDeyNIPo50f4wQdlM5oa5HP9wUnEBo9dfh91cI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=J0vX5mPQdyMCcxFjfCEt2YBQwhaw7LxtF10YxzxI6yBpIqAipLNSw8NEZxkA4y7yH
-	 uKM+2Zk3WIu5YxWREz/iNaAMnBm6qTl05spv0i3rubV16GJrkDZlKwevPKTGS3zr8Z
-	 +7cUJ5nQTrWbiAALrEFFaLP8G1oLGxqpmxIHhXuDwU10ks7ehLEKK0PLbNwcytFf4p
-	 EThNTJy9JlOX9KfVo9F5gDIQQ2WYwpAZRmUaSSo2EW3B8Y+WhJ1t+ipsnnxguXiIiV
-	 hf3nTsATMeOFmbBxicaOvlJRQpfGTiVIJ8tEdVNq3GXElpg04Bmg0tAeTI/sDhmVnI
-	 i9yGMJoRiZx+A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 28 Nov 2023 17:37:00 -0700
-Subject: [PATCH 5.10] PCI: keystone: Drop __init from
- ks_pcie_add_pcie_{ep,port}()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KbsWcUtP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701220291; x=1732756291;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Ztz3I+XcXE7EnPrEmSxi/fBX/uCg6GXn2cC6TYKYOg=;
+  b=KbsWcUtPAwcYt04I+nfjdU/+Ip5Po/Fqp3K7LOvMMr0lgZlTQSIP0DTq
+   8/qm7ssnWMeMeA3N5S67OgqKV0+fCuTGEfD1aDo5CwXQ3GtaPwwaIfRVI
+   mTVCVYIobtxrSxAaCZRlmLiQm2pR3FbJLrfUy86I/aLXXPNybjjxsoLZf
+   52rupxbG8Wc9pBepDQeyMxYj8DDwmBrCzJRSlx0x94AiN7llW87Q8sQgQ
+   r9W2m+ZXmlPER5z7zU9ndKGJTGhR/VKF1srBbS+KNMWfuFVe0GhPNtpmr
+   zHWEyyZ69lcODkrUE9Znlh8m1HNhfUE11l5oZp3LgGB+O52b/LZXxH/gI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="391929085"
+X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
+   d="scan'208";a="391929085"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 17:11:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
+   d="scan'208";a="10171897"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 28 Nov 2023 17:11:27 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r896q-0008Na-1G;
+	Wed, 29 Nov 2023 01:11:24 +0000
+Date: Wed, 29 Nov 2023 09:11:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacky Huang <ychuang570808@gmail.com>, linus.walleij@linaro.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, p.zabel@pengutronix.de, j.neuschaefer@gmx.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ychuang3@nuvoton.com, schung@nuvoton.com
+Subject: Re: [PATCH v2 3/4] arm64: dts: nuvoton: Add pinctrl support for
+ ma35d1
+Message-ID: <202311290550.7HCXMJCy-lkp@intel.com>
+References: <20231128061118.575847-4-ychuang570808@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231128-5-10-fix-pci-keystone-modpost-warning-v1-1-43240045c516@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKuHZmUC/x2NywrCMBAAf6Xs2ZVspBr8FfEQk21dxE3IFh+U/
- rvB4xxmZgXjJmxwHlZo/BKToh1oN0C6R50ZJXcG7/yByAcckRxO8sGaBB/8taUo47PkWmzBd2w
- qOmMMHMLxlpObTtBbtXF3/p8LjHtycN22HwA7Hb19AAAA
-To: gregkh@linuxfoundation.org, sashal@kernel.org
-Cc: u.kleine-koenig@pengutronix.de, bhelgaas@google.com, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Naresh Kamboju <naresh.kamboju@linaro.org>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3259; i=nathan@kernel.org;
- h=from:subject:message-id; bh=4QzmELDeyNIPo50f4wQdlM5oa5HP9wUnEBo9dfh91cI=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKlp7Ws3+ExXMjv4/YVl49af+4X8W6bx/Zz9y0aRP1rbN
- aBffUVuRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZgIRzLDf0/H2xc2vpqdLJsx
- yamWn/3fT8vHdW1r3Z1mvS8+Y8MZKsrwV95XOOGlgoF59tQF6/zvGFtxmK2TNYzzb+P9+Nyr6f4
- VPgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231128061118.575847-4-ychuang570808@gmail.com>
 
-This commit has no upstream equivalent.
+Hi Jacky,
 
-After commit db5ebaeb8fda ("PCI: keystone: Don't discard .probe()
-callback") in 5.10, there are two modpost warnings when building with
-clang:
+kernel test robot noticed the following build errors:
 
-  WARNING: modpost: vmlinux.o(.text+0x5aa6dc): Section mismatch in reference from the function ks_pcie_probe() to the function .init.text:ks_pcie_add_pcie_port()
-  The function ks_pcie_probe() references
-  the function __init ks_pcie_add_pcie_port().
-  This is often because ks_pcie_probe lacks a __init
-  annotation or the annotation of ks_pcie_add_pcie_port is wrong.
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on linusw-pinctrl/for-next robh/for-next linus/master v6.7-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  WARNING: modpost: vmlinux.o(.text+0x5aa6f4): Section mismatch in reference from the function ks_pcie_probe() to the function .init.text:ks_pcie_add_pcie_ep()
-  The function ks_pcie_probe() references
-  the function __init ks_pcie_add_pcie_ep().
-  This is often because ks_pcie_probe lacks a __init
-  annotation or the annotation of ks_pcie_add_pcie_ep is wrong.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Huang/dt-bindings-reset-Add-syscon-to-nuvoton-ma35d1-system-management-node/20231128-141443
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20231128061118.575847-4-ychuang570808%40gmail.com
+patch subject: [PATCH v2 3/4] arm64: dts: nuvoton: Add pinctrl support for ma35d1
+config: arm64-randconfig-001-20231128 (https://download.01.org/0day-ci/archive/20231129/202311290550.7HCXMJCy-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311290550.7HCXMJCy-lkp@intel.com/reproduce)
 
-ks_pcie_add_pcie_ep() was removed in upstream commit a0fd361db8e5 ("PCI:
-dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common
-code") and ks_pcie_add_pcie_port() was removed in upstream
-commit 60f5b73fa0f2 ("PCI: dwc: Remove unnecessary wrappers around
-dw_pcie_host_init()"), both of which happened before upstream
-commit 7994db905c0f ("PCI: keystone: Don't discard .probe() callback").
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311290550.7HCXMJCy-lkp@intel.com/
 
-As neither of these removal changes are really suitable for stable, just
-remove __init from these functions in stable, as it is no longer a
-correct annotation after dropping __init from ks_pcie_probe().
+All errors (new ones prefixed by >>):
 
-Fixes: db5ebaeb8fda ("PCI: keystone: Don't discard .probe() callback")
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-This is not an issue in mainline but I still cc'd the author and
-committer of 7994db905c0f in case they would like to check my analysis.
----
- drivers/pci/controller/dwc/pci-keystone.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+   In file included from arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts:9:
+>> arch/arm64/boot/dts/nuvoton/ma35d1.dtsi:13:10: fatal error: 'dt-bindings/pinctrl/ma35d1-pinfunc.h' file not found
+      13 | #include <dt-bindings/pinctrl/ma35d1-pinfunc.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
-index 5b722287aac9..afaea201a5af 100644
---- a/drivers/pci/controller/dwc/pci-keystone.c
-+++ b/drivers/pci/controller/dwc/pci-keystone.c
-@@ -865,8 +865,8 @@ static irqreturn_t ks_pcie_err_irq_handler(int irq, void *priv)
- 	return ks_pcie_handle_error_irq(ks_pcie);
- }
- 
--static int __init ks_pcie_add_pcie_port(struct keystone_pcie *ks_pcie,
--					struct platform_device *pdev)
-+static int ks_pcie_add_pcie_port(struct keystone_pcie *ks_pcie,
-+				 struct platform_device *pdev)
- {
- 	struct dw_pcie *pci = ks_pcie->pci;
- 	struct pcie_port *pp = &pci->pp;
-@@ -978,8 +978,8 @@ static const struct dw_pcie_ep_ops ks_pcie_am654_ep_ops = {
- 	.get_features = &ks_pcie_am654_get_features,
- };
- 
--static int __init ks_pcie_add_pcie_ep(struct keystone_pcie *ks_pcie,
--				      struct platform_device *pdev)
-+static int ks_pcie_add_pcie_ep(struct keystone_pcie *ks_pcie,
-+			       struct platform_device *pdev)
- {
- 	int ret;
- 	struct dw_pcie_ep *ep;
 
----
-base-commit: 479e8b8925415420b31e2aa65f9b0db3dea2adf4
-change-id: 20231128-5-10-fix-pci-keystone-modpost-warning-a8e886bdc0f7
+vim +13 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
 
-Best regards,
+  > 13	#include <dt-bindings/pinctrl/ma35d1-pinfunc.h>
+    14	
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
