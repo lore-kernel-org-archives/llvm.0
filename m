@@ -1,8 +1,8 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0D117980
-	for <llvm@lists.linux.dev>; Wed, 29 Nov 2023 09:46:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330EE15E86
+	for <llvm@lists.linux.dev>; Wed, 29 Nov 2023 09:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
@@ -10,25 +10,25 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r8H9M-000510-Mf; Wed, 29 Nov 2023 10:46:32 +0100
+	id 1r8HAn-0005C2-Mc; Wed, 29 Nov 2023 10:48:01 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r8H9L-00CNFD-W4; Wed, 29 Nov 2023 10:46:32 +0100
+	id 1r8HAn-00CNFM-9p; Wed, 29 Nov 2023 10:48:01 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r8H9L-00AkXS-N4; Wed, 29 Nov 2023 10:46:31 +0100
-Date: Wed, 29 Nov 2023 10:46:31 +0100
+	id 1r8HAn-00AkYx-0R; Wed, 29 Nov 2023 10:48:01 +0100
+Date: Wed, 29 Nov 2023 10:48:00 +0100
 From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: gregkh@linuxfoundation.org, sashal@kernel.org, bhelgaas@google.com,
 	llvm@lists.linux.dev, stable@vger.kernel.org,
 	Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH 5.4] PCI: keystone: Drop __init from
+Subject: Re: [PATCH 5.10] PCI: keystone: Drop __init from
  ks_pcie_add_pcie_{ep,port}()
-Message-ID: <20231129094631.msxnslknitdmmeif@pengutronix.de>
-References: <20231128-5-4-fix-pci-keystone-modpost-warning-v1-1-a999b944ac81@kernel.org>
+Message-ID: <20231129094800.7uxfxx7h2sa4p5an@pengutronix.de>
+References: <20231128-5-10-fix-pci-keystone-modpost-warning-v1-1-43240045c516@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,27 +36,29 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hvkbhzkvzu7w6p6o"
+	protocol="application/pgp-signature"; boundary="5lyitvpr4ipbhqge"
 Content-Disposition: inline
-In-Reply-To: <20231128-5-4-fix-pci-keystone-modpost-warning-v1-1-a999b944ac81@kernel.org>
+In-Reply-To: <20231128-5-10-fix-pci-keystone-modpost-warning-v1-1-43240045c516@kernel.org>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: llvm@lists.linux.dev
 
 
---hvkbhzkvzu7w6p6o
+--5lyitvpr4ipbhqge
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 28, 2023 at 05:35:17PM -0700, Nathan Chancellor wrote:
+On Tue, Nov 28, 2023 at 05:37:00PM -0700, Nathan Chancellor wrote:
 > This commit has no upstream equivalent.
 >=20
-> After commit 012dba0ab814 ("PCI: keystone: Don't discard .probe()
-> callback") in 5.4, there are two modpost warnings when building with
+> After commit db5ebaeb8fda ("PCI: keystone: Don't discard .probe()
+> callback") in 5.10, there are two modpost warnings when building with
 
-I'd do s/5.4/5.4.262/ here.
+As with the 5.4 patch:
+
+s/5.10/5.10.202/
 
 > clang:
 >=20
@@ -87,7 +89,7 @@ d_pcie_ep()
 > remove __init from these functions in stable, as it is no longer a
 > correct annotation after dropping __init from ks_pcie_probe().
 >=20
-> Fixes: 012dba0ab814 ("PCI: keystone: Don't discard .probe() callback")
+> Fixes: db5ebaeb8fda ("PCI: keystone: Don't discard .probe() callback")
 > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
@@ -100,19 +102,19 @@ Uwe
 Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
 Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---hvkbhzkvzu7w6p6o
+--5lyitvpr4ipbhqge
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVnCHYACgkQj4D7WH0S
-/k59agf/d/ViUF9KqldUBQ+M8916KC10q0nvxu4cPYq4HovsOS04DwEN4ZasYJ6b
-OiPqTI7y1EJ+KDZbT22pMZlXB86AjrB9wX4SjReBJdeCzEoRf6+iwDdWNVxtdnwL
-MLY3LM95jReVLdZigFE7PYSgHpUdotP+nCPtXw05aI7Izri/9TcXfPQGaU7SwTBu
-ydsNPlcJvDptzxBBHXMVkxPxhHG67an2o6OIQh4oi3KDX3pnTmEafbCBEGDR+Xyx
-8t+jqC+9Nyz1cAFZK+k+w2xwm5WWJ7XqHYq155OSg8JGtag/dHDtemx5SnAiCh1L
-CaCoBiApMK+vCgfmP/vmxcHxrv1fbA==
-=ul9g
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVnCNAACgkQj4D7WH0S
+/k5/oQf+MaA9j1Lx1QDq4jCwPrh4diaezdqjOJq5gKdZeryh0VqNp8qtOY1cE+kp
+MF0VH18Dl3sAojrC3sBaCu6Izv05Gh5SpMuijZaIJ2Wao395PEZJcMlJ48It27hZ
+JWPHDljULnJrme7L1o0ne/E4f8x2O6xNohRAapwkgI9/w/8FJmwzpAynIFXg/5tL
+/uxCmjdGSJwCEODLqu1a51tq8y/aFs65fsjBqpPj5LYeIOdqIhe0cb3fXZLHmttL
+IUNjUVpbmBKCe8wF7yb5Uhkmjq2g3fVv945M4p5e4hlqdz+Z1x9IBqAIIs041giI
+hLORDKOUNq2IzMzvxMuUXr027jF7tg==
+=Ux+x
 -----END PGP SIGNATURE-----
 
---hvkbhzkvzu7w6p6o--
+--5lyitvpr4ipbhqge--
