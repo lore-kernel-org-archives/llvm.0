@@ -1,120 +1,78 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330EE15E86
-	for <llvm@lists.linux.dev>; Wed, 29 Nov 2023 09:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r8HAn-0005C2-Mc; Wed, 29 Nov 2023 10:48:01 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r8HAn-00CNFM-9p; Wed, 29 Nov 2023 10:48:01 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r8HAn-00AkYx-0R; Wed, 29 Nov 2023 10:48:01 +0100
-Date: Wed, 29 Nov 2023 10:48:00 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: gregkh@linuxfoundation.org, sashal@kernel.org, bhelgaas@google.com,
-	llvm@lists.linux.dev, stable@vger.kernel.org,
-	Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH 5.10] PCI: keystone: Drop __init from
- ks_pcie_add_pcie_{ep,port}()
-Message-ID: <20231129094800.7uxfxx7h2sa4p5an@pengutronix.de>
-References: <20231128-5-10-fix-pci-keystone-modpost-warning-v1-1-43240045c516@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445041B272;
+	Wed, 29 Nov 2023 10:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eajR8JMN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701254706; x=1732790706;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BZ6mKkSg/PokyHaXTrcCCXEpNUcaYlgAbNAIrKE9gus=;
+  b=eajR8JMNwVCkeI+oNIXpOjlT4wYeGyhrFUFI4JBvIXvlVzIi8MBHBzKr
+   W7K5AsIdx+WGW7JxNcPB9530hySZerjyI+FBvfistjZaBVXIN8w4xmy5V
+   s3HTPh1i1iKjPKnztvhaPt8fLjDQqZ0splOTNZcZDP4dMfs/GkUlTPYEb
+   7e8mppEJtzWQScBQGCupERCWMRvDqH+hQctNtxyxQJ+yAAlccO6JO5Hz+
+   7a8si5/P6g+eTyoHkjBqENwBraGgF0RpSvC8RVUgQ5u1Mh0nLCel8t3Cp
+   00q9j1IhwuisG0pTI6WFzdDeS8elIIgeHpnz0P3EhXlhlTI8sgU6guTtZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="123883"
+X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
+   d="scan'208";a="123883"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 02:45:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="718714661"
+X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
+   d="scan'208";a="718714661"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 29 Nov 2023 02:45:02 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r8I3v-000067-2k;
+	Wed, 29 Nov 2023 10:44:59 +0000
+Date: Wed, 29 Nov 2023 18:44:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Rokosov <ddrokosov@salutedevices.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 3338/3829] make[5]: *** No rule to make target
+ 'samples/cgroup/cgroup_event_listener.c', needed by
+ 'samples/cgroup/cgroup_event_listener'.
+Message-ID: <202311291652.B1dxuHt0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5lyitvpr4ipbhqge"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231128-5-10-fix-pci-keystone-modpost-warning-v1-1-43240045c516@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1f5c003694fab4b1ba6cbdcc417488b975c088d0
+commit: fc2cf253aaec1eaf84f9d9f629b455ef5c1834f2 [3338/3829] samples: introduce new samples subdir for cgroup
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231129/202311291652.B1dxuHt0-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311291652.B1dxuHt0-lkp@intel.com/reproduce)
 
---5lyitvpr4ipbhqge
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311291652.B1dxuHt0-lkp@intel.com/
 
-On Tue, Nov 28, 2023 at 05:37:00PM -0700, Nathan Chancellor wrote:
-> This commit has no upstream equivalent.
->=20
-> After commit db5ebaeb8fda ("PCI: keystone: Don't discard .probe()
-> callback") in 5.10, there are two modpost warnings when building with
+Note: the linux-next/master HEAD 1f5c003694fab4b1ba6cbdcc417488b975c088d0 builds fine.
+      It may have been fixed somewhere.
 
-As with the 5.4 patch:
+All errors (new ones prefixed by >>):
 
-s/5.10/5.10.202/
+>> make[5]: *** No rule to make target 'samples/cgroup/cgroup_event_listener.c', needed by 'samples/cgroup/cgroup_event_listener'.
+   make[5]: Target 'samples/cgroup/' not remade because of errors.
 
-> clang:
->=20
->   WARNING: modpost: vmlinux.o(.text+0x5aa6dc): Section mismatch in refere=
-nce from the function ks_pcie_probe() to the function .init.text:ks_pcie_ad=
-d_pcie_port()
->   The function ks_pcie_probe() references
->   the function __init ks_pcie_add_pcie_port().
->   This is often because ks_pcie_probe lacks a __init
->   annotation or the annotation of ks_pcie_add_pcie_port is wrong.
->=20
->   WARNING: modpost: vmlinux.o(.text+0x5aa6f4): Section mismatch in refere=
-nce from the function ks_pcie_probe() to the function .init.text:ks_pcie_ad=
-d_pcie_ep()
->   The function ks_pcie_probe() references
->   the function __init ks_pcie_add_pcie_ep().
->   This is often because ks_pcie_probe lacks a __init
->   annotation or the annotation of ks_pcie_add_pcie_ep is wrong.
->=20
-> ks_pcie_add_pcie_ep() was removed in upstream commit a0fd361db8e5 ("PCI:
-> dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common
-> code") and ks_pcie_add_pcie_port() was removed in upstream
-> commit 60f5b73fa0f2 ("PCI: dwc: Remove unnecessary wrappers around
-> dw_pcie_host_init()"), both of which happened before upstream
-> commit 7994db905c0f ("PCI: keystone: Don't discard .probe() callback").
->=20
-> As neither of these removal changes are really suitable for stable, just
-> remove __init from these functions in stable, as it is no longer a
-> correct annotation after dropping __init from ks_pcie_probe().
->=20
-> Fixes: db5ebaeb8fda ("PCI: keystone: Don't discard .probe() callback")
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---5lyitvpr4ipbhqge
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVnCNAACgkQj4D7WH0S
-/k5/oQf+MaA9j1Lx1QDq4jCwPrh4diaezdqjOJq5gKdZeryh0VqNp8qtOY1cE+kp
-MF0VH18Dl3sAojrC3sBaCu6Izv05Gh5SpMuijZaIJ2Wao395PEZJcMlJ48It27hZ
-JWPHDljULnJrme7L1o0ne/E4f8x2O6xNohRAapwkgI9/w/8FJmwzpAynIFXg/5tL
-/uxCmjdGSJwCEODLqu1a51tq8y/aFs65fsjBqpPj5LYeIOdqIhe0cb3fXZLHmttL
-IUNjUVpbmBKCe8wF7yb5Uhkmjq2g3fVv945M4p5e4hlqdz+Z1x9IBqAIIs041giI
-hLORDKOUNq2IzMzvxMuUXr027jF7tg==
-=Ux+x
------END PGP SIGNATURE-----
-
---5lyitvpr4ipbhqge--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
