@@ -1,73 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out203-205-251-73.mail.qq.com (out203-205-251-73.mail.qq.com [203.205.251.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FF81C2A3
-	for <llvm@lists.linux.dev>; Wed, 29 Nov 2023 12:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6A21C2A3
+	for <llvm@lists.linux.dev>; Wed, 29 Nov 2023 12:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dNaZjDzl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CECC433C7;
-	Wed, 29 Nov 2023 12:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701259962;
-	bh=O90B4Q0S1Q+25NbVYezH5mjoV/3TQBVl6kKEY21UdBg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dNaZjDzlPm9hargk7WwoEBpWiULnK5zXGjWFr4jJRVNrO6rKAOnHDjrH0yNf2rRh0
-	 F4w1IjdcgUhsVUJ5fMAjZeouxDAP+fayP8yO0E81JSico4hHagDsGkQ1LnQXgY6liP
-	 r4TFuZFn4pE18UFGTkuK1pNLlcBljsIFFe6YTkfMsJi6S6hCVoxmK2+bp1s5oLgR4M
-	 zQlG1MWGEf/69f0YY9jMSx805g4qV86Dk2Pmg3BXngNhMA79aOQYWdzR4xfXn0Dw/R
-	 cl/8v/KFNMGjOpKzSYtmtoe4KC8WR/fwyXeGmXdY9UUULe4cj92mqiAROQCU24akRG
-	 0cEQvOaRvio6w==
-Date: Wed, 29 Nov 2023 13:12:39 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Donald Robson <donald.robson@imgtec.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, frank.binns@imgtec.com, matt.coster@imgtec.com, 
-	maarten.lankhorst@linux.intel.com, tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch, 
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] drm/imagination: Fixed clang warnings for initial
- upstreamed patches.
-Message-ID: <ewky6qzrzzh56pgrl3arkr5cvwncbonefmhdrjoxyvpaexlfbh@eyxh6p7znjis>
-References: <20231129112014.137407-1-donald.robson@imgtec.com>
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="qsA4SuGk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1701260768; bh=u/kJJE/vqyJTMGmEfzpylHMc8Ysza3g9cZpru6QlCt4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=qsA4SuGkC9QY8XtE3g0jfSX8hrHdTi9WeMx4LCdXyUEToBwlQ2gjcoihHtpnvigqc
+	 +7O8Khq+loCH4BTWxKmO09RzzJK2tdXWk9sDRJqWAuq90Eexs5lLTowlfpeCf+3pKk
+	 Im4rBaDNDMq7GS+9xAkTfMElJxNFX42/8S0hjoy8=
+Received: from pek-lxu-l1.wrs.com ([111.198.228.56])
+	by newxmesmtplogicsvrszc5-1.qq.com (NewEsmtp) with SMTP
+	id 46E1989A; Wed, 29 Nov 2023 20:17:46 +0800
+X-QQ-mid: xmsmtpt1701260266tji7ldykr
+Message-ID: <tencent_DE67FF86DB92ED465489A36ECD2EDDCC8C06@qq.com>
+X-QQ-XMAILINFO: OKkKo7I1HxIew+Fm4chwnma/C0iyoMaFP3nfP6kENcQxQTB+XEQKuQqDbnMI5h
+	 fWSDST1Rcuh/BFu5Bi62sqczUSoUm3S9Gw65b1jUnKHdYzePvQjvgUJ2nS7mm4kV5nN1IwKWNtP/
+	 rHRLoaxT8jsVbFyDBdKfLVyQd80W6zhcVcxeNayuyQLyB0djcZxTgDs3FOx6xFgLNnRIo4WWCRj8
+	 G6k+KiAK3qn+6Tr6NxDUu3J4kq08p0GzgTvBAEEkbNDVgSoJ7yLMZR5jjtUuPO4NRQOa/2kkY53k
+	 n1KNRW9JZOZtXNyEfZ3QydGnoTviZrsMARqE5stH7R2+G5JRDuVPpAkXBKGsWr/YFlfGsALYY5lM
+	 OLQMOiVmQ7I/1Q/7ULlwZtZpBKT3z8yvr6Yme8UewWHneSi1I0CqTFfYZCXnaJixKR60rwL7dzR2
+	 ERPXoknDOMu4AcCg5RAgSS/sKVcJlntBb1+okNN9np3xwkXZ2avgLxfILzDV9FLEPP+d4mDd1pKa
+	 NyWxpq4jFHuwRHMBN9nLTXdXCjZI3rtxc8h3of2kgvepGl1D0qR5ecfAGnhNk/PJu8StwGfl28lQ
+	 soYaU1+pHV9AFA/BUhq9kelxTelXi3NlKU8qcmw1soldrk3UKzFkHtiWpFZrL0mwV07XwPYoLJCn
+	 Urj4ZdU3ohNsHsW39wSzPCdOoD82xCF2xTUTrRmiyyDdx457znILnYYD38mlNgl1ULAZKo6wxTSl
+	 Z5YBUGamT79LsIWS1zFyPuoQOVWDrePyMQ9KP1CYisSsxekw88m6XmVXHf4+oIqpFw+NFBIEL2Gs
+	 5J8daFDZNfxiu0cg3wPTS3rbXS5He/3JPPT1L6jSELKW0VA2D/GAFEQ60WeBD0lNmu/Hc5kG5pBX
+	 FZiuEkjNTs6tt5PYBe8GFtHwEC5rurSJDRQXfSvNgh3vlL7JreqE20i+1GMc7pStkP2QHvlkBjOx
+	 bLOSRYowIkkWmsiZPZWxOFAjr1aUEGzgEKgSGDdhGJvnh/9GAF2SogXPh6AdyO
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+From: Edward Adam Davis <eadavis@qq.com>
+To: johannes@sipsolutions.net
+Cc: davem@davemloft.net,
+	eadavis@qq.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com,
+	trix@redhat.com
+Subject: [PATCH V2] wifi: mac80211: check if the existing link config remains unchanged
+Date: Wed, 29 Nov 2023 20:17:47 +0800
+X-OQ-MSGID: <20231129121746.4051185-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <52e6ba0affb1648edd3ffd25fb6d8199a39a2f51.camel@sipsolutions.net>
+References: <52e6ba0affb1648edd3ffd25fb6d8199a39a2f51.camel@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lkhfry2wxo7bon2c"
-Content-Disposition: inline
-In-Reply-To: <20231129112014.137407-1-donald.robson@imgtec.com>
+Content-Transfer-Encoding: 8bit
 
+[Syz report]
+WARNING: CPU: 1 PID: 5067 at net/mac80211/rate.c:48 rate_control_rate_init+0x540/0x690 net/mac80211/rate.c:48
+Modules linked in:
+CPU: 1 PID: 5067 Comm: syz-executor413 Not tainted 6.7.0-rc3-syzkaller-00014-gdf60cee26a2e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
+RIP: 0010:rate_control_rate_init+0x540/0x690 net/mac80211/rate.c:48
+Code: 48 c7 c2 00 46 0c 8c be 08 03 00 00 48 c7 c7 c0 45 0c 8c c6 05 70 79 0b 05 01 e8 1b a0 6f f7 e9 e0 fd ff ff e8 61 b3 8f f7 90 <0f> 0b 90 e9 36 ff ff ff e8 53 b3 8f f7 e8 5e 0b 78 f7 31 ff 89 c3
+RSP: 0018:ffffc90003c57248 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888016bc4000 RCX: ffffffff89f7d519
+RDX: ffff888076d43b80 RSI: ffffffff89f7d6df RDI: 0000000000000005
+RBP: ffff88801daaae20 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000002 R12: 0000000000000001
+R13: 0000000000000000 R14: ffff888020030e20 R15: ffff888078f08000
+FS:  0000555556b94380(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005fdeb8 CR3: 0000000076d22000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ sta_apply_auth_flags.constprop.0+0x4b7/0x510 net/mac80211/cfg.c:1674
+ sta_apply_parameters+0xaf1/0x16c0 net/mac80211/cfg.c:2002
+ ieee80211_add_station+0x3fa/0x6c0 net/mac80211/cfg.c:2068
+ rdev_add_station net/wireless/rdev-ops.h:201 [inline]
+ nl80211_new_station+0x13ba/0x1a70 net/wireless/nl80211.c:7603
+ genl_family_rcv_msg_doit+0x1fc/0x2e0 net/netlink/genetlink.c:972
+ genl_family_rcv_msg net/netlink/genetlink.c:1052 [inline]
+ genl_rcv_msg+0x561/0x800 net/netlink/genetlink.c:1067
+ netlink_rcv_skb+0x16b/0x440 net/netlink/af_netlink.c:2545
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1342 [inline]
+ netlink_unicast+0x53b/0x810 net/netlink/af_netlink.c:1368
+ netlink_sendmsg+0x93c/0xe40 net/netlink/af_netlink.c:1910
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0xd5/0x180 net/socket.c:745
+ ____sys_sendmsg+0x6ac/0x940 net/socket.c:2584
+ ___sys_sendmsg+0x135/0x1d0 net/socket.c:2638
+ __sys_sendmsg+0x117/0x1e0 net/socket.c:2667
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x40/0x110 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
 
---lkhfry2wxo7bon2c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+[Analysis]
+It is inappropriate to make a link configuration change judgment on an 
+non-existent and non new link.
 
-Hi Donald,
+[Fix]
+Quickly exit when there is a existent link and the link configuration has not 
+changed.
 
-On Wed, Nov 29, 2023 at 11:20:14AM +0000, Donald Robson wrote:
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202311242159.hh8MWiAm-lkp@intel.com/
-> Closes: https://lore.kernel.org/oe-kbuild-all/202311241752.3iLyyFcA-lkp@intel.com/
-> Closes: https://lore.kernel.org/oe-kbuild-all/202311250632.giVEx7MU-lkp@intel.com/
-> Closes: https://lore.kernel.org/oe-kbuild-all/202311250226.Da2yiSKp-lkp@intel.com/
-> Signed-off-by: Donald Robson <donald.robson@imgtec.com>
+Fixes: b303835dabe0 ("wifi: mac80211: accept STA changes without link changes")
+Reported-and-tested-by: syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+ net/mac80211/cfg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The expectation is that you send one patch per type of warning or bug report
+diff --git a/net/mac80211/cfg.c b/net/mac80211/cfg.c
+index 606b1b2e4123..d0b5a5dd7410 100644
+--- a/net/mac80211/cfg.c
++++ b/net/mac80211/cfg.c
+@@ -1788,10 +1788,10 @@ static int sta_link_apply_parameters(struct ieee80211_local *local,
+ 					  lockdep_is_held(&local->hw.wiphy->mtx));
+ 
+ 	/*
+-	 * If there are no changes, then accept a link that doesn't exist,
++	 * If there are no changes, then accept a link that exist,
+ 	 * unless it's a new link.
+ 	 */
+-	if (params->link_id < 0 && !new_link &&
++	if (params->link_id >= 0 && !new_link &&
+ 	    !params->link_mac && !params->txpwr_set &&
+ 	    !params->supported_rates_len &&
+ 	    !params->ht_capa && !params->vht_capa &&
+-- 
+2.43.0
 
-Maxime
-
---lkhfry2wxo7bon2c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZWcqtwAKCRDj7w1vZxhR
-xcEjAQCmFNuRLlP8MT+UK0jKa63G5J3hYc4h5qVuaAmTQju1uAEAqENb8fcwuHG7
-PKDe5N+lmxJDWQH3VgZ0nUTrlN5J4wk=
-=pnBq
------END PGP SIGNATURE-----
-
---lkhfry2wxo7bon2c--
