@@ -1,63 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA4A5FEED;
-	Thu, 30 Nov 2023 19:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3755DF27
+	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 21:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VsquDq4o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0612BC433C7;
-	Thu, 30 Nov 2023 19:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701372139;
-	bh=+7y/SoB0oekqe7y/gT33Bcz6gA3T+9Zo09+5P9Q1naY=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=VsquDq4ozGnJM2AsKT3V7db8lUQAoqT0ku4HmN0YvirIuLernk2g6FugwhGB31BNO
-	 RGhvSPM4wZEgJqhm44lXuMQaEY9YDmdKy5B94p2cBC5Sqqz36CQNRxfFJ37s0mcC6k
-	 eYk/07nfaZ0MahKCvz9cbGNJv66QctAShqOvhfeY1O+fCh1AlzVdRkEHiKxM2BueXN
-	 9CZiO7p1eKUseIb2B+NUaN0sHU7c5HOFjtPB/qp4pjfMrgAiS0v/5WNjlM0jfRVkm8
-	 fyubqsRUC1nO8b5v+BYyb2fD56UDZuheA0JjkIbkG7oh/hoFHGktuycO44Q37I/jSc
-	 HiTnyJSpBzIxQ==
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Nlws4p27"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6cdcef8b400so1464842b3a.1
+        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 13:59:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1701381584; x=1701986384; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E+MjKIfeA6c7V+SkVK7ESwNu4zKp4IlbbMa3hRtTv3E=;
+        b=Nlws4p27lvMGRbHlBQWesXhCaIf5ZV6dTDQo8W82ngDRY4FMBIHyPV/v5Eff0MjHqG
+         gmgnx2CxHJBNcDKzoub1XrPDor+KaMFNMw9nS43RnahiXpQspbVV523Lbb06AiUQ2Zfd
+         a2qBvIAMXw4+kcw8ad7s0Ip7KLZJhphuSar0w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701381584; x=1701986384;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E+MjKIfeA6c7V+SkVK7ESwNu4zKp4IlbbMa3hRtTv3E=;
+        b=dDZS4nXL8EwWplkiOSUAGHpamwSSZL34nBUYFixjqJiseNhtmzqpoynZ7UDg3o25h/
+         j27V/La0sPXZocp/4gRP6CiP0O5Jf9Wzep3GvYS2347OBE65P64I/HANppSdber29G/r
+         Wu82UT/FKCmuAd1TMaV+imVU+3DSeKJ6748QBdkTzZfOWbqZEpEs1dIRPjyzd6kYw7qP
+         Zu2Y5kaZ/fleKlze5ouUH6+QD8ItN21cCIH5yPqOVRDkKHIRA9Buc3iXhQeJep2fBt3G
+         cet2nogl88QGC3FOj46ZnFQhx+ppk3i/WgSbtiFHcDNznOKo6tO0uj4aKm299CyyAfLG
+         HC7Q==
+X-Gm-Message-State: AOJu0YwsUxNpEPkUYo/aunC0a6QhSh2eVndndC0S6ev4IeMnEe+t8Nba
+	Umrw61uFTPk24bA9BHlZ0UacZw==
+X-Google-Smtp-Source: AGHT+IHnOCwCjzZBfKxzRTjC4fQ8XP/8fQObomS+nCckrMFuuQt1ZNZTYjBCrPSpglsbSfTmpIMqEQ==
+X-Received: by 2002:a05:6a00:2d95:b0:6cd:dece:b73d with SMTP id fb21-20020a056a002d9500b006cddeceb73dmr6204554pfb.18.1701381584754;
+        Thu, 30 Nov 2023 13:59:44 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k5-20020aa79d05000000b006cbcd08ed56sm1683994pfp.56.2023.11.30.13.59.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Nov 2023 13:59:44 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Kees Cook <keescook@chromium.org>
+Cc: Shiraz Saleem <shiraz.saleem@intel.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Gurucharan G <gurucharanx.g@intel.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] i40e: Annotate struct i40e_qvlist_info with __counted_by
+Date: Thu, 30 Nov 2023 13:59:37 -0800
+Message-Id: <170138157431.3648624.12161951188288893323.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231003231838.work.510-kees@kernel.org>
+References: <20231003231838.work.510-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [wireless-next,v3,1/2] wifi: rtlwifi: rtl8821ae: phy: remove some
- useless code
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20231127013511.26694-1-suhui@nfschina.com>
-References: <20231127013511.26694-1-suhui@nfschina.com>
-To: Su Hui <suhui@nfschina.com>
-Cc: pkshih@realtek.com, nathan@kernel.org, ndesaulniers@google.com,
- trix@redhat.com, Su Hui <suhui@nfschina.com>, lizetao1@huawei.com,
- linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
-Message-ID: <170137213526.1963309.2251579800524493199.kvalo@kernel.org>
-Date: Thu, 30 Nov 2023 19:22:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Su Hui <suhui@nfschina.com> wrote:
-
-> Clang static checker warns:
+On Tue, 03 Oct 2023 16:18:38 -0700, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
 > 
-> Value stored to 'v1' is never read [deadcode.DeadStores]
-> Value stored to 'channel' is never read [deadcode.DeadStores]
+> As found with Coccinelle[1], add __counted_by for struct i40e_qvlist_info.
 > 
-> Remove them to save some place.
-> 
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+> [...]
 
-2 patches applied to wireless-next.git, thanks.
+Applied to for-next/hardening, thanks!
 
-cda37445718d wifi: rtlwifi: rtl8821ae: phy: remove some useless code
-bc8263083af6 wifi: rtlwifi: rtl8821ae: phy: fix an undefined bitwise shift behavior
+[1/1] i40e: Annotate struct i40e_qvlist_info with __counted_by
+      https://git.kernel.org/kees/c/da2e08d4630a
+
+Take care,
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20231127013511.26694-1-suhui@nfschina.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Kees Cook
 
