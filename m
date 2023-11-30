@@ -1,50 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC1013FE6;
-	Thu, 30 Nov 2023 03:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5401548F;
+	Thu, 30 Nov 2023 04:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a7Z3IFLg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BjFLOAkp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701316504; x=1732852504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ko+KnnNR5xJSMUoC6K+lQ0mnuMOhszyEdMuVH3KwCmY=;
-  b=a7Z3IFLgDmoex3fGUICccwBuGb7DJC4FM0EU6rMOgjyHl75NOQZyWtxM
-   Hb0RifKAfqAtkiHSzdRkJBhTtvJ8wt+fpsGj8asvWkOdtgqnXoYJd5kVc
-   xSZ3E3SX9qI/FxKd2RaUk7e6YrlXkDJl1qc3gcJe02SpwogrBgUDdStUQ
-   eEgwqWwLDBGYsOyIltnMHADCY4zQLVQmxpj+Qv3MA0pAuT99o7KSNAjLt
-   RwlJoDMzeaEoGAjtpQxmthPNVmOUTQNqG5RsIq9OU8j4/6CYOeZu5wuQ1
-   Sm5dqi7kVN7AicD+2daoMyzlAV6mN86Is8bvXeNE/GgSvJSY4XW9h3RDi
+  t=1701316992; x=1732852992;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lv3eW2TOZ55jN7KZ/f4TbMkgEF+ITNbNvPTU0G0/IEs=;
+  b=BjFLOAkpO8YuumXsQ6SAFNJlD1DI846uPXf0HpaDy/1pje9zO/LpulCv
+   bKidR7lXbu5IpD82eC+Irynz3dkCX8RsulusY+rH9+C6oOWZb5pAS4CgD
+   rrFfTixkB+N95sCLr95x1IvUAVRTVht7mIbYqJrxrFuuGkzNTX6KS9hWY
+   Xz3f7l2BUU4+V3+9Gm5aXUREAR9cTyK2OhwDkGnzSJ0QgCAFiIaF/czTJ
+   2Vm6i4C7mOIAVH7FUlWJMxDeR06b5ahsUghmRZJk3fxoNQcOQX3yTUiFV
+   wsERnZF3sxplfs+CAqbzDOETFHkjoF8OSddJEB/ZGVoZCOIzfjW4Sz+NQ
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="459757287"
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="393009072"
 X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="459757287"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 19:55:03 -0800
+   d="scan'208";a="393009072"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 20:03:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="745488152"
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="913063269"
 X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="745488152"
+   d="scan'208";a="913063269"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 29 Nov 2023 19:55:00 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2023 20:03:06 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r8Y8g-0001J8-16;
-	Thu, 30 Nov 2023 03:54:58 +0000
-Date: Thu, 30 Nov 2023 11:54:50 +0800
+	id 1r8YGW-0001Jw-0m;
+	Thu, 30 Nov 2023 04:03:04 +0000
+Date: Thu, 30 Nov 2023 12:02:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haoran Liu <liuhaoran14@163.com>, geert+renesas@glider.be
+To: Keith Busch <kbusch@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Haoran Liu <liuhaoran14@163.com>
-Subject: Re: [PATCH] [soc/renesas] renesas-soc: Add error handling in
- renesas_soc_init
-Message-ID: <202311300814.9jXQLQEU-lkp@intel.com>
-References: <20231129143431.34459-1-liuhaoran14@163.com>
+	linux-nvme@lists.infradead.org, Sagi Grimberg <sagi@grimberg.me>
+Subject: [linux-nvme:nvme-6.7 5/6] drivers/nvme/host/rdma.c:987:47: error:
+ incompatible pointer types passing 'struct nvme_rdma_ctrl *' to parameter of
+ type 'struct nvme_ctrl *'
+Message-ID: <202311301141.jPWaYfLH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,87 +51,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231129143431.34459-1-liuhaoran14@163.com>
 
-Hi Haoran,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on geert-renesas-devel/next]
-[also build test ERROR on linus/master v6.7-rc3 next-20231129]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Haoran-Liu/renesas-soc-Add-error-handling-in-renesas_soc_init/20231129-225113
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
-patch link:    https://lore.kernel.org/r/20231129143431.34459-1-liuhaoran14%40163.com
-patch subject: [PATCH] [soc/renesas] renesas-soc: Add error handling in renesas_soc_init
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231130/202311300814.9jXQLQEU-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231130/202311300814.9jXQLQEU-lkp@intel.com/reproduce)
+tree:   git://git.infradead.org/nvme.git nvme-6.7
+head:   b6cbe703db447a22f70caa0ee9cf616ac26cdc37
+commit: 822d50c036c6af2e6a42b45b2e63cb02d6233c2b [5/6] nvme: ensure reset state check ordering
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231130/202311301141.jPWaYfLH-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231130/202311301141.jPWaYfLH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311300814.9jXQLQEU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311301141.jPWaYfLH-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/renesas/renesas-soc.c:492:11: error: use of undeclared identifier 'dev'
-     492 |                 dev_err(dev, "Failed to read model property: %d\n", ret);
-         |                         ^
-   1 error generated.
+>> drivers/nvme/host/rdma.c:987:47: error: incompatible pointer types passing 'struct nvme_rdma_ctrl *' to parameter of type 'struct nvme_ctrl *' [-Werror,-Wincompatible-pointer-types]
+           enum nvme_ctrl_state state = nvme_ctrl_state(ctrl);
+                                                        ^~~~
+   drivers/nvme/host/nvme.h:390:70: note: passing argument to parameter 'ctrl' here
+   static inline enum nvme_ctrl_state nvme_ctrl_state(struct nvme_ctrl *ctrl)
+                                                                        ^
+   drivers/nvme/host/rdma.c:1063:48: error: incompatible pointer types passing 'struct nvme_rdma_ctrl *' to parameter of type 'struct nvme_ctrl *' [-Werror,-Wincompatible-pointer-types]
+                   enum nvme_ctrl_state state = nvme_ctrl_state(ctrl);
+                                                                ^~~~
+   drivers/nvme/host/nvme.h:390:70: note: passing argument to parameter 'ctrl' here
+   static inline enum nvme_ctrl_state nvme_ctrl_state(struct nvme_ctrl *ctrl)
+                                                                        ^
+   drivers/nvme/host/rdma.c:1135:48: error: incompatible pointer types passing 'struct nvme_rdma_ctrl *' to parameter of type 'struct nvme_ctrl *' [-Werror,-Wincompatible-pointer-types]
+                   enum nvme_ctrl_state state = nvme_ctrl_state(ctrl);
+                                                                ^~~~
+   drivers/nvme/host/nvme.h:390:70: note: passing argument to parameter 'ctrl' here
+   static inline enum nvme_ctrl_state nvme_ctrl_state(struct nvme_ctrl *ctrl)
+                                                                        ^
+   drivers/nvme/host/rdma.c:1170:22: error: incompatible pointer types passing 'struct nvme_rdma_ctrl *' to parameter of type 'struct nvme_ctrl *' [-Werror,-Wincompatible-pointer-types]
+           if (nvme_ctrl_state(ctrl) == NVME_CTRL_LIVE)
+                               ^~~~
+   drivers/nvme/host/nvme.h:390:70: note: passing argument to parameter 'ctrl' here
+   static inline enum nvme_ctrl_state nvme_ctrl_state(struct nvme_ctrl *ctrl)
+                                                                        ^
+   drivers/nvme/host/rdma.c:1953:22: error: incompatible pointer types passing 'struct nvme_rdma_ctrl *' to parameter of type 'struct nvme_ctrl *' [-Werror,-Wincompatible-pointer-types]
+           if (nvme_ctrl_state(ctrl) != NVME_CTRL_LIVE) {
+                               ^~~~
+   drivers/nvme/host/nvme.h:390:70: note: passing argument to parameter 'ctrl' here
+   static inline enum nvme_ctrl_state nvme_ctrl_state(struct nvme_ctrl *ctrl)
+                                                                        ^
+   5 errors generated.
 
 
-vim +/dev +492 drivers/soc/renesas/renesas-soc.c
+vim +987 drivers/nvme/host/rdma.c
 
-   447	
-   448	static int __init renesas_soc_init(void)
-   449	{
-   450		struct soc_device_attribute *soc_dev_attr;
-   451		unsigned int product, eshi = 0, eslo;
-   452		const struct renesas_family *family;
-   453		const struct of_device_id *match;
-   454		const struct renesas_soc *soc;
-   455		const struct renesas_id *id;
-   456		void __iomem *chipid = NULL;
-   457		const char *rev_prefix = "";
-   458		struct soc_device *soc_dev;
-   459		struct device_node *np;
-   460		const char *soc_id;
-   461		int ret;
-   462	
-   463		match = of_match_node(renesas_socs, of_root);
-   464		if (!match)
-   465			return -ENODEV;
-   466	
-   467		soc_id = strchr(match->compatible, ',') + 1;
-   468		soc = match->data;
-   469		family = soc->family;
-   470	
-   471		np = of_find_matching_node_and_match(NULL, renesas_ids, &match);
-   472		if (np) {
-   473			id = match->data;
-   474			chipid = of_iomap(np, 0);
-   475			of_node_put(np);
-   476		} else if (soc->id && family->reg) {
-   477			/* Try hardcoded CCCR/PRR fallback */
-   478			id = &id_prr;
-   479			chipid = ioremap(family->reg, 4);
-   480		}
-   481	
-   482		soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
-   483		if (!soc_dev_attr) {
-   484			if (chipid)
-   485				iounmap(chipid);
-   486			return -ENOMEM;
-   487		}
-   488	
-   489		np = of_find_node_by_path("/");
-   490		ret = of_property_read_string(np, "model", &soc_dev_attr->machine);
-   491		if (ret) {
- > 492			dev_err(dev, "Failed to read model property: %d\n", ret);
+   984	
+   985	static void nvme_rdma_reconnect_or_remove(struct nvme_rdma_ctrl *ctrl)
+   986	{
+ > 987		enum nvme_ctrl_state state = nvme_ctrl_state(ctrl);
+   988	
+   989		/* If we are resetting/deleting then do nothing */
+   990		if (state != NVME_CTRL_CONNECTING) {
+   991			WARN_ON_ONCE(state == NVME_CTRL_NEW || state == NVME_CTRL_LIVE);
+   992			return;
+   993		}
+   994	
+   995		if (nvmf_should_reconnect(&ctrl->ctrl)) {
+   996			dev_info(ctrl->ctrl.device, "Reconnecting in %d seconds...\n",
+   997				ctrl->ctrl.opts->reconnect_delay);
+   998			queue_delayed_work(nvme_wq, &ctrl->reconnect_work,
+   999					ctrl->ctrl.opts->reconnect_delay * HZ);
+  1000		} else {
+  1001			nvme_delete_ctrl(&ctrl->ctrl);
+  1002		}
+  1003	}
+  1004	
 
 -- 
 0-DAY CI Kernel Test Service
