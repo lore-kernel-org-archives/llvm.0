@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97223C693
-	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 13:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6809C47A58
+	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 13:29:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a2yTNhzo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF04C433C9;
-	Thu, 30 Nov 2023 13:29:08 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="esjL4JrH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4ACEC433C9;
+	Thu, 30 Nov 2023 13:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701350949;
-	bh=bVBWBLjY/vqkT+76xeaCTef8QMQpWe6A9foVqyZEsAM=;
+	s=korg; t=1701350955;
+	bh=hMzZXUZ73brWGQxEM2H5xRe+mPrFx/8xAyqR/oqFDi8=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=a2yTNhzoTfm8ak+XG6Y947zh3bSJXA0hi+0PzJhGROmXj0/hFaik/5YBIu1HqZmGr
-	 2ntrV9kWfu50/n10u0uVtqgRqeztdP6jXK9CgcyibrbebWoJgjhmfg11YrmLDy6bDd
-	 GvTin/5LzvvFkFpuG7UyelAiG2FgEO9Vp+3QJmoI=
-Subject: Patch "PCI: keystone: Drop __init from ks_pcie_add_pcie_{ep,port}()" has been added to the 5.4-stable tree
+	b=esjL4JrHLGfRBbsMdTuxMMa5Ymtb32piQjwsev/e+ji8MvjZA/vQL/RFPyIFZc3ek
+	 BMqgww6CvIw5KGUt8Ml7L68bLV2HO60BfF9VCyJmfFXvoKWCq3THT9fKFvU/Oe88Wd
+	 Cu4WMhwNduyo6O13Eg92mnFTr/UNizfUfJkLjvzM=
+Subject: Patch "PCI: keystone: Drop __init from ks_pcie_add_pcie_{ep,port}()" has been added to the 5.10-stable tree
 To: bhelgaas@google.com,gregkh@linuxfoundation.org,llvm@lists.linux.dev,naresh.kamboju@linaro.org,nathan@kernel.org,sashal@kernel.org,u.kleine-koenig@pengutronix.de
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Thu, 30 Nov 2023 13:28:56 +0000
+Date: Thu, 30 Nov 2023 13:29:07 +0000
 In-Reply-To: <20231128-5-4-fix-pci-keystone-modpost-warning-v1-1-a999b944ac81@kernel.org>
-Message-ID: <2023113056-output-unhappy-a605@gregkh>
+Message-ID: <2023113007-safehouse-immortal-f148@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,12 +37,12 @@ This is a note to let you know that I've just added the patch titled
 
     PCI: keystone: Drop __init from ks_pcie_add_pcie_{ep,port}()
 
-to the 5.4-stable tree which can be found at:
+to the 5.10-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      pci-keystone-drop-__init-from-ks_pcie_add_pcie_-ep-port.patch
-and it can be found in the queue-5.4 subdirectory.
+and it can be found in the queue-5.10 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
@@ -60,8 +60,8 @@ From: Nathan Chancellor <nathan@kernel.org>
 
 This commit has no upstream equivalent.
 
-After commit 012dba0ab814 ("PCI: keystone: Don't discard .probe()
-callback") in 5.4.262, there are two modpost warnings when building with
+After commit db5ebaeb8fda ("PCI: keystone: Don't discard .probe()
+callback") in 5.10.202, there are two modpost warnings when building with
 clang:
 
   WARNING: modpost: vmlinux.o(.text+0x5aa6dc): Section mismatch in reference from the function ks_pcie_probe() to the function .init.text:ks_pcie_add_pcie_port()
@@ -98,7 +98,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/pci/controller/dwc/pci-keystone.c
 +++ b/drivers/pci/controller/dwc/pci-keystone.c
-@@ -861,8 +861,8 @@ static irqreturn_t ks_pcie_err_irq_handl
+@@ -865,8 +865,8 @@ static irqreturn_t ks_pcie_err_irq_handl
  	return ks_pcie_handle_error_irq(ks_pcie);
  }
  
@@ -109,7 +109,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  {
  	struct dw_pcie *pci = ks_pcie->pci;
  	struct pcie_port *pp = &pci->pp;
-@@ -992,8 +992,8 @@ static const struct dw_pcie_ep_ops ks_pc
+@@ -978,8 +978,8 @@ static const struct dw_pcie_ep_ops ks_pc
  	.get_features = &ks_pcie_am654_get_features,
  };
  
@@ -124,4 +124,4 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Patches currently in stable-queue which might be from nathan@kernel.org are
 
-queue-5.4/pci-keystone-drop-__init-from-ks_pcie_add_pcie_-ep-port.patch
+queue-5.10/pci-keystone-drop-__init-from-ks_pcie_add_pcie_-ep-port.patch
