@@ -1,56 +1,57 @@
 Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0861F31A6D
-	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 16:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4419E54670
+	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 16:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zDXucOGT"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40b51e26a7aso64425e9.1
-        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 08:06:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kvne9/E6"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40b51e26a7aso66095e9.1
+        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 08:16:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701360378; x=1701965178; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1701361016; x=1701965816; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h6Wu9BYoPOgzOTrfzG/UoYHqri4WRctrB3D+iqT3Lb8=;
-        b=zDXucOGTe9Q+zX3I0MrnA3TXibfE8oyIIYjHXq8o8v4yWt6lm0fo+vKyHlqMY9HE4C
-         sE/mEZrRvc+TiIIfFBqUIuXuKuZChPkWfD9qI2fhzkqUuRTNiU7fWvAT34gfI1bkD586
-         +031vW39i7kN3oz3cZWUcsvLWvLECiF16T8yUcMBXYEyvYvXXrmNPUzvWa9p9kmBzZLe
-         AdP+kZXvfDLoHTX0yV7JwQhROWfpE1CGCtvxASmGIUeVUVYRQLcl+SP6HxlZflSwCLo+
-         dlBRr8wUa2qY6sMrm9n+4GC1xLhF6j0w/Ajs2RF+5au18vsLcWBF+TDZ9j5TUZqq4oRf
-         GjAw==
+        bh=1WTfd9Dke/wAtrjfd7TJ0XP8He7wb5roBd0D+Jv5G+8=;
+        b=Kvne9/E6pJ3KtLuHeCklDlEu0vaIXzxwXtiXOZoY8kz3V7Hj1P874qg54M0hoT8JUi
+         UqXfH7MYxYN9DBSWsJEM9If+pFDWylFK2dPXs4wKbA7bX7Upyb4HMvXaVMtyLVcjX4WD
+         PqOP+dwRVdIYfV7VohmQ+WTZXGJS+zYvivmagFUy12fD+wXDVMt/hPBeARC4Ej2P/tBI
+         ku43mtQJawUY2kVcR++3yiq49+I3CDDnyMtg8koZsQxxVxzvTj1QRYneyDOLJuBhmiE2
+         6zMm5ks1z6mMnczg52wzAbbUO6B2CogHyHknCPDOMs7k+uxa5T+6qfGB6w/5D0ZighSO
+         ee0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701360378; x=1701965178;
+        d=1e100.net; s=20230601; t=1701361016; x=1701965816;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h6Wu9BYoPOgzOTrfzG/UoYHqri4WRctrB3D+iqT3Lb8=;
-        b=kzqqkRmqwQ/FptKxpa4nJqp6Ed2P0aXbuSJP4qNU8PC+ukysAbK3d1FJ/gC1wyDss9
-         eXmuoYg8T/jOpl554oCKRUzgWEyj+8bvhdUB9iuU9KnOgfrYjstIOnkNrVRJ0R0QL486
-         KmZaLIRNZSOvy9F/43eTZ8zqBhSOSfjke0yaOwunD5Y5PprFOe9A0fVcVTQTZXLPyoI6
-         a9heMIP5cq7pYEvtjr201ilwePt+/3Ax/9NADJiywfYMC/vrtjjvVdAKuvPso81RDB62
-         +u7AROTq5OGzu8eJ23mNC/b3dpRRQS6h0eqheZIqcNsLuBF2//GjZIXhTZybcuwIPk7f
-         t2rQ==
-X-Gm-Message-State: AOJu0YwGqr6V8UIlsc9o5LMXe/ZZMbpjQHxFsnFYtRRoPutBrqGW2w0I
-	R7TcVgSzuApRmYkPm2Dcs3tNkB8ITlPxZXUOsY6oRQ==
-X-Google-Smtp-Source: AGHT+IFCeuDKxzqLbWkqyo4oZIA5ZPre+Z7BPi/It9wdY5IGOQ7jgdPnEFeelRaufUJIJAQBvu7D/RkZCQb4LKJexsA=
+        bh=1WTfd9Dke/wAtrjfd7TJ0XP8He7wb5roBd0D+Jv5G+8=;
+        b=CCI/79zN5E0abUk3L5i1wjKY4JU+LbjiIBYlvoqggD+YV7p3qyGj7l7RfBkU7v6621
+         90ZsKuOOJbxbRhWdEY9MAchbS9Za0MAuqX/fRoEkl9Z0y+Iuud/tT+rJLH4LGKMR5mC3
+         nk0BP5DqVDcYUD+w38U4UJ/NqwLR3A2pAAYFycmJRcQ8ek4RAhZAqyjGrD5+KdNeUb4H
+         sruEWVq6PMjPnZsNJPaSqlNapUwtXB9yuUIdYLOYrlAf+KOVzV73E0Qk89dD61wpkS+f
+         ooH53WFOwKN2NbfWm8sRzc3W1OMJLUU73nXKxzFnJ0fKmJsIv/0FtkfSfMOCEDFPT1jT
+         jzuQ==
+X-Gm-Message-State: AOJu0YxF/JTp8mP1QB6cjLa70E+p1jdOdLj/901H0Z215qVvKs2VHNFy
+	VhqzSq5lgUq4jUjnIeTbkNP8peW/9zceykUeynXAgw==
+X-Google-Smtp-Source: AGHT+IGHXtr/E8NOLWNyZndhRTTrYhJyY0dcj6OSW4gPELV7MTjdbT3NJnNTWIYqXPZBfh1qufpPoy5lX9LAEeCBts0=
 X-Received: by 2002:a05:600c:1e15:b0:40b:3483:8488 with SMTP id
- ay21-20020a05600c1e1500b0040b34838488mr133007wmb.3.1701360378046; Thu, 30 Nov
- 2023 08:06:18 -0800 (PST)
+ ay21-20020a05600c1e1500b0040b34838488mr135764wmb.3.1701361016285; Thu, 30 Nov
+ 2023 08:16:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org> <20231129-riscv-restrict-dwarf5-llvm-v1-1-ec0d368fb538@kernel.org>
-In-Reply-To: <20231129-riscv-restrict-dwarf5-llvm-v1-1-ec0d368fb538@kernel.org>
+References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org> <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
+In-Reply-To: <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
 From: Fangrui Song <maskray@google.com>
-Date: Thu, 30 Nov 2023 08:06:04 -0800
-Message-ID: <CAFP8O3LNUFREj4er4Ateq2-6hyHyeJLLg71bE7bLjFZ23E1xgg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] riscv: Hoist linker relaxation disabling logic into Kconfig
+Date: Thu, 30 Nov 2023 08:16:41 -0800
+Message-ID: <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
+ known working versions
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
 	conor@kernel.org, ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
@@ -61,63 +62,92 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Nov 29, 2023 at 3:30=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
 g> wrote:
 >
-> Certain configurations may need to be disabled if linker relaxation is
-> in use, such as DWARF5 with ld.lld < 18. Hoist the logic of whether or
-> not linker relaxation is in use into Kconfig so decisions can be made at
-> configuration time.
+> LLVM prior to 18.0.0 would generate incorrect debug info for DWARF5 due
+> to linker relaxation, which was worked around in clang by defaulting
+> RISC-V to DWARF4 [1]. Unfortunately, this workaround does not work for
+> the kernel because the DWARF version can be independently changed from
+> the default in Kconfig.
 >
+> Do not allow DWARF5 to be selected for RISC-V when using linker
+> relaxation (ld.lld >=3D 15.0.0) and a version of LLVM that does not have
+> the fixes (the integrated assembler [2] and ld.lld [3] < 18.0.0)
+> necessary to generate the correct debug info.
+>
+> Link: https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649=
+fc21dd18e5b0918f6 [1]
+> Link: https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622db2c=
+ad7b745607ca4de6a [2]
+> Link: https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac932=
+2e22e5471cc5e4a77 [3]
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->  arch/riscv/Kconfig  | 5 +++++
->  arch/riscv/Makefile | 4 +---
->  2 files changed, 6 insertions(+), 3 deletions(-)
+>  arch/riscv/Kconfig | 9 +++++++++
+>  lib/Kconfig.debug  | 1 +
+>  2 files changed, 10 insertions(+)
 >
 > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 95a2a06acc6a..72be1d8122a3 100644
+> index 72be1d8122a3..81b473cb47b0 100644
 > --- a/arch/riscv/Kconfig
 > +++ b/arch/riscv/Kconfig
-> @@ -181,6 +181,11 @@ config HAVE_SHADOW_CALL_STACK
->         # https://github.com/riscv-non-isa/riscv-elf-psabi-doc/commit/a48=
-4e843e6eeb51f0cb7b8819e50da6d2444d769
->         depends on $(ld-option,--no-relax-gp)
->
-> +config RISCV_USE_LINKER_RELAXATION
-> +       def_bool y
-> +       # https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec7726=
+> @@ -186,6 +186,15 @@ config RISCV_USE_LINKER_RELAXATION
+>         # https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec7726=
 2d392e2923e1d680f6985
-> +       depends on !LD_IS_LLD || LLD_VERSION >=3D 150000
+>         depends on !LD_IS_LLD || LLD_VERSION >=3D 150000
+>
+> +# https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc2=
+1dd18e5b0918f6
+> +config ARCH_HAS_BROKEN_DWARF5
+> +       def_bool y
+> +       depends on RISCV_USE_LINKER_RELAXATION
+> +       # https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622=
+db2cad7b745607ca4de6a
+> +       depends on AS_IS_LLVM && AS_VERSION < 180000
+> +       # https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5a=
+c9322e22e5471cc5e4a77
+> +       depends on LD_IS_LLD && LLD_VERSION < 180000
 > +
 >  config ARCH_MMAP_RND_BITS_MIN
 >         default 18 if 64BIT
 >         default 8
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index a74be78678eb..e383aa9e2757 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -43,8 +43,7 @@ else
->         KBUILD_LDFLAGS +=3D -melf32lriscv
->  endif
->
-> -ifeq ($(CONFIG_LD_IS_LLD),y)
-> -ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
-> +ifndef CONFIG_RISCV_USE_LINKER_RELAXATION
->         KBUILD_CFLAGS +=3D -mno-relax
->         KBUILD_AFLAGS +=3D -mno-relax
->  ifndef CONFIG_AS_IS_LLVM
-> @@ -52,7 +51,6 @@ ifndef CONFIG_AS_IS_LLVM
->         KBUILD_AFLAGS +=3D -Wa,-mno-relax
->  endif
->  endif
-> -endif
->
->  ifeq ($(CONFIG_SHADOW_CALL_STACK),y)
->         KBUILD_LDFLAGS +=3D --no-relax-gp
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index cc7d53d9dc01..a0ebce05a368 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -282,6 +282,7 @@ config DEBUG_INFO_DWARF4
+>  config DEBUG_INFO_DWARF5
+>         bool "Generate DWARF Version 5 debuginfo"
+>         select DEBUG_INFO
+> +       depends on !ARCH_HAS_BROKEN_DWARF5
+>         depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
+ >=3D 23502 && AS_HAS_NON_CONST_LEB128)
+>         help
+>           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0=
++ (gcc
 >
 > --
 > 2.43.0
+>
 
+A comment and "depends on" condition introduced by commit
+0a6de78cff600cb991f2a1b7ed376935871796a0 "lib/Kconfig.debug: Add check
+for non-constant .{s,u}leb128 support to DWARF5"
+can now be refined.
 
-Reviewed-by: Fangrui Song <maskray@google.com>
+> ib/Kconfig.debug
+> (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
+
+AS_VERSION can now be 24100.
+
+Thanks for the comment. I just marked
+https://sourceware.org/bugzilla/show_bug.cgi?id=3D27215 (" as: Error:
+non-constant .uleb128 is not supported on riscv64") as resolved :)
+
+> +# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5=
+, which
+> +# some targets may not support: https://sourceware.org/bugzilla/show_bug=
+.cgi?id=3D27215
+
+This comment can be updated:)
 
 
 --=20
