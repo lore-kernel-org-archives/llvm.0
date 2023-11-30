@@ -1,52 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD963E47A;
-	Thu, 30 Nov 2023 13:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97223C693
+	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 13:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KQAuosfi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C90CC433C7;
-	Thu, 30 Nov 2023 13:24:57 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a2yTNhzo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF04C433C9;
+	Thu, 30 Nov 2023 13:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701350698;
-	bh=6wXQG8GC4xHQYPa80EXyBOhEFr8itdnJN4uCsBB6Yi0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KQAuosfibECnkXGBM2E9G412xWv5J7I4boFHF22LgUiNKc8GyoDpMkzSbitx6ngOX
-	 enDFY1isne+gxxvlQpj5WXE4Lu8v/Yw5L5uaNPLlVsO5jycRqvBCE9yBoHE6nZvWsY
-	 1qabRZhpA4CZPuIikP6z6PPL3nw4Ba4LIXQqAYac=
-Date: Thu, 30 Nov 2023 13:24:55 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, sashal@kernel.org,
-	bhelgaas@google.com, llvm@lists.linux.dev, stable@vger.kernel.org,
-	Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH 5.10] PCI: keystone: Drop __init from
- ks_pcie_add_pcie_{ep,port}()
-Message-ID: <2023113047-county-icy-baff@gregkh>
-References: <20231128-5-10-fix-pci-keystone-modpost-warning-v1-1-43240045c516@kernel.org>
- <20231129094800.7uxfxx7h2sa4p5an@pengutronix.de>
+	s=korg; t=1701350949;
+	bh=bVBWBLjY/vqkT+76xeaCTef8QMQpWe6A9foVqyZEsAM=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:From;
+	b=a2yTNhzoTfm8ak+XG6Y947zh3bSJXA0hi+0PzJhGROmXj0/hFaik/5YBIu1HqZmGr
+	 2ntrV9kWfu50/n10u0uVtqgRqeztdP6jXK9CgcyibrbebWoJgjhmfg11YrmLDy6bDd
+	 GvTin/5LzvvFkFpuG7UyelAiG2FgEO9Vp+3QJmoI=
+Subject: Patch "PCI: keystone: Drop __init from ks_pcie_add_pcie_{ep,port}()" has been added to the 5.4-stable tree
+To: bhelgaas@google.com,gregkh@linuxfoundation.org,llvm@lists.linux.dev,naresh.kamboju@linaro.org,nathan@kernel.org,sashal@kernel.org,u.kleine-koenig@pengutronix.de
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Thu, 30 Nov 2023 13:28:56 +0000
+In-Reply-To: <20231128-5-4-fix-pci-keystone-modpost-warning-v1-1-a999b944ac81@kernel.org>
+Message-ID: <2023113056-output-unhappy-a605@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231129094800.7uxfxx7h2sa4p5an@pengutronix.de>
+X-stable: commit
+X-Patchwork-Hint: ignore
 
-On Wed, Nov 29, 2023 at 10:48:00AM +0100, Uwe Kleine-König wrote:
-> On Tue, Nov 28, 2023 at 05:37:00PM -0700, Nathan Chancellor wrote:
-> > This commit has no upstream equivalent.
-> > 
-> > After commit db5ebaeb8fda ("PCI: keystone: Don't discard .probe()
-> > callback") in 5.10, there are two modpost warnings when building with
-> 
-> As with the 5.4 patch:
-> 
-> s/5.10/5.10.202/
 
-Thanks, all now queued up.
+This is a note to let you know that I've just added the patch titled
 
-greg k-h
+    PCI: keystone: Drop __init from ks_pcie_add_pcie_{ep,port}()
+
+to the 5.4-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+
+The filename of the patch is:
+     pci-keystone-drop-__init-from-ks_pcie_add_pcie_-ep-port.patch
+and it can be found in the queue-5.4 subdirectory.
+
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From nathan@kernel.org  Thu Nov 30 13:23:28 2023
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 28 Nov 2023 17:35:17 -0700
+Subject: PCI: keystone: Drop __init from ks_pcie_add_pcie_{ep,port}()
+To: gregkh@linuxfoundation.org, sashal@kernel.org
+Cc: u.kleine-koenig@pengutronix.de, bhelgaas@google.com,  llvm@lists.linux.dev, stable@vger.kernel.org,  Naresh Kamboju <naresh.kamboju@linaro.org>,  Nathan Chancellor <nathan@kernel.org>
+Message-ID: <20231128-5-4-fix-pci-keystone-modpost-warning-v1-1-a999b944ac81@kernel.org>
+
+From: Nathan Chancellor <nathan@kernel.org>
+
+This commit has no upstream equivalent.
+
+After commit 012dba0ab814 ("PCI: keystone: Don't discard .probe()
+callback") in 5.4.262, there are two modpost warnings when building with
+clang:
+
+  WARNING: modpost: vmlinux.o(.text+0x5aa6dc): Section mismatch in reference from the function ks_pcie_probe() to the function .init.text:ks_pcie_add_pcie_port()
+  The function ks_pcie_probe() references
+  the function __init ks_pcie_add_pcie_port().
+  This is often because ks_pcie_probe lacks a __init
+  annotation or the annotation of ks_pcie_add_pcie_port is wrong.
+
+  WARNING: modpost: vmlinux.o(.text+0x5aa6f4): Section mismatch in reference from the function ks_pcie_probe() to the function .init.text:ks_pcie_add_pcie_ep()
+  The function ks_pcie_probe() references
+  the function __init ks_pcie_add_pcie_ep().
+  This is often because ks_pcie_probe lacks a __init
+  annotation or the annotation of ks_pcie_add_pcie_ep is wrong.
+
+ks_pcie_add_pcie_ep() was removed in upstream commit a0fd361db8e5 ("PCI:
+dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common
+code") and ks_pcie_add_pcie_port() was removed in upstream
+commit 60f5b73fa0f2 ("PCI: dwc: Remove unnecessary wrappers around
+dw_pcie_host_init()"), both of which happened before upstream
+commit 7994db905c0f ("PCI: keystone: Don't discard .probe() callback").
+
+As neither of these removal changes are really suitable for stable, just
+remove __init from these functions in stable, as it is no longer a
+correct annotation after dropping __init from ks_pcie_probe().
+
+Fixes: 012dba0ab814 ("PCI: keystone: Don't discard .probe() callback")
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/pci/controller/dwc/pci-keystone.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+--- a/drivers/pci/controller/dwc/pci-keystone.c
++++ b/drivers/pci/controller/dwc/pci-keystone.c
+@@ -861,8 +861,8 @@ static irqreturn_t ks_pcie_err_irq_handl
+ 	return ks_pcie_handle_error_irq(ks_pcie);
+ }
+ 
+-static int __init ks_pcie_add_pcie_port(struct keystone_pcie *ks_pcie,
+-					struct platform_device *pdev)
++static int ks_pcie_add_pcie_port(struct keystone_pcie *ks_pcie,
++				 struct platform_device *pdev)
+ {
+ 	struct dw_pcie *pci = ks_pcie->pci;
+ 	struct pcie_port *pp = &pci->pp;
+@@ -992,8 +992,8 @@ static const struct dw_pcie_ep_ops ks_pc
+ 	.get_features = &ks_pcie_am654_get_features,
+ };
+ 
+-static int __init ks_pcie_add_pcie_ep(struct keystone_pcie *ks_pcie,
+-				      struct platform_device *pdev)
++static int ks_pcie_add_pcie_ep(struct keystone_pcie *ks_pcie,
++			       struct platform_device *pdev)
+ {
+ 	int ret;
+ 	struct dw_pcie_ep *ep;
+
+
+Patches currently in stable-queue which might be from nathan@kernel.org are
+
+queue-5.4/pci-keystone-drop-__init-from-ks_pcie_add_pcie_-ep-port.patch
