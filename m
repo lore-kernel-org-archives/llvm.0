@@ -1,94 +1,2694 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A09D125C3
-	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 08:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC442D606
+	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 08:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqeemkyz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 496A1C433C7;
-	Thu, 30 Nov 2023 08:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701332827;
-	bh=AVPr5QEXIbplSm1/AOQkNsZ7+EYuGbAVBfNp5Jit/NU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aqeemkyzYxzUb4DFNt2IWN1M7NTo6NHpsb6fmEMKF5RNEs0zSQcWF0XuIsKeh8rBN
-	 uX2c9fmeIj8te8eqWuWR87eu1mui3sw39O8gOFlPJjRNSfEbJE3ySBHYB9CoYRgwtj
-	 dDe8W3JSB/jjeceJ3IrgsKqG3zEwdcgM+7T1bGSr+5Jz5BZh9AvqS7p5P8PmK2dYIF
-	 kOK8KVyqmFHSfHN8AmqlLEWbTCZQHBKNgVT/FMwbRut6xPw2cvS3M3chktTgBgGII+
-	 nBte7sYXta9WJo/pI8UpDWysdPpiMiTXDN5wuVdbp/YAzJFH55HzFwYAq0bYThrUDW
-	 GS9CbVx35kW+w==
-Date: Thu, 30 Nov 2023 08:27:01 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Pan Xinhui <Xinhui.Pan@amd.com>, Daniel Vetter <daniel@ffwll.ch>,
-	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev, arnd@arndb.de
-Subject: Re: [PATCH 3/3] drm/amd/display: Support DRM_AMD_DC_FP on RISC-V
-Message-ID: <20231130-pellet-parted-4c3854bda573@spud>
-References: <20231122030621.3759313-1-samuel.holland@sifive.com>
- <20231122030621.3759313-4-samuel.holland@sifive.com>
- <20231123-headdress-mold-0dd7a74477f7@wendy>
- <20231130004224.GE2513828@dev-arch.thelio-3990X>
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="kaLXWdCZ"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6cbd24d9557so624008b3a.1
+        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 00:32:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701333136; x=1701937936; darn=lists.linux.dev;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xhfsuskk81vOk+PeBd4YvXEhib62NHz+j2Uady2XgVY=;
+        b=kaLXWdCZOL55C8bymUYm7QPXjNsGwB5+uCajal+iLJUPclYZ7hnqVG6nKFk4lXOn41
+         wdUfDP4lwsb3M5U7V46tOy7y8HF7iNdEv7ZeMNz3KSlI5MgfPbk0+uBC9DUGXrm0qSXr
+         vajnFiGxNM4Zo69sU4KaTyhmMIgzyTPr0feOFdnu94kjV9R59fMwTdSpIOnymV6SaL9C
+         xfu4EzZvD5+WNx9Kv6FJMgXThTCecSYWbuDOgXf6FCKDFsNFPQvyoigDoNBXjR6YrQas
+         abQd5qzFl9pq2S7U2Gw3Bw+0Yy2LtJMcwQaYhf/oBeNLtAtgywbaMscICpUULOgfK3hy
+         q9cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701333136; x=1701937936;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xhfsuskk81vOk+PeBd4YvXEhib62NHz+j2Uady2XgVY=;
+        b=py00nJ/BuOCe1nHUcoDkMPOP4szrJOizTiBJjwTmk8FAQJkAI+MWzfE1Dmgt9OZfE0
+         zc/oLYlDAw0kQ8tLsfW8UAX84Jr9yJc5EOp8EQuy5+Ku6BF/Ve/cC6XTAkQSG3IWlmFf
+         gBBGLVnxzpqp50FS2Y9TAxNW3OCCPhHghc9BCJpr4//LMlqxCeQ0PsZm9VCodYmBftDw
+         B+kaUT+2tBF/Np8Ch+SIl5GDx8ERAk6qjlBkqha0x7G1l3g4V+BVeZENj0JuCwkvdMhj
+         xab2SECCwUud2nJN4GdNVvqDSUqzIHBHRnAvDqK4PLba27cwLLQVlDyo0v5auMAgvG8p
+         zDxw==
+X-Gm-Message-State: AOJu0YwbxvVDkiuaDcLOD+ymLDepIFKlFoSlVqtQbQwhHREpkwYPMF6C
+	eAY5OujFXi4b5h+j49q5Zs3FMvYpTKYm1INRZmJ8TA==
+X-Google-Smtp-Source: AGHT+IGrAgcY6m5udgcGKJXz7vxEUJECCjs94Fn2J9b63yMQLoqlrPXV7MvHrzQ6ahs6281BpvyNUw==
+X-Received: by 2002:a05:6a00:21c8:b0:690:f877:aa1e with SMTP id t8-20020a056a0021c800b00690f877aa1emr28055804pfj.12.1701333134314;
+        Thu, 30 Nov 2023 00:32:14 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id h22-20020aa786d6000000b006cde4523767sm671279pfo.22.2023.11.30.00.32.13
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Nov 2023 00:32:13 -0800 (PST)
+Message-ID: <6568488d.a70a0220.47115.1871@mx.google.com>
+Date: Thu, 30 Nov 2023 00:32:13 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="skPAiwM3XKXsb30B"
-Content-Disposition: inline
-In-Reply-To: <20231130004224.GE2513828@dev-arch.thelio-3990X>
-
-
---skPAiwM3XKXsb30B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20231130
+Subject: next/master build: 188 builds: 63 failed, 125 passed, 276 errors,
+ 238 warnings (next-20231130)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Wed, Nov 29, 2023 at 05:42:24PM -0700, Nathan Chancellor wrote:
-> On Thu, Nov 23, 2023 at 02:23:01PM +0000, Conor Dooley wrote:
-> > On Tue, Nov 21, 2023 at 07:05:15PM -0800, Samuel Holland wrote:
-> > > RISC-V uses kernel_fpu_begin()/kernel_fpu_end() like several other
-> > > architectures. Enabling hardware FP requires overriding the ISA string
-> > > for the relevant compilation units.
-> >=20
-> > Ah yes, bringing the joy of frame-larger-than warnings to RISC-V:
-> > ../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_=
-32.c:58:13: warning: stack frame size (2416) exceeds limit (2048) in 'DISPC=
-LKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculatio=
-n' [-Wframe-larger-than]
->=20
-> :(
->=20
-> > Nathan, have you given up on these being sorted out?
->=20
-> Does your configuration have KASAN (I don't think RISC-V supports
-> KCSAN)? It is possible that dml/dcn32 needs something similar to commit
-> 6740ec97bcdb ("drm/amd/display: Increase frame warning limit with KASAN
-> or KCSAN in dml2")?
+next/master build: 188 builds: 63 failed, 125 passed, 276 errors, 238 warni=
+ngs (next-20231130)
 
-It's from allmodconfig, so yes, I think so.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20231130/
 
+Tree: next
+Branch: master
+Git Describe: next-20231130
+Git Commit: 3cd3fe06ff81cfb3a969acb12a56796cff5af23d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
---skPAiwM3XKXsb30B
-Content-Type: application/pgp-signature; name="signature.asc"
+Build Failures Detected:
 
------BEGIN PGP SIGNATURE-----
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWhHVQAKCRB4tDGHoIJi
-0ktTAP4zJtbMBMKEDeq0u/9g0c5SQ8z5cOnNzWWYN7sZHhwFyAEA8RLHzYprTbaE
-YZSEx6U8yszQOIViwBKWPBZ/OyRTWAo=
-=98lz
------END PGP SIGNATURE-----
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
---skPAiwM3XKXsb30B--
+i386:
+    i386_defconfig: (gcc-10) FAIL
+    i386_defconfig+debug: (gcc-10) FAIL
+    i386_defconfig+kselftest: (gcc-10) FAIL
+
+mips:
+    32r2el_defconfig: (gcc-10) FAIL
+    32r2el_defconfig+debug: (gcc-10) FAIL
+    32r2el_defconfig+kselftest: (gcc-10) FAIL
+    allnoconfig: (gcc-10) FAIL
+    ath25_defconfig: (gcc-10) FAIL
+    ath79_defconfig: (gcc-10) FAIL
+    bcm47xx_defconfig: (gcc-10) FAIL
+    bcm63xx_defconfig: (gcc-10) FAIL
+    bigsur_defconfig: (gcc-10) FAIL
+    bmips_be_defconfig: (gcc-10) FAIL
+    bmips_stb_defconfig: (gcc-10) FAIL
+    cavium_octeon_defconfig: (gcc-10) FAIL
+    ci20_defconfig: (gcc-10) FAIL
+    cobalt_defconfig: (gcc-10) FAIL
+    cu1000-neo_defconfig: (gcc-10) FAIL
+    cu1830-neo_defconfig: (gcc-10) FAIL
+    db1xxx_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    decstation_defconfig: (gcc-10) FAIL
+    decstation_r4k_defconfig: (gcc-10) FAIL
+    fuloong2e_defconfig: (gcc-10) FAIL
+    gcw0_defconfig: (gcc-10) FAIL
+    gpr_defconfig: (gcc-10) FAIL
+    ip22_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    ip32_defconfig: (gcc-10) FAIL
+    jazz_defconfig: (gcc-10) FAIL
+    lemote2f_defconfig: (gcc-10) FAIL
+    loongson1b_defconfig: (gcc-10) FAIL
+    loongson1c_defconfig: (gcc-10) FAIL
+    loongson2k_defconfig: (gcc-10) FAIL
+    loongson3_defconfig: (gcc-10) FAIL
+    malta_defconfig: (gcc-10) FAIL
+    malta_kvm_defconfig: (gcc-10) FAIL
+    malta_qemu_32r6_defconfig: (gcc-10) FAIL
+    maltaaprp_defconfig: (gcc-10) FAIL
+    maltasmvp_defconfig: (gcc-10) FAIL
+    maltasmvp_eva_defconfig: (gcc-10) FAIL
+    maltaup_defconfig: (gcc-10) FAIL
+    maltaup_xpa_defconfig: (gcc-10) FAIL
+    mtx1_defconfig: (gcc-10) FAIL
+    omega2p_defconfig: (gcc-10) FAIL
+    pic32mzda_defconfig: (gcc-10) FAIL
+    qi_lb60_defconfig: (gcc-10) FAIL
+    rb532_defconfig: (gcc-10) FAIL
+    rbtx49xx_defconfig: (gcc-10) FAIL
+    rm200_defconfig: (gcc-10) FAIL
+    rs90_defconfig: (gcc-10) FAIL
+    rt305x_defconfig: (gcc-10) FAIL
+    sb1250_swarm_defconfig: (gcc-10) FAIL
+    tinyconfig: (gcc-10) FAIL
+    vocore2_defconfig: (gcc-10) FAIL
+    xway_defconfig: (gcc-10) FAIL
+
+x86_64:
+    x86_64_defconfig: (gcc-10) FAIL
+    x86_64_defconfig+kselftest: (gcc-10) FAIL
+    x86_64_defconfig+x86-board: (gcc-10) FAIL
+    x86_64_defconfig+x86-board+kselftest: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    allnoconfig (gcc-10): 1 warning
+    axs103_defconfig (gcc-10): 1 warning
+    axs103_smp_defconfig (gcc-10): 1 warning
+    haps_hs_defconfig (gcc-10): 1 warning
+    haps_hs_smp_defconfig (gcc-10): 2 warnings
+    haps_hs_smp_defconfig+debug (gcc-10): 2 warnings
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error, 2 warnings
+    hsdk_defconfig (gcc-10): 1 warning
+    nsimosci_hs_defconfig (gcc-10): 2 warnings
+    nsimosci_hs_smp_defconfig (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+    vdk_hs38_defconfig (gcc-10): 1 warning
+    vdk_hs38_smp_defconfig (gcc-10): 1 warning
+
+arm64:
+    defconfig (gcc-10): 1 warning
+    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-10): 1 warning
+    defconfig+arm64-chromebook (gcc-10): 1 warning
+    defconfig+arm64-chromebook+kselftest (gcc-10): 2 warnings
+    defconfig+arm64-chromebook+videodec (gcc-10): 1 warning
+    defconfig+kselftest (gcc-10): 2 warnings
+    defconfig+videodec (gcc-10): 1 warning
+
+arm:
+    collie_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig+kselftest (gcc-10): 1 warning
+    mxs_defconfig (gcc-10): 1 warning
+    omap2plus_defconfig (gcc-10): 1 warning
+    pxa_defconfig (gcc-10): 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+    i386_defconfig (gcc-10): 1 error, 1 warning
+    i386_defconfig+debug (gcc-10): 1 error, 1 warning
+    i386_defconfig+kselftest (gcc-10): 1 error, 1 warning
+
+mips:
+    32r2el_defconfig (gcc-10): 5 errors, 1 warning
+    32r2el_defconfig+debug (gcc-10): 6 errors, 2 warnings
+    32r2el_defconfig+kselftest (gcc-10): 5 errors, 1 warning
+    allnoconfig (gcc-10): 7 errors, 3 warnings
+    ath25_defconfig (gcc-10): 6 errors, 2 warnings
+    ath79_defconfig (gcc-10): 6 errors, 2 warnings
+    bcm47xx_defconfig (gcc-10): 6 errors, 2 warnings
+    bcm63xx_defconfig (gcc-10): 1 error, 1 warning
+    bigsur_defconfig (gcc-10): 5 errors, 2 warnings
+    bmips_be_defconfig (gcc-10): 5 errors, 1 warning
+    bmips_stb_defconfig (gcc-10): 5 errors, 1 warning
+    cavium_octeon_defconfig (gcc-10): 2 errors, 2 warnings
+    ci20_defconfig (gcc-10): 6 errors, 2 warnings
+    cobalt_defconfig (gcc-10): 2 errors, 1 warning
+    cu1000-neo_defconfig (gcc-10): 8 errors, 4 warnings
+    cu1830-neo_defconfig (gcc-10): 7 errors, 3 warnings
+    db1xxx_defconfig (gcc-10): 3 errors, 1 warning
+    decstation_64_defconfig (gcc-10): 8 errors, 2 warnings
+    decstation_defconfig (gcc-10): 10 errors, 3 warnings
+    decstation_r4k_defconfig (gcc-10): 4 errors, 1 warning
+    fuloong2e_defconfig (gcc-10): 5 errors, 2 warnings
+    gcw0_defconfig (gcc-10): 8 errors, 4 warnings
+    gpr_defconfig (gcc-10): 1 error, 1 warning
+    ip22_defconfig (gcc-10): 1 error, 1 warning
+    ip27_defconfig (gcc-10): 2 errors, 1 warning
+    ip28_defconfig (gcc-10): 1 error, 1 warning
+    ip32_defconfig (gcc-10): 1 error, 1 warning
+    jazz_defconfig (gcc-10): 3 errors, 1 warning
+    lemote2f_defconfig (gcc-10): 2 errors, 1 warning
+    loongson1b_defconfig (gcc-10): 7 errors, 3 warnings
+    loongson1c_defconfig (gcc-10): 7 errors, 3 warnings
+    loongson2k_defconfig (gcc-10): 1 error, 1 warning
+    loongson3_defconfig (gcc-10): 5 errors, 2 warnings
+    malta_defconfig (gcc-10): 5 errors, 1 warning
+    malta_kvm_defconfig (gcc-10): 7 errors, 3 warnings
+    malta_qemu_32r6_defconfig (gcc-10): 5 errors, 1 warning
+    maltaaprp_defconfig (gcc-10): 5 errors, 1 warning
+    maltasmvp_defconfig (gcc-10): 6 errors, 2 warnings
+    maltasmvp_eva_defconfig (gcc-10): 6 errors, 2 warnings
+    maltaup_defconfig (gcc-10): 7 errors, 3 warnings
+    maltaup_xpa_defconfig (gcc-10): 7 errors, 3 warnings
+    mtx1_defconfig (gcc-10): 1 error, 1 warning
+    omega2p_defconfig (gcc-10): 8 errors, 3 warnings
+    pic32mzda_defconfig (gcc-10): 5 errors, 1 warning
+    qi_lb60_defconfig (gcc-10): 5 errors, 1 warning
+    rb532_defconfig (gcc-10): 1 error, 1 warning
+    rbtx49xx_defconfig (gcc-10): 6 errors, 2 warnings
+    rm200_defconfig (gcc-10): 7 errors, 2 warnings
+    rs90_defconfig (gcc-10): 7 errors, 3 warnings
+    rt305x_defconfig (gcc-10): 9 errors, 4 warnings
+    sb1250_swarm_defconfig (gcc-10): 2 errors, 1 warning
+    tinyconfig (gcc-10): 6 errors, 2 warnings
+    vocore2_defconfig (gcc-10): 9 errors, 4 warnings
+    xway_defconfig (gcc-10): 1 error, 1 warning
+
+riscv:
+    defconfig (gcc-10): 1 warning
+    defconfig+kselftest (gcc-10): 1 warning
+    rv32_defconfig (gcc-10): 1 warning
+
+sparc:
+    allnoconfig (gcc-10): 5 warnings
+    sparc32_defconfig (gcc-10): 6 warnings
+    sparc64_defconfig (gcc-10): 26 warnings
+    sparc64_defconfig+debug (gcc-10): 24 warnings
+    sparc64_defconfig+kselftest (gcc-10): 25 warnings
+    tinyconfig (gcc-10): 5 warnings
+
+x86_64:
+    x86_64_defconfig (gcc-10): 1 error, 1 warning
+    x86_64_defconfig+kselftest (gcc-10): 1 error, 1 warning
+    x86_64_defconfig+kselftest (rustc-1.73): 1 warning
+    x86_64_defconfig+x86-board (gcc-10): 1 error, 1 warning
+    x86_64_defconfig+x86-board+kselftest (gcc-10): 1 error, 1 warning
+
+Errors summary:
+
+    37   arch/mips/kernel/signal.c:903:17: error: no previous prototype for=
+ =E2=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    37   arch/mips/kernel/signal.c:673:17: error: no previous prototype for=
+ =E2=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    37   arch/mips/kernel/signal.c:515:5: error: no previous prototype for =
+=E2=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    37   arch/mips/kernel/signal.c:438:5: error: no previous prototype for =
+=E2=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    33   arch/mips/kernel/signal.c:636:17: error: no previous prototype for=
+ =E2=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    18   arch/mips/kernel/syscall.c:51:16: error: no previous prototype for=
+ =E2=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+    14   arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=
+=80=98do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    3    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_me=
+mcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+    3    arch/mips/ralink/irq.c:92:14: error: no previous prototype for =E2=
+=80=98get_c0_compare_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    3    arch/mips/ralink/irq.c:86:5: error: no previous prototype for =E2=
+=80=98get_c0_perfcount_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    3    arch/mips/mm/init.c:60:6: error: no previous prototype for =E2=80=
+=98setup_zero_pages=E2=80=99 [-Werror=3Dmissing-prototypes]
+    3    arch/mips/dec/reset.c:38:13: error: no previous prototype for =E2=
+=80=98dec_intr_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    3    arch/mips/dec/reset.c:32:17: error: no previous prototype for =E2=
+=80=98dec_machine_power_off=E2=80=99 [-Werror=3Dmissing-prototypes]
+    3    arch/mips/dec/reset.c:27:17: error: no previous prototype for =E2=
+=80=98dec_machine_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    3    arch/mips/dec/reset.c:22:17: error: no previous prototype for =E2=
+=80=98dec_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+    2    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
+32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+    2    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
+_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
+nds]
+    2    arch/mips/sgi-ip22/ip22-time.c:119:18: error: no previous prototyp=
+e for =E2=80=98indy_8254timer_irq=E2=80=99 [-Werror=3Dmissing-prototypes]
+    2    arch/mips/loongson64/dma.c:25:13: error: no previous prototype for=
+ =E2=80=98plat_swiotlb_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+    2    arch/mips/loongson32/common/platform.c:71:5: error: no previous pr=
+ototype for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Werror=3Dmissing-prototyp=
+es]
+    1    fs/proc/task_mmu.c:2130:21: error: 'HPAGE_SIZE' undeclared (first =
+use in this function); did you mean 'PAGE_SIZE'?
+    1    arch/mips/sni/reset.c:45:6: error: no previous prototype for =E2=
+=80=98sni_machine_power_off=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/sni/reset.c:28:6: error: no previous prototype for =E2=
+=80=98sni_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/sibyte/sb1250/setup.c:79:5: error: no previous prototype=
+ for =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Werror=3Dmissing-proto=
+types]
+    1    arch/mips/sibyte/sb1250/setup.c:168:13: error: no previous prototy=
+pe for =E2=80=98sb1250_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/sibyte/bcm1480/setup.c:104:13: error: no previous protot=
+ype for =E2=80=98bcm1480_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/sgi-ip32/ip32-berr.c:35:13: error: no previous prototype=
+ for =E2=80=98ip32_be_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/sgi-ip27/ip27-berr.c:82:13: error: no previous prototype=
+ for =E2=80=98ip27_be_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/sgi-ip27/ip27-berr.c:60:5: error: no previous prototype =
+for =E2=80=98ip27_be_handler=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/rb532/serial.c:48:12: error: no previous prototype for =
+=E2=80=98setup_serial_port=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/loongson2ef/common/machtype.c:34:20: error: no previous =
+prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Werror=3Dmissing-=
+prototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: error: no p=
+revious prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Werror=3Dmissing=
+-prototypes]
+    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: error: no p=
+revious prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Werror=3Dmissin=
+g-prototypes]
+    1    arch/mips/lantiq/xway/clk.c:77:15: error: no previous prototype fo=
+r =E2=80=98ltq_ar9_sys_hz=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/jazz/irq.c:55:13: error: no previous prototype for =E2=
+=80=98init_r4030_ints=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/jazz/irq.c:38:6: error: no previous prototype for =E2=80=
+=98disable_r4030_irq=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/jazz/irq.c:128:13: error: no previous prototype for =E2=
+=80=98plat_time_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/cobalt/reset.c:46:6: error: no previous prototype for =
+=E2=80=98cobalt_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/cobalt/reset.c:32:6: error: no previous prototype for =
+=E2=80=98cobalt_machine_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/cavium-octeon/octeon-platform.c:701:13: error: no previo=
+us prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Werror=3Dmis=
+sing-prototypes]
+    1    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: e=
+rror: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en_e=
+nable=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/bcm63xx/boards/board_bcm963xx.c:705:5: error: no previou=
+s prototype for =E2=80=98bcm63xx_get_fallback_sprom=E2=80=99 [-Werror=3Dmis=
+sing-prototypes]
+    1    arch/mips/alchemy/common/prom.c:59:7: error: no previous prototype=
+ for =E2=80=98prom_getenv=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/alchemy/common/prom.c:48:13: error: no previous prototyp=
+e for =E2=80=98prom_init_cmdline=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/alchemy/common/prom.c:127:12: error: no previous prototy=
+pe for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Werror=3Dmissing-prototyp=
+es]
+    1    arch/mips/alchemy/board-mtx1.c:53:13: error: no previous prototype=
+ for =E2=80=98board_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/mips/alchemy/board-gpr.c:61:13: error: no previous prototype =
+for =E2=80=98board_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    108  cc1: all warnings being treated as errors
+    13   arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
+r 'syscall_trace_enter' [-Wmissing-prototypes]
+    12   security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
+t 32 is out of the bounds [0, 0] [-Warray-bounds]
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    5    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
+or 'arc_kprobe_handler' [-Wmissing-prototypes]
+    3    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98fre=
+e_dma=E2=80=99 [-Wmissing-prototypes]
+    3    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98req=
+uest_dma=E2=80=99 [-Wmissing-prototypes]
+    3    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_=
+memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+    3    include/linux/fortify-string.h:402:12: warning: writing 1 byte int=
+o a region of size 0 [-Wstringop-overflow=3D]
+    3    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
+=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    3    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
+ =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =
+=E2=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =
+=E2=80=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
+ for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
+e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
+ypes]
+    3    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
+ for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
+e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
+pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
+or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
+for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    3    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
+for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
+ for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    2    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
+e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x14d439
+    1    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous protot=
+ype for =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
+    1    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype f=
+or =E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/include/asm/string.h:15:25: warning: =E2=80=98__builtin=
+_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+    1    ....../arch/sparc/kernel/traps_64.c:2035:6: warning: no previous p=
+rototype for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    1    ................./arch/sparc/kernel/traps_64.c:253:6: warning: no =
+previous prototype for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-p=
+rototypes]
+
+Section mismatches summary:
+
+    2    WARNING: modpost: vmlinux: section mismatch in reference: at91_shd=
+wc_probe+0xd8 (section: .text) -> at91_wakeup_status (section: .init.text)
+    2    WARNING: modpost: vmlinux: section mismatch in reference: at91_pow=
+eroff_probe+0x8c (section: .text) -> at91_wakeup_status (section: .init.tex=
+t)
+    2    WARNING: modpost: vmlinux: section mismatch in reference: at91_pow=
+eroff_probe+0x80 (section: .text) -> at91_wakeup_status (section: .init.tex=
+t)
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings,=
+ 0 section mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warni=
+ng, 0 section mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, 0 section =
+mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
+dma=E2=80=99 [-Wmissing-prototypes]
+    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
+=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
+=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
+=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    arch/mips/bcm63xx/boards/board_bcm963xx.c:705:5: error: no previous pro=
+totype for =E2=80=98bcm63xx_get_fallback_sprom=E2=80=99 [-Werror=3Dmissing-=
+prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    arch/mips/sibyte/bcm1480/setup.c:104:13: error: no previous prototype f=
+or =E2=80=98bcm1480_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warning, 0 se=
+ction mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 2 warnings=
+, 0 section mismatches
+
+Errors:
+    arch/mips/cavium-octeon/octeon-platform.c:701:13: error: no previous pr=
+ototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Werror=3Dmissing-=
+prototypes]
+    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: error:=
+ no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en_enable=
+=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    arch/mips/cobalt/reset.c:32:6: error: no previous prototype for =E2=80=
+=98cobalt_machine_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/cobalt/reset.c:46:6: error: no previous prototype for =E2=80=
+=98cobalt_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype f=
+or =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 FAIL, 8 errors, 4 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/mm/init.c:60:6: error: no previous prototype for =E2=80=98set=
+up_zero_pages=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 FAIL, 3 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    arch/mips/alchemy/common/prom.c:48:13: error: no previous prototype for=
+ =E2=80=98prom_init_cmdline=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/alchemy/common/prom.c:59:7: error: no previous prototype for =
+=E2=80=98prom_getenv=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/alchemy/common/prom.c:127:12: error: no previous prototype fo=
+r =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 8 errors, 2 warnings=
+, 0 section mismatches
+
+Errors:
+    arch/mips/dec/reset.c:22:17: error: no previous prototype for =E2=80=98=
+dec_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: error: no previous prototype for =E2=80=98=
+dec_machine_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: error: no previous prototype for =E2=80=98=
+dec_machine_power_off=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: error: no previous prototype for =E2=80=98=
+dec_intr_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 10 errors, 3 warnings, =
+0 section mismatches
+
+Errors:
+    arch/mips/dec/reset.c:22:17: error: no previous prototype for =E2=80=98=
+dec_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: error: no previous prototype for =E2=80=98=
+dec_machine_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: error: no previous prototype for =E2=80=98=
+dec_machine_power_off=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: error: no previous prototype for =E2=80=98=
+dec_intr_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning=
+, 0 section mismatches
+
+Errors:
+    arch/mips/dec/reset.c:22:17: error: no previous prototype for =E2=80=98=
+dec_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:27:17: error: no previous prototype for =E2=80=98=
+dec_machine_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:32:17: error: no previous prototype for =E2=80=98=
+dec_machine_power_off=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/dec/reset.c:38:13: error: no previous prototype for =E2=80=98=
+dec_intr_halt=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 1 warning, 0 section mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 1 warning, 0 section mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
+ing, 0 section mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 2 warnings, 0 section mismatches
+
+Warnings:
+    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
+y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+    include/linux/fortify-string.h:402:12: warning: writing 1 byte into a r=
+egion of size 0 [-Wstringop-overflow=3D]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 1 warning, 0 section mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    include/linux/fortify-string.h:402:12: warning: writing 1 byte into a r=
+egion of size 0 [-Wstringop-overflow=3D]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
+y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+    include/linux/fortify-string.h:402:12: warning: writing 1 byte into a r=
+egion of size 0 [-Wstringop-overflow=3D]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 2 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/mips/loongson2ef/common/machtype.c:34:20: error: no previous proto=
+type for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Werror=3Dmissing-proto=
+types]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 FAIL, 8 errors, 4 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/mm/init.c:60:6: error: no previous prototype for =E2=80=98set=
+up_zero_pages=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
+mismatches
+
+Errors:
+    arch/mips/alchemy/board-gpr.c:61:13: error: no previous prototype for =
+=E2=80=98board_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 2 wa=
+rnings, 0 section mismatches
+
+Errors:
+    fs/proc/task_mmu.c:2130:21: error: 'HPAGE_SIZE' undeclared (first use i=
+n this function); did you mean 'PAGE_SIZE'?
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
+py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
+py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
+ 0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
+=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/mips/sgi-ip22/ip22-time.c:119:18: error: no previous prototype for=
+ =E2=80=98indy_8254timer_irq=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    arch/mips/sgi-ip27/ip27-berr.c:60:5: error: no previous prototype for =
+=E2=80=98ip27_be_handler=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/sgi-ip27/ip27-berr.c:82:13: error: no previous prototype for =
+=E2=80=98ip27_be_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/mips/sgi-ip22/ip22-time.c:119:18: error: no previous prototype for=
+ =E2=80=98indy_8254timer_irq=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/mips/sgi-ip32/ip32-berr.c:35:13: error: no previous prototype for =
+=E2=80=98ip32_be_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 FAIL, 3 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    arch/mips/jazz/irq.c:38:6: error: no previous prototype for =E2=80=98di=
+sable_r4030_irq=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/jazz/irq.c:55:13: error: no previous prototype for =E2=80=98i=
+nit_r4030_ints=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/jazz/irq.c:128:13: error: no previous prototype for =E2=80=98=
+plat_time_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 se=
+ction mismatches
+
+Errors:
+    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: error: no previo=
+us prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Werror=3Dmissing-pro=
+totypes]
+    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: error: no previo=
+us prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Werror=3Dmissing-prot=
+otypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/mips/loongson32/common/platform.c:71:5: error: no previous prototy=
+pe for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/mips/loongson32/common/platform.c:71:5: error: no previous prototy=
+pe for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/loongson64/dma.c:25:13: error: no previous prototype for =E2=
+=80=98plat_swiotlb_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 2 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/mips/loongson64/dma.c:25:13: error: no previous prototype for =E2=
+=80=98plat_swiotlb_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warnin=
+g, 0 section mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings=
+, 0 section mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, =
+0 section mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/mips/alchemy/board-mtx1.c:53:13: error: no previous prototype for =
+=E2=80=98board_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff=
+_probe+0x80 (section: .text) -> at91_wakeup_status (section: .init.text)
+    WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff=
+_probe+0x80 (section: .text) -> at91_wakeup_status (section: .init.text)
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff=
+_probe+0x8c (section: .text) -> at91_wakeup_status (section: .init.text)
+    WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_pr=
+obe+0xd8 (section: .text) -> at91_wakeup_status (section: .init.text)
+    WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff=
+_probe+0x8c (section: .text) -> at91_wakeup_status (section: .init.text)
+    WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_pr=
+obe+0xd8 (section: .text) -> at91_wakeup_status (section: .init.text)
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
+ing, 0 section mismatches
+
+Warnings:
+    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
+y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype for =
+=E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 FAIL, 8 errors, 3 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/mips/ralink/irq.c:86:5: error: no previous prototype for =E2=80=98=
+get_c0_perfcount_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: error: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 FAIL, 5 errors, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    arch/mips/rb532/serial.c:48:12: error: no previous prototype for =E2=80=
+=98setup_serial_port=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/mips/sni/reset.c:28:6: error: no previous prototype for =E2=80=98s=
+ni_machine_restart=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/sni/reset.c:45:6: error: no previous prototype for =E2=80=98s=
+ni_machine_power_off=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 FAIL, 7 errors, 3 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 FAIL, 9 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/ralink/irq.c:86:5: error: no previous prototype for =E2=80=98=
+get_c0_perfcount_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: error: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, =
+0 section mismatches
+
+Errors:
+    arch/mips/sibyte/sb1250/setup.c:79:5: error: no previous prototype for =
+=E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/sibyte/sb1250/setup.c:168:13: error: no previous prototype fo=
+r =E2=80=98sb1250_setup=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
+dma=E2=80=99 [-Wmissing-prototypes]
+    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
+=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
+=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
+=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 24 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 25 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    ................./arch/sparc/kernel/traps_64.c:253:6: warning: no previ=
+ous prototype for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-protot=
+ypes]
+    ....../arch/sparc/kernel/traps_64.c:2035:6: warning: no previous protot=
+ype for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/include/asm/string.h:15:25: warning: =E2=80=98__builtin_memc=
+py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (mips, gcc-10) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 section m=
+ismatches
+
+Errors:
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
+dma=E2=80=99 [-Wmissing-prototypes]
+    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
+=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
+=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
+=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 FAIL, 9 errors, 4 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/mips/ralink/irq.c:86:5: error: no previous prototype for =E2=80=98=
+get_c0_perfcount_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/ralink/irq.c:92:14: error: no previous prototype for =E2=80=
+=98get_c0_compare_int=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=98=
+do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/mm/init.c:60:6: error: no previous prototype for =E2=80=98set=
+up_zero_pages=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:438:5: error: no previous prototype for =E2=
+=80=98setup_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:515:5: error: no previous prototype for =E2=
+=80=98restore_sigcontext=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:903:17: error: no previous prototype for =E2=
+=80=98do_notify_resume=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
+ out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
+ing, 0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
+=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x14d439
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.73) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-board (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
+ing, 0 section mismatches
+
+Errors:
+    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
+ out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-board+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 err=
+or, 1 warning, 0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
+=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/mips/lantiq/xway/clk.c:77:15: error: no previous prototype for =E2=
+=80=98ltq_ar9_sys_hz=E2=80=99 [-Werror=3Dmissing-prototypes]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---
+For more info write to <info@kernelci.org>
