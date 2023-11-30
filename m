@@ -1,154 +1,204 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4419E54670
-	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 16:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kvne9/E6"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40b51e26a7aso66095e9.1
-        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 08:16:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701361016; x=1701965816; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1WTfd9Dke/wAtrjfd7TJ0XP8He7wb5roBd0D+Jv5G+8=;
-        b=Kvne9/E6pJ3KtLuHeCklDlEu0vaIXzxwXtiXOZoY8kz3V7Hj1P874qg54M0hoT8JUi
-         UqXfH7MYxYN9DBSWsJEM9If+pFDWylFK2dPXs4wKbA7bX7Upyb4HMvXaVMtyLVcjX4WD
-         PqOP+dwRVdIYfV7VohmQ+WTZXGJS+zYvivmagFUy12fD+wXDVMt/hPBeARC4Ej2P/tBI
-         ku43mtQJawUY2kVcR++3yiq49+I3CDDnyMtg8koZsQxxVxzvTj1QRYneyDOLJuBhmiE2
-         6zMm5ks1z6mMnczg52wzAbbUO6B2CogHyHknCPDOMs7k+uxa5T+6qfGB6w/5D0ZighSO
-         ee0A==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B1555788
+	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 16:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1d04d286b5cso4775ad.0
+        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 08:58:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701361016; x=1701965816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1WTfd9Dke/wAtrjfd7TJ0XP8He7wb5roBd0D+Jv5G+8=;
-        b=CCI/79zN5E0abUk3L5i1wjKY4JU+LbjiIBYlvoqggD+YV7p3qyGj7l7RfBkU7v6621
-         90ZsKuOOJbxbRhWdEY9MAchbS9Za0MAuqX/fRoEkl9Z0y+Iuud/tT+rJLH4LGKMR5mC3
-         nk0BP5DqVDcYUD+w38U4UJ/NqwLR3A2pAAYFycmJRcQ8ek4RAhZAqyjGrD5+KdNeUb4H
-         sruEWVq6PMjPnZsNJPaSqlNapUwtXB9yuUIdYLOYrlAf+KOVzV73E0Qk89dD61wpkS+f
-         ooH53WFOwKN2NbfWm8sRzc3W1OMJLUU73nXKxzFnJ0fKmJsIv/0FtkfSfMOCEDFPT1jT
-         jzuQ==
-X-Gm-Message-State: AOJu0YxF/JTp8mP1QB6cjLa70E+p1jdOdLj/901H0Z215qVvKs2VHNFy
-	VhqzSq5lgUq4jUjnIeTbkNP8peW/9zceykUeynXAgw==
-X-Google-Smtp-Source: AGHT+IGHXtr/E8NOLWNyZndhRTTrYhJyY0dcj6OSW4gPELV7MTjdbT3NJnNTWIYqXPZBfh1qufpPoy5lX9LAEeCBts0=
-X-Received: by 2002:a05:600c:1e15:b0:40b:3483:8488 with SMTP id
- ay21-20020a05600c1e1500b0040b34838488mr135764wmb.3.1701361016285; Thu, 30 Nov
- 2023 08:16:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701363502; x=1701968302;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f3LgIEz551m5QS19kYMv8+Qv6JiftTimJRxKuDcn7DA=;
+        b=oBWeDkNY6yeyYG2NNKsYvf2cZn1NB9FWUHFfOrc1esfY/UQkE0qKCkAjh2CQb7Z/nn
+         i85J7ETYA4CHTlz6jEIPr+jgoB6t05mDo4yiK+9qwJ7ZyzX6OOmvCJKZ2X5xsOAkZJ2y
+         dFdeQEZnnZXZk/IEdtpr3zduOUbh7dM2bT/lz4J+kQwT+Y8GVtffpXmvgCKKAEoy8eDl
+         IoMCzNC6npqoqabSVvB4qSjimoONdcwWJuQKa+OvSxMg5wlQqjBltHxcggjmhSo7nW7j
+         8GPGniOCfglhnsr32cvT57Ojh9JeIL0LAWLmoPQNmjBbAByyouiwgc9lI/+XRDOaaidv
+         p4ww==
+X-Gm-Message-State: AOJu0YzfZKZaz7wN4k9r0GSWce6bGTNcUGKDypKo88zJ37N40oRZ6vpf
+	0qQ0/HXUXph0N1GL8FjIX3Rz+PxcWrEqttK12YLDTqBVZcD6
+X-Google-Smtp-Source: AGHT+IFVIP1QNI42yejmrgo+Sg7pC3ZOMrJUCDPNnb4bfv2evIE+5Rp6jx8LiLoY4qymhuuj0W9/CpdyfJInl8/fAcVXbA4sU+2p
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org> <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
-In-Reply-To: <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
-From: Fangrui Song <maskray@google.com>
-Date: Thu, 30 Nov 2023 08:16:41 -0800
-Message-ID: <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
- known working versions
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	conor@kernel.org, ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
+X-Received: by 2002:a17:902:ce8a:b0:1cc:29fb:f398 with SMTP id
+ f10-20020a170902ce8a00b001cc29fbf398mr5447890plg.10.1701363502571; Thu, 30
+ Nov 2023 08:58:22 -0800 (PST)
+Date: Thu, 30 Nov 2023 08:58:22 -0800
+In-Reply-To: <000000000000e6432a06046c96a5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000349d05060b618f2a@google.com>
+Subject: Re: [syzbot] [fs] INFO: task hung in __fdget_pos (4)
+From: syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>
+To: brauner@kernel.org, david@fromorbit.com, djwong@kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, llvm@lists.linux.dev, mjguzik@gmail.com, 
+	nathan@kernel.org, ndesaulniers@google.com, nogikh@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu, 
+	viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 29, 2023 at 3:30=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> LLVM prior to 18.0.0 would generate incorrect debug info for DWARF5 due
-> to linker relaxation, which was worked around in clang by defaulting
-> RISC-V to DWARF4 [1]. Unfortunately, this workaround does not work for
-> the kernel because the DWARF version can be independently changed from
-> the default in Kconfig.
->
-> Do not allow DWARF5 to be selected for RISC-V when using linker
-> relaxation (ld.lld >=3D 15.0.0) and a version of LLVM that does not have
-> the fixes (the integrated assembler [2] and ld.lld [3] < 18.0.0)
-> necessary to generate the correct debug info.
->
-> Link: https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649=
-fc21dd18e5b0918f6 [1]
-> Link: https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622db2c=
-ad7b745607ca4de6a [2]
-> Link: https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac932=
-2e22e5471cc5e4a77 [3]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/riscv/Kconfig | 9 +++++++++
->  lib/Kconfig.debug  | 1 +
->  2 files changed, 10 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 72be1d8122a3..81b473cb47b0 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -186,6 +186,15 @@ config RISCV_USE_LINKER_RELAXATION
->         # https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec7726=
-2d392e2923e1d680f6985
->         depends on !LD_IS_LLD || LLD_VERSION >=3D 150000
->
-> +# https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc2=
-1dd18e5b0918f6
-> +config ARCH_HAS_BROKEN_DWARF5
-> +       def_bool y
-> +       depends on RISCV_USE_LINKER_RELAXATION
-> +       # https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622=
-db2cad7b745607ca4de6a
-> +       depends on AS_IS_LLVM && AS_VERSION < 180000
-> +       # https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5a=
-c9322e22e5471cc5e4a77
-> +       depends on LD_IS_LLD && LLD_VERSION < 180000
-> +
->  config ARCH_MMAP_RND_BITS_MIN
->         default 18 if 64BIT
->         default 8
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index cc7d53d9dc01..a0ebce05a368 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -282,6 +282,7 @@ config DEBUG_INFO_DWARF4
->  config DEBUG_INFO_DWARF5
->         bool "Generate DWARF Version 5 debuginfo"
->         select DEBUG_INFO
-> +       depends on !ARCH_HAS_BROKEN_DWARF5
->         depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
- >=3D 23502 && AS_HAS_NON_CONST_LEB128)
->         help
->           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0=
-+ (gcc
->
-> --
-> 2.43.0
->
+syzbot has found a reproducer for the following issue on:
 
-A comment and "depends on" condition introduced by commit
-0a6de78cff600cb991f2a1b7ed376935871796a0 "lib/Kconfig.debug: Add check
-for non-constant .{s,u}leb128 support to DWARF5"
-can now be refined.
+HEAD commit:    3b47bc037bd4 Merge tag 'pinctrl-v6.7-2' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14e6bdaae80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c2c74446ab4f0028
+dashboard link: https://syzkaller.appspot.com/bug?extid=e245f0516ee625aaa412
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11026e54e80000
 
-> ib/Kconfig.debug
-> (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/43de6cde1436/disk-3b47bc03.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/24a2ba210bcf/vmlinux-3b47bc03.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a5d414ced6d5/bzImage-3b47bc03.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/c28d17ae0132/mount_4.gz
 
-AS_VERSION can now be 24100.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com
 
-Thanks for the comment. I just marked
-https://sourceware.org/bugzilla/show_bug.cgi?id=3D27215 (" as: Error:
-non-constant .uleb128 is not supported on riscv64") as resolved :)
+INFO: task syz-executor.0:24270 blocked for more than 143 seconds.
+      Not tainted 6.7.0-rc3-syzkaller-00033-g3b47bc037bd4 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.0  state:D stack:28784 pid:24270 tgid:24259 ppid:5149   flags:0x00004006
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5376 [inline]
+ __schedule+0x1961/0x4ab0 kernel/sched/core.c:6688
+ __schedule_loop kernel/sched/core.c:6763 [inline]
+ schedule+0x149/0x260 kernel/sched/core.c:6778
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6835
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0x6a3/0xd60 kernel/locking/mutex.c:747
+ __fdget_pos+0x2b0/0x340 fs/file.c:1177
+ fdget_pos include/linux/file.h:74 [inline]
+ __do_sys_getdents64 fs/readdir.c:401 [inline]
+ __se_sys_getdents64+0x1dc/0x4f0 fs/readdir.c:390
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x45/0x110 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+RIP: 0033:0x7fd0cec7cae9
+RSP: 002b:00007fd0cfa610c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
+RAX: ffffffffffffffda RBX: 00007fd0ced9c050 RCX: 00007fd0cec7cae9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
+RBP: 00007fd0cecc847a R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 000000000000006e R14: 00007fd0ced9c050 R15: 00007ffeeda72018
+ </TASK>
 
-> +# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5=
-, which
-> +# some targets may not support: https://sourceware.org/bugzilla/show_bug=
-.cgi?id=3D27215
+Showing all locks held in the system:
+1 lock held by khungtaskd/29:
+ #0: ffffffff8d92cf60 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:301 [inline]
+ #0: ffffffff8d92cf60 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:747 [inline]
+ #0: ffffffff8d92cf60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x2a0 kernel/locking/lockdep.c:6614
+2 locks held by getty/4818:
+ #0: ffff88814afe20a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
+ #1: ffffc900031332f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6b4/0x1e10 drivers/tty/n_tty.c:2201
+1 lock held by syz-executor.5/5143:
+3 locks held by syz-executor.0/24262:
+1 lock held by syz-executor.0/24270:
+ #0: ffff88807c5574c8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x2b0/0x340 fs/file.c:1177
+1 lock held by syz-executor.0/24319:
+2 locks held by syz-executor.1/32017:
+ #0: ffff8880b983c358 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:558
+ #1: ffff8880b9828808 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x441/0x770 kernel/sched/psi.c:988
+1 lock held by syz-executor.1/32030:
+ #0: ffff8880b983c358 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:558
+2 locks held by syz-executor.4/32028:
+ #0: ffff8880b983c358 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:558
+ #1: ffff8880b9828808 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x441/0x770 kernel/sched/psi.c:988
+2 locks held by syz-executor.3/32042:
+ #0: ffff88801cfea360 (&lo->lo_mutex){+.+.}-{3:3}, at: loop_global_lock_killable drivers/block/loop.c:120 [inline]
+ #0: ffff88801cfea360 (&lo->lo_mutex){+.+.}-{3:3}, at: loop_configure+0x1f9/0x1250 drivers/block/loop.c:1023
+ #1: ffffe8ffffd6a108 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x3a7/0x770 kernel/sched/psi.c:976
+4 locks held by syz-executor.0/32045:
 
-This comment can be updated:)
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 PID: 29 Comm: khungtaskd Not tainted 6.7.0-rc3-syzkaller-00033-g3b47bc037bd4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x498/0x4d0 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x198/0x310 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:160 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
+ watchdog+0xfaf/0xff0 kernel/hung_task.c:379
+ kthread+0x2d3/0x370 kernel/kthread.c:388
+ ret_from_fork+0x48/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 5138 Comm: syz-executor.1 Not tainted 6.7.0-rc3-syzkaller-00033-g3b47bc037bd4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
+RIP: 0010:orc_find arch/x86/kernel/unwind_orc.c:217 [inline]
+RIP: 0010:unwind_next_frame+0x271/0x29e0 arch/x86/kernel/unwind_orc.c:494
+Code: 50 00 39 eb 0f 86 f7 1d 00 00 89 e8 48 8d 1c 85 08 26 20 90 48 89 d8 48 c1 e8 03 49 be 00 00 00 00 00 fc ff df 42 0f b6 04 30 <84> c0 0f 85 89 20 00 00 44 8b 3b 89 e8 ff c0 48 8d 1c 85 08 26 20
+RSP: 0018:ffffc90003f3f700 EFLAGS: 00000a06
+RAX: 0000000000000000 RBX: ffffffff90211d88 RCX: 00000000000a6001
+RDX: ffff88801eaa3b80 RSI: 0000000000003de0 RDI: 00000000000a6000
+RBP: 0000000000003de0 R08: ffffffff813db069 R09: 0000000000000000
+R10: ffffc90003f3f840 R11: fffff520007e7f14 R12: ffffc90003f3f840
+R13: 00000000000a6001 R14: dffffc0000000000 R15: ffffffff813de03c
+FS:  0000555556748480(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f84b6775198 CR3: 00000000200ef000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <NMI>
+ </NMI>
+ <TASK>
+ __unwind_start+0x641/0x7a0 arch/x86/kernel/unwind_orc.c:760
+ unwind_start arch/x86/include/asm/unwind.h:64 [inline]
+ arch_stack_walk+0xfd/0x1a0 arch/x86/kernel/stacktrace.c:24
+ stack_trace_save+0x117/0x1c0 kernel/stacktrace.c:122
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
+ kasan_slab_alloc include/linux/kasan.h:188 [inline]
+ slab_post_alloc_hook+0x6c/0x3c0 mm/slab.h:763
+ slab_alloc_node mm/slub.c:3478 [inline]
+ slab_alloc mm/slub.c:3486 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3493 [inline]
+ kmem_cache_alloc+0x19e/0x2b0 mm/slub.c:3502
+ sk_prot_alloc+0x58/0x210 net/core/sock.c:2069
+ sk_alloc+0x38/0x370 net/core/sock.c:2128
+ inet_create+0x652/0xe20 net/ipv4/af_inet.c:325
+ __sock_create+0x48c/0x910 net/socket.c:1569
+ sock_create net/socket.c:1620 [inline]
+ __sys_socket_create net/socket.c:1657 [inline]
+ __sys_socket+0x14f/0x3b0 net/socket.c:1704
+ __do_sys_socket net/socket.c:1718 [inline]
+ __se_sys_socket net/socket.c:1716 [inline]
+ __x64_sys_socket+0x7a/0x90 net/socket.c:1716
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x45/0x110 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+RIP: 0033:0x7f84b667e867
+Code: f0 ff ff 77 06 c3 0f 1f 44 00 00 48 c7 c2 b0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 b8 29 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffed1a3ed28 EFLAGS: 00000206 ORIG_RAX: 0000000000000029
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f84b667e867
+RDX: 0000000000000006 RSI: 0000000000000001 RDI: 0000000000000002
+RBP: 00007ffed1a3f43c R08: 00007ffed1a3ed1c R09: 00007ffed1a3f127
+R10: 00007ffed1a3eda0 R11: 0000000000000206 R12: 0000000000000032
+R13: 0000000000165078 R14: 0000000000165035 R15: 0000000000000008
+ </TASK>
 
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
