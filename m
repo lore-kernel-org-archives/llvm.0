@@ -1,204 +1,162 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B1555788
-	for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 16:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1d04d286b5cso4775ad.0
-        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 08:58:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701363502; x=1701968302;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f3LgIEz551m5QS19kYMv8+Qv6JiftTimJRxKuDcn7DA=;
-        b=oBWeDkNY6yeyYG2NNKsYvf2cZn1NB9FWUHFfOrc1esfY/UQkE0qKCkAjh2CQb7Z/nn
-         i85J7ETYA4CHTlz6jEIPr+jgoB6t05mDo4yiK+9qwJ7ZyzX6OOmvCJKZ2X5xsOAkZJ2y
-         dFdeQEZnnZXZk/IEdtpr3zduOUbh7dM2bT/lz4J+kQwT+Y8GVtffpXmvgCKKAEoy8eDl
-         IoMCzNC6npqoqabSVvB4qSjimoONdcwWJuQKa+OvSxMg5wlQqjBltHxcggjmhSo7nW7j
-         8GPGniOCfglhnsr32cvT57Ojh9JeIL0LAWLmoPQNmjBbAByyouiwgc9lI/+XRDOaaidv
-         p4ww==
-X-Gm-Message-State: AOJu0YzfZKZaz7wN4k9r0GSWce6bGTNcUGKDypKo88zJ37N40oRZ6vpf
-	0qQ0/HXUXph0N1GL8FjIX3Rz+PxcWrEqttK12YLDTqBVZcD6
-X-Google-Smtp-Source: AGHT+IFVIP1QNI42yejmrgo+Sg7pC3ZOMrJUCDPNnb4bfv2evIE+5Rp6jx8LiLoY4qymhuuj0W9/CpdyfJInl8/fAcVXbA4sU+2p
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0123C694;
+	Thu, 30 Nov 2023 17:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RtFDEWtR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701364267; x=1732900267;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T2ohSyGygnVmFJU7qsTvN07gwTnTpebl88jUrSzTp2s=;
+  b=RtFDEWtRZhD20zCelbwO+nsvO0gmeKqaY4dfsMYrB5fgWozc6fbBe6tq
+   l3A98AdieQYj9gfy9+dP+ekTmwnkuWg92BDbjxk1phRmb60SAe3ad6Wrx
+   ngqJ1QKyQxItVQ7fN7uuPoQPdfjfqDc5pZdSvNhfUvAJDFkJYTG9PHwR4
+   JfYhFAm2KpFcBb7rvOe8R4jhdPPuSF4uol5Fm4QMPU5SLm6uXTIVkFLyB
+   zbA/UqrZXh6UX6CCAUBj5WfITh7PZ07/qfKXDKzF4z9vOpH2tcV5KLvxe
+   t7QvwTsG7pGbFVUrSDA08oov/TvixgAH7qdVLkaG1Aym0vUffqXpsVjvX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="347283"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="347283"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 09:11:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="798371518"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="798371518"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2023 09:11:04 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r8kZ3-0002R8-2C;
+	Thu, 30 Nov 2023 17:11:01 +0000
+Date: Fri, 1 Dec 2023 01:10:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>,
+	"linkinjeon@kernel.org" <linkinjeon@kernel.org>,
+	"sj1557.seo@samsung.com" <sj1557.seo@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"Andy.Wu@sony.com" <Andy.Wu@sony.com>,
+	"Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>,
+	"cpgs@samsung.com" <cpgs@samsung.com>
+Subject: Re: [PATCH v5 1/2] exfat: change to get file size from DataLength
+Message-ID: <202312010044.6CIJOsWq-lkp@intel.com>
+References: <PUZPR04MB6316F0640983B00CC55D903F8182A@PUZPR04MB6316.apcprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:ce8a:b0:1cc:29fb:f398 with SMTP id
- f10-20020a170902ce8a00b001cc29fbf398mr5447890plg.10.1701363502571; Thu, 30
- Nov 2023 08:58:22 -0800 (PST)
-Date: Thu, 30 Nov 2023 08:58:22 -0800
-In-Reply-To: <000000000000e6432a06046c96a5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000349d05060b618f2a@google.com>
-Subject: Re: [syzbot] [fs] INFO: task hung in __fdget_pos (4)
-From: syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>
-To: brauner@kernel.org, david@fromorbit.com, djwong@kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, llvm@lists.linux.dev, mjguzik@gmail.com, 
-	nathan@kernel.org, ndesaulniers@google.com, nogikh@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu, 
-	viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PUZPR04MB6316F0640983B00CC55D903F8182A@PUZPR04MB6316.apcprd04.prod.outlook.com>
 
-syzbot has found a reproducer for the following issue on:
+Hi,
 
-HEAD commit:    3b47bc037bd4 Merge tag 'pinctrl-v6.7-2' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14e6bdaae80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c2c74446ab4f0028
-dashboard link: https://syzkaller.appspot.com/bug?extid=e245f0516ee625aaa412
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11026e54e80000
+kernel test robot noticed the following build warnings:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/43de6cde1436/disk-3b47bc03.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/24a2ba210bcf/vmlinux-3b47bc03.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a5d414ced6d5/bzImage-3b47bc03.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/c28d17ae0132/mount_4.gz
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.7-rc3 next-20231130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuezhang-Mo-sony-com/exfat-do-not-zero-the-extended-part/20231130-164222
+base:   linus/master
+patch link:    https://lore.kernel.org/r/PUZPR04MB6316F0640983B00CC55D903F8182A%40PUZPR04MB6316.apcprd04.prod.outlook.com
+patch subject: [PATCH v5 1/2] exfat: change to get file size from DataLength
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231201/202312010044.6CIJOsWq-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231201/202312010044.6CIJOsWq-lkp@intel.com/reproduce)
 
-INFO: task syz-executor.0:24270 blocked for more than 143 seconds.
-      Not tainted 6.7.0-rc3-syzkaller-00033-g3b47bc037bd4 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:28784 pid:24270 tgid:24259 ppid:5149   flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5376 [inline]
- __schedule+0x1961/0x4ab0 kernel/sched/core.c:6688
- __schedule_loop kernel/sched/core.c:6763 [inline]
- schedule+0x149/0x260 kernel/sched/core.c:6778
- schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6835
- __mutex_lock_common kernel/locking/mutex.c:679 [inline]
- __mutex_lock+0x6a3/0xd60 kernel/locking/mutex.c:747
- __fdget_pos+0x2b0/0x340 fs/file.c:1177
- fdget_pos include/linux/file.h:74 [inline]
- __do_sys_getdents64 fs/readdir.c:401 [inline]
- __se_sys_getdents64+0x1dc/0x4f0 fs/readdir.c:390
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x45/0x110 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7fd0cec7cae9
-RSP: 002b:00007fd0cfa610c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
-RAX: ffffffffffffffda RBX: 00007fd0ced9c050 RCX: 00007fd0cec7cae9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
-RBP: 00007fd0cecc847a R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 000000000000006e R14: 00007fd0ced9c050 R15: 00007ffeeda72018
- </TASK>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312010044.6CIJOsWq-lkp@intel.com/
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/29:
- #0: ffffffff8d92cf60 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:301 [inline]
- #0: ffffffff8d92cf60 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:747 [inline]
- #0: ffffffff8d92cf60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x2a0 kernel/locking/lockdep.c:6614
-2 locks held by getty/4818:
- #0: ffff88814afe20a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
- #1: ffffc900031332f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6b4/0x1e10 drivers/tty/n_tty.c:2201
-1 lock held by syz-executor.5/5143:
-3 locks held by syz-executor.0/24262:
-1 lock held by syz-executor.0/24270:
- #0: ffff88807c5574c8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x2b0/0x340 fs/file.c:1177
-1 lock held by syz-executor.0/24319:
-2 locks held by syz-executor.1/32017:
- #0: ffff8880b983c358 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:558
- #1: ffff8880b9828808 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x441/0x770 kernel/sched/psi.c:988
-1 lock held by syz-executor.1/32030:
- #0: ffff8880b983c358 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:558
-2 locks held by syz-executor.4/32028:
- #0: ffff8880b983c358 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:558
- #1: ffff8880b9828808 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x441/0x770 kernel/sched/psi.c:988
-2 locks held by syz-executor.3/32042:
- #0: ffff88801cfea360 (&lo->lo_mutex){+.+.}-{3:3}, at: loop_global_lock_killable drivers/block/loop.c:120 [inline]
- #0: ffff88801cfea360 (&lo->lo_mutex){+.+.}-{3:3}, at: loop_configure+0x1f9/0x1250 drivers/block/loop.c:1023
- #1: ffffe8ffffd6a108 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x3a7/0x770 kernel/sched/psi.c:976
-4 locks held by syz-executor.0/32045:
+All warnings (new ones prefixed by >>):
 
-=============================================
-
-NMI backtrace for cpu 1
-CPU: 1 PID: 29 Comm: khungtaskd Not tainted 6.7.0-rc3-syzkaller-00033-g3b47bc037bd4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- nmi_cpu_backtrace+0x498/0x4d0 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x198/0x310 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:160 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
- watchdog+0xfaf/0xff0 kernel/hung_task.c:379
- kthread+0x2d3/0x370 kernel/kthread.c:388
- ret_from_fork+0x48/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 5138 Comm: syz-executor.1 Not tainted 6.7.0-rc3-syzkaller-00033-g3b47bc037bd4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
-RIP: 0010:orc_find arch/x86/kernel/unwind_orc.c:217 [inline]
-RIP: 0010:unwind_next_frame+0x271/0x29e0 arch/x86/kernel/unwind_orc.c:494
-Code: 50 00 39 eb 0f 86 f7 1d 00 00 89 e8 48 8d 1c 85 08 26 20 90 48 89 d8 48 c1 e8 03 49 be 00 00 00 00 00 fc ff df 42 0f b6 04 30 <84> c0 0f 85 89 20 00 00 44 8b 3b 89 e8 ff c0 48 8d 1c 85 08 26 20
-RSP: 0018:ffffc90003f3f700 EFLAGS: 00000a06
-RAX: 0000000000000000 RBX: ffffffff90211d88 RCX: 00000000000a6001
-RDX: ffff88801eaa3b80 RSI: 0000000000003de0 RDI: 00000000000a6000
-RBP: 0000000000003de0 R08: ffffffff813db069 R09: 0000000000000000
-R10: ffffc90003f3f840 R11: fffff520007e7f14 R12: ffffc90003f3f840
-R13: 00000000000a6001 R14: dffffc0000000000 R15: ffffffff813de03c
-FS:  0000555556748480(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f84b6775198 CR3: 00000000200ef000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <NMI>
- </NMI>
- <TASK>
- __unwind_start+0x641/0x7a0 arch/x86/kernel/unwind_orc.c:760
- unwind_start arch/x86/include/asm/unwind.h:64 [inline]
- arch_stack_walk+0xfd/0x1a0 arch/x86/kernel/stacktrace.c:24
- stack_trace_save+0x117/0x1c0 kernel/stacktrace.c:122
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
- __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
- kasan_slab_alloc include/linux/kasan.h:188 [inline]
- slab_post_alloc_hook+0x6c/0x3c0 mm/slab.h:763
- slab_alloc_node mm/slub.c:3478 [inline]
- slab_alloc mm/slub.c:3486 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3493 [inline]
- kmem_cache_alloc+0x19e/0x2b0 mm/slub.c:3502
- sk_prot_alloc+0x58/0x210 net/core/sock.c:2069
- sk_alloc+0x38/0x370 net/core/sock.c:2128
- inet_create+0x652/0xe20 net/ipv4/af_inet.c:325
- __sock_create+0x48c/0x910 net/socket.c:1569
- sock_create net/socket.c:1620 [inline]
- __sys_socket_create net/socket.c:1657 [inline]
- __sys_socket+0x14f/0x3b0 net/socket.c:1704
- __do_sys_socket net/socket.c:1718 [inline]
- __se_sys_socket net/socket.c:1716 [inline]
- __x64_sys_socket+0x7a/0x90 net/socket.c:1716
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x45/0x110 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7f84b667e867
-Code: f0 ff ff 77 06 c3 0f 1f 44 00 00 48 c7 c2 b0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 b8 29 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffed1a3ed28 EFLAGS: 00000206 ORIG_RAX: 0000000000000029
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f84b667e867
-RDX: 0000000000000006 RSI: 0000000000000001 RDI: 0000000000000002
-RBP: 00007ffed1a3f43c R08: 00007ffed1a3ed1c R09: 00007ffed1a3f127
-R10: 00007ffed1a3eda0 R11: 0000000000000206 R12: 0000000000000032
-R13: 0000000000165078 R14: 0000000000165035 R15: 0000000000000008
- </TASK>
+>> fs/exfat/file.c:543:22: warning: format specifies type 'long' but the argument has type 'ssize_t' (aka 'int') [-Wformat]
+                                   valid_size, pos, ret);
+                                                    ^~~
+   fs/exfat/exfat_fs.h:545:51: note: expanded from macro 'exfat_err'
+           pr_err("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+                                    ~~~                     ^~~~~~~~~~~
+   include/linux/printk.h:498:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+vim +543 fs/exfat/file.c
+
+   520	
+   521	static ssize_t exfat_file_write_iter(struct kiocb *iocb, struct iov_iter *iter)
+   522	{
+   523		ssize_t ret;
+   524		struct file *file = iocb->ki_filp;
+   525		struct inode *inode = file_inode(file);
+   526		struct exfat_inode_info *ei = EXFAT_I(inode);
+   527		loff_t pos = iocb->ki_pos;
+   528		loff_t valid_size;
+   529	
+   530		inode_lock(inode);
+   531	
+   532		valid_size = ei->valid_size;
+   533	
+   534		ret = generic_write_checks(iocb, iter);
+   535		if (ret < 0)
+   536			goto unlock;
+   537	
+   538		if (pos > valid_size) {
+   539			ret = exfat_file_zeroed_range(file, valid_size, pos);
+   540			if (ret < 0 && ret != -ENOSPC) {
+   541				exfat_err(inode->i_sb,
+   542					"write: fail to zero from %llu to %llu(%ld)",
+ > 543					valid_size, pos, ret);
+   544			}
+   545			if (ret < 0)
+   546				goto unlock;
+   547		}
+   548	
+   549		ret = __generic_file_write_iter(iocb, iter);
+   550		if (ret < 0)
+   551			goto unlock;
+   552	
+   553		inode_unlock(inode);
+   554	
+   555		if (pos > valid_size)
+   556			pos = valid_size;
+   557	
+   558		if (iocb_is_dsync(iocb) && iocb->ki_pos > pos) {
+   559			ssize_t err = vfs_fsync_range(file, pos, iocb->ki_pos - 1,
+   560					iocb->ki_flags & IOCB_SYNC);
+   561			if (err < 0)
+   562				return err;
+   563		}
+   564	
+   565		return ret;
+   566	
+   567	unlock:
+   568		inode_unlock(inode);
+   569	
+   570		return ret;
+   571	}
+   572	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
