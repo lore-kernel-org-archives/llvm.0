@@ -1,197 +1,248 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0727D59B40;
-	Fri,  1 Dec 2023 21:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F883F8EA
+	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 23:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yh2Wmz+g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 473EFC433C7;
-	Fri,  1 Dec 2023 21:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701467423;
-	bh=hgErs2+9xOlVRFEfSS/n+GlJFVfTFeYoDoNHhlzozhg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yh2Wmz+gpth1ZQrAI0doYusBzWe95tdpg796Ky8XrsvmWIYI7KXNGBgDUKdW4UFiX
-	 1Mx585IDy/UpO7h6uc1gIVEZNXBXYUXm1m6QiEcKpNL0JeTcwOufXIhAZRgukKlFTQ
-	 SJd98FwYZ2dLmZ5bX+p6C2QBhLFjIGU4+nlMZ63s3D0kC68pvXNKZyb0ytAcS61uU7
-	 HFJ0nc+G871ltG+rL7chOiaC2nNi74gVGUffiXiGlT6iTfG75XswO0TmRPG560fP22
-	 N2wo838PhF86ugFhzb2HME3z/6Y+N+STRQ+KtsgbPwOATC2vwoqLAcwn4lzVkOhrqz
-	 V8zAcn0BI5JYw==
-Date: Fri, 1 Dec 2023 14:50:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Fangrui Song <maskray@google.com>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	conor@kernel.org, ndesaulniers@google.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
- known working versions
-Message-ID: <20231201215021.GA2579712@dev-arch.thelio-3990X>
-References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
- <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
- <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
- <20231201194858.GA290910@dev-arch.thelio-3990X>
- <CAFP8O3+uta+GQO7dpeNLe0OMFnX-tdEyvHREEu1ThjA3nFtTkQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dXQay9g4"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a0029289b1bso363054266b.1
+        for <llvm@lists.linux.dev>; Fri, 01 Dec 2023 15:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701474583; x=1702079383; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vv48LOC3e09LzBvcT71ztOIfWllD91HEPBwZOsmIU1E=;
+        b=dXQay9g4o5A0KZVFapYsjT4ex4nPdGda+Jb2Y655qLCkn5ir/wrJm8rH1YFuaTqjRn
+         WnJdKSwkC2g5v7EQ2SG//deV9YMnQfgQmCSb3gf0dtCiY8dXQkD4diCH4QDQGfnv2P0I
+         53bQhZruFdQVT3E8iZhfMj8ykDELUJIYSxC8mvIex/fsm2ls6io/zvo15qJcPqvaoUbN
+         ecB4muk9x4zqCw3MfZkse7aXfv9wy7Yk55PM+DeTT0okWgZmwJFHta2u8Sa6rAawmQ5a
+         egle5PTkgK52a9j9gxuxOVZiPjJyeljHFIoieNcoa2qKI+/RUvI0Pv22/8fwv8NDg531
+         O57w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701474583; x=1702079383;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vv48LOC3e09LzBvcT71ztOIfWllD91HEPBwZOsmIU1E=;
+        b=KVjtyoJ7gyA4BwHMccJewD4imH8rp3CWVdJj7rDL6KkJtUUc1oIKIolCx3aaygZXw3
+         j6aAUYF9O0rvRsjUANZIaLX08wJ+0EGBfR14rrNObMApk/iQ1eFhOJ2aq6EKKK5WVuji
+         BnwlJ6ZMuNwKQRoyjUU8zIEIPbHW7SwVnSg7ob9yEivN0Hw4Z/22DlHxVo7Q3XWAzVZD
+         mNRq+6emqsbxs4kwwS146pKmhuVMU/X0xxagAxGqe7Rp9FIBv48JXQvu8wGcs2p2focB
+         s63/RjxxMthknPpEBlw1n5eIx3XINlwTXDOCmopl4oGqjrnYMV4CjSdNZU9qZMawwwSG
+         JJng==
+X-Gm-Message-State: AOJu0Yz0mo1RuaM6NHVTyAHxhawhnq+MNl82Hy9KRK1UAe4QxUUk0xJj
+	0P73acxkUWNtF7e0EnJW7aw9dWo3r/c+jn/esYQ=
+X-Google-Smtp-Source: AGHT+IFeOeKN+GaFhGPrPoEPYpWXSzh6d+a1CmqErQInDltIIQ9VOBe4wSvDG31NlZW9hNJ8fvUhLV449qeBn8y6BRI=
+X-Received: by 2002:a17:906:d0d7:b0:a19:a1ba:8cfd with SMTP id
+ bq23-20020a170906d0d700b00a19a1ba8cfdmr1374871ejb.155.1701474582630; Fri, 01
+ Dec 2023 15:49:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFP8O3+uta+GQO7dpeNLe0OMFnX-tdEyvHREEu1ThjA3nFtTkQ@mail.gmail.com>
+References: <cover.1701462010.git.dxu@dxuuu.xyz> <adea997dff6d07332d294ad9cd233f3b71494a81.1701462010.git.dxu@dxuuu.xyz>
+In-Reply-To: <adea997dff6d07332d294ad9cd233f3b71494a81.1701462010.git.dxu@dxuuu.xyz>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 1 Dec 2023 15:49:30 -0800
+Message-ID: <CAEf4BzaSDHuqfhGJgh6gvu5t8Vg-q72bp99hfFa0PCQhapJPZQ@mail.gmail.com>
+Subject: Re: [PATCH ipsec-next v3 3/9] libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: ndesaulniers@google.com, daniel@iogearbox.net, nathan@kernel.org, 
+	ast@kernel.org, andrii@kernel.org, steffen.klassert@secunet.com, 
+	antony.antony@secunet.com, alexei.starovoitov@gmail.com, 
+	yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, jolsa@kernel.org, trix@redhat.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, devel@linux-ipsec.org, 
+	netdev@vger.kernel.org, Jonathan Lemon <jlemon@aviatrix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 01, 2023 at 12:12:26PM -0800, Fangrui Song wrote:
-> On Fri, Dec 1, 2023 at 11:49 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Thu, Nov 30, 2023 at 08:16:41AM -0800, Fangrui Song wrote:
-> > > On Wed, Nov 29, 2023 at 3:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > LLVM prior to 18.0.0 would generate incorrect debug info for DWARF5 due
-> > > > to linker relaxation, which was worked around in clang by defaulting
-> > > > RISC-V to DWARF4 [1]. Unfortunately, this workaround does not work for
-> > > > the kernel because the DWARF version can be independently changed from
-> > > > the default in Kconfig.
-> > > >
-> > > > Do not allow DWARF5 to be selected for RISC-V when using linker
-> > > > relaxation (ld.lld >= 15.0.0) and a version of LLVM that does not have
-> > > > the fixes (the integrated assembler [2] and ld.lld [3] < 18.0.0)
-> > > > necessary to generate the correct debug info.
-> > > >
-> > > > Link: https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc21dd18e5b0918f6 [1]
-> > > > Link: https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622db2cad7b745607ca4de6a [2]
-> > > > Link: https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac9322e22e5471cc5e4a77 [3]
-> > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > > ---
-> > > >  arch/riscv/Kconfig | 9 +++++++++
-> > > >  lib/Kconfig.debug  | 1 +
-> > > >  2 files changed, 10 insertions(+)
-> > > >
-> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > index 72be1d8122a3..81b473cb47b0 100644
-> > > > --- a/arch/riscv/Kconfig
-> > > > +++ b/arch/riscv/Kconfig
-> > > > @@ -186,6 +186,15 @@ config RISCV_USE_LINKER_RELAXATION
-> > > >         # https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec77262d392e2923e1d680f6985
-> > > >         depends on !LD_IS_LLD || LLD_VERSION >= 150000
-> > > >
-> > > > +# https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc21dd18e5b0918f6
-> > > > +config ARCH_HAS_BROKEN_DWARF5
-> > > > +       def_bool y
-> > > > +       depends on RISCV_USE_LINKER_RELAXATION
-> > > > +       # https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622db2cad7b745607ca4de6a
-> > > > +       depends on AS_IS_LLVM && AS_VERSION < 180000
-> > > > +       # https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac9322e22e5471cc5e4a77
-> > > > +       depends on LD_IS_LLD && LLD_VERSION < 180000
-> > > > +
-> > > >  config ARCH_MMAP_RND_BITS_MIN
-> > > >         default 18 if 64BIT
-> > > >         default 8
-> > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > > index cc7d53d9dc01..a0ebce05a368 100644
-> > > > --- a/lib/Kconfig.debug
-> > > > +++ b/lib/Kconfig.debug
-> > > > @@ -282,6 +282,7 @@ config DEBUG_INFO_DWARF4
-> > > >  config DEBUG_INFO_DWARF5
-> > > >         bool "Generate DWARF Version 5 debuginfo"
-> > > >         select DEBUG_INFO
-> > > > +       depends on !ARCH_HAS_BROKEN_DWARF5
-> > > >         depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> > > >         help
-> > > >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
-> > > >
-> > > > --
-> > > > 2.43.0
-> > > >
-> > >
-> > > A comment and "depends on" condition introduced by commit
-> > > 0a6de78cff600cb991f2a1b7ed376935871796a0 "lib/Kconfig.debug: Add check
-> > > for non-constant .{s,u}leb128 support to DWARF5"
-> > > can now be refined.
-> > >
-> > > > ib/Kconfig.debug
-> > > > (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> > >
-> > > AS_VERSION can now be 24100.
-> >
-> > That will impact all architectures that use GNU as, even though the
-> > issue was really only seen on RISC-V. It probably doesn't matter since
-> > most architectures work with the integrated assembler and that is what
-> > we tell people to use but I think the current check will continue to
-> > work.
-> 
-> Agreed.
-> 
->     depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION
-> >= 23502 && AS_HAS_NON_CONST_LEB128)
-> 
-> is enabled for GCC. The long condition chain is for Clang. Given
-> Clang's behavior, we can simplify this to
-> 
->     depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU &&
-> AS_HAS_NON_CONST_LEB128)
+On Fri, Dec 1, 2023 at 12:24=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> =3D=3D=3D Motivation =3D=3D=3D
+>
+> Similar to reading from CO-RE bitfields, we need a CO-RE aware bitfield
+> writing wrapper to make the verifier happy.
+>
+> Two alternatives to this approach are:
+>
+> 1. Use the upcoming `preserve_static_offset` [0] attribute to disable
+>    CO-RE on specific structs.
+> 2. Use broader byte-sized writes to write to bitfields.
+>
+> (1) is a bit hard to use. It requires specific and not-very-obvious
+> annotations to bpftool generated vmlinux.h. It's also not generally
+> available in released LLVM versions yet.
+>
+> (2) makes the code quite hard to read and write. And especially if
+> BPF_CORE_READ_BITFIELD() is already being used, it makes more sense to
+> to have an inverse helper for writing.
+>
+> =3D=3D=3D Implementation details =3D=3D=3D
+>
+> Since the logic is a bit non-obvious, I thought it would be helpful
+> to explain exactly what's going on.
+>
+> To start, it helps by explaining what LSHIFT_U64 (lshift) and RSHIFT_U64
+> (rshift) is designed to mean. Consider the core of the
+> BPF_CORE_READ_BITFIELD() algorithm:
+>
+>         val <<=3D __CORE_RELO(s, field, LSHIFT_U64);
+>                 val =3D val >> __CORE_RELO(s, field, RSHIFT_U64);
 
-I think we still need the version check due to
-https://sourceware.org/bugzilla/show_bug.cgi?id=25611, which was added
-in commit 98cd6f521f10 ("Kconfig: allow explicit opt in to DWARF v5").
+nit: indentation is off?
 
-> This will still work even after R_LARCH_{ADD,SUB}_ULEB128 support is
-> added to llvm-project.
-> This condition matches HAVE_AS_LEB128 in GCC in spirit.
-> 
-> > Alternatively, I could do something like this but it is quite ugly and
-> > verbose :/
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index a0ebce05a368..aea0ef5a5d1f 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -231,11 +231,6 @@ config DEBUG_INFO
-> >           in the "Debug information" choice below, indicating that debug
-> >           information will be generated for build targets.
-> >
-> > -# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
-> > -# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> > -config AS_HAS_NON_CONST_LEB128
-> > -       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
-> > -
-> 
-> Consider keeping this config, but just reword the comment.
+>
+> Basically what happens is we lshift to clear the non-relevant (blank)
+> higher order bits. Then we rshift to bring the relevant bits (bitfield)
+> down to LSB position (while also clearing blank lower order bits). To
+> illustrate:
+>
+>         Start:    ........XXX......
+>         Lshift:   XXX......00000000
+>         Rshift:   00000000000000XXX
+>
+> where `.` means blank bit, `0` means 0 bit, and `X` means bitfield bit.
+>
+> After the two operations, the bitfield is ready to be interpreted as a
+> regular integer.
+>
+> Next, we want to build an alternative (but more helpful) mental model
+> on lshift and rshift. That is, to consider:
+>
+> * rshift as the total number of blank bits in the u64
+> * lshift as number of blank bits left of the bitfield in the u64
+>
+> Take a moment to consider why that is true by consulting the above
+> diagram.
+>
+> With this insight, we can how define the following relationship:
+>
+>               bitfield
+>                  _
+>                 | |
+>         0.....00XXX0...00
+>         |      |   |    |
+>         |______|   |    |
+>          lshift    |    |
+>                    |____|
+>               (rshift - lshift)
+>
+> That is, we know the number of higher order blank bits is just lshift.
+> And the number of lower order blank bits is (rshift - lshift).
+>
 
-Do you have a suggestion for how it should be reworded? I am struggling
-to come up with something that conveys additional information in a
-succinct manner.
+Nice diagrams and description, thanks!
 
-> >  choice
-> >         prompt "Debug information"
-> >         depends on DEBUG_KERNEL
-> > @@ -258,7 +253,7 @@ config DEBUG_INFO_NONE
-> >  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> >         bool "Rely on the toolchain's implicit default DWARF version"
-> >         select DEBUG_INFO
-> > -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> > +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && ((!RISCV && AS_VERSION >= 23502) || (RISCV && AS_VERSION >= 24100)))
-> 
-> The RISCV condition would cause additional churn when LoongArch
-> ULEB128 support is added.
+> Finally, we can examine the core of the write side algorithm:
+>
+>         mask =3D (~0ULL << rshift) >> lshift;   // 1
+>         nval =3D new_val;                       // 2
+>         nval =3D (nval << rpad) & mask;         // 3
+>         val =3D (val & ~mask) | nval;           // 4
+>
+> (1): Compute a mask where the set bits are the bitfield bits. The first
+>      left shift zeros out exactly the number of blank bits, leaving a
+>      bitfield sized set of 1s. The subsequent right shift inserts the
+>      correct amount of higher order blank bits.
+> (2): Place the new value into a word sized container, nval.
+> (3): Place nval at the correct bit position and mask out blank bits.
+> (4): Mix the bitfield in with original surrounding blank bits.
+>
+> [0]: https://reviews.llvm.org/D133361
+> Co-authored-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> Co-authored-by: Jonathan Lemon <jlemon@aviatrix.com>
+> Signed-off-by: Jonathan Lemon <jlemon@aviatrix.com>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>  tools/lib/bpf/bpf_core_read.h | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>
+> diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.=
+h
+> index 1ac57bb7ac55..a7ffb80e3539 100644
+> --- a/tools/lib/bpf/bpf_core_read.h
+> +++ b/tools/lib/bpf/bpf_core_read.h
+> @@ -111,6 +111,40 @@ enum bpf_enum_value_kind {
+>         val;                                                             =
+     \
+>  })
+>
+> +/*
+> + * Write to a bitfield, identified by s->field.
+> + * This is the inverse of BPF_CORE_WRITE_BITFIELD().
+> + */
+> +#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({                  \
+> +       void *p =3D (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);      =
+ \
+> +       unsigned int byte_size =3D __CORE_RELO(s, field, BYTE_SIZE);     =
+ \
+> +       unsigned int lshift =3D __CORE_RELO(s, field, LSHIFT_U64);       =
+ \
+> +       unsigned int rshift =3D __CORE_RELO(s, field, RSHIFT_U64);       =
+ \
+> +       unsigned int rpad =3D rshift - lshift;                           =
+ \
+> +       unsigned long long nval, mask, val;                             \
+> +                                                                       \
+> +       asm volatile("" : "+r"(p));                                     \
+> +                                                                       \
+> +       switch (byte_size) {                                            \
+> +       case 1: val =3D *(unsigned char *)p; break;                      =
+ \
+> +       case 2: val =3D *(unsigned short *)p; break;                     =
+ \
+> +       case 4: val =3D *(unsigned int *)p; break;                       =
+ \
+> +       case 8: val =3D *(unsigned long long *)p; break;                 =
+ \
+> +       }                                                               \
+> +                                                                       \
+> +       mask =3D (~0ULL << rshift) >> lshift;                            =
+ \
+> +       nval =3D new_val;                                                =
+ \
+> +       nval =3D (nval << rpad) & mask;                                  =
+ \
+> +       val =3D (val & ~mask) | nval;                                    =
+ \
 
-Ah, I did not realize that LoongArch would have the same issue. This is
-definitely not the right way to go for that then.
+I'd simplify it to not need nval at all
 
-> >         help
-> >           The implicit default version of DWARF debug info produced by a
-> >           toolchain changes over time.
-> > @@ -283,7 +278,7 @@ config DEBUG_INFO_DWARF5
-> >         bool "Generate DWARF Version 5 debuginfo"
-> >         select DEBUG_INFO
-> >         depends on !ARCH_HAS_BROKEN_DWARF5
-> > -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && ((!RISCV && AS_VERSION >= 23502) || (RISCV && AS_VERSION >= 24100)))
-> >         help
-> >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
-> >           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+val =3D (val & ~mask) | ((new_val << rpad) & mask);
 
-Cheers,
-Nathan
+I actually find it easier to follow and make sure we are not doing
+anything unexpected. First part before |, we take old value and clear
+bits we are about to set, second part after |, we take bitfield value,
+shift it in position, and just in case mask it out if it's too big to
+fit. Combine, done.
+
+Other than that, it looks good.
+
+> +                                                                       \
+> +       switch (byte_size) {                                            \
+> +       case 1: *(unsigned char *)p      =3D val; break;                 =
+ \
+> +       case 2: *(unsigned short *)p     =3D val; break;                 =
+ \
+> +       case 4: *(unsigned int *)p       =3D val; break;                 =
+ \
+> +       case 8: *(unsigned long long *)p =3D val; break;                 =
+ \
+> +       }                                                               \
+> +})
+> +
+>  #define ___bpf_field_ref1(field)       (field)
+>  #define ___bpf_field_ref2(type, field) (((typeof(type) *)0)->field)
+>  #define ___bpf_field_ref(args...)                                       =
+   \
+> --
+> 2.42.1
+>
