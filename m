@@ -1,75 +1,93 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211C24E605
-	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 20:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E131B57882
+	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 20:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="k+GjMhwb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YC5ec4jY"
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.nyi.internal (Postfix) with ESMTP id 1E64F5C01AE;
-	Fri,  1 Dec 2023 15:23:52 -0500 (EST)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="YOE8nYUp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uVUpr5Ra"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailnew.nyi.internal (Postfix) with ESMTP id E613058098F;
+	Fri,  1 Dec 2023 15:23:57 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Fri, 01 Dec 2023 15:23:52 -0500
+  by compute5.internal (MEProxy); Fri, 01 Dec 2023 15:23:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1701462232; x=1701548632; bh=v+Tu4Bv5Hn
-	sux9nKej021Clejo1i0m7B359jEiXfuUk=; b=k+GjMhwb4lBExMqHzvpS1DDiM9
-	xJpNzAiHkhGEm9hcPI6CkRPr2uD15m8gOTtr9NdHwNWJ2sY8XK8LDUihwz6v0ZXk
-	7396GWvonb1jA1BZYunU93pfw35hvrUAiNCxBc0XfLMalwVm2Q2NGoJdFLQMlVGS
-	UhETxmW/EkQ8gM8GS5pCJu6jEDwIffW5czb5dSVD0I9M783LaygiK1AFmYTmWAiG
-	xUo1y9LFZuONVGTV9Pdf+EWRSzD7tyB+QtpIzhVfyioI/MgUfjF769j0rSl62Amd
-	BRR/0HVWE/MFnRIyNQxLWiTXfEPxJ1FMqoD2QBpNDnOWMGkxc1rFtuH72GZg==
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm3; t=1701462237; x=
+	1701469437; bh=c0SQUBYYwJzTTCGOT+Ez9K+x+hF2I698/lffpVW1VHI=; b=Y
+	OE8nYUpixcpzmPMxMxOt4wxQ0E+uKI2F8N1A6+Es6IGnOIfEZDCaySPB7pvY4Lun
+	1YFNZbQlkgNdbqT0hqFG8QOT6OY0XwLURyfzy6aL+4fuSUWfxpcpgVkzFAArhXHh
+	wijPHaVuT5oTxdy+uN4ts6OrCCseD7T+MrnjswaSWDgOy3SQQwkNnD4ytrt6oPgb
+	vDVlQ826Z/1ey17zD0BXZOjI1z1nf3aZcZ6JaMj4aHpP2STegI2I2qFAxaN05nuk
+	8LkWlVLye8I9WCfxgLV4F+ovRylzG6PQNZwjI4UVX3dSEOFFFfQRHR1iCxqrd+nl
+	kuQpdgsucmnFOouzjtl6w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701462232; x=1701548632; bh=v+Tu4Bv5Hnsux
-	9nKej021Clejo1i0m7B359jEiXfuUk=; b=YC5ec4jYHVz5viFxUXWS0vb0RUxYg
-	82WHiNgKXbfSwmmryzA2WB8uY5YV0IbhJBhHGMU+jtSOwnskOGE6hG/0cqbCa8zs
-	JSXWlo5cWJZY4zaLJ3i2wlAm0tK+ZlC5ORbOorBdBpJ+6Ak5n7Gqj5rpCPLCfk3Q
-	P5XR3KE8tnXLhQ5lA7mgz1u9YMDkoDzTkS5ReVYEFglkUeV2KdWGSA6uOla5/CH0
-	+LQf6xxrRBnGpNg9fLXeYy2FnV7UFkJVIYZTG7gUjX63m69PD0PHJq/3Z4W6+xBx
-	YBIf1z4tqeBu94l1wk0kvbt/4dhKNVHTWR/nAOUg9F3lByp5p3xEhuH2A==
-X-ME-Sender: <xms:10BqZU-5DD2Jd3lvUmWPBEI3bJBvidiFx1XQvtY1LvPLNNlLUkWhBA>
-    <xme:10BqZcv8sQvMd08J6QouebE7FPpy8n1vryna3ODlnALZ7NEEA2HaVYbPDyYREnj_G
-    79-bRGGLpyPiUqceA>
-X-ME-Received: <xmr:10BqZaBca_B1Ki24sM4eVqlSipvzFstDXAcxmFMnD5XghUdc-Si78M_8FYxa9s72YvoNPrnkJLBAtCcNmldvMS7QVVinROvAFbCxjr6_QeTEhw>
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1701462237; x=
+	1701469437; bh=c0SQUBYYwJzTTCGOT+Ez9K+x+hF2I698/lffpVW1VHI=; b=u
+	VUpr5RaeyZAcr8XiX/cUJd6y/eQ2sCZA2Cb5ZPhbUdWP2uTdzvS4MBxJbWZUlSGB
+	W+G9tOZmC70vPeUBvKHp1Zn5FifuzhdwqwHOF2RjR1GmsB3PwR9ADWjSd8M90nXl
+	mO9o3l0VWQRKq68GyzC5/VWgKrCKcyE1Q8FEsHPJUxEkdtdV0ND3MhHWy8o5nOX3
+	4hc1lRE94yUDhU9Lnk0mGHUf22ktlmvYwLrL7MvkmQi+ijtdIa/uhyNXD0OhnLVd
+	6p4zNBQ0JJK6xOpZTMbcrXXMA6ek7hEcdDAwuwuJYdt+SmLmSayMp/BMxjQEJCD2
+	I9RjQ2n0QvzgIewr27UBg==
+X-ME-Sender: <xms:3UBqZRslVxYXHKZeWFfT3xIZrPYAz95LDZsdnizbcey93EMBv0TTKQ>
+    <xme:3UBqZacqS7VQ3ZJIALIOAW_xVP8eyHW2tFxkNjPUi3Y06h4FZcOPLwLBeCctii4I-
+    syZWjovxXNIAz-cdQ>
+X-ME-Received: <xmr:3UBqZUyLp9Qw_K6BE8ovgh7t_LkngFsgz84G9CWvdxbitKx3mxaRNNVnu8aADuKh8mcx3Mv31uTVY7mTUre6eoRdHNMGZSwUzcckQ9VYQEzDDw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgudefjecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeikeehudegteevuddthf
-    eilefhjefgueeuueffveevheeggfeufeejfeeuudekfeenucffohhmrghinhepihgvthhf
-    rdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:10BqZUecUTuIuTt5Gk6kKmrwLXMse3fbQDzYtiCtuGIV-92H4YFgXw>
-    <xmx:10BqZZMY33McqneU-XDqa-Bz1Gv-qxQyD-qIwDJ87T_xj-HBLtKD9w>
-    <xmx:10BqZekkfGjNtDwbYzf8ugwXFW5IiuuwLhttwJHY-ABk87PyONQaLg>
-    <xmx:2EBqZcpcMkAVoFiHty4ANJSo9ZfI5IiBQZozkxKWmuY6f_tkNfOFNw>
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculddvfedmnecujfgurhephffvvefufffkofgjfhgggfestdekredt
+    redttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpeeigeffteehteffheejkeefjeeuudfgvdekkeetudeghedu
+    gffgleffhefgjeevgfenucffohhmrghinheplhhlvhhmrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiih
+    ii
+X-ME-Proxy: <xmx:3UBqZYMDcKmt08JG9XyUs-6Z0FayOZGM24-qam0ukKVpAfal_7KIaQ>
+    <xmx:3UBqZR_14No7y8bFEVonX9PmSd0EgerSp_PF-rjzOkejVsCUzmuKVw>
+    <xmx:3UBqZYXUfKnwN5xd_hd20aZQXpG6ug81B8LVpv5mt-Oxu_GL7y860A>
+    <xmx:3UBqZdvow0Q2osEWvHvEvp_G4H2DzgsYsI7D0kS4nCyBezNslK1fzw>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Dec 2023 15:23:50 -0500 (EST)
+ 1 Dec 2023 15:23:55 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
+To: ndesaulniers@google.com,
+	daniel@iogearbox.net,
+	nathan@kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org,
 	steffen.klassert@secunet.com,
 	antony.antony@secunet.com,
 	alexei.starovoitov@gmail.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com
-Cc: devel@linux-ipsec.org
-Subject: [PATCH ipsec-next v3 0/9] Add bpf_xdp_get_xfrm_state() kfunc
-Date: Fri,  1 Dec 2023 13:23:11 -0700
-Message-ID: <cover.1701462010.git.dxu@dxuuu.xyz>
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	trix@redhat.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	devel@linux-ipsec.org,
+	netdev@vger.kernel.org,
+	Jonathan Lemon <jlemon@aviatrix.com>
+Subject: [PATCH ipsec-next v3 3/9] libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
+Date: Fri,  1 Dec 2023 13:23:14 -0700
+Message-ID: <adea997dff6d07332d294ad9cd233f3b71494a81.1701462010.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.1
+In-Reply-To: <cover.1701462010.git.dxu@dxuuu.xyz>
+References: <cover.1701462010.git.dxu@dxuuu.xyz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,70 +96,145 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
-bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
-xfrm_state_put(). The intent is to support software RSS (via XDP) for
-the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
-on (hopefully) reproducible AWS testbeds indicate that single tunnel
-pcpu ipsec can reach line rate on 100G ENA nics.
+=== Motivation ===
 
-Note this patchset only tests/shows generic xfrm_state access. The
-"secret sauce" (if you can really even call it that) involves accessing
-a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
-available here [1].
+Similar to reading from CO-RE bitfields, we need a CO-RE aware bitfield
+writing wrapper to make the verifier happy.
 
-[0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
-[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
+Two alternatives to this approach are:
 
-Changes from v2:
-* Fix/simplify BPF_CORE_WRITE_BITFIELD() algorithm
-* Added verifier tests for bitfield writes
-* Fix state leakage across test_tunnel subtests
+1. Use the upcoming `preserve_static_offset` [0] attribute to disable
+   CO-RE on specific structs.
+2. Use broader byte-sized writes to write to bitfields.
 
-Changes from v1:
-* Move xfrm tunnel tests to test_progs
-* Fix writing to opts->error when opts is invalid
-* Use __bpf_kfunc_start_defs()
-* Remove unused vxlanhdr definition
-* Add and use BPF_CORE_WRITE_BITFIELD() macro
-* Make series bisect clean
+(1) is a bit hard to use. It requires specific and not-very-obvious
+annotations to bpftool generated vmlinux.h. It's also not generally
+available in released LLVM versions yet.
 
-Changes from RFCv2:
-* Rebased to ipsec-next
-* Fix netns leak
+(2) makes the code quite hard to read and write. And especially if
+BPF_CORE_READ_BITFIELD() is already being used, it makes more sense to
+to have an inverse helper for writing.
 
-Changes from RFCv1:
-* Add Antony's commit tags
-* Add KF_ACQUIRE and KF_RELEASE semantics
+=== Implementation details ===
 
-Daniel Xu (9):
-  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
-  bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
-  libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
-  bpf: selftests: test_loader: Support __btf_path() annotation
-  libbpf: selftests: Add verifier tests for CO-RE bitfield writes
-  bpf: selftests: test_tunnel: Setup fresh topology for each subtest
-  bpf: selftests: test_tunnel: Use vmlinux.h declarations
-  bpf: selftests: Move xfrm tunnel test to test_progs
-  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
+Since the logic is a bit non-obvious, I thought it would be helpful
+to explain exactly what's going on.
 
- include/net/xfrm.h                            |   9 +
- net/xfrm/Makefile                             |   1 +
- net/xfrm/xfrm_policy.c                        |   2 +
- net/xfrm/xfrm_state_bpf.c                     | 128 ++++++++++++++
- tools/lib/bpf/bpf_core_read.h                 |  34 ++++
- .../selftests/bpf/prog_tests/test_tunnel.c    | 162 +++++++++++++++++-
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
- .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
- .../selftests/bpf/progs/test_tunnel_kern.c    | 138 ++++++++-------
- .../bpf/progs/verifier_bitfield_write.c       | 100 +++++++++++
- tools/testing/selftests/bpf/test_loader.c     |   7 +
- tools/testing/selftests/bpf/test_tunnel.sh    |  92 ----------
- 13 files changed, 522 insertions(+), 155 deletions(-)
- create mode 100644 net/xfrm/xfrm_state_bpf.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_bitfield_write.c
+To start, it helps by explaining what LSHIFT_U64 (lshift) and RSHIFT_U64
+(rshift) is designed to mean. Consider the core of the
+BPF_CORE_READ_BITFIELD() algorithm:
 
+        val <<= __CORE_RELO(s, field, LSHIFT_U64);
+                val = val >> __CORE_RELO(s, field, RSHIFT_U64);
+
+Basically what happens is we lshift to clear the non-relevant (blank)
+higher order bits. Then we rshift to bring the relevant bits (bitfield)
+down to LSB position (while also clearing blank lower order bits). To
+illustrate:
+
+        Start:    ........XXX......
+        Lshift:   XXX......00000000
+        Rshift:   00000000000000XXX
+
+where `.` means blank bit, `0` means 0 bit, and `X` means bitfield bit.
+
+After the two operations, the bitfield is ready to be interpreted as a
+regular integer.
+
+Next, we want to build an alternative (but more helpful) mental model
+on lshift and rshift. That is, to consider:
+
+* rshift as the total number of blank bits in the u64
+* lshift as number of blank bits left of the bitfield in the u64
+
+Take a moment to consider why that is true by consulting the above
+diagram.
+
+With this insight, we can how define the following relationship:
+
+              bitfield
+                 _
+                | |
+        0.....00XXX0...00
+        |      |   |    |
+        |______|   |    |
+         lshift    |    |
+                   |____|
+              (rshift - lshift)
+
+That is, we know the number of higher order blank bits is just lshift.
+And the number of lower order blank bits is (rshift - lshift).
+
+Finally, we can examine the core of the write side algorithm:
+
+        mask = (~0ULL << rshift) >> lshift;   // 1
+        nval = new_val;                       // 2
+        nval = (nval << rpad) & mask;         // 3
+        val = (val & ~mask) | nval;           // 4
+
+(1): Compute a mask where the set bits are the bitfield bits. The first
+     left shift zeros out exactly the number of blank bits, leaving a
+     bitfield sized set of 1s. The subsequent right shift inserts the
+     correct amount of higher order blank bits.
+(2): Place the new value into a word sized container, nval.
+(3): Place nval at the correct bit position and mask out blank bits.
+(4): Mix the bitfield in with original surrounding blank bits.
+
+[0]: https://reviews.llvm.org/D133361
+Co-authored-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Co-authored-by: Jonathan Lemon <jlemon@aviatrix.com>
+Signed-off-by: Jonathan Lemon <jlemon@aviatrix.com>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/lib/bpf/bpf_core_read.h | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
+index 1ac57bb7ac55..a7ffb80e3539 100644
+--- a/tools/lib/bpf/bpf_core_read.h
++++ b/tools/lib/bpf/bpf_core_read.h
+@@ -111,6 +111,40 @@ enum bpf_enum_value_kind {
+ 	val;								      \
+ })
+ 
++/*
++ * Write to a bitfield, identified by s->field.
++ * This is the inverse of BPF_CORE_WRITE_BITFIELD().
++ */
++#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({			\
++	void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);	\
++	unsigned int byte_size = __CORE_RELO(s, field, BYTE_SIZE);	\
++	unsigned int lshift = __CORE_RELO(s, field, LSHIFT_U64);	\
++	unsigned int rshift = __CORE_RELO(s, field, RSHIFT_U64);	\
++	unsigned int rpad = rshift - lshift;				\
++	unsigned long long nval, mask, val;				\
++									\
++	asm volatile("" : "+r"(p));					\
++									\
++	switch (byte_size) {						\
++	case 1: val = *(unsigned char *)p; break;			\
++	case 2: val = *(unsigned short *)p; break;			\
++	case 4: val = *(unsigned int *)p; break;			\
++	case 8: val = *(unsigned long long *)p; break;			\
++	}								\
++									\
++	mask = (~0ULL << rshift) >> lshift;				\
++	nval = new_val;							\
++	nval = (nval << rpad) & mask;					\
++	val = (val & ~mask) | nval;					\
++									\
++	switch (byte_size) {						\
++	case 1: *(unsigned char *)p      = val; break;			\
++	case 2: *(unsigned short *)p     = val; break;			\
++	case 4: *(unsigned int *)p       = val; break;			\
++	case 8: *(unsigned long long *)p = val; break;			\
++	}								\
++})
++
+ #define ___bpf_field_ref1(field)	(field)
+ #define ___bpf_field_ref2(type, field)	(((typeof(type) *)0)->field)
+ #define ___bpf_field_ref(args...)					    \
 -- 
 2.42.1
 
