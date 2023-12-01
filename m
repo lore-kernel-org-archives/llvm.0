@@ -1,97 +1,138 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7947159539;
-	Fri,  1 Dec 2023 07:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE243125B2
+	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 07:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QBBW4O00";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XmJF9yUO"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 6B5815C00E5;
-	Fri,  1 Dec 2023 02:13:03 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 01 Dec 2023 02:13:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701414783; x=1701501183; bh=UQ
-	cJg/VTtDrgrhKBmRIKlMI4XLTbyNR+8ti2pMu62+g=; b=QBBW4O00v7oHdzlN1x
-	2XsOtdrSiwUNsOoSKxJIS8D52OEPfglHY+2oeHKR2uoLLofwG36qcQpN6gmzk1lM
-	zV8UcQQQIyldKjtDJjmXWCq+qonAwJR4uAPgBYTHmW9Dyykaf75DxZBv53wcDK+Y
-	EzRVxmMHnwx2UFncInSFMSDTkDB+JAuoTeIbuvCDa4qgpL2YHavCAiJcQthp+1g9
-	ZSz55op1ezLI8RbG1sjj3TO+rJpvwLLCHhuvHHiEHtu9j7WvL5rTRdwp9l04+U3T
-	swpmeTrDymbc8EdB+4330KLsXy1srHA7MWgIJHs+vjz/XqZIyN6+WBaY4owovTVq
-	HKTw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701414783; x=1701501183; bh=UQcJg/VTtDrgr
-	hKBmRIKlMI4XLTbyNR+8ti2pMu62+g=; b=XmJF9yUOqF9uXI6sGmO0q535ykBS8
-	9iGY8Js4Nmd2VjAgr4Y6GioYu1RbSZ/ESA1SeSQDeucTiHsP8HY2qtO+CzPXM4eu
-	ZYVU4W5SQGD+3JOZ55l1COp3rB6LZDEgp8oZkdix7Jgp5Sh8C2bz5WSVcQSc7aB4
-	HjWOqXwQ3TbUaT1X+QadRSFSlTx6wYOt+VYRL1JkCEJQTO9EEIZZqJANpWxeZA7Y
-	9rHfiVdxEQ1yYZAEgr1z3lSw4fh9IyDRdRgEU2VHWrAsvJVibYczKYTBH8IhO8qp
-	UChnXyJWD2L1CLGPooXBoe0c0ylvW1n1EYRV7OmbUElvucaH7rxKpM/VA==
-X-ME-Sender: <xms:f4dpZe-At7CGBnOs2c45VGasV6QcZb7ztSpQ4GTipEfiPgJYmTXMUw>
-    <xme:f4dpZeu7QoJNPoP72AQa7N3Bj1RcvKVIMJn49GoMD8ncW6rJhTZbNdHQ1ZEvMsMhG
-    mQpdgFHAKMppm0c_iI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeikedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:f4dpZUB9Q2lw3ZGWTf50NsCn__5isdUJA_aCq_cvaIIcv4kQAYM4Uw>
-    <xmx:f4dpZWdAJ7BdogPJXRMT9ZkLJQMTzLqNmvZ7AnqPwNMYuzR9wucCmA>
-    <xmx:f4dpZTO6yjElFYpfb7AEBjFeDyRrukT77CnjKJS9oIJJB-srZa00MQ>
-    <xmx:f4dpZcpzQaHY6zUxuDjHV8Y-sAS1qp_9oMuAOkZLQKdsoL3Yn9S6cg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 22826B60089; Fri,  1 Dec 2023 02:13:03 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l9EihEnT"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-54af4f2838dso2037964a12.2
+        for <llvm@lists.linux.dev>; Thu, 30 Nov 2023 23:48:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701416902; x=1702021702; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BqqO/q4f6pFgF1PPCq8ZVSkps1XzTjSMsOrJ9t4F9/I=;
+        b=l9EihEnTZrGRwgNMgYfW+roA4U+Z4Rs9dV6jzt/LxioMzhWTLUNFxYjusxzrz7++mm
+         NsNbmm02+Bn5uOiWhptwkgWsCRKiOVJWlMpAw61IOk4eqhIZsbn1AoOLoI16exCwr6mj
+         sqM8Mn1i9NMPGJuKOUJMLkOMaPfJB7t4iT6oD+Oe/F4SHWq541si0C4uaOOTMoQv1/yc
+         x3cHfd9CbOQ4Yvh1ji2umkU12UJ+UCTdrq9B0+2n6CythFTRK7imck6kwMnpeQWmnzo/
+         nmt7klyXhM5U/BjhGIthJB7ZMuw3xS32pfVGySSzvRxQKRzWw2ataRwNL/Q3VPsFEleB
+         dMcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701416902; x=1702021702;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BqqO/q4f6pFgF1PPCq8ZVSkps1XzTjSMsOrJ9t4F9/I=;
+        b=iiau7PAE7UKA0hLYL3QkFpHJIQziu7nHvD7hBa7O6g7tAHFIOV5zlKlIONWI4MARF3
+         X7oeXUCMOM6pCHrK0h29T5HybA73xP5Mv93RxIt/fxZQAXBu9HW9jarssFcq1A3aaHsD
+         OIZmhbBE+EJrLvp+ABk6h/jdIr7kSc/Vnb1myvrMh5R3sAP8Fr1gc8OC3GQEiyS7Im5Z
+         E0Dh9UHp6lO7fRpWKPqcRjg0qZ3WHTKCqe1KL9N1CqTUKseUOQ3Z74LTQmxbKBGeGAPr
+         qjSsy7gs/7Ny20ADIou0tdpvU3fgoZ31HjpQvvhZQZ0Nxt9e2iYJQ9qi0ZDNCMsp2XuW
+         8Srw==
+X-Gm-Message-State: AOJu0YxUtWf6wH4gefjWnO2T1BdDVMAaT7XWjpmb9JVsgcz0hUKtVF/d
+	/eLm8/vuPqLxUhjIjhMQ+YZ5WmPridyqBVa9jAE=
+X-Google-Smtp-Source: AGHT+IHXt7iWmWAHVO6dLBENFB4BU1iOkeDYAFaPuDdzu9erF2c9fh5ZDPqFa2o+OlhWO+47MvbVCk1IY20gs45gSgI=
+X-Received: by 2002:a50:a404:0:b0:548:7a6f:b51e with SMTP id
+ u4-20020a50a404000000b005487a6fb51emr498989edb.14.1701416901693; Thu, 30 Nov
+ 2023 23:48:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <170c8da3-068e-43ff-9c0a-6e21555dfab7@app.fastmail.com>
-In-Reply-To: 
- <20231130-hexagon-missing-prototypes-v1-0-5c34714afe9e@kernel.org>
-References: 
- <20231130-hexagon-missing-prototypes-v1-0-5c34714afe9e@kernel.org>
-Date: Fri, 01 Dec 2023 08:12:42 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>, "Brian Cain" <bcain@quicinc.com>,
- "Andrew Morton" <akpm@linux-foundation.org>
-Cc: linux-hexagon@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev
-Subject: Re: [PATCH 00/19] hexagon: Fix up instances of -Wmissing-prototypes
-Content-Type: text/plain
+References: <20231105213731.1878100-1-ubizjak@gmail.com> <20231105213731.1878100-3-ubizjak@gmail.com>
+ <20231201035457.GA321497@dev-arch.thelio-3990X>
+In-Reply-To: <20231201035457.GA321497@dev-arch.thelio-3990X>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Fri, 1 Dec 2023 08:48:10 +0100
+Message-ID: <CAFULd4YWa+Xfue-JEebR9JgjxKtQy7byr68Q+tTOdR+Jf1DBEg@mail.gmail.com>
+Subject: Re: [PATCH -tip v2 2/3] x86/callthunks: Handle %rip-relative
+ relocations in call thunk template
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev
+Content-Type: multipart/mixed; boundary="0000000000000a641c060b6dfec8"
 
-On Thu, Nov 30, 2023, at 23:58, Nathan Chancellor wrote:
-> Hi all,
+--0000000000000a641c060b6dfec8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Dec 1, 2023 at 4:55=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
 >
-> This series fixes all the instances of -Wmissing-prototypes in
-> arch/hexagon, now that it is enabled globally in a default build. I hope
-> most of the patches will be uncontroversial but please let me know
-> otherwise. This survives ARCH=hexagon defconfig and allmodconfig with
-> LLVM 17.0.6.
+> Hi Uros,
 >
-> This is based on Arnd's asm-generic-prototypes branch but it applies
-> cleanly to 6.7-rc3 as well, in case Andrew wants to take it (as far as
-> I remember, he has handled Hexagon patches for me in the past).
+> On Sun, Nov 05, 2023 at 10:34:36PM +0100, Uros Bizjak wrote:
+> > Contrary to alternatives, relocations are currently not supported in
+> > call thunk templates.  Re-use the existing infrastructure from
+> > alternative.c to allow %rip-relative relocations when copying call
+> > thunk template from its storage location.
+> >
+> > The patch allows unification of ASM_INCREMENT_CALL_DEPTH, which already
+> > uses PER_CPU_VAR macro, with INCREMENT_CALL_DEPTH, used in call thunk
+> > template, which is currently limited to use absolute address.
+> >
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@kernel.org>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> ...
+> > diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.=
+c
+> > index e9ad518a5003..ef9c04707b3c 100644
+> > --- a/arch/x86/kernel/callthunks.c
+> > +++ b/arch/x86/kernel/callthunks.c
+> ...
+> > @@ -291,20 +298,27 @@ void *callthunks_translate_call_dest(void *dest)
+> >  static bool is_callthunk(void *addr)
+> >  {
+> >       unsigned int tmpl_size =3D SKL_TMPL_SIZE;
+> > -     void *tmpl =3D skl_call_thunk_template;
+> > +     u8 insn_buff[MAX_PATCH_LEN];
+> >       unsigned long dest;
+> > +     u8 *pad;
+> >
+> >       dest =3D roundup((unsigned long)addr, CONFIG_FUNCTION_ALIGNMENT);
+> >       if (!thunks_initialized || skip_addr((void *)dest))
+> >               return false;
+> >
+> > -     return !bcmp((void *)(dest - tmpl_size), tmpl, tmpl_size);
+> > +     *pad =3D dest - tmpl_size;
+>
+> Clang warns (or errors with CONFIG_WERROR=3Dy):
 
-The patches all look fine to me. I usually prefer to put prototypes
-in a header even if the only caller is in a .S file rather than
-adding them in front of the definition, but your version does
-the job.
+Uh, GCC didn't warn at all (and there is some mixup with types here,
+so a thinko slipped through.
 
-      Arnd
+The attached patch fixes the oversight. I'll post a formal patch later
+today after some more testing.
+
+Thanks,
+Uros.
+
+--0000000000000a641c060b6dfec8
+Content-Type: text/plain; charset="US-ASCII"; name="p.diff.txt"
+Content-Disposition: attachment; filename="p.diff.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lpmbofu90>
+X-Attachment-Id: f_lpmbofu90
+
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jYWxsdGh1bmtzLmMgYi9hcmNoL3g4Ni9rZXJu
+ZWwvY2FsbHRodW5rcy5jCmluZGV4IGY1NTA3Yzk1ZTdiZS4uNzFiNzRhMDdjOGVlIDEwMDY0NAot
+LS0gYS9hcmNoL3g4Ni9rZXJuZWwvY2FsbHRodW5rcy5jCisrKyBiL2FyY2gveDg2L2tlcm5lbC9j
+YWxsdGh1bmtzLmMKQEAgLTMwNiw3ICszMDYsNyBAQCBzdGF0aWMgYm9vbCBpc19jYWxsdGh1bmso
+dm9pZCAqYWRkcikKIAlpZiAoIXRodW5rc19pbml0aWFsaXplZCB8fCBza2lwX2FkZHIoKHZvaWQg
+KilkZXN0KSkKIAkJcmV0dXJuIGZhbHNlOwogCi0JKnBhZCA9IGRlc3QgLSB0bXBsX3NpemU7CisJ
+cGFkID0gKHZvaWQgKilkZXN0IC0gdG1wbF9zaXplOwogCiAJbWVtY3B5KGluc25fYnVmZiwgc2ts
+X2NhbGxfdGh1bmtfdGVtcGxhdGUsIHRtcGxfc2l6ZSk7CiAJYXBwbHlfcmVsb2NhdGlvbihpbnNu
+X2J1ZmYsIHRtcGxfc2l6ZSwgcGFkLAo=
+--0000000000000a641c060b6dfec8--
