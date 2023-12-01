@@ -1,204 +1,156 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDE121A0E
-	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 19:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5A251039;
+	Fri,  1 Dec 2023 19:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MZpaANCX"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a1a2615e909so129905866b.3
-        for <llvm@lists.linux.dev>; Fri, 01 Dec 2023 11:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701458005; x=1702062805; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i2Lbiqp5ZRvN1hAivWbYt8v17Pu/BS70LAaQOJ42RIQ=;
-        b=MZpaANCXvxdkpBskZ7XZidq6hm68Qm4zx1SWFY74+Rf5XgJJmHThU8u6FyIqwx5Mfz
-         5ldxhsT7voYZQdQCVIErH+QYHZ5Fa6NCfOaWgZDAsBxOKpm8V3Iz+3pmwXQG1BM6Yquc
-         xjZLy0EbKBIuW22yci/oHn4fNleksEM56uQshfE+q8XaRzpfc2OlxR5jl7zCH3ENVvZq
-         vs3uAs7SHL3rbw0FZ9vLZLUAnqJ5ppTu6gblbQg4fyltV2udgtA5cSo/J6PFtpIbc6TS
-         JYRD1nM8N7iaZ6q1FAabTNc4/sPOPsGRLvUhHByfiTauaIMTkR+XBMm6G0oeYNhZnit4
-         r4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701458005; x=1702062805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i2Lbiqp5ZRvN1hAivWbYt8v17Pu/BS70LAaQOJ42RIQ=;
-        b=IXbvMuRRfjFxCucMMRdDF5idehteHm+hkCDu+uAYgr207mxL9/pEGdyj8hW/2QwWlf
-         WmUfNozVCfR/9wExUFt7OygUzvqNsroB2P5/vFtwrsuBgkoKtYxUCTOv8xFCt0ca3A5o
-         7gphAFtd6bEduTWpowUZO8ZhualXWXIP9k/foBddf9UVMyHTKywWbQ1cFWdg1zaE5s1m
-         V9EBHfsQ29+0PExkKAoX+mMjMQD+HC2mPuhboBnCvvthpKDK8BThfxmBSTStV6a2zIDY
-         OAxTMR1VaKLCz0v5NwsNNAl1pODMUaybO6YJr03u8jvYhXgeDjoOQDDbYOh/iHgd+8NI
-         crIQ==
-X-Gm-Message-State: AOJu0YyrLU/xLr4+W6Vj7yJXKSXlULYWb90LWQHGQY+PmYvzGxnK8xLS
-	ebfD7K+9Hxh5lhynp625mkfqLTIgVf2ItMAhUY4=
-X-Google-Smtp-Source: AGHT+IFO8HmN8cKisorXKlaxjvn65SXi9n3tkqpo3QVDmcxZEvOsV6J5UEz2W3qvKXgG+8ThW59v/XdJZwOzkviuwP4=
-X-Received: by 2002:a17:906:f2c4:b0:a04:7e8a:dc2f with SMTP id
- gz4-20020a170906f2c400b00a047e8adc2fmr738405ejb.70.1701458005495; Fri, 01 Dec
- 2023 11:13:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bs61syxh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3ABBC433C7;
+	Fri,  1 Dec 2023 19:48:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701460140;
+	bh=/NMTe08hTREBRymeoexz4Ax9l0/M/tIAZoJxRF7wb9A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bs61syxhcUtOaQEXsekq0WnKt2qa2+yZbrU8jzD4NTuhwKAaxvj2Jo1lLtuZSCIsA
+	 XrpXDizJ+JE3khoIQjTjmWPc3Jpjz+cOTceDTXDRmp7NnjcOeR9IZlqjheXZZ2DItL
+	 cuI4lMfoG6QdwC9Rd+VVmPxu3Hg2hqY6b+FVF1EKWkJg172VsLQYsa5rKODG8p+Syb
+	 dkzUY1/WcQ9k6M+OpIcmRspOnsl4kOcw+lR+Z3nxHYAkOQ7AgHWBRYKf3DnZ3E5y1r
+	 3mEVMotymQrMnlSItohB34A/yqRqA16ikjKrdFo9yHlwBrYuUygQkkdYpTqqgf4qLX
+	 ex3mG9wPoeHwQ==
+Date: Fri, 1 Dec 2023 12:48:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Fangrui Song <maskray@google.com>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	conor@kernel.org, ndesaulniers@google.com,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
+ known working versions
+Message-ID: <20231201194858.GA290910@dev-arch.thelio-3990X>
+References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
+ <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
+ <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1701193577.git.dxu@dxuuu.xyz> <ed7920365daf5eff1c82892b57e918d3db786ac7.1701193577.git.dxu@dxuuu.xyz>
- <20c593b6f31720a3d24d75e5e5cc3245b67249d1.camel@gmail.com>
- <ib27gbqj6c6ilblugm5kalwyfty6h4zujhvykw4a562uorqzjn@6wxeino6q7vk> <CAEf4BzbO80kFyFBCUixJ_NGqjJv79i+6oQXz+-jzRE+MaoRYZA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbO80kFyFBCUixJ_NGqjJv79i+6oQXz+-jzRE+MaoRYZA@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 1 Dec 2023 11:13:13 -0800
-Message-ID: <CAEf4BzYGLVXVUptLym8p4dw4X=XxRErPLuPi=msHrwvXgDbCbQ@mail.gmail.com>
-Subject: Re: [PATCH ipsec-next v2 3/6] libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, ndesaulniers@google.com, andrii@kernel.org, 
-	nathan@kernel.org, daniel@iogearbox.net, ast@kernel.org, 
-	steffen.klassert@secunet.com, antony.antony@secunet.com, 
-	alexei.starovoitov@gmail.com, yonghong.song@linux.dev, martin.lau@linux.dev, 
-	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, trix@redhat.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, devel@linux-ipsec.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
 
-On Fri, Dec 1, 2023 at 11:11=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Nov 30, 2023 at 5:33=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
+On Thu, Nov 30, 2023 at 08:16:41AM -0800, Fangrui Song wrote:
+> On Wed, Nov 29, 2023 at 3:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
 > >
-> > On Tue, Nov 28, 2023 at 07:59:01PM +0200, Eduard Zingerman wrote:
-> > > On Tue, 2023-11-28 at 10:54 -0700, Daniel Xu wrote:
-> > > > Similar to reading from CO-RE bitfields, we need a CO-RE aware bitf=
-ield
-> > > > writing wrapper to make the verifier happy.
-> > > >
-> > > > Two alternatives to this approach are:
-> > > >
-> > > > 1. Use the upcoming `preserve_static_offset` [0] attribute to disab=
-le
-> > > >    CO-RE on specific structs.
-> > > > 2. Use broader byte-sized writes to write to bitfields.
-> > > >
-> > > > (1) is a bit a bit hard to use. It requires specific and
-> > > > not-very-obvious annotations to bpftool generated vmlinux.h. It's a=
-lso
-> > > > not generally available in released LLVM versions yet.
-> > > >
-> > > > (2) makes the code quite hard to read and write. And especially if
-> > > > BPF_CORE_READ_BITFIELD() is already being used, it makes more sense=
- to
-> > > > to have an inverse helper for writing.
-> > > >
-> > > > [0]: https://reviews.llvm.org/D133361
-> > > > From: Eduard Zingerman <eddyz87@gmail.com>
-> > > >
-> > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > > ---
-> > >
-> > > Could you please also add a selftest (or several) using __retval()
-> > > annotation for this macro?
+> > LLVM prior to 18.0.0 would generate incorrect debug info for DWARF5 due
+> > to linker relaxation, which was worked around in clang by defaulting
+> > RISC-V to DWARF4 [1]. Unfortunately, this workaround does not work for
+> > the kernel because the DWARF version can be independently changed from
+> > the default in Kconfig.
 > >
-> > Good call about adding tests -- I found a few bugs with the code from
-> > the other thread. But boy did they take a lot of brain cells to figure
-> > out.
+> > Do not allow DWARF5 to be selected for RISC-V when using linker
+> > relaxation (ld.lld >= 15.0.0) and a version of LLVM that does not have
+> > the fixes (the integrated assembler [2] and ld.lld [3] < 18.0.0)
+> > necessary to generate the correct debug info.
 > >
-> > There was some 6th grade algebra involved too -- I'll do my best to
-> > explain it in the commit msg for v3.
+> > Link: https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc21dd18e5b0918f6 [1]
+> > Link: https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622db2cad7b745607ca4de6a [2]
+> > Link: https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac9322e22e5471cc5e4a77 [3]
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  arch/riscv/Kconfig | 9 +++++++++
+> >  lib/Kconfig.debug  | 1 +
+> >  2 files changed, 10 insertions(+)
 > >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 72be1d8122a3..81b473cb47b0 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -186,6 +186,15 @@ config RISCV_USE_LINKER_RELAXATION
+> >         # https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec77262d392e2923e1d680f6985
+> >         depends on !LD_IS_LLD || LLD_VERSION >= 150000
 > >
-> > Here are the fixes in case you are curious:
+> > +# https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc21dd18e5b0918f6
+> > +config ARCH_HAS_BROKEN_DWARF5
+> > +       def_bool y
+> > +       depends on RISCV_USE_LINKER_RELAXATION
+> > +       # https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622db2cad7b745607ca4de6a
+> > +       depends on AS_IS_LLVM && AS_VERSION < 180000
+> > +       # https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac9322e22e5471cc5e4a77
+> > +       depends on LD_IS_LLD && LLD_VERSION < 180000
+> > +
+> >  config ARCH_MMAP_RND_BITS_MIN
+> >         default 18 if 64BIT
+> >         default 8
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index cc7d53d9dc01..a0ebce05a368 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -282,6 +282,7 @@ config DEBUG_INFO_DWARF4
+> >  config DEBUG_INFO_DWARF5
+> >         bool "Generate DWARF Version 5 debuginfo"
+> >         select DEBUG_INFO
+> > +       depends on !ARCH_HAS_BROKEN_DWARF5
+> >         depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
+> >         help
+> >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
 > >
-> > diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_rea=
-d.h
-> > index 7a764f65d299..8f02c558c0ff 100644
-> > --- a/tools/lib/bpf/bpf_core_read.h
-> > +++ b/tools/lib/bpf/bpf_core_read.h
-> > @@ -120,7 +120,9 @@ enum bpf_enum_value_kind {
-> >         unsigned int byte_size =3D __CORE_RELO(s, field, BYTE_SIZE);   =
-   \
-> >         unsigned int lshift =3D __CORE_RELO(s, field, LSHIFT_U64);     =
-   \
-> >         unsigned int rshift =3D __CORE_RELO(s, field, RSHIFT_U64);     =
-   \
-> > -       unsigned int bit_size =3D (rshift - lshift);                   =
-   \
-> > +       unsigned int bit_size =3D (64 - rshift);                       =
-   \
-> > +       unsigned int hi_size =3D lshift;                               =
-   \
-> > +       unsigned int lo_size =3D (rshift - lshift);                    =
-   \
->
-> nit: let's drop unnecessary ()
->
-> >         unsigned long long nval, val, hi, lo;                          =
- \
-> >                                                                        =
- \
-> >         asm volatile("" : "+r"(p));                                    =
- \
-> > @@ -131,13 +133,13 @@ enum bpf_enum_value_kind {
-> >         case 4: val =3D *(unsigned int *)p; break;                     =
-   \
-> >         case 8: val =3D *(unsigned long long *)p; break;               =
-   \
-> >         }                                                              =
- \
-> > -       hi =3D val >> (bit_size + rshift);                             =
-   \
-> > -       hi <<=3D bit_size + rshift;                                    =
-   \
-> > -       lo =3D val << (bit_size + lshift);                             =
-   \
-> > -       lo >>=3D bit_size + lshift;                                    =
-   \
-> > +       hi =3D val >> (64 - hi_size);                                  =
-   \
-> > +       hi <<=3D 64 - hi_size;                                         =
-   \
-> > +       lo =3D val << (64 - lo_size);                                  =
-   \
-> > +       lo >>=3D 64 - lo_size;                                         =
-   \
-> >         nval =3D new_val;                                              =
-   \
-> > -       nval <<=3D lshift;                                             =
-   \
-> > -       nval >>=3D rshift;                                             =
-   \
-> > +       nval <<=3D (64 - bit_size);                                    =
-   \
-> > +       nval >>=3D (64 - bit_size - lo_size);                          =
-   \
-> >         val =3D hi | nval | lo;                                        =
-   \
->
-> this looks.. unusual. I'd imagine we calculate a mask, mask out bits
-> we are replacing, and then OR with new values, roughly (assuming all
-> the right left/right shift values and stuff)
->
-> /* clear bits */
-> val &=3D ~(bitfield_mask << shift);
+> > --
+> > 2.43.0
+> >
+> 
+> A comment and "depends on" condition introduced by commit
+> 0a6de78cff600cb991f2a1b7ed376935871796a0 "lib/Kconfig.debug: Add check
+> for non-constant .{s,u}leb128 support to DWARF5"
+> can now be refined.
+> 
+> > ib/Kconfig.debug
+> > (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
+> 
+> AS_VERSION can now be 24100.
 
-we can also calculate shifted mask with just
+That will impact all architectures that use GNU as, even though the
+issue was really only seen on RISC-V. It probably doesn't matter since
+most architectures work with the integrated assembler and that is what
+we tell people to use but I think the current check will continue to
+work.
 
-bitfield_mask =3D (-1ULL) << some_left_shift >> some_right_shift;
-val &=3D ~bitfield_mask;
+Alternatively, I could do something like this but it is quite ugly and
+verbose :/
 
-> /* set bits */
-> val |=3D (nval & bitfield_mask) << shift;
->
-> ?
->
-> >         switch (byte_size) {                                           =
- \
-> >         case 1: *(unsigned char *)p      =3D val; break;               =
-   \
-> >
-> >
-> > Thanks,
-> > Daniel
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index a0ebce05a368..aea0ef5a5d1f 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -231,11 +231,6 @@ config DEBUG_INFO
+ 	  in the "Debug information" choice below, indicating that debug
+ 	  information will be generated for build targets.
+ 
+-# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
+-# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
+-config AS_HAS_NON_CONST_LEB128
+-	def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
+-
+ choice
+ 	prompt "Debug information"
+ 	depends on DEBUG_KERNEL
+@@ -258,7 +253,7 @@ config DEBUG_INFO_NONE
+ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ 	bool "Rely on the toolchain's implicit default DWARF version"
+ 	select DEBUG_INFO
+-	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
++	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && ((!RISCV && AS_VERSION >= 23502) || (RISCV && AS_VERSION >= 24100)))
+ 	help
+ 	  The implicit default version of DWARF debug info produced by a
+ 	  toolchain changes over time.
+@@ -283,7 +278,7 @@ config DEBUG_INFO_DWARF5
+ 	bool "Generate DWARF Version 5 debuginfo"
+ 	select DEBUG_INFO
+ 	depends on !ARCH_HAS_BROKEN_DWARF5
+-	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
++	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && ((!RISCV && AS_VERSION >= 23502) || (RISCV && AS_VERSION >= 24100)))
+ 	help
+ 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+ 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
