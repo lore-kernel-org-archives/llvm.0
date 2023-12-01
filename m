@@ -1,230 +1,147 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0959B56468
-	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 20:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211C24E605
+	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 20:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VRC2yF6x"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40b422a274dso13165e9.0
-        for <llvm@lists.linux.dev>; Fri, 01 Dec 2023 12:12:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701461561; x=1702066361; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vwvbU3NbxVoLwq1aUgdhbPcKUW0YvfljLLe46XRPIWI=;
-        b=VRC2yF6xJqbiDBM/Dd94wlGzb7SN7DgZrHEvJ2ACtqtNYFno0SziRkNNdjZWGm8Xet
-         KdZaZiI3dlnI7AFZRD70opjggcHSR1KAWU5oSqjvIvpvq6c4YnZqfi8y6YEjTUGl+Et7
-         WVSVEiP01lyH/R50qVy+5pMx8o7HGYB/Yyq9qiwiSQ+aNKcoiEsf/EvmMi3KbhnlAfoy
-         +sm1owaXZg9qwBN/Ab6mT/MT3/D/YIAICyMlYk9jE4lh+likWFOfOC2VwToQ0Ehn0RsN
-         2JGmc9I3T/goboZad1uWpC1t3yHucOfzix2ObtPeQQxUsVw9TDo2Bo2hNYiA74wh2WXE
-         9nVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701461561; x=1702066361;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vwvbU3NbxVoLwq1aUgdhbPcKUW0YvfljLLe46XRPIWI=;
-        b=VmF93I2cY2WiIZferLWA3nO6MTlq6OWghC6XARTZ/5kQ0f7x0OxSDub3XMl7gCF4ue
-         DWpoWQZi06hBijNR51MOL34wXjae+kJjtMJYE5aV2tzmmGJ+oRBvKI0S94Gx/ILAs5GQ
-         3+9jcFHCaM7qqqNjeeOJNSDkpHFKoi51qkO/rA7MBw4qv38dlnHyRG/5pvvJUogq12we
-         Nk0ztRDabl14QTLm2xYhuCd4LVPGnjiXQUqyq/B1hNxXfrqIWJHo/fMv+s6ZuQXYTnJj
-         6XVLzTUgLd/BqxeR1ihixiXsrj0Ma4Nkykd9cleVC4ZLH8evoEgvLwySM/3eear2SNqS
-         QCMQ==
-X-Gm-Message-State: AOJu0Yzd3uqTuctWEzIAy0GuUyzhCojM8pYtO8eSrdNWwkCPATZAqK9B
-	7mIbqxihvno55VOUx8k7ImHdP9psCCP1TO9hA8yntA==
-X-Google-Smtp-Source: AGHT+IFSO1J6OUWZ4PAIR7oz0XqCBsEtAD5/qv01GXRaVlpBcK2jtBS60oRspgP5OTu19AE7wozkkxsK7nkHo1Esl8k=
-X-Received: by 2002:a05:600c:54e7:b0:3f7:3e85:36a with SMTP id
- jb7-20020a05600c54e700b003f73e85036amr199679wmb.7.1701461561009; Fri, 01 Dec
- 2023 12:12:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="k+GjMhwb";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YC5ec4jY"
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailout.nyi.internal (Postfix) with ESMTP id 1E64F5C01AE;
+	Fri,  1 Dec 2023 15:23:52 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Fri, 01 Dec 2023 15:23:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to; s=fm3; t=1701462232; x=1701548632; bh=v+Tu4Bv5Hn
+	sux9nKej021Clejo1i0m7B359jEiXfuUk=; b=k+GjMhwb4lBExMqHzvpS1DDiM9
+	xJpNzAiHkhGEm9hcPI6CkRPr2uD15m8gOTtr9NdHwNWJ2sY8XK8LDUihwz6v0ZXk
+	7396GWvonb1jA1BZYunU93pfw35hvrUAiNCxBc0XfLMalwVm2Q2NGoJdFLQMlVGS
+	UhETxmW/EkQ8gM8GS5pCJu6jEDwIffW5czb5dSVD0I9M783LaygiK1AFmYTmWAiG
+	xUo1y9LFZuONVGTV9Pdf+EWRSzD7tyB+QtpIzhVfyioI/MgUfjF769j0rSl62Amd
+	BRR/0HVWE/MFnRIyNQxLWiTXfEPxJ1FMqoD2QBpNDnOWMGkxc1rFtuH72GZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701462232; x=1701548632; bh=v+Tu4Bv5Hnsux
+	9nKej021Clejo1i0m7B359jEiXfuUk=; b=YC5ec4jYHVz5viFxUXWS0vb0RUxYg
+	82WHiNgKXbfSwmmryzA2WB8uY5YV0IbhJBhHGMU+jtSOwnskOGE6hG/0cqbCa8zs
+	JSXWlo5cWJZY4zaLJ3i2wlAm0tK+ZlC5ORbOorBdBpJ+6Ak5n7Gqj5rpCPLCfk3Q
+	P5XR3KE8tnXLhQ5lA7mgz1u9YMDkoDzTkS5ReVYEFglkUeV2KdWGSA6uOla5/CH0
+	+LQf6xxrRBnGpNg9fLXeYy2FnV7UFkJVIYZTG7gUjX63m69PD0PHJq/3Z4W6+xBx
+	YBIf1z4tqeBu94l1wk0kvbt/4dhKNVHTWR/nAOUg9F3lByp5p3xEhuH2A==
+X-ME-Sender: <xms:10BqZU-5DD2Jd3lvUmWPBEI3bJBvidiFx1XQvtY1LvPLNNlLUkWhBA>
+    <xme:10BqZcv8sQvMd08J6QouebE7FPpy8n1vryna3ODlnALZ7NEEA2HaVYbPDyYREnj_G
+    79-bRGGLpyPiUqceA>
+X-ME-Received: <xmr:10BqZaBca_B1Ki24sM4eVqlSipvzFstDXAcxmFMnD5XghUdc-Si78M_8FYxa9s72YvoNPrnkJLBAtCcNmldvMS7QVVinROvAFbCxjr6_QeTEhw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgudefjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
+    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeikeehudegteevuddthf
+    eilefhjefgueeuueffveevheeggfeufeejfeeuudekfeenucffohhmrghinhepihgvthhf
+    rdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:10BqZUecUTuIuTt5Gk6kKmrwLXMse3fbQDzYtiCtuGIV-92H4YFgXw>
+    <xmx:10BqZZMY33McqneU-XDqa-Bz1Gv-qxQyD-qIwDJ87T_xj-HBLtKD9w>
+    <xmx:10BqZekkfGjNtDwbYzf8ugwXFW5IiuuwLhttwJHY-ABk87PyONQaLg>
+    <xmx:2EBqZcpcMkAVoFiHty4ANJSo9ZfI5IiBQZozkxKWmuY6f_tkNfOFNw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 Dec 2023 15:23:50 -0500 (EST)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	steffen.klassert@secunet.com,
+	antony.antony@secunet.com,
+	alexei.starovoitov@gmail.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com
+Cc: devel@linux-ipsec.org
+Subject: [PATCH ipsec-next v3 0/9] Add bpf_xdp_get_xfrm_state() kfunc
+Date: Fri,  1 Dec 2023 13:23:11 -0700
+Message-ID: <cover.1701462010.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
- <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
- <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com> <20231201194858.GA290910@dev-arch.thelio-3990X>
-In-Reply-To: <20231201194858.GA290910@dev-arch.thelio-3990X>
-From: Fangrui Song <maskray@google.com>
-Date: Fri, 1 Dec 2023 12:12:26 -0800
-Message-ID: <CAFP8O3+uta+GQO7dpeNLe0OMFnX-tdEyvHREEu1ThjA3nFtTkQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
- known working versions
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	conor@kernel.org, ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 1, 2023 at 11:49=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Thu, Nov 30, 2023 at 08:16:41AM -0800, Fangrui Song wrote:
-> > On Wed, Nov 29, 2023 at 3:30=E2=80=AFPM Nathan Chancellor <nathan@kerne=
-l.org> wrote:
-> > >
-> > > LLVM prior to 18.0.0 would generate incorrect debug info for DWARF5 d=
-ue
-> > > to linker relaxation, which was worked around in clang by defaulting
-> > > RISC-V to DWARF4 [1]. Unfortunately, this workaround does not work fo=
-r
-> > > the kernel because the DWARF version can be independently changed fro=
-m
-> > > the default in Kconfig.
-> > >
-> > > Do not allow DWARF5 to be selected for RISC-V when using linker
-> > > relaxation (ld.lld >=3D 15.0.0) and a version of LLVM that does not h=
-ave
-> > > the fixes (the integrated assembler [2] and ld.lld [3] < 18.0.0)
-> > > necessary to generate the correct debug info.
-> > >
-> > > Link: https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16=
-f649fc21dd18e5b0918f6 [1]
-> > > Link: https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622=
-db2cad7b745607ca4de6a [2]
-> > > Link: https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5a=
-c9322e22e5471cc5e4a77 [3]
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  arch/riscv/Kconfig | 9 +++++++++
-> > >  lib/Kconfig.debug  | 1 +
-> > >  2 files changed, 10 insertions(+)
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index 72be1d8122a3..81b473cb47b0 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -186,6 +186,15 @@ config RISCV_USE_LINKER_RELAXATION
-> > >         # https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec=
-77262d392e2923e1d680f6985
-> > >         depends on !LD_IS_LLD || LLD_VERSION >=3D 150000
-> > >
-> > > +# https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f64=
-9fc21dd18e5b0918f6
-> > > +config ARCH_HAS_BROKEN_DWARF5
-> > > +       def_bool y
-> > > +       depends on RISCV_USE_LINKER_RELAXATION
-> > > +       # https://github.com/llvm/llvm-project/commit/1df5ea29b43690b=
-6622db2cad7b745607ca4de6a
-> > > +       depends on AS_IS_LLVM && AS_VERSION < 180000
-> > > +       # https://github.com/llvm/llvm-project/commit/7ffabb61a556944=
-4b5ac9322e22e5471cc5e4a77
-> > > +       depends on LD_IS_LLD && LLD_VERSION < 180000
-> > > +
-> > >  config ARCH_MMAP_RND_BITS_MIN
-> > >         default 18 if 64BIT
-> > >         default 8
-> > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > index cc7d53d9dc01..a0ebce05a368 100644
-> > > --- a/lib/Kconfig.debug
-> > > +++ b/lib/Kconfig.debug
-> > > @@ -282,6 +282,7 @@ config DEBUG_INFO_DWARF4
-> > >  config DEBUG_INFO_DWARF5
-> > >         bool "Generate DWARF Version 5 debuginfo"
-> > >         select DEBUG_INFO
-> > > +       depends on !ARCH_HAS_BROKEN_DWARF5
-> > >         depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VER=
-SION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> > >         help
-> > >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc=
- 5.0+ (gcc
-> > >
-> > > --
-> > > 2.43.0
-> > >
-> >
-> > A comment and "depends on" condition introduced by commit
-> > 0a6de78cff600cb991f2a1b7ed376935871796a0 "lib/Kconfig.debug: Add check
-> > for non-constant .{s,u}leb128 support to DWARF5"
-> > can now be refined.
-> >
-> > > ib/Kconfig.debug
-> > > (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> >
-> > AS_VERSION can now be 24100.
->
-> That will impact all architectures that use GNU as, even though the
-> issue was really only seen on RISC-V. It probably doesn't matter since
-> most architectures work with the integrated assembler and that is what
-> we tell people to use but I think the current check will continue to
-> work.
+This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
+bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
+xfrm_state_put(). The intent is to support software RSS (via XDP) for
+the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
+on (hopefully) reproducible AWS testbeds indicate that single tunnel
+pcpu ipsec can reach line rate on 100G ENA nics.
 
-Agreed.
+Note this patchset only tests/shows generic xfrm_state access. The
+"secret sauce" (if you can really even call it that) involves accessing
+a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
+available here [1].
 
-    depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION
->=3D 23502 && AS_HAS_NON_CONST_LEB128)
+[0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
+[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
 
-is enabled for GCC. The long condition chain is for Clang. Given
-Clang's behavior, we can simplify this to
+Changes from v2:
+* Fix/simplify BPF_CORE_WRITE_BITFIELD() algorithm
+* Added verifier tests for bitfield writes
+* Fix state leakage across test_tunnel subtests
 
-    depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU &&
-AS_HAS_NON_CONST_LEB128)
+Changes from v1:
+* Move xfrm tunnel tests to test_progs
+* Fix writing to opts->error when opts is invalid
+* Use __bpf_kfunc_start_defs()
+* Remove unused vxlanhdr definition
+* Add and use BPF_CORE_WRITE_BITFIELD() macro
+* Make series bisect clean
 
-This will still work even after R_LARCH_{ADD,SUB}_ULEB128 support is
-added to llvm-project.
-This condition matches HAVE_AS_LEB128 in GCC in spirit.
+Changes from RFCv2:
+* Rebased to ipsec-next
+* Fix netns leak
 
-> Alternatively, I could do something like this but it is quite ugly and
-> verbose :/
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a0ebce05a368..aea0ef5a5d1f 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -231,11 +231,6 @@ config DEBUG_INFO
->           in the "Debug information" choice below, indicating that debug
->           information will be generated for build targets.
->
-> -# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5=
-, which
-> -# some targets may not support: https://sourceware.org/bugzilla/show_bug=
-.cgi?id=3D27215
-> -config AS_HAS_NON_CONST_LEB128
-> -       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_=
-start3:\n.Lexpr_end4:)
-> -
+Changes from RFCv1:
+* Add Antony's commit tags
+* Add KF_ACQUIRE and KF_RELEASE semantics
 
-Consider keeping this config, but just reword the comment.
+Daniel Xu (9):
+  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
+  bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
+  libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
+  bpf: selftests: test_loader: Support __btf_path() annotation
+  libbpf: selftests: Add verifier tests for CO-RE bitfield writes
+  bpf: selftests: test_tunnel: Setup fresh topology for each subtest
+  bpf: selftests: test_tunnel: Use vmlinux.h declarations
+  bpf: selftests: Move xfrm tunnel test to test_progs
+  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
 
->  choice
->         prompt "Debug information"
->         depends on DEBUG_KERNEL
-> @@ -258,7 +253,7 @@ config DEBUG_INFO_NONE
->  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->         bool "Rely on the toolchain's implicit default DWARF version"
->         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 |=
-| (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 |=
-| (AS_IS_GNU && ((!RISCV && AS_VERSION >=3D 23502) || (RISCV && AS_VERSION =
->=3D 24100)))
+ include/net/xfrm.h                            |   9 +
+ net/xfrm/Makefile                             |   1 +
+ net/xfrm/xfrm_policy.c                        |   2 +
+ net/xfrm/xfrm_state_bpf.c                     | 128 ++++++++++++++
+ tools/lib/bpf/bpf_core_read.h                 |  34 ++++
+ .../selftests/bpf/prog_tests/test_tunnel.c    | 162 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
+ .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 138 ++++++++-------
+ .../bpf/progs/verifier_bitfield_write.c       | 100 +++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |   7 +
+ tools/testing/selftests/bpf/test_tunnel.sh    |  92 ----------
+ 13 files changed, 522 insertions(+), 155 deletions(-)
+ create mode 100644 net/xfrm/xfrm_state_bpf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_bitfield_write.c
 
-The RISCV condition would cause additional churn when LoongArch
-ULEB128 support is added.
+-- 
+2.42.1
 
->         help
->           The implicit default version of DWARF debug info produced by a
->           toolchain changes over time.
-> @@ -283,7 +278,7 @@ config DEBUG_INFO_DWARF5
->         bool "Generate DWARF Version 5 debuginfo"
->         select DEBUG_INFO
->         depends on !ARCH_HAS_BROKEN_DWARF5
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
- >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && ((!RISCV &=
-& AS_VERSION >=3D 23502) || (RISCV && AS_VERSION >=3D 24100)))
->         help
->           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0=
-+ (gcc
->           5.0+ accepts the -gdwarf-5 flag but only had partial support fo=
-r some
-
-
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
