@@ -1,110 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFE24684
-	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 03:55:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7947159539;
+	Fri,  1 Dec 2023 07:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpE2SaUi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62ABAC433C8;
-	Fri,  1 Dec 2023 03:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701402900;
-	bh=2eDs4rq/o2XffOF2c3AbganMdUEvcgwhvDkUuTL6Ks8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NpE2SaUiW5ZvDrhOhXYzsnU0dePt+6ngyVmnyYun5XctDO7RXcU4oK7xE/D0OMSgz
-	 8h+ykVLnUyskKTFsDzUnI6nQ/CJ1jJDD/498a1t5g5XIgW2Y6+4xiI7gYpJiEQHsar
-	 hpy3NZLDmU170gwZYh8+RK9/jRHsZLppceiP02vJ7mrDdM8W39b6scSgNdTdpFlGiN
-	 pzzdPALI87+hTO4qTDpT0jgDpDXKWyelpdkSfbdHvnSRXGXd3UMb911N45DQ4tfuFM
-	 sGDy13+zlv4uaAhmNdAuLV6BTHmpRFcFb8TVN2Ejf4VWTPep6eaLInU7YzaiA18bSS
-	 9QJe/Ec5oDwqQ==
-Date: Thu, 30 Nov 2023 20:54:57 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH -tip v2 2/3] x86/callthunks: Handle %rip-relative
- relocations in call thunk template
-Message-ID: <20231201035457.GA321497@dev-arch.thelio-3990X>
-References: <20231105213731.1878100-1-ubizjak@gmail.com>
- <20231105213731.1878100-3-ubizjak@gmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QBBW4O00";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XmJF9yUO"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.nyi.internal (Postfix) with ESMTP id 6B5815C00E5;
+	Fri,  1 Dec 2023 02:13:03 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 01 Dec 2023 02:13:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm3; t=1701414783; x=1701501183; bh=UQ
+	cJg/VTtDrgrhKBmRIKlMI4XLTbyNR+8ti2pMu62+g=; b=QBBW4O00v7oHdzlN1x
+	2XsOtdrSiwUNsOoSKxJIS8D52OEPfglHY+2oeHKR2uoLLofwG36qcQpN6gmzk1lM
+	zV8UcQQQIyldKjtDJjmXWCq+qonAwJR4uAPgBYTHmW9Dyykaf75DxZBv53wcDK+Y
+	EzRVxmMHnwx2UFncInSFMSDTkDB+JAuoTeIbuvCDa4qgpL2YHavCAiJcQthp+1g9
+	ZSz55op1ezLI8RbG1sjj3TO+rJpvwLLCHhuvHHiEHtu9j7WvL5rTRdwp9l04+U3T
+	swpmeTrDymbc8EdB+4330KLsXy1srHA7MWgIJHs+vjz/XqZIyN6+WBaY4owovTVq
+	HKTw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701414783; x=1701501183; bh=UQcJg/VTtDrgr
+	hKBmRIKlMI4XLTbyNR+8ti2pMu62+g=; b=XmJF9yUOqF9uXI6sGmO0q535ykBS8
+	9iGY8Js4Nmd2VjAgr4Y6GioYu1RbSZ/ESA1SeSQDeucTiHsP8HY2qtO+CzPXM4eu
+	ZYVU4W5SQGD+3JOZ55l1COp3rB6LZDEgp8oZkdix7Jgp5Sh8C2bz5WSVcQSc7aB4
+	HjWOqXwQ3TbUaT1X+QadRSFSlTx6wYOt+VYRL1JkCEJQTO9EEIZZqJANpWxeZA7Y
+	9rHfiVdxEQ1yYZAEgr1z3lSw4fh9IyDRdRgEU2VHWrAsvJVibYczKYTBH8IhO8qp
+	UChnXyJWD2L1CLGPooXBoe0c0ylvW1n1EYRV7OmbUElvucaH7rxKpM/VA==
+X-ME-Sender: <xms:f4dpZe-At7CGBnOs2c45VGasV6QcZb7ztSpQ4GTipEfiPgJYmTXMUw>
+    <xme:f4dpZeu7QoJNPoP72AQa7N3Bj1RcvKVIMJn49GoMD8ncW6rJhTZbNdHQ1ZEvMsMhG
+    mQpdgFHAKMppm0c_iI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeikedguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:f4dpZUB9Q2lw3ZGWTf50NsCn__5isdUJA_aCq_cvaIIcv4kQAYM4Uw>
+    <xmx:f4dpZWdAJ7BdogPJXRMT9ZkLJQMTzLqNmvZ7AnqPwNMYuzR9wucCmA>
+    <xmx:f4dpZTO6yjElFYpfb7AEBjFeDyRrukT77CnjKJS9oIJJB-srZa00MQ>
+    <xmx:f4dpZcpzQaHY6zUxuDjHV8Y-sAS1qp_9oMuAOkZLQKdsoL3Yn9S6cg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 22826B60089; Fri,  1 Dec 2023 02:13:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231105213731.1878100-3-ubizjak@gmail.com>
+Message-Id: <170c8da3-068e-43ff-9c0a-6e21555dfab7@app.fastmail.com>
+In-Reply-To: 
+ <20231130-hexagon-missing-prototypes-v1-0-5c34714afe9e@kernel.org>
+References: 
+ <20231130-hexagon-missing-prototypes-v1-0-5c34714afe9e@kernel.org>
+Date: Fri, 01 Dec 2023 08:12:42 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nathan Chancellor" <nathan@kernel.org>, "Brian Cain" <bcain@quicinc.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>
+Cc: linux-hexagon@vger.kernel.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev
+Subject: Re: [PATCH 00/19] hexagon: Fix up instances of -Wmissing-prototypes
+Content-Type: text/plain
 
-Hi Uros,
+On Thu, Nov 30, 2023, at 23:58, Nathan Chancellor wrote:
+> Hi all,
+>
+> This series fixes all the instances of -Wmissing-prototypes in
+> arch/hexagon, now that it is enabled globally in a default build. I hope
+> most of the patches will be uncontroversial but please let me know
+> otherwise. This survives ARCH=hexagon defconfig and allmodconfig with
+> LLVM 17.0.6.
+>
+> This is based on Arnd's asm-generic-prototypes branch but it applies
+> cleanly to 6.7-rc3 as well, in case Andrew wants to take it (as far as
+> I remember, he has handled Hexagon patches for me in the past).
 
-On Sun, Nov 05, 2023 at 10:34:36PM +0100, Uros Bizjak wrote:
-> Contrary to alternatives, relocations are currently not supported in
-> call thunk templates.  Re-use the existing infrastructure from
-> alternative.c to allow %rip-relative relocations when copying call
-> thunk template from its storage location.
-> 
-> The patch allows unification of ASM_INCREMENT_CALL_DEPTH, which already
-> uses PER_CPU_VAR macro, with INCREMENT_CALL_DEPTH, used in call thunk
-> template, which is currently limited to use absolute address.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-...
-> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-> index e9ad518a5003..ef9c04707b3c 100644
-> --- a/arch/x86/kernel/callthunks.c
-> +++ b/arch/x86/kernel/callthunks.c
-...
-> @@ -291,20 +298,27 @@ void *callthunks_translate_call_dest(void *dest)
->  static bool is_callthunk(void *addr)
->  {
->  	unsigned int tmpl_size = SKL_TMPL_SIZE;
-> -	void *tmpl = skl_call_thunk_template;
-> +	u8 insn_buff[MAX_PATCH_LEN];
->  	unsigned long dest;
-> +	u8 *pad;
->  
->  	dest = roundup((unsigned long)addr, CONFIG_FUNCTION_ALIGNMENT);
->  	if (!thunks_initialized || skip_addr((void *)dest))
->  		return false;
->  
-> -	return !bcmp((void *)(dest - tmpl_size), tmpl, tmpl_size);
-> +	*pad = dest - tmpl_size;
+The patches all look fine to me. I usually prefer to put prototypes
+in a header even if the only caller is in a .S file rather than
+adding them in front of the definition, but your version does
+the job.
 
-Clang warns (or errors with CONFIG_WERROR=y):
-
-  arch/x86/kernel/callthunks.c:315:3: error: variable 'pad' is uninitialized when used here [-Werror,-Wuninitialized]
-    315 |         *pad = dest - tmpl_size;
-        |          ^~~
-  arch/x86/kernel/callthunks.c:309:9: note: initialize the variable 'pad' to silence this warning
-    309 |         u8 *pad;
-        |                ^
-        |                 = NULL
-  1 error generated.
-
-which came from our continuous integration:
-
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/7054081453/job/19205345548
-https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2Yv1FATZZIeD3P7S57ZkHYhyZ8A/build.log
-
-> +
-> +	memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
-> +	apply_relocation(insn_buff, tmpl_size, pad,
-> +			 skl_call_thunk_template, tmpl_size);
-> +
-> +	return !bcmp(pad, insn_buff, tmpl_size);
->  }
-
-Cheers,
-Nathan
+      Arnd
