@@ -1,76 +1,36 @@
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0840117CD
-	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 01:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFE24684
+	for <llvm@lists.linux.dev>; Fri,  1 Dec 2023 03:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="iFG2UTmm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E4JAUDbt"
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 9CEAD580A5A;
-	Thu, 30 Nov 2023 20:33:41 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Thu, 30 Nov 2023 20:33:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701394421; x=1701401621; bh=jf
-	qYqY018jdffj6zz+dnM/tM+okukGD8jcdyViM8tLU=; b=iFG2UTmmYzmIB4IoIc
-	nRRmjJw9ay21fZLZfnHBcmxVZCkud4yQJ+V9Auwh19vxjk5IoliLkrjmAanvRp9e
-	ILdJ8v4jD4l+IXTgw0YXlWdwIRAeYzXhMWrfnjpjiB2Q6hEOkcnz+0HNk5N55d/k
-	efHhKzvnCQvHUaSLxPUxMp4hT/DY6XxGq9JM8N4v8aCA6coqclgEsg3+LqsIH3sp
-	e3mtVu0eBzGZTErTmJguLh6BDlls9iALhKiLf1VW0lJCfOads73lg+IGVAJseXML
-	AtANjKgh5WvRiZ4WlfzH+l09eNHsmjvikUOOw8XBvOJL2LHVSwgp8nDSZsWNL3I7
-	ZTYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701394421; x=1701401621; bh=jfqYqY018jdff
-	j6zz+dnM/tM+okukGD8jcdyViM8tLU=; b=E4JAUDbt3CWm62uu3AwTKuhYnxZSm
-	s8urrS3AHDstYIGUMr9sE0iQiTKfsGSSgy50QWr1EfyV2qjlVid/jObea8rfMlb5
-	Mh1hnFHOUzkSzcGiUKzzSI7IQow1lbAB8jkxRdNyS3lga63GM3YraUghVDqwxg9c
-	5ycJzB8zd62g7ScwwDWsnYtd1vBr7Yx/HwxHuYEQbGwyOf+dBqGxnhYwAXoyp4Os
-	ej6Khe8SWeNp1+iX0JZ9Wi0FF1UWDHNKQn8I8gEEwmyaoAYRlCLDAa8aUvqyqMDz
-	e1odz7Ai4fpIS2SEHEpqI6h1iTNx70pB4qvNHwy3ghWl3xZoDHbFmqHng==
-X-ME-Sender: <xms:9DdpZU5etkdH4ZXQ60PrOr3NIHj5E27P2bu01_51Cy0Ytzpke_u8TQ>
-    <xme:9DdpZV5XPj2jVzk8INysCRHEPVDUecPYVOSYzoC3SPonXb5bEXmzdhdwnQpCzbK5s
-    5hpPbsPD3u-jiexFQ>
-X-ME-Received: <xmr:9DdpZTf_ERyiUhaNYMJRCGfI_l9WgIEGjOhsjfgX0paBc7bXii-GH1ZEb43zCNunDvOCNu4_X-QSB87vJVlTybxrhVdBaU5mOzPZMxM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeikedgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlvdefmdenucfjughrpeffhf
-    fvvefukfhfgggtuggjsehttdfstddttddvnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepfedtffeuudehheduhf
-    eggfefjeelhfetgeeiteevieeiheefvdehudeifedvfedunecuffhomhgrihhnpehllhhv
-    mhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:9TdpZZKAjFzcl7y16F2sPH0omwvoIR1mu1XGirVrq79w5v9Qn9Dgjg>
-    <xmx:9TdpZYKuMQKWr9UGNG01Q0IsmPpouXO2oGcqwCkpDleStxaLmJamAg>
-    <xmx:9TdpZay1rq7twixNaFHkPcIMydkV9HTttjlZUzvCt3Dgq-KUNnHUVQ>
-    <xmx:9TdpZdjZIRrrCzJsxX_2iYBD2MKNQtm0l3dyxtD8McE5RoTvlgT3QA>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Nov 2023 20:33:39 -0500 (EST)
-Date: Thu, 30 Nov 2023 18:33:37 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: ndesaulniers@google.com, andrii@kernel.org, nathan@kernel.org, 
-	daniel@iogearbox.net, ast@kernel.org, steffen.klassert@secunet.com, 
-	antony.antony@secunet.com, alexei.starovoitov@gmail.com, yonghong.song@linux.dev, 
-	martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@google.com, haoluo@google.com, jolsa@kernel.org, trix@redhat.com, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	devel@linux-ipsec.org, netdev@vger.kernel.org
-Subject: Re: [PATCH ipsec-next v2 3/6] libbpf: Add BPF_CORE_WRITE_BITFIELD()
- macro
-Message-ID: <ib27gbqj6c6ilblugm5kalwyfty6h4zujhvykw4a562uorqzjn@6wxeino6q7vk>
-References: <cover.1701193577.git.dxu@dxuuu.xyz>
- <ed7920365daf5eff1c82892b57e918d3db786ac7.1701193577.git.dxu@dxuuu.xyz>
- <20c593b6f31720a3d24d75e5e5cc3245b67249d1.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpE2SaUi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62ABAC433C8;
+	Fri,  1 Dec 2023 03:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701402900;
+	bh=2eDs4rq/o2XffOF2c3AbganMdUEvcgwhvDkUuTL6Ks8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NpE2SaUiW5ZvDrhOhXYzsnU0dePt+6ngyVmnyYun5XctDO7RXcU4oK7xE/D0OMSgz
+	 8h+ykVLnUyskKTFsDzUnI6nQ/CJ1jJDD/498a1t5g5XIgW2Y6+4xiI7gYpJiEQHsar
+	 hpy3NZLDmU170gwZYh8+RK9/jRHsZLppceiP02vJ7mrDdM8W39b6scSgNdTdpFlGiN
+	 pzzdPALI87+hTO4qTDpT0jgDpDXKWyelpdkSfbdHvnSRXGXd3UMb911N45DQ4tfuFM
+	 sGDy13+zlv4uaAhmNdAuLV6BTHmpRFcFb8TVN2Ejf4VWTPep6eaLInU7YzaiA18bSS
+	 9QJe/Ec5oDwqQ==
+Date: Thu, 30 Nov 2023 20:54:57 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH -tip v2 2/3] x86/callthunks: Handle %rip-relative
+ relocations in call thunk template
+Message-ID: <20231201035457.GA321497@dev-arch.thelio-3990X>
+References: <20231105213731.1878100-1-ubizjak@gmail.com>
+ <20231105213731.1878100-3-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,82 +39,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20c593b6f31720a3d24d75e5e5cc3245b67249d1.camel@gmail.com>
+In-Reply-To: <20231105213731.1878100-3-ubizjak@gmail.com>
 
-On Tue, Nov 28, 2023 at 07:59:01PM +0200, Eduard Zingerman wrote:
-> On Tue, 2023-11-28 at 10:54 -0700, Daniel Xu wrote:
-> > Similar to reading from CO-RE bitfields, we need a CO-RE aware bitfield
-> > writing wrapper to make the verifier happy.
-> > 
-> > Two alternatives to this approach are:
-> > 
-> > 1. Use the upcoming `preserve_static_offset` [0] attribute to disable
-> >    CO-RE on specific structs.
-> > 2. Use broader byte-sized writes to write to bitfields.
-> > 
-> > (1) is a bit a bit hard to use. It requires specific and
-> > not-very-obvious annotations to bpftool generated vmlinux.h. It's also
-> > not generally available in released LLVM versions yet.
-> > 
-> > (2) makes the code quite hard to read and write. And especially if
-> > BPF_CORE_READ_BITFIELD() is already being used, it makes more sense to
-> > to have an inverse helper for writing.
-> > 
-> > [0]: https://reviews.llvm.org/D133361
-> > From: Eduard Zingerman <eddyz87@gmail.com>
-> > 
-> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > ---
+Hi Uros,
+
+On Sun, Nov 05, 2023 at 10:34:36PM +0100, Uros Bizjak wrote:
+> Contrary to alternatives, relocations are currently not supported in
+> call thunk templates.  Re-use the existing infrastructure from
+> alternative.c to allow %rip-relative relocations when copying call
+> thunk template from its storage location.
 > 
-> Could you please also add a selftest (or several) using __retval()
-> annotation for this macro?
+> The patch allows unification of ASM_INCREMENT_CALL_DEPTH, which already
+> uses PER_CPU_VAR macro, with INCREMENT_CALL_DEPTH, used in call thunk
+> template, which is currently limited to use absolute address.
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+...
+> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+> index e9ad518a5003..ef9c04707b3c 100644
+> --- a/arch/x86/kernel/callthunks.c
+> +++ b/arch/x86/kernel/callthunks.c
+...
+> @@ -291,20 +298,27 @@ void *callthunks_translate_call_dest(void *dest)
+>  static bool is_callthunk(void *addr)
+>  {
+>  	unsigned int tmpl_size = SKL_TMPL_SIZE;
+> -	void *tmpl = skl_call_thunk_template;
+> +	u8 insn_buff[MAX_PATCH_LEN];
+>  	unsigned long dest;
+> +	u8 *pad;
+>  
+>  	dest = roundup((unsigned long)addr, CONFIG_FUNCTION_ALIGNMENT);
+>  	if (!thunks_initialized || skip_addr((void *)dest))
+>  		return false;
+>  
+> -	return !bcmp((void *)(dest - tmpl_size), tmpl, tmpl_size);
+> +	*pad = dest - tmpl_size;
 
-Good call about adding tests -- I found a few bugs with the code from
-the other thread. But boy did they take a lot of brain cells to figure
-out.
+Clang warns (or errors with CONFIG_WERROR=y):
 
-There was some 6th grade algebra involved too -- I'll do my best to
-explain it in the commit msg for v3.
+  arch/x86/kernel/callthunks.c:315:3: error: variable 'pad' is uninitialized when used here [-Werror,-Wuninitialized]
+    315 |         *pad = dest - tmpl_size;
+        |          ^~~
+  arch/x86/kernel/callthunks.c:309:9: note: initialize the variable 'pad' to silence this warning
+    309 |         u8 *pad;
+        |                ^
+        |                 = NULL
+  1 error generated.
 
+which came from our continuous integration:
 
-Here are the fixes in case you are curious:
+https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/7054081453/job/19205345548
+https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2Yv1FATZZIeD3P7S57ZkHYhyZ8A/build.log
 
-diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
-index 7a764f65d299..8f02c558c0ff 100644
---- a/tools/lib/bpf/bpf_core_read.h
-+++ b/tools/lib/bpf/bpf_core_read.h
-@@ -120,7 +120,9 @@ enum bpf_enum_value_kind {
-        unsigned int byte_size = __CORE_RELO(s, field, BYTE_SIZE);      \
-        unsigned int lshift = __CORE_RELO(s, field, LSHIFT_U64);        \
-        unsigned int rshift = __CORE_RELO(s, field, RSHIFT_U64);        \
--       unsigned int bit_size = (rshift - lshift);                      \
-+       unsigned int bit_size = (64 - rshift);                          \
-+       unsigned int hi_size = lshift;                                  \
-+       unsigned int lo_size = (rshift - lshift);                       \
-        unsigned long long nval, val, hi, lo;                           \
-                                                                        \
-        asm volatile("" : "+r"(p));                                     \
-@@ -131,13 +133,13 @@ enum bpf_enum_value_kind {
-        case 4: val = *(unsigned int *)p; break;                        \
-        case 8: val = *(unsigned long long *)p; break;                  \
-        }                                                               \
--       hi = val >> (bit_size + rshift);                                \
--       hi <<= bit_size + rshift;                                       \
--       lo = val << (bit_size + lshift);                                \
--       lo >>= bit_size + lshift;                                       \
-+       hi = val >> (64 - hi_size);                                     \
-+       hi <<= 64 - hi_size;                                            \
-+       lo = val << (64 - lo_size);                                     \
-+       lo >>= 64 - lo_size;                                            \
-        nval = new_val;                                                 \
--       nval <<= lshift;                                                \
--       nval >>= rshift;                                                \
-+       nval <<= (64 - bit_size);                                       \
-+       nval >>= (64 - bit_size - lo_size);                             \
-        val = hi | nval | lo;                                           \
-        switch (byte_size) {                                            \
-        case 1: *(unsigned char *)p      = val; break;                  \
+> +
+> +	memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
+> +	apply_relocation(insn_buff, tmpl_size, pad,
+> +			 skl_call_thunk_template, tmpl_size);
+> +
+> +	return !bcmp(pad, insn_buff, tmpl_size);
+>  }
 
-
-Thanks,
-Daniel
+Cheers,
+Nathan
