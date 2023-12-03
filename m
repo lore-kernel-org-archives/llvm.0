@@ -1,270 +1,181 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3DEBE65
-	for <llvm@lists.linux.dev>; Sat,  2 Dec 2023 04:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TrfwzsAF"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40b422a274dso31965e9.0
-        for <llvm@lists.linux.dev>; Fri, 01 Dec 2023 20:31:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701491486; x=1702096286; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xVvA+XfxaSXw1LOLOxF27ECPqWwPbIuTdt5pxpSTVtI=;
-        b=TrfwzsAFF8gm5b6YhJJ2bGAuAyx/LFdn8yrauTprQp5q6czBeMkBPLsodG4GK6/Hzs
-         Rzr3Gs39vz3kb6KxEIiv/sQAV1dBwdqFp3iv3SkFwyN1hlJdDcmlrtKZO/oPC2fFCjks
-         dABYxShycQqFNPSECtMxgT39tGug+C8ar6qzEd1CWBLwSO7bicObW4rr37H5N9QgITAG
-         jlTrmlXwVpsXO7yYFDL90M13OkPaG1pXW5Tq4MtQuGhtQZvGZE9g1fqt8ViUijbamGs8
-         mJRaF3sdVy7DH5U18gjfvhe3u5UUshXPO2ZdApzHdlr/4ZrGPL8WidoIIvjoofOOzkdo
-         K03w==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5523395
+	for <llvm@lists.linux.dev>; Sun,  3 Dec 2023 02:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1ef4f8d294eso2245392fac.1
+        for <llvm@lists.linux.dev>; Sat, 02 Dec 2023 18:17:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701491486; x=1702096286;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xVvA+XfxaSXw1LOLOxF27ECPqWwPbIuTdt5pxpSTVtI=;
-        b=nDLME4GeLiHRjslJ4kfXz/nEUC62LW0lvH9YkQ5IxUXXBpB/9jfgsd9+4VG5J3exm0
-         VxXZ/FyCYJxgTjwgoakzHc3J6sUiQlf6Y0sKxp9viPZixdfXjP3V4YVRT4+cqkOB123I
-         vY8ga6HLt376ZYiDm6i4QuQShXfnCy0sMScr4/+T22gtMV3vbujFmDQgKj2oaKdvjSWR
-         xA9CIhRczhqYvnfj6IKsNQjAI2sMhKsu/kSReo2TghMP1YEUlwuZD346nG2YJGhkbjg1
-         RiAUsFWG81xkHWJOqj9An1Drh/RqUqQJ7ahcVpLpXcIEHRzXwh1fuJVlIH3KS4p8yjza
-         uZLg==
-X-Gm-Message-State: AOJu0Yxx4F+qDZoHbVc9u1a3Ig3RLMOPTCUOw3afvPI+zNdyF7vBAKUv
-	/SILOVjmaUFXxPWQp+gA+8eNiwuHor4FJzXcxx8TSg==
-X-Google-Smtp-Source: AGHT+IGZhXPrV5zZD7MMITUMl+i1J2MAf+VqQ3LbjimMEmYuYS/1QgCXy9TruE5THgAQQOMpOJkXklaVozBLg9DISgk=
-X-Received: by 2002:a05:600c:35d2:b0:40a:4c7d:f300 with SMTP id
- r18-20020a05600c35d200b0040a4c7df300mr314571wmq.6.1701491486245; Fri, 01 Dec
- 2023 20:31:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701569842; x=1702174642;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fGzXlsAzbZiLccFkwH8GA+pyTeJhZabwV9L8aYXVjKo=;
+        b=bRifxo7jjFuBF5sEJ0ZNSB7++Hp74Jj7UBPqc1keozt00DpXvgND1OfQ1sSnZZ+rTt
+         cjOFwInRIhJho49/KSnnIF+8hce9n4SSZoRU9jzf44Ud1If9VdsuB0jpBkS2L0uz/Nsg
+         Ezz83P0ieJ/Mc9bh9M/MpS+OtY1k8CpjfxWj5cjG4voZNZx3q736lsj3FlXrNY6EK2QK
+         6NweO1CtwixuyW3MTwOwc0XZLEm8T0nQqN/b5c/SigaZsac5dbpY6V2TgfeGvP2fma3F
+         H6QVtnk96lKLuZKFrMPrhpbGZVA7D2tXXIquqXiAAITWkTyia6Bj0lJBCNN7SRKu4VPM
+         VS1w==
+X-Gm-Message-State: AOJu0YyCx3SqaGwReaVnUHAlGvasXwSLLNAn3SvpJWXydzRT7lA3pq0x
+	IrfJwrs3+15f/6PGE1Qn6ebzXR78hI5aN/GUcFWrtXOi5adZ
+X-Google-Smtp-Source: AGHT+IH0hFtoyfkjTi/wlcQhnKQkR6jkSpzFeik5lnAZDT4v1m0WC9I7Nu68iRbHaOygebrSbFi81efNOarNRE7JGtC7ONW1IjKT
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
- <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
- <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
- <20231201194858.GA290910@dev-arch.thelio-3990X> <CAFP8O3+uta+GQO7dpeNLe0OMFnX-tdEyvHREEu1ThjA3nFtTkQ@mail.gmail.com>
- <20231201215021.GA2579712@dev-arch.thelio-3990X>
-In-Reply-To: <20231201215021.GA2579712@dev-arch.thelio-3990X>
-From: Fangrui Song <maskray@google.com>
-Date: Fri, 1 Dec 2023 20:31:12 -0800
-Message-ID: <CAFP8O3LJPqPVxcRzi_Qxvu_w8w76BXmfWv8YnsK+bMvqXb701Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
- known working versions
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	conor@kernel.org, ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
+X-Received: by 2002:a05:6870:160a:b0:1fa:4e4:c49 with SMTP id
+ b10-20020a056870160a00b001fa04e40c49mr2091482oae.0.1701569841976; Sat, 02 Dec
+ 2023 18:17:21 -0800 (PST)
+Date: Sat, 02 Dec 2023 18:17:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fdfe4b060b91993f@google.com>
+Subject: [syzbot] [fs?] general protection fault in pagemap_scan_hugetlb_entry
+From: syzbot <syzbot+6e2ccedb96d1174e6a5f@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, dan.carpenter@linaro.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
+	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	sidhartha.kumar@oracle.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 1, 2023 at 1:50=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> On Fri, Dec 01, 2023 at 12:12:26PM -0800, Fangrui Song wrote:
-> > On Fri, Dec 1, 2023 at 11:49=E2=80=AFAM Nathan Chancellor <nathan@kerne=
-l.org> wrote:
-> > >
-> > > On Thu, Nov 30, 2023 at 08:16:41AM -0800, Fangrui Song wrote:
-> > > > On Wed, Nov 29, 2023 at 3:30=E2=80=AFPM Nathan Chancellor <nathan@k=
-ernel.org> wrote:
-> > > > >
-> > > > > LLVM prior to 18.0.0 would generate incorrect debug info for DWAR=
-F5 due
-> > > > > to linker relaxation, which was worked around in clang by default=
-ing
-> > > > > RISC-V to DWARF4 [1]. Unfortunately, this workaround does not wor=
-k for
-> > > > > the kernel because the DWARF version can be independently changed=
- from
-> > > > > the default in Kconfig.
-> > > > >
-> > > > > Do not allow DWARF5 to be selected for RISC-V when using linker
-> > > > > relaxation (ld.lld >=3D 15.0.0) and a version of LLVM that does n=
-ot have
-> > > > > the fixes (the integrated assembler [2] and ld.lld [3] < 18.0.0)
-> > > > > necessary to generate the correct debug info.
-> > > > >
-> > > > > Link: https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1=
-db16f649fc21dd18e5b0918f6 [1]
-> > > > > Link: https://github.com/llvm/llvm-project/commit/1df5ea29b43690b=
-6622db2cad7b745607ca4de6a [2]
-> > > > > Link: https://github.com/llvm/llvm-project/commit/7ffabb61a556944=
-4b5ac9322e22e5471cc5e4a77 [3]
-> > > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > > > ---
-> > > > >  arch/riscv/Kconfig | 9 +++++++++
-> > > > >  lib/Kconfig.debug  | 1 +
-> > > > >  2 files changed, 10 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > > index 72be1d8122a3..81b473cb47b0 100644
-> > > > > --- a/arch/riscv/Kconfig
-> > > > > +++ b/arch/riscv/Kconfig
-> > > > > @@ -186,6 +186,15 @@ config RISCV_USE_LINKER_RELAXATION
-> > > > >         # https://github.com/llvm/llvm-project/commit/6611d58f5bb=
-cbec77262d392e2923e1d680f6985
-> > > > >         depends on !LD_IS_LLD || LLD_VERSION >=3D 150000
-> > > > >
-> > > > > +# https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db1=
-6f649fc21dd18e5b0918f6
-> > > > > +config ARCH_HAS_BROKEN_DWARF5
-> > > > > +       def_bool y
-> > > > > +       depends on RISCV_USE_LINKER_RELAXATION
-> > > > > +       # https://github.com/llvm/llvm-project/commit/1df5ea29b43=
-690b6622db2cad7b745607ca4de6a
-> > > > > +       depends on AS_IS_LLVM && AS_VERSION < 180000
-> > > > > +       # https://github.com/llvm/llvm-project/commit/7ffabb61a55=
-69444b5ac9322e22e5471cc5e4a77
-> > > > > +       depends on LD_IS_LLD && LLD_VERSION < 180000
-> > > > > +
-> > > > >  config ARCH_MMAP_RND_BITS_MIN
-> > > > >         default 18 if 64BIT
-> > > > >         default 8
-> > > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > > > index cc7d53d9dc01..a0ebce05a368 100644
-> > > > > --- a/lib/Kconfig.debug
-> > > > > +++ b/lib/Kconfig.debug
-> > > > > @@ -282,6 +282,7 @@ config DEBUG_INFO_DWARF4
-> > > > >  config DEBUG_INFO_DWARF5
-> > > > >         bool "Generate DWARF Version 5 debuginfo"
-> > > > >         select DEBUG_INFO
-> > > > > +       depends on !ARCH_HAS_BROKEN_DWARF5
-> > > > >         depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS=
-_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> > > > >         help
-> > > > >           Generate DWARF v5 debug info. Requires binutils 2.35.2,=
- gcc 5.0+ (gcc
-> > > > >
-> > > > > --
-> > > > > 2.43.0
-> > > > >
-> > > >
-> > > > A comment and "depends on" condition introduced by commit
-> > > > 0a6de78cff600cb991f2a1b7ed376935871796a0 "lib/Kconfig.debug: Add ch=
-eck
-> > > > for non-constant .{s,u}leb128 support to DWARF5"
-> > > > can now be refined.
-> > > >
-> > > > > ib/Kconfig.debug
-> > > > > (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> > > >
-> > > > AS_VERSION can now be 24100.
-> > >
-> > > That will impact all architectures that use GNU as, even though the
-> > > issue was really only seen on RISC-V. It probably doesn't matter sinc=
-e
-> > > most architectures work with the integrated assembler and that is wha=
-t
-> > > we tell people to use but I think the current check will continue to
-> > > work.
-> >
-> > Agreed.
-> >
-> >     depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION
-> > >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> >
-> > is enabled for GCC. The long condition chain is for Clang. Given
-> > Clang's behavior, we can simplify this to
-> >
-> >     depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU &&
-> > AS_HAS_NON_CONST_LEB128)
->
-> I think we still need the version check due to
-> https://sourceware.org/bugzilla/show_bug.cgi?id=3D25611, which was added
-> in commit 98cd6f521f10 ("Kconfig: allow explicit opt in to DWARF v5").
+Hello,
 
-I see...
+syzbot found the following issue on:
 
-> > This will still work even after R_LARCH_{ADD,SUB}_ULEB128 support is
-> > added to llvm-project.
-> > This condition matches HAVE_AS_LEB128 in GCC in spirit.
-> >
-> > > Alternatively, I could do something like this but it is quite ugly an=
-d
-> > > verbose :/
-> > >
-> > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > index a0ebce05a368..aea0ef5a5d1f 100644
-> > > --- a/lib/Kconfig.debug
-> > > +++ b/lib/Kconfig.debug
-> > > @@ -231,11 +231,6 @@ config DEBUG_INFO
-> > >           in the "Debug information" choice below, indicating that de=
-bug
-> > >           information will be generated for build targets.
-> > >
-> > > -# Clang is known to generate .{s,u}leb128 with symbol deltas with DW=
-ARF5, which
-> > > -# some targets may not support: https://sourceware.org/bugzilla/show=
-_bug.cgi?id=3D27215
-> > > -config AS_HAS_NON_CONST_LEB128
-> > > -       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Le=
-xpr_start3:\n.Lexpr_end4:)
-> > > -
-> >
-> > Consider keeping this config, but just reword the comment.
->
-> Do you have a suggestion for how it should be reworded? I am struggling
-> to come up with something that conveys additional information in a
-> succinct manner.
+HEAD commit:    df60cee26a2e Merge tag '6.7-rc3-smb3-server-fixes' of git:..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17ad46fce80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bb39fe85d254f638
+dashboard link: https://syzkaller.appspot.com/bug?extid=6e2ccedb96d1174e6a5f
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17befd62e80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d5a90ce80000
 
-Perhaps: Clang generates .uleb128 with label differences for DWARF v5,
-a feature that older binutils ports, utilizing RISC-V style linker
-relaxation, do not support.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c632017e0dc4/disk-df60cee2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f94c8fa25aeb/vmlinux-df60cee2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/af80f80c708b/bzImage-df60cee2.xz
 
-(Signed LEB128 is used by DWARF as well, but it is encoded directly
-into DW_OP_fbreg/DW_LNS_advance_line/etc, and explicit .sleb128
-directives are not emitted)
-(In assemblers, "label difference" is a more common term.)
-(People working on DWARF tend to prefer DWARF v5 to DWARF5, when the
-full "DWARF version 5" feels too verbose.)
+The issue was bisected to:
 
-> > >  choice
-> > >         prompt "Debug information"
-> > >         depends on DEBUG_KERNEL
-> > > @@ -258,7 +253,7 @@ config DEBUG_INFO_NONE
-> > >  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > >         bool "Rely on the toolchain's implicit default DWARF version"
-> > >         select DEBUG_INFO
-> > > -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 1400=
-00 || (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> > > +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 1400=
-00 || (AS_IS_GNU && ((!RISCV && AS_VERSION >=3D 23502) || (RISCV && AS_VERS=
-ION >=3D 24100)))
-> >
-> > The RISCV condition would cause additional churn when LoongArch
-> > ULEB128 support is added.
->
-> Ah, I did not realize that LoongArch would have the same issue. This is
-> definitely not the right way to go for that then.
->
-> > >         help
-> > >           The implicit default version of DWARF debug info produced b=
-y a
-> > >           toolchain changes over time.
-> > > @@ -283,7 +278,7 @@ config DEBUG_INFO_DWARF5
-> > >         bool "Generate DWARF Version 5 debuginfo"
-> > >         select DEBUG_INFO
-> > >         depends on !ARCH_HAS_BROKEN_DWARF5
-> > > -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VER=
-SION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> > > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && ((!RIS=
-CV && AS_VERSION >=3D 23502) || (RISCV && AS_VERSION >=3D 24100)))
-> > >         help
-> > >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc=
- 5.0+ (gcc
-> > >           5.0+ accepts the -gdwarf-5 flag but only had partial suppor=
-t for some
->
-> Cheers,
-> Nathan
->
+commit a08c7193e4f18dc8508f2d07d0de2c5b94cb39a3
+Author: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Date:   Tue Sep 26 19:20:17 2023 +0000
+
+    mm/filemap: remove hugetlb special casing in filemap.c
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17f61552e80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=140e1552e80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=100e1552e80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6e2ccedb96d1174e6a5f@syzkaller.appspotmail.com
+Fixes: a08c7193e4f1 ("mm/filemap: remove hugetlb special casing in filemap.c")
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 5072 Comm: syz-executor107 Not tainted 6.7.0-rc3-syzkaller-00014-gdf60cee26a2e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
+RIP: 0010:pagemap_scan_backout_range fs/proc/task_mmu.c:1946 [inline]
+RIP: 0010:pagemap_scan_hugetlb_entry+0x6ca/0x1130 fs/proc/task_mmu.c:2254
+Code: 3c 02 00 0f 85 68 09 00 00 48 8b 83 80 00 00 00 48 8d 04 40 4d 8d 6c c5 00 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 51 09 00 00 4d 8b 75 00 48 8b 7c 24 08 4c 89 f6
+RSP: 0018:ffffc90003a2fa50 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffc90003a2fdb0 RCX: ffffffff82111e46
+RDX: 0000000000000000 RSI: ffffffff82111e54 RDI: ffffc90003a2fe30
+RBP: 1ffff92000745f52 R08: 0000000000000006 R09: 0000000020ffc000
+R10: 00000000211f9000 R11: ffffffff915f5de8 R12: ffff8880299e0300
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000020ffc000
+FS:  0000555555c7b380(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005fdeb8 CR3: 00000000752b4000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ walk_hugetlb_range mm/pagewalk.c:326 [inline]
+ __walk_page_range+0x36c/0x770 mm/pagewalk.c:393
+ walk_page_range+0x626/0xa80 mm/pagewalk.c:521
+ do_pagemap_scan+0x40d/0xcd0 fs/proc/task_mmu.c:2437
+ do_pagemap_cmd+0x5e/0x80 fs/proc/task_mmu.c:2478
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:871 [inline]
+ __se_sys_ioctl fs/ioctl.c:857 [inline]
+ __x64_sys_ioctl+0x18f/0x210 fs/ioctl.c:857
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x40/0x110 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+RIP: 0033:0x7f171819d669
+Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffbe81bb68 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fffbe81bb80 RCX: 00007f171819d669
+RDX: 0000000020000040 RSI: 00000000c0606610 RDI: 0000000000000003
+RBP: 00007f1718210610 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000286 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007fffbe81bdb8 R14: 0000000000000001 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:pagemap_scan_backout_range fs/proc/task_mmu.c:1946 [inline]
+RIP: 0010:pagemap_scan_hugetlb_entry+0x6ca/0x1130 fs/proc/task_mmu.c:2254
+Code: 3c 02 00 0f 85 68 09 00 00 48 8b 83 80 00 00 00 48 8d 04 40 4d 8d 6c c5 00 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 51 09 00 00 4d 8b 75 00 48 8b 7c 24 08 4c 89 f6
+RSP: 0018:ffffc90003a2fa50 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffc90003a2fdb0 RCX: ffffffff82111e46
+RDX: 0000000000000000 RSI: ffffffff82111e54 RDI: ffffc90003a2fe30
+RBP: 1ffff92000745f52 R08: 0000000000000006 R09: 0000000020ffc000
+R10: 00000000211f9000 R11: ffffffff915f5de8 R12: ffff8880299e0300
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000020ffc000
+FS:  0000555555c7b380(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005fdeb8 CR3: 00000000752b4000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	3c 02                	cmp    $0x2,%al
+   2:	00 0f                	add    %cl,(%rdi)
+   4:	85 68 09             	test   %ebp,0x9(%rax)
+   7:	00 00                	add    %al,(%rax)
+   9:	48 8b 83 80 00 00 00 	mov    0x80(%rbx),%rax
+  10:	48 8d 04 40          	lea    (%rax,%rax,2),%rax
+  14:	4d 8d 6c c5 00       	lea    0x0(%r13,%rax,8),%r13
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	4c 89 ea             	mov    %r13,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 51 09 00 00    	jne    0x985
+  34:	4d 8b 75 00          	mov    0x0(%r13),%r14
+  38:	48 8b 7c 24 08       	mov    0x8(%rsp),%rdi
+  3d:	4c 89 f6             	mov    %r14,%rsi
 
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
