@@ -1,181 +1,243 @@
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5523395
-	for <llvm@lists.linux.dev>; Sun,  3 Dec 2023 02:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1ef4f8d294eso2245392fac.1
-        for <llvm@lists.linux.dev>; Sat, 02 Dec 2023 18:17:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701569842; x=1702174642;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fGzXlsAzbZiLccFkwH8GA+pyTeJhZabwV9L8aYXVjKo=;
-        b=bRifxo7jjFuBF5sEJ0ZNSB7++Hp74Jj7UBPqc1keozt00DpXvgND1OfQ1sSnZZ+rTt
-         cjOFwInRIhJho49/KSnnIF+8hce9n4SSZoRU9jzf44Ud1If9VdsuB0jpBkS2L0uz/Nsg
-         Ezz83P0ieJ/Mc9bh9M/MpS+OtY1k8CpjfxWj5cjG4voZNZx3q736lsj3FlXrNY6EK2QK
-         6NweO1CtwixuyW3MTwOwc0XZLEm8T0nQqN/b5c/SigaZsac5dbpY6V2TgfeGvP2fma3F
-         H6QVtnk96lKLuZKFrMPrhpbGZVA7D2tXXIquqXiAAITWkTyia6Bj0lJBCNN7SRKu4VPM
-         VS1w==
-X-Gm-Message-State: AOJu0YyCx3SqaGwReaVnUHAlGvasXwSLLNAn3SvpJWXydzRT7lA3pq0x
-	IrfJwrs3+15f/6PGE1Qn6ebzXR78hI5aN/GUcFWrtXOi5adZ
-X-Google-Smtp-Source: AGHT+IH0hFtoyfkjTi/wlcQhnKQkR6jkSpzFeik5lnAZDT4v1m0WC9I7Nu68iRbHaOygebrSbFi81efNOarNRE7JGtC7ONW1IjKT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F42D33F2
+	for <llvm@lists.linux.dev>; Sun,  3 Dec 2023 09:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TADRNeq1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701594110;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xhzeHv0cmcZ2cw29iRj2XyM0QT46p9LKDE7T64WfgQw=;
+	b=TADRNeq1EjxKmChpJlNLW8yQDF5ovM0FPlIc5SgDVBTjCFNYv4rP5FRENwrhC4/uqYbRHZ
+	qirCUfjG4ngCQWbnaGGpuwkcVIlvtzO/Ghi4O4EkD5HhEmvUnrOt2sQTlBlXHOoBYrVJv0
+	zEX0XqWBoVVKQTpfMSqxta/dgRPx5Wo=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-107-R06Be9HpPZi2Rx3aT78AFw-1; Sun,
+ 03 Dec 2023 04:01:47 -0500
+X-MC-Unique: R06Be9HpPZi2Rx3aT78AFw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C667A1C060D5
+	for <llvm@lists.linux.dev>; Sun,  3 Dec 2023 09:01:46 +0000 (UTC)
+Received: from [172.64.4.123] (unknown [10.30.32.45])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 40FF4C1596F;
+	Sun,  3 Dec 2023 09:01:46 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 229): Test report for master
+ (6.7.0-rc3, mainline.kernel.org-clang, c1c09da0)
+Date: Sun, 03 Dec 2023 09:01:46 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6870:160a:b0:1fa:4e4:c49 with SMTP id
- b10-20020a056870160a00b001fa04e40c49mr2091482oae.0.1701569841976; Sat, 02 Dec
- 2023 18:17:21 -0800 (PST)
-Date: Sat, 02 Dec 2023 18:17:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fdfe4b060b91993f@google.com>
-Subject: [syzbot] [fs?] general protection fault in pagemap_scan_hugetlb_entry
-From: syzbot <syzbot+6e2ccedb96d1174e6a5f@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, dan.carpenter@linaro.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	sidhartha.kumar@oracle.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <12974.123120304014700125@us-mta-107.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi, we tested your kernel and here are the results:
 
-syzbot found the following issue on:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-HEAD commit:    df60cee26a2e Merge tag '6.7-rc3-smb3-server-fixes' of git:..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17ad46fce80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bb39fe85d254f638
-dashboard link: https://syzkaller.appspot.com/bug?extid=6e2ccedb96d1174e6a5f
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17befd62e80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d5a90ce80000
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c632017e0dc4/disk-df60cee2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f94c8fa25aeb/vmlinux-df60cee2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/af80f80c708b/bzImage-df60cee2.xz
+Kernel information:
+    Commit message: Merge tag 'fs_for_v6.7-rc4' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/jack/linux-fs
 
-The issue was bisected to:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/117295
 
-commit a08c7193e4f18dc8508f2d07d0de2c5b94cb39a3
-Author: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Date:   Tue Sep 26 19:20:17 2023 +0000
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - IPMItool loop stress test
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Reboot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - Memory function: memfd_create
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking - Ethernet drivers sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - block - queue scheduler test
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking - Ethernet drivers sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - kselftests upstream - net
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
+au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
+            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
+913cfd3efb.camel@intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
-    mm/filemap: remove hugetlb special casing in filemap.c
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17f61552e80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=140e1552e80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=100e1552e80000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6e2ccedb96d1174e6a5f@syzkaller.appspotmail.com
-Fixes: a08c7193e4f1 ("mm/filemap: remove hugetlb special casing in filemap.c")
-
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 5072 Comm: syz-executor107 Not tainted 6.7.0-rc3-syzkaller-00014-gdf60cee26a2e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
-RIP: 0010:pagemap_scan_backout_range fs/proc/task_mmu.c:1946 [inline]
-RIP: 0010:pagemap_scan_hugetlb_entry+0x6ca/0x1130 fs/proc/task_mmu.c:2254
-Code: 3c 02 00 0f 85 68 09 00 00 48 8b 83 80 00 00 00 48 8d 04 40 4d 8d 6c c5 00 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 51 09 00 00 4d 8b 75 00 48 8b 7c 24 08 4c 89 f6
-RSP: 0018:ffffc90003a2fa50 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffc90003a2fdb0 RCX: ffffffff82111e46
-RDX: 0000000000000000 RSI: ffffffff82111e54 RDI: ffffc90003a2fe30
-RBP: 1ffff92000745f52 R08: 0000000000000006 R09: 0000000020ffc000
-R10: 00000000211f9000 R11: ffffffff915f5de8 R12: ffff8880299e0300
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000020ffc000
-FS:  0000555555c7b380(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005fdeb8 CR3: 00000000752b4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- walk_hugetlb_range mm/pagewalk.c:326 [inline]
- __walk_page_range+0x36c/0x770 mm/pagewalk.c:393
- walk_page_range+0x626/0xa80 mm/pagewalk.c:521
- do_pagemap_scan+0x40d/0xcd0 fs/proc/task_mmu.c:2437
- do_pagemap_cmd+0x5e/0x80 fs/proc/task_mmu.c:2478
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:871 [inline]
- __se_sys_ioctl fs/ioctl.c:857 [inline]
- __x64_sys_ioctl+0x18f/0x210 fs/ioctl.c:857
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x40/0x110 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7f171819d669
-Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffbe81bb68 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fffbe81bb80 RCX: 00007f171819d669
-RDX: 0000000020000040 RSI: 00000000c0606610 RDI: 0000000000000003
-RBP: 00007f1718210610 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000286 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007fffbe81bdb8 R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:pagemap_scan_backout_range fs/proc/task_mmu.c:1946 [inline]
-RIP: 0010:pagemap_scan_hugetlb_entry+0x6ca/0x1130 fs/proc/task_mmu.c:2254
-Code: 3c 02 00 0f 85 68 09 00 00 48 8b 83 80 00 00 00 48 8d 04 40 4d 8d 6c c5 00 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 51 09 00 00 4d 8b 75 00 48 8b 7c 24 08 4c 89 f6
-RSP: 0018:ffffc90003a2fa50 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffc90003a2fdb0 RCX: ffffffff82111e46
-RDX: 0000000000000000 RSI: ffffffff82111e54 RDI: ffffc90003a2fe30
-RBP: 1ffff92000745f52 R08: 0000000000000006 R09: 0000000020ffc000
-R10: 00000000211f9000 R11: ffffffff915f5de8 R12: ffff8880299e0300
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000020ffc000
-FS:  0000555555c7b380(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005fdeb8 CR3: 00000000752b4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	3c 02                	cmp    $0x2,%al
-   2:	00 0f                	add    %cl,(%rdi)
-   4:	85 68 09             	test   %ebp,0x9(%rax)
-   7:	00 00                	add    %al,(%rax)
-   9:	48 8b 83 80 00 00 00 	mov    0x80(%rbx),%rax
-  10:	48 8d 04 40          	lea    (%rax,%rax,2),%rax
-  14:	4d 8d 6c c5 00       	lea    0x0(%r13,%rax,8),%r13
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	4c 89 ea             	mov    %r13,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 51 09 00 00    	jne    0x985
-  34:	4d 8b 75 00          	mov    0x0(%r13),%r14
-  38:	48 8b 7c 24 08       	mov    0x8(%rsp),%rdi
-  3d:	4c 89 f6             	mov    %r14,%rsi
+Tests that were not ran because of internal issues:=20
+     aarch64 - CKI/restraint
+     aarch64 - SELinux Custom Module Setup
+     aarch64 - machineinfo
+     aarch64 - Boot test
+     aarch64 - selinux-policy: serge-testsuite
+     aarch64 - Hardware - Firmware test suite
+     aarch64 - Reboot test
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
