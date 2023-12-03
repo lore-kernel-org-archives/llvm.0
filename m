@@ -1,37 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E8528F5;
-	Sun,  3 Dec 2023 09:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38B89463;
+	Sun,  3 Dec 2023 10:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VNv2/I0y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099D3C433CB;
-	Sun,  3 Dec 2023 09:49:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ru11GhM8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08552C433CA;
+	Sun,  3 Dec 2023 10:25:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701597000;
-	bh=3fREL+3pDb0+f3gpXJDWy/Z+fjSVV4sYVi1Ga8WtaHw=;
+	s=k20201202; t=1701599139;
+	bh=/G/U1jJhbg6VKWyteRfH6C1mvYApP8yrSi62PoEqI9o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VNv2/I0y1QaQgNoItB2fCs1RK2AgJtD5NdVHjX92RWhrLjqitS+cRVeZ2kXIsGx8o
-	 QER7zjLtrPvCDVpDGyc3FQjR1VGYW3GSPNVdnBPNTd/weX/xjWmn3qQ+K1pop+vvcg
-	 GFEsnbwuHQbnxVpzlV+Nq196TtY3G02V8Ierf2Za1v9CKfTZdcZyFKZPK5izOAbYYl
-	 ZOpkXYUBx5i1XQIVUb6TT7YK1VqGX0xTOhvmbj9cb/vYAtzzh/DiO1FD7tn+eXX70Q
-	 AtM5DljHuHWcL9uKAyXzFm49NNpivgg0zf9/3DC1s2cXsmpzfMak3IwicdamK9Zc7m
-	 G3A13S5DzjkPg==
+	b=ru11GhM84CbNOelG13KOP1EoEqrb8+Wvlvslrb7HO888VE7rXPv8gGZNWGla1cS2c
+	 /vzIfuDA7nv5eCPMlO/dUbAT1l2/8dSPRLuyq1q7qHSx6xZU4pyZRzeXpOABc7hasb
+	 GrVzvInmpj19XxroKZTs8Ulwp20rJyHa6ejUCPLhjztl7s4S7SIoesFrougAlvMqis
+	 O+DVF79EGrgNWxMnJF37ZTdwifA++f2ylh+huqAlQCjyc+QT5Bvv9yKHhzV2r/Qq1o
+	 P9pt2ypmlUV9rXAv/HTjBE1K+VhMnBe13AzN8iEBtsT7aMWQxBNKYvn3qlollSvI3v
+	 IAswBND4PDQnw==
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
 Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 4/4] modpost: remove unreachable code after fatal()
-Date: Sun,  3 Dec 2023 18:49:34 +0900
-Message-Id: <20231203094934.1908270-4-masahiroy@kernel.org>
+Subject: [PATCH 5/6] kconfig: remove unreachable printf()
+Date: Sun,  3 Dec 2023 19:25:27 +0900
+Message-Id: <20231203102528.1913822-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231203094934.1908270-1-masahiroy@kernel.org>
-References: <20231203094934.1908270-1-masahiroy@kernel.org>
+In-Reply-To: <20231203102528.1913822-1-masahiroy@kernel.org>
+References: <20231203102528.1913822-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,65 +39,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now compilers can recognize fatal() never returns.
+Remove the unreachable code detected by clang.
 
-While GCC 4.5 dropped support for -Wunreachable-code, Clang is capable
-of detecting the unreachable code.
-
-  $ make HOSTCC=clang HOSTCFLAGS=-Wunreachable-code-return
-      [snip]
-    HOSTCC  scripts/mod/modpost.o
-  scripts/mod/modpost.c:520:11: warning: 'return' will never be executed [-Wunreachable-code-return]
-                          return 0;
-                                 ^
-  scripts/mod/modpost.c:477:10: warning: 'return' will never be executed [-Wunreachable-code-return]
-                  return 0;
-                         ^
-  2 warnings generated.
+  $ make HOSTCC=clang HOSTCFLAGS=-Wunreachable-code defconfig
+    [ snip ]
+  scripts/kconfig/expr.c:1134:2: warning: code will never be executed [-Wunreachable-code]
+          printf("[%dgt%d?]", t1, t2);
+          ^~~~~~
+  1 warning generated.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 ---
 
-Changes in v2:
-  - Change the patch order
-  - Update the commit description and add warning example.
+ scripts/kconfig/expr.c | 1 -
+ 1 file changed, 1 deletion(-)
 
- scripts/mod/modpost.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 3233946fa5f6..e2bc180cecc8 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -476,11 +476,9 @@ static int parse_elf(struct elf_info *info, const char *filename)
- 		fatal("%s: not relocatable object.", filename);
+diff --git a/scripts/kconfig/expr.c b/scripts/kconfig/expr.c
+index 81ebf8108ca7..a290de36307b 100644
+--- a/scripts/kconfig/expr.c
++++ b/scripts/kconfig/expr.c
+@@ -1131,7 +1131,6 @@ static int expr_compare_type(enum expr_type t1, enum expr_type t2)
+ 	default:
+ 		return -1;
+ 	}
+-	printf("[%dgt%d?]", t1, t2);
+ 	return 0;
+ }
  
- 	/* Check if file offset is correct */
--	if (hdr->e_shoff > info->size) {
-+	if (hdr->e_shoff > info->size)
- 		fatal("section header offset=%lu in file '%s' is bigger than filesize=%zu\n",
- 		      (unsigned long)hdr->e_shoff, filename, info->size);
--		return 0;
--	}
- 
- 	if (hdr->e_shnum == SHN_UNDEF) {
- 		/*
-@@ -518,12 +516,11 @@ static int parse_elf(struct elf_info *info, const char *filename)
- 		const char *secname;
- 		int nobits = sechdrs[i].sh_type == SHT_NOBITS;
- 
--		if (!nobits && sechdrs[i].sh_offset > info->size) {
-+		if (!nobits && sechdrs[i].sh_offset > info->size)
- 			fatal("%s is truncated. sechdrs[i].sh_offset=%lu > sizeof(*hrd)=%zu\n",
- 			      filename, (unsigned long)sechdrs[i].sh_offset,
- 			      sizeof(*hdr));
--			return 0;
--		}
-+
- 		secname = secstrings + sechdrs[i].sh_name;
- 		if (strcmp(secname, ".modinfo") == 0) {
- 			if (nobits)
 -- 
 2.40.1
 
