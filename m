@@ -1,28 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D3E2E41A;
-	Mon,  4 Dec 2023 17:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D900C433C7;
-	Mon,  4 Dec 2023 17:31:50 +0000 (UTC)
-Date: Mon, 4 Dec 2023 17:31:47 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, Leon Romanovsky <leon@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <ZW4NAzI_jvwoq8dL@arm.com>
-References: <cover.1700766072.git.leon@kernel.org>
- <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
- <ZWB373y5XuZDultf@FVFF77S0Q05N>
- <20231124122352.GB436702@nvidia.com>
- <ZWSOwT2OyMXD1lmo@arm.com>
- <20231127134505.GI436702@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C229A28694;
+	Mon,  4 Dec 2023 18:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pq53kDja"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E36C433C8;
+	Mon,  4 Dec 2023 18:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701713587;
+	bh=ZnF++KDAwRvjCUKLyEG+QdraHD7QYVU2OsL3PPOdigc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pq53kDjarcnqVwJBMAHI7DkjDZTij2orbEmtr6uX1KJdWfLSgtGrJGJJ1MWCM1Ns/
+	 +k6snGazyw+FcMAWXZfPapU+24iXOSXhFQwRL3k7UoxMFwaVqVltkXYoNCTlEG1Bte
+	 E5DE1AWqGuFgQfUl0wjRQSuk7mrr5HA3MRMLAJAlYY0AFLnXcvWF8D0TZO9U69jlrb
+	 zYXxIpMxjViFo5XEeuumn9Erb7UNesBj8zcknk45dVOhgCd8eJVs4qLNqvfFPTHkef
+	 zjni7Awuw+1XFeKPGLE2zoihO1xco35ldUt9wM8xiMwOMmGbvw9xduJ+B8XYoOT7IL
+	 IRwRzjykF8nuA==
+Date: Mon, 4 Dec 2023 11:13:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	lkft-triage@lists.linaro.org,
+	Russell King - ARM Linux <linux@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: clang-nightly: vdso/compat_gettimeofday.h:152:15: error:
+ instruction variant requires ARMv6 or later
+Message-ID: <20231204181304.GA2043538@dev-arch.thelio-3990X>
+References: <CA+G9fYvD72Vpfs2g8R+OJ6L8w9p_uaWbXpWMvnGAx_AOLabatw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,74 +40,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231127134505.GI436702@nvidia.com>
+In-Reply-To: <CA+G9fYvD72Vpfs2g8R+OJ6L8w9p_uaWbXpWMvnGAx_AOLabatw@mail.gmail.com>
 
-On Mon, Nov 27, 2023 at 09:45:05AM -0400, Jason Gunthorpe wrote:
-> On Mon, Nov 27, 2023 at 12:42:41PM +0000, Catalin Marinas wrote:
-> > > > What's the actual requirement here? Is this just for performance?
-> > > 
-> > > Yes, just performance.
-> > 
-> > Do you have any rough numbers (percentage)? It's highly
-> > microarchitecture-dependent until we get the ST64B instruction.
+Hi Naresh,
+
+On Mon, Dec 04, 2023 at 05:33:26PM +0530, Naresh Kamboju wrote:
+> Following build errors noticed on Linux next-20231204 tag with clang-nightly
+> for arm and arm64.
 > 
-> The current C code is an open coded store loop. The kernel does 250
-> tries and measures if any one of them succeeds to combine.
+> ## Test Regressions (compared to next-20231201)
+> * arm64, build
+>   - clang-nightly-defconfig
+>   - clang-nightly-defconfig-40bc7ee5
+>   - clang-nightly-lkftconfig
+>   - clang-nightly-lkftconfig-kselftest
 > 
-> On x86, and older ARM cores we see that 100% of the time at least 1 in
-> 250 tries succeeds.
+> * arm, build
+>   - clang-nightly-allnoconfig
+>   - clang-nightly-axm55xx_defconfig
+>   - clang-nightly-bcm2835_defconfig
+>   - clang-nightly-clps711x_defconfig
+>   - clang-nightly-defconfig
+>   - clang-nightly-exynos_defconfig
+>   - clang-nightly-imx_v6_v7_defconfig
+>   - clang-nightly-keystone_defconfig
+>   - clang-nightly-lkftconfig
+>   - clang-nightly-lkftconfig-kselftest
+>   - clang-nightly-omap2plus_defconfig
+>   - clang-nightly-pxa910_defconfig
+>   - clang-nightly-s3c6400_defconfig
+>   - clang-nightly-s5pv210_defconfig
+>   - clang-nightly-sama5_defconfig
+>   - clang-nightly-shmobile_defconfig
+>   - clang-nightly-tinyconfig
+>   - clang-nightly-u8500_defconfig
+>   - clang-nightly-vexpress_defconfig
 > 
-> With the new CPU cores we see more like 9 out of 10 time there are 0
-> in 250 tries that succeed. Ie we can go thousands of times without
-> seeing any successful WC combine.
 > 
-> The STP block brings it back to 100% of the time 1 in 250 succeed.
-
-That's a bit confusing to me: 1 in 250 succeeding is still pretty rare.
-But I guess what your benchmark says is that at least 1 succeeded to
-write-combine and it might as well be all 250 tries. It's more
-interesting to see if there's actual performance gain in real-world
-traffic, not just some artificial benchmark (I may have misunderstood
-your numbers above).
-
-> However, in userspace we have long been using ST4 to create a
-> single-instruction 64 byte store on ARM64. As far as I know this is
-> highly reliable. I don't have direct data on the STP configuration.
-
-Personally I'd optimise the mempcy_toio() arm64 implementation to do
-STPs if the alignment is right (like we do for classic memcpy()).
-There's a slight overhead for alignment checking but I suspect it would
-be lost as long as you can get the write-combining. Not sure whether the
-interspersed reads in memcpy_toio() would somehow prevent the
-write-combining.
-
-A memcpy_toio_64() can use the new ST64B instruction if available or
-fall back to memcpy_toio() on arm64. It should also have the DGH
-instruction (io_stop_wc()) but only if falling back to classic
-memcpy_toio(). We don't need DGH with ST64B.
-
-> > More of a bike-shedding, I wonder whether the __iowrite*_copy()
-> > semantics are better suited for what you need in terms of ordering (not
-> > that mempcy_toio() to Normal NC memory gives us any ordering).
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> I have the same remark I gave to Niklas, this does not require
-> alignment or an exact 64 byte size. It was clearly made to support WC
-> stores since Pathscale did it, but I don't see this mapping nicely to
-> the future 64 byte store instructions are we getting.
+> 
+> Build log on arm64:
+> ---------
+> In file included from lib/vdso/gettimeofday.c:5:
+> In file included from include/vdso/datapage.h:135:
+> arch/arm64/include/asm/vdso/compat_gettimeofday.h:152:15: error:
+> instruction variant requires ARMv6 or later
+>   152 |         asm volatile("mov %0, %1" : "=r"(ret) : "r"(_vdso_data));
+>       |                      ^
+> <inline asm>:1:2: note: instantiated into assembly here
+>     1 |         mov r4, r1
+>       |         ^
+> In file included from <built-in>:3:
+> lib/vdso/gettimeofday.c:139:3: error: invalid instruction
+>   139 |                 smp_rmb();
+>       |                 ^
+> 
+> Build log on arm:
+> ---------
+> In file included from arch/arm/vfp/vfpmodule.c:23:
+> arch/arm/include/asm/cp15.h:101:2: error: instruction requires: data-barriers
+>   101 |         isb();
+>       |         ^
 
-As above, I'd suggest just using memcpy_toio() as a fallback if ST64B is
-not available.
+This is caused by a change to Debian's LLVM that changes the internal
+defaults of the arm-linux-gnueabi and arm-linux-gnueabihf tuples:
 
-> We could name it __iowrite512_copy() if that makes more sense?
+https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/commit/907baf024b9a5a1626893d9e731b6c79ccf45c87
 
-I've been thinking at the __iowrite*_copy() and these also take a
-'count' argument. I assume in this instance we don't really need one, so
-it's just additional overhead (more like API clutter, I doubt it makes
-much difference for performance). I'd say just stick to the
-mempcy_toio_64() but have the io_stop_wc() inside this function as we
-won't need it with ST64B.
+We use arm-linux-gnueabi for the kernel (see scripts/Makefile.clang) so
+now we have a hardcoded armv5te CPU, even if we are building for armv7
+or such.
 
-Well, unless someone has a better name for this function.
+I am still investigating into what (if anything) can be done to resolve
+this on the kernel side. We could potentially revert commit
+ddc72c9659b5 ("kbuild: clang: do not use CROSS_COMPILE for target
+triple") but I am not sure that will save us from that change, as
+tuxmake's CROSS_COMPILE=arm-linux-gnueabihf will cause us to have an
+armv7 CPU even though we may not be building for armv7.
 
--- 
-Catalin
+Cheers,
+Nathan
