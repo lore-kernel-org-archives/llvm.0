@@ -1,111 +1,444 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736612C1AB;
-	Mon,  4 Dec 2023 19:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7B735EEA;
+	Mon,  4 Dec 2023 20:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mpfSE74Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAF1C433C7;
-	Mon,  4 Dec 2023 19:59:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lRAK3Tz3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 221A8C433C7;
+	Mon,  4 Dec 2023 20:30:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701719949;
-	bh=MXwhypHm/2XEVlJLFiCiCiYnn0Tjqj3lKlj+8mfTxUs=;
+	s=k20201202; t=1701721812;
+	bh=FQnnXIcrmsJS0CQ/ECI8/TSOUdlLjKhnOuMqg9sGnJ4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mpfSE74YGQlBzvvMt4KY8SUzEJP3DhJpui6G7u6rqCeg765mjU1ONJHXxHWDuJsp5
-	 fZX9acdqO8SEPmqSFWw1yq27R/JNHi1Zro7BADiK5WL66PulgsHKreFeY77PNrJKLP
-	 Mr+YajXnDxCmN9N3n6C4zsJJc9Cqx3n5xNxHhZ+ueAQy8+VGcy5AQukV9HHE+KnuZT
-	 1Vpn4Xb1MGzNur7Zh4M7O3o8MYBZIAuSFf9CWlgvwSeXc/5IFh9RooicFq0wWzU54u
-	 7urAI+8n5q5DNDE75EcU7bJKKWjJFZfac95ajrj1Dc110oUCrKCMZZ+I0R5iptbRbz
-	 H7tK/bectefgw==
-Date: Mon, 4 Dec 2023 12:59:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Linux Regressions <regressions@lists.linux.dev>,
-	lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: clang-nightly: vdso/compat_gettimeofday.h:152:15: error:
- instruction variant requires ARMv6 or later
-Message-ID: <20231204195906.GA2045328@dev-arch.thelio-3990X>
-References: <CA+G9fYvD72Vpfs2g8R+OJ6L8w9p_uaWbXpWMvnGAx_AOLabatw@mail.gmail.com>
- <20231204181304.GA2043538@dev-arch.thelio-3990X>
- <ZW4Zx4olPp0Owz0a@shell.armlinux.org.uk>
+	b=lRAK3Tz33QVfZJMFSoNYCSqOP5RcGx8ztV1YRZ3c9aT3o5hsNrKVEWAD1h3JOO/JJ
+	 0/s3eSe37+9ryWpU5t0Ky7xUm/ERiPfwth637djONo7tf8U42D732J+PEpq67XuCkr
+	 LU/lFAYFv0edTFWXMwNjdkZHXYlSujAOYrl3PeJ3eDP28jRiNgJmyxvnNO1f7ke4R+
+	 jc7iR+bq2qpm/RsRgU8QsEmM27ZvDqyQrGBuuPu3i0QcbQzcPMEnq8thhKvuDEPJNg
+	 K6RiUi0j+Dz7pUpqEZAh3nfjlIhnvMDgwfbRIOASc0y6sZJgHArSh9l/r800y7P23Y
+	 DRZb8X30CkBWA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 62D7440094; Mon,  4 Dec 2023 17:30:09 -0300 (-03)
+Date: Mon, 4 Dec 2023 17:30:09 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Ravi Bangoria <ravi.bangoria@amd.com>,
+	James Clark <james.clark@arm.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 9/9] perf tests: Add option to run tests in parallel
+Message-ID: <ZW420ecpaSjwykny@kernel.org>
+References: <20231201235031.475293-1-irogers@google.com>
+ <20231201235031.475293-9-irogers@google.com>
+ <CAP-5=fUtoi7ynQ-x_7rrv_vYoTZfS_14COA1MskOFVXJ_jCDew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZW4Zx4olPp0Owz0a@shell.armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fUtoi7ynQ-x_7rrv_vYoTZfS_14COA1MskOFVXJ_jCDew@mail.gmail.com>
+X-Url: http://acmel.wordpress.com
 
-On Mon, Dec 04, 2023 at 06:26:15PM +0000, Russell King (Oracle) wrote:
-> On Mon, Dec 04, 2023 at 11:13:04AM -0700, Nathan Chancellor wrote:
-> > Hi Naresh,
-> > 
-> > On Mon, Dec 04, 2023 at 05:33:26PM +0530, Naresh Kamboju wrote:
-> > > Following build errors noticed on Linux next-20231204 tag with clang-nightly
-> > > for arm and arm64.
-> > > 
-> > > ## Test Regressions (compared to next-20231201)
-> > > * arm64, build
-> > >   - clang-nightly-defconfig
-> > >   - clang-nightly-defconfig-40bc7ee5
-> > >   - clang-nightly-lkftconfig
-> > >   - clang-nightly-lkftconfig-kselftest
-> > > 
-> > > * arm, build
-> > >   - clang-nightly-allnoconfig
-> > >   - clang-nightly-axm55xx_defconfig
-> > >   - clang-nightly-bcm2835_defconfig
-> > >   - clang-nightly-clps711x_defconfig
-> > >   - clang-nightly-defconfig
-> > >   - clang-nightly-exynos_defconfig
-> > >   - clang-nightly-imx_v6_v7_defconfig
-> > >   - clang-nightly-keystone_defconfig
-> > >   - clang-nightly-lkftconfig
-> > >   - clang-nightly-lkftconfig-kselftest
-> > >   - clang-nightly-omap2plus_defconfig
-> > >   - clang-nightly-pxa910_defconfig
-> > >   - clang-nightly-s3c6400_defconfig
-> > >   - clang-nightly-s5pv210_defconfig
-> > >   - clang-nightly-sama5_defconfig
-> > >   - clang-nightly-shmobile_defconfig
-> > >   - clang-nightly-tinyconfig
-> > >   - clang-nightly-u8500_defconfig
-> > >   - clang-nightly-vexpress_defconfig
-> > > 
-> > > 
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > 
-> > > 
-> > > Build log on arm64:
-> > > ---------
-> > > In file included from lib/vdso/gettimeofday.c:5:
-> > > In file included from include/vdso/datapage.h:135:
-> > > arch/arm64/include/asm/vdso/compat_gettimeofday.h:152:15: error:
-> > > instruction variant requires ARMv6 or later
-> > >   152 |         asm volatile("mov %0, %1" : "=r"(ret) : "r"(_vdso_data));
-> > >       |                      ^
-> > > <inline asm>:1:2: note: instantiated into assembly here
-> > >     1 |         mov r4, r1
-> > >       |         ^
+Em Fri, Dec 01, 2023 at 06:06:12PM -0800, Ian Rogers escreveu:
+> On Fri, Dec 1, 2023 at 3:50 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > By default tests are forked, add an option (-p or --parallel) so that
+> > the forked tests are all started in parallel and then their output
+> > gathered serially. This is opt-in as running in parallel can cause
+> > test flakes.
+> >
+> > Rather than fork within the code, the start_command/finish_command
+> > from libsubcmd are used. This changes how stderr and stdout are
+> > handled.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > 
-> I have to wonder why Clang is complaining about "mov r4, r1" because
-> that certainly should not require "ARMv6 or later". On the face of it,
-> this to me looks like a bug in Clang.
+> Actually, I think this patch needs more work. The verbose output is
+> degraded and missing in some cases. Suggestions on how to fix welcome.
 
-This is because the compat vDSO is compiled with '-mthumb' by default
-and Nick helpfully pointed out on IRC that prior to ARMv6, one of the
-operands to the mov had to be a HI register, which I do see in the ARM:
+I'll think about, but to make progress I think the first 8 patches in
+this series can be considered now?
 
-  Encoding T1     ARMv6*, ARMv7 if <Rd> and <Rm> both from R0-R7
-                  ARMv4T, ARMv5T*, ARMv6*, ARMv7 otherwise
-  MOV<c> <Rd>, <Rm>
+- Arnaldo
 
-Cheers,
-Nathan
+> It'd be nice to fix up the tests and allow parallel to be the default.
+> The first patch in this series is 1 such fix. Another is needed to
+> make "Couldn't resolve comm name for pid" silent in the cases where it
+> is racy. I was also noticing hangs on things like the lock contention
+> test. The good news is the tests are doing their job of finding bugs.
+> 
+> Thanks,
+> Ian
+> 
+> 
+> > ---
+> >  tools/perf/tests/builtin-test.c | 261 +++++++++++++++++++++-----------
+> >  1 file changed, 169 insertions(+), 92 deletions(-)
+> >
+> > diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> > index 54b11c23e863..91c32b477cbb 100644
+> > --- a/tools/perf/tests/builtin-test.c
+> > +++ b/tools/perf/tests/builtin-test.c
+> > @@ -21,6 +21,7 @@
+> >  #include "debug.h"
+> >  #include "color.h"
+> >  #include <subcmd/parse-options.h>
+> > +#include <subcmd/run-command.h>
+> >  #include "string2.h"
+> >  #include "symbol.h"
+> >  #include "util/rlimit.h"
+> > @@ -31,7 +32,13 @@
+> >
+> >  #include "tests-scripts.h"
+> >
+> > +/*
+> > + * Command line option to not fork the test running in the same process and
+> > + * making them easier to debug.
+> > + */
+> >  static bool dont_fork;
+> > +/* Fork the tests in parallel and then wait for their completion. */
+> > +static bool parallel;
+> >  const char *dso_to_test;
+> >  const char *test_objdump_path = "objdump";
+> >
+> > @@ -211,76 +218,36 @@ static bool perf_test__matches(const char *desc, int curr, int argc, const char
+> >         return false;
+> >  }
+> >
+> > -static int run_test(struct test_suite *test, int subtest)
+> > -{
+> > -       int status, err = -1, child = dont_fork ? 0 : fork();
+> > -       char sbuf[STRERR_BUFSIZE];
+> > -
+> > -       if (child < 0) {
+> > -               pr_err("failed to fork test: %s\n",
+> > -                       str_error_r(errno, sbuf, sizeof(sbuf)));
+> > -               return -1;
+> > -       }
+> > -
+> > -       if (!child) {
+> > -               if (!dont_fork) {
+> > -                       pr_debug("test child forked, pid %d\n", getpid());
+> > -
+> > -                       if (verbose <= 0) {
+> > -                               int nullfd = open("/dev/null", O_WRONLY);
+> > -
+> > -                               if (nullfd >= 0) {
+> > -                                       close(STDERR_FILENO);
+> > -                                       close(STDOUT_FILENO);
+> > -
+> > -                                       dup2(nullfd, STDOUT_FILENO);
+> > -                                       dup2(STDOUT_FILENO, STDERR_FILENO);
+> > -                                       close(nullfd);
+> > -                               }
+> > -                       } else {
+> > -                               signal(SIGSEGV, sighandler_dump_stack);
+> > -                               signal(SIGFPE, sighandler_dump_stack);
+> > -                       }
+> > -               }
+> > -
+> > -               err = test_function(test, subtest)(test, subtest);
+> > -               if (!dont_fork)
+> > -                       exit(err);
+> > -       }
+> > -
+> > -       if (!dont_fork) {
+> > -               wait(&status);
+> > +struct child_test {
+> > +       struct child_process process;
+> > +       struct test_suite *test;
+> > +       int test_num;
+> > +       int subtest;
+> > +};
+> >
+> > -               if (WIFEXITED(status)) {
+> > -                       err = (signed char)WEXITSTATUS(status);
+> > -                       pr_debug("test child finished with %d\n", err);
+> > -               } else if (WIFSIGNALED(status)) {
+> > -                       err = -1;
+> > -                       pr_debug("test child interrupted\n");
+> > -               }
+> > -       }
+> > +static int run_test_child(struct child_process *process)
+> > +{
+> > +       struct child_test *child = container_of(process, struct child_test, process);
+> > +       int err;
+> >
+> > -       return err;
+> > +       pr_debug("--- start ---\n");
+> > +       pr_debug("test child forked, pid %d\n", getpid());
+> > +       err = test_function(child->test, child->subtest)(child->test, child->subtest);
+> > +       pr_debug("---- end(%d) ----\n", err);
+> > +       fflush(NULL);
+> > +       return -err;
+> >  }
+> >
+> > -#define for_each_test(j, k, t)                 \
+> > -       for (j = 0, k = 0; j < ARRAY_SIZE(tests); j++, k = 0)   \
+> > -               while ((t = tests[j][k++]) != NULL)
+> > -
+> > -static int test_and_print(struct test_suite *t, int subtest)
+> > +static int print_test_result(struct test_suite *t, int i, int subtest, int result, int width)
+> >  {
+> > -       int err;
+> > -
+> > -       pr_debug("\n--- start ---\n");
+> > -       err = run_test(t, subtest);
+> > -       pr_debug("---- end ----\n");
+> > +       if (has_subtests(t)) {
+> > +               int subw = width > 2 ? width - 2 : width;
+> >
+> > -       if (!has_subtests(t))
+> > -               pr_debug("%s:", t->desc);
+> > -       else
+> > -               pr_debug("%s subtest %d:", t->desc, subtest + 1);
+> > +               pr_info("%3d.%1d: %-*s:", i + 1, subtest + 1, subw, test_description(t, subtest));
+> > +       } else
+> > +               pr_info("%3d: %-*s:", i + 1, width, test_description(t, subtest));
+> >
+> > -       switch (err) {
+> > +       switch (result) {
+> >         case TEST_OK:
+> >                 pr_info(" Ok\n");
+> >                 break;
+> > @@ -299,22 +266,135 @@ static int test_and_print(struct test_suite *t, int subtest)
+> >                 break;
+> >         }
+> >
+> > -       return err;
+> > +       return 0;
+> > +}
+> > +
+> > +static int finish_test(struct child_test *child_test, int width)
+> > +{
+> > +       struct test_suite *t = child_test->test;
+> > +       int i = child_test->test_num;
+> > +       int subi = child_test->subtest;
+> > +       int out = child_test->process.out;
+> > +       int err = child_test->process.err;
+> > +       int ret;
+> > +
+> > +       if (verbose) {
+> > +               bool out_done = false, err_done = false;
+> > +
+> > +               fcntl(out, F_SETFL, O_NONBLOCK);
+> > +               fcntl(err, F_SETFL, O_NONBLOCK);
+> > +               if (has_subtests(t))
+> > +                       pr_info("%3d.%1d: %s:\n", i + 1, subi + 1, test_description(t, subi));
+> > +               else
+> > +                       pr_info("%3d: %s:\n", i + 1, test_description(t, -1));
+> > +
+> > +               while (!out_done && !err_done) {
+> > +                       char buf[512];
+> > +                       ssize_t len;
+> > +
+> > +                       if (!out_done) {
+> > +                               errno = 0;
+> > +                               len = read(out, buf, sizeof(buf) - 1);
+> > +
+> > +                               if (len <= 0)
+> > +                                       err_done = errno != EAGAIN;
+> > +                               else {
+> > +                                       buf[len] = '\0';
+> > +                                       fprintf(stdout, "%s", buf);
+> > +                               }
+> > +                       }
+> > +                       if (!err_done) {
+> > +                               errno = 0;
+> > +                               len = read(err, buf, sizeof(buf) - 1);
+> > +
+> > +                               if (len <= 0)
+> > +                                       err_done = errno != EAGAIN;
+> > +                               else {
+> > +                                       buf[len] = '\0';
+> > +                                       fprintf(stderr, "%s", buf);
+> > +                               }
+> > +                       }
+> > +               }
+> > +       }
+> > +       ret = finish_command(&child_test->process);
+> > +       print_test_result(t, i, subi, ret, width);
+> > +       if (out >= 0)
+> > +               close(out);
+> > +       if (err >= 0)
+> > +               close(err);
+> > +       return 0;
+> > +}
+> > +
+> > +static int start_test(struct test_suite *test, int i, int subi, struct child_test **child,
+> > +                     int width)
+> > +{
+> > +       int err;
+> > +
+> > +       *child = NULL;
+> > +       if (dont_fork) {
+> > +               pr_debug("--- start ---\n");
+> > +               err = test_function(test, subi)(test, subi);
+> > +               pr_debug("---- end ----\n");
+> > +               print_test_result(test, i, subi, err, width);
+> > +               return 0;
+> > +       }
+> > +
+> > +       *child = zalloc(sizeof(**child));
+> > +       if (!*child)
+> > +               return -ENOMEM;
+> > +
+> > +       (*child)->test = test;
+> > +       (*child)->test_num = i;
+> > +       (*child)->subtest = subi;
+> > +       (*child)->process.pid = -1;
+> > +       (*child)->process.no_stdin = 1;
+> > +       if (verbose <= 0) {
+> > +               (*child)->process.no_stdout = 1;
+> > +               (*child)->process.no_stderr = 1;
+> > +       } else {
+> > +               (*child)->process.out = -1;
+> > +               (*child)->process.err = -1;
+> > +       }
+> > +       (*child)->process.no_exec_cmd = run_test_child;
+> > +       err = start_command(&(*child)->process);
+> > +       if (err || parallel)
+> > +               return  err;
+> > +       return finish_test(*child, width);
+> >  }
+> >
+> > +#define for_each_test(j, k, t)                                 \
+> > +       for (j = 0, k = 0; j < ARRAY_SIZE(tests); j++, k = 0)   \
+> > +               while ((t = tests[j][k++]) != NULL)
+> > +
+> >  static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
+> >  {
+> >         struct test_suite *t;
+> >         unsigned int j, k;
+> >         int i = 0;
+> >         int width = 0;
+> > +       size_t num_tests = 0;
+> > +       struct child_test **child_tests;
+> > +       int child_test_num = 0;
+> >
+> >         for_each_test(j, k, t) {
+> >                 int len = strlen(test_description(t, -1));
+> >
+> >                 if (width < len)
+> >                         width = len;
+> > +
+> > +               if (has_subtests(t)) {
+> > +                       for (int l = 0, subn = num_subtests(t); l < subn; l++) {
+> > +                               len = strlen(test_description(t, -1));
+> > +                               if (width < len)
+> > +                                       width = len;
+> > +                               num_tests++;
+> > +                       }
+> > +               } else
+> > +                       num_tests++;
+> >         }
+> > +       child_tests = calloc(num_tests, sizeof(*child_tests));
+> > +       if (!child_tests)
+> > +               return -ENOMEM;
+> >
+> >         for_each_test(j, k, t) {
+> >                 int curr = i++;
+> > @@ -336,52 +416,47 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
+> >                                 continue;
+> >                 }
+> >
+> > -               pr_info("%3d: %-*s:", i, width, test_description(t, -1));
+> > -
+> >                 if (intlist__find(skiplist, i)) {
+> > +                       pr_info("%3d: %-*s:", curr + 1, width, test_description(t, -1));
+> >                         color_fprintf(stderr, PERF_COLOR_YELLOW, " Skip (user override)\n");
+> >                         continue;
+> >                 }
+> >
+> >                 if (!has_subtests(t)) {
+> > -                       test_and_print(t, -1);
+> > +                       int err = start_test(t, curr, -1, &child_tests[child_test_num++], width);
+> > +
+> > +                       if (err) {
+> > +                               /* TODO: if parallel waitpid the already forked children. */
+> > +                               free(child_tests);
+> > +                               return err;
+> > +                       }
+> >                 } else {
+> >                         int subn = num_subtests(t);
+> > -                       /*
+> > -                        * minus 2 to align with normal testcases.
+> > -                        * For subtest we print additional '.x' in number.
+> > -                        * for example:
+> > -                        *
+> > -                        * 35: Test LLVM searching and compiling                        :
+> > -                        * 35.1: Basic BPF llvm compiling test                          : Ok
+> > -                        */
+> > -                       int subw = width > 2 ? width - 2 : width;
+> > -
+> > -                       if (subn <= 0) {
+> > -                               color_fprintf(stderr, PERF_COLOR_YELLOW,
+> > -                                             " Skip (not compiled in)\n");
+> > -                               continue;
+> > -                       }
+> > -                       pr_info("\n");
+> >
+> >                         for (subi = 0; subi < subn; subi++) {
+> > -                               int len = strlen(test_description(t, subi));
+> > -
+> > -                               if (subw < len)
+> > -                                       subw = len;
+> > -                       }
+> > +                               int err;
+> >
+> > -                       for (subi = 0; subi < subn; subi++) {
+> >                                 if (!perf_test__matches(test_description(t, subi),
+> >                                                         curr, argc, argv))
+> >                                         continue;
+> >
+> > -                               pr_info("%3d.%1d: %-*s:", i, subi + 1, subw,
+> > -                                       test_description(t, subi));
+> > -                               test_and_print(t, subi);
+> > +                               err = start_test(t, curr, subi, &child_tests[child_test_num++],
+> > +                                                width);
+> > +                               if (err)
+> > +                                       return err;
+> >                         }
+> >                 }
+> >         }
+> > +       for (i = 0; i < child_test_num; i++) {
+> > +               if (parallel) {
+> > +                       int ret  = finish_test(child_tests[i], width);
+> > +
+> > +                       if (ret)
+> > +                               return ret;
+> > +               }
+> > +               free(child_tests[i]);
+> > +       }
+> > +       free(child_tests);
+> >         return 0;
+> >  }
+> >
+> > @@ -449,6 +524,8 @@ int cmd_test(int argc, const char **argv)
+> >                     "be more verbose (show symbol address, etc)"),
+> >         OPT_BOOLEAN('F', "dont-fork", &dont_fork,
+> >                     "Do not fork for testcase"),
+> > +       OPT_BOOLEAN('p', "parallel", &parallel,
+> > +                   "Run the tests altogether in parallel"),
+> >         OPT_STRING('w', "workload", &workload, "work", "workload to run for testing"),
+> >         OPT_STRING(0, "dso", &dso_to_test, "dso", "dso to test"),
+> >         OPT_STRING(0, "objdump", &test_objdump_path, "path",
+> > --
+> > 2.43.0.rc2.451.g8631bc7472-goog
+> >
+
+-- 
+
+- Arnaldo
