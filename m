@@ -1,163 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478E710A0D;
-	Mon,  4 Dec 2023 08:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF5214AB7
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 09:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ETDPOKFh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701680263; x=1733216263;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GxySVDxuiGHiIKw4W+PxgpWkeVuDjpKSSOyOdyQHQFo=;
-  b=ETDPOKFhJfqd+CBwilab7RrX2oELryAwDPATAC8VS307M6CyWBjw1yXE
-   Nbcmm6pSqAieg5ySrps1iEsjgtY453pwTIAxCGh4O3z6rUUrbc84IvPRY
-   O9gfrQkpQkUJhp3XNk164gtWcmbR2B8mjUCI1kAyPRVvxw6/cil1L/8gh
-   BIUOwLj7TtCmnkYA24gK31xv/sD6T8WoyO7EysAsaK4Roh7tCUIQkgtki
-   LRsZPqWJ5BSRzbhhcP0GdwAHGYyOgdFTuomVFfej1uMGzPN4gLuITjwr5
-   u0f3HIpphZDE9MqPwillKMzVz3Xq7xAvRYCMxDwM8al1g1kf0zfUBitay
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="390863368"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="390863368"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 00:57:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="774190999"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="774190999"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Dec 2023 00:57:39 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rA4ll-0007c6-1v;
-	Mon, 04 Dec 2023 08:57:37 +0000
-Date: Mon, 4 Dec 2023 16:56:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>
-Subject: drivers/firmware/qcom/qcom_scm.c:1652:34: warning: unused variable
- 'qcom_scm_qseecom_allowlist'
-Message-ID: <202312041607.kGqDrfpq-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Oq2r/tZ4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=17YJ1z3ogS9ZFtbiaMgUZd7PQ1LHRkBWBWcBGoc/CJ8=; b=Oq2r/tZ4GMYvXmULCX+LD6Qfz7
+	HO9OVNz8XCXQMgxz/LWfORxgl/H3LTq81ngFJsgHC93qrKcMcjpBQX8v5qQhdci74NGvXZAJ/yVju
+	sK9gFvSFKKjG+KTta5qWhde5JaQQriDgSlX54kLf3MXV6oHLk1PYPA8HeGphIfHdNTawm8bbTLJrU
+	NgcMlwn6/lrZmRXbfPHQFRxpn4ftLCB5eM9fnRnJvlMZpH3BmDJrGqa4dnsA7VRIdxnJbQVajyNOi
+	Bn006jXGBXzTqb9dfS3GtKtm0DDTPpLydkfwONe+R1/uAJi3EvwQfUiJ18EbM5lGDJHCoVpl5xoSe
+	3fM7hPwA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rA51D-004JwZ-2M;
+	Mon, 04 Dec 2023 09:13:35 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4D01F300472; Mon,  4 Dec 2023 10:13:34 +0100 (CET)
+Date: Mon, 4 Dec 2023 10:13:34 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv <linux-riscv@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <20231204091334.GM3818@noisy.programming.kicks-ass.net>
+References: <20231130133630.192490507@infradead.org>
+ <20231130134204.136058029@infradead.org>
+ <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
 
-Hi Bartosz,
+On Sun, Dec 03, 2023 at 02:56:34PM -0800, Alexei Starovoitov wrote:
+> On Thu, Nov 30, 2023 at 5:43 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> >
+> >  void bpf_prog_kallsyms_del(struct bpf_prog *fp)
+> > @@ -691,6 +708,9 @@ void bpf_prog_kallsyms_del(struct bpf_pr
+> >                 return;
+> >
+> >         bpf_ksym_del(&fp->aux->ksym);
+> > +#ifdef CONFIG_FINEIBT
+> > +       bpf_ksym_del(&fp->aux->ksym_prefix);
+> > +#endif
+> >  }
+> 
+> Thank you for addressing all comments, but it panics during boot with:
+> 
+> [    3.109474] RIP: 0010:bpf_prog_kallsyms_del+0x10f/0x140
+> [    3.109867] Code: 26 e0 00 ff 05 32 dd dd 01 48 8d bb 80 03 00 00
+> 48 c7 c6 b8 b3 00 83 e8 ef 25 e0 00 48 8b 83 58 03 00 00 48 8b 8b 60
+> 03 00 00 <48> 89 48 08 48 89 01 4c 89 b3 60 03 00 00 48 c7 c7 10 0b 7b
+> 83 5b
+> [    3.111282] RSP: 0000:ffffc90000013e08 EFLAGS: 00010246
+> [    3.116968] Call Trace:
+> [    3.117163]  <TASK>
+> [    3.117328]  ? __die_body+0x68/0xb0
+> [    3.117599]  ? page_fault_oops+0x317/0x390
+> [    3.117909]  ? debug_objects_fill_pool+0x19/0x440
+> [    3.118283]  ? debug_objects_fill_pool+0x19/0x440
+> [    3.118715]  ? do_user_addr_fault+0x4cd/0x560
+> [    3.119045]  ? exc_page_fault+0x62/0x1c0
+> [    3.119350]  ? asm_exc_page_fault+0x26/0x30
+> [    3.119675]  ? bpf_prog_kallsyms_del+0x10f/0x140
+> [    3.120023]  ? bpf_prog_kallsyms_del+0x101/0x140
+> [    3.120381]  __bpf_prog_put_noref+0x12/0xf0
+> [    3.120704]  bpf_prog_put_deferred+0xe9/0x110
+> [    3.121035]  bpf_prog_put+0xbb/0xd0
+> [    3.121307]  bpf_prog_release+0x15/0x20
+> 
+> Adding the following:
+> 
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 5c84a935ba63..5013fd53adfd 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -709,6 +709,8 @@ void bpf_prog_kallsyms_del(struct bpf_prog *fp)
+> 
+>         bpf_ksym_del(&fp->aux->ksym);
+>  #ifdef CONFIG_FINEIBT
+> +       if (cfi_mode != CFI_FINEIBT)
+> +               return;
+>         bpf_ksym_del(&fp->aux->ksym_prefix);
+>  #endif
+>  }
+> 
+> fixes the boot issue, but test_progs is not happy.
 
-FYI, the error/warning still remains.
+Damn, I'm an idiot :-), I knew I should've boot tested all
+configurations again :/
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   33cc938e65a98f1d29d0a18403dbbee050dcad9a
-commit: bdac188ec3c71800dd8419620224ee74ef37732a firmware: qcom: move Qualcomm code into its own directory
-date:   6 weeks ago
-config: s390-randconfig-002-20231119 (https://download.01.org/0day-ci/archive/20231204/202312041607.kGqDrfpq-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231204/202312041607.kGqDrfpq-lkp@intel.com/reproduce)
+> Just running test_progs it splats right away:
+> 
+> [   74.047757] kmemleak: Found object by alias at 0xffffffffa0001d80
+> [   74.048272] CPU: 14 PID: 104 Comm: kworker/14:0 Tainted: G        W
+>  O       6.7.0-rc3-00702-g41c30fec304d-dirty #5241
+> [   74.049118] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+> BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+> [   74.050042] Workqueue: events bpf_prog_free_deferred
+> [   74.050448] Call Trace:
+> [   74.050663]  <TASK>
+> [   74.050841]  dump_stack_lvl+0x55/0x80
+> [   74.051141]  __find_and_remove_object+0xdb/0x110
+> [   74.051521]  kmemleak_free+0x41/0x70
+> [   74.051828]  vfree+0x36/0x130
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312041607.kGqDrfpq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/firmware/qcom/qcom_scm.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/firmware/qcom/qcom_scm.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/firmware/qcom/qcom_scm.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/firmware/qcom/qcom_scm.c:1652:34: warning: unused variable 'qcom_scm_qseecom_allowlist' [-Wunused-const-variable]
-    1652 | static const struct of_device_id qcom_scm_qseecom_allowlist[] = {
-         |                                  ^
-   13 warnings generated.
-
-
-vim +/qcom_scm_qseecom_allowlist +1652 drivers/firmware/qcom/qcom_scm.c
-
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1647  
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1648  /*
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1649   * We do not yet support re-entrant calls via the qseecom interface. To prevent
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1650   + any potential issues with this, only allow validated machines for now.
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1651   */
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27 @1652  static const struct of_device_id qcom_scm_qseecom_allowlist[] = {
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1653  	{ .compatible = "lenovo,thinkpad-x13s", },
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1654  	{ }
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1655  };
-00b1248606ba39 drivers/firmware/qcom_scm.c Maximilian Luz 2023-08-27  1656  
-
-:::::: The code at line 1652 was first introduced by commit
-:::::: 00b1248606ba3979ccae30ed11df8cdc1a84245a firmware: qcom_scm: Add support for Qualcomm Secure Execution Environment SCM interface
-
-:::::: TO: Maximilian Luz <luzmaximilian@gmail.com>
-:::::: CC: Bjorn Andersson <andersson@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Durr, I'll see if I can get that stuff running locally, and otherwise
+play with the robot as you suggested. Thanks!
