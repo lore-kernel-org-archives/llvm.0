@@ -1,92 +1,111 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0750930F9D
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 19:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736612C1AB;
+	Mon,  4 Dec 2023 19:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cGfT4WQ6"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6d87cf8a297so864781a34.2
-        for <llvm@lists.linux.dev>; Mon, 04 Dec 2023 11:18:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701717520; x=1702322320; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VWNzZv699g9WmaMge8Xt2XGWr8M2fBvBoGU1E608xn8=;
-        b=cGfT4WQ674tg+Hkuv08LF7EwtzxcmMqZANopT4/UFthpXIMGGX8M/4pxpCFyYP05HY
-         WntXQioAbx29IEr4nfiMuU2QpKPcjkY2gHZC9vf/28eA4Q6ViD2vqrxoZhqGmlaL98Zv
-         mif8F7cIKYLHp8b2Ap8BRP7B3mtC33R4NHIRGinzPk6slyap7JC9H/Ugp0lXUfV6OfP4
-         1FFrfYa67NEtaZCEx4HnDPLIaHbIq7jx0PLf+PgSy+eXiaZcS07evddmXavuocwDhi50
-         TPoE4UU+IwrYOpHOwjxsOsJnRTLWQbTZ5hyDW4nHi+uliaHJPggc8vJUk2OK8ky/qkBD
-         HVcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701717520; x=1702322320;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VWNzZv699g9WmaMge8Xt2XGWr8M2fBvBoGU1E608xn8=;
-        b=l81WMXmXPBABOrnfs/Jz5FYgcS6i1TZA4nsmxIa4zLGXfBfeUj83c59RkI77VHrSCb
-         Qedbn76FJuVUcWrS6MQQ9YgHbsF8zvogAg7/U9i/oZ4T3V3n04i4tORRNxyH8Dm4Ys0F
-         inJSGl8O3Pg3lHCLpZcr3Ma7t58400n7GkPokq0wQ9CPmyRjdSVZgS3WG4TYhVSNgPS8
-         5VUkAYCPFkPpHHYW61I1A6bDBqmkBhv605B5OuUzFl+Eteod2EWOFOVHvACoaLwBOMBF
-         0vAKo7qM44yVPfHURVHBXe2+gSdqmElaj047u+GPCMCeS2me7yuRxzNUA0HDYcUuMqvz
-         LH2w==
-X-Gm-Message-State: AOJu0Yy4lkXz1pgPBDzrYbYr6JDuxt6ts9vXXOQ75XvGeqmKY8yCGsvo
-	+QeDZq8Fw4RvFmmw04wxN1JOSpSrWgWhh9P7BzNjdw==
-X-Google-Smtp-Source: AGHT+IHyqGlUNEc09zfk+7C7spFR2KrAlLytNjHQMZMVaTcBh0jkMo0aAva0Taxeji7L30FkvzDde4ybRx0p4piiiZw=
-X-Received: by 2002:a9d:4d02:0:b0:6d8:75a8:8455 with SMTP id
- n2-20020a9d4d02000000b006d875a88455mr2668679otf.50.1701717519644; Mon, 04 Dec
- 2023 11:18:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mpfSE74Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAF1C433C7;
+	Mon,  4 Dec 2023 19:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701719949;
+	bh=MXwhypHm/2XEVlJLFiCiCiYnn0Tjqj3lKlj+8mfTxUs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mpfSE74YGQlBzvvMt4KY8SUzEJP3DhJpui6G7u6rqCeg765mjU1ONJHXxHWDuJsp5
+	 fZX9acdqO8SEPmqSFWw1yq27R/JNHi1Zro7BADiK5WL66PulgsHKreFeY77PNrJKLP
+	 Mr+YajXnDxCmN9N3n6C4zsJJc9Cqx3n5xNxHhZ+ueAQy8+VGcy5AQukV9HHE+KnuZT
+	 1Vpn4Xb1MGzNur7Zh4M7O3o8MYBZIAuSFf9CWlgvwSeXc/5IFh9RooicFq0wWzU54u
+	 7urAI+8n5q5DNDE75EcU7bJKKWjJFZfac95ajrj1Dc110oUCrKCMZZ+I0R5iptbRbz
+	 H7tK/bectefgw==
+Date: Mon, 4 Dec 2023 12:59:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: clang-nightly: vdso/compat_gettimeofday.h:152:15: error:
+ instruction variant requires ARMv6 or later
+Message-ID: <20231204195906.GA2045328@dev-arch.thelio-3990X>
+References: <CA+G9fYvD72Vpfs2g8R+OJ6L8w9p_uaWbXpWMvnGAx_AOLabatw@mail.gmail.com>
+ <20231204181304.GA2043538@dev-arch.thelio-3990X>
+ <ZW4Zx4olPp0Owz0a@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231130133630.192490507@infradead.org> <20231130134204.026354676@infradead.org>
-In-Reply-To: <20231130134204.026354676@infradead.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 4 Dec 2023 11:18:03 -0800
-Message-ID: <CABCJKufv1z0-+an7iws8J2v-c_Jg1Nfu47Um9rhCnVLxQfC6ug@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] cfi: Flip headers
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, keescook@chromium.org, nathan@kernel.org, 
-	ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, jpoimboe@kernel.org, 
-	joao@overdrivepizza.com, mark.rutland@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZW4Zx4olPp0Owz0a@shell.armlinux.org.uk>
 
-On Thu, Nov 30, 2023 at 5:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> Normal include order is that linux/foo.h should include asm/foo.h, CFI ha=
-s it
-> the wrong way around.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/riscv/include/asm/cfi.h |    3 ++-
->  arch/riscv/kernel/cfi.c      |    2 +-
->  arch/x86/include/asm/cfi.h   |    3 ++-
->  arch/x86/kernel/cfi.c        |    4 ++--
->  include/asm-generic/Kbuild   |    1 +
->  include/asm-generic/cfi.h    |    5 +++++
->  include/linux/cfi.h          |    1 +
->  7 files changed, 14 insertions(+), 5 deletions(-)
+On Mon, Dec 04, 2023 at 06:26:15PM +0000, Russell King (Oracle) wrote:
+> On Mon, Dec 04, 2023 at 11:13:04AM -0700, Nathan Chancellor wrote:
+> > Hi Naresh,
+> > 
+> > On Mon, Dec 04, 2023 at 05:33:26PM +0530, Naresh Kamboju wrote:
+> > > Following build errors noticed on Linux next-20231204 tag with clang-nightly
+> > > for arm and arm64.
+> > > 
+> > > ## Test Regressions (compared to next-20231201)
+> > > * arm64, build
+> > >   - clang-nightly-defconfig
+> > >   - clang-nightly-defconfig-40bc7ee5
+> > >   - clang-nightly-lkftconfig
+> > >   - clang-nightly-lkftconfig-kselftest
+> > > 
+> > > * arm, build
+> > >   - clang-nightly-allnoconfig
+> > >   - clang-nightly-axm55xx_defconfig
+> > >   - clang-nightly-bcm2835_defconfig
+> > >   - clang-nightly-clps711x_defconfig
+> > >   - clang-nightly-defconfig
+> > >   - clang-nightly-exynos_defconfig
+> > >   - clang-nightly-imx_v6_v7_defconfig
+> > >   - clang-nightly-keystone_defconfig
+> > >   - clang-nightly-lkftconfig
+> > >   - clang-nightly-lkftconfig-kselftest
+> > >   - clang-nightly-omap2plus_defconfig
+> > >   - clang-nightly-pxa910_defconfig
+> > >   - clang-nightly-s3c6400_defconfig
+> > >   - clang-nightly-s5pv210_defconfig
+> > >   - clang-nightly-sama5_defconfig
+> > >   - clang-nightly-shmobile_defconfig
+> > >   - clang-nightly-tinyconfig
+> > >   - clang-nightly-u8500_defconfig
+> > >   - clang-nightly-vexpress_defconfig
+> > > 
+> > > 
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > 
+> > > 
+> > > Build log on arm64:
+> > > ---------
+> > > In file included from lib/vdso/gettimeofday.c:5:
+> > > In file included from include/vdso/datapage.h:135:
+> > > arch/arm64/include/asm/vdso/compat_gettimeofday.h:152:15: error:
+> > > instruction variant requires ARMv6 or later
+> > >   152 |         asm volatile("mov %0, %1" : "=r"(ret) : "r"(_vdso_data));
+> > >       |                      ^
+> > > <inline asm>:1:2: note: instantiated into assembly here
+> > >     1 |         mov r4, r1
+> > >       |         ^
+> 
+> I have to wonder why Clang is complaining about "mov r4, r1" because
+> that certainly should not require "ARMv6 or later". On the face of it,
+> this to me looks like a bug in Clang.
 
-Looks good to me, thanks!
+This is because the compat vDSO is compiled with '-mthumb' by default
+and Nick helpfully pointed out on IRC that prior to ARMv6, one of the
+operands to the mov had to be a HI register, which I do see in the ARM:
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+  Encoding T1     ARMv6*, ARMv7 if <Rd> and <Rm> both from R0-R7
+                  ARMv4T, ARMv5T*, ARMv6*, ARMv7 otherwise
+  MOV<c> <Rd>, <Rm>
 
-Sami
+Cheers,
+Nathan
