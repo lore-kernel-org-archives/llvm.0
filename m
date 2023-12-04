@@ -1,239 +1,162 @@
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B62364A1
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 20:57:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B22B2E832
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 21:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="mSqkINcQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nx00iUpT"
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 3CEA658045D;
-	Mon,  4 Dec 2023 15:57:00 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 04 Dec 2023 15:57:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1701723420; x=
-	1701730620; bh=frFWRgIM/BeMgIIvESHMUoKVQK0r3Pl2bvU4ZuSshRc=; b=m
-	SqkINcQHxbWSUBUJzPxK8wksAFZ+b5OXhV4a/ZwNfWXPYFyuAk1Rh+Al8G+WEjh8
-	F4dfDce1gwAViusNsDX3iarLdX5vmKvAN4bVpaJ+tayuTocuXFUoqCKt1E4Sq6zN
-	HjOWNEOLmIMCd3HFIOQI5vGPqtld8OAqLdEyyelfBoloSKd+7zpO4SxzLt5Er+Rc
-	zF2x2s2u1JpiX+r01GwBREN86b4o1bl1PC2RW//ejGIkLs4dDSzxGV/V2nZ1x53+
-	9shbaXQnbIJpj743DimxJ0vNzJSMsNAzQ55EznkrCCviTA0UMkTFjWa605ToSmOg
-	nr2b7piRQGQsEo7pITZwQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1701723420; x=
-	1701730620; bh=frFWRgIM/BeMgIIvESHMUoKVQK0r3Pl2bvU4ZuSshRc=; b=n
-	x00iUpTzWbiSsyAoM77a2vxQPTLImeX/GE4aSA9MNIoLeMkDoPLeA1QwesW2Dclk
-	KCpuwzGYg/eFz4KNtDV3l6nZ4Rpo7FEbgoZvLg886oZ8qEszarMeMCCZqD4g1hL/
-	WEqhI62m5+aR3FHDOOOsyWwQH15ksykVswpldm+FcnSdX3AilNFH6WZSV4srqISo
-	vQFqicMePoZmNZCTueXltWV4HeDqBCrwW1c7swhNc2VU9yy5HjFq78SFOoTv1RL1
-	ITxheXrM/WtsZaqQX07efy/0V7J/nnbaI/plaNgO5Kp67yJxUG9geGmp2dkTHF/N
-	GleKFo46Qsi6G+0YWwvPw==
-X-ME-Sender: <xms:HD1uZSuvAwmLqoFfRsLUW74S_BIYsCXRUQ9kZ3dQIAVIhGwoEmqI1g>
-    <xme:HD1uZXdTjDNjHDwB9NIIfboUADdTi7jtHKUW_zZ0fzaaaJwUqSMcfMx1VOGsN6wsv
-    YJdpTvpmizsic2G1w>
-X-ME-Received: <xmr:HD1uZdzL0CC76muk3eo-7_4JNmcuB1kRyi0ImMQM6m6ehAVn0ZFdGWbNLHjjqCBCXUv-AvbnfusEIzB2ID8Qlvdzsa91UqU86jk9BoCUuIc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejiedgudeggecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculddvfedmnecujfgurhephffvvefufffkofgjfhgggfestdekredt
-    redttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeeigeffteehteffheejkeefjeeuudfgvdekkeetudeghedu
-    gffgleffhefgjeevgfenucffohhmrghinheplhhlvhhmrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiih
-    ii
-X-ME-Proxy: <xmx:HD1uZdPgwYv5otBFGGrHiIuaVH8rZ2gTbUiuJGkQQ3o3d9dMEd_rRg>
-    <xmx:HD1uZS8QUiosJX7oU3wh8RjF6gbxEfycGXOD9wupcEmaejpZde2Yhg>
-    <xmx:HD1uZVW6te2HxlC1UxIyFc4qjiux01RopI3koyBWnNi7TGH5f8Ve1g>
-    <xmx:HD1uZeu6TnnzOoXJ-HNYP2J0bzSQRahniOP9xORwfBH7zuOeGYyLOg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Dec 2023 15:56:58 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: daniel@iogearbox.net,
-	ast@kernel.org,
-	nathan@kernel.org,
-	andrii@kernel.org,
-	ndesaulniers@google.com,
-	steffen.klassert@secunet.com,
-	antony.antony@secunet.com,
-	alexei.starovoitov@gmail.com,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	trix@redhat.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	devel@linux-ipsec.org,
-	netdev@vger.kernel.org,
-	Jonathan Lemon <jlemon@aviatrix.com>
-Subject: [PATCH bpf-next v4 04/10] libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
-Date: Mon,  4 Dec 2023 13:56:24 -0700
-Message-ID: <d213a6438f7f5db1014f6b41213b71851736d3bc.1701722991.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <cover.1701722991.git.dxu@dxuuu.xyz>
-References: <cover.1701722991.git.dxu@dxuuu.xyz>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u8f+l5/A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F9FC433C8;
+	Mon,  4 Dec 2023 21:07:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701724067;
+	bh=pPNje76giO/5XWYeDRsEw44LOoBYF9QrnV+yRAFwW/4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=u8f+l5/Arw38mA2Nt6AhJJPg5sin2odcxhJu1lUQphwWkEv6cLyl3xByPParK0+TR
+	 0aMWraUplVY2cl/7at2eebE7XTn0YBEOf8zjyUMG0eRnQq5PPkoQ4GAMWQEtUMoavj
+	 jwDc+Jpcw7SXhRxw3a8xCQ2IQlQrOD6tyoEQ4KzrJC39DEWXHqZp51BsxpJxCj5VSn
+	 9nj4Qldf3KxNC2kKEWcv9fWvxWz/nokw9l4r60iNaU7MadagSfxaFzzS3JrsprhHV2
+	 YyCC9RzmjOZhJLsdOF1IxVZWscpjbwnrK3Bffsw2vjbrh6kxFjh19q7sfha4bhZFWC
+	 xGG15winIhRPw==
+Date: Mon, 4 Dec 2023 16:07:45 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: stable-commits@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
+Subject: Re: Patch "arm64: Restrict CPU_BIG_ENDIAN to GNU as or LLVM IAS 15.x
+ or newer" has been added to the 4.19-stable tree
+Message-ID: <ZW4_obnZCwz_DI-D@sashalap>
+References: <20231203202353.1854269-1-sashal@kernel.org>
+ <20231204162228.GA1007084@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20231204162228.GA1007084@dev-arch.thelio-3990X>
 
-=== Motivation ===
+On Mon, Dec 04, 2023 at 09:22:28AM -0700, Nathan Chancellor wrote:
+>On Sun, Dec 03, 2023 at 03:23:53PM -0500, Sasha Levin wrote:
+>> This is a note to let you know that I've just added the patch titled
+>>
+>>     arm64: Restrict CPU_BIG_ENDIAN to GNU as or LLVM IAS 15.x or newer
+>>
+>> to the 4.19-stable tree which can be found at:
+>>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+>>
+>> The filename of the patch is:
+>>      arm64-restrict-cpu_big_endian-to-gnu-as-or-llvm-ias-.patch
+>> and it can be found in the queue-4.19 subdirectory.
+>>
+>> If you, or anyone else, feels it should not be added to the stable tree,
+>> please let <stable@vger.kernel.org> know about it.
+>>
+>>
+>>
+>> commit 4c762ee5a651ad98e47860959d05a8cb18248bdf
+>> Author: Nathan Chancellor <nathan@kernel.org>
+>> Date:   Wed Oct 25 10:21:28 2023 -0700
+>>
+>>     arm64: Restrict CPU_BIG_ENDIAN to GNU as or LLVM IAS 15.x or newer
+>>
+>>     [ Upstream commit 146a15b873353f8ac28dc281c139ff611a3c4848 ]
+>>
+>>     Prior to LLVM 15.0.0, LLVM's integrated assembler would incorrectly
+>>     byte-swap NOP when compiling for big-endian, and the resulting series of
+>>     bytes happened to match the encoding of FNMADD S21, S30, S0, S0.
+>>
+>>     This went unnoticed until commit:
+>>
+>>       34f66c4c4d5518c1 ("arm64: Use a positive cpucap for FP/SIMD")
+>>
+>>     Prior to that commit, the kernel would always enable the use of FPSIMD
+>>     early in boot when __cpu_setup() initialized CPACR_EL1, and so usage of
+>>     FNMADD within the kernel was not detected, but could result in the
+>>     corruption of user or kernel FPSIMD state.
+>>
+>>     After that commit, the instructions happen to trap during boot prior to
+>>     FPSIMD being detected and enabled, e.g.
+>>
+>>     | Unhandled 64-bit el1h sync exception on CPU0, ESR 0x000000001fe00000 -- ASIMD
+>>     | CPU: 0 PID: 0 Comm: swapper Not tainted 6.6.0-rc3-00013-g34f66c4c4d55 #1
+>>     | Hardware name: linux,dummy-virt (DT)
+>>     | pstate: 400000c9 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>     | pc : __pi_strcmp+0x1c/0x150
+>>     | lr : populate_properties+0xe4/0x254
+>>     | sp : ffffd014173d3ad0
+>>     | x29: ffffd014173d3af0 x28: fffffbfffddffcb8 x27: 0000000000000000
+>>     | x26: 0000000000000058 x25: fffffbfffddfe054 x24: 0000000000000008
+>>     | x23: fffffbfffddfe000 x22: fffffbfffddfe000 x21: fffffbfffddfe044
+>>     | x20: ffffd014173d3b70 x19: 0000000000000001 x18: 0000000000000005
+>>     | x17: 0000000000000010 x16: 0000000000000000 x15: 00000000413e7000
+>>     | x14: 0000000000000000 x13: 0000000000001bcc x12: 0000000000000000
+>>     | x11: 00000000d00dfeed x10: ffffd414193f2cd0 x9 : 0000000000000000
+>>     | x8 : 0101010101010101 x7 : ffffffffffffffc0 x6 : 0000000000000000
+>>     | x5 : 0000000000000000 x4 : 0101010101010101 x3 : 000000000000002a
+>>     | x2 : 0000000000000001 x1 : ffffd014171f2988 x0 : fffffbfffddffcb8
+>>     | Kernel panic - not syncing: Unhandled exception
+>>     | CPU: 0 PID: 0 Comm: swapper Not tainted 6.6.0-rc3-00013-g34f66c4c4d55 #1
+>>     | Hardware name: linux,dummy-virt (DT)
+>>     | Call trace:
+>>     |  dump_backtrace+0xec/0x108
+>>     |  show_stack+0x18/0x2c
+>>     |  dump_stack_lvl+0x50/0x68
+>>     |  dump_stack+0x18/0x24
+>>     |  panic+0x13c/0x340
+>>     |  el1t_64_irq_handler+0x0/0x1c
+>>     |  el1_abort+0x0/0x5c
+>>     |  el1h_64_sync+0x64/0x68
+>>     |  __pi_strcmp+0x1c/0x150
+>>     |  unflatten_dt_nodes+0x1e8/0x2d8
+>>     |  __unflatten_device_tree+0x5c/0x15c
+>>     |  unflatten_device_tree+0x38/0x50
+>>     |  setup_arch+0x164/0x1e0
+>>     |  start_kernel+0x64/0x38c
+>>     |  __primary_switched+0xbc/0xc4
+>>
+>>     Restrict CONFIG_CPU_BIG_ENDIAN to a known good assembler, which is
+>>     either GNU as or LLVM's IAS 15.0.0 and newer, which contains the linked
+>>     commit.
+>>
+>>     Closes: https://github.com/ClangBuiltLinux/linux/issues/1948
+>>     Link: https://github.com/llvm/llvm-project/commit/1379b150991f70a5782e9a143c2ba5308da1161c
+>>     Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>>     Cc: stable@vger.kernel.org
+>>     Acked-by: Mark Rutland <mark.rutland@arm.com>
+>>     Link: https://lore.kernel.org/r/20231025-disable-arm64-be-ias-b4-llvm-15-v1-1-b25263ed8b23@kernel.org
+>>     Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+>>     Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 92646f12a66d2..ff8e0db1693e9 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -759,6 +759,8 @@ choice
+>>  config CPU_BIG_ENDIAN
+>>  	bool "Build big-endian kernel"
+>>  	depends on !LD_IS_LLD || LLD_VERSION >= 130000
+>> +	# https://github.com/llvm/llvm-project/commit/1379b150991f70a5782e9a143c2ba5308da1161c
+>> +	depends on AS_IS_GNU || AS_VERSION >= 150000
+>
+>Both this backport and the backport of commit e9c6deee00e9 ("arm64: Make
+>CPU_BIG_ENDIAN depend on ld.bfd or ld.lld 13.0.0+") are incorrect for
+>5.4 and 4.19, which do not have CONFIG_AS_IS_GNU, CONFIG_AS_VERSION, or
+>CONFIG_LLD_VERSION.
+>
+>I don't think this patch is worth pursuing in 5.4 and 4.19, I would be
+>very surprised if someone was to hit this issue there, as arm64 big
+>endian is pretty esoteric as is. If someone does report something at
+>some point, we can consider it then but for now, I think they should be
+>dropped from 5.4 and 4.19.
 
-Similar to reading from CO-RE bitfields, we need a CO-RE aware bitfield
-writing wrapper to make the verifier happy.
+Dropped from 5.4 and 4.19, thanks!
 
-Two alternatives to this approach are:
-
-1. Use the upcoming `preserve_static_offset` [0] attribute to disable
-   CO-RE on specific structs.
-2. Use broader byte-sized writes to write to bitfields.
-
-(1) is a bit hard to use. It requires specific and not-very-obvious
-annotations to bpftool generated vmlinux.h. It's also not generally
-available in released LLVM versions yet.
-
-(2) makes the code quite hard to read and write. And especially if
-BPF_CORE_READ_BITFIELD() is already being used, it makes more sense to
-to have an inverse helper for writing.
-
-=== Implementation details ===
-
-Since the logic is a bit non-obvious, I thought it would be helpful
-to explain exactly what's going on.
-
-To start, it helps by explaining what LSHIFT_U64 (lshift) and RSHIFT_U64
-(rshift) is designed to mean. Consider the core of the
-BPF_CORE_READ_BITFIELD() algorithm:
-
-        val <<= __CORE_RELO(s, field, LSHIFT_U64);
-        val = val >> __CORE_RELO(s, field, RSHIFT_U64);
-
-Basically what happens is we lshift to clear the non-relevant (blank)
-higher order bits. Then we rshift to bring the relevant bits (bitfield)
-down to LSB position (while also clearing blank lower order bits). To
-illustrate:
-
-        Start:    ........XXX......
-        Lshift:   XXX......00000000
-        Rshift:   00000000000000XXX
-
-where `.` means blank bit, `0` means 0 bit, and `X` means bitfield bit.
-
-After the two operations, the bitfield is ready to be interpreted as a
-regular integer.
-
-Next, we want to build an alternative (but more helpful) mental model
-on lshift and rshift. That is, to consider:
-
-* rshift as the total number of blank bits in the u64
-* lshift as number of blank bits left of the bitfield in the u64
-
-Take a moment to consider why that is true by consulting the above
-diagram.
-
-With this insight, we can now define the following relationship:
-
-              bitfield
-                 _
-                | |
-        0.....00XXX0...00
-        |      |   |    |
-        |______|   |    |
-         lshift    |    |
-                   |____|
-              (rshift - lshift)
-
-That is, we know the number of higher order blank bits is just lshift.
-And the number of lower order blank bits is (rshift - lshift).
-
-Finally, we can examine the core of the write side algorithm:
-
-        mask = (~0ULL << rshift) >> lshift;              // 1
-        val = (val & ~mask) | ((nval << rpad) & mask);   // 2
-
-1. Compute a mask where the set bits are the bitfield bits. The first
-   left shift zeros out exactly the number of blank bits, leaving a
-   bitfield sized set of 1s. The subsequent right shift inserts the
-   correct amount of higher order blank bits.
-
-2. On the left of the `|`, mask out the bitfield bits. This creates
-   0s where the new bitfield bits will go. On the right of the `|`,
-   bring nval into the correct bit position and mask out any bits
-   that fall outside of the bitfield. Finally, by bor'ing the two
-   halves, we get the final set of bits to write back.
-
-[0]: https://reviews.llvm.org/D133361
-Co-developed-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-Co-developed-by: Jonathan Lemon <jlemon@aviatrix.com>
-Signed-off-by: Jonathan Lemon <jlemon@aviatrix.com>
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/lib/bpf/bpf_core_read.h | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
-index 1ac57bb7ac55..7325a12692a3 100644
---- a/tools/lib/bpf/bpf_core_read.h
-+++ b/tools/lib/bpf/bpf_core_read.h
-@@ -111,6 +111,38 @@ enum bpf_enum_value_kind {
- 	val;								      \
- })
- 
-+/*
-+ * Write to a bitfield, identified by s->field.
-+ * This is the inverse of BPF_CORE_WRITE_BITFIELD().
-+ */
-+#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({			\
-+	void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);	\
-+	unsigned int byte_size = __CORE_RELO(s, field, BYTE_SIZE);	\
-+	unsigned int lshift = __CORE_RELO(s, field, LSHIFT_U64);	\
-+	unsigned int rshift = __CORE_RELO(s, field, RSHIFT_U64);	\
-+	unsigned long long mask, val, nval = new_val;			\
-+	unsigned int rpad = rshift - lshift;				\
-+									\
-+	asm volatile("" : "+r"(p));					\
-+									\
-+	switch (byte_size) {						\
-+	case 1: val = *(unsigned char *)p; break;			\
-+	case 2: val = *(unsigned short *)p; break;			\
-+	case 4: val = *(unsigned int *)p; break;			\
-+	case 8: val = *(unsigned long long *)p; break;			\
-+	}								\
-+									\
-+	mask = (~0ULL << rshift) >> lshift;				\
-+	val = (val & ~mask) | ((nval << rpad) & mask);			\
-+									\
-+	switch (byte_size) {						\
-+	case 1: *(unsigned char *)p      = val; break;			\
-+	case 2: *(unsigned short *)p     = val; break;			\
-+	case 4: *(unsigned int *)p       = val; break;			\
-+	case 8: *(unsigned long long *)p = val; break;			\
-+	}								\
-+})
-+
- #define ___bpf_field_ref1(field)	(field)
- #define ___bpf_field_ref2(type, field)	(((typeof(type) *)0)->field)
- #define ___bpf_field_ref(args...)					    \
 -- 
-2.42.1
-
+Thanks,
+Sasha
