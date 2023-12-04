@@ -1,100 +1,129 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DC8224D6
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 11:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C4A23752
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 12:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SJZWmelL"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=57qN1iQssrdoPxO3vjOJxY+KkICDSFEOHy7vEhypSQY=; b=SJZWmelLjacxjQSc2rHFwC2yAL
-	jTj9QZTX0X4Po4XPpfbs7mcPqcRffTzF+bRxA6cc+E5pWWustakRYKEHFrKYdsNMy0O3vYtMgKPqD
-	g6mXsMan1PhPEuOos6p54MK0NRN6dhfjkQFxjjekcKPgEUo/P8hMw93tOmEpoCTiUedvGyLRD8Z9D
-	HLkoFDqCUrQBEg2UU8X7XyyVtMWxis4xqXdL5iszhpV2f0OjzCwzyI6Idp1VXXqqWoC3vZQiQNbY4
-	zqZ1Mcm2rpTcgt+Qe43CxSMZDe3gBiRFLdStRojeDIPpxLyqyFTKjjgekBA/xZqWFFnX93kfXBC7a
-	/EPIZEzw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rA6rJ-000b3j-D2; Mon, 04 Dec 2023 11:11:29 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 6305A3003F0; Mon,  4 Dec 2023 12:11:28 +0100 (CET)
-Date: Mon, 4 Dec 2023 12:11:28 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231204111128.GV8262@noisy.programming.kicks-ass.net>
-References: <20231130133630.192490507@infradead.org>
- <20231130134204.136058029@infradead.org>
- <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
- <20231204091334.GM3818@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SVIehuM2"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6d8751c8e7eso1736127a34.3
+        for <llvm@lists.linux.dev>; Mon, 04 Dec 2023 04:03:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701691418; x=1702296218; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8m9lBss2N9gmJ7CWiI2qsuc6tjxWOakJzaxWbQb+vtA=;
+        b=SVIehuM2Y24gYr0Z6wHsJw4jkh17O6Mknn6I0mmnaV1x0P0RmN4zy7vzCjaSCDKmrH
+         tHO1FzHmksv1jqkoyccOvooeCkrBCbRn5uTKD7i3aLD6ETLZe+SMU6cVFZx9xgG3hMZf
+         wsywFYuJXF9XuItZyfmo31VQk5NPES8tKjXvOGKA9EkeD5I+Mo00EtlfxwkhEtr3NTAn
+         OvPZxG2H9PJJi5SNHrTqqLXcXxRzS1cOQnxH5AHXNO+Op++Ud1z88jPAch7ZhpZPoJpJ
+         vyXvB4bt46ja6d/ZsA5wm8Otxr10JvrUexSx6Awd+MrlqM62Z3ja/0EK8jR/cZyjaUdh
+         VrXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701691418; x=1702296218;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8m9lBss2N9gmJ7CWiI2qsuc6tjxWOakJzaxWbQb+vtA=;
+        b=siaAXQ0k4leD3KAgaaaQnhQIJ3HxqyoAL5uDrNEK8VtfFR30uAYFjnPubrCSEhuNJw
+         2JEoG3CesGkBfGLiqdd7JwC4pePLGEn1nI6IPcleiqIrpAJIU6jz3xKYDJ8laCkg1FS0
+         xyBqOvCCrCyoQUVrWcGfAGcbGFqsFFlUZ29Q78cDaA8J/svPwuhlUPCTTS5efWbZ025i
+         tK7jec0U/ZSYRUoKloAE0rI6Qcm29ejLpBRgaQWgjRYRnTRV7aWjSwNVQ979y2yHjEeq
+         HE9o4C4IegfkRAprJQ7oORsi226zspYalRrLKK4s3dLNgq9hR59nH2lmpq+EQ3fwkJ7t
+         jJ6g==
+X-Gm-Message-State: AOJu0YyYZBJLlQlF3WU730GLIwEQpyrLEHhKsFdqB6FFEfj8CgCZxlG0
+	SVG/anfMbYVSCBPb27+us6Psskz4kFPJc1fuob/DIsV4ktU1gJuqYmc=
+X-Google-Smtp-Source: AGHT+IEtcMK1FvJnO/N929rTgm1c5UQwY9ZKTuLRDbSnocjG2Dv64YKBRmzygwY+RjRRS5oUMM5l2sXrtIt5uIV35A4=
+X-Received: by 2002:a05:6830:6e15:b0:6d8:74e2:c086 with SMTP id
+ ec21-20020a0568306e1500b006d874e2c086mr5495794otb.56.1701691418411; Mon, 04
+ Dec 2023 04:03:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231204091334.GM3818@noisy.programming.kicks-ass.net>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 4 Dec 2023 17:33:26 +0530
+Message-ID: <CA+G9fYvD72Vpfs2g8R+OJ6L8w9p_uaWbXpWMvnGAx_AOLabatw@mail.gmail.com>
+Subject: clang-nightly: vdso/compat_gettimeofday.h:152:15: error: instruction
+ variant requires ARMv6 or later
+To: clang-built-linux <llvm@lists.linux.dev>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	Linux Regressions <regressions@lists.linux.dev>, lkft-triage@lists.linaro.org
+Cc: Russell King - ARM Linux <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Dec 04, 2023 at 10:13:34AM +0100, Peter Zijlstra wrote:
+Following build errors noticed on Linux next-20231204 tag with clang-nightly
+for arm and arm64.
 
-> > Just running test_progs it splats right away:
-> > 
-> > [   74.047757] kmemleak: Found object by alias at 0xffffffffa0001d80
-> > [   74.048272] CPU: 14 PID: 104 Comm: kworker/14:0 Tainted: G        W
-> >  O       6.7.0-rc3-00702-g41c30fec304d-dirty #5241
-> > [   74.049118] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-> > BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-> > [   74.050042] Workqueue: events bpf_prog_free_deferred
-> > [   74.050448] Call Trace:
-> > [   74.050663]  <TASK>
-> > [   74.050841]  dump_stack_lvl+0x55/0x80
-> > [   74.051141]  __find_and_remove_object+0xdb/0x110
-> > [   74.051521]  kmemleak_free+0x41/0x70
-> > [   74.051828]  vfree+0x36/0x130
-> 
-> Durr, I'll see if I can get that stuff running locally, and otherwise
-> play with the robot as you suggested. Thanks!
+## Test Regressions (compared to next-20231201)
+* arm64, build
+  - clang-nightly-defconfig
+  - clang-nightly-defconfig-40bc7ee5
+  - clang-nightly-lkftconfig
+  - clang-nightly-lkftconfig-kselftest
 
-I think it is bpf_jit_binary_pack_hdr(), which is using prog->bpf_func
-as a start address for the image, instead of jit_data->image.
+* arm, build
+  - clang-nightly-allnoconfig
+  - clang-nightly-axm55xx_defconfig
+  - clang-nightly-bcm2835_defconfig
+  - clang-nightly-clps711x_defconfig
+  - clang-nightly-defconfig
+  - clang-nightly-exynos_defconfig
+  - clang-nightly-imx_v6_v7_defconfig
+  - clang-nightly-keystone_defconfig
+  - clang-nightly-lkftconfig
+  - clang-nightly-lkftconfig-kselftest
+  - clang-nightly-omap2plus_defconfig
+  - clang-nightly-pxa910_defconfig
+  - clang-nightly-s3c6400_defconfig
+  - clang-nightly-s5pv210_defconfig
+  - clang-nightly-sama5_defconfig
+  - clang-nightly-shmobile_defconfig
+  - clang-nightly-tinyconfig
+  - clang-nightly-u8500_defconfig
+  - clang-nightly-vexpress_defconfig
 
-This used to be true, but now it's offset.
 
-Let me see what to do about that...
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+Build log on arm64:
+---------
+In file included from lib/vdso/gettimeofday.c:5:
+In file included from include/vdso/datapage.h:135:
+arch/arm64/include/asm/vdso/compat_gettimeofday.h:152:15: error:
+instruction variant requires ARMv6 or later
+  152 |         asm volatile("mov %0, %1" : "=r"(ret) : "r"(_vdso_data));
+      |                      ^
+<inline asm>:1:2: note: instantiated into assembly here
+    1 |         mov r4, r1
+      |         ^
+In file included from <built-in>:3:
+lib/vdso/gettimeofday.c:139:3: error: invalid instruction
+  139 |                 smp_rmb();
+      |                 ^
+
+Build log on arm:
+---------
+In file included from arch/arm/vfp/vfpmodule.c:23:
+arch/arm/include/asm/cp15.h:101:2: error: instruction requires: data-barriers
+  101 |         isb();
+      |         ^
+
+
+Links:
+arm64
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231204/testrun/21471527/suite/build/test/clang-nightly-defconfig/details/
+
+arm
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231204/testrun/21471941/suite/build/test/clang-nightly-exynos_defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231204/testrun/21471941/suite/build/test/clang-nightly-exynos_defconfig/details/
+
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
