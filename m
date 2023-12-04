@@ -1,91 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E13E8F5A
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 06:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D94FC03
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 08:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ct2yt0LB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701672901; x=1733208901;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=DkI6Gqdi3oM5F1BCGG/SyVaLLGeuLY9c6+WsMZZX+HU=;
-  b=ct2yt0LBod7DpN68pdzMxw7R/apgJ/tUkjHyv8brE7hBcNr2rnftldnl
-   jb3JCP7nF2Okc9z3FV/Glvp9P5TCxMBYT5U/RzIz9d3SsQrPBkddyhMpn
-   xKuyjZhay6i9xahY9NAfdUzSqHYgXHO2mSggqn2FLql2TuAkKUo4/tr2w
-   VFCBWai5alOIxlF3co8l4aiQ2szSYHeQBF56/ckMMcYtzNMT55Y8+Qgcm
-   KpBuTQ7JfsEq1yW7Hvtk3wqmEUndC0Erewlh/P6ZxRn1PA9MBKY0SwLtc
-   Jd+74YmeTuhXFSJQ2wHSCnhUd5rasnwocxt8/sMCxb/YK2OpelWkPD034
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="573871"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="573871"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2023 22:55:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="888430244"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="888430244"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.44.211])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2023 22:54:55 -0800
-Message-ID: <cc1f77b9-6a3f-4574-8d45-8c2ded43b589@intel.com>
-Date: Mon, 4 Dec 2023 08:54:54 +0200
+	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="KwWu3Bpt"
+Received: from localhost (localhost [127.0.0.1])
+	by a.mx.secunet.com (Postfix) with ESMTP id E4AA3204D9;
+	Mon,  4 Dec 2023 09:25:47 +0100 (CET)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hvPwaSxxYUiK; Mon,  4 Dec 2023 09:25:47 +0100 (CET)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by a.mx.secunet.com (Postfix) with ESMTPS id 4C40920078;
+	Mon,  4 Dec 2023 09:25:47 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 4C40920078
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
+	s=202301; t=1701678347;
+	bh=6LGB45I5byCoMEvvTmFWKfhjgGrm1+u7IAc5pF3fXcc=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To:From;
+	b=KwWu3BptcKE5mMLWl8mHeIi9qJxIyxohZ3pyPiU8GufgBcZRy11AsRCirUPTY3RQ5
+	 VCuwAOdD4D+GLjwzzqx1CbPm/IV7UUyKjO5zDaHy7JJ76KnHdWhkYiJBa1+jQVCd8/
+	 WhCMr8qRJOI7Oe6Z6dM/unK4csL4qMFT2PaB9f4kbIaooD4Ks7XPzx6bo99hCXx/Pv
+	 B9U4v3BDF/XeDlHwKkMgRtWDKt0SX0DWReAbIC1e+0lAfqcmxD1TmpeUi6WkrEFUHl
+	 D0oGMrMRGiFTY9e/9xvWryQ0LkLVPlrF2/+GQIVr9TUbardkk3RRGkhURoBQiqNKzU
+	 5owz2QNMth0Qg==
+Received: from cas-essen-02.secunet.de (unknown [10.53.40.202])
+	by mailout2.secunet.com (Postfix) with ESMTP id 164F580004A;
+	Mon,  4 Dec 2023 09:25:47 +0100 (CET)
+Received: from mbx-essen-02.secunet.de (10.53.40.198) by
+ cas-essen-02.secunet.de (10.53.40.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Mon, 4 Dec 2023 09:25:46 +0100
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-02.secunet.de
+ (10.53.40.198) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 4 Dec
+ 2023 09:25:46 +0100
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+	id 49F6131811E6; Mon,  4 Dec 2023 09:25:46 +0100 (CET)
+Date: Mon, 4 Dec 2023 09:25:46 +0100
+From: Steffen Klassert <steffen.klassert@secunet.com>
+To: Daniel Xu <dxu@dxuuu.xyz>
+CC: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Network Development
+	<netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, bpf
+	<bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, "open
+ list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	<antony.antony@secunet.com>, Yonghong Song <yonghong.song@linux.dev>, Eddy Z
+	<eddyz87@gmail.com>, <devel@linux-ipsec.org>, Eyal Birger
+	<eyal.birger@gmail.com>
+Subject: Re: [PATCH ipsec-next v3 0/9] Add bpf_xdp_get_xfrm_state() kfunc
+Message-ID: <ZW2NCm/pIthdpNgF@gauss3.secunet.de>
+References: <cover.1701462010.git.dxu@dxuuu.xyz>
+ <CAADnVQKWrvec6ap_7O0Z5uAJe-pdrhuJk8LRkmWvGMM4iF9Frg@mail.gmail.com>
+ <dkzlpw6sj7we5xteyvbwxufqzg6axwlrvb4arq23ecaiy5ayok@jg52fqjr4ftf>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/9] perf tests: Avoid fork in perf_has_symbol test
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>,
- Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>,
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20231201235031.475293-1-irogers@google.com>
- <20231201235031.475293-3-irogers@google.com>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20231201235031.475293-3-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dkzlpw6sj7we5xteyvbwxufqzg6axwlrvb4arq23ecaiy5ayok@jg52fqjr4ftf>
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-02.secunet.de (10.53.40.198)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-On 2/12/23 01:50, Ian Rogers wrote:
-> perf test -vv Symbols is used to indentify symbols within the perf
-> binary. Add the -F flag so that the test command doesn't fork the test
-> before running. This removes a little overhead.
+On Fri, Dec 01, 2023 at 05:16:04PM -0700, Daniel Xu wrote:
+> On Fri, Dec 01, 2023 at 04:10:18PM -0800, Alexei Starovoitov wrote:
+> > On Fri, Dec 1, 2023 at 12:23 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> > >
+> > >  include/net/xfrm.h                            |   9 +
+> > >  net/xfrm/Makefile                             |   1 +
+> > >  net/xfrm/xfrm_policy.c                        |   2 +
+> > >  net/xfrm/xfrm_state_bpf.c                     | 128 ++++++++++++++
+> > >  tools/lib/bpf/bpf_core_read.h                 |  34 ++++
+> > >  .../selftests/bpf/prog_tests/test_tunnel.c    | 162 +++++++++++++++++-
+> > >  .../selftests/bpf/prog_tests/verifier.c       |   2 +
+> > >  tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
+> > >  .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
+> > >  .../selftests/bpf/progs/test_tunnel_kern.c    | 138 ++++++++-------
+> > >  .../bpf/progs/verifier_bitfield_write.c       | 100 +++++++++++
+> > >  tools/testing/selftests/bpf/test_loader.c     |   7 +
+> > >  tools/testing/selftests/bpf/test_tunnel.sh    |  92 ----------
+> > >  13 files changed, 522 insertions(+), 155 deletions(-)
+> > 
+> > I really think this should go via bpf-next tree.
+> > The bpf changes are much bigger than ipsec.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Ack. Ended up picking up a lot of stuff along the way.
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+I'm fine with merging this via the bpf-next tree.
 
-> ---
->  tools/perf/tests/shell/lib/perf_has_symbol.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/tests/shell/lib/perf_has_symbol.sh b/tools/perf/tests/shell/lib/perf_has_symbol.sh
-> index 5d59c32ae3e7..561c93b75d77 100644
-> --- a/tools/perf/tests/shell/lib/perf_has_symbol.sh
-> +++ b/tools/perf/tests/shell/lib/perf_has_symbol.sh
-> @@ -3,7 +3,7 @@
->  
->  perf_has_symbol()
->  {
-> -	if perf test -vv "Symbols" 2>&1 | grep "[[:space:]]$1$"; then
-> +	if perf test -vv -F "Symbols" 2>&1 | grep "[[:space:]]$1$"; then
->  		echo "perf does have symbol '$1'"
->  		return 0
->  	fi
+Please consider to merge the bpf hepler functions
+to one file. We have already xfrm_interface_bpf.c
+and now you introduce xfrm_state_bpf.c.
 
+Try to merge this into a single xfrm_bpf.c file.
