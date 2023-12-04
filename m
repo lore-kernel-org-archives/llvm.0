@@ -1,103 +1,248 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105751DDD7;
-	Mon,  4 Dec 2023 23:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC262225AE
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 23:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNvG9d52"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B00C433C7;
-	Mon,  4 Dec 2023 23:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701731517;
-	bh=DVXCZ9jpOAnNg7LJEUeeMDB9ZjLGevPMDsIyu7d5WpQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bNvG9d527lXukIxR9+gLXuTRtcZ3LR1hX2B3aNpA7rsRtLbhjqerlUJqsy/CtL3nI
-	 DV9uuBfDQGd3TsZ5jgfL9uVmWQ/LEuoIl5Bvi3YFPD6uBoSg2njjtQPrzENhVc0/aL
-	 1PYLH1+nRyRY98F5llMANneXs5tqpN/pSD2oWFma3NQYi+LKKL+xqBmzKOeID/JiSh
-	 G/Eexl0vTWn7OZdUAlf+F4x58PjrDMnwV60SmD2zzTdiM32tNACPy5C2XJssIetlqM
-	 M+u4biG2quLP3Z/9NIBBcJ2VThXSLB8KWbpQoYGT51jEVSQ1qYgDJctD7YlVNd3TiD
-	 U3Bz9P6gsHB+g==
-Date: Mon, 4 Dec 2023 16:11:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Fangrui Song <maskray@google.com>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	conor@kernel.org, ndesaulniers@google.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
- known working versions
-Message-ID: <20231204231155.GA3560411@dev-arch.thelio-3990X>
-References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
- <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
- <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
- <20231201194858.GA290910@dev-arch.thelio-3990X>
- <CAFP8O3+uta+GQO7dpeNLe0OMFnX-tdEyvHREEu1ThjA3nFtTkQ@mail.gmail.com>
- <20231201215021.GA2579712@dev-arch.thelio-3990X>
- <CAFP8O3LJPqPVxcRzi_Qxvu_w8w76BXmfWv8YnsK+bMvqXb701Q@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GoDDyHeV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701732703;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nokDr7fDhJtk8Vm6e610W3ep/8X4aj/rcntr//UK79U=;
+	b=GoDDyHeVTUOal1DSrGX6DxQdWTy+jeIlnnkFHclHogBcPoaJha5IXkrKpi3qppVtWGWSI7
+	ZFHpSoVsxhO574/0trZPj7jigNd5GsqPQPDlZm4vkND2GB5w+tqIvqos0B2wflUtuUwlIw
+	oUZxo//UOzJ/IrJ2l2mYaQ7XkXzsMYI=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-438-3w6nNadvO8aCqJaeidNymg-1; Mon,
+ 04 Dec 2023 18:31:36 -0500
+X-MC-Unique: 3w6nNadvO8aCqJaeidNymg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9BC73C0C109
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 23:31:36 +0000 (UTC)
+Received: from [172.64.11.14] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 974CE492BFC;
+	Mon,  4 Dec 2023 23:31:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 229): Test report for master
+ (6.7.0-rc3, mainline.kernel.org-clang, 815fb87b)
+Date: Mon, 04 Dec 2023 23:31:36 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFP8O3LJPqPVxcRzi_Qxvu_w8w76BXmfWv8YnsK+bMvqXb701Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <89705.123120418313600939@us-mta-438.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 01, 2023 at 08:31:12PM -0800, Fangrui Song wrote:
-> Perhaps: Clang generates .uleb128 with label differences for DWARF v5,
-> a feature that older binutils ports, utilizing RISC-V style linker
-> relaxation, do not support.
-> 
-> (Signed LEB128 is used by DWARF as well, but it is encoded directly
-> into DW_OP_fbreg/DW_LNS_advance_line/etc, and explicit .sleb128
-> directives are not emitted)
-> (In assemblers, "label difference" is a more common term.)
-> (People working on DWARF tend to prefer DWARF v5 to DWARF5, when the
-> full "DWARF version 5" feels too verbose.)
+Hi, we tested your kernel and here are the results:
 
-Thanks, does this diff seem reasonable to you? I'd like to keep the
-issue link as a paper trail and I figured that we might as well make the
-configuration name slightly more accurate with that additional
-information. I will send it as a separate patch in v2 tomorrow if so in
-order to give people a chance to further chime in on the series.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Cheers,
-Nathan
+Tested-by: CKI Project <cki-project@redhat.com>
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index a0ebce05a368..76c2cc697573 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -231,9 +231,10 @@ config DEBUG_INFO
- 	  in the "Debug information" choice below, indicating that debug
- 	  information will be generated for build targets.
- 
--# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
--# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
--config AS_HAS_NON_CONST_LEB128
-+# Clang generates .uleb128 with label differences for DWARF v5, a feature that
-+# older binutils ports do not support when utilizing RISC-V style linker
-+# relaxation: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-+config AS_HAS_NON_CONST_ULEB128
- 	def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
- 
- choice
-@@ -258,7 +259,7 @@ config DEBUG_INFO_NONE
- config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- 	bool "Rely on the toolchain's implicit default DWARF version"
- 	select DEBUG_INFO
--	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-+	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_ULEB128)
- 	help
- 	  The implicit default version of DWARF debug info produced by a
- 	  toolchain changes over time.
-@@ -283,7 +284,7 @@ config DEBUG_INFO_DWARF5
- 	bool "Generate DWARF Version 5 debuginfo"
- 	select DEBUG_INFO
- 	depends on !ARCH_HAS_BROKEN_DWARF5
--	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-+	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_ULEB128)
- 	help
- 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
- 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+Kernel information:
+    Commit message: Merge tag 'pm-6.7-rc4' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/rafael/linux-pm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/117306
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - IPMItool loop stress test
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                 aarch64 - Storage - block - filesystem fio test
+                 aarch64 - Storage - block - queue scheduler test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Reboot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - Memory function: memfd_create
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking - Ethernet drivers sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - block - queue scheduler test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking - Ethernet drivers sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - kselftests upstream - net
+                  x86_64 - kselftests upstream - bpf
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Hardware - CPU: Die Test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking - Ethernet drivers sanity
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
+au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
+            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
+913cfd3efb.camel@intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - CKI/restraint
+     aarch64 - SELinux Custom Module Setup
+     aarch64 - machineinfo
+     aarch64 - Boot test
+     aarch64 - selinux-policy: serge-testsuite
+     aarch64 - Hardware - Firmware test suite
+     aarch64 - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
