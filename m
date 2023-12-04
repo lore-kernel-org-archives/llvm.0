@@ -1,79 +1,100 @@
-Received: from bg2.exmail.qq.com (bg2.exmail.qq.com [114.132.63.24])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB02101EE
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 10:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=vimux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vimux.org
-X-QQ-mid: bizesmtp90t1701686533t9w18dy6
-Received: from localhost.localdomain ( [112.6.196.165])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 04 Dec 2023 18:42:10 +0800 (CST)
-X-QQ-SSF: 01200000000000B0J000000A0000000
-X-QQ-FEAT: ZdHcY4j9T+I4a9YN8Gv8XPmWt4O1cvJndJZZex7Xb7xsJrCqjKY4egbNCxmRi
-	D96ArEymkCRQjw6F64Nbn5aVHKh4RDRQYSo68gXBQow0mmylNPEGaFP0ngOh5JbocUGQBzS
-	5RjS4vS66FL7R9Qa7l9O/U5Ad1YI23Nzp6Wrq+wupOg5Lg6uFyO0JCq7SshpgwILAXdxmj2
-	GsNDkCpQRnTr0V4l/pjeMVCOKyA3NoesngcY7+oebuOaVC+p/kpVzKKB640LD6BSf3ZGWXt
-	eJQv9Zelnt554Ope6Ynn81h2AQ/KzctOJorfg6gZXmTPGmyHm9s+ejA8JTpXziUBmAsdw28
-	OQ+B2ngRHObnR14Md0=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 72683575249682803
-From: Jialu Xu <xujialu@vimux.org>
-To: nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Jialu Xu <xujialu@vimux.org>
-Subject: [PATCH] gen_compile_commands.py: fix path resolve with symlinks in it
-Date: Mon,  4 Dec 2023 18:41:42 +0800
-Message-Id: <20231204104141.3618547-1-xujialu@vimux.org>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DC8224D6
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 11:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SJZWmelL"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=57qN1iQssrdoPxO3vjOJxY+KkICDSFEOHy7vEhypSQY=; b=SJZWmelLjacxjQSc2rHFwC2yAL
+	jTj9QZTX0X4Po4XPpfbs7mcPqcRffTzF+bRxA6cc+E5pWWustakRYKEHFrKYdsNMy0O3vYtMgKPqD
+	g6mXsMan1PhPEuOos6p54MK0NRN6dhfjkQFxjjekcKPgEUo/P8hMw93tOmEpoCTiUedvGyLRD8Z9D
+	HLkoFDqCUrQBEg2UU8X7XyyVtMWxis4xqXdL5iszhpV2f0OjzCwzyI6Idp1VXXqqWoC3vZQiQNbY4
+	zqZ1Mcm2rpTcgt+Qe43CxSMZDe3gBiRFLdStRojeDIPpxLyqyFTKjjgekBA/xZqWFFnX93kfXBC7a
+	/EPIZEzw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1rA6rJ-000b3j-D2; Mon, 04 Dec 2023 11:11:29 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 6305A3003F0; Mon,  4 Dec 2023 12:11:28 +0100 (CET)
+Date: Mon, 4 Dec 2023 12:11:28 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv <linux-riscv@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <20231204111128.GV8262@noisy.programming.kicks-ass.net>
+References: <20231130133630.192490507@infradead.org>
+ <20231130134204.136058029@infradead.org>
+ <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+ <20231204091334.GM3818@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:vimux.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231204091334.GM3818@noisy.programming.kicks-ass.net>
 
-When symbolic links are involved in the path, os.path.abspath might not
-resolve the symlinks and instead return the absolute path with the
-symlinks intact.
+On Mon, Dec 04, 2023 at 10:13:34AM +0100, Peter Zijlstra wrote:
 
-use pathlib.Path resolve() instead of os.path.abspath()
+> > Just running test_progs it splats right away:
+> > 
+> > [   74.047757] kmemleak: Found object by alias at 0xffffffffa0001d80
+> > [   74.048272] CPU: 14 PID: 104 Comm: kworker/14:0 Tainted: G        W
+> >  O       6.7.0-rc3-00702-g41c30fec304d-dirty #5241
+> > [   74.049118] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+> > BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+> > [   74.050042] Workqueue: events bpf_prog_free_deferred
+> > [   74.050448] Call Trace:
+> > [   74.050663]  <TASK>
+> > [   74.050841]  dump_stack_lvl+0x55/0x80
+> > [   74.051141]  __find_and_remove_object+0xdb/0x110
+> > [   74.051521]  kmemleak_free+0x41/0x70
+> > [   74.051828]  vfree+0x36/0x130
+> 
+> Durr, I'll see if I can get that stuff running locally, and otherwise
+> play with the robot as you suggested. Thanks!
 
-Signed-off-by: Jialu Xu <xujialu@vimux.org>
----
- scripts/clang-tools/gen_compile_commands.py | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I think it is bpf_jit_binary_pack_hdr(), which is using prog->bpf_func
+as a start address for the image, instead of jit_data->image.
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 180952fb91c1b..0a6c0996b4a8f 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -11,6 +11,7 @@ import argparse
- import json
- import logging
- import os
-+from pathlib import Path
- import re
- import subprocess
- import sys
-@@ -172,8 +173,8 @@ def process_line(root_directory, command_prefix, file_path):
-     # by Make, so this code replaces the escaped version with '#'.
-     prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
- 
--    # Use os.path.abspath() to normalize the path resolving '.' and '..' .
--    abs_path = os.path.abspath(os.path.join(root_directory, file_path))
-+    # Make the path absolute, resolving all symlinks on the way and also normalizing it.
-+    abs_path = str(Path(os.path.join(root_directory, file_path)).resolve())
-     if not os.path.exists(abs_path):
-         raise ValueError('File %s not found' % abs_path)
-     return {
--- 
-2.39.2
+This used to be true, but now it's offset.
 
+Let me see what to do about that...
