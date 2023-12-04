@@ -1,94 +1,256 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBFF364AD
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 21:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC312E848
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 21:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0+q5TQwo"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50bf1de91c6so113e87.1
-        for <llvm@lists.linux.dev>; Mon, 04 Dec 2023 13:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701724475; x=1702329275; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HC3Kqwq0MMmfCoFQwZgAsJVop+/+8BNQbF/H1UQSrUk=;
-        b=0+q5TQwoc48fLj/9ATYy6VD3abUYnK2r+BtJonV9DVu5+tebEK4lRQmjuTscda0Flw
-         3Ph+EzV9YhFBaaSoFcc14aooMPfGZpbk1uzzpkf4vs5Ia35kMwfah9W0kpAUqgeDGcsJ
-         euiRI1Lo7yEp7l51NsDnz7EOOxOLyzQXFP65t3D/vo1TZUSdI9snck0PEFD+scEXlxMB
-         rpKj84XxvW11UnbgYnKCFBnprKf4f2jfGz9ESyj0hQvOUL16Np8D/vn/+TY1pLgyItER
-         2G7pCuA/vFiVuKH2yVQncVQ7Sfg6ATXkh4ZTIMiwz4V/bzu30cep2JuxSHIhol0qdN7G
-         8AmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701724475; x=1702329275;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HC3Kqwq0MMmfCoFQwZgAsJVop+/+8BNQbF/H1UQSrUk=;
-        b=oUsij4aVzGGeZUi7G8O9rdsaeVZVtz8UHYyUPdJ+y/mmEwiUNp8Zm+KGmBASaMYONO
-         aV6M32lJlnLll37tAeJ/1tq3GwdvXnN+nCFbkxQ3O8dLZzNvS1soXAkdkFkN6krIkFld
-         NDByRox4KAfDnwvCTqCG3ox9ziPaWsKGrx8IP4rqaGDEjh7zN95Plf9UkhAzPIdh12i9
-         i2/s9ZNHYyE3hXTpVQQuB38CmZwJmiynOwUWwnW9Z/BeYy4bFvt+qy20hQ2KkO0OEdb8
-         rbkOPiTEAWoIlx/kfJ7x5Pxdoi9reAuGcF5ecE/c0a5JfZzfKKxsZxU1+EGHKtZW7BIM
-         ck0w==
-X-Gm-Message-State: AOJu0YyB8WONMZA4tFsZeUfCCVWXENrqn68kZ0ELO7UAEmzLgKgjBf8W
-	83VUEivb+Rv/8kQfENFWKmrF9exEIIU8s0ybrmvLcg==
-X-Google-Smtp-Source: AGHT+IHFNQl9WEbRcWJgH4WIhG5b7q61jmODDxGI8iaboRfnh21mH+fe1Ktul9AFsgSTRW5UVuMiGdR5g8dxC5LoCTU=
-X-Received: by 2002:a05:6512:12c4:b0:50b:fc76:42c with SMTP id
- p4-20020a05651212c400b0050bfc76042cmr87811lfg.2.1701724474909; Mon, 04 Dec
- 2023 13:14:34 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Kl62v9OI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701724901;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Z5VJ2oQ1wj5S8ZjdpkkMb08W5iTokCKCsQ2GnGslsPM=;
+	b=Kl62v9OIX9NuHuXjVGlMYhAa+I0u0l5Mdnmj7W3BUunZrAEXIfllktkhglRbiRJnmaavuc
+	2UEtgXWh4irBV4q9mKzzj5/R/qUIhl5twK0fjzcLWWgSqIJ5wXTcPmsyH1CpIgQ+UX2lm9
+	vTTRGs0P4d/ttavbKShYUIQ8ZMlHmD4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-Hl1eHi-CO1yVygCuiWe63Q-1; Mon, 04 Dec 2023 16:21:37 -0500
+X-MC-Unique: Hl1eHi-CO1yVygCuiWe63Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 666B485A58B
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 21:21:37 +0000 (UTC)
+Received: from [172.64.11.14] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4F13040C6EB9;
+	Mon,  4 Dec 2023 21:21:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 21 of 229): Test report for master
+ (6.7.0-rc3, mainline.kernel.org-clang, c9a925b7)
+Date: Mon, 04 Dec 2023 21:21:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231201235031.475293-1-irogers@google.com> <20231201235031.475293-9-irogers@google.com>
- <CAP-5=fUtoi7ynQ-x_7rrv_vYoTZfS_14COA1MskOFVXJ_jCDew@mail.gmail.com> <ZW420ecpaSjwykny@kernel.org>
-In-Reply-To: <ZW420ecpaSjwykny@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 4 Dec 2023 13:14:23 -0800
-Message-ID: <CAP-5=fXq2CTwSO8QVRdgz2uR73DrGU9qD3z5gPPD3ZEncsn36w@mail.gmail.com>
-Subject: Re: [PATCH v1 9/9] perf tests: Add option to run tests in parallel
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <30312.123120416213701571@us-mta-584.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 4, 2023 at 12:30=E2=80=AFPM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Dec 01, 2023 at 06:06:12PM -0800, Ian Rogers escreveu:
-> > On Fri, Dec 1, 2023 at 3:50=E2=80=AFPM Ian Rogers <irogers@google.com> =
-wrote:
-> > >
-> > > By default tests are forked, add an option (-p or --parallel) so that
-> > > the forked tests are all started in parallel and then their output
-> > > gathered serially. This is opt-in as running in parallel can cause
-> > > test flakes.
-> > >
-> > > Rather than fork within the code, the start_command/finish_command
-> > > from libsubcmd are used. This changes how stderr and stdout are
-> > > handled.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> >
-> > Actually, I think this patch needs more work. The verbose output is
-> > degraded and missing in some cases. Suggestions on how to fix welcome.
->
-> I'll think about, but to make progress I think the first 8 patches in
-> this series can be considered now?
+Hi, we tested your kernel and here are the results:
 
-That would be great. Thanks!
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Ian
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'io_uring-6.7-2023-11-30' of git://git.kernel=
+.dk/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/117297
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - Memory function: memfd_create
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking - Ethernet drivers sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - Reboot test
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                   s390x - Storage - lvm thinp sanity
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking - Ethernet drivers sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - kselftests upstream - net
+                  x86_64 - kselftests upstream - bpf
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking - Ethernet drivers sanity
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: blktests block/024 failed
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2128603
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
+au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
+            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
+913cfd3efb.camel@intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - CKI/restraint
+     aarch64 - SELinux Custom Module Setup
+     aarch64 - machineinfo
+     aarch64 - Boot test
+     aarch64 - Hardware - IPMI driver test
+     aarch64 - Hardware - IPMItool loop stress test
+     aarch64 - Storage - blktests - blk
+     aarch64 - Storage - blktests - nvme-tcp
+     aarch64 - Storage - block - filesystem fio test
+     aarch64 - Storage - block - queue scheduler test
+     aarch64 - Storage - swraid scsi_raid
+     aarch64 - stress: stress-ng - cpu-cache
+     aarch64 - stress: stress-ng - memory
+     aarch64 - Reboot test
+     aarch64 - CKI/restraint
+     aarch64 - SELinux Custom Module Setup
+     aarch64 - machineinfo
+     aarch64 - Boot test
+     aarch64 - selinux-policy: serge-testsuite
+     aarch64 - Hardware - Firmware test suite
+     aarch64 - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
