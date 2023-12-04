@@ -1,108 +1,92 @@
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2A430CF1
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 18:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0750930F9D
+	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 19:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XNnxNPjT"
-Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-7c59ac49f12so1385586241.1
-        for <llvm@lists.linux.dev>; Mon, 04 Dec 2023 10:59:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cGfT4WQ6"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6d87cf8a297so864781a34.2
+        for <llvm@lists.linux.dev>; Mon, 04 Dec 2023 11:18:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701716367; x=1702321167; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1701717520; x=1702322320; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OhTNasiWgh+dkfX0Dm+ISFeJznRbPndi9WOsk0B0xUY=;
-        b=XNnxNPjTSiARdPaZgn3SzSc/ePoWNlz79Qsjo8uQe0SXA90rjspS1gjkw2TEeRbEoC
-         Jj4h7rAX7tpRKwYT2Lvrugb5qxbmONMtzLPJdqBYInFhmt9nLlCNzCUxDVY5PKBeL7kG
-         0Pc+iXgx+os/xJ42HsMj3wao2c5PB0M3sOcJWzNCiyJMKyzGxcdZmHJZNQm5XjjmHts/
-         WwhWdsfDjcwQP/0aQXN0CAvoBhQQxoYuUFxLGKo65GXowfZRUKFfKGK13mvVVvqBNIm1
-         88vfFX7862WcXmI9OiqGreGaPF4HhxQuyxtoUtKKMnR+XkIW79XqXxPcyHfvqiwneVoo
-         gfMA==
+        bh=VWNzZv699g9WmaMge8Xt2XGWr8M2fBvBoGU1E608xn8=;
+        b=cGfT4WQ674tg+Hkuv08LF7EwtzxcmMqZANopT4/UFthpXIMGGX8M/4pxpCFyYP05HY
+         WntXQioAbx29IEr4nfiMuU2QpKPcjkY2gHZC9vf/28eA4Q6ViD2vqrxoZhqGmlaL98Zv
+         mif8F7cIKYLHp8b2Ap8BRP7B3mtC33R4NHIRGinzPk6slyap7JC9H/Ugp0lXUfV6OfP4
+         1FFrfYa67NEtaZCEx4HnDPLIaHbIq7jx0PLf+PgSy+eXiaZcS07evddmXavuocwDhi50
+         TPoE4UU+IwrYOpHOwjxsOsJnRTLWQbTZ5hyDW4nHi+uliaHJPggc8vJUk2OK8ky/qkBD
+         HVcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701716367; x=1702321167;
+        d=1e100.net; s=20230601; t=1701717520; x=1702322320;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OhTNasiWgh+dkfX0Dm+ISFeJznRbPndi9WOsk0B0xUY=;
-        b=f6dNG4VceE6BSvQcttGAKv2hSl8rzSujOZT/ZE1uiV0InBbGvuU6qySrzHlgrwi+o/
-         7HYPbofjBFhlqVtjaNAhJgmR6eh3rHCAy8VPy6VJ7siy5SV3YOVJEup468gCqu78Ex7F
-         VfniZswV/HlzcKWwR+7lh0UkrrIQXHH705xak0IG4v8FZrQEh0+tBf0Ryx1iTd5hfp/I
-         h9Pvw2WKhNVyqFjLHOVrObry4yDWUxWDcX+G43I8Prs/gh97bQCi1O2wp1cOefGlGHfh
-         ekeW1ijelfkL0UI0gujjbZGsYNG9vcdjQWFP4wG+kyoUlm2ygqly6PRJnNgPlc58GH9O
-         NAcw==
-X-Gm-Message-State: AOJu0Yx6114Dh25tp+H5LzLWRDJc3oCiyUCfc0VpJu3A7IZj7HFFwph7
-	84v1GJbRm9qLI4ESxTot2vJUJVgI28U2FKA1kztvqQ==
-X-Google-Smtp-Source: AGHT+IEfIkpQz/M9GZdrLZVheDNrcWpdTi70JO843+0WuxJNqy5io3mjCriO6X0r0jWpNfjDIVrEn82cF2d3kchgVn8=
-X-Received: by 2002:a05:6102:a53:b0:452:6d82:56e3 with SMTP id
- i19-20020a0561020a5300b004526d8256e3mr383189vss.6.1701716367163; Mon, 04 Dec
- 2023 10:59:27 -0800 (PST)
+        bh=VWNzZv699g9WmaMge8Xt2XGWr8M2fBvBoGU1E608xn8=;
+        b=l81WMXmXPBABOrnfs/Jz5FYgcS6i1TZA4nsmxIa4zLGXfBfeUj83c59RkI77VHrSCb
+         Qedbn76FJuVUcWrS6MQQ9YgHbsF8zvogAg7/U9i/oZ4T3V3n04i4tORRNxyH8Dm4Ys0F
+         inJSGl8O3Pg3lHCLpZcr3Ma7t58400n7GkPokq0wQ9CPmyRjdSVZgS3WG4TYhVSNgPS8
+         5VUkAYCPFkPpHHYW61I1A6bDBqmkBhv605B5OuUzFl+Eteod2EWOFOVHvACoaLwBOMBF
+         0vAKo7qM44yVPfHURVHBXe2+gSdqmElaj047u+GPCMCeS2me7yuRxzNUA0HDYcUuMqvz
+         LH2w==
+X-Gm-Message-State: AOJu0Yy4lkXz1pgPBDzrYbYr6JDuxt6ts9vXXOQ75XvGeqmKY8yCGsvo
+	+QeDZq8Fw4RvFmmw04wxN1JOSpSrWgWhh9P7BzNjdw==
+X-Google-Smtp-Source: AGHT+IHyqGlUNEc09zfk+7C7spFR2KrAlLytNjHQMZMVaTcBh0jkMo0aAva0Taxeji7L30FkvzDde4ybRx0p4piiiZw=
+X-Received: by 2002:a9d:4d02:0:b0:6d8:75a8:8455 with SMTP id
+ n2-20020a9d4d02000000b006d875a88455mr2668679otf.50.1701717519644; Mon, 04 Dec
+ 2023 11:18:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231130133630.192490507@infradead.org> <20231130134204.136058029@infradead.org>
- <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
- <20231204091334.GM3818@noisy.programming.kicks-ass.net> <20231204111128.GV8262@noisy.programming.kicks-ass.net>
- <20231204125239.GA1319@noisy.programming.kicks-ass.net> <ZW4LjmUKj1q6RWdL@krava>
- <20231204181614.GA7299@noisy.programming.kicks-ass.net> <20231204183354.GC7299@noisy.programming.kicks-ass.net>
-In-Reply-To: <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+References: <20231130133630.192490507@infradead.org> <20231130134204.026354676@infradead.org>
+In-Reply-To: <20231130134204.026354676@infradead.org>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 4 Dec 2023 10:58:48 -0800
-Message-ID: <CABCJKudYc5GtO7TLV=d0-ZYFfBxofrV3-q1vpsaT3MD7oTKpnA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Date: Mon, 4 Dec 2023 11:18:03 -0800
+Message-ID: <CABCJKufv1z0-+an7iws8J2v-c_Jg1Nfu47Um9rhCnVLxQfC6ug@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cfi: Flip headers
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Song Liu <song@kernel.org>, Song Liu <songliubraving@meta.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	linux-arch <linux-arch@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Joao Moreira <joao@overdrivepizza.com>, 
-	Mark Rutland <mark.rutland@arm.com>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	davem@davemloft.net, dsahern@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, keescook@chromium.org, nathan@kernel.org, 
+	ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, jpoimboe@kernel.org, 
+	joao@overdrivepizza.com, mark.rutland@arm.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 4, 2023 at 10:34=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+On Thu, Nov 30, 2023 at 5:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
 g> wrote:
 >
-> So afaict this is used through bpf_for_each_map_elem(), where the
-> argument still is properly callback_fn. However, in the desriptor
-> bpf_for_each_map_elem_proto the argument gets described as:
-> ARG_PTR_TO_FUNC, which in turn has a comment like:
+> Normal include order is that linux/foo.h should include asm/foo.h, CFI ha=
+s it
+> the wrong way around.
 >
->   ARG_PTR_TO_FUNC,        /* pointer to a bpf program function */
->
-> Which to me sounds like there is definite type punning involved. The
-> call in bpf_for_each_array_elem() is a regular C indirect call, which
-> gets adorned with the kCFI magic.
->
-> But I doubt the BPF function that gets used gets the correct matching
-> bits on.
->
-> TL;DR, I think this is a pre-existing problem with kCFI + eBPF and not
-> caused by my patches.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/riscv/include/asm/cfi.h |    3 ++-
+>  arch/riscv/kernel/cfi.c      |    2 +-
+>  arch/x86/include/asm/cfi.h   |    3 ++-
+>  arch/x86/kernel/cfi.c        |    4 ++--
+>  include/asm-generic/Kbuild   |    1 +
+>  include/asm-generic/cfi.h    |    5 +++++
+>  include/linux/cfi.h          |    1 +
+>  7 files changed, 14 insertions(+), 5 deletions(-)
 
-It is a pre-existing problem, I ran into the same failures when I
-looked into this briefly last year:
+Looks good to me, thanks!
 
-https://github.com/ClangBuiltLinux/linux/issues/1727
-
-In addition to bpf_for_each_array_elem, a few other callers also use
-the same function pointer type that doesn't match cfi_bpf_hash.
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
 Sami
