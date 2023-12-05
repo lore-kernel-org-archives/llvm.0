@@ -1,142 +1,128 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B63405D8
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 23:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AC741220
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 23:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DugbmtQr"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40b35199f94so25935e9.0
-        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 15:39:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701819593; x=1702424393; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tSWCSu+uiAqROdUkMO1B316jZcgb431g6mYLbAjqo80=;
-        b=DugbmtQrjyNajgXHSlUO/iscC+asM67rl88pKVjXWNHI6Y8sajHVcrU92wHb9OBRua
-         7rgeq2LbVMbOzRJGZDRBwvgSLBepiq+S+Aug6h/mTddBEXhUsUaK2Y/vhiJSgwWHMOU4
-         2Oq6L4QZj1l2eXniCmqi1r9zaFxBxMyOx+XMKiDof9GFcxq+qIXXiFBjhaRM1OllZr2T
-         yJJu5I4kKnU7Rwd1QByF3o3L/FCWs79ThONRx4l+EciWOYE5sYAWpEjxBs4uQhA344yF
-         HN7d0D7qCAghHMuMH2nIWuYpO0AwJLK+U+jitPz8BjlWvoRflcLsUicNks+UeLRVaBfd
-         dURw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701819593; x=1702424393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tSWCSu+uiAqROdUkMO1B316jZcgb431g6mYLbAjqo80=;
-        b=szM8nCJgylIzcdk9ulzzQ0CgkuBECLP/lAqxwWR5Xq6TTAnp5vJYDcVjF7ez2XpaqK
-         cSrqaFynL7vnTUzAPKRcWnsTetDh809WBx4iF0j7wYuS6TfWozXKdZZog41sKm6j7aAP
-         GE55LnPIS76Pe9jnkXSYBWCaXl8ycjqGJ12aHuq6PIfLyC2JoAAE+UmFfot0QRmcDzqQ
-         swj5azROn5lE1dkr0C0+/5JooQyJWx/J3mPgWlrw9P+JteqQc+lZmdNRm0LpD1JL6CPa
-         cKdeASUdiOwmmpzTgjo6hNCnF78yDdlvbsDeQ3gD8Y5/FNeqjyhz07yYnOe6pUN8Tqj8
-         xvpQ==
-X-Gm-Message-State: AOJu0Yx8HPIi/kIJSxv159Ek938+dMUUmv3y9fWEEN4ZfWDQ12odmmCd
-	4mUd80LzqAmr3xFU/enBs+k8XOPBpqSsVbi4qkR32g==
-X-Google-Smtp-Source: AGHT+IF8mDldPOjjvLBVwxyoBmhqdFoqGknCkdePsEll3+maAHtLGMnd7XmU96mZreg/qdTS7mVk+MDJmUNb3enDW1M=
-X-Received: by 2002:a05:600c:3b22:b0:40b:4355:a04b with SMTP id
- m34-20020a05600c3b2200b0040b4355a04bmr32914wms.6.1701819592988; Tue, 05 Dec
- 2023 15:39:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="nKkQEoBF";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bBb4xJ6D"
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id C06CD5C0099;
+	Tue,  5 Dec 2023 18:47:00 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 05 Dec 2023 18:47:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1701820020; x=1701906420; bh=v1AF7u8uyhL5eTCK0aLokAy6KSNNe4qNX9h
+	wmxep6io=; b=nKkQEoBFCEngX8kMNRRFmVuttVFB1DLZ7o+9DXrTBtsmwB5Iz1Y
+	tPVAjWSj8NXpHiGfap+IjroN2uT3B8fVXJhLk/+M1Unb5B3+uLETyQuax1Wv+q+t
+	/okMrQbBvy1qcu2PAztdw/nsNi5I41FLPQ5zrFpcyjWgxVrbwjkRqGMJX/Pw6EIu
+	TkBwpaXcIuFILIaU9V/pVg7Jr17YxI9XlOThRj6Qv5dfOtyK8ngvw1sZs41VOfFp
+	DCWmcHHNY7S2AakMHTYZqfpS3YwoKf9hxlwiCuH8kSgM+rK56BBAztTVyA5jpO71
+	PpDNkso7KhZ+evVGEF/vvy/id2yVqDySOew==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701820020; x=1701906420; bh=v1AF7u8uyhL5eTCK0aLokAy6KSNNe4qNX9h
+	wmxep6io=; b=bBb4xJ6D+VfjxbfscIlwlcKLH6erIAl59Jjl51+g4B825FQh4aQ
+	EjBIbZbofeuM+xeVMmZXmVCHgR9G7aLzPXpbIUDyrprcK9X/LeBz1OVsfT9GMk32
+	xh0UsSWuOcIH9v8SGhX6IYcL6DjFA/25sEBYJelozqvx9BG0eLORsJhXBBapSFlS
+	i1y+tZMu1HdcwR10apfb/VJ2ZzAesAH7B+OXGXHSiQnaVW5QdZuR+CV+XnW5evHb
+	WyIOr/T+hPCctGPXHp3aensKohAjJg1NqHuNkEbIvSlN+Bnw42Jfl9zN2cfnarTl
+	LpShoSKvmi9M6bVU32GrVdvyJIb0d6SYV9A==
+X-ME-Sender: <xms:c7ZvZR-R9UKBl1cE9WQB5g6BarDXhmu1oRztT8F8Auv9fRL9fMFq8w>
+    <xme:c7ZvZVvAehVMvLAhoPKOIh6u6QWEBPGJiReVIrBsQ4sDO9EslynX_x219teVXxGaQ
+    ih5eL6gi0nYuQ>
+X-ME-Received: <xmr:c7ZvZfAAWqMQNzJ1_SrwgxAhcRqTvNCrVm1ZEKrRAJZ4_VYvDzbSwBMBlrIdvO04xO2rab2EEkvgD-rOYj6xSOi6>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejledgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
+    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:c7ZvZVdyTaw2ffvejqSWsTPFp-EkcFftMvxVtcWO-Vg4V8UT0ZCuTw>
+    <xmx:c7ZvZWOdKwhdb5gT2HQ1A4DsHppU6-TEID5G2mGszykyhbUzm7v3SQ>
+    <xmx:c7ZvZXmRIxymqCPSQusJmHn-I2ZdMj2ulJmyhEVoM1eJm2qFbvCWqQ>
+    <xmx:dLZvZRE9bGSuMrEkB-gqL-RqrzetrqNEwrjRFPdBn0R2F4oywpp34g>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 5 Dec 2023 18:46:58 -0500 (EST)
+Date: Wed, 6 Dec 2023 08:46:50 +0900
+From: Greg KH <greg@kroah.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, tanzirh@google.com,
+	Kees Cook <keescook@chromium.org>,
+	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
+Message-ID: <2023120657-henna-spongy-9ef6@gregkh>
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205213807.GE1674809@ZenIV>
+ <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
+ <2023120608-ivy-snowdrop-890d@gregkh>
+ <CAKwvOdmFJ=ZGN8ZScS5oQpXnAL0wwtTDCeNNGpBKZXzQ4kRAVA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
- <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
- <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
- <20231201194858.GA290910@dev-arch.thelio-3990X> <CAFP8O3+uta+GQO7dpeNLe0OMFnX-tdEyvHREEu1ThjA3nFtTkQ@mail.gmail.com>
- <20231201215021.GA2579712@dev-arch.thelio-3990X> <CAFP8O3LJPqPVxcRzi_Qxvu_w8w76BXmfWv8YnsK+bMvqXb701Q@mail.gmail.com>
- <20231204231155.GA3560411@dev-arch.thelio-3990X>
-In-Reply-To: <20231204231155.GA3560411@dev-arch.thelio-3990X>
-From: Fangrui Song <maskray@google.com>
-Date: Tue, 5 Dec 2023 15:39:39 -0800
-Message-ID: <CAFP8O3Kgzt=fdOLH+TG1vDTfNzY_-YebhsdAgPJ7XJ+x7qO1ow@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
- known working versions
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	conor@kernel.org, ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdmFJ=ZGN8ZScS5oQpXnAL0wwtTDCeNNGpBKZXzQ4kRAVA@mail.gmail.com>
 
-On Mon, Dec 4, 2023 at 3:12=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> On Fri, Dec 01, 2023 at 08:31:12PM -0800, Fangrui Song wrote:
-> > Perhaps: Clang generates .uleb128 with label differences for DWARF v5,
-> > a feature that older binutils ports, utilizing RISC-V style linker
-> > relaxation, do not support.
+On Tue, Dec 05, 2023 at 02:14:55PM -0800, Nick Desaulniers wrote:
+> On Tue, Dec 5, 2023 at 1:59 PM Greg KH <greg@kroah.com> wrote:
 > >
-> > (Signed LEB128 is used by DWARF as well, but it is encoded directly
-> > into DW_OP_fbreg/DW_LNS_advance_line/etc, and explicit .sleb128
-> > directives are not emitted)
-> > (In assemblers, "label difference" is a more common term.)
-> > (People working on DWARF tend to prefer DWARF v5 to DWARF5, when the
-> > full "DWARF version 5" feels too verbose.)
->
-> Thanks, does this diff seem reasonable to you? I'd like to keep the
-> issue link as a paper trail and I figured that we might as well make the
-> configuration name slightly more accurate with that additional
-> information. I will send it as a separate patch in v2 tomorrow if so in
-> order to give people a chance to further chime in on the series.
->
-> Cheers,
-> Nathan
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a0ebce05a368..76c2cc697573 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -231,9 +231,10 @@ config DEBUG_INFO
->           in the "Debug information" choice below, indicating that debug
->           information will be generated for build targets.
->
-> -# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5=
-, which
-> -# some targets may not support: https://sourceware.org/bugzilla/show_bug=
-.cgi?id=3D27215
-> -config AS_HAS_NON_CONST_LEB128
-> +# Clang generates .uleb128 with label differences for DWARF v5, a featur=
-e that
-> +# older binutils ports do not support when utilizing RISC-V style linker
-> +# relaxation: https://sourceware.org/bugzilla/show_bug.cgi?id=3D27215
-> +config AS_HAS_NON_CONST_ULEB128
->         def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_=
-start3:\n.Lexpr_end4:)
->
->  choice
-> @@ -258,7 +259,7 @@ config DEBUG_INFO_NONE
->  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->         bool "Rely on the toolchain's implicit default DWARF version"
->         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 |=
-| (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 |=
-| (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_ULEB128)
->         help
->           The implicit default version of DWARF debug info produced by a
->           toolchain changes over time.
-> @@ -283,7 +284,7 @@ config DEBUG_INFO_DWARF5
->         bool "Generate DWARF Version 5 debuginfo"
->         select DEBUG_INFO
->         depends on !ARCH_HAS_BROKEN_DWARF5
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
- >=3D 23502 && AS_HAS_NON_CONST_LEB128)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
- >=3D 23502 && AS_HAS_NON_CONST_ULEB128)
->         help
->           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0=
-+ (gcc
->           5.0+ accepts the -gdwarf-5 flag but only had partial support fo=
-r some
+> > On Tue, Dec 05, 2023 at 01:51:10PM -0800, Nick Desaulniers wrote:
+> > > On Tue, Dec 5, 2023 at 1:38 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > > >
+> > > > It also breeds includes of asm/*.h, by the look of the output, which is
+> > > > not a good thing in general ;-/  E.g. #include <asm/uaccess.h> *anywhere*
+> > > > outside of linux/uaccess.h is a bad idea.
+> > >
+> > > It's not clear to me when it's ok to #include <asm/*.h>.  Is there a
+> > > convention here that I'm missing?
+> >
+> > General rule, NEVER include asm/*.h, there should be a include/*.h
+> > instead that works.  So much so that checkpatch.pl should catch this,
+> > right?
+> 
+> ah, shoot, I was showing Tanzir how to use `b4` for patch development,
+> and forgot to check this.  Indeed it does.
+> 
+> I can see how the check works (scripts/checkpatch.pl L5881).  Decoding
+> that will probably help us improve the tooling.
+> 
+> >
+> > But of course, it doesn't always hold true, there are a few minor
+> > exceptions, but they are rare.
+> 
+> $ grep -r \\#include lib | grep asm
+> 
+> shows quite a few exceptions, and just in lib/.
+> 
+> For example, lib/math/int_log.c includes asm/bug.h.  Is that a case
+> where lib/math/int_log.c should be #include 'ing linux/bug.h rather
+> than asm/bug.h?
 
-This diff looks good to me.
+Probably yes, but we don't normally go back and take coding style fixes
+for old files like this as it doesn't make much sense to do so.
 
+But, if you are cleaning up the headers for large portions with the goal
+of faster builds, that's a good reason.
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+Good luck!
+
+greg k-h
