@@ -1,94 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCFF6A32A;
-	Tue,  5 Dec 2023 17:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOHvhhhG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99653C433C8;
-	Tue,  5 Dec 2023 17:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701798785;
-	bh=qND1Cy64uVoi7dcRD4f9PhuWzWNexF0SFLJhlxPZ91E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bOHvhhhGxvy2Z/wb90CKjL692W3BqYaNIrPBlQ8ImdyJIOGtjD2j7xMkgGxaMhwXY
-	 kuQgjFkYAtPqKyCh+i4sbbU9AG9ZdJez5q9PL41RjRm1ErlRBqIYPEu6k0e02lLhM+
-	 aunfDl2k5E/MtUGpqtUdJ1blRg4NVZX8tdW5gqyY2FLk6MBHa/bQHiqK4ioRuGExQL
-	 /Ce9YdeDBNPfVf6BNBOuVMw5uaTnSM2pZMmwaXZi59+56lmcGv28gkYmhoYoBqZsRB
-	 3R7j/RRT3DyigF/LuAdEK4Nj7d+x5uL4nQSQ8uj1XzadQYLqbBZIhIYzLZSN5kWL0q
-	 T1OMbB5r4kInw==
-Date: Tue, 5 Dec 2023 10:53:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: richard@nod.at, anton.ivanov@cambridgegreys.com,
-	johannes@sipsolutions.net
-Cc: ndesaulniers@google.com, trix@redhat.com, linux-um@lists.infradead.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] um: net: Fix return type of uml_net_start_xmit()
-Message-ID: <20231205175302.GA536347@dev-arch.thelio-3990X>
-References: <20231003-um-net-wifpts-v1-1-02888c634ee7@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0816A32A
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 17:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6d87ee6973eso5110417a34.2
+        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 09:53:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701798806; x=1702403606;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mmF1E4cgql5JMVIjcXLrnsYwldekR7/sa+hhIzCwXi0=;
+        b=epAptJmvIHSVYVA7Fzh675QIipUDjmp78mc2/gpvIpJXpLRJBN8B4lkXoxPk83jyLr
+         ntiA0X4sMoSJ1hhRijCwZ48uA/0Xv449yWsbwIP+ZWaRwCDUjLmIeLDol0EVmtCuizf1
+         Tw/MM+v6QiFuVNXMubZt4yE4UPXDPYuPvGSDRcTaNYly2/S3QgFYihbAGLTIcS02dE5a
+         yxQJ5Zjsg7tFnpm2XE6zlrGrzm3Q3sksnaw/ZaLgYIHokPYhBmRvBJIvcakgTPlKl2zg
+         aX/qpHoSNgnvEOtZWBgr70jSU3rd/U8i2NZtVUV6dcCw9Rm5O4tnYMFg2YbAY4BSmHNv
+         EG/w==
+X-Gm-Message-State: AOJu0Yw/eQNpbDve3rbWu6g5wQW626PGTeZn0ZuRo4GFuQ2y1hq3UFvk
+	vnbYcEI/YOQcw7XQJ/ZgLhgFCDarJRKTjGBlCL5cUzCpC+dk
+X-Google-Smtp-Source: AGHT+IH/l4O9QOjC5H0eyORFG6DTQAO/7Nwr/Ft8BfBYchS8c0cPKHLrsH+MlzGJV9cmRIVOUbZZxQBNymoyDWNOKyWVP9RUfuNU
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231003-um-net-wifpts-v1-1-02888c634ee7@kernel.org>
+X-Received: by 2002:aca:1909:0:b0:3b8:752e:ca8b with SMTP id
+ l9-20020aca1909000000b003b8752eca8bmr3730765oii.11.1701798805977; Tue, 05 Dec
+ 2023 09:53:25 -0800 (PST)
+Date: Tue, 05 Dec 2023 09:53:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004f438d060bc6e988@google.com>
+Subject: [syzbot] [net?] WARNING in tcp_recvmsg_locked (2)
+From: syzbot <syzbot+06dbd397158ec0ea4983@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	cong.wang@bytedance.com, daniel@iogearbox.net, davem@davemloft.net, 
+	dsahern@kernel.org, edumazet@google.com, john.fastabend@gmail.com, 
+	kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, netdev@vger.kernel.org, pabeni@redhat.com, 
+	songliubraving@fb.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
+	yhs@fb.com, yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
 
-Ping? I would like to turn this warning on for W=1 and the kbuild test
-robot flagged this instance. If the UML folks don't want to carry it,
-could I get an ack so that it could go with the warning enablement in
-the kbuild tree?
+Hello,
 
-https://lore.kernel.org/20231002-enable-wincompatible-function-pointer-types-strict-w-1-v1-1-808ab955d42d@kernel.org/
+syzbot found the following issue on:
 
-On Tue, Oct 03, 2023 at 11:35:53AM -0700, Nathan Chancellor wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> warning in clang aims to catch these at compile time, which reveals:
-> 
->   arch/um/drivers/net_kern.c:353:21: warning: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Wincompatible-function-pointer-types-strict]
->     353 |         .ndo_start_xmit         = uml_net_start_xmit,
->         |                                   ^~~~~~~~~~~~~~~~~~
->   1 warning generated.
-> 
-> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> 'netdev_tx_t', not 'int'. Adjust the return type of uml_net_start_xmit()
-> to match the prototype's to resolve the warning. While UML does not
-> currently implement support for kCFI, it could in the future, which
-> means this warning becomes a fatal CFI failure at run time.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202310031340.v1vPh207-lkp@intel.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/um/drivers/net_kern.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/um/drivers/net_kern.c b/arch/um/drivers/net_kern.c
-> index 3d7836c46507..cabcc501b448 100644
-> --- a/arch/um/drivers/net_kern.c
-> +++ b/arch/um/drivers/net_kern.c
-> @@ -204,7 +204,7 @@ static int uml_net_close(struct net_device *dev)
->  	return 0;
->  }
->  
-> -static int uml_net_start_xmit(struct sk_buff *skb, struct net_device *dev)
-> +static netdev_tx_t uml_net_start_xmit(struct sk_buff *skb, struct net_device *dev)
->  {
->  	struct uml_net_private *lp = netdev_priv(dev);
->  	unsigned long flags;
-> 
-> ---
-> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-> change-id: 20231003-um-net-wifpts-14a7429c7524
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+HEAD commit:    8470e4368b0f Merge branch 'net-cacheline-optimizations'
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12094286e80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f8715b6ede5c4b90
+dashboard link: https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1247bee2e80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1285243ce80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/90007d08e178/disk-8470e436.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b55270de1cdc/vmlinux-8470e436.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2237d34b6fec/bzImage-8470e436.xz
+
+The issue was bisected to:
+
+commit 965b57b469a589d64d81b1688b38dcb537011bb0
+Author: Cong Wang <cong.wang@bytedance.com>
+Date:   Wed Jun 15 16:20:12 2022 +0000
+
+    net: Introduce a new proto_ops ->read_skb()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1087c0d4e80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1287c0d4e80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1487c0d4e80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+06dbd397158ec0ea4983@syzkaller.appspotmail.com
+Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
+
+WARNING: CPU: 1 PID: 5130 at net/ipv4/tcp.c:2396 tcp_recvmsg_locked+0xa54/0x2490 net/ipv4/tcp.c:2396
+Modules linked in:
+CPU: 1 PID: 5130 Comm: syz-executor313 Not tainted 6.7.0-rc3-syzkaller-00690-g8470e4368b0f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
+RIP: 0010:tcp_recvmsg_locked+0xa54/0x2490 net/ipv4/tcp.c:2396
+Code: 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 70 18 00 00 48 8b 04 24 89 da 48 c7 c7 a0 b0 f4 8b 44 8b 44 24 30 8b 30 e8 ad 69 57 f8 90 <0f> 0b 90 90 e9 62 fa ff ff e8 7e 4b 91 f8 49 8d 5f 60 be 08 00 00
+RSP: 0018:ffffc90003acf290 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 000000000618aefc RCX: ffffffff814db209
+RDX: ffff8880259e9dc0 RSI: ffffffff814db216 RDI: 0000000000000001
+RBP: ffff8880250b7024 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000004 R12: dffffc0000000000
+R13: ffff8880250b6ff0 R14: 0000000000000001 R15: ffff8880250b7018
+FS:  0000555556ebf380(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff3dd9f6f8 CR3: 000000002534d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ receive_fallback_to_copy+0x1d5/0x7a0 net/ipv4/tcp.c:1866
+ tcp_zerocopy_receive+0x110b/0x2110 net/ipv4/tcp.c:2099
+ do_tcp_getsockopt+0x1ae0/0x27b0 net/ipv4/tcp.c:4257
+ tcp_getsockopt net/ipv4/tcp.c:4342 [inline]
+ tcp_getsockopt+0xd1/0xf0 net/ipv4/tcp.c:4333
+ do_sock_getsockopt+0x2e1/0x6c0 net/socket.c:2373
+ __sys_getsockopt+0x1a3/0x270 net/socket.c:2402
+ __do_sys_getsockopt net/socket.c:2412 [inline]
+ __se_sys_getsockopt net/socket.c:2409 [inline]
+ __x64_sys_getsockopt+0xbd/0x150 net/socket.c:2409
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x40/0x110 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+RIP: 0033:0x7fcd44438c59
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff3dd9f7f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000037
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fcd44438c59
+RDX: 0000000000000023 RSI: 0000000000000006 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00000000200004c0 R09: 0000000100000000
+R10: 0000000020000380 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
