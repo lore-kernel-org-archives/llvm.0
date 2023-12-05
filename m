@@ -1,144 +1,441 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450054177F;
-	Tue,  5 Dec 2023 09:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB264C620;
+	Tue,  5 Dec 2023 10:34:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I/R0s+ns"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iPgimBiT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701769839; x=1733305839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xWFYoe5oxsGtQxUArBVv5GQudQnV/5Hoox5HND4fMlM=;
-  b=I/R0s+nsECvLUgt3FPtYjaPDvC5uy1nNU1LKiY1RzS6jvLLx6jjeA+Jf
-   Yv7OEZ9JSkaBkK/c8IKmIC7ga3ZvG1pW/Z9fV89cYuTaDhabbS9t2kdER
-   lDM/wJ6jv4WVXZ7XalXpdytDr4QsBtMjluDVxoKtICW8Lf1T1X1whNjmt
-   S2/XX0B8rnxmg9KNY4UTuNUpyD5oyU+6lUC+bpHT816Ffr7nLHLzaoigI
-   ldQodmxk1YnHgBQidAjoZ7YBqIB7K8kFsvuemXHKMpXpfygEjSUEEhj3k
-   PpCzMfI6869usL2fuRUxHUnzN2SsOYIMQPlyqVw7cwjFNSEddZxdBXfNp
+  t=1701772466; x=1733308466;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=yYgLqrXGI2VB45wRL2h58GT+poyNKmcqbZtPV5B9t5g=;
+  b=iPgimBiTBKiXnGipSMUj9Zido9bPu5qU/emdruVsJEqqrftemQAFniJh
+   mInelTXRElb5n1QmDVoZ0/d6I7464R8a0/u/BI+KkcqsU+AXJF3Wc4v57
+   kbs1OMjF7kuw/QToxuR/bNttm11lL+qTy/GFrxx+Q1cyxtAwb8ftYQnaW
+   1rYzZ65hqa5o2UcKi+F7iYWCuLtXC99o6tlmReRXVTVK5h44/v0/DfIKO
+   Ls5iMCaEX77nYaFmUm8Hwkwub2+K4CMk++ZjZ8yMAyiXaHB/4PcIGXFtq
+   S6jKe/+DOmEc7snh72NnPT3q8McgDwlWhDNr3vcyYC8YL3POpznLUvikZ
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="384269377"
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="7217880"
 X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
-   d="scan'208";a="384269377"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 01:50:38 -0800
+   d="scan'208";a="7217880"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 02:34:23 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="805229070"
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="799924052"
 X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
-   d="scan'208";a="805229070"
+   d="scan'208";a="799924052"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Dec 2023 01:50:36 -0800
+  by orsmga008.jf.intel.com with ESMTP; 05 Dec 2023 02:34:20 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rAS4Y-0008hn-13;
-	Tue, 05 Dec 2023 09:50:34 +0000
-Date: Tue, 5 Dec 2023 17:50:32 +0800
+	id 1rASks-0008m4-1T;
+	Tue, 05 Dec 2023 10:34:18 +0000
+Date: Tue, 5 Dec 2023 18:33:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Atish Patra <atishp@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Atish Patra <Atish.Patra@wdc.com>
-Subject: [atishp04:kvm_pmu_snapshot_v1 32/32]
- arch/riscv/kvm/vcpu_pmu.c:204:6: warning: unused variable 'enabled'
-Message-ID: <202312051709.nVYMNAeq-lkp@intel.com>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 08/15] dyndbg: move flags field to a new structure
+Message-ID: <202312051858.4Q1PZdEQ-lkp@intel.com>
+References: <20231130234048.157509-9-lb@semihalf.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231130234048.157509-9-lb@semihalf.com>
 
-tree:   https://github.com/atishp04/linux kvm_pmu_snapshot_v1
-head:   7536565387bf2f507db4c5407ad0a27413b349db
-commit: 7536565387bf2f507db4c5407ad0a27413b349db [32/32] RISC-V: KVM: Support 64 bit firmware counters on RV32
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231205/202312051709.nVYMNAeq-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312051709.nVYMNAeq-lkp@intel.com/reproduce)
+Hi Łukasz,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.7-rc4 next-20231205]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/ukasz-Bartosik/dyndbg-add-_DPRINTK_FLAGS_TRACE/20231201-084054
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20231130234048.157509-9-lb%40semihalf.com
+patch subject: [PATCH v2 08/15] dyndbg: move flags field to a new structure
+config: powerpc64-randconfig-001-20231204 (https://download.01.org/0day-ci/archive/20231205/202312051858.4Q1PZdEQ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312051858.4Q1PZdEQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312051709.nVYMNAeq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312051858.4Q1PZdEQ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/vcpu_pmu.c:204:6: warning: unused variable 'enabled' [-Wunused-variable]
-     204 |         u64 enabled, running;
-         |             ^
->> arch/riscv/kvm/vcpu_pmu.c:204:15: warning: unused variable 'running' [-Wunused-variable]
-     204 |         u64 enabled, running;
-         |                      ^
-   arch/riscv/kvm/vcpu_pmu.c:383:28: warning: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-     383 |                 if (kvpmu->snapshot_addr != INVALID_GPA)
-         |                     ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:387:25: warning: implicit conversion from 'gpa_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     387 |         kvpmu->snapshot_addr = INVALID_GPA;
-         |                              ~ ^~~~~~~~~~~
-   include/linux/kvm_types.h:43:22: note: expanded from macro 'INVALID_GPA'
-      43 | #define INVALID_GPA     (~(gpa_t)0)
-         |                          ^~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:440:26: warning: implicit conversion from 'gpa_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     440 |                 kvpmu->snapshot_addr = INVALID_GPA;
-         |                                      ~ ^~~~~~~~~~~
-   include/linux/kvm_types.h:43:22: note: expanded from macro 'INVALID_GPA'
-      43 | #define INVALID_GPA     (~(gpa_t)0)
-         |                          ^~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:485:41: warning: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-     485 |             (bSnapshot && kvpmu->snapshot_addr == INVALID_GPA)) {
-         |                           ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:556:42: warning: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-     556 |             (bSnapshot && (kvpmu->snapshot_addr == INVALID_GPA))) {
-         |                            ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:771:25: warning: implicit conversion from 'gpa_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     771 |         kvpmu->snapshot_addr = INVALID_GPA;
-         |                              ~ ^~~~~~~~~~~
-   include/linux/kvm_types.h:43:22: note: expanded from macro 'INVALID_GPA'
-      43 | #define INVALID_GPA     (~(gpa_t)0)
-         |                          ^~~~~~~~~
-   8 warnings generated.
+>> drivers/scsi/hpsa.c:7581:4: error: no member named 'flags' in 'struct _ddebug'
+                           dev_dbg(&pdev->dev, "memory BAR = %lx\n",
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/hpsa.c:8739:32: warning: shift count >= width of type [-Wshift-count-overflow]
+           rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
+                                         ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 1 error generated.
+--
+>> drivers/scsi/wd719x.c:583:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&wd->pdev->dev, "SCB terminated by direct command\n");
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/wd719x.c:598:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&wd->pdev->dev, "selection timeout\n");
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/wd719x.c:601:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&wd->pdev->dev, "bus reset occurred\n");
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/wd719x.c:605:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&wd->pdev->dev, "SCSI bus error\n");
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/wd719x.c:625:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&wd->pdev->dev, "auto request sense\n");
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+--
+>> drivers/scsi/myrb.c:1412:2: error: no member named 'flags' in 'struct _ddebug'
+           dev_dbg(&scmd->device->sdev_gendev,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/myrb.c:1437:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&shost->shost_gendev, "ldev %u in state %x, skip\n",
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/myrb.c:1637:2: error: no member named 'flags' in 'struct _ddebug'
+           dev_dbg(&sdev->sdev_gendev,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/myrb.c:1685:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&sdev->sdev_gendev,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/scsi/myrb.c:1692:3: error: no member named 'flags' in 'struct _ddebug'
+                   dev_dbg(&sdev->sdev_gendev,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:258:2: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+--
+>> drivers/usb/host/fhci-hub.c:53:2: error: no member named 'flags' in 'struct _ddebug'
+           fhci_dbg(fhci, "-> %s: %d\n", __func__, status);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/fhci.h:452:3: note: expanded from macro 'fhci_dbg'
+                   dev_dbg(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/usb/host/fhci-hub.c:74:2: error: no member named 'flags' in 'struct _ddebug'
+           fhci_dbg(fhci, "<- %s: %d\n", __func__, status);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/fhci.h:452:3: note: expanded from macro 'fhci_dbg'
+                   dev_dbg(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/usb/host/fhci-hub.c:83:2: error: no member named 'flags' in 'struct _ddebug'
+           fhci_dbg(fhci, "-> %s\n", __func__);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/fhci.h:452:3: note: expanded from macro 'fhci_dbg'
+                   dev_dbg(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/usb/host/fhci-hub.c:104:2: error: no member named 'flags' in 'struct _ddebug'
+           fhci_dbg(fhci, "<- %s\n", __func__);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/fhci.h:452:3: note: expanded from macro 'fhci_dbg'
+                   dev_dbg(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:231:6: note: expanded from macro '__dynamic_func_call_cls'
+           if (DYNAMIC_DEBUG_BRANCH(id))                           \
+               ^                    ~~
+   include/linux/dynamic_debug.h:213:22: note: expanded from macro 'DYNAMIC_DEBUG_BRANCH'
+           unlikely(descriptor.flags & _DPRINTK_FLAGS_ENABLED)
+                    ~~~~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   drivers/usb/host/fhci-hub.c:113:2: error: no member named 'flags' in 'struct _ddebug'
+           fhci_dbg(fhci, "-> %s\n", __func__);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/fhci.h:452:3: note: expanded from macro 'fhci_dbg'
+                   dev_dbg(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:2: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:281:2: note: expanded from macro 'dynamic_dev_dbg'
+           _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+..
 
 
-vim +/enabled +204 arch/riscv/kvm/vcpu_pmu.c
+vim +7581 drivers/scsi/hpsa.c
 
-   185	
-   186	static int pmu_get_pmc_index(struct kvm_pmu *pmu, unsigned long eidx,
-   187				     unsigned long cbase, unsigned long cmask)
-   188	{
-   189		int ret;
-   190	
-   191		/* Fixed counters need to be have fixed mapping as they have different width */
-   192		ret = kvm_pmu_get_fixed_pmc_index(eidx);
-   193		if (ret >= 0)
-   194			return ret;
-   195	
-   196		return kvm_pmu_get_programmable_pmc_index(pmu, eidx, cbase, cmask);
-   197	}
-   198	#if defined(CONFIG_32BIT)
-   199	static int pmu_fw_ctr_read_hi(struct kvm_vcpu *vcpu, unsigned long cidx,
-   200				      unsigned long *out_val)
-   201	{
-   202		struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-   203		struct kvm_pmc *pmc;
- > 204		u64 enabled, running;
-   205		int fevent_code;
-   206	
-   207		pmc = &kvpmu->pmc[cidx];
-   208	
-   209		if (pmc->cinfo.type != SBI_PMU_CTR_TYPE_FW)
-   210			return -EINVAL;
-   211	
-   212		fevent_code = get_event_code(pmc->event_idx);
-   213		pmc->counter_val = kvpmu->fw_event[fevent_code].value;
-   214	
-   215		*out_val = pmc->counter_val >> 32;
-   216	
-   217		return 0;
-   218	}
-   219	#endif
-   220	
+e5c880d1d5923c Stephen M. Cameron 2010-05-27  7571  
+6f039790510fd6 Greg Kroah-Hartman 2012-12-21  7572  static int hpsa_pci_find_memory_BAR(struct pci_dev *pdev,
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7573  				    unsigned long *memory_bar)
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7574  {
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7575  	int i;
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7576  
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7577  	for (i = 0; i < DEVICE_COUNT_RESOURCE; i++)
+12d2cd4711b9e3 Stephen M. Cameron 2010-06-16  7578  		if (pci_resource_flags(pdev, i) & IORESOURCE_MEM) {
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7579  			/* addressing mode bits already removed */
+12d2cd4711b9e3 Stephen M. Cameron 2010-06-16  7580  			*memory_bar = pci_resource_start(pdev, i);
+12d2cd4711b9e3 Stephen M. Cameron 2010-06-16 @7581  			dev_dbg(&pdev->dev, "memory BAR = %lx\n",
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7582  				*memory_bar);
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7583  			return 0;
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7584  		}
+12d2cd4711b9e3 Stephen M. Cameron 2010-06-16  7585  	dev_warn(&pdev->dev, "no memory BAR found\n");
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7586  	return -ENODEV;
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7587  }
+3a7774ceb89f02 Stephen M. Cameron 2010-05-27  7588  
 
 -- 
 0-DAY CI Kernel Test Service
