@@ -1,229 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807C6405D3;
-	Tue,  5 Dec 2023 23:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B63405D8
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 23:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cRBM0zet"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701819306; x=1733355306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q1Ro+uJdPYPP7GHlP970a2IwYcDn5FDdLVSOC+XE8vo=;
-  b=cRBM0zet/XSkDrqt4ffhGHGw8DhDeK2tp6B4fSy+vBMYTPbfR7m1OjwA
-   DBCqZ5QqUfZGDVT0R9MUYOb3GEWlOP4ngAtFk7p4/Ik+0fLx158o6oyD5
-   amoMx+P6TWa8RpSdq3mFoVMCpJLLrUp878qoaN17GhrAFkOfDRygxShx5
-   lYoRsMRmqYMjp2tRf/A0TVU9rIbMjabP/13uWIIlhwM+iOUq59ZbNDFPw
-   +EowAZSoLa7snuNtKxwqDH2lRvSGAhfZN26OwEm5pdHGaxWeL6vuIBnTa
-   HAKAYs5EGX9XhgAN9sXCPbjO0bjq+A00ExYLDHLjGfHtHenEX1KQlwmMS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="374157360"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="374157360"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 15:35:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="914974629"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="914974629"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Dec 2023 15:35:01 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAewM-0009sQ-32;
-	Tue, 05 Dec 2023 23:34:58 +0000
-Date: Wed, 6 Dec 2023 07:34:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Boris Brezillon <bbrezillon@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 12/14] drm/panthor: Allow driver compilation
-Message-ID: <202312060755.OMcP3qSq-lkp@intel.com>
-References: <20231204173313.2098733-13-boris.brezillon@collabora.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DugbmtQr"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40b35199f94so25935e9.0
+        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 15:39:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701819593; x=1702424393; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tSWCSu+uiAqROdUkMO1B316jZcgb431g6mYLbAjqo80=;
+        b=DugbmtQrjyNajgXHSlUO/iscC+asM67rl88pKVjXWNHI6Y8sajHVcrU92wHb9OBRua
+         7rgeq2LbVMbOzRJGZDRBwvgSLBepiq+S+Aug6h/mTddBEXhUsUaK2Y/vhiJSgwWHMOU4
+         2Oq6L4QZj1l2eXniCmqi1r9zaFxBxMyOx+XMKiDof9GFcxq+qIXXiFBjhaRM1OllZr2T
+         yJJu5I4kKnU7Rwd1QByF3o3L/FCWs79ThONRx4l+EciWOYE5sYAWpEjxBs4uQhA344yF
+         HN7d0D7qCAghHMuMH2nIWuYpO0AwJLK+U+jitPz8BjlWvoRflcLsUicNks+UeLRVaBfd
+         dURw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701819593; x=1702424393;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tSWCSu+uiAqROdUkMO1B316jZcgb431g6mYLbAjqo80=;
+        b=szM8nCJgylIzcdk9ulzzQ0CgkuBECLP/lAqxwWR5Xq6TTAnp5vJYDcVjF7ez2XpaqK
+         cSrqaFynL7vnTUzAPKRcWnsTetDh809WBx4iF0j7wYuS6TfWozXKdZZog41sKm6j7aAP
+         GE55LnPIS76Pe9jnkXSYBWCaXl8ycjqGJ12aHuq6PIfLyC2JoAAE+UmFfot0QRmcDzqQ
+         swj5azROn5lE1dkr0C0+/5JooQyJWx/J3mPgWlrw9P+JteqQc+lZmdNRm0LpD1JL6CPa
+         cKdeASUdiOwmmpzTgjo6hNCnF78yDdlvbsDeQ3gD8Y5/FNeqjyhz07yYnOe6pUN8Tqj8
+         xvpQ==
+X-Gm-Message-State: AOJu0Yx8HPIi/kIJSxv159Ek938+dMUUmv3y9fWEEN4ZfWDQ12odmmCd
+	4mUd80LzqAmr3xFU/enBs+k8XOPBpqSsVbi4qkR32g==
+X-Google-Smtp-Source: AGHT+IF8mDldPOjjvLBVwxyoBmhqdFoqGknCkdePsEll3+maAHtLGMnd7XmU96mZreg/qdTS7mVk+MDJmUNb3enDW1M=
+X-Received: by 2002:a05:600c:3b22:b0:40b:4355:a04b with SMTP id
+ m34-20020a05600c3b2200b0040b4355a04bmr32914wms.6.1701819592988; Tue, 05 Dec
+ 2023 15:39:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231204173313.2098733-13-boris.brezillon@collabora.com>
+References: <20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org>
+ <20231129-riscv-restrict-dwarf5-llvm-v1-2-ec0d368fb538@kernel.org>
+ <CAFP8O3JscgacLPX-_pc2J0uhqk=ehtxSNStzo7PwewPSuXkxiw@mail.gmail.com>
+ <20231201194858.GA290910@dev-arch.thelio-3990X> <CAFP8O3+uta+GQO7dpeNLe0OMFnX-tdEyvHREEu1ThjA3nFtTkQ@mail.gmail.com>
+ <20231201215021.GA2579712@dev-arch.thelio-3990X> <CAFP8O3LJPqPVxcRzi_Qxvu_w8w76BXmfWv8YnsK+bMvqXb701Q@mail.gmail.com>
+ <20231204231155.GA3560411@dev-arch.thelio-3990X>
+In-Reply-To: <20231204231155.GA3560411@dev-arch.thelio-3990X>
+From: Fangrui Song <maskray@google.com>
+Date: Tue, 5 Dec 2023 15:39:39 -0800
+Message-ID: <CAFP8O3Kgzt=fdOLH+TG1vDTfNzY_-YebhsdAgPJ7XJ+x7qO1ow@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: Restrict DWARF5 when building with LLVM to
+ known working versions
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	conor@kernel.org, ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Boris,
+On Mon, Dec 4, 2023 at 3:12=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Fri, Dec 01, 2023 at 08:31:12PM -0800, Fangrui Song wrote:
+> > Perhaps: Clang generates .uleb128 with label differences for DWARF v5,
+> > a feature that older binutils ports, utilizing RISC-V style linker
+> > relaxation, do not support.
+> >
+> > (Signed LEB128 is used by DWARF as well, but it is encoded directly
+> > into DW_OP_fbreg/DW_LNS_advance_line/etc, and explicit .sleb128
+> > directives are not emitted)
+> > (In assemblers, "label difference" is a more common term.)
+> > (People working on DWARF tend to prefer DWARF v5 to DWARF5, when the
+> > full "DWARF version 5" feels too verbose.)
+>
+> Thanks, does this diff seem reasonable to you? I'd like to keep the
+> issue link as a paper trail and I figured that we might as well make the
+> configuration name slightly more accurate with that additional
+> information. I will send it as a separate patch in v2 tomorrow if so in
+> order to give people a chance to further chime in on the series.
+>
+> Cheers,
+> Nathan
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index a0ebce05a368..76c2cc697573 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -231,9 +231,10 @@ config DEBUG_INFO
+>           in the "Debug information" choice below, indicating that debug
+>           information will be generated for build targets.
+>
+> -# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5=
+, which
+> -# some targets may not support: https://sourceware.org/bugzilla/show_bug=
+.cgi?id=3D27215
+> -config AS_HAS_NON_CONST_LEB128
+> +# Clang generates .uleb128 with label differences for DWARF v5, a featur=
+e that
+> +# older binutils ports do not support when utilizing RISC-V style linker
+> +# relaxation: https://sourceware.org/bugzilla/show_bug.cgi?id=3D27215
+> +config AS_HAS_NON_CONST_ULEB128
+>         def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_=
+start3:\n.Lexpr_end4:)
+>
+>  choice
+> @@ -258,7 +259,7 @@ config DEBUG_INFO_NONE
+>  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>         bool "Rely on the toolchain's implicit default DWARF version"
+>         select DEBUG_INFO
+> -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 |=
+| (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)
+> +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 |=
+| (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_ULEB128)
+>         help
+>           The implicit default version of DWARF debug info produced by a
+>           toolchain changes over time.
+> @@ -283,7 +284,7 @@ config DEBUG_INFO_DWARF5
+>         bool "Generate DWARF Version 5 debuginfo"
+>         select DEBUG_INFO
+>         depends on !ARCH_HAS_BROKEN_DWARF5
+> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
+ >=3D 23502 && AS_HAS_NON_CONST_LEB128)
+> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
+ >=3D 23502 && AS_HAS_NON_CONST_ULEB128)
+>         help
+>           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0=
++ (gcc
+>           5.0+ accepts the -gdwarf-5 flag but only had partial support fo=
+r some
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.7-rc4 next-20231205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Boris-Brezillon/drm-panthor-Add-GPU-register-definitions/20231205-023301
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20231204173313.2098733-13-boris.brezillon%40collabora.com
-patch subject: [PATCH v3 12/14] drm/panthor: Allow driver compilation
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231206/202312060755.OMcP3qSq-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060755.OMcP3qSq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312060755.OMcP3qSq-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/panthor/panthor_mmu.c:1019:8: error: assigning to 'bool' (aka '_Bool') from incompatible type 'void'
-    1019 |         unpin = drm_gpuvm_bo_put(vm_bo);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/panthor/panthor_mmu.c:2167:4: error: field designator 'alloc' does not refer to any field in type 'struct io_pgtable_cfg'
-    2167 |                 .alloc          = alloc_pt,
-         |                 ~^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/panthor/panthor_mmu.c:2168:4: error: field designator 'free' does not refer to any field in type 'struct io_pgtable_cfg'
-    2168 |                 .free           = free_pt,
-         |                 ~^~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
---
->> drivers/gpu/drm/panthor/panthor_sched.c:1966:6: warning: variable 'csg_mod_mask' set but not used [-Wunused-but-set-variable]
-    1966 |         u32 csg_mod_mask = 0, free_csg_slots = 0;
-         |             ^
-   1 warning generated.
+This diff looks good to me.
 
 
-vim +2167 drivers/gpu/drm/panthor/panthor_mmu.c
-
-bed8deda31e29cf Boris Brezillon 2023-12-04  2099  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2100  /**
-bed8deda31e29cf Boris Brezillon 2023-12-04  2101   * panthor_vm_create() - Create a VM
-bed8deda31e29cf Boris Brezillon 2023-12-04  2102   * @ptdev: Device.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2103   * @for_mcu: True if this is the FW MCU VM.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2104   * @kernel_va_start: Start of the range reserved for kernel BO mapping.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2105   * @kernel_va_size: Size of the range reserved for kernel BO mapping.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2106   * @auto_kernel_va_start: Start of the auto-VA kernel range.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2107   * @auto_kernel_va_size: Size of the auto-VA kernel range.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2108   *
-bed8deda31e29cf Boris Brezillon 2023-12-04  2109   * Return: A valid pointer on success, an ERR_PTR() otherwise.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2110   */
-bed8deda31e29cf Boris Brezillon 2023-12-04  2111  struct panthor_vm *
-bed8deda31e29cf Boris Brezillon 2023-12-04  2112  panthor_vm_create(struct panthor_device *ptdev, bool for_mcu,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2113  		  u64 kernel_va_start, u64 kernel_va_size,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2114  		  u64 auto_kernel_va_start, u64 auto_kernel_va_size)
-bed8deda31e29cf Boris Brezillon 2023-12-04  2115  {
-bed8deda31e29cf Boris Brezillon 2023-12-04  2116  	u32 va_bits = GPU_MMU_FEATURES_VA_BITS(ptdev->gpu_info.mmu_features);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2117  	u32 pa_bits = GPU_MMU_FEATURES_PA_BITS(ptdev->gpu_info.mmu_features);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2118  	u64 full_va_range = 1ull << min_t(u32, va_bits, sizeof(unsigned long) * 8);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2119  	struct drm_gem_object *dummy_gem;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2120  	struct drm_gpu_scheduler *sched;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2121  	struct io_pgtable_cfg pgtbl_cfg;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2122  	u64 mair, min_va, va_range;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2123  	struct panthor_vm *vm;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2124  	int ret;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2125  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2126  	vm = kzalloc(sizeof(*vm), GFP_KERNEL);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2127  	if (!vm)
-bed8deda31e29cf Boris Brezillon 2023-12-04  2128  		return ERR_PTR(-ENOMEM);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2129  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2130  	/* We allocate a dummy GEM for the VM. */
-bed8deda31e29cf Boris Brezillon 2023-12-04  2131  	dummy_gem = drm_gpuvm_resv_object_alloc(&ptdev->base);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2132  	if (!dummy_gem) {
-bed8deda31e29cf Boris Brezillon 2023-12-04  2133  		ret = -ENOMEM;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2134  		goto err_free_vm;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2135  	}
-bed8deda31e29cf Boris Brezillon 2023-12-04  2136  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2137  	mutex_init(&vm->heaps.lock);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2138  	vm->for_mcu = for_mcu;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2139  	vm->ptdev = ptdev;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2140  	mutex_init(&vm->op_lock);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2141  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2142  	if (for_mcu) {
-bed8deda31e29cf Boris Brezillon 2023-12-04  2143  		/* CSF MCU is a cortex M7, and can only address 4G */
-bed8deda31e29cf Boris Brezillon 2023-12-04  2144  		min_va = 0;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2145  		va_range = SZ_4G;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2146  	} else {
-bed8deda31e29cf Boris Brezillon 2023-12-04  2147  		min_va = 0;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2148  		va_range = full_va_range;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2149  	}
-bed8deda31e29cf Boris Brezillon 2023-12-04  2150  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2151  	mutex_init(&vm->mm_lock);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2152  	drm_mm_init(&vm->mm, kernel_va_start, kernel_va_size);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2153  	vm->kernel_auto_va.start = auto_kernel_va_start;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2154  	vm->kernel_auto_va.end = vm->kernel_auto_va.start + auto_kernel_va_size - 1;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2155  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2156  	INIT_LIST_HEAD(&vm->node);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2157  	INIT_LIST_HEAD(&vm->as.lru_node);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2158  	vm->as.id = -1;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2159  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2160  	pgtbl_cfg = (struct io_pgtable_cfg) {
-bed8deda31e29cf Boris Brezillon 2023-12-04  2161  		.pgsize_bitmap	= SZ_4K | SZ_2M,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2162  		.ias		= va_bits,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2163  		.oas		= pa_bits,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2164  		.coherent_walk	= ptdev->coherent,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2165  		.tlb		= &mmu_tlb_ops,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2166  		.iommu_dev	= ptdev->base.dev,
-bed8deda31e29cf Boris Brezillon 2023-12-04 @2167  		.alloc		= alloc_pt,
-bed8deda31e29cf Boris Brezillon 2023-12-04 @2168  		.free		= free_pt,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2169  	};
-bed8deda31e29cf Boris Brezillon 2023-12-04  2170  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2171  	vm->pgtbl_ops = alloc_io_pgtable_ops(ARM_64_LPAE_S1, &pgtbl_cfg, vm);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2172  	if (!vm->pgtbl_ops) {
-bed8deda31e29cf Boris Brezillon 2023-12-04  2173  		ret = -EINVAL;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2174  		goto err_mm_takedown;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2175  	}
-bed8deda31e29cf Boris Brezillon 2023-12-04  2176  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2177  	/* Bind operations are synchronous for now, no timeout needed. */
-bed8deda31e29cf Boris Brezillon 2023-12-04  2178  	ret = drm_sched_init(&vm->sched, &panthor_vm_bind_ops, ptdev->mmu->vm.wq,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2179  			     1, 1, 0,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2180  			     MAX_SCHEDULE_TIMEOUT, NULL, NULL,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2181  			     "panthor-vm-bind", ptdev->base.dev);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2182  	if (ret)
-bed8deda31e29cf Boris Brezillon 2023-12-04  2183  		goto err_free_io_pgtable;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2184  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2185  	sched = &vm->sched;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2186  	ret = drm_sched_entity_init(&vm->entity, 0, &sched, 1, NULL);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2187  	if (ret)
-bed8deda31e29cf Boris Brezillon 2023-12-04  2188  		goto err_sched_fini;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2189  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2190  	mair = io_pgtable_ops_to_pgtable(vm->pgtbl_ops)->cfg.arm_lpae_s1_cfg.mair;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2191  	vm->memattr = mair_to_memattr(mair);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2192  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2193  	mutex_lock(&ptdev->mmu->vm.lock);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2194  	list_add_tail(&vm->node, &ptdev->mmu->vm.list);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2195  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2196  	/* If a reset is in progress, stop the scheduler. */
-bed8deda31e29cf Boris Brezillon 2023-12-04  2197  	if (ptdev->mmu->vm.reset_in_progress)
-bed8deda31e29cf Boris Brezillon 2023-12-04  2198  		panthor_vm_stop(vm);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2199  	mutex_unlock(&ptdev->mmu->vm.lock);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2200  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2201  	/* We intentionally leave the reserved range to zero, because we want kernel VMAs
-bed8deda31e29cf Boris Brezillon 2023-12-04  2202  	 * to be handled the same way user VMAs are.
-bed8deda31e29cf Boris Brezillon 2023-12-04  2203  	 */
-bed8deda31e29cf Boris Brezillon 2023-12-04  2204  	drm_gpuvm_init(&vm->base,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2205  		       for_mcu ? "panthor-MCU-VM" : "panthor-GPU-VM",
-bed8deda31e29cf Boris Brezillon 2023-12-04  2206  		       0, &ptdev->base, dummy_gem, min_va, va_range, 0, 0,
-bed8deda31e29cf Boris Brezillon 2023-12-04  2207  		       &panthor_gpuvm_ops);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2208  	drm_gem_object_put(dummy_gem);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2209  	return vm;
-bed8deda31e29cf Boris Brezillon 2023-12-04  2210  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2211  err_sched_fini:
-bed8deda31e29cf Boris Brezillon 2023-12-04  2212  	drm_sched_fini(&vm->sched);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2213  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2214  err_free_io_pgtable:
-bed8deda31e29cf Boris Brezillon 2023-12-04  2215  	free_io_pgtable_ops(vm->pgtbl_ops);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2216  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2217  err_mm_takedown:
-bed8deda31e29cf Boris Brezillon 2023-12-04  2218  	drm_mm_takedown(&vm->mm);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2219  	drm_gem_object_put(dummy_gem);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2220  
-bed8deda31e29cf Boris Brezillon 2023-12-04  2221  err_free_vm:
-bed8deda31e29cf Boris Brezillon 2023-12-04  2222  	kfree(vm);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2223  	return ERR_PTR(ret);
-bed8deda31e29cf Boris Brezillon 2023-12-04  2224  }
-bed8deda31e29cf Boris Brezillon 2023-12-04  2225  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
