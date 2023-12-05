@@ -1,238 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A31A6DD15;
-	Tue,  5 Dec 2023 20:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8226A038
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 20:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tanzirh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VugrPMHG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701807595; x=1733343595;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8Te1EPKT9Apvr/qvCbHF708uBV9mKYf+FGDtRDTDGng=;
-  b=VugrPMHGgPVDCOPtY6A6RJscYwxHCWIv4czP1lHMjUCYWOmntShGBjfH
-   7Jlok/mJka6ya4KEb+sy7WdhaQRgrPtoLtoZvRygtckAd5wy5NuLsxmOB
-   IYgjZ3QA982mjF3Da5XpsLMR2LOnoor7sYCoXm2dsbpTRFJ8T2vWlQEkk
-   tbYTv1kjHsNQ2+R4Iez6emvFxKP+uanYSvanF3OH8YrLmmGNuxDinq4po
-   JKEOVUmE3Xp1ajWzPV8UH5LMOn1tgGpFxLY7WE0YHMhpl5/Fl11uM8B3J
-   Cw4q2PamcWc3a5sWnt/j/PXKZOZVNprvH7SF3PCAYWMAbxxJfiBM5acoh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="849886"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="849886"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 12:19:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="841594336"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="841594336"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Dec 2023 12:19:47 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAbtR-0009fL-18;
-	Tue, 05 Dec 2023 20:19:45 +0000
-Date: Wed, 6 Dec 2023 04:19:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 1/3] bpf: make common crypto API for TC/XDP
- programs
-Message-ID: <202312060457.bRXN2xnb-lkp@intel.com>
-References: <20231202010604.1877561-1-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OcFGXP8+"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5ca2a6f07b6so98704907b3.2
+        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 12:59:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701809951; x=1702414751; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=W7RafG7nAWDAAGrW/jUsNIHCRJDj/ZzkUDLX/nKv/hI=;
+        b=OcFGXP8+68oAlfIT0mEoyR9VJge/yG1ZxD6ZsJrHdx3A4KuPyBViS/2vvT4yXF58eU
+         mgM5Johj2oH2u/O0f9hAiCg9t3gqJFU1yd+luY3LjQldUmwQ16xdgBEymhiW2MKYlu9X
+         jKzLSm14EDhqQTqhHwGSA3fuYyuYXaknkOgggspU7ad27+kb7MWJj0YGe84NinGtv7TY
+         FECyxbx+GYUTYhYH6zF1PfsSLYAZpDjPocIjPeanOrSJo/8Ozn8/sJdldq/TU9t+OVKV
+         wrghlyB4nMdDl9fxu4wj/rO/TG4ikmQxGI7jETe4yg5aFBc6zYZwFVPxfQDrTYuPW7B1
+         3yzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701809951; x=1702414751;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W7RafG7nAWDAAGrW/jUsNIHCRJDj/ZzkUDLX/nKv/hI=;
+        b=rpeto8TnZVcREcUIUpyntu6AZHGBJUVu43BTb7tfx/PqtfCLVeYgx6fuo8dcViA1gK
+         HQZmZX45Nga3sA8bmomi6Sw/9kjA4dDLG1yvwSPgJxJ02W/K7j5/5h542cgc4ZddOc5b
+         Ve6sZCYDKkaw9QNu/D47cKXZgidft9svAc7DnMR8042VLaSQ6189ePHG6W8HGwuP7Tyy
+         gQa3vSmrbJQO+eYgfdRxEVF6qem2XqO3M42Jk+9lLrxoBlvZgLm+45Qeg/powTXuSx4p
+         u7D4TfCVqU0vt1qY9l0yNETpVDCMRo4hSOHm7n44ZCnlJdP636QNZKdK6licCUxDkd8X
+         gt3g==
+X-Gm-Message-State: AOJu0Yybq0Zkn+rKKjicatRMFVizTzodS6InlzXFto3vBCjSrQlLxVSo
+	3JX/nZwoCgUejrwGTU6XaroHJ9SSHkMF
+X-Google-Smtp-Source: AGHT+IEOHHHkQHCm04ytFMnKqd50M5Z2PyFwnofksHuvbSlF0wfs0twpe2H4x1KbIfv/MfMzuensmACLCWaX
+X-Received: from tanz.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:c4a])
+ (user=tanzirh job=sendgmr) by 2002:a81:6d91:0:b0:5d8:39ca:4824 with SMTP id
+ i139-20020a816d91000000b005d839ca4824mr138285ywc.4.1701809950939; Tue, 05 Dec
+ 2023 12:59:10 -0800 (PST)
+Date: Tue, 05 Dec 2023 20:58:53 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231202010604.1877561-1-vadfed@meta.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAAyPb2UC/4XSS2rDMBCA4asEreuiGT2nq9yjdGFJI0eQxMEOp
+ iXk7pWzaetQtBzB9wsNuomZp8KzeNvdxMRLmct4rgO87EQ89OeBu5LqLFCiApS6O5YwX6dyHg7
+ cJ546RuUZ+2yYo6jqMnEun4/i+0edD2W+jtPX44IF1tP/Wwt00EWblLY9BnK0H8ZxOPJrHE9ij
+ S3YCOAaCFm5iBqk0fvh1Jfjj1cNr6rXxjvpU/YUzNbrhterzwF0BHI689abhjfV5wyeNAUL2m6
+ 9/e3Ns7erR8uYQWYfaetdw7vq2UoEZcFzTFvvG95Xj30kip4gxKf3U8NT9VJlhLo7pSluPchGA GQtkO0JrbSerX8qQKuwfkLrTWDjZEjpzw7u9/s33ZJMGjMDAAA=
+X-Developer-Key: i=tanzirhasanhasan@gmail.com; a=ed25519; pk=UeRjcUcv5W9AeLGEbAe2+0LptQpcY+o1Zg0LHHo7VN4=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1701809949; l=1597;
+ i=tanzirhasanhasan@gmail.com; s=20231204; h=from:subject:message-id;
+ bh=OpBF4JO9qEH0eFq9aQn9Qy1e2TtS+Dvl+rfyupEM/hU=; b=G2C30+8JBiyLP+brqVYCFRKKsEOwWYcODMl+8oBzBX4I1wKHBpcIzqzsZmbtSf8ei4tm2bXDd
+ 3Pj/70/QYYoBhZTVzJcLoI/enQ4fP7Pa/1o5uPYJUjjXNAO3gnbLJiY
+X-Mailer: b4 0.12.3
+Message-ID: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+Subject: [PATCH] lib/string: shrink lib/string.i via IWYU
+From: tanzirh@google.com
+To: Kees Cook <keescook@chromium.org>
+Cc: Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
+	Tanzir Hasan <tanzirh@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Vadim,
+This diff uses an open source tool include-what-you-use (IWYU) to modify
+the include list changing indirect includes to direct includes.
+IWYU is implemented using the IWYUScripts github repository which is a tool that is
+currently undergoing development. These changes seek to improve build times.
 
-kernel test robot noticed the following build warnings:
+This change to lib/string.c resulted in a preprocessed size of
+lib/string.i from 26371 lines to 5232 lines (-80%).
 
-[auto build test WARNING on bpf-next/master]
+If there are any problems with the output of the tool please raise an
+issue on the github.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bpf-crypto-add-skcipher-to-bpf-crypto/20231202-091254
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20231202010604.1877561-1-vadfed%40meta.com
-patch subject: [PATCH bpf-next v7 1/3] bpf: make common crypto API for TC/XDP programs
-config: x86_64-buildonly-randconfig-001-20231202 (https://download.01.org/0day-ci/archive/20231206/202312060457.bRXN2xnb-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060457.bRXN2xnb-lkp@intel.com/reproduce)
+Link: https://github.com/ClangBuiltLinux/IWYUScripts
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312060457.bRXN2xnb-lkp@intel.com/
+Signed-off-by: Tanzir Hasan <tanzirh@google.com>
+---
 
-All warnings (new ones prefixed by >>):
+---
+ lib/string.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
->> kernel/bpf/crypto.c:159:6: warning: variable 'ctx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!key) {
-               ^~~~
-   kernel/bpf/crypto.c:192:6: note: uninitialized use occurs here
-           if (ctx->tfm)
-               ^~~
-   kernel/bpf/crypto.c:159:2: note: remove the 'if' if its condition is always false
-           if (!key) {
-           ^~~~~~~~~~~
-   kernel/bpf/crypto.c:154:6: warning: variable 'ctx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!key_len) {
-               ^~~~~~~~
-   kernel/bpf/crypto.c:192:6: note: uninitialized use occurs here
-           if (ctx->tfm)
-               ^~~
-   kernel/bpf/crypto.c:154:2: note: remove the 'if' if its condition is always false
-           if (!key_len) {
-           ^~~~~~~~~~~~~~~
-   kernel/bpf/crypto.c:148:6: warning: variable 'ctx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (authsize && !type->setauthsize) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/crypto.c:192:6: note: uninitialized use occurs here
-           if (ctx->tfm)
-               ^~~
-   kernel/bpf/crypto.c:148:2: note: remove the 'if' if its condition is always false
-           if (authsize && !type->setauthsize) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/crypto.c:143:6: warning: variable 'ctx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!authsize && type->setauthsize) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/crypto.c:192:6: note: uninitialized use occurs here
-           if (ctx->tfm)
-               ^~~
-   kernel/bpf/crypto.c:143:2: note: remove the 'if' if its condition is always false
-           if (!authsize && type->setauthsize) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/crypto.c:138:6: warning: variable 'ctx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!type->has_algo(algo__str)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/crypto.c:192:6: note: uninitialized use occurs here
-           if (ctx->tfm)
-               ^~~
-   kernel/bpf/crypto.c:138:2: note: remove the 'if' if its condition is always false
-           if (!type->has_algo(algo__str)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/crypto.c:128:28: note: initialize the variable 'ctx' to silence this warning
-           struct bpf_crypto_ctx *ctx;
-                                     ^
-                                      = NULL
-   5 warnings generated.
+diff --git a/lib/string.c b/lib/string.c
+index be26623953d2..aff066e9da9f 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -16,16 +16,16 @@
+ 
+ #define __NO_FORTIFY
+ #include <linux/types.h>
++#include <asm/bitsperlong.h>
++#include <asm/bug.h>
++#include <asm/errno.h>
++#include <asm/rwonce.h>
++#include <linux/linkage.h>
++#include <linux/stddef.h>
++#include <vdso/limits.h>
+ #include <linux/string.h>
+ #include <linux/ctype.h>
+-#include <linux/kernel.h>
+-#include <linux/export.h>
+-#include <linux/bug.h>
+-#include <linux/errno.h>
+-#include <linux/slab.h>
+-
+ #include <asm/unaligned.h>
+-#include <asm/byteorder.h>
+ #include <asm/word-at-a-time.h>
+ #include <asm/page.h>
+ 
 
+---
+base-commit: 33cc938e65a98f1d29d0a18403dbbee050dcad9a
+change-id: 20231204-libstringheader-e238e2af5eec
 
-vim +159 kernel/bpf/crypto.c
-
-   105	
-   106	/**
-   107	 * bpf_crypto_ctx_create() - Create a mutable BPF crypto context.
-   108	 *
-   109	 * Allocates a crypto context that can be used, acquired, and released by
-   110	 * a BPF program. The crypto context returned by this function must either
-   111	 * be embedded in a map as a kptr, or freed with bpf_crypto_ctx_release().
-   112	 * As crypto API functions use GFP_KERNEL allocations, this function can
-   113	 * only be used in sleepable BPF programs.
-   114	 *
-   115	 * bpf_crypto_ctx_create() allocates memory for crypto context.
-   116	 * It may return NULL if no memory is available.
-   117	 * @type__str: pointer to string representation of crypto type.
-   118	 * @algo__str: pointer to string representation of algorithm.
-   119	 * @pkey:      bpf_dynptr which holds cipher key to do crypto.
-   120	 * @err:       integer to store error code when NULL is returned
-   121	 */
-   122	__bpf_kfunc struct bpf_crypto_ctx *
-   123	bpf_crypto_ctx_create(const char *type__str, const char *algo__str,
-   124			      const struct bpf_dynptr_kern *pkey,
-   125			      unsigned int authsize, int *err)
-   126	{
-   127		const struct bpf_crypto_type *type = bpf_crypto_get_type(type__str);
-   128		struct bpf_crypto_ctx *ctx;
-   129		const u8 *key;
-   130		u32 key_len;
-   131	
-   132		type = bpf_crypto_get_type(type__str);
-   133		if (IS_ERR(type)) {
-   134			*err = PTR_ERR(type);
-   135			return NULL;
-   136		}
-   137	
-   138		if (!type->has_algo(algo__str)) {
-   139			*err = -EOPNOTSUPP;
-   140			goto err;
-   141		}
-   142	
-   143		if (!authsize && type->setauthsize) {
-   144			*err = -EOPNOTSUPP;
-   145			goto err;
-   146		}
-   147	
-   148		if (authsize && !type->setauthsize) {
-   149			*err = -EOPNOTSUPP;
-   150			goto err;
-   151		}
-   152	
-   153		key_len = __bpf_dynptr_size(pkey);
-   154		if (!key_len) {
-   155			*err = -EINVAL;
-   156			goto err;
-   157		}
-   158		key = __bpf_dynptr_data(pkey, key_len);
- > 159		if (!key) {
-   160			*err = -EINVAL;
-   161			goto err;
-   162		}
-   163	
-   164		ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-   165		if (!ctx) {
-   166			*err = -ENOMEM;
-   167			goto err;
-   168		}
-   169	
-   170		ctx->type = type;
-   171		ctx->tfm = type->alloc_tfm(algo__str);
-   172		if (IS_ERR(ctx->tfm)) {
-   173			*err = PTR_ERR(ctx->tfm);
-   174			ctx->tfm = NULL;
-   175			goto err;
-   176		}
-   177	
-   178		if (authsize) {
-   179			*err = type->setauthsize(ctx->tfm, authsize);
-   180			if (*err)
-   181				goto err;
-   182		}
-   183	
-   184		*err = type->setkey(ctx->tfm, key, key_len);
-   185		if (*err)
-   186			goto err;
-   187	
-   188		refcount_set(&ctx->usage, 1);
-   189	
-   190		return ctx;
-   191	err:
-   192		if (ctx->tfm)
-   193			type->free_tfm(ctx->tfm);
-   194		kfree(ctx);
-   195		module_put(type->owner);
-   196	
-   197		return NULL;
-   198	}
-   199	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tanzir Hasan <tanzirhasanhasan@gmail.com>
+
