@@ -1,49 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CE3584CA;
-	Tue,  5 Dec 2023 13:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB71E4CDF7;
+	Tue,  5 Dec 2023 13:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gz2N8L/g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="acfNOIG7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701781955; x=1733317955;
+  t=1701783243; x=1733319243;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1YJkpglt0M+USmPuYOcmbpC1f8V0q1J5BWnl8qZNugo=;
-  b=gz2N8L/gkxR7BRDszOKJxow5YPRT9egd4Cb9JnO9+Z6Rs6fxC/PJajYT
-   G++Xu6HzHWkg3xmDRjwmDWKsErp0uwbBTk3fyel9Av1Cwcy3BASTEOzZo
-   4+XU8VA7Gcj6908JChE3KCGvFQtj8Gt+RHBGVV28gm+nkSZ1sFahDpvUY
-   rqUB9M7sMK7fGt78OjrDXDtiUmF+5YG/WNIwihXp3UCNuGm7bluOr9Nc2
-   8iZxHwS4pYCYQsoTZrD5Fu2sJMiU2Q2N+vyxLIWMQm3RYwk6396D9Aww8
-   9uRKWEOho9yWhcXOdLXhl6SG75gCtG80fAsr81uFcDFg2I36or0Ji4/1x
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="7190133"
+  bh=b2GfwFST1ueM5U/2wKHdX45CfQpeB2wtXVu/9e0FuVQ=;
+  b=acfNOIG7zR+IoEGfbF8TBIr0Lgoz0b4yqiAwUlVcU2F+Ml1UwCoMjNvW
+   zLYrnnstIGkPajMtYY/JB20bBDqBavvpCzO1WOILzMgyWrvhRLAGjD5LN
+   BZ9YoT2pIefxvcosRB3FheYibkNkdHNyZ5z+ZtuZ1+yX6UAoIFkj1rmDD
+   y4b8HGdMD69ZrQz+zHoEl1c9SMSh+W3Hb8Df1LpGI6ZJPh+HJXXc6NeKZ
+   AkjmdF3C3r8x5YGGlsupMh0h4VvKHTO57u5FdDvdIIg4YdcHBXJR+vVV1
+   h7ECpi11EkaBwCgFYsx2KXXlT6ubqCMPo22hmm9g6T6IcclSZ0KNprkOS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="396688868"
 X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="7190133"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 05:12:34 -0800
+   d="scan'208";a="396688868"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 05:34:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="914798925"
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="747232424"
 X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="914798925"
+   d="scan'208";a="747232424"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Dec 2023 05:12:31 -0800
+  by orsmga006.jf.intel.com with ESMTP; 05 Dec 2023 05:33:59 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rAVDx-00090y-0k;
-	Tue, 05 Dec 2023 13:12:29 +0000
-Date: Tue, 5 Dec 2023 21:11:53 +0800
+	id 1rAVYg-000934-1P;
+	Tue, 05 Dec 2023 13:33:54 +0000
+Date: Tue, 5 Dec 2023 21:32:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: YangXin <yx.0xffff@gmail.com>, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ___neigh_lookup_noref(): remove redundant parameters
-Message-ID: <202312052031.mECkx7WX-lkp@intel.com>
-References: <20231204185943.68-1-yx.0xffff@gmail.com>
+	freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	dri-devel@lists.freedesktop.org, Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [RFT PATCH v2 1/4] drm/msm/dpu: enable writeback on SM8150
+Message-ID: <202312052138.qMYI7bXS-lkp@intel.com>
+References: <20231203003203.1293087-2-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,211 +56,167 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231204185943.68-1-yx.0xffff@gmail.com>
+In-Reply-To: <20231203003203.1293087-2-dmitry.baryshkov@linaro.org>
 
-Hi YangXin,
+Hi Dmitry,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v6.7-rc4 next-20231205]
-[cannot apply to horms-ipvs/master]
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.7-rc4 next-20231205]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/YangXin/net-___neigh_lookup_noref-remove-redundant-parameters/20231205-030205
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20231204185943.68-1-yx.0xffff%40gmail.com
-patch subject: [PATCH] net: ___neigh_lookup_noref(): remove redundant parameters
-config: i386-randconfig-015-20231205 (https://download.01.org/0day-ci/archive/20231205/202312052031.mECkx7WX-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312052031.mECkx7WX-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-msm-dpu-enable-writeback-on-SM8150/20231203-083350
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20231203003203.1293087-2-dmitry.baryshkov%40linaro.org
+patch subject: [RFT PATCH v2 1/4] drm/msm/dpu: enable writeback on SM8150
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231205/202312052138.qMYI7bXS-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312052138.qMYI7bXS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312052031.mECkx7WX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312052138.qMYI7bXS-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/sfc/ef100_rx.c:11:
-   In file included from drivers/net/ethernet/sfc/net_driver.h:28:
-   In file included from include/net/busy_poll.h:18:
-   In file included from include/net/ip.h:30:
-   In file included from include/net/route.h:28:
-   include/net/arp.h:27:63: error: too many arguments to function call, expected 3, have 4
-           return ___neigh_lookup_noref(&arp_tbl, neigh_key_eq32, &key, dev);
-                  ~~~~~~~~~~~~~~~~~~~~~                                 ^~~
-   include/net/neighbour.h:293:33: note: '___neigh_lookup_noref' declared here
-   static inline struct neighbour *___neigh_lookup_noref(
-                                   ^
-   In file included from drivers/net/ethernet/sfc/ef100_rx.c:11:
-   In file included from drivers/net/ethernet/sfc/net_driver.h:28:
-   In file included from include/net/busy_poll.h:18:
-   In file included from include/net/ip.h:30:
-   In file included from include/net/route.h:29:
-   include/net/ndisc.h:383:63: error: too many arguments to function call, expected 3, have 4
-           return ___neigh_lookup_noref(&nd_tbl, neigh_key_eq128, pkey, dev);
-                  ~~~~~~~~~~~~~~~~~~~~~                                 ^~~
-   include/net/neighbour.h:293:33: note: '___neigh_lookup_noref' declared here
-   static inline struct neighbour *___neigh_lookup_noref(
-                                   ^
-   In file included from drivers/net/ethernet/sfc/ef100_rx.c:11:
-   In file included from drivers/net/ethernet/sfc/net_driver.h:28:
-   In file included from include/net/busy_poll.h:18:
-   In file included from include/net/ip.h:30:
-   In file included from include/net/route.h:29:
-   include/net/ndisc.h:390:73: error: too many arguments to function call, expected 3, have 4
-           return ___neigh_lookup_noref(ipv6_stub->nd_tbl, neigh_key_eq128, pkey, dev);
-                  ~~~~~~~~~~~~~~~~~~~~~                                           ^~~
-   include/net/neighbour.h:293:33: note: '___neigh_lookup_noref' declared here
-   static inline struct neighbour *___neigh_lookup_noref(
-                                   ^
-   drivers/net/ethernet/sfc/ef100_rx.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_QWORD_FIELD(*p_event, ESF_GZ_EV_RXPKTS_NUM_PKT);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:231:26: note: expanded from macro 'EFX_QWORD_FIELD'
-   #define EFX_QWORD_FIELD         EFX_QWORD_FIELD32
-                                   ^
-   drivers/net/ethernet/sfc/bitfield.h:183:2: note: expanded from macro 'EFX_QWORD_FIELD32'
-           EFX_EXTRACT_QWORD32(qword, EFX_LOW_BIT(field),          \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:163:4: note: expanded from macro 'EFX_EXTRACT_QWORD32'
-             EFX_EXTRACT32((qword).u32[1], 32, 63, low, high)) &           \
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:143:2: note: expanded from macro 'EFX_EXTRACT32'
-           EFX_EXTRACT_NATIVE(le32_to_cpu(element), min, max, low, high)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:128:20: note: expanded from macro 'EFX_EXTRACT_NATIVE'
-            (native_element) >> ((low) - (min)) :                          \
-                             ^  ~~~~~~~~~~~~~~~
->> drivers/net/ethernet/sfc/ef100_rx.c:175:3: warning: shift count >= width of type [-Wshift-count-overflow]
-                   EFX_QWORD_FIELD(*p_event, ESF_GZ_EV_RXPKTS_NUM_PKT);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:231:26: note: expanded from macro 'EFX_QWORD_FIELD'
-   #define EFX_QWORD_FIELD         EFX_QWORD_FIELD32
-                                   ^
-   drivers/net/ethernet/sfc/bitfield.h:183:2: note: expanded from macro 'EFX_QWORD_FIELD32'
-           EFX_EXTRACT_QWORD32(qword, EFX_LOW_BIT(field),          \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:163:4: note: expanded from macro 'EFX_EXTRACT_QWORD32'
-             EFX_EXTRACT32((qword).u32[1], 32, 63, low, high)) &           \
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:143:2: note: expanded from macro 'EFX_EXTRACT32'
-           EFX_EXTRACT_NATIVE(le32_to_cpu(element), min, max, low, high)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:129:20: note: expanded from macro 'EFX_EXTRACT_NATIVE'
-            (native_element) << ((min) - (low)))
-                             ^  ~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/ef100_rx.c:204:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_QWORD_1(*rxd, ESF_GZ_RX_BUF_ADDR, rx_buf->dma_addr);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:440:2: note: expanded from macro 'EFX_POPULATE_QWORD_1'
-           EFX_POPULATE_QWORD_2(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:438:2: note: expanded from macro 'EFX_POPULATE_QWORD_2'
-           EFX_POPULATE_QWORD_3(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:436:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
-           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 21 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:258:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:247:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) << (low - min)) :            \
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   drivers/net/ethernet/sfc/ef100_rx.c:204:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_QWORD_1(*rxd, ESF_GZ_RX_BUF_ADDR, rx_buf->dma_addr);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:440:2: note: expanded from macro 'EFX_POPULATE_QWORD_1'
-           EFX_POPULATE_QWORD_2(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:438:2: note: expanded from macro 'EFX_POPULATE_QWORD_2'
-           EFX_POPULATE_QWORD_3(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:436:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
-           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 21 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:259:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:253:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) << (low - min)) :            \
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   drivers/net/ethernet/sfc/ef100_rx.c:204:3: warning: shift count >= width of type [-Wshift-count-overflow]
-                   EFX_POPULATE_QWORD_1(*rxd, ESF_GZ_RX_BUF_ADDR, rx_buf->dma_addr);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:440:2: note: expanded from macro 'EFX_POPULATE_QWORD_1'
-           EFX_POPULATE_QWORD_2(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:438:2: note: expanded from macro 'EFX_POPULATE_QWORD_2'
-           EFX_POPULATE_QWORD_3(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:436:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
-           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 21 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:259:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:254:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   drivers/net/ethernet/sfc/ef100_rx.c:204:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_QWORD_1(*rxd, ESF_GZ_RX_BUF_ADDR, rx_buf->dma_addr);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:440:2: note: expanded from macro 'EFX_POPULATE_QWORD_1'
-           EFX_POPULATE_QWORD_2(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:438:2: note: expanded from macro 'EFX_POPULATE_QWORD_2'
-           EFX_POPULATE_QWORD_3(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:436:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
-           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 21 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:258:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:247:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
+   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:658:
+>> drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h:299:15: error: use of undeclared identifier 'WB_SDM845_MASK'
+     299 |                 .features = WB_SDM845_MASK,
+         |                             ^
+>> drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h:404:14: error: invalid application of 'sizeof' to an incomplete type 'const struct dpu_wb_cfg[]'
+     404 |         .wb_count = ARRAY_SIZE(sm8150_wb),
+         |                     ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   2 errors generated.
 
 
-vim +175 drivers/net/ethernet/sfc/ef100_rx.c
+vim +/WB_SDM845_MASK +299 drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
 
-8e57daf70671e4 Edward Cree 2020-08-03  170  
-8e57daf70671e4 Edward Cree 2020-08-03  171  void efx_ef100_ev_rx(struct efx_channel *channel, const efx_qword_t *p_event)
-8e57daf70671e4 Edward Cree 2020-08-03  172  {
-8e57daf70671e4 Edward Cree 2020-08-03  173  	struct efx_rx_queue *rx_queue = efx_channel_get_rx_queue(channel);
-8e57daf70671e4 Edward Cree 2020-08-03  174  	unsigned int n_packets =
-8e57daf70671e4 Edward Cree 2020-08-03 @175  		EFX_QWORD_FIELD(*p_event, ESF_GZ_EV_RXPKTS_NUM_PKT);
-8e57daf70671e4 Edward Cree 2020-08-03  176  	int i;
-8e57daf70671e4 Edward Cree 2020-08-03  177  
-8e57daf70671e4 Edward Cree 2020-08-03  178  	WARN_ON_ONCE(!n_packets);
-8e57daf70671e4 Edward Cree 2020-08-03  179  	if (n_packets > 1)
-8e57daf70671e4 Edward Cree 2020-08-03  180  		++channel->n_rx_merge_events;
-8e57daf70671e4 Edward Cree 2020-08-03  181  
-8e57daf70671e4 Edward Cree 2020-08-03  182  	channel->irq_mod_score += 2 * n_packets;
-8e57daf70671e4 Edward Cree 2020-08-03  183  
-8e57daf70671e4 Edward Cree 2020-08-03  184  	for (i = 0; i < n_packets; ++i) {
-8e57daf70671e4 Edward Cree 2020-08-03  185  		ef100_rx_packet(rx_queue,
-8e57daf70671e4 Edward Cree 2020-08-03  186  				rx_queue->removed_count & rx_queue->ptr_mask);
-8e57daf70671e4 Edward Cree 2020-08-03  187  		++rx_queue->removed_count;
-8e57daf70671e4 Edward Cree 2020-08-03  188  	}
-8e57daf70671e4 Edward Cree 2020-08-03  189  }
-8e57daf70671e4 Edward Cree 2020-08-03  190  
+   294	
+   295	static const struct dpu_wb_cfg sm8150_wb[] = {
+   296		{
+   297			.name = "wb_2", .id = WB_2,
+   298			.base = 0x65000, .len = 0x2c8,
+ > 299			.features = WB_SDM845_MASK,
+   300			.format_list = wb2_formats,
+   301			.num_formats = ARRAY_SIZE(wb2_formats),
+   302			.clk_ctrl = DPU_CLK_CTRL_WB2,
+   303			.xin_id = 6,
+   304			.vbif_idx = VBIF_RT,
+   305			.maxlinewidth = 4096,
+   306			.intr_wb_done = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 4),
+   307		},
+   308	};
+   309	
+   310	static const struct dpu_intf_cfg sm8150_intf[] = {
+   311		{
+   312			.name = "intf_0", .id = INTF_0,
+   313			.base = 0x6a000, .len = 0x280,
+   314			.features = INTF_SC7180_MASK,
+   315			.type = INTF_DP,
+   316			.controller_id = MSM_DP_CONTROLLER_0,
+   317			.prog_fetch_lines_worst_case = 24,
+   318			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+   319			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 25),
+   320		}, {
+   321			.name = "intf_1", .id = INTF_1,
+   322			.base = 0x6a800, .len = 0x2bc,
+   323			.features = INTF_SC7180_MASK,
+   324			.type = INTF_DSI,
+   325			.controller_id = MSM_DSI_CONTROLLER_0,
+   326			.prog_fetch_lines_worst_case = 24,
+   327			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
+   328			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
+   329			.intr_tear_rd_ptr = DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2),
+   330		}, {
+   331			.name = "intf_2", .id = INTF_2,
+   332			.base = 0x6b000, .len = 0x2bc,
+   333			.features = INTF_SC7180_MASK,
+   334			.type = INTF_DSI,
+   335			.controller_id = MSM_DSI_CONTROLLER_1,
+   336			.prog_fetch_lines_worst_case = 24,
+   337			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 28),
+   338			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 29),
+   339			.intr_tear_rd_ptr = DPU_IRQ_IDX(MDP_INTF2_TEAR_INTR, 2),
+   340		}, {
+   341			.name = "intf_3", .id = INTF_3,
+   342			.base = 0x6b800, .len = 0x280,
+   343			.features = INTF_SC7180_MASK,
+   344			.type = INTF_DP,
+   345			.controller_id = MSM_DP_CONTROLLER_1,
+   346			.prog_fetch_lines_worst_case = 24,
+   347			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 30),
+   348			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 31),
+   349		},
+   350	};
+   351	
+   352	static const struct dpu_perf_cfg sm8150_perf_data = {
+   353		.max_bw_low = 12800000,
+   354		.max_bw_high = 12800000,
+   355		.min_core_ib = 2400000,
+   356		.min_llcc_ib = 800000,
+   357		.min_dram_ib = 800000,
+   358		.min_prefill_lines = 24,
+   359		.danger_lut_tbl = {0xf, 0xffff, 0x0},
+   360		.safe_lut_tbl = {0xfff8, 0xf000, 0xffff},
+   361		.qos_lut_tbl = {
+   362			{.nentry = ARRAY_SIZE(sm8150_qos_linear),
+   363			.entries = sm8150_qos_linear
+   364			},
+   365			{.nentry = ARRAY_SIZE(sc7180_qos_macrotile),
+   366			.entries = sc7180_qos_macrotile
+   367			},
+   368			{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+   369			.entries = sc7180_qos_nrt
+   370			},
+   371			/* TODO: macrotile-qseed is different from macrotile */
+   372		},
+   373		.cdp_cfg = {
+   374			{.rd_enable = 1, .wr_enable = 1},
+   375			{.rd_enable = 1, .wr_enable = 0}
+   376		},
+   377		.clk_inefficiency_factor = 105,
+   378		.bw_inefficiency_factor = 120,
+   379	};
+   380	
+   381	static const struct dpu_mdss_version sm8150_mdss_ver = {
+   382		.core_major_ver = 5,
+   383		.core_minor_ver = 0,
+   384	};
+   385	
+   386	const struct dpu_mdss_cfg dpu_sm8150_cfg = {
+   387		.mdss_ver = &sm8150_mdss_ver,
+   388		.caps = &sm8150_dpu_caps,
+   389		.mdp = &sm8150_mdp,
+   390		.ctl_count = ARRAY_SIZE(sm8150_ctl),
+   391		.ctl = sm8150_ctl,
+   392		.sspp_count = ARRAY_SIZE(sm8150_sspp),
+   393		.sspp = sm8150_sspp,
+   394		.mixer_count = ARRAY_SIZE(sm8150_lm),
+   395		.mixer = sm8150_lm,
+   396		.dspp_count = ARRAY_SIZE(sm8150_dspp),
+   397		.dspp = sm8150_dspp,
+   398		.dsc_count = ARRAY_SIZE(sm8150_dsc),
+   399		.dsc = sm8150_dsc,
+   400		.pingpong_count = ARRAY_SIZE(sm8150_pp),
+   401		.pingpong = sm8150_pp,
+   402		.merge_3d_count = ARRAY_SIZE(sm8150_merge_3d),
+   403		.merge_3d = sm8150_merge_3d,
+ > 404		.wb_count = ARRAY_SIZE(sm8150_wb),
+   405		.wb = sm8150_wb,
+   406		.intf_count = ARRAY_SIZE(sm8150_intf),
+   407		.intf = sm8150_intf,
+   408		.vbif_count = ARRAY_SIZE(sdm845_vbif),
+   409		.vbif = sdm845_vbif,
+   410		.perf = &sm8150_perf_data,
+   411	};
+   412	
 
 -- 
 0-DAY CI Kernel Test Service
