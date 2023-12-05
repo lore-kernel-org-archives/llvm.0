@@ -1,248 +1,229 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC262225AE
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 23:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82A715D5
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 01:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GoDDyHeV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701732703;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nokDr7fDhJtk8Vm6e610W3ep/8X4aj/rcntr//UK79U=;
-	b=GoDDyHeVTUOal1DSrGX6DxQdWTy+jeIlnnkFHclHogBcPoaJha5IXkrKpi3qppVtWGWSI7
-	ZFHpSoVsxhO574/0trZPj7jigNd5GsqPQPDlZm4vkND2GB5w+tqIvqos0B2wflUtuUwlIw
-	oUZxo//UOzJ/IrJ2l2mYaQ7XkXzsMYI=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-438-3w6nNadvO8aCqJaeidNymg-1; Mon,
- 04 Dec 2023 18:31:36 -0500
-X-MC-Unique: 3w6nNadvO8aCqJaeidNymg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9BC73C0C109
-	for <llvm@lists.linux.dev>; Mon,  4 Dec 2023 23:31:36 +0000 (UTC)
-Received: from [172.64.11.14] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 974CE492BFC;
-	Mon,  4 Dec 2023 23:31:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 229): Test report for master
- (6.7.0-rc3, mainline.kernel.org-clang, 815fb87b)
-Date: Mon, 04 Dec 2023 23:31:36 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XGGiusZ1"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3331752d2b9so3862181f8f.3
+        for <llvm@lists.linux.dev>; Mon, 04 Dec 2023 17:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701739123; x=1702343923; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7jf8j7x8KL5+FXfau2GI8WqRGtfi/ioqnUgDBbWrCwc=;
+        b=XGGiusZ1W30P++2HBO9l2cszDb/MqtI3D4BN8PDdhYH6/HDp0/ygmEs5tigMpn762S
+         IFCoBypCGKeIdZ2D4A86bejXR8lDSGFPL2xrjYFsEWy7LXodnJn/uT1ey7cuurP9zXw5
+         Z2THGBVzJZmAp+kFBJ9iHwiXKKalhTQs/4AnzxG/oA+8SxDMbrFdkz32P7RWaHbsCjuV
+         zZMIa4nrVEvCRNZpccwHuWt2iIpRwfbTOvZZfJn7l2JrBbNYf2UJpIZ5j+GCEHKfj6Hy
+         ChrZ9eQwL748JCde/7urnD0MMcZ+GqgY5K2o5HRKEkTHDzzrv7GH5aoQOgjBfahc/dkc
+         0Bmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701739123; x=1702343923;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7jf8j7x8KL5+FXfau2GI8WqRGtfi/ioqnUgDBbWrCwc=;
+        b=p8TODAqt2cyuI53f9TENDWiaxRQ3jo4FZLpEsGZy/pPtoHTvWDGsHBjkyw9edhTF0b
+         IckMlLBEe1V1u6mY7BRAqbU6wpYrfWkXaDqqXIIY2lJLmu+VUR19hVWxDs6avYRGyt6Z
+         tcWpC+H5K6oIA5ctofQi3DxboQvFZiavZ/dOJOqbYBaLh9wb3r9Zk9oKK93tO32MRJc4
+         JZEe7PtUrR5yJfswTxEkhpBpxN0D/aRuIK7yN2fPzV3nvCD6GMbXpuJk4Y/HtPSZ/AxE
+         MTPTwoS82YDJuYi5zOG6XBFc49p/tqHGLgkOJ1t/lmjaLksAQ2+3kBt035Lg5SzJiYB5
+         IO3Q==
+X-Gm-Message-State: AOJu0YxhekrLadeIu35Z8+P8cFNqB3i4RGpJTvqWuyGwAoAUyB+wO2V5
+	ZjDD68YFIrsHPcIGaRUvKSoyDC1O8T+wxkgT028=
+X-Google-Smtp-Source: AGHT+IGEc+RU3aLyo6G6cXdlO/5FlaIRSUm657pq4pWBz4aI+C9RHW2IiSzyw85KCLQaAJWMQI8ODuDVbfqFALf2YSA=
+X-Received: by 2002:adf:e78a:0:b0:333:2fd2:812c with SMTP id
+ n10-20020adfe78a000000b003332fd2812cmr3734853wrm.73.1701739122768; Mon, 04
+ Dec 2023 17:18:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <89705.123120418313600939@us-mta-438.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20231130133630.192490507@infradead.org> <20231130134204.136058029@infradead.org>
+ <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+ <20231204091334.GM3818@noisy.programming.kicks-ass.net> <20231204111128.GV8262@noisy.programming.kicks-ass.net>
+ <20231204125239.GA1319@noisy.programming.kicks-ass.net> <ZW4LjmUKj1q6RWdL@krava>
+ <20231204181614.GA7299@noisy.programming.kicks-ass.net> <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 4 Dec 2023 17:18:31 -0800
+Message-ID: <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>, 
+	Song Liu <songliubraving@meta.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv <linux-riscv@lists.infradead.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Joao Moreira <joao@overdrivepizza.com>, Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Dec 4, 2023 at 10:34=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+>
+> TL;DR, I think this is a pre-existing problem with kCFI + eBPF and not
+> caused by my patches.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+It's an old issue indeed.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+To workaround I just did:
++__nocfi
+ static long bpf_for_each_array_elem(struct bpf_map *map,
+bpf_callback_t callback_fn,
+                                    void *callback_ctx, u64 flags)
 
-Kernel information:
-    Commit message: Merge tag 'pm-6.7-rc4' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/rafael/linux-pm
+to proceed further.
+test_progs passed few more tests, but then it hit:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/117306
+[   13.965472] CFI failure at tcp_set_ca_state+0x51/0xd0 (target:
+0xffffffffa02050d6; expected type: 0x3a47ac32)
+[   13.966351] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+[   13.966752] CPU: 3 PID: 2142 Comm: test_progs Tainted: G
+O       6.7.0-rc3-00705-g421defd1bea0-dirty #5246
+[   13.967552] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+[   13.968421] RIP: 0010:tcp_set_ca_state+0x51/0xd0
+[   13.968751] Code: 70 40 ff 84 c0 74 49 48 8b 83 60 07 00 00 4c 8b
+58 10 4d 85 db 74 1b 40 0f b6 f5 48 89 df 41 ba ce 53 b8 c5 45 03 53
+f1 74 02 <0f> 0b 2e e8 c7 ee 31 00 0f b6 83 90 07 00 00 40 80 e5 1f 24
+e0 40
+[   13.975460] Call Trace:
+[   13.975640]  <IRQ>
+[   13.975791]  ? __die_body+0x68/0xb0
+[   13.976062]  ? die+0xa4/0xd0
+[   13.976273]  ? do_trap+0xa5/0x180
+[   13.976513]  ? tcp_set_ca_state+0x51/0xd0
+[   13.976800]  ? do_error_trap+0xb6/0x100
+[   13.977076]  ? tcp_set_ca_state+0x51/0xd0
+[   13.977360]  ? tcp_set_ca_state+0x51/0xd0
+[   13.977644]  ? handle_invalid_op+0x2c/0x40
+[   13.977934]  ? tcp_set_ca_state+0x51/0xd0
+[   13.978222]  ? exc_invalid_op+0x38/0x60
+[   13.978497]  ? asm_exc_invalid_op+0x1a/0x20
+[   13.978798]  ? tcp_set_ca_state+0x51/0xd0
+[   13.979087]  tcp_v6_syn_recv_sock+0x45c/0x6c0
+[   13.979401]  tcp_check_req+0x497/0x590
+[   13.979671]  tcp_v6_rcv+0x728/0xce0
+[   13.979923]  ? raw6_local_deliver+0x63/0x350
+[   13.980257]  ip6_protocol_deliver_rcu+0x2f6/0x560
+[   13.980596]  ? ip6_input_finish+0x59/0x140
+[   13.980887]  ? NF_HOOK+0x29/0x1d0
+[   13.981136]  ip6_input_finish+0xcb/0x140
+[   13.981415]  ? __cfi_ip6_input_finish+0x10/0x10
+[   13.981738]  NF_HOOK+0x177/0x1d0
+[   13.981970]  ? rcu_is_watching+0x10/0x40
+[   13.982279]  ? lock_release+0x35/0x2e0
+[   13.982547]  ? lock_release+0x35/0x2e0
+[   13.982822]  ? NF_HOOK+0x29/0x1d0
+[   13.983064]  ? __cfi_ip6_rcv_finish+0x10/0x10
+[   13.983409]  NF_HOOK+0x177/0x1d0
+[   13.983664]  ? ip6_rcv_core+0x50/0x6c0
+[   13.983956]  ? process_backlog+0x132/0x290
+[   13.984264]  ? process_backlog+0x132/0x290
+[   13.984557]  __netif_receive_skb+0x5c/0x160
+[   13.984856]  process_backlog+0x19e/0x290
+[   13.985140]  __napi_poll+0x3f/0x1f0
+[   13.985402]  net_rx_action+0x193/0x330
+[   13.985672]  __do_softirq+0x14d/0x3ea
+[   13.985963]  ? do_softirq+0x7f/0xb0
+[   13.986243]  ? __dev_queue_xmit+0x5b/0xd50
+[   13.986563]  ? ip6_finish_output2+0x222/0x7a0
+[   13.986906]  do_softirq+0x7f/0xb0
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
-d, map_write access on the bpf labeled init_t.
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
-            Affected tests:
-                 aarch64 - machineinfo
-                 aarch64 - Boot test
-                 aarch64 - Hardware - IPMItool loop stress test
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                 aarch64 - Storage - block - filesystem fio test
-                 aarch64 - Storage - block - queue scheduler test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                 aarch64 - Reboot test
-                 aarch64 - Hardware - ACPI table test
-                 aarch64 - POSIX pjd-fstest suites
-                 aarch64 - Filesystem - Loopdev Sanity
-                 aarch64 - Memory function: memfd_create
-                 aarch64 - AMTU (Abstract Machine Test Utility)
-                 aarch64 - Networking - Ethernet drivers sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - Networking vnic: ipvlan/basic
-                 aarch64 - Libkcapi AF_ALG test
-                 aarch64 - Storage - multipath mapping test
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - Memory function: memfd_create
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Storage - multipath mapping test
-                  x86_64 - machineinfo
-                  x86_64 - Boot test
-                  x86_64 - Hardware - CPU: Die Test
-                  x86_64 - Hardware - IPMItool loop stress test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - block - filesystem fio test
-                  x86_64 - Storage - block - queue scheduler test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Reboot test
-                  x86_64 - Hardware - ACPI table test
-                  x86_64 - POSIX pjd-fstest suites
-                  x86_64 - Filesystem - Loopdev Sanity
-                  x86_64 - Memory function: memfd_create
-                  x86_64 - AMTU (Abstract Machine Test Utility)
-                  x86_64 - Networking - Ethernet drivers sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - Networking vnic: ipvlan/basic
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 - Hardware - pciutils: sanity smoke test
-                  x86_64 - Storage - multipath mapping test
-                  x86_64 - kselftests upstream - net
-                  x86_64 - kselftests upstream - bpf
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - machineinfo
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Hardware - CPU: Die Test
-                  x86_64 (debug) - Storage - swraid scsi_raid
-                  x86_64 (debug) - Reboot test
-                  x86_64 (debug) - Hardware - ACPI table test
-                  x86_64 (debug) - POSIX pjd-fstest suites
-                  x86_64 (debug) - Filesystem - Loopdev Sanity
-                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-                  x86_64 (debug) - Networking - Ethernet drivers sanity
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
-                  x86_64 (debug) - Storage - lvm thinp sanity
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
-au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
-            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
-913cfd3efb.camel@intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+The stack trace doesn't have any bpf, but it's a bpf issue too.
+Here tcp_set_ca_state() calls
+icsk->icsk_ca_ops->set_state(sk, ca_state);
+which calls bpf prog via bpf trampoline.
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - CKI/restraint
-     aarch64 - SELinux Custom Module Setup
-     aarch64 - machineinfo
-     aarch64 - Boot test
-     aarch64 - selinux-policy: serge-testsuite
-     aarch64 - Hardware - Firmware test suite
-     aarch64 - Reboot test
+re: bpf_jit_binary_pack_hdr().
 
+since cfi_mode is __ro_after_init we don't need to waste
+cfi_offset variable in prog->aux and in jit_context.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+How about
++int get_cfi_offset(void)
++{
++       switch (cfi_mode) {
++       case CFI_FINEIBT:
++               return 16;
++       case CFI_KCFI:
++#ifdef CONFIG_CALL_PADDING
++               return 16;
++#else
++               return 5;
++#endif
++       default:
++               return 0;
++       }
++}
++
+ struct bpf_binary_header *
+ bpf_jit_binary_pack_hdr(const struct bpf_prog *fp)
+ {
+-       unsigned long real_start =3D (unsigned long)fp->bpf_func;
++       unsigned long real_start =3D (unsigned long)fp->bpf_func -
+get_cfi_offset();
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+and have __weak version of get_cfi_offset() in bpf/core.c
+that returns 0 and non-weak in arch/x86 like above?
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Similarly remove prog_offset from jit_context and undo:
 
+ctx->prog_offset =3D emit_prologue(...)
+to keep it as 'static void emit_prologue'
+
+since cfi offset is fixed at early boot and the same for all progs.
+
+Separately we need to deal with bpf_for_each_array_elem()
+which doesn't look easy.
+And fix tcp_set_ca_state() as well (which is even harder).
+
+Just to see where places like these are I did:
++__nocfi
+ BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_=
+ctx,
++__nocfi
+ static long bpf_for_each_hash_elem(struct bpf_map *map,
+bpf_callback_t callback_fn,
++__nocfi
+ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
++__nocfi
+ static int __bpf_rbtree_add(struct bpf_rb_root *root,
++__nocfi
+ BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
++__nocfi
+ void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
++__nocfi
+ void tcp_init_congestion_control(struct sock *sk)
++__nocfi
+ void tcp_enter_loss(struct sock *sk)
++__nocfi
+ static void tcp_cong_avoid(struct sock *sk, u32 ack, u32 acked)
++__nocfi
+ static inline void tcp_in_ack_event(struct sock *sk, u32 flags)
+
+and more... Which is clearly not a direction to go.
+
+Instead of annotating callers is there a way to say that
+all bpf_callback_t calls are nocfi?
+
+I feel the patches scratched the iceberg.
