@@ -1,95 +1,83 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD1F6FCFE
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 22:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135BE6EB5D
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 22:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0f7NX8Ux"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3334d9b57adso118711f8f.1
-        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 14:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701815154; x=1702419954; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tlRvcm7L+cBAIszdYTxuMdD16SmRomd1bg4ss68VhyI=;
-        b=0f7NX8Ux0jabauhH5R0aKnXfTWidrSRoAITFh2A2gjGhnDVhK13Mu9JifDff8kDHYx
-         SBbTD/vDLXxNdPxPaGCe3uFnAgIigAaS18Tnjbe93M9phZM5c+j1YR0T+SHLezKxIcxQ
-         71tZrywg1yMHQgPOPgJrXy87qBBbbaoiXePCvKo7RqaZ+OuD7fVfrgvqTAoAQcVEq9Cr
-         BPjI1zRH47tHF8KEPp9W1hTZfyU3AmGZMj1XitEkaKlIvPoFVizznJZbCD5M/lrFKYd6
-         PQVm+fV+s5BUbZtXSPHIAltGWQAScqV+qZeHynZSYbUsVTkQdSxsvmKkdb62EASEtQgk
-         K6/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701815154; x=1702419954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tlRvcm7L+cBAIszdYTxuMdD16SmRomd1bg4ss68VhyI=;
-        b=FtoKROoyGnU5aFHgh1TDJxLyZy5hLtIUIO4IL/7wQODbAVfGp8HfbP+UdYPrhrV7gz
-         gcKZWtCgDxNcykr8BSe50DSOMhSPMNJOdv/fX7hnKWwaWQIFBBfPRXMXWS+E6YVa7J5l
-         segpP6l3TcOWmgY9yVNjiE9u2AGfuihB+GM9D8HHJQHe3CL+1buBUIlO17XgQYl6yhi5
-         BaevA9FwV5r3Xnxj3SPVc5cZc6E0O6UeVZzB9sBeaVmMSdyncTnE4UmR0G50Sg8hvFbn
-         ls+REKeobhaX/12RmC3NrynGyqVlpCTRN5ET/JUYZ2PJmK1QRGJ5bXDdLbl/LUEKDfWu
-         kOtg==
-X-Gm-Message-State: AOJu0YzHo9Al/jEDCM5krYkGW/CNQsW3Nfw6K47USR/9AHvynOyDoc1k
-	H7xFJV7xFcc0+luBfRMnV2bnW3wrA8efOLRQ72Vxbg==
-X-Google-Smtp-Source: AGHT+IHF7C4eMuQFihFrv8+8ynBjYGzdmiqKV5qMKe3JCWHAeoQ6T/vXYIaLbgU2DeTIXJ8mWuYYqhOravlOhhfavug=
-X-Received: by 2002:adf:ed12:0:b0:333:2fd2:813d with SMTP id
- a18-20020adfed12000000b003332fd2813dmr4815585wro.90.1701815154097; Tue, 05
- Dec 2023 14:25:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="o3XjrazS"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=OD1ItpAr/xwE+UpWJnM3+Hd/hQwe/hOCe/5jv7jdpPk=; b=o3XjrazSh2WGCShw9aY/0MdGor
+	WF/MV/1Do8TzOamoGOVtnVRhVIgvJskn2l6UJWaEeZEmj+4dwxL76HA0H++pOcs6oN1rBP4G3TAGM
+	O49edbXY/MAVM8YI8RYccB/BSkYD7R8cmfjcQQtbZdcHjpEeRBLvCfPy5/YBZVEs2EacTBwMiKz3F
+	EFnMjJy4sugxWkBqyUfIyGI/ful9aw733BnaYxs+d37x6zDXx7ETTYk1vM68ZoVsBlqit646m6ZXZ
+	jkfzHR7B6ixmSjlYeJA7jhB9clkviA6ryNnRG7gC3aushuA5OK3QKfv2wjAjor4svyZSR9LFbAhqu
+	LI2H81eQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rAdxV-007UJ0-0T;
+	Tue, 05 Dec 2023 22:32:05 +0000
+Date: Tue, 5 Dec 2023 22:32:05 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Andy Shevchenko <andy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, tanzirh@google.com,
+	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
+Message-ID: <20231205223205.GI1674809@ZenIV>
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205213807.GE1674809@ZenIV>
+ <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
+ <ZW-d1NZRIvmJlfcW@smile.fi.intel.com>
+ <20231205221521.GH1674809@ZenIV>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
- <20231205213807.GE1674809@ZenIV> <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
- <ZW-d1NZRIvmJlfcW@smile.fi.intel.com> <34e27c57-fc18-4918-bf44-4f8a53825361@infradead.org>
-In-Reply-To: <34e27c57-fc18-4918-bf44-4f8a53825361@infradead.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 5 Dec 2023 14:25:43 -0800
-Message-ID: <CAKwvOd=bZvLz4yRqet6Hv2O9iZYfGr=xiwfk+-MAasPjK7XnWA@mail.gmail.com>
-Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Andy Shevchenko <andy@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, tanzirh@google.com, 
-	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231205221521.GH1674809@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Tue, Dec 5, 2023 at 2:10=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org>=
- wrote:
->
-> I have an unpublished Linux Best Known Practices txt file with
-> this "rule" and some other info that I have collected over a few
-> years. I wouldn't say that it's up to date. Anyway, it's copied below
-> FWIW.
-> Generic drivers should not (do not) #include header files from
-> <asm-generic>. Only arch code and arch-specific drivers do that.
+On Tue, Dec 05, 2023 at 10:15:21PM +0000, Al Viro wrote:
 
-Ok, that confirms my understanding.  We had picked up on that
-convention, but had missed the one below.
+> It would certainly be nice to have such information in the tree;
+> "where should I pick $SYMBOL from?" is something one needs to
+> find out often enough.  To a large extent it's covered by "where
+> in include/*.h do we have it defined?", but that's not all there
+> is to it.  E.g. "get_user() => use linux/uaccess.h".
+> 
+> There's also stuff like "$SYMBOL should not be used outside of arch/*
+> and include/*, better use $OTHER_SYMBOL", etc.
 
->
-> Don't use <asm/header.h> in generic driver code. Instead use
-> some <linux/header.h> that then #includes <asm/header.h>.
-> asm/ headers are implementation; linux/ headers are API.
+Speaking of...
 
-Ah, yeah, that's what we missed.
+arch/arm64/include/asm/asm-prototypes.h:18:#include <asm/uaccess.h>
+arch/powerpc/include/asm/inst.h:8:#include <asm/uaccess.h>
+arch/powerpc/kvm/book3s_xive_native.c:16:#include <asm/uaccess.h>
+arch/powerpc/mm/book3s64/radix_pgtable.c:31:#include <asm/uaccess.h>
+arch/riscv/kernel/sys_riscv.c:15:#include <asm/uaccess.h>
+arch/xtensa/include/asm/asm-prototypes.h:10:#include <asm/uaccess.h>
+include/linux/uaccess.h:11:#include <asm/uaccess.h>
+tools/testing/crypto/chacha20-s390/test-cipher.c:8:#include <asm/uaccess.h>
 
----
-You should publish you doc somewhere, it can be helpful to refer back
-to them when you're on a different machine or to point someone else
-to.
-
-I keep notes like this myself for debugging LLVM:
-https://github.com/ClangBuiltLinux/llvm-dev-conf-2020/issues/3 (and
-recently gcc: https://github.com/ClangBuiltLinux/llvm-dev-conf-2020/issues/=
-4)
---=20
-Thanks,
-~Nick Desaulniers
+Only one of those is legitimate (linux/uaccess.h); asm-prototypes.h
+ones are borderline, but probably should be pulling linux/uaccess.h,
+everything in *.c is really wrong.  Powerpc asm/inst.h is the really
+unpleasant one here - it's pulled by quite a few other places, including
+several asm/*.h.  Hell knows; might be worth splitting the
+{__,}{get_user_instr,copy_inst_from_kernel_nofault}() off to
+a separate header (asm/inst-uaccess.h?), to be included only by the
+files that use any of those (that would be
+arch/powerpc/kernel/{align,hw_breakpoint_constraints,module_32,traps,vecemu}.c
+and arch/powerpc/kernel/trace/{ftrace,ftrace_64_pg}.c - not a single header
+among them).  That header would pull linux/uaccess.h and asm/inst.h wouldn't
+need any uaccess at all; might spill into explicit includes of linux/uaccess.h
+in some of the places in arch/powerpc that pull asm/inst.h, directly or
+not...
