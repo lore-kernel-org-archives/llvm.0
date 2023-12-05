@@ -1,223 +1,249 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB71E4CDF7;
-	Tue,  5 Dec 2023 13:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E232365ED5
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 14:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="acfNOIG7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701783243; x=1733319243;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b2GfwFST1ueM5U/2wKHdX45CfQpeB2wtXVu/9e0FuVQ=;
-  b=acfNOIG7zR+IoEGfbF8TBIr0Lgoz0b4yqiAwUlVcU2F+Ml1UwCoMjNvW
-   zLYrnnstIGkPajMtYY/JB20bBDqBavvpCzO1WOILzMgyWrvhRLAGjD5LN
-   BZ9YoT2pIefxvcosRB3FheYibkNkdHNyZ5z+ZtuZ1+yX6UAoIFkj1rmDD
-   y4b8HGdMD69ZrQz+zHoEl1c9SMSh+W3Hb8Df1LpGI6ZJPh+HJXXc6NeKZ
-   AkjmdF3C3r8x5YGGlsupMh0h4VvKHTO57u5FdDvdIIg4YdcHBXJR+vVV1
-   h7ECpi11EkaBwCgFYsx2KXXlT6ubqCMPo22hmm9g6T6IcclSZ0KNprkOS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="396688868"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="396688868"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 05:34:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="747232424"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="747232424"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Dec 2023 05:33:59 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAVYg-000934-1P;
-	Tue, 05 Dec 2023 13:33:54 +0000
-Date: Tue, 5 Dec 2023 21:32:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Marijn Suijten <marijn.suijten@somainline.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	dri-devel@lists.freedesktop.org, Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [RFT PATCH v2 1/4] drm/msm/dpu: enable writeback on SM8150
-Message-ID: <202312052138.qMYI7bXS-lkp@intel.com>
-References: <20231203003203.1293087-2-dmitry.baryshkov@linaro.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FNUuZM+w"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701786121;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LWJhzctfwOMB4kbNHd6jqe//bYbKBy+aqMDSXQkYuR4=;
+	b=FNUuZM+whh5T881IrU7FviU1sUj15zgy1TP8ZO7tq/+jyBIvtX6zisKz4/e44SVQJYBSlq
+	frengQ4hEO39bFKKvSsFiTJRq57pylKBnFcfCunmooNX0b84ApVScQJo7pDJgy7G5Q4O4J
+	kTJNZSgj6KBqPya1LbshkZTJY7c+dFQ=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-299-_rTRBjMRMhiPy8eoKRuhQA-1; Tue,
+ 05 Dec 2023 09:21:59 -0500
+X-MC-Unique: _rTRBjMRMhiPy8eoKRuhQA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 159E61C0F475
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 14:21:59 +0000 (UTC)
+Received: from [172.64.9.23] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0551F492BC6;
+	Tue,  5 Dec 2023 14:21:59 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 21 of 229): Test report for master
+ (6.7.0-rc4, mainline.kernel.org-clang, 33cc938e)
+Date: Tue, 05 Dec 2023 14:21:58 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231203003203.1293087-2-dmitry.baryshkov@linaro.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Message-Id: <03634.123120509215902477@us-mta-299.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dmitry,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.7-rc4 next-20231205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-msm-dpu-enable-writeback-on-SM8150/20231203-083350
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20231203003203.1293087-2-dmitry.baryshkov%40linaro.org
-patch subject: [RFT PATCH v2 1/4] drm/msm/dpu: enable writeback on SM8150
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231205/202312052138.qMYI7bXS-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312052138.qMYI7bXS-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Linux 6.7-rc4
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312052138.qMYI7bXS-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/117376
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                 aarch64 - machineinfo
+                 aarch64 - Boot test
+                 aarch64 - Hardware - ACPI table test
+                 aarch64 - POSIX pjd-fstest suites
+                 aarch64 - Filesystem - Loopdev Sanity
+                 aarch64 - Memory function: memfd_create
+                 aarch64 - AMTU (Abstract Machine Test Utility)
+                 aarch64 - Networking - Ethernet drivers sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - Networking vnic: ipvlan/basic
+                 aarch64 - Libkcapi AF_ALG test
+                 aarch64 - Storage - multipath mapping test
+                 aarch64 - Reboot test
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - Memory function: memfd_create
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - multipath mapping test
+                  x86_64 - machineinfo
+                  x86_64 - Boot test
+                  x86_64 - Hardware - IPMItool loop stress test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - block - filesystem fio test
+                  x86_64 - Storage - block - queue scheduler test
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Reboot test
+                  x86_64 - Hardware - ACPI table test
+                  x86_64 - POSIX pjd-fstest suites
+                  x86_64 - Filesystem - Loopdev Sanity
+                  x86_64 - Memory function: memfd_create
+                  x86_64 - AMTU (Abstract Machine Test Utility)
+                  x86_64 - Networking - Ethernet drivers sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - Networking vnic: ipvlan/basic
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 - Hardware - pciutils: sanity smoke test
+                  x86_64 - Storage - multipath mapping test
+                  x86_64 - kselftests upstream - net
+                  x86_64 - kselftests upstream - bpf
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - machineinfo
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Hardware - CPU: Die Test
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - Reboot test
+                  x86_64 (debug) - Hardware - ACPI table test
+                  x86_64 (debug) - POSIX pjd-fstest suites
+                  x86_64 (debug) - Filesystem - Loopdev Sanity
+                  x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+                  x86_64 (debug) - Networking - Ethernet drivers sanity
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Hardware - pciutils: sanity smoke test
+                  x86_64 (debug) - Storage - lvm thinp sanity
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
+au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
+            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
+913cfd3efb.camel@intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
+g dependency detected
+            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid scsi_raid
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
 
-   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:658:
->> drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h:299:15: error: use of undeclared identifier 'WB_SDM845_MASK'
-     299 |                 .features = WB_SDM845_MASK,
-         |                             ^
->> drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h:404:14: error: invalid application of 'sizeof' to an incomplete type 'const struct dpu_wb_cfg[]'
-     404 |         .wb_count = ARRAY_SIZE(sm8150_wb),
-         |                     ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   2 errors generated.
+Tests that were not ran because of internal issues:=20
+     aarch64 - CKI/restraint
+     aarch64 - SELinux Custom Module Setup
+     aarch64 - machineinfo
+     aarch64 - Boot test
+     aarch64 - Hardware - IPMI driver test
+     aarch64 - Hardware - IPMItool loop stress test
+     aarch64 - Storage - blktests - blk
+     aarch64 - Storage - blktests - nvme-tcp
+     aarch64 - Storage - block - filesystem fio test
+     aarch64 - Storage - block - queue scheduler test
+     aarch64 - Storage - swraid scsi_raid
+     aarch64 - stress: stress-ng - cpu-cache
+     aarch64 - stress: stress-ng - memory
+     aarch64 - Reboot test
+     aarch64 - CKI/restraint
+     aarch64 - SELinux Custom Module Setup
+     aarch64 - machineinfo
+     aarch64 - Boot test
+     aarch64 - selinux-policy: serge-testsuite
+     aarch64 - Hardware - Firmware test suite
+     aarch64 - Reboot test
 
 
-vim +/WB_SDM845_MASK +299 drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   294	
-   295	static const struct dpu_wb_cfg sm8150_wb[] = {
-   296		{
-   297			.name = "wb_2", .id = WB_2,
-   298			.base = 0x65000, .len = 0x2c8,
- > 299			.features = WB_SDM845_MASK,
-   300			.format_list = wb2_formats,
-   301			.num_formats = ARRAY_SIZE(wb2_formats),
-   302			.clk_ctrl = DPU_CLK_CTRL_WB2,
-   303			.xin_id = 6,
-   304			.vbif_idx = VBIF_RT,
-   305			.maxlinewidth = 4096,
-   306			.intr_wb_done = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 4),
-   307		},
-   308	};
-   309	
-   310	static const struct dpu_intf_cfg sm8150_intf[] = {
-   311		{
-   312			.name = "intf_0", .id = INTF_0,
-   313			.base = 0x6a000, .len = 0x280,
-   314			.features = INTF_SC7180_MASK,
-   315			.type = INTF_DP,
-   316			.controller_id = MSM_DP_CONTROLLER_0,
-   317			.prog_fetch_lines_worst_case = 24,
-   318			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
-   319			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 25),
-   320		}, {
-   321			.name = "intf_1", .id = INTF_1,
-   322			.base = 0x6a800, .len = 0x2bc,
-   323			.features = INTF_SC7180_MASK,
-   324			.type = INTF_DSI,
-   325			.controller_id = MSM_DSI_CONTROLLER_0,
-   326			.prog_fetch_lines_worst_case = 24,
-   327			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
-   328			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
-   329			.intr_tear_rd_ptr = DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2),
-   330		}, {
-   331			.name = "intf_2", .id = INTF_2,
-   332			.base = 0x6b000, .len = 0x2bc,
-   333			.features = INTF_SC7180_MASK,
-   334			.type = INTF_DSI,
-   335			.controller_id = MSM_DSI_CONTROLLER_1,
-   336			.prog_fetch_lines_worst_case = 24,
-   337			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 28),
-   338			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 29),
-   339			.intr_tear_rd_ptr = DPU_IRQ_IDX(MDP_INTF2_TEAR_INTR, 2),
-   340		}, {
-   341			.name = "intf_3", .id = INTF_3,
-   342			.base = 0x6b800, .len = 0x280,
-   343			.features = INTF_SC7180_MASK,
-   344			.type = INTF_DP,
-   345			.controller_id = MSM_DP_CONTROLLER_1,
-   346			.prog_fetch_lines_worst_case = 24,
-   347			.intr_underrun = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 30),
-   348			.intr_vsync = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 31),
-   349		},
-   350	};
-   351	
-   352	static const struct dpu_perf_cfg sm8150_perf_data = {
-   353		.max_bw_low = 12800000,
-   354		.max_bw_high = 12800000,
-   355		.min_core_ib = 2400000,
-   356		.min_llcc_ib = 800000,
-   357		.min_dram_ib = 800000,
-   358		.min_prefill_lines = 24,
-   359		.danger_lut_tbl = {0xf, 0xffff, 0x0},
-   360		.safe_lut_tbl = {0xfff8, 0xf000, 0xffff},
-   361		.qos_lut_tbl = {
-   362			{.nentry = ARRAY_SIZE(sm8150_qos_linear),
-   363			.entries = sm8150_qos_linear
-   364			},
-   365			{.nentry = ARRAY_SIZE(sc7180_qos_macrotile),
-   366			.entries = sc7180_qos_macrotile
-   367			},
-   368			{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
-   369			.entries = sc7180_qos_nrt
-   370			},
-   371			/* TODO: macrotile-qseed is different from macrotile */
-   372		},
-   373		.cdp_cfg = {
-   374			{.rd_enable = 1, .wr_enable = 1},
-   375			{.rd_enable = 1, .wr_enable = 0}
-   376		},
-   377		.clk_inefficiency_factor = 105,
-   378		.bw_inefficiency_factor = 120,
-   379	};
-   380	
-   381	static const struct dpu_mdss_version sm8150_mdss_ver = {
-   382		.core_major_ver = 5,
-   383		.core_minor_ver = 0,
-   384	};
-   385	
-   386	const struct dpu_mdss_cfg dpu_sm8150_cfg = {
-   387		.mdss_ver = &sm8150_mdss_ver,
-   388		.caps = &sm8150_dpu_caps,
-   389		.mdp = &sm8150_mdp,
-   390		.ctl_count = ARRAY_SIZE(sm8150_ctl),
-   391		.ctl = sm8150_ctl,
-   392		.sspp_count = ARRAY_SIZE(sm8150_sspp),
-   393		.sspp = sm8150_sspp,
-   394		.mixer_count = ARRAY_SIZE(sm8150_lm),
-   395		.mixer = sm8150_lm,
-   396		.dspp_count = ARRAY_SIZE(sm8150_dspp),
-   397		.dspp = sm8150_dspp,
-   398		.dsc_count = ARRAY_SIZE(sm8150_dsc),
-   399		.dsc = sm8150_dsc,
-   400		.pingpong_count = ARRAY_SIZE(sm8150_pp),
-   401		.pingpong = sm8150_pp,
-   402		.merge_3d_count = ARRAY_SIZE(sm8150_merge_3d),
-   403		.merge_3d = sm8150_merge_3d,
- > 404		.wb_count = ARRAY_SIZE(sm8150_wb),
-   405		.wb = sm8150_wb,
-   406		.intf_count = ARRAY_SIZE(sm8150_intf),
-   407		.intf = sm8150_intf,
-   408		.vbif_count = ARRAY_SIZE(sdm845_vbif),
-   409		.vbif = sdm845_vbif,
-   410		.perf = &sm8150_perf_data,
-   411	};
-   412	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
