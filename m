@@ -1,79 +1,183 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5DC6FCF0
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 22:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639856FCD7
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 22:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2Lvj3xDh"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3316bb1303bso114104f8f.0
-        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 14:05:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701813957; x=1702418757; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f9JeQfipl8UW5TVzZ70ugB2PN1r+4JCceO2n9SgysLY=;
-        b=2Lvj3xDhXFBHV60Odrur4/h59NDZAWu9B3nZOPBJdUACqvNKmGA2qJZIWcSRGFqXep
-         4Te/nlXTw9R9IH58Kw4FK+O+CS8PM6OWar7mj3czqm2PSnn3GUODJKEdwHbhCbFFqxss
-         ejh4qJbErt75E0R6I4axpn2rICb+6Acvh1KySL35RQbvQETyMMHpVBdF3vjGTzA5MSFH
-         bplBGZGU6Ly8ac4g3N+4Tdc//pbKX9AIE1IYX6x8at/2p3stx4yCwY0j2YjO02Zap7DW
-         FuOM6QDxOnYCRQBiNtLLFdejR/h/oFJhDW1P1Q9asPNleV1lgzjrBFfFg3yoDAxRNfwV
-         xJLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701813957; x=1702418757;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f9JeQfipl8UW5TVzZ70ugB2PN1r+4JCceO2n9SgysLY=;
-        b=QH93Ll/o0LujvPswIthdq4J84NiX7tP2NBBl2fAYTkJj1Vco8WBOEGNdnvA9doCnKV
-         Yu4qxujvAMzGAuTd400BqwlIXx3zS+qIHEJfN7J+/kpu3krxpIx3kjv4Ak7wIpC2VYpm
-         7zJEIJHzCIbnZShBsMbB1IluA56i29NKuHhm/b8lvV8vJTRgw9ZJ3J2ndKeEDTUJRtx4
-         sz7aKFbqDtO5BfJIvgjX4OgWsRpgYXjR8cjSM2gvV9OMGErCtsLG2h2fD3lP3n/BxCYZ
-         c/16EEP3EHTm9xwGghiglrlSircTls75A3Z8ao/EsvAjUDN37vyOXA5nNlmodk4/SbBo
-         gDPQ==
-X-Gm-Message-State: AOJu0YyZhEKhcE5tdQc9Gg0am/3eAl7yhtbFWjOTkc+38hqyZxMJCGmn
-	dHO4iMeAjz9nCW4w0lFHxwUqZdX47+oBruXa1Itn3g==
-X-Google-Smtp-Source: AGHT+IHkAJabxfpBjjJ7hbUgdJBd2Fen0CGawNzwxwjbFMg7jrNg9K9f8rvFT5xK3F8ap3VfXxDmTj52qvUE57KRoM4=
-X-Received: by 2002:a5d:66ca:0:b0:333:2fd2:8153 with SMTP id
- k10-20020a5d66ca000000b003332fd28153mr4348200wrw.112.1701813957199; Tue, 05
- Dec 2023 14:05:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="4CEtjMFy"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=WFSiYAwur+U3RCrPnGEwUFixm4ostxp7ATn0GBN/ugg=; b=4CEtjMFyJF9oSIsasW5M/S7aaD
+	SEP7hNIHAD4ZHeCURIL6pYOfzEldrdUGFNQh0mt5B49AATe+Fj0V/Asfu2xXYIEkmmV9ExuL+9On5
+	RRc8dBZb4AsWmjlEirHbxYI6lhF0iWVsDkX+yEJ77X74vrfwqgdlu4BAGyZAXO+A0WuaZtQPU1WMb
+	s69FYs8nxT08zMqZhSWkK7w+gcSYJlZUNRkPhOFBQ4jtPwNv8+/RSOOsB+ntgYECMf40aFmvuiGmE
+	wLS4PPEggFvu7RV3hF112qXY7UV9a/u22uVvIJ0SF7ABxQT03k68OZv8+Vyr0fLdLRyUq/GFDLFut
+	nXPygM1Q==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rAdce-008UYm-20;
+	Tue, 05 Dec 2023 22:10:32 +0000
+Message-ID: <34e27c57-fc18-4918-bf44-4f8a53825361@infradead.org>
+Date: Tue, 5 Dec 2023 14:10:31 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
- <20231205130449.8e330a26ecbed1f7b5ad5d7a@linux-foundation.org>
- <CAKwvOdn+VTM+LY6ALcgaZTL57JpiKt5rBPMSPNXsgS3MCENhDQ@mail.gmail.com>
- <20231205132452.418722bea8f6878dca88142a@linux-foundation.org>
- <CAKwvOdn=og6h5gVdDCjFDANs3MN-_CD4OZ9oRM=o9YAvoTzkzw@mail.gmail.com> <ZW-b4l1llqPXW-el@smile.fi.intel.com>
-In-Reply-To: <ZW-b4l1llqPXW-el@smile.fi.intel.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 5 Dec 2023 14:05:43 -0800
-Message-ID: <CAKwvOdk+JpEC-=27EkB7inOUfB+6tLe_NREz7tryHu3vmXq7DQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, tanzirh@google.com, 
-	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+To: Andy Shevchenko <andy@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, tanzirh@google.com,
+ Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205213807.GE1674809@ZenIV>
+ <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
+ <ZW-d1NZRIvmJlfcW@smile.fi.intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ZW-d1NZRIvmJlfcW@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 5, 2023 at 1:53=E2=80=AFPM Andy Shevchenko <andy@kernel.org> wr=
-ote:
->
-> Have you checked Ingo Molnar's gigantic series (2k+ patches) for the head=
-er
-> hell clean up? Perhaps we need to apply that first.
->
 
-We missed you at plumbers.  Tanzir gave a talk on this, with the
-raison d'etre of this work was to see if we could help automate Ingo's
-work.
-https://www.youtube.com/watch?v=3DeFq_oqLiXPM
---=20
-Thanks,
-~Nick Desaulniers
+
+On 12/5/23 14:01, Andy Shevchenko wrote:
+> On Tue, Dec 05, 2023 at 01:51:10PM -0800, Nick Desaulniers wrote:
+>> On Tue, Dec 5, 2023 at 1:38 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>>> On Tue, Dec 05, 2023 at 08:58:53PM +0000, tanzirh@google.com wrote:
+> 
+> ...
+> 
+>>>> IWYU is implemented using the IWYUScripts github repository which is a tool that is
+>>>> currently undergoing development. These changes seek to improve build times.
+>>>>
+>>>> This change to lib/string.c resulted in a preprocessed size of
+>>>> lib/string.i from 26371 lines to 5232 lines (-80%).
+>>>
+>>> It also breeds includes of asm/*.h, by the look of the output, which is
+>>> not a good thing in general ;-/  E.g. #include <asm/uaccess.h> *anywhere*
+>>> outside of linux/uaccess.h is a bad idea.
+>>
+>> It's not clear to me when it's ok to #include <asm/*.h>.  Is there a
+>> convention here that I'm missing?
+> 
+> The mandatory ones can be used, but not all of them.
+> In some cases you even must include asm and not linux
+> (unaligned.h, byteorder.h, maybe others...).
+> 
+> As I told, it comes with experience, we lack of the
+> respective documentation (or file which is good for
+> automation checks, like with IWYU).
+
+I have an unpublished Linux Best Known Practices txt file with
+this "rule" and some other info that I have collected over a few
+years. I wouldn't say that it's up to date. Anyway, it's copied below
+FWIW.
+
+-- 
+~Randy
+
+---
+
+=================================
+Linux Kernel Best Known Practices
+=================================
+
+N.B.: This is an evolving document.
+
+
+No need to init variables in bss to 0. bss is always cleared to 0.
+
+User interfaces should use explicit types (and hence type sizes)
+instead of generic types like "long" or "unsigned int".
+E.g.
+Also see Documentation/process/botching-up-ioctls.rst
+
+Unused fields of API structures or flags bits should be checked
+for value 0 on input and warn if they are not 0.
+
+submit-checklist Rule #1.
+
+use the kmalloc() helpers for variable-size array allocations.
+
+Generic drivers should not (do not) #include header files from
+<asm-generic>. Only arch code and arch-specific drivers do that.
+
+Don't use <asm/header.h> in generic driver code. Instead use
+some <linux/header.h> that then #includes <asm/header.h>.
+asm/ headers are implementation; linux/ headers are API.
+
+Use __maybe_unused to driver suspend/resume functions instead of
+surrounding them with #ifdef CONFIG_PM_SLEEP / #endif.
+
+Many API families provide full stub support for when their
+Kconfig option is disabled. This means that these APIs can still be used
+with COMPILE_TEST. Examples of these API families are:
+CONFIG_OF, <more>.
+
+CONFIG_namespace belongs to Kconfig files. A driver or filesystem or
+whatever should not have a local macro (or variable!) whose name
+begins with "CONFIG_".
+
+see Documentation/process/submit-checklist.rst
+
+run scripts/checkpatch.pl
+
+use Documentation/core-api/printk-formats.rst
+
+Don't introduce any new build errors or warnings
+Yes, that means that you need to check for warnings when you build.
+Yes, that includes Documentation or kernel-doc warnings or errors
+  (now that we have those down to zero).
+
+Do NOT use stack space for DMA.
+
+Don't use 'extern' on function prototypes. (deprecated)
+
+Don't depend on Makefile order to control builtin module/driver init
+calls. Use initcall levels instead.
+
+In a Kconfig dependency list,
+by convention, please keep "|| COMPILE_TEST" last in the list.
+
+Shell scripts should use /bin/sh instead of another shell
+as much as possible.
+
+When making a patch such as a coding-style patch that should have
+no effect on the produced code, do a before/after comparison of the
+binary files to show that they are the same. If they are not the same,
+explain why not.
+
+Most scripts in the kernel source tree try to avoid bashisms.
+There may be some exceptions to this, such as bpf-related scripts
+and perf-related scripts.
+
+Don't use BIT() macros in UAPI headers. Either open-code bit fields
+or use _BITUL().
+
+"sigcontext is accessible to user; do *NOT* assume that sigreturn will find what the kernel had written there" (Viro)
+
+Please just use whole numbers for patch versions, there's no need for .X
+for this type of thing as our tools do not know how to catch that, and
+it makes no sense.
+Just keep bumping the number please. (gkh)
+
+C99 style comments are OK in source code except in UAPI header files.
+They may be used with cstd=C90, which does not accept // comments.
+
+TODO:
+
+Should we say something about __delay() not being available in all
+arch-es so some other delay function is preferable.
+[maybe add something like this to checkpatch?]
+
+#####
+
