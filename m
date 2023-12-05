@@ -1,96 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2052.outbound.protection.outlook.com [40.107.102.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC8C6A320;
-	Tue,  5 Dec 2023 17:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0236A326
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 17:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XczyRqP6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFF7C433C8;
-	Tue,  5 Dec 2023 17:49:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701798562;
-	bh=PK2vCfbXtlwtD+G6evFibgNJ248BLr3rSJX0bTPzSv4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XczyRqP6XKk6NmwbJAiVw8qzZu2d15u9Y09nPMYtc3MduPMmAykmqW3+ZS+qy6Yjx
-	 /MYoHPl5JF1ouJeyiIYi706tyo897WWZflqBQ34K+eEdhKmRv2UzRmwb74gsx4JkpV
-	 RnINHJ9HbLwdR29PK6kBjm+Bh5DSlfnQF0F7VBDyUJBq8WEKRUs84atW0O8vlN8wTl
-	 TLK8zVwi0imtvTiU45lOcaWP1hVr456Z7nuOXMHadBNsBxnbzxqsQWVO2rSApFL4M0
-	 Fofzqb6w6siEK+UXnKqReA+PL90tB4HRZYp3LaTAkkKCQjfpNEAAFElxrdwviZDuxA
-	 iSbtZe7XAt5Dw==
-Date: Tue, 5 Dec 2023 10:49:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: sre@kernel.org
-Cc: nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, u.kleine-koenig@pengutronix.de,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] power: reset: at91: Drop '__init' from
- at91_wakeup_status()
-Message-ID: <20231205174919.GA535965@dev-arch.thelio-3990X>
-References: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="csj6OeBQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BMlxGYZ/AEcKqHM9tepjeQoF+4kdM382X9SHO9l+QaVwJqVvcRaMaP0Km4BdhXXLGd8p78oeK6pXSrQVirXT92YuSawpthlo6c9u4DUdt23nJNXuw2TxDYjLFUH8f9z1pxKRI4lzhIdAibdd2Nr9jyhIp7umrq3SJ/xB6lf/FcXcjde1SbHV0ap6qhIkP/jjVApbp1bQNhXODrKl1jkn/D7RPb21r5/ERSPnApFGJGL7jSjzzsPJKQuyVMYXPuxlaytlga74/HGHUIwwp/T+N8r4lYdLFjLb2sv+Dm2mJha2qAKoce8vp8av9wSl6S1NylBsN9oiUNIjVbndwNXh6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=efof6XjFHYzaeCUgn5K7CuGjpOO+HSLejGzqAzKvFMw=;
+ b=FQfQzsddmj/x0j71nYnhGM1jRsVHY0gh1OyanJFhp7RAPrCyWmqZA4NRGU61mqb+CTjTegzhBhn34Aol9LxpgyMeRpkVwiKbwk1m6HwQHeLz8rTf6Est8pfKi7DE31O/TzRYz8hDh7uWvzYyxqhDfGokMb9hENxrqRKueV4ER2AVFczCKlmYGNNVxabr7JyLlRIFzl9GLcftKIsPQOt2SI00UyoYOV7VV7Y6ziHyJcjuVBiTlA2FluDx5KZYWQWpgqqxjr8ZeOyy4F95n86Ahh3GJl6EdWLLbNdoIC1vofQ2mRfPonumW1Ru6uOXnMTAUXVC8CvZ36keHCkTHpNVNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=efof6XjFHYzaeCUgn5K7CuGjpOO+HSLejGzqAzKvFMw=;
+ b=csj6OeBQBZ33c4564O9aySkp5YKu4CTscsQBMO8BT3OGgNrNqL/kkK7Crh2XMhcONbSptEX/UYnQmRmT4lkthx/MXNEX8I4k1ws2tztn4CLSKD5vyQ/iy+TUV6YOd3B9Vjkhxurrjoe39Lz19BG+0N0TMv955mLYjf4F8WGkB/907SqTIh9OMbaRVjDo9EnOJj9qrsrInPLjU/yHFWF78cBDH+fKFw67gHlZYWHw0mR1A9gLsjgIbRCV35mZXupt9ojEm2MeOMKlkN8HvYkJN+C5reaREw+gO8vkP5IlK87COebqTnEB9STdFKYIPzeS5h5l09TyWFBYkr9//uMYpQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM4PR12MB5746.namprd12.prod.outlook.com (2603:10b6:8:5d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Tue, 5 Dec
+ 2023 17:51:29 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7046.034; Tue, 5 Dec 2023
+ 17:51:29 +0000
+Date: Tue, 5 Dec 2023 13:51:27 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, Leon Romanovsky <leon@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
+	llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <20231205175127.GJ2692119@nvidia.com>
+References: <cover.1700766072.git.leon@kernel.org>
+ <c3ae87aea7660c3d266905c19d10d8de0f9fb779.1700766072.git.leon@kernel.org>
+ <ZWB373y5XuZDultf@FVFF77S0Q05N>
+ <20231124122352.GB436702@nvidia.com>
+ <ZWSOwT2OyMXD1lmo@arm.com>
+ <20231127134505.GI436702@nvidia.com>
+ <ZW4NAzI_jvwoq8dL@arm.com>
+ <20231204182330.GK1493156@nvidia.com>
+ <ZW9cF0ALVwgvcQMy@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZW9cF0ALVwgvcQMy@arm.com>
+X-ClientProxiedBy: BL1PR13CA0163.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::18) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5746:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4213330-dcf6-4021-a8af-08dbf5bacf3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	0WwXS5kkqlskCv6cR0TpjwS4j2FIRWXUba+uaWcQjQIoo741d6PCHiFXtylYkyfjQ7xYPmzqeH//C22oNuFtMhRtZrQA/SfFh3kX6IssHnsPshZBlFDmq7WulDr2T4815AJEJGoZkUsv53Q+WqB9xNlLP4QQ7b+TLYmhaj1RjZQofnDnPI9Sx7/0HEs716MkHutBjJW/34zdIlmRlwaFljEqptiQPf+NgKpBncJrtOan9tpkqJnGkLbjU13Il6/8GaVNc7Tz4ZbvfFPOyq8YwBAB2pyvX8VzW9ImpWysVmj+0WmY2ge5uVrLnmm0Jzs8GM50dUBKn9DwUb1Gt20NuaLAbtN1oo6gHWAYKwTn9qxVjEBE7EA1h1ZYGy0VzzxFUzIv6OcurkJTlHEfCD9ogXQxJTZDdyQ/1YzIML5VTX0/C4eofohrJD/FcW1v5XzzZumwKqfkZkY9V8XTpGhuxVIVjkmsM+pGR8H3MvkQyyMBidnBU6M6ldKrMoWblLsNWtDRPNTIz3v6Yxg+8jKz3uDrE8K5oIxVDqL1qG9KybOo/gdc5fJ/ztFlfXrsHLx+
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(136003)(376002)(346002)(39860400002)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(6486002)(83380400001)(478600001)(6512007)(2616005)(6506007)(26005)(1076003)(316002)(110136005)(66476007)(54906003)(66556008)(66946007)(86362001)(8936002)(41300700001)(36756003)(4326008)(8676002)(7416002)(33656002)(2906002)(5660300002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?C9+QQ6yoS7vgIBlcuVUd7/nMXq9vxMvQnNQMlvX22m35skZX60CXbWTpfDhm?=
+ =?us-ascii?Q?l3xdhUkTIGCdaUCp+CaLIwOzrVrlv572NuHanzRlzMDCWrpONrWiJr72tFxt?=
+ =?us-ascii?Q?Zpkf7veJ8Y2AyTGpsH/o4YMdjmtCw3O/GxSZcywpgRYhiKg17Gr+zRcV2PT5?=
+ =?us-ascii?Q?xCqfC2+VFp2tkEB0Hlk58+BpJUgBEK+8/vEPA3Dprqyguab8T2V/PX0PEC9u?=
+ =?us-ascii?Q?bY8trLKYZhaABFPHvWgVaFJIKDu991qlnIp+9Rk9U0GaCAVNYUo2/t3EVAP8?=
+ =?us-ascii?Q?RvWeMyye1bhEgFnl+aCgsnbhOrnYoC6LXLkxImseEahdCi1wLp4mNrymsa2v?=
+ =?us-ascii?Q?l0ShcW42NUgfc8m8cQfMVUWqqWmrp24e3pYhorYMiznG+S8FxkXQ2XCN2VvU?=
+ =?us-ascii?Q?mT9KTP+aELb7btgN9mHh2X9evJp1TYfGxyfOjzNpajcmW1326RENcRQJLkrM?=
+ =?us-ascii?Q?Fv/uae5ujB4rUXnpiMT5O4DumGsYu/9Tu+ADfAYBdBVfqJr9M5oWoWIRRDKs?=
+ =?us-ascii?Q?WwgN7qLD8y0xxwVrFn4mos/nKTuh5gNW/CXZL5uECstLt9lX3gT+mGgZFygw?=
+ =?us-ascii?Q?NjmcGrFGFTPkAZRrPKoHBFTgOvo14nnqhrhD5Eg6FkJiTv+AMm3CJCErt1tq?=
+ =?us-ascii?Q?djT2NdOWd22kDAFkDPvQBMjogK6D7TDJmBNhT/gpHDpW+/5NtN8a4S3Ccmxs?=
+ =?us-ascii?Q?dWPpbQQUVVq4/w4+ZkCD46ych86iTxjq3OJWTXsWEDJdazrmc08CblIpUQf1?=
+ =?us-ascii?Q?gsl7sp4UDwuSS5Bk44MwenWBEVDeKj6INWOPyrtIBzlGSGlMLMvSIb29EyzE?=
+ =?us-ascii?Q?nYlOKjsGTDxN7Ipvah6+cu5AdAS1LUB5T3yKwIPaonfXygf9s+SXGtCPBgDJ?=
+ =?us-ascii?Q?yZShnZC4kBmbVtqvskS2mKAYGTcJTv2Jw3fhFV7e1K8gLTbCJk8ljGaiDNHR?=
+ =?us-ascii?Q?pq33twQLsIi04WvagaFW93QIzK/A/2COVMXc+3HhaBG9ftu16RUJEK2Z+Nty?=
+ =?us-ascii?Q?lG3w3YpJxHQWnlt34IdfcpQewRuN0DCLp0GsaDHBCFxKKl99n0x/IHMwJSYE?=
+ =?us-ascii?Q?evq47LRsfWdWhFuaMRK0pBjfp2UEE98rGtYcccd+tK7CJermdFVLjRVTvXb5?=
+ =?us-ascii?Q?yjqLa2qyAFWmPDE7XcGQyW6pfnidKoHRuJD3JvaiXnSDTwI4pdxeKAziKyIH?=
+ =?us-ascii?Q?CKujF93oY1FIr9Htg8juoC0t7mt7X8cYutHPFokXFwfQ1ehBz0oLqdkDrYCl?=
+ =?us-ascii?Q?1NPykHLV/cdOJyEkCuR5xz+r4o6Hpptl4zfwv3YGcbr6vi959q1tMYEMVi1C?=
+ =?us-ascii?Q?DS5RpMxXTzkp8fMab4GnkCxEJ4uLu/b3ovhlE7e9JXHzT8RXO2YQE0xVhkmL?=
+ =?us-ascii?Q?XLSK+0KVUSgcEgZzbDGEWae1TagwkvtRwU8LnS10rVRHIUrFgllaTLRB6C5H?=
+ =?us-ascii?Q?KTtyNOmnhN8GulrSxM8r246Pkraz5l3E42YgjxpvBjkOG4m29bgDsOVTun4N?=
+ =?us-ascii?Q?mFuAU1NLYfKSA/9VO6EthGF09uRZ5Q/rcKAg/XhKgTq9fHfPP4XIOIOmGayu?=
+ =?us-ascii?Q?TzSp2aRsFC2i7++aYpTataW+KP2Y4AyRJh5R8SGY?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4213330-dcf6-4021-a8af-08dbf5bacf3f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2023 17:51:29.4059
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EKlLkHM8FH35IDCHpQTr8eMj/o62hnu1LWbPNQtpcxXhaVfi+EapfuYQsLdIcXOb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5746
 
-Ping? I still see these warnings in next-20231205.
+On Tue, Dec 05, 2023 at 05:21:27PM +0000, Catalin Marinas wrote:
+> On Mon, Dec 04, 2023 at 02:23:30PM -0400, Jason Gunthorpe wrote:
+> > On Mon, Dec 04, 2023 at 05:31:47PM +0000, Catalin Marinas wrote:
+> > > Personally I'd optimise the mempcy_toio() arm64 implementation to do
+> > > STPs if the alignment is right (like we do for classic memcpy()).
+> > > There's a slight overhead for alignment checking but I suspect it would
+> > > be lost as long as you can get the write-combining. Not sure whether the
+> > > interspersed reads in memcpy_toio() would somehow prevent the
+> > > write-combining.
+> > 
+> > I understand on these new CPUs anything other than a block of
+> > contiguous STPs is risky to break the WC. I was told we should not
+> > have any loads between them.
+> 
+> Classic memcpy does similar tricks with four LDPs in a row before
+> starting to issue the STPs (though there are new LDPs for the next
+> data in-between). But that was tuned for cacheable memory, not sure
+> if something similar would behave well on Normal-NC memory.
 
-On Mon, Nov 20, 2023 at 03:35:32PM -0700, Nathan Chancellor wrote:
-> When building with clang, there are two section mismatch warnings:
+Can we conclude a direction here?
+
+1) I don't want to mess with x86 so we keep a dedicated API
+   Are we agreed to call it __iowrite512_copy() and note its special
+   alignment limitation?
+
+2) You want to #define __iowrite512_copy() to memcpy_toio() on ARM and
+   implement some quad STP optimization for this case?
+
+3) A future ST64B and the x86 version would be put under
+   __iowrite512_copy()?
+
+4) A future ST64B would come with some kind of 'must do 64b copy or
+   oops' to support the future HW that must have this instruction? eg
+   we already see on Intel that HW must use ENQCMD and nothing else.
+
+Agreed?
+
+Niklas, is this OK for S390 too?
+
+> > I'm told it is problematic, something about ST64B not working with
+> > NORMAL_NC.
 > 
->   WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff_probe+0x7c (section: .text) -> at91_wakeup_status (section: .init.text)
->   WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_probe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
-> 
-> Drop '__init' from at91_wakeup_status() to clear up the mismatch.
-> 
-> Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_probe()")
-> Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_platform_driver_probe()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> I suspect this is not visible for GCC due to inlining
-> at91_wakeup_status() but I did not actually check.
-> ---
->  drivers/power/reset/at91-poweroff.c      | 2 +-
->  drivers/power/reset/at91-sama5d2_shdwc.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/reset/at91-poweroff.c b/drivers/power/reset/at91-poweroff.c
-> index 126e774e210c..93eece027865 100644
-> --- a/drivers/power/reset/at91-poweroff.c
-> +++ b/drivers/power/reset/at91-poweroff.c
-> @@ -57,7 +57,7 @@ static struct shdwc {
->  	void __iomem *mpddrc_base;
->  } at91_shdwc;
->  
-> -static void __init at91_wakeup_status(struct platform_device *pdev)
-> +static void at91_wakeup_status(struct platform_device *pdev)
->  {
->  	const char *reason;
->  	u32 reg = readl(at91_shdwc.shdwc_base + AT91_SHDW_SR);
-> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
-> index af95c7b39cb3..959ce0dbe91d 100644
-> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
-> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-> @@ -107,7 +107,7 @@ static const unsigned long long sdwc_dbc_period[] = {
->  	0, 3, 32, 512, 4096, 32768,
->  };
->  
-> -static void __init at91_wakeup_status(struct platform_device *pdev)
-> +static void at91_wakeup_status(struct platform_device *pdev)
->  {
->  	struct shdwc *shdw = platform_get_drvdata(pdev);
->  	const struct reg_config *rcfg = shdw->rcfg;
-> 
-> ---
-> base-commit: b55d073e6501dc6077edaa945a6dad8ac5c8bbab
-> change-id: 20231120-fix-at91-modpost-warnings-beabd2bac722
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+> Last time I checked it was meant to work on Normal-NC (not cacheable
+> though). That's on page 285 of the Arm ARM J.a.
+
+This is a relief to hear!
+
+Thanks,
+Jason
