@@ -1,82 +1,76 @@
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AC246AD
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 02:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=vimux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vimux.org
-X-QQ-mid: bizesmtp73t1701742630tlxdw301
-Received: from localhost.localdomain ( [219.147.26.62])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 05 Dec 2023 10:16:14 +0800 (CST)
-X-QQ-SSF: 01200000000000B0J000000A0000000
-X-QQ-FEAT: k0mQ4ihyJQPgishzlGfWTZNfXN6f40onPWxHaDYCN1gveOrb8wvY1GV2C3fmO
-	FdH3zNbGQFzov4jkdI7bl6fKtjXLTUgRvFuqAF19DnkDRognDl8nDtWCOKTpVIBr+wwjjG5
-	O5uDuPeg3o06KxzZVC32mDakfdjDlgQGZxl872ouxCGWwtcOMhj8bFYuuj6HFzDFCi5b/su
-	h0MxxWowiAaQS90XnSTU82rAatqMTungJQZqkAqAkZTioB3G6ERlTnE+kxNB6D4kwsu1y/e
-	+Vaj2TKVgh6hPvzWefYS0AHJQBNvxxP7hTk0of5R3MveTvaupHOCrbjhirjBiF3zbqyH7A7
-	CbFwtfrI0buvUCt22sGPhyDGIoyvOJuU1HpFPphhUIwVLJQj6RhkiYG8DDWpg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16628219759286156628
-From: Jialu Xu <xujialu@vimux.org>
-To: nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Jialu Xu <xujialu@vimux.org>
-Subject: [PATCH v2] gen_compile_commands.py: fix path resolve with symlinks in it
-Date: Tue,  5 Dec 2023 10:15:26 +0800
-Message-Id: <20231205021523.4152128-2-xujialu@vimux.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231204165920.GA16980@dev-arch.thelio-3990X>
-References: <20231204165920.GA16980@dev-arch.thelio-3990X>
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id E6BDD8BE0
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 02:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from [172.30.20.54] (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id A473660598E85;
+	Tue,  5 Dec 2023 10:30:22 +0800 (CST)
+Message-ID: <098b1c0f-f303-3708-939a-28ecaf2185c3@nfschina.com>
+Date: Tue, 5 Dec 2023 10:30:22 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:vimux.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3] misc: mei: client.c: fix problem of return
+ '-EOVERFLOW' in mei_cl_write
+Content-Language: en-US
+To: alexander.usyskin@intel.com, Greg KH <gregkh@linuxfoundation.org>,
+ Dan Carpenter <dan.carpenter@linaro.org>
+Cc: tomas.winkler@intel.com, arnd@arndb.de, nathan@kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+In-Reply-To: <2023120425-broaden-image-fdc9@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-When symbolic links are involved in the path, os.path.abspath might not
-resolve the symlinks and instead return the absolute path with the
-symlinks intact.
 
-Use pathlib.Path resolve() instead of os.path.abspath()
+On 2023/12/4 21:17, Greg KH wrote:
+> On Mon, Dec 04, 2023 at 04:11:31PM +0300, Dan Carpenter wrote:
+>> On Mon, Dec 04, 2023 at 09:00:42AM +0100, Greg KH wrote:
+>>>> diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
+>>>> index 7ea80779a0e2..0489bec4fded 100644
+>>>> --- a/drivers/misc/mei/client.c
+>>>> +++ b/drivers/misc/mei/client.c
+>>>> @@ -2033,7 +2033,7 @@ ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long time
+>>>>   	hbuf_slots = mei_hbuf_empty_slots(dev);
+>>>>   	if (hbuf_slots < 0) {
+>>>>   		rets = -EOVERFLOW;
+>>>> -		goto out;
+>>>> +		goto err;
+>>> Please prove that this is correct, as based on the code logic, it seems
+>>> very wrong.  I can't take this unless the code is tested properly.
+>> Hi Greg,
+>>
+>> When Su Hui sent the v2 patch you sent an auto response about adding
+>> stable to the CC list.
+>> https://lore.kernel.org/all/2023112042-napped-snoring-b766@gregkh/
+>>
+>> However, it appears that you still applied the v2 patch.  It's in
+>> linux-next as commit ee6236027218 ("misc: mei: client.c: fix problem of
+>> return '-EOVERFLOW' in mei_cl_write").
+>>
+>> When I use `git am` to apply this patch, then it doesn't apply.  However,
+>> when I use cat email.txt | patch -p1 then it tries to reverse the patch
+>> and apply it to a different function.
+> Odd, I missed that I had already applied the first one, nevermind, that
+> one is correct, this one was wrong :)
 
-Signed-off-by: Jialu Xu <xujialu@vimux.org>
----
- scripts/clang-tools/gen_compile_commands.py | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 180952fb91c1b..99e28b7152c19 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -11,6 +11,7 @@ import argparse
- import json
- import logging
- import os
-+from pathlib import Path
- import re
- import subprocess
- import sys
-@@ -172,8 +173,9 @@ def process_line(root_directory, command_prefix, file_path):
-     # by Make, so this code replaces the escaped version with '#'.
-     prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
- 
--    # Use os.path.abspath() to normalize the path resolving '.' and '..' .
--    abs_path = os.path.abspath(os.path.join(root_directory, file_path))
-+    # Make the path absolute, resolving all symlinks on the way and also normalizing it.
-+    # Convert Path object to a string because 'PosixPath' is not JSON serializable.
-+    abs_path = str(Path(root_directory, file_path).resolve())
-     if not os.path.exists(abs_path):
-         raise ValueError('File %s not found' % abs_path)
-     return {
--- 
-2.39.2
+Oh, sorry...
+I'm not familiar with mei device, I send this v3 patch because of Sasha' 
+s suggestion.[1]
+Could Sasha give some advice about this ?
+Thanks a lot :)
+
+https://lore.kernel.org/all/CY5PR11MB63668F464A281A239FA12B6AEDBDA@CY5PR11MB6366.namprd11.prod.outlook.com/
+
 
