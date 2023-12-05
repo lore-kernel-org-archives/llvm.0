@@ -1,76 +1,115 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36A46E589
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 21:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500A96E589
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 21:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="YnhA+Lw6"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=HKW4QFdw1SLSy+SkuqSHdm3s7yV1a+qPMBI8CTnpIIQ=; b=YnhA+Lw601956o/BXGvoJwVs6b
-	HJ/ruVA7o7YK8GsFiaU8pesx1TY1HZe1YgvI/ZNQpHpMBDU1HidBuw3Kug5y5Z8Oys6bgmCguEvDr
-	MhBtL7J+wjd/TtYdnXZt1YFqpBQbN0xHEt0ohsYHTviT3X8TcdUj6b6B7VGrkd4Btgr7vUCxP0fLQ
-	WI97i5i8K2w8RdHp73Gq3qQb8+t2H73w2SbEWYijKjHabtCMOokySCrhY0UI/i9cvJHpuI4DzyrZN
-	TbR3KybOl1fMP5diqdjKNvn7tcSi9twOa7taauWBAPPv6yKEQp9/3QvK2reorfJe4Hhfq65+pD7JO
-	UTb3UfQw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAd7H-007TNt-26;
-	Tue, 05 Dec 2023 21:38:07 +0000
-Date: Tue, 5 Dec 2023 21:38:07 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: tanzirh@google.com
-Cc: Kees Cook <keescook@chromium.org>, Andy Shevchenko <andy@kernel.org>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nick DeSaulniers <nnn@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-Message-ID: <20231205213807.GE1674809@ZenIV>
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2KvpB9Ql"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3333074512bso58962f8f.1
+        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 13:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701812401; x=1702417201; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/kbHlqbkhYwBbDQLJMz0TJVKvZVaLjuc/LRCzX5dlF4=;
+        b=2KvpB9QlNf8mRQgUT8PWn1I5SbH3TZk3Jq8H49YJWG47pK7Or/yu+o/bcifyLk6vWS
+         a9tacPEJLV09J57jU/671qzZPy7hMEtD8fNOVZkxuinuhrbYA+o8kxhMSf+ui9GlzNkj
+         R+YUL2/4HRZLo7X0oU5FWAO1IcubuFyFf76gnBn32kXgj+PqqhbpKFFy+w03ponUO7aO
+         9kPSHuWSJvG27xkNp4z4Kwevu/nTc1Gy+u4eEuwX+MTvnmC29m4/3TbcVjVtfcOv3xPD
+         bBYXvwiUMJSP8F5NtCbnHi4oSGlFwhSzENBsyG0UZcXnOU/IwOXX6z5tMPbHnwLLO/wd
+         BtEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701812401; x=1702417201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/kbHlqbkhYwBbDQLJMz0TJVKvZVaLjuc/LRCzX5dlF4=;
+        b=gX5qrueiKqmV2G/m/u7GQtxnHPO47eEEaE21LPDCNWO2BRMjNoxhJM0bX4zrmJ5YDD
+         2rpwokvEMdf4VDW5OKoWeH0MkPgh+8KxVT8454bXbIW7AX9mrCgxXWJ/4Qe+Cb7+5SBu
+         OenmwoeSKmo2+zYU00PI6S2dHm/717dzrqhS0Gv2LLseMHjnrc0VGMzzH7nKAmoLiBgt
+         SZ1wQEPQlfbq2cJoOO8mEb1mc61GrsQeIHKPBJzwKz7lhpcnhfC0LTWMThs3yEhnkbk9
+         VrjcjKdTyZax/gb0ArqxV7QAgeYIB5XoXtYCcKjnV3PIG8tHNptxHHFYQPnEK+X+Ti/F
+         l2rg==
+X-Gm-Message-State: AOJu0YyBAHRUD+vEb0RGKX3nlH3bbrq4m1wW7A4bmk8vSX9UMIU6Mtlv
+	hyVW9B6cNVm11dUT04XXf1PomOAwHI/PAD8Kdhp3DA==
+X-Google-Smtp-Source: AGHT+IGMn79dOXEc4cRtYoqKYziKCkAseM49c6cHdzYaoWCqgxNOZ+I1/FwkoTDwVqORs0jMTHot/e41TNqNF/jcYS4=
+X-Received: by 2002:adf:ea4a:0:b0:333:3b79:27d7 with SMTP id
+ j10-20020adfea4a000000b003333b7927d7mr1299396wrn.59.1701812401438; Tue, 05
+ Dec 2023 13:40:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205130449.8e330a26ecbed1f7b5ad5d7a@linux-foundation.org>
+ <CAKwvOdn+VTM+LY6ALcgaZTL57JpiKt5rBPMSPNXsgS3MCENhDQ@mail.gmail.com> <20231205132452.418722bea8f6878dca88142a@linux-foundation.org>
+In-Reply-To: <20231205132452.418722bea8f6878dca88142a@linux-foundation.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 5 Dec 2023 13:39:47 -0800
+Message-ID: <CAKwvOdn=og6h5gVdDCjFDANs3MN-_CD4OZ9oRM=o9YAvoTzkzw@mail.gmail.com>
+Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: tanzirh@google.com, Kees Cook <keescook@chromium.org>, 
+	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 05, 2023 at 08:58:53PM +0000, tanzirh@google.com wrote:
-> This diff uses an open source tool include-what-you-use (IWYU) to modify
-> the include list changing indirect includes to direct includes.
+On Tue, Dec 5, 2023 at 1:24=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
+>
+> On Tue, 5 Dec 2023 13:14:16 -0800 Nick Desaulniers <ndesaulniers@google.c=
+om> wrote:
+>
+> > >
+> > > The preferred way to import bit-fiddling stuff is to include
+> > > <linux/bits.h>.  Under the hood this may include asm/bitsperlong.h.  =
+Or
+> > > it may not, depending on Kconfig settings (particularly architecture)=
+.
+> > >
+> >
+> > Just triple checking my understanding; it looks like
+> > include/linux/bits.h unconditionally includes asm/bitsperlong.h (which
+> > is implemented per arch) most of which seem to include
+> > asm-generic/bitsperlong.h.
+> >
+> > include/linux/bits.h also defines a few macros (BIT_MASK, BIT_WORD,
+> > BITS_PER_BYTE, GENMASK, etc).  If lib/string.c is not using any of
+> > those, why can't we go straight to #including asm/bitsperlong.h?  That
+> > should resolve to the arch specific impl which may include
+> > asm-generic/bitsperlong.h?
+>
+> It's just a general rule.  If the higher-level include is present, use
+> that.  Because of the above, plus I guess things might change in the
+> future.
 
-How does it account for arch- and config-dependent indirect includes?
+Hmm...how does one know that linux/bits.h is the higher-level include
+of asm/bitsperlong.h?
 
-In particular, on sh this patch breaks, since there word-at-a-time.h does not
-contain an include of kernel.h, even though it uses REPEAT_BYTE.  This is
-a very simple case (they really ought to include kernel.h, same as all other
-instances of word-at-a-time.h), but I would expect arseloads of more subtle
-breakage in anything less trivial.
+Do we mention these conventions anywhere under Documentation?
 
-And I'm not at all sure that there's no config-dependent breakage as well -
-this had been caught by quick make allmodconfig + make lib/string.o on
-a bunch of architectures; the graph of indirects includes (as well as the
-set of symbols needed for given header) is very much config-dependent.
+>
+> We've been getting better about irregular asm/include files.
+>
+> But bits.h is a poor example.  A better case to study is spinlock.h.
+> If this tool recommended including asm/spinlock.h then that won't work
+> on any architecture which doesn't implement SMP (there is no
+> arch/nios2/include/asm/spinlock.h).
 
-> IWYU is implemented using the IWYUScripts github repository which is a tool that is
-> currently undergoing development. These changes seek to improve build times.
-> 
-> This change to lib/string.c resulted in a preprocessed size of
-> lib/string.i from 26371 lines to 5232 lines (-80%).
+The tooling Tanzir is working on does wrap IWYU, and does support such
+mapping (of 'low level' to 'high level' headers; more so, if it
+recommends X you can override to suggest Y instead).
 
-It also breeds includes of asm/*.h, by the look of the output, which is
-not a good thing in general ;-/  E.g. #include <asm/uaccess.h> *anywhere*
-outside of linux/uaccess.h is a bad idea.
+arch/nios/ also doesn't provide a bug.h, which this patch is
+suggesting we include directly.  I guess the same goes for
+asm/rwonce.h.
 
-> If there are any problems with the output of the tool please raise an
-> issue on the github.
-
-Sorry, no.  Your tool, your workflow, of course, but I don't do github issues.
-You are welcome to the contents of this reply, but I'm not using browser-based
-UI without very strong reasons; this one isn't.
+--=20
+Thanks,
+~Nick Desaulniers
