@@ -1,65 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17A0692A8;
-	Tue,  5 Dec 2023 21:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D153F6A32E;
+	Tue,  5 Dec 2023 21:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Umm13VIf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C92C433C8;
-	Tue,  5 Dec 2023 21:04:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1701810290;
-	bh=oBo9P7E2H1qo/8P7D4Gn1bqot50xulgDivPddX3B360=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Umm13VIfsxObQ8ml3mnlVj2Ggug4q74F5giIj1ChM2SJpMGqfOoIJm/I/zwxWurWb
-	 UO3nMTeKUpysC/bdJyiBA/s/ehpIBbSeHj6P+xggFewzgSUQw6z1xt+5uNePlJR/MN
-	 WX7rq/HoUa6w6xG42vWWspTCu+TsBaCrNZzf6wT0=
-Date: Tue, 5 Dec 2023 13:04:49 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: tanzirh@google.com
-Cc: Kees Cook <keescook@chromium.org>, Andy Shevchenko <andy@kernel.org>,
- linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, Nick
- DeSaulniers <nnn@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-Message-Id: <20231205130449.8e330a26ecbed1f7b5ad5d7a@linux-foundation.org>
-In-Reply-To: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LcdgIhPC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701810301; x=1733346301;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QoRB+kUlNzcFbM1jcDY4W8+DKPtN7knm2yCQx9BeXHw=;
+  b=LcdgIhPCvGw7/HfGxdIo47Sh5jlPpB6c7qwxdNU3k0KMXqJpBcG2SzVV
+   kgj6Hv0KfXC3FtfP6BlxnP2ufODoePbVt9CZYjU4MBYMBOvIYWYNabwyx
+   pCWmXdqT8M/iqgttbuDkwrr5tMwbcDdWxt+0tP43Wv7SOE7KGOHSie4F6
+   khtq+/MlVxjqGktZJMdySlGunxZHtNC/DXRP5+YQGtrkJ+STrg2MiOQxF
+   TMLUp79h7P9P9Xr5yoM5E0FHLNVa4WI95avJebS33lADZzONEa1AyiNil
+   aY9P8HthgFv2U7rINIM76EqfY3KNRHMa4FsiU/R6T4/dcH04D9yJi9Ws/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="458275353"
+X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
+   d="scan'208";a="458275353"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 13:05:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="800104497"
+X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
+   d="scan'208";a="800104497"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Dec 2023 13:04:52 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAcb3-0009jG-2T;
+	Tue, 05 Dec 2023 21:04:49 +0000
+Date: Wed, 6 Dec 2023 05:04:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexey Makhalov <amakhalov@vmware.com>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, hpa@zytor.com,
+	dave.hansen@linux.intel.co, bp@alien8.d, mingo@redhat.com,
+	tglx@linutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, x86@kernel.org,
+	netdev@vger.kernel.org, richardcochran@gmail.com,
+	linux-input@vger.kernel.org, dmitry.torokhov@gmail.com,
+	zackr@vmware.com, linux-graphics-maintainer@vmware.com,
+	pv-drivers@vmware.com, namit@vmware.com, timothym@vmware.com,
+	akaher@vmware.com, jsipek@vmware.com,
+	dri-devel@lists.freedesktop.org, daniel@ffwll.ch, airlied@gmail.com,
+	tzimmermann@suse.de, mripard@kernel.org,
+	maarten.lankhorst@linux.intel.com, horms@kernel.org
+Subject: Re: [PATCH v2 6/6] x86/vmware: Add TDX hypercall support
+Message-ID: <202312060432.8e2xdh6F-lkp@intel.com>
+References: <20231201232452.220355-7-amakhalov@vmware.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231201232452.220355-7-amakhalov@vmware.com>
 
-On Tue, 05 Dec 2023 20:58:53 +0000 tanzirh@google.com wrote:
+Hi Alexey,
 
-> This diff uses an open source tool include-what-you-use (IWYU) to modify
-> the include list changing indirect includes to direct includes.
-> IWYU is implemented using the IWYUScripts github repository which is a tool that is
-> currently undergoing development. These changes seek to improve build times.
-> 
-> This change to lib/string.c resulted in a preprocessed size of
-> lib/string.i from 26371 lines to 5232 lines (-80%).
-> 
-> If there are any problems with the output of the tool please raise an
-> issue on the github.
-> 
-> Link: https://github.com/ClangBuiltLinux/IWYUScripts
+kernel test robot noticed the following build errors:
 
-Issue:
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on dtor-input/next dtor-input/for-linus linus/master v6.7-rc4 next-20231205]
+[cannot apply to tip/x86/vmware]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> --- a/lib/string.c
-> +++ b/lib/string.c
-> @@ -16,16 +16,16 @@
->  
->  #define __NO_FORTIFY
->  #include <linux/types.h>
-> +#include <asm/bitsperlong.h>
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Makhalov/x86-vmware-Move-common-macros-to-vmware-h/20231202-072821
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20231201232452.220355-7-amakhalov%40vmware.com
+patch subject: [PATCH v2 6/6] x86/vmware: Add TDX hypercall support
+config: i386-buildonly-randconfig-005-20231202 (https://download.01.org/0day-ci/archive/20231206/202312060432.8e2xdh6F-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060432.8e2xdh6F-lkp@intel.com/reproduce)
 
-The preferred way to import bit-fiddling stuff is to include
-<linux/bits.h>.  Under the hood this may include asm/bitsperlong.h.  Or
-it may not, depending on Kconfig settings (particularly architecture).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312060432.8e2xdh6F-lkp@intel.com/
 
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/vmwgfx/vmwgfx_msg.c:37:
+   In file included from drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h:38:
+>> arch/x86/include/asm/vmware.h:46:46: warning: declaration of 'struct tdx_module_args' will not be visible outside of this function [-Wvisibility]
+   extern void vmware_tdx_hypercall_args(struct tdx_module_args *args);
+                                                ^
+>> arch/x86/include/asm/vmware.h:61:25: error: variable has incomplete type 'struct tdx_module_args'
+           struct tdx_module_args args = {
+                                  ^
+   arch/x86/include/asm/vmware.h:61:9: note: forward declaration of 'struct tdx_module_args'
+           struct tdx_module_args args = {
+                  ^
+   1 warning and 1 error generated.
+
+
+vim +61 arch/x86/include/asm/vmware.h
+
+    45	
+  > 46	extern void vmware_tdx_hypercall_args(struct tdx_module_args *args);
+    47	
+    48	/*
+    49	 * TDCALL[TDG.VP.VMCALL] uses rax (arg0) and rcx (arg2), while the use of
+    50	 * rbp (arg6) is discouraged by the TDX specification. Therefore, we
+    51	 * remap those registers to r12, r13 and r14, respectively.
+    52	 */
+    53	static inline
+    54	unsigned long vmware_tdx_hypercall(unsigned long cmd, unsigned long in1,
+    55					   unsigned long in3, unsigned long in4,
+    56					   unsigned long in5, unsigned long in6,
+    57					   uint32_t *out1, uint32_t *out2,
+    58					   uint32_t *out3, uint32_t *out4,
+    59					   uint32_t *out5, uint32_t *out6)
+    60	{
+  > 61		struct tdx_module_args args = {
+    62			.r10 = VMWARE_TDX_VENDOR_LEAF,
+    63			.r11 = VMWARE_TDX_HCALL_FUNC,
+    64			.r12 = VMWARE_HYPERVISOR_MAGIC,
+    65			.r13 = cmd,
+    66			.rbx = in1,
+    67			.rdx = in3,
+    68			.rsi = in4,
+    69			.rdi = in5,
+    70			.r14 = in6,
+    71		};
+    72	
+    73		vmware_tdx_hypercall_args(&args);
+    74	
+    75		if (out1)
+    76			*out1 = args.rbx;
+    77		if (out2)
+    78			*out2 = args.r13;
+    79		if (out3)
+    80			*out3 = args.rdx;
+    81		if (out4)
+    82			*out4 = args.rsi;
+    83		if (out5)
+    84			*out5 = args.rdi;
+    85		if (out6)
+    86			*out6 = args.r14;
+    87	
+    88		return args.r12;
+    89	}
+    90	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
