@@ -1,104 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7366FCC6
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 21:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="460453465"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3B66FCD1;
+	Tue,  5 Dec 2023 21:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YxOsYx+h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701813415; x=1733349415;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=2OPXpTmJCIDcrRgxZxhB97w8GEbwddByqEeySBbzUik=;
+  b=YxOsYx+hqs4/mfCWMWMrix4NVsobUtoGo5ASZEgPgjDqidGpD7rvza/c
+   +OxS244Ez7vI1abM4uGLHpzPdB3vYWRx7V2ua63y28XdHZV9w42Ur95My
+   wx5dEXQKTF/KdJDxCfJjmByP03gSTmzPYH3LYBu96iv9D7wNN8Gn3emSM
+   /L1bD1Vd+5YvDOHr9YhGK4IlecMfXwWrORM4uMm0LOxlWgIXp0RojVTTS
+   Vt+TVKAm3pEyK+yO0AIcUm214AnlLabfwCmW1HTetCiWKek4/g6aReYwp
+   /f0/a9NoGfolEGrVKa7W+xpZoCr+JdxfvoEVXxMV5w16mVWEpSkJ3q8wJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="393697566"
 X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="460453465"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 13:53:43 -0800
+   d="scan'208";a="393697566"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 13:56:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="841615284"
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="889087074"
 X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="841615284"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 13:53:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rAdMJ-00000002Bv4-03UG;
-	Tue, 05 Dec 2023 23:53:39 +0200
-Date: Tue, 5 Dec 2023 23:53:38 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, tanzirh@google.com,
-	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-Message-ID: <ZW-b4l1llqPXW-el@smile.fi.intel.com>
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
- <20231205130449.8e330a26ecbed1f7b5ad5d7a@linux-foundation.org>
- <CAKwvOdn+VTM+LY6ALcgaZTL57JpiKt5rBPMSPNXsgS3MCENhDQ@mail.gmail.com>
- <20231205132452.418722bea8f6878dca88142a@linux-foundation.org>
- <CAKwvOdn=og6h5gVdDCjFDANs3MN-_CD4OZ9oRM=o9YAvoTzkzw@mail.gmail.com>
+   d="scan'208";a="889087074"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Dec 2023 13:56:54 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAdPQ-0009mS-08;
+	Tue, 05 Dec 2023 21:56:52 +0000
+Date: Wed, 6 Dec 2023 05:56:38 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [peterz-queue:x86/kvm 4/11]
+ drivers/net/ethernet/chelsio/cxgb/cxgb.o: warning: objtool: t1_netpoll+0x4d:
+ indirect call found in RETPOLINE build
+Message-ID: <202312060525.gF4X125a-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdn=og6h5gVdDCjFDANs3MN-_CD4OZ9oRM=o9YAvoTzkzw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Dec 05, 2023 at 01:39:47PM -0800, Nick Desaulniers wrote:
-> On Tue, Dec 5, 2023 at 1:24 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > On Tue, 5 Dec 2023 13:14:16 -0800 Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > > > The preferred way to import bit-fiddling stuff is to include
-> > > > <linux/bits.h>.  Under the hood this may include asm/bitsperlong.h.  Or
-> > > > it may not, depending on Kconfig settings (particularly architecture).
-> > >
-> > > Just triple checking my understanding; it looks like
-> > > include/linux/bits.h unconditionally includes asm/bitsperlong.h (which
-> > > is implemented per arch) most of which seem to include
-> > > asm-generic/bitsperlong.h.
-> > >
-> > > include/linux/bits.h also defines a few macros (BIT_MASK, BIT_WORD,
-> > > BITS_PER_BYTE, GENMASK, etc).  If lib/string.c is not using any of
-> > > those, why can't we go straight to #including asm/bitsperlong.h?  That
-> > > should resolve to the arch specific impl which may include
-> > > asm-generic/bitsperlong.h?
-> >
-> > It's just a general rule.  If the higher-level include is present, use
-> > that.  Because of the above, plus I guess things might change in the
-> > future.
-> 
-> Hmm...how does one know that linux/bits.h is the higher-level include
-> of asm/bitsperlong.h?
-> 
-> Do we mention these conventions anywhere under Documentation?
+TO: Peter Zijlstra <peterz@infradead.org>
 
-Unfortunately it comes with an experience. The problem here is the absence of
-Documentation for the headers that guarantee inclusion of other headers. In
-general linux/* are preferred over asm/* but sometimes things are complicated
-(when some asm ones include linux ones via architectural code and circling
-around).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/kvm
+head:   bd8e1c4c02ac085925674bddccb989e2d7d6cc2d
+commit: 4e0928208ef241e2f7ea9367bda43386f8aec87c [4/11] objtool: Convert instrumentation_{begin,end}() to ANNOTATE
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231206/202312060525.gF4X125a-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060525.gF4X125a-lkp@intel.com/reproduce)
 
-> > We've been getting better about irregular asm/include files.
-> >
-> > But bits.h is a poor example.  A better case to study is spinlock.h.
-> > If this tool recommended including asm/spinlock.h then that won't work
-> > on any architecture which doesn't implement SMP (there is no
-> > arch/nios2/include/asm/spinlock.h).
-> 
-> The tooling Tanzir is working on does wrap IWYU, and does support such
-> mapping (of 'low level' to 'high level' headers; more so, if it
-> recommends X you can override to suggest Y instead).
-> 
-> arch/nios/ also doesn't provide a bug.h, which this patch is
-> suggesting we include directly.  I guess the same goes for
-> asm/rwonce.h.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312060525.gF4X125a-lkp@intel.com/
 
-Have you checked Ingo Molnar's gigantic series (2k+ patches) for the header
-hell clean up? Perhaps we need to apply that first.
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/chelsio/cxgb/cxgb.o: warning: objtool: t1_netpoll+0x4d: indirect call found in RETPOLINE build
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
