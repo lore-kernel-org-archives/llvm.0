@@ -1,39 +1,39 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E232365ED5
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 14:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE36B65EAB
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 14:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FNUuZM+w"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OFSm2CpY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701786121;
+	s=mimecast20190719; t=1701786148;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=LWJhzctfwOMB4kbNHd6jqe//bYbKBy+aqMDSXQkYuR4=;
-	b=FNUuZM+whh5T881IrU7FviU1sUj15zgy1TP8ZO7tq/+jyBIvtX6zisKz4/e44SVQJYBSlq
-	frengQ4hEO39bFKKvSsFiTJRq57pylKBnFcfCunmooNX0b84ApVScQJo7pDJgy7G5Q4O4J
-	kTJNZSgj6KBqPya1LbshkZTJY7c+dFQ=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-299-_rTRBjMRMhiPy8eoKRuhQA-1; Tue,
- 05 Dec 2023 09:21:59 -0500
-X-MC-Unique: _rTRBjMRMhiPy8eoKRuhQA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	bh=n55rMcxgFmZNSyH4uCcKdmz41Q3YRJwYkbmX7SAZHME=;
+	b=OFSm2CpYu0YkaQ9q9GWd2CeOXqv+nVGdVFS3JXGJueEaofXQvjAZI/pNgyLGPHFlNqv2xE
+	7ungVyZVZOH6z5rAJBx0t6zdWbCxFoUB4BXEczrM/yx/Pce6xhSPstIFCSXmtbIWj94oCv
+	X5gBSYa90i77BEFoKbI94Z4Lr5k3jsw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-373-2Zde7JvxPzCop0tWPcUOUQ-1; Tue, 05 Dec 2023 09:22:27 -0500
+X-MC-Unique: 2Zde7JvxPzCop0tWPcUOUQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 159E61C0F475
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 14:21:59 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F321F832D6B
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 14:22:26 +0000 (UTC)
 Received: from [172.64.9.23] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0551F492BC6;
-	Tue,  5 Dec 2023 14:21:59 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E0DA9492BE6;
+	Tue,  5 Dec 2023 14:22:26 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 21 of 229): Test report for master
- (6.7.0-rc4, mainline.kernel.org-clang, 33cc938e)
-Date: Tue, 05 Dec 2023 14:21:58 -0000
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 15 of 229): Test report for master
+ (6.7.0-rc3, mainline.kernel.org-clang, 968f35f4)
+Date: Tue, 05 Dec 2023 14:22:26 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -41,8 +41,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <03634.123120509215902477@us-mta-299.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <46534.123120509222700835@us-mta-373.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -58,10 +58,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Linux 6.7-rc4
+    Commit message: Merge tag 'v6.7-rc3-smb3-client-fixes' of git://git.sam=
+ba.org/sfrench/cifs-2.6
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/117376
+    https://datawarehouse.cki-project.org/kcidb/checkouts/117362
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -72,10 +73,10 @@ d, map_write access on the bpf labeled init_t.
             Affected tests:
                  aarch64 - machineinfo
                  aarch64 - Boot test
+                 aarch64 - Hardware - IPMItool loop stress test
                  aarch64 - Hardware - ACPI table test
                  aarch64 - POSIX pjd-fstest suites
                  aarch64 - Filesystem - Loopdev Sanity
-                 aarch64 - Memory function: memfd_create
                  aarch64 - AMTU (Abstract Machine Test Utility)
                  aarch64 - Networking - Ethernet drivers sanity
                  aarch64 - Networking cki netfilter test
@@ -90,7 +91,6 @@ d, map_write access on the bpf labeled init_t.
                    s390x - Boot test
                    s390x - Storage - blktests - blk
                    s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - swraid scsi_raid
                    s390x - stress: stress-ng - cpu-cache
                    s390x - stress: stress-ng - memory
                    s390x - Reboot test
@@ -104,8 +104,10 @@ d, map_write access on the bpf labeled init_t.
                    s390x - Storage - multipath mapping test
                   x86_64 - machineinfo
                   x86_64 - Boot test
+                  x86_64 - Hardware - CPU: Die Test
                   x86_64 - Hardware - IPMItool loop stress test
                   x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
                   x86_64 - Storage - block - filesystem fio test
                   x86_64 - Storage - block - queue scheduler test
                   x86_64 - Storage - swraid scsi_raid
@@ -117,7 +119,6 @@ d, map_write access on the bpf labeled init_t.
                   x86_64 - Filesystem - Loopdev Sanity
                   x86_64 - Memory function: memfd_create
                   x86_64 - AMTU (Abstract Machine Test Utility)
-                  x86_64 - Networking - Ethernet drivers sanity
                   x86_64 - Networking cki netfilter test
                   x86_64 - Networking vnic: ipvlan/basic
                   x86_64 - Libkcapi AF_ALG test
@@ -141,22 +142,17 @@ d, map_write access on the bpf labeled init_t.
                   x86_64 (debug) - AMTU (Abstract Machine Test Utility)
                   x86_64 (debug) - Networking - Ethernet drivers sanity
                   x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Libkcapi AF_ALG test
                   x86_64 (debug) - Hardware - pciutils: sanity smoke test
                   x86_64 (debug) - Storage - lvm thinp sanity
                   x86_64 (debug) - kselftests upstream - net
                   x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
                   x86_64 (debug) - xfstests - ext4
                   x86_64 (debug) - xfstests - xfs
                   x86_64 (debug) - xfstests - btrfs
                   x86_64 (debug) - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [upstream] WARNING: CPU: 2 PID: 386 at drivers/gpu/drm/nouve=
-au/dispnv50/disp.c:2731 nv50_display_init+0x35f/0x900 [nouveau]
-            URL: https://lore.kernel.org/all/20d102ce07031b2d8d63f2f97176eb=
-913cfd3efb.camel@intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
         Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
 g dependency detected
             URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
@@ -181,7 +177,6 @@ d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
             Affected tests:
-                  x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
@@ -206,12 +201,6 @@ l-tests/-/issues/1752
                   x86_64 - stress: stress-ng - memory
 
 Tests that were not ran because of internal issues:=20
-     aarch64 - CKI/restraint
-     aarch64 - SELinux Custom Module Setup
-     aarch64 - machineinfo
-     aarch64 - Boot test
-     aarch64 - Hardware - IPMI driver test
-     aarch64 - Hardware - IPMItool loop stress test
      aarch64 - Storage - blktests - blk
      aarch64 - Storage - blktests - nvme-tcp
      aarch64 - Storage - block - filesystem fio test
