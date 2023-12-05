@@ -1,162 +1,113 @@
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB6310A14;
-	Tue,  5 Dec 2023 06:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A1315EBC;
+	Tue,  5 Dec 2023 07:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="zbNV8n7F";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cu6M4cDD"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id B93893200A39;
-	Tue,  5 Dec 2023 01:35:01 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 05 Dec 2023 01:35:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701758101; x=1701844501; bh=Nu
-	G/6/Yb8lCUL8zFD4dfH32Me2vLPL01Z8/hfRvZ+5Q=; b=zbNV8n7Fo/M7Fhfb9S
-	/Zj0Pybk3s74kElk47wi1vWdwOGJECAbQh/Dw9IkxaX05aBnAURLkDpMRjxZwn76
-	eYX++Ae6lxX2p6zghqBIgnBkn8+KcdJ56QtYRcglV2zxKBR+OX/vnDIkaghnz+3A
-	MK3rb/kOyKZf1sEav96h0WowCLaOHWfIxIsvWuhFU8l4MOR5rix08RvOQmoqrT/6
-	TJbXVTwgpBj5/7h+tctjongW9UTMpjFO/Yfm++6ZDRDY2geWNJKvi60BRFZteQSr
-	lN3zHgB6k7yILkROoJ717qoojsFm5T5jjderNZQlmx3A/U7RHWbdVS8hS3zsXKRb
-	+jSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701758101; x=1701844501; bh=NuG/6/Yb8lCUL
-	8zFD4dfH32Me2vLPL01Z8/hfRvZ+5Q=; b=cu6M4cDDuig0gcodZ84Nr8YBHIk/e
-	ZdPv4PBhc3A2hKmkT6JlNd1XTuNDwvf3AzavlzwRd5g3mWsApH/0PBnUkaEp9ESb
-	a6FRmjCHqbosnpCh+UXPo5atyselG3EC/BLhaimiHjtcJVP3daCBt5+4HID0gRLc
-	tq5i4IckvVx6UPwDZiSCYPu/TSHIX6ptV46ognEnUsC1OWKLk48eUa14iz2yEke9
-	BWbuZRrOSxbeSuhlQMk2Xtd2Xv6lo90BtxHh91ojV6WB9HbzVqHWh3wUudkDextN
-	HM2cyvKrL20Js8s0HAoE+JofceHmqe1DBe0ijKfMzndaDWZibBw7+AUHA==
-X-ME-Sender: <xms:lMRuZaS04D4HdXlWlzRidv31z6FP9WRFopnVwaEh7mxQmYWUrRYzTQ>
-    <xme:lMRuZfxdHq9rHdWhxWJGwkMMjHPw-rJbny7dFVI0DSddGvxhi8q2fLvDD5IxKnUzI
-    ImxOSKrNnLpNa4cVz0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejjedgleekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:lcRuZX3EDvy2xkor_CSr5qxEyY9EJj2bIKNtiNqF4oCuoQxupGs1rA>
-    <xmx:lcRuZWBj8WQTEBFsRkh5HtYQj1UrNOQ3BmeZ5eoMcj4VJjHuldRXxw>
-    <xmx:lcRuZThU0_Kau23rzEF_8RO6UQgEEQ5sTGK_J2nSl6M0JiswegNk0Q>
-    <xmx:lcRuZThfC7w52-_wySVbz2KNCDVQ4bH2e4w8Qew0-R90RuhYczk5MQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E03AAB60089; Tue,  5 Dec 2023 01:35:00 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jIPqVrUL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701760695; x=1733296695;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1/H5a4fYOah864VWf7Otp532KU2D/WLsDxcCiPM4jxY=;
+  b=jIPqVrULKkf2awcNA2ENhi55l7x9s24Y1fPIVvCb6Wu5bgS4gYiT9dnq
+   gWo7NEZBrAHGNsRjTYzH3Z1aR6D7EEoBBPzIfWpmBeuhiJXXwnDDAvUey
+   RlMgU3MijibZDj8hxglXerlvUdJ8CsWiJOBwt3N7nAEl07ZsCNpxIqhHc
+   UQ0alCAog/4XLR03QH+d5goNDUe+sagQSNt+ryQIT9l5/fO5pFvYkBY+T
+   pFghXGJ2cDF7U0/2Ie8uY3z7BPE/ZbEWEEXSpA5Oe0e0gKXWq5HUVtAyD
+   dGZS8uc9GtcatwEM3R5+ubjZuKTIU2yOzSZNOJ7UZGe+tqMfwRrv8sTIQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="7195045"
+X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
+   d="scan'208";a="7195045"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 23:18:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="894278135"
+X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
+   d="scan'208";a="894278135"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 04 Dec 2023 23:18:09 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAPh0-0008Ua-32;
+	Tue, 05 Dec 2023 07:18:06 +0000
+Date: Tue, 5 Dec 2023 15:17:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Lee Jones <lee@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	syzbot+97a4fe20470e9bc30810@syzkaller.appspotmail.com,
+	bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@chromium.org>,
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>
+Subject: Re: [PATCHv3 bpf 1/2] bpf: Fix prog_array_map_poke_run map poke
+ update
+Message-ID: <202312051557.5OKOsVGa-lkp@intel.com>
+References: <20231203204851.388654-2-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <36a25113-731c-4b28-a695-f3fbb0996d6e@app.fastmail.com>
-In-Reply-To: <20231204223317.GA2053629@dev-arch.thelio-3990X>
-References: 
- <CA+G9fYvD72Vpfs2g8R+OJ6L8w9p_uaWbXpWMvnGAx_AOLabatw@mail.gmail.com>
- <20231204181304.GA2043538@dev-arch.thelio-3990X>
- <20231204223317.GA2053629@dev-arch.thelio-3990X>
-Date: Tue, 05 Dec 2023 07:34:40 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
- "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
- "open list" <linux-kernel@vger.kernel.org>,
- "Linux Regressions" <regressions@lists.linux.dev>,
- lkft-triage@lists.linaro.org, "Russell King" <linux@armlinux.org.uk>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Sylvestre Ledru" <sylvestre@debian.org>
-Subject: Re: clang-nightly: vdso/compat_gettimeofday.h:152:15: error: instruction
- variant requires ARMv6 or later
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231203204851.388654-2-jolsa@kernel.org>
 
-On Mon, Dec 4, 2023, at 23:33, Nathan Chancellor wrote:
-> On Mon, Dec 04, 2023 at 11:13:04AM -0700, Nathan Chancellor wrote:
-> 
->> I am still investigating into what (if anything) can be done to resolve
->> this on the kernel side. We could potentially revert commit
->> ddc72c9659b5 ("kbuild: clang: do not use CROSS_COMPILE for target
->> triple") but I am not sure that will save us from that change, as
->> tuxmake's CROSS_COMPILE=arm-linux-gnueabihf will cause us to have an
->> armv7 CPU even though we may not be building for armv7.
->
-> Okay, this is a pretty awful situation the more I look into it :(
->
-> The arm64 compat vDSO build is easy enough to fix because we require use
-> of the integrated assembler, which means we can add '-mcpu=generic' (the
-> default in LLVM for those files based on my debugging) to those files
-> and be done with it:
->
-> diff --git a/arch/arm64/kernel/vdso32/Makefile 
-> b/arch/arm64/kernel/vdso32/Makefile
-> index 1f911a76c5af..5f5cb722cfc2 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -9,6 +9,10 @@ include $(srctree)/lib/vdso/Makefile
->  ifeq ($(CONFIG_CC_IS_CLANG), y)
->  CC_COMPAT ?= $(CC)
->  CC_COMPAT += --target=arm-linux-gnueabi
-> +# Some distributions (such as Debian) change the default CPU for the
-> +# arm-linux-gnueabi target triple, which can break the build. 
-> Explicitly set
-> +# the CPU to generic, which is the default for Linux in LLVM.
-> +CC_COMPAT += -mcpu=generic
->  else
->  CC_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
->  endif
+Hi Jiri,
 
-I'm still trying to follow what is actually going on. I
-see that we pass
+kernel test robot noticed the following build warnings:
 
-VDSO_CAFLAGS += -march=armv8-a
+[auto build test WARNING on bpf/master]
 
-which is meant to tell the compiler that we want it to
-use ARMv8 compatible instructions. Is the problem that
-clang ignores this flag, or do we not pass it correctly?
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/bpf-Fix-prog_array_map_poke_run-map-poke-update/20231204-045204
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20231203204851.388654-2-jolsa%40kernel.org
+patch subject: [PATCHv3 bpf 1/2] bpf: Fix prog_array_map_poke_run map poke update
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231205/202312051557.5OKOsVGa-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312051557.5OKOsVGa-lkp@intel.com/reproduce)
 
-I would have expected -march=armv8-a to be better than
--mcpu=generic here, as it allows the compiler to use
-a wider set of instructions that is still guaranteed to
-be available on everything it will run on.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312051557.5OKOsVGa-lkp@intel.com/
 
-> Sylvestre, I strongly believe you should consider reverting that change
-> or give us some compiler flag that allows us to fallback to upstream
-> LLVM's default CPU selection logic. I think that hardcoding Debian's
-> architecture defintions based on the target triple into the compiler
-> could cause issues for other projects as well. For example,
-> '--target=arm-linux-gnueabi -march=armv7-a' won't actually target ARMv7:
->
->   $ echo 'int main(void) { asm("dsb"); return 0; }' | \
->         clang --target=arm-linux-gnueabi -march=armv7-a \
->         -x c -c -o /dev/null -v -
->   ...
->    "/usr/bin/clang-17" -cc1 -triple armv7-unknown-linux-gnueabi ...
->   ...
->
-> vs.
->
->   $ echo 'int main(void) { asm("dsb"); return 0; }' | \
->         clang --target=arm-linux-gnueabi -march=armv7-a \
->         -x c -c -o /dev/null -v -
->   ...
->   "<prefix>/bin/clang-18" -cc1 -triple armv5e-unknown-linux-gnueabi ...
->   ...
+All warnings (new ones prefixed by >>):
 
-Right, the kernel definitely relies on -march= taking
-precedence over the default CPU, the same way that we
-tell the compiler to pick a non-default endianess or ABI.
+>> arch/x86/net/bpf_jit_comp.c:3029:6: warning: no previous prototype for function 'bpf_arch_poke_desc_update' [-Wmissing-prototypes]
+   void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+        ^
+   arch/x86/net/bpf_jit_comp.c:3029:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+   ^
+   static 
+   1 warning generated.
+--
+>> kernel/bpf/arraymap.c:1015:13: warning: no previous prototype for function 'bpf_arch_poke_desc_update' [-Wmissing-prototypes]
+   void __weak bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+               ^
+   kernel/bpf/arraymap.c:1015:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __weak bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+   ^
+   static 
+   1 warning generated.
 
-    Arnd
+
+vim +/bpf_arch_poke_desc_update +3029 arch/x86/net/bpf_jit_comp.c
+
+  3028	
+> 3029	void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
