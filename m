@@ -1,39 +1,48 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135BE6EB5D
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 22:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44A26FCE1;
+	Tue,  5 Dec 2023 23:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="o3XjrazS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=OD1ItpAr/xwE+UpWJnM3+Hd/hQwe/hOCe/5jv7jdpPk=; b=o3XjrazSh2WGCShw9aY/0MdGor
-	WF/MV/1Do8TzOamoGOVtnVRhVIgvJskn2l6UJWaEeZEmj+4dwxL76HA0H++pOcs6oN1rBP4G3TAGM
-	O49edbXY/MAVM8YI8RYccB/BSkYD7R8cmfjcQQtbZdcHjpEeRBLvCfPy5/YBZVEs2EacTBwMiKz3F
-	EFnMjJy4sugxWkBqyUfIyGI/ful9aw733BnaYxs+d37x6zDXx7ETTYk1vM68ZoVsBlqit646m6ZXZ
-	jkfzHR7B6ixmSjlYeJA7jhB9clkviA6ryNnRG7gC3aushuA5OK3QKfv2wjAjor4svyZSR9LFbAhqu
-	LI2H81eQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAdxV-007UJ0-0T;
-	Tue, 05 Dec 2023 22:32:05 +0000
-Date: Tue, 5 Dec 2023 22:32:05 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, tanzirh@google.com,
-	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-Message-ID: <20231205223205.GI1674809@ZenIV>
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
- <20231205213807.GE1674809@ZenIV>
- <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
- <ZW-d1NZRIvmJlfcW@smile.fi.intel.com>
- <20231205221521.GH1674809@ZenIV>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JgfxOGsS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701818101; x=1733354101;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uvO2Khwda7EpRuiNDYxdXOiNlOv9MVw2vm74fm8w2zM=;
+  b=JgfxOGsScVF4kJ7POKShZ8/GRM8jI9AdZaT31IQtDuEIGz/5PNNpeq0Q
+   U6oEpebpIMnQhJsGJdI+iXEY7ePBcCjk3LL/IHbpAwm9SSslXAUXysm7e
+   KB4C9dydILIQ9oNpJb+JOmo0WyvPlitnVVU3U4Lx39JmjD0H6qXCQW4oA
+   LwaAsqTLdFXVk5ejhggCHSX1kEtHAO87ZPBAF9AP+rftHBeJOmtjmwaFm
+   NBPss6nG2RFHV2YsqsLSfHlTNjnFNAbOauUFrs3ki8E4ESR3bKGsP1k9m
+   USQAYlKKSk0A9s0OUDHDIUZaekcJ+F3+hHADqm7AZmQwNUnGWrKww5tZW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="397863259"
+X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
+   d="scan'208";a="397863259"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 15:15:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="944435995"
+X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
+   d="scan'208";a="944435995"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 05 Dec 2023 15:14:58 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAecy-0009rM-0l;
+	Tue, 05 Dec 2023 23:14:56 +0000
+Date: Wed, 6 Dec 2023 07:14:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC] platform/x86: p2sb: Allow p2sb_bar() calls during
+ PCI device probe
+Message-ID: <202312060601.Wtrr6tJ1-lkp@intel.com>
+References: <20231201104759.949340-1-shinichiro.kawasaki@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,42 +51,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231205221521.GH1674809@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <20231201104759.949340-1-shinichiro.kawasaki@wdc.com>
 
-On Tue, Dec 05, 2023 at 10:15:21PM +0000, Al Viro wrote:
+Hi Shin'ichiro,
 
-> It would certainly be nice to have such information in the tree;
-> "where should I pick $SYMBOL from?" is something one needs to
-> find out often enough.  To a large extent it's covered by "where
-> in include/*.h do we have it defined?", but that's not all there
-> is to it.  E.g. "get_user() => use linux/uaccess.h".
-> 
-> There's also stuff like "$SYMBOL should not be used outside of arch/*
-> and include/*, better use $OTHER_SYMBOL", etc.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Speaking of...
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.7-rc4 next-20231205]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-arch/arm64/include/asm/asm-prototypes.h:18:#include <asm/uaccess.h>
-arch/powerpc/include/asm/inst.h:8:#include <asm/uaccess.h>
-arch/powerpc/kvm/book3s_xive_native.c:16:#include <asm/uaccess.h>
-arch/powerpc/mm/book3s64/radix_pgtable.c:31:#include <asm/uaccess.h>
-arch/riscv/kernel/sys_riscv.c:15:#include <asm/uaccess.h>
-arch/xtensa/include/asm/asm-prototypes.h:10:#include <asm/uaccess.h>
-include/linux/uaccess.h:11:#include <asm/uaccess.h>
-tools/testing/crypto/chacha20-s390/test-cipher.c:8:#include <asm/uaccess.h>
+url:    https://github.com/intel-lab-lkp/linux/commits/Shin-ichiro-Kawasaki/platform-x86-p2sb-Allow-p2sb_bar-calls-during-PCI-device-probe/20231201-185053
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231201104759.949340-1-shinichiro.kawasaki%40wdc.com
+patch subject: [PATCH RFC] platform/x86: p2sb: Allow p2sb_bar() calls during PCI device probe
+config: i386-randconfig-011-20231203 (https://download.01.org/0day-ci/archive/20231206/202312060601.Wtrr6tJ1-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060601.Wtrr6tJ1-lkp@intel.com/reproduce)
 
-Only one of those is legitimate (linux/uaccess.h); asm-prototypes.h
-ones are borderline, but probably should be pulling linux/uaccess.h,
-everything in *.c is really wrong.  Powerpc asm/inst.h is the really
-unpleasant one here - it's pulled by quite a few other places, including
-several asm/*.h.  Hell knows; might be worth splitting the
-{__,}{get_user_instr,copy_inst_from_kernel_nofault}() off to
-a separate header (asm/inst-uaccess.h?), to be included only by the
-files that use any of those (that would be
-arch/powerpc/kernel/{align,hw_breakpoint_constraints,module_32,traps,vecemu}.c
-and arch/powerpc/kernel/trace/{ftrace,ftrace_64_pg}.c - not a single header
-among them).  That header would pull linux/uaccess.h and asm/inst.h wouldn't
-need any uaccess at all; might spill into explicit includes of linux/uaccess.h
-in some of the places in arch/powerpc that pull asm/inst.h, directly or
-not...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312060601.Wtrr6tJ1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/p2sb.c:90:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+           return ret;
+                  ^~~
+   drivers/platform/x86/p2sb.c:79:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
+   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && DRM_I915_WERROR [=n]
+   Selected by [m]:
+   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && !COMPILE_TEST [=n]
+
+
+vim +/ret +90 drivers/platform/x86/p2sb.c
+
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  75  
+d34534bd969a42a drivers/platform/x86/p2sb.c       Shin'ichiro Kawasaki 2023-12-01  76  static int p2sb_scan_and_cache(struct pci_bus *bus, unsigned int devfn)
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  77  {
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  78  	struct pci_dev *pdev;
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  79  	int ret;
+d34534bd969a42a drivers/platform/x86/p2sb.c       Shin'ichiro Kawasaki 2023-12-01  80  	struct p2sb_res_cache *cache = &p2sb_resources[PCI_FUNC(devfn)];
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  81  
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  82  	pdev = pci_scan_single_device(bus, devfn);
+d34534bd969a42a drivers/platform/x86/p2sb.c       Shin'ichiro Kawasaki 2023-12-01  83  	if (!pdev || p2sb_invalid_resource(&pdev->resource[0]))
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  84  		return -ENODEV;
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  85  
+d34534bd969a42a drivers/platform/x86/p2sb.c       Shin'ichiro Kawasaki 2023-12-01  86  	p2sb_read_bar0(pdev, &cache->res);
+d34534bd969a42a drivers/platform/x86/p2sb.c       Shin'ichiro Kawasaki 2023-12-01  87  	cache->bus_dev_id = bus->dev.id;
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  88  
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  89  	pci_stop_and_remove_bus_device(pdev);
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06 @90  	return ret;
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  91  }
+9745fb07474f450 drivers/platform/x86/intel/p2sb.c Jonathan Yong        2022-06-06  92  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
