@@ -1,128 +1,88 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AC741220
-	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 23:47:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E9141220;
+	Tue,  5 Dec 2023 23:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="nKkQEoBF";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bBb4xJ6D"
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id C06CD5C0099;
-	Tue,  5 Dec 2023 18:47:00 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 05 Dec 2023 18:47:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1701820020; x=1701906420; bh=v1AF7u8uyhL5eTCK0aLokAy6KSNNe4qNX9h
-	wmxep6io=; b=nKkQEoBFCEngX8kMNRRFmVuttVFB1DLZ7o+9DXrTBtsmwB5Iz1Y
-	tPVAjWSj8NXpHiGfap+IjroN2uT3B8fVXJhLk/+M1Unb5B3+uLETyQuax1Wv+q+t
-	/okMrQbBvy1qcu2PAztdw/nsNi5I41FLPQ5zrFpcyjWgxVrbwjkRqGMJX/Pw6EIu
-	TkBwpaXcIuFILIaU9V/pVg7Jr17YxI9XlOThRj6Qv5dfOtyK8ngvw1sZs41VOfFp
-	DCWmcHHNY7S2AakMHTYZqfpS3YwoKf9hxlwiCuH8kSgM+rK56BBAztTVyA5jpO71
-	PpDNkso7KhZ+evVGEF/vvy/id2yVqDySOew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701820020; x=1701906420; bh=v1AF7u8uyhL5eTCK0aLokAy6KSNNe4qNX9h
-	wmxep6io=; b=bBb4xJ6D+VfjxbfscIlwlcKLH6erIAl59Jjl51+g4B825FQh4aQ
-	EjBIbZbofeuM+xeVMmZXmVCHgR9G7aLzPXpbIUDyrprcK9X/LeBz1OVsfT9GMk32
-	xh0UsSWuOcIH9v8SGhX6IYcL6DjFA/25sEBYJelozqvx9BG0eLORsJhXBBapSFlS
-	i1y+tZMu1HdcwR10apfb/VJ2ZzAesAH7B+OXGXHSiQnaVW5QdZuR+CV+XnW5evHb
-	WyIOr/T+hPCctGPXHp3aensKohAjJg1NqHuNkEbIvSlN+Bnw42Jfl9zN2cfnarTl
-	LpShoSKvmi9M6bVU32GrVdvyJIb0d6SYV9A==
-X-ME-Sender: <xms:c7ZvZR-R9UKBl1cE9WQB5g6BarDXhmu1oRztT8F8Auv9fRL9fMFq8w>
-    <xme:c7ZvZVvAehVMvLAhoPKOIh6u6QWEBPGJiReVIrBsQ4sDO9EslynX_x219teVXxGaQ
-    ih5eL6gi0nYuQ>
-X-ME-Received: <xmr:c7ZvZfAAWqMQNzJ1_SrwgxAhcRqTvNCrVm1ZEKrRAJZ4_VYvDzbSwBMBlrIdvO04xO2rab2EEkvgD-rOYj6xSOi6>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejledgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
-    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:c7ZvZVdyTaw2ffvejqSWsTPFp-EkcFftMvxVtcWO-Vg4V8UT0ZCuTw>
-    <xmx:c7ZvZWOdKwhdb5gT2HQ1A4DsHppU6-TEID5G2mGszykyhbUzm7v3SQ>
-    <xmx:c7ZvZXmRIxymqCPSQusJmHn-I2ZdMj2ulJmyhEVoM1eJm2qFbvCWqQ>
-    <xmx:dLZvZRE9bGSuMrEkB-gqL-RqrzetrqNEwrjRFPdBn0R2F4oywpp34g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Dec 2023 18:46:58 -0500 (EST)
-Date: Wed, 6 Dec 2023 08:46:50 +0900
-From: Greg KH <greg@kroah.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, tanzirh@google.com,
-	Kees Cook <keescook@chromium.org>,
-	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-Message-ID: <2023120657-henna-spongy-9ef6@gregkh>
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
- <20231205213807.GE1674809@ZenIV>
- <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
- <2023120608-ivy-snowdrop-890d@gregkh>
- <CAKwvOdmFJ=ZGN8ZScS5oQpXnAL0wwtTDCeNNGpBKZXzQ4kRAVA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnO/23+J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD91C433C7;
+	Tue,  5 Dec 2023 23:53:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701820439;
+	bh=y/jqertrO7frvcmMbzQv5qp/lLtbm42FIUi32gqKKTY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=HnO/23+J7Z0MsuTFQi1T5wWU6invgYUs70iS/MAR4gtRjF5ObSqqHmVtULa5Ojcvk
+	 3erW/Oa/ZZncJ9/8DlrHRRUTMDI3oK8RlfkfD5mhEa0zB3v7CIXTVRH3FnPWPJcvXF
+	 J3bLveJlNDLck1gUDuiNW8rxPkXPpCwnr8A2fhssmxuhe9Z2V6SD73s4S4gGGtM04W
+	 DA7S3xg75s0ioAS3eivrpa1fI6cTtXwuBCtK2SQJwneXBuvu6zF8HXHnZ2oMwaz7FG
+	 qBYx04GN+6ejn5HE4AFBdDY7p8jh96eyYzdIorgO4hkO6ovKPnRSJ99588+2qh/N5I
+	 p0P6xPYDEivFA==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2 0/3] RISC-V: Disable DWARF5 with known broken LLVM
+ versions
+Date: Tue, 05 Dec 2023 16:53:49 -0700
+Message-Id: <20231205-riscv-restrict-dwarf5-llvm-v2-0-aedf00a382ac@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdmFJ=ZGN8ZScS5oQpXnAL0wwtTDCeNNGpBKZXzQ4kRAVA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA24b2UC/43NQQ6CMBCF4auQWTumLaDgynsYFrRMYSKCmZKqI
+ dzdyglcfm/xvxUCCVOAS7aCUOTA85RgDhm4oZ16Qu6SwSiTa21qFA4uolBYhN2C3asVX+I4xge
+ 2dWUKa+tz4SykwFPI83uP35rkgcMyy2f/ivq3/pWNGhWSU11+qrwt8+p6J5loPM7SQ7Nt2xdtc
+ XClxQAAAA==
+To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+ conor@kernel.org
+Cc: maskray@google.com, ndesaulniers@google.com, 
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1298; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=y/jqertrO7frvcmMbzQv5qp/lLtbm42FIUi32gqKKTY=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKn5O8Re5h0w0Dxz3u2i223Ro88ZF37uDCwSubE6dce2N
+ 6aLizdZdJSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJLDzHyPC1OO1An+EljfDY
+ dztfHFjfzsnEmLH13WGHWzGzv3BO8r7O8L+y98uGVXZiRbLs6d+UNERkT/7N3XY7Msj4xzbZDQw
+ 6XhwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Dec 05, 2023 at 02:14:55PM -0800, Nick Desaulniers wrote:
-> On Tue, Dec 5, 2023 at 1:59 PM Greg KH <greg@kroah.com> wrote:
-> >
-> > On Tue, Dec 05, 2023 at 01:51:10PM -0800, Nick Desaulniers wrote:
-> > > On Tue, Dec 5, 2023 at 1:38 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > > >
-> > > > It also breeds includes of asm/*.h, by the look of the output, which is
-> > > > not a good thing in general ;-/  E.g. #include <asm/uaccess.h> *anywhere*
-> > > > outside of linux/uaccess.h is a bad idea.
-> > >
-> > > It's not clear to me when it's ok to #include <asm/*.h>.  Is there a
-> > > convention here that I'm missing?
-> >
-> > General rule, NEVER include asm/*.h, there should be a include/*.h
-> > instead that works.  So much so that checkpatch.pl should catch this,
-> > right?
-> 
-> ah, shoot, I was showing Tanzir how to use `b4` for patch development,
-> and forgot to check this.  Indeed it does.
-> 
-> I can see how the check works (scripts/checkpatch.pl L5881).  Decoding
-> that will probably help us improve the tooling.
-> 
-> >
-> > But of course, it doesn't always hold true, there are a few minor
-> > exceptions, but they are rare.
-> 
-> $ grep -r \\#include lib | grep asm
-> 
-> shows quite a few exceptions, and just in lib/.
-> 
-> For example, lib/math/int_log.c includes asm/bug.h.  Is that a case
-> where lib/math/int_log.c should be #include 'ing linux/bug.h rather
-> than asm/bug.h?
+Hi all,
 
-Probably yes, but we don't normally go back and take coding style fixes
-for old files like this as it doesn't make much sense to do so.
+This series disables DWARF5 for LLVM versions where it is known to be
+broken due to linker relaxation:
 
-But, if you are cleaning up the headers for large portions with the goal
-of faster builds, that's a good reason.
+https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc21dd18e5b0918f6
 
-Good luck!
+If I understand correctly, it sounds like GNU binutils has a similar
+issue but I am not sure of the status of the fixes and such, so I did
+not bother with checking for it but it should be easy to add if so
+desired.
 
-greg k-h
+---
+Changes in v2:
+- Added patch 3 with Fangrui's suggested improvements around
+  CONFIG_AS_HAS_NON_CONST_LEB128.
+- Pick up Fangrui's Reviewed-by on patch 1.
+- Link to v1: https://lore.kernel.org/r/20231129-riscv-restrict-dwarf5-llvm-v1-0-ec0d368fb538@kernel.org
+
+---
+Nathan Chancellor (3):
+      riscv: Hoist linker relaxation disabling logic into Kconfig
+      riscv: Restrict DWARF5 when building with LLVM to known working versions
+      lib/Kconfig.debug: Update AS_HAS_NON_CONST_LEB128 comment and name
+
+ arch/riscv/Kconfig  | 14 ++++++++++++++
+ arch/riscv/Makefile |  4 +---
+ lib/Kconfig.debug   | 12 +++++++-----
+ 3 files changed, 22 insertions(+), 8 deletions(-)
+---
+base-commit: 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab
+change-id: 20231129-riscv-restrict-dwarf5-llvm-a9824bb974cb
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
