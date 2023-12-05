@@ -1,54 +1,36 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD59C6FCD6;
-	Tue,  5 Dec 2023 21:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA14C6FCD1
+	for <llvm@lists.linux.dev>; Tue,  5 Dec 2023 21:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lR9Tz0iP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701813418; x=1733349418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D9EtR6Py7ooGLOmKmiVsc4WAuKZzq54r1HkSKwjte8A=;
-  b=lR9Tz0iPJRXs6zqT9LUz7S76TSAtFDRc5NlQHUY0/WK6sH4e1eMWWusQ
-   WVZpocjTpwPGz/aQz5EFNe9EXTfRHrmu3si9wWuU8A2ZdQfuj4DjSicZS
-   VMIEQi993/5TphxpQvVXWkm+KNyTTXHCIP8iZlJAHO/pO/UrtOpqWvMLb
-   PxD9VB4fCuWuQlOIJF8nJRqGGY74JuMC/Gy+O+KTN/CNJV8kgJ9o6SBQg
-   qnQe/6gHmTASgH+bdTxjXTVs37krB6HSkXkKjzkgGEk8cNILow0fDOWKn
-   MU3K8g/mzCVMw+SpaW57l44R5vAj171c35nutqUJfYnlKaI+yJjGQiJqp
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="392833554"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="392833554"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 13:56:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="747388076"
-X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
-   d="scan'208";a="747388076"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Dec 2023 13:56:54 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAdPQ-0009ma-0g;
-	Tue, 05 Dec 2023 21:56:52 +0000
-Date: Wed, 6 Dec 2023 05:56:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-	srinivas.kandagatla@linaro.org, krzysztof.kozlowski@linaro.org,
-	broonie@kernel.org, agross@kernel.org, andersson@kernel.org,
-	quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-	quic_phaniu@quicinc.com, quic_avangala@quicinc.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-	Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: Re: [PATCH v1] ASoC: codecs: wcd937x: Add wcd937x codec driver
-Message-ID: <202312060522.gxYr8k2D-lkp@intel.com>
-References: <20231205123400.6353-1-quic_pkumpatl@quicinc.com>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="qlh/FNeD"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=4R8XorxoFVOpovwERfSrloKkn2fMEhR5jZoBji1BSzM=; b=qlh/FNeDT4RM5b8OO4gTtNwyyw
+	Yj566rfENDUFrZyrSODB7/RDqkMAoxkYS6Kqmvz/6ib39OUcGVHBY2AdXtFHtOrWZMpAmntVEYmeq
+	Q4ox4UkGCyDPct/YjeoqTVzAak1qLHfUSr9eHYzJgCGeaSv/ofdJavh6WHUxRUviF/KOMiAeXuHxx
+	cjvhQlTkXKiQ53swhQP37deCDEWQT51eQYoWRVjm+ZboLMI1xvqJT8iHwcV73gQGDV35Gccz1AUGz
+	LGYZmNwp1qXNNKD2M9l634UMZw0J2f7EEHy8VVTMz28+ht0YI6Xh6xz2sEm6PBrlsNsU6Kl7peIep
+	16Q8aXKQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rAdQ1-007Tjl-1a;
+	Tue, 05 Dec 2023 21:57:29 +0000
+Date: Tue, 5 Dec 2023 21:57:29 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: tanzirh@google.com
+Cc: Kees Cook <keescook@chromium.org>, Andy Shevchenko <andy@kernel.org>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nick DeSaulniers <nnn@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
+Message-ID: <20231205215729.GG1674809@ZenIV>
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205213807.GE1674809@ZenIV>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,63 +39,29 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231205123400.6353-1-quic_pkumpatl@quicinc.com>
+In-Reply-To: <20231205213807.GE1674809@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi Prasad,
+On Tue, Dec 05, 2023 at 09:38:07PM +0000, Al Viro wrote:
 
-kernel test robot noticed the following build warnings:
+> It also breeds includes of asm/*.h, by the look of the output, which is
+> not a good thing in general ;-/  E.g. #include <asm/uaccess.h> *anywhere*
+> outside of linux/uaccess.h is a bad idea.
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on linus/master v6.7-rc4 next-20231205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Let me elaborate a bit:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prasad-Kumpatla/ASoC-codecs-wcd937x-Add-wcd937x-codec-driver/20231205-203631
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20231205123400.6353-1-quic_pkumpatl%40quicinc.com
-patch subject: [PATCH v1] ASoC: codecs: wcd937x: Add wcd937x codec driver
-config: i386-buildonly-randconfig-005-20231206 (https://download.01.org/0day-ci/archive/20231206/202312060522.gxYr8k2D-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060522.gxYr8k2D-lkp@intel.com/reproduce)
+Consider e.g. a situation when we have linux/foo.h pulling asm/foo.h;
+among the things declared there is foo_bar(), which is identical in
+18 instances of asm/foo.h (out of current 21).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312060522.gxYr8k2D-lkp@intel.com/
+At some point we notice that; the obvious approach would be to have
+3 unusual architectures have their asm/foo.h define _ARCH_HAS_ODD_FOO_BAR
+and put the common variant in linux/foo.h under ifndef _ARCH_HAS_ODD_FOO_BAR.
 
-All warnings (new ones prefixed by >>):
+Except that any file that pulls asm/foo.h will get broken by that.
+And something like your tool might convert the users of linux/foo.h to
+asm/foo.h - all it takes is using only the primitives that currently
+happen to be in asm/foo.h on all architectures.
 
-   sound/soc/codecs/wcd937x.c:1024:6: warning: variable 'pre_off_event' set but not used [-Wunused-but-set-variable]
-           int pre_off_event = 0, post_off_event = 0;
-               ^
-   sound/soc/codecs/wcd937x.c:1024:25: warning: variable 'post_off_event' set but not used [-Wunused-but-set-variable]
-           int pre_off_event = 0, post_off_event = 0;
-                                  ^
-   sound/soc/codecs/wcd937x.c:1025:6: warning: variable 'post_on_event' set but not used [-Wunused-but-set-variable]
-           int post_on_event = 0, post_dapm_off = 0;
-               ^
-   sound/soc/codecs/wcd937x.c:1025:25: warning: variable 'post_dapm_off' set but not used [-Wunused-but-set-variable]
-           int post_on_event = 0, post_dapm_off = 0;
-                                  ^
-   sound/soc/codecs/wcd937x.c:1027:6: warning: variable 'post_dapm_on' set but not used [-Wunused-but-set-variable]
-           int post_dapm_on = 0;
-               ^
->> sound/soc/codecs/wcd937x.c:2909:34: warning: unused variable 'wcd937x_of_match' [-Wunused-const-variable]
-   static const struct of_device_id wcd937x_of_match[] = {
-                                    ^
-   6 warnings generated.
-
-
-vim +/wcd937x_of_match +2909 sound/soc/codecs/wcd937x.c
-
-  2908	
-> 2909	static const struct of_device_id wcd937x_of_match[] = {
-  2910		{ .compatible = "qcom,wcd9370-codec" },
-  2911		{ }
-  2912	};
-  2913	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This is not an artifical example, BTW - look at the history of uaccess.h and
+checksum.h...
