@@ -1,153 +1,90 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6FF67E92;
-	Tue,  5 Dec 2023 15:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CF75F1CE;
+	Tue,  5 Dec 2023 15:31:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="i9IbFRJr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Reply-To:Content-ID:Content-Description;
-	bh=Puy8nVRKh+PHtxSSvph4owiQxGDEu81haJo6iP0fqOg=; b=i9IbFRJrrd6Gw1wNSb/IhRTRk9
-	6zIBpoPQZNj+kKdpA5C2USS283miQo+vg75caIvXCpeS5qDqlkrXwU+XhjMfKuJTl1t1fpJ5pYOUg
-	o7qidBGzlRAXiEUoSnSfXhKHq9UCQe06DwQc72p7A9uRg5AaRRO9ZSidavu4GOf/xb3S/TmhpZE8Q
-	hUkF9CUkTCDR/pav7vRlHiJvDF07mpMagHttGsYMlt6xRFF5mG5uVHBKzIaKERIMXuGjsG6RKKkA+
-	vJx7wwFDkrUWXiVPO6zG2vMwVJ3w4dq5hvtyB0Hh0Ff3hAQoMLu0M6ie4VwJqfUzFSvlJEOtYLGo4
-	fqtzxG+g==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	(Exim 4.94.2)
-	(envelope-from <sylvestre@debian.org>)
-	id 1rAX77-00HOIb-SE; Tue, 05 Dec 2023 15:13:34 +0000
-Message-ID: <3523ca62-be8b-4b08-8d0c-5b97ece9aad8@debian.org>
-Date: Tue, 5 Dec 2023 16:13:29 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IGgcIfBL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701790300; x=1733326300;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9d+CrePk0J5cve1H8K0Z0/p2xvhNTllfEP6S+ZkrQk8=;
+  b=IGgcIfBLE0dpbZhrx6vJ2dmozZwZs0pLmeSdRVLvCtXFBxDx0KGkhXWt
+   kQaT7f9jTVoJZ4rvbFAa5gy1uHYTKC1IAOc+V+W37cmAss7U3E8KNI4wd
+   v63SXMX2ihI5z9WyMcBHvs0qf8tILPuPQqbZmufkJK+ZwYc4MHDosuM7R
+   qC6u/bt6rX/GHU6jcMf1LtIsXpHxEeNTY/vYzey8HeZpnMAn1shjKCA0N
+   wDeI31ZzLFZ/OQKLjOAS4aS+EEkzoi6Qn01TusvdNSF9lcGSSGnXNyk8N
+   rxcACJRmE7IwfwLZ1j9erGfLbrOe+leMTl5P/9Bbco2CeIfo5KBSZTukY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="458229238"
+X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
+   d="scan'208";a="458229238"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 07:31:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="861778081"
+X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
+   d="scan'208";a="861778081"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Dec 2023 07:31:38 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAXOa-0009Eo-28;
+	Tue, 05 Dec 2023 15:31:36 +0000
+Date: Tue, 5 Dec 2023 23:31:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH net-next v3 01/13] net: phy: Introduce ethernet link
+ topology representation
+Message-ID: <202312052307.KuiFEyDS-lkp@intel.com>
+References: <20231201163704.1306431-2-maxime.chevallier@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: clang-nightly: vdso/compat_gettimeofday.h:152:15: error:
- instruction variant requires ARMv6 or later
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
- clang-built-linux <llvm@lists.linux.dev>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>,
- Linux Regressions <regressions@lists.linux.dev>,
- lkft-triage@lists.linaro.org, Russell King <linux@armlinux.org.uk>,
- Nick Desaulniers <ndesaulniers@google.com>, Matthias Klose <doko@debian.org>
-References: <CA+G9fYvD72Vpfs2g8R+OJ6L8w9p_uaWbXpWMvnGAx_AOLabatw@mail.gmail.com>
- <20231204181304.GA2043538@dev-arch.thelio-3990X>
- <20231204223317.GA2053629@dev-arch.thelio-3990X>
- <36a25113-731c-4b28-a695-f3fbb0996d6e@app.fastmail.com>
- <20231205150417.GA349053@dev-arch.thelio-3990X>
-From: Sylvestre Ledru <sylvestre@debian.org>
-In-Reply-To: <20231205150417.GA349053@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Debian-User: sylvestre
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231201163704.1306431-2-maxime.chevallier@bootlin.com>
 
-Le 05/12/2023 à 16:04, Nathan Chancellor a écrit :
-> On Tue, Dec 05, 2023 at 07:34:40AM +0100, Arnd Bergmann wrote:
->> On Mon, Dec 4, 2023, at 23:33, Nathan Chancellor wrote:
->>> On Mon, Dec 04, 2023 at 11:13:04AM -0700, Nathan Chancellor wrote:
->>>
->>>> I am still investigating into what (if anything) can be done to resolve
->>>> this on the kernel side. We could potentially revert commit
->>>> ddc72c9659b5 ("kbuild: clang: do not use CROSS_COMPILE for target
->>>> triple") but I am not sure that will save us from that change, as
->>>> tuxmake's CROSS_COMPILE=arm-linux-gnueabihf will cause us to have an
->>>> armv7 CPU even though we may not be building for armv7.
->>>
->>> Okay, this is a pretty awful situation the more I look into it :(
->>>
->>> The arm64 compat vDSO build is easy enough to fix because we require use
->>> of the integrated assembler, which means we can add '-mcpu=generic' (the
->>> default in LLVM for those files based on my debugging) to those files
->>> and be done with it:
->>>
->>> diff --git a/arch/arm64/kernel/vdso32/Makefile
->>> b/arch/arm64/kernel/vdso32/Makefile
->>> index 1f911a76c5af..5f5cb722cfc2 100644
->>> --- a/arch/arm64/kernel/vdso32/Makefile
->>> +++ b/arch/arm64/kernel/vdso32/Makefile
->>> @@ -9,6 +9,10 @@ include $(srctree)/lib/vdso/Makefile
->>>   ifeq ($(CONFIG_CC_IS_CLANG), y)
->>>   CC_COMPAT ?= $(CC)
->>>   CC_COMPAT += --target=arm-linux-gnueabi
->>> +# Some distributions (such as Debian) change the default CPU for the
->>> +# arm-linux-gnueabi target triple, which can break the build.
->>> Explicitly set
->>> +# the CPU to generic, which is the default for Linux in LLVM.
->>> +CC_COMPAT += -mcpu=generic
->>>   else
->>>   CC_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
->>>   endif
->>
->> I'm still trying to follow what is actually going on. I
->> see that we pass
->>
->> VDSO_CAFLAGS += -march=armv8-a
->>
->> which is meant to tell the compiler that we want it to
->> use ARMv8 compatible instructions. Is the problem that
->> clang ignores this flag, or do we not pass it correctly?
->>
->> I would have expected -march=armv8-a to be better than
->> -mcpu=generic here, as it allows the compiler to use
->> a wider set of instructions that is still guaranteed to
->> be available on everything it will run on.
-> 
-> I should have made it clearer in that message that adding
-> '-mcpu=generic' was only to avoid the logic added by that Debian LLVM
-> change, not because I believe the kernel is doing something incorrectly
-> now. From what I could tell following through LLVM's code, '-march='
-> determines the default CPU, which is then used to further inform the
-> full target triple and by overriding the CPU where that patch did, it
-> was just blowing away the user's request. By providing an '-mcpu='
-> option explicitly, it would avoid the default selection logic and we
-> would get what we asked for.
-> 
->>> Sylvestre, I strongly believe you should consider reverting that change
->>> or give us some compiler flag that allows us to fallback to upstream
->>> LLVM's default CPU selection logic. I think that hardcoding Debian's
->>> architecture defintions based on the target triple into the compiler
->>> could cause issues for other projects as well. For example,
->>> '--target=arm-linux-gnueabi -march=armv7-a' won't actually target ARMv7:
->>>
->>>    $ echo 'int main(void) { asm("dsb"); return 0; }' | \
->>>          clang --target=arm-linux-gnueabi -march=armv7-a \
->>>          -x c -c -o /dev/null -v -
->>>    ...
->>>     "/usr/bin/clang-17" -cc1 -triple armv7-unknown-linux-gnueabi ...
->>>    ...
->>>
->>> vs.
->>>
->>>    $ echo 'int main(void) { asm("dsb"); return 0; }' | \
->>>          clang --target=arm-linux-gnueabi -march=armv7-a \
->>>          -x c -c -o /dev/null -v -
->>>    ...
->>>    "<prefix>/bin/clang-18" -cc1 -triple armv5e-unknown-linux-gnueabi ...
->>>    ...
->>
->> Right, the kernel definitely relies on -march= taking
->> precedence over the default CPU, the same way that we
->> tell the compiler to pick a non-default endianess or ABI.
-> 
-> Agreed, I have yet to test the new version of the patch but I see you
-> and Ard have given input on it, so hopefully it does not have any
-> problems like this.
+Hi Maxime,
 
-Matthias, as cc, pushed a potential fix for debian/ubuntu packages!
-https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/commit/01a06b481e5a2610c7387149b58978c3ec281f2c
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Cheers,
-Sylvestre
+[auto build test ERROR on net-next/main]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Chevallier/net-phy-Introduce-ethernet-link-topology-representation/20231202-003935
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231201163704.1306431-2-maxime.chevallier%40bootlin.com
+patch subject: [RFC PATCH net-next v3 01/13] net: phy: Introduce ethernet link topology representation
+config: i386-randconfig-011-20231203 (https://download.01.org/0day-ci/archive/20231205/202312052307.KuiFEyDS-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312052307.KuiFEyDS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312052307.KuiFEyDS-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: phy_link_topo_init
+   >>> referenced by dev.c:10836 (net/core/dev.c:10836)
+   >>>               net/core/dev.o:(alloc_netdev_mqs) in archive vmlinux.a
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
+   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && DRM_I915_WERROR [=n]
+   Selected by [m]:
+   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && !COMPILE_TEST [=n]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
