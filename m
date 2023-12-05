@@ -1,96 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793596ABA6;
-	Tue,  5 Dec 2023 19:53:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29246ABA6;
+	Tue,  5 Dec 2023 19:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rZl2VeTY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7299FC433C7;
-	Tue,  5 Dec 2023 19:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701805996;
-	bh=5bILRm/voPLjGTGQ/2zk5RoYBOPSzOEdtIPbiV7rR0M=;
-	h=From:Date:Subject:To:Cc:From;
-	b=rZl2VeTYSyv0nFgj+9bbl3iP7V9JuPOrOv3FngmiP8rmM/cmIPfZO4ZVt5HMqze2a
-	 wpPLxbChLvQZeb8H/r8AKrB/henHwRHiuygWU90/qwrPmQ/3SEOzwQlcaUblDCcdhA
-	 DroFvHKIO20pJloDs+TkUx5xi/I6Rs83ja3ECGJBSKzWmnkiPTAhaDGcuJpVNE4QFH
-	 NkxGjxBe/ganelNIOLJST+/RadhGxN2eQbFPd2qzbZ8/igHqdJZThmV3O1JysdfHbH
-	 5Q+Ut/CzvDRcy3NJfe32z7PGITCI22ZjzD7qCAZ14duhfswBUDdx/AyzAG+NFojt0P
-	 NOpDjKnvax1/w==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 05 Dec 2023 12:53:08 -0700
-Subject: [PATCH] x86/tools: objdump_reformat.awk: Skip bad instructions
- from llvm-objdump
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gvjG5WYr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701806269; x=1733342269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xA1OzQEvdpIisbeo/qOhqWfw2+XY21GFvBNGrnm+YDQ=;
+  b=gvjG5WYrGOHskPDYqeE/mZFq7rYPReQ+Js0tkvPFoeHxInuPLH1RKGYT
+   e/8FR12wBFw2ecoZNG58wC5mG2Uej1L8QqdApd3MLnKqKBjQJJsy5kRvC
+   ZBuMzRFMdiQfU+jP9XCz0f2iCfUEoJvzbF71Y1FMfExKGo1tkoV15hEf/
+   kQasRqJn1Oru+LzPpW6j9JhotFpHSQ6c5tOr2jDi3cghdqPQkECWNMwl3
+   Aimb+3eskgzHf/gtP+RbCINXy8Oi29gkLAl7ozetMTF7Ae7dG8kFoQQFA
+   nXXDXhGE2o4RYnY5y3A2vnu78szHeFf8rDoWAGo2QjgZHdxb4xBekaRxY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="373406762"
+X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
+   d="scan'208";a="373406762"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 11:57:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="720831377"
+X-IronPort-AV: E=Sophos;i="6.04,253,1695711600"; 
+   d="scan'208";a="720831377"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 05 Dec 2023 11:57:47 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAbY8-0009eW-2C;
+	Tue, 05 Dec 2023 19:57:44 +0000
+Date: Wed, 6 Dec 2023 03:57:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v3 14/21] mm/zsmalloc: convert
+ zs_page_{isolate,migrate,putback} to use zsdesc
+Message-ID: <202312060306.pC0tXo8R-lkp@intel.com>
+References: <20231130101242.2590384-15-42.hyeyoo@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231205-objdump_reformat-awk-handle-llvm-objdump-bad_expr-v1-1-b4a74f39396f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKN/b2UC/zWN2wrCMBAFf6XsswtptHj5FZGyaVaNJk3YaC2U/
- ruL4OPAnDkLVJbAFU7NAsJTqCGPCu2mgeFO440xeGWwxm5bazrM7uHfqfTC1yyJXkifJ6rpI2O
- MU/oL6Mj3PBfBI+93g7dkDq4D7Radhvn3eb6s6xengL9GgwAAAA==
-To: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
- dave.hansen@linux.intel.com, x86@kernel.org
-Cc: mhiramat@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1989; i=nathan@kernel.org;
- h=from:subject:message-id; bh=5bILRm/voPLjGTGQ/2zk5RoYBOPSzOEdtIPbiV7rR0M=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKn59avvh/y0Yp8yseFB/C75KbV3D9tXvBTYeTTDb7/fp
- zXbeDniO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEck8z/M9zP1Yfdo//ucHt
- O2ej3JYve8fS/WF/v3/gralT9/3hjjvCyPDadKqcXrDFjZd85To3Dwjf2RUm8XyT7/wDKrPmnDm
- zaD0/AA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231130101242.2590384-15-42.hyeyoo@gmail.com>
 
-When running the instruction decoder selftest with LLVM=1 +
-CONFIG_PVH=y, there is a series of warnings:
+Hi Hyeonggon,
 
-  arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-  arch/x86/tools/insn_decoder_test: warning: ffffffff81000050     ea                      <unknown>
-  arch/x86/tools/insn_decoder_test: warning: objdump says 1 bytes, but insn_get_length() says 7
-  arch/x86/tools/insn_decoder_test: warning: Decoded and checked 7214721 instructions with 1 failures
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-GNU objdump outputs "(bad)" instead of "<unknown>", which is already
-handled in the bad_expr regex, so there is no warning.
+[auto build test WARNING on akpm-mm/mm-everything]
 
-  $ objdump -d arch/x86/platform/pvh/head.o | grep -E '50:\s+ea'
-  50:   ea                      (bad)
+url:    https://github.com/intel-lab-lkp/linux/commits/Hyeonggon-Yoo/mm-zsmalloc-create-new-struct-zsdesc/20231130-181616
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20231130101242.2590384-15-42.hyeyoo%40gmail.com
+patch subject: [RFC PATCH v3 14/21] mm/zsmalloc: convert zs_page_{isolate,migrate,putback} to use zsdesc
+config: i386-buildonly-randconfig-002-20231202 (https://download.01.org/0day-ci/archive/20231206/202312060306.pC0tXo8R-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060306.pC0tXo8R-lkp@intel.com/reproduce)
 
-  $ llvm-objdump -d arch/x86/platform/pvh/head.o | grep -E '50:\s+ea'
-        50: ea                            <unknown>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312060306.pC0tXo8R-lkp@intel.com/
 
-Add "<unknown>" to the bad_expr regex to clear up the warning, allowing
-the instruction decoder selftest to fully pass with llvm-objdump.
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/tools/objdump_reformat.awk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> mm/zsmalloc.c:388:14: warning: no previous prototype for function 'zsdesc_zone' [-Wmissing-prototypes]
+   struct zone *zsdesc_zone(struct zsdesc *zsdesc)
+                ^
+   mm/zsmalloc.c:388:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct zone *zsdesc_zone(struct zsdesc *zsdesc)
+   ^
+   static 
+   mm/zsmalloc.c:286:29: warning: unused function 'zsdesc_pfn' [-Wunused-function]
+   static inline unsigned long zsdesc_pfn(const struct zsdesc *zsdesc)
+                               ^
+   mm/zsmalloc.c:296:20: warning: unused function 'zsdesc_get' [-Wunused-function]
+   static inline void zsdesc_get(struct zsdesc *zsdesc)
+                      ^
+   mm/zsmalloc.c:303:20: warning: unused function 'zsdesc_put' [-Wunused-function]
+   static inline void zsdesc_put(struct zsdesc *zsdesc)
+                      ^
+   mm/zsmalloc.c:320:20: warning: unused function 'wait_on_zsdesc_locked' [-Wunused-function]
+   static inline void wait_on_zsdesc_locked(struct zsdesc *zsdesc)
+                      ^
+   mm/zsmalloc.c:343:20: warning: unused function 'zsdesc_set_movable' [-Wunused-function]
+   static inline void zsdesc_set_movable(struct zsdesc *zsdesc)
+                      ^
+   mm/zsmalloc.c:383:20: warning: unused function 'zsdesc_is_isolated' [-Wunused-function]
+   static inline bool zsdesc_is_isolated(struct zsdesc *zsdesc)
+                      ^
+   7 warnings generated.
 
-diff --git a/arch/x86/tools/objdump_reformat.awk b/arch/x86/tools/objdump_reformat.awk
-index a4120d907277..20b08a6c4d33 100644
---- a/arch/x86/tools/objdump_reformat.awk
-+++ b/arch/x86/tools/objdump_reformat.awk
-@@ -11,7 +11,7 @@ BEGIN {
- 	prev_addr = ""
- 	prev_hex = ""
- 	prev_mnemonic = ""
--	bad_expr = "(\\(bad\\)|^rex|^.byte|^rep(z|nz)$|^lock$|^es$|^cs$|^ss$|^ds$|^fs$|^gs$|^data(16|32)$|^addr(16|32|64))"
-+	bad_expr = "(\\(bad\\)|<unknown>|^rex|^.byte|^rep(z|nz)$|^lock$|^es$|^cs$|^ss$|^ds$|^fs$|^gs$|^data(16|32)$|^addr(16|32|64))"
- 	fwait_expr = "^9b[ \t]*fwait"
- 	fwait_str="9b\tfwait"
- }
 
----
-base-commit: 5225952d74d43e4c054731c74b8afd700b23a94a
-change-id: 20231205-objdump_reformat-awk-handle-llvm-objdump-bad_expr-9e74cd2a08b5
+vim +/zsdesc_zone +388 mm/zsmalloc.c
 
-Best regards,
+   387	
+ > 388	struct zone *zsdesc_zone(struct zsdesc *zsdesc)
+   389	{
+   390		return page_zone(zsdesc_page(zsdesc));
+   391	}
+   392	
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
