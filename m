@@ -1,119 +1,140 @@
-Received: from bg2.exmail.qq.com (bg2.exmail.qq.com [114.132.75.215])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88EEEBC
-	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 01:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=vimux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vimux.org
-X-QQ-mid: bizesmtp71t1701825951t7a9xq2a
-Received: from localhost.localdomain ( [219.147.0.78])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 06 Dec 2023 09:25:48 +0800 (CST)
-X-QQ-SSF: 01200000000000B0J000000A0000000
-X-QQ-FEAT: AVwGxPGvfUdqbQU/G7eEgdV1fs9Yo38Y6mwGCNuioTVl0jOcC4pMJUn4smZA/
-	45jFOcuA90l4hf6qklveMLvls0JPLGxsmwUXdjwn87awODmf0E6hInIkdnZ9TZUHlbqmn5G
-	U3VuDSJLWaqiDYcZOCojTqiiUm85yKElsIc8YwVw0Vdw0WSIIDowwtl3KVrBwW8qqr7dGIa
-	l976ZY+A6PAIQQZ62bArDpRNIdo78J42KELQLDcJrR/63pCjVhTh3vR4gnWyQ0D+8ygXA/1
-	eZz0WywWZXKfkOnRiliFL/l0Kkyb33t7bVjslwdyMULEPJ+dV7CUriKA/+a0+ImoqK973qj
-	t/OJHERVuFOF+pmZERJjXENtTI84wrv3K5dGDqSHjMIK463Ly12C3Pxv9Z66w==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6151313308317870226
-From: Jialu Xu <xujialu@vimux.org>
-To: nathan@kernel.org
-Cc: justinstitt@google.com,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	masahiroy@kernel.org,
-	morbo@google.com,
-	ndesaulniers@google.com,
-	xujialu@vimux.org
-Subject: [PATCH v4] gen_compile_commands.py: fix path resolve with symlinks in it
-Date: Wed,  6 Dec 2023 09:24:42 +0800
-Message-Id: <20231206012441.840082-1-xujialu@vimux.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231205165648.GA391810@dev-arch.thelio-3990X>
-References: <20231205165648.GA391810@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD225697
+	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 02:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R3d0rGbK"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-54c79cca895so5991a12.0
+        for <llvm@lists.linux.dev>; Tue, 05 Dec 2023 18:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701828711; x=1702433511; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TSzJ/eDmpu5qKlh7l7ZmUhxzU0D7hwAbG/bWD2UzWAg=;
+        b=R3d0rGbKXsoCBIMxCCu/LgTLsy/L/v3bB+3U10ARG0vpM650AnxQhBJSLLBJmxA0Wc
+         iN1FLQ1W2VpDBW/llm8mOFoajbxTsEFhC54v6j0EsS+ikX6YLA56inrx4nckZXeqK9B1
+         blL3mOZehka+SM/+P40FYqRhMfY+r25qWUL68GbPYKr8gtfj1zX4V6JQTJNBr3MQ4y/X
+         U5KlQCQfPMzTyFUhNL2dzgOqh1hl3chJSDkzfu8it2k9+7y3n9VOFgfO56hznzsPUFrz
+         GDXqhvsMweHQORDgbYapesIbTigQM+XlvvQlkvxr7cwwvxzDg/mu4sAILn3e3ps8zSOh
+         MOdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701828711; x=1702433511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TSzJ/eDmpu5qKlh7l7ZmUhxzU0D7hwAbG/bWD2UzWAg=;
+        b=UZtJCHJ1RqNXa4QMY9PFydUj5DT8IZ+JKYJtvNO33FfH/45UjIJmMspMD2azaR0icp
+         f07Lw4uF4y9/qH4jKMR/gUsz+4D7BPDsdJ4OGZBehRdpXRwCKUb1ZHoHYdrNaDrcHxDI
+         hv5H/Z0P/T2m8LkJTxnkdLAz31vGdVWR24El6IIuX74vJfpmTFzSGvppDn1KlRj8M8ud
+         FGHwNrIPt0W/qN12YxVYbmpeg2SQN9LcAc0035DUJPGVHC42QMAuZRnNR7w88JhITo2L
+         yvHG0qBGg1aeFxnhsxZbonIwakFhCXGpg/oPediW78NdxSRrefMVKW5jlQH53ReUzsQC
+         HyNg==
+X-Gm-Message-State: AOJu0Yw7bf9tA0/pUDFVPmY7HBH8p9fL+oKQd+VrlYCBuxSe7uTWafZB
+	00aflGPH5SWXmWZvaiORIVfvu6cRJPztsx7UReqvmQ==
+X-Google-Smtp-Source: AGHT+IFzA8RIjLbgincX9lQ/PvllzQCK/mYcCDN7t80oDb+wk/rQpCEl5GkjPt8Q+5aU6plyxvR27GnuD2AjYgQfTS8=
+X-Received: by 2002:a50:9f69:0:b0:54b:6b3f:4a86 with SMTP id
+ b96-20020a509f69000000b0054b6b3f4a86mr43698edf.4.1701828710837; Tue, 05 Dec
+ 2023 18:11:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:vimux.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+References: <20231205-riscv-restrict-dwarf5-llvm-v2-0-aedf00a382ac@kernel.org> <20231205-riscv-restrict-dwarf5-llvm-v2-2-aedf00a382ac@kernel.org>
+In-Reply-To: <20231205-riscv-restrict-dwarf5-llvm-v2-2-aedf00a382ac@kernel.org>
+From: Fangrui Song <maskray@google.com>
+Date: Tue, 5 Dec 2023 18:11:38 -0800
+Message-ID: <CAFP8O3+-YZaS01NSYt9d2cOVLS-wHk-tMjB8URA0g2GPddy4HQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] riscv: Restrict DWARF5 when building with LLVM to
+ known working versions
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	conor@kernel.org, ndesaulniers@google.com, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When a path contains relative symbolic links, os.path.abspath() might
-not follow the symlinks and instead return the absolute path with just
-the relative paths resolved, resulting in an incorrect path.
+On Tue, Dec 5, 2023 at 3:54=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> LLVM prior to 18.0.0 would generate incorrect debug info for DWARF5 due
+> to linker relaxation, which was worked around in clang by defaulting
+> RISC-V to DWARF4 [1]. Unfortunately, this workaround does not work for
+> the kernel because the DWARF version can be independently changed from
+> the default in Kconfig.
+>
+> Do not allow DWARF5 to be selected for RISC-V when using linker
+> relaxation (ld.lld >=3D 15.0.0) and a version of LLVM that does not have
+> the fixes (the integrated assembler [2] and ld.lld [3] < 18.0.0)
+> necessary to generate the correct debug info.
+>
+> Link: https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649=
+fc21dd18e5b0918f6 [1]
+> Link: https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622db2c=
+ad7b745607ca4de6a [2]
+> Link: https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac932=
+2e22e5471cc5e4a77 [3]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/riscv/Kconfig | 9 +++++++++
+>  lib/Kconfig.debug  | 1 +
+>  2 files changed, 10 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 72be1d8122a3..81b473cb47b0 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -186,6 +186,15 @@ config RISCV_USE_LINKER_RELAXATION
+>         # https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec7726=
+2d392e2923e1d680f6985
+>         depends on !LD_IS_LLD || LLD_VERSION >=3D 150000
+>
+> +# https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc2=
+1dd18e5b0918f6
+> +config ARCH_HAS_BROKEN_DWARF5
+> +       def_bool y
+> +       depends on RISCV_USE_LINKER_RELAXATION
+> +       # https://github.com/llvm/llvm-project/commit/1df5ea29b43690b6622=
+db2cad7b745607ca4de6a
+> +       depends on AS_IS_LLVM && AS_VERSION < 180000
+> +       # https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5a=
+c9322e22e5471cc5e4a77
+> +       depends on LD_IS_LLD && LLD_VERSION < 180000
+> +
 
-1. Say "drivers/hdf/" has some symlinks:
+LGTM.  loongarch folks can add arch/loongarch/Kconfig after they
+finish their R_LARCH_ADD_ULEB128/R_LARCH_SUB_ULEB128 toolchain work.
 
-    # ls -l drivers/hdf/
-    total 364
-    drwxrwxr-x 2 ...   4096 ... evdev
-    lrwxrwxrwx 1 ...     44 ... framework -> ../../../../../../drivers/hdf_core/framework
-    -rw-rw-r-- 1 ... 359010 ... hdf_macro_test.h
-    lrwxrwxrwx 1 ...     55 ... inner_api -> ../../../../../../drivers/hdf_core/interfaces/inner_api
-    lrwxrwxrwx 1 ...     53 ... khdf -> ../../../../../../drivers/hdf_core/adapter/khdf/linux
-    -rw-r--r-- 1 ...     74 ... Makefile
-    drwxrwxr-x 3 ...   4096 ... wifi
+Reviewed-by: Fangrui Song <maskray@google.com>
 
-2. One .cmd file records that:
+>  config ARCH_MMAP_RND_BITS_MIN
+>         default 18 if 64BIT
+>         default 8
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index cc7d53d9dc01..a0ebce05a368 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -282,6 +282,7 @@ config DEBUG_INFO_DWARF4
+>  config DEBUG_INFO_DWARF5
+>         bool "Generate DWARF Version 5 debuginfo"
+>         select DEBUG_INFO
+> +       depends on !ARCH_HAS_BROKEN_DWARF5
+>         depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION=
+ >=3D 23502 && AS_HAS_NON_CONST_LEB128)
+>         help
+>           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0=
++ (gcc
+>
+> --
+> 2.43.0
+>
+>
 
-    # head -1 ./framework/core/manager/src/.devmgr_service.o.cmd
-    cmd_drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.o := ... \
-    /path/to/out/drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.c
 
-3. os.path.abspath returns "/path/to/out/framework/core/manager/src/devmgr_service.c", not correct:
-
-    # ./scripts/clang-tools/gen_compile_commands.py
-    INFO: Could not add line from ./framework/core/manager/src/.devmgr_service.o.cmd: File \
-        /path/to/out/framework/core/manager/src/devmgr_service.c not found
-
-Use pathlib.Path.resolve(), which resolves the symlinks and normalizes
-the paths correctly.
-
-    # cat compile_commands.json
-    ...
-    {
-      "command": ...
-      "directory": ...
-      "file": "/path/to/blabla/drivers/hdf_core/framework/core/manager/src/devmgr_service.c"
-    },
-    ...
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Jialu Xu <xujialu@vimux.org>
----
- scripts/clang-tools/gen_compile_commands.py | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 180952fb91c1b..99e28b7152c19 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -11,6 +11,7 @@ import argparse
- import json
- import logging
- import os
-+from pathlib import Path
- import re
- import subprocess
- import sys
-@@ -172,8 +173,9 @@ def process_line(root_directory, command_prefix, file_path):
-     # by Make, so this code replaces the escaped version with '#'.
-     prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
- 
--    # Use os.path.abspath() to normalize the path resolving '.' and '..' .
--    abs_path = os.path.abspath(os.path.join(root_directory, file_path))
-+    # Make the path absolute, resolving all symlinks on the way and also normalizing it.
-+    # Convert Path object to a string because 'PosixPath' is not JSON serializable.
-+    abs_path = str(Path(root_directory, file_path).resolve())
-     if not os.path.exists(abs_path):
-         raise ValueError('File %s not found' % abs_path)
-     return {
--- 
-2.39.2
-
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
