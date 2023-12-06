@@ -1,273 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from bg2.exmail.qq.com (bg2.exmail.qq.com [114.132.75.215])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04605651;
-	Wed,  6 Dec 2023 01:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SYzbN3lG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701824470; x=1733360470;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5w3EXB3GayPeRpqOMEz9Tz3C9lVAMElYTKZ/eLMdAa0=;
-  b=SYzbN3lGqG/68jcnV7W4VNxvYzvyl/9kOlQMXNKbayEyVWNJ1L5u5SQP
-   /2ygCYPAjYE7WwvBiw5IsvpquYg4p++w99gpTBn2R4WM4gBujZ/E5o3pt
-   iWhE9eKWt/jdDNnk60QVQ683uuy+WQZk8I+2YkrYUWFr1Lbvjsz28E1zo
-   B+jZl2JD7vXkI/v8u8M29AKMO0Zr90YxD4pnq3TgXlbSELhko5Fzkmvu0
-   lf9ROr3KPuRGWMPff2ay7jOp5fmsAnpwBxMuIeIRmYZfuECgIa/jMMl4J
-   CmFx7i33e17AFE97EiytF4B+tdMga4bv1cWjvhPZpdjt0OGuQ+i1pBtz1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="12700215"
-X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
-   d="scan'208";a="12700215"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 17:01:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="841655132"
-X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
-   d="scan'208";a="841655132"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Dec 2023 17:01:07 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAgHg-000A01-1m;
-	Wed, 06 Dec 2023 01:01:04 +0000
-Date: Wed, 6 Dec 2023 09:01:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Atish Patra <atishp@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Atish Patra <Atish.Patra@wdc.com>
-Subject: [atishp04:kvm_pmu_snapshot_v1 31/32]
- arch/riscv/kvm/vcpu_pmu.c:320:28: warning: result of comparison of constant
- 18446744073709551615 with expression of type 'unsigned long' is always true
-Message-ID: <202312060919.zlTwRyyd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20ABC815
+	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 01:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=vimux.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vimux.org
+X-QQ-mid: bizesmtp68t1701825671tkvj01k2
+Received: from localhost.localdomain ( [219.147.0.78])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 06 Dec 2023 09:20:54 +0800 (CST)
+X-QQ-SSF: 01200000000000B0J000000A0000000
+X-QQ-FEAT: C46Rb8GPIEdQevORz54Ns4TE4UnwfxCC0E13jQg+0AJuwH4J+RvoDvhcR29qZ
+	fd0I2Ya2QhUAnVu/XxurUCK+OByf5q1TR0Hu5nCKXHaNMwwHUUTkJO7SCYNczNTCXxaR500
+	0uxLbSKqY7gbYJ77VPDhHYDpbA/HqgvojNLcHXj50CeNMyO+UMgvqku3YGgz9dV8Fee5LuR
+	Drj+X0E+7G91YYjQWovG3fFKB4UJ1zjPOosS5hOxNkCqMliB24gi25duq3jL0bHbhE1GLHm
+	ZZO1TFyhqJ52D1uDR9CkbztAnnUsGK3/lCbxidLYcd4wrGIMnSmcW7ToygoVOsryUMbQYj0
+	pScmh8LSKGGbj7U1YQTjprvkSyZHO8bvrt1RHK3bsApOPZbUCQ=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16475695321451035816
+From: Jialu Xu <xujialu@vimux.org>
+To: nathan@kernel.org
+Cc: justinstitt@google.com,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	masahiroy@kernel.org,
+	morbo@google.com,
+	ndesaulniers@google.com,
+	xujialu@vimux.org
+Subject: [PATCH v3] gen_compile_commands.py: fix path resolve with symlinks in it
+Date: Wed,  6 Dec 2023 09:20:36 +0800
+Message-Id: <20231206012034.833057-2-xujialu@vimux.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231205165648.GA391810@dev-arch.thelio-3990X>
+References: <20231205165648.GA391810@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:vimux.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 
-tree:   https://github.com/atishp04/linux kvm_pmu_snapshot_v1
-head:   7536565387bf2f507db4c5407ad0a27413b349db
-commit: 35ce374331eb26024537a8cc583578ff941b41f7 [31/32] RISC-V: KVM: Implement SBI PMU Snapshot feature
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231206/202312060919.zlTwRyyd-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060919.zlTwRyyd-lkp@intel.com/reproduce)
+When a path contains relative symbolic links, os.path.abspath() might
+not follow the symlinks and instead return the absolute path with just
+the relative paths resolved, resulting in an incorrect path.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312060919.zlTwRyyd-lkp@intel.com/
+1. Say "drivers/hdf/" has some symlinks:
 
-All warnings (new ones prefixed by >>):
+    # ls -l drivers/hdf/
+    total 364
+    drwxrwxr-x 2 ...   4096 ... evdev
+    lrwxrwxrwx 1 ...     44 ... framework -> ../../../../../../drivers/hdf_core/framework
+    -rw-rw-r-- 1 ... 359010 ... hdf_macro_test.h
+    lrwxrwxrwx 1 ...     55 ... inner_api -> ../../../../../../drivers/hdf_core/interfaces/inner_api
+    lrwxrwxrwx 1 ...     53 ... khdf -> ../../../../../../drivers/hdf_core/adapter/khdf/linux
+    -rw-r--r-- 1 ...     74 ... Makefile
+    drwxrwxr-x 3 ...   4096 ... wifi
 
->> arch/riscv/kvm/vcpu_pmu.c:320:28: warning: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-     320 |                 if (kvpmu->snapshot_addr != INVALID_GPA)
-         |                     ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
->> arch/riscv/kvm/vcpu_pmu.c:324:25: warning: implicit conversion from 'gpa_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     324 |         kvpmu->snapshot_addr = INVALID_GPA;
-         |                              ~ ^~~~~~~~~~~
-   include/linux/kvm_types.h:43:22: note: expanded from macro 'INVALID_GPA'
-      43 | #define INVALID_GPA     (~(gpa_t)0)
-         |                          ^~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:377:26: warning: implicit conversion from 'gpa_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     377 |                 kvpmu->snapshot_addr = INVALID_GPA;
-         |                                      ~ ^~~~~~~~~~~
-   include/linux/kvm_types.h:43:22: note: expanded from macro 'INVALID_GPA'
-      43 | #define INVALID_GPA     (~(gpa_t)0)
-         |                          ^~~~~~~~~
->> arch/riscv/kvm/vcpu_pmu.c:422:41: warning: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-     422 |             (bSnapshot && kvpmu->snapshot_addr == INVALID_GPA)) {
-         |                           ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:487:42: warning: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-     487 |             (bSnapshot && (kvpmu->snapshot_addr == INVALID_GPA))) {
-         |                            ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:679:25: warning: implicit conversion from 'gpa_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     679 |         kvpmu->snapshot_addr = INVALID_GPA;
-         |                              ~ ^~~~~~~~~~~
-   include/linux/kvm_types.h:43:22: note: expanded from macro 'INVALID_GPA'
-      43 | #define INVALID_GPA     (~(gpa_t)0)
-         |                          ^~~~~~~~~
-   arch/riscv/kvm/vcpu_pmu.c:740:25: warning: implicit conversion from 'gpa_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     740 |         kvpmu->snapshot_addr = INVALID_GPA;
-         |                              ~ ^~~~~~~~~~~
-   include/linux/kvm_types.h:43:22: note: expanded from macro 'INVALID_GPA'
-      43 | #define INVALID_GPA     (~(gpa_t)0)
-         |                          ^~~~~~~~~
-   7 warnings generated.
+2. One .cmd file records that:
 
+    # head -1 ./framework/core/manager/src/.devmgr_service.o.cmd
+    cmd_drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.o := ... \
+    /path/to/out/drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.c
 
-vim +320 arch/riscv/kvm/vcpu_pmu.c
+3. os.path.abspath returns "/path/to/out/framework/core/manager/src/devmgr_service.c", not correct:
 
-   312	
-   313	static void kvm_pmu_clear_snapshot_area(struct kvm_vcpu *vcpu)
-   314	{
-   315		struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-   316		int snapshot_area_size = sizeof(struct riscv_pmu_snapshot_data);
-   317	
-   318		if (kvpmu->sdata) {
-   319			memset(kvpmu->sdata, 0, snapshot_area_size);
- > 320			if (kvpmu->snapshot_addr != INVALID_GPA)
-   321				kvm_vcpu_write_guest(vcpu, kvpmu->snapshot_addr,
-   322						     kvpmu->sdata, snapshot_area_size);
-   323		}
- > 324		kvpmu->snapshot_addr = INVALID_GPA;
-   325	}
-   326	
-   327	int kvm_riscv_vcpu_pmu_setup_snapshot(struct kvm_vcpu *vcpu, unsigned long saddr_low,
-   328					      unsigned long saddr_high, unsigned long flags,
-   329					      struct kvm_vcpu_sbi_return *retdata)
-   330	{
-   331		struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-   332		int snapshot_area_size = sizeof(struct riscv_pmu_snapshot_data);
-   333		int sbiret = 0;
-   334		gpa_t saddr;
-   335		unsigned long hva;
-   336		bool writable;
-   337	
-   338		if (!kvpmu) {
-   339			sbiret = SBI_ERR_INVALID_PARAM;
-   340			goto out;
-   341		}
-   342	
-   343		if (saddr_low == -1 && saddr_high == -1) {
-   344			kvm_pmu_clear_snapshot_area(vcpu);
-   345			return 0;
-   346		}
-   347	
-   348		saddr = saddr_low;
-   349	
-   350		if (saddr_high != 0) {
-   351	#ifdef CONFIG_32BIT
-   352			saddr |= ((gpa_t)saddr << 32);
-   353	#else
-   354			sbiret = SBI_ERR_INVALID_ADDRESS;
-   355			goto out;
-   356	#endif
-   357		}
-   358	
-   359		if (kvm_is_error_gpa(vcpu->kvm, saddr)) {
-   360			sbiret = SBI_ERR_INVALID_PARAM;
-   361			goto out;
-   362		}
-   363	
-   364		hva = kvm_vcpu_gfn_to_hva_prot(vcpu, saddr >> PAGE_SHIFT, &writable);
-   365		if (kvm_is_error_hva(hva) || !writable) {
-   366			sbiret = SBI_ERR_INVALID_ADDRESS;
-   367			goto out;
-   368		}
-   369	
-   370		kvpmu->snapshot_addr = saddr;
-   371		kvpmu->sdata = kzalloc(snapshot_area_size, GFP_ATOMIC);
-   372		if (!kvpmu->sdata)
-   373			return -ENOMEM;
-   374	
-   375		if (kvm_vcpu_write_guest(vcpu, saddr, kvpmu->sdata, snapshot_area_size)) {
-   376			kfree(kvpmu->sdata);
- > 377			kvpmu->snapshot_addr = INVALID_GPA;
-   378			sbiret = SBI_ERR_FAILURE;
-   379		}
-   380	out:
-   381		retdata->err_val = sbiret;
-   382	
-   383		return 0;
-   384	}
-   385	
-   386	int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu,
-   387					struct kvm_vcpu_sbi_return *retdata)
-   388	{
-   389		struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-   390	
-   391		retdata->out_val = kvm_pmu_num_counters(kvpmu);
-   392	
-   393		return 0;
-   394	}
-   395	
-   396	int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
-   397					struct kvm_vcpu_sbi_return *retdata)
-   398	{
-   399		struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-   400	
-   401		if (cidx > RISCV_KVM_MAX_COUNTERS || cidx == 1) {
-   402			retdata->err_val = SBI_ERR_INVALID_PARAM;
-   403			return 0;
-   404		}
-   405	
-   406		retdata->out_val = kvpmu->pmc[cidx].cinfo.value;
-   407	
-   408		return 0;
-   409	}
-   410	
-   411	int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
-   412					 unsigned long ctr_mask, unsigned long flags, u64 ival,
-   413					 struct kvm_vcpu_sbi_return *retdata)
-   414	{
-   415		struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-   416		int i, pmc_index, sbiret = 0;
-   417		struct kvm_pmc *pmc;
-   418		int fevent_code;
-   419		bool bSnapshot = flags & SBI_PMU_START_FLAG_INIT_FROM_SNAPSHOT;
-   420	
-   421		if ((kvm_pmu_validate_counter_mask(kvpmu, ctr_base, ctr_mask) < 0) ||
- > 422		    (bSnapshot && kvpmu->snapshot_addr == INVALID_GPA)) {
-   423			sbiret = SBI_ERR_INVALID_PARAM;
-   424			goto out;
-   425		}
-   426	
-   427		/* Start the counters that have been configured and requested by the guest */
-   428		for_each_set_bit(i, &ctr_mask, RISCV_MAX_COUNTERS) {
-   429			pmc_index = i + ctr_base;
-   430			if (!test_bit(pmc_index, kvpmu->pmc_in_use))
-   431				continue;
-   432			pmc = &kvpmu->pmc[pmc_index];
-   433			if (flags & SBI_PMU_START_FLAG_SET_INIT_VALUE) {
-   434				pmc->counter_val = ival;
-   435			} else if (bSnapshot) {
-   436				kvm_vcpu_read_guest(vcpu, kvpmu->snapshot_addr, kvpmu->sdata,
-   437						    sizeof(struct riscv_pmu_snapshot_data));
-   438				pmc->counter_val = kvpmu->sdata->ctr_values[pmc_index];
-   439			}
-   440	
-   441			if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
-   442				fevent_code = get_event_code(pmc->event_idx);
-   443				if (fevent_code >= SBI_PMU_FW_MAX) {
-   444					sbiret = SBI_ERR_INVALID_PARAM;
-   445					goto out;
-   446				}
-   447	
-   448				/* Check if the counter was already started for some reason */
-   449				if (kvpmu->fw_event[fevent_code].started) {
-   450					sbiret = SBI_ERR_ALREADY_STARTED;
-   451					continue;
-   452				}
-   453	
-   454				kvpmu->fw_event[fevent_code].started = true;
-   455				kvpmu->fw_event[fevent_code].value = pmc->counter_val;
-   456			} else if (pmc->perf_event) {
-   457				if (unlikely(pmc->started)) {
-   458					sbiret = SBI_ERR_ALREADY_STARTED;
-   459					continue;
-   460				}
-   461				perf_event_period(pmc->perf_event, kvm_pmu_get_sample_period(pmc));
-   462				perf_event_enable(pmc->perf_event);
-   463				pmc->started = true;
-   464			} else {
-   465				sbiret = SBI_ERR_INVALID_PARAM;
-   466			}
-   467		}
-   468	
-   469	out:
-   470		retdata->err_val = sbiret;
-   471	
-   472		return 0;
-   473	}
-   474	
+    # ./scripts/clang-tools/gen_compile_commands.py
+    INFO: Could not add line from ./framework/core/manager/src/.devmgr_service.o.cmd: File \
+        /path/to/out/framework/core/manager/src/devmgr_service.c not found
 
+Use pathlib.Path.resolve(), which resolves the symlinks and normalizes
+the paths correctly.
+
+    # cat compile_commands.json
+    ...
+    {
+      "command": ...
+      "directory": ...
+      "file": "/path/to/blabla/drivers/hdf_core/framework/core/manager/src/devmgr_service.c"
+    },
+    ...
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/clang-tools/gen_compile_commands.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index 180952fb91c1b..99e28b7152c19 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -11,6 +11,7 @@ import argparse
+ import json
+ import logging
+ import os
++from pathlib import Path
+ import re
+ import subprocess
+ import sys
+@@ -172,8 +173,9 @@ def process_line(root_directory, command_prefix, file_path):
+     # by Make, so this code replaces the escaped version with '#'.
+     prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
+ 
+-    # Use os.path.abspath() to normalize the path resolving '.' and '..' .
+-    abs_path = os.path.abspath(os.path.join(root_directory, file_path))
++    # Make the path absolute, resolving all symlinks on the way and also normalizing it.
++    # Convert Path object to a string because 'PosixPath' is not JSON serializable.
++    abs_path = str(Path(root_directory, file_path).resolve())
+     if not os.path.exists(abs_path):
+         raise ValueError('File %s not found' % abs_path)
+     return {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
