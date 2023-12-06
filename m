@@ -1,59 +1,31 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870C23DBBC;
-	Wed,  6 Dec 2023 15:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77DD46547;
+	Wed,  6 Dec 2023 16:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WkE1R4hd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701877328; x=1733413328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cO0A3WdbHX7R83cIqfmPmfW4uzDk1PAzvzBbmxZCtlE=;
-  b=WkE1R4hdJiE5S9aijjeebUWNKa+Zq7qRHCDBH6tRAI6CsYk7K6iZaIIV
-   EH7x6zOw5OlvVgoJ9Aa6JeJPqOUXhpkksAHCWB2S4ro8wk2diffqWe6Qg
-   FZ8Cy4CBBetl16X+xS8XhxweeT9YcYF2xMoPBxZwPg6wXcCKjs9j0kwyR
-   0d2/mhm9VaAjyYHCWwbKSPaQgdDO9yL7PUrp276te4CXZ5ceJUPFEttJg
-   7aLaRMagklsa13gZKAHQuE+CeogsaGIT+638AgtKmGsIPzEfRGkU1am60
-   9Z64/lesBxVRN1G5b6cLVtk61yLYbh38Stuyd+SUAPhR2SlK/BXcWvR9O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="458401208"
-X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="458401208"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 07:42:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="894770140"
-X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="894770140"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2023 07:42:03 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAu2C-000B1L-0T;
-	Wed, 06 Dec 2023 15:42:00 +0000
-Date: Wed, 6 Dec 2023 23:39:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Inochi Amaoto <inochiama@outlook.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jisheng Zhang <jszhang@kernel.org>, qiujingbao.dlmu@gmail.com,
-	dlan@gentoo.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/4] clk: sophgo: Add CV1800 series clock controller
- driver
-Message-ID: <202312062352.3dWKz9Hm-lkp@intel.com>
-References: <IA1PR20MB4953946E2F8D8795DC261DBFBB85A@IA1PR20MB4953.namprd20.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MPpKGr02"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3FFC433C7;
+	Wed,  6 Dec 2023 16:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701879995;
+	bh=ZXweG10khDuRddPxSqk8fVsgPKqy4X0Se3jxAunEMa0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MPpKGr023RclkgsGoII8sIoCNnXaC2ssQ35SGFTCKqdR3YMjzbPi0X+2ySU5Qfx8H
+	 OvAXFitLBtncNinJxD5nBJvo4pyqi0FwtJl2l/fdFUTbDsqupaezmtWhJXgaACXEnC
+	 OABSvB6hvmFG+LBNVPmiNUPOcSHRZ5uDzv5QQEGKPjknWToS2L/irVOcsUGNsjhlR6
+	 KV4shOhjOe15tBCZ9swrE9mUjwRSwYYLmFS+1H4nfK6dU7MTa0tuoD/jkx1JcWrZpY
+	 vyPAJg1Z75gKsABz7o9I1etD9lfVEM60CLkFkHVQERNgdtOJHUD9PuEzmdR7hsP0RO
+	 jobcLHiZvdfcA==
+Date: Wed, 6 Dec 2023 09:26:32 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: masahiroy@kernel.org, ndesaulniers@google.com
+Cc: nicolas@fjasle.eu, trix@redhat.com, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] kbuild: Disable clang's
+ -Wformat-{overflow,truncation}-non-kprintf
+Message-ID: <20231206162632.GA809535@dev-arch.thelio-3990X>
+References: <20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,56 +34,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <IA1PR20MB4953946E2F8D8795DC261DBFBB85A@IA1PR20MB4953.namprd20.prod.outlook.com>
+In-Reply-To: <20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org>
 
-Hi Inochi,
+On Mon, Oct 02, 2023 at 12:52:28PM -0700, Nathan Chancellor wrote:
+> Recently, clang added support for -Wformat-overflow and
+> -Wformat-truncation. When building the kernel, it was discovered that
+> clang's implementation of these warnings handles the '%p' specifier,
+> which differs from GCC's implementation. This results in false positive
+> warnings due to the kernel's various '%p' extensions. Fortunately, the
+> clang developers placed this warning difference into a separate flag,
+> allowing the kernel to turn off the warning for '%p' unconditionally.
+> 
+> This is not currently an issue for a normal build, as -Wformat-overflow
+> and -Wformat-truncation are unconditionally disabled, which includes
+> this sub-warning. However, ever since commit 6d4ab2e97dcf ("extrawarn:
+> enable format and stringop overflow warnings in W=1"), these warnings
+> are in W=1 and the goal is to enable them in the normal build once they
+> are all eliminated. Disable the warnings for W=1 to avoid false
+> positives. This block should move with -Wformat-overflow and
+> -Wformat-truncation when they are enabled for a normal build.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1923
+> Link: https://github.com/llvm/llvm-project/issues/64871
+> Link: https://github.com/llvm/llvm-project/pull/65969
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78512
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  scripts/Makefile.extrawarn | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 2fe6f2828d37..bad1baa2cfb4 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -106,6 +106,13 @@ KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
+>  KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
+>  KBUILD_CFLAGS += $(call cc-option, -Wformat-overflow)
+>  KBUILD_CFLAGS += $(call cc-option, -Wformat-truncation)
+> +# Clang checks for overflow/truncation with '%p', while GCC does not:
+> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
+> +# The kernel has many extensions to '%p' that clang does not understand, so
+> +# always disable these warnings when '-Wformat-truncation' and
+> +# '-Wformat-overflow' are enabled.
+> +KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
+> +KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
+>  KBUILD_CFLAGS += $(call cc-option, -Wstringop-overflow)
+>  KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
+>  
+> 
+> ---
+> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+> change-id: 20231002-disable-wformat-truncation-overflow-non-kprintf-033e8d8b4de8
+> 
+> Best regards,
+> -- 
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
-kernel test robot noticed the following build warnings:
+I am going through my outstanding patches and I noticed this was not
+picked up. Masahiro, would you like me to resend it? It still applies
+cleanly to the current kbuild tree, although there will be a conflict in
+-next because of commit 89741e7e42f6 ("Makefile: Enable
+-Wstringop-overflow globally"), but there is not much that can be done
+about that.
 
-[auto build test WARNING on next-20231205]
-[also build test WARNING on linus/master v6.7-rc4]
-[cannot apply to clk/clk-next robh/for-next v6.7-rc4 v6.7-rc3 v6.7-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Inochi-Amaoto/dt-bindings-clock-sophgo-Add-CV1800-bindings/20231205-174631
-base:   next-20231205
-patch link:    https://lore.kernel.org/r/IA1PR20MB4953946E2F8D8795DC261DBFBB85A%40IA1PR20MB4953.namprd20.prod.outlook.com
-patch subject: [PATCH 2/4] clk: sophgo: Add CV1800 series clock controller driver
-config: i386-buildonly-randconfig-003-20231206 (https://download.01.org/0day-ci/archive/20231206/202312062352.3dWKz9Hm-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312062352.3dWKz9Hm-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312062352.3dWKz9Hm-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/clk/sophgo/clk-cv18xx-ip.c:347: warning: Function parameter or member 'hw' not described in 'bypass_div_get_parent'
->> drivers/clk/sophgo/clk-cv18xx-ip.c:347: warning: expecting prototype for clokc parent list(). Prototype was for bypass_div_get_parent() instead
-
-
-vim +347 drivers/clk/sophgo/clk-cv18xx-ip.c
-
-   341	
-   342	/**
-   343	 * clokc parent list:
-   344	 * | osc | div0 | div1 | div2 | div3 |
-   345	 */
-   346	static u8 bypass_div_get_parent(struct clk_hw *hw)
- > 347	{
-   348		struct cv1800_clk_bypass_div *div = hw_to_cv1800_clk_bypass_div(hw);
-   349	
-   350		if (cv1800_clk_checkbit(&div->div.common, &div->bypass))
-   351			return 0;
-   352	
-   353		return 1;
-   354	}
-   355	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
