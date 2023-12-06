@@ -1,105 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7476E41220;
-	Tue,  5 Dec 2023 23:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E598AA3C
+	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 00:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ofJioA7a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1C2C43391;
-	Tue,  5 Dec 2023 23:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701820441;
-	bh=ba9h7X86HRdFrwM84UeL/FEcVW5UbtpdyhVkFXYpoFE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ofJioA7ajxhroSG6pbg/v8t+WNd/24XLW0AF0EDyyzI4OweyCQPg1OC3rqxd/9aSs
-	 vdnCDjHBHy6iKqW25viUm1LzyKW7Wtzw6CKu2uWJ3rGmn8hYcTZyxkzfBewIbYn9Om
-	 v07FRFNDn/hX3VcWF8p/03ruM7F+KySYEFZFLYfm+f4uFkVGHo6YJ0S+IOG65U0L1g
-	 +RvSA5jp1INWT+ybaGEksBn4lLL8VJKrycF7vgNBFZqcuFakAoTH1isQDhKwJCx6/+
-	 39e+BrunYszmi9AmAHVfk8clcznqyz/J7huKOKJZbDwm/lwfNU17lMRYrUfZJ1MHJ8
-	 AKbgIq0y0w7+A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 05 Dec 2023 16:53:52 -0700
-Subject: [PATCH v2 3/3] lib/Kconfig.debug: Update AS_HAS_NON_CONST_LEB128
- comment and name
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="iJ9aLbum"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=X8KK4VSJFZP6TzOCTWGDStmgVhNuLq23YhUpuTUXAQ4=; b=iJ9aLbum3b2L5pwcfpjDF8tL5c
+	Qw2bPrYFGW7a5lznqCq8i9u3nNWRbvjN7WQUj4HYjv6+sNjh+kog7kBKCGMuLYgbQHzHzVqjklWes
+	UuXdI2UR8wvKVkuhilt+p67cLOZpSpo2vc/9RhZGBI+/z06wkrKxktMjKalVjP2Zew4/wwWNj/ebc
+	0n8EUyr9K3F1qFsFA0VDlCv79YGqzTBJBbEfxeGDgECMPvZ5Ez9CzP87q/S6IA3sQmlrakoL8RifS
+	4nyrx9wCeSUL6aRFTMjPFvamsyEihswzbbTInErnbgjJWEx/rmLQHAAYV9weWJtKXu9ynsbxsqAPH
+	N+Q1KODw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rAgCU-007Wc9-2y;
+	Wed, 06 Dec 2023 00:55:42 +0000
+Date: Wed, 6 Dec 2023 00:55:42 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Greg KH <greg@kroah.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, tanzirh@google.com,
+	Kees Cook <keescook@chromium.org>,
+	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
+Message-ID: <20231206005542.GJ1674809@ZenIV>
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205213807.GE1674809@ZenIV>
+ <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
+ <2023120608-ivy-snowdrop-890d@gregkh>
+ <CAKwvOdmFJ=ZGN8ZScS5oQpXnAL0wwtTDCeNNGpBKZXzQ4kRAVA@mail.gmail.com>
+ <2023120657-henna-spongy-9ef6@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231205-riscv-restrict-dwarf5-llvm-v2-3-aedf00a382ac@kernel.org>
-References: <20231205-riscv-restrict-dwarf5-llvm-v2-0-aedf00a382ac@kernel.org>
-In-Reply-To: <20231205-riscv-restrict-dwarf5-llvm-v2-0-aedf00a382ac@kernel.org>
-To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
- conor@kernel.org
-Cc: maskray@google.com, ndesaulniers@google.com, 
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2652; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ba9h7X86HRdFrwM84UeL/FEcVW5UbtpdyhVkFXYpoFE=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKn5O8Qtlz4tNM1ofLfhkoW1Ra3BRw8Z+ZPiPIJGdWf+3
- v9beFaxo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkfx8jw0Orx23NbNlW184l
- 5S84tcruQCJzEdOSHROtlAVzt5qfO8TIMLdBiV1lV5pEhq1rolvs3x69kOiqkt8fzQ9dCpol8T6
- FBwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023120657-henna-spongy-9ef6@gregkh>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Fangrui noted that the comment around CONFIG_AS_HAS_NON_CONST_LEB128
-could be made more accurate because explicit .sleb128 directives are not
-emitted, only .uleb128 directives are. Rename the symbol to
-CONFIG_AS_HAS_NON_CONST_ULEB128 as a result.
+On Wed, Dec 06, 2023 at 08:46:50AM +0900, Greg KH wrote:
+> > >
+> > > But of course, it doesn't always hold true, there are a few minor
+> > > exceptions, but they are rare.
+> > 
+> > $ grep -r \\#include lib | grep asm
+> > 
+> > shows quite a few exceptions, and just in lib/.
+> > 
+> > For example, lib/math/int_log.c includes asm/bug.h.  Is that a case
+> > where lib/math/int_log.c should be #include 'ing linux/bug.h rather
+> > than asm/bug.h?
+> 
+> Probably yes, but we don't normally go back and take coding style fixes
+> for old files like this as it doesn't make much sense to do so.
+> 
+> But, if you are cleaning up the headers for large portions with the goal
+> of faster builds, that's a good reason.
 
-Further clarifications include replacing "symbol deltas" with the more
-accurate "label differences", noting that this issue has been resolved
-in newer binutils (2.41+), and it only occurs when a port uses RISC-V
-style linker relaxation.
+FWIW, the most common (by far - about 13% of such includes, over drivers/, fs/,
+mm/, net/ and sound/) is asm/unaligned.h.
 
-Suggested-by: Fangrui Song <maskray@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- lib/Kconfig.debug | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+The next are asm/io.h (10%), asm/byteorder.h (6%), asm/irq.h (5%), asm/div64.h (3%),
+asm/page.h and asm/dma.h (2% each).  The rest is below that (the next is a bit over
+1%).
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index a0ebce05a368..76c2cc697573 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -231,9 +231,10 @@ config DEBUG_INFO
- 	  in the "Debug information" choice below, indicating that debug
- 	  information will be generated for build targets.
- 
--# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
--# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
--config AS_HAS_NON_CONST_LEB128
-+# Clang generates .uleb128 with label differences for DWARF v5, a feature that
-+# older binutils ports do not support when utilizing RISC-V style linker
-+# relaxation: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-+config AS_HAS_NON_CONST_ULEB128
- 	def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
- 
- choice
-@@ -258,7 +259,7 @@ config DEBUG_INFO_NONE
- config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- 	bool "Rely on the toolchain's implicit default DWARF version"
- 	select DEBUG_INFO
--	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-+	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_ULEB128)
- 	help
- 	  The implicit default version of DWARF debug info produced by a
- 	  toolchain changes over time.
-@@ -283,7 +284,7 @@ config DEBUG_INFO_DWARF5
- 	bool "Generate DWARF Version 5 debuginfo"
- 	select DEBUG_INFO
- 	depends on !ARCH_HAS_BROKEN_DWARF5
--	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-+	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_ULEB128)
- 	help
- 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
- 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-
--- 
-2.43.0
-
+In fs/* unaligned.h is again the top one (37 out of 139), followed by
+byteorder.h (30 out of 139), div64.h (12), page.h (10) and then comes random
+shite - I do not believe that fs/coda/psdev.c might have a legitimate
+reason to pull asm/io.h, for one thing...
