@@ -1,118 +1,108 @@
-Received: from bg2.exmail.qq.com (bg2.exmail.qq.com [114.132.75.215])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20ABC815
-	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 01:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=vimux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=vimux.org
-X-QQ-mid: bizesmtp68t1701825671tkvj01k2
-Received: from localhost.localdomain ( [219.147.0.78])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 06 Dec 2023 09:20:54 +0800 (CST)
-X-QQ-SSF: 01200000000000B0J000000A0000000
-X-QQ-FEAT: C46Rb8GPIEdQevORz54Ns4TE4UnwfxCC0E13jQg+0AJuwH4J+RvoDvhcR29qZ
-	fd0I2Ya2QhUAnVu/XxurUCK+OByf5q1TR0Hu5nCKXHaNMwwHUUTkJO7SCYNczNTCXxaR500
-	0uxLbSKqY7gbYJ77VPDhHYDpbA/HqgvojNLcHXj50CeNMyO+UMgvqku3YGgz9dV8Fee5LuR
-	Drj+X0E+7G91YYjQWovG3fFKB4UJ1zjPOosS5hOxNkCqMliB24gi25duq3jL0bHbhE1GLHm
-	ZZO1TFyhqJ52D1uDR9CkbztAnnUsGK3/lCbxidLYcd4wrGIMnSmcW7ToygoVOsryUMbQYj0
-	pScmh8LSKGGbj7U1YQTjprvkSyZHO8bvrt1RHK3bsApOPZbUCQ=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16475695321451035816
-From: Jialu Xu <xujialu@vimux.org>
-To: nathan@kernel.org
-Cc: justinstitt@google.com,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	masahiroy@kernel.org,
-	morbo@google.com,
-	ndesaulniers@google.com,
-	xujialu@vimux.org
-Subject: [PATCH v3] gen_compile_commands.py: fix path resolve with symlinks in it
-Date: Wed,  6 Dec 2023 09:20:36 +0800
-Message-Id: <20231206012034.833057-2-xujialu@vimux.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231205165648.GA391810@dev-arch.thelio-3990X>
-References: <20231205165648.GA391810@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74802A3F;
+	Wed,  6 Dec 2023 01:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="miTJJRBr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701825757; x=1733361757;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hKqKTS2nPg3pzQqtsO7o1mE/HeXCCWcHKiyVPcEKXiM=;
+  b=miTJJRBryb70zsg4YMTL8swWZdY8aN11HcFdhq2626zHNqnM8M7Wla2l
+   OS9x7MxHDkkIpP20DhmN1xz/NV7MtX0uQatiWSCPY94PYftyu1AN//DbX
+   6h3pJULGvf40dgWfogWZCPDRHtP0JFNQ25Z/tsT+mIbilsYyKK2qgUVD7
+   ZHheNmAEbVtjMiNQ+g1jS/4ra7VPCLNnxXu7vJHwX/02rM/yGDA0ipYNF
+   K2E+dDoDldialW667zZxolcxyYWFUykU2p8by2O+k6pYGTyLSgipLOsvX
+   6IxNev/F5AQrxi6YJ1hb8cBl/7Vxi5ZCGHIpkb0JRcru8fnO0lNs/jfMB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="396777231"
+X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
+   d="scan'208";a="396777231"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 17:22:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="944462186"
+X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
+   d="scan'208";a="944462186"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 05 Dec 2023 17:22:28 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAgcL-000A0s-2C;
+	Wed, 06 Dec 2023 01:22:25 +0000
+Date: Wed, 6 Dec 2023 09:21:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [broonie-ci:kvm-arm64-sme 17/26] arch/arm64/kvm/guest.c:325:7:
+ error: implicit declaration of function 'vq_available' is invalid in C99
+Message-ID: <202312060901.mfYwvqW7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:vimux.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When a path contains relative symbolic links, os.path.abspath() might
-not follow the symlinks and instead return the absolute path with just
-the relative paths resolved, resulting in an incorrect path.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git kvm-arm64-sme
+head:   cf8673c4f464f79c9b5528a6ca24001cb40e5605
+commit: 9188453af24188b2be6a6129e4a70868fbbfc1f0 [17/26] KVM: arm64: Implement SME vector length configuration
+config: arm64-randconfig-003-20231202 (https://download.01.org/0day-ci/archive/20231206/202312060901.mfYwvqW7-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312060901.mfYwvqW7-lkp@intel.com/reproduce)
 
-1. Say "drivers/hdf/" has some symlinks:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312060901.mfYwvqW7-lkp@intel.com/
 
-    # ls -l drivers/hdf/
-    total 364
-    drwxrwxr-x 2 ...   4096 ... evdev
-    lrwxrwxrwx 1 ...     44 ... framework -> ../../../../../../drivers/hdf_core/framework
-    -rw-rw-r-- 1 ... 359010 ... hdf_macro_test.h
-    lrwxrwxrwx 1 ...     55 ... inner_api -> ../../../../../../drivers/hdf_core/interfaces/inner_api
-    lrwxrwxrwx 1 ...     53 ... khdf -> ../../../../../../drivers/hdf_core/adapter/khdf/linux
-    -rw-r--r-- 1 ...     74 ... Makefile
-    drwxrwxr-x 3 ...   4096 ... wifi
+All errors (new ones prefixed by >>):
 
-2. One .cmd file records that:
+>> arch/arm64/kvm/guest.c:325:7: error: implicit declaration of function 'vq_available' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (vq_available(vec_type, vq))
+                       ^
+   arch/arm64/kvm/guest.c:325:7: note: did you mean 'sve_vq_available'?
+   arch/arm64/include/asm/fpsimd.h:332:20: note: 'sve_vq_available' declared here
+   static inline bool sve_vq_available(unsigned int vq) { return false; }
+                      ^
+   arch/arm64/kvm/guest.c:365:30: error: implicit declaration of function 'vq_available' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (vq_present(vqs, vq) != vq_available(vec_type, vq))
+                                              ^
+   2 errors generated.
 
-    # head -1 ./framework/core/manager/src/.devmgr_service.o.cmd
-    cmd_drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.o := ... \
-    /path/to/out/drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.c
 
-3. os.path.abspath returns "/path/to/out/framework/core/manager/src/devmgr_service.c", not correct:
+vim +/vq_available +325 arch/arm64/kvm/guest.c
 
-    # ./scripts/clang-tools/gen_compile_commands.py
-    INFO: Could not add line from ./framework/core/manager/src/.devmgr_service.o.cmd: File \
-        /path/to/out/framework/core/manager/src/devmgr_service.c not found
+   311	
+   312	static int get_vec_vls(enum vec_type vec_type, struct kvm_vcpu *vcpu,
+   313			      const struct kvm_one_reg *reg)
+   314	{
+   315		unsigned int max_vq, vq;
+   316		u64 vqs[KVM_ARM64_SVE_VLS_WORDS];
+   317	
+   318		if (WARN_ON(!sve_vl_valid(vcpu->arch.max_vl[vec_type])))
+   319			return -EINVAL;
+   320	
+   321		memset(vqs, 0, sizeof(vqs));
+   322	
+   323		max_vq = vcpu_vec_max_vq(vec_type, vcpu);
+   324		for (vq = SVE_VQ_MIN; vq <= max_vq; ++vq)
+ > 325			if (vq_available(vec_type, vq))
+   326				vqs[vq_word(vq)] |= vq_mask(vq);
+   327	
+   328		if (copy_to_user((void __user *)reg->addr, vqs, sizeof(vqs)))
+   329			return -EFAULT;
+   330	
+   331		return 0;
+   332	}
+   333	
 
-Use pathlib.Path.resolve(), which resolves the symlinks and normalizes
-the paths correctly.
-
-    # cat compile_commands.json
-    ...
-    {
-      "command": ...
-      "directory": ...
-      "file": "/path/to/blabla/drivers/hdf_core/framework/core/manager/src/devmgr_service.c"
-    },
-    ...
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
----
- scripts/clang-tools/gen_compile_commands.py | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 180952fb91c1b..99e28b7152c19 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -11,6 +11,7 @@ import argparse
- import json
- import logging
- import os
-+from pathlib import Path
- import re
- import subprocess
- import sys
-@@ -172,8 +173,9 @@ def process_line(root_directory, command_prefix, file_path):
-     # by Make, so this code replaces the escaped version with '#'.
-     prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
- 
--    # Use os.path.abspath() to normalize the path resolving '.' and '..' .
--    abs_path = os.path.abspath(os.path.join(root_directory, file_path))
-+    # Make the path absolute, resolving all symlinks on the way and also normalizing it.
-+    # Convert Path object to a string because 'PosixPath' is not JSON serializable.
-+    abs_path = str(Path(root_directory, file_path).resolve())
-     if not os.path.exists(abs_path):
-         raise ValueError('File %s not found' % abs_path)
-     return {
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
