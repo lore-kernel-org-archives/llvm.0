@@ -1,50 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6541DFCB;
-	Wed,  6 Dec 2023 14:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469F83EA8C;
+	Wed,  6 Dec 2023 14:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MSNVfiaw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gwV8mPSG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701871956; x=1733407956;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9KBgE7WoLm30p8TsqNuDi2Qwjj4S4nvLK9g7bzayGd0=;
-  b=MSNVfiawnDZsKhdlxj21cX05ULEFhJAosarrdtxgsXb5wTWgz9TbGrGJ
-   nIXnJrC5vOT9wDVEAfx5/Z/ZdYoLkxAMqhwohczcdW+XIGEqGFsHc4xNa
-   Qg3irBAG4BF8X3TYAUDP5B6VEczaA52AVR2O7HovuHIkUb4qyW5rvwCSI
-   V8/Md/d2i9g44cn/Ee1MrO0idd2YvwibKHeEuy0TM7da2ssUrts88LnCt
-   q6h9RqxsRlU9UJtShw+15r4FNNVvL44T9KQkUzZs1YLRGKUPiiSLVg/49
-   iEgFbGL8SDudZQE3BwD7kS0gxBUPDPz7dVhooxMDVsGj9i23+52uqWpsO
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="396854834"
+  t=1701873381; x=1733409381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WU7uoERKMN9emSVT0P55AXXuYgaH78ed5qVLp3BJnkQ=;
+  b=gwV8mPSG1bkKfdQesYg4VLwEOqiitblPABDI14+KDLQXFzZld4f5tkJ7
+   iuPdXEhetlLoZk9RBpHXbZcQIm4Dkh++YEzDXJP8XYIRDgBnHr1qS1l3R
+   41+CLSDsDiSi0CAMep0rZeAoa8Am1SvLWFfATgsIhtTIC+CHZjM8ECIk8
+   QaiASkRg+SKO7JIauyesLn6qzzl7PD5oKKOKhI4c1K0zRc6wD0hJRPYpF
+   wZgMfPul/7NpDGSuBSWmDe9UbSMn9Dpx/vjgkxCpS0i4i+z1QA0ksxb/g
+   lMEi44MDxifF1h2Qpmf/afyltb5+STVR+o7WoUoAIZM3OOb1WPI7gsX/h
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="955775"
 X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="396854834"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 06:12:35 -0800
+   d="scan'208";a="955775"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 06:36:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="721092649"
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="894746783"
 X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="721092649"
+   d="scan'208";a="894746783"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 06 Dec 2023 06:12:34 -0800
+  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2023 06:36:18 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rAsdN-000AuH-2z;
-	Wed, 06 Dec 2023 14:12:21 +0000
-Date: Wed, 6 Dec 2023 22:11:53 +0800
+	id 1rAszV-000Avu-0a;
+	Wed, 06 Dec 2023 14:35:46 +0000
+Date: Wed, 6 Dec 2023 22:34:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [linux-next:master 5063/5273] drivers/perf/riscv_pmu_sbi.c:1008:19:
- error: incompatible function pointer types initializing 'proc_handler *'
- (aka 'int (*)(const struct ctl_table *, int, void *, unsigned long *, long
- long *)') with an expression of type 'int (struct ctl_table *, int, v...
-Message-ID: <202312062242.RFPPozG9-lkp@intel.com>
+To: Suraj Kandpal <suraj.kandpal@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [Intel-gfx] [PATCH] drm/i915/hdcp: Fail Repeater authentication
+ if Type1 device not present
+Message-ID: <202312062210.SQ5uhQkD-lkp@intel.com>
+References: <20231206093916.1733863-1-suraj.kandpal@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,49 +52,128 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231206093916.1733863-1-suraj.kandpal@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   577a4ee0b96fb043c9cf4a533c550ff587e526cf
-commit: c8be9e66ca1eb71c694537e20d00533db48650a9 [5063/5273] sysctl: treewide: constify the ctl_table argument of handlers
-config: riscv-randconfig-001-20231206 (https://download.01.org/0day-ci/archive/20231206/202312062242.RFPPozG9-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312062242.RFPPozG9-lkp@intel.com/reproduce)
+Hi Suraj,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-tip/drm-tip]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suraj-Kandpal/drm-i915-hdcp-Fail-Repeater-authentication-if-Type1-device-not-present/20231206-174124
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20231206093916.1733863-1-suraj.kandpal%40intel.com
+patch subject: [Intel-gfx] [PATCH] drm/i915/hdcp: Fail Repeater authentication if Type1 device not present
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231206/202312062210.SQ5uhQkD-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312062210.SQ5uhQkD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312062242.RFPPozG9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312062210.SQ5uhQkD-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/perf/riscv_pmu_sbi.c:1008:19: error: incompatible function pointer types initializing 'proc_handler *' (aka 'int (*)(const struct ctl_table *, int, void *, unsigned long *, long long *)') with an expression of type 'int (struct ctl_table *, int, void *, size_t *, loff_t *)' (aka 'int (struct ctl_table *, int, void *, unsigned long *, long long *)') [-Wincompatible-function-pointer-types]
-    1008 |                 .proc_handler   = riscv_pmu_proc_user_access_handler,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   warning: unknown warning option '-Wrestrict' [-Wunknown-warning-option]
+   warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
+   warning: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+   warning: unknown warning option '-Wformat-truncation' [-Wunknown-warning-option]
+   warning: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+   warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
+>> drivers/gpu/drm/i915/display/intel_hdcp.c:1638:16: error: use of undeclared identifier 'dev_priv'
+                   drm_dbg_kms(&dev_priv->drm,
+                                ^
+>> drivers/gpu/drm/i915/display/intel_hdcp.c:1638:16: error: use of undeclared identifier 'dev_priv'
+   6 warnings and 2 errors generated.
 
 
-vim +1008 drivers/perf/riscv_pmu_sbi.c
+vim +/dev_priv +1638 drivers/gpu/drm/i915/display/intel_hdcp.c
 
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1001  
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1002  static struct ctl_table sbi_pmu_sysctl_table[] = {
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1003  	{
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1004  		.procname       = "perf_user_access",
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1005  		.data		= &sysctl_perf_user_access,
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1006  		.maxlen		= sizeof(unsigned int),
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1007  		.mode           = 0644,
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02 @1008  		.proc_handler	= riscv_pmu_proc_user_access_handler,
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1009  		.extra1		= SYSCTL_ZERO,
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1010  		.extra2		= SYSCTL_TWO,
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1011  	},
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1012  	{ }
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1013  };
-cc4c07c89aada1 Alexandre Ghiti 2023-08-02  1014  
-
-:::::: The code at line 1008 was first introduced by commit
-:::::: cc4c07c89aada16229084eeb93895c95b7eabaa3 drivers: perf: Implement perf event mmap support in the SBI backend
-
-:::::: TO: Alexandre Ghiti <alexghiti@rivosinc.com>
-:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+  1599	
+  1600	static
+  1601	int hdcp2_authenticate_repeater_topology(struct intel_connector *connector)
+  1602	{
+  1603		struct intel_digital_port *dig_port = intel_attached_dig_port(connector);
+  1604		struct drm_i915_private *i915 = to_i915(connector->base.dev);
+  1605		struct intel_hdcp *hdcp = &connector->hdcp;
+  1606		union {
+  1607			struct hdcp2_rep_send_receiverid_list recvid_list;
+  1608			struct hdcp2_rep_send_ack rep_ack;
+  1609		} msgs;
+  1610		const struct intel_hdcp_shim *shim = hdcp->shim;
+  1611		u32 seq_num_v, device_cnt;
+  1612		u8 *rx_info;
+  1613		int ret;
+  1614	
+  1615		ret = shim->read_2_2_msg(connector, HDCP_2_2_REP_SEND_RECVID_LIST,
+  1616					 &msgs.recvid_list, sizeof(msgs.recvid_list));
+  1617		if (ret < 0)
+  1618			return ret;
+  1619	
+  1620		rx_info = msgs.recvid_list.rx_info;
+  1621	
+  1622		if (HDCP_2_2_MAX_CASCADE_EXCEEDED(rx_info[1]) ||
+  1623		    HDCP_2_2_MAX_DEVS_EXCEEDED(rx_info[1])) {
+  1624			drm_dbg_kms(&i915->drm, "Topology Max Size Exceeded\n");
+  1625			return -EINVAL;
+  1626		}
+  1627	
+  1628		/*
+  1629		 * MST topology is not Type 1 capable if it contains a downstream
+  1630		 * device that is only HDCP 1.x or Legacy HDCP 2.0/2.1 compliant.
+  1631		 */
+  1632		dig_port->hdcp_mst_type1_capable =
+  1633			!HDCP_2_2_HDCP1_DEVICE_CONNECTED(rx_info[1]) &&
+  1634			!HDCP_2_2_HDCP_2_0_REP_CONNECTED(rx_info[1]);
+  1635	
+  1636		if (!dig_port->hdcp_mst_type1_capable && hdcp->content_type &&
+  1637		    !intel_encoder_is_mst(connector->encoder)) {
+> 1638			drm_dbg_kms(&dev_priv->drm,
+  1639				    "HDCP1.x or 2.0 Legacy Device Downstream\n");
+  1640			return -EINVAL;
+  1641		}
+  1642	
+  1643		/* Converting and Storing the seq_num_v to local variable as DWORD */
+  1644		seq_num_v =
+  1645			drm_hdcp_be24_to_cpu((const u8 *)msgs.recvid_list.seq_num_v);
+  1646	
+  1647		if (!hdcp->hdcp2_encrypted && seq_num_v) {
+  1648			drm_dbg_kms(&i915->drm,
+  1649				    "Non zero Seq_num_v at first RecvId_List msg\n");
+  1650			return -EINVAL;
+  1651		}
+  1652	
+  1653		if (seq_num_v < hdcp->seq_num_v) {
+  1654			/* Roll over of the seq_num_v from repeater. Reauthenticate. */
+  1655			drm_dbg_kms(&i915->drm, "Seq_num_v roll over.\n");
+  1656			return -EINVAL;
+  1657		}
+  1658	
+  1659		device_cnt = (HDCP_2_2_DEV_COUNT_HI(rx_info[0]) << 4 |
+  1660			      HDCP_2_2_DEV_COUNT_LO(rx_info[1]));
+  1661		if (drm_hdcp_check_ksvs_revoked(&i915->drm,
+  1662						msgs.recvid_list.receiver_ids,
+  1663						device_cnt) > 0) {
+  1664			drm_err(&i915->drm, "Revoked receiver ID(s) is in list\n");
+  1665			return -EPERM;
+  1666		}
+  1667	
+  1668		ret = hdcp2_verify_rep_topology_prepare_ack(connector,
+  1669							    &msgs.recvid_list,
+  1670							    &msgs.rep_ack);
+  1671		if (ret < 0)
+  1672			return ret;
+  1673	
+  1674		hdcp->seq_num_v = seq_num_v;
+  1675		ret = shim->write_2_2_msg(connector, &msgs.rep_ack,
+  1676					  sizeof(msgs.rep_ack));
+  1677		if (ret < 0)
+  1678			return ret;
+  1679	
+  1680		return 0;
+  1681	}
+  1682	
 
 -- 
 0-DAY CI Kernel Test Service
