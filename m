@@ -1,47 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A98495F0;
-	Wed,  6 Dec 2023 19:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01844B121
+	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 20:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U8Bib3IN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701889937; x=1733425937;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nyn7kQ/YKbbAVIJOWPsCMekPVsyc7HiSXO19E7SObCQ=;
-  b=U8Bib3INQT/0E7Jf1tSvMRh8GgoMd1+ZPIKtRSSrQF9YdBXmBYxQk9QW
-   ihTpxs7JRxrfs+xrLvgs2t6EocooJA2cO17K1QzbnaITb/iyOPY6j/KSM
-   NF1Hr/0jw7Q/wCQ7jTAfj5sewRck9K+RmG9YiFGR+9ui5yk/NiMi2MZH7
-   qHMhpKELXlOhuU0THKhR4NpelyydaUEe4fpXRE1ATL0eLALJL+79ntLnX
-   hWYY4lHrOcrKPVOvYxYoLI3V2vSzTVd7D0wJtCuuIYYahuKbYPuYQ+cRN
-   rGUpF59WaEjI2LKrW9Wf8SiEBbQYcckeJLSD00rUY/yHG+btl42toTA4M
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="393841153"
-X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="393841153"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 11:12:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="837423406"
-X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="837423406"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Dec 2023 11:12:15 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAxJd-000BJS-1U;
-	Wed, 06 Dec 2023 19:12:13 +0000
-Date: Thu, 7 Dec 2023 03:11:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mark:perf/overflow 2/3] drivers/perf/arm_pmuv3.c:653:3: error: call
- to undeclared function 'write_pmovsset'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202312070310.UwUHziXk-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ePDSJY9Q"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5c6ce4dffb5so129795a12.0
+        for <llvm@lists.linux.dev>; Wed, 06 Dec 2023 12:28:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1701894532; x=1702499332; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XTBTLAqDXor1l6sg34c9kbUSBjJSEI8UiBBYr9CwL2Q=;
+        b=ePDSJY9QZNQ0aiQUhQsY22iZRyDBsgxdfCWLLRNa/vXVHXXT3sbksGPZmOg5vPkMkY
+         HR3VFBDARTz/DeBVl6IqGophZU2M9XD+u/O+odb7yRJ/WmMnHmOsmKztE8sVMml/xbJr
+         dq9nN1BInhJXd45HV55k6DtNazjB4nb0igmr4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701894532; x=1702499332;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XTBTLAqDXor1l6sg34c9kbUSBjJSEI8UiBBYr9CwL2Q=;
+        b=BRZihcZHYHahoE1ju+2iOY6x1RJd+mC5Z9ATkaDwXafqqL7XZTRlEjAX015EUFn8vR
+         wgpFBEayG/aeGATsHCFNRjKNe4pBHN0tdBIisILAVyGlUFDI+o9ORaVugyzOeum2uhXG
+         2DfbvesYIo3Qjh+wYnjlqgLDWBQaUEFG9WFP1flhCdJuufnXk86bNhrJYaH+rJGz5qTK
+         68mWWdTORM4zsBXP7Mkpo0FK8bJo0CEP9s5RDGB+4eKqLcZnlqQ+zcdACB9rPptMUXQz
+         GvqroY4t3Yo5WC1hSlmRfDNHQYCgq823oa6AI/s8WOs8PgjwnF/acr/rWIzsHeN46tuU
+         6A6Q==
+X-Gm-Message-State: AOJu0YzbofflLQtOJP8SmOHoUrGCgvz4Yx3Nt1vmfrzWqrqKleFm+mJx
+	UqNcWRU7zYnFr37lALEcBMfKNg==
+X-Google-Smtp-Source: AGHT+IGCJW9aAT/9l5dWk1euSiHsIcWqvf5+MSkN2kUSEvXz1J47cG2MljPvGZxmFTZ5NhzqTZhnjg==
+X-Received: by 2002:a17:90a:d796:b0:286:d42d:e7e with SMTP id z22-20020a17090ad79600b00286d42d0e7emr1213709pju.3.1701894532050;
+        Wed, 06 Dec 2023 12:28:52 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id fz20-20020a17090b025400b00280a2275e4bsm280195pjb.27.2023.12.06.12.28.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 12:28:51 -0800 (PST)
+Date: Wed, 6 Dec 2023 12:28:50 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: samitolvanen@google.com, Paul Walmsley <paul.walmsley@sifive.com>,
+	aou@eecs.berkeley.edu, akpm@linux-foundation.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] riscv: Increase mmap_rnd_bits_max on Sv48/57
+Message-ID: <202312061228.B953DE8CA@keescook>
+References: <20230929211155.3910949-4-samitolvanen@google.com>
+ <mhng-f0a257c6-a1f5-41db-b1c4-c178a77a79e9@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,46 +57,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <mhng-f0a257c6-a1f5-41db-b1c4-c178a77a79e9@palmer-ri-x1c9>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git perf/overflow
-head:   f3b357f85dad79444f2d0c645833fb947de1e88d
-commit: 7ba6f752673580876865a00a76702eb2cea8565f [2/3] arm_pmu: rework overflow handling
-config: arm-randconfig-001-20231206 (https://download.01.org/0day-ci/archive/20231207/202312070310.UwUHziXk-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312070310.UwUHziXk-lkp@intel.com/reproduce)
+On Wed, Dec 06, 2023 at 05:14:26AM -0800, Palmer Dabbelt wrote:
+> On Fri, 29 Sep 2023 14:11:56 PDT (-0700), samitolvanen@google.com wrote:
+> > Hi all,
+> > 
+> > We noticed that 64-bit RISC-V kernels limit mmap_rnd_bits to 24
+> > even if the hardware supports a larger virtual address space size
+> > [1]. These two patches allow mmap_rnd_bits_max to be changed during
+> > init, and bumps up the maximum randomness if we end up setting up
+> > 4/5-level paging at boot.
+> 
+> Sorry for missing this, I'm just poking through old stuff in patchwork.  As
+> far as I can tell this is still relevant, the discussions are just on the
+> mmap() bits (but we'd already screwed that one up and have since fixed it).
+> 
+> So
+> 
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> in case someone else wants to take it, but I'm OK taking that MM patch with
+> Kees' review.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312070310.UwUHziXk-lkp@intel.com/
+Yes, thanks! Please do. I already +1ed it:
+https://lore.kernel.org/all/202309291454.436E19663@keescook
 
-All errors (new ones prefixed by >>):
-
->> drivers/perf/arm_pmuv3.c:653:3: error: call to undeclared function 'write_pmovsset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   write_pmovsset(BIT(counter));
-                   ^
-   drivers/perf/arm_pmuv3.c:653:3: note: did you mean 'write_pmovsclr'?
-   arch/arm/include/asm/arm_pmuv3.h:180:20: note: 'write_pmovsclr' declared here
-   static inline void write_pmovsclr(u32 val)
-                      ^
-   1 error generated.
-
-
-vim +/write_pmovsset +653 drivers/perf/arm_pmuv3.c
-
-   646	
-   647	static inline void armv8pmu_enable_event_irq(struct perf_event *event)
-   648	{
-   649		u32 counter = ARMV8_IDX_TO_COUNTER(event->hw.idx);
-   650		armv8pmu_enable_intens(BIT(counter));
-   651	
-   652		if (local64_read(&event->hw.period_left) <= 0) {
- > 653			write_pmovsset(BIT(counter));
-   654			isb();
-   655		}
-   656	}
-   657	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
