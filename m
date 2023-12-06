@@ -1,31 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77DD46547;
-	Wed,  6 Dec 2023 16:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1585948CDA;
+	Wed,  6 Dec 2023 16:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MPpKGr02"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3FFC433C7;
-	Wed,  6 Dec 2023 16:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701879995;
-	bh=ZXweG10khDuRddPxSqk8fVsgPKqy4X0Se3jxAunEMa0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MPpKGr023RclkgsGoII8sIoCNnXaC2ssQ35SGFTCKqdR3YMjzbPi0X+2ySU5Qfx8H
-	 OvAXFitLBtncNinJxD5nBJvo4pyqi0FwtJl2l/fdFUTbDsqupaezmtWhJXgaACXEnC
-	 OABSvB6hvmFG+LBNVPmiNUPOcSHRZ5uDzv5QQEGKPjknWToS2L/irVOcsUGNsjhlR6
-	 KV4shOhjOe15tBCZ9swrE9mUjwRSwYYLmFS+1H4nfK6dU7MTa0tuoD/jkx1JcWrZpY
-	 vyPAJg1Z75gKsABz7o9I1etD9lfVEM60CLkFkHVQERNgdtOJHUD9PuEzmdR7hsP0RO
-	 jobcLHiZvdfcA==
-Date: Wed, 6 Dec 2023 09:26:32 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: masahiroy@kernel.org, ndesaulniers@google.com
-Cc: nicolas@fjasle.eu, trix@redhat.com, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] kbuild: Disable clang's
- -Wformat-{overflow,truncation}-non-kprintf
-Message-ID: <20231206162632.GA809535@dev-arch.thelio-3990X>
-References: <20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dctMhG+F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701880411; x=1733416411;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=htX4iDGNzlMTy6lmTdVTpUZwaIRb7KEUVU3EoBWvnLk=;
+  b=dctMhG+F/vzM6UoeWHIImpWDs79+4fm4BRHO1UC3G2Rnvd+ZGxaWSGjW
+   vSWkonRYUuTKHhvDPPQzYvCX5PUE4WAXbjU9OfqYPDJsdoLps+72tHoOF
+   EpRhM4BwJL8+qQTLveb5ZLO3sW5RsFHZ0IMhV+2K0FwM8KSpbpBxbAoz3
+   uL01w9UCMd5gPbmbxCBdEIQD9m/VZClpy5R0DzWeYtG23LtPpDt/De+tH
+   UFptTZgrRr+K1Qq1XU9XPxRmTZj7080U5o4fSoJGRpNRZzVbnczbgJAHd
+   DUqTELy2VlUtt3N8GyNtXjpBfUFGhalXqiYP2eBBHC/BrkZ3pHF8uFR+h
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="957919"
+X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
+   d="scan'208";a="957919"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 08:33:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="889404516"
+X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
+   d="scan'208";a="889404516"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Dec 2023 08:33:27 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAupw-000B8t-2n;
+	Wed, 06 Dec 2023 16:33:24 +0000
+Date: Thu, 7 Dec 2023 00:31:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxime Ripard <mripard@kernel.org>, davidgow@google.com,
+	Rae Moar <rmoar@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	David Airlie <airlied@linux.ie>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] drm/tests: Switch to kunit devices
+Message-ID: <202312070011.fDjYhKoz-lkp@intel.com>
+References: <20231205090405.153140-1-mripard@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,70 +58,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org>
+In-Reply-To: <20231205090405.153140-1-mripard@kernel.org>
 
-On Mon, Oct 02, 2023 at 12:52:28PM -0700, Nathan Chancellor wrote:
-> Recently, clang added support for -Wformat-overflow and
-> -Wformat-truncation. When building the kernel, it was discovered that
-> clang's implementation of these warnings handles the '%p' specifier,
-> which differs from GCC's implementation. This results in false positive
-> warnings due to the kernel's various '%p' extensions. Fortunately, the
-> clang developers placed this warning difference into a separate flag,
-> allowing the kernel to turn off the warning for '%p' unconditionally.
-> 
-> This is not currently an issue for a normal build, as -Wformat-overflow
-> and -Wformat-truncation are unconditionally disabled, which includes
-> this sub-warning. However, ever since commit 6d4ab2e97dcf ("extrawarn:
-> enable format and stringop overflow warnings in W=1"), these warnings
-> are in W=1 and the goal is to enable them in the normal build once they
-> are all eliminated. Disable the warnings for W=1 to avoid false
-> positives. This block should move with -Wformat-overflow and
-> -Wformat-truncation when they are enabled for a normal build.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1923
-> Link: https://github.com/llvm/llvm-project/issues/64871
-> Link: https://github.com/llvm/llvm-project/pull/65969
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78512
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  scripts/Makefile.extrawarn | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 2fe6f2828d37..bad1baa2cfb4 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -106,6 +106,13 @@ KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
->  KBUILD_CFLAGS += $(call cc-option, -Wpacked-not-aligned)
->  KBUILD_CFLAGS += $(call cc-option, -Wformat-overflow)
->  KBUILD_CFLAGS += $(call cc-option, -Wformat-truncation)
-> +# Clang checks for overflow/truncation with '%p', while GCC does not:
-> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
-> +# The kernel has many extensions to '%p' that clang does not understand, so
-> +# always disable these warnings when '-Wformat-truncation' and
-> +# '-Wformat-overflow' are enabled.
-> +KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
-> +KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
->  KBUILD_CFLAGS += $(call cc-option, -Wstringop-overflow)
->  KBUILD_CFLAGS += $(call cc-option, -Wstringop-truncation)
->  
-> 
-> ---
-> base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-> change-id: 20231002-disable-wformat-truncation-overflow-non-kprintf-033e8d8b4de8
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+Hi Maxime,
 
-I am going through my outstanding patches and I noticed this was not
-picked up. Masahiro, would you like me to resend it? It still applies
-cleanly to the current kbuild tree, although there will be a conflict in
--next because of commit 89741e7e42f6 ("Makefile: Enable
--Wstringop-overflow globally"), but there is not much that can be done
-about that.
+kernel test robot noticed the following build errors:
 
-Cheers,
-Nathan
+[auto build test ERROR on next-20231205]
+[cannot apply to drm-misc/drm-misc-next v6.7-rc4 v6.7-rc3 v6.7-rc2 linus/master v6.7-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-Switch-to-kunit-devices/20231205-170508
+base:   next-20231205
+patch link:    https://lore.kernel.org/r/20231205090405.153140-1-mripard%40kernel.org
+patch subject: [PATCH] drm/tests: Switch to kunit devices
+config: i386-buildonly-randconfig-004-20231206 (https://download.01.org/0day-ci/archive/20231207/202312070011.fDjYhKoz-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312070011.fDjYhKoz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312070011.fDjYhKoz-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/tests/drm_kunit_helpers.c:8:10: fatal error: 'kunit/device.h' file not found
+   #include <kunit/device.h>
+            ^~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +8 drivers/gpu/drm/tests/drm_kunit_helpers.c
+
+     7	
+   > 8	#include <kunit/device.h>
+     9	#include <kunit/resource.h>
+    10	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
