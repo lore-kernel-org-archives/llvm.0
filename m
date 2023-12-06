@@ -1,55 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1585948CDA;
-	Wed,  6 Dec 2023 16:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1A748CDA
+	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 16:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dctMhG+F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701880411; x=1733416411;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=htX4iDGNzlMTy6lmTdVTpUZwaIRb7KEUVU3EoBWvnLk=;
-  b=dctMhG+F/vzM6UoeWHIImpWDs79+4fm4BRHO1UC3G2Rnvd+ZGxaWSGjW
-   vSWkonRYUuTKHhvDPPQzYvCX5PUE4WAXbjU9OfqYPDJsdoLps+72tHoOF
-   EpRhM4BwJL8+qQTLveb5ZLO3sW5RsFHZ0IMhV+2K0FwM8KSpbpBxbAoz3
-   uL01w9UCMd5gPbmbxCBdEIQD9m/VZClpy5R0DzWeYtG23LtPpDt/De+tH
-   UFptTZgrRr+K1Qq1XU9XPxRmTZj7080U5o4fSoJGRpNRZzVbnczbgJAHd
-   DUqTELy2VlUtt3N8GyNtXjpBfUFGhalXqiYP2eBBHC/BrkZ3pHF8uFR+h
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="957919"
-X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="957919"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 08:33:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="889404516"
-X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="889404516"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Dec 2023 08:33:27 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAupw-000B8t-2n;
-	Wed, 06 Dec 2023 16:33:24 +0000
-Date: Thu, 7 Dec 2023 00:31:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <mripard@kernel.org>, davidgow@google.com,
-	Rae Moar <rmoar@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	David Airlie <airlied@linux.ie>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
-	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] drm/tests: Switch to kunit devices
-Message-ID: <202312070011.fDjYhKoz-lkp@intel.com>
-References: <20231205090405.153140-1-mripard@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mFV0PJjQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=evl1U5G+v7p9gMxFFsHi0NmzyC/QyjntfdGiRP4l5KI=; b=mFV0PJjQXYK/i1bHZs3i4ArIx2
+	d+67mDb1sq/1LHA4CRjlKQFBybEQ/pPdtvl3YCA6rjyaE1TstBZDO3xznhyQPDrCnlR9QGuHq3P+S
+	narwijdN41kTVPuDq/6+3vxrGUyBvNIMT9JwiAoZ+bKsub8Bznx2HjLBVgDnJa7Nw9VaQgcFYyPFS
+	crmsGQu6piC1a+orpEC7xdDPk1laSZFsjU9j97438gE7BXKWwta+0GMp+qulr7yAxnnu2WxNfAdpE
+	JfXYDiufGNKc/x4BwwXFLE93CGGLVcxqD4Rmg8yirLAoTf4UUc8Ax39kqbOCpn2HNkZKVZz0E48Xo
+	Wk6R1rlw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1rAuue-0034Um-DJ; Wed, 06 Dec 2023 16:38:16 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 09FD5300451; Wed,  6 Dec 2023 17:38:15 +0100 (CET)
+Date: Wed, 6 Dec 2023 17:38:14 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
+	Song Liu <songliubraving@meta.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv <linux-riscv@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <20231206163814.GB36423@noisy.programming.kicks-ass.net>
+References: <20231130133630.192490507@infradead.org>
+ <20231130134204.136058029@infradead.org>
+ <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
+ <20231204091334.GM3818@noisy.programming.kicks-ass.net>
+ <20231204111128.GV8262@noisy.programming.kicks-ass.net>
+ <20231204125239.GA1319@noisy.programming.kicks-ass.net>
+ <ZW4LjmUKj1q6RWdL@krava>
+ <20231204181614.GA7299@noisy.programming.kicks-ass.net>
+ <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+ <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,46 +76,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231205090405.153140-1-mripard@kernel.org>
+In-Reply-To: <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
 
-Hi Maxime,
+On Mon, Dec 04, 2023 at 05:18:31PM -0800, Alexei Starovoitov wrote:
 
-kernel test robot noticed the following build errors:
+> [   13.978497]  ? asm_exc_invalid_op+0x1a/0x20
+> [   13.978798]  ? tcp_set_ca_state+0x51/0xd0
+> [   13.979087]  tcp_v6_syn_recv_sock+0x45c/0x6c0
+> [   13.979401]  tcp_check_req+0x497/0x590
 
-[auto build test ERROR on next-20231205]
-[cannot apply to drm-misc/drm-misc-next v6.7-rc4 v6.7-rc3 v6.7-rc2 linus/master v6.7-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-Switch-to-kunit-devices/20231205-170508
-base:   next-20231205
-patch link:    https://lore.kernel.org/r/20231205090405.153140-1-mripard%40kernel.org
-patch subject: [PATCH] drm/tests: Switch to kunit devices
-config: i386-buildonly-randconfig-004-20231206 (https://download.01.org/0day-ci/archive/20231207/202312070011.fDjYhKoz-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312070011.fDjYhKoz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312070011.fDjYhKoz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/tests/drm_kunit_helpers.c:8:10: fatal error: 'kunit/device.h' file not found
-   #include <kunit/device.h>
-            ^~~~~~~~~~~~~~~~
-   1 error generated.
+> The stack trace doesn't have any bpf, but it's a bpf issue too.
+> Here tcp_set_ca_state() calls
+> icsk->icsk_ca_ops->set_state(sk, ca_state);
+> which calls bpf prog via bpf trampoline.
 
 
-vim +8 drivers/gpu/drm/tests/drm_kunit_helpers.c
 
-     7	
-   > 8	#include <kunit/device.h>
-     9	#include <kunit/resource.h>
-    10	
+Specifically, I think this is
+tools/testing/selftests/bpf/progs/bpf_cubic.c, which has:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        .set_state      = (void *)bpf_cubic_state,
+
+which comes from:
+
+BPF_STRUCT_OPS(bpf_cubic_state, struct sock *sk, __u8 *new_state)
+
+which then wraps:
+
+BPF_PROG()
+
+which ends up generating:
+
+static __always_inline ___bpf_cubic_state(unsigned long long *ctx, struct sock *sk, __u8 *new_state)
+{
+	...
+}
+
+void bpf_cubic_state(unsigned long long *ctx)
+{
+	return ____bpf_cubic_state(ctx, ctx[0], ctx[1]);
+}
+
+
+I think this then uses arch_prepare_bpf_trampoline(), but I'm entirely
+lost how this all comes together, because the way I understand it the
+whole bpf_trampoline is used to hook into an ftrace __fentry hook.
+
+And a __fentry hook is very much not a function pointer. Help!?!?
+
+
+The other case:
+
+For tools/testing/selftests/bpf/progs/bloom_filter_bench.c we have:
+
+        bpf_for_each_map_elem(&array_map, bloom_callback, &data, 0);
+
+and here bloom callback appears like a normal function:
+
+static __u64
+bloom_callback(struct bpf_map *map, __u32 *key, void *val,
+               struct callback_ctx *data)
+
+
+But what do functions looks like in the JIT? What's the actual address
+that's then passed into the helper function. Given this seems to work
+without kCFI, it should at least have an ENDBR, but there's only 3 of
+those afaict:
+
+  - emit_prologue() first insn
+  - emit_prologue() tail-call site
+  - arch_preprare_bpf_trampoline()
+
+If the function passed to the helper is from do_jit()/emit_prologue(),
+then how do I tell what 'function' is being JIT'ed ?
+
+If it is arch_prepare_bpf_trampoline(), then we're back at the previous
+question and I don't see how a __fentry site becomes a callable function
+pointer.
+
+
+Any clues would be much appreciated.
