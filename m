@@ -1,73 +1,59 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD520381AE
-	for <llvm@lists.linux.dev>; Wed,  6 Dec 2023 15:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870C23DBBC;
+	Wed,  6 Dec 2023 15:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gTruqnlu"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=34JGkeDw2fzo5aYJ5fytyFCmmA2EAJ4M9xy4pwn6wrM=; b=gTruqnlu8eDmXa3L0iyeSD2Nnn
-	ePXXo7+GcN32qytdrXaWYSLANmme4ALZxhg0JQlNFwM/MH4cviy77G8UNNHVpyThWd9OSqLjvfyjH
-	n+hvMI4zCb/iJgc+nB2YqllaE+P53evNS/9fuIg8TOPrU7vxPv0Z2HgxAq+kGffHXcdGVjW87Znxc
-	j4vkPvTk0bS8qgVSzZs8fcJ4jZGSyPTxTSPz0Q2sEpN7Cn7GkfA4d44EOHD4gLC5FjiKQEaNcynfB
-	DtD725Qv+e8+0LnA0+qRxiZ5Qcjpt7or8VjiV6p28m3HroSjoRF0w57Lro7i//DTiB2B6gCrZJ6mU
-	cXJtqFlQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rAtw5-0031PW-8d; Wed, 06 Dec 2023 15:35:41 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 36B6E300451; Wed,  6 Dec 2023 16:35:40 +0100 (CET)
-Date: Wed, 6 Dec 2023 16:35:40 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-	Song Liu <songliubraving@meta.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WkE1R4hd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701877328; x=1733413328;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cO0A3WdbHX7R83cIqfmPmfW4uzDk1PAzvzBbmxZCtlE=;
+  b=WkE1R4hdJiE5S9aijjeebUWNKa+Zq7qRHCDBH6tRAI6CsYk7K6iZaIIV
+   EH7x6zOw5OlvVgoJ9Aa6JeJPqOUXhpkksAHCWB2S4ro8wk2diffqWe6Qg
+   FZ8Cy4CBBetl16X+xS8XhxweeT9YcYF2xMoPBxZwPg6wXcCKjs9j0kwyR
+   0d2/mhm9VaAjyYHCWwbKSPaQgdDO9yL7PUrp276te4CXZ5ceJUPFEttJg
+   7aLaRMagklsa13gZKAHQuE+CeogsaGIT+638AgtKmGsIPzEfRGkU1am60
+   9Z64/lesBxVRN1G5b6cLVtk61yLYbh38Stuyd+SUAPhR2SlK/BXcWvR9O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="458401208"
+X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
+   d="scan'208";a="458401208"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 07:42:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="894770140"
+X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
+   d="scan'208";a="894770140"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2023 07:42:03 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAu2C-000B1L-0T;
+	Wed, 06 Dec 2023 15:42:00 +0000
+Date: Wed, 6 Dec 2023 23:39:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Inochi Amaoto <inochiama@outlook.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <20231206153540.GA36423@noisy.programming.kicks-ass.net>
-References: <20231130133630.192490507@infradead.org>
- <20231130134204.136058029@infradead.org>
- <CAADnVQJqE=aE7mHVS54pnwwnDS0b67iJbr+t4j5F4HRyJSTOHw@mail.gmail.com>
- <20231204091334.GM3818@noisy.programming.kicks-ass.net>
- <20231204111128.GV8262@noisy.programming.kicks-ass.net>
- <20231204125239.GA1319@noisy.programming.kicks-ass.net>
- <ZW4LjmUKj1q6RWdL@krava>
- <20231204181614.GA7299@noisy.programming.kicks-ass.net>
- <20231204183354.GC7299@noisy.programming.kicks-ass.net>
- <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jisheng Zhang <jszhang@kernel.org>, qiujingbao.dlmu@gmail.com,
+	dlan@gentoo.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 2/4] clk: sophgo: Add CV1800 series clock controller
+ driver
+Message-ID: <202312062352.3dWKz9Hm-lkp@intel.com>
+References: <IA1PR20MB4953946E2F8D8795DC261DBFBB85A@IA1PR20MB4953.namprd20.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,65 +62,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
+In-Reply-To: <IA1PR20MB4953946E2F8D8795DC261DBFBB85A@IA1PR20MB4953.namprd20.prod.outlook.com>
 
-On Mon, Dec 04, 2023 at 05:18:31PM -0800, Alexei Starovoitov wrote:
+Hi Inochi,
 
-> How about
+kernel test robot noticed the following build warnings:
 
-> +int get_cfi_offset(void)
-> +{
-> +       switch (cfi_mode) {
-> +       case CFI_FINEIBT:
-> +               return 16;
-> +       case CFI_KCFI:
-> +#ifdef CONFIG_CALL_PADDING
-> +               return 16;
-> +#else
-> +               return 5;
-> +#endif
-> +       default:
-> +               return 0;
-> +       }
-> +}
+[auto build test WARNING on next-20231205]
+[also build test WARNING on linus/master v6.7-rc4]
+[cannot apply to clk/clk-next robh/for-next v6.7-rc4 v6.7-rc3 v6.7-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yeah, that works. I'll go make it happen.
+url:    https://github.com/intel-lab-lkp/linux/commits/Inochi-Amaoto/dt-bindings-clock-sophgo-Add-CV1800-bindings/20231205-174631
+base:   next-20231205
+patch link:    https://lore.kernel.org/r/IA1PR20MB4953946E2F8D8795DC261DBFBB85A%40IA1PR20MB4953.namprd20.prod.outlook.com
+patch subject: [PATCH 2/4] clk: sophgo: Add CV1800 series clock controller driver
+config: i386-buildonly-randconfig-003-20231206 (https://download.01.org/0day-ci/archive/20231206/202312062352.3dWKz9Hm-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312062352.3dWKz9Hm-lkp@intel.com/reproduce)
 
-> Separately we need to deal with bpf_for_each_array_elem()
-> which doesn't look easy.
-> And fix tcp_set_ca_state() as well (which is even harder).
-> 
-> Just to see where places like these are I did:
-> +__nocfi
->  BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
-> +__nocfi
->  static long bpf_for_each_hash_elem(struct bpf_map *map,
-> bpf_callback_t callback_fn,
-> +__nocfi
->  static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
-> +__nocfi
->  static int __bpf_rbtree_add(struct bpf_rb_root *root,
-> +__nocfi
->  BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
-> +__nocfi
->  void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
-> +__nocfi
->  void tcp_init_congestion_control(struct sock *sk)
-> +__nocfi
->  void tcp_enter_loss(struct sock *sk)
-> +__nocfi
->  static void tcp_cong_avoid(struct sock *sk, u32 ack, u32 acked)
-> +__nocfi
->  static inline void tcp_in_ack_event(struct sock *sk, u32 flags)
-> 
-> and more... Which is clearly not a direction to go.
-> 
-> Instead of annotating callers is there a way to say that
-> all bpf_callback_t calls are nocfi?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312062352.3dWKz9Hm-lkp@intel.com/
 
-Well, ideally they would all actually use CFI, I'll go figure out how
-all this works and think about it. Thanks!
+All warnings (new ones prefixed by >>):
 
-> I feel the patches scratched the iceberg.
+>> drivers/clk/sophgo/clk-cv18xx-ip.c:347: warning: Function parameter or member 'hw' not described in 'bypass_div_get_parent'
+>> drivers/clk/sophgo/clk-cv18xx-ip.c:347: warning: expecting prototype for clokc parent list(). Prototype was for bypass_div_get_parent() instead
 
-Yeah, clearly :/ I'll go stare at it all.
+
+vim +347 drivers/clk/sophgo/clk-cv18xx-ip.c
+
+   341	
+   342	/**
+   343	 * clokc parent list:
+   344	 * | osc | div0 | div1 | div2 | div3 |
+   345	 */
+   346	static u8 bypass_div_get_parent(struct clk_hw *hw)
+ > 347	{
+   348		struct cv1800_clk_bypass_div *div = hw_to_cv1800_clk_bypass_div(hw);
+   349	
+   350		if (cv1800_clk_checkbit(&div->div.common, &div->bypass))
+   351			return 0;
+   352	
+   353		return 1;
+   354	}
+   355	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
