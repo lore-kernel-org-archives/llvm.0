@@ -1,33 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E201D682;
-	Wed,  6 Dec 2023 16:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9C26A01F;
+	Wed,  6 Dec 2023 17:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hCCJATZC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E35C433C8;
-	Wed,  6 Dec 2023 16:52:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701881575;
-	bh=YL7LrE2gx5RrBMHsOk++cN+Fw8sVVDbEcm8TuSIc1ME=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hCCJATZCCv6MKDLvYS/EZE+5WksxgPxBvPJVWTzeI+bbfq5d5vxt+tY4P+tG0+UKs
-	 yYy5qga6SoB0o42a9dUC2Tst2WRBAGTBiQs+QpxpU4Vq9wLPfhoYbTnpulGnLS5E4b
-	 LVd7XE1EWVTZiPImZLZh453xGZJ4JzHDB2d25TNwcOixmTurzLABvgdGu+rH/gN537
-	 q5XfZ8PBDqwPZABlX36ICCMaiOZbVRBNmFABb3AZz7niXogaVd9nwSvWWmTqtd84Rq
-	 T89SYLMFDSTl7uclPSlu66ElYZ/o9dIGK2cI6VM6B1nQ9JAJtTJ82ZdNi71gX6R5su
-	 b78S0twPMgyNA==
-Date: Wed, 6 Dec 2023 09:52:53 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: richard@nod.at, johannes@sipsolutions.net, ndesaulniers@google.com,
-	trix@redhat.com, linux-um@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] um: net: Fix return type of uml_net_start_xmit()
-Message-ID: <20231206165253.GA819558@dev-arch.thelio-3990X>
-References: <20231003-um-net-wifpts-v1-1-02888c634ee7@kernel.org>
- <20231205175302.GA536347@dev-arch.thelio-3990X>
- <62f83e94-27fc-1422-3999-1936e6b28625@cambridgegreys.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OTJ7rHa5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701884380; x=1733420380;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6qUUe2xtYsDJmk4A2enE0E39kQrqq5EhD6/nWGNeU2c=;
+  b=OTJ7rHa5aX8omhRKN33ahAngaeeIBTvZOzRdia/yXiBz3Pdt5Emgj5mF
+   bAy2+ItQuxnZYd95nqGCe8ULaduSRW3FLLEuNTkIgJbFOnyZVMeeTbMY/
+   7B1UCnX3um9+0HdQYdeB40HGYjnAwv29PYHCuOrD8CRxoX/feCSJDlnLd
+   ceDU5wLlRDIGjb7OGvciuswDetoqpIQ26pUQqJek4zpJl0QUTA1pY1wLv
+   hOGkGvkILBP13afng0+bdvoiBM4FDWQGhg7UQJsSXB4S1oxoIRH/8xKEh
+   dhP7F2p/tZmlZf/jVnimjqxbXF+FH+BTnpulG9Bnyk2RD+eySCUgHqkk8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1197912"
+X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
+   d="scan'208";a="1197912"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 09:39:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1102910094"
+X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
+   d="scan'208";a="1102910094"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Dec 2023 09:39:34 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rAvr1-000BCg-1Q;
+	Wed, 06 Dec 2023 17:38:55 +0000
+Date: Thu, 7 Dec 2023 01:38:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+	Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
+Subject: Re: [PATCH v3 3/4] nvme: move ns id info to struct nvme_ns_head
+Message-ID: <202312070119.ThsAOHuk-lkp@intel.com>
+References: <20231206081244.32733-4-dwagner@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,76 +53,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <62f83e94-27fc-1422-3999-1936e6b28625@cambridgegreys.com>
+In-Reply-To: <20231206081244.32733-4-dwagner@suse.de>
 
-On Wed, Dec 06, 2023 at 07:19:35AM +0000, Anton Ivanov wrote:
-> 
-> 
-> On 05/12/2023 17:53, Nathan Chancellor wrote:
-> > Ping? I would like to turn this warning on for W=1 and the kbuild test
-> > robot flagged this instance. If the UML folks don't want to carry it,
-> > could I get an ack so that it could go with the warning enablement in
-> > the kbuild tree?
-> > 
-> > https://lore.kernel.org/20231002-enable-wincompatible-function-pointer-types-strict-w-1-v1-1-808ab955d42d@kernel.org/
-> > 
-> > On Tue, Oct 03, 2023 at 11:35:53AM -0700, Nathan Chancellor wrote:
-> > > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> > > indirect call targets are validated against the expected function
-> > > pointer prototype to make sure the call target is valid to help mitigate
-> > > ROP attacks. If they are not identical, there is a failure at run time,
-> > > which manifests as either a kernel panic or thread getting killed. A
-> > > warning in clang aims to catch these at compile time, which reveals:
-> > > 
-> > >    arch/um/drivers/net_kern.c:353:21: warning: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Wincompatible-function-pointer-types-strict]
-> > >      353 |         .ndo_start_xmit         = uml_net_start_xmit,
-> > >          |                                   ^~~~~~~~~~~~~~~~~~
-> > >    1 warning generated.
-> > > 
-> > > ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> > > 'netdev_tx_t', not 'int'. Adjust the return type of uml_net_start_xmit()
-> > > to match the prototype's to resolve the warning. While UML does not
-> > > currently implement support for kCFI, it could in the future, which
-> > > means this warning becomes a fatal CFI failure at run time.
-> > > 
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes: https://lore.kernel.org/oe-kbuild-all/202310031340.v1vPh207-lkp@intel.com/
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >   arch/um/drivers/net_kern.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/um/drivers/net_kern.c b/arch/um/drivers/net_kern.c
-> > > index 3d7836c46507..cabcc501b448 100644
-> > > --- a/arch/um/drivers/net_kern.c
-> > > +++ b/arch/um/drivers/net_kern.c
-> > > @@ -204,7 +204,7 @@ static int uml_net_close(struct net_device *dev)
-> > >   	return 0;
-> > >   }
-> > > -static int uml_net_start_xmit(struct sk_buff *skb, struct net_device *dev)
-> > > +static netdev_tx_t uml_net_start_xmit(struct sk_buff *skb, struct net_device *dev)
-> > >   {
-> > >   	struct uml_net_private *lp = netdev_priv(dev);
-> > >   	unsigned long flags;
-> > > 
-> > > ---
-> > > base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
-> > > change-id: 20231003-um-net-wifpts-14a7429c7524
-> > > 
-> > > Best regards,
-> > > -- 
-> > > Nathan Chancellor <nathan@kernel.org>
-> > > 
-> > 
-> > 
-> 
-> Looks ok to me.
-> Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Hi Daniel,
 
-Thanks a lot, I have included this change in v2 of the series to turn
-this warning on for W=1, so Masahiro should be able to carry it:
+kernel test robot noticed the following build errors:
 
-https://lore.kernel.org/20231206-enable-wincompatible-function-pointer-types-strict-w-1-v2-1-91311b4c37b0@kernel.org
+[auto build test ERROR on v6.7-rc4]
+[also build test ERROR on linus/master next-20231206]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Wagner/nvme-lookup-ctrl-from-request-instead-from-namespace/20231206-161455
+base:   v6.7-rc4
+patch link:    https://lore.kernel.org/r/20231206081244.32733-4-dwagner%40suse.de
+patch subject: [PATCH v3 3/4] nvme: move ns id info to struct nvme_ns_head
+config: i386-buildonly-randconfig-003-20231206 (https://download.01.org/0day-ci/archive/20231207/202312070119.ThsAOHuk-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312070119.ThsAOHuk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312070119.ThsAOHuk-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/nvme/host/core.c:2034:31: error: incompatible pointer types passing 'struct nvme_ns_head *' to parameter of type 'struct nvme_ns *' [-Werror,-Wincompatible-pointer-types]
+                   nvme_mpath_revalidate_paths(ns->head);
+                                               ^~~~~~~~
+   drivers/nvme/host/nvme.h:945:64: note: passing argument to parameter 'ns' here
+   static inline void nvme_mpath_revalidate_paths(struct nvme_ns *ns)
+                                                                  ^
+   drivers/nvme/host/core.c:2109:31: error: incompatible pointer types passing 'struct nvme_ns_head *' to parameter of type 'struct nvme_ns *' [-Werror,-Wincompatible-pointer-types]
+                   nvme_mpath_revalidate_paths(ns->head);
+                                               ^~~~~~~~
+   drivers/nvme/host/nvme.h:945:64: note: passing argument to parameter 'ns' here
+   static inline void nvme_mpath_revalidate_paths(struct nvme_ns *ns)
+                                                                  ^
+   2 errors generated.
+
+
+vim +2034 drivers/nvme/host/core.c
+
+  2022	
+  2023	static int nvme_update_ns_info_generic(struct nvme_ns *ns,
+  2024			struct nvme_ns_info *info)
+  2025	{
+  2026		blk_mq_freeze_queue(ns->disk->queue);
+  2027		nvme_set_queue_limits(ns->ctrl, ns->queue);
+  2028		set_disk_ro(ns->disk, nvme_ns_is_readonly(ns, info));
+  2029		blk_mq_unfreeze_queue(ns->disk->queue);
+  2030	
+  2031		if (nvme_ns_head_multipath(ns->head)) {
+  2032			blk_mq_freeze_queue(ns->head->disk->queue);
+  2033			set_disk_ro(ns->head->disk, nvme_ns_is_readonly(ns, info));
+> 2034			nvme_mpath_revalidate_paths(ns->head);
+  2035			blk_stack_limits(&ns->head->disk->queue->limits,
+  2036					 &ns->queue->limits, 0);
+  2037			ns->head->disk->flags |= GENHD_FL_HIDDEN;
+  2038			blk_mq_unfreeze_queue(ns->head->disk->queue);
+  2039		}
+  2040	
+  2041		/* Hide the block-interface for these devices */
+  2042		ns->disk->flags |= GENHD_FL_HIDDEN;
+  2043		set_bit(NVME_NS_READY, &ns->flags);
+  2044	
+  2045		return 0;
+  2046	}
+  2047	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
