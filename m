@@ -1,49 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9760D328C0;
-	Wed,  6 Dec 2023 23:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6358A7E;
+	Thu,  7 Dec 2023 00:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="caWNr5ll"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B3Ng0JDd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701906855; x=1733442855;
+  t=1701907462; x=1733443462;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j5rgjmV0icXX+VYqK+3kkicxVUiHQv5yaVn1QVGR5o8=;
-  b=caWNr5llUZUm8i9JD7QM2+QjWKgjX2CHTaYkpvsV8E/gVL60uaEh8bor
-   ON8xO3RXvwmHsBdma5bWxEKLWnT8zpQCBm3qxwZICZWPLs6G3EIN1LwWd
-   sjwbWzt7gMtxkm0VGsYOAum+wR2zu+oa8dieaxhzBT9+B/rOzsi04uHDi
-   zxiBTw/2ExnjYfOgg3ZfY+yq/H9wiIg0RT/GIbWhmAMxpS8BgKMhaFyGL
-   WkjeHTGlVjfeWC2yfpYSjACZ9vY2wDggc3Dq5LVClSTcnCbWV90edcsm1
-   jB9A1IjiHd6zHuJODI1oHeW/aoGKK2m5a/etiqNyoOcpJmm2NKQnj95bv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="379165911"
+  bh=NJuxcnEQ5WnvnxEJHKKiKSbGDVoZSpNWli4+2rrUjec=;
+  b=B3Ng0JDdJq6O+yaOFVWOLqT+5JbvMbVVJJ0d8p+bbEKhWTWqyn0Kxgv6
+   Av8UaKXMRQL2Mifp23vJJ42nQlcPEd5UNUoQ9+rRZxvZkHIDgCD+IgSbn
+   DQD42lHB0vo5qVZ9zQKcGmvoNOHBtSgacMHMZH+vgQJQsiMltfP2lb6in
+   jtBrMdNkL27j88sCmHvu+J19mFijiMq5dhHnuu6IxaL0hzjqVSNBEIQr3
+   qx0ZKsswsHkl83Zq4V7+ABZCo5+F5olSig7s/CmeIH4QkqG+Bb2tnBGWf
+   YIQj0EG+KBWBrXJiwUdcAB14SUcNglPUapoMPZiORy9H2XKkYUiJ7P0Rq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="396933541"
 X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="379165911"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 15:54:12 -0800
+   d="scan'208";a="396933541"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 16:04:12 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="944821998"
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="800526557"
 X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="944821998"
+   d="scan'208";a="800526557"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 06 Dec 2023 15:54:10 -0800
+  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2023 16:04:10 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rB1iS-000BbK-16;
-	Wed, 06 Dec 2023 23:54:08 +0000
-Date: Thu, 7 Dec 2023 07:53:39 +0800
+	id 1rB1s8-000Bbk-20;
+	Thu, 07 Dec 2023 00:04:08 +0000
+Date: Thu, 7 Dec 2023 08:03:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [hverkuil-media-tree:for-v6.8n 38/60]
- drivers/media/i2c/ccs/ccs-core.c:3310:19: error: call to undeclared function
- 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202312070756.lNpIszWj-lkp@intel.com>
+	Sean Christopherson <sean.j.christopherson@intel.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [intel-tdx:guest 53/136] arch/x86/kernel/acpi/boot.c:366:2: error:
+ call to '__compiletime_assert_229' declared with 'error' attribute: Need
+ native word sized stores/loads for atomicity.
+Message-ID: <202312070720.whAy8Wim-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,412 +54,110 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v6.8n
-head:   a513d091d2f2fe2b9a46a78c09bb3da912803b4a
-commit: 529322112a3bcce5906ad8f26b7a7c51e93d0e5f [38/60] media: ccs: Use V4L2 CCI for accessing sensor registers
-config: x86_64-randconfig-073-20231206 (https://download.01.org/0day-ci/archive/20231207/202312070756.lNpIszWj-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git guest
+head:   f3d7a7e86bf2f0d5ce629f2fb7be11dca88ac06d
+commit: b93c111150948d0c5a55fca8e1620a05aa7e4298 [53/136] x86/acpi, x86/boot: Add multiprocessor wake-up support
+config: i386-buildonly-randconfig-004-20231206 (https://download.01.org/0day-ci/archive/20231207/202312070720.whAy8Wim-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312070756.lNpIszWj-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312070720.whAy8Wim-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312070756.lNpIszWj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312070720.whAy8Wim-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/i2c/ccs/ccs-core.c:3310:19: error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           sensor->regmap = devm_cci_regmap_init_i2c(client, 16);
-                            ^
-   drivers/media/i2c/ccs/ccs-core.c:3310:19: note: did you mean '__devm_regmap_init_i2c'?
-   include/linux/regmap.h:660:16: note: '__devm_regmap_init_i2c' declared here
-   struct regmap *__devm_regmap_init_i2c(struct i2c_client *i2c,
-                  ^
->> drivers/media/i2c/ccs/ccs-core.c:3310:17: error: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
-           sensor->regmap = devm_cci_regmap_init_i2c(client, 16);
-                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> arch/x86/kernel/acpi/boot.c:366:2: error: call to '__compiletime_assert_229' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+           smp_store_release(&acpi_mp_wake_mailbox->wakeup_vector, start_ip);
+           ^
+   include/asm-generic/barrier.h:138:33: note: expanded from macro 'smp_store_release'
+   #define smp_store_release(p, v) __smp_store_release(p, v)
+                                   ^
+   arch/x86/include/asm/barrier.h:65:2: note: expanded from macro '__smp_store_release'
+           compiletime_assert_atomic_type(*p);                             \
+           ^
+   include/linux/compiler_types.h:325:2: note: expanded from macro 'compiletime_assert_atomic_type'
+           compiletime_assert(__native_word(t),                            \
+           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:310:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:303:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:132:1: note: expanded from here
+   __compiletime_assert_229
+   ^
+   1 error generated.
 
 
-vim +/devm_cci_regmap_init_i2c +3310 drivers/media/i2c/ccs/ccs-core.c
+vim +366 arch/x86/kernel/acpi/boot.c
 
-  3208	
-  3209	static int ccs_probe(struct i2c_client *client)
-  3210	{
-  3211		static struct lock_class_key pixel_array_lock_key, binner_lock_key,
-  3212			scaler_lock_key;
-  3213		const struct ccs_device *ccsdev = device_get_match_data(&client->dev);
-  3214		struct ccs_sensor *sensor;
-  3215		const struct firmware *fw;
-  3216		char filename[40];
-  3217		unsigned int i;
-  3218		int rval;
-  3219	
-  3220		sensor = devm_kzalloc(&client->dev, sizeof(*sensor), GFP_KERNEL);
-  3221		if (sensor == NULL)
-  3222			return -ENOMEM;
-  3223	
-  3224		rval = ccs_get_hwconfig(sensor, &client->dev);
-  3225		if (rval)
-  3226			return rval;
-  3227	
-  3228		sensor->src = &sensor->ssds[sensor->ssds_used];
-  3229	
-  3230		v4l2_i2c_subdev_init(&sensor->src->sd, client, &ccs_ops);
-  3231		sensor->src->sd.internal_ops = &ccs_internal_src_ops;
-  3232	
-  3233		sensor->regulators = devm_kcalloc(&client->dev,
-  3234						  ARRAY_SIZE(ccs_regulators),
-  3235						  sizeof(*sensor->regulators),
-  3236						  GFP_KERNEL);
-  3237		if (!sensor->regulators)
-  3238			return -ENOMEM;
-  3239	
-  3240		for (i = 0; i < ARRAY_SIZE(ccs_regulators); i++)
-  3241			sensor->regulators[i].supply = ccs_regulators[i];
-  3242	
-  3243		rval = devm_regulator_bulk_get(&client->dev, ARRAY_SIZE(ccs_regulators),
-  3244					       sensor->regulators);
-  3245		if (rval) {
-  3246			dev_err(&client->dev, "could not get regulators\n");
-  3247			return rval;
-  3248		}
-  3249	
-  3250		sensor->ext_clk = devm_clk_get(&client->dev, NULL);
-  3251		if (PTR_ERR(sensor->ext_clk) == -ENOENT) {
-  3252			dev_info(&client->dev, "no clock defined, continuing...\n");
-  3253			sensor->ext_clk = NULL;
-  3254		} else if (IS_ERR(sensor->ext_clk)) {
-  3255			dev_err(&client->dev, "could not get clock (%ld)\n",
-  3256				PTR_ERR(sensor->ext_clk));
-  3257			return -EPROBE_DEFER;
-  3258		}
-  3259	
-  3260		if (sensor->ext_clk) {
-  3261			if (sensor->hwcfg.ext_clk) {
-  3262				unsigned long rate;
-  3263	
-  3264				rval = clk_set_rate(sensor->ext_clk,
-  3265						    sensor->hwcfg.ext_clk);
-  3266				if (rval < 0) {
-  3267					dev_err(&client->dev,
-  3268						"unable to set clock freq to %u\n",
-  3269						sensor->hwcfg.ext_clk);
-  3270					return rval;
-  3271				}
-  3272	
-  3273				rate = clk_get_rate(sensor->ext_clk);
-  3274				if (rate != sensor->hwcfg.ext_clk) {
-  3275					dev_err(&client->dev,
-  3276						"can't set clock freq, asked for %u but got %lu\n",
-  3277						sensor->hwcfg.ext_clk, rate);
-  3278					return -EINVAL;
-  3279				}
-  3280			} else {
-  3281				sensor->hwcfg.ext_clk = clk_get_rate(sensor->ext_clk);
-  3282				dev_dbg(&client->dev, "obtained clock freq %u\n",
-  3283					sensor->hwcfg.ext_clk);
-  3284			}
-  3285		} else if (sensor->hwcfg.ext_clk) {
-  3286			dev_dbg(&client->dev, "assuming clock freq %u\n",
-  3287				sensor->hwcfg.ext_clk);
-  3288		} else {
-  3289			dev_err(&client->dev, "unable to obtain clock freq\n");
-  3290			return -EINVAL;
-  3291		}
-  3292	
-  3293		if (!sensor->hwcfg.ext_clk) {
-  3294			dev_err(&client->dev, "cannot work with xclk frequency 0\n");
-  3295			return -EINVAL;
-  3296		}
-  3297	
-  3298		sensor->reset = devm_gpiod_get_optional(&client->dev, "reset",
-  3299							GPIOD_OUT_HIGH);
-  3300		if (IS_ERR(sensor->reset))
-  3301			return PTR_ERR(sensor->reset);
-  3302		/* Support old users that may have used "xshutdown" property. */
-  3303		if (!sensor->reset)
-  3304			sensor->xshutdown = devm_gpiod_get_optional(&client->dev,
-  3305								    "xshutdown",
-  3306								    GPIOD_OUT_LOW);
-  3307		if (IS_ERR(sensor->xshutdown))
-  3308			return PTR_ERR(sensor->xshutdown);
-  3309	
-> 3310		sensor->regmap = devm_cci_regmap_init_i2c(client, 16);
-  3311		if (IS_ERR(sensor->regmap)) {
-  3312			dev_err(&client->dev, "can't initialise CCI (%ld)\n",
-  3313				PTR_ERR(sensor->regmap));
-  3314			return PTR_ERR(sensor->regmap);
-  3315		}
-  3316	
-  3317		rval = ccs_power_on(&client->dev);
-  3318		if (rval < 0)
-  3319			return rval;
-  3320	
-  3321		mutex_init(&sensor->mutex);
-  3322	
-  3323		rval = ccs_identify_module(sensor);
-  3324		if (rval) {
-  3325			rval = -ENODEV;
-  3326			goto out_power_off;
-  3327		}
-  3328	
-  3329		rval = ccs_firmware_name(client, sensor, filename, sizeof(filename),
-  3330					 false);
-  3331		if (rval >= sizeof(filename)) {
-  3332			rval = -ENOMEM;
-  3333			goto out_power_off;
-  3334		}
-  3335	
-  3336		rval = request_firmware(&fw, filename, &client->dev);
-  3337		if (!rval) {
-  3338			ccs_data_parse(&sensor->sdata, fw->data, fw->size, &client->dev,
-  3339				       true);
-  3340			release_firmware(fw);
-  3341		}
-  3342	
-  3343		if (!(ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA) ||
-  3344		    sensor->minfo.smiapp_version) {
-  3345			rval = ccs_firmware_name(client, sensor, filename,
-  3346						 sizeof(filename), true);
-  3347			if (rval >= sizeof(filename)) {
-  3348				rval = -ENOMEM;
-  3349				goto out_release_sdata;
-  3350			}
-  3351	
-  3352			rval = request_firmware(&fw, filename, &client->dev);
-  3353			if (!rval) {
-  3354				ccs_data_parse(&sensor->mdata, fw->data, fw->size,
-  3355					       &client->dev, true);
-  3356				release_firmware(fw);
-  3357			}
-  3358		}
-  3359	
-  3360		rval = ccs_read_all_limits(sensor);
-  3361		if (rval)
-  3362			goto out_release_mdata;
-  3363	
-  3364		rval = ccs_read_frame_fmt(sensor);
-  3365		if (rval) {
-  3366			rval = -ENODEV;
-  3367			goto out_free_ccs_limits;
-  3368		}
-  3369	
-  3370		rval = ccs_update_phy_ctrl(sensor);
-  3371		if (rval < 0)
-  3372			goto out_free_ccs_limits;
-  3373	
-  3374		rval = ccs_call_quirk(sensor, limits);
-  3375		if (rval) {
-  3376			dev_err(&client->dev, "limits quirks failed\n");
-  3377			goto out_free_ccs_limits;
-  3378		}
-  3379	
-  3380		if (CCS_LIM(sensor, BINNING_CAPABILITY)) {
-  3381			sensor->nbinning_subtypes =
-  3382				min_t(u8, CCS_LIM(sensor, BINNING_SUB_TYPES),
-  3383				      CCS_LIM_BINNING_SUB_TYPE_MAX_N);
-  3384	
-  3385			for (i = 0; i < sensor->nbinning_subtypes; i++) {
-  3386				sensor->binning_subtypes[i].horizontal =
-  3387					CCS_LIM_AT(sensor, BINNING_SUB_TYPE, i) >>
-  3388					CCS_BINNING_SUB_TYPE_COLUMN_SHIFT;
-  3389				sensor->binning_subtypes[i].vertical =
-  3390					CCS_LIM_AT(sensor, BINNING_SUB_TYPE, i) &
-  3391					CCS_BINNING_SUB_TYPE_ROW_MASK;
-  3392	
-  3393				dev_dbg(&client->dev, "binning %xx%x\n",
-  3394					sensor->binning_subtypes[i].horizontal,
-  3395					sensor->binning_subtypes[i].vertical);
-  3396			}
-  3397		}
-  3398		sensor->binning_horizontal = 1;
-  3399		sensor->binning_vertical = 1;
-  3400	
-  3401		if (device_create_file(&client->dev, &dev_attr_ident) != 0) {
-  3402			dev_err(&client->dev, "sysfs ident entry creation failed\n");
-  3403			rval = -ENOENT;
-  3404			goto out_free_ccs_limits;
-  3405		}
-  3406	
-  3407		if (sensor->minfo.smiapp_version &&
-  3408		    CCS_LIM(sensor, DATA_TRANSFER_IF_CAPABILITY) &
-  3409		    CCS_DATA_TRANSFER_IF_CAPABILITY_SUPPORTED) {
-  3410			if (device_create_file(&client->dev, &dev_attr_nvm) != 0) {
-  3411				dev_err(&client->dev, "sysfs nvm entry failed\n");
-  3412				rval = -EBUSY;
-  3413				goto out_cleanup;
-  3414			}
-  3415		}
-  3416	
-  3417		if (!CCS_LIM(sensor, MIN_OP_SYS_CLK_DIV) ||
-  3418		    !CCS_LIM(sensor, MAX_OP_SYS_CLK_DIV) ||
-  3419		    !CCS_LIM(sensor, MIN_OP_PIX_CLK_DIV) ||
-  3420		    !CCS_LIM(sensor, MAX_OP_PIX_CLK_DIV)) {
-  3421			/* No OP clock branch */
-  3422			sensor->pll.flags |= CCS_PLL_FLAG_NO_OP_CLOCKS;
-  3423		} else if (CCS_LIM(sensor, SCALING_CAPABILITY)
-  3424			   != CCS_SCALING_CAPABILITY_NONE ||
-  3425			   CCS_LIM(sensor, DIGITAL_CROP_CAPABILITY)
-  3426			   == CCS_DIGITAL_CROP_CAPABILITY_INPUT_CROP) {
-  3427			/* We have a scaler or digital crop. */
-  3428			sensor->scaler = &sensor->ssds[sensor->ssds_used];
-  3429			sensor->ssds_used++;
-  3430		}
-  3431		sensor->binner = &sensor->ssds[sensor->ssds_used];
-  3432		sensor->ssds_used++;
-  3433		sensor->pixel_array = &sensor->ssds[sensor->ssds_used];
-  3434		sensor->ssds_used++;
-  3435	
-  3436		sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
-  3437	
-  3438		/* prepare PLL configuration input values */
-  3439		sensor->pll.bus_type = CCS_PLL_BUS_TYPE_CSI2_DPHY;
-  3440		sensor->pll.csi2.lanes = sensor->hwcfg.lanes;
-  3441		if (CCS_LIM(sensor, CLOCK_CALCULATION) &
-  3442		    CCS_CLOCK_CALCULATION_LANE_SPEED) {
-  3443			sensor->pll.flags |= CCS_PLL_FLAG_LANE_SPEED_MODEL;
-  3444			if (CCS_LIM(sensor, CLOCK_CALCULATION) &
-  3445			    CCS_CLOCK_CALCULATION_LINK_DECOUPLED) {
-  3446				sensor->pll.vt_lanes =
-  3447					CCS_LIM(sensor, NUM_OF_VT_LANES) + 1;
-  3448				sensor->pll.op_lanes =
-  3449					CCS_LIM(sensor, NUM_OF_OP_LANES) + 1;
-  3450				sensor->pll.flags |= CCS_PLL_FLAG_LINK_DECOUPLED;
-  3451			} else {
-  3452				sensor->pll.vt_lanes = sensor->pll.csi2.lanes;
-  3453				sensor->pll.op_lanes = sensor->pll.csi2.lanes;
-  3454			}
-  3455		}
-  3456		if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-  3457		    CCS_CLOCK_TREE_PLL_CAPABILITY_EXT_DIVIDER)
-  3458			sensor->pll.flags |= CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER;
-  3459		if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-  3460		    CCS_CLOCK_TREE_PLL_CAPABILITY_FLEXIBLE_OP_PIX_CLK_DIV)
-  3461			sensor->pll.flags |= CCS_PLL_FLAG_FLEXIBLE_OP_PIX_CLK_DIV;
-  3462		if (CCS_LIM(sensor, FIFO_SUPPORT_CAPABILITY) &
-  3463		    CCS_FIFO_SUPPORT_CAPABILITY_DERATING)
-  3464			sensor->pll.flags |= CCS_PLL_FLAG_FIFO_DERATING;
-  3465		if (CCS_LIM(sensor, FIFO_SUPPORT_CAPABILITY) &
-  3466		    CCS_FIFO_SUPPORT_CAPABILITY_DERATING_OVERRATING)
-  3467			sensor->pll.flags |= CCS_PLL_FLAG_FIFO_DERATING |
-  3468					     CCS_PLL_FLAG_FIFO_OVERRATING;
-  3469		if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-  3470		    CCS_CLOCK_TREE_PLL_CAPABILITY_DUAL_PLL) {
-  3471			if (CCS_LIM(sensor, CLOCK_TREE_PLL_CAPABILITY) &
-  3472			    CCS_CLOCK_TREE_PLL_CAPABILITY_SINGLE_PLL) {
-  3473				u32 v;
-  3474	
-  3475				/* Use sensor default in PLL mode selection */
-  3476				rval = ccs_read(sensor, PLL_MODE, &v);
-  3477				if (rval)
-  3478					goto out_cleanup;
-  3479	
-  3480				if (v == CCS_PLL_MODE_DUAL)
-  3481					sensor->pll.flags |= CCS_PLL_FLAG_DUAL_PLL;
-  3482			} else {
-  3483				sensor->pll.flags |= CCS_PLL_FLAG_DUAL_PLL;
-  3484			}
-  3485			if (CCS_LIM(sensor, CLOCK_CALCULATION) &
-  3486			    CCS_CLOCK_CALCULATION_DUAL_PLL_OP_SYS_DDR)
-  3487				sensor->pll.flags |= CCS_PLL_FLAG_OP_SYS_DDR;
-  3488			if (CCS_LIM(sensor, CLOCK_CALCULATION) &
-  3489			    CCS_CLOCK_CALCULATION_DUAL_PLL_OP_PIX_DDR)
-  3490				sensor->pll.flags |= CCS_PLL_FLAG_OP_PIX_DDR;
-  3491		}
-  3492		sensor->pll.op_bits_per_lane = CCS_LIM(sensor, OP_BITS_PER_LANE);
-  3493		sensor->pll.ext_clk_freq_hz = sensor->hwcfg.ext_clk;
-  3494		sensor->pll.scale_n = CCS_LIM(sensor, SCALER_N_MIN);
-  3495	
-  3496		rval = ccs_get_mbus_formats(sensor);
-  3497		if (rval) {
-  3498			rval = -ENODEV;
-  3499			goto out_cleanup;
-  3500		}
-  3501	
-  3502		rval = ccs_init_subdev(sensor, sensor->scaler, " scaler", 2,
-  3503				       MEDIA_ENT_F_PROC_VIDEO_SCALER,
-  3504				       "ccs scaler mutex", &scaler_lock_key);
-  3505		if (rval)
-  3506			goto out_cleanup;
-  3507		rval = ccs_init_subdev(sensor, sensor->binner, " binner", 2,
-  3508				       MEDIA_ENT_F_PROC_VIDEO_SCALER,
-  3509				       "ccs binner mutex", &binner_lock_key);
-  3510		if (rval)
-  3511			goto out_cleanup;
-  3512		rval = ccs_init_subdev(sensor, sensor->pixel_array, " pixel_array", 1,
-  3513				       MEDIA_ENT_F_CAM_SENSOR, "ccs pixel array mutex",
-  3514				       &pixel_array_lock_key);
-  3515		if (rval)
-  3516			goto out_cleanup;
-  3517	
-  3518		rval = ccs_init_controls(sensor);
-  3519		if (rval < 0)
-  3520			goto out_cleanup;
-  3521	
-  3522		rval = ccs_call_quirk(sensor, init);
-  3523		if (rval)
-  3524			goto out_cleanup;
-  3525	
-  3526		rval = ccs_init_late_controls(sensor);
-  3527		if (rval) {
-  3528			rval = -ENODEV;
-  3529			goto out_cleanup;
-  3530		}
-  3531	
-  3532		mutex_lock(&sensor->mutex);
-  3533		rval = ccs_pll_blanking_update(sensor);
-  3534		mutex_unlock(&sensor->mutex);
-  3535		if (rval) {
-  3536			dev_err(&client->dev, "update mode failed\n");
-  3537			goto out_cleanup;
-  3538		}
-  3539	
-  3540		sensor->streaming = false;
-  3541		sensor->dev_init_done = true;
-  3542		sensor->handler_setup_needed = true;
-  3543	
-  3544		rval = ccs_write_msr_regs(sensor);
-  3545		if (rval)
-  3546			goto out_cleanup;
-  3547	
-  3548		pm_runtime_set_active(&client->dev);
-  3549		pm_runtime_get_noresume(&client->dev);
-  3550		pm_runtime_enable(&client->dev);
-  3551	
-  3552		rval = v4l2_async_register_subdev_sensor(&sensor->src->sd);
-  3553		if (rval < 0)
-  3554			goto out_disable_runtime_pm;
-  3555	
-  3556		pm_runtime_set_autosuspend_delay(&client->dev, 1000);
-  3557		pm_runtime_use_autosuspend(&client->dev);
-  3558		pm_runtime_put_autosuspend(&client->dev);
-  3559	
-  3560		return 0;
-  3561	
-  3562	out_disable_runtime_pm:
-  3563		pm_runtime_put_noidle(&client->dev);
-  3564		pm_runtime_disable(&client->dev);
-  3565	
-  3566	out_cleanup:
-  3567		ccs_cleanup(sensor);
-  3568	
-  3569	out_release_mdata:
-  3570		kvfree(sensor->mdata.backing);
-  3571	
-  3572	out_release_sdata:
-  3573		kvfree(sensor->sdata.backing);
-  3574	
-  3575	out_free_ccs_limits:
-  3576		kfree(sensor->ccs_limits);
-  3577	
-  3578	out_power_off:
-  3579		ccs_power_off(&client->dev);
-  3580		mutex_destroy(&sensor->mutex);
-  3581	
-  3582		return rval;
-  3583	}
-  3584	
+   333	
+   334	static int acpi_wakeup_cpu(int apicid, unsigned long start_ip)
+   335	{
+   336		u8 timeout = 0xFF;
+   337	
+   338		/* Remap mailbox memory only for the first call to acpi_wakeup_cpu() */
+   339		if (physids_empty(apic_id_wakemap)) {
+   340			acpi_mp_wake_mailbox = memremap(acpi_mp_wake_mailbox_paddr,
+   341							sizeof(*acpi_mp_wake_mailbox),
+   342							MEMREMAP_WB);
+   343		}
+   344	
+   345		/*
+   346		 * According to the ACPI specification r6.4, sec 5.2.12.19, the
+   347		 * mailbox-based wakeup mechanism cannot be used more than once
+   348		 * for the same CPU, so skip sending wake commands to already
+   349		 * awake CPU.
+   350		 */
+   351		if (physid_isset(apicid, apic_id_wakemap)) {
+   352			pr_err("CPU already awake (APIC ID %x), skipping wakeup\n",
+   353			       apicid);
+   354			return -EINVAL;
+   355		}
+   356	
+   357		/*
+   358		 * Mailbox memory is shared between firmware and OS. Firmware will
+   359		 * listen on mailbox command address, and once it receives the wakeup
+   360		 * command, CPU associated with the given apicid will be booted. So,
+   361		 * the value of apic_id and wakeup_vector has to be set before updating
+   362		 * the wakeup command. So use smp_store_release to let the compiler know
+   363		 * about it and preserve the order of writes.
+   364		 */
+   365		smp_store_release(&acpi_mp_wake_mailbox->apic_id, apicid);
+ > 366		smp_store_release(&acpi_mp_wake_mailbox->wakeup_vector, start_ip);
+   367		smp_store_release(&acpi_mp_wake_mailbox->command,
+   368				  ACPI_MP_WAKE_COMMAND_WAKEUP);
+   369	
+   370		/*
+   371		 * After writing wakeup command, wait for maximum timeout of 0xFF
+   372		 * for firmware to reset the command address back zero to indicate
+   373		 * the successful reception of command.
+   374		 * NOTE: 255 as timeout value is decided based on our experiments.
+   375		 *
+   376		 * XXX: Change the timeout once ACPI specification comes up with
+   377		 *      standard maximum timeout value.
+   378		 */
+   379		while (READ_ONCE(acpi_mp_wake_mailbox->command) && timeout--)
+   380			cpu_relax();
+   381	
+   382		if (timeout) {
+   383			/*
+   384			 * If the CPU wakeup process is successful, store the
+   385			 * status in apic_id_wakemap to prevent re-wakeup
+   386			 * requests.
+   387			 */
+   388			physid_set(apicid, apic_id_wakemap);
+   389			return 0;
+   390		}
+   391	
+   392		/* If timed out (timeout == 0), return error */
+   393		return -EIO;
+   394	}
+   395	
 
 -- 
 0-DAY CI Kernel Test Service
