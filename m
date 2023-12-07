@@ -1,78 +1,57 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3BA5731B
-	for <llvm@lists.linux.dev>; Thu,  7 Dec 2023 22:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12475731B
+	for <llvm@lists.linux.dev>; Thu,  7 Dec 2023 22:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OiPmnGoG"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6cebbf51742so700861b3a.1
-        for <llvm@lists.linux.dev>; Thu, 07 Dec 2023 14:32:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dXI30UQz"
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7b701b75f36so30796139f.0
+        for <llvm@lists.linux.dev>; Thu, 07 Dec 2023 14:54:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701988340; x=1702593140; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1701989655; x=1702594455; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FMK5oBL7ZRsz2fIyOpAup+LzkwMHF1v8UfcRl/00pW4=;
-        b=OiPmnGoG2ZQQ8E/2z6AtRr5ZvEwJc+3Vm2+aNVlMOELSXMYthVBHqQnM2amhq9cUsW
-         HJVLd9C4KSv0BHkS9K0Ve66HZm9T5p3tpSYBTGQCoYF19njFkiWQlp30OBI1JDfEDuv7
-         fhg8MsKCtXQ7e8K0Tj4jsBJl2bQMqw2883qnnQMxcYT60K1D6OCOaF8dn7vZI6zsL+fc
-         LYbEYjDo2mEA4m+dyAEluYGZRVufWigsB5rfmI51dQiDvtJoVtmld7HyADYwKZa+zlHs
-         c0Q8a9uMsO7UerVxMm8+QKyqDxTbJvQ4nd/VPifyNPkFw9Gi1YGVU92Idu8QtUhLTUi6
-         vdJQ==
+        bh=8z/n7oVJrLI7AapO66ABR3Mg7MdK3FEalI7JxmyKlx0=;
+        b=dXI30UQzrXiY8zduDdtmnSyJ6+ZGkwxSsNGOgJJ5q0PGx3e7ngzWUOdbWqMnUCodLK
+         7kkViV1RwM8YKyXfWQ2TrX9oburECrS4EXyWkOnP0Ee0T/Ao9fwJSkMxArE3phsQcLU8
+         V5muHI/h5T4wryFUuF3Mdx7tltu0kaRlVdby0DxWwytvpUz5WzruZ8cEqzLflFzuD+ZV
+         dHUo+feaghBHulN0U2djwTH+mQPzhPesJoEjnbPWKjJfpQpV1nT9uUh+lscxZn1MGAzk
+         FIaRbbmfStB/gDWlu7Kslb2BlQxlZzUIMnREZPdVcXXpFFllC2cYQDctFde3bzoV8hXb
+         ZBDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701988340; x=1702593140;
+        d=1e100.net; s=20230601; t=1701989655; x=1702594455;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FMK5oBL7ZRsz2fIyOpAup+LzkwMHF1v8UfcRl/00pW4=;
-        b=srqMVNQJE8uTOAKBUlp+c9kgJ4GQflMpIuHIIJd72MoEjjTSdmu9+Rpxh3a5KM+EOC
-         pedvY4zZZVPqRKZQ4a0lPW1tGAv2Z0jzgUgrElJbu8ZOJlYc41fQtBt5V14a6hpsk5Bz
-         OFpYVhif3LwGQp6LLtsEgKSAz3ehwCODbcrpInNWwIDZHOryql7u2sttoe771Y1LRNEf
-         ZuGln1k1rFGNchyeMy47pZl5LYKG6avlBJWa2jS8FmJh5IMG/g9UQ6EpM0/m+qCtYh+l
-         25Fci6P2qqIXA3/vdl02cxNSTZivF+3/VlWlLMSXrAST7tSvNPaM6reJI3Iakqk2GOnx
-         ea0A==
-X-Gm-Message-State: AOJu0YxTViHI6+hcZPF5+kzQBp5SmOGYysp7G9HxoD+NMmS2ALQwNVLz
-	QXnzYrYRJPAk5f+SxYbFm5U=
-X-Google-Smtp-Source: AGHT+IGjndnK2BCYLCyacoFwmyubc38b0BJwGWZc02r4foqXNC19yYWn9LMik7KGPp42sJmibTCaIg==
-X-Received: by 2002:a05:6a00:238c:b0:6ce:939e:bed6 with SMTP id f12-20020a056a00238c00b006ce939ebed6mr3760900pfc.34.1701988340144;
-        Thu, 07 Dec 2023 14:32:20 -0800 (PST)
-Received: from MacBook-Pro-49.local ([2620:10d:c090:500::7:6fe4])
-        by smtp.gmail.com with ESMTPSA id gx4-20020a056a001e0400b006cbb71186f7sm286775pfb.29.2023.12.07.14.32.16
+        bh=8z/n7oVJrLI7AapO66ABR3Mg7MdK3FEalI7JxmyKlx0=;
+        b=NfWw0HDW6+C573rDicbH9sBySzW0ubaJIzMsP9epF1echDOzglGjz9VJw3P3RXvqa4
+         6WWaeNoWYJujlczYZhMIGhoM8nxjdj3tbvQmLN9XlGLE+Eef88sUfwAeK25lFLoKJLCx
+         vCN2bBN9iWRGMei2uCPi+qJuZLiyx56LmiZtYgIBI23UQEitm1BQpXyRDfMsDNb5vLwg
+         KEnt1XVVhaa8uZjHrZ321X4L3PbL4KKsx/+aq4bqLuAPe2hTDsM9KRxmWkrDNxUefz8/
+         +Xy+Vth7fNKFXCYLEOowcZpHyvOrw8iMU8RFUJ1K3b0Zsx/wEsOZ8SjhSqFOQwIdQd4E
+         JELg==
+X-Gm-Message-State: AOJu0YxlEZrk0ZR7khoI6H7nFwLROgX8H0euGUW3UAKfknna6l1crILj
+	nVUkbCespFvJj/5k5GG2K1526A==
+X-Google-Smtp-Source: AGHT+IG+tMLAPQMs0kJxW/IS3KFdRdsft6Gda4jPxtMmDl2cn6omxOmWAnKPtSQSHnM2EVZDhqe2JQ==
+X-Received: by 2002:a05:6e02:12ec:b0:35d:59a2:331d with SMTP id l12-20020a056e0212ec00b0035d59a2331dmr4773035iln.33.1701989654689;
+        Thu, 07 Dec 2023 14:54:14 -0800 (PST)
+Received: from google.com (20.10.132.34.bc.googleusercontent.com. [34.132.10.20])
+        by smtp.gmail.com with ESMTPSA id h6-20020a92c086000000b0035d5935e19bsm168963ile.65.2023.12.07.14.54.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 14:32:19 -0800 (PST)
-Date: Thu, 7 Dec 2023 14:32:12 -0800
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>, 
-	Song Liu <songliubraving@meta.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv <linux-riscv@lists.infradead.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Joao Moreira <joao@overdrivepizza.com>, Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-Message-ID: <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
-References: <20231204111128.GV8262@noisy.programming.kicks-ass.net>
- <20231204125239.GA1319@noisy.programming.kicks-ass.net>
- <ZW4LjmUKj1q6RWdL@krava>
- <20231204181614.GA7299@noisy.programming.kicks-ass.net>
- <20231204183354.GC7299@noisy.programming.kicks-ass.net>
- <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
- <20231206163814.GB36423@noisy.programming.kicks-ass.net>
- <20231206183713.GA35897@noisy.programming.kicks-ass.net>
- <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
- <20231207093105.GA28727@noisy.programming.kicks-ass.net>
+        Thu, 07 Dec 2023 14:54:14 -0800 (PST)
+Date: Thu, 7 Dec 2023 22:54:11 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Jialu Xu <xujialu@vimux.org>
+Cc: nathan@kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	masahiroy@kernel.org, morbo@google.com, ndesaulniers@google.com
+Subject: Re: [PATCH v4] gen_compile_commands.py: fix path resolve with
+ symlinks in it
+Message-ID: <20231207225411.his46ofov6kswkmi@google.com>
+References: <20231205165648.GA391810@dev-arch.thelio-3990X>
+ <20231206012441.840082-1-xujialu@vimux.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,158 +60,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231207093105.GA28727@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231206012441.840082-1-xujialu@vimux.org>
 
-On Thu, Dec 07, 2023 at 10:31:05AM +0100, Peter Zijlstra wrote:
-> On Wed, Dec 06, 2023 at 01:39:43PM -0800, Alexei Starovoitov wrote:
-> 
-> 
-> > All is ok until kCFI comes into picture.
-> > Here we probably need to teach arch_prepare_bpf_trampoline() to emit
-> > different __kcfi_typeid depending on kernel function proto,
-> > so that caller hash checking logic won't be tripped.
-> > I suspect that requires to reverse engineer an algorithm of computing kcfi from clang.
-> > other ideas?
-> 
-> I was going to try and extend bpf_struct_ops with a pointer, this
-> pointer will point to a struct of the right type with all ops filled out
-> as stubs.
+Hi,
 
-Right. Something like this, but it's more nuanced.
+On Wed, Dec 06, 2023 at 09:24:42AM +0800, Jialu Xu wrote:
+> When a path contains relative symbolic links, os.path.abspath() might
+> not follow the symlinks and instead return the absolute path with just
+> the relative paths resolved, resulting in an incorrect path.
+>
+> 1. Say "drivers/hdf/" has some symlinks:
+>
+>     # ls -l drivers/hdf/
+>     total 364
+>     drwxrwxr-x 2 ...   4096 ... evdev
+>     lrwxrwxrwx 1 ...     44 ... framework -> ../../../../../../drivers/hdf_core/framework
+>     -rw-rw-r-- 1 ... 359010 ... hdf_macro_test.h
+>     lrwxrwxrwx 1 ...     55 ... inner_api -> ../../../../../../drivers/hdf_core/interfaces/inner_api
+>     lrwxrwxrwx 1 ...     53 ... khdf -> ../../../../../../drivers/hdf_core/adapter/khdf/linux
+>     -rw-r--r-- 1 ...     74 ... Makefile
+>     drwxrwxr-x 3 ...   4096 ... wifi
+>
+> 2. One .cmd file records that:
+>
+>     # head -1 ./framework/core/manager/src/.devmgr_service.o.cmd
+>     cmd_drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.o := ... \
+>     /path/to/out/drivers/hdf/khdf/manager/../../../../framework/core/manager/src/devmgr_service.c
+>
+> 3. os.path.abspath returns "/path/to/out/framework/core/manager/src/devmgr_service.c", not correct:
+>
+>     # ./scripts/clang-tools/gen_compile_commands.py
+>     INFO: Could not add line from ./framework/core/manager/src/.devmgr_service.o.cmd: File \
+>         /path/to/out/framework/core/manager/src/devmgr_service.c not found
+>
+> Use pathlib.Path.resolve(), which resolves the symlinks and normalizes
+> the paths correctly.
+>
+>     # cat compile_commands.json
+>     ...
+>     {
+>       "command": ...
+>       "directory": ...
+>       "file": "/path/to/blabla/drivers/hdf_core/framework/core/manager/src/devmgr_service.c"
+>     },
+>     ...
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Jialu Xu <xujialu@vimux.org>
+> ---
 
-The bpf_struct_ops concept is a generic mechanism to provide bpf-based callback
-to any set of kernel callbacks.
+This looks good to me. I prefer using pathlib over anything in os
+module, even if the behavior was the same. In this case, the pathlib
+behavior is better -- which is a bonus.
 
-bpf tcp CC plugs into:
-struct tcp_congestion_ops {
-        /* do new cwnd calculation (required) */
-        void (*cong_avoid)(struct sock *sk, u32 ack, u32 acked);
-
-        /* call before changing ca_state (optional) */
-        void (*set_state)(struct sock *sk, u8 new_state);
-
-        /* call when cwnd event occurs (optional) */
-        void (*cwnd_event)(struct sock *sk, enum tcp_ca_event ev);
-  ...
-};
-
-and from bpf side we don't touch tcp kernel bits at all.
-tcp stack doesn't know whether it's calling bpf based CC or builtin CC or CC provided by kernel module.
-
-bpf struct_ops mechanim is a zero cost extension to potentially any kernel mechanism
-that is already setup with callbacks. tcp_congestion_ops is one of them.
-
-The allowlisting of tcp_congestion_ops for bpf use is done in net/ipv4/bpf_tcp_ca.c via:
-
-struct bpf_struct_ops bpf_tcp_congestion_ops = {
-        ...
-        .reg = bpf_tcp_ca_reg,
-        .unreg = bpf_tcp_ca_unreg,
-        ...
-        .name = "tcp_congestion_ops",
-};
-static int bpf_tcp_ca_reg(void *kdata)
-{
-        return tcp_register_congestion_control(kdata);
-}
-and
- int tcp_register_congestion_control(struct tcp_congestion_ops *type);
-is a normal TCP CC registration routine that is used by all CCs.
-
-The bpf struct_ops infra prepares everything inside
-'struct tcp_congestion_ops' that makes it indistinguishable from normal kernel CC,
-except kCFI part. sadly.
-
-The kCFI challenge is that clang may not generate any __cfi + __kcfi_typeid at all.
-Like if vmlinux doesn't have any TCP CCs built-in there will be no kCFI hashes
-in the kernel that represent a required hash to call cong_avoid, set_state, cwnd_event.
-
-At the callsite like in net/ipv4/tcp_input.c
-  icsk->icsk_ca_ops->cong_avoid(sk, ack, acked);
-the clang will compute the kcfi hash, but there will be no __cfi symbol in vmlinux.
-
-If there was one we could teach the verifier to look for __kcfi...cong_avoid
-in kallsyms, then read cfi hash from there and populate it into generated asm
-in arch_prepare_bpf_trampoline.
-
-So I'm thinking to do this:
-
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index c7bbd8f3c708..afaadc2c0827 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -283,6 +283,12 @@ struct bpf_struct_ops bpf_tcp_congestion_ops = {
-        .name = "tcp_congestion_ops",
- };
-
-+/* never accessed, here for clang kCFI only */
-+extern void __kcfi_cong_avoid(struct sock *sk, u32 ack, u32 acked);
-+__ADDRESSABLE(__kcfi_cong_avoid);
-+extern void __kcfi_set_state(struct sock *sk, u8 new_state);
-+__ADDRESSABLE(__kcfi_set_state);
-
-To force kcfi generation and then teach struct_ops infra to look
-for __kcfi_typeid___kcfi_##callbackname in kallsyms,
-read kcfi from there and populate into bpf trampoline.
-
-Since kcfi and bpf are not working well, I believe it's bpf folks job to fix it.
-Especially since it's starting to look bpf infra heavy.
-
-If you're interested I can, of course, point to relevant bits in kernel/bpf/bpf_struct_ops.c
-that would need to be extended to support such kcfi_typeid search,
-but I think it's my job to fix it.
-
-If I get stuck, I'll ask for help.
-
-I also researched a different approach.
-llvm does the following to compute the kcfi hash:
-
-llvm::ConstantInt *CodeGenModule::CreateKCFITypeId(QualType T) {
-  if (auto *FnType = T->getAs<FunctionProtoType>())
-    T = getContext().getFunctionType(
-        FnType->getReturnType(), FnType->getParamTypes(),
-        FnType->getExtProtoInfo().withExceptionSpec(EST_None));
-
-  std::string OutName;
-  llvm::raw_string_ostream Out(OutName);
-  getCXXABI().getMangleContext().mangleCanonicalTypeName(
-      T, Out, getCodeGenOpts().SanitizeCfiICallNormalizeIntegers);
-
-  if (getCodeGenOpts().SanitizeCfiICallNormalizeIntegers)
-    Out << ".normalized";
-
-  return llvm::ConstantInt::get(Int32Ty,
-                                static_cast<uint32_t>(llvm::xxHash64(OutName)));
-}
-
-xxhash is already available in the kernel.
-We can add type mangling logic and convert prototype of cong_avoid, set_state, etc
-(that are already available in vmlinux BTF) into a mangled string and
-apply xxhash on that string.
-This way we wouldn't need to add __kcfi stubs to net/ipv4/bpf_tcp_ca.c.
-kcfi will be computed on demand.
-
-> > 
-> > This case is easier to make work with kCFI.
-> > The JIT will use:
-> > cfi_bpf_hash:
-> >       .long   __kcfi_typeid___bpf_prog_runX  
-> > like your patch already does.
-> > And will use
-> > extern u64 __bpf_callback_fn(u64, u64, u64, u64, u64);
-> > cfi_bpf_subprog_hash:
-> >       .long   __kcfi_typeid___bpf_callback_fn
-> > to JIT all subprogs. See bpf_is_subprog().
-> 
-> Aaah!, yes it should be trivial to use another hash value when
-> is_subprog in emit_prologue().
-
-Great. I'll wait for your respin and then will start building "kcfi for struct-ops"
-via one of the two approaches above.
-
-> Yes, we can do that. Plans have changed on my side too -- I'm taking a 6
-> week break soon, so I'll do whatever I can before I'm out, and then
-> continue from whatever state I find when I get back.
-
-6 weeks! Nice. Enjoy the long break.
-Last time I took 3 week PTO in a row I got bored after week 2 and went back to hacking :)
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+>  scripts/clang-tools/gen_compile_commands.py | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+> index 180952fb91c1b..99e28b7152c19 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -11,6 +11,7 @@ import argparse
+>  import json
+>  import logging
+>  import os
+> +from pathlib import Path
+>  import re
+>  import subprocess
+>  import sys
+> @@ -172,8 +173,9 @@ def process_line(root_directory, command_prefix, file_path):
+>      # by Make, so this code replaces the escaped version with '#'.
+>      prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
+>
+> -    # Use os.path.abspath() to normalize the path resolving '.' and '..' .
+> -    abs_path = os.path.abspath(os.path.join(root_directory, file_path))
+> +    # Make the path absolute, resolving all symlinks on the way and also normalizing it.
+> +    # Convert Path object to a string because 'PosixPath' is not JSON serializable.
+> +    abs_path = str(Path(root_directory, file_path).resolve())
+>      if not os.path.exists(abs_path):
+>          raise ValueError('File %s not found' % abs_path)
+>      return {
+> --
+> 2.39.2
+>
