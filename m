@@ -1,57 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632AE4D597;
-	Thu,  7 Dec 2023 18:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400444E60E;
+	Thu,  7 Dec 2023 19:30:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Stw1Yw4T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C4ECxeh4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701973369; x=1733509369;
+  t=1701977449; x=1733513449;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=iCLUUaatBfqlkyFZ3lf+30TefpNxCMzpAtCl5N7SoO4=;
-  b=Stw1Yw4TkjgCTLJDqe2i5JsTqevnEexP1rhYHCL68CIJvCMfhQnwy2vF
-   b0LSn2xFSl6mAE47fz3oSRvpj9zSTPzo9slAeKuAqXOq5q/Pay3fF5QgF
-   wnkSGOS/oIXC+ezkUFWrSvVCbP2Wj9DvmEd/3MmyFwM6kdiB7W4UkER3i
-   uTevKBENTAutR4pbM1ADPLfLwlxGPLBLdgwkYH3S8TsNkRrXw86YmuKXs
-   YfEDTU6qRYkKgmOsbtm5qHuPvNpt3zoBwrY0lV7x5yJP/RzoW4dSiNh3T
-   d4rAHuaSFq0+6w8Hspwe+ZSnItTAjs5AiAL4jiDArTeVwx/iZaQuSUrd8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="458597362"
+  bh=dQJzpPCJi2DcWLmi+tpSUDnGySOo5HoMcMdxmPpeqDs=;
+  b=C4ECxeh40vXZ5roxy2D9fLgxq06aihaOSzQYAPm+tSnUCOSFRhAOrgIw
+   FhkI85fwvcSU5gd1D+736HLCnRVDs2Mfb8COmfrJ/mtJO94m8syCoqVNo
+   fWRwIaZ+mtWBPgFQ/ANI1b+efK8BsK6EcrVMDwuJDGyFQyhzdNTZ59efK
+   5DtksA0vR38p/uuCxwbU0Cs7wTCIrikJ+8LPmCK6r0OqKvSknCkGYjR37
+   QRQO4+XyP73Hlp2HNiBnJDnIMqM5MMGNe4gZ54Hmle10r/CWINPKubwqt
+   kYE3g1pUXKjlFMWujfFhNwMltJ8lnCaB7MjdPpM4z9a+HCn9YlWJNs8mL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="373791327"
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="458597362"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 10:22:48 -0800
+   d="scan'208";a="373791327"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 11:30:48 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="895233228"
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="895233228"
+   d="scan'208";a="13216355"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 07 Dec 2023 10:22:42 -0800
+  by orviesa002.jf.intel.com with ESMTP; 07 Dec 2023 11:30:45 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rBJ1E-000CfP-0N;
-	Thu, 07 Dec 2023 18:22:40 +0000
-Date: Fri, 8 Dec 2023 02:22:00 +0800
+	id 1rBK54-000Cjl-2R;
+	Thu, 07 Dec 2023 19:30:42 +0000
+Date: Fri, 8 Dec 2023 03:30:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chen Wang <unicornxw@gmail.com>, aou@eecs.berkeley.edu,
-	chao.wei@sophgo.com, conor@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-	palmer@dabbelt.com, paul.walmsley@sifive.com,
-	richardcochran@gmail.com, robh+dt@kernel.org, sboyd@kernel.org,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	haijiao.liu@sophgo.com, xiaoguang.xing@sophgo.com,
-	guoren@kernel.org, jszhang@kernel.org, inochiama@outlook.com,
-	samuel.holland@sifive.com
+To: Xiaolei Wang <xiaolei.wang@windriver.com>, rafael@kernel.org,
+	pavel@ucw.cz, len.brown@intel.com, peterz@infradead.org,
+	mingo@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chen Wang <unicorn_wang@outlook.com>
-Subject: Re: [PATCH v5 3/4] clk: sophgo: Add SG2042 clock generator driver
-Message-ID: <202312080254.Vka7cUVe-lkp@intel.com>
-References: <975f9995584dfa8af751e96a1f4d2c7991551a35.1701938395.git.unicorn_wang@outlook.com>
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] freezer,sched: Move state information judgment outside
+ task_call_func
+Message-ID: <202312080347.yJvIjGb3-lkp@intel.com>
+References: <20231207111634.667057-1-xiaolei.wang@windriver.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,93 +53,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <975f9995584dfa8af751e96a1f4d2c7991551a35.1701938395.git.unicorn_wang@outlook.com>
+In-Reply-To: <20231207111634.667057-1-xiaolei.wang@windriver.com>
 
-Hi Chen,
+Hi Xiaolei,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on b85ea95d086471afb4ad062012a4d73cd328fa86]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.7-rc4 next-20231207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Wang/dt-bindings-soc-sophgo-Add-Sophgo-system-control-module/20231207-165948
-base:   b85ea95d086471afb4ad062012a4d73cd328fa86
-patch link:    https://lore.kernel.org/r/975f9995584dfa8af751e96a1f4d2c7991551a35.1701938395.git.unicorn_wang%40outlook.com
-patch subject: [PATCH v5 3/4] clk: sophgo: Add SG2042 clock generator driver
-config: i386-buildonly-randconfig-002-20231208 (https://download.01.org/0day-ci/archive/20231208/202312080254.Vka7cUVe-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080254.Vka7cUVe-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/freezer-sched-Move-state-information-judgment-outside-task_call_func/20231207-191924
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231207111634.667057-1-xiaolei.wang%40windriver.com
+patch subject: [PATCH] freezer,sched: Move state information judgment outside task_call_func
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231208/202312080347.yJvIjGb3-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080347.yJvIjGb3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080254.Vka7cUVe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312080347.yJvIjGb3-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/sophgo/clk-sophgo-sg2042.c:1273:13: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           clk_data = kzalloc(struct_size(clk_data, onecell_data.hws, num_clks), GFP_KERNEL);
-                      ^
-   drivers/clk/sophgo/clk-sophgo-sg2042.c:1273:13: note: did you mean 'vzalloc'?
-   include/linux/vmalloc.h:141:14: note: 'vzalloc' declared here
-   extern void *vzalloc(unsigned long size) __alloc_size(1);
-                ^
->> drivers/clk/sophgo/clk-sophgo-sg2042.c:1273:11: error: incompatible integer to pointer conversion assigning to 'struct sg2042_clk_data *' from 'int' [-Wint-conversion]
-           clk_data = kzalloc(struct_size(clk_data, onecell_data.hws, num_clks), GFP_KERNEL);
-                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/clk/sophgo/clk-sophgo-sg2042.c:1293:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           kfree(clk_data);
-           ^
-   drivers/clk/sophgo/clk-sophgo-sg2042.c:1349:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           kfree(clk_data);
-           ^
-   4 errors generated.
+>> kernel/freezer.c:125:30: error: no member named 'lockdep_depth' in 'struct task_struct'
+           p_check->lockdep_depth = p->lockdep_depth;
+                                    ~  ^
+   1 error generated.
 
 
-vim +/kzalloc +1273 drivers/clk/sophgo/clk-sophgo-sg2042.c
+vim +125 kernel/freezer.c
 
-  1256	
-  1257	static int __init sg2042_clk_init_clk_data(
-  1258		struct device_node *node,
-  1259		int num_clks,
-  1260		struct sg2042_clk_data **pp_clk_data)
-  1261	{
-  1262		int ret = 0;
-  1263		struct sg2042_clk_data *clk_data = NULL;
-  1264		struct device_node *np_syscon;
-  1265	
-  1266		np_syscon = of_parse_phandle(node, "sophgo,system-ctrl", 0);
-  1267		if (!np_syscon) {
-  1268			pr_err("failed to get system-ctrl node\n");
-  1269			ret = -EINVAL;
-  1270			goto error_out;
-  1271		}
-  1272	
-> 1273		clk_data = kzalloc(struct_size(clk_data, onecell_data.hws, num_clks), GFP_KERNEL);
-  1274		if (!clk_data) {
-  1275			ret = -ENOMEM;
-  1276			goto error_out;
-  1277		}
-  1278	
-  1279		clk_data->regmap_syscon = device_node_to_regmap(np_syscon);
-  1280		if (IS_ERR_OR_NULL(clk_data->regmap_syscon)) {
-  1281			pr_err("cannot get regmap_syscon %ld\n", PTR_ERR(clk_data->regmap_syscon));
-  1282			ret = -ENODEV;
-  1283			goto cleanup;
-  1284		}
-  1285		clk_data->iobase_syscon = of_iomap(np_syscon, 0);
-  1286		clk_data->iobase = of_iomap(node, 0);
-  1287		clk_data->onecell_data.num = num_clks;
-  1288	
-  1289		*pp_clk_data = clk_data;
-  1290		return ret;
-  1291	
-  1292	cleanup:
-> 1293		kfree(clk_data);
-  1294	
-  1295	error_out:
-  1296		return ret;
-  1297	}
-  1298	
+   107	
+   108	static int __set_task_frozen(struct task_struct *p, void *arg)
+   109	{
+   110		unsigned int state = READ_ONCE(p->__state);
+   111		struct task_freeze_check *p_check = arg;
+   112	
+   113		if (p->on_rq)
+   114			return 0;
+   115	
+   116		if (p != current && task_curr(p))
+   117			return 0;
+   118	
+   119		if (!(state & (TASK_FREEZABLE | __TASK_STOPPED | __TASK_TRACED)))
+   120			return 0;
+   121	
+   122		p->saved_state = p->__state;
+   123		WRITE_ONCE(p->__state, TASK_FROZEN);
+   124		p_check->state = p->__state;
+ > 125		p_check->lockdep_depth = p->lockdep_depth;
+   126		return TASK_FROZEN;
+   127	}
+   128	
 
 -- 
 0-DAY CI Kernel Test Service
