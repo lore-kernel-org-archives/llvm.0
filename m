@@ -1,54 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70F64F88E;
-	Thu,  7 Dec 2023 19:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E915027D;
+	Thu,  7 Dec 2023 20:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9IL30Vf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kCt1qvDa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701977451; x=1733513451;
+  t=1701981237; x=1733517237;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0eJYswHSdqLumV5B3q8tXp4JrEbH7Qyc7NqSqNcNoH4=;
-  b=h9IL30Vf3Z+slEOu8iYBZkbY+BXuApBu+l0nU5CT5tOEhTotFJTtdXuH
-   Jzk3/UUBHzUY7Iw1mO4B9rYOfksZxXf0yrbfSRh1vzdvTr0VH87r4mRBk
-   h7ViVx3iINtX5ZPHHyzdV7Aw1ev2J7mNXrPalU41xYLhWQhlN8eTd4mwE
-   Ttsn69r6SZHcRILmlWE8AHmjlJ9cujABUNwD1VSsKNmIv82iXK9Pfj8hF
-   b/ynXt5N0DRA8WO8pyhHd60rKrO0sRW0xD1t4pBxPa1yYdJVHYH6bwujq
-   I5QfZUnw8CwOw4tAQwpMmVjb8Pz9BRWlbyCCFBD/34ApU5JOOagvk8WEh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="373791330"
+  bh=SPK2zasUPN95+NP/auAttA6k+ge4mGcg7RBWFAT4m1U=;
+  b=kCt1qvDaMdXsMYqR0qzhCWCKPUUfuiAzshqVcRXmHgikn76HdK0wlGkI
+   9U7HmXo+1Bx3xakelD7zytH+1A7VPpQG9AfBUMk/yn6H6Hca4rPyTzfim
+   635cwVzfMmA9jUpo04nsII6FES1qpU46dDovJLA0ftkjhoxC6jKwpbCWa
+   O5g5WbEAsy2nAmc5O6FaMpfnjCYUQy8CiOMuH+gUndBYgjrcv8WdVglQF
+   i1Jigwt2F13MHh3hkXUqOPZQ+aVZrrWRzWk/XsMQXUxbTTYcQqZ2XZtYp
+   q8YJpXGdoTJZPO40aLv5oYD/087+V3yRQ//a4zlZN6muW14+id4VukKq7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="379306316"
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="373791330"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 11:30:48 -0800
+   d="scan'208";a="379306316"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 12:33:57 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="915695873"
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="13216314"
+   d="scan'208";a="915695873"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 07 Dec 2023 11:30:45 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2023 12:33:53 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rBK54-000Cjn-2V;
-	Thu, 07 Dec 2023 19:30:42 +0000
-Date: Fri, 8 Dec 2023 03:30:03 +0800
+	id 1rBL4B-000Cnh-1q;
+	Thu, 07 Dec 2023 20:33:51 +0000
+Date: Fri, 8 Dec 2023 04:33:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Gerald Loacker <gerald.loacker@wolfvision.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH 1/3] media: i2c: imx415: Convert to new CCI register
- access helpers
-Message-ID: <202312080321.6wjzIYcj-lkp@intel.com>
-References: <20231205090557.298680-2-alexander.stein@ew.tq-group.com>
+To: RD Babiera <rdbabiera@google.com>, heikki.krogerus@linux.intel.com,
+	linux@roeck-us.net, gregkh@linuxfoundation.org,
+	pmalani@chromium.org, bleung@chromium.org,
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, badhri@google.com,
+	tzungbi@kernel.org, utkarsh.h.patel@intel.com,
+	andriy.shevchenko@linux.intel.com,
+	RD Babiera <rdbabiera@google.com>
+Subject: Re: [PATCH v1 01/10] usb: typec: bus: provide transmit type for
+ alternate mode drivers
+Message-ID: <202312080436.1iwq0THA-lkp@intel.com>
+References: <20231207090738.15721-13-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,171 +58,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231205090557.298680-2-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20231207090738.15721-13-rdbabiera@google.com>
 
-Hi Alexander,
+Hi RD,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linuxtv-media-stage/master linus/master v6.7-rc4 next-20231207]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 5e4c8814a431d21bfaf20b464134f40f2f81e152]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/media-i2c-imx415-Convert-to-new-CCI-register-access-helpers/20231205-170736
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20231205090557.298680-2-alexander.stein%40ew.tq-group.com
-patch subject: [PATCH 1/3] media: i2c: imx415: Convert to new CCI register access helpers
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231208/202312080321.6wjzIYcj-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/RD-Babiera/usb-typec-bus-provide-transmit-type-for-alternate-mode-drivers/20231207-171114
+base:   5e4c8814a431d21bfaf20b464134f40f2f81e152
+patch link:    https://lore.kernel.org/r/20231207090738.15721-13-rdbabiera%40google.com
+patch subject: [PATCH v1 01/10] usb: typec: bus: provide transmit type for alternate mode drivers
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231208/202312080436.1iwq0THA-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080321.6wjzIYcj-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080436.1iwq0THA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080321.6wjzIYcj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312080436.1iwq0THA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/i2c/imx415.c:119:16: error: call to undeclared function 'CCI_REG16_LE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   .regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
-                                ^
-   drivers/media/i2c/imx415.c:41:30: note: expanded from macro 'IMX415_BCWAIT_TIME'
-   #define IMX415_BCWAIT_TIME        CCI_REG16_LE(0x3008)
-                                     ^
->> drivers/media/i2c/imx415.c:119:16: error: initializer element is not a compile-time constant
-                   .regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
-                                ^~~~~~~~~~~~~~~~~~
-   drivers/media/i2c/imx415.c:41:30: note: expanded from macro 'IMX415_BCWAIT_TIME'
-   #define IMX415_BCWAIT_TIME        CCI_REG16_LE(0x3008)
-                                     ^~~~~~~~~~~~~~~~~~~~
->> drivers/media/i2c/imx415.c:195:4: error: call to undeclared function 'CCI_REG24_LE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           { IMX415_VMAX, 0x08CA },
-             ^
-   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
-   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
-                                     ^
-   drivers/media/i2c/imx415.c:195:4: error: initializer element is not a compile-time constant
-           { IMX415_VMAX, 0x08CA },
-             ^~~~~~~~~~~
-   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
-   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
-                                     ^~~~~~~~~~~~~~~~~~~~
-   drivers/media/i2c/imx415.c:211:4: error: initializer element is not a compile-time constant
-           { IMX415_VMAX, 0x08CA },
-             ^~~~~~~~~~~
-   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
-   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
-                                     ^~~~~~~~~~~~~~~~~~~~
-   drivers/media/i2c/imx415.c:227:4: error: initializer element is not a compile-time constant
-           { IMX415_VMAX, 0x08CA },
-             ^~~~~~~~~~~
-   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
-   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
-                                     ^~~~~~~~~~~~~~~~~~~~
-   6 errors generated.
+>> drivers/usb/typec/ucsi/displayport.c:293:31: error: too few arguments to function call, expected 5, have 4
+                                   dp->vdo_data, dp->vdo_size);
+                                                             ^
+   include/linux/usb/typec_altmode.h:84:5: note: 'typec_altmode_vdm' declared here
+   int typec_altmode_vdm(struct typec_altmode *altmode,
+       ^
+   1 error generated.
 
 
-vim +/CCI_REG16_LE +119 drivers/media/i2c/imx415.c
+vim +293 drivers/usb/typec/ucsi/displayport.c
 
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  113  
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  114  /* INCK Settings - includes all lane rate and INCK dependent registers */
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  115  static const struct imx415_clk_params imx415_clk_params[] = {
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  116  	{
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  117  		.lane_rate = 594000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  118  		.inck = 27000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30 @119  		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  120  		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  121  		.regs[2] = { IMX415_SYS_MODE, 0x7 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  122  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  123  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  124  		.regs[5] = { IMX415_INCKSEL3, 0x084 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  125  		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  126  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  127  		.regs[8] = { IMX415_INCKSEL6, 0x0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  128  		.regs[9] = { IMX415_INCKSEL7, 0x1 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  129  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  130  	},
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  131  	{
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  132  		.lane_rate = 720000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  133  		.inck = 24000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  134  		.regs[0] = { IMX415_BCWAIT_TIME, 0x054 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  135  		.regs[1] = { IMX415_CPWAIT_TIME, 0x03B },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  136  		.regs[2] = { IMX415_SYS_MODE, 0x9 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  137  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  138  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  139  		.regs[5] = { IMX415_INCKSEL3, 0x0B4 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  140  		.regs[6] = { IMX415_INCKSEL4, 0x0FC },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  141  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  142  		.regs[8] = { IMX415_INCKSEL6, 0x0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  143  		.regs[9] = { IMX415_INCKSEL7, 0x1 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  144  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  145  	},
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  146  	{
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  147  		.lane_rate = 891000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  148  		.inck = 27000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  149  		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  150  		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  151  		.regs[2] = { IMX415_SYS_MODE, 0x5 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  152  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  153  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  154  		.regs[5] = { IMX415_INCKSEL3, 0x0C6 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  155  		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  156  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  157  		.regs[8] = { IMX415_INCKSEL6, 0x0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  158  		.regs[9] = { IMX415_INCKSEL7, 0x1 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  159  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  160  	},
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  161  	{
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  162  		.lane_rate = 1440000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  163  		.inck = 24000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  164  		.regs[0] = { IMX415_BCWAIT_TIME, 0x054 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  165  		.regs[1] = { IMX415_CPWAIT_TIME, 0x03B },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  166  		.regs[2] = { IMX415_SYS_MODE, 0x8 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  167  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  168  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  169  		.regs[5] = { IMX415_INCKSEL3, 0x0B4 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  170  		.regs[6] = { IMX415_INCKSEL4, 0x0FC },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  171  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  172  		.regs[8] = { IMX415_INCKSEL6, 0x1 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  173  		.regs[9] = { IMX415_INCKSEL7, 0x0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  174  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  175  	},
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  176  	{
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  177  		.lane_rate = 1485000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  178  		.inck = 27000000,
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  179  		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  180  		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  181  		.regs[2] = { IMX415_SYS_MODE, 0x8 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  182  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  183  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  184  		.regs[5] = { IMX415_INCKSEL3, 0x0A5 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  185  		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  186  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  187  		.regs[8] = { IMX415_INCKSEL6, 0x1 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  188  		.regs[9] = { IMX415_INCKSEL7, 0x0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  189  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  190  	},
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  191  };
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  192  
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  193  /* all-pixel 2-lane 720 Mbps 15.74 Hz mode */
-a13751ef748a7a Alexander Stein 2023-12-05  194  static const struct cci_reg_sequence imx415_mode_2_720[] = {
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30 @195  	{ IMX415_VMAX, 0x08CA },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  196  	{ IMX415_HMAX, 0x07F0 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  197  	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  198  	{ IMX415_TCLKPOST, 0x006F },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  199  	{ IMX415_TCLKPREPARE, 0x002F },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  200  	{ IMX415_TCLKTRAIL, 0x002F },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  201  	{ IMX415_TCLKZERO, 0x00BF },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  202  	{ IMX415_THSPREPARE, 0x002F },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  203  	{ IMX415_THSZERO, 0x0057 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  204  	{ IMX415_THSTRAIL, 0x002F },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  205  	{ IMX415_THSEXIT, 0x004F },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  206  	{ IMX415_TLPX, 0x0027 },
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  207  };
-14cd15e7a1e2a3 Gerald Loacker  2023-01-30  208  
+af8622f6a585d8 Heikki Krogerus 2019-04-23  284  
+af8622f6a585d8 Heikki Krogerus 2019-04-23  285  static void ucsi_displayport_work(struct work_struct *work)
+af8622f6a585d8 Heikki Krogerus 2019-04-23  286  {
+af8622f6a585d8 Heikki Krogerus 2019-04-23  287  	struct ucsi_dp *dp = container_of(work, struct ucsi_dp, work);
+af8622f6a585d8 Heikki Krogerus 2019-04-23  288  	int ret;
+af8622f6a585d8 Heikki Krogerus 2019-04-23  289  
+af8622f6a585d8 Heikki Krogerus 2019-04-23  290  	mutex_lock(&dp->con->lock);
+af8622f6a585d8 Heikki Krogerus 2019-04-23  291  
+af8622f6a585d8 Heikki Krogerus 2019-04-23  292  	ret = typec_altmode_vdm(dp->alt, dp->header,
+af8622f6a585d8 Heikki Krogerus 2019-04-23 @293  				dp->vdo_data, dp->vdo_size);
+af8622f6a585d8 Heikki Krogerus 2019-04-23  294  	if (ret)
+af8622f6a585d8 Heikki Krogerus 2019-04-23  295  		dev_err(&dp->alt->dev, "VDM 0x%x failed\n", dp->header);
+af8622f6a585d8 Heikki Krogerus 2019-04-23  296  
+af8622f6a585d8 Heikki Krogerus 2019-04-23  297  	dp->vdo_data = NULL;
+af8622f6a585d8 Heikki Krogerus 2019-04-23  298  	dp->vdo_size = 0;
+af8622f6a585d8 Heikki Krogerus 2019-04-23  299  	dp->header = 0;
+af8622f6a585d8 Heikki Krogerus 2019-04-23  300  
+af8622f6a585d8 Heikki Krogerus 2019-04-23  301  	mutex_unlock(&dp->con->lock);
+af8622f6a585d8 Heikki Krogerus 2019-04-23  302  }
+af8622f6a585d8 Heikki Krogerus 2019-04-23  303  
 
 -- 
 0-DAY CI Kernel Test Service
