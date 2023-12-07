@@ -1,50 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6358A7E;
-	Thu,  7 Dec 2023 00:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A7B15CE;
+	Thu,  7 Dec 2023 02:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B3Ng0JDd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AT1YYdjQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701907462; x=1733443462;
+  t=1701915723; x=1733451723;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NJuxcnEQ5WnvnxEJHKKiKSbGDVoZSpNWli4+2rrUjec=;
-  b=B3Ng0JDdJq6O+yaOFVWOLqT+5JbvMbVVJJ0d8p+bbEKhWTWqyn0Kxgv6
-   Av8UaKXMRQL2Mifp23vJJ42nQlcPEd5UNUoQ9+rRZxvZkHIDgCD+IgSbn
-   DQD42lHB0vo5qVZ9zQKcGmvoNOHBtSgacMHMZH+vgQJQsiMltfP2lb6in
-   jtBrMdNkL27j88sCmHvu+J19mFijiMq5dhHnuu6IxaL0hzjqVSNBEIQr3
-   qx0ZKsswsHkl83Zq4V7+ABZCo5+F5olSig7s/CmeIH4QkqG+Bb2tnBGWf
-   YIQj0EG+KBWBrXJiwUdcAB14SUcNglPUapoMPZiORy9H2XKkYUiJ7P0Rq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="396933541"
+  bh=6UJrye13+9he0kh2Bl2TS8SowZ/Hi8F5/t6IqlrwEKk=;
+  b=AT1YYdjQLlrUVXHlp7bo3zfG4uaKESvbULkXF1Uq474HjeIQSYRIB+x8
+   dAYnEoEuG+HXKEqvwrnL1poXLRnAOSb/Rha9CbkKU4Dw1168ftJiC/CTl
+   whRXuoOkkUfvC6QF9d5/C+fRkATRsidK/Z2t4PKdvrW4OYtmfj9uPHC5R
+   q+5bIRriKFocMldeuilMLFhxcRd2aipYVwnS7suTuOYNoecp6En7lwSdE
+   K32yxyWsP0nX/QCLUHBKLhM1j2kCrvf4I8n+3bwV0YKU8NU5pa2vIQkJx
+   lfMsLd1uWO0UJopewsyQH3aWG7B4sSNDKZYU/RLoVE2k6ojbGtxWsokw3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="12873134"
 X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="396933541"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 16:04:12 -0800
+   d="scan'208";a="12873134"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 18:22:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="800526557"
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="747806041"
 X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="800526557"
+   d="scan'208";a="747806041"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2023 16:04:10 -0800
+  by orsmga006.jf.intel.com with ESMTP; 06 Dec 2023 18:22:00 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rB1s8-000Bbk-20;
-	Thu, 07 Dec 2023 00:04:08 +0000
-Date: Thu, 7 Dec 2023 08:03:52 +0800
+	id 1rB41T-000Bis-3A;
+	Thu, 07 Dec 2023 02:21:56 +0000
+Date: Thu, 7 Dec 2023 10:21:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+To: Sujuan Chen <sujuan.chen@mediatek.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Christopherson <sean.j.christopherson@intel.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [intel-tdx:guest 53/136] arch/x86/kernel/acpi/boot.c:366:2: error:
- call to '__compiletime_assert_229' declared with 'error' attribute: Need
- native word sized stores/loads for atomicity.
-Message-ID: <202312070720.whAy8Wim-lkp@intel.com>
+	Felix Fietkau <nbd@nbd.name>, Rex Lu <rex.lu@mediatek.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [nbd168-wireless:mt76 58/62]
+ drivers/net/wireless/mediatek/mt76/mmio.c:146:39: warning: shift count >=
+ width of type
+Message-ID: <202312071044.ks9eUdyG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,110 +53,161 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/intel/tdx.git guest
-head:   f3d7a7e86bf2f0d5ce629f2fb7be11dca88ac06d
-commit: b93c111150948d0c5a55fca8e1620a05aa7e4298 [53/136] x86/acpi, x86/boot: Add multiprocessor wake-up support
-config: i386-buildonly-randconfig-004-20231206 (https://download.01.org/0day-ci/archive/20231207/202312070720.whAy8Wim-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312070720.whAy8Wim-lkp@intel.com/reproduce)
+tree:   https://github.com/nbd168/wireless mt76
+head:   131c05dd91da2a13df20d4e5671e7c90d510bf69
+commit: 950aaa76922a903f2431d36e9093327dc0e8ff9c [58/62] wifi: mt76: mt7996: set DMA mask to 36 bits for boards with more than 4GB of RAM
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20231207/202312071044.ks9eUdyG-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231207/202312071044.ks9eUdyG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312070720.whAy8Wim-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312071044.ks9eUdyG-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/acpi/boot.c:366:2: error: call to '__compiletime_assert_229' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-           smp_store_release(&acpi_mp_wake_mailbox->wakeup_vector, start_ip);
-           ^
-   include/asm-generic/barrier.h:138:33: note: expanded from macro 'smp_store_release'
-   #define smp_store_release(p, v) __smp_store_release(p, v)
-                                   ^
-   arch/x86/include/asm/barrier.h:65:2: note: expanded from macro '__smp_store_release'
-           compiletime_assert_atomic_type(*p);                             \
-           ^
-   include/linux/compiler_types.h:325:2: note: expanded from macro 'compiletime_assert_atomic_type'
-           compiletime_assert(__native_word(t),                            \
-           ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:310:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:303:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:132:1: note: expanded from here
-   __compiletime_assert_229
-   ^
-   1 error generated.
+   In file included from drivers/net/wireless/mediatek/mt76/mmio.c:6:
+   In file included from drivers/net/wireless/mediatek/mt76/mt76.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/mediatek/mt76/mmio.c:6:
+   In file included from drivers/net/wireless/mediatek/mt76/mt76.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/mediatek/mt76/mmio.c:6:
+   In file included from drivers/net/wireless/mediatek/mt76/mt76.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/net/wireless/mediatek/mt76/mmio.c:146:39: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                         FIELD_PREP(MT_DMA_CTL_SDP0_H, addr >> 32);
+         |                                                            ^  ~~
+   include/linux/bitfield.h:114:33: note: expanded from macro 'FIELD_PREP'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                                               ^~~~
+   include/linux/bitfield.h:68:41: note: expanded from macro '__BF_FIELD_CHECK'
+      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+         |                                                       ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:435:22: note: expanded from macro 'compiletime_assert'
+     435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:423:23: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:415:9: note: expanded from macro '__compiletime_assert'
+     415 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/wireless/mediatek/mt76/mmio.c:146:39: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                         FIELD_PREP(MT_DMA_CTL_SDP0_H, addr >> 32);
+         |                                                            ^  ~~
+   include/linux/bitfield.h:114:33: note: expanded from macro 'FIELD_PREP'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                                               ^~~~
+   include/linux/bitfield.h:69:39: note: expanded from macro '__BF_FIELD_CHECK'
+      69 |                                  ~((_mask) >> __bf_shf(_mask)) & (_val) : 0, \
+         |                                                                   ^~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:435:22: note: expanded from macro 'compiletime_assert'
+     435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:423:23: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:415:9: note: expanded from macro '__compiletime_assert'
+     415 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/wireless/mediatek/mt76/mmio.c:146:39: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                         FIELD_PREP(MT_DMA_CTL_SDP0_H, addr >> 32);
+         |                                                            ^  ~~
+   include/linux/bitfield.h:115:20: note: expanded from macro 'FIELD_PREP'
+     115 |                 ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);   \
+         |                                  ^~~~
+   9 warnings generated.
 
 
-vim +366 arch/x86/kernel/acpi/boot.c
+vim +146 drivers/net/wireless/mediatek/mt76/mmio.c
 
-   333	
-   334	static int acpi_wakeup_cpu(int apicid, unsigned long start_ip)
-   335	{
-   336		u8 timeout = 0xFF;
-   337	
-   338		/* Remap mailbox memory only for the first call to acpi_wakeup_cpu() */
-   339		if (physids_empty(apic_id_wakemap)) {
-   340			acpi_mp_wake_mailbox = memremap(acpi_mp_wake_mailbox_paddr,
-   341							sizeof(*acpi_mp_wake_mailbox),
-   342							MEMREMAP_WB);
-   343		}
-   344	
-   345		/*
-   346		 * According to the ACPI specification r6.4, sec 5.2.12.19, the
-   347		 * mailbox-based wakeup mechanism cannot be used more than once
-   348		 * for the same CPU, so skip sending wake commands to already
-   349		 * awake CPU.
-   350		 */
-   351		if (physid_isset(apicid, apic_id_wakemap)) {
-   352			pr_err("CPU already awake (APIC ID %x), skipping wakeup\n",
-   353			       apicid);
-   354			return -EINVAL;
-   355		}
-   356	
-   357		/*
-   358		 * Mailbox memory is shared between firmware and OS. Firmware will
-   359		 * listen on mailbox command address, and once it receives the wakeup
-   360		 * command, CPU associated with the given apicid will be booted. So,
-   361		 * the value of apic_id and wakeup_vector has to be set before updating
-   362		 * the wakeup command. So use smp_store_release to let the compiler know
-   363		 * about it and preserve the order of writes.
-   364		 */
-   365		smp_store_release(&acpi_mp_wake_mailbox->apic_id, apicid);
- > 366		smp_store_release(&acpi_mp_wake_mailbox->wakeup_vector, start_ip);
-   367		smp_store_release(&acpi_mp_wake_mailbox->command,
-   368				  ACPI_MP_WAKE_COMMAND_WAKEUP);
-   369	
-   370		/*
-   371		 * After writing wakeup command, wait for maximum timeout of 0xFF
-   372		 * for firmware to reset the command address back zero to indicate
-   373		 * the successful reception of command.
-   374		 * NOTE: 255 as timeout value is decided based on our experiments.
-   375		 *
-   376		 * XXX: Change the timeout once ACPI specification comes up with
-   377		 *      standard maximum timeout value.
-   378		 */
-   379		while (READ_ONCE(acpi_mp_wake_mailbox->command) && timeout--)
-   380			cpu_relax();
-   381	
-   382		if (timeout) {
-   383			/*
-   384			 * If the CPU wakeup process is successful, store the
-   385			 * status in apic_id_wakemap to prevent re-wakeup
-   386			 * requests.
-   387			 */
-   388			physid_set(apicid, apic_id_wakemap);
-   389			return 0;
-   390		}
-   391	
-   392		/* If timed out (timeout == 0), return error */
-   393		return -EIO;
-   394	}
-   395	
+   110	
+   111	u32 mt76_mmio_wed_init_rx_buf(struct mtk_wed_device *wed, int size)
+   112	{
+   113		struct mt76_dev *dev = container_of(wed, struct mt76_dev, mmio.wed);
+   114		struct mtk_wed_bm_desc *desc = wed->rx_buf_ring.desc;
+   115		struct mt76_queue *q = &dev->q_rx[MT_RXQ_MAIN];
+   116		int i, len = SKB_WITH_OVERHEAD(q->buf_size);
+   117		struct mt76_txwi_cache *t = NULL;
+   118	
+   119		for (i = 0; i < size; i++) {
+   120			enum dma_data_direction dir;
+   121			dma_addr_t addr;
+   122			u32 offset;
+   123			int token;
+   124			void *buf;
+   125	
+   126			t = mt76_get_rxwi(dev);
+   127			if (!t)
+   128				goto unmap;
+   129	
+   130			buf = mt76_get_page_pool_buf(q, &offset, q->buf_size);
+   131			if (!buf)
+   132				goto unmap;
+   133	
+   134			addr = page_pool_get_dma_addr(virt_to_head_page(buf)) + offset;
+   135			dir = page_pool_get_dma_dir(q->page_pool);
+   136			dma_sync_single_for_device(dev->dma_dev, addr, len, dir);
+   137	
+   138			desc->buf0 = cpu_to_le32(addr);
+   139			token = mt76_rx_token_consume(dev, buf, t, addr);
+   140			if (token < 0) {
+   141				mt76_put_page_pool_buf(buf, false);
+   142				goto unmap;
+   143			}
+   144	
+   145			token = FIELD_PREP(MT_DMA_CTL_TOKEN, token) |
+ > 146				FIELD_PREP(MT_DMA_CTL_SDP0_H, addr >> 32);
+   147			desc->token |= cpu_to_le32(token);
+   148			desc++;
+   149		}
+   150	
+   151		return 0;
+   152	
+   153	unmap:
+   154		if (t)
+   155			mt76_put_rxwi(dev, t);
+   156		mt76_mmio_wed_release_rx_buf(wed);
+   157	
+   158		return -ENOMEM;
+   159	}
+   160	EXPORT_SYMBOL_GPL(mt76_mmio_wed_init_rx_buf);
+   161	
 
 -- 
 0-DAY CI Kernel Test Service
