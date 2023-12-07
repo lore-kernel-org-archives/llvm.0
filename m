@@ -1,50 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400444E60E;
-	Thu,  7 Dec 2023 19:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70F64F88E;
+	Thu,  7 Dec 2023 19:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C4ECxeh4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9IL30Vf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701977449; x=1733513449;
+  t=1701977451; x=1733513451;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dQJzpPCJi2DcWLmi+tpSUDnGySOo5HoMcMdxmPpeqDs=;
-  b=C4ECxeh40vXZ5roxy2D9fLgxq06aihaOSzQYAPm+tSnUCOSFRhAOrgIw
-   FhkI85fwvcSU5gd1D+736HLCnRVDs2Mfb8COmfrJ/mtJO94m8syCoqVNo
-   fWRwIaZ+mtWBPgFQ/ANI1b+efK8BsK6EcrVMDwuJDGyFQyhzdNTZ59efK
-   5DtksA0vR38p/uuCxwbU0Cs7wTCIrikJ+8LPmCK6r0OqKvSknCkGYjR37
-   QRQO4+XyP73Hlp2HNiBnJDnIMqM5MMGNe4gZ54Hmle10r/CWINPKubwqt
-   kYE3g1pUXKjlFMWujfFhNwMltJ8lnCaB7MjdPpM4z9a+HCn9YlWJNs8mL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="373791327"
+  bh=0eJYswHSdqLumV5B3q8tXp4JrEbH7Qyc7NqSqNcNoH4=;
+  b=h9IL30Vf3Z+slEOu8iYBZkbY+BXuApBu+l0nU5CT5tOEhTotFJTtdXuH
+   Jzk3/UUBHzUY7Iw1mO4B9rYOfksZxXf0yrbfSRh1vzdvTr0VH87r4mRBk
+   h7ViVx3iINtX5ZPHHyzdV7Aw1ev2J7mNXrPalU41xYLhWQhlN8eTd4mwE
+   Ttsn69r6SZHcRILmlWE8AHmjlJ9cujABUNwD1VSsKNmIv82iXK9Pfj8hF
+   b/ynXt5N0DRA8WO8pyhHd60rKrO0sRW0xD1t4pBxPa1yYdJVHYH6bwujq
+   I5QfZUnw8CwOw4tAQwpMmVjb8Pz9BRWlbyCCFBD/34ApU5JOOagvk8WEh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="373791330"
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="373791327"
+   d="scan'208";a="373791330"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 11:30:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="13216355"
+   d="scan'208";a="13216314"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
   by orviesa002.jf.intel.com with ESMTP; 07 Dec 2023 11:30:45 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rBK54-000Cjl-2R;
+	id 1rBK54-000Cjn-2V;
 	Thu, 07 Dec 2023 19:30:42 +0000
-Date: Fri, 8 Dec 2023 03:30:04 +0800
+Date: Fri, 8 Dec 2023 03:30:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Xiaolei Wang <xiaolei.wang@windriver.com>, rafael@kernel.org,
-	pavel@ucw.cz, len.brown@intel.com, peterz@infradead.org,
-	mingo@kernel.org
+To: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] freezer,sched: Move state information judgment outside
- task_call_func
-Message-ID: <202312080347.yJvIjGb3-lkp@intel.com>
-References: <20231207111634.667057-1-xiaolei.wang@windriver.com>
+	linux-media@vger.kernel.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: Re: [PATCH 1/3] media: i2c: imx415: Convert to new CCI register
+ access helpers
+Message-ID: <202312080321.6wjzIYcj-lkp@intel.com>
+References: <20231205090557.298680-2-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,63 +57,171 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231207111634.667057-1-xiaolei.wang@windriver.com>
+In-Reply-To: <20231205090557.298680-2-alexander.stein@ew.tq-group.com>
 
-Hi Xiaolei,
+Hi Alexander,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.7-rc4 next-20231207]
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linuxtv-media-stage/master linus/master v6.7-rc4 next-20231207]
+[cannot apply to sailus-media-tree/streams]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/freezer-sched-Move-state-information-judgment-outside-task_call_func/20231207-191924
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231207111634.667057-1-xiaolei.wang%40windriver.com
-patch subject: [PATCH] freezer,sched: Move state information judgment outside task_call_func
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20231208/202312080347.yJvIjGb3-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080347.yJvIjGb3-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/media-i2c-imx415-Convert-to-new-CCI-register-access-helpers/20231205-170736
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20231205090557.298680-2-alexander.stein%40ew.tq-group.com
+patch subject: [PATCH 1/3] media: i2c: imx415: Convert to new CCI register access helpers
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231208/202312080321.6wjzIYcj-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080321.6wjzIYcj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080347.yJvIjGb3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312080321.6wjzIYcj-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/freezer.c:125:30: error: no member named 'lockdep_depth' in 'struct task_struct'
-           p_check->lockdep_depth = p->lockdep_depth;
-                                    ~  ^
-   1 error generated.
+>> drivers/media/i2c/imx415.c:119:16: error: call to undeclared function 'CCI_REG16_LE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   .regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+                                ^
+   drivers/media/i2c/imx415.c:41:30: note: expanded from macro 'IMX415_BCWAIT_TIME'
+   #define IMX415_BCWAIT_TIME        CCI_REG16_LE(0x3008)
+                                     ^
+>> drivers/media/i2c/imx415.c:119:16: error: initializer element is not a compile-time constant
+                   .regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+                                ^~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/imx415.c:41:30: note: expanded from macro 'IMX415_BCWAIT_TIME'
+   #define IMX415_BCWAIT_TIME        CCI_REG16_LE(0x3008)
+                                     ^~~~~~~~~~~~~~~~~~~~
+>> drivers/media/i2c/imx415.c:195:4: error: call to undeclared function 'CCI_REG24_LE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           { IMX415_VMAX, 0x08CA },
+             ^
+   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
+   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
+                                     ^
+   drivers/media/i2c/imx415.c:195:4: error: initializer element is not a compile-time constant
+           { IMX415_VMAX, 0x08CA },
+             ^~~~~~~~~~~
+   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
+   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
+                                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/imx415.c:211:4: error: initializer element is not a compile-time constant
+           { IMX415_VMAX, 0x08CA },
+             ^~~~~~~~~~~
+   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
+   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
+                                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/imx415.c:227:4: error: initializer element is not a compile-time constant
+           { IMX415_VMAX, 0x08CA },
+             ^~~~~~~~~~~
+   drivers/media/i2c/imx415.c:53:24: note: expanded from macro 'IMX415_VMAX'
+   #define IMX415_VMAX               CCI_REG24_LE(0x3024)
+                                     ^~~~~~~~~~~~~~~~~~~~
+   6 errors generated.
 
 
-vim +125 kernel/freezer.c
+vim +/CCI_REG16_LE +119 drivers/media/i2c/imx415.c
 
-   107	
-   108	static int __set_task_frozen(struct task_struct *p, void *arg)
-   109	{
-   110		unsigned int state = READ_ONCE(p->__state);
-   111		struct task_freeze_check *p_check = arg;
-   112	
-   113		if (p->on_rq)
-   114			return 0;
-   115	
-   116		if (p != current && task_curr(p))
-   117			return 0;
-   118	
-   119		if (!(state & (TASK_FREEZABLE | __TASK_STOPPED | __TASK_TRACED)))
-   120			return 0;
-   121	
-   122		p->saved_state = p->__state;
-   123		WRITE_ONCE(p->__state, TASK_FROZEN);
-   124		p_check->state = p->__state;
- > 125		p_check->lockdep_depth = p->lockdep_depth;
-   126		return TASK_FROZEN;
-   127	}
-   128	
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  113  
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  114  /* INCK Settings - includes all lane rate and INCK dependent registers */
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  115  static const struct imx415_clk_params imx415_clk_params[] = {
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  116  	{
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  117  		.lane_rate = 594000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  118  		.inck = 27000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30 @119  		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  120  		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  121  		.regs[2] = { IMX415_SYS_MODE, 0x7 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  122  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  123  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  124  		.regs[5] = { IMX415_INCKSEL3, 0x084 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  125  		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  126  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  127  		.regs[8] = { IMX415_INCKSEL6, 0x0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  128  		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  129  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  130  	},
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  131  	{
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  132  		.lane_rate = 720000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  133  		.inck = 24000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  134  		.regs[0] = { IMX415_BCWAIT_TIME, 0x054 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  135  		.regs[1] = { IMX415_CPWAIT_TIME, 0x03B },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  136  		.regs[2] = { IMX415_SYS_MODE, 0x9 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  137  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  138  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  139  		.regs[5] = { IMX415_INCKSEL3, 0x0B4 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  140  		.regs[6] = { IMX415_INCKSEL4, 0x0FC },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  141  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  142  		.regs[8] = { IMX415_INCKSEL6, 0x0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  143  		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  144  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  145  	},
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  146  	{
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  147  		.lane_rate = 891000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  148  		.inck = 27000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  149  		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  150  		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  151  		.regs[2] = { IMX415_SYS_MODE, 0x5 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  152  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  153  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  154  		.regs[5] = { IMX415_INCKSEL3, 0x0C6 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  155  		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  156  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  157  		.regs[8] = { IMX415_INCKSEL6, 0x0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  158  		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  159  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  160  	},
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  161  	{
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  162  		.lane_rate = 1440000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  163  		.inck = 24000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  164  		.regs[0] = { IMX415_BCWAIT_TIME, 0x054 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  165  		.regs[1] = { IMX415_CPWAIT_TIME, 0x03B },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  166  		.regs[2] = { IMX415_SYS_MODE, 0x8 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  167  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  168  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  169  		.regs[5] = { IMX415_INCKSEL3, 0x0B4 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  170  		.regs[6] = { IMX415_INCKSEL4, 0x0FC },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  171  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  172  		.regs[8] = { IMX415_INCKSEL6, 0x1 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  173  		.regs[9] = { IMX415_INCKSEL7, 0x0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  174  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  175  	},
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  176  	{
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  177  		.lane_rate = 1485000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  178  		.inck = 27000000,
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  179  		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  180  		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  181  		.regs[2] = { IMX415_SYS_MODE, 0x8 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  182  		.regs[3] = { IMX415_INCKSEL1, 0x00 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  183  		.regs[4] = { IMX415_INCKSEL2, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  184  		.regs[5] = { IMX415_INCKSEL3, 0x0A5 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  185  		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  186  		.regs[7] = { IMX415_INCKSEL5, 0x23 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  187  		.regs[8] = { IMX415_INCKSEL6, 0x1 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  188  		.regs[9] = { IMX415_INCKSEL7, 0x0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  189  		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  190  	},
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  191  };
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  192  
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  193  /* all-pixel 2-lane 720 Mbps 15.74 Hz mode */
+a13751ef748a7a Alexander Stein 2023-12-05  194  static const struct cci_reg_sequence imx415_mode_2_720[] = {
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30 @195  	{ IMX415_VMAX, 0x08CA },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  196  	{ IMX415_HMAX, 0x07F0 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  197  	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  198  	{ IMX415_TCLKPOST, 0x006F },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  199  	{ IMX415_TCLKPREPARE, 0x002F },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  200  	{ IMX415_TCLKTRAIL, 0x002F },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  201  	{ IMX415_TCLKZERO, 0x00BF },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  202  	{ IMX415_THSPREPARE, 0x002F },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  203  	{ IMX415_THSZERO, 0x0057 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  204  	{ IMX415_THSTRAIL, 0x002F },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  205  	{ IMX415_THSEXIT, 0x004F },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  206  	{ IMX415_TLPX, 0x0027 },
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  207  };
+14cd15e7a1e2a3 Gerald Loacker  2023-01-30  208  
 
 -- 
 0-DAY CI Kernel Test Service
