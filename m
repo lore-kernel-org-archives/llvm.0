@@ -1,32 +1,74 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415D41C290;
-	Fri,  8 Dec 2023 13:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fjasle.eu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9611CA81
+	for <llvm@lists.linux.dev>; Fri,  8 Dec 2023 13:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b="eCbJM65F"
-Received: from leknes.fjasle.eu ([46.142.121.132]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MDhth-1r36rE2vLz-00ApQE; Fri, 08 Dec 2023 14:20:51 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-	id 1E47A3E78A; Fri,  8 Dec 2023 14:20:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-	t=1702041641; bh=QDL5JcqlyVOnFIyl+IQV8GsQ4nRlAMjLx+obmLW8jTE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eCbJM65FZFkCfv6CHsYJNVM4KDXDSop7vJNSjw6UjR7M6KrQJ0M/73HlPC0kTl9Pb
-	 g0+QRbL3RajyHgWiF/4KZbeD6bZER9TWL8eQI4egrxCD0yQejtsj3+avIv89au+cDn
-	 TY3a7Hgu0tCOLu072tP4QuH5+loOWKrudPT+iZTg=
-Date: Fri, 8 Dec 2023 14:20:39 +0100
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, morbo@google.com,
-	justinstitt@google.com, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] MAINTAINERS: Add scripts/clang-tools to Kbuild section
-Message-ID: <ZXMYJ6JCm3ZmDJ9G@fjasle.eu>
-References: <20231205-maintainers-kbuild-clang-tools-v1-1-a646a1985300@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UZDv1w4D"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=mEwzSQj49+1V+0OqU5JPdRDMA9pBIqO9QxdbK1+psok=; b=UZDv1w4D/0pm8nMQazAuCgRLvP
+	kUoVvd6ilj8Hjwd0Y5fIUgaEUgLc20msRFexR7C9e/R5jJFuu7bZjqIgiL/klT2qwoH/SACGyjE5D
+	pIY+B9k0Lyqc1ioJ98358Ce9+VsG8tCGQG0nIhqFli9RrusQihcQTNhejxgQ19eW4p1pvj3KvnFig
+	MMidSdAN6qqBAZeYoFmUr/sVh9/o3dTb62t0uTDjAvWYahnB8nERNNsZtaGrTwGnY2ZzvDdXs6hji
+	c+xdyrIm44MYQPUN7hS1K511Z1iwDJHo+/f6P9zSOKIaQo/HioUiRcnxmR7aXAYVsIuA48UUj04b+
+	r9rIzZCQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rBb5u-006bFJ-00;
+	Fri, 08 Dec 2023 13:40:42 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A3EDA3003F0; Fri,  8 Dec 2023 14:40:41 +0100 (CET)
+Date: Fri, 8 Dec 2023 14:40:41 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
+	Song Liu <songliubraving@meta.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv <linux-riscv@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+Message-ID: <20231208134041.GD28727@noisy.programming.kicks-ass.net>
+References: <ZW4LjmUKj1q6RWdL@krava>
+ <20231204181614.GA7299@noisy.programming.kicks-ass.net>
+ <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+ <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
+ <20231206163814.GB36423@noisy.programming.kicks-ass.net>
+ <20231206183713.GA35897@noisy.programming.kicks-ass.net>
+ <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
+ <20231207093105.GA28727@noisy.programming.kicks-ass.net>
+ <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
+ <20231208102940.GB28727@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,58 +77,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231205-maintainers-kbuild-clang-tools-v1-1-a646a1985300@kernel.org>
-X-Provags-ID: V03:K1:iYfwVXTmwwrYz1qs3mVONKhDPEE1wQY7wYRTotUVhsZaDlv7/+f
- iPJhP7egDSBrXu/RZsJYEWNt3G3aAEJVTWkONFs5juLZPZ6VVUBd4jBSoJQwyVn7ZMv8OxI
- uEx+mlafCrUR/d93pgxyX7ginLOlHlDeg/U3WbK/qBS1l3hvC1vZI0XAwv0iaIBH6txcA91
- g5ogTfQn7ipaaik0hxjhg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:R5mxsVcB3sw=;HD28HwgfVKeRCezuPbxE/qWu1An
- ljTj6BxNYyfXLSFi7G2Skiw0cyBUTZTo16E37WNEZxzG4AhbEjTHiLDDFN12MqGivTi9ikKS+
- zxTMxrckfiBEbkZVlk8jDdeaQZEw4WjRGxKZDqlj0rthKdVn0n0eBPi3LvXQ12VuYZQP7gEYU
- kdGqxFcSYyaSu4FASwC0cMakIMLDw0DDyU8ZQDhGg1NM4jBwvW24K/LsIF2NjIx2jryomGoA2
- f4isFyepw3zpIpInraIu9aBdKvU+ikqIawBsUK8d2EGkc88lIxn6WtAsLgMiQD0HCOAezOEYI
- DrM7HzvGrfaLEP64lLUGXD6tfx8VpZYJ61Hy3EONn5/Nv6QarbdbLu+Yk8EAo9PytoKnnXoQI
- SKuYiW5+I23oliSEzcma21p0Zfiq46SOQeHDGbFMiANRFz9XebAkfiVpmh4lfJoEeFjKXLwA9
- e0Xnr1likfBMJraSxeVs4YqDxj6R54QEfYWE+PP1hYeaO3YopnEXXt7snupatRdJn7cYIZ/Tr
- 9lPHOg/fEOtrhkirGA9Zug/ysTr8c3cThstxoFxf+eHkfGxWn36c8yym1U4T04Q6exJFBsKtA
- /GReP2hz07tYKIQVRs/VPUremMeNi8yMFKgE/SoqF1xw/KUPDYrqHl9AwcND9RAV716MCOK7D
- l7157RW5BHUOgxmBnqoGog0VxnSzhhlvSm9MyvwSLLKSWi5zZt5XHLHn9PFmtyftjoIfDfKQP
- Teuk/lrp25UUo5+tBznHlbXWVAAAWwpVKG2HFJzPmuW2sNiY59wqFGgJc/xn4Sx/FtCe67Npy
- uwO7ex3YnOGMz0jm0OKcBh6Sq337zvxZrg4GaGFo48DNBXL4ro+XkaakN7VZtxhJqn2/CHULT
- Aiv0Fzc3etlNRbQ==
+In-Reply-To: <20231208102940.GB28727@noisy.programming.kicks-ass.net>
 
-On Tue, Dec 05, 2023 at 10:05:57AM -0700 Nathan Chancellor wrote:
-> Masahiro has always applied scripts/clang-tools patches but it is not
-> included in the Kbuild section, so neither he nor linux-kbuild get cc'd
-> on patches that touch those files.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 788be9ab5b73..cd9bf44dc1b3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11526,6 +11526,7 @@ F:	scripts/*vmlinux*
->  F:	scripts/Kbuild*
->  F:	scripts/Makefile*
->  F:	scripts/basic/
-> +F:	scripts/clang-tools/
->  F:	scripts/dummy-tools/
->  F:	scripts/mk*
->  F:	scripts/mod/
-> 
-> ---
-> base-commit: 33cc938e65a98f1d29d0a18403dbbee050dcad9a
-> change-id: 20231205-maintainers-kbuild-clang-tools-93666b423b02
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
+On Fri, Dec 08, 2023 at 11:29:40AM +0100, Peter Zijlstra wrote:
+> The only problem I now have is the one XXX, I'm not entirely sure what
+> signature to use there.
 
-Thanks, sounds reasonable to me.
+> @@ -119,6 +119,7 @@ int bpf_struct_ops_test_run(struct bpf_p
+>  	op_idx = prog->expected_attach_type;
+>  	err = bpf_struct_ops_prepare_trampoline(tlinks, link,
+>  						&st_ops->func_models[op_idx],
+> +						/* XXX */ NULL,
+>  						image, image + PAGE_SIZE);
+>  	if (err < 0)
+>  		goto out;
 
-Acked-by: Nicolas Schier <nicolas@fjasle.eu>
+Duh, that should ofcourse be something of dummy_ops_test_ret_fn type.
+Let me go fix that.
