@@ -1,55 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17108840C0;
-	Thu,  7 Dec 2023 23:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634FE5224;
+	Fri,  8 Dec 2023 04:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CZUOsi4M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j1CCAL73"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701991481; x=1733527481;
+  t=1702008993; x=1733544993;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xoqsFo9dnxWWy6BSu4v73RRiTtczxofsXV0GmHIT9GE=;
-  b=CZUOsi4MRyWo6dTjyx6dlzZvFQVxCzNSvyuTR7nYOeZrM6R1QHA8kyLv
-   GDpZyQYVbWscMLzKrGqfPd2xC0Wq5PNYlea1TSoa7ln1FOHRuY5L5B828
-   1COj643IiPmYYOZRr/YBvup2thxeuDNrASASSYs1ui/MKVuP3fs+pEM8k
-   sLOazRxhQh95MYbNytoqZSaSJv5ZtIV3iXsTlVnvPElosyZzjtJ8Gyh1Q
-   NX/k637d3jMgz0TBYIBRVWQrS//eNOBd7V4x6uLPrBU61+i+zgjGFF59d
-   zHQBp8yWzLIdQRnl1SmLxNkhDodYpjyP0N09I8ehI8hS3drT9aG3sY4vY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1430965"
+  bh=SxevhwPvl1dlX54v2YDQvnciLdpmAuA4/R+k34yhueQ=;
+  b=j1CCAL73D3/jBdsLNbygECA/Zp6Bk00L36s1ekjv4MRxDV2qfMlrNvQ/
+   aoWSWkZJ1+ubbMnfIHl04XGa07afN68p8sBBLo/x1sQx9DxVieIyJR8Cp
+   VLv6lUFk9yDl5J6U1SRPanJmU9vavxJNw8bR/XCFOaljLHvGKGi175hkR
+   u9Lw6WwDO1b7XgPO+DP5mOlD0MkJ60mLjUPjAcnmKucI+qNxFjXnpoSVe
+   X7Tahnfw4UVt5dVsVzNImI41D6fLj74urSHwgza0QpopSWX4+gNrrPYJ2
+   promWvNQ3OGg8IJTIfhn0eTSee2Zvk7pMpfYdOS95JBuKVau0lbehXzLE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="374519752"
 X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="1430965"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 15:24:40 -0800
+   d="scan'208";a="374519752"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 20:16:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="771923277"
 X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="771923277"
+   d="scan'208";a="19953059"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 07 Dec 2023 15:24:36 -0800
+  by orviesa001.jf.intel.com with ESMTP; 07 Dec 2023 20:16:15 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rBNjM-000CyZ-1m;
-	Thu, 07 Dec 2023 23:24:32 +0000
-Date: Fri, 8 Dec 2023 07:23:58 +0800
+	id 1rBSHc-000DEh-0s;
+	Fri, 08 Dec 2023 04:16:12 +0000
+Date: Fri, 8 Dec 2023 12:15:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: RD Babiera <rdbabiera@google.com>, heikki.krogerus@linux.intel.com,
-	linux@roeck-us.net, gregkh@linuxfoundation.org,
-	pmalani@chromium.org, bleung@chromium.org,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, badhri@google.com,
-	tzungbi@kernel.org, utkarsh.h.patel@intel.com,
-	andriy.shevchenko@linux.intel.com,
-	RD Babiera <rdbabiera@google.com>
-Subject: Re: [PATCH v1 02/10] usb: typec: tcpci: enable reception of SOP'
- messages
-Message-ID: <202312080751.GDJHcwNz-lkp@intel.com>
-References: <20231207090738.15721-14-rdbabiera@google.com>
+To: Elad Nachman <enachman@marvell.com>, gregory.clement@bootlin.com,
+	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	enachman@marvell.com, cyuval@marvell.com
+Subject: Re: [PATCH v2 1/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
+Message-ID: <202312081143.38GWJJ2J-lkp@intel.com>
+References: <20231207165027.2628302-2-enachman@marvell.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,110 +52,187 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231207090738.15721-14-rdbabiera@google.com>
+In-Reply-To: <20231207165027.2628302-2-enachman@marvell.com>
 
-Hi RD,
+Hi Elad,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 5e4c8814a431d21bfaf20b464134f40f2f81e152]
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on linus/master v6.7-rc4 next-20231207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/RD-Babiera/usb-typec-bus-provide-transmit-type-for-alternate-mode-drivers/20231207-171114
-base:   5e4c8814a431d21bfaf20b464134f40f2f81e152
-patch link:    https://lore.kernel.org/r/20231207090738.15721-14-rdbabiera%40google.com
-patch subject: [PATCH v1 02/10] usb: typec: tcpci: enable reception of SOP' messages
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231208/202312080751.GDJHcwNz-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Elad-Nachman/i2c-busses-i2c-mv64xxx-fix-arb-loss-i2c-lock/20231208-005406
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/20231207165027.2628302-2-enachman%40marvell.com
+patch subject: [PATCH v2 1/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
+config: i386-buildonly-randconfig-004-20231208 (https://download.01.org/0day-ci/archive/20231208/202312081143.38GWJJ2J-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080751.GDJHcwNz-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312081143.38GWJJ2J-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080751.GDJHcwNz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312081143.38GWJJ2J-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/usb/typec/tcpm/fusb302.c:1470:39: error: too few arguments to function call, expected 3, have 2
-                   tcpm_pd_receive(chip->tcpm_port, msg);
-                   ~~~~~~~~~~~~~~~                     ^
-   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
-   void tcpm_pd_receive(struct tcpm_port *port,
-        ^
-   1 error generated.
---
->> drivers/usb/typec/tcpm/wcove.c:538:37: error: too few arguments to function call, expected 3, have 2
-                           tcpm_pd_receive(wcove->tcpm, &msg);
-                           ~~~~~~~~~~~~~~~                  ^
-   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
-   void tcpm_pd_receive(struct tcpm_port *port,
-        ^
-   1 error generated.
---
->> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c:302:52: error: too few arguments to function call, expected 3, have 2
-                   tcpm_pd_receive(pmic_typec_pdphy->tcpm_port, &msg);
-                   ~~~~~~~~~~~~~~~                                  ^
-   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
-   void tcpm_pd_receive(struct tcpm_port *port,
-        ^
-   1 error generated.
+>> drivers/i2c/busses/i2c-mv64xxx.c:440:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                           if (!ret) {
+                                ^~~
+   drivers/i2c/busses/i2c-mv64xxx.c:372:12: note: initialize the variable 'ret' to silence this warning
+           int i, ret;
+                     ^
+                      = 0
+   1 warning generated.
 
 
-vim +1470 drivers/usb/typec/tcpm/fusb302.c
+vim +/ret +440 drivers/i2c/busses/i2c-mv64xxx.c
 
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1421  
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1422  static int fusb302_pd_read_message(struct fusb302_chip *chip,
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1423  				   struct pd_message *msg)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1424  {
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1425  	int ret = 0;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1426  	u8 token;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1427  	u8 crc[4];
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1428  	int len;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1429  
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1430  	/* first SOP token */
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1431  	ret = fusb302_i2c_read(chip, FUSB_REG_FIFOS, &token);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1432  	if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1433  		return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1434  	ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, 2,
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1435  				     (u8 *)&msg->header);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1436  	if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1437  		return ret;
-f03d95f59026d1 drivers/staging/typec/fusb302/fusb302.c Guru Das Srinagesh 2017-05-10  1438  	len = pd_header_cnt_le(msg->header) * 4;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1439  	/* add 4 to length to include the CRC */
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1440  	if (len > PD_MAX_PAYLOAD * 4) {
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1441  		fusb302_log(chip, "PD message too long %d", len);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1442  		return -EINVAL;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1443  	}
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1444  	if (len > 0) {
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1445  		ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, len,
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1446  					     (u8 *)msg->payload);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1447  		if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1448  			return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1449  	}
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1450  	/* another 4 bytes to read CRC out */
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1451  	ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, 4, crc);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1452  	if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1453  		return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1454  	fusb302_log(chip, "PD message header: %x", msg->header);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1455  	fusb302_log(chip, "PD message len: %d", len);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1456  
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1457  	/*
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1458  	 * Check if we've read off a GoodCRC message. If so then indicate to
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1459  	 * TCPM that the previous transmission has completed. Otherwise we pass
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1460  	 * the received message over to TCPM for processing.
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1461  	 *
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1462  	 * We make this check here instead of basing the reporting decision on
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1463  	 * the IRQ event type, as it's possible for the chip to report the
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1464  	 * TX_SUCCESS and GCRCSENT events out of order on occasion, so we need
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1465  	 * to check the message type to ensure correct reporting to TCPM.
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1466  	 */
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1467  	if ((!len) && (pd_header_type_le(msg->header) == PD_CTRL_GOOD_CRC))
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1468  		tcpm_pd_transmit_complete(chip->tcpm_port, TCPC_TX_SUCCESS);
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1469  	else
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21 @1470  		tcpm_pd_receive(chip->tcpm_port, msg);
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1471  
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1472  	return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1473  }
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1474  
+   367	
+   368	static void
+   369	mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
+   370	{
+   371		struct pinctrl *pc;
+   372		int i, ret;
+   373	
+   374		switch(drv_data->action) {
+   375		case MV64XXX_I2C_ACTION_SEND_RESTART:
+   376			/* We should only get here if we have further messages */
+   377			BUG_ON(drv_data->num_msgs == 0);
+   378	
+   379			drv_data->msgs++;
+   380			drv_data->num_msgs--;
+   381			mv64xxx_i2c_send_start(drv_data);
+   382	
+   383			if (drv_data->errata_delay)
+   384				udelay(5);
+   385	
+   386			/*
+   387			 * We're never at the start of the message here, and by this
+   388			 * time it's already too late to do any protocol mangling.
+   389			 * Thankfully, do not advertise support for that feature.
+   390			 */
+   391			drv_data->send_stop = drv_data->num_msgs == 1;
+   392			break;
+   393	
+   394		case MV64XXX_I2C_ACTION_CONTINUE:
+   395			writel(drv_data->cntl_bits,
+   396				drv_data->reg_base + drv_data->reg_offsets.control);
+   397			break;
+   398	
+   399		case MV64XXX_I2C_ACTION_SEND_ADDR_1:
+   400			writel(drv_data->addr1,
+   401				drv_data->reg_base + drv_data->reg_offsets.data);
+   402			writel(drv_data->cntl_bits,
+   403				drv_data->reg_base + drv_data->reg_offsets.control);
+   404			break;
+   405	
+   406		case MV64XXX_I2C_ACTION_SEND_ADDR_2:
+   407			writel(drv_data->addr2,
+   408				drv_data->reg_base + drv_data->reg_offsets.data);
+   409			writel(drv_data->cntl_bits,
+   410				drv_data->reg_base + drv_data->reg_offsets.control);
+   411			break;
+   412	
+   413		case MV64XXX_I2C_ACTION_SEND_DATA:
+   414			writel(drv_data->msg->buf[drv_data->byte_posn++],
+   415				drv_data->reg_base + drv_data->reg_offsets.data);
+   416			writel(drv_data->cntl_bits,
+   417				drv_data->reg_base + drv_data->reg_offsets.control);
+   418			break;
+   419	
+   420		case MV64XXX_I2C_ACTION_RCV_DATA:
+   421			drv_data->msg->buf[drv_data->byte_posn++] =
+   422				readl(drv_data->reg_base + drv_data->reg_offsets.data);
+   423			writel(drv_data->cntl_bits,
+   424				drv_data->reg_base + drv_data->reg_offsets.control);
+   425			break;
+   426	
+   427		case MV64XXX_I2C_ACTION_UNLOCK_BUS:
+   428			if (!drv_data->soft_reset)
+   429				break;
+   430	
+   431			pc = devm_pinctrl_get(drv_data->adapter.dev.parent);
+   432			if (IS_ERR(pc)) {
+   433				dev_err(&drv_data->adapter.dev,
+   434					"failed to get pinctrl for bus unlock!\n");
+   435				break;
+   436			}
+   437	
+   438			/* Change i2c MPPs state to act as GPIOs: */
+   439			if (pinctrl_select_state(pc, drv_data->i2c_gpio_state) >= 0) {
+ > 440				if (!ret) {
+   441					/*
+   442					 * Toggle i2c scl (serial clock) 10 times.
+   443					 * 10 clocks are enough to transfer a full
+   444					 * byte plus extra as seen from tests with
+   445					 * Ubiquity SFP module causing the issue.
+   446					 * This allows the slave that occupies
+   447					 * the bus to transmit its remaining data,
+   448					 * so it can release the i2c bus:
+   449					 */
+   450					for (i = 0; i < 10; i++) {
+   451						gpio_set_value(drv_data->scl_gpio, 1);
+   452						udelay(100);
+   453						gpio_set_value(drv_data->scl_gpio, 0);
+   454					};
+   455				}
+   456	
+   457				/* restore i2c pin state to MPPs: */
+   458				pinctrl_select_state(pc, drv_data->i2c_mpp_state);
+   459			}
+   460	
+   461			/*
+   462			 * Trigger controller soft reset
+   463			 * This register is write only, with none of the bits defined.
+   464			 * So any value will do.
+   465			 * 0x1 just seems more intuitive than 0x0 ...
+   466			 */
+   467			writel(0x1, drv_data->reg_base + drv_data->reg_offsets.soft_reset);
+   468			/* wait for i2c controller to complete reset: */
+   469			udelay(100);
+   470			/*
+   471			 * need to proceed to the data stop condition generation clause.
+   472			 * This is needed after clock toggling to put the i2c slave
+   473			 * in the correct state.
+   474			 */
+   475			fallthrough;
+   476	
+   477		case MV64XXX_I2C_ACTION_RCV_DATA_STOP:
+   478			drv_data->msg->buf[drv_data->byte_posn++] =
+   479				readl(drv_data->reg_base + drv_data->reg_offsets.data);
+   480			if (!drv_data->atomic)
+   481				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
+   482			writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
+   483				drv_data->reg_base + drv_data->reg_offsets.control);
+   484			drv_data->block = 0;
+   485			if (drv_data->errata_delay)
+   486				udelay(5);
+   487	
+   488			wake_up(&drv_data->waitq);
+   489			break;
+   490	
+   491		case MV64XXX_I2C_ACTION_INVALID:
+   492		default:
+   493			dev_err(&drv_data->adapter.dev,
+   494				"mv64xxx_i2c_do_action: Invalid action: %d\n",
+   495				drv_data->action);
+   496			drv_data->rc = -EIO;
+   497			fallthrough;
+   498		case MV64XXX_I2C_ACTION_SEND_STOP:
+   499			if (!drv_data->atomic)
+   500				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
+   501			writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
+   502				drv_data->reg_base + drv_data->reg_offsets.control);
+   503			drv_data->block = 0;
+   504			wake_up(&drv_data->waitq);
+   505			break;
+   506		}
+   507	}
+   508	
 
 -- 
 0-DAY CI Kernel Test Service
