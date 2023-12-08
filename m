@@ -1,108 +1,105 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDE53B2A4
-	for <llvm@lists.linux.dev>; Fri,  8 Dec 2023 21:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFEB558115
+	for <llvm@lists.linux.dev>; Fri,  8 Dec 2023 22:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AsRr5a5Z"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40c38de1ee4so5054985e9.0
-        for <llvm@lists.linux.dev>; Fri, 08 Dec 2023 13:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702069474; x=1702674274; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D6NtR+oTUIOd2AHKXBfJVs3VbzXFOw3VtZb1y+6tew0=;
-        b=AsRr5a5Zor3Axw9y0/2zwk+Z1V6jxdp5ZKTMkLNOxMie43xzhJcowQkKQZN8DXK3P8
-         7Dbtv7ID6USJA0vsWM4Pvkb8WXwCTYWbqwFuzX1qheBY4JBoaGSvs5oY5XHk4onW11+o
-         iLnmTl/UhrBEshxjIeuUHnVwAEwGNVEuchuTCOHxnYmOmtyc7T2otzGI0VZ6k3mVj8X+
-         ENvIgHq895xBBggMcZaGrtLOslmpPonWTQ8NV4HjIrR16vAp0HpxIbZJVUe/hIxPcPRI
-         z4HG6MlWoXw+HFwoLEtRnkBKFWRPToZqYHbaRCOM7sk1n8xRb1WAizW8jxO5bgcAUXrF
-         WK/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702069474; x=1702674274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D6NtR+oTUIOd2AHKXBfJVs3VbzXFOw3VtZb1y+6tew0=;
-        b=Jtoj3noyHgNnX6hkw2o1CLDyZheHHGcVabg8UwNDxRlRODw0uw5YCGIjEcG1A7sa68
-         JRRjljY+L5IWP7xU3dMiKUgUiGKQ4tw6AwScrBRpWXwALyoHEoQqg0v1rl2fp7tTYbb9
-         iyJwgbmdwueOYVM0t/4DDveGumQI1/gu7e8neYtoybiHmxs2tjc+eqvQV/qMViC4UCmu
-         t+w61UqDlai2F/4Vu2C56J2ctEqJyFFJ6nofqj6+3x5KthbBZ+nFuGyIXPBF3z6785DQ
-         guZc8n+C2K8AzRYF6ShQPjRh5wH8gnAXdNQOrdNOVmLXxh9wpogKdrfiTpi779gMaMF0
-         aEVA==
-X-Gm-Message-State: AOJu0YxN7vJfuO7nEFCJWSiL+ga6eVaphwApY215kWMtnYQg3bB5VcPt
-	vl7GFZJFVJAYr0tY9fBiez4VRdtgP5SItWJRLeY=
-X-Google-Smtp-Source: AGHT+IEkTtKeS6XS1G3jyMsgzOhUXClVJ029bbBc4Aqz+vIee0Tzhjlve6H0wlutP+qM9rQB9kK5huFu1aQL+LEf+9E=
-X-Received: by 2002:a1c:4c0a:0:b0:40c:2ad3:1aed with SMTP id
- z10-20020a1c4c0a000000b0040c2ad31aedmr288910wmf.35.1702069473424; Fri, 08 Dec
- 2023 13:04:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GGCJsY3C"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B8M1qn5026906;
+	Fri, 8 Dec 2023 22:08:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
+ subject : mime-version : content-type : content-transfer-encoding :
+ message-id : to : cc; s=qcppdkim1;
+ bh=B23GovXxqp99o/l4fZ6ai8goWBskAqHEnHVpvbkPoWE=;
+ b=GGCJsY3CyuhTGLZUXlKGQo/1tTO/smZX8Rut95r8qZnXNYfuOMTcxdU9tmRsAdH9/YFr
+ /DDrHSEQteGIZgf5auZQlPWpCCFAt+SbatKXqzL4kktNcAfdOkf+K3RABunYco36Swpw
+ beR6aESXWjFSUivS55RWSIFeGRRne09oSuV1kaBOM1rR3fQcU3w6hCSwjoBXmWTkDfmT
+ wV+DashsilIAkTt3hgTgX21NJE50U9I2F2e+P/xLUXZ0eTj0MVANTJWQXHZnMQGWZJ9n
+ qdUJCoZPLhYiqVzqW35qiplZREfCHrVLn7VLiACnZsSWMUO0hK2+PMaw658hVz5CWza3 5w== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uuu1dt3cm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Dec 2023 22:08:31 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B8M8VlJ000510
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 8 Dec 2023 22:08:31 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 8 Dec
+ 2023 14:08:30 -0800
+From: Elliot Berman <quic_eberman@quicinc.com>
+Date: Fri, 8 Dec 2023 14:08:29 -0800
+Subject: [PATCH] clang-format: Add maple tree's for_each macros
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231206163814.GB36423@noisy.programming.kicks-ass.net>
- <20231206183713.GA35897@noisy.programming.kicks-ass.net> <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
- <20231207093105.GA28727@noisy.programming.kicks-ass.net> <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
- <20231208102940.GB28727@noisy.programming.kicks-ass.net> <20231208134041.GD28727@noisy.programming.kicks-ass.net>
- <CAADnVQJFB_CPtFS3=VV=RwnP=EQRL3yEsR8wXVcicb07P8NODw@mail.gmail.com>
- <20231208201819.GE36716@noisy.programming.kicks-ass.net> <CAADnVQ+1nVBuKkjdvh0eu19p+J0UqbO9mcCf3yzVeQtALxzQ+Q@mail.gmail.com>
- <20231208205647.GL28727@noisy.programming.kicks-ass.net>
-In-Reply-To: <20231208205647.GL28727@noisy.programming.kicks-ass.net>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Dec 2023 13:04:22 -0800
-Message-ID: <CAADnVQKjAwWLfn-gBxq03qv4SQTt0YguYSDZXj8L6nmBZqU66g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>, 
-	Song Liu <songliubraving@meta.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv <linux-riscv@lists.infradead.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Joao Moreira <joao@overdrivepizza.com>, Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20231208-clang-format-mt-for-each-v1-1-b4b73186b886@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIANyTc2UC/x2MSwqAMAwFryJZG7C1LvQq4iK0UQP+aEWE4t2N7
+ mYG3suQOAon6IoMkS9Jsm8qpizAz7RNjBLUwVa2NrYy6BetOO5xpRPX8yNk8jN6CtQG54iaADo
+ /Io9y/9f98DwvQ5nILmoAAAA=
+To: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Elliot Berman <quic_eberman@quicinc.com>
+X-Mailer: b4 0.13-dev
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KzngbB3wzlZSq2qL5v8BZQAwCgEY3oet
+X-Proofpoint-ORIG-GUID: KzngbB3wzlZSq2qL5v8BZQAwCgEY3oet
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-08_14,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ adultscore=0 clxscore=1011 bulkscore=0 mlxlogscore=569 phishscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312080184
 
-On Fri, Dec 8, 2023 at 12:56=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Fri, Dec 08, 2023 at 12:45:51PM -0800, Alexei Starovoitov wrote:
->
-> > I mean we don't need to store a pointer to a func in stubs.
-> > Can it be, roughly:
-> >
-> > extern void bpf_tcp_ca_cong_avoid(struct sock *sk, u32 ack, u32 acked);
-> > KCFI_MACRO(hash_of_cong_avoid, bpf_tcp_ca_cong_avoid);
-> > u32 __array_of_kcfi_hash[] =3D {hash_of_cong_avoid, hash_of_set_state,.=
-..};
-> >       .bpf_ops_stubs =3D __array_of_kcfi_hash,
->
-> But then how do I index this array? The bpf_ops_stubs thing having the
-> same layout at the target struct made it easy and we could use 'moff'
-> for both.
->
-> That also remains working if someone adds a member to the struct or
-> moves some members around.
+Add maple tree's for_each macros so clang-format operates correctly on
+{mt,mas}_for_each.
 
-I was thinking to just moff/2 assuming u32 array will have the same order,
-but I missed the fact that init() and release() in tcp_congestion_ops
-come after some variables.
-And you're right it's more fragile when things change in tcp_congestion_ops=
-.
-Storing u32 hash as (void *) into function pointers is just ugly.
-Let's go with your initial approach.
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+---
+ .clang-format | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/.clang-format b/.clang-format
+index 0bbb1991defe..54bab11d38f0 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -494,11 +494,13 @@ ForEachMacros:
+   - 'map_for_each_metric'
+   - 'maps__for_each_entry'
+   - 'maps__for_each_entry_safe'
++  - 'mas_for_each'
+   - 'mci_for_each_dimm'
+   - 'media_device_for_each_entity'
+   - 'media_device_for_each_intf'
+   - 'media_device_for_each_link'
+   - 'media_device_for_each_pad'
++  - 'mt_for_each'
+   - 'msi_for_each_desc'
+   - 'nanddev_io_for_each_page'
+   - 'netdev_for_each_lower_dev'
+
+---
+base-commit: 5eda217cee887e595ba2265435862d585d399769
+change-id: 20231201-clang-format-mt-for-each-cada9d44aa5d
+
+Best regards,
+-- 
+Elliot Berman <quic_eberman@quicinc.com>
+
