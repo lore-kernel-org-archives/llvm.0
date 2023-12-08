@@ -1,239 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634FE5224;
-	Fri,  8 Dec 2023 04:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB52D641
+	for <llvm@lists.linux.dev>; Fri,  8 Dec 2023 05:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j1CCAL73"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702008993; x=1733544993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SxevhwPvl1dlX54v2YDQvnciLdpmAuA4/R+k34yhueQ=;
-  b=j1CCAL73D3/jBdsLNbygECA/Zp6Bk00L36s1ekjv4MRxDV2qfMlrNvQ/
-   aoWSWkZJ1+ubbMnfIHl04XGa07afN68p8sBBLo/x1sQx9DxVieIyJR8Cp
-   VLv6lUFk9yDl5J6U1SRPanJmU9vavxJNw8bR/XCFOaljLHvGKGi175hkR
-   u9Lw6WwDO1b7XgPO+DP5mOlD0MkJ60mLjUPjAcnmKucI+qNxFjXnpoSVe
-   X7Tahnfw4UVt5dVsVzNImI41D6fLj74urSHwgza0QpopSWX4+gNrrPYJ2
-   promWvNQ3OGg8IJTIfhn0eTSee2Zvk7pMpfYdOS95JBuKVau0lbehXzLE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="374519752"
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="374519752"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 20:16:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="19953059"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 07 Dec 2023 20:16:15 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBSHc-000DEh-0s;
-	Fri, 08 Dec 2023 04:16:12 +0000
-Date: Fri, 8 Dec 2023 12:15:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Elad Nachman <enachman@marvell.com>, gregory.clement@bootlin.com,
-	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	enachman@marvell.com, cyuval@marvell.com
-Subject: Re: [PATCH v2 1/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
-Message-ID: <202312081143.38GWJJ2J-lkp@intel.com>
-References: <20231207165027.2628302-2-enachman@marvell.com>
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="jqskjqxl"
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-4b2cef60577so452140e0c.3
+        for <llvm@lists.linux.dev>; Thu, 07 Dec 2023 21:04:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1702011884; x=1702616684; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YCezDiITLYZlXZkoiENFPkRYgXSgvqAlJqwCHapkHlo=;
+        b=jqskjqxlZJTQdyhmJWIx6O1zjzN3vc4oXlMBp9LYxqFF0kl5od2lbf5qne3GSJusEZ
+         Hi8gfSULfxjABdZfd6/i/ezKUFUl5zlxd55Y3a9mSDvPibsS64VAs4kXwq6466NzTqU7
+         R/mXTOvOG5+VfiB/uSBKhCig7iggZDmN6wUXTyfXpKhHZKp2YTVnnR/DHsWhKnA+AW4N
+         X7tJukbGDKHe5rGKNX7Qtx7G+0ywPvPAbFhfjqoNhpJA+OBM7a8p/tE1eJYxgCoiXbZE
+         G+Iu7vGk1m0tLIOaYThtF+k60PjkUVSaiD5guI0PHa793N1YKT9AghbKgg+0iubVWXkN
+         pZ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702011884; x=1702616684;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YCezDiITLYZlXZkoiENFPkRYgXSgvqAlJqwCHapkHlo=;
+        b=vGrIyAWpSLGKlcP2VFb8WhsVQDX5AW9inw+b6OepG2qf/XmsVKgchZJexMJE3wE0Sh
+         Om1WjQW3kXGyF350QhAqzM9HXKETAyEoh1cV8vV4JadaUxKRniY38h0G6Dkpr9JLo7LB
+         fxtfI9E35xfbKDtyBt9Z0mdH7/rbvYEReX9pZ5UfHosiQwfM78Qj5J6FMFgDZ7aqmgY9
+         E63dwXmcpSgaUGlNk7UfH+3yyF6SwdbVYJp/udG8M9Y+4IbAQzQ7dZAa+ApAMiDmj5Im
+         Q+fyo2rURemFhbMoZUQ6KdgChWJqhN4FXqfy+8MuP65gdKg/857GXuuCaw661Q8W7aUn
+         SZgA==
+X-Gm-Message-State: AOJu0Yxa0ROCjeK/L/rxyK7TxAZ2Xw9DTtNpGpb4moqDcs8tNzLimqx9
+	UF3qQ+CYDztwE+uhGWUwkvVpeQ==
+X-Google-Smtp-Source: AGHT+IHd3xhGQZwcUIcLtaS/NPIhQH51OI4srkcBz6UdtbLizYUKJjw8nicEQTdHb0F/v/M3ROTE/Q==
+X-Received: by 2002:a1f:c843:0:b0:4b2:c555:389 with SMTP id y64-20020a1fc843000000b004b2c5550389mr2948641vkf.31.1702011884531;
+        Thu, 07 Dec 2023 21:04:44 -0800 (PST)
+Received: from ?IPV6:2600:1700:2000:b002:41c5:bf1:860b:1e95? ([2600:1700:2000:b002:41c5:bf1:860b:1e95])
+        by smtp.gmail.com with ESMTPSA id i14-20020a0cf38e000000b0067a33133420sm494592qvk.110.2023.12.07.21.04.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Dec 2023 21:04:44 -0800 (PST)
+Message-ID: <4f277982-fffb-4fe1-bc02-007633400f31@sifive.com>
+Date: Thu, 7 Dec 2023 23:04:43 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207165027.2628302-2-enachman@marvell.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] drm/amd/display: Support DRM_AMD_DC_FP on RISC-V
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>,
+ Conor Dooley <conor.dooley@microchip.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>,
+ Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
+ Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>, Pan Xinhui <Xinhui.Pan@amd.com>,
+ Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+ llvm@lists.linux.dev, arnd@arndb.de
+References: <20231122030621.3759313-1-samuel.holland@sifive.com>
+ <20231122030621.3759313-4-samuel.holland@sifive.com>
+ <20231123-headdress-mold-0dd7a74477f7@wendy>
+ <20231130004224.GE2513828@dev-arch.thelio-3990X>
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <20231130004224.GE2513828@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Elad,
+Hi Nathan,
 
-kernel test robot noticed the following build warnings:
+On 2023-11-29 6:42 PM, Nathan Chancellor wrote:
+> On Thu, Nov 23, 2023 at 02:23:01PM +0000, Conor Dooley wrote:
+>> On Tue, Nov 21, 2023 at 07:05:15PM -0800, Samuel Holland wrote:
+>>> RISC-V uses kernel_fpu_begin()/kernel_fpu_end() like several other
+>>> architectures. Enabling hardware FP requires overriding the ISA string
+>>> for the relevant compilation units.
+>>
+>> Ah yes, bringing the joy of frame-larger-than warnings to RISC-V:
+>> ../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:58:13: warning: stack frame size (2416) exceeds limit (2048) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Wframe-larger-than]
+> 
+> :(
+> 
+>> Nathan, have you given up on these being sorted out?
+> 
+> Does your configuration have KASAN (I don't think RISC-V supports
+> KCSAN)? It is possible that dml/dcn32 needs something similar to commit
+> 6740ec97bcdb ("drm/amd/display: Increase frame warning limit with KASAN
+> or KCSAN in dml2")?
+> 
+> I am not really interested in playing whack-a-mole with these warnings
+> like I have done in the past for the reasons I outlined here:
+> 
+> https://lore.kernel.org/20231019205117.GA839902@dev-arch.thelio-3990X/
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on linus/master v6.7-rc4 next-20231207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I also see one of these with clang 17 even with KASAN disabled:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Elad-Nachman/i2c-busses-i2c-mv64xxx-fix-arb-loss-i2c-lock/20231208-005406
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20231207165027.2628302-2-enachman%40marvell.com
-patch subject: [PATCH v2 1/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
-config: i386-buildonly-randconfig-004-20231208 (https://download.01.org/0day-ci/archive/20231208/202312081143.38GWJJ2J-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312081143.38GWJJ2J-lkp@intel.com/reproduce)
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:37:6:
+warning: stack frame size (2208) exceeds limit (2048) in 'dml32_recalculate'
+[-Wframe-larger-than]
+void dml32_recalculate(struct display_mode_lib *mode_lib)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312081143.38GWJJ2J-lkp@intel.com/
+     ^
+1532/2208 (69.38%) spills, 676/2208 (30.62%) variables
 
-All warnings (new ones prefixed by >>):
+So I'm in favor of just raising the limit for these files for clang, like you
+suggested in the linked thread.
 
->> drivers/i2c/busses/i2c-mv64xxx.c:440:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                           if (!ret) {
-                                ^~~
-   drivers/i2c/busses/i2c-mv64xxx.c:372:12: note: initialize the variable 'ret' to silence this warning
-           int i, ret;
-                     ^
-                      = 0
-   1 warning generated.
+Regards,
+Samuel
 
-
-vim +/ret +440 drivers/i2c/busses/i2c-mv64xxx.c
-
-   367	
-   368	static void
-   369	mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
-   370	{
-   371		struct pinctrl *pc;
-   372		int i, ret;
-   373	
-   374		switch(drv_data->action) {
-   375		case MV64XXX_I2C_ACTION_SEND_RESTART:
-   376			/* We should only get here if we have further messages */
-   377			BUG_ON(drv_data->num_msgs == 0);
-   378	
-   379			drv_data->msgs++;
-   380			drv_data->num_msgs--;
-   381			mv64xxx_i2c_send_start(drv_data);
-   382	
-   383			if (drv_data->errata_delay)
-   384				udelay(5);
-   385	
-   386			/*
-   387			 * We're never at the start of the message here, and by this
-   388			 * time it's already too late to do any protocol mangling.
-   389			 * Thankfully, do not advertise support for that feature.
-   390			 */
-   391			drv_data->send_stop = drv_data->num_msgs == 1;
-   392			break;
-   393	
-   394		case MV64XXX_I2C_ACTION_CONTINUE:
-   395			writel(drv_data->cntl_bits,
-   396				drv_data->reg_base + drv_data->reg_offsets.control);
-   397			break;
-   398	
-   399		case MV64XXX_I2C_ACTION_SEND_ADDR_1:
-   400			writel(drv_data->addr1,
-   401				drv_data->reg_base + drv_data->reg_offsets.data);
-   402			writel(drv_data->cntl_bits,
-   403				drv_data->reg_base + drv_data->reg_offsets.control);
-   404			break;
-   405	
-   406		case MV64XXX_I2C_ACTION_SEND_ADDR_2:
-   407			writel(drv_data->addr2,
-   408				drv_data->reg_base + drv_data->reg_offsets.data);
-   409			writel(drv_data->cntl_bits,
-   410				drv_data->reg_base + drv_data->reg_offsets.control);
-   411			break;
-   412	
-   413		case MV64XXX_I2C_ACTION_SEND_DATA:
-   414			writel(drv_data->msg->buf[drv_data->byte_posn++],
-   415				drv_data->reg_base + drv_data->reg_offsets.data);
-   416			writel(drv_data->cntl_bits,
-   417				drv_data->reg_base + drv_data->reg_offsets.control);
-   418			break;
-   419	
-   420		case MV64XXX_I2C_ACTION_RCV_DATA:
-   421			drv_data->msg->buf[drv_data->byte_posn++] =
-   422				readl(drv_data->reg_base + drv_data->reg_offsets.data);
-   423			writel(drv_data->cntl_bits,
-   424				drv_data->reg_base + drv_data->reg_offsets.control);
-   425			break;
-   426	
-   427		case MV64XXX_I2C_ACTION_UNLOCK_BUS:
-   428			if (!drv_data->soft_reset)
-   429				break;
-   430	
-   431			pc = devm_pinctrl_get(drv_data->adapter.dev.parent);
-   432			if (IS_ERR(pc)) {
-   433				dev_err(&drv_data->adapter.dev,
-   434					"failed to get pinctrl for bus unlock!\n");
-   435				break;
-   436			}
-   437	
-   438			/* Change i2c MPPs state to act as GPIOs: */
-   439			if (pinctrl_select_state(pc, drv_data->i2c_gpio_state) >= 0) {
- > 440				if (!ret) {
-   441					/*
-   442					 * Toggle i2c scl (serial clock) 10 times.
-   443					 * 10 clocks are enough to transfer a full
-   444					 * byte plus extra as seen from tests with
-   445					 * Ubiquity SFP module causing the issue.
-   446					 * This allows the slave that occupies
-   447					 * the bus to transmit its remaining data,
-   448					 * so it can release the i2c bus:
-   449					 */
-   450					for (i = 0; i < 10; i++) {
-   451						gpio_set_value(drv_data->scl_gpio, 1);
-   452						udelay(100);
-   453						gpio_set_value(drv_data->scl_gpio, 0);
-   454					};
-   455				}
-   456	
-   457				/* restore i2c pin state to MPPs: */
-   458				pinctrl_select_state(pc, drv_data->i2c_mpp_state);
-   459			}
-   460	
-   461			/*
-   462			 * Trigger controller soft reset
-   463			 * This register is write only, with none of the bits defined.
-   464			 * So any value will do.
-   465			 * 0x1 just seems more intuitive than 0x0 ...
-   466			 */
-   467			writel(0x1, drv_data->reg_base + drv_data->reg_offsets.soft_reset);
-   468			/* wait for i2c controller to complete reset: */
-   469			udelay(100);
-   470			/*
-   471			 * need to proceed to the data stop condition generation clause.
-   472			 * This is needed after clock toggling to put the i2c slave
-   473			 * in the correct state.
-   474			 */
-   475			fallthrough;
-   476	
-   477		case MV64XXX_I2C_ACTION_RCV_DATA_STOP:
-   478			drv_data->msg->buf[drv_data->byte_posn++] =
-   479				readl(drv_data->reg_base + drv_data->reg_offsets.data);
-   480			if (!drv_data->atomic)
-   481				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
-   482			writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
-   483				drv_data->reg_base + drv_data->reg_offsets.control);
-   484			drv_data->block = 0;
-   485			if (drv_data->errata_delay)
-   486				udelay(5);
-   487	
-   488			wake_up(&drv_data->waitq);
-   489			break;
-   490	
-   491		case MV64XXX_I2C_ACTION_INVALID:
-   492		default:
-   493			dev_err(&drv_data->adapter.dev,
-   494				"mv64xxx_i2c_do_action: Invalid action: %d\n",
-   495				drv_data->action);
-   496			drv_data->rc = -EIO;
-   497			fallthrough;
-   498		case MV64XXX_I2C_ACTION_SEND_STOP:
-   499			if (!drv_data->atomic)
-   500				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
-   501			writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
-   502				drv_data->reg_base + drv_data->reg_offsets.control);
-   503			drv_data->block = 0;
-   504			wake_up(&drv_data->waitq);
-   505			break;
-   506		}
-   507	}
-   508	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
