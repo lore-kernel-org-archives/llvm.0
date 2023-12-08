@@ -1,61 +1,61 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED4E29433
-	for <llvm@lists.linux.dev>; Fri,  8 Dec 2023 20:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984C434541
+	for <llvm@lists.linux.dev>; Fri,  8 Dec 2023 20:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCrpsJl8"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3331752d2b9so1807473f8f.3
-        for <llvm@lists.linux.dev>; Fri, 08 Dec 2023 12:41:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5WJn9DP"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-333536432e0so2249872f8f.3
+        for <llvm@lists.linux.dev>; Fri, 08 Dec 2023 12:46:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702068075; x=1702672875; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1702068363; x=1702673163; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mj7pq+OIwUID+JMsGrWjS7UT9Bcii1A8UE8TU13OktE=;
-        b=fCrpsJl8HN1Kk2yUO1ROzBcO1ZzxL5Eu1IS0bbcgi2aNazvKZ/0jkPFovp5+93old8
-         rU6QOk3/YIUl3M8scR9DW7rC3THJ0OhQrBSN3jIE7WY/Ngdgkc1Hl77bo0OxZhSsx5Q4
-         9h2S83XfvKc0/DXQBV6+9SODhydsLQ9iCXuDrq0mAe4yAiWJ0y003TNsQKQSn3GfF3aE
-         7qKe+sWNRqpo9Y+Dtp0PZLlZhpMWrIa17zGqLzGVdAqWrPaq9WDnFGSHy+jjmtH4HbMR
-         Z4qI3jE+NwJKE1a0HfQ9k7Gh75eLV+68MZJBVgbKQrwFEGU34WpjNdCMhVx/GPB16TWn
-         PhgA==
+        bh=jlXQF//AUsnwP+nKFBoybb7LMYNoRVOQuSpa/LCcRfc=;
+        b=d5WJn9DPxD+7TzqS+iDfgi0be5QpJKpzMzrt8sJbb2JuQyiHnR0MLTJFwNNne/HYnX
+         IvvhOvL+8xVvrobbs1kXS2z24lPnHWnBGI0UaTU3ckn/n0vL/anh4pVBm3ad1UdJ5yTi
+         9CauDJIO+2viSYR9pI4hYRnVqU+n09foKkPQ6ocP9FssxGGEyQD4htx+C1hLEeauvOaB
+         E/BKEAEUbsBfJsd6SV74cLzaqEKiNKlcMjzlGteaPMZtwYjpk2OA6CRo47A8kuLcN/11
+         iebUjh9Gtv05bNBoJoR4GfejHYRY7nNHqljRDXL2/l1pdgc3cyZDLsfsi9uBAJWUlXmS
+         ZZug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702068075; x=1702672875;
+        d=1e100.net; s=20230601; t=1702068363; x=1702673163;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mj7pq+OIwUID+JMsGrWjS7UT9Bcii1A8UE8TU13OktE=;
-        b=Xv5VjJFb1QNJkaom3Sni2//+wvpuoC0q/xEJHm+NNSEF71IhTUbi0b2Kn4+cfgGzjj
-         cJIh+OfBnLg5VZkVgbRGjNlddxQcYbXDPr9zC9C8DWk0mrzAlklVLFScudyU4RNEvYb8
-         tuzh2q8rJ4eIgsq76PdyTh58Xb1pcIvrIvKNqR0oa7igy3c1aRiKZCSqG60+IW6gqXc7
-         eR5ds8yOcpkn20it7sfsSlPncUYSmHMzpEiZXpBkiFCJ5yBebfqhDENa6RS3KSF0KCRp
-         1TtgffvoZQGeCXU0EhANB+z8bdRYP8rZIspowqRvYWb30VV9b0piJh9zMFyV8ZWk7lUK
-         45uQ==
-X-Gm-Message-State: AOJu0YyTKYwXVrp7pfwZzP610tkNeOv/BY+gbBYfWgxVnCLntYvph2hK
-	XWWYBRpAXhQ+uoO+2ER1A9ocJXfmVizslyXCtPs=
-X-Google-Smtp-Source: AGHT+IERcqiD0C/8xjZJmHAgSBT2DdIylL4yKHY4jgZtfjgalQtcY6Jcz2MAn3dQVMGiGBWeMdU28s7aF98ziv0/pdE=
-X-Received: by 2002:adf:f00f:0:b0:333:2f14:7642 with SMTP id
- j15-20020adff00f000000b003332f147642mr344840wro.61.1702068075072; Fri, 08 Dec
- 2023 12:41:15 -0800 (PST)
+        bh=jlXQF//AUsnwP+nKFBoybb7LMYNoRVOQuSpa/LCcRfc=;
+        b=RQAppX3tR8WggFwK1uAnJ0lIZADS1guw/Mf1bgik6N/IGYz/9NfRBR7OiyQG8sI1LY
+         8V697rcYjli+PvFODhYXYF6XVKan/T1P+gWoVMrASVKNcBoFhMA9NwrQLQM7YSJ/Ub/S
+         dAWafg9Zco+6Mgso/fSK1zm+OWk6zFJYqy3Rb4oXgeMfuKLN0ATWPPvj8eL6l8GXU6R7
+         +JGQcLI/RHzvDH7Hbkx3DearSqQ81b9TIVQ9s21lozCI6yiq5OG3bvk6/YKk/a+EBeig
+         bUVlL7ybAGgk9Y1xz7lq0HwySunT3xEjfTw9tCvpwzGSyup9cDwj7aH5Ra7Mlt0yxq9/
+         zFEg==
+X-Gm-Message-State: AOJu0YzrSeYRl1hfENfo6AVqJmnvNYtNnC7z1X+D6pITHsaJyg+SVys+
+	b2DjZxDnyjevqXfWXrm2gznkfPJ3avGZXxZYeCc=
+X-Google-Smtp-Source: AGHT+IE4sHBb5/cNR7lbKXUMWA7pBzCk+Azp42Xup3bWyH2dubUwP/oKuFvKD+DnRI3AEHKgZH07K+Gk15b7iovJNI8=
+X-Received: by 2002:a5d:457b:0:b0:333:129d:239 with SMTP id
+ a27-20020a5d457b000000b00333129d0239mr393721wrc.0.1702068362601; Fri, 08 Dec
+ 2023 12:46:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
+References: <20231204183354.GC7299@noisy.programming.kicks-ass.net>
+ <CAADnVQJwU5fCLcjBWM9zBY6jUcnME3+p=vvdgKK9FiLPWvXozg@mail.gmail.com>
  <20231206163814.GB36423@noisy.programming.kicks-ass.net> <20231206183713.GA35897@noisy.programming.kicks-ass.net>
  <zu5eb2robdqnp2ojwaxjhnglcummrnjaqbw6krdds6qac3bql2@5zx46c2s6ez4>
  <20231207093105.GA28727@noisy.programming.kicks-ass.net> <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
  <20231208102940.GB28727@noisy.programming.kicks-ass.net> <20231208134041.GD28727@noisy.programming.kicks-ass.net>
- <20231208172152.GD36716@noisy.programming.kicks-ass.net> <CAADnVQKsnZfFomQ4wTZz=jMZW5QCV2XiXVsi64bghHkAjJtcmA@mail.gmail.com>
- <20231208203535.GG36716@noisy.programming.kicks-ass.net>
-In-Reply-To: <20231208203535.GG36716@noisy.programming.kicks-ass.net>
+ <CAADnVQJFB_CPtFS3=VV=RwnP=EQRL3yEsR8wXVcicb07P8NODw@mail.gmail.com> <20231208201819.GE36716@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231208201819.GE36716@noisy.programming.kicks-ass.net>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 Dec 2023 12:41:03 -0800
-Message-ID: <CAADnVQJzCw=qcG+jHBYG0q0SxLPkwghni0wpgV4A4PkpgVbGPw@mail.gmail.com>
+Date: Fri, 8 Dec 2023 12:45:51 -0800
+Message-ID: <CAADnVQ+1nVBuKkjdvh0eu19p+J0UqbO9mcCf3yzVeQtALxzQ+Q@mail.gmail.com>
 Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>, 
@@ -78,57 +78,53 @@ Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 8, 2023 at 12:35=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+On Fri, Dec 8, 2023 at 12:18=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
 g> wrote:
 >
-> On Fri, Dec 08, 2023 at 11:40:27AM -0800, Alexei Starovoitov wrote:
+> On Fri, Dec 08, 2023 at 11:32:07AM -0800, Alexei Starovoitov wrote:
+> > On Fri, Dec 8, 2023 at 5:41=E2=80=AFAM Peter Zijlstra <peterz@infradead=
+.org> wrote:
+> > >
+> > > On Fri, Dec 08, 2023 at 11:29:40AM +0100, Peter Zijlstra wrote:
+> > > > The only problem I now have is the one XXX, I'm not entirely sure w=
+hat
+> > > > signature to use there.
+> > >
+> > > > @@ -119,6 +119,7 @@ int bpf_struct_ops_test_run(struct bpf_p
+> > > >       op_idx =3D prog->expected_attach_type;
+> > > >       err =3D bpf_struct_ops_prepare_trampoline(tlinks, link,
+> > > >                                               &st_ops->func_models[=
+op_idx],
+> > > > +                                             /* XXX */ NULL,
+> > > >                                               image, image + PAGE_S=
+IZE);
+> > > >       if (err < 0)
+> > > >               goto out;
+> > >
+> > > Duh, that should ofcourse be something of dummy_ops_test_ret_fn type.
+> > > Let me go fix that.
+> >
+> > Right. That should work.
+> > A bit wasteful to generate real code just to read hash from it
+> > via cfi_get_func_hash(), but it's a neat idea.
 >
-> > typedef void (*btf_dtor_kfunc_t)(void *);
-> >         btf_dtor_kfunc_t dtor;
-> > but the bpf_cgroup_release takes 'struct cgroup*'.
-> > From kcfi pov void * =3D=3D struct cgroup * ?
-> > Do we need to change it to 'void *cgrp' ?
+> Right, bit wasteful. But the advantage is that I get a structure with
+> pointers that exactly mirrors the structure we're writing.
 >
-> Yes, doing that naively like the below, gets me lovely things like:
+> > I guess it's hard to get kcfi from __ADDRESSABLE in plain C
+> > and sprinkling asm("cfi_xxx: .long   __kcfi_typeid..."); is worse?
+> > Even if it's a macro ?
 >
-> validate_case:FAIL:expect_msg unexpected error: -22
-> VERIFIER LOG:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> EXPECTED MSG: 'Possibly NULL pointer passed to trusted arg0'
-> #48/7    cgrp_kfunc/cgrp_kfunc_acquire_untrusted:FAIL
-> run_subtest:PASS:obj_open_mem 0 nsec
-> libbpf: extern (func ksym) 'bpf_cgroup_release': func_proto [148] incompa=
-tible with vmlinux [125610]
-> libbpf: failed to load object 'cgrp_kfunc_failure'
+> I can try this, but I'm not sure it'll be pretty. Even if I wrap it in a
+> decent macro, I still get to define a ton of variables and then wrap the
+> lot into a structure -- one that expects function pointers.
 >
->
-> But let me try rebuilding everything..
->
->
-> ---
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index b3be5742d6f1..078b207af7f0 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2145,10 +2145,11 @@ __bpf_kfunc struct task_struct *bpf_task_acquire(=
-struct task_struct *p)
->   * bpf_task_release - Release the reference acquired on a task.
->   * @p: The task on which a reference is being released.
->   */
-> -__bpf_kfunc void bpf_task_release(struct task_struct *p)
-> +__bpf_kfunc void bpf_task_release(void *p)
+> I'll see how horrible it will become.
 
-Yeah. That won't work. We need a wrapper.
-Since bpf prog is also calling it directly.
-In progs/task_kfunc_common.h
-void bpf_task_release(struct task_struct *p) __ksym;
+I mean we don't need to store a pointer to a func in stubs.
+Can it be, roughly:
 
-than later both libbpf and the verifier check that
-what bpf prog is calling actually matches the proto
-of what is in the kernel.
-Effectively we're doing strong prototype check at load time.
-
-btw instead of EXPORT_SYMBOL_GPL(bpf_task_release)
-can __ADDRESSABLE be used ?
-Since it's not an export symbol.
+extern void bpf_tcp_ca_cong_avoid(struct sock *sk, u32 ack, u32 acked);
+KCFI_MACRO(hash_of_cong_avoid, bpf_tcp_ca_cong_avoid);
+u32 __array_of_kcfi_hash[] =3D {hash_of_cong_avoid, hash_of_set_state,...};
+      .bpf_ops_stubs =3D __array_of_kcfi_hash,
