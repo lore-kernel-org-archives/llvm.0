@@ -1,158 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48966810;
-	Sat,  9 Dec 2023 02:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447091386
+	for <llvm@lists.linux.dev>; Sat,  9 Dec 2023 04:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JvIRyY+m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702089590; x=1733625590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4CE9sM053J6aohwBxo6bhrvVdr6BIe2JxI8KJ0O3uRQ=;
-  b=JvIRyY+mtcx3ob77mo7IDnQ/CGeHIUAfMdNV5mRuMcRW1Ltj9RRWZVM9
-   /ZJVXJdSlEy3nTeZ1nmJNfifuSVzBrAVfxdxPP3VQuI/vBIL4prAHwD5h
-   jVmAWQ1scwpIy3hREEzSK5C/FZj3L7xDUBIGa0xZatkofU0y9QRAD2QPI
-   /NZIKJgaNstMasN/7eoYvYOfmvC1FXKf9eFt9lYfAmzB1bOaoyHZGMWQj
-   vFu7ESmERgPE453gUF7+5XPLCK54Lzzq00WsGhgLkDPR36dLNhdU9h049
-   G1UE23C1En98S4gU/3OL889UJuYvFdebG6SFZoYtPpOWUNMMKc3ecpXAz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="374000900"
-X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
-   d="scan'208";a="374000900"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 18:39:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="945606814"
-X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
-   d="scan'208";a="945606814"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2023 18:39:45 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBnFn-000EiS-1c;
-	Sat, 09 Dec 2023 02:39:43 +0000
-Date: Sat, 9 Dec 2023 10:39:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/3] powerpc/pseries/fadump: add support for multiple
- boot memory regions
-Message-ID: <202312091034.YzllwdF4-lkp@intel.com>
-References: <20231205201835.388030-2-hbathini@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDhBwSo1"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3332efd75c9so2567121f8f.2
+        for <llvm@lists.linux.dev>; Fri, 08 Dec 2023 20:51:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702097499; x=1702702299; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E9jLsGhfGkMZnWhDYfHQ0jvQvXqjfciOlusSLK9GhRY=;
+        b=PDhBwSo1DoSBOTESbEuIl8UOfpFekgWd1OBsGFFEgWVrNq+mzdQSrCt1dhuG1fkIhB
+         rTzJ8g8Un6kRqsKmZqzqzqudhHMTetxjL358tN2vjQs8lQrnbc0McYZfkXxsY//qn09f
+         XqNGkB8LsSJrqBnLQFmDnPcUweGlgIHaZ9Hjpq4Tg2KQNmuL43fmawvxkYCDpuQurha7
+         gGNhpu4RbB8/Aji6HcbHhdmowDXFbJvCzRUp7ACF+Nyb7qiA8WS+XNKKb6An/XYpXnhG
+         YRL247VzGnEKRwqSBzZE2e2lYCznVCmtVP2489aDurEBCxzMq0YmVRutoE1BFq6BEwai
+         GTzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702097499; x=1702702299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E9jLsGhfGkMZnWhDYfHQ0jvQvXqjfciOlusSLK9GhRY=;
+        b=CFrtQ7ZF+CSoOHVGjmXKWqN8AUl0pCpQVs6IfUnhFBG34stGSC39fvRy4xGHgeSwdw
+         fFsy59Qu5mUujYtdT3ILZ55UIYXVGbDEu1b4YtmI5GF3Ykor/pdkUM4ENc9pgSHBVKxW
+         ztNs70AsqQ+xzIwyWyY2/9N1nIvjf9EdYwoo+VKpw0nnemy86SR/op7bUjKjUSWiTmXz
+         /NDEUAiijIsuDwn+8Uu2LYqqCoefwphxAuyGVF9jDIjEcPbEOyxCiMRApXh3ESFSed8G
+         0ik3FJMJsOlaxc7Tqo8DWA+uXMKmvKBz+cRq9LyanILWBqFF8ufEH1eY3UfO09yeUF3h
+         5Otw==
+X-Gm-Message-State: AOJu0Yx+Hxvy9I0lqTjz8o6bv4Qqzag51yZNRXQs7wSMlYCC4OAfTquD
+	4xDYiSh/mnV0HTsRdFzmvCHVlvPYzw4yRPvyZkQ=
+X-Google-Smtp-Source: AGHT+IGWegoXbG6riU09aOxjScmI6QdU76ibtag8Pupqd8K6QoQZC3fgz8qhZUFCULCtLMsl2YQJg9oU3fR3idrWio4=
+X-Received: by 2002:adf:ce8d:0:b0:333:49a8:73e4 with SMTP id
+ r13-20020adfce8d000000b0033349a873e4mr197659wrn.201.1702097499187; Fri, 08
+ Dec 2023 20:51:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205201835.388030-2-hbathini@linux.ibm.com>
+References: <20231207093105.GA28727@noisy.programming.kicks-ass.net>
+ <ivhrgimonsvy3tyj5iidoqmlcyqvtsh2ay3cm3ouemsdbvjzs4@6jlt6zv55tgh>
+ <20231208102940.GB28727@noisy.programming.kicks-ass.net> <20231208134041.GD28727@noisy.programming.kicks-ass.net>
+ <20231208172152.GD36716@noisy.programming.kicks-ass.net> <CAADnVQKsnZfFomQ4wTZz=jMZW5QCV2XiXVsi64bghHkAjJtcmA@mail.gmail.com>
+ <20231208203535.GG36716@noisy.programming.kicks-ass.net> <CAADnVQJzCw=qcG+jHBYG0q0SxLPkwghni0wpgV4A4PkpgVbGPw@mail.gmail.com>
+ <20231208205241.GK28727@noisy.programming.kicks-ass.net> <CAADnVQL3KsJONShsstDq5jrpbc_4FOU-VQPJgDCt50N9asoFzA@mail.gmail.com>
+ <20231208224557.GH36716@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231208224557.GH36716@noisy.programming.kicks-ass.net>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 8 Dec 2023 20:51:27 -0800
+Message-ID: <CAADnVQ+Z7UcXXBBhMubhcMM=R-dExk-uHtfOLtoLxQ1XxEpqEA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] x86/cfi,bpf: Fix BPF JIT call
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>, 
+	Song Liu <songliubraving@meta.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv <linux-riscv@lists.infradead.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Joao Moreira <joao@overdrivepizza.com>, Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hari,
+On Fri, Dec 8, 2023 at 2:46=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+>
+> Ok, did that. Current patches (on top of bpf-next) are here:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/cfi
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Looks really great. The last patch is cleaner than I expected. Good idea.
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on powerpc/fixes linus/master v6.7-rc4 next-20231208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> (really should try and write better changelogs, but it's too late)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hari-Bathini/powerpc-pseries-fadump-add-support-for-multiple-boot-memory-regions/20231206-042158
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/20231205201835.388030-2-hbathini%40linux.ibm.com
-patch subject: [RFC PATCH 1/3] powerpc/pseries/fadump: add support for multiple boot memory regions
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231209/202312091034.YzllwdF4-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312091034.YzllwdF4-lkp@intel.com/reproduce)
+commit logs look fine except the "pilfer" word that I had to look up
+in the dictionary :)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312091034.YzllwdF4-lkp@intel.com/
+> [  247.721063]  ? bpf_throw+0x9b/0xf0
+> [  247.721126]  ? bpf_test_run+0x108/0x350
+> [  247.721191]  ? bpf_prog_5555714b685bf0cf_exception_throw_always_1+0x26=
+/0x26
+> [  247.721301]  ? bpf_test_run+0x108/0x350
+> [  247.721368]  bpf_test_run+0x212/0x350
+> [  247.721433]  ? slab_build_skb+0x22/0x110
+> [  247.721503]  bpf_prog_test_run_skb+0x347/0x4a0
+>
+> But I'm too tired to think staight. Is  this a bpf_callback_t vs
+> bpf_exception_cb difference?
 
-All errors (new ones prefixed by >>):
+Yep.
+It's easy to fix:
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0e162eae8639..e36b3f41751e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1484,7 +1484,7 @@ struct bpf_prog_aux {
+        int cgroup_atype; /* enum cgroup_bpf_attach_type */
+        struct bpf_map *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
+        char name[BPF_OBJ_NAME_LEN];
+-       unsigned int (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp);
++       u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
+ #ifdef CONFIG_SECURITY
+        void *security;
+ #endif
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index fe229b28e4a9..650ebe8ff183 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2537,7 +2537,7 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+         * which skips compiler generated instrumentation to do the same.
+         */
+        kasan_unpoison_task_stack_below((void *)(long)ctx.sp);
+-       ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp);
++       ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp, 0, 0);
+        WARN(1, "A call to BPF exception callback should never return\n");
+ }
 
->> arch/powerpc/platforms/pseries/rtas-fadump.c:55:4: error: expected expression
-      55 |                         u64 addr = be64_to_cpu(fdm->rgn[i].destination_address);
-         |                         ^
->> arch/powerpc/platforms/pseries/rtas-fadump.c:57:50: error: use of undeclared identifier 'addr'
-      57 |                         fadump_conf->cpu_state_dest_vaddr = (u64)__va(addr);
-         |                                                                       ^
->> arch/powerpc/platforms/pseries/rtas-fadump.c:57:50: error: use of undeclared identifier 'addr'
-   arch/powerpc/platforms/pseries/rtas-fadump.c:62:43: error: use of undeclared identifier 'addr'
-      62 |                         fadump_conf->reserve_dump_area_start = addr;
-         |                                                                ^
-   4 errors generated.
+and with that all of test_progs runs successfully without CFI panics.
+*happy dance*
 
+Only test_progs -t btf/line_info fails suspiciously.
+There we check that line info embedded in the prog looks sane.
+New cfi preamble is probably tripping something.
+It could be a test issue. I'll investigate. It's not a blocker.
 
-vim +55 arch/powerpc/platforms/pseries/rtas-fadump.c
-
-    35	
-    36	/*
-    37	 * This function is called in the capture kernel to get configuration details
-    38	 * setup in the first kernel and passed to the f/w.
-    39	 */
-    40	static void __init rtas_fadump_get_config(struct fw_dump *fadump_conf,
-    41					   const struct rtas_fadump_mem_struct *fdm)
-    42	{
-    43		unsigned long base, size, last_end, hole_size;
-    44	
-    45		last_end = 0;
-    46		hole_size = 0;
-    47		fadump_conf->boot_memory_size = 0;
-    48		fadump_conf->boot_mem_regs_cnt = 0;
-    49		pr_debug("Boot memory regions:\n");
-    50		for (int i = 0; i < be16_to_cpu(fdm->header.dump_num_sections); i++) {
-    51			int type = be16_to_cpu(fdm->rgn[i].source_data_type);
-    52	
-    53			switch (type) {
-    54			case RTAS_FADUMP_CPU_STATE_DATA:
-  > 55				u64 addr = be64_to_cpu(fdm->rgn[i].destination_address);
-    56	
-  > 57				fadump_conf->cpu_state_dest_vaddr = (u64)__va(addr);
-    58				/*
-    59				 * Start address of reserve dump area (permanent reservation) for
-    60				 * re-registering FADump after dump capture.
-    61				 */
-    62				fadump_conf->reserve_dump_area_start = addr;
-    63				break;
-    64			case RTAS_FADUMP_HPTE_REGION:
-    65				/* Not processed currently. */
-    66				break;
-    67			case RTAS_FADUMP_REAL_MODE_REGION:
-    68				base = be64_to_cpu(fdm->rgn[i].source_address);
-    69				size = be64_to_cpu(fdm->rgn[i].source_len);
-    70				pr_debug("\t[%03d] base: 0x%lx, size: 0x%lx\n", i, base, size);
-    71				if (!base) {
-    72					fadump_conf->boot_mem_dest_addr =
-    73						be64_to_cpu(fdm->rgn[i].destination_address);
-    74				}
-    75	
-    76				fadump_conf->boot_mem_addr[fadump_conf->boot_mem_regs_cnt] = base;
-    77				fadump_conf->boot_mem_sz[fadump_conf->boot_mem_regs_cnt] = size;
-    78				fadump_conf->boot_memory_size += size;
-    79				hole_size += (base - last_end);
-    80				last_end = base + size;
-    81				fadump_conf->boot_mem_regs_cnt++;
-    82				break;
-    83			default:
-    84				pr_warn("Section type %d unsupported on this kernel. Ignoring!\n", type);
-    85				break;
-    86			}
-    87		}
-    88		fadump_conf->boot_mem_top = fadump_conf->boot_memory_size + hole_size;
-    89	
-    90		rtas_fadump_update_config(fadump_conf, fdm);
-    91	}
-    92	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Do you mind resending the whole set so that BPF CI can test it
+on different archs ?
