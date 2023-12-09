@@ -1,208 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870A81CF83;
-	Sat,  9 Dec 2023 21:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5391D6B6
+	for <llvm@lists.linux.dev>; Sat,  9 Dec 2023 21:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YJk8Robz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702157063; x=1733693063;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZiDja0DRjGF8V4kOTELVdfHO8iGqBQYFHxa1g/OKJdg=;
-  b=YJk8RobzwK80RSYfwStPmErT38PjWyAaUAJmsU2nZT9PqKiUKkQTCJ5n
-   z9WRNIxEwPlWt4w6SmxDtrBr8bW2LkYxwpyvZcQ/CpAO4n3mGLHXL9Puh
-   ZmnfCzLcZJVNKtoXOPK6vg1hshD5ioIX+0W3qBMfyieMlG6/4Z6CpRuf/
-   REolgjKNdo6rtM+qHYi7B02M8WvGZGQT86ZcV7wsm+3xnophEMfBmIaWY
-   HChlYkiyojWJs0Toq821pR9H4EcRJbHnx5vsYp4/dGYQwlm4sG0UD1pC1
-   kr+A3HhOQXMlRGviy21VVFCR9JshVBRTb054Zg1hDYNxTOQWBNdPTqUPh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="7850930"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="7850930"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 13:24:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="20490955"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 09 Dec 2023 13:24:16 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rC4o1-000Fxn-17;
-	Sat, 09 Dec 2023 21:24:13 +0000
-Date: Sun, 10 Dec 2023 05:24:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry.memverge@gmail.com>, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	arnd@arndb.de, tglx@linutronix.de, luto@kernel.org,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, mhocko@kernel.org, tj@kernel.org,
-	ying.huang@intel.com, gregory.price@memverge.com, corbet@lwn.net,
-	rakie.kim@sk.com, hyeongtak.ji@sk.com, honggyu.kim@sk.com,
-	vtavarespetr@micron.com, peterz@infradead.org, jgroves@micron.com,
-	ravis.opensrc@micron.com, sthanneeru@micron.com,
-	emirakhur@micron.com, Hasan.Maruf@amd.com
-Subject: Re: [PATCH v2 02/11] mm/mempolicy: introduce
- MPOL_WEIGHTED_INTERLEAVE for weighted interleaving
-Message-ID: <202312100543.ix4jxw81-lkp@intel.com>
-References: <20231209065931.3458-3-gregory.price@memverge.com>
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Q+niWgLU"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-77f3c4914e5so169059185a.3
+        for <llvm@lists.linux.dev>; Sat, 09 Dec 2023 13:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1702157390; x=1702762190; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iFEUFFz09hiRyS0qcoPsXIF6VUSImKjj5WbLQv8dS3M=;
+        b=Q+niWgLUwr2v/YhPPKKRWliHTNZKWj7aJvw7tKV1W2zTyG8T1GtgnhXsM4q5FVURB7
+         zGSqh9zEJqdUXyFGuk5eriV1gqBc+ivVwrJdFjkb1ZOGJQMZFuE1uqPsvxGUEd81Vghr
+         pFUduMrLueVc7ch24jlxgcYzLHkW7DSlO8c2QPNGEgxpbYcHk1ZOjOcCrlyUXIcGrgCv
+         VWJ33d9WavnR0VTCMir+anvocSU3IbcDwt+lOM549FGVax01c9R+94a8mFR/8fdDi1v2
+         TuHI3OKPyiL8nPOq4iMeoFZx2QIN21d2s/v7cvwfpP6UxD/TdMykh7Of7eiMEKBA0O/4
+         4rwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702157390; x=1702762190;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iFEUFFz09hiRyS0qcoPsXIF6VUSImKjj5WbLQv8dS3M=;
+        b=aaWc2ZTpvq38A2uESLOobh3dNW5qaUfpqr1sE4ihS0hXFiR5rMho33BI7vk2oWmNY3
+         gVnl8rEfrDJ5IoVd0DMKUv41ZqmgQKAyzT/4ocrkuD5rkUuFPjyQXlwFMO6Q7fe4rzZ2
+         HpVQ0TcUcnaJJi/oB9KZBdf6Hmwssi0F6H4nmKvw5XJG4Ssfx2jvZJIF7wenCPKNpxR6
+         xv1DRBJCqPL2qQDajg7bz+Ko/dl9RTqoXKM299rU/UvBw3lFSCtoxqul0Xv/KsB8JW3D
+         jX6snR9aM5EZHXRYSVDdsFQGqw22ImCCnT4ahxApwDSSq9iJy5MriBP4W/bn2FPLCIwy
+         yoZw==
+X-Gm-Message-State: AOJu0YyLArHr28PfAnpzpx6oLRQjC5FbpswcBZUgN+Frcs5SOc5smzzV
+	iJFMk5856YH3y29ou+hxdCMSbA==
+X-Google-Smtp-Source: AGHT+IFocs3LkyA/Jt/FCqhjxzgRz8AgbQ0brbt26sXxD73qHkqT5u0QLdYWPcmh/VTk8arvnDsjzw==
+X-Received: by 2002:a05:620a:8112:b0:77f:61d3:734c with SMTP id os18-20020a05620a811200b0077f61d3734cmr1598295qkn.43.1702157390147;
+        Sat, 09 Dec 2023 13:29:50 -0800 (PST)
+Received: from ?IPV6:2600:1700:2000:b002:f559:1d79:8a5d:590e? ([2600:1700:2000:b002:f559:1d79:8a5d:590e])
+        by smtp.gmail.com with ESMTPSA id tn24-20020a05620a3c1800b0077f052fa73bsm1662198qkn.15.2023.12.09.13.29.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Dec 2023 13:29:48 -0800 (PST)
+Message-ID: <07d27191-12b6-4c84-b80e-75c618df9de4@sifive.com>
+Date: Sat, 9 Dec 2023 15:29:47 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231209065931.3458-3-gregory.price@memverge.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] drm/amd/display: Support DRM_AMD_DC_FP on RISC-V
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+ "Conor.Dooley" <conor.dooley@microchip.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>,
+ Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>,
+ Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Dave Airlie <airlied@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>, Pan Xinhui <Xinhui.Pan@amd.com>,
+ Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+ llvm@lists.linux.dev
+References: <20231122030621.3759313-1-samuel.holland@sifive.com>
+ <20231122030621.3759313-4-samuel.holland@sifive.com>
+ <20231123-headdress-mold-0dd7a74477f7@wendy>
+ <20231130004224.GE2513828@dev-arch.thelio-3990X>
+ <4f277982-fffb-4fe1-bc02-007633400f31@sifive.com>
+ <5090a015-5b6f-44be-bb25-d2ca3fdf5d40@app.fastmail.com>
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <5090a015-5b6f-44be-bb25-d2ca3fdf5d40@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Gregory,
+Hi Arnd,
 
-kernel test robot noticed the following build warnings:
+On 2023-12-09 2:38 PM, Arnd Bergmann wrote:
+> On Fri, Dec 8, 2023, at 06:04, Samuel Holland wrote:
+>> On 2023-11-29 6:42 PM, Nathan Chancellor wrote:
+>>> On Thu, Nov 23, 2023 at 02:23:01PM +0000, Conor Dooley wrote:
+>>>> On Tue, Nov 21, 2023 at 07:05:15PM -0800, Samuel Holland wrote:
+>>>>> RISC-V uses kernel_fpu_begin()/kernel_fpu_end() like several other
+>>>>> architectures. Enabling hardware FP requires overriding the ISA string
+>>>>> for the relevant compilation units.
+>>>>
+>>>> Ah yes, bringing the joy of frame-larger-than warnings to RISC-V:
+>>>> ../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:58:13: warning: stack frame size (2416) exceeds limit (2048) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Wframe-larger-than]
+>>>
+>>> :(
+>>>
+>>>> Nathan, have you given up on these being sorted out?
+>>>
+>>> Does your configuration have KASAN (I don't think RISC-V supports
+>>> KCSAN)? It is possible that dml/dcn32 needs something similar to commit
+>>> 6740ec97bcdb ("drm/amd/display: Increase frame warning limit with KASAN
+>>> or KCSAN in dml2")?
+>>>
+>>> I am not really interested in playing whack-a-mole with these warnings
+>>> like I have done in the past for the reasons I outlined here:
+>>>
+>>> https://lore.kernel.org/20231019205117.GA839902@dev-arch.thelio-3990X/
+>>
+>> I also see one of these with clang 17 even with KASAN disabled:
+>>
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:37:6:
+>> warning: stack frame size (2208) exceeds limit (2048) in 'dml32_recalculate'
+>> [-Wframe-larger-than]
+>> void dml32_recalculate(struct display_mode_lib *mode_lib)
+>>
+>>      ^
+>> 1532/2208 (69.38%) spills, 676/2208 (30.62%) variables
+>>
+>> So I'm in favor of just raising the limit for these files for clang, like you
+>> suggested in the linked thread.
+> 
+> How about just adding a BUG_ON(IS_ENABLED(CONFIG_RISCV))
+> in that function? That should also avoid the build failure
+> but give a better indication of where the problem is
+> if someone actually runs into that function and triggers
+> a runtime stack overflow.
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on deller-parisc/for-next powerpc/next powerpc/fixes s390/features jcmvbkbc-xtensa/xtensa-for-next arnd-asm-generic/master linus/master v6.7-rc4 next-20231208]
-[cannot apply to tip/x86/asm geert-m68k/for-next geert-m68k/for-linus]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Won't that break actual users of the driver, trading an unlikely but
+theoretically possible stack overflow for a guaranteed crash? The intent of this
+series is that I have one of these GPUs plugged in to a RISC-V board, and I want
+to use it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/mm-mempolicy-implement-the-sysfs-based-weighted_interleave-interface/20231209-150314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231209065931.3458-3-gregory.price%40memverge.com
-patch subject: [PATCH v2 02/11] mm/mempolicy: introduce MPOL_WEIGHTED_INTERLEAVE for weighted interleaving
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231210/202312100543.ix4jxw81-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100543.ix4jxw81-lkp@intel.com/reproduce)
+Regards,
+Samuel
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312100543.ix4jxw81-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/mempolicy.c:2355:3: warning: variable 'weight_total' is uninitialized when used here [-Wuninitialized]
-                   weight_total += weight;
-                   ^~~~~~~~~~~~
-   mm/mempolicy.c:2341:27: note: initialize the variable 'weight_total' to silence this warning
-           unsigned int weight_total;
-                                    ^
-                                     = 0
-   1 warning generated.
-
-
-vim +/weight_total +2355 mm/mempolicy.c
-
-  2329	
-  2330	static unsigned long alloc_pages_bulk_array_weighted_interleave(gfp_t gfp,
-  2331			struct mempolicy *pol, unsigned long nr_pages,
-  2332			struct page **page_array)
-  2333	{
-  2334		struct task_struct *me = current;
-  2335		unsigned long total_allocated = 0;
-  2336		unsigned long nr_allocated;
-  2337		unsigned long rounds;
-  2338		unsigned long node_pages, delta;
-  2339		unsigned char weight;
-  2340		unsigned char weights[MAX_NUMNODES];
-  2341		unsigned int weight_total;
-  2342		unsigned long rem_pages = nr_pages;
-  2343		nodemask_t nodes = pol->nodes;
-  2344		int nnodes, node, prev_node;
-  2345		int i;
-  2346	
-  2347		/* Stabilize the nodemask on the stack */
-  2348		barrier();
-  2349	
-  2350		nnodes = nodes_weight(nodes);
-  2351	
-  2352		/* Collect weights and save them on stack so they don't change */
-  2353		for_each_node_mask(node, nodes) {
-  2354			weight = iw_table[node];
-> 2355			weight_total += weight;
-  2356			weights[node] = weight;
-  2357		}
-  2358	
-  2359		/* Continue allocating from most recent node and adjust the nr_pages */
-  2360		if (pol->wil.cur_weight) {
-  2361			node = next_node_in(me->il_prev, nodes);
-  2362			node_pages = pol->wil.cur_weight;
-  2363			if (node_pages > rem_pages)
-  2364				node_pages = rem_pages;
-  2365			nr_allocated = __alloc_pages_bulk(gfp, node, NULL, node_pages,
-  2366							  NULL, page_array);
-  2367			page_array += nr_allocated;
-  2368			total_allocated += nr_allocated;
-  2369			/* if that's all the pages, no need to interleave */
-  2370			if (rem_pages <= pol->wil.cur_weight) {
-  2371				pol->wil.cur_weight -= rem_pages;
-  2372				return total_allocated;
-  2373			}
-  2374			/* Otherwise we adjust nr_pages down, and continue from there */
-  2375			rem_pages -= pol->wil.cur_weight;
-  2376			pol->wil.cur_weight = 0;
-  2377			prev_node = node;
-  2378		}
-  2379	
-  2380		/* Now we can continue allocating as if from 0 instead of an offset */
-  2381		rounds = rem_pages / weight_total;
-  2382		delta = rem_pages % weight_total;
-  2383		for (i = 0; i < nnodes; i++) {
-  2384			node = next_node_in(prev_node, nodes);
-  2385			weight = weights[node];
-  2386			node_pages = weight * rounds;
-  2387			if (delta) {
-  2388				if (delta > weight) {
-  2389					node_pages += weight;
-  2390					delta -= weight;
-  2391				} else {
-  2392					node_pages += delta;
-  2393					delta = 0;
-  2394				}
-  2395			}
-  2396			/* We may not make it all the way around */
-  2397			if (!node_pages)
-  2398				break;
-  2399			/* If an over-allocation would occur, floor it */
-  2400			if (node_pages + total_allocated > nr_pages) {
-  2401				node_pages = nr_pages - total_allocated;
-  2402				delta = 0;
-  2403			}
-  2404			nr_allocated = __alloc_pages_bulk(gfp, node, NULL, node_pages,
-  2405							  NULL, page_array);
-  2406			page_array += nr_allocated;
-  2407			total_allocated += nr_allocated;
-  2408			prev_node = node;
-  2409		}
-  2410	
-  2411		/*
-  2412		 * Finally, we need to update me->il_prev and pol->wil.cur_weight
-  2413		 * if there were overflow pages, but not equivalent to the node
-  2414		 * weight, set the cur_weight to node_weight - delta and the
-  2415		 * me->il_prev to the previous node. Otherwise if it was perfect
-  2416		 * we can simply set il_prev to node and cur_weight to 0
-  2417		 */
-  2418		if (node_pages) {
-  2419			me->il_prev = prev_node;
-  2420			node_pages %= weight;
-  2421			pol->wil.cur_weight = weight - node_pages;
-  2422		} else {
-  2423			me->il_prev = node;
-  2424			pol->wil.cur_weight = 0;
-  2425		}
-  2426	
-  2427		return total_allocated;
-  2428	}
-  2429	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
