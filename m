@@ -1,128 +1,123 @@
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580731FA3
-	for <llvm@lists.linux.dev>; Sat,  9 Dec 2023 21:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB4314F6E;
+	Sat,  9 Dec 2023 22:22:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cvHA9bOc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JLgUH7wa"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id D4D73320046E;
-	Sat,  9 Dec 2023 16:43:53 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Sat, 09 Dec 2023 16:43:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1702158233; x=1702244633; bh=We
-	6kY3gAvHmi9sxQSDSEwapFQp49viPEwJBBDd9ci5w=; b=cvHA9bOcnXtURsTD7h
-	hQIwOkrnSC/IEaopUb7jcU3SO71P2HglKc/Uf/tbOJgiQdVvBbYUi5wIeI/SuHdN
-	yihGgZozlJtPuOEBXBUtit4VmIrrw4iI9wyvOpZtesme/XJI4CB73j6HIO/29i2g
-	J9jzcjTXS3e2q7va1k83+YbmF98nTRA9aZv5rVUKh4ua+HV757M6xE1l6PExeBOH
-	4AkKpOCn6h7HzggQz1bKkZ1QqQEmo4X7lqBxD3JHribrEUCKyubmKlBs8AncEceS
-	WsxBv/4g9Tsa57PG4+KEQ8Z9hREEBU5ah1hjoC1XZRXhc0YlNTK5bJ/RHhiFPZSQ
-	R4MQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1702158233; x=1702244633; bh=We6kY3gAvHmi9
-	sxQSDSEwapFQp49viPEwJBBDd9ci5w=; b=JLgUH7waXEbUzBEVje+yS8gqR3UZv
-	0CffHOWY0+Z+wwB+vW7KwAu70naHiDTc5u+OYzUVLCv0unDsrJpC93z3zETAGff7
-	e0/T0GRtbRg0+VnKpUtTWPl/Q4nlGcTAyPFjPNVovSCRC1cUnlcC3O2I04IH5cok
-	MESfiIG+6tt4R9ba3Gg9/9KnbqSVFlntTrRNLbzBRy93epWnYX5VTNrGGgOaENLy
-	XlEPzcvCm3VRq9ydeqbEFCF21r5ibe7XRlynlw5bEBTNt50vdbXTP7QJa37rnJfz
-	NT1ZcZ4nx6pbp3NiCJ8HgiHHtOAi3T7I/d1Ju8OBaYA2CHgazdrnZNtIw==
-X-ME-Sender: <xms:mN90Zcj1t9YVcktHsm-DKH45IHMXpA9-Hpk1MgTfZICEl6zlaEQO-Q>
-    <xme:mN90ZVBye_9O77lTM1mzlC0eY5rXGnN3rcl8YdJFkH31am33R7m_eb1Es3R2UGMnB
-    7ZiLaTlclBhknsZ7ls>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudekkedgudehgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:mN90ZUHkY2lVvRTuVB80nWKONPPFQfKxiUCPeYhQNqvjAx9BHimUqg>
-    <xmx:mN90ZdQBaq15D8xNbGkhH8mnW9rg4RLUFMqWhsHROKx2rdbi3lmzmw>
-    <xmx:mN90ZZwDe9e9jmJA9g9aU6t06uGsYV23Rtq8P4aLnmtVN_b5V5QsZg>
-    <xmx:md90ZeJ8gleODk1pUugxxYDlZwxKnUBYXS_E8L8KAxGPRh2PldOCLA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A87CDB60089; Sat,  9 Dec 2023 16:43:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b4CLcuFv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702160557; x=1733696557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jQVI10ojt2pNa2p7oTrsLX7J984azRT0H87VfWxIKKE=;
+  b=b4CLcuFvPkv9Aj63seidTGIpNGqifGlqj9Y86IX1q6RK8LUHHkYYm69x
+   VFzncA1YUaVfitCLsI+179etJBtrH9lTTt+8h1QzNRfhh3LdxwlyDZ5Yr
+   G8148Y58/9w74tomOUGWe5G4I3dzXdCAwYtXBeUqEUNTlYYYumn1jgVam
+   ZD5sMtI5g7gQBr3/IfFhJCCEost1bZDRQIzDNURtT+fqpZHmsddZALaG9
+   WfR1VxeWFOZTmrPVm+xwLuIghF92oqig7hKWY5SMRbQUXN08UoknG7xp3
+   4IiQ7g3DLmEplQtZMJmbQyuyPb3+X144Qc+GxYttUuT2ZTUcvQEGo/JjA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="1345040"
+X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
+   d="scan'208";a="1345040"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 14:22:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="748729927"
+X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
+   d="scan'208";a="748729927"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2023 14:17:42 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rC5dk-000G1Z-0B;
+	Sat, 09 Dec 2023 22:17:40 +0000
+Date: Sun, 10 Dec 2023 06:17:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	kernel@collabora.com
+Subject: Re: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
+Message-ID: <202312100602.sdYTHOg1-lkp@intel.com>
+References: <20231208131342.65671-1-andrzej.p@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <7996d21a-3e97-408b-82a3-3bad432095a2@app.fastmail.com>
-In-Reply-To: <07d27191-12b6-4c84-b80e-75c618df9de4@sifive.com>
-References: <20231122030621.3759313-1-samuel.holland@sifive.com>
- <20231122030621.3759313-4-samuel.holland@sifive.com>
- <20231123-headdress-mold-0dd7a74477f7@wendy>
- <20231130004224.GE2513828@dev-arch.thelio-3990X>
- <4f277982-fffb-4fe1-bc02-007633400f31@sifive.com>
- <5090a015-5b6f-44be-bb25-d2ca3fdf5d40@app.fastmail.com>
- <07d27191-12b6-4c84-b80e-75c618df9de4@sifive.com>
-Date: Sat, 09 Dec 2023 22:42:56 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Samuel Holland" <samuel.holland@sifive.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Conor.Dooley" <conor.dooley@microchip.com>
-Cc: "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Harry Wentland" <harry.wentland@amd.com>, "Leo Li" <sunpeng.li@amd.com>,
- "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "Dave Airlie" <airlied@gmail.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Alex Deucher" <alexander.deucher@amd.com>,
- "Pan Xinhui" <Xinhui.Pan@amd.com>, "Daniel Vetter" <daniel@ffwll.ch>,
- amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3] drm/amd/display: Support DRM_AMD_DC_FP on RISC-V
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231208131342.65671-1-andrzej.p@collabora.com>
 
-On Sat, Dec 9, 2023, at 22:29, Samuel Holland wrote:
-> On 2023-12-09 2:38 PM, Arnd Bergmann wrote:
->> On Fri, Dec 8, 2023, at 06:04, Samuel Holland wrote:
->>> On 2023-11-29 6:42 PM, Nathan Chancellor wrote:
->>>>
->>>> https://lore.kernel.org/20231019205117.GA839902@dev-arch.thelio-3990X/
->>>
->>> I also see one of these with clang 17 even with KASAN disabled:
->>>
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:37:6:
->>> warning: stack frame size (2208) exceeds limit (2048) in 'dml32_recalculate'
->>> [-Wframe-larger-than]
->>> void dml32_recalculate(struct display_mode_lib *mode_lib)
->>>
->>>      ^
->>> 1532/2208 (69.38%) spills, 676/2208 (30.62%) variables
->>>
->>> So I'm in favor of just raising the limit for these files for clang, like you
->>> suggested in the linked thread.
->> 
->> How about just adding a BUG_ON(IS_ENABLED(CONFIG_RISCV))
->> in that function? That should also avoid the build failure
->> but give a better indication of where the problem is
->> if someone actually runs into that function and triggers
->> a runtime stack overflow.
->
-> Won't that break actual users of the driver, trading an unlikely but
-> theoretically possible stack overflow for a guaranteed crash? The intent of this
-> series is that I have one of these GPUs plugged in to a RISC-V board, and I want
-> to use it.
+Hi Andrzej,
 
-Ah, I thought you just wanted to get it to compile cleanly
-so you could use some of the more common cards. If you
-are trying to run the dcn32 code specifically, then you
-should definitely fix the stack usage of that function
-instead.
+kernel test robot noticed the following build errors:
 
-      Arnd
+[auto build test ERROR on 33cc938e65a98f1d29d0a18403dbbee050dcad9a]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrzej-Pietrasiewicz/usb-gadget-webcam-Make-g_webcam-loadable-again/20231208-211513
+base:   33cc938e65a98f1d29d0a18403dbbee050dcad9a
+patch link:    https://lore.kernel.org/r/20231208131342.65671-1-andrzej.p%40collabora.com
+patch subject: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231210/202312100602.sdYTHOg1-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100602.sdYTHOg1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312100602.sdYTHOg1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/gadget/legacy/webcam.c:224:36: error: initializer element is not a compile-time constant
+     224 |                 .b_length                       = uvc_frame_yuv_360p.bLength,
+         |                                                   ~~~~~~~~~~~~~~~~~~~^~~~~~~
+   drivers/usb/gadget/legacy/webcam.c:263:36: error: initializer element is not a compile-time constant
+     263 |                 .b_length                       = uvc_frame_yuv_720p.bLength,
+         |                                                   ~~~~~~~~~~~~~~~~~~~^~~~~~~
+   drivers/usb/gadget/legacy/webcam.c:332:37: error: initializer element is not a compile-time constant
+     332 |                 .b_length                       = uvc_frame_mjpg_360p.bLength,
+         |                                                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   drivers/usb/gadget/legacy/webcam.c:371:37: error: initializer element is not a compile-time constant
+     371 |                 .b_length                       = uvc_frame_mjpg_720p.bLength,
+         |                                                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   4 errors generated.
+
+
+vim +224 drivers/usb/gadget/legacy/webcam.c
+
+   220	
+   221	static const struct uvcg_frame uvcg_frame_yuv_360p = {
+   222		.fmt_type		= UVCG_UNCOMPRESSED,
+   223		.frame = {
+ > 224			.b_length			= uvc_frame_yuv_360p.bLength,
+   225			.b_descriptor_type		= uvc_frame_yuv_360p.bDescriptorType,
+   226			.b_descriptor_subtype		= uvc_frame_yuv_360p.bDescriptorSubType,
+   227			.b_frame_index			= uvc_frame_yuv_360p.bFrameIndex,
+   228			.bm_capabilities		= uvc_frame_yuv_360p.bmCapabilities,
+   229			.w_width			= uvc_frame_yuv_360p.wWidth,
+   230			.w_height			= uvc_frame_yuv_360p.wHeight,
+   231			.dw_min_bit_rate		= uvc_frame_yuv_360p.dwMinBitRate,
+   232			.dw_max_bit_rate		= uvc_frame_yuv_360p.dwMaxBitRate,
+   233			.dw_max_video_frame_buffer_size	= uvc_frame_yuv_360p.dwMaxVideoFrameBufferSize,
+   234			.dw_default_frame_interval	= uvc_frame_yuv_360p.dwDefaultFrameInterval,
+   235			.b_frame_interval_type		= uvc_frame_yuv_360p.bFrameIntervalType,
+   236		},
+   237		.dw_frame_interval	= (u32 *)uvc_frame_yuv_360p.dwFrameInterval,
+   238	};
+   239	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
