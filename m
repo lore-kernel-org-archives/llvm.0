@@ -1,38 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025C213AF9;
-	Sat,  9 Dec 2023 15:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D31613AF9;
+	Sat,  9 Dec 2023 15:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d4vPiUZg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB26C433C8;
-	Sat,  9 Dec 2023 15:51:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702137090;
-	bh=B3v9bwxxiKJCYTZLonVR80MhGHU+cdr4njBxdTxrBZ8=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=d4vPiUZgGBp/xiPQThXJAATl3ojnowbYpykR84SpURS3H5bRnDo/aL+ZbJWapa2Q4
-	 +NnwnQ7fRXZDz0+QeeoO6V94YORod1WZhFn25o6Vw3I6bm5IMq9O7F5cagNoSM795B
-	 LIoPVAqu18I9s4SApslb6bP4Ashzt2WdKRQa7PmUktT71HSDRTn5mxP6O3tRQDSAN8
-	 wxOUlI23WMhEbhSsrpd9qQPDpALR4J+Hxm0v4/8V5OvjyxwpvXrTWSnn+xM+4J5NG9
-	 41xfD22q+3t7pEu3qrg+0dePAhEayiDH3eMI9U+5PejE0Rp0n+9zuTetFFXseZ1SbL
-	 rpxKfObL7MCxg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 5B3F4CE0D18; Sat,  9 Dec 2023 07:51:30 -0800 (PST)
-Date: Sat, 9 Dec 2023 07:51:30 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S/+PEgLp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702137284; x=1733673284;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NfJwR/SGMCYUAuPEGJ0/Oym4fLVR3iKuAFetXDvWIs4=;
+  b=S/+PEgLpfxKRS+4pzGfjotZuq9HNIleVPCFcpBAQMaPWsgd9FpQlZ8Eb
+   XI/8bXmdICmji8x3dK5BF4pfSKa2xRZJjsbjpSPwEaQxs+TXdTsaiX09c
+   243bmbZjv2buHjLZcBa7APFOX0eHJOYNM6HJ6DfuWJryqvjFZsA/wEPK/
+   ycMGywsP1K9H4dCl38Z48UcAf1+bbNAb2M1WcN3dTmhu0NACScvR3PdX1
+   0WnVyBz9mU6qDaLLDDueZz4WppF4tv0MTk5HMQXNMxZ64niVjzkHVqiyC
+   YbA1R2qx3G755fifrXo/pPtugjrKMujjhpgyduJq/C0c5Bxf8JCCjx2kH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="397308999"
+X-IronPort-AV: E=Sophos;i="6.04,263,1695711600"; 
+   d="scan'208";a="397308999"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 07:54:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="1019676505"
+X-IronPort-AV: E=Sophos;i="6.04,263,1695711600"; 
+   d="scan'208";a="1019676505"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 09 Dec 2023 07:54:42 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rBzf6-000FXt-0D;
+	Sat, 09 Dec 2023 15:54:40 +0000
+Date: Sat, 9 Dec 2023 23:54:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal Kubiak <michal.kubiak@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-	julia.lawall@inria.fr, clm@fb.com, dsterba@suse.com,
-	baptiste.lepers@gmail.com
-Subject: Re: [paulmck-rcu:frederic.2023.12.08a 29/37]
- fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329'
- declared with 'error' attribute: Need native word sized stores/loads for
- atomicity.
-Message-ID: <0487d7cc-b906-4a4a-b284-9c79700b4ede@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202312091837.cKaPw0Tf-lkp@intel.com>
+	Alexander Lobakin <aleksander.lobakin@intel.com>
+Subject: [alobakin:idpf-libie 26/27]
+ drivers/net/ethernet/intel/idpf/idpf_txrx.c:755: warning: expecting
+ prototype for idpf_xdp_rxq_info_init(). Prototype was for
+ idpf_xdp_rxq_info_deinit() instead
+Message-ID: <202312092341.4WEhvmIw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,57 +52,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202312091837.cKaPw0Tf-lkp@intel.com>
 
-On Sat, Dec 09, 2023 at 06:20:37PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git frederic.2023.12.08a
-> head:   37843b5f561a08ae899fb791eeeb5abd992eabe2
-> commit: 7dd87072d40809e26503f04b79d63290288dbbac [29/37] btrfs: Adjust ->last_trans ordering in btrfs_record_root_in_trans()
-> config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202312091837.cKaPw0Tf-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
->    warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
->    warning: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Wunknown-warning-option]
-> >> fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
->      496 |         if (smp_load_acquire(&root->last_trans) == trans->transid && /* ^^^ */
->          |             ^
+tree:   https://github.com/alobakin/linux idpf-libie
+head:   30de646961d910ded1d31d2d98c021ea839255b4
+commit: 545feeffdc3f0d66797108318ab732cc4927ffe2 [26/27] idpf: prepare structures to support xdp
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231209/202312092341.4WEhvmIw-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312092341.4WEhvmIw-lkp@intel.com/reproduce)
 
-Ooooh!!!  :-/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312092341.4WEhvmIw-lkp@intel.com/
 
-From what I can see, the current code can tear this load on 32-bit
-systems, which can result in bad comparisons and then in failure to wait
-for a partially complete transaction.
+All warnings (new ones prefixed by >>):
 
-So is btrfs actually supported on 32-bit systems?  If not, would the
-following patch be appropriate?
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:755: warning: expecting prototype for idpf_xdp_rxq_info_init(). Prototype was for idpf_xdp_rxq_info_deinit() instead
 
-If btrfs is to be supported on 32-bit systems, from what I can see some
-major surgery is required, even if a 32-bit counter is wrap-safe for
-this particular type of transaction.  (But SSDs?  In-memory btrfs
-filesystems?)
 
-							Thanx, Paul
+vim +755 drivers/net/ethernet/intel/idpf/idpf_txrx.c
 
-------------------------------------------------------------------------
+   749	
+   750	/**
+   751	 * idpf_xdp_rxq_info_init - Deinit XDP RxQ info for a given Rx queue
+   752	 * @rxq: Rx queue for which the resources are destroyed
+   753	 */
+   754	static void idpf_xdp_rxq_info_deinit(struct idpf_queue *rxq)
+ > 755	{
+   756		/* Memory model is managed by libie */
+   757		memset(&rxq->xdp_rxq, 0, sizeof(rxq->xdp_rxq));
+   758	}
+   759	
 
-diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
-index 4fb925e8c981..4d56158c34f9 100644
---- a/fs/btrfs/Kconfig
-+++ b/fs/btrfs/Kconfig
-@@ -19,6 +19,7 @@ config BTRFS_FS
- 	select RAID6_PQ
- 	select XOR_BLOCKS
- 	depends on PAGE_SIZE_LESS_THAN_256KB
-+	depends on 64BIT
- 
- 	help
- 	  Btrfs is a general purpose copy-on-write filesystem with extents,
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
