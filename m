@@ -1,113 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8B8154BE;
-	Sat,  9 Dec 2023 18:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A5818E00
+	for <llvm@lists.linux.dev>; Sat,  9 Dec 2023 20:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nQAvJVoo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702147687; x=1733683687;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Qcv3BMcwRS6unAS+l31DkzLh6IXXF4c6LNf//+waDhI=;
-  b=nQAvJVoobSCHblutcuhcnzEEE2LKAif0F0iFDC2vdwD0Oqqe0aTDG+fR
-   hjlmdUN1AucGxzYCOyEuaFK0ayA6ppWfsl1S2IhXCkzZuI30eYZb81aSp
-   IOXiWCIH6pCrYBL+1EAFJNwlvlBV1/V4ngwtVA5SG9lj0I7unCmeHYG+M
-   JaDoOTdDDjXq3wBbWzuHKJcpHeKcLV6AWcAlRQFgCaVuqvr3OO6V/Sp5b
-   LVEntRrPShSh2KEmo4mM6U5/h2Q5vw4aZICodXpWMexEuEawsh762RsCI
-   iQjlbCZuh4myoszrXadQfYntkek4iT9OcAeFmBSbeNOPSTNhEgeE/yMAa
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="458837088"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="458837088"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 10:48:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="1103920876"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="1103920876"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Dec 2023 10:48:04 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rC2Ms-000Fm4-2K;
-	Sat, 09 Dec 2023 18:48:02 +0000
-Date: Sun, 10 Dec 2023 02:47:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-xe@lists.freedesktop.org,
-	Vinay Belgaumkar <vinay.belgaumkar@intel.com>
-Subject: [drm-xe:drm-xe-next 1052/1053]
- drivers/gpu/drm/xe/xe_gt_freq.c:201:30: warning: variable 'err' is
- uninitialized when used here
-Message-ID: <202312100223.2IyYhSLJ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nqixXGn/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E2Hu6Hkx"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 71AF13200A10;
+	Sat,  9 Dec 2023 15:39:08 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Sat, 09 Dec 2023 15:39:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm1; t=1702154347; x=1702240747; bh=nA
+	pf9oaznILOB+bOEKeTCqS0+E9iMtrHOKNgiCZPnf8=; b=nqixXGn/qgsSYwLhji
+	Pk7AHucq7sOmZ5xV7f8NxIs2Bypt/sSPfonlIOyX4uFw9IIBIM6UpabIKFU/Q1T8
+	HbgPb7QPEtRtCQYUITouprUCXUaSWsXuMtO7e857eD70IEMB8OBC+krG2s1vJs11
+	7JfXGnKuK1rngnVWnNGY5/kL2k6BYPZEOmozrh+VXB6/gq9ww0Dy1rhzUiCxgD0b
+	ucaYhl5fYXWMeT0qDoqsr8PutI3Y0e5b0ved6rf22QA1h7RaaNOa5yhqb9OVCqtf
+	dhMUGtv5PHnv8aslN6ks3TUDP2WlQN+84NtcQ13qsU2hK/mk/UWY6n+x6fSX5PPL
+	RTfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1702154347; x=1702240747; bh=nApf9oaznILOB
+	+bOEKeTCqS0+E9iMtrHOKNgiCZPnf8=; b=E2Hu6Hkx16494KxIz37zzPeHrqHU+
+	+Btk4U8HPNVSdxhLMyqzBmbU2tpsiOopPlbNXwlAxsj8B3ERm884+GYKcZN1dSGh
+	oBhEAv6qDw1Oc1QWDow/Wy9Reeedk9TnS+KOf5x55mktCDMtR0c4eATojEMJX+in
+	4Dmu24QPaDO/LPGQ9e63MGoTvRref3z/EWtqbmcdda6DNN+TC56B46VRvv0E6SEP
+	Yy9XHxDN+lwLRvCSIT6mQFlVMP5vpThWwHOoBz2A0C/5poGI387xh8QeaN5N2TXk
+	FUYBbKhnnnZvUGH9qofig10Qwo9RCUeC597NVh4CLEe6xukPow9f1lR3g==
+X-ME-Sender: <xms:a9B0Zfib413GnDb6e0EhQlyXh3FlDQDG_60N50GrNnCK7lBniFD29w>
+    <xme:a9B0ZcBUoJh4xwRwq63NclpFBCmJ4wHmvTqIlqRstuabLpbFqJ9RDx4tuTWQMtFrt
+    SyKrxvqNWskA96ZS0Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudekkedgudegudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:a9B0ZfHtyKCEGLX6rLgXxfohUPPoYL6LBaZkICr7MwjshweRq9Lp3g>
+    <xmx:a9B0ZcRBY5ifpZ1WJDTg0yFZh4Cdk7G_4HmdosGAuRLtG_oZXyZ3Tw>
+    <xmx:a9B0ZczcTOQDZ-sdzQbvzdigiB-F_hJmDw_1OkEC4SdoYTJApDpyJA>
+    <xmx:a9B0ZRIlkv02LwxHqcn9uTWdA1PQNbMzR3BKCsvozjcb9Azm7nczaA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 453DAB60089; Sat,  9 Dec 2023 15:39:07 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1178-geeaf0069a7-fm-20231114.001-geeaf0069
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-Id: <5090a015-5b6f-44be-bb25-d2ca3fdf5d40@app.fastmail.com>
+In-Reply-To: <4f277982-fffb-4fe1-bc02-007633400f31@sifive.com>
+References: <20231122030621.3759313-1-samuel.holland@sifive.com>
+ <20231122030621.3759313-4-samuel.holland@sifive.com>
+ <20231123-headdress-mold-0dd7a74477f7@wendy>
+ <20231130004224.GE2513828@dev-arch.thelio-3990X>
+ <4f277982-fffb-4fe1-bc02-007633400f31@sifive.com>
+Date: Sat, 09 Dec 2023 21:38:45 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Samuel Holland" <samuel.holland@sifive.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Conor.Dooley" <conor.dooley@microchip.com>
+Cc: "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Harry Wentland" <harry.wentland@amd.com>, "Leo Li" <sunpeng.li@amd.com>,
+ "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "Dave Airlie" <airlied@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "Alex Deucher" <alexander.deucher@amd.com>,
+ "Pan Xinhui" <Xinhui.Pan@amd.com>, "Daniel Vetter" <daniel@ffwll.ch>,
+ amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/3] drm/amd/display: Support DRM_AMD_DC_FP on RISC-V
+Content-Type: text/plain
 
-tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-head:   1fc141d1f445b8e5ab4ff14645b0482dd98460b9
-commit: 5d57684e0f5e1b8bb2484f0140a9b3a2f132f8fe [1052/1053] drm/xe: Create a xe_gt_freq component for raw management and sysfs
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231210/202312100223.2IyYhSLJ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100223.2IyYhSLJ-lkp@intel.com/reproduce)
+On Fri, Dec 8, 2023, at 06:04, Samuel Holland wrote:
+> On 2023-11-29 6:42 PM, Nathan Chancellor wrote:
+>> On Thu, Nov 23, 2023 at 02:23:01PM +0000, Conor Dooley wrote:
+>>> On Tue, Nov 21, 2023 at 07:05:15PM -0800, Samuel Holland wrote:
+>>>> RISC-V uses kernel_fpu_begin()/kernel_fpu_end() like several other
+>>>> architectures. Enabling hardware FP requires overriding the ISA string
+>>>> for the relevant compilation units.
+>>>
+>>> Ah yes, bringing the joy of frame-larger-than warnings to RISC-V:
+>>> ../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:58:13: warning: stack frame size (2416) exceeds limit (2048) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Wframe-larger-than]
+>> 
+>> :(
+>> 
+>>> Nathan, have you given up on these being sorted out?
+>> 
+>> Does your configuration have KASAN (I don't think RISC-V supports
+>> KCSAN)? It is possible that dml/dcn32 needs something similar to commit
+>> 6740ec97bcdb ("drm/amd/display: Increase frame warning limit with KASAN
+>> or KCSAN in dml2")?
+>> 
+>> I am not really interested in playing whack-a-mole with these warnings
+>> like I have done in the past for the reasons I outlined here:
+>> 
+>> https://lore.kernel.org/20231019205117.GA839902@dev-arch.thelio-3990X/
+>
+> I also see one of these with clang 17 even with KASAN disabled:
+>
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:37:6:
+> warning: stack frame size (2208) exceeds limit (2048) in 'dml32_recalculate'
+> [-Wframe-larger-than]
+> void dml32_recalculate(struct display_mode_lib *mode_lib)
+>
+>      ^
+> 1532/2208 (69.38%) spills, 676/2208 (30.62%) variables
+>
+> So I'm in favor of just raising the limit for these files for clang, like you
+> suggested in the linked thread.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312100223.2IyYhSLJ-lkp@intel.com/
+How about just adding a BUG_ON(IS_ENABLED(CONFIG_RISCV))
+in that function? That should also avoid the build failure
+but give a better indication of where the problem is
+if someone actually runs into that function and triggers
+a runtime stack overflow.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/xe/xe_gt_freq.c:201:30: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-                            kobject_name(gt->sysfs), err);
-                                                     ^~~
-   include/drm/drm_print.h:466:36: note: expanded from macro 'drm_warn'
-           __drm_printk((drm), warn,, fmt, ##__VA_ARGS__)
-                                             ^~~~~~~~~~~
-   include/drm/drm_print.h:456:48: note: expanded from macro '__drm_printk'
-           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-                                                         ^~~~~~~~~~~
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_gt_freq.c:196:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/err +201 drivers/gpu/drm/xe/xe_gt_freq.c
-
-   186	
-   187	/**
-   188	 * xe_gt_freq_init - Initialize Xe Freq component
-   189	 * @gt: Xe GT object
-   190	 *
-   191	 * It needs to be initialized after GT Sysfs and GuC PC components are ready.
-   192	 */
-   193	void xe_gt_freq_init(struct xe_gt *gt)
-   194	{
-   195		struct xe_device *xe = gt_to_xe(gt);
-   196		int err;
-   197	
-   198		gt->freq = kobject_create_and_add("freq0", gt->sysfs);
-   199		if (!gt->freq) {
-   200			drm_warn(&xe->drm, "failed to add freq0 directory to %s, err: %d\n",
- > 201				 kobject_name(gt->sysfs), err);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+      Arnd
