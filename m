@@ -1,58 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F719BCB;
-	Sat,  9 Dec 2023 18:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C0A1802A;
+	Sat,  9 Dec 2023 18:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k6Pl2IhO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sb5TkkOx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702146313; x=1733682313;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0M0nXpWDhcnAg4+20gZZF8o8lfD/T3Wj0UyQZlZSoCU=;
-  b=k6Pl2IhOwKJPLcQ4xKl16TLydrpCqae/2r/y60KYdZKfcNvUnfJR591P
-   HbPkiFWwUgkHnlNhCnyUy+F0yZ3pTR3n6Xgv7YZMnUd2GcOEXZEsnSpA5
-   zAxtkagjmCbPBcRMIqf8QKpAIl/4SiROVQusxW3xEx8jLZ7cQ4evzeLBp
-   76fM+slZ++EqN19nN5ptUHeAEP+lxg6a4k0w1sIx04U2Jv+mOO3Dbl8Wf
-   0uVg8HEU26RHIAQG4Wnk2wJQfxrpYENodUlWt5SyZnRrNxKaiwkxUmJA8
-   7J5+c07SC/JC9fhtdOMsKiXnTisP3S3L3LPV4NOpkLwuM+CIOJmjo1Ajb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="1592451"
+  t=1702146906; x=1733682906;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=djHHmAftj9p50s0o3qa5eltA18Ttb159yPJkN8YgOP8=;
+  b=Sb5TkkOxh/iy3UhenXz5C3bS0/eLNWOgICDt3DDCuIxWQ3qei/MstJKs
+   V/1jot89s8llmdS/io5/QZFNK9AOvMJx1rTW+tKXg1IuPzpx/yIr3MRov
+   iR2nsiZRIZBn39jHO6+vWaBgkPP5JtMv3ejNoKa7wHPCb5qkXz2Rrlacj
+   p7ppOT8fO0nOZb5puP8qWRcR2bnN0PmTx8Z0J7F7MPqDwdXTWUU2T8Otq
+   6N7ADy5KBl1Wf5vddx9eAAtBc4D4iUnJkMwkSobzgMN/hLV+bIguoEwes
+   /4jEy0EpGBtBa661Vu7KY08E1Dn0YW+TLebC376RQFyzYn5vY3JXb8OwE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="384931662"
 X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="1592451"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 10:25:13 -0800
+   d="scan'208";a="384931662"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 10:35:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="722202683"
+X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="842973120"
 X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="722202683"
+   d="scan'208";a="842973120"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2023 10:25:04 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 09 Dec 2023 10:35:04 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rC20c-000Fkz-0C;
-	Sat, 09 Dec 2023 18:25:02 +0000
-Date: Sun, 10 Dec 2023 02:24:27 +0800
+	id 1rC2AI-000FlF-0Z;
+	Sat, 09 Dec 2023 18:35:02 +0000
+Date: Sun, 10 Dec 2023 02:34:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry.memverge@gmail.com>, linux-mm@kvack.org
+To: Dave Jiang <dave.jiang@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	arnd@arndb.de, tglx@linutronix.de, luto@kernel.org,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, mhocko@kernel.org, tj@kernel.org,
-	ying.huang@intel.com, gregory.price@memverge.com, corbet@lwn.net,
-	rakie.kim@sk.com, hyeongtak.ji@sk.com, honggyu.kim@sk.com,
-	vtavarespetr@micron.com, peterz@infradead.org, jgroves@micron.com,
-	ravis.opensrc@micron.com, sthanneeru@micron.com,
-	emirakhur@micron.com, Hasan.Maruf@amd.com
-Subject: Re: [PATCH v2 08/11] mm/mempolicy: add set_mempolicy2 syscall
-Message-ID: <202312100245.Jgz5mPhJ-lkp@intel.com>
-References: <20231209065931.3458-9-gregory.price@memverge.com>
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [djiang:cxl-hmem-report 9/23] lib/fw_table.c:29:39: error: expected
+ ';' after top level declarator
+Message-ID: <202312100233.nx1OELtr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,219 +50,322 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231209065931.3458-9-gregory.price@memverge.com>
 
-Hi Gregory,
+Hi Dave,
 
-kernel test robot noticed the following build warnings:
+First bad commit (maybe != root cause):
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on deller-parisc/for-next powerpc/next powerpc/fixes s390/features jcmvbkbc-xtensa/xtensa-for-next arnd-asm-generic/master linus/master v6.7-rc4]
-[cannot apply to tip/x86/asm geert-m68k/for-next geert-m68k/for-linus next-20231208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/mm-mempolicy-implement-the-sysfs-based-weighted_interleave-interface/20231209-150314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231209065931.3458-9-gregory.price%40memverge.com
-patch subject: [PATCH v2 08/11] mm/mempolicy: add set_mempolicy2 syscall
-config: arm-lpc32xx_defconfig (https://download.01.org/0day-ci/archive/20231210/202312100245.Jgz5mPhJ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-hmem-report
+head:   d097ef73f93c1f0d8098ecc5bbaf396ce09c75e2
+commit: 42771b7cc480da076cded00909b9b7fde57d8928 [9/23] cxl: Add callback to parse the DSMAS subtables from CDAT
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231210/202312100233.nx1OELtr-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100245.Jgz5mPhJ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100233.nx1OELtr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312100245.Jgz5mPhJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312100233.nx1OELtr-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from kernel/time/time.c:33:
->> include/linux/syscalls.h:825:43: warning: declaration of 'struct mpol_args' will not be visible outside of this function [-Wvisibility]
-     825 | asmlinkage long sys_set_mempolicy2(struct mpol_args *args, size_t size,
-         |                                           ^
-   1 warning generated.
---
-   In file included from kernel/time/hrtimer.c:30:
->> include/linux/syscalls.h:825:43: warning: declaration of 'struct mpol_args' will not be visible outside of this function [-Wvisibility]
-     825 | asmlinkage long sys_set_mempolicy2(struct mpol_args *args, size_t size,
-         |                                           ^
-   kernel/time/hrtimer.c:1651:7: warning: variable 'expires_in_hardirq' set but not used [-Wunused-but-set-variable]
-    1651 |         bool expires_in_hardirq;
-         |              ^
-   kernel/time/hrtimer.c:277:20: warning: unused function 'is_migration_base' [-Wunused-function]
-     277 | static inline bool is_migration_base(struct hrtimer_clock_base *base)
-         |                    ^
-   kernel/time/hrtimer.c:1876:20: warning: unused function '__hrtimer_peek_ahead_timers' [-Wunused-function]
-    1876 | static inline void __hrtimer_peek_ahead_timers(void)
-         |                    ^
-   4 warnings generated.
+>> lib/fw_table.c:29:39: error: expected ';' after top level declarator
+      29 | static unsigned long __init_or_acpilib
+         |                                       ^
+         |                                       ;
+   lib/fw_table.c:47:39: error: expected ';' after top level declarator
+      47 | static unsigned long __init_or_acpilib
+         |                                       ^
+         |                                       ;
+   lib/fw_table.c:68:39: error: expected ';' after top level declarator
+      68 | static unsigned long __init_or_acpilib
+         |                                       ^
+         |                                       ;
+>> lib/fw_table.c:86:32: error: redefinition of '__init_or_acpilib' with a different type: 'enum acpi_subtable_type' vs 'unsigned long'
+      86 | static enum acpi_subtable_type __init_or_acpilib
+         |                                ^
+   lib/fw_table.c:68:22: note: previous definition is here
+      68 | static unsigned long __init_or_acpilib
+         |                      ^
+   lib/fw_table.c:86:49: error: expected ';' after top level declarator
+      86 | static enum acpi_subtable_type __init_or_acpilib
+         |                                                 ^
+         |                                                 ;
+   lib/fw_table.c:100:39: error: expected ';' after top level declarator
+     100 | static unsigned long __init_or_acpilib
+         |                                       ^
+         |                                       ;
+   lib/fw_table.c:113:8: error: unknown type name '__init_or_acpilib'
+     113 | static __init_or_acpilib bool has_handler(struct acpi_subtable_proc *proc)
+         |        ^
+   lib/fw_table.c:113:30: error: expected ';' after top level declarator
+     113 | static __init_or_acpilib bool has_handler(struct acpi_subtable_proc *proc)
+         |                              ^
+         |                              ;
+   lib/fw_table.c:118:8: error: unknown type name '__init_or_acpilib'
+     118 | static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+         |        ^
+>> lib/fw_table.c:118:50: warning: declaration of 'struct acpi_subtable_proc' will not be visible outside of this function [-Wvisibility]
+     118 | static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+         |                                                  ^
+>> lib/fw_table.c:122:10: error: incomplete definition of type 'struct acpi_subtable_proc'
+     122 |         if (proc->handler)
+         |             ~~~~^
+   lib/fw_table.c:118:50: note: forward declaration of 'struct acpi_subtable_proc'
+     118 | static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+         |                                                  ^
+   lib/fw_table.c:123:14: error: incomplete definition of type 'struct acpi_subtable_proc'
+     123 |                 return proc->handler(hdr, end);
+         |                        ~~~~^
+   lib/fw_table.c:118:50: note: forward declaration of 'struct acpi_subtable_proc'
+     118 | static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+         |                                                  ^
+   lib/fw_table.c:124:10: error: incomplete definition of type 'struct acpi_subtable_proc'
+     124 |         if (proc->handler_arg)
+         |             ~~~~^
+   lib/fw_table.c:118:50: note: forward declaration of 'struct acpi_subtable_proc'
+     118 | static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+         |                                                  ^
+   lib/fw_table.c:125:14: error: incomplete definition of type 'struct acpi_subtable_proc'
+     125 |                 return proc->handler_arg(hdr, proc->arg, end);
+         |                        ~~~~^
+   lib/fw_table.c:118:50: note: forward declaration of 'struct acpi_subtable_proc'
+     118 | static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+         |                                                  ^
+   lib/fw_table.c:125:37: error: incomplete definition of type 'struct acpi_subtable_proc'
+     125 |                 return proc->handler_arg(hdr, proc->arg, end);
+         |                                               ~~~~^
+   lib/fw_table.c:118:50: note: forward declaration of 'struct acpi_subtable_proc'
+     118 | static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+         |                                                  ^
+>> lib/fw_table.c:152:5: error: redefinition of '__init_or_acpilib' with a different type: 'int' vs 'unsigned long'
+     152 | int __init_or_acpilib
+         |     ^
+   lib/fw_table.c:100:22: note: previous definition is here
+     100 | static unsigned long __init_or_acpilib
+         |                      ^
+   lib/fw_table.c:152:22: error: expected ';' after top level declarator
+     152 | int __init_or_acpilib
+         |                      ^
+         |                      ;
+   lib/fw_table.c:219:8: error: unknown type name 'acpi_tbl_entry_handler_arg'
+     219 |                      acpi_tbl_entry_handler_arg handler_arg, void *arg,
+         |                      ^
+>> lib/fw_table.c:222:28: error: variable has incomplete type 'struct acpi_subtable_proc'
+     222 |         struct acpi_subtable_proc proc = {
+         |                                   ^
+   lib/fw_table.c:222:9: note: forward declaration of 'struct acpi_subtable_proc'
+     222 |         struct acpi_subtable_proc proc = {
+         |                ^
+>> lib/fw_table.c:231:9: error: call to undeclared function 'acpi_parse_entries_array'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     231 |         return acpi_parse_entries_array(ACPI_SIG_CDAT,
+         |                ^
+   1 warning and 19 errors generated.
 
 
-vim +825 include/linux/syscalls.h
+vim +29 lib/fw_table.c
 
-   794	
-   795	/* CONFIG_MMU only */
-   796	asmlinkage long sys_swapon(const char __user *specialfile, int swap_flags);
-   797	asmlinkage long sys_swapoff(const char __user *specialfile);
-   798	asmlinkage long sys_mprotect(unsigned long start, size_t len,
-   799					unsigned long prot);
-   800	asmlinkage long sys_msync(unsigned long start, size_t len, int flags);
-   801	asmlinkage long sys_mlock(unsigned long start, size_t len);
-   802	asmlinkage long sys_munlock(unsigned long start, size_t len);
-   803	asmlinkage long sys_mlockall(int flags);
-   804	asmlinkage long sys_munlockall(void);
-   805	asmlinkage long sys_mincore(unsigned long start, size_t len,
-   806					unsigned char __user * vec);
-   807	asmlinkage long sys_madvise(unsigned long start, size_t len, int behavior);
-   808	asmlinkage long sys_process_madvise(int pidfd, const struct iovec __user *vec,
-   809				size_t vlen, int behavior, unsigned int flags);
-   810	asmlinkage long sys_process_mrelease(int pidfd, unsigned int flags);
-   811	asmlinkage long sys_remap_file_pages(unsigned long start, unsigned long size,
-   812				unsigned long prot, unsigned long pgoff,
-   813				unsigned long flags);
-   814	asmlinkage long sys_mbind(unsigned long start, unsigned long len,
-   815					unsigned long mode,
-   816					const unsigned long __user *nmask,
-   817					unsigned long maxnode,
-   818					unsigned flags);
-   819	asmlinkage long sys_get_mempolicy(int __user *policy,
-   820					unsigned long __user *nmask,
-   821					unsigned long maxnode,
-   822					unsigned long addr, unsigned long flags);
-   823	asmlinkage long sys_set_mempolicy(int mode, const unsigned long __user *nmask,
-   824					unsigned long maxnode);
- > 825	asmlinkage long sys_set_mempolicy2(struct mpol_args *args, size_t size,
-   826					   unsigned long flags);
-   827	asmlinkage long sys_migrate_pages(pid_t pid, unsigned long maxnode,
-   828					const unsigned long __user *from,
-   829					const unsigned long __user *to);
-   830	asmlinkage long sys_move_pages(pid_t pid, unsigned long nr_pages,
-   831					const void __user * __user *pages,
-   832					const int __user *nodes,
-   833					int __user *status,
-   834					int flags);
-   835	asmlinkage long sys_rt_tgsigqueueinfo(pid_t tgid, pid_t  pid, int sig,
-   836			siginfo_t __user *uinfo);
-   837	asmlinkage long sys_perf_event_open(
-   838			struct perf_event_attr __user *attr_uptr,
-   839			pid_t pid, int cpu, int group_fd, unsigned long flags);
-   840	asmlinkage long sys_accept4(int, struct sockaddr __user *, int __user *, int);
-   841	asmlinkage long sys_recvmmsg(int fd, struct mmsghdr __user *msg,
-   842				     unsigned int vlen, unsigned flags,
-   843				     struct __kernel_timespec __user *timeout);
-   844	asmlinkage long sys_recvmmsg_time32(int fd, struct mmsghdr __user *msg,
-   845				     unsigned int vlen, unsigned flags,
-   846				     struct old_timespec32 __user *timeout);
-   847	asmlinkage long sys_wait4(pid_t pid, int __user *stat_addr,
-   848					int options, struct rusage __user *ru);
-   849	asmlinkage long sys_prlimit64(pid_t pid, unsigned int resource,
-   850					const struct rlimit64 __user *new_rlim,
-   851					struct rlimit64 __user *old_rlim);
-   852	asmlinkage long sys_fanotify_init(unsigned int flags, unsigned int event_f_flags);
-   853	asmlinkage long sys_fanotify_mark(int fanotify_fd, unsigned int flags,
-   854					  u64 mask, int fd,
-   855					  const char  __user *pathname);
-   856	asmlinkage long sys_name_to_handle_at(int dfd, const char __user *name,
-   857					      struct file_handle __user *handle,
-   858					      int __user *mnt_id, int flag);
-   859	asmlinkage long sys_open_by_handle_at(int mountdirfd,
-   860					      struct file_handle __user *handle,
-   861					      int flags);
-   862	asmlinkage long sys_clock_adjtime(clockid_t which_clock,
-   863					struct __kernel_timex __user *tx);
-   864	asmlinkage long sys_clock_adjtime32(clockid_t which_clock,
-   865					struct old_timex32 __user *tx);
-   866	asmlinkage long sys_syncfs(int fd);
-   867	asmlinkage long sys_setns(int fd, int nstype);
-   868	asmlinkage long sys_pidfd_open(pid_t pid, unsigned int flags);
-   869	asmlinkage long sys_sendmmsg(int fd, struct mmsghdr __user *msg,
-   870				     unsigned int vlen, unsigned flags);
-   871	asmlinkage long sys_process_vm_readv(pid_t pid,
-   872					     const struct iovec __user *lvec,
-   873					     unsigned long liovcnt,
-   874					     const struct iovec __user *rvec,
-   875					     unsigned long riovcnt,
-   876					     unsigned long flags);
-   877	asmlinkage long sys_process_vm_writev(pid_t pid,
-   878					      const struct iovec __user *lvec,
-   879					      unsigned long liovcnt,
-   880					      const struct iovec __user *rvec,
-   881					      unsigned long riovcnt,
-   882					      unsigned long flags);
-   883	asmlinkage long sys_kcmp(pid_t pid1, pid_t pid2, int type,
-   884				 unsigned long idx1, unsigned long idx2);
-   885	asmlinkage long sys_finit_module(int fd, const char __user *uargs, int flags);
-   886	asmlinkage long sys_sched_setattr(pid_t pid,
-   887						struct sched_attr __user *attr,
-   888						unsigned int flags);
-   889	asmlinkage long sys_sched_getattr(pid_t pid,
-   890						struct sched_attr __user *attr,
-   891						unsigned int size,
-   892						unsigned int flags);
-   893	asmlinkage long sys_renameat2(int olddfd, const char __user *oldname,
-   894				      int newdfd, const char __user *newname,
-   895				      unsigned int flags);
-   896	asmlinkage long sys_seccomp(unsigned int op, unsigned int flags,
-   897				    void __user *uargs);
-   898	asmlinkage long sys_getrandom(char __user *buf, size_t count,
-   899				      unsigned int flags);
-   900	asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned int flags);
-   901	asmlinkage long sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
-   902	asmlinkage long sys_execveat(int dfd, const char __user *filename,
-   903				const char __user *const __user *argv,
-   904				const char __user *const __user *envp, int flags);
-   905	asmlinkage long sys_userfaultfd(int flags);
-   906	asmlinkage long sys_membarrier(int cmd, unsigned int flags, int cpu_id);
-   907	asmlinkage long sys_mlock2(unsigned long start, size_t len, int flags);
-   908	asmlinkage long sys_copy_file_range(int fd_in, loff_t __user *off_in,
-   909					    int fd_out, loff_t __user *off_out,
-   910					    size_t len, unsigned int flags);
-   911	asmlinkage long sys_preadv2(unsigned long fd, const struct iovec __user *vec,
-   912				    unsigned long vlen, unsigned long pos_l, unsigned long pos_h,
-   913				    rwf_t flags);
-   914	asmlinkage long sys_pwritev2(unsigned long fd, const struct iovec __user *vec,
-   915				    unsigned long vlen, unsigned long pos_l, unsigned long pos_h,
-   916				    rwf_t flags);
-   917	asmlinkage long sys_pkey_mprotect(unsigned long start, size_t len,
-   918					  unsigned long prot, int pkey);
-   919	asmlinkage long sys_pkey_alloc(unsigned long flags, unsigned long init_val);
-   920	asmlinkage long sys_pkey_free(int pkey);
-   921	asmlinkage long sys_statx(int dfd, const char __user *path, unsigned flags,
-   922				  unsigned mask, struct statx __user *buffer);
-   923	asmlinkage long sys_rseq(struct rseq __user *rseq, uint32_t rseq_len,
-   924				 int flags, uint32_t sig);
-   925	asmlinkage long sys_open_tree(int dfd, const char __user *path, unsigned flags);
-   926	asmlinkage long sys_move_mount(int from_dfd, const char __user *from_path,
-   927				       int to_dfd, const char __user *to_path,
-   928				       unsigned int ms_flags);
-   929	asmlinkage long sys_mount_setattr(int dfd, const char __user *path,
-   930					  unsigned int flags,
-   931					  struct mount_attr __user *uattr, size_t usize);
-   932	asmlinkage long sys_fsopen(const char __user *fs_name, unsigned int flags);
-   933	asmlinkage long sys_fsconfig(int fs_fd, unsigned int cmd, const char __user *key,
-   934				     const void __user *value, int aux);
-   935	asmlinkage long sys_fsmount(int fs_fd, unsigned int flags, unsigned int ms_flags);
-   936	asmlinkage long sys_fspick(int dfd, const char __user *path, unsigned int flags);
-   937	asmlinkage long sys_pidfd_send_signal(int pidfd, int sig,
-   938					       siginfo_t __user *info,
-   939					       unsigned int flags);
-   940	asmlinkage long sys_pidfd_getfd(int pidfd, int fd, unsigned int flags);
-   941	asmlinkage long sys_landlock_create_ruleset(const struct landlock_ruleset_attr __user *attr,
-   942			size_t size, __u32 flags);
-   943	asmlinkage long sys_landlock_add_rule(int ruleset_fd, enum landlock_rule_type rule_type,
-   944			const void __user *rule_attr, __u32 flags);
-   945	asmlinkage long sys_landlock_restrict_self(int ruleset_fd, __u32 flags);
-   946	asmlinkage long sys_memfd_secret(unsigned int flags);
-   947	asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
-   948						    unsigned long home_node,
-   949						    unsigned long flags);
-   950	asmlinkage long sys_cachestat(unsigned int fd,
-   951			struct cachestat_range __user *cstat_range,
-   952			struct cachestat __user *cstat, unsigned int flags);
-   953	asmlinkage long sys_map_shadow_stack(unsigned long addr, unsigned long size, unsigned int flags);
-   954	
+a103f46633fdcd Dave Jiang 2023-10-12   28  
+a103f46633fdcd Dave Jiang 2023-10-12  @29  static unsigned long __init_or_acpilib
+a103f46633fdcd Dave Jiang 2023-10-12   30  acpi_get_entry_type(struct acpi_subtable_entry *entry)
+a103f46633fdcd Dave Jiang 2023-10-12   31  {
+a103f46633fdcd Dave Jiang 2023-10-12   32  	switch (entry->type) {
+a103f46633fdcd Dave Jiang 2023-10-12   33  	case ACPI_SUBTABLE_COMMON:
+a103f46633fdcd Dave Jiang 2023-10-12   34  		return entry->hdr->common.type;
+a103f46633fdcd Dave Jiang 2023-10-12   35  	case ACPI_SUBTABLE_HMAT:
+a103f46633fdcd Dave Jiang 2023-10-12   36  		return entry->hdr->hmat.type;
+a103f46633fdcd Dave Jiang 2023-10-12   37  	case ACPI_SUBTABLE_PRMT:
+a103f46633fdcd Dave Jiang 2023-10-12   38  		return 0;
+a103f46633fdcd Dave Jiang 2023-10-12   39  	case ACPI_SUBTABLE_CEDT:
+a103f46633fdcd Dave Jiang 2023-10-12   40  		return entry->hdr->cedt.type;
+13b7d7a98b65d1 Dave Jiang 2023-05-24   41  	case CDAT_SUBTABLE:
+13b7d7a98b65d1 Dave Jiang 2023-05-24   42  		return entry->hdr->cdat.type;
+a103f46633fdcd Dave Jiang 2023-10-12   43  	}
+a103f46633fdcd Dave Jiang 2023-10-12   44  	return 0;
+a103f46633fdcd Dave Jiang 2023-10-12   45  }
+a103f46633fdcd Dave Jiang 2023-10-12   46  
+a103f46633fdcd Dave Jiang 2023-10-12  @47  static unsigned long __init_or_acpilib
+a103f46633fdcd Dave Jiang 2023-10-12   48  acpi_get_entry_length(struct acpi_subtable_entry *entry)
+a103f46633fdcd Dave Jiang 2023-10-12   49  {
+a103f46633fdcd Dave Jiang 2023-10-12   50  	switch (entry->type) {
+a103f46633fdcd Dave Jiang 2023-10-12   51  	case ACPI_SUBTABLE_COMMON:
+a103f46633fdcd Dave Jiang 2023-10-12   52  		return entry->hdr->common.length;
+a103f46633fdcd Dave Jiang 2023-10-12   53  	case ACPI_SUBTABLE_HMAT:
+a103f46633fdcd Dave Jiang 2023-10-12   54  		return entry->hdr->hmat.length;
+a103f46633fdcd Dave Jiang 2023-10-12   55  	case ACPI_SUBTABLE_PRMT:
+a103f46633fdcd Dave Jiang 2023-10-12   56  		return entry->hdr->prmt.length;
+a103f46633fdcd Dave Jiang 2023-10-12   57  	case ACPI_SUBTABLE_CEDT:
+a103f46633fdcd Dave Jiang 2023-10-12   58  		return entry->hdr->cedt.length;
+13b7d7a98b65d1 Dave Jiang 2023-05-24   59  	case CDAT_SUBTABLE: {
+13b7d7a98b65d1 Dave Jiang 2023-05-24   60  		__le16 length = (__force __le16)entry->hdr->cdat.length;
+13b7d7a98b65d1 Dave Jiang 2023-05-24   61  
+13b7d7a98b65d1 Dave Jiang 2023-05-24   62  		return le16_to_cpu(length);
+13b7d7a98b65d1 Dave Jiang 2023-05-24   63  	}
+a103f46633fdcd Dave Jiang 2023-10-12   64  	}
+a103f46633fdcd Dave Jiang 2023-10-12   65  	return 0;
+a103f46633fdcd Dave Jiang 2023-10-12   66  }
+a103f46633fdcd Dave Jiang 2023-10-12   67  
+a103f46633fdcd Dave Jiang 2023-10-12   68  static unsigned long __init_or_acpilib
+a103f46633fdcd Dave Jiang 2023-10-12   69  acpi_get_subtable_header_length(struct acpi_subtable_entry *entry)
+a103f46633fdcd Dave Jiang 2023-10-12   70  {
+a103f46633fdcd Dave Jiang 2023-10-12   71  	switch (entry->type) {
+a103f46633fdcd Dave Jiang 2023-10-12   72  	case ACPI_SUBTABLE_COMMON:
+a103f46633fdcd Dave Jiang 2023-10-12   73  		return sizeof(entry->hdr->common);
+a103f46633fdcd Dave Jiang 2023-10-12   74  	case ACPI_SUBTABLE_HMAT:
+a103f46633fdcd Dave Jiang 2023-10-12   75  		return sizeof(entry->hdr->hmat);
+a103f46633fdcd Dave Jiang 2023-10-12   76  	case ACPI_SUBTABLE_PRMT:
+a103f46633fdcd Dave Jiang 2023-10-12   77  		return sizeof(entry->hdr->prmt);
+a103f46633fdcd Dave Jiang 2023-10-12   78  	case ACPI_SUBTABLE_CEDT:
+a103f46633fdcd Dave Jiang 2023-10-12   79  		return sizeof(entry->hdr->cedt);
+13b7d7a98b65d1 Dave Jiang 2023-05-24   80  	case CDAT_SUBTABLE:
+13b7d7a98b65d1 Dave Jiang 2023-05-24   81  		return sizeof(entry->hdr->cdat);
+a103f46633fdcd Dave Jiang 2023-10-12   82  	}
+a103f46633fdcd Dave Jiang 2023-10-12   83  	return 0;
+a103f46633fdcd Dave Jiang 2023-10-12   84  }
+a103f46633fdcd Dave Jiang 2023-10-12   85  
+a103f46633fdcd Dave Jiang 2023-10-12  @86  static enum acpi_subtable_type __init_or_acpilib
+a103f46633fdcd Dave Jiang 2023-10-12   87  acpi_get_subtable_type(char *id)
+a103f46633fdcd Dave Jiang 2023-10-12   88  {
+a103f46633fdcd Dave Jiang 2023-10-12   89  	if (strncmp(id, ACPI_SIG_HMAT, 4) == 0)
+a103f46633fdcd Dave Jiang 2023-10-12   90  		return ACPI_SUBTABLE_HMAT;
+a103f46633fdcd Dave Jiang 2023-10-12   91  	if (strncmp(id, ACPI_SIG_PRMT, 4) == 0)
+a103f46633fdcd Dave Jiang 2023-10-12   92  		return ACPI_SUBTABLE_PRMT;
+a103f46633fdcd Dave Jiang 2023-10-12   93  	if (strncmp(id, ACPI_SIG_CEDT, 4) == 0)
+a103f46633fdcd Dave Jiang 2023-10-12   94  		return ACPI_SUBTABLE_CEDT;
+13b7d7a98b65d1 Dave Jiang 2023-05-24   95  	if (strncmp(id, ACPI_SIG_CDAT, 4) == 0)
+13b7d7a98b65d1 Dave Jiang 2023-05-24   96  		return CDAT_SUBTABLE;
+a103f46633fdcd Dave Jiang 2023-10-12   97  	return ACPI_SUBTABLE_COMMON;
+a103f46633fdcd Dave Jiang 2023-10-12   98  }
+a103f46633fdcd Dave Jiang 2023-10-12   99  
+13b7d7a98b65d1 Dave Jiang 2023-05-24  100  static unsigned long __init_or_acpilib
+13b7d7a98b65d1 Dave Jiang 2023-05-24  101  acpi_table_get_length(enum acpi_subtable_type type,
+13b7d7a98b65d1 Dave Jiang 2023-05-24  102  		      union fw_table_header *header)
+13b7d7a98b65d1 Dave Jiang 2023-05-24  103  {
+13b7d7a98b65d1 Dave Jiang 2023-05-24  104  	if (type == CDAT_SUBTABLE) {
+13b7d7a98b65d1 Dave Jiang 2023-05-24  105  		__le32 length = (__force __le32)header->cdat.length;
+13b7d7a98b65d1 Dave Jiang 2023-05-24  106  
+13b7d7a98b65d1 Dave Jiang 2023-05-24  107  		return le32_to_cpu(length);
+13b7d7a98b65d1 Dave Jiang 2023-05-24  108  	}
+13b7d7a98b65d1 Dave Jiang 2023-05-24  109  
+13b7d7a98b65d1 Dave Jiang 2023-05-24  110  	return header->acpi.length;
+13b7d7a98b65d1 Dave Jiang 2023-05-24  111  }
+13b7d7a98b65d1 Dave Jiang 2023-05-24  112  
+a103f46633fdcd Dave Jiang 2023-10-12 @113  static __init_or_acpilib bool has_handler(struct acpi_subtable_proc *proc)
+a103f46633fdcd Dave Jiang 2023-10-12  114  {
+a103f46633fdcd Dave Jiang 2023-10-12  115  	return proc->handler || proc->handler_arg;
+a103f46633fdcd Dave Jiang 2023-10-12  116  }
+a103f46633fdcd Dave Jiang 2023-10-12  117  
+a103f46633fdcd Dave Jiang 2023-10-12 @118  static __init_or_acpilib int call_handler(struct acpi_subtable_proc *proc,
+a103f46633fdcd Dave Jiang 2023-10-12  119  					  union acpi_subtable_headers *hdr,
+a103f46633fdcd Dave Jiang 2023-10-12  120  					  unsigned long end)
+a103f46633fdcd Dave Jiang 2023-10-12  121  {
+a103f46633fdcd Dave Jiang 2023-10-12 @122  	if (proc->handler)
+a103f46633fdcd Dave Jiang 2023-10-12  123  		return proc->handler(hdr, end);
+a103f46633fdcd Dave Jiang 2023-10-12  124  	if (proc->handler_arg)
+a103f46633fdcd Dave Jiang 2023-10-12  125  		return proc->handler_arg(hdr, proc->arg, end);
+a103f46633fdcd Dave Jiang 2023-10-12  126  	return -EINVAL;
+a103f46633fdcd Dave Jiang 2023-10-12  127  }
+a103f46633fdcd Dave Jiang 2023-10-12  128  
+a103f46633fdcd Dave Jiang 2023-10-12  129  /**
+a103f46633fdcd Dave Jiang 2023-10-12  130   * acpi_parse_entries_array - for each proc_num find a suitable subtable
+a103f46633fdcd Dave Jiang 2023-10-12  131   *
+a103f46633fdcd Dave Jiang 2023-10-12  132   * @id: table id (for debugging purposes)
+a103f46633fdcd Dave Jiang 2023-10-12  133   * @table_size: size of the root table
+a103f46633fdcd Dave Jiang 2023-10-12  134   * @table_header: where does the table start?
+a103f46633fdcd Dave Jiang 2023-10-12  135   * @proc: array of acpi_subtable_proc struct containing entry id
+a103f46633fdcd Dave Jiang 2023-10-12  136   *        and associated handler with it
+a103f46633fdcd Dave Jiang 2023-10-12  137   * @proc_num: how big proc is?
+a103f46633fdcd Dave Jiang 2023-10-12  138   * @max_entries: how many entries can we process?
+a103f46633fdcd Dave Jiang 2023-10-12  139   *
+a103f46633fdcd Dave Jiang 2023-10-12  140   * For each proc_num find a subtable with proc->id and run proc->handler
+a103f46633fdcd Dave Jiang 2023-10-12  141   * on it. Assumption is that there's only single handler for particular
+a103f46633fdcd Dave Jiang 2023-10-12  142   * entry id.
+a103f46633fdcd Dave Jiang 2023-10-12  143   *
+a103f46633fdcd Dave Jiang 2023-10-12  144   * The table_size is not the size of the complete ACPI table (the length
+a103f46633fdcd Dave Jiang 2023-10-12  145   * field in the header struct), but only the size of the root table; i.e.,
+a103f46633fdcd Dave Jiang 2023-10-12  146   * the offset from the very first byte of the complete ACPI table, to the
+a103f46633fdcd Dave Jiang 2023-10-12  147   * first byte of the very first subtable.
+a103f46633fdcd Dave Jiang 2023-10-12  148   *
+a103f46633fdcd Dave Jiang 2023-10-12  149   * On success returns sum of all matching entries for all proc handlers.
+a103f46633fdcd Dave Jiang 2023-10-12  150   * Otherwise, -ENODEV or -EINVAL is returned.
+a103f46633fdcd Dave Jiang 2023-10-12  151   */
+a103f46633fdcd Dave Jiang 2023-10-12 @152  int __init_or_acpilib
+a103f46633fdcd Dave Jiang 2023-10-12  153  acpi_parse_entries_array(char *id, unsigned long table_size,
+13b7d7a98b65d1 Dave Jiang 2023-05-24  154  			 union fw_table_header *table_header,
+a103f46633fdcd Dave Jiang 2023-10-12  155  			 struct acpi_subtable_proc *proc,
+a103f46633fdcd Dave Jiang 2023-10-12  156  			 int proc_num, unsigned int max_entries)
+a103f46633fdcd Dave Jiang 2023-10-12  157  {
+a103f46633fdcd Dave Jiang 2023-10-12  158  	unsigned long table_end, subtable_len, entry_len;
+a103f46633fdcd Dave Jiang 2023-10-12  159  	struct acpi_subtable_entry entry;
+13b7d7a98b65d1 Dave Jiang 2023-05-24  160  	enum acpi_subtable_type type;
+a103f46633fdcd Dave Jiang 2023-10-12  161  	int count = 0;
+a103f46633fdcd Dave Jiang 2023-10-12  162  	int errs = 0;
+a103f46633fdcd Dave Jiang 2023-10-12  163  	int i;
+a103f46633fdcd Dave Jiang 2023-10-12  164  
+13b7d7a98b65d1 Dave Jiang 2023-05-24  165  	type = acpi_get_subtable_type(id);
+13b7d7a98b65d1 Dave Jiang 2023-05-24  166  	table_end = (unsigned long)table_header +
+13b7d7a98b65d1 Dave Jiang 2023-05-24  167  		    acpi_table_get_length(type, table_header);
+a103f46633fdcd Dave Jiang 2023-10-12  168  
+a103f46633fdcd Dave Jiang 2023-10-12  169  	/* Parse all entries looking for a match. */
+a103f46633fdcd Dave Jiang 2023-10-12  170  
+13b7d7a98b65d1 Dave Jiang 2023-05-24  171  	entry.type = type;
+a103f46633fdcd Dave Jiang 2023-10-12  172  	entry.hdr = (union acpi_subtable_headers *)
+a103f46633fdcd Dave Jiang 2023-10-12  173  	    ((unsigned long)table_header + table_size);
+a103f46633fdcd Dave Jiang 2023-10-12  174  	subtable_len = acpi_get_subtable_header_length(&entry);
+a103f46633fdcd Dave Jiang 2023-10-12  175  
+a103f46633fdcd Dave Jiang 2023-10-12  176  	while (((unsigned long)entry.hdr) + subtable_len  < table_end) {
+a103f46633fdcd Dave Jiang 2023-10-12  177  		if (max_entries && count >= max_entries)
+a103f46633fdcd Dave Jiang 2023-10-12  178  			break;
+a103f46633fdcd Dave Jiang 2023-10-12  179  
+a103f46633fdcd Dave Jiang 2023-10-12  180  		for (i = 0; i < proc_num; i++) {
+a103f46633fdcd Dave Jiang 2023-10-12  181  			if (acpi_get_entry_type(&entry) != proc[i].id)
+a103f46633fdcd Dave Jiang 2023-10-12  182  				continue;
+a103f46633fdcd Dave Jiang 2023-10-12  183  			if (!has_handler(&proc[i]) ||
+a103f46633fdcd Dave Jiang 2023-10-12  184  			    (!errs &&
+a103f46633fdcd Dave Jiang 2023-10-12  185  			     call_handler(&proc[i], entry.hdr, table_end))) {
+a103f46633fdcd Dave Jiang 2023-10-12  186  				errs++;
+a103f46633fdcd Dave Jiang 2023-10-12  187  				continue;
+a103f46633fdcd Dave Jiang 2023-10-12  188  			}
+a103f46633fdcd Dave Jiang 2023-10-12  189  
+a103f46633fdcd Dave Jiang 2023-10-12  190  			proc[i].count++;
+a103f46633fdcd Dave Jiang 2023-10-12  191  			break;
+a103f46633fdcd Dave Jiang 2023-10-12  192  		}
+a103f46633fdcd Dave Jiang 2023-10-12  193  		if (i != proc_num)
+a103f46633fdcd Dave Jiang 2023-10-12  194  			count++;
+a103f46633fdcd Dave Jiang 2023-10-12  195  
+a103f46633fdcd Dave Jiang 2023-10-12  196  		/*
+a103f46633fdcd Dave Jiang 2023-10-12  197  		 * If entry->length is 0, break from this loop to avoid
+a103f46633fdcd Dave Jiang 2023-10-12  198  		 * infinite loop.
+a103f46633fdcd Dave Jiang 2023-10-12  199  		 */
+a103f46633fdcd Dave Jiang 2023-10-12  200  		entry_len = acpi_get_entry_length(&entry);
+a103f46633fdcd Dave Jiang 2023-10-12  201  		if (entry_len == 0) {
+a103f46633fdcd Dave Jiang 2023-10-12  202  			pr_err("[%4.4s:0x%02x] Invalid zero length\n", id, proc->id);
+a103f46633fdcd Dave Jiang 2023-10-12  203  			return -EINVAL;
+a103f46633fdcd Dave Jiang 2023-10-12  204  		}
+a103f46633fdcd Dave Jiang 2023-10-12  205  
+a103f46633fdcd Dave Jiang 2023-10-12  206  		entry.hdr = (union acpi_subtable_headers *)
+a103f46633fdcd Dave Jiang 2023-10-12  207  		    ((unsigned long)entry.hdr + entry_len);
+a103f46633fdcd Dave Jiang 2023-10-12  208  	}
+a103f46633fdcd Dave Jiang 2023-10-12  209  
+a103f46633fdcd Dave Jiang 2023-10-12  210  	if (max_entries && count > max_entries) {
+a103f46633fdcd Dave Jiang 2023-10-12  211  		pr_warn("[%4.4s:0x%02x] found the maximum %i entries\n",
+a103f46633fdcd Dave Jiang 2023-10-12  212  			id, proc->id, count);
+a103f46633fdcd Dave Jiang 2023-10-12  213  	}
+a103f46633fdcd Dave Jiang 2023-10-12  214  
+a103f46633fdcd Dave Jiang 2023-10-12  215  	return errs ? -EINVAL : count;
+a103f46633fdcd Dave Jiang 2023-10-12  216  }
+13b7d7a98b65d1 Dave Jiang 2023-05-24  217  
+13b7d7a98b65d1 Dave Jiang 2023-05-24  218  int cdat_table_parse(enum acpi_cdat_type type,
+13b7d7a98b65d1 Dave Jiang 2023-05-24 @219  		     acpi_tbl_entry_handler_arg handler_arg, void *arg,
+13b7d7a98b65d1 Dave Jiang 2023-05-24  220  		     struct acpi_table_cdat *table_header)
+13b7d7a98b65d1 Dave Jiang 2023-05-24  221  {
+13b7d7a98b65d1 Dave Jiang 2023-05-24 @222  	struct acpi_subtable_proc proc = {
+
+:::::: The code at line 29 was first introduced by commit
+:::::: a103f46633fdcddc2aaca506420f177e8803a2bd acpi: Move common tables helper functions to common lib
+
+:::::: TO: Dave Jiang <dave.jiang@intel.com>
+:::::: CC: Dan Williams <dan.j.williams@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
