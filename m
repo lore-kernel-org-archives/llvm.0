@@ -1,56 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D66F9E2;
-	Sun, 10 Dec 2023 14:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5410BE7C;
+	Sun, 10 Dec 2023 15:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SJ2LnbdZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B8FPXjzm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702217257; x=1733753257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AqMQ12hypplovnBMfrnx3Zg6ItOfjkwRtKkMHvGMTUQ=;
-  b=SJ2LnbdZKqcEGWcnOaXiM1zfoP+4U6Vhrep/6d3RrWSh23MFacewplb0
-   Sq05Y/dG8lObddFbVlvwec0SI+XPgjT8h2bwaEq+qgiHv5UqIZOJ34Lqu
-   gtLazybtQdqykJfCE7t/huhU1MufZesBVBXflKB5Dj4GmXmiP6ue+clBx
-   DiZ2O+MbfYzH+hnNtffm2lwUua6YYCV6pebWBUsCPVhkTVjMxMUXSi/MG
-   aaB4p/e19VfKj30ASUg2nzUE1kLausuLi50tYNp0di7nuwnjRUCg/sIVH
-   hHT1xQ7pfZHBYlgSlQoeP6QxWpueQ/pa+DyeHnHL94o3mz0RAzDFE8yLC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="7914857"
-X-IronPort-AV: E=Sophos;i="6.04,265,1695711600"; 
-   d="scan'208";a="7914857"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2023 06:07:36 -0800
+  t=1702223197; x=1733759197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NxMgVDX8E221F0XByN95AeHy9t31xp4N6PC9RbSYb+0=;
+  b=B8FPXjzm+1/XVgKOrWmNG1OcIiP3VKA/7wVAmNN6eHzwuVu8SXg2IhOR
+   RTUT627I4/Pf0GfXjdzLQxGEjUadP0Wh62sJVSm2KDsE3jhT8eD2S8vw8
+   lSSZb7SY0097gyYe1IjG2tGGfG74FMi/lJtmJteWQxKjLLcRz/0k6Bxcf
+   DVjVqb0cNJs3iupU87xuMx5xBeK+4BUpmQm6qn308ysSH4ygvzXuqttlP
+   sI4PLMeeT0Hl1D6sMGULQZ7eqlzlCVBkBHfQvb225WOLVH7j8m6ZF1LM8
+   yAvlytx214NDn0M0L5YaR87GsfkdjST6Bf+XD3ctZ20fy2sL0fNOHrnQm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="16109247"
+X-IronPort-AV: E=Sophos;i="6.04,266,1695711600"; 
+   d="scan'208";a="16109247"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2023 07:46:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="722435368"
-X-IronPort-AV: E=Sophos;i="6.04,265,1695711600"; 
-   d="scan'208";a="722435368"
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="843206016"
+X-IronPort-AV: E=Sophos;i="6.04,266,1695711600"; 
+   d="scan'208";a="843206016"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Dec 2023 06:07:32 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 10 Dec 2023 07:46:34 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rCKSv-000GuU-29;
-	Sun, 10 Dec 2023 14:07:29 +0000
-Date: Sun, 10 Dec 2023 22:06:59 +0800
+	id 1rCM0m-000GzI-2i;
+	Sun, 10 Dec 2023 15:46:32 +0000
+Date: Sun, 10 Dec 2023 23:45:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_jesszhan@quicinc.com, quic_parellan@quicinc.com,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 12/16] drm/msm/dpu: add an API to setup the CDM block
- for writeback
-Message-ID: <202312102149.qmbCdsg2-lkp@intel.com>
-References: <20231208050641.32582-13-quic_abhinavk@quicinc.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [isilence:zc/rx-pp-provider 18/31] io_uring/uring_cmd.c:250:5:
+ warning: no previous prototype for function 'io_uring_cmd_sock'
+Message-ID: <202312102323.ticiB8ua-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,133 +49,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231208050641.32582-13-quic_abhinavk@quicinc.com>
 
-Hi Abhinav,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on next-20231207]
-[also build test WARNING on v6.7-rc4]
-[cannot apply to drm-misc/drm-misc-next linus/master v6.7-rc4 v6.7-rc3 v6.7-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Abhinav-Kumar/drm-msm-dpu-add-formats-check-for-writeback-encoder/20231208-130820
-base:   next-20231207
-patch link:    https://lore.kernel.org/r/20231208050641.32582-13-quic_abhinavk%40quicinc.com
-patch subject: [PATCH v2 12/16] drm/msm/dpu: add an API to setup the CDM block for writeback
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231210/202312102149.qmbCdsg2-lkp@intel.com/config)
+tree:   https://github.com/isilence/linux zc/rx-pp-provider
+head:   4b8de8977565096e38b6da993c68da6f2ef9b89c
+commit: 6ad9b73c4e6e27dc9e3adfe7f139c37975780415 [18/31] io_uring: separate header for exported net bits
+config: i386-randconfig-012-20231210 (https://download.01.org/0day-ci/archive/20231210/202312102323.ticiB8ua-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312102149.qmbCdsg2-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312102323.ticiB8ua-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312102149.qmbCdsg2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312102323.ticiB8ua-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:267: warning: expecting prototype for dpu_encoder_phys_wb_setup_cdp(). Prototype was for dpu_encoder_helper_phys_setup_cdm() instead
+>> io_uring/uring_cmd.c:250:5: warning: no previous prototype for function 'io_uring_cmd_sock' [-Wmissing-prototypes]
+   int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+       ^
+   io_uring/uring_cmd.c:250:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +267 drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+vim +/io_uring_cmd_sock +250 io_uring/uring_cmd.c
 
-   261	
-   262	/**
-   263	 * dpu_encoder_phys_wb_setup_cdp - setup chroma down sampling block
-   264	 * @phys_enc:Pointer to physical encoder
-   265	 */
-   266	static void dpu_encoder_helper_phys_setup_cdm(struct dpu_encoder_phys *phys_enc)
- > 267	{
-   268		struct dpu_hw_cdm *hw_cdm;
-   269		struct dpu_hw_cdm_cfg *cdm_cfg;
-   270		struct dpu_hw_pingpong *hw_pp;
-   271		struct dpu_encoder_phys_wb *wb_enc;
-   272		const struct msm_format *format;
-   273		const struct dpu_format *dpu_fmt;
-   274		struct drm_writeback_job *wb_job;
-   275		int ret;
-   276	
-   277		if (!phys_enc)
-   278			return;
-   279	
-   280		wb_enc = to_dpu_encoder_phys_wb(phys_enc);
-   281		cdm_cfg = &wb_enc->cdm_cfg;
-   282		hw_pp = phys_enc->hw_pp;
-   283		hw_cdm = phys_enc->hw_cdm;
-   284		wb_job = wb_enc->wb_job;
-   285	
-   286		format = msm_framebuffer_format(wb_enc->wb_job->fb);
-   287		dpu_fmt = dpu_get_dpu_format_ext(format->pixel_format, wb_job->fb->modifier);
-   288	
-   289		if (!hw_cdm)
-   290			return;
-   291	
-   292		if (!DPU_FORMAT_IS_YUV(dpu_fmt)) {
-   293			DPU_DEBUG("[enc:%d] cdm_disable fmt:%x\n", DRMID(phys_enc->parent),
-   294				  dpu_fmt->base.pixel_format);
-   295			if (hw_cdm->ops.disable)
-   296				hw_cdm->ops.disable(hw_cdm);
-   297	
-   298			return;
-   299		}
-   300	
-   301		memset(cdm_cfg, 0, sizeof(struct dpu_hw_cdm_cfg));
-   302	
-   303		cdm_cfg->output_width = wb_job->fb->width;
-   304		cdm_cfg->output_height = wb_job->fb->height;
-   305		cdm_cfg->output_fmt = dpu_fmt;
-   306		cdm_cfg->output_type = CDM_CDWN_OUTPUT_WB;
-   307		cdm_cfg->output_bit_depth = DPU_FORMAT_IS_DX(dpu_fmt) ?
-   308				CDM_CDWN_OUTPUT_10BIT : CDM_CDWN_OUTPUT_8BIT;
-   309		cdm_cfg->csc_cfg = dpu_hw_get_csc_cfg(DPU_HW_RGB2YUV_601L_10BIT);
-   310		if (!cdm_cfg->csc_cfg) {
-   311			DPU_ERROR("valid csc not found\n");
-   312			return;
-   313		}
-   314	
-   315		/* enable 10 bit logic */
-   316		switch (cdm_cfg->output_fmt->chroma_sample) {
-   317		case DPU_CHROMA_RGB:
-   318			cdm_cfg->h_cdwn_type = CDM_CDWN_DISABLE;
-   319			cdm_cfg->v_cdwn_type = CDM_CDWN_DISABLE;
-   320			break;
-   321		case DPU_CHROMA_H2V1:
-   322			cdm_cfg->h_cdwn_type = CDM_CDWN_COSITE;
-   323			cdm_cfg->v_cdwn_type = CDM_CDWN_DISABLE;
-   324			break;
-   325		case DPU_CHROMA_420:
-   326			cdm_cfg->h_cdwn_type = CDM_CDWN_COSITE;
-   327			cdm_cfg->v_cdwn_type = CDM_CDWN_OFFSITE;
-   328			break;
-   329		case DPU_CHROMA_H1V2:
-   330		default:
-   331			DPU_ERROR("[enc:%d] unsupported chroma sampling type\n",
-   332				  DRMID(phys_enc->parent));
-   333			cdm_cfg->h_cdwn_type = CDM_CDWN_DISABLE;
-   334			cdm_cfg->v_cdwn_type = CDM_CDWN_DISABLE;
-   335			break;
-   336		}
-   337	
-   338		DPU_DEBUG("[enc:%d] cdm_enable:%d,%d,%X,%d,%d,%d,%d]\n",
-   339			  DRMID(phys_enc->parent), cdm_cfg->output_width,
-   340			  cdm_cfg->output_height, cdm_cfg->output_fmt->base.pixel_format,
-   341			  cdm_cfg->output_type, cdm_cfg->output_bit_depth,
-   342			  cdm_cfg->h_cdwn_type, cdm_cfg->v_cdwn_type);
-   343	
-   344		if (hw_cdm->ops.enable) {
-   345			cdm_cfg->pp_id = hw_pp->idx;
-   346			ret = hw_cdm->ops.enable(hw_cdm, cdm_cfg);
-   347			if (ret < 0) {
-   348				DPU_ERROR("[enc:%d] failed to enable CDM; ret:%d\n",
-   349					  DRMID(phys_enc->parent), ret);
-   350				return;
-   351			}
-   352		}
-   353	}
-   354	
+4232c6e349f3a5 Breno Leitao 2023-10-16  248  
+d2cac3ec823798 Breno Leitao 2023-10-16  249  #if defined(CONFIG_NET)
+8e9fad0e70b7b6 Breno Leitao 2023-06-27 @250  int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+
+:::::: The code at line 250 was first introduced by commit
+:::::: 8e9fad0e70b7b62848e0aeb1a873903b9ce4d7c4 io_uring: Add io_uring command support for sockets
+
+:::::: TO: Breno Leitao <leitao@debian.org>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
 
 -- 
 0-DAY CI Kernel Test Service
