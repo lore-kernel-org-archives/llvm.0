@@ -1,173 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B0053E38;
-	Mon, 11 Dec 2023 20:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC3D4F8B6
+	for <llvm@lists.linux.dev>; Mon, 11 Dec 2023 20:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZFMXzJlq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702327059; x=1733863059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2kZgK+Azl0i+jQycTVfutPvf19qddGVf1z6teDm6mjs=;
-  b=ZFMXzJlqvoJUsEqXei9AbWOwI08cSLNrfWHMWVlVMb4SIlYPutcwYmEi
-   2tu80OTBifl0oQ1+CaRrI9Z1cwOYc8s726t/3kAdl072x7Je5+qbDxabS
-   vAX6b84MX0en1nWdIZurjSpBJ+jynBvn8LYWTKz6IXUVOUihn799n1qLb
-   D57tX7WGXc1w5K409X8CKthLz5pf7PzVHl/KtOV3iIbcQzlxHb0EXHtgG
-   Uz/TKRo8qLFV6Q//NA5FHsUFeJvaTASDfLqWDAfYg9bdBOjELlaG+8str
-   6ijo5Lg+vXNH3rde5RO07MXKs9ZdoC9ic9cxKKADgZDjjZ+e5mMWcw9wq
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="1576470"
-X-IronPort-AV: E=Sophos;i="6.04,268,1695711600"; 
-   d="scan'208";a="1576470"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 12:37:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="946469699"
-X-IronPort-AV: E=Sophos;i="6.04,268,1695711600"; 
-   d="scan'208";a="946469699"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Dec 2023 12:37:35 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rCn1w-000ISi-2u;
-	Mon, 11 Dec 2023 20:37:32 +0000
-Date: Tue, 12 Dec 2023 04:37:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-media@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [PATCH 2/4] media: imx334: Use v4l2_link_frequencies_to_bitmap
- helper
-Message-ID: <202312120434.56RvVcwQ-lkp@intel.com>
-References: <20231211140658.366268-3-sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h6237ZiI"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-336221efdceso1092843f8f.3
+        for <llvm@lists.linux.dev>; Mon, 11 Dec 2023 12:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702327675; x=1702932475; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FNFFKTdQ4QRGU3jiDsgZw6qRsjpUS+kZ+xjPJ/qMrTI=;
+        b=h6237ZiIRtpZDeOVE64TAoIedwCEFhXq6xSLnzEqYRwcbQvfcf5+oGLug3JJ6R4b4Q
+         /sp+GTWNST45xEn/5kB/6pvaR1ipoIiZd89ip5YoigMPdyeO7QBBV2wyqgwtEuqZpkil
+         Pea6b6VseYms2EjLE5Ug898Ccj9ZGekipnu6J1zB90CMELftXaQZzm4MuC1rvSGRgVxg
+         64bjet1XxaI5gneM4CjTtI2+D2SQZ18UYxJsuzifFRjDVDL2wVf2J28OhazFvquT8nR4
+         cGC9QWv8YUy6ptrU59ZY/9w+SIlh2OQaMXEuifaSBanm3kQWBFMbN0zkayKYik8jzv6d
+         RifA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702327675; x=1702932475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FNFFKTdQ4QRGU3jiDsgZw6qRsjpUS+kZ+xjPJ/qMrTI=;
+        b=BVBFJwW5gkeACHgwcdJog5+Zkl6tZDs69OQTH++XCfLL1HWX3rmohILPedXsPvAf1L
+         6wJXla87B7Js+5KgYsGRfWhsrzAtTAGDdYiyzBP+3ZgVntdisPel1H96g1vAg8QIH5x1
+         ghsSmlXkJrdZGXXWwgT/u4mcysFF4tJYUuFY/dYdhqgo+5AC+WSHX5Zkk8uuFhoafQd5
+         ZKWDkGXtvr1NMCiDIBdCJA6e2siJG96OCutz0OestJlXua/zSjMotc9qafbJc6Q2ylZa
+         He8I5of5Fx2O3yOyQxg42vEUGUQ6RSxVOXf/yr4gexVrBL2a1AAX1e3EPH8KXQqXdDKm
+         FEkA==
+X-Gm-Message-State: AOJu0YwLeO2z+6+Y0SokSYeiLNnpVwkPKgyF7D+bqD1jDWuUHRW27cZ6
+	ugooECb76z6Nn9ufhS/3FxevuThxq+R4f6Sh/zFUQw==
+X-Google-Smtp-Source: AGHT+IHwCiI9a280gfixWHYnlXadu2DnALRqwi1TkFx8Su2VU6cZ+QOy+Dz/bbRdlhSki6Dni8BtYfJKHIclqEDVHoc=
+X-Received: by 2002:a5d:604d:0:b0:333:2fd2:7692 with SMTP id
+ j13-20020a5d604d000000b003332fd27692mr435092wrt.131.1702327674923; Mon, 11
+ Dec 2023 12:47:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231211140658.366268-3-sakari.ailus@linux.intel.com>
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205130449.8e330a26ecbed1f7b5ad5d7a@linux-foundation.org>
+ <CAKwvOdn+VTM+LY6ALcgaZTL57JpiKt5rBPMSPNXsgS3MCENhDQ@mail.gmail.com>
+ <20231205132452.418722bea8f6878dca88142a@linux-foundation.org>
+ <CAKwvOdn=og6h5gVdDCjFDANs3MN-_CD4OZ9oRM=o9YAvoTzkzw@mail.gmail.com> <20231205214359.GF1674809@ZenIV>
+In-Reply-To: <20231205214359.GF1674809@ZenIV>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 11 Dec 2023 12:47:39 -0800
+Message-ID: <CAKwvOdkC0oHWKGJ1Z6k_U9cwkjdcf=iweG-G78jXSJgWFk86Jg@mail.gmail.com>
+Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
+To: Al Viro <viro@zeniv.linux.org.uk>, Greg KH <gregkh@linuxfoundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, tanzirh@google.com, 
+	Kees Cook <keescook@chromium.org>, Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sakari,
+On Tue, Dec 5, 2023 at 1:44=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> wr=
+ote:
+>
+> On Tue, Dec 05, 2023 at 01:39:47PM -0800, Nick Desaulniers wrote:
+>
+> > The tooling Tanzir is working on does wrap IWYU, and does support such
+> > mapping (of 'low level' to 'high level' headers; more so, if it
+> > recommends X you can override to suggest Y instead).
+> >
+> > arch/nios/ also doesn't provide a bug.h, which this patch is
+> > suggesting we include directly.  I guess the same goes for
+> > asm/rwonce.h.
+>
+> See include/asm-generic/Kbuild:
+> mandatory-y +=3D bug.h
+> ...
+> mandatory-y +=3D rwonce.h
+>
+> IOW, sh will have asm/bug.h and as/rwonce.h copied from asm-generic.
+>
+> Still, includes of asm/*.h had been a massive headache historically
+> and breeding more of those shouldn't be overdone.
+>
+> More painful problem is arch- and config-dependent stuff, though...
 
-kernel test robot noticed the following build warnings:
+Ah, it looks like include/uapi/asm-generic/Kbuild also makes use of
+this pattern using mandatory-y.
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linuxtv-media-stage/master linus/master v6.7-rc5 next-20231211]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So I think we can handle this as a two step translation. We can tell
+the tooling to 'nevermind recommending X, always replace
+recommendations for X with Y <for raisins>', so:
+1. any recommendation to use asm-generic/foo.h should be replaced with
+asm/foo.h (always, based on those 2 Kbuild files, could autogenerate)
+2. some recommendations to use asm/foo.h should be replaced with
+linux/foo.h (not necessarily codified anywhere; depends on if there is
+a linux/foo.h, will manually curate this list for now)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-Add-a-helper-for-setting-up-link-frequencies-control/20231211-220844
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20231211140658.366268-3-sakari.ailus%40linux.intel.com
-patch subject: [PATCH 2/4] media: imx334: Use v4l2_link_frequencies_to_bitmap helper
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231212/202312120434.56RvVcwQ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231212/202312120434.56RvVcwQ-lkp@intel.com/reproduce)
+Orthogonal but some places in tree can be cleaned up to include
+linux/foo.h rather than asm/foo.h.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312120434.56RvVcwQ-lkp@intel.com/
+Does this sound like an improvement to my mental model of the
+conventions used for kernel header inclusion within the linux kernel?
 
-All warnings (new ones prefixed by >>):
-
->> drivers/media/i2c/imx334.c:1115:15: warning: unused variable 'i' [-Wunused-variable]
-           unsigned int i, j;
-                        ^
->> drivers/media/i2c/imx334.c:1115:18: warning: unused variable 'j' [-Wunused-variable]
-           unsigned int i, j;
-                           ^
-   2 warnings generated.
-
-
-vim +/i +1115 drivers/media/i2c/imx334.c
-
-9746b11715c394 Martina Krasteva 2021-02-03  1100  
-9746b11715c394 Martina Krasteva 2021-02-03  1101  /**
-9746b11715c394 Martina Krasteva 2021-02-03  1102   * imx334_parse_hw_config() - Parse HW configuration and check if supported
-9746b11715c394 Martina Krasteva 2021-02-03  1103   * @imx334: pointer to imx334 device
-9746b11715c394 Martina Krasteva 2021-02-03  1104   *
-9746b11715c394 Martina Krasteva 2021-02-03  1105   * Return: 0 if successful, error code otherwise.
-9746b11715c394 Martina Krasteva 2021-02-03  1106   */
-9746b11715c394 Martina Krasteva 2021-02-03  1107  static int imx334_parse_hw_config(struct imx334 *imx334)
-9746b11715c394 Martina Krasteva 2021-02-03  1108  {
-9746b11715c394 Martina Krasteva 2021-02-03  1109  	struct fwnode_handle *fwnode = dev_fwnode(imx334->dev);
-9746b11715c394 Martina Krasteva 2021-02-03  1110  	struct v4l2_fwnode_endpoint bus_cfg = {
-9746b11715c394 Martina Krasteva 2021-02-03  1111  		.bus_type = V4L2_MBUS_CSI2_DPHY
-9746b11715c394 Martina Krasteva 2021-02-03  1112  	};
-9746b11715c394 Martina Krasteva 2021-02-03  1113  	struct fwnode_handle *ep;
-9746b11715c394 Martina Krasteva 2021-02-03  1114  	unsigned long rate;
-e3269ea5148d39 Shravan Chippa   2023-04-14 @1115  	unsigned int i, j;
-9746b11715c394 Martina Krasteva 2021-02-03  1116  	int ret;
-9746b11715c394 Martina Krasteva 2021-02-03  1117  
-9746b11715c394 Martina Krasteva 2021-02-03  1118  	if (!fwnode)
-9746b11715c394 Martina Krasteva 2021-02-03  1119  		return -ENXIO;
-9746b11715c394 Martina Krasteva 2021-02-03  1120  
-9746b11715c394 Martina Krasteva 2021-02-03  1121  	/* Request optional reset pin */
-9746b11715c394 Martina Krasteva 2021-02-03  1122  	imx334->reset_gpio = devm_gpiod_get_optional(imx334->dev, "reset",
-9746b11715c394 Martina Krasteva 2021-02-03  1123  						     GPIOD_OUT_LOW);
-9746b11715c394 Martina Krasteva 2021-02-03  1124  	if (IS_ERR(imx334->reset_gpio)) {
-c702e2f70275db Hans Verkuil     2021-02-08  1125  		dev_err(imx334->dev, "failed to get reset gpio %ld",
-c702e2f70275db Hans Verkuil     2021-02-08  1126  			PTR_ERR(imx334->reset_gpio));
-9746b11715c394 Martina Krasteva 2021-02-03  1127  		return PTR_ERR(imx334->reset_gpio);
-9746b11715c394 Martina Krasteva 2021-02-03  1128  	}
-9746b11715c394 Martina Krasteva 2021-02-03  1129  
-9746b11715c394 Martina Krasteva 2021-02-03  1130  	/* Get sensor input clock */
-9746b11715c394 Martina Krasteva 2021-02-03  1131  	imx334->inclk = devm_clk_get(imx334->dev, NULL);
-9746b11715c394 Martina Krasteva 2021-02-03  1132  	if (IS_ERR(imx334->inclk)) {
-9746b11715c394 Martina Krasteva 2021-02-03  1133  		dev_err(imx334->dev, "could not get inclk");
-9746b11715c394 Martina Krasteva 2021-02-03  1134  		return PTR_ERR(imx334->inclk);
-9746b11715c394 Martina Krasteva 2021-02-03  1135  	}
-9746b11715c394 Martina Krasteva 2021-02-03  1136  
-9746b11715c394 Martina Krasteva 2021-02-03  1137  	rate = clk_get_rate(imx334->inclk);
-9746b11715c394 Martina Krasteva 2021-02-03  1138  	if (rate != IMX334_INCLK_RATE) {
-9746b11715c394 Martina Krasteva 2021-02-03  1139  		dev_err(imx334->dev, "inclk frequency mismatch");
-9746b11715c394 Martina Krasteva 2021-02-03  1140  		return -EINVAL;
-9746b11715c394 Martina Krasteva 2021-02-03  1141  	}
-9746b11715c394 Martina Krasteva 2021-02-03  1142  
-9746b11715c394 Martina Krasteva 2021-02-03  1143  	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
-9746b11715c394 Martina Krasteva 2021-02-03  1144  	if (!ep)
-9746b11715c394 Martina Krasteva 2021-02-03  1145  		return -ENXIO;
-9746b11715c394 Martina Krasteva 2021-02-03  1146  
-9746b11715c394 Martina Krasteva 2021-02-03  1147  	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-9746b11715c394 Martina Krasteva 2021-02-03  1148  	fwnode_handle_put(ep);
-9746b11715c394 Martina Krasteva 2021-02-03  1149  	if (ret)
-9746b11715c394 Martina Krasteva 2021-02-03  1150  		return ret;
-9746b11715c394 Martina Krasteva 2021-02-03  1151  
-9746b11715c394 Martina Krasteva 2021-02-03  1152  	if (bus_cfg.bus.mipi_csi2.num_data_lanes != IMX334_NUM_DATA_LANES) {
-9746b11715c394 Martina Krasteva 2021-02-03  1153  		dev_err(imx334->dev,
-9746b11715c394 Martina Krasteva 2021-02-03  1154  			"number of CSI2 data lanes %d is not supported",
-9746b11715c394 Martina Krasteva 2021-02-03  1155  			bus_cfg.bus.mipi_csi2.num_data_lanes);
-9746b11715c394 Martina Krasteva 2021-02-03  1156  		ret = -EINVAL;
-9746b11715c394 Martina Krasteva 2021-02-03  1157  		goto done_endpoint_free;
-9746b11715c394 Martina Krasteva 2021-02-03  1158  	}
-9746b11715c394 Martina Krasteva 2021-02-03  1159  
-4b895656c4c2b2 Sakari Ailus     2023-12-11  1160  	ret = v4l2_link_frequencies_to_bitmap(imx334->dev,
-4b895656c4c2b2 Sakari Ailus     2023-12-11  1161  					      bus_cfg.link_frequencies,
-4b895656c4c2b2 Sakari Ailus     2023-12-11  1162  					      bus_cfg.nr_of_link_frequencies,
-4b895656c4c2b2 Sakari Ailus     2023-12-11  1163  					      link_freq, ARRAY_SIZE(link_freq),
-4b895656c4c2b2 Sakari Ailus     2023-12-11  1164  					      &imx334->link_freq_bitmap);
-9746b11715c394 Martina Krasteva 2021-02-03  1165  
-9746b11715c394 Martina Krasteva 2021-02-03  1166  done_endpoint_free:
-9746b11715c394 Martina Krasteva 2021-02-03  1167  	v4l2_fwnode_endpoint_free(&bus_cfg);
-9746b11715c394 Martina Krasteva 2021-02-03  1168  
-9746b11715c394 Martina Krasteva 2021-02-03  1169  	return ret;
-9746b11715c394 Martina Krasteva 2021-02-03  1170  }
-9746b11715c394 Martina Krasteva 2021-02-03  1171  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tanzir nearly has the above done (for 1, 2 we will probably need to
+iterate on more).  We've also beefed up our local testing to test more
+architectures.  I expect Tanzir to send a v2 of this patch (as a
+series, with the fix for ARCH=3Dsh) later this week, if the above seems
+correct.
+--=20
+Thanks,
+~Nick Desaulniers
