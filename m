@@ -1,116 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151B21CFA8;
-	Sun, 10 Dec 2023 22:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD174776B;
+	Mon, 11 Dec 2023 13:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N89XU/Bt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702247894; x=1733783894;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EN08IgAEgyqeRIyaagaAwRK29/EowU3evqySKfqMhH8=;
-  b=N89XU/Btx+WVgFq7QRV8raBK36tErdijf7nQYWIjbSz0evHsKST0Bwfm
-   sQJKG6r6pQhTuHWMdLKy9RcC7s1Xag1A8vmIPzidYuz1HZ63NFjHKpu1D
-   4OPe5GspXhMu9/zG4POslwezgeguLEh8L6MU747jmpu9Z56700Z1Z7dJu
-   t/OKS7hUgtFOu5/oTXjIQ6/T9Zvlx/jZmtLoHWif0w61LuR8a53HYxdML
-   nw1NGXNYFKT90oZJ6FWyyPLzs6EuxamNQn8oCjVzf+RFTAosk3UwUNyEE
-   b6qaozVa/lNnY3fJ2B16JpmKEACstfWw9fSGbWGI/52loFKLG/FBljbbC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="393437417"
-X-IronPort-AV: E=Sophos;i="6.04,266,1695711600"; 
-   d="scan'208";a="393437417"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2023 14:38:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="766144816"
-X-IronPort-AV: E=Sophos;i="6.04,266,1695711600"; 
-   d="scan'208";a="766144816"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2023 14:38:11 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rCSR7-000HLC-1F;
-	Sun, 10 Dec 2023 22:38:09 +0000
-Date: Mon, 11 Dec 2023 06:37:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v3] LSM: Officially support appending LSM hooks after
- boot.
-Message-ID: <202312110630.N1lx6TMb-lkp@intel.com>
-References: <09e4992c-9def-41b5-a806-2978b3ae35c6@I-love.SAKURA.ne.jp>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3xjA0mP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF81C433B7;
+	Mon, 11 Dec 2023 13:53:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702302840;
+	bh=wdNJDgqHvDzQr6q3lTGtBsDgx/ijcaDTNNN6qwjaRC4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=L3xjA0mPON5y9hqfrcIgIc/MOZd1DVa6Z+3NRujO/rvhRp39mnwEw7iVmpquAjejI
+	 H3xn6oQIsdRUevtkFNo9vcyT8cPC8UKyF91hU9DODbeYBJAVhkaCb1JufSm5xN5TLI
+	 70JF6vDwQjfQ3ESCxvTeKjrcUtIHaXZrRw2s0B56n+i96DJwuYmelK7JDgaLYQk10+
+	 lx458Ufq4gnd8IeVIFcEJK5jyp9X7UKxsuUoSN2YuRQJgl4CXXanZ3FIMRTu7CVWpJ
+	 GlbSyuenluKSisDNOO2vvjhT4pKMExnIdZQmD1Uo0YHUKAAN3WjQ/aQZRnu+KFqJJe
+	 yX0SA/+PuKNOA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: WANG Rui <wangrui@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Sasha Levin <sashal@kernel.org>,
+	chenhuacai@kernel.org,
+	nathan@kernel.org,
+	loongarch@lists.linux.dev,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.6 45/47] LoongArch: Apply dynamic relocations for LLD
+Date: Mon, 11 Dec 2023 08:50:46 -0500
+Message-ID: <20231211135147.380223-45-sashal@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231211135147.380223-1-sashal@kernel.org>
+References: <20231211135147.380223-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09e4992c-9def-41b5-a806-2978b3ae35c6@I-love.SAKURA.ne.jp>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.5
+Content-Transfer-Encoding: 8bit
 
-Hi Tetsuo,
+From: WANG Rui <wangrui@loongson.cn>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+[ Upstream commit eea673e9d5ea994c60b550ffb684413d3759b3f4 ]
 
-[auto build test WARNING on pcmoore-audit/next]
-[also build test WARNING on pcmoore-selinux/next linus/master v6.7-rc4]
-[cannot apply to next-20231208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+For the following assembly code:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tetsuo-Handa/LSM-Officially-support-appending-LSM-hooks-after-boot/20231209-162924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-patch link:    https://lore.kernel.org/r/09e4992c-9def-41b5-a806-2978b3ae35c6%40I-love.SAKURA.ne.jp
-patch subject: [RFC PATCH v3] LSM: Officially support appending LSM hooks after boot.
-config: i386-buildonly-randconfig-003-20231211 (https://download.01.org/0day-ci/archive/20231211/202312110630.N1lx6TMb-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231211/202312110630.N1lx6TMb-lkp@intel.com/reproduce)
+     .text
+     .global func
+ func:
+     nop
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312110630.N1lx6TMb-lkp@intel.com/
+     .data
+ var:
+     .dword func
 
-All warnings (new ones prefixed by >>):
+When linked with `-pie`, GNU LD populates the `var` variable with the
+pre-relocated value of `func`. However, LLVM LLD does not exhibit the
+same behavior. This issue also arises with the `kernel_entry` in arch/
+loongarch/kernel/head.S:
 
->> security/security.c:554:5: warning: no previous prototype for function 'mod_security_add_hooks' [-Wmissing-prototypes]
-   int mod_security_add_hooks(struct security_hook_list *hooks, int count, const char *lsm)
-       ^
-   security/security.c:554:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int mod_security_add_hooks(struct security_hook_list *hooks, int count, const char *lsm)
-   ^
-   static 
-   1 warning generated.
+ _head:
+     .word   MZ_MAGIC                /* "MZ", MS-DOS header */
+     .org    0x8
+     .dword  kernel_entry            /* Kernel entry point */
 
+The correct kernel entry from the MS-DOS header is crucial for jumping
+to vmlinux from zboot. This necessity is why the compressed relocatable
+kernel compiled by Clang encounters difficulties in booting.
 
-vim +/mod_security_add_hooks +554 security/security.c
+To address this problem, it is proposed to apply dynamic relocations to
+place with `--apply-dynamic-relocs`.
 
-   553	
- > 554	int mod_security_add_hooks(struct security_hook_list *hooks, int count, const char *lsm)
-   555	{
-   556		int i;
-   557	
-   558		if (!static_branch_unlikely(&mod_security_enabled)) {
-   559			pr_info("Modular LSM support is not enabled.\n");
-   560			return -EINVAL;
-   561		}
-   562		pr_info("Registering modular LSM: %s\n", lsm);
-   563		for (i = 0; i < count; i++) {
-   564			hooks[i].lsm = lsm;
-   565			hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
-   566		}
-   567		return 0;
-   568	}
-   569	EXPORT_SYMBOL_GPL(mod_security_add_hooks);
-   570	
+Link: https://github.com/ClangBuiltLinux/linux/issues/1962
+Signed-off-by: WANG Rui <wangrui@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/loongarch/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index fb0fada43197e..390867fc45b84 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -80,7 +80,7 @@ endif
+ 
+ ifeq ($(CONFIG_RELOCATABLE),y)
+ KBUILD_CFLAGS_KERNEL		+= -fPIE
+-LDFLAGS_vmlinux			+= -static -pie --no-dynamic-linker -z notext
++LDFLAGS_vmlinux			+= -static -pie --no-dynamic-linker -z notext $(call ld-option, --apply-dynamic-relocs)
+ endif
+ 
+ cflags-y += $(call cc-option, -mno-check-zero-division)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
