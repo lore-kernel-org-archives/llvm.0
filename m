@@ -1,110 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A892A65A98;
-	Tue, 12 Dec 2023 21:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09B916428;
+	Tue, 12 Dec 2023 22:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rzsvwnlo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9FF1C433C7;
-	Tue, 12 Dec 2023 21:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702417805;
-	bh=6ogrBXo4J5g4zBXsQOlW0y4FIDZEwSmJ8vaSdXm00eE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rzsvwnlo32fqTtf3/7LvOn0kX55GFA+RKbr8qR84zmtyBxBr8Z27rXb4U/6Pub9MR
-	 SZPALCeQvn2083UU6DzF9G7YUneqS+diLCLU8LotEsI+v9qPOxZhj11odGxvk5n6Iu
-	 yYJwm5kUuY6Vy6D9LYgAhKLUqWGU9OnXxgbB18lXh+hcvu9SPljiZMuBhOwujYPV8b
-	 x5LlP7Gs6hZTDH8OmivofNGvAtf7K8ZIEwfbXCbp83wdffTbNJmxqjofNZEOFXBNyK
-	 0sZ4swf7yt8LFaX5CAqYXb07ZoIeMFPXObopMU3OU3jhLSRBwnsDhIjjrrajdlI1xP
-	 MnbKaOMp5BiWw==
-Date: Tue, 12 Dec 2023 14:50:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] power: reset: at91: mark at91_wakeup_status non-__init
-Message-ID: <20231212215002.GA3300655@dev-arch.thelio-3990X>
-References: <20231212214658.213510-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iaWERBnR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702420692; x=1733956692;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=h8t5QXL6Y/ehxu347O7xBo8bJeRhhquvqG+ltUVUxcg=;
+  b=iaWERBnR/idOx+Tj4VIfg7WtVMbUk+tYTN3cpD8EmQp0fGjWKWJRF07Y
+   /BHJGx+ztDfmbiT27FdaDHGkSp8tVAmCrPXNSv9Kysmpd8gdaVz8NRFek
+   P4kl2zT0HGW3b5//og/ld7bdjnQIlcf3IBF6bEJqMziV/R3OtT4ftisfL
+   aDlJEogcVGVDv31ZYkqixf3QkizORt3ycsR0tyvhou8pejBjZExbbS63I
+   1nW8xsNNaE/vYnaJe3btCigwWNFrzmKMaDe7qhHBMexRhjoWN4VA5qGIY
+   id1SQ99PkZF/JoDjxNs9HT7mYsqwCaq+xpK/QhktGxuf+OAsEazm2Fc7Z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="1737037"
+X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
+   d="scan'208";a="1737037"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 14:38:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
+   d="scan'208";a="15185388"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 12 Dec 2023 14:38:10 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDBOB-000Jnr-24;
+	Tue, 12 Dec 2023 22:38:07 +0000
+Date: Wed, 13 Dec 2023 06:37:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?B?TWljaGHFgiBLb3BlxIc=?= <michal.kopec@3mdeb.com>,
+	linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	=?utf-8?B?TWljaGHFgiBLb3BlxIc=?= <michal@nozomi.space>
+Subject: Re: [PATCH] platform/x86: serial-multi-instantiate: allow single
+ GpioInt IRQ for INT3515
+Message-ID: <202312130609.vkwtG6qJ-lkp@intel.com>
+References: <20231212103823.546118-2-michal.kopec@3mdeb.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231212214658.213510-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231212103823.546118-2-michal.kopec@3mdeb.com>
 
-On Tue, Dec 12, 2023 at 10:46:49PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Two copies of the at91_wakeup_status() function are called by the
-> respective probe() callbacks and are marked __init, but the probe
-> functions are no longer annotated that way. This works with gcc because
-> the functions always get inlined, but clang keeps them separate, which
-> can lead to executing freed memory:
-> 
-> WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff_probe+0x80 (section: .text) -> at91_wakeup_status (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_probe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
-> 
-> Drop the incorrect annotation on these.
-> 
-> Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_platform_driver_probe()")
-> Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_probe()")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Michał,
 
-Thanks, I sent the same change three weeks ago at this point:
+kernel test robot noticed the following build warnings:
 
-https://lore.kernel.org/20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org/
+[auto build test WARNING on westeri-thunderbolt/next]
+[also build test WARNING on linus/master v6.7-rc5 next-20231212]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Your commit message is a little better than mine and I don't really care
-which one goes in but it would be good if this could get cleared up
-soon...
+url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Kope/platform-x86-serial-multi-instantiate-allow-single-GpioInt-IRQ-for-INT3515/20231212-184116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+patch link:    https://lore.kernel.org/r/20231212103823.546118-2-michal.kopec%403mdeb.com
+patch subject: [PATCH] platform/x86: serial-multi-instantiate: allow single GpioInt IRQ for INT3515
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231213/202312130609.vkwtG6qJ-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312130609.vkwtG6qJ-lkp@intel.com/reproduce)
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312130609.vkwtG6qJ-lkp@intel.com/
 
-> ---
->  drivers/power/reset/at91-poweroff.c      | 2 +-
->  drivers/power/reset/at91-sama5d2_shdwc.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/reset/at91-poweroff.c b/drivers/power/reset/at91-poweroff.c
-> index 126e774e210c..93eece027865 100644
-> --- a/drivers/power/reset/at91-poweroff.c
-> +++ b/drivers/power/reset/at91-poweroff.c
-> @@ -57,7 +57,7 @@ static struct shdwc {
->  	void __iomem *mpddrc_base;
->  } at91_shdwc;
->  
-> -static void __init at91_wakeup_status(struct platform_device *pdev)
-> +static void at91_wakeup_status(struct platform_device *pdev)
->  {
->  	const char *reason;
->  	u32 reg = readl(at91_shdwc.shdwc_base + AT91_SHDW_SR);
-> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
-> index af95c7b39cb3..959ce0dbe91d 100644
-> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
-> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-> @@ -107,7 +107,7 @@ static const unsigned long long sdwc_dbc_period[] = {
->  	0, 3, 32, 512, 4096, 32768,
->  };
->  
-> -static void __init at91_wakeup_status(struct platform_device *pdev)
-> +static void at91_wakeup_status(struct platform_device *pdev)
->  {
->  	struct shdwc *shdw = platform_get_drvdata(pdev);
->  	const struct reg_config *rcfg = shdw->rcfg;
-> -- 
-> 2.39.2
-> 
-> 
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/serial-multi-instantiate.c:79:17: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
+           if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
+                          ^            ~
+   drivers/platform/x86/serial-multi-instantiate.c:79:17: note: add parentheses after the '!' to evaluate the bitwise operator first
+           if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
+                          ^
+                           (                         )
+   drivers/platform/x86/serial-multi-instantiate.c:79:17: note: add parentheses around left hand side expression to silence this warning
+           if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
+                          ^
+                          (           )
+   1 warning generated.
+
+
+vim +79 drivers/platform/x86/serial-multi-instantiate.c
+
+    51	
+    52	static int smi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
+    53			       const struct smi_instance *inst)
+    54	{
+    55		int ret;
+    56	
+    57		switch (inst->flags & IRQ_RESOURCE_TYPE) {
+    58		case IRQ_RESOURCE_AUTO:
+    59			ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
+    60			if (ret > 0) {
+    61				dev_dbg(&pdev->dev, "Using gpio irq\n");
+    62				break;
+    63			}
+    64			ret = platform_get_irq_optional(pdev, inst->irq_idx);
+    65			if (ret > 0) {
+    66				dev_dbg(&pdev->dev, "Using platform irq\n");
+    67				break;
+    68			}
+    69			break;
+    70		case IRQ_RESOURCE_GPIO:
+    71			ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
+    72			break;
+    73		case IRQ_RESOURCE_APIC:
+    74			ret = platform_get_irq_optional(pdev, inst->irq_idx);
+    75			break;
+    76		default:
+    77			return 0;
+    78		}
+  > 79		if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
+    80			return dev_err_probe(&pdev->dev, ret, "Error requesting irq at index %d\n",
+    81					     inst->irq_idx);
+    82	
+    83		return ret;
+    84	}
+    85	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
