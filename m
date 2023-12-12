@@ -1,41 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5046413B;
-	Tue, 12 Dec 2023 21:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DF864157;
+	Tue, 12 Dec 2023 21:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jogJziO6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A13DFC433C7;
-	Tue, 12 Dec 2023 21:36:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3TKEoD2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDE0C433C7;
+	Tue, 12 Dec 2023 21:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702416993;
-	bh=7eLZmT4c+fhFsyeFMw0JfCmjrU8I9lIkdJtLdS55xkI=;
+	s=k20201202; t=1702417543;
+	bh=61xu+OcPj5V/1U8yttDpwKsOSr89T9ROKbwgf4LauZA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=jogJziO6KMjsDBdgTJ3ForpAxZ2uFB69WZGXd3/IfFyg5tI+o5RHURJQ5VRTxE6Fr
-	 C7Zbo3zE8fb2bRohJVE808bYOONGZLkZg+KBkwOZb/yHfUpsimO4JHhTJed8xjn6Od
-	 F2HFZr0skIQJQRqzTV/DbxXbxZG6TLjbK3B3fG+kEHSmDbz7rMlQSFjus3J1wPqEko
-	 RqOhl9hRq8kXc/4jUEJunbPBlWk+qDiAjxoZ9XlsuqqVrTkeEcADCMv/QhZvgLqX1e
-	 zZ85U+5FZbgw/vVOC6RlquCAdfIJMGzs6J0yNJuKc0qayPp5USq1o1vZsSITFzKmYm
-	 c8mZD3flToCpw==
+	b=T3TKEoD2DFoTDRZykH5hmLSR6hlqT0AnBgKiI3oIuSwoqnWxisE4jV/vsLrsRXeEK
+	 0WZtTjZAjZYgIYHeFiTT6MIU2qeh0t8gVZ0/oco5JFhrqOFVIjTSoeQNoQVqzFKqbk
+	 elZeBAu284TS6ifRfnpUQjTqccQO9uuxZM4P0IJ+QVYDnm2MYgYYU/QZ3etN4oPOVY
+	 NLgzc8OcdUVl3a+jVOD2dXqNTDKTZLDSfwS3V7zvb8dnY6bAboBZ8Tu3wcUnHnRYz+
+	 1vo7iRWVaKZ6M/VqexWF3wTR8ah4R0yZZ0lg45/S2pFBrVNkSpLF2TQDTqEElGPxPM
+	 rTZwO2qzO3u/w==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+To: Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+	Guo Ren <guoren@kernel.org>,
+	Palmer Dabbelt <palmer@rivosinc.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	linux-media@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] media: i2c: mt9m114: add CONFIG_COMMON_CLK dependency
-Date: Tue, 12 Dec 2023 22:18:04 +0100
-Message-Id: <20231212213625.3653558-1-arnd@kernel.org>
+Subject: [PATCH] leds: sun50i-a100: avoid division-by-zero warning
+Date: Tue, 12 Dec 2023 22:45:22 +0100
+Message-Id: <20231212214536.175327-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -47,33 +49,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-With clang-16, building without COMMON_CLK triggers a range check on
-udelay() because of a constant division-by-zero calculation:
+When CONFIG_COMMON_CLK is disabled, e.g. on an x86 randconfig compile test,
+clang reports a field overflow from propagating the result of a division by
+zero:
 
-ld.lld: error: undefined symbol: __bad_udelay
->>> referenced by mt9m114.c
->>>               drivers/media/i2c/mt9m114.o:(mt9m114_power_on) in archive vmlinux.a
+drivers/leds/leds-sun50i-a100.c:309:12: error: call to '__compiletime_assert_265' declared with 'error' attribute: FIELD_PREP: value too large for the field
+        control = FIELD_PREP(LEDC_T01_TIMING_CTRL_REG_T1H, timing->t1h_ns / cycle_ns) |
 
-Avoid this by adding a Kconfig dependency that avoids the broken build.
+Avoid the problem by adding an explicit check for the zero value here. Alternatively
+the assertion could be avoided with a Kconfig dependency on COMMON_CLK.
 
-Fixes: 24d756e914fc ("media: i2c: Add driver for onsemi MT9M114 camera sensor")
+Fixes: 090a25ad9798 ("leds: sun50i-a100: New driver for the A100 LED controller")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/i2c/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/leds/leds-sun50i-a100.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index aae05142e191..b224c37bfd77 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -228,6 +228,7 @@ config VIDEO_MT9M111
+diff --git a/drivers/leds/leds-sun50i-a100.c b/drivers/leds/leds-sun50i-a100.c
+index e4a7e692a908..171cefd1ea0d 100644
+--- a/drivers/leds/leds-sun50i-a100.c
++++ b/drivers/leds/leds-sun50i-a100.c
+@@ -303,9 +303,13 @@ static void sun50i_a100_ledc_set_timing(struct sun50i_a100_ledc *priv)
+ {
+ 	const struct sun50i_a100_ledc_timing *timing = &priv->timing;
+ 	unsigned long mod_freq = clk_get_rate(priv->mod_clk);
+-	u32 cycle_ns = NSEC_PER_SEC / mod_freq;
++	u32 cycle_ns;
+ 	u32 control;
  
- config VIDEO_MT9M114
- 	tristate "onsemi MT9M114 sensor support"
-+	depends on COMMON_CLK
- 	select V4L2_CCI_I2C
- 	help
- 	  This is a Video4Linux2 sensor-level driver for the onsemi MT9M114
++	if (!mod_freq)
++		return;
++
++	cycle_ns = NSEC_PER_SEC / mod_freq;
+ 	control = FIELD_PREP(LEDC_T01_TIMING_CTRL_REG_T1H, timing->t1h_ns / cycle_ns) |
+ 		  FIELD_PREP(LEDC_T01_TIMING_CTRL_REG_T1L, timing->t1l_ns / cycle_ns) |
+ 		  FIELD_PREP(LEDC_T01_TIMING_CTRL_REG_T0H, timing->t0h_ns / cycle_ns) |
 -- 
 2.39.2
 
