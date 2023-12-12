@@ -1,288 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195036359A;
-	Tue, 12 Dec 2023 19:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25DB65A76
+	for <llvm@lists.linux.dev>; Tue, 12 Dec 2023 21:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="boqi7+0n"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702410894; x=1733946894;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GrNtDaHDEHt75jee9nBiRP4qnezfbYvMWhStDWh4qs4=;
-  b=boqi7+0nukRiSauWh2UcB5kq1wBXUipevSttRETC5J/Ci7mQ4Q7OXCQD
-   t6tcI3IFRlh4CfqnRNM7APZCUhHHwJga9Jzsg7f2efHlCW8p0rZ7h85db
-   LO/C8gvv5Pczc5EySicPgP27YPSCrn+fsDpwcbc8W8wOOJtQ1ZFODzfFi
-   44hqNz4GhBVU+ZruAzDALBHqa0GtUueGCA5wIgkiqwChvvjMqRojdsUUo
-   h1EFGgC4XlPDQzdVZliu/LCLB+X5HGOOCUWwAw0tmFF6A96o2MjJzBx62
-   3YQ4uWD8YDnV+LRSQCbGsLGAzHV45Nk8kIdIw8l9K2FWeK2/rUrZ/qbID
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="398704154"
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="398704154"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 11:54:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="802601536"
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="802601536"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 12 Dec 2023 11:54:51 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rD8q8-000JeU-3D;
-	Tue, 12 Dec 2023 19:54:48 +0000
-Date: Wed, 13 Dec 2023 03:54:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bvanassche:block-ioprio 1/1] include/linux/blk-mq.h:1161:25: error:
- no member named 'bi_disk' in 'struct bio'
-Message-ID: <202312130353.K81VpYuM-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="AiCZzotk"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d2f1cecf89so22261305ad.1
+        for <llvm@lists.linux.dev>; Tue, 12 Dec 2023 13:04:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1702415082; x=1703019882; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NQLI8ZxmgGnTnjndBk3z0pIE3uTOANUnGC/O+K8Uf68=;
+        b=AiCZzotkTppcu2Sx1a+h9LsU52fvuYW+PkeYg/6QAbZssk6aZQ/bmwmR7MZzZarmEc
+         wUspLX5GWpB+/pnsdIpJNFAmzKqqSvCuhXKHD/Bm6H6GiT3GjxF3PM/ZPMkPa62KQSMk
+         aU8VLf8q+tLyriyMHr4574dTWfd3TMInR2A1haWPx+V5dxkzwVx1QXnu4e3QZwI6AmpP
+         sMKkN6t99sogMG+8qUdCllm6NpTjAZQ1CjJcsTDCCfCcQK4dNeiFGj9mrBmtU+GL4PpP
+         rDDGavssV1CNIdskVFkALX7DD0zvndDksBOytcg49/c6dUj9sbkY/sAxs+EcHFWv+DTq
+         /h5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702415082; x=1703019882;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NQLI8ZxmgGnTnjndBk3z0pIE3uTOANUnGC/O+K8Uf68=;
+        b=ov0uLFjzSqS1Q3atnMOMps6CACYQXsNnlBzOrGc3hyxvOH4iRtJTW85opjRyuZ7mB+
+         FXI1Q5IYBOjI5Ixm5uOFIPIGWITal7imZ98YRwJdEaPaZ3cLXCe7YacfyOyK64AGSWlj
+         0o2cCJtgcQ39sly2I5rfxkkHQK4/lrnjtX04euzJ2tFbqxbNhy2pVx8gJlId/b3aoThh
+         c17CgTYK9Qx5UINjhMPNOIiJX0u/U1omEKQfldxW9E+gfoQlnfGlCupxfoA7VJ0DU6mA
+         jVBnldezG/mPyzx0TVsOwiviGtaAurk7ys76w7Sex83u14FpjOw/a+nKTEn99kV1tP84
+         LpRA==
+X-Gm-Message-State: AOJu0YyULgDHkFEEn5Up9NDeDzfvoPWoPHCkNQ7WOWby2ADig1SDiltY
+	ZPyqjpqR9KB4Ayo7iNYSmHkPwQ==
+X-Google-Smtp-Source: AGHT+IEffuvr5hwWjR1T7jT2dRz7mdzArWh18uGXB0xpGx+xGt4IV2Sq4auOxtaoNxBwuMmVj5TnWQ==
+X-Received: by 2002:a17:903:2282:b0:1d3:39fd:9043 with SMTP id b2-20020a170903228200b001d339fd9043mr938093plh.13.1702415082012;
+        Tue, 12 Dec 2023 13:04:42 -0800 (PST)
+Received: from localhost ([12.44.203.122])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902ab8700b001cfc19c2d01sm1697091plr.296.2023.12.12.13.04.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 13:04:41 -0800 (PST)
+Date: Tue, 12 Dec 2023 13:04:41 -0800 (PST)
+X-Google-Original-Date: Tue, 12 Dec 2023 12:59:26 PST (-0800)
+Subject:     Re: [PATCH -next] drivers: perf: Fix build error by adding const to ctl_table argument of handler
+In-Reply-To: <20231207083512.51792-1-alexghiti@rivosinc.com>
+CC: lkp@intel.com, linux-mm@kvack.org, linux@weissschuh.net, llvm@lists.linux.dev,
+  mcgrof@kernel.org, oe-kbuild-all@lists.linux.dev, alexghiti@rivosinc.com
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: alexghiti@rivosinc.com
+Message-ID: <mhng-eda68e75-0733-4b42-b2a8-3e4696bde0db@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/bvanassche/linux block-ioprio
-head:   1541e2e932ed4580c4c40941c837512846386cf9
-commit: 1541e2e932ed4580c4c40941c837512846386cf9 [1/1] block/blk-ioprio: Skip zoned writes that are not append operations
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231213/202312130353.K81VpYuM-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312130353.K81VpYuM-lkp@intel.com/reproduce)
+On Thu, 07 Dec 2023 00:35:12 PST (-0800), alexghiti@rivosinc.com wrote:
+> The ctl_table argument of the proc_handler field was constified treewide
+> but somehow missed the occurrence in the riscv pmu sbi driver, so add the
+> const to fix the build error.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202312062242.RFPPozG9-lkp@intel.com/
+> Fixes: c8be9e66ca1e ("sysctl: treewide: constify the ctl_table argument of handlers")
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  drivers/perf/riscv_pmu_sbi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> index 16acd4dcdb96..97e345f7d25d 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -986,7 +986,7 @@ static void riscv_pmu_update_counter_access(void *info)
+>  		csr_write(CSR_SCOUNTEREN, 0x2);
+>  }
+>
+> -static int riscv_pmu_proc_user_access_handler(struct ctl_table *table,
+> +static int riscv_pmu_proc_user_access_handler(const struct ctl_table *table,
+>  					      int write, void *buffer,
+>  					      size_t *lenp, loff_t *ppos)
+>  {
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312130353.K81VpYuM-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/scsi/scsi.c:61:
-   In file included from include/scsi/scsi_cmnd.h:7:
-   In file included from include/linux/t10-pi.h:6:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   2 errors generated.
---
-   In file included from drivers/scsi/ips.c:184:
-   In file included from include/scsi/scsi_cmnd.h:7:
-   In file included from include/linux/t10-pi.h:6:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/ips.c:6905:38: warning: shift count >= width of type [-Wshift-count-overflow]
-               !dma_set_mask(&ha->pcidev->dev, DMA_BIT_MASK(64))) {
-                                               ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/scsi/qla1280.c:355:
-   In file included from include/scsi/scsi_cmnd.h:7:
-   In file included from include/linux/t10-pi.h:6:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/qla1280.c:1712:15: warning: variable 'num' set but not used [-Wunused-but-set-variable]
-           int err = 0, num, i;
-                        ^
-   drivers/scsi/qla1280.c:4181:48: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (dma_set_mask_and_coherent(&ha->pdev->dev, DMA_BIT_MASK(64))) {
-                                                         ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   2 warnings and 2 errors generated.
---
-   In file included from drivers/scsi/hpsa.c:33:
-   In file included from include/linux/blktrace_api.h:5:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/hpsa.c:8739:32: warning: shift count >= width of type [-Wshift-count-overflow]
-           rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-                                         ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/scsi/megaraid.c:49:
-   In file included from include/scsi/scsi_cmnd.h:7:
-   In file included from include/linux/t10-pi.h:6:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/megaraid.c:4409:28: warning: shift count >= width of type [-Wshift-count-overflow]
-                   dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-                                            ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/scsi/myrs.c:22:
-   In file included from include/scsi/scsi_host.h:11:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/myrs.c:492:31: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(64)))
-                                        ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/scsi/3w-9xxx.c:97:
-   In file included from include/scsi/scsi_host.h:11:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/3w-9xxx.c:2014:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   drivers/scsi/3w-9xxx.c:2223:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   2 warnings and 2 errors generated.
---
-   In file included from drivers/scsi/3w-sas.c:69:
-   In file included from include/scsi/scsi_host.h:11:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/3w-sas.c:1568:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   drivers/scsi/3w-sas.c:1785:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   2 warnings and 2 errors generated.
---
-   In file included from drivers/scsi/ipr.c:68:
-   In file included from include/scsi/scsi_host.h:11:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/ipr.c:9487:46: warning: shift count >= width of type [-Wshift-count-overflow]
-                   rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                              ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/scsi/stex.c:29:
-   In file included from include/scsi/scsi_device.h:8:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/stex.c:1698:46: warning: shift count >= width of type [-Wshift-count-overflow]
-           err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                       ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/scsi/mvumi.c:22:
-   In file included from include/scsi/scsi_cmnd.h:7:
-   In file included from include/linux/t10-pi.h:6:
->> include/linux/blk-mq.h:1161:25: error: no member named 'bi_disk' in 'struct bio'
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                    ~~~  ^
->> include/linux/blk-mq.h:1161:37: error: member reference type 'struct bio *' is a pointer; did you mean to use '->'?
-                   disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-                                                  ~~~^
-                                                     ->
-   drivers/scsi/mvumi.c:658:32: warning: shift count >= width of type [-Wshift-count-overflow]
-                   if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(64)))
-                                                ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 2 errors generated.
-..
-
-
-vim +1161 include/linux/blk-mq.h
-
-  1151	
-  1152	/**
-  1153	 * blk_bio_is_seq_zoned_write() - Check if @bio requires write serialization.
-  1154	 * @bio: Bio to examine.
-  1155	 *
-  1156	 * Note: REQ_OP_ZONE_APPEND bios do not require serialization.
-  1157	 */
-  1158	static inline bool blk_bio_is_seq_zoned_write(struct bio *bio)
-  1159	{
-  1160		return op_needs_zoned_write_locking(bio_op(bio)) &&
-> 1161			disk_zone_is_seq(bio->bi_disk, bio.bi_iter.bi_sector);
-  1162	}
-  1163	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
