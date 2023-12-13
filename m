@@ -1,174 +1,136 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48D963B9
-	for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 19:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDC725743;
+	Wed, 13 Dec 2023 19:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kDXhnqbL"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-286d6c95b8cso7184026a91.0
-        for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 11:35:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702496107; x=1703100907; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
-        b=kDXhnqbL7tvYolrjj+Po4Xyb/jr5Lxx2QTyWKEj0g6+IgF1Z7kr9Eqw+5Bid8h6W//
-         G4QhakwwedGLnnV2ZRmUTG7mbM9wHDhJHkFJUM55C6q510O3CiS3VqhjChHD4aX5/xiZ
-         bUxqWLMvrYa2J1yM8hBMbmelM7rCy46YYdS9M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702496107; x=1703100907;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
-        b=HNYqgCts8iVFS67uvBWYDuZmv2k+QoYrlHcNnIODK/VxDL1P9VMskcmXkcrsaBTbu1
-         I2CkH15AFwcTiKQH8p8x8zz3rqO5w5Gfee5jdglBaYGxPXIHnS1Cpgr9UhAwfnN9nvN5
-         iRpHPTKhpUmtD4nZ5R9i3IjY8OimN9toRLcgN2XgCTEvKFFVruyzhqh8OdF8fV0C9Sla
-         jj96R+b80aY9JyKiBAegikSRbpk5XdeZH4Osg5IzaSzOBGp55NINotZkEp+IaiE0zfSF
-         +VIem4MGWwAwv0K1CxyMAYHKBGnPFtrnXbhJtPVCYmvG6M5vBGTuSRFnW6TvzLpfyyvj
-         LOEg==
-X-Gm-Message-State: AOJu0YyQC5xQe2gZ5cgtg5w+ujMPyOzjuDxl2n07BI3ZWs2ewsjk0kI/
-	Q9mUEewfMIs/PhBoJvpdFz4dKw==
-X-Google-Smtp-Source: AGHT+IFC5O0ogGHSFN9U4m/5EgPgHuUXB72Ex5/NV/wuzLf+pctjLmlVG1zZQc96G2B2P4iPB/5lmA==
-X-Received: by 2002:a17:90a:6d88:b0:286:6cc1:3f17 with SMTP id a8-20020a17090a6d8800b002866cc13f17mr7490686pjk.78.1702496107255;
-        Wed, 13 Dec 2023 11:35:07 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e16-20020a17090301d000b001d337dcc5afsm3718083plh.30.2023.12.13.11.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 11:35:06 -0800 (PST)
-Date: Wed, 13 Dec 2023 11:35:06 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Wang <wanglikun@lixiang.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
-	Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-	Brian Gerst <brgerst@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Changbin Du <changbin.du@intel.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Frederic Weisbecker <frederic@kernel.org>, gcc-patches@gcc.gnu.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Marco Elver <elver@google.com>, Mark Brown <broonie@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Roth <michael.roth@amd.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Richard Sandiford <richard.sandiford@arm.com>,
-	Song Liu <song@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
-	Will Deacon <will@kernel.org>, x86@kernel.org,
-	Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
-	Zhen Lei <thunder.leizhen@huawei.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, Dan Li <ashimida.1990@gmail.com>
-Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-Message-ID: <202312131132.639E8802B@keescook>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <20230325085416.95191-1-ashimida.1990@gmail.com>
- <20230327093016.GB4253@hirez.programming.kicks-ass.net>
- <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
- <CAE+Z0PFZaa2bwtfY5P7ZDYH4JjMxKpJgqz0m+KJ_ks4dctzAKA@mail.gmail.com>
- <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U+XgiCcU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702496954; x=1734032954;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AsC/bkFxnvGz28yB18zGRCfVJtAAcMt1vR1R3uw0LSs=;
+  b=U+XgiCcUAx8Gs0IKG0N77Q6gvJzkYFzVeZiwFCa8ZCAcI54P/AB/PbRW
+   uuQEF4UAFZo+WLbmX6N06TUNQPex6iU303p1sS5Y/GTkOl2B8Exh38NMH
+   gz1WnTP2HJ9WN6lYkru4WPQXs5LRRhOlPR2Mjhvjm3e8lvTgfIWM3YBQB
+   Ujl6KmP51fBN6wOMOR1jUWhm3A31TO+vj+NYIZ8+phu8K9VC3UraTZJou
+   j/ORwlFBCLgnHpjqrIWvpbzydyj/a+VluGpTEpZ8Dl8d1syWS4Qr3+hUg
+   KLLTG7GcywH8GxrRq6LKtDjvIqxyP4TJTq9j65BqXyyxJRaVMucFCEX8V
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="397801796"
+X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
+   d="scan'208";a="397801796"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 11:49:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="774064431"
+X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
+   d="scan'208";a="774064431"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2023 11:49:12 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDVED-000L4t-22;
+	Wed, 13 Dec 2023 19:49:09 +0000
+Date: Thu, 14 Dec 2023 03:48:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Selvin Xavier <selvin.xavier@broadcom.com>, leon@kernel.org,
+	jgg@ziepe.ca
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-rdma@vger.kernel.org,
+	Selvin Xavier <selvin.xavier@broadcom.com>
+Subject: Re: [PATCH for-next 2/2] RDMA/bnxt_re: Share a page to expose per CQ
+ info with userspace
+Message-ID: <202312140331.djKEJ9zR-lkp@intel.com>
+References: <1702438411-23530-3-git-send-email-selvin.xavier@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+In-Reply-To: <1702438411-23530-3-git-send-email-selvin.xavier@broadcom.com>
 
-On Wed, Dec 13, 2023 at 05:01:07PM +0800, Wang wrote:
-> On 2023/12/13 16:48, Dan Li wrote:
-> > + Likun
-> >
-> > On Tue, 28 Mar 2023 at 06:18, Sami Tolvanen <samitolvanen@google.com> wrote:
-> >> On Mon, Mar 27, 2023 at 2:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >>> On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
-> >>>
-> >>>> In the compiler part[4], most of the content is the same as Sami's
-> >>>> implementation[3], except for some minor differences, mainly including:
-> >>>>
-> >>>> 1. The function typeid is calculated differently and it is difficult
-> >>>> to be consistent.
-> >>> This means there is an effective ABI break between the compilers, which
-> >>> is sad :-( Is there really nothing to be done about this?
-> >> I agree, this would be unfortunate, and would also be a compatibility
-> >> issue with rustc where there's ongoing work to support
-> >> clang-compatible CFI type hashes:
-> >>
-> >> https://github.com/rust-lang/rust/pull/105452
-> >>
-> >> Sami
-> 
-> 
-> Hi Peter and Sami
-> 
-> I am Dan Li's colleague, and I will take over and continue the work of CFI.
+Hi Selvin,
 
-Welcome; this is great news! :) Thanks for picking up the work.
+kernel test robot noticed the following build warnings:
 
-> 
-> Regarding the issue of gcc cfi type id being compatible with clang, we 
-> have analyzed and verified:
-> 
-> 1. clang uses Mangling defined in Itanium C++ ABI to encode the function 
-> prototype, and uses the encoding result as input to generate cfi type id;
-> 2. Currently, gcc only implements mangling for the C++ compiler, and the 
-> function prototype coding generated by these interfaces is compatible 
-> with clang, but gcc's c compiler does not support mangling.;
-> 
-> Adding mangling to gcc's c compiler is a huge and difficult task，because 
-> we have to refactor the mangling of C++, splitting it into basic 
-> mangling and language specific mangling, and adding support for the c 
-> language which requires a deep understanding of the compiler and 
-> language processing parts.
-> 
-> And for the kernel cfi, I suggest separating type compatibility from CFI 
-> basic functions. Type compatibility is independent from CFI basic 
-> funcitons and should be dealt with under another topic. Should we focus 
-> on the main issus of cfi, and  let it work first on linux kernel, and 
-> left the compatible issue to be solved later?
+[auto build test WARNING on rdma/for-next]
+[also build test WARNING on next-20231213]
+[cannot apply to linus/master v6.7-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If you mean keeping the hashes identical between Clang/LLVM and GCC,
-I think this is going to be a requirement due to adding Rust to the
-build environment (which uses the LLVM mangling and hashing).
+url:    https://github.com/intel-lab-lkp/linux/commits/Selvin-Xavier/RDMA-bnxt_re-Add-UAPI-to-share-a-page-with-user-space/20231213-115222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+patch link:    https://lore.kernel.org/r/1702438411-23530-3-git-send-email-selvin.xavier%40broadcom.com
+patch subject: [PATCH for-next 2/2] RDMA/bnxt_re: Share a page to expose per CQ info with userspace
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231214/202312140331.djKEJ9zR-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231214/202312140331.djKEJ9zR-lkp@intel.com/reproduce)
 
-FWIW, I think the subset of type mangling needed isn't the entirely C++
-language spec, so it shouldn't be hard to add this to GCC.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312140331.djKEJ9zR-lkp@intel.com/
 
--Kees
+All warnings (new ones prefixed by >>):
+
+>> drivers/infiniband/hw/bnxt_re/ib_verbs.c:4236:20: warning: no previous prototype for function 'bnxt_re_search_for_cq' [-Wmissing-prototypes]
+   struct bnxt_re_cq *bnxt_re_search_for_cq(struct bnxt_re_dev *rdev, u32 cq_id)
+                      ^
+   drivers/infiniband/hw/bnxt_re/ib_verbs.c:4236:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct bnxt_re_cq *bnxt_re_search_for_cq(struct bnxt_re_dev *rdev, u32 cq_id)
+   ^
+   static 
+   drivers/infiniband/hw/bnxt_re/ib_verbs.c:4473:30: warning: variable 'cctx' set but not used [-Wunused-but-set-variable]
+           struct bnxt_qplib_chip_ctx *cctx;
+                                       ^
+>> drivers/infiniband/hw/bnxt_re/ib_verbs.c:4510:7: warning: variable 'addr' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case BNXT_RE_SRQ_TOGGLE_MEM:
+                ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/bnxt_re/ib_verbs.c:4517:42: note: uninitialized use occurs here
+           entry = bnxt_re_mmap_entry_insert(uctx, addr, mmap_flag, &mem_offset);
+                                                   ^~~~
+   drivers/infiniband/hw/bnxt_re/ib_verbs.c:4481:10: note: initialize the variable 'addr' to silence this warning
+           u64 addr;
+                   ^
+                    = 0
+>> drivers/infiniband/hw/bnxt_re/ib_verbs.c:4510:7: warning: variable 'mmap_flag' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case BNXT_RE_SRQ_TOGGLE_MEM:
+                ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/bnxt_re/ib_verbs.c:4517:48: note: uninitialized use occurs here
+           entry = bnxt_re_mmap_entry_insert(uctx, addr, mmap_flag, &mem_offset);
+                                                         ^~~~~~~~~
+   drivers/infiniband/hw/bnxt_re/ib_verbs.c:4472:2: note: variable 'mmap_flag' is declared here
+           enum bnxt_re_mmap_flag mmap_flag;
+           ^
+   4 warnings generated.
+
+
+vim +/bnxt_re_search_for_cq +4236 drivers/infiniband/hw/bnxt_re/ib_verbs.c
+
+  4235	
+> 4236	struct bnxt_re_cq *bnxt_re_search_for_cq(struct bnxt_re_dev *rdev, u32 cq_id)
+  4237	{
+  4238		struct bnxt_re_cq *cq = NULL, *tmp_cq;
+  4239	
+  4240		hash_for_each_possible(rdev->cq_hash, tmp_cq, hash_entry, cq_id) {
+  4241			if (tmp_cq->qplib_cq.id == cq_id) {
+  4242				cq = tmp_cq;
+  4243				break;
+  4244			}
+  4245		}
+  4246		return cq;
+  4247	}
+  4248	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
