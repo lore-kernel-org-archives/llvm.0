@@ -1,52 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649F110EA;
-	Wed, 13 Dec 2023 01:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A88BA28;
+	Wed, 13 Dec 2023 05:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VIxaAWvB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hEXyEv+M"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702432383; x=1733968383;
+  t=1702443614; x=1733979614;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vOD639SEH38rqVLAvQsG8+duD14pLGfWQv7GhTo/BAM=;
-  b=VIxaAWvB7AHhEwf1bkFCaDhfTJ/w+WgTtfWh84BqmPZyoMXqOG+Fri2G
-   ic+ICLdHPkiSoEk4d3FTGM9tYTQL1961J4996euCWWWyY4W3Htu8iFZ2M
-   NXO4X66xSzoLnNPIxQldzfBHfcOaADKOARTJVK9dh1c7oMEcHLFc4sgh8
-   d9dEOOlX8BoahFAEWahOwjhjCYP88CliIcwOkO/BjA0Rd/4pvmItNh3pF
-   obNYXXXhxT7xVwwqBsaT8zG1BPp/JWqfdTr2Nze4/X3gRTb5Q4KhhsJ/q
-   4IWJ7kU6dkxwSAyWNDjbjO4pABeMzqlelokqMPTivpOx6KyVavgqlxSQb
+  bh=E2++cigaU5epJz8MvyaCLgexIN/en3jBO7RKWMnmda8=;
+  b=hEXyEv+MaRQonEHyWV7MFR+NRwEiNjGZ/fgTwWHn6+P6o7OC+c29qq4t
+   QRHdIIXDVQGFq/rOWDIh1Gohh21ZMkAlJKmx/63PHfq7M9vu16yNRJWl7
+   YIuF5teDr2pybOWWprndqqLJ8TAdFeitA/7iYfW9dgi+75GkE3kdfHWOr
+   8yBiENT4LWSn1FbaqL2iEaNHdLI//7416ZlC6Jj1cBONRp8vnDhJqD/Zi
+   CPCeZW75VLqu6KQUWg5pBxSKE7iEIOyqcO4phj1VKnd0kA70Ee3YD+dMe
+   2FeSa2JNLOccugsJ/Dgv6zOG1UjjLKhP0/r2L2dw1vu0HNUhNhyqyp9Ar
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="374407363"
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="374407363"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 17:52:47 -0800
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="8289895"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="8289895"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 21:00:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="749923851"
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="749923851"
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="1105181391"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="1105181391"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 12 Dec 2023 17:52:43 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 12 Dec 2023 21:00:07 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rDEQU-000Jyp-2Q;
-	Wed, 13 Dec 2023 01:52:42 +0000
-Date: Wed, 13 Dec 2023 09:52:25 +0800
+	id 1rDHLp-000K5V-2Q;
+	Wed, 13 Dec 2023 05:00:05 +0000
+Date: Wed, 13 Dec 2023 12:59:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>, adrian.hunter@intel.com,
-	ulf.hansson@linaro.org
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	David Epping <david.epping@missinglinkelectronics.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Harini Katakam <harini.katakam@amd.com>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Victor Shih <victor.shih@genesyslogic.com.tw>,
-	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mmc: sdhci-pci-gli: GL9750: Mask rootport's replay timer
- timeout during suspend
-Message-ID: <202312130937.AU6tt2Ik-lkp@intel.com>
-References: <20231212141029.239235-1-kai.heng.feng@canonical.com>
+	netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v5 3/3] net: phy: add support for PHY package
+ MMD read/write
+Message-ID: <202312131208.HLapuT6A-lkp@intel.com>
+References: <20231212123743.29829-3-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,70 +65,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231212141029.239235-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20231212123743.29829-3-ansuelsmth@gmail.com>
 
-Hi Kai-Heng,
+Hi Christian,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.7-rc5 next-20231212]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/mmc-sdhci-pci-gli-GL9750-Mask-rootport-s-replay-timer-timeout-during-suspend/20231212-221223
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231212141029.239235-1-kai.heng.feng%40canonical.com
-patch subject: [PATCH] mmc: sdhci-pci-gli: GL9750: Mask rootport's replay timer timeout during suspend
-config: arm64-randconfig-002-20231213 (https://download.01.org/0day-ci/archive/20231213/202312130937.AU6tt2Ik-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312130937.AU6tt2Ik-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-phy-restructure-__phy_write-read_mmd-to-helper-and-phydev-user/20231212-203921
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231212123743.29829-3-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH v5 3/3] net: phy: add support for PHY package MMD read/write
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231213/202312131208.HLapuT6A-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312131208.HLapuT6A-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312130937.AU6tt2Ik-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312131208.HLapuT6A-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/mmc/host/sdhci-pci-gli.c:1437:26: error: no member named 'aer_cap' in 'struct pci_dev'
-    1437 |         if (!parent || !parent->aer_cap)
-         |                         ~~~~~~  ^
-   drivers/mmc/host/sdhci-pci-gli.c:1440:40: error: no member named 'aer_cap' in 'struct pci_dev'
-    1440 |         pci_read_config_dword(parent, parent->aer_cap + PCI_ERR_COR_MASK, &val);
-         |                                       ~~~~~~  ^
-   drivers/mmc/host/sdhci-pci-gli.c:1442:41: error: no member named 'aer_cap' in 'struct pci_dev'
-    1442 |         pci_write_config_dword(parent, parent->aer_cap + PCI_ERR_COR_MASK, val);
-         |                                        ~~~~~~  ^
-   drivers/mmc/host/sdhci-pci-gli.c:1450:26: error: no member named 'aer_cap' in 'struct pci_dev'
-    1450 |         if (!parent || !parent->aer_cap)
-         |                         ~~~~~~  ^
-   drivers/mmc/host/sdhci-pci-gli.c:1453:38: error: no member named 'aer_cap' in 'struct pci_dev'
-    1453 |         pci_read_config_dword(pdev, parent->aer_cap + PCI_ERR_COR_MASK, &val);
-         |                                     ~~~~~~  ^
-   drivers/mmc/host/sdhci-pci-gli.c:1455:39: error: no member named 'aer_cap' in 'struct pci_dev'
-    1455 |         pci_write_config_dword(pdev, parent->aer_cap + PCI_ERR_COR_MASK, val);
-         |                                      ~~~~~~  ^
-   6 errors generated.
+>> drivers/net/phy/phy-core.c:777: warning: expecting prototype for __phy_package_write_mmd(). Prototype was for phy_package_write_mmd() instead
 
 
-vim +1437 drivers/mmc/host/sdhci-pci-gli.c
+vim +777 drivers/net/phy/phy-core.c
 
-  1431	
-  1432	static void mask_replay_timer_timeout(struct pci_dev *pdev)
-  1433	{
-  1434		struct pci_dev *parent = pci_upstream_bridge(pdev);
-  1435		u32 val;
-  1436	
-> 1437		if (!parent || !parent->aer_cap)
-  1438			return;
-  1439	
-  1440		pci_read_config_dword(parent, parent->aer_cap + PCI_ERR_COR_MASK, &val);
-  1441		val |= PCI_ERR_COR_REP_TIMER;
-  1442		pci_write_config_dword(parent, parent->aer_cap + PCI_ERR_COR_MASK, val);
-  1443	}
-  1444	
+   757	
+   758	/**
+   759	 * __phy_package_write_mmd - write MMD reg relative to PHY package base addr
+   760	 * @phydev: The phy_device struct
+   761	 * @addr_offset: The offset to be added to PHY package base_addr
+   762	 * @devad: The MMD to write to
+   763	 * @regnum: The register on the MMD to write
+   764	 * @val: value to write to @regnum
+   765	 *
+   766	 * Convenience helper for writing a register of an MMD on a given PHY
+   767	 * using the PHY package base address. The base address is added to
+   768	 * the addr_offset value.
+   769	 *
+   770	 * Same calling rules as for phy_write();
+   771	 *
+   772	 * NOTE: It's assumed that the entire PHY package is either C22 or C45.
+   773	 */
+   774	int phy_package_write_mmd(struct phy_device *phydev,
+   775				  unsigned int addr_offset, int devad,
+   776				  u32 regnum, u16 val)
+ > 777	{
+   778		struct phy_package_shared *shared = phydev->shared;
+   779		int addr = shared->base_addr + addr_offset;
+   780		int ret;
+   781	
+   782		if (addr >= PHY_MAX_ADDR)
+   783			return -EIO;
+   784	
+   785		if (regnum > (u16)~0 || devad > 32)
+   786			return -EINVAL;
+   787	
+   788		phy_lock_mdio_bus(phydev);
+   789		ret = mmd_phy_write(phydev->mdio.bus, addr, phydev->is_c45, devad,
+   790				    regnum, val);
+   791		phy_unlock_mdio_bus(phydev);
+   792	
+   793		return ret;
+   794	}
+   795	EXPORT_SYMBOL(phy_package_write_mmd);
+   796	
 
 -- 
 0-DAY CI Kernel Test Service
