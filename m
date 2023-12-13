@@ -1,130 +1,76 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E07B2111F
-	for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 09:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B44122313;
+	Wed, 13 Dec 2023 10:06:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ClCGkiUO"
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id E19386CF;
-	Wed, 13 Dec 2023 10:57:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1702461477;
-	bh=JoJj/ykH0cPZRaBJ01vpWhfVB89teGr3YCkf7ZkjkBM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ClCGkiUOsI5Xe9NfB+qY7rWUtusoLoTo4VtEjyCcz47GrfEFzJFLdDzHqs6bRtfuS
-	 q7pBJh8iWxmS/m2HMLS+kRWE2HxA7t/5o1whiv48zLIWRxx8Yzh4B3B94qQNKwCJVG
-	 vJegemlkP9RF1WOweAqa15z1Tp97GQsLMNTSqYMw=
-Date: Wed, 13 Dec 2023 11:58:49 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] media: i2c: mt9m114: add CONFIG_COMMON_CLK dependency
-Message-ID: <20231213095849.GA2191@pendragon.ideasonboard.com>
-References: <20231212213625.3653558-1-arnd@kernel.org>
- <ZXlmnmGepRnMyNfr@kekkonen.localdomain>
- <97a826ab-cd68-4494-884e-f7bd512a7bef@app.fastmail.com>
- <ZXl0-8VgzF3YH18i@kekkonen.localdomain>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jnLC+47Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702462012; x=1733998012;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Wt46aTT4AdfL9P9gCxMraEWkImaA94dGPx8Sl9GvCmc=;
+  b=jnLC+47QEKmUm9A0goGtT3du6jf09/Q37wWyae5IpNdPnVo4e61FuU21
+   re+dnOKFRXTQnwIRuiRpB0+q+Tx6Mobu7PES0w1C4kf7k3w+Xj1TsnSbo
+   pF0GLWBak1XT1tEpU4XYAvXieWJMeYbwmQMNUHIVYzXmEQK2DczqCB5rM
+   b8BTxdJZLWyxodvwAs109fjdQjUFA6FYqG/g/zIZv4ZFlvLN7oryuGQ5C
+   09dXyzXMWcdmfOS/Rph4/hg+HsNRu+44mPeoGGsOAmIER0/544H0GX498
+   iRmn9WXuv/9XDySnu0sR4hJBbTcISZOBDKDj1IF0FcVuQuAx628yeAFxP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="2114171"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="2114171"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 02:06:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="1105261279"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="1105261279"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Dec 2023 02:06:48 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDM8G-000KNY-2N;
+	Wed, 13 Dec 2023 10:06:29 +0000
+Date: Wed, 13 Dec 2023 18:05:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 7115/7300] ld.lld: error: undefined symbol:
+ __bad_xchg
+Message-ID: <202312131823.hO2NP34f-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZXl0-8VgzF3YH18i@kekkonen.localdomain>
 
-On Wed, Dec 13, 2023 at 09:10:19AM +0000, Sakari Ailus wrote:
-> Hi Arnd,
-> 
-> On Wed, Dec 13, 2023 at 09:39:01AM +0100, Arnd Bergmann wrote:
-> > On Wed, Dec 13, 2023, at 09:09, Sakari Ailus wrote:
-> > > On Tue, Dec 12, 2023 at 10:18:04PM +0100, Arnd Bergmann wrote:
-> > >> From: Arnd Bergmann <arnd@arndb.de>
-> > >> 
-> > >> With clang-16, building without COMMON_CLK triggers a range check on
-> > >> udelay() because of a constant division-by-zero calculation:
-> > >> 
-> > >> ld.lld: error: undefined symbol: __bad_udelay
-> > >> >>> referenced by mt9m114.c
-> > >> >>>               drivers/media/i2c/mt9m114.o:(mt9m114_power_on) in archive vmlinux.a
-> > >> 
-> > >> Avoid this by adding a Kconfig dependency that avoids the broken build.
-> > >
-> > > This sounds like an odd way to fix an issue with udelay(). On which arch
-> > > does it happen? Wouldn't it be better to fix the udelay() problem in the
-> > > source?
-> > >
-> > > A quick check reveals there are about 2400 files using udelay.
-> > 
-> > I observed this on arm, but same sanity check exists on arc, m68k,
-> > microblaze, nios2 and xtensa, all of which try to discourage
-> > overly large constant delays busy loops. On Arm that limit is
-> > any delay of over 2 miliseconds, at which time a driver should
-> > generally use either msleep() to avoid a busy-loop, or (in extreme
-> > cases) mdelay().
-> > 
-> > I first tried to rewrite the mt9m114_power_on() function to
-> > have an upper bound on the udelay, but that didn't avoid the
-> > link error because it still got into undefined C. Disabling
-> > the driver without COMMON_CLK seemed easier since it already
-> > fails to probe if mt9m114_clk_init() runs into a zero clk.
-> > 
-> > Maybe we could just fall back to the soft reset when the
-> > clock rate is unknown?
-> 
-> The datasheet says the input clock range is between 6 MHz and 54 MHz. We
-> could check that, and return an error if it's not in the range. The rate is
-> needed for other reasons, too, and the sensor is unlikely to work if it's
-> (more than little) off.
-> 
-> I wonder if this could address the Clang 16 issue, too? I'd replace
-> udelay() with fsleep() in any case, and at the very least Clang should be
-> happy with this.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   48e8992e33abf054bcc0bb2e77b2d43bb899212e
+commit: 4a0d72ea10ce156eb2269358fa38528f62a96081 [7115/7300] afs: Overhaul invalidation handling to better support RO volumes
+config: arm-randconfig-003-20231213 (https://download.01.org/0day-ci/archive/20231213/202312131823.hO2NP34f-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312131823.hO2NP34f-lkp@intel.com/reproduce)
 
-I'm fine with both of those changes.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312131823.hO2NP34f-lkp@intel.com/
 
-> > diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
-> > index 0a22f328981d..88a67568edf8 100644
-> > --- a/drivers/media/i2c/mt9m114.c
-> > +++ b/drivers/media/i2c/mt9m114.c
-> > @@ -2092,6 +2092,7 @@ static void mt9m114_ifp_cleanup(struct mt9m114 *sensor)
-> >  
-> >  static int mt9m114_power_on(struct mt9m114 *sensor)
-> >  {
-> > +       long freq;
-> >         int ret;
-> >  
-> >         /* Enable power and clocks. */
-> > @@ -2104,9 +2105,10 @@ static int mt9m114_power_on(struct mt9m114 *sensor)
-> >         if (ret < 0)
-> >                 goto error_regulator;
-> >  
-> > +       freq = clk_get_rate(sensor->clk);
-> > +
-> >         /* Perform a hard reset if available, or a soft reset otherwise. */
-> > -       if (sensor->reset) {
-> > -               long freq = clk_get_rate(sensor->clk);
-> > +       if (sensor->reset && freq) {
-> >                 unsigned int duration;
-> >  
-> >                 /*
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __bad_xchg
+   >>> referenced by callback.c
+   >>>               fs/afs/callback.o:(__afs_break_callback) in archive vmlinux.a
+   >>> referenced by rotate.c
+   >>>               fs/afs/rotate.o:(afs_select_fileserver) in archive vmlinux.a
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
