@@ -1,137 +1,91 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E862EAE0
-	for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 14:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E51EC15;
-	Wed, 13 Dec 2023 06:46:09 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.42.80])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC3A93F738;
-	Wed, 13 Dec 2023 06:45:13 -0800 (PST)
-Date: Wed, 13 Dec 2023 14:45:10 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Wang <wanglikun@lixiang.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
-	Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-	Brian Gerst <brgerst@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Changbin Du <changbin.du@intel.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Frederic Weisbecker <frederic@kernel.org>, gcc-patches@gcc.gnu.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Marco Elver <elver@google.com>, Mark Brown <broonie@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Roth <michael.roth@amd.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Richard Sandiford <richard.sandiford@arm.com>,
-	Song Liu <song@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
-	Will Deacon <will@kernel.org>, x86@kernel.org,
-	Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
-	Zhen Lei <thunder.leizhen@huawei.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, Dan Li <ashimida.1990@gmail.com>
-Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-Message-ID: <ZXnDdooZv0of64ZK@FVFF77S0Q05N>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <20230325085416.95191-1-ashimida.1990@gmail.com>
- <20230327093016.GB4253@hirez.programming.kicks-ass.net>
- <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
- <CAE+Z0PFZaa2bwtfY5P7ZDYH4JjMxKpJgqz0m+KJ_ks4dctzAKA@mail.gmail.com>
- <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB8D2EB0B;
+	Wed, 13 Dec 2023 14:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u0xvyQQG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAE3C433CD;
+	Wed, 13 Dec 2023 14:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702479085;
+	bh=YN2Pi9j4nXI2YgjQFpbxAPwojU9mF9Ce9D2uzS7p5oI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=u0xvyQQG/8zoQ+DyU7J67Rt7Z66v47wiT7TsBD7R/RwnJ6uDkrLjvsK1R+eZUsF+o
+	 Gcd9xiu0nZ+1asUa+demSVp6obViBF4R1Wte7jQ9+nmHnhr98WlNOec922nFmN4INg
+	 tz03SIlIQXkRak830Sd7GIWIgj9BgvBt5NdKIHPn2gPu9+avudg1KQWDqwaPvBowvR
+	 DN0wnbLsKyP8hhC3Ij2N1M/cgvCWCGM4E2eCdnQJEiNxwfFdHZDrpz9y3ZvdM3kJI9
+	 FYlgVBO0+jOAccPxzZKbRDIk2X4pnNm2jooR55DWZZpptO0cg7zd0QzzivSLB3BHPl
+	 KvNpHBCnCVGSg==
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a1ec87a7631so625402366b.0;
+        Wed, 13 Dec 2023 06:51:25 -0800 (PST)
+X-Gm-Message-State: AOJu0YyWh6GalgthAo0J9AGl97rvZfIsPuDJXC5iCmjv2jlX2U+4O1xX
+	TAxia+gqY/hV/Xm8a0PekSpeuAQHYH+Q3uTyw3Y=
+X-Google-Smtp-Source: AGHT+IHHbxlb+2p+oWmwWz9N1M5MlIVMBv6ta1Pihyc/8OevnH+Tc4BVUehL8EHk1fQgb58btAbkNyf7aPZDLhSrTtM=
+X-Received: by 2002:a17:907:2d26:b0:a18:615c:66ff with SMTP id
+ gs38-20020a1709072d2600b00a18615c66ffmr6081043ejc.49.1702479084073; Wed, 13
+ Dec 2023 06:51:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+References: <20231212214536.175327-1-arnd@kernel.org> <CAJF2gTQckdn=uDfeLKu7wceOq7LT1KGJUT0vARMr9zUy3xc4xw@mail.gmail.com>
+ <42f522b5-6406-4bef-8180-3a431ee884a5@app.fastmail.com>
+In-Reply-To: <42f522b5-6406-4bef-8180-3a431ee884a5@app.fastmail.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Wed, 13 Dec 2023 22:51:12 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ2jCKO4my9pNvEDyf0R+Cro8ZE_RgvWi-ts8pD6vJ=Nw@mail.gmail.com>
+Message-ID: <CAJF2gTQ2jCKO4my9pNvEDyf0R+Cro8ZE_RgvWi-ts8pD6vJ=Nw@mail.gmail.com>
+Subject: Re: [PATCH] leds: sun50i-a100: avoid division-by-zero warning
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@kernel.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Palmer Dabbelt <palmer@rivosinc.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-leds@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 05:01:07PM +0800, Wang wrote:
-> On 2023/12/13 16:48, Dan Li wrote:
-> > + Likun
+On Wed, Dec 13, 2023 at 2:32=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Wed, Dec 13, 2023, at 02:26, Guo Ren wrote:
+> > On Wed, Dec 13, 2023 at 5:45=E2=80=AFAM Arnd Bergmann <arnd@kernel.org>=
+ wrote:
+> >>  {
+> >>         const struct sun50i_a100_ledc_timing *timing =3D &priv->timing=
+;
+> >>         unsigned long mod_freq =3D clk_get_rate(priv->mod_clk);
+> >> -       u32 cycle_ns =3D NSEC_PER_SEC / mod_freq;
+> >> +       u32 cycle_ns;
+> >>         u32 control;
+> >>
+> >> +       if (!mod_freq)
+> >> +               return;
+> >> +
+> > Shall we need err_disable_bus_clk?
 > >
-> > On Tue, 28 Mar 2023 at 06:18, Sami Tolvanen wrote:
-> >> On Mon, Mar 27, 2023 at 2:30 AM Peter Zijlstra wrote:
-> >>> On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
-> >>>
-> >>>> In the compiler part[4], most of the content is the same as Sami's
-> >>>> implementation[3], except for some minor differences, mainly including:
-> >>>>
-> >>>> 1. The function typeid is calculated differently and it is difficult
-> >>>> to be consistent.
-> >>> This means there is an effective ABI break between the compilers, which
-> >>> is sad :-( Is there really nothing to be done about this?
-> >> I agree, this would be unfortunate, and would also be a compatibility
-> >> issue with rustc where there's ongoing work to support
-> >> clang-compatible CFI type hashes:
-> >>
-> >> https://github.com/rust-lang/rust/pull/105452
-> >>
-> >> Sami
-> 
-> Hi Peter and Sami
-> 
-> I am Dan Li's colleague, and I will take over and continue the work of CFI.
-> 
-> Regarding the issue of gcc cfi type id being compatible with clang, we
-> have analyzed and verified:
-> 
-> 1. clang uses Mangling defined in Itanium C++ ABI to encode the function
-> prototype, and uses the encoding result as input to generate cfi type id;
-> 2. Currently, gcc only implements mangling for the C++ compiler, and the
-> function prototype coding generated by these interfaces is compatible
-> with clang, but gcc's c compiler does not support mangling.;
-> 
-> Adding mangling to gcc's c compiler is a huge and difficult task，because
-> we have to refactor the mangling of C++, splitting it into basic
-> mangling and language specific mangling, and adding support for the c
-> language which requires a deep understanding of the compiler and
-> language processing parts.
-> 
-> And for the kernel cfi, I suggest separating type compatibility from CFI
-> basic functions. Type compatibility is independent from CFI basic
-> funcitons and should be dealt with under another topic. Should we focus
-> on the main issus of cfi, and  let it work first on linux kernel, and
-> left the compatible issue to be solved later?
+> > + static int sun50i_a100_ledc_set_timing(struct sun50i_a100_ledc *priv)
+> > - static void sun50i_a100_ledc_set_timing(struct sun50i_a100_ledc *priv=
+)
+>
+> I'm not worried about it too much, as there is already an error check
+> on priv->mod_clk being unavailable during initialization. The case that
+> the warning is about is just for build-testing on architectures that
+> don't even use COMMON_CLK.
+Okay
 
-I'm not sure what you're suggesting here exactly, do you mean to add a type ID
-scheme that's incompatible with clang, leaving everything else the same? If so,
-what sort of scheme are you proposing?
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-It seems unfortunate to have a different scheme, but IIUC we expect all kernel
-objects to be built with the same compiler.
+>
+>      Arnd
 
-Mark.
+
+
+--=20
+Best Regards
+ Guo Ren
