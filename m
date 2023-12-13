@@ -1,48 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A1EC8E7;
-	Wed, 13 Dec 2023 06:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9450C17995;
+	Wed, 13 Dec 2023 07:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kOSWMkg5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="THR9wNEr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702449526; x=1733985526;
+  t=1702451518; x=1733987518;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rUEmHFlk0kFUdPoiOVV5DamsPmtNx/DjaXS8UdBouoY=;
-  b=kOSWMkg5cSwXXJrd9wPaU3IdCry+uYGPHwG17dXf6wQIyjR9vmc+W1oa
-   3FSfRiy39dnqw3NsMxe9Nueh+WbSFsf2MwWoUZXAEjM70nJFCPPYY5h5q
-   MIZw5zmjm5Eg7umM7xWG53uSAn4KeOplDNWNS5f8tMdtcb6Mm6URI24Lt
-   ZNh8Mr9mCWBKcPpfFpTZj9DY7Fu2ZbWpIuzMnsh1wZNm2tF6P+T1FXTN+
-   hUr+V2MynFTi8fANj5H+Z10M8QpVLLKPJ60AJzzow1Gejl/J81BQZczIy
-   J9dNxbI+sOkQAhql4tH5lwIWHzDXk8qFzMn2MvHYbFrA9uxMQ90UURnMg
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="374426495"
+  bh=0wv2VcEiu8/TZx7vPxNTFFPQFsqN1ltE7M9wiYMdAhw=;
+  b=THR9wNEr13dJPhHBORSB0+NjfV0a88gakv5fCjSSPf63bnj+qTbtKeIX
+   jv2qcZc2hkMkfebwMIUjP9BkNJ4IazHlpxnLWUoqt41WqVd9RFiJsdVtU
+   LMKYoT98HkPsOdPUfhw4U9pTAx1o3X3l4M9DkPGqn/z/ZiQi2K5WNNix/
+   c2vIafQtpJsvrPZAiU3xI2OaSESvLpLCUhsxqrSsgp8DxPc8LZZ0qe09C
+   2XK6IXEFbFujw5Lu1A4QKQ2BloNXp7IZoxBf2tHSo9mSEKgC3/7qOf7GT
+   NsYytkLyTmnLQBPO+tcq+dZ74TPWyXUd5W7UrPX7P3RSq1R1az46nH1t3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="8309966"
 X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="374426495"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 22:38:45 -0800
+   d="scan'208";a="8309966"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 23:11:57 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="839741420"
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="947078302"
 X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="839741420"
+   d="scan'208";a="947078302"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Dec 2023 22:38:44 -0800
+  by orsmga005.jf.intel.com with ESMTP; 12 Dec 2023 23:11:55 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rDItG-000KAt-14;
-	Wed, 13 Dec 2023 06:38:42 +0000
-Date: Wed, 13 Dec 2023 14:38:27 +0800
+	id 1rDJPM-000KBj-0Y;
+	Wed, 13 Dec 2023 07:11:52 +0000
+Date: Wed, 13 Dec 2023 15:11:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: [trace:ring-buffer-multi-page-subbufers 30/31]
- kernel/trace/trace.c:7385:40: warning: variable 'buffer' is uninitialized
- when used here
-Message-ID: <202312131437.7Fi2rLZa-lkp@intel.com>
+	linux-gpio@vger.kernel.org
+Subject: [linusw-gpio:b4/gpio-descriptors-sound-misc 5/5]
+ sound/soc/tegra/tegra20_ac97.c:46:18: warning: incompatible integer to
+ pointer conversion passing 'int' to parameter of type 'struct gpio_desc *'
+Message-ID: <202312131517.ksxVggg2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,76 +52,118 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace ring-buffer-multi-page-subbufers
-head:   cf9d2732932a8071635166afd4fd282889edc056
-commit: 51ea7c0e6660f763f8bc81abe1ad737594d0f88d [30/31] tracing: Increase size of trace_marker_raw to max ring buffer entry
-config: arm-randconfig-001-20231213 (https://download.01.org/0day-ci/archive/20231213/202312131437.7Fi2rLZa-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312131437.7Fi2rLZa-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git b4/gpio-descriptors-sound-misc
+head:   cbde31b95f12d0b3059938194b704f40cdd55540
+commit: cbde31b95f12d0b3059938194b704f40cdd55540 [5/5] ASoC: tegra: tegra20_ac97: Convert to use GPIO descriptors
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231213/202312131517.ksxVggg2-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312131517.ksxVggg2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312131437.7Fi2rLZa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312131517.ksxVggg2-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/trace/trace.c:7385:40: warning: variable 'buffer' is uninitialized when used here [-Wuninitialized]
-    7385 |         if (size > ring_buffer_max_event_size(buffer))
-         |                                               ^~~~~~
-   kernel/trace/trace.c:7363:29: note: initialize the variable 'buffer' to silence this warning
-    7363 |         struct trace_buffer *buffer;
-         |                                    ^
-         |                                     = NULL
-   In file included from kernel/trace/trace.c:8929:
-   kernel/trace/trace_selftest.c:605:6: warning: variable 'len' set but not used [-Wunused-but-set-variable]
-     605 |         int len;
-         |             ^
-   2 warnings generated.
+>> sound/soc/tegra/tegra20_ac97.c:46:18: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct gpio_desc *' [-Wint-conversion]
+           gpiod_set_value(workdata->reset_gpio, 1);
+                           ^~~~~~~~~~~~~~~~~~~~
+   include/linux/gpio/consumer.h:122:40: note: passing argument to parameter 'desc' here
+   void gpiod_set_value(struct gpio_desc *desc, int value);
+                                          ^
+   sound/soc/tegra/tegra20_ac97.c:49:18: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct gpio_desc *' [-Wint-conversion]
+           gpiod_set_value(workdata->reset_gpio, 0);
+                           ^~~~~~~~~~~~~~~~~~~~
+   include/linux/gpio/consumer.h:122:40: note: passing argument to parameter 'desc' here
+   void gpiod_set_value(struct gpio_desc *desc, int value);
+                                          ^
+   sound/soc/tegra/tegra20_ac97.c:72:25: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct gpio_desc *' [-Wint-conversion]
+           gpiod_direction_output(workdata->sync_gpio, 1);
+                                  ^~~~~~~~~~~~~~~~~~~
+   include/linux/gpio/consumer.h:111:46: note: passing argument to parameter 'desc' here
+   int gpiod_direction_output(struct gpio_desc *desc, int value);
+                                                ^
+   sound/soc/tegra/tegra20_ac97.c:74:18: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct gpio_desc *' [-Wint-conversion]
+           gpiod_set_value(workdata->sync_gpio, 0);
+                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/gpio/consumer.h:122:40: note: passing argument to parameter 'desc' here
+   void gpiod_set_value(struct gpio_desc *desc, int value);
+                                          ^
+>> sound/soc/tegra/tegra20_ac97.c:345:19: warning: incompatible pointer to integer conversion assigning to 'int' from 'struct gpio_desc *' [-Wint-conversion]
+           ac97->reset_gpio = devm_gpiod_get(&pdev->dev,
+                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/tegra/tegra20_ac97.c:348:13: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+           if (IS_ERR(ac97->reset_gpio)) {
+                      ^~~~~~~~~~~~~~~~
+   include/linux/err.h:59:60: note: passing argument to parameter 'ptr' here
+   static inline bool __must_check IS_ERR(__force const void *ptr)
+                                                              ^
+   sound/soc/tegra/tegra20_ac97.c:349:17: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+                   ret = PTR_ERR(ac97->reset_gpio);
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
+   static inline long __must_check PTR_ERR(__force const void *ptr)
+                                                               ^
+   sound/soc/tegra/tegra20_ac97.c:353:26: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct gpio_desc *' [-Wint-conversion]
+           gpiod_set_consumer_name(ac97->reset_gpio, "codec-reset");
+                                   ^~~~~~~~~~~~~~~~
+   include/linux/gpio/consumer.h:168:47: note: passing argument to parameter 'desc' here
+   int gpiod_set_consumer_name(struct gpio_desc *desc, const char *name);
+                                                 ^
+   sound/soc/tegra/tegra20_ac97.c:355:18: warning: incompatible pointer to integer conversion assigning to 'int' from 'struct gpio_desc *' [-Wint-conversion]
+           ac97->sync_gpio = devm_gpiod_get(&pdev->dev,
+                           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/tegra/tegra20_ac97.c:358:13: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+           if (IS_ERR(ac97->sync_gpio)) {
+                      ^~~~~~~~~~~~~~~
+   include/linux/err.h:59:60: note: passing argument to parameter 'ptr' here
+   static inline bool __must_check IS_ERR(__force const void *ptr)
+                                                              ^
+   sound/soc/tegra/tegra20_ac97.c:359:17: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+                   ret = PTR_ERR(ac97->sync_gpio);
+                                 ^~~~~~~~~~~~~~~
+   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
+   static inline long __must_check PTR_ERR(__force const void *ptr)
+                                                               ^
+   sound/soc/tegra/tegra20_ac97.c:363:26: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct gpio_desc *' [-Wint-conversion]
+           gpiod_set_consumer_name(ac97->sync_gpio, "codec-sync");
+                                   ^~~~~~~~~~~~~~~
+   include/linux/gpio/consumer.h:168:47: note: passing argument to parameter 'desc' here
+   int gpiod_set_consumer_name(struct gpio_desc *desc, const char *name);
+                                                 ^
+   12 warnings generated.
 
 
-vim +/buffer +7385 kernel/trace/trace.c
+vim +46 sound/soc/tegra/tegra20_ac97.c
 
-  7370	
-  7371		if (tracing_disabled)
-  7372			return -EINVAL;
-  7373	
-  7374		if (!(tr->trace_flags & TRACE_ITER_MARKERS))
-  7375			return -EINVAL;
-  7376	
-  7377		/* The marker must at least have a tag id */
-  7378		if (cnt < sizeof(unsigned int))
-  7379			return -EINVAL;
-  7380	
-  7381		size = sizeof(*entry) + cnt;
-  7382		if (cnt < FAULT_SIZE_ID)
-  7383			size += FAULT_SIZE_ID - cnt;
-  7384	
-> 7385		if (size > ring_buffer_max_event_size(buffer))
-  7386			return -EINVAL;
-  7387	
-  7388		buffer = tr->array_buffer.buffer;
-  7389		event = __trace_buffer_lock_reserve(buffer, TRACE_RAW_DATA, size,
-  7390						    tracing_gen_ctx());
-  7391		if (!event)
-  7392			/* Ring buffer disabled, return as if not open for write */
-  7393			return -EBADF;
-  7394	
-  7395		entry = ring_buffer_event_data(event);
-  7396	
-  7397		len = __copy_from_user_inatomic(&entry->id, ubuf, cnt);
-  7398		if (len) {
-  7399			entry->id = -1;
-  7400			memcpy(&entry->buf, FAULTED_STR, FAULTED_SIZE);
-  7401			written = -EFAULT;
-  7402		} else
-  7403			written = cnt;
-  7404	
-  7405		__buffer_unlock_commit(buffer, event);
-  7406	
-  7407		return written;
-  7408	}
-  7409	
+    35	
+    36	static void tegra20_ac97_codec_reset(struct snd_ac97 *ac97)
+    37	{
+    38		u32 readback;
+    39		unsigned long timeout;
+    40	
+    41		/*
+    42		 * The reset line is not driven by DAC pad group, have to toggle GPIO.
+    43		 * The RESET line is active low but this is abstracted by the GPIO
+    44		 * library.
+    45		 */
+  > 46		gpiod_set_value(workdata->reset_gpio, 1);
+    47		udelay(2);
+    48	
+    49		gpiod_set_value(workdata->reset_gpio, 0);
+    50		udelay(2);
+    51	
+    52		timeout = jiffies + msecs_to_jiffies(100);
+    53	
+    54		do {
+    55			regmap_read(workdata->regmap, TEGRA20_AC97_STATUS1, &readback);
+    56			if (readback & TEGRA20_AC97_STATUS1_CODEC1_RDY)
+    57				break;
+    58			usleep_range(1000, 2000);
+    59		} while (!time_after(jiffies, timeout));
+    60	}
+    61	
 
 -- 
 0-DAY CI Kernel Test Service
