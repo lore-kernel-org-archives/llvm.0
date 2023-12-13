@@ -1,141 +1,188 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68E82555E
-	for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 12:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDAD826AFD;
+	Wed, 13 Dec 2023 13:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Hwp6d+Ej"
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2BC6666F;
-	Wed, 13 Dec 2023 13:08:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1702469296;
-	bh=jqhRjEL97tn66XG6waeuYNlSKAzpHyL1g4+7ALb8P6Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hwp6d+EjAYB0geF68t4m6zgcSbUiP+a93h4cqFqIC3Vzcbm2w9XuqWaArOoceoFlp
-	 ISYe3zCw05UnSJi4G81SOMUr8xC/qfJqhBMNag4gvwnMMiO5gQbVLGBxIIIGSs537k
-	 HKFJpw8ki6RmYvuiLZW89YKvP8LMgmmqd1+lIOVc=
-Date: Wed, 13 Dec 2023 14:09:09 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [v2] media: i2c: mt9m114: use fsleep() in place of
- udelay()
-Message-ID: <20231213120909.GC769@pendragon.ideasonboard.com>
-References: <20231213112322.1655236-1-arnd@kernel.org>
- <5c5647d5-b389-4d71-9062-3a9921212079@ideasonboard.com>
- <20231213114812.GB769@pendragon.ideasonboard.com>
- <0722393c-8107-4a8f-b3ab-1bbb347a6f1b@ideasonboard.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="B55tobPW";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CjI5e0gF";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="wTb1cv0C";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="MW5UH5ML"
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E22192253E;
+	Wed, 13 Dec 2023 13:00:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1702472450;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Fc6oe/XMIOwA5ngedPo5oLgqOy7OCBLCUg0DlfK38Lk=;
+	b=B55tobPWLFHdIJlmeI69FNLLnCE7Vw+40W+lZLgeNLcLKu/cFRCzGxfjbO5+QQzdVnncYB
+	ko+Vg89dv1fg0uoWPOVz9vRb7qY1AL8GOaxl30lJcSSK7jdU9YE3KkbcGjpzQfrAeTqhjS
+	AOJKzaV4CNsZFMK51IybJ/I+Ta7dpGk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1702472450;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Fc6oe/XMIOwA5ngedPo5oLgqOy7OCBLCUg0DlfK38Lk=;
+	b=CjI5e0gFQcqBTK2Bl+EdnsJR+aQ83XB6Qo/X+peRT2oMBET1lqbIEaCHvHeF2rYHDDvZ7O
+	ld3n6jrp9JvqDpAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1702472449;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Fc6oe/XMIOwA5ngedPo5oLgqOy7OCBLCUg0DlfK38Lk=;
+	b=wTb1cv0Csna/1yuml5biItuDVVtSajSrMHCBtTOzeYjnD3qFZvt0r3lplQSnPwFfgOYY+G
+	tZJYVmQr27fiWGAm3z43B/Fci7iu+pn2NFWuggpycFgySZKh6w1WIMHsV/QW0M/LwRie1r
+	oGAxzc+TwFMdR92ftayfyuiZgAcm/+o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1702472449;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Fc6oe/XMIOwA5ngedPo5oLgqOy7OCBLCUg0DlfK38Lk=;
+	b=MW5UH5MLm6+1w4wF+IN4ty4fdtoXToNEAhSUV9UGyTVn96vJcS7rgKsj5YFZPLPBl/fjdF
+	OxpI9LEC0+lD1QAg==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id BC3C313240;
+	Wed, 13 Dec 2023 13:00:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id LG69LQGreWVeJAAAn2gu4w
+	(envelope-from <dsterba@suse.cz>); Wed, 13 Dec 2023 13:00:49 +0000
+Date: Wed, 13 Dec 2023 13:53:58 +0100
+From: David Sterba <dsterba@suse.cz>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Josef Bacik <josef@toxicpanda.com>, julia.lawall@inria.fr,
+	clm@fb.com, dsterba@suse.com, baptiste.lepers@gmail.com
+Subject: Re: [paulmck-rcu:frederic.2023.12.08a 29/37]
+ fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329'
+ declared with 'error' attribute: Need native word sized stores/loads for
+ atomicity.
+Message-ID: <20231213125358.GB3001@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <202312091837.cKaPw0Tf-lkp@intel.com>
+ <0487d7cc-b906-4a4a-b284-9c79700b4ede@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0722393c-8107-4a8f-b3ab-1bbb347a6f1b@ideasonboard.com>
+In-Reply-To: <0487d7cc-b906-4a4a-b284-9c79700b4ede@paulmck-laptop>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Level: 
+X-Spam-Score: -1.50
+X-Spam-Flag: NO
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -1.50
+X-Spamd-Result: default: False [-1.50 / 50.00];
+	 ARC_NA(0.00)[];
+	 HAS_REPLYTO(0.30)[dsterba@suse.cz];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 REPLYTO_ADDR_EQ_FROM(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 BAYES_HAM(-3.00)[99.99%];
+	 RCPT_COUNT_SEVEN(0.00)[10];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[intel.com,lists.linux.dev,vger.kernel.org,toxicpanda.com,inria.fr,fb.com,suse.com,gmail.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Flag: NO
 
-On Wed, Dec 13, 2023 at 01:56:48PM +0200, Tomi Valkeinen wrote:
-> On 13/12/2023 13:48, Laurent Pinchart wrote:
-> > On Wed, Dec 13, 2023 at 01:40:54PM +0200, Tomi Valkeinen wrote:
-> >> On 13/12/2023 13:23, Arnd Bergmann wrote:
-> >>> From: Arnd Bergmann <arnd@arndb.de>
-> >>>
-> >>> With clang-16, building without COMMON_CLK triggers a range check on
-> >>> udelay() because of a constant division-by-zero calculation:
-> >>>
-> >>> ld.lld: error: undefined symbol: __bad_udelay
-> >>>>>> referenced by mt9m114.c
-> >>>>>>                 drivers/media/i2c/mt9m114.o:(mt9m114_power_on) in archive vmlinux.a
-> >>>
-> >>> In this configuration, the driver already fails to probe, before
-> >>> this function gets called, so it's enough to suppress the assertion.
-> >>>
-> >>> Do this by using fsleep(), which turns long delays into sleep() calls
-> >>> in place of the link failure.
-> >>>
-> >>> This is probably a good idea regardless to avoid overly long dynamic
-> >>> udelay() calls on a slow clock.
-> >>>
-> >>> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> >>> Fixes: 24d756e914fc ("media: i2c: Add driver for onsemi MT9M114 camera sensor")
-> >>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >>> ---
-> >>>    drivers/media/i2c/mt9m114.c | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
-> >>> index 0a22f328981d..68adaecaf481 100644
-> >>> --- a/drivers/media/i2c/mt9m114.c
-> >>> +++ b/drivers/media/i2c/mt9m114.c
-> >>> @@ -2116,7 +2116,7 @@ static int mt9m114_power_on(struct mt9m114 *sensor)
-> >>>    		duration = DIV_ROUND_UP(2 * 50 * 1000000, freq);
-> >>>    
-> >>>    		gpiod_set_value(sensor->reset, 1);
-> >>> -		udelay(duration);
-> >>> +		fsleep(duration);
-> >>>    		gpiod_set_value(sensor->reset, 0);
-> >>>    	} else {
-> >>>    		/*
-> >>
-> >> I think this is fine, so:
-> >>
-> >> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >>
-> >> But: If we don't have COMMON_CLK (or rather, I think, HAVE_CLK), the
-> >> freq will be zero at compile time. So won't the compiler give a warning
-> >> for the DIV_ROUND_UP() call?
-> >>
-> >> Interestingly, for me, this doesn't give a div-by-zero warning:
-> >>
-> >> 	int x;
-> >> 	int y = 0;
-> >> 	x = DIV_ROUND_UP(10, y);
-> >>
-> >> but this does:
-> >>
-> >> 	int x;
-> >> 	const int y = 0;
-> >> 	x = DIV_ROUND_UP(10, y);
-> >>
-> >> And looks like this gives the warning too:
-> >>
-> >> 	int x;
-> >> 	const int y = 0;
-> >> 	if (y)
-> >> 		x = DIV_ROUND_UP(10, y);
-> >>
-> >> So, I think, the code in the driver could fail to compile at some later
-> >> point, if the compiler warnings are improved (?), or if someone adds a
-> >> 'const' in front of 'long freq = clk_get_rate(sensor->clk);' line.
-> >>
-> >> Maybe worry about that if it actually happens =).
+On Sat, Dec 09, 2023 at 07:51:30AM -0800, Paul E. McKenney wrote:
+> On Sat, Dec 09, 2023 at 06:20:37PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git frederic.2023.12.08a
+> > head:   37843b5f561a08ae899fb791eeeb5abd992eabe2
+> > commit: 7dd87072d40809e26503f04b79d63290288dbbac [29/37] btrfs: Adjust ->last_trans ordering in btrfs_record_root_in_trans()
+> > config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/reproduce)
 > > 
-> > Maybe :-) I would be tempted to make VIDEO_CAMERA_SENSOR depend on
-> > COMMON_CLK.
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202312091837.cKaPw0Tf-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
+> >    warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
+> >    warning: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Wunknown-warning-option]
+> > >> fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+> >      496 |         if (smp_load_acquire(&root->last_trans) == trans->transid && /* ^^^ */
+> >          |             ^
 > 
-> I think HAVE_CLK would be more correct.
+> Ooooh!!!  :-/
+> 
+> From what I can see, the current code can tear this load on 32-bit
+> systems, which can result in bad comparisons and then in failure to wait
+> for a partially complete transaction.
+> 
+> So is btrfs actually supported on 32-bit systems?  If not, would the
+> following patch be appropriate?
 
-Indeed. Only arch/m68k (for Coldfire), arch/mips (for BCM63xx and
-Lantiq) and arch/sh (for pre-DT platforms) still make use of
-HAVE_LEGACY_CLK. It takes a long time to address the last users of a
-legacy API, but it seems we could get there one day.
+There are limitations on 32bit systems, eg. due to shorter inode numbers
+(ino_t is unsigned long) and that radix-tree/xarray does support only
+unsigned long keys, while we have 64bit identifiers for inodes or tree
+roots.
 
--- 
-Regards,
+So far we support that and dropping it completely is I think a big deal,
+like with any possibly used feature. What I've seen there are NAS boxes
+with low power ARM that are 32bit.
 
-Laurent Pinchart
+> If btrfs is to be supported on 32-bit systems, from what I can see some
+> major surgery is required, even if a 32-bit counter is wrap-safe for
+> this particular type of transaction.  (But SSDs?  In-memory btrfs
+> filesystems?)
+
+We won't probably do any major surgery to support 32bit systems.
+
+> 
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
+> index 4fb925e8c981..4d56158c34f9 100644
+> --- a/fs/btrfs/Kconfig
+> +++ b/fs/btrfs/Kconfig
+> @@ -19,6 +19,7 @@ config BTRFS_FS
+>  	select RAID6_PQ
+>  	select XOR_BLOCKS
+>  	depends on PAGE_SIZE_LESS_THAN_256KB
+> +	depends on 64BIT
+
+Can we keep the current inefficient smp_* barriers instead of dropping
+the whole 32bit support as an alternative. If the smp_load_acquire are
+better but not strictly necessary for the correctness (from the barriers
+POV) I'd suggest to leave it as-is. We can put comments in case somebody
+wants to optimize it in the future again.
