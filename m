@@ -1,83 +1,174 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B103225743
-	for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 18:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48D963B9
+	for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 19:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DauCO2JK"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5e2e4c88c39so8552827b3.1
-        for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 10:44:08 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kDXhnqbL"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-286d6c95b8cso7184026a91.0
+        for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 11:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702493047; x=1703097847; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l2LwifpOgXej1dsHd1KHJezfiI8h2hD12gEj1McMU+k=;
-        b=DauCO2JKZ5KTgRQFKbcYttRoW0MqViGQcJhW/EM3b0voi3NlPchUYjEgV688kd6xqL
-         F2TeywGZYUKJev2ftPyOgkciSU0fZBgkM9KKjscs0+MrN057rKdM9P2/NbwNxJrJflXo
-         cTxpIGIfbazWUPbMHGXhXX3YjQhdURah/Tdy9tCRH0TAOv8rusYuYfdIGXYEkHKdE9DU
-         tUwnkLs2+yNd6U+cFOeGgLzSn3+V6kBoV5jAAxmC/SjJRLQzPD7Hu0YUKgPXybdvMQ8I
-         0yGoId2OeyAk8jUs0fNJ7v3o8GiuZoNrfuqgffydUHvoK7uE9zNaFmNWYDZx9aCkhppM
-         CxVA==
+        d=chromium.org; s=google; t=1702496107; x=1703100907; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
+        b=kDXhnqbL7tvYolrjj+Po4Xyb/jr5Lxx2QTyWKEj0g6+IgF1Z7kr9Eqw+5Bid8h6W//
+         G4QhakwwedGLnnV2ZRmUTG7mbM9wHDhJHkFJUM55C6q510O3CiS3VqhjChHD4aX5/xiZ
+         bUxqWLMvrYa2J1yM8hBMbmelM7rCy46YYdS9M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702493047; x=1703097847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l2LwifpOgXej1dsHd1KHJezfiI8h2hD12gEj1McMU+k=;
-        b=IxFeGuH++rmJENOwj4qRQISD3noWGKzTJ5YUGom0cXlHhF7z7AvpHrJkB5to+/djuT
-         AlZDyixJ3n4iYrewu2ChNDbtCqMMpCkD6PEh0hN6GiWL85eSty1+xtnjLIKCwjeyIDCK
-         udUDBOP4FHr7GepU0Yg5B03y5Kj0g9Vz+ba2uDD7pZBrdQuQIMwlsCC+HhXuC9p6t4db
-         MuHHKZBFOXVRm7quvuMy7DBTKg63X9aWaLA2XWChmr+3i7UhMxkmrD+ya2VorjXdHjXv
-         +CXAmDRhT3Yh19+tUhd/MahATDsExks6YTWpKLgyvjgdixFOXABKmzyMeR96oK2Okg+m
-         qnYg==
-X-Gm-Message-State: AOJu0YxHDHLCuXR4Qtt3St6TIfitzPll0RHM8fz+QWWkj8uq9M6C9IaM
-	etA/7BCNJep1Hb1hjwT79nrhkAbx6FJV1jf9OJQ=
-X-Google-Smtp-Source: AGHT+IFd3K+SY9c18W79MkJVqB2q5KL7a71Eye1yZ2Yet4HXlhA9PPM7Cwa5kQtzyj27Aii8A7ptyLqtukiMGfgBB+A=
-X-Received: by 2002:a81:8415:0:b0:5e2:f017:24b5 with SMTP id
- u21-20020a818415000000b005e2f01724b5mr989270ywf.21.1702493047731; Wed, 13 Dec
- 2023 10:44:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702496107; x=1703100907;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
+        b=HNYqgCts8iVFS67uvBWYDuZmv2k+QoYrlHcNnIODK/VxDL1P9VMskcmXkcrsaBTbu1
+         I2CkH15AFwcTiKQH8p8x8zz3rqO5w5Gfee5jdglBaYGxPXIHnS1Cpgr9UhAwfnN9nvN5
+         iRpHPTKhpUmtD4nZ5R9i3IjY8OimN9toRLcgN2XgCTEvKFFVruyzhqh8OdF8fV0C9Sla
+         jj96R+b80aY9JyKiBAegikSRbpk5XdeZH4Osg5IzaSzOBGp55NINotZkEp+IaiE0zfSF
+         +VIem4MGWwAwv0K1CxyMAYHKBGnPFtrnXbhJtPVCYmvG6M5vBGTuSRFnW6TvzLpfyyvj
+         LOEg==
+X-Gm-Message-State: AOJu0YyQC5xQe2gZ5cgtg5w+ujMPyOzjuDxl2n07BI3ZWs2ewsjk0kI/
+	Q9mUEewfMIs/PhBoJvpdFz4dKw==
+X-Google-Smtp-Source: AGHT+IFC5O0ogGHSFN9U4m/5EgPgHuUXB72Ex5/NV/wuzLf+pctjLmlVG1zZQc96G2B2P4iPB/5lmA==
+X-Received: by 2002:a17:90a:6d88:b0:286:6cc1:3f17 with SMTP id a8-20020a17090a6d8800b002866cc13f17mr7490686pjk.78.1702496107255;
+        Wed, 13 Dec 2023 11:35:07 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id e16-20020a17090301d000b001d337dcc5afsm3718083plh.30.2023.12.13.11.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 11:35:06 -0800 (PST)
+Date: Wed, 13 Dec 2023 11:35:06 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Wang <wanglikun@lixiang.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Aaron Tomlin <atomlin@redhat.com>,
+	Alexander Potapenko <glider@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
+	Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
+	Brian Gerst <brgerst@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Changbin Du <changbin.du@intel.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Frederic Weisbecker <frederic@kernel.org>, gcc-patches@gcc.gnu.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Juergen Gross <jgross@suse.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Marco Elver <elver@google.com>, Mark Brown <broonie@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michael Roth <michael.roth@amd.com>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Richard Sandiford <richard.sandiford@arm.com>,
+	Song Liu <song@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
+	Will Deacon <will@kernel.org>, x86@kernel.org,
+	Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
+	Zhen Lei <thunder.leizhen@huawei.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, Dan Li <ashimida.1990@gmail.com>
+Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
+Message-ID: <202312131132.639E8802B@keescook>
+References: <20221219061758.23321-1-ashimida.1990@gmail.com>
+ <20230325085416.95191-1-ashimida.1990@gmail.com>
+ <20230327093016.GB4253@hirez.programming.kicks-ass.net>
+ <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
+ <CAE+Z0PFZaa2bwtfY5P7ZDYH4JjMxKpJgqz0m+KJ_ks4dctzAKA@mail.gmail.com>
+ <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231031201945.1412345-1-mmaurer@google.com>
-In-Reply-To: <20231031201945.1412345-1-mmaurer@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 13 Dec 2023 19:43:56 +0100
-Message-ID: <CANiq72mmx01ow3fN_8uaWFOw1wDZ2DfN2ZgEA5O+412gzeYCCg@mail.gmail.com>
-Subject: Re: [PATCH] rust: Ignore preserve-most functions
-To: Matthew Maurer <mmaurer@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
 
-On Tue, Oct 31, 2023 at 9:20=E2=80=AFPM Matthew Maurer <mmaurer@google.com>=
- wrote:
->
-> Neither bindgen nor Rust know about the preserve-most calling
-> convention, and Clang describes it as unstable. Since we aren't using
-> functions with this calling convention from Rust, blocklist them.
->
-> These functions are only added to the build when list hardening is
-> enabled, which is likely why others didn't notice this yet.
->
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
+On Wed, Dec 13, 2023 at 05:01:07PM +0800, Wang wrote:
+> On 2023/12/13 16:48, Dan Li wrote:
+> > + Likun
+> >
+> > On Tue, 28 Mar 2023 at 06:18, Sami Tolvanen <samitolvanen@google.com> wrote:
+> >> On Mon, Mar 27, 2023 at 2:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >>> On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
+> >>>
+> >>>> In the compiler part[4], most of the content is the same as Sami's
+> >>>> implementation[3], except for some minor differences, mainly including:
+> >>>>
+> >>>> 1. The function typeid is calculated differently and it is difficult
+> >>>> to be consistent.
+> >>> This means there is an effective ABI break between the compilers, which
+> >>> is sad :-( Is there really nothing to be done about this?
+> >> I agree, this would be unfortunate, and would also be a compatibility
+> >> issue with rustc where there's ongoing work to support
+> >> clang-compatible CFI type hashes:
+> >>
+> >> https://github.com/rust-lang/rust/pull/105452
+> >>
+> >> Sami
+> 
+> 
+> Hi Peter and Sami
+> 
+> I am Dan Li's colleague, and I will take over and continue the work of CFI.
 
-Applied to `rust-next` (used Markdown for consistency with the other
-comments in the file).
+Welcome; this is great news! :) Thanks for picking up the work.
 
-Thanks everyone!
+> 
+> Regarding the issue of gcc cfi type id being compatible with clang, we 
+> have analyzed and verified:
+> 
+> 1. clang uses Mangling defined in Itanium C++ ABI to encode the function 
+> prototype, and uses the encoding result as input to generate cfi type id;
+> 2. Currently, gcc only implements mangling for the C++ compiler, and the 
+> function prototype coding generated by these interfaces is compatible 
+> with clang, but gcc's c compiler does not support mangling.;
+> 
+> Adding mangling to gcc's c compiler is a huge and difficult task，because 
+> we have to refactor the mangling of C++, splitting it into basic 
+> mangling and language specific mangling, and adding support for the c 
+> language which requires a deep understanding of the compiler and 
+> language processing parts.
+> 
+> And for the kernel cfi, I suggest separating type compatibility from CFI 
+> basic functions. Type compatibility is independent from CFI basic 
+> funcitons and should be dealt with under another topic. Should we focus 
+> on the main issus of cfi, and  let it work first on linux kernel, and 
+> left the compatible issue to be solved later?
 
-Cheers,
-Miguel
+If you mean keeping the hashes identical between Clang/LLVM and GCC,
+I think this is going to be a requirement due to adding Rust to the
+build environment (which uses the LLVM mangling and hashing).
+
+FWIW, I think the subset of type mangling needed isn't the entirely C++
+language spec, so it shouldn't be hard to add this to GCC.
+
+-Kees
+
+-- 
+Kees Cook
