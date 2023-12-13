@@ -1,40 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5F12D780;
-	Wed, 13 Dec 2023 14:56:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E27A85366
+	for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 15:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hrd+mK15"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35478C433C8;
-	Wed, 13 Dec 2023 14:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702479398;
-	bh=RbqO8lhLpHDZIavrq3v7GldwAkkZy4gcb11Zs9mg9yQ=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=Hrd+mK15OXrooHgeQnsU/Nu8j0gvSF67u3rJRkr1x7BgKkJsKCMjnx94V7Hxi3Qu1
-	 6LpfA/+/pAB1NJcwCRXFVfK8Sn/EMlmLr7IuZEdkl/pARDfRiVsv/FedIrC3RQqBFL
-	 7N8ZRtfPmy4b+VvdQoS2RTupHG856iiRvGQbA+Qi2fsFKNWi+6s7VfjS9GqbbGv7x4
-	 1znbv5REK8/qZEvQfKI+Im1Q1y8srpTP9g7IFJJFSggyNhOCk3I9n1lfI8IB+Io+7c
-	 MOeS8gqCKcwLx+OLmyxMziV0y01viOoBHusbBcFhqUcoSreV/NQanCnypVYYmJ/aB7
-	 szsxbI3LQoD3Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id B381DCE105C; Wed, 13 Dec 2023 06:56:37 -0800 (PST)
-Date: Wed, 13 Dec 2023 06:56:37 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: David Sterba <dsterba@suse.cz>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Josef Bacik <josef@toxicpanda.com>, julia.lawall@inria.fr,
-	clm@fb.com, dsterba@suse.com, baptiste.lepers@gmail.com
+	dkim=pass (2048-bit key) header.d=toxicpanda-com.20230601.gappssmtp.com header.i=@toxicpanda-com.20230601.gappssmtp.com header.b="05hiwRB7"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-425e63955f6so11494981cf.3
+        for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 07:54:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20230601.gappssmtp.com; s=20230601; t=1702482882; x=1703087682; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M7xTC+G+f1Iqi6sFQ87hq+iglTPOBVKIoeWAacl0tD0=;
+        b=05hiwRB7IfVJ++XlQpADuTksCz0S4GkXxdQL7gHmBUSsT76w9FMMVn6R8EKLIl5jdV
+         isK8HJubv4fvclN5lxOiuAoL3p4Jxpcxwb64tOi4Ob3mzXjSf+NZ0JarWrDnWPcN3m8E
+         xuy9hWS4dW7Ta10kmsIWNKbknbY1oDvx2XznmQ1hWhTpUR8LfpSp1bebAF/GH4GY+f4H
+         nfip/kFGGyD8hM7nksAeE7veo2e7+B0Min2Y+dzpvOeOf4A9TLzbUtI3QXPAHFD/X/ig
+         dd1PzqD0ONxe3AWM3acc7fOnaSQikrUky6FMcUf/kjtdRj00OB42ga18fwf6WV/LpHCj
+         wnFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702482882; x=1703087682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M7xTC+G+f1Iqi6sFQ87hq+iglTPOBVKIoeWAacl0tD0=;
+        b=FutHKJfCeQftJL2QWbcs9nJtJx9gQ86TZeTX/flUqGqOG7W7W9GoSmV+l+8vnKBRs9
+         cDZ3M9IcUekt0IT9ggklvcQN5MYv4/1kemP5fhkav+JJp3GsfKavzdNogGzkTPigBkBl
+         Gp3nNeL7QN+ZAPU4hm1r3gian+CtW5Zch1DUYo3xrLXxxYfvfj2Ctpy5Ji84gHYAcYpU
+         s68kblv+n+A3p2ft6R0T/9UCdCRNXpa5t6JS3/82aAtOpfNDgMfd7krMlZ/jXvkA0VdN
+         fUlezCH+99XuBWOD6pwTXWP8NX0WYAd17Rm5O3+eJOQRFjXmdHV6248u8fqu4RbeEhMG
+         Ntiw==
+X-Gm-Message-State: AOJu0YwPaFlDEiMax41jpqwnO8aJLJBcYtLbYSPqJ80H+sbaBaV5GqJ0
+	5y0Wn0zvLW3GmWjd34DYMKfyX9xCCVkj0Owlc6g=
+X-Google-Smtp-Source: AGHT+IG2B0lkjDQNo4lCRnssD+LpqnP1aKCB2kir6C9zTlS5+P989aH7cGfGvscvbjJcJVi3ViSdJA==
+X-Received: by 2002:a05:622a:40f:b0:425:4043:50e8 with SMTP id n15-20020a05622a040f00b00425404350e8mr10908966qtx.119.1702482881861;
+        Wed, 13 Dec 2023 07:54:41 -0800 (PST)
+Received: from localhost (076-182-020-124.res.spectrum.com. [76.182.20.124])
+        by smtp.gmail.com with ESMTPSA id o5-20020ac841c5000000b004254355d4dcsm4982048qtm.77.2023.12.13.07.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 07:54:41 -0800 (PST)
+Date: Wed, 13 Dec 2023 10:54:40 -0500
+From: Josef Bacik <josef@toxicpanda.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: David Sterba <dsterba@suse.cz>, kernel test robot <lkp@intel.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, julia.lawall@inria.fr, clm@fb.com,
+	dsterba@suse.com, baptiste.lepers@gmail.com
 Subject: Re: [paulmck-rcu:frederic.2023.12.08a 29/37]
  fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329'
  declared with 'error' attribute: Need native word sized stores/loads for
  atomicity.
-Message-ID: <4c814394-6eab-4aca-96af-43f99fb94c01@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+Message-ID: <20231213155440.GA454379@perftesting>
 References: <202312091837.cKaPw0Tf-lkp@intel.com>
  <0487d7cc-b906-4a4a-b284-9c79700b4ede@paulmck-laptop>
  <20231213125358.GB3001@suse.cz>
+ <4c814394-6eab-4aca-96af-43f99fb94c01@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,93 +65,283 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231213125358.GB3001@suse.cz>
+In-Reply-To: <4c814394-6eab-4aca-96af-43f99fb94c01@paulmck-laptop>
 
-On Wed, Dec 13, 2023 at 01:53:58PM +0100, David Sterba wrote:
-> On Sat, Dec 09, 2023 at 07:51:30AM -0800, Paul E. McKenney wrote:
-> > On Sat, Dec 09, 2023 at 06:20:37PM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git frederic.2023.12.08a
-> > > head:   37843b5f561a08ae899fb791eeeb5abd992eabe2
-> > > commit: 7dd87072d40809e26503f04b79d63290288dbbac [29/37] btrfs: Adjust ->last_trans ordering in btrfs_record_root_in_trans()
-> > > config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/config)
-> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/reproduce)
+On Wed, Dec 13, 2023 at 06:56:37AM -0800, Paul E. McKenney wrote:
+> On Wed, Dec 13, 2023 at 01:53:58PM +0100, David Sterba wrote:
+> > On Sat, Dec 09, 2023 at 07:51:30AM -0800, Paul E. McKenney wrote:
+> > > On Sat, Dec 09, 2023 at 06:20:37PM +0800, kernel test robot wrote:
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git frederic.2023.12.08a
+> > > > head:   37843b5f561a08ae899fb791eeeb5abd992eabe2
+> > > > commit: 7dd87072d40809e26503f04b79d63290288dbbac [29/37] btrfs: Adjust ->last_trans ordering in btrfs_record_root_in_trans()
+> > > > config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/config)
+> > > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/reproduce)
+> > > > 
+> > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > > the same patch/commit), kindly add following tags
+> > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202312091837.cKaPw0Tf-lkp@intel.com/
+> > > > 
+> > > > All errors (new ones prefixed by >>):
+> > > > 
+> > > >    warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
+> > > >    warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
+> > > >    warning: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Wunknown-warning-option]
+> > > > >> fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+> > > >      496 |         if (smp_load_acquire(&root->last_trans) == trans->transid && /* ^^^ */
+> > > >          |             ^
 > > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202312091837.cKaPw0Tf-lkp@intel.com/
+> > > Ooooh!!!  :-/
 > > > 
-> > > All errors (new ones prefixed by >>):
+> > > From what I can see, the current code can tear this load on 32-bit
+> > > systems, which can result in bad comparisons and then in failure to wait
+> > > for a partially complete transaction.
 > > > 
-> > >    warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
-> > >    warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
-> > >    warning: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Wunknown-warning-option]
-> > > >> fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-> > >      496 |         if (smp_load_acquire(&root->last_trans) == trans->transid && /* ^^^ */
-> > >          |             ^
+> > > So is btrfs actually supported on 32-bit systems?  If not, would the
+> > > following patch be appropriate?
 > > 
-> > Ooooh!!!  :-/
+> > There are limitations on 32bit systems, eg. due to shorter inode numbers
+> > (ino_t is unsigned long) and that radix-tree/xarray does support only
+> > unsigned long keys, while we have 64bit identifiers for inodes or tree
+> > roots.
 > > 
-> > From what I can see, the current code can tear this load on 32-bit
-> > systems, which can result in bad comparisons and then in failure to wait
-> > for a partially complete transaction.
+> > So far we support that and dropping it completely is I think a big deal,
+> > like with any possibly used feature. What I've seen there are NAS boxes
+> > with low power ARM that are 32bit.
 > > 
-> > So is btrfs actually supported on 32-bit systems?  If not, would the
-> > following patch be appropriate?
-> 
-> There are limitations on 32bit systems, eg. due to shorter inode numbers
-> (ino_t is unsigned long) and that radix-tree/xarray does support only
-> unsigned long keys, while we have 64bit identifiers for inodes or tree
-> roots.
-> 
-> So far we support that and dropping it completely is I think a big deal,
-> like with any possibly used feature. What I've seen there are NAS boxes
-> with low power ARM that are 32bit.
-> 
-> > If btrfs is to be supported on 32-bit systems, from what I can see some
-> > major surgery is required, even if a 32-bit counter is wrap-safe for
-> > this particular type of transaction.  (But SSDs?  In-memory btrfs
-> > filesystems?)
-> 
-> We won't probably do any major surgery to support 32bit systems.
-
-Got it, and thank you for the background!  My takeaway is that 32-bit
-BTRFS must work in the common case, but might have issues on some
-workloads, for example, running out of inode numbers or load tearing.
-
-> > ------------------------------------------------------------------------
+> > > If btrfs is to be supported on 32-bit systems, from what I can see some
+> > > major surgery is required, even if a 32-bit counter is wrap-safe for
+> > > this particular type of transaction.  (But SSDs?  In-memory btrfs
+> > > filesystems?)
 > > 
-> > diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
-> > index 4fb925e8c981..4d56158c34f9 100644
-> > --- a/fs/btrfs/Kconfig
-> > +++ b/fs/btrfs/Kconfig
-> > @@ -19,6 +19,7 @@ config BTRFS_FS
-> >  	select RAID6_PQ
-> >  	select XOR_BLOCKS
-> >  	depends on PAGE_SIZE_LESS_THAN_256KB
-> > +	depends on 64BIT
+> > We won't probably do any major surgery to support 32bit systems.
 > 
-> Can we keep the current inefficient smp_* barriers instead of dropping
-> the whole 32bit support as an alternative. If the smp_load_acquire are
-> better but not strictly necessary for the correctness (from the barriers
-> POV) I'd suggest to leave it as-is. We can put comments in case somebody
-> wants to optimize it in the future again.
+> Got it, and thank you for the background!  My takeaway is that 32-bit
+> BTRFS must work in the common case, but might have issues on some
+> workloads, for example, running out of inode numbers or load tearing.
+> 
+> > > ------------------------------------------------------------------------
+> > > 
+> > > diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
+> > > index 4fb925e8c981..4d56158c34f9 100644
+> > > --- a/fs/btrfs/Kconfig
+> > > +++ b/fs/btrfs/Kconfig
+> > > @@ -19,6 +19,7 @@ config BTRFS_FS
+> > >  	select RAID6_PQ
+> > >  	select XOR_BLOCKS
+> > >  	depends on PAGE_SIZE_LESS_THAN_256KB
+> > > +	depends on 64BIT
+> > 
+> > Can we keep the current inefficient smp_* barriers instead of dropping
+> > the whole 32bit support as an alternative. If the smp_load_acquire are
+> > better but not strictly necessary for the correctness (from the barriers
+> > POV) I'd suggest to leave it as-is. We can put comments in case somebody
+> > wants to optimize it in the future again.
+> 
+> We still have the barrier placement issue, given that smp_rmb() enforces
+> only the ordering of earlier and later loads, correct?  Or am I missing
+> some other ordering constraint that makes all that work?
+> 
+> But I can make each of the current patch's smp_load_acquire() call instead
+> be be a READ_ONCE() followed by an smp_rmb(), the test_bit_acquire()
+> call be test_bit() followed by smp_rmb(), and the smp_store_release()
+> call be an smp_wmb() followed by a WRITE_ONCE().  This provides the needed
+> ordering, bullet-proofs the 64-bit code against compilers, but works on
+> 32-bit systems.  For example, on a 32-bit system the 64-bit READ_ONCE()
+> and WRITE_ONCE() might still be compiled as a pair of 32-bit memory
+> accesses, but they will both be guaranteed to be single memory accesses
+> on 64-bit systems.
+> 
+> Would that work for you guys?
 
-We still have the barrier placement issue, given that smp_rmb() enforces
-only the ordering of earlier and later loads, correct?  Or am I missing
-some other ordering constraint that makes all that work?
+Actually I think we just need to re-work all of this to make it less silly.
+Does this look reasonable to you Paul?  I still have to test it, but I think it
+addresses your concerns and lets us keep 32bit support ;).  Thanks,
 
-But I can make each of the current patch's smp_load_acquire() call instead
-be be a READ_ONCE() followed by an smp_rmb(), the test_bit_acquire()
-call be test_bit() followed by smp_rmb(), and the smp_store_release()
-call be an smp_wmb() followed by a WRITE_ONCE().  This provides the needed
-ordering, bullet-proofs the 64-bit code against compilers, but works on
-32-bit systems.  For example, on a 32-bit system the 64-bit READ_ONCE()
-and WRITE_ONCE() might still be compiled as a pair of 32-bit memory
-accesses, but they will both be guaranteed to be single memory accesses
-on 64-bit systems.
+Josef
 
-Would that work for you guys?
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 13 Dec 2023 10:46:57 -0500
+Subject: [PATCH] btrfs: cleanup how we record roots in the transaction
 
-							Thanx, Paul
+Previously we didn't have a bit field for tracking if a root was
+recorded in the transaction, it was simply an integer on the root.
+Additionally we have the ->last_trans which we record the last
+transaction this root was modified in.  We had various memory barriers
+to attempt to synchronize these two updates so we could avoid taking the
+->reloc_mutex all of the time for transaction starts.
+
+However this code has changed a lot, but the dubious memory ordering has
+remained.  Fix up this code to make it more clear and get rid of the
+memory barriers.  All we're trying to avoid here is constantly taking
+the ->reloc_mutex, so add a new bit to mark that the root has been
+recorded.  If this bit is set then we can skip the expensive step,
+otherwise we have to take the lock and wait.
+
+Add a big comment indicating why we're doing the ordering and locking
+the way we are, and use ->fs_roots_radix_lock as the arbiter of this new
+bit.
+
+This makes the code simpler, removes the memory barriers, and documents
+clearly what we're doing so it's less confusing for future readers.
+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ fs/btrfs/ctree.h       | 11 ++++---
+ fs/btrfs/disk-io.c     |  1 +
+ fs/btrfs/transaction.c | 69 +++++++++++++++++-------------------------
+ 3 files changed, 34 insertions(+), 47 deletions(-)
+
+diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
+index 70e828d33177..eb44cf191863 100644
+--- a/fs/btrfs/ctree.h
++++ b/fs/btrfs/ctree.h
+@@ -90,12 +90,13 @@ struct btrfs_path {
+  */
+ enum {
+ 	/*
+-	 * btrfs_record_root_in_trans is a multi-step process, and it can race
+-	 * with the balancing code.   But the race is very small, and only the
+-	 * first time the root is added to each transaction.  So IN_TRANS_SETUP
+-	 * is used to tell us when more checks are required
++	 * We set this after we've recorded the root in the transaction.  This
++	 * is used to avoid taking the reloc_mutex every time we call
++	 * btrfs_start_transaction(root).  Once the root has been recorded we
++	 * don't have to do the setup work again, and this is cleared on
++	 * transaction commit once we're done with the root.
+ 	 */
+-	BTRFS_ROOT_IN_TRANS_SETUP,
++	BTRFS_ROOT_RECORDED,
+ 
+ 	/*
+ 	 * Set if tree blocks of this root can be shared by other roots.
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index c6907d533fe8..0410fac5f78e 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -4805,6 +4805,7 @@ static void btrfs_free_all_qgroup_pertrans(struct btrfs_fs_info *fs_info)
+ 			radix_tree_tag_clear(&fs_info->fs_roots_radix,
+ 					(unsigned long)root->root_key.objectid,
+ 					BTRFS_ROOT_TRANS_TAG);
++			clear_bit(BTRFS_ROOT_RECORDED, &root->state);
+ 		}
+ 	}
+ 	spin_unlock(&fs_info->fs_roots_radix_lock);
+diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
+index 5b3333ceef04..186089ddac27 100644
+--- a/fs/btrfs/transaction.c
++++ b/fs/btrfs/transaction.c
+@@ -407,54 +407,43 @@ static int record_root_in_trans(struct btrfs_trans_handle *trans,
+ 	int ret = 0;
+ 
+ 	if ((test_bit(BTRFS_ROOT_SHAREABLE, &root->state) &&
+-	    root->last_trans < trans->transid) || force) {
++	     !test_bit(BTRFS_ROOT_RECORDED, &root->state)) || force) {
+ 		WARN_ON(!force && root->commit_root != root->node);
+ 
+ 		/*
+-		 * see below for IN_TRANS_SETUP usage rules
+-		 * we have the reloc mutex held now, so there
+-		 * is only one writer in this function
++		 * We are using ->fs_roots_radix_lock as the ultimate protector
++		 * of BTRFS_ROOT_RECORDED, which means we want to set it once
++		 * we're completely done, so we call btrfs_init_reloc_root()
++		 * first.
++		 *
++		 * This is ok because we are protected here by ->reloc_mutex, so
++		 * in reality we won't ever race and call
++		 * btrfs_init_reloc_root() twice on the same root back to back.
++		 * However if we do it's ok, because again we're protected by
++		 * ->reloc_mutex and the second call will simply update the
++		 * ->last_trans on the reloc root to the current transid, making
++		 * it essentially a no-op.
++		 *
++		 * We're using ->fs_roots_radix_lock here because
++		 * btrfs_drop_snapshot will clear the tag so we don't update the
++		 * root, and we will clear the RECORDED flag there without the
++		 * ->reloc_mutex lock held.  Again this is fine because we won't
++		 * be messing with a dropped root anymore, but for concurrency
++		 * it's best to keep the rules nice and simple.
+ 		 */
+-		set_bit(BTRFS_ROOT_IN_TRANS_SETUP, &root->state);
+-
+-		/* make sure readers find IN_TRANS_SETUP before
+-		 * they find our root->last_trans update
+-		 */
+-		smp_wmb();
++		ret = btrfs_init_reloc_root(trans, root);
+ 
+ 		spin_lock(&fs_info->fs_roots_radix_lock);
+-		if (root->last_trans == trans->transid && !force) {
++		if (test_bit(BTRFS_ROOT_RECORDED, &root->state) && !force) {
+ 			spin_unlock(&fs_info->fs_roots_radix_lock);
+ 			return 0;
+ 		}
+ 		radix_tree_tag_set(&fs_info->fs_roots_radix,
+ 				   (unsigned long)root->root_key.objectid,
+ 				   BTRFS_ROOT_TRANS_TAG);
+-		spin_unlock(&fs_info->fs_roots_radix_lock);
++		set_bit(BTRFS_ROOT_RECORDED, &root->state);
+ 		root->last_trans = trans->transid;
+-
+-		/* this is pretty tricky.  We don't want to
+-		 * take the relocation lock in btrfs_record_root_in_trans
+-		 * unless we're really doing the first setup for this root in
+-		 * this transaction.
+-		 *
+-		 * Normally we'd use root->last_trans as a flag to decide
+-		 * if we want to take the expensive mutex.
+-		 *
+-		 * But, we have to set root->last_trans before we
+-		 * init the relocation root, otherwise, we trip over warnings
+-		 * in ctree.c.  The solution used here is to flag ourselves
+-		 * with root IN_TRANS_SETUP.  When this is 1, we're still
+-		 * fixing up the reloc trees and everyone must wait.
+-		 *
+-		 * When this is zero, they can trust root->last_trans and fly
+-		 * through btrfs_record_root_in_trans without having to take the
+-		 * lock.  smp_wmb() makes sure that all the writes above are
+-		 * done before we pop in the zero below
+-		 */
+-		ret = btrfs_init_reloc_root(trans, root);
+-		smp_mb__before_atomic();
+-		clear_bit(BTRFS_ROOT_IN_TRANS_SETUP, &root->state);
++		spin_unlock(&fs_info->fs_roots_radix_lock);
+ 	}
+ 	return ret;
+ }
+@@ -476,6 +465,7 @@ void btrfs_add_dropped_root(struct btrfs_trans_handle *trans,
+ 	radix_tree_tag_clear(&fs_info->fs_roots_radix,
+ 			     (unsigned long)root->root_key.objectid,
+ 			     BTRFS_ROOT_TRANS_TAG);
++	clear_bit(BTRFS_ROOT_RECORDED, &root->state);
+ 	spin_unlock(&fs_info->fs_roots_radix_lock);
+ }
+ 
+@@ -488,13 +478,7 @@ int btrfs_record_root_in_trans(struct btrfs_trans_handle *trans,
+ 	if (!test_bit(BTRFS_ROOT_SHAREABLE, &root->state))
+ 		return 0;
+ 
+-	/*
+-	 * see record_root_in_trans for comments about IN_TRANS_SETUP usage
+-	 * and barriers
+-	 */
+-	smp_rmb();
+-	if (root->last_trans == trans->transid &&
+-	    !test_bit(BTRFS_ROOT_IN_TRANS_SETUP, &root->state))
++	if (test_bit(BTRFS_ROOT_RECORDED, &root->state))
+ 		return 0;
+ 
+ 	mutex_lock(&fs_info->reloc_mutex);
+@@ -1531,6 +1515,7 @@ static noinline int commit_fs_roots(struct btrfs_trans_handle *trans)
+ 			radix_tree_tag_clear(&fs_info->fs_roots_radix,
+ 					(unsigned long)root->root_key.objectid,
+ 					BTRFS_ROOT_TRANS_TAG);
++			clear_bit(BTRFS_ROOT_RECORDED, &root->state);
+ 			spin_unlock(&fs_info->fs_roots_radix_lock);
+ 
+ 			btrfs_free_log(trans, root);
+-- 
+2.43.0
+
