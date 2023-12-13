@@ -1,91 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB8D2EB0B;
-	Wed, 13 Dec 2023 14:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5F12D780;
+	Wed, 13 Dec 2023 14:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u0xvyQQG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAE3C433CD;
-	Wed, 13 Dec 2023 14:51:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hrd+mK15"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35478C433C8;
+	Wed, 13 Dec 2023 14:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702479085;
-	bh=YN2Pi9j4nXI2YgjQFpbxAPwojU9mF9Ce9D2uzS7p5oI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=u0xvyQQG/8zoQ+DyU7J67Rt7Z66v47wiT7TsBD7R/RwnJ6uDkrLjvsK1R+eZUsF+o
-	 Gcd9xiu0nZ+1asUa+demSVp6obViBF4R1Wte7jQ9+nmHnhr98WlNOec922nFmN4INg
-	 tz03SIlIQXkRak830Sd7GIWIgj9BgvBt5NdKIHPn2gPu9+avudg1KQWDqwaPvBowvR
-	 DN0wnbLsKyP8hhC3Ij2N1M/cgvCWCGM4E2eCdnQJEiNxwfFdHZDrpz9y3ZvdM3kJI9
-	 FYlgVBO0+jOAccPxzZKbRDIk2X4pnNm2jooR55DWZZpptO0cg7zd0QzzivSLB3BHPl
-	 KvNpHBCnCVGSg==
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a1ec87a7631so625402366b.0;
-        Wed, 13 Dec 2023 06:51:25 -0800 (PST)
-X-Gm-Message-State: AOJu0YyWh6GalgthAo0J9AGl97rvZfIsPuDJXC5iCmjv2jlX2U+4O1xX
-	TAxia+gqY/hV/Xm8a0PekSpeuAQHYH+Q3uTyw3Y=
-X-Google-Smtp-Source: AGHT+IHHbxlb+2p+oWmwWz9N1M5MlIVMBv6ta1Pihyc/8OevnH+Tc4BVUehL8EHk1fQgb58btAbkNyf7aPZDLhSrTtM=
-X-Received: by 2002:a17:907:2d26:b0:a18:615c:66ff with SMTP id
- gs38-20020a1709072d2600b00a18615c66ffmr6081043ejc.49.1702479084073; Wed, 13
- Dec 2023 06:51:24 -0800 (PST)
+	s=k20201202; t=1702479398;
+	bh=RbqO8lhLpHDZIavrq3v7GldwAkkZy4gcb11Zs9mg9yQ=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Hrd+mK15OXrooHgeQnsU/Nu8j0gvSF67u3rJRkr1x7BgKkJsKCMjnx94V7Hxi3Qu1
+	 6LpfA/+/pAB1NJcwCRXFVfK8Sn/EMlmLr7IuZEdkl/pARDfRiVsv/FedIrC3RQqBFL
+	 7N8ZRtfPmy4b+VvdQoS2RTupHG856iiRvGQbA+Qi2fsFKNWi+6s7VfjS9GqbbGv7x4
+	 1znbv5REK8/qZEvQfKI+Im1Q1y8srpTP9g7IFJJFSggyNhOCk3I9n1lfI8IB+Io+7c
+	 MOeS8gqCKcwLx+OLmyxMziV0y01viOoBHusbBcFhqUcoSreV/NQanCnypVYYmJ/aB7
+	 szsxbI3LQoD3Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id B381DCE105C; Wed, 13 Dec 2023 06:56:37 -0800 (PST)
+Date: Wed, 13 Dec 2023 06:56:37 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: David Sterba <dsterba@suse.cz>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Josef Bacik <josef@toxicpanda.com>, julia.lawall@inria.fr,
+	clm@fb.com, dsterba@suse.com, baptiste.lepers@gmail.com
+Subject: Re: [paulmck-rcu:frederic.2023.12.08a 29/37]
+ fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329'
+ declared with 'error' attribute: Need native word sized stores/loads for
+ atomicity.
+Message-ID: <4c814394-6eab-4aca-96af-43f99fb94c01@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202312091837.cKaPw0Tf-lkp@intel.com>
+ <0487d7cc-b906-4a4a-b284-9c79700b4ede@paulmck-laptop>
+ <20231213125358.GB3001@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231212214536.175327-1-arnd@kernel.org> <CAJF2gTQckdn=uDfeLKu7wceOq7LT1KGJUT0vARMr9zUy3xc4xw@mail.gmail.com>
- <42f522b5-6406-4bef-8180-3a431ee884a5@app.fastmail.com>
-In-Reply-To: <42f522b5-6406-4bef-8180-3a431ee884a5@app.fastmail.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 13 Dec 2023 22:51:12 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ2jCKO4my9pNvEDyf0R+Cro8ZE_RgvWi-ts8pD6vJ=Nw@mail.gmail.com>
-Message-ID: <CAJF2gTQ2jCKO4my9pNvEDyf0R+Cro8ZE_RgvWi-ts8pD6vJ=Nw@mail.gmail.com>
-Subject: Re: [PATCH] leds: sun50i-a100: avoid division-by-zero warning
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Palmer Dabbelt <palmer@rivosinc.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-leds@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231213125358.GB3001@suse.cz>
 
-On Wed, Dec 13, 2023 at 2:32=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Wed, Dec 13, 2023, at 02:26, Guo Ren wrote:
-> > On Wed, Dec 13, 2023 at 5:45=E2=80=AFAM Arnd Bergmann <arnd@kernel.org>=
- wrote:
-> >>  {
-> >>         const struct sun50i_a100_ledc_timing *timing =3D &priv->timing=
-;
-> >>         unsigned long mod_freq =3D clk_get_rate(priv->mod_clk);
-> >> -       u32 cycle_ns =3D NSEC_PER_SEC / mod_freq;
-> >> +       u32 cycle_ns;
-> >>         u32 control;
-> >>
-> >> +       if (!mod_freq)
-> >> +               return;
-> >> +
-> > Shall we need err_disable_bus_clk?
-> >
-> > + static int sun50i_a100_ledc_set_timing(struct sun50i_a100_ledc *priv)
-> > - static void sun50i_a100_ledc_set_timing(struct sun50i_a100_ledc *priv=
-)
->
-> I'm not worried about it too much, as there is already an error check
-> on priv->mod_clk being unavailable during initialization. The case that
-> the warning is about is just for build-testing on architectures that
-> don't even use COMMON_CLK.
-Okay
+On Wed, Dec 13, 2023 at 01:53:58PM +0100, David Sterba wrote:
+> On Sat, Dec 09, 2023 at 07:51:30AM -0800, Paul E. McKenney wrote:
+> > On Sat, Dec 09, 2023 at 06:20:37PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git frederic.2023.12.08a
+> > > head:   37843b5f561a08ae899fb791eeeb5abd992eabe2
+> > > commit: 7dd87072d40809e26503f04b79d63290288dbbac [29/37] btrfs: Adjust ->last_trans ordering in btrfs_record_root_in_trans()
+> > > config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/config)
+> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312091837.cKaPw0Tf-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202312091837.cKaPw0Tf-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > >    warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
+> > >    warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
+> > >    warning: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Wunknown-warning-option]
+> > > >> fs/btrfs/transaction.c:496:6: error: call to '__compiletime_assert_329' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+> > >      496 |         if (smp_load_acquire(&root->last_trans) == trans->transid && /* ^^^ */
+> > >          |             ^
+> > 
+> > Ooooh!!!  :-/
+> > 
+> > From what I can see, the current code can tear this load on 32-bit
+> > systems, which can result in bad comparisons and then in failure to wait
+> > for a partially complete transaction.
+> > 
+> > So is btrfs actually supported on 32-bit systems?  If not, would the
+> > following patch be appropriate?
+> 
+> There are limitations on 32bit systems, eg. due to shorter inode numbers
+> (ino_t is unsigned long) and that radix-tree/xarray does support only
+> unsigned long keys, while we have 64bit identifiers for inodes or tree
+> roots.
+> 
+> So far we support that and dropping it completely is I think a big deal,
+> like with any possibly used feature. What I've seen there are NAS boxes
+> with low power ARM that are 32bit.
+> 
+> > If btrfs is to be supported on 32-bit systems, from what I can see some
+> > major surgery is required, even if a 32-bit counter is wrap-safe for
+> > this particular type of transaction.  (But SSDs?  In-memory btrfs
+> > filesystems?)
+> 
+> We won't probably do any major surgery to support 32bit systems.
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Got it, and thank you for the background!  My takeaway is that 32-bit
+BTRFS must work in the common case, but might have issues on some
+workloads, for example, running out of inode numbers or load tearing.
 
->
->      Arnd
+> > ------------------------------------------------------------------------
+> > 
+> > diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
+> > index 4fb925e8c981..4d56158c34f9 100644
+> > --- a/fs/btrfs/Kconfig
+> > +++ b/fs/btrfs/Kconfig
+> > @@ -19,6 +19,7 @@ config BTRFS_FS
+> >  	select RAID6_PQ
+> >  	select XOR_BLOCKS
+> >  	depends on PAGE_SIZE_LESS_THAN_256KB
+> > +	depends on 64BIT
+> 
+> Can we keep the current inefficient smp_* barriers instead of dropping
+> the whole 32bit support as an alternative. If the smp_load_acquire are
+> better but not strictly necessary for the correctness (from the barriers
+> POV) I'd suggest to leave it as-is. We can put comments in case somebody
+> wants to optimize it in the future again.
 
+We still have the barrier placement issue, given that smp_rmb() enforces
+only the ordering of earlier and later loads, correct?  Or am I missing
+some other ordering constraint that makes all that work?
 
+But I can make each of the current patch's smp_load_acquire() call instead
+be be a READ_ONCE() followed by an smp_rmb(), the test_bit_acquire()
+call be test_bit() followed by smp_rmb(), and the smp_store_release()
+call be an smp_wmb() followed by a WRITE_ONCE().  This provides the needed
+ordering, bullet-proofs the 64-bit code against compilers, but works on
+32-bit systems.  For example, on a 32-bit system the 64-bit READ_ONCE()
+and WRITE_ONCE() might still be compiled as a pair of 32-bit memory
+accesses, but they will both be guaranteed to be single memory accesses
+on 64-bit systems.
 
---=20
-Best Regards
- Guo Ren
+Would that work for you guys?
+
+							Thanx, Paul
