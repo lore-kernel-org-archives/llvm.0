@@ -1,113 +1,128 @@
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D28FBF3;
-	Wed, 13 Dec 2023 06:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A1EC8E7;
+	Wed, 13 Dec 2023 06:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hH019c6j";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="u93SpR8K"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 766763200A12;
-	Wed, 13 Dec 2023 01:32:36 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 13 Dec 2023 01:32:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1702449155;
-	 x=1702535555; bh=UyW0IXIQPsKnr5ShFX4RHhbev01w7X9e9SS2M4KdIQE=; b=
-	hH019c6jpUpdOMYxII369agbX2xrFFWUJUaaWR1goA1XTcP8iY8lKDebN2WfEJy8
-	ZQmRrgqWPyeWgoTFFjhrJNf/NakQ/5a51j7z9M2fAlpEXGhQI5vooeE5P4Nuz8lj
-	YQmXJpngABQQjVI31iSN+Gsqsvv08e+erezTUDgwuKxyJf1c2rtMjvvRE3dqgOOi
-	QzEeXDNSicFcYeB2H3j4BOtcFJfOIIYkYzH9sKkvS2nQWMl5mOs6IchGZZ3yMVSY
-	NSpva/pHqQ8mhqAB9IORiwUUTed77wLhuP1mWP7o6bOJunElyaTRId1xWBDX0OJG
-	ApdoH4zhydGsVvLMQpo1Ww==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702449155; x=
-	1702535555; bh=UyW0IXIQPsKnr5ShFX4RHhbev01w7X9e9SS2M4KdIQE=; b=u
-	93SpR8K00SNfGyjLScld39ONSX3DLD2VIv2Qc34TVz/T7sO6a4wPlB5kpQOr7zzW
-	IBdy/FlL3Dz9BLUuQljWWcUkY0wc7JaYrVjLcHJqT3Mg0bW2TR6V0XPGSjLOPHH3
-	OWVp3sqPdJqvEHdWN+HiKYtPO3O5lRHUnoe2/ylZTJqoaKY01XOTZ1mrzcoqw1Hd
-	nIeCrk4gXXMV6tKMZba762hF7AsA8UdpdreK7JrFXx/DGFEx6HqN0eAVBwm6U7g/
-	6J+fJrUOW/YPwC7wviLGaRtVgSxaKgGeptAOIIP8Mq7LeEZmAaXWK0J2Ubk42Y1l
-	p9avhRszS3Zv9ce2+G1Gw==
-X-ME-Sender: <xms:A1B5ZRmQQOjQiYtXsOyFHSCj_5SOwkQg5DUtS9uMjiT92_zrjjb4jw>
-    <xme:A1B5Zc3s9bGC3-5rIcxToews5sTaZQXV3fJP9SV37SYZkO1tMq6g4jexcK3ULwvlo
-    jabpvmEpzX8aYOZT-E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudelhedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:A1B5ZXpZ0sIY5ElZOjJ8DiS8OJFHWHkrBszEqIG1LdL_0ysv8kN1ug>
-    <xmx:A1B5ZRkhT31O43qDSo5BoCvMza94RJ5EKx-CC-MP-xYgvN0jKKbttA>
-    <xmx:A1B5Zf1Rvd-6lcG5Gi5GQz2mJQ83TfdYAO9fHFe0P59UEmUwZ7sZRw>
-    <xmx:A1B5ZZNuk9oY7eWdO0hmMScL5EY4D4s53-n3e4BpauCgs4eAGfMKoQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E8939B6008D; Wed, 13 Dec 2023 01:32:34 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1283-g327e3ec917-fm-20231207.002-g327e3ec9
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kOSWMkg5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702449526; x=1733985526;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rUEmHFlk0kFUdPoiOVV5DamsPmtNx/DjaXS8UdBouoY=;
+  b=kOSWMkg5cSwXXJrd9wPaU3IdCry+uYGPHwG17dXf6wQIyjR9vmc+W1oa
+   3FSfRiy39dnqw3NsMxe9Nueh+WbSFsf2MwWoUZXAEjM70nJFCPPYY5h5q
+   MIZw5zmjm5Eg7umM7xWG53uSAn4KeOplDNWNS5f8tMdtcb6Mm6URI24Lt
+   ZNh8Mr9mCWBKcPpfFpTZj9DY7Fu2ZbWpIuzMnsh1wZNm2tF6P+T1FXTN+
+   hUr+V2MynFTi8fANj5H+Z10M8QpVLLKPJ60AJzzow1Gejl/J81BQZczIy
+   J9dNxbI+sOkQAhql4tH5lwIWHzDXk8qFzMn2MvHYbFrA9uxMQ90UURnMg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="374426495"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="374426495"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 22:38:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="839741420"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="839741420"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Dec 2023 22:38:44 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDItG-000KAt-14;
+	Wed, 13 Dec 2023 06:38:42 +0000
+Date: Wed, 13 Dec 2023 14:38:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: [trace:ring-buffer-multi-page-subbufers 30/31]
+ kernel/trace/trace.c:7385:40: warning: variable 'buffer' is uninitialized
+ when used here
+Message-ID: <202312131437.7Fi2rLZa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <42f522b5-6406-4bef-8180-3a431ee884a5@app.fastmail.com>
-In-Reply-To: 
- <CAJF2gTQckdn=uDfeLKu7wceOq7LT1KGJUT0vARMr9zUy3xc4xw@mail.gmail.com>
-References: <20231212214536.175327-1-arnd@kernel.org>
- <CAJF2gTQckdn=uDfeLKu7wceOq7LT1KGJUT0vARMr9zUy3xc4xw@mail.gmail.com>
-Date: Wed, 13 Dec 2023 07:32:14 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: guoren <guoren@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Pavel Machek" <pavel@ucw.cz>, "Lee Jones" <lee@kernel.org>,
- "Chen-Yu Tsai" <wens@csie.org>, "Jernej Skrabec" <jernej.skrabec@gmail.com>,
- "Samuel Holland" <samuel@sholland.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Palmer Dabbelt" <palmer@rivosinc.com>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] leds: sun50i-a100: avoid division-by-zero warning
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Dec 13, 2023, at 02:26, Guo Ren wrote:
-> On Wed, Dec 13, 2023 at 5:45=E2=80=AFAM Arnd Bergmann <arnd@kernel.org=
-> wrote:
->>  {
->>         const struct sun50i_a100_ledc_timing *timing =3D &priv->timin=
-g;
->>         unsigned long mod_freq =3D clk_get_rate(priv->mod_clk);
->> -       u32 cycle_ns =3D NSEC_PER_SEC / mod_freq;
->> +       u32 cycle_ns;
->>         u32 control;
->>
->> +       if (!mod_freq)
->> +               return;
->> +
-> Shall we need err_disable_bus_clk?
->
-> + static int sun50i_a100_ledc_set_timing(struct sun50i_a100_ledc *priv)
-> - static void sun50i_a100_ledc_set_timing(struct sun50i_a100_ledc *pri=
-v)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace ring-buffer-multi-page-subbufers
+head:   cf9d2732932a8071635166afd4fd282889edc056
+commit: 51ea7c0e6660f763f8bc81abe1ad737594d0f88d [30/31] tracing: Increase size of trace_marker_raw to max ring buffer entry
+config: arm-randconfig-001-20231213 (https://download.01.org/0day-ci/archive/20231213/202312131437.7Fi2rLZa-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312131437.7Fi2rLZa-lkp@intel.com/reproduce)
 
-I'm not worried about it too much, as there is already an error check
-on priv->mod_clk being unavailable during initialization. The case that
-the warning is about is just for build-testing on architectures that
-don't even use COMMON_CLK.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312131437.7Fi2rLZa-lkp@intel.com/
 
-     Arnd
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/trace.c:7385:40: warning: variable 'buffer' is uninitialized when used here [-Wuninitialized]
+    7385 |         if (size > ring_buffer_max_event_size(buffer))
+         |                                               ^~~~~~
+   kernel/trace/trace.c:7363:29: note: initialize the variable 'buffer' to silence this warning
+    7363 |         struct trace_buffer *buffer;
+         |                                    ^
+         |                                     = NULL
+   In file included from kernel/trace/trace.c:8929:
+   kernel/trace/trace_selftest.c:605:6: warning: variable 'len' set but not used [-Wunused-but-set-variable]
+     605 |         int len;
+         |             ^
+   2 warnings generated.
+
+
+vim +/buffer +7385 kernel/trace/trace.c
+
+  7370	
+  7371		if (tracing_disabled)
+  7372			return -EINVAL;
+  7373	
+  7374		if (!(tr->trace_flags & TRACE_ITER_MARKERS))
+  7375			return -EINVAL;
+  7376	
+  7377		/* The marker must at least have a tag id */
+  7378		if (cnt < sizeof(unsigned int))
+  7379			return -EINVAL;
+  7380	
+  7381		size = sizeof(*entry) + cnt;
+  7382		if (cnt < FAULT_SIZE_ID)
+  7383			size += FAULT_SIZE_ID - cnt;
+  7384	
+> 7385		if (size > ring_buffer_max_event_size(buffer))
+  7386			return -EINVAL;
+  7387	
+  7388		buffer = tr->array_buffer.buffer;
+  7389		event = __trace_buffer_lock_reserve(buffer, TRACE_RAW_DATA, size,
+  7390						    tracing_gen_ctx());
+  7391		if (!event)
+  7392			/* Ring buffer disabled, return as if not open for write */
+  7393			return -EBADF;
+  7394	
+  7395		entry = ring_buffer_event_data(event);
+  7396	
+  7397		len = __copy_from_user_inatomic(&entry->id, ubuf, cnt);
+  7398		if (len) {
+  7399			entry->id = -1;
+  7400			memcpy(&entry->buf, FAULTED_STR, FAULTED_SIZE);
+  7401			written = -EFAULT;
+  7402		} else
+  7403			written = cnt;
+  7404	
+  7405		__buffer_unlock_commit(buffer, event);
+  7406	
+  7407		return written;
+  7408	}
+  7409	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
