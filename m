@@ -1,58 +1,48 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892CC18A
-	for <llvm@lists.linux.dev>; Thu, 14 Dec 2023 00:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F86642;
+	Thu, 14 Dec 2023 02:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="xypUG/ew"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6ceb93fb381so79569b3a.0
-        for <llvm@lists.linux.dev>; Wed, 13 Dec 2023 16:12:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702512744; x=1703117544; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=viMe9kglal5ScjZ1n6jPL3FjIe+JldVfUhvBnQIbEiw=;
-        b=xypUG/eweQMH92qWDqkgRH4eOEvSjeO9d37Z9Rws/YwxdueksJUN/XaqqAikM0M56Z
-         78Pb8SG8f+ErMgXTLceap3v4pTKx+FxYVNN9jd0+bMWr+ROlE0zp/iryu9t3wTmU1IK7
-         idnrleGgbMa8vWv4X7NIwWp+uFDTk3pvPRjq3yhpEPsyTeIurFB/IWyLf8xhIeDEqB7U
-         IfIk8W+KFLgdimgzmz3LR37pL4BvQYRCNjJ3NnNmTUAHIlKxFToz9tR8NGvc+IaFWNcK
-         iEIZjRB8mUrPkpV9JQl2mRCzbusQlrqqK4Nm39oNCUV3DY50hVCA1knTgQXvpIyPe2Jy
-         5FPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702512744; x=1703117544;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=viMe9kglal5ScjZ1n6jPL3FjIe+JldVfUhvBnQIbEiw=;
-        b=hu/mJKBJG35Cc8WSLciHr79JHMQIH2ujG81jQW91daTaD8+tsEy7xNGd9e3QXRkXST
-         vhSns2bRJD67+Ap/ceQ3hQasOmB54OLar0RW193AJFrxHfQp3yceA+6D59loAPBn9A86
-         tDhiO093MX2flF2/y6DPr7anhlL89uOinuEgBvsy6k2Oykze6kBBx1MiuA0NpZRY3sUk
-         sX9BMcuZ6ANJn9FR72AJomJHHQ/qg19i+x9DrcUa89cENbqY1FvWR49/JkcYLCPGmbI9
-         ai4CibswIlf0HXBLCc164RhVmpO7lnjXy0QFwy1+cXp7FXMbMhDWH7VKIrcnt3uj9bZf
-         2keA==
-X-Gm-Message-State: AOJu0YxKMTiltwg5tVta61IU2Oc0t+FHNPEvMo+RgGfHMZ4wC0idy8fY
-	NALD6emIZez6Y6cnsEL8xlFaLw==
-X-Google-Smtp-Source: AGHT+IEeZevrL+CP3o0k1tCx3qTiITpwRbjE02mFHTMHU0lILBn9xW4aeM0+zn8YH8RqAwIzSvOtZw==
-X-Received: by 2002:a05:6a00:2da1:b0:6ce:2731:47b7 with SMTP id fb33-20020a056a002da100b006ce273147b7mr10780615pfb.23.1702512743782;
-        Wed, 13 Dec 2023 16:12:23 -0800 (PST)
-Received: from ghost ([12.44.203.122])
-        by smtp.gmail.com with ESMTPSA id y4-20020a62f244000000b006ce809948adsm10397431pfl.30.2023.12.13.16.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 16:12:23 -0800 (PST)
-Date: Wed, 13 Dec 2023 16:12:20 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	conor@kernel.org, maskray@google.com, ndesaulniers@google.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v2 3/3] lib/Kconfig.debug: Update AS_HAS_NON_CONST_LEB128
- comment and name
-Message-ID: <ZXpIZGE9e6F2d5Hk@ghost>
-References: <20231205-riscv-restrict-dwarf5-llvm-v2-0-aedf00a382ac@kernel.org>
- <20231205-riscv-restrict-dwarf5-llvm-v2-3-aedf00a382ac@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tx6Lp8FQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702520365; x=1734056365;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FElVasb2JyPiBShkrgXhSEWO3eoTNyC+MpcYkkfWdys=;
+  b=Tx6Lp8FQpYEs5bUKrj8k8AGAgb71tm/WkSOC4yyeExjzhaA41MFZjWkE
+   B6ELuNjvhpWl0gS9BY43hVJ1vze1DFoFZl0f+wPXcj2FCZTogKc2TSkXS
+   /BHS+pw4D/N3awiRl/YraG2OUh1u97W20xsAcQL4s2hARUAbz/N/soA3+
+   GuWP1495//0hplhznUmfhvZ4DuH8PsDfo6RLhEyR0gbl8grCnkEQ4XIr9
+   pfvb/jhN25PRtOVeCq51lcM3WsmJuX14ONb9TzuX5lCDYfoufJYpGpLGo
+   Y/5mRCQlgSZyg/qQp2FVYipreTNoJmNj7u6mOw4QxkMlbcz9ciN3a8QkN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="1909042"
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="1909042"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 18:19:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="947395914"
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="947395914"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 13 Dec 2023 18:19:22 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDbJo-000LQh-1E;
+	Thu, 14 Dec 2023 02:19:20 +0000
+Date: Thu, 14 Dec 2023 10:18:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 4/6] block: partitions: efi: Move GPT-specific code
+ to a new library
+Message-ID: <202312140949.NDLEVBGx-lkp@intel.com>
+References: <20231211151244.289349-5-romain.gantois@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,81 +51,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231205-riscv-restrict-dwarf5-llvm-v2-3-aedf00a382ac@kernel.org>
+In-Reply-To: <20231211151244.289349-5-romain.gantois@bootlin.com>
 
-On Tue, Dec 05, 2023 at 04:53:52PM -0700, Nathan Chancellor wrote:
-> Fangrui noted that the comment around CONFIG_AS_HAS_NON_CONST_LEB128
-> could be made more accurate because explicit .sleb128 directives are not
-> emitted, only .uleb128 directives are. Rename the symbol to
-> CONFIG_AS_HAS_NON_CONST_ULEB128 as a result.
-> 
-> Further clarifications include replacing "symbol deltas" with the more
-> accurate "label differences", noting that this issue has been resolved
-> in newer binutils (2.41+), and it only occurs when a port uses RISC-V
-> style linker relaxation.
-> 
-> Suggested-by: Fangrui Song <maskray@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  lib/Kconfig.debug | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a0ebce05a368..76c2cc697573 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -231,9 +231,10 @@ config DEBUG_INFO
->  	  in the "Debug information" choice below, indicating that debug
->  	  information will be generated for build targets.
->  
-> -# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
-> -# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> -config AS_HAS_NON_CONST_LEB128
-> +# Clang generates .uleb128 with label differences for DWARF v5, a feature that
-> +# older binutils ports do not support when utilizing RISC-V style linker
-> +# relaxation: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> +config AS_HAS_NON_CONST_ULEB128
->  	def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
+Hi Romain,
 
-This seems like a good change. However the wording in your commit
-message seems misleading. This config only ever checked for .uleb128
-with a label difference and would assume that sleb128 with label
-differences were supported. This seems more like a "bug" in the config
-name that this is fixing. My interpretation is that your commit
-describes why this issue was never caught (because sleb128 is not
-emitted), but not the root of why this change is necessary (because
-non-const sleb128 is not necessarily supported if non-const uleb128 is).
-Anyways, it's just a commit message so not something that is important
-to change.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v6.7-rc5]
+[cannot apply to next-20231213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->  
->  choice
-> @@ -258,7 +259,7 @@ config DEBUG_INFO_NONE
->  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->  	bool "Rely on the toolchain's implicit default DWARF version"
->  	select DEBUG_INFO
-> -	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> +	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_ULEB128)
->  	help
->  	  The implicit default version of DWARF debug info produced by a
->  	  toolchain changes over time.
-> @@ -283,7 +284,7 @@ config DEBUG_INFO_DWARF5
->  	bool "Generate DWARF Version 5 debuginfo"
->  	select DEBUG_INFO
->  	depends on !ARCH_HAS_BROKEN_DWARF5
-> -	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> +	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_ULEB128)
->  	help
->  	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
->  	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-> 
-> -- 
-> 2.43.0
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+url:    https://github.com/intel-lab-lkp/linux/commits/Romain-Gantois/block-partitions-efi-Move-efi-h-header-to-include-linux-gpt-h/20231211-231331
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20231211151244.289349-5-romain.gantois%40bootlin.com
+patch subject: [RFC PATCH 4/6] block: partitions: efi: Move GPT-specific code to a new library
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20231214/202312140949.NDLEVBGx-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231214/202312140949.NDLEVBGx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312140949.NDLEVBGx-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: crc32_le
+   >>> referenced by gpt.c
+   >>>               lib/gpt.o:(gpt_validate_header) in archive vmlinux.a
+   >>> referenced by gpt.c
+   >>>               lib/gpt.o:(gpt_check_pte_array_crc) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
