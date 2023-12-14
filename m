@@ -1,48 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F86642;
-	Thu, 14 Dec 2023 02:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA937610C;
+	Thu, 14 Dec 2023 05:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tx6Lp8FQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MtTGdNek"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702520365; x=1734056365;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FElVasb2JyPiBShkrgXhSEWO3eoTNyC+MpcYkkfWdys=;
-  b=Tx6Lp8FQpYEs5bUKrj8k8AGAgb71tm/WkSOC4yyeExjzhaA41MFZjWkE
-   B6ELuNjvhpWl0gS9BY43hVJ1vze1DFoFZl0f+wPXcj2FCZTogKc2TSkXS
-   /BHS+pw4D/N3awiRl/YraG2OUh1u97W20xsAcQL4s2hARUAbz/N/soA3+
-   GuWP1495//0hplhznUmfhvZ4DuH8PsDfo6RLhEyR0gbl8grCnkEQ4XIr9
-   pfvb/jhN25PRtOVeCq51lcM3WsmJuX14ONb9TzuX5lCDYfoufJYpGpLGo
-   Y/5mRCQlgSZyg/qQp2FVYipreTNoJmNj7u6mOw4QxkMlbcz9ciN3a8QkN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="1909042"
+  t=1702530594; x=1734066594;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iOH6CBIuDKzjzM38vVVl+svnXcyMqfAk8k3l1GVWXI8=;
+  b=MtTGdNekgby2hA2uOHJO9K2VbAwgQLznCi+IjRKcq4h96OpGLuh+qV23
+   E/Y558F/EpX8b0Q3AA24yefy7D7RrKX0Jf5nCi+WzmGa1ixNJKZaymsYg
+   uC3a7Dc7Otxm+wPRQEuxtkrcDwpLhv0b6gJs6zoaCAaANbl2EombyalLp
+   zIt45PWWUqaAV87m9eKWGjwmqJUEpO5R5PdRu9+b/jxjglUT9vzmG6zVM
+   61AEOcIhrmetRpjN2S/vUBgg+0Y3dy0ogbcYzev6KrC1lLAbgyfE6k0iA
+   QLVDTvERjU3GsaNik4JjsXyJUYMI3xQvxvmDym0ZqZNXFf1T4F92jrCMX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="393939748"
 X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="1909042"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 18:19:24 -0800
+   d="scan'208";a="393939748"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 21:09:53 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="947395914"
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="808445410"
 X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="947395914"
+   d="scan'208";a="808445410"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Dec 2023 18:19:22 -0800
+  by orsmga001.jf.intel.com with ESMTP; 13 Dec 2023 21:09:51 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rDbJo-000LQh-1E;
-	Thu, 14 Dec 2023 02:19:20 +0000
-Date: Thu, 14 Dec 2023 10:18:23 +0800
+	id 1rDdyn-000La7-01;
+	Thu, 14 Dec 2023 05:09:49 +0000
+Date: Thu, 14 Dec 2023 13:09:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 4/6] block: partitions: efi: Move GPT-specific code
- to a new library
-Message-ID: <202312140949.NDLEVBGx-lkp@intel.com>
-References: <20231211151244.289349-5-romain.gantois@bootlin.com>
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-unstable 153/301] mm/list_lru.c:110:1: error: unused
+ function 'list_lru_from_kmem'
+Message-ID: <202312141318.q8b5yrAq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,40 +51,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231211151244.289349-5-romain.gantois@bootlin.com>
 
-Hi Romain,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v6.7-rc5]
-[cannot apply to next-20231213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Romain-Gantois/block-partitions-efi-Move-efi-h-header-to-include-linux-gpt-h/20231211-231331
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20231211151244.289349-5-romain.gantois%40bootlin.com
-patch subject: [RFC PATCH 4/6] block: partitions: efi: Move GPT-specific code to a new library
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20231214/202312140949.NDLEVBGx-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   3ecae30dda241440417499d69ae90dfad517a932
+commit: 0a97c01cd20bb96359d8c9dedad92a061ed34e0b [153/301] list_lru: allow explicit memcg and NUMA node selection
+config: x86_64-sof-customedconfig-compile-test-defconfig (https://download.01.org/0day-ci/archive/20231214/202312141318.q8b5yrAq-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231214/202312140949.NDLEVBGx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231214/202312141318.q8b5yrAq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312140949.NDLEVBGx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312141318.q8b5yrAq-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: crc32_le
-   >>> referenced by gpt.c
-   >>>               lib/gpt.o:(gpt_validate_header) in archive vmlinux.a
-   >>> referenced by gpt.c
-   >>>               lib/gpt.o:(gpt_check_pte_array_crc) in archive vmlinux.a
+>> mm/list_lru.c:110:1: error: unused function 'list_lru_from_kmem' [-Werror,-Wunused-function]
+   list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
+   ^
+   1 error generated.
+
+
+vim +/list_lru_from_kmem +110 mm/list_lru.c
+
+60d3fd32a7a9da Vladimir Davydov 2015-02-12  108  
+60d3fd32a7a9da Vladimir Davydov 2015-02-12  109  static inline struct list_lru_one *
+6a6b7b77cc0fdc Muchun Song      2022-03-22 @110  list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
+44bd4a4759d5a7 Kirill Tkhai     2018-08-17  111  		   struct mem_cgroup **memcg_ptr)
+60d3fd32a7a9da Vladimir Davydov 2015-02-12  112  {
+44bd4a4759d5a7 Kirill Tkhai     2018-08-17  113  	if (memcg_ptr)
+44bd4a4759d5a7 Kirill Tkhai     2018-08-17  114  		*memcg_ptr = NULL;
+6a6b7b77cc0fdc Muchun Song      2022-03-22  115  	return &lru->node[nid].lru;
+60d3fd32a7a9da Vladimir Davydov 2015-02-12  116  }
+84c07d11aa619c Kirill Tkhai     2018-08-17  117  #endif /* CONFIG_MEMCG_KMEM */
+60d3fd32a7a9da Vladimir Davydov 2015-02-12  118  
+
+:::::: The code at line 110 was first introduced by commit
+:::::: 6a6b7b77cc0fdc13f50c66c219c8c05500a8dfce mm: list_lru: transpose the array of per-node per-memcg lru lists
+
+:::::: TO: Muchun Song <songmuchun@bytedance.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
