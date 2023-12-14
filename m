@@ -1,336 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73496E2A4;
-	Thu, 14 Dec 2023 20:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10897494;
+	Thu, 14 Dec 2023 21:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iEGOuruM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702587258; x=1734123258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zunJNe5vX1dRgJ3thSTyIAATEg/2I3q2EUAAAPNGQnc=;
-  b=iEGOuruMYud6QFw4j/AVZD484gVeEj8sb7ujvWNTsbhXW5xE2tEpa+4L
-   xauLOPzmofi0uVnDRzegeESGzSzhP7jYC9IpFKZ2eP/2IMpKXDfTvoAkd
-   XvNEbMlaQFBVICLzd/ed3Yv5jYw9BcOWlOq71rGfaHIdLphqkgu8wglNw
-   n2LtTtmYZ0IQs8SGrAYlNhPaMjiKchv0T183TFVuaBrtODLNW/o/YY1nG
-   AfV8UK1YX3vg6XO6SkoLw1RK+exokA6IHZr2up1uyAHVcZnLM9Iy4QtFF
-   NSCXKSh5Yy+HmqjsK7hdydkL66/cEM16CRyyuDZwKjxoi7mzyHrHOKeOS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="13876914"
-X-IronPort-AV: E=Sophos;i="6.04,276,1695711600"; 
-   d="scan'208";a="13876914"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2023 12:54:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="947719024"
-X-IronPort-AV: E=Sophos;i="6.04,276,1695711600"; 
-   d="scan'208";a="947719024"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 14 Dec 2023 12:54:13 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rDsih-000Mbj-1c;
-	Thu, 14 Dec 2023 20:54:11 +0000
-Date: Fri, 15 Dec 2023 04:53:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jani Nikula <jani.nikula@intel.com>, linux-sound@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-	dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>
-Subject: Re: [PATCH v3] ASoC: hdmi-codec: drop drm/drm_edid.h include
-Message-ID: <202312150438.cYAajoc9-lkp@intel.com>
-References: <20231214092856.4019251-1-jani.nikula@intel.com>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vHqwe+0C"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7FrhxwWPxjd1nrVnDhmOIzmALWzUB7ji13bBSfV+Dm4=; b=vHqwe+0C8DVTzGY92KpnnNrZ61
+	9AjwcGxoG3Z+B6DxOIX8VQEGOmuosBI6oPZmY2zpXNULYfiyLkl8djZ+AEFgYzpt49vAy0GAniFJ4
+	5v9WbrwDHC97+uhc5/D/1PUPO2LYNKGAKJLMZgDVPQ754lKyl15E4c1FP5wSBXJZudT/yt5i6qp3n
+	jv3eydn+WQiJ1sz6nQKrPf0OjctP6s90DUcXuzC6eD9aKqYJNiVlsX/6snjTx5Umg7anTdjOFQBYR
+	GBSvFcFbH9466jNlUaKxsFV6HabQYMdWsSOiXmhYhq/qmoMnr8kVAmrjAPgPtA8VackjJOvkA/lzl
+	vf07MJPA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rDssC-00CS2n-1P;
+	Thu, 14 Dec 2023 21:04:00 +0000
+Date: Thu, 14 Dec 2023 21:04:00 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Greg KH <greg@kroah.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, tanzirh@google.com,
+	Kees Cook <keescook@chromium.org>,
+	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
+Message-ID: <20231214210400.GR1674809@ZenIV>
+References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
+ <20231205213807.GE1674809@ZenIV>
+ <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
+ <2023120608-ivy-snowdrop-890d@gregkh>
+ <CAKwvOdmFJ=ZGN8ZScS5oQpXnAL0wwtTDCeNNGpBKZXzQ4kRAVA@mail.gmail.com>
+ <2023120657-henna-spongy-9ef6@gregkh>
+ <20231206005542.GJ1674809@ZenIV>
+ <20231206030047.GL1674809@ZenIV>
+ <2023120650-faucet-palpable-f1a3@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231214092856.4019251-1-jani.nikula@intel.com>
+In-Reply-To: <2023120650-faucet-palpable-f1a3@gregkh>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi Jani,
+On Wed, Dec 06, 2023 at 12:09:17PM +0900, Greg KH wrote:
+> > slap #include "unaligned.h" into their traps.c and unaligned.c
+> > (callers and definitions resp.) and strip those from asm/unaligned.h?
+> > At that point we can remove arch/{arc,parisc}/asm/unaligned.h - everything
+> > will pick include/asm-generic/unaligned.h.
+> > 
+> > Then the next cycle we ask Linus to run the following:
+> > for i in `git grep -l -w asm/unaligned.h`; do
+> > 	sed -i -e "s/asm\/unaligned.h/linux\/unaligned.h/" $i
+> > done
+> > git mv include/asm-generic/unaligned.h include/linux/unaligned.h
+> > sed -i -e "/unaligned.h/d" include/asm-generic/Kbuild
+> > right before releasing -rc1 and asm/unaligned.h is gone...
+> 
+> Please do, it's really annoying and would be great to fix up.
 
-kernel test robot noticed the following build errors:
+	FWIW, turns out that we have several places in drivers/* that pull
+asm-generic/unaligned.h.  IMO that's completely wrong - not just in this
+case (it's a matter of trivially adjusting the script), but I think that
+as a matter of policy we should *NOT* have includes of asm-generic/*.h
+anywhere in drivers/ fs/ io_uring/ kernel/ mm/ net/ sound/
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on tiwai-sound/for-next tiwai-sound/for-linus drm-tip/drm-tip linus/master v6.7-rc5 next-20231214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	Current situation (outside of arch, include, scripts and tools,
+with asm-generic/unaligned.h cases already taken out):
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/ASoC-hdmi-codec-drop-drm-drm_edid-h-include/20231214-173047
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20231214092856.4019251-1-jani.nikula%40intel.com
-patch subject: [PATCH v3] ASoC: hdmi-codec: drop drm/drm_edid.h include
-config: arm-randconfig-001-20231215 (https://download.01.org/0day-ci/archive/20231215/202312150438.cYAajoc9-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231215/202312150438.cYAajoc9-lkp@intel.com/reproduce)
+drivers/android/binderfs.c:32:#include <uapi/asm-generic/errno-base.h>
+drivers/clk/microchip/clk-mpfs-ccc.c:7:#include "asm-generic/errno-base.h"
+drivers/firmware/arm_scmi/shmem.c:13:#include <asm-generic/bug.h>
+drivers/irqchip/irq-ti-sci-inta.c:24:#include <asm-generic/msi.h>
+drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:9:#include <uapi/asm-generic/errno-base.h>
+drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:10:#include <asm-generic/posix_types.h>
+io_uring/uring_cmd.c:10:#include <uapi/asm-generic/ioctls.h>
+lib/trace_readwrite.c:10:#include <asm-generic/io.h>
+mm/damon/vaddr.c:10:#include <asm-generic/mman-common.h>
+net/sunrpc/xprtrdma/verbs.c:58:#include <asm-generic/barrier.h>
+rust/uapi/uapi_helper.h:9:#include <uapi/asm-generic/ioctl.h>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312150438.cYAajoc9-lkp@intel.com/
+That's it.  asm-generic/errno-base.h cases - just use linux/errno.h and
+be done with it.  Anyone who goes "I've got ENOENT and ENOMEM in my driver,
+but those two are covered by errno-base.h and I can be clever and use
+just that" is wrong.
 
-All errors (new ones prefixed by >>):
+asm-generic/mman-common.h - and linux/mman.h would not serve why, exactly?
+uapi/linux/linux/mman.h, if one really feels like it...
 
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:1772:2: error: call to undeclared function 'drm_hdmi_avi_infoframe_from_display_mode'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           drm_hdmi_avi_infoframe_from_display_mode(&frame, connector, mode);
-           ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:1775:3: error: call to undeclared function 'drm_hdmi_avi_infoframe_quant_range'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   drm_hdmi_avi_infoframe_quant_range(&frame, connector, mode,
-                   ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:1899:8: error: call to undeclared function 'drm_hdmi_vendor_infoframe_from_display_mode'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           err = drm_hdmi_vendor_infoframe_from_display_mode(&frame, connector,
-                 ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2249:14: error: call to undeclared function 'drm_match_cea_mode'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           hdmi->vic = drm_match_cea_mode(mode);
-                       ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2282:3: error: call to undeclared function 'drm_default_rgb_quant_range'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   drm_default_rgb_quant_range(mode) ==
-                   ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2465:9: error: call to undeclared function 'drm_get_edid'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           edid = drm_get_edid(connector, hdmi->ddc);
-                  ^
-   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2465:7: error: incompatible integer to pointer conversion assigning to 'struct edid *' from 'int' [-Wint-conversion]
-           edid = drm_get_edid(connector, hdmi->ddc);
-                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2472:7: error: incomplete definition of type 'struct edid'
-                   edid->width_cm, edid->height_cm);
-                   ~~~~^
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                                  ^~~~~~~~~~~
-   include/media/cec.h:311:8: note: forward declaration of 'struct edid'
-   struct edid;
-          ^
-   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2472:23: error: incomplete definition of type 'struct edid'
-                   edid->width_cm, edid->height_cm);
-                                   ~~~~^
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                                  ^~~~~~~~~~~
-   include/media/cec.h:311:8: note: forward declaration of 'struct edid'
-   struct edid;
-          ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2474:23: error: call to undeclared function 'drm_detect_hdmi_monitor'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           hdmi->sink_is_hdmi = drm_detect_hdmi_monitor(edid);
-                                ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2475:25: error: call to undeclared function 'drm_detect_monitor_audio'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           hdmi->sink_has_audio = drm_detect_monitor_audio(edid);
-                                  ^
->> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2505:8: error: call to undeclared function 'drm_add_edid_modes'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           ret = drm_add_edid_modes(connector, edid);
-                 ^
-   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2677:35: error: use of undeclared identifier 'DRM_EDID_YCBCR420_DC_48'
-                       (info->hdmi.y420_dc_modes & DRM_EDID_YCBCR420_DC_48))
-                                                   ^
-   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2681:35: error: use of undeclared identifier 'DRM_EDID_YCBCR420_DC_36'
-                       (info->hdmi.y420_dc_modes & DRM_EDID_YCBCR420_DC_36))
-                                                   ^
-   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2685:35: error: use of undeclared identifier 'DRM_EDID_YCBCR420_DC_30'
-                       (info->hdmi.y420_dc_modes & DRM_EDID_YCBCR420_DC_30))
-                                                   ^
-   15 errors generated.
+asm-generic/ioctls.h in io_uring - definitely wrong; SIOCINQ is what
+it's brought for, but that's in sockios.h.  It expands to FIONREAD, which
+*is* in ioctls.h, but...
 
+arch/alpha/include/uapi/asm/ioctls.h:11:#define FIONREAD        _IOR('f', 127, int)
+arch/mips/include/uapi/asm/ioctls.h:64:#define FIONREAD 0x467f
+arch/parisc/include/uapi/asm/ioctls.h:35:#define FIONREAD       0x541B
+arch/powerpc/include/uapi/asm/ioctls.h:11:#define FIONREAD      _IOR('f', 127, int)
+arch/sh/include/uapi/asm/ioctls.h:11:#define FIONREAD   _IOR('f', 127, int)
+arch/sparc/include/uapi/asm/ioctls.h:101:#define FIONREAD       _IOR('f', 127, int)
+arch/xtensa/include/uapi/asm/ioctls.h:23:#define FIONREAD       _IOR('f', 127, int)
+include/uapi/asm-generic/ioctls.h:46:#define FIONREAD   0x541B
 
-vim +/drm_hdmi_avi_infoframe_from_display_mode +1772 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+See the problem?  On mips the value is not 0x541B - it's 0x467F; on
+alpha, powerpc and sparc it's 0x4004667F, on sh and xtensa - 0x8004667F
+(different expansions of _IOR).
 
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1763  
-9fbfa320b435e6 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  1764  static void hdmi_config_AVI(struct dw_hdmi *hdmi,
-81980037fb275d drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  1765  			    const struct drm_connector *connector,
-9fbfa320b435e6 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  1766  			    const struct drm_display_mode *mode)
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1767  {
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1768  	struct hdmi_avi_infoframe frame;
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1769  	u8 val;
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1770  
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1771  	/* Initialise info frame from DRM mode */
-81980037fb275d drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26 @1772  	drm_hdmi_avi_infoframe_from_display_mode(&frame, connector, mode);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1773  
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1774  	if (hdmi_bus_fmt_is_rgb(hdmi->hdmi_data.enc_out_bus_format)) {
-81980037fb275d drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26 @1775  		drm_hdmi_avi_infoframe_quant_range(&frame, connector, mode,
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1776  						   hdmi->hdmi_data.rgb_limited_range ?
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1777  						   HDMI_QUANTIZATION_RANGE_LIMITED :
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1778  						   HDMI_QUANTIZATION_RANGE_FULL);
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1779  	} else {
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1780  		frame.quantization_range = HDMI_QUANTIZATION_RANGE_DEFAULT;
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1781  		frame.ycc_quantization_range =
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1782  			HDMI_YCC_QUANTIZATION_RANGE_LIMITED;
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1783  	}
-86af379ebca2ef drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1784  
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1785  	if (hdmi_bus_fmt_is_yuv444(hdmi->hdmi_data.enc_out_bus_format))
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1786  		frame.colorspace = HDMI_COLORSPACE_YUV444;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1787  	else if (hdmi_bus_fmt_is_yuv422(hdmi->hdmi_data.enc_out_bus_format))
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1788  		frame.colorspace = HDMI_COLORSPACE_YUV422;
-ba9877e2361c46 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2019-02-01  1789  	else if (hdmi_bus_fmt_is_yuv420(hdmi->hdmi_data.enc_out_bus_format))
-ba9877e2361c46 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2019-02-01  1790  		frame.colorspace = HDMI_COLORSPACE_YUV420;
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1791  	else
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1792  		frame.colorspace = HDMI_COLORSPACE_RGB;
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1793  
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1794  	/* Set up colorimetry */
-e8dca30f711846 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1795  	if (!hdmi_bus_fmt_is_rgb(hdmi->hdmi_data.enc_out_bus_format)) {
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1796  		switch (hdmi->hdmi_data.enc_out_encoding) {
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1797  		case V4L2_YCBCR_ENC_601:
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1798  			if (hdmi->hdmi_data.enc_in_encoding == V4L2_YCBCR_ENC_XV601)
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1799  				frame.colorimetry = HDMI_COLORIMETRY_EXTENDED;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1800  			else
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1801  				frame.colorimetry = HDMI_COLORIMETRY_ITU_601;
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1802  			frame.extended_colorimetry =
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1803  					HDMI_EXTENDED_COLORIMETRY_XV_YCC_601;
-f40d6560eba65b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Dan Carpenter    2017-04-06  1804  			break;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1805  		case V4L2_YCBCR_ENC_709:
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1806  			if (hdmi->hdmi_data.enc_in_encoding == V4L2_YCBCR_ENC_XV709)
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1807  				frame.colorimetry = HDMI_COLORIMETRY_EXTENDED;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1808  			else
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1809  				frame.colorimetry = HDMI_COLORIMETRY_ITU_709;
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1810  			frame.extended_colorimetry =
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1811  					HDMI_EXTENDED_COLORIMETRY_XV_YCC_709;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1812  			break;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1813  		default: /* Carries no data */
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1814  			frame.colorimetry = HDMI_COLORIMETRY_ITU_601;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1815  			frame.extended_colorimetry =
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1816  					HDMI_EXTENDED_COLORIMETRY_XV_YCC_601;
-def23aa7e9821a drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Neil Armstrong   2017-04-04  1817  			break;
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1818  		}
-e8dca30f711846 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1819  	} else {
-e8dca30f711846 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1820  		frame.colorimetry = HDMI_COLORIMETRY_NONE;
-e8dca30f711846 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1821  		frame.extended_colorimetry =
-e8dca30f711846 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1822  			HDMI_EXTENDED_COLORIMETRY_XV_YCC_601;
-e8dca30f711846 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jernej Skrabec   2020-03-05  1823  	}
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1824  
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1825  	/*
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1826  	 * The Designware IP uses a different byte format from standard
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1827  	 * AVI info frames, though generally the bits are in the correct
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1828  	 * bytes.
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1829  	 */
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1830  
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1831  	/*
-b0118e7d936c55 drivers/gpu/drm/bridge/dw-hdmi.c          Jose Abreu       2016-08-29  1832  	 * AVI data byte 1 differences: Colorspace in bits 0,1 rather than 5,6,
-b0118e7d936c55 drivers/gpu/drm/bridge/dw-hdmi.c          Jose Abreu       2016-08-29  1833  	 * scan info in bits 4,5 rather than 0,1 and active aspect present in
-b0118e7d936c55 drivers/gpu/drm/bridge/dw-hdmi.c          Jose Abreu       2016-08-29  1834  	 * bit 6 rather than 4.
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1835  	 */
-b0118e7d936c55 drivers/gpu/drm/bridge/dw-hdmi.c          Jose Abreu       2016-08-29  1836  	val = (frame.scan_mode & 3) << 4 | (frame.colorspace & 3);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1837  	if (frame.active_aspect & 15)
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1838  		val |= HDMI_FC_AVICONF0_ACTIVE_FMT_INFO_PRESENT;
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1839  	if (frame.top_bar || frame.bottom_bar)
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1840  		val |= HDMI_FC_AVICONF0_BAR_DATA_HORIZ_BAR;
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1841  	if (frame.left_bar || frame.right_bar)
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1842  		val |= HDMI_FC_AVICONF0_BAR_DATA_VERT_BAR;
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1843  	hdmi_writeb(hdmi, val, HDMI_FC_AVICONF0);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1844  
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1845  	/* AVI data byte 2 differences: none */
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1846  	val = ((frame.colorimetry & 0x3) << 6) |
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1847  	      ((frame.picture_aspect & 0x3) << 4) |
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1848  	      (frame.active_aspect & 0xf);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1849  	hdmi_writeb(hdmi, val, HDMI_FC_AVICONF1);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1850  
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1851  	/* AVI data byte 3 differences: none */
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1852  	val = ((frame.extended_colorimetry & 0x7) << 4) |
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1853  	      ((frame.quantization_range & 0x3) << 2) |
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1854  	      (frame.nups & 0x3);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1855  	if (frame.itc)
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1856  		val |= HDMI_FC_AVICONF2_IT_CONTENT_VALID;
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1857  	hdmi_writeb(hdmi, val, HDMI_FC_AVICONF2);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1858  
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1859  	/* AVI data byte 4 differences: none */
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1860  	val = frame.video_code & 0x7f;
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1861  	hdmi_writeb(hdmi, val, HDMI_FC_AVIVID);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1862  
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1863  	/* AVI Data Byte 5- set up input and output pixel repetition */
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1864  	val = (((hdmi->hdmi_data.video_mode.mpixelrepetitioninput + 1) <<
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1865  		HDMI_FC_PRCONF_INCOMING_PR_FACTOR_OFFSET) &
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1866  		HDMI_FC_PRCONF_INCOMING_PR_FACTOR_MASK) |
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1867  		((hdmi->hdmi_data.video_mode.mpixelrepetitionoutput <<
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1868  		HDMI_FC_PRCONF_OUTPUT_PR_FACTOR_OFFSET) &
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1869  		HDMI_FC_PRCONF_OUTPUT_PR_FACTOR_MASK);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1870  	hdmi_writeb(hdmi, val, HDMI_FC_PRCONF);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1871  
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1872  	/*
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1873  	 * AVI data byte 5 differences: content type in 0,1 rather than 4,5,
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1874  	 * ycc range in bits 2,3 rather than 6,7
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1875  	 */
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1876  	val = ((frame.ycc_quantization_range & 0x3) << 2) |
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1877  	      (frame.content_type & 0x3);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1878  	hdmi_writeb(hdmi, val, HDMI_FC_AVICONF3);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1879  
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1880  	/* AVI Data Bytes 6-13 */
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1881  	hdmi_writeb(hdmi, frame.top_bar & 0xff, HDMI_FC_AVIETB0);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1882  	hdmi_writeb(hdmi, (frame.top_bar >> 8) & 0xff, HDMI_FC_AVIETB1);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1883  	hdmi_writeb(hdmi, frame.bottom_bar & 0xff, HDMI_FC_AVISBB0);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1884  	hdmi_writeb(hdmi, (frame.bottom_bar >> 8) & 0xff, HDMI_FC_AVISBB1);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1885  	hdmi_writeb(hdmi, frame.left_bar & 0xff, HDMI_FC_AVIELB0);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1886  	hdmi_writeb(hdmi, (frame.left_bar >> 8) & 0xff, HDMI_FC_AVIELB1);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1887  	hdmi_writeb(hdmi, frame.right_bar & 0xff, HDMI_FC_AVISRB0);
-d4ac4cb69e79e3 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-03-27  1888  	hdmi_writeb(hdmi, (frame.right_bar >> 8) & 0xff, HDMI_FC_AVISRB1);
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1889  }
-9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  1890  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1891  static void hdmi_config_vendor_specific_infoframe(struct dw_hdmi *hdmi,
-81980037fb275d drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  1892  						  const struct drm_connector *connector,
-9fbfa320b435e6 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  1893  						  const struct drm_display_mode *mode)
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1894  {
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1895  	struct hdmi_vendor_infoframe frame;
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1896  	u8 buffer[10];
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1897  	ssize_t err;
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1898  
-81980037fb275d drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26 @1899  	err = drm_hdmi_vendor_infoframe_from_display_mode(&frame, connector,
-f1781e9bb2dd23 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Ville Syrjälä    2017-11-13  1900  							  mode);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1901  	if (err < 0)
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1902  		/*
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1903  		 * Going into that statement does not means vendor infoframe
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1904  		 * fails. It just informed us that vendor infoframe is not
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1905  		 * needed for the selected mode. Only 4k or stereoscopic 3D
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1906  		 * mode requires vendor infoframe. So just simply return.
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1907  		 */
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1908  		return;
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1909  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1910  	err = hdmi_vendor_infoframe_pack(&frame, buffer, sizeof(buffer));
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1911  	if (err < 0) {
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1912  		dev_err(hdmi->dev, "Failed to pack vendor infoframe: %zd\n",
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1913  			err);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1914  		return;
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1915  	}
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1916  	hdmi_mask_writeb(hdmi, 0, HDMI_FC_DATAUTO0, HDMI_FC_DATAUTO0_VSD_OFFSET,
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1917  			HDMI_FC_DATAUTO0_VSD_MASK);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1918  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1919  	/* Set the length of HDMI vendor specific InfoFrame payload */
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1920  	hdmi_writeb(hdmi, buffer[2], HDMI_FC_VSDSIZE);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1921  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1922  	/* Set 24bit IEEE Registration Identifier */
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1923  	hdmi_writeb(hdmi, buffer[4], HDMI_FC_VSDIEEEID0);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1924  	hdmi_writeb(hdmi, buffer[5], HDMI_FC_VSDIEEEID1);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1925  	hdmi_writeb(hdmi, buffer[6], HDMI_FC_VSDIEEEID2);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1926  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1927  	/* Set HDMI_Video_Format and HDMI_VIC/3D_Structure */
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1928  	hdmi_writeb(hdmi, buffer[7], HDMI_FC_VSDPAYLOAD0);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1929  	hdmi_writeb(hdmi, buffer[8], HDMI_FC_VSDPAYLOAD1);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1930  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1931  	if (frame.s3d_struct >= HDMI_3D_STRUCTURE_SIDE_BY_SIDE_HALF)
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1932  		hdmi_writeb(hdmi, buffer[9], HDMI_FC_VSDPAYLOAD2);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1933  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1934  	/* Packet frame interpolation */
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1935  	hdmi_writeb(hdmi, 1, HDMI_FC_DATAUTO1);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1936  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1937  	/* Auto packets per frame and line spacing */
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1938  	hdmi_writeb(hdmi, 0x11, HDMI_FC_DATAUTO2);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1939  
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1940  	/* Configures the Frame Composer On RDRB mode */
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1941  	hdmi_mask_writeb(hdmi, 1, HDMI_FC_DATAUTO0, HDMI_FC_DATAUTO0_VSD_OFFSET,
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1942  			HDMI_FC_DATAUTO0_VSD_MASK);
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1943  }
-9aa1eca095579b drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Nickey Yang      2017-03-21  1944  
+The only thing that has any business including asm-generic/ioctls.h is
+arch/*/include/uapi/asm/ioctls.h - if it feels like doing so.  Anywhere
+else it ought to be asm/ioctls.h.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+asm-generic/msi.h - looks bogus; there's an include of linux/msi.h several lines
+above, and that pulls asm/msi.h.  Which makes it either a no-op or a build bug
+(the latter - if that driver can be built on x86 with CONFIG_GENERIC_MSI_IRQ
+defined;
+typedef struct irq_alloc_info msi_alloc_info_t;
+in asm/msi.h vs.
+typedef struct msi_alloc_info {
+        struct msi_desc                 *desc;
+        irq_hw_number_t                 hwirq;
+        unsigned long                   flags;
+        union {
+                unsigned long           ul;
+                void                    *ptr;
+        } scratchpad[NUM_MSI_ALLOC_SCRATCHPAD_REGS];
+} msi_alloc_info_t;
+in asm-generic/msi.h).
+
+Hell knows about the rest, but they all look very dubious...
