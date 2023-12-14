@@ -1,48 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA937610C;
-	Thu, 14 Dec 2023 05:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6008ED53B;
+	Thu, 14 Dec 2023 07:14:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MtTGdNek"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLAe4KiP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702530594; x=1734066594;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iOH6CBIuDKzjzM38vVVl+svnXcyMqfAk8k3l1GVWXI8=;
-  b=MtTGdNekgby2hA2uOHJO9K2VbAwgQLznCi+IjRKcq4h96OpGLuh+qV23
-   E/Y558F/EpX8b0Q3AA24yefy7D7RrKX0Jf5nCi+WzmGa1ixNJKZaymsYg
-   uC3a7Dc7Otxm+wPRQEuxtkrcDwpLhv0b6gJs6zoaCAaANbl2EombyalLp
-   zIt45PWWUqaAV87m9eKWGjwmqJUEpO5R5PdRu9+b/jxjglUT9vzmG6zVM
-   61AEOcIhrmetRpjN2S/vUBgg+0Y3dy0ogbcYzev6KrC1lLAbgyfE6k0iA
-   QLVDTvERjU3GsaNik4JjsXyJUYMI3xQvxvmDym0ZqZNXFf1T4F92jrCMX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="393939748"
+  t=1702538043; x=1734074043;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GN22NQP6pMAziWGVyIMCN9j8aXdvqe/Q9qp2AF7ybkA=;
+  b=HLAe4KiPGaapf6YePGQldNbkywqQxigqUhU/V98g4sG5N7P218HIB0x2
+   xqRJMcSC3megIo5L16SHhUnPIR3u0H6a115SwSfxFFyb5l5WCfCMcstsV
+   10EiDBlu1XKfeHfVIetPMpXD6vVfM55h5vNt/Iu0HHsOgfO9vVl0Vj7/i
+   ZOyUrWkEN7wigQA2mxE+DecwkH99oFK7tZr/am+izBaNYfGlw08ptVkPz
+   54FVkrM7rzJp8FcCFf4qvSqYCqNoOGbgDm93FIMKRFDtHPE2pvWNHkbsV
+   B2oAjXwyLSfuifRr10DG9GkHO2csdoVFcf0by/VlOy5Z3QVDZUGbNsjNA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="393950395"
 X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="393939748"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 21:09:53 -0800
+   d="scan'208";a="393950395"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 23:14:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="808445410"
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="750421412"
 X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="808445410"
+   d="scan'208";a="750421412"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Dec 2023 21:09:51 -0800
+  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2023 23:13:58 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rDdyn-000La7-01;
-	Thu, 14 Dec 2023 05:09:49 +0000
-Date: Thu, 14 Dec 2023 13:09:31 +0800
+	id 1rDfuu-000Lj2-0F;
+	Thu, 14 Dec 2023 07:13:56 +0000
+Date: Thu, 14 Dec 2023 15:12:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nhat Pham <nphamcs@gmail.com>
+To: Akhil R <akhilrajeev@nvidia.com>, herbert@gondor.apana.org.au,
+	davem@davemloft.net, linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
+	jonathanh@nvidia.com, linux-tegra@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 153/301] mm/list_lru.c:110:1: error: unused
- function 'list_lru_from_kmem'
-Message-ID: <202312141318.q8b5yrAq-lkp@intel.com>
+	Akhil R <akhilrajeev@nvidia.com>
+Subject: Re: [PATCH 3/5] crypto: tegra: Add Tegra Security Engine driver
+Message-ID: <202312141448.599zJgqd-lkp@intel.com>
+References: <20231213122030.11734-4-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,46 +54,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231213122030.11734-4-akhilrajeev@nvidia.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   3ecae30dda241440417499d69ae90dfad517a932
-commit: 0a97c01cd20bb96359d8c9dedad92a061ed34e0b [153/301] list_lru: allow explicit memcg and NUMA node selection
-config: x86_64-sof-customedconfig-compile-test-defconfig (https://download.01.org/0day-ci/archive/20231214/202312141318.q8b5yrAq-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231214/202312141318.q8b5yrAq-lkp@intel.com/reproduce)
+Hi Akhil,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on drm/drm-next arm64/for-next/core robh/for-next linus/master v6.7-rc5 next-20231213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/dt-bindings-crypto-Add-Tegra-SE-DT-binding-doc/20231213-202407
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/20231213122030.11734-4-akhilrajeev%40nvidia.com
+patch subject: [PATCH 3/5] crypto: tegra: Add Tegra Security Engine driver
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231214/202312141448.599zJgqd-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231214/202312141448.599zJgqd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312141318.q8b5yrAq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312141448.599zJgqd-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/list_lru.c:110:1: error: unused function 'list_lru_from_kmem' [-Werror,-Wunused-function]
-   list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
-   ^
-   1 error generated.
+>> drivers/crypto/tegra/tegra-se-main.c:283:51: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+     283 |                 dev_err(se->dev, "failed to set %d clock rate", i);
+         |                                                                 ^
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/crypto/tegra/tegra-se-main.c:273:7: note: initialize the variable 'i' to silence this warning
+     273 |         int i, ret;
+         |              ^
+         |               = 0
+   1 warning generated.
 
 
-vim +/list_lru_from_kmem +110 mm/list_lru.c
+vim +/i +283 drivers/crypto/tegra/tegra-se-main.c
 
-60d3fd32a7a9da Vladimir Davydov 2015-02-12  108  
-60d3fd32a7a9da Vladimir Davydov 2015-02-12  109  static inline struct list_lru_one *
-6a6b7b77cc0fdc Muchun Song      2022-03-22 @110  list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
-44bd4a4759d5a7 Kirill Tkhai     2018-08-17  111  		   struct mem_cgroup **memcg_ptr)
-60d3fd32a7a9da Vladimir Davydov 2015-02-12  112  {
-44bd4a4759d5a7 Kirill Tkhai     2018-08-17  113  	if (memcg_ptr)
-44bd4a4759d5a7 Kirill Tkhai     2018-08-17  114  		*memcg_ptr = NULL;
-6a6b7b77cc0fdc Muchun Song      2022-03-22  115  	return &lru->node[nid].lru;
-60d3fd32a7a9da Vladimir Davydov 2015-02-12  116  }
-84c07d11aa619c Kirill Tkhai     2018-08-17  117  #endif /* CONFIG_MEMCG_KMEM */
-60d3fd32a7a9da Vladimir Davydov 2015-02-12  118  
-
-:::::: The code at line 110 was first introduced by commit
-:::::: 6a6b7b77cc0fdc13f50c66c219c8c05500a8dfce mm: list_lru: transpose the array of per-node per-memcg lru lists
-
-:::::: TO: Muchun Song <songmuchun@bytedance.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+   270	
+   271	static int tegra_se_clk_init(struct tegra_se *se)
+   272	{
+   273		int i, ret;
+   274	
+   275		se->clk = devm_clk_get(se->dev, NULL);
+   276		if (IS_ERR(se->clk)) {
+   277			dev_err(se->dev, "failed to get clock\n");
+   278			return PTR_ERR(se->clk);
+   279		}
+   280	
+   281		ret = clk_set_rate(se->clk, ULONG_MAX);
+   282		if (ret) {
+ > 283			dev_err(se->dev, "failed to set %d clock rate", i);
+   284			return ret;
+   285		}
+   286	
+   287		ret = clk_prepare_enable(se->clk);
+   288		if (ret) {
+   289			dev_err(se->dev, "failed to enable clocks\n");
+   290			return ret;
+   291		}
+   292	
+   293		return 0;
+   294	}
+   295	
 
 -- 
 0-DAY CI Kernel Test Service
