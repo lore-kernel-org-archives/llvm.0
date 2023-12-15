@@ -1,129 +1,128 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838FE4777D;
-	Fri, 15 Dec 2023 21:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F177916419
+	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 21:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="RSHEuCkD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=3sddRRvwk/fTKF7doym0HPnBmsg/UatU52NDddZvLeM=; b=RSHEuCkD54S7yVRnkkdRcJRhGB
-	CCGEmrAERKHDC9A23+dPZdarY6qX1xEXD04Fd6FYVZ2haVIn4+aWT4QIFjld3w02jGzgMq+UXLQDG
-	uB1rFook2rv0QRa21NRESCSJtqiU4skicVFf4JN/Z3SHmGp63xgpextFd2ddlJIoxsIcje2EDRlKi
-	qLZL3dYhDnG1LkYaTy/ZPivcDvPAKMfuhgGQnW+nUZfmyimzpIEnv3dmIciv5FIvxBB7bkqL0KQgA
-	RkNS86h1OL0o04t8ROx7kJP6ownxFmdArQXSB+7HnT/NsLrGq5KSFJ3v475DsRLOdCBama76TWRf1
-	junaDkpw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rEFLU-00D57W-27;
-	Fri, 15 Dec 2023 21:03:44 +0000
-Date: Fri, 15 Dec 2023 21:03:44 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Greg KH <greg@kroah.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, tanzirh@google.com,
-	Kees Cook <keescook@chromium.org>,
-	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] lib/string: shrink lib/string.i via IWYU
-Message-ID: <20231215210344.GA3096493@ZenIV>
-References: <20231205-libstringheader-v1-1-7f9c573053a7@gmail.com>
- <20231205213807.GE1674809@ZenIV>
- <CAKwvOd=2VASkaLvjU+7kkbvhu2CimYn5KUGJBDRePyUhtrNK2Q@mail.gmail.com>
- <2023120608-ivy-snowdrop-890d@gregkh>
- <CAKwvOdmFJ=ZGN8ZScS5oQpXnAL0wwtTDCeNNGpBKZXzQ4kRAVA@mail.gmail.com>
- <2023120657-henna-spongy-9ef6@gregkh>
- <20231206005542.GJ1674809@ZenIV>
- <20231206030047.GL1674809@ZenIV>
- <2023120650-faucet-palpable-f1a3@gregkh>
- <20231214210400.GR1674809@ZenIV>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uaCPGOmK"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-54c5ed26cf6so1317942a12.3
+        for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 13:19:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702675170; x=1703279970; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8mxcQ8U3h2VEOqJmIa1ew38QPU2ZNWsAXvnsDdFpYNk=;
+        b=uaCPGOmKqyHjF19/SKiZjTOkHE7damCqaZHnGKuyVEUcugYuev/eM77G/s/AOXUGgD
+         bXf/B4Qg+EMCM8zoyB0Gwq2V5D9lFMi+7dV79Q+N0/qrQ3aHEILuuaiYIVUM90cm2bU1
+         JFUZwmaHoZIcbGCEeCH5m2dl8RlY66WDG128yQvKJ35CGCtoStqhHHEFT5a/KI8hSg7Y
+         oP5jhsOVWH6DI3tHcCFSmrlQFBwLHMK25UYg/21q4PjP1zWQveeSF/WTaoPqi5GFL8jJ
+         Srf4dcqkj1vdEiE/qIDga+C7uh+J5FeLaEYVgXk2Xy1xfvHfxeus6fmrdviMdvm/PuEU
+         nxFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702675170; x=1703279970;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8mxcQ8U3h2VEOqJmIa1ew38QPU2ZNWsAXvnsDdFpYNk=;
+        b=ZKpw+y2CrrTGVdfitWsmkil1Gg+HHx1+tUDikxO0AzgpzgtCbe5oGkfUSSFA3QwH8j
+         U/8+kW0NEzOKZs4hUzPTdWpbceeAEhgQepubtVHKTAdTTA/mOMLUyLPKe/q3VXsYu7Zo
+         TmgCR4ZcHE1kUN0Y3VPoi55mow3pR9EUqYfaQ7DbDJGveDJXT6VAr6SNxeD816dAlroM
+         qcWHkWW479uuc+ybVxs74PC43LofITZenFO1w6ekRBSXSsYOUv9EB5M2S1yMbF2Qd19r
+         pyJ3FYx1pOdhVVUdahadEo61i/cB/pwDkWxOx5c/bpIuNU78yNvbTe88IE98XlllBAnG
+         kV9A==
+X-Gm-Message-State: AOJu0YzbtNFUS+SA+T8rrbl5+Y380rwR7StoOoM21imCsbOb5M2qUGqH
+	m+OCQ2k3I7GSjI3AYXwldpxaWVH6fBU4s4r3zZbAWA==
+X-Google-Smtp-Source: AGHT+IGWvGafUSlhGGXrv1hh40ziXnG3b+EtYKBvhRhUWYc2aqT1+gDxNub/ucJABTu5gCVtHtP+ylscuPXvzxMb7IU=
+X-Received: by 2002:a50:8d50:0:b0:552:e8c3:95a7 with SMTP id
+ t16-20020a508d50000000b00552e8c395a7mr409698edt.27.1702675170229; Fri, 15 Dec
+ 2023 13:19:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231214210400.GR1674809@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20231215-llvm-decode-stacktrace-v1-1-201cb86f4879@quicinc.com>
+In-Reply-To: <20231215-llvm-decode-stacktrace-v1-1-201cb86f4879@quicinc.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Fri, 15 Dec 2023 13:19:18 -0800
+Message-ID: <CAFhGd8pweTJJU7=iSqXbvSW79fL54B_aLpzwW3nxJ62=UA0b+A@mail.gmail.com>
+Subject: Re: [PATCH] scripts/decode_stacktrace.sh: Use LLVM environment variable
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Manuel Traut <manut@linutronix.de>, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 09:04:00PM +0000, Al Viro wrote:
+Hi,
 
-> drivers/firmware/arm_scmi/shmem.c:13:#include <asm-generic/bug.h>
+On Fri, Dec 15, 2023 at 10:27=E2=80=AFAM Elliot Berman <quic_eberman@quicin=
+c.com> wrote:
+>
+> When using LLVM as the compiler, decode_stacktrace should also use
+> llvm-addr2line. Check if LLVM is set and add the appropriate
+> suffix/prefix.
+>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
 
-Should just use linux/bug.h and be done with that.
+I tried it out by dropping a random dump_stack() call into the init
+phase of the kernel and redirecting the serial console output to a log
+file. Using the pre-(this patch) and post-(this patch) script yields
+good stack trace results. It seems llvm-addr2line is a drop-in
+replacement.
 
-> drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:10:#include <asm-generic/posix_types.h>
+Tested-by: Justin Stitt <justinstitt@google.com>
 
-Completely pointless; not to mention that none of the types defined
-there are used anywhere in that file, the previous line pulls their
-private header, which explicitly pulls linux/types.h.
+>  scripts/decode_stacktrace.sh | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
+> index 564c5632e1a2..189b00f4e120 100755
+> --- a/scripts/decode_stacktrace.sh
+> +++ b/scripts/decode_stacktrace.sh
+> @@ -16,6 +16,16 @@ elif type c++filt >/dev/null 2>&1 ; then
+>         cppfilt_opts=3D-i
+>  fi
+>
+> +if [[ "${LLVM}" =3D=3D "1" ]] ; then
+> +       addr2line=3D"llvm-addr2line"
+> +elif [[ "${LLVM}" =3D=3D */ ]] ; then
+> +       addr2line=3D"${LLVM}llvm-addr2line"
+> +elif [[ "${LLVM}" =3D=3D -* ]] ; then
+> +       addr2line=3D"llvm-addr2line${LLVM}"
+> +else
+> +       addr2line=3D"${CROSS_COMPILE}addr2line"
+> +fi
+> +
+>  if [[ $1 =3D=3D "-r" ]] ; then
+>         vmlinux=3D""
+>         basepath=3D"auto"
+> @@ -169,7 +179,7 @@ parse_symbol() {
+>         if [[ $aarray_support =3D=3D true && "${cache[$module,$address]+i=
+sset}" =3D=3D "isset" ]]; then
+>                 local code=3D${cache[$module,$address]}
+>         else
+> -               local code=3D$(${CROSS_COMPILE}addr2line -i -e "$objfile"=
+ "$address" 2>/dev/null)
+> +               local code=3D$(${addr2line} -i -e "$objfile" "$address" 2=
+>/dev/null)
+>                 if [[ $aarray_support =3D=3D true ]]; then
+>                         cache[$module,$address]=3D$code
+>                 fi
+>
+> ---
+> base-commit: 3f7168591ebf7bbdb91797d02b1afaf00a4289b1
+> change-id: 20231214-llvm-decode-stacktrace-09538979006d
+>
+> Best regards,
+> --
+> Elliot Berman <quic_eberman@quicinc.com>
+>
 
-> lib/trace_readwrite.c:10:#include <asm-generic/io.h>
-
-Yeccchhh...  This is just plain wrong.
-
-What happens here is that hooks are added to writeb() et.al., to
-allow ftrace to play with those.  By default these are empty
-inlines; with CONFIG_TRACE_MMIO_ACCESS they are real function
-calls, the functions living in lib/trace_readwrite.c
-
-asm-generic/io.h is pulled by all asm/io.h instances, so that's
-where the externs went.  That would've made sense, except that
-asm-generic/io.h is used as a backstop for architectures that
-had not bothered to define e.g. readl() of their own.  And *that*
-is where the calls of those hooks had gone.  IOW, if architecture
-has readl()/writeb()/whatnot of its own, it won't get those hooks
-at all.
-
-It smells like a conversion in progress, stalled after the first
-(and only) architecture where that thing is selectable.  In effect,
-it's arm64-specific.
-
-> net/sunrpc/xprtrdma/verbs.c:58:#include <asm-generic/barrier.h>
-
-Bogus, same as the include of asm/bitops.h immediately before that
-line (the latter would've blown up if we hadn't already pulled
-linux/bitops.h - which needs asm/barrier.h and pulls it, TYVM).
-
-> rust/uapi/uapi_helper.h:9:#include <uapi/asm-generic/ioctl.h>
-
-To the rust crowd, that...  It's wrong for e.g. powerpc -
-uapi/asm/ioctl.h in there does pull asm-generic/ioctl.h, but
-only after
-#define _IOC_SIZEBITS   13
-#define _IOC_DIRBITS    3
-
-#define _IOC_NONE       1U
-#define _IOC_READ       2U
-#define _IOC_WRITE      4U
-
-which means that trying to use asm-generic/ioctl.h directly
-will yield the wrong numbers out of _IOC() et.al.
-
-
-So...
-in arch headers (..../asm/.../*.h and similar):
-	OK, that's what asm-generic is for
-in asm-generic headers themselves (..../asm-generic/.../*.h):
-	OK
-in linker scripts (*/*.lds{,.S}):
-	asm-generic/vmlinux.lds.h is fine in those (and nowhere else)
-in */*audit*.c:
-	asm-generic/audit_*.h is OK there (ugly, but...)
-in drivers,fs,init,io_uring,ipc,kernel,mm,net,sound,virt and probably rust:
-	100% bollocks, not a single valid use
-in lib/trace_readwrite.c:
-	asm-generic/io.h is an exception; complicated story.
-
-That leaves several instances in arch/, tools/ and include/linux, plus
-some oddities in makefiles, scripts, etc.  And include/linux ones are
-also not obviously correct - e.g. linux/bug.h pulls asm/bug.h, then
-(under ifdef CONFIG_BUG) asm-generic/bug.h.  AFAICS on all architectures
-we have asm/bug.h pulling asm-generic/bug.h (the ones that don't have
-asm/bug.h of their own get it generated with just such an include in
-it).  So do we need that include in linux/bug.h these days?
+Thanks
+Justin
