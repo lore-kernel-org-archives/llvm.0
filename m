@@ -1,130 +1,53 @@
-Received: from aer-iport-4.cisco.com (aer-iport-4.cisco.com [173.38.203.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8722231734;
-	Fri, 15 Dec 2023 14:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cisco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="g5/declT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=1242; q=dns/txt; s=iport;
-  t=1702650516; x=1703860116;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rtGpcSBAa+bZIu1Cx5ZRUunKjM+Koy2IkGWED7zM6Sw=;
-  b=g5/declTbySEJ59Elpm8Uzt8Dt6HpOEiox8Sbl1KBoHtZu3h3uuJhGlJ
-   xQRhIWs/Qq+jRM13gfuT0fQHotq6QGRCEkS3jYFdtuTq0y+gg4pq0sG2R
-   9nJIbGYbj3EZf9RhBgWGmD6gO6dr1+3PKlmbVs0XFce0si/GbYr5vLtqU
-   g=;
-X-CSE-ConnectionGUID: Ea8JoieSQcKM1hK/F0wyog==
-X-CSE-MsgGUID: 2lIXEF/3RZmN8Lx+OVNwdA==
-X-IPAS-Result: =?us-ascii?q?A0AbAQADYnxllxbLJq1aHgEBCxIMQIFEC4IRgSNWLhJIB?=
- =?us-ascii?q?I1KiGqSWoslgSUDVg8BAQENAQE7CQQBAYUGAocxJzQJDgECBAEBAQEDAgMBA?=
- =?us-ascii?q?QEBAQEBAQYBAQUBAQECAQcEFAEBAQEBAQEBNwUQNYVoDYZGAQIDOj8QCxguV?=
- =?us-ascii?q?wYTCIJ4AYJeAxGuO3iBNIEBg2sPrzKBYwaBSIgbAYogQoFJRIEVgyo+imQiB?=
- =?us-ascii?q?IZ7gh4HMoEJDAmBA4MmKZFrWyJGcBsDBwN/DysHBDAbBwYJFBgVIwZQAgIoI?=
- =?us-ascii?q?QkTEkCBXYFSCn4/Dw4Rgj4oNjYZSIJaFQw0SnUQKgQUF4ESBGobEh4SJREQF?=
- =?us-ascii?q?w0DCHQdAjI8AwUDBDMKEg0LIQUUQgNCBkkLAwIaBQMDBIEwBQ0eAhAaBgwnA?=
- =?us-ascii?q?wMSSQIQFAMeHQMDBgMKMQMwgRkMTwNsHzIJPA8MGwI5DScjAixWBRACFgMkG?=
- =?us-ascii?q?jYRCQsHIQMsBjgCEwwGBgleJhYJBCcDCAQDVAMjdxEDBAwDFwcLB1cDRB1AA?=
- =?us-ascii?q?3g9NRQbbaJSgTYBgxtZUIEaExcpliMBrwyEGYwFlSJJA5cZklmYRY1omkoCB?=
- =?us-ascii?q?AYFAhaBYzqBWzMaCBsVgyISQBkPjjmBEwEIh1eKZ0IyAjkCBwsBAQMJimEBA?=
- =?us-ascii?q?Q?=
-IronPort-Data: A9a23:JeBLWKts0qdEzzBx6FishubU9ufnVL9ZMUV32f8akzHdYApBsoF/q
- tZmKWmBO/7eYGT9KNF/O4zgoxtX6JLXzINkQQs9qSk2RS9HgMeUXt7xwmUckM+xwmwvaGo9s
- q3yv/GZdJhcokf0/0rrav656yAkiclkf5KkYMbcICd9WAR4fykojBNnioYRj5Vh6TSDK1vlV
- eja/YuHZDdJ5xYuajhPsvja9Us21BjPkGpwUmIWNKgjUGD2zxH5PLpHTYmtIn3xRJVjH+LSb
- 44vG5ngows1Vz90Yj+Uuu6Tnn8iG9Y+DiDS4pZiYJVOtzAZzsAEPgnXA9JHAatfo23hc9mcU
- 7yhv7ToIesiFvWkdOjwz3C0HgkmVZCq9oMrLlCSuJyxyEzLSELn4NA3DGJxE9UH6+F4VDQmG
- fwwcFjhbziKivjzy7WhR6wwwM8iN8LseogYvxmMzxmAUq1gGsCFGf2Ro4UCtNszrpgm8fL2b
- s8YYidrZQ/oaBxUMVBRA5U79AutriiuKWYC9wj9SawfuWzy/CFfl+PXAt/zKviaBuJruFmUj
- zeTl4j+KkpHbIPEk2XtHmiXruvLgybTXIMJCKb+8v9snU3VymENYDUSVF2msby1jUWWRd1SM
- QoX9zAooKx081akJvH/QgakoXifoh8AR/JfFOo17AzLwa3Riy6cAXIOSRZOb9spsMJwTjsvv
- nePk97yDCFrtryYU2m1+bCToje/fyMSKAcqYyYYTQIDy9ruuoc+ilTIVNkLOKWylNf4BRn03
- DbMqiUi750LhNIA16ig1VTGmC634JzISBMloAnaQAqN6gJ/eZ7gZIGy71XfxehPIZzfTVSbu
- nUA3c+E44gmF4yWiGmDR/9IGLCv+uatLjLRmxhsEoMn+jDr/GSsFahZ5DB1KV14MsIsdjjub
- 0ve/whW4fd7NT2qbKl7aYWrBOwxxK37CNLqEPvTa7JmaJV3cgjB+CZ1fk+W93j3l1Qrl+c6N
- P+ze8SrF3BBPqtn5CKsQPsa17oixyR4zmTWLbj0xg62+bWXfm+aVLBDNlaSBsgz67qZpkPb/
- tBQH8SPwhRbFub5Z0H/+IoePRYFJGk9AorepMled+rFKQ1jcEk+BvPKxrUodaRqmq1UkqHD+
- XTVckhaxVb2rX7KMwOHbjZkcryHYHpkhXs2J2ktJVGyxz0laJrp56YEfJxxdr4inAB+8RJqZ
- 9QMK+eHA/l0cz/k3m0dTt7T9JNzcxv+0GpiIBGZSDQ4epdhQSnA9dnlYhbj+UEy4syf65NWT
- 1qIiFuzfHYTezmOGvo6f9qJ6zuMUZkhdABaAhCgzjp7IRmEHG1Wx8vZ1KNfHi30AU+frgZ2L
- i7PafvimcHDopUu7P7Cjr2eooGiHoNWRxUCRTSEvejpbHWKrwJPJLOsts7WJFgxs0uqoc2fi
- Rl9lqiU3AAvxQ8V7NQkS96HM4pktoWxz1Ol8uiUNC6WNwvwUOwIzoiu1shUvaoF3a5CpQazQ
- QqO/NIcUYhly+u7eGP90DENN7zZvdlNw2G6xa1scC3HCNpfoePvvbN6ZELX1kSw7dJdbesY/
- AvWkJVMsFzj10tyYozuY+I93z3kE0Hsmp4P7vkyaLIHQCJyor2eSfQw0hPL3aw=
-IronPort-HdrOrdr: A9a23:Jf+cha+mPhaclPTgDcJuk+D3I+orL9Y04lQ7vn2ZhyY7TiW9rb
- HKoB17726XtN9/YhsdcLy7VZVoBEmskaKdgrNhXotKPjOGhILAFugLhrcKgQeBJ8SUzIBgPM
- lbH5RWOZnZEUV6gcHm4AOxDtoshOWc/LvAv5a485+oJjsaEp2JKGxCe2CmLnE=
-X-Talos-CUID: =?us-ascii?q?9a23=3ABTKwDGkwtJoYBvThQlyoJrOhjnzXOVDUnFXXIkK?=
- =?us-ascii?q?DMG1KbeSVahi+oLx1lMU7zg=3D=3D?=
-X-Talos-MUID: =?us-ascii?q?9a23=3ArQek7w0rU18T4A+NZln6zXWjLzUjuaCPOG0j1s4?=
- =?us-ascii?q?8icyiZQhgeBCjqiu7a9py?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="6.04,278,1695686400"; 
-   d="scan'208";a="9923272"
-Received: from aer-iport-nat.cisco.com (HELO aer-core-4.cisco.com) ([173.38.203.22])
-  by aer-iport-4.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 14:27:05 +0000
-Received: from localhost (ams3-vpn-dhcp3724.cisco.com [10.61.78.140])
-	(authenticated bits=0)
-	by aer-core-4.cisco.com (8.15.2/8.15.2) with ESMTPSA id 3BFER4AZ022079
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 15 Dec 2023 14:27:04 GMT
-Date: Fri, 15 Dec 2023 16:27:03 +0200
-From: Ariel Miculas <amiculas@cisco.com>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] docs: rust: remove `CC=clang` mentions
-Message-ID: <am3aewoqtx2tzcdn55lzhqszhmtfqx5phwufo4bwinrslwe3ft@jahi4gp25sqf>
-References: <20231215124751.175191-1-ojeda@kernel.org>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B740A3589E
+	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 15:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45B6BC15;
+	Fri, 15 Dec 2023 07:01:45 -0800 (PST)
+Received: from e127643.broadband (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 658113F5A1;
+	Fri, 15 Dec 2023 07:00:56 -0800 (PST)
+From: James Clark <james.clark@arm.com>
+To: linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org,
+	linux-next@vger.kernel.org,
+	will@kernel.org,
+	u.kleine-koenig@pengutronix.de
+Cc: James Clark <james.clark@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/2] arm: perf: Fix ARCH=arm build with GCC
+Date: Fri, 15 Dec 2023 15:00:37 +0000
+Message-Id: <20231215150040.3342183-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215124751.175191-1-ojeda@kernel.org>
-X-Authenticated-User: amiculas@cisco.com
-X-Outbound-SMTP-Client: 10.61.78.140, ams3-vpn-dhcp3724.cisco.com
-X-Outbound-Node: aer-core-4.cisco.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 23/12/15 01:47PM, Miguel Ojeda wrote:
-> Nowadays all architectures except s390 recommend using `LLVM=1` instead of
-> `CC=clang`, and since commit a3c6bfba4429 ("Documentation/llvm: refresh
-> docs") the Kbuild LLVM documentation makes `LLVM=1` the way to go:
-> 
->     We want to encourage the use of ``LLVM=1`` rather than just
->     ``CC=clang``. Make that suggestion "above the fold" and "front and
->     center" in our docs.
-> 
-> In particular, that commit removes the examples with `CC=clang`.
-> 
-> Thus do the same in the Rust Quick Start guide, i.e. remove the `CC=clang`
-> mentions, especially since the architectures that have had their Rust
-> support upstreamed (or soon to be upstreamed) are all `LLVM=1` ones
-> anyway. And perhaps by the time Rust is supported for s390 (or new
-> architectures), it may have moved to `LLVM=1` anyway. Otherwise,
-> this can be added back if needed (or perhaps an extra link to
-> Documentation/kbuild/llvm.rst).
-> 
-> This should also help avoiding potential confusion around `CC=clang` [1].
-> 
-> Link: https://lore.kernel.org/rust-for-linux/6df6e8e5-8d5b-4d3d-91b5-bc0e90c424ea@nvidia.com/ [1]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Ariel Miculas <amiculas@cisco.com>
+Two fixes for the broken build withh GCC currently in linux-next
+(next-20231214)
+
+James Clark (2):
+  arm: perf: Fix ARCH=arm build with GCC in armv8pmu_write_evtype()
+  arm: perf: Fix ARCH=arm build with GCC in armv8pmu_set_event_filter()
+
+ drivers/perf/arm_pmuv3.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+-- 
+2.34.1
+
