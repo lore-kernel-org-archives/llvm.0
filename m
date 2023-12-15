@@ -1,105 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB8D2C6A3;
-	Fri, 15 Dec 2023 12:48:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE5C2C6A5;
+	Fri, 15 Dec 2023 12:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGAGxiS3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FCDC433C7;
-	Fri, 15 Dec 2023 12:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702644481;
-	bh=KmFWeYKbRRsOcz7786bdIgRCmbbEy4sqix2mUbhzS80=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GGAGxiS3ZCe4EXhYSpVHvqYTkOw3Z386azCItWPdkTjxFrzm8ZqPY9UjfzvCeinuz
-	 6jmYiIIQqHLE40yIO4N1DYTARwzirmk10jykV2FqlnzKNu+t9iqdE+Bvu83vyKQew3
-	 L+8aJElN9JCebXatAwB6QXwulLd2YRSkhDsIy3C8H7S5aZ4caFU/94H/arFWIlNkNG
-	 InG2ZBszprtTaM/bwJKSEtVyZpOTivoZdu7zmfoLoUBrlmXOjB0hwEgGCh7JOvAVQi
-	 OEL67H3rMdcIkxOmUyQL7MOp/PBz5dAcRtKqnVpfsNFuo4IvfwuZwaN5OlBUotz0Z0
-	 QkdqOpp0AaYyw==
-From: Miguel Ojeda <ojeda@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Alex Gaynor <alex.gaynor@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] docs: rust: remove `CC=clang` mentions
-Date: Fri, 15 Dec 2023 13:47:51 +0100
-Message-ID: <20231215124751.175191-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K3wmu5Eg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702644686; x=1734180686;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IXxi6ICpVIOD8cotQkNPnEsduzVGrflHgp1nX0wIlyY=;
+  b=K3wmu5EgeVIENro0CJu4CT/bSrphEjSQnyYiR20EFnWZEm6HMXvYubeG
+   QDunnzLvaphxqYaLkYzvqCNvVZ2C+wEM5/S6H89Ptktj17yh61Eus0ayN
+   gkZb7STLWqxfmHfbhphHvCLp/KBAHtODKumCVmgnnHUR1bPGEIhzMUto4
+   2Y9+Ta3vOTDEY/a1e4WCd2DeJfFIf0zaTyYxHGgyP4601ZFstXzBmS+7u
+   GtuU4qZ3QGZl02lWDEZd+0s3b/Mbf2ckyuyV7KY1Rk84q1EauHryNDjqO
+   SNQM4N5P7lSAU/v82SrO67RXOyaPn7Yw1l5uTsknjKIe+GZj3RGZseWYw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="380266707"
+X-IronPort-AV: E=Sophos;i="6.04,278,1695711600"; 
+   d="scan'208";a="380266707"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 04:51:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="898128674"
+X-IronPort-AV: E=Sophos;i="6.04,278,1695711600"; 
+   d="scan'208";a="898128674"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2023 04:51:23 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rE7ey-0000DS-2w;
+	Fri, 15 Dec 2023 12:51:20 +0000
+Date: Fri, 15 Dec 2023 20:50:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>
+Subject: Re: [net-next PATCH v2 3/3] net: phy: led: dynamically allocate
+ speed modes array
+Message-ID: <202312152044.iRWfyQXJ-lkp@intel.com>
+References: <20231214154906.29436-4-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231214154906.29436-4-ansuelsmth@gmail.com>
 
-Nowadays all architectures except s390 recommend using `LLVM=1` instead of
-`CC=clang`, and since commit a3c6bfba4429 ("Documentation/llvm: refresh
-docs") the Kbuild LLVM documentation makes `LLVM=1` the way to go:
+Hi Christian,
 
-    We want to encourage the use of ``LLVM=1`` rather than just
-    ``CC=clang``. Make that suggestion "above the fold" and "front and
-    center" in our docs.
+kernel test robot noticed the following build errors:
 
-In particular, that commit removes the examples with `CC=clang`.
+[auto build test ERROR on net-next/main]
 
-Thus do the same in the Rust Quick Start guide, i.e. remove the `CC=clang`
-mentions, especially since the architectures that have had their Rust
-support upstreamed (or soon to be upstreamed) are all `LLVM=1` ones
-anyway. And perhaps by the time Rust is supported for s390 (or new
-architectures), it may have moved to `LLVM=1` anyway. Otherwise,
-this can be added back if needed (or perhaps an extra link to
-Documentation/kbuild/llvm.rst).
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-phy-refactor-and-better-document-phy_speeds-function/20231215-064112
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231214154906.29436-4-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH v2 3/3] net: phy: led: dynamically allocate speed modes array
+config: arm-randconfig-003-20231215 (https://download.01.org/0day-ci/archive/20231215/202312152044.iRWfyQXJ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231215/202312152044.iRWfyQXJ-lkp@intel.com/reproduce)
 
-This should also help avoiding potential confusion around `CC=clang` [1].
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312152044.iRWfyQXJ-lkp@intel.com/
 
-Link: https://lore.kernel.org/rust-for-linux/6df6e8e5-8d5b-4d3d-91b5-bc0e90c424ea@nvidia.com/ [1]
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
- Documentation/rust/quick-start.rst | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quick-start.rst
-index f382914f4191..75faa987079a 100644
---- a/Documentation/rust/quick-start.rst
-+++ b/Documentation/rust/quick-start.rst
-@@ -76,7 +76,7 @@ libclang
- 
- ``libclang`` (part of LLVM) is used by ``bindgen`` to understand the C code
- in the kernel, which means LLVM needs to be installed; like when the kernel
--is compiled with ``CC=clang`` or ``LLVM=1``.
-+is compiled with ``LLVM=1``.
- 
- Linux distributions are likely to have a suitable one available, so it is
- best to check that first.
-@@ -229,10 +229,6 @@ at the moment. That is::
- 
- 	make LLVM=1
- 
--For architectures that do not support a full LLVM toolchain, use::
--
--	make CC=clang
--
- Using GCC also works for some configurations, but it is very experimental at
- the moment.
- 
+>> drivers/net/phy/phy_led_triggers.c:89:30: error: implicit declaration of function 'phy_supported_speeds_num' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           phy->phy_num_led_triggers = phy_supported_speeds_num(phy);
+                                       ^
+   drivers/net/phy/phy_led_triggers.c:89:30: note: did you mean 'phy_supported_speeds'?
+   include/linux/phy.h:208:14: note: 'phy_supported_speeds' declared here
+   unsigned int phy_supported_speeds(struct phy_device *phy,
+                ^
+>> drivers/net/phy/phy_led_triggers.c:133:2: error: implicitly declaring library function 'free' with type 'void (void *)' [-Werror,-Wimplicit-function-declaration]
+           free(speeds);
+           ^
+   drivers/net/phy/phy_led_triggers.c:133:2: note: include the header <stdlib.h> or explicitly provide a declaration for 'free'
+   2 errors generated.
 
-base-commit: a39b6ac3781d46ba18193c9dbb2110f31e9bffe9
+
+vim +/phy_supported_speeds_num +89 drivers/net/phy/phy_led_triggers.c
+
+    83	
+    84	int phy_led_triggers_register(struct phy_device *phy)
+    85	{
+    86		unsigned int *speeds;
+    87		int i, err;
+    88	
+  > 89		phy->phy_num_led_triggers = phy_supported_speeds_num(phy);
+    90		if (!phy->phy_num_led_triggers)
+    91			return 0;
+    92	
+    93		speeds = kmalloc_array(phy->phy_num_led_triggers, sizeof(*speeds),
+    94				       GFP_KERNEL);
+    95		if (!speeds)
+    96			return -ENOMEM;
+    97	
+    98		/* Presence of speed modes already checked up */
+    99		phy_supported_speeds(phy, speeds, phy->phy_num_led_triggers);
+   100	
+   101		phy->led_link_trigger = devm_kzalloc(&phy->mdio.dev,
+   102						     sizeof(*phy->led_link_trigger),
+   103						     GFP_KERNEL);
+   104		if (!phy->led_link_trigger) {
+   105			err = -ENOMEM;
+   106			goto out_clear;
+   107		}
+   108	
+   109		err = phy_led_trigger_register(phy, phy->led_link_trigger, 0, "link");
+   110		if (err)
+   111			goto out_free_link;
+   112	
+   113		phy->phy_led_triggers = devm_kcalloc(&phy->mdio.dev,
+   114						    phy->phy_num_led_triggers,
+   115						    sizeof(struct phy_led_trigger),
+   116						    GFP_KERNEL);
+   117		if (!phy->phy_led_triggers) {
+   118			err = -ENOMEM;
+   119			goto out_unreg_link;
+   120		}
+   121	
+   122		for (i = 0; i < phy->phy_num_led_triggers; i++) {
+   123			err = phy_led_trigger_register(phy, &phy->phy_led_triggers[i],
+   124						       speeds[i],
+   125						       phy_speed_to_str(speeds[i]));
+   126			if (err)
+   127				goto out_unreg;
+   128		}
+   129	
+   130		phy->last_triggered = NULL;
+   131		phy_led_trigger_change_speed(phy);
+   132	
+ > 133		free(speeds);
+   134	
+   135		return 0;
+   136	out_unreg:
+   137		while (i--)
+   138			phy_led_trigger_unregister(&phy->phy_led_triggers[i]);
+   139		devm_kfree(&phy->mdio.dev, phy->phy_led_triggers);
+   140	out_unreg_link:
+   141		phy_led_trigger_unregister(phy->led_link_trigger);
+   142	out_free_link:
+   143		devm_kfree(&phy->mdio.dev, phy->led_link_trigger);
+   144		phy->led_link_trigger = NULL;
+   145	out_clear:
+   146		free(speeds);
+   147		phy->phy_num_led_triggers = 0;
+   148		return err;
+   149	}
+   150	EXPORT_SYMBOL_GPL(phy_led_triggers_register);
+   151	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
