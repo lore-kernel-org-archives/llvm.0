@@ -1,123 +1,124 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FE53012F
-	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 18:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rECna-0005Cl-42; Fri, 15 Dec 2023 19:20:34 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rECnZ-00G5Nx-Bc; Fri, 15 Dec 2023 19:20:33 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rECnZ-003kV5-2H; Fri, 15 Dec 2023 19:20:33 +0100
-Date: Fri, 15 Dec 2023 19:20:32 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: James Clark <james.clark@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org,
-	linux-next@vger.kernel.org, will@kernel.org, mark.rutland@arm.com,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 1/1] arm: perf: Fix ARCH=arm build with GCC
-Message-ID: <20231215182032.yainbyffntkqpkye@pengutronix.de>
-References: <20231215175648.3397170-1-james.clark@arm.com>
- <20231215175648.3397170-2-james.clark@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180403FE40;
+	Fri, 15 Dec 2023 18:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WDql3P5U"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BFIDXRU018255;
+	Fri, 15 Dec 2023 18:26:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:date:subject:mime-version:content-type
+	:content-transfer-encoding:message-id:to:cc; s=qcppdkim1; bh=t6s
+	jwTTEMurBtYFGKNA1rJneCPYBdA2fvAB/fMn1cDk=; b=WDql3P5Uu4yoQSjEmkp
+	jvL2HXRLgC0lbOC0inGuRz0rKgUYswXgtJWhEmSv5NwRllAyFlN0tAt0TlUC1qw/
+	2J4J9qEMN439hpHYG+RYY608nTR5GgJyUHEIwQPHG6y3WBoAh4OAMbu2zpxpD2Z0
+	ALCVo9bYrjnEAWQlGb7rqgKQOoodMVKP77T/A8LK3Uz67p5HGNqosVeH8XkpCzUT
+	vf1CNfiJBgiKj8EmFHtQBvdZqOWtq76Dzq9GJurkJhF67upf9twp9HnudegCDVZk
+	Y085iGCaVahUFmy7snP/XS22dUjK2F7DwQXT8WVUQXT2AFZw/Bsx65IFugh7FvVU
+	usQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v0up201sm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 18:26:55 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BFIQtrd001897
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 18:26:55 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 15 Dec
+ 2023 10:26:54 -0800
+From: Elliot Berman <quic_eberman@quicinc.com>
+Date: Fri, 15 Dec 2023 10:26:40 -0800
+Subject: [PATCH] scripts/decode_stacktrace.sh: Use LLVM environment
+ variable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="itsdxshq7bgb2hps"
-Content-Disposition: inline
-In-Reply-To: <20231215175648.3397170-2-james.clark@arm.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20231215-llvm-decode-stacktrace-v1-1-201cb86f4879@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAF+afGUC/4WNTQ6CMBBGr0JmbU1/VKgr72FY4HSUidBqi42Gc
+ HcrF3D5XvK9b4ZEkSnBsZohUubEwRdQmwqw7/yNBLvCoKU2SqudGIY8CkcYHIk0dXifYockpN2
+ bxtZWyoODMn5EuvJ7DZ/bwj2nKcTP+pPVz/5NZiWUaKy+1Abrxhp9er4Y2eMWwwjtsixfUfICO
+ L4AAAA=
+To: Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+	<ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt
+	<justinstitt@google.com>,
+        Manuel Traut <manut@linutronix.de>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Elliot Berman <quic_eberman@quicinc.com>
+X-Mailer: b4 0.13-dev
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 63bvn7dcg4qWbRItjJ2-hdFyotm5vUcs
+X-Proofpoint-ORIG-GUID: 63bvn7dcg4qWbRItjJ2-hdFyotm5vUcs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ mlxscore=0 phishscore=0 adultscore=0 suspectscore=0 mlxlogscore=427
+ impostorscore=0 priorityscore=1501 clxscore=1011 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312150129
 
+When using LLVM as the compiler, decode_stacktrace should also use
+llvm-addr2line. Check if LLVM is set and add the appropriate
+suffix/prefix.
 
---itsdxshq7bgb2hps
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+---
+ scripts/decode_stacktrace.sh | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-On Fri, Dec 15, 2023 at 05:56:48PM +0000, James Clark wrote:
-> LLVM ignores everything inside the if statement and doesn't generate
-> errors, but GCC doesn't ignore it, resulting in the following error:
->=20
->   drivers/perf/arm_pmuv3.c: In function =E2=80=98armv8pmu_write_evtype=E2=
-=80=99:
->   include/linux/bits.h:34:29: error: left shift count >=3D width of type =
-[-Werror=3Dshift-count-overflow]
->   34 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
->=20
-> Fix it by using GENMASK_ULL which doesn't overflow on arm32 (even though
-> the value is never used there).
->=20
-> Fixes: 3115ee021bfb ("arm64: perf: Include threshold control fields in PM=
-EVTYPER mask")
-> Reported-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> Closes: https://lore.kernel.org/linux-arm-kernel/20231215120817.h2f3akgv7=
-2zhrtqo@pengutronix.de/
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  include/linux/perf/arm_pmuv3.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv=
-3.h
-> index 0f4d62ef3a9a..46377e134d67 100644
-> --- a/include/linux/perf/arm_pmuv3.h
-> +++ b/include/linux/perf/arm_pmuv3.h
-> @@ -234,8 +234,8 @@
->   * PMXEVTYPER: Event selection reg
->   */
->  #define ARMV8_PMU_EVTYPE_EVENT	GENMASK(15, 0)	/* Mask for EVENT bits */
-> -#define ARMV8_PMU_EVTYPE_TH	GENMASK(43, 32)
-> -#define ARMV8_PMU_EVTYPE_TC	GENMASK(63, 61)
-> +#define ARMV8_PMU_EVTYPE_TH	GENMASK_ULL(43, 32) /* arm64 only */
-> +#define ARMV8_PMU_EVTYPE_TC	GENMASK_ULL(63, 61) /* arm64 only */
+diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
+index 564c5632e1a2..189b00f4e120 100755
+--- a/scripts/decode_stacktrace.sh
++++ b/scripts/decode_stacktrace.sh
+@@ -16,6 +16,16 @@ elif type c++filt >/dev/null 2>&1 ; then
+ 	cppfilt_opts=-i
+ fi
+ 
++if [[ "${LLVM}" == "1" ]] ; then
++	addr2line="llvm-addr2line"
++elif [[ "${LLVM}" == */ ]] ; then
++	addr2line="${LLVM}llvm-addr2line"
++elif [[ "${LLVM}" == -* ]] ; then
++	addr2line="llvm-addr2line${LLVM}"
++else
++	addr2line="${CROSS_COMPILE}addr2line"
++fi
++
+ if [[ $1 == "-r" ]] ; then
+ 	vmlinux=""
+ 	basepath="auto"
+@@ -169,7 +179,7 @@ parse_symbol() {
+ 	if [[ $aarray_support == true && "${cache[$module,$address]+isset}" == "isset" ]]; then
+ 		local code=${cache[$module,$address]}
+ 	else
+-		local code=$(${CROSS_COMPILE}addr2line -i -e "$objfile" "$address" 2>/dev/null)
++		local code=$(${addr2line} -i -e "$objfile" "$address" 2>/dev/null)
+ 		if [[ $aarray_support == true ]]; then
+ 			cache[$module,$address]=$code
+ 		fi
 
-As expected this fixes compilation on my end, too and it's nicer than
-v1.
+---
+base-commit: 3f7168591ebf7bbdb91797d02b1afaf00a4289b1
+change-id: 20231214-llvm-decode-stacktrace-09538979006d
 
-Reviewed-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Best regards,
+-- 
+Elliot Berman <quic_eberman@quicinc.com>
 
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---itsdxshq7bgb2hps
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV8mPAACgkQj4D7WH0S
-/k70Nwf/RKlhvu5kU7OLm1mwdjKU6aYfvAZkSBnFv1UIDqNO8kUiqQ1LNc7dYKYT
-+fmz88BDDkzJF8QYG73bLrwtn9paSrbPxc6kg24tdp2mH4Fq8FuDH7FuMK1Dd8CW
-L9zcHcVt1ymmRmY86UgGxSihpmeXFbqg+dt0R67TiWE/4fGMe2ilVFHtaYpZfE1s
-cw0fN2tiFUqbpWu50lokbStcsxkwhZ4RF1OCodVW4vPYUDnYyvLc/P//GS3Er6vn
-aVCFZT9WoUom77pG9L0q2f5CmZeUHC0ra2qAnguUvCIja3goldOYe0LKgetBcpK6
-PunHLJ35H+n7OoDkZiBm9fedtquNmw==
-=E8iy
------END PGP SIGNATURE-----
-
---itsdxshq7bgb2hps--
