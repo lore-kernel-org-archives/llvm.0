@@ -1,127 +1,144 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F177916419
-	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 21:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E569447F6B
+	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 21:28:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uaCPGOmK"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-54c5ed26cf6so1317942a12.3
-        for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 13:19:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Cc3qIS4P"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-552e4a68de0so1019568a12.0
+        for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 13:28:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702675170; x=1703279970; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1702675718; x=1703280518; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8mxcQ8U3h2VEOqJmIa1ew38QPU2ZNWsAXvnsDdFpYNk=;
-        b=uaCPGOmKqyHjF19/SKiZjTOkHE7damCqaZHnGKuyVEUcugYuev/eM77G/s/AOXUGgD
-         bXf/B4Qg+EMCM8zoyB0Gwq2V5D9lFMi+7dV79Q+N0/qrQ3aHEILuuaiYIVUM90cm2bU1
-         JFUZwmaHoZIcbGCEeCH5m2dl8RlY66WDG128yQvKJ35CGCtoStqhHHEFT5a/KI8hSg7Y
-         oP5jhsOVWH6DI3tHcCFSmrlQFBwLHMK25UYg/21q4PjP1zWQveeSF/WTaoPqi5GFL8jJ
-         Srf4dcqkj1vdEiE/qIDga+C7uh+J5FeLaEYVgXk2Xy1xfvHfxeus6fmrdviMdvm/PuEU
-         nxFw==
+        bh=cC1bTSXVCMzouBImm4Lunm53BHd7q+29uIzARRshG/Q=;
+        b=Cc3qIS4PEWDLwVhvmZ215vv5FXj4WeLECHp2BlNO1n1gb/Qvw3ohixWNbuz6c/4DoL
+         wCi47sfBNVe95Dd3VhQ2oAkeIR3DDXYcDeSJSVFlFcE41CLMy5WqbLdVGKf8DkLPplSO
+         4j1OYN6JlrfOeVDQS2qEtL7xtnS70A13EA8y/qrMK+8EeK0MOOkJZSH/3WB6kj2vQA03
+         1P3GgCPRGR1MInbLVz+v+SPjMy9FdtRLLesyy4zI6CvpLVesDRB0pqU/egEs73l12KCM
+         wjeFeTacj8y50cv/+0ntgpL43q76/X3LUDIiJ2OneSTedwuEnWAtJo93wS2TGCqUFncy
+         vENA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702675170; x=1703279970;
+        d=1e100.net; s=20230601; t=1702675718; x=1703280518;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8mxcQ8U3h2VEOqJmIa1ew38QPU2ZNWsAXvnsDdFpYNk=;
-        b=ZKpw+y2CrrTGVdfitWsmkil1Gg+HHx1+tUDikxO0AzgpzgtCbe5oGkfUSSFA3QwH8j
-         U/8+kW0NEzOKZs4hUzPTdWpbceeAEhgQepubtVHKTAdTTA/mOMLUyLPKe/q3VXsYu7Zo
-         TmgCR4ZcHE1kUN0Y3VPoi55mow3pR9EUqYfaQ7DbDJGveDJXT6VAr6SNxeD816dAlroM
-         qcWHkWW479uuc+ybVxs74PC43LofITZenFO1w6ekRBSXSsYOUv9EB5M2S1yMbF2Qd19r
-         pyJ3FYx1pOdhVVUdahadEo61i/cB/pwDkWxOx5c/bpIuNU78yNvbTe88IE98XlllBAnG
-         kV9A==
-X-Gm-Message-State: AOJu0YzbtNFUS+SA+T8rrbl5+Y380rwR7StoOoM21imCsbOb5M2qUGqH
-	m+OCQ2k3I7GSjI3AYXwldpxaWVH6fBU4s4r3zZbAWA==
-X-Google-Smtp-Source: AGHT+IGWvGafUSlhGGXrv1hh40ziXnG3b+EtYKBvhRhUWYc2aqT1+gDxNub/ucJABTu5gCVtHtP+ylscuPXvzxMb7IU=
-X-Received: by 2002:a50:8d50:0:b0:552:e8c3:95a7 with SMTP id
- t16-20020a508d50000000b00552e8c395a7mr409698edt.27.1702675170229; Fri, 15 Dec
- 2023 13:19:30 -0800 (PST)
+        bh=cC1bTSXVCMzouBImm4Lunm53BHd7q+29uIzARRshG/Q=;
+        b=YsHiSc0xFXzy0fuBPUXvALdUxg35xrFrnLbfqzZs4gxhGfjkGOQn6LNrrrwMCe9ked
+         gpbXDYNfEtu9UyduMly5byl383ew5thLdH9M7Sf4dCZMT19D9a2d6mF7xjYIXpyaUgWT
+         JDLQpbXu4ZCTvGlUH6I37l+5GXMXPwSa2s5oaFkq5xhzHyMZrRyqfoTkOG1zsQopnFI5
+         3kslkroAmU+tHvLtAV3kxdALYR8JhVJboxoyH8rrwrqHH7ENEba3jMdpH9870Y5uaa2X
+         V/J2OltOGsUNczc0Dy/W8nhRcteL9cn5ArRuaWh/qzAe8nVl4SUItw2X6eg3b3kQ1ONm
+         ntxg==
+X-Gm-Message-State: AOJu0Yzcgcmhs3LTnBpmQhzFox39vXJro/g6PuECHiMDg3JsGyxOZ16+
+	EXkfDTOVLMvsDCT4Wg+q4Z7nhVj/JNR42oaEGZTTDQ==
+X-Google-Smtp-Source: AGHT+IE2mXg2+E2jLeKihSLfRCnuQkYt+4zI+WvSBMFz2WgpbdwhTo/O+qkSxIF4jSezpRGJphrMSKQXA2O0/0ant9E=
+X-Received: by 2002:a50:cd53:0:b0:551:cfab:5538 with SMTP id
+ d19-20020a50cd53000000b00551cfab5538mr6411620edj.32.1702675718126; Fri, 15
+ Dec 2023 13:28:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231215-llvm-decode-stacktrace-v1-1-201cb86f4879@quicinc.com>
-In-Reply-To: <20231215-llvm-decode-stacktrace-v1-1-201cb86f4879@quicinc.com>
+References: <20231215124751.175191-1-ojeda@kernel.org>
+In-Reply-To: <20231215124751.175191-1-ojeda@kernel.org>
 From: Justin Stitt <justinstitt@google.com>
-Date: Fri, 15 Dec 2023 13:19:18 -0800
-Message-ID: <CAFhGd8pweTJJU7=iSqXbvSW79fL54B_aLpzwW3nxJ62=UA0b+A@mail.gmail.com>
-Subject: Re: [PATCH] scripts/decode_stacktrace.sh: Use LLVM environment variable
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Manuel Traut <manut@linutronix.de>, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Fri, 15 Dec 2023 13:28:26 -0800
+Message-ID: <CAFhGd8pHtfuMYfx=uEzssvesQDZ-BS0BzPwn06WbasXKUfPBJg@mail.gmail.com>
+Subject: Re: [PATCH] docs: rust: remove `CC=clang` mentions
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Wedson Almeida Filho <wedsonaf@gmail.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev, 
+	Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, linux-doc@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Dec 15, 2023 at 10:27=E2=80=AFAM Elliot Berman <quic_eberman@quicin=
-c.com> wrote:
+On Fri, Dec 15, 2023 at 4:48=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wro=
+te:
 >
-> When using LLVM as the compiler, decode_stacktrace should also use
-> llvm-addr2line. Check if LLVM is set and add the appropriate
-> suffix/prefix.
+> Nowadays all architectures except s390 recommend using `LLVM=3D1` instead=
+ of
+> `CC=3Dclang`, and since commit a3c6bfba4429 ("Documentation/llvm: refresh
+> docs") the Kbuild LLVM documentation makes `LLVM=3D1` the way to go:
 >
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>     We want to encourage the use of ``LLVM=3D1`` rather than just
+>     ``CC=3Dclang``. Make that suggestion "above the fold" and "front and
+>     center" in our docs.
+>
+> In particular, that commit removes the examples with `CC=3Dclang`.
+>
+> Thus do the same in the Rust Quick Start guide, i.e. remove the `CC=3Dcla=
+ng`
+> mentions, especially since the architectures that have had their Rust
+> support upstreamed (or soon to be upstreamed) are all `LLVM=3D1` ones
+> anyway. And perhaps by the time Rust is supported for s390 (or new
+> architectures), it may have moved to `LLVM=3D1` anyway. Otherwise,
+> this can be added back if needed (or perhaps an extra link to
+> Documentation/kbuild/llvm.rst).
+>
+> This should also help avoiding potential confusion around `CC=3Dclang` [1=
+].
+>
+
+Yes!
+
+
+> Link: https://lore.kernel.org/rust-for-linux/6df6e8e5-8d5b-4d3d-91b5-bc0e=
+90c424ea@nvidia.com/ [1]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+
 > ---
-
-I tried it out by dropping a random dump_stack() call into the init
-phase of the kernel and redirecting the serial console output to a log
-file. Using the pre-(this patch) and post-(this patch) script yields
-good stack trace results. It seems llvm-addr2line is a drop-in
-replacement.
-
-Tested-by: Justin Stitt <justinstitt@google.com>
-
->  scripts/decode_stacktrace.sh | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+>  Documentation/rust/quick-start.rst | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 >
-> diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
-> index 564c5632e1a2..189b00f4e120 100755
-> --- a/scripts/decode_stacktrace.sh
-> +++ b/scripts/decode_stacktrace.sh
-> @@ -16,6 +16,16 @@ elif type c++filt >/dev/null 2>&1 ; then
->         cppfilt_opts=3D-i
->  fi
+> diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quic=
+k-start.rst
+> index f382914f4191..75faa987079a 100644
+> --- a/Documentation/rust/quick-start.rst
+> +++ b/Documentation/rust/quick-start.rst
+> @@ -76,7 +76,7 @@ libclang
 >
-> +if [[ "${LLVM}" =3D=3D "1" ]] ; then
-> +       addr2line=3D"llvm-addr2line"
-> +elif [[ "${LLVM}" =3D=3D */ ]] ; then
-> +       addr2line=3D"${LLVM}llvm-addr2line"
-> +elif [[ "${LLVM}" =3D=3D -* ]] ; then
-> +       addr2line=3D"llvm-addr2line${LLVM}"
-> +else
-> +       addr2line=3D"${CROSS_COMPILE}addr2line"
-> +fi
-> +
->  if [[ $1 =3D=3D "-r" ]] ; then
->         vmlinux=3D""
->         basepath=3D"auto"
-> @@ -169,7 +179,7 @@ parse_symbol() {
->         if [[ $aarray_support =3D=3D true && "${cache[$module,$address]+i=
-sset}" =3D=3D "isset" ]]; then
->                 local code=3D${cache[$module,$address]}
->         else
-> -               local code=3D$(${CROSS_COMPILE}addr2line -i -e "$objfile"=
- "$address" 2>/dev/null)
-> +               local code=3D$(${addr2line} -i -e "$objfile" "$address" 2=
->/dev/null)
->                 if [[ $aarray_support =3D=3D true ]]; then
->                         cache[$module,$address]=3D$code
->                 fi
+>  ``libclang`` (part of LLVM) is used by ``bindgen`` to understand the C c=
+ode
+>  in the kernel, which means LLVM needs to be installed; like when the ker=
+nel
+> -is compiled with ``CC=3Dclang`` or ``LLVM=3D1``.
+> +is compiled with ``LLVM=3D1``.
 >
-> ---
-> base-commit: 3f7168591ebf7bbdb91797d02b1afaf00a4289b1
-> change-id: 20231214-llvm-decode-stacktrace-09538979006d
+>  Linux distributions are likely to have a suitable one available, so it i=
+s
+>  best to check that first.
+> @@ -229,10 +229,6 @@ at the moment. That is::
 >
-> Best regards,
+>         make LLVM=3D1
+>
+> -For architectures that do not support a full LLVM toolchain, use::
+> -
+> -       make CC=3Dclang
+> -
+>  Using GCC also works for some configurations, but it is very experimenta=
+l at
+>  the moment.
+>
+>
+> base-commit: a39b6ac3781d46ba18193c9dbb2110f31e9bffe9
 > --
-> Elliot Berman <quic_eberman@quicinc.com>
+> 2.43.0
 >
 
 Thanks
