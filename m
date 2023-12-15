@@ -1,78 +1,88 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC823FB0B
-	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 17:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F11E1063;
-	Fri, 15 Dec 2023 09:58:00 -0800 (PST)
-Received: from e127643.broadband (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 40CC33F738;
-	Fri, 15 Dec 2023 09:57:13 -0800 (PST)
-From: James Clark <james.clark@arm.com>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	will@kernel.org,
-	u.kleine-koenig@pengutronix.de,
-	mark.rutland@arm.com
-Cc: James Clark <james.clark@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 1/1] arm: perf: Fix ARCH=arm build with GCC
-Date: Fri, 15 Dec 2023 17:56:48 +0000
-Message-Id: <20231215175648.3397170-2-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231215175648.3397170-1-james.clark@arm.com>
-References: <20231215175648.3397170-1-james.clark@arm.com>
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2526A3012A;
+	Fri, 15 Dec 2023 18:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eZKjJbtC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702664298; x=1734200298;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oIy/GeRIK9X1C9SdD2TD84Y3G6YhriV7Fh3rv+hzjLE=;
+  b=eZKjJbtCYamR+brd2PCEL9K5ai0uefVLjCWxdwd00k4GrPmdJRczSGP3
+   nROmR6M6aW9ehCK1R84kFZ+MOd2WIfm3f23kQ6HWLkKH+dcRVQp6T+KMm
+   CYcun3BHqR+B5D7hRE8Na29fF99i62E9hKLR5i23UXjiclvUleNlodTbU
+   eFh+CNcxbBo5EqkNruikrAs/Qy4coELqb4PB2zgHiPbrWQ1rjuqnwO377
+   lGm8F1E1/69R2gQvkUpFPsfcjdBiOsL+VGvioYYcxmoIkGijKvGk21PuS
+   UR/1hnFiHTA6xmeRhSJcVVxBP3nrVkCrcdgqk4QNZsMoN1OXDv4UTPO1v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="399146938"
+X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
+   d="scan'208";a="399146938"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 10:18:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
+   d="scan'208";a="22936309"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 15 Dec 2023 10:18:16 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rEClJ-0000as-2T;
+	Fri, 15 Dec 2023 18:18:13 +0000
+Date: Sat, 16 Dec 2023 02:17:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function
+ parameter or struct member 'sglen' not described in 'at_desc'
+Message-ID: <202312160248.qdLfKzJz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-LLVM ignores everything inside the if statement and doesn't generate
-errors, but GCC doesn't ignore it, resulting in the following error:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3f7168591ebf7bbdb91797d02b1afaf00a4289b1
+commit: ac803b56860f6506c55a3c9330007837e3f4edda dmaengine: at_hdmac: Convert driver to use virt-dma
+date:   1 year, 1 month ago
+config: arm-randconfig-001-20231215 (https://download.01.org/0day-ci/archive/20231216/202312160248.qdLfKzJz-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312160248.qdLfKzJz-lkp@intel.com/reproduce)
 
-  drivers/perf/arm_pmuv3.c: In function ‘armv8pmu_write_evtype’:
-  include/linux/bits.h:34:29: error: left shift count >= width of type [-Werror=shift-count-overflow]
-  34 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312160248.qdLfKzJz-lkp@intel.com/
 
-Fix it by using GENMASK_ULL which doesn't overflow on arm32 (even though
-the value is never used there).
+All warnings (new ones prefixed by >>):
 
-Fixes: 3115ee021bfb ("arm64: perf: Include threshold control fields in PMEVTYPER mask")
-Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Closes: https://lore.kernel.org/linux-arm-kernel/20231215120817.h2f3akgv72zhrtqo@pengutronix.de/
-Signed-off-by: James Clark <james.clark@arm.com>
----
- include/linux/perf/arm_pmuv3.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>> scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function parameter or struct member 'sglen' not described in 'at_desc'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function parameter or struct member 'boundary' not described in 'at_desc'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function parameter or struct member 'dst_hole' not described in 'at_desc'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function parameter or struct member 'src_hole' not described in 'at_desc'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function parameter or struct member 'memset_buffer' not described in 'at_desc'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function parameter or struct member 'memset_paddr' not described in 'at_desc'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Function parameter or struct member 'memset_vaddr' not described in 'at_desc'
+>> scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Excess struct member 'sg_len' description in 'at_desc'
+>> scripts/kernel-doc: drivers/dma/at_hdmac.c:240: warning: Excess struct member 'sg_len' description in 'at_desc'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:249: warning: cannot understand function prototype: 'enum atc_status '
+>> scripts/kernel-doc: drivers/dma/at_hdmac.c:284: warning: Function parameter or struct member 'cyclic' not described in 'at_dma_chan'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:348: warning: Function parameter or struct member 'regs' not described in 'at_dma'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:348: warning: Function parameter or struct member 'memset_pool' not described in 'at_dma'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:348: warning: Excess struct member 'atdma_devtype' description in 'at_dma'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:348: warning: Excess struct member 'ch_regs' description in 'at_dma'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:348: warning: Excess struct member 'atdma_devtype' description in 'at_dma'
+   scripts/kernel-doc: drivers/dma/at_hdmac.c:348: warning: Excess struct member 'ch_regs' description in 'at_dma'
 
-diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-index 0f4d62ef3a9a..46377e134d67 100644
---- a/include/linux/perf/arm_pmuv3.h
-+++ b/include/linux/perf/arm_pmuv3.h
-@@ -234,8 +234,8 @@
-  * PMXEVTYPER: Event selection reg
-  */
- #define ARMV8_PMU_EVTYPE_EVENT	GENMASK(15, 0)	/* Mask for EVENT bits */
--#define ARMV8_PMU_EVTYPE_TH	GENMASK(43, 32)
--#define ARMV8_PMU_EVTYPE_TC	GENMASK(63, 61)
-+#define ARMV8_PMU_EVTYPE_TH	GENMASK_ULL(43, 32) /* arm64 only */
-+#define ARMV8_PMU_EVTYPE_TC	GENMASK_ULL(63, 61) /* arm64 only */
- 
- /*
-  * Event filters for PMUv3
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
