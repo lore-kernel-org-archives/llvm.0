@@ -1,35 +1,32 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D443A8D8
-	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 16:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="380291055"
-X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="380291055"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 08:08:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="898189055"
-X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="898189055"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 08:08:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rEAjf-00000006AFZ-3TgL;
-	Fri, 15 Dec 2023 18:08:23 +0200
-Date: Fri, 15 Dec 2023 18:08:23 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: tanzirh@google.com
-Cc: Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] lib/string: shrink lib/string.i via IWYU
-Message-ID: <ZXx594P0pdS8vpVt@smile.fi.intel.com>
-References: <20231214-libstringheader-v2-0-0f195dcff204@google.com>
- <20231214-libstringheader-v2-2-0f195dcff204@google.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E733B2A2
+	for <llvm@lists.linux.dev>; Fri, 15 Dec 2023 16:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D2BFC15;
+	Fri, 15 Dec 2023 08:22:40 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.45.203])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1150B3F5A1;
+	Fri, 15 Dec 2023 08:21:52 -0800 (PST)
+Date: Fri, 15 Dec 2023 16:21:45 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: James Clark <james.clark@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org,
+	linux-next@vger.kernel.org, will@kernel.org,
+	u.kleine-koenig@pengutronix.de,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] arm: perf: Fix ARCH=arm build with GCC in
+ armv8pmu_write_evtype()
+Message-ID: <ZXx9GW1onSy4eBEB@FVFF77S0Q05N>
+References: <20231215150040.3342183-1-james.clark@arm.com>
+ <20231215150040.3342183-2-james.clark@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,61 +35,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231214-libstringheader-v2-2-0f195dcff204@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20231215150040.3342183-2-james.clark@arm.com>
 
-On Thu, Dec 14, 2023 at 09:06:13PM +0000, tanzirh@google.com wrote:
-> This diff uses an open source tool include-what-you-use (IWYU) to modify
-> the include list changing indirect includes to direct includes.
-> IWYU is implemented using the IWYUScripts github repository which is a tool that is
-> currently undergoing development. These changes seek to improve build times.
+On Fri, Dec 15, 2023 at 03:00:38PM +0000, James Clark wrote:
+> LLVM ignores everything inside the if statement and doesn't generate
+> errors, but GCC doesn't ignore it, resulting in the following error:
 > 
-> This change to lib/string.c resulted in a preprocessed size of
-> lib/string.i from 26371 lines to 5259 lines (-80%) for the x86
-> defconfig.
-
-> Link: https://github.com/ClangBuiltLinux/IWYUScripts
+>   drivers/perf/arm_pmuv3.c: In function 'armv8pmu_write_evtype':
+>   include/linux/bits.h:34:29: error: left shift count >= width of type [-Werror=shift-count-overflow]
+>   	34 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
 > 
-> Signed-off-by: Tanzir Hasan <tanzirh@google.com>
+> Fix it by changing the if to #if.
 
-Tag block should not have blank line(s).
+I reckon it'd be cleaner to use GENMASK_ULL for the TH and TC fields, in
+include/linux/perf/arm_pmu.h have:
 
->  #include <linux/types.h>
-> -#include <linux/string.h>
-> -#include <linux/ctype.h>
-> -#include <linux/kernel.h>
-> -#include <linux/export.h>
-> +#include <linux/bits.h>
->  #include <linux/bug.h>
->  #include <linux/errno.h>
-> -#include <linux/slab.h>
-> -
-> +#include <asm/rwonce.h>
-> +#include <linux/linkage.h>
-> +#include <linux/stddef.h>
-> +#include <vdso/limits.h>
-> +#include <linux/string.h>
-> +#include <linux/ctype.h>
->  #include <asm/unaligned.h>
-> -#include <asm/byteorder.h>
->  #include <asm/word-at-a-time.h>
->  #include <asm/page.h>
+| /*
+|  * PMXEVTYPER: Event selection reg
+|  */
+| #define ARMV8_PMU_EVTYPE_EVENT GENMASK(15, 0)          /* Mask for EVENT bits */
+| #define ARMV8_PMU_EVTYPE_TH    GENMASK_ULL(43, 32)     /* arm64 only */
+| #define ARMV8_PMU_EVTYPE_TC    GENMASK_ULL(63, 61)     /* arm64 only */
 
-My gosh, this becomes unreadable!
+IIUC that should silence this warning, and it'd remove the need for the
+ifdeffery and other changes in patch 2.
 
-Please make sure you go with groups of headers from more generic to more
-particular, i.e.
+Does that work, or am I missing something?
 
-linux/*
+Thanks,
+Mark.
 
-asm/*
-
-vdso/*
-
-BUT, why the heck vdso? It should be rather uapi/ or regular linux/.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> 
+> Fixes: 3115ee021bfb ("arm64: perf: Include threshold control fields in PMEVTYPER mask")
+> Reported-by: Uwe Kleine-K"onig <u.kleine-koenig@pengutronix.de>
+> Closes: https://lore.kernel.org/linux-arm-kernel/20231215120817.h2f3akgv72zhrtqo@pengutronix.de/
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  drivers/perf/arm_pmuv3.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+> index 23fa6c5da82c..3ed2086cefc3 100644
+> --- a/drivers/perf/arm_pmuv3.c
+> +++ b/drivers/perf/arm_pmuv3.c
+> @@ -631,8 +631,9 @@ static void armv8pmu_write_evtype(int idx, unsigned long val)
+>  			     ARMV8_PMU_EXCLUDE_EL0 |
+>  			     ARMV8_PMU_EXCLUDE_EL1;
+>  
+> -	if (IS_ENABLED(CONFIG_ARM64))
+> -		mask |= ARMV8_PMU_EVTYPE_TC | ARMV8_PMU_EVTYPE_TH;
+> +#if IS_ENABLED(CONFIG_ARM64)
+> +	mask |= ARMV8_PMU_EVTYPE_TC | ARMV8_PMU_EVTYPE_TH;
+> +#endif
+>  
+>  	val &= mask;
+>  	write_pmevtypern(counter, val);
+> -- 
+> 2.34.1
+> 
