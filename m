@@ -1,57 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8507ECD;
-	Fri, 15 Dec 2023 01:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD8B53BA;
+	Fri, 15 Dec 2023 04:52:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a0H5GXNn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mmV/4MtB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702603858; x=1734139858;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bo4CQbjDhFgPpZxFoaEvDAhRSz9PVVm5QEWsB3l+Hvk=;
-  b=a0H5GXNnXIuSo2nz6RcDsjiQQsmRNnMV28Ik9xIKQvwzWPET1eCTzmA5
-   +WVO0XLlbOTLh94U13Xf5daDZdktoyE1fmxoCodrT+PGEGp90wlTP6uJJ
-   dZhVOERkh0cpnY34iT2seMIfvU5rx7HkZ8ofdGBABrO+anFTqbv9xXgdH
-   K3pME6DZpV+BKLejAQDe9lbepKhi4OftsUd54XE64S0LJi+mbyBHLdXzf
-   f8+kDXMDcH/MnuCwJUp9T7Ar1t1jLY2oP4gR0nJcauQEPhhTiq+XBjdfC
-   lpJw7rVR+t5OWKHscTtJ2YAsqKyNtbKGQ4Ha8vjQ5/5hkhWK8lBAWdZVd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="399050766"
+  t=1702615968; x=1734151968;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s1sK5A9juIqh9wbDZfAu6XfLHOfjggmzG4OCju+NBy0=;
+  b=mmV/4MtBpPv6825tYNT1uR1RkbSSnpnG8ZDG7p6kkpnXmRajDizPiTqP
+   Z+YrGeg0Oo2ptfWOlYhHyjCKyq12NxSnvkNk/seo+OkZuo+NhCfw9aVhW
+   UrjbN4ncYWLFGdWAgiPy8ChjI1RKesV0Iq6imz6q3dUEgt3kyj31POlyZ
+   9rizBMUma6scwtEXSMvk8Wm22NMwEQqNJTI8UxeOAyu/SsZvzuo9p/GEt
+   1pVWAVw/7+QiC0ro2rsLR82HobBpsUDIjcj9OczTaFs7vOsOQGy9m96Vv
+   2P7cDfbyk8OYYZOCLDE9k0NIhMathqu4WVwUmkLIsDtau0nBWc1GI0cG5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="461693256"
 X-IronPort-AV: E=Sophos;i="6.04,277,1695711600"; 
-   d="scan'208";a="399050766"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2023 17:30:58 -0800
+   d="scan'208";a="461693256"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2023 20:52:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="897960014"
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="774632490"
 X-IronPort-AV: E=Sophos;i="6.04,277,1695711600"; 
-   d="scan'208";a="897960014"
+   d="scan'208";a="774632490"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 14 Dec 2023 17:30:50 -0800
+  by orsmga002.jf.intel.com with ESMTP; 14 Dec 2023 20:52:46 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rDx2N-000Mwz-31;
-	Fri, 15 Dec 2023 01:30:47 +0000
-Date: Fri, 15 Dec 2023 09:30:24 +0800
+	id 1rE0Bo-000N6c-0l;
+	Fri, 15 Dec 2023 04:52:44 +0000
+Date: Fri, 15 Dec 2023 12:51:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry.memverge@gmail.com>, linux-mm@kvack.org
+To: Michal Kubiak <michal.kubiak@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-	x86@kernel.org, akpm@linux-foundation.org, arnd@arndb.de,
-	tglx@linutronix.de, luto@kernel.org, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, hpa@zytor.com, mhocko@kernel.org,
-	tj@kernel.org, ying.huang@intel.com, gregory.price@memverge.com,
-	corbet@lwn.net, rakie.kim@sk.com, hyeongtak.ji@sk.com,
-	honggyu.kim@sk.com, vtavarespetr@micron.com, peterz@infradead.org,
-	jgroves@micron.com, ravis.opensrc@micron.com, sthanneeru@micron.com,
-	emirakhur@micron.com, Hasan.Maruf@amd.com, seungjun.ha@samsung.com
-Subject: Re: [PATCH v3 09/11] mm/mempolicy: add get_mempolicy2 syscall
-Message-ID: <202312150958.WYyFWIdr-lkp@intel.com>
-References: <20231213224118.1949-10-gregory.price@memverge.com>
+	Alexander Lobakin <aleksander.lobakin@intel.com>
+Subject: [alobakin:idpf-libie 35/35]
+ drivers/net/ethernet/intel/idpf/idpf_txrx.c:3213: warning: Function
+ parameter or member 'dma' not described in 'idpf_xdp_tx_xmit'
+Message-ID: <202312151246.oVbOrEQm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,39 +51,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231213224118.1949-10-gregory.price@memverge.com>
 
-Hi Gregory,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on deller-parisc/for-next powerpc/next powerpc/fixes s390/features jcmvbkbc-xtensa/xtensa-for-next arnd-asm-generic/master linus/master v6.7-rc5]
-[cannot apply to geert-m68k/for-next geert-m68k/for-linus tip/x86/asm next-20231214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/mm-mempolicy-implement-the-sysfs-based-weighted_interleave-interface/20231214-064236
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231213224118.1949-10-gregory.price%40memverge.com
-patch subject: [PATCH v3 09/11] mm/mempolicy: add get_mempolicy2 syscall
-config: x86_64-randconfig-002-20231214 (https://download.01.org/0day-ci/archive/20231215/202312150958.WYyFWIdr-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231215/202312150958.WYyFWIdr-lkp@intel.com/reproduce)
+tree:   https://github.com/alobakin/linux idpf-libie
+head:   3bd358daafd19b00cfd2caa30d72f6ae1bb1b611
+commit: 3bd358daafd19b00cfd2caa30d72f6ae1bb1b611 [35/35] idpf: add support for XDP_PASS, XDP_DROP, XDP_TX, XDP_REDIRECT
+config: arm-randconfig-002-20231215 (https://download.01.org/0day-ci/archive/20231215/202312151246.oVbOrEQm-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231215/202312151246.oVbOrEQm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312150958.WYyFWIdr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312151246.oVbOrEQm-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __x64_sys_get_mempolicy2
-   >>> referenced by syscall_64.c
-   >>>               arch/x86/entry/syscall_64.o:(sys_call_table) in archive vmlinux.a
-   >>> did you mean: __x64_sys_get_mempolicy
-   >>> defined in: vmlinux.a(kernel/sys_ni.o)
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:3213: warning: Function parameter or member 'dma' not described in 'idpf_xdp_tx_xmit'
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:3213: warning: Function parameter or member 'len' not described in 'idpf_xdp_tx_xmit'
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:3213: warning: Function parameter or member 'sq' not described in 'idpf_xdp_tx_xmit'
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:3213: warning: expecting prototype for idpf_xmit_xdp_buff(). Prototype was for idpf_xdp_tx_xmit() instead
+
+
+vim +3213 drivers/net/ethernet/intel/idpf/idpf_txrx.c
+
+  3202	
+  3203	/**
+  3204	 * idpf_xmit_xdp_buff - submit single buffer to XDP queue for transmission
+  3205	 * @xdp: XDP buffer pointer
+  3206	 * @xdpq: XDP queue for transmission
+  3207	 * @map: whether to map the buffer
+  3208	 *
+  3209	 * Returns negative on failure, 0 on success.
+  3210	 */
+  3211	static void idpf_xdp_tx_xmit(dma_addr_t dma, u32 len,
+  3212				     const struct libie_tx_queue *sq)
+> 3213	{
+  3214		union idpf_tx_flex_desc *tx_desc = sq->desc_ring;
+  3215		struct idpf_tx_splitq_params tx_params = {
+  3216			.dtype		= IDPF_TX_DESC_DTYPE_FLEX_L2TAG1_L2TAG2,
+  3217			.eop_cmd	= IDPF_TX_DESC_CMD_EOP,
+  3218		};
+  3219	
+  3220		tx_desc = &tx_desc[sq->next_to_use];
+  3221		tx_desc->q.buf_addr = cpu_to_le64(dma);
+  3222	
+  3223		idpf_tx_splitq_build_desc(tx_desc, &tx_params,
+  3224					  tx_params.eop_cmd | tx_params.offload.td_cmd,
+  3225					  len);
+  3226	}
+  3227	
 
 -- 
 0-DAY CI Kernel Test Service
