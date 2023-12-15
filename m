@@ -1,55 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D557F18EAF;
-	Fri, 15 Dec 2023 22:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B308418EC5;
+	Fri, 15 Dec 2023 23:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iXFuaSqL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XUUqqp3O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702679794; x=1734215794;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=81ICkebormZ0Z0Ct1dTYfN2Re+TIgDgSB9gIT28pAKg=;
-  b=iXFuaSqLd1s2hyXfHgq8AZegeGD8JmnE0qmwz0D3pG4LbVSp/mirfLUB
-   qeZlfp+1j5xWa+KRmfawDFlkIq5MDuQL8DTBXeIwyooDQEVLZhWbOAg0D
-   odrNwhcpqa8tqAYzH+VVgiZt8N+wkCGbqd5oYT8akdzsRcOsEyQ8RaJ9K
-   WYvzvENJN6EJmhuCcdkQOrFs7Sf0ntPZdHS4LNRFIuRKKxrKl/T3TGhx9
-   2YR713Rtb3BYsLErOnwr+XzuhzZIF2f76Z5NE2SR8wQFSolcwJNpPZK5S
-   P9zoldvuqldRX6YPEE1C3FcDg+krJieNnzqRhCi3Ovvgl+XlHQpatLCqr
+  t=1702681711; x=1734217711;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ea4jBCYtQ2auku9rqiJ5wsdQiARPic3KpBoLedt2jXA=;
+  b=XUUqqp3OKvEhYj80Ixj9wQwHQz+y0nd/b6hFMdZZK+b0HnU4Hz7d+eht
+   V0q7Tj6QuPYR0rGOI6NEqnjFiNClPqPNqUb9Q4PlGralic/OsTf1p7Z67
+   l/mMLrNoOXWMz6WvfkInwgdyaeRWFMcOJUGuVMI1Da124GFAgVFUdOwsi
+   Gf2PMeEYKaUXtywMOQTf913Ya4yjvWGBvyo0O1PqX8VXqaJwxgVTwuTgg
+   CvzlqX7I/TZQHU+zxtleMP/Tn1HZXPfAAYTHW14pwiTj+eGR4BzKJM04M
+   FS42Gzkv/GoQp4PaKWfNYMAeSnTePDLll5t2465RhPspkUtYX/UyX3YJ0
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="16891904"
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="395078189"
 X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
-   d="scan'208";a="16891904"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 14:36:32 -0800
+   d="scan'208";a="395078189"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 15:08:29 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="768144404"
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="724601802"
 X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
-   d="scan'208";a="768144404"
+   d="scan'208";a="724601802"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2023 14:36:26 -0800
+  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2023 15:08:27 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rEGnA-0000r2-15;
-	Fri, 15 Dec 2023 22:36:24 +0000
-Date: Sat, 16 Dec 2023 06:35:39 +0800
+	id 1rEHI9-0000sm-0s;
+	Fri, 15 Dec 2023 23:08:25 +0000
+Date: Sat, 16 Dec 2023 07:07:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Elad Nachman <enachman@marvell.com>, wim@linux-watchdog.org,
-	linux@roeck-us.net, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	gregory.clement@bootlin.com, chris.packham@alliedtelesis.co.nz,
-	andrew@lunn.ch, fu.wei@linaro.org, Suravee.Suthikulpanit@amd.com,
-	al.stone@linaro.org, timur@codeaurora.org,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	enachman@marvell.com, cyuval@marvell.com
-Subject: Re: [PATCH 3/3] watchdog: sbsa_gwdt: add support for Marvell ac5
-Message-ID: <202312160648.h1CrZxtx-lkp@intel.com>
-References: <20231214150414.1849058-4-enachman@marvell.com>
+	Steev Klimaszewski <steev@kali.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [steev:lenovo-x13s-v6.7-rc5 128/138]
+ drivers/media/i2c/ar1337.c:349:54: error: incompatible pointer types passing
+ 'struct v4l2_subdev_pad_config *' to parameter of type 'struct
+ v4l2_subdev_state *'
+Message-ID: <202312160723.5w8KtEwc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,201 +53,265 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231214150414.1849058-4-enachman@marvell.com>
 
-Hi Elad,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on groeck-staging/hwmon-next linus/master v6.7-rc5 next-20231215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Elad-Nachman/dt-bindings-watchdog-add-Marvell-AC5-watchdog/20231214-230812
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20231214150414.1849058-4-enachman%40marvell.com
-patch subject: [PATCH 3/3] watchdog: sbsa_gwdt: add support for Marvell ac5
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231216/202312160648.h1CrZxtx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312160648.h1CrZxtx-lkp@intel.com/reproduce)
+tree:   https://github.com/steev/linux lenovo-x13s-v6.7-rc5
+head:   b8cd563c115473e27fa4778c1eca7b25f6f9a7ee
+commit: 3816d49b9f2ab3e4b7b94aa5b5a8207c062b504d [128/138] media: i2c: ar1337: Add OnSemi AR1337 CMOS sensor
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231216/202312160723.5w8KtEwc-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312160723.5w8KtEwc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312160648.h1CrZxtx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312160723.5w8KtEwc-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/watchdog/sbsa_gwdt.c:434:11: error: incompatible integer to pointer conversion assigning to 'void *' from 'resource_size_t' (aka 'unsigned long long') [-Wint-conversion]
-     434 |                 cf_base = res->start;
-         |                         ^ ~~~~~~~~~~
-   drivers/watchdog/sbsa_gwdt.c:439:11: error: incompatible integer to pointer conversion assigning to 'void *' from 'resource_size_t' (aka 'unsigned long long') [-Wint-conversion]
-     439 |                 rf_base = res->start;
-         |                         ^ ~~~~~~~~~~
-   drivers/watchdog/sbsa_gwdt.c:444:17: error: incompatible integer to pointer conversion assigning to 'void *' from 'resource_size_t' (aka 'unsigned long long') [-Wint-conversion]
-     444 |                 cpu_ctrl_base = res->start;
-         |                               ^ ~~~~~~~~~~
-   3 errors generated.
+   drivers/media/i2c/ar1337.c:281:6: warning: unused variable 'ret' [-Wunused-variable]
+           int ret;
+               ^
+>> drivers/media/i2c/ar1337.c:349:54: error: incompatible pointer types passing 'struct v4l2_subdev_pad_config *' to parameter of type 'struct v4l2_subdev_state *' [-Werror,-Wincompatible-pointer-types]
+                   framefmt = v4l2_subdev_get_try_format(&ar1337->sd, cfg,
+                                                                      ^~~
+   include/media/v4l2-subdev.h:1212:33: note: expanded from macro 'v4l2_subdev_get_try_format'
+           v4l2_subdev_get_pad_format(sd, state, pad)
+                                          ^~~~~
+   include/media/v4l2-subdev.h:1157:33: note: passing argument to parameter 'state' here
+                              struct v4l2_subdev_state *state,
+                                                        ^
+   drivers/media/i2c/ar1337.c:401:43: error: incompatible pointer types passing 'struct v4l2_subdev_pad_config *' to parameter of type 'struct v4l2_subdev_state *' [-Werror,-Wincompatible-pointer-types]
+                   format = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+                                                           ^~~
+   include/media/v4l2-subdev.h:1212:33: note: expanded from macro 'v4l2_subdev_get_try_format'
+           v4l2_subdev_get_pad_format(sd, state, pad)
+                                          ^~~~~
+   include/media/v4l2-subdev.h:1157:33: note: passing argument to parameter 'state' here
+                              struct v4l2_subdev_state *state,
+                                                        ^
+>> drivers/media/i2c/ar1337.c:560:14: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_pad_config *)' [-Wincompatible-function-pointer-types]
+           .init_cfg = ar1337_entity_init_cfg,
+                       ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/media/i2c/ar1337.c:561:20: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_mbus_code_enum *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_mbus_code_enum *)' [-Wincompatible-function-pointer-types]
+           .enum_mbus_code = ar1337_enum_mbus_code,
+                             ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/media/i2c/ar1337.c:562:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+           .get_fmt = ar1337_get_fmt,
+                      ^~~~~~~~~~~~~~
+   drivers/media/i2c/ar1337.c:563:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+           .set_fmt = ar1337_set_fmt,
+                      ^~~~~~~~~~~~~~
+>> drivers/media/i2c/ar1337.c:597:56: error: too few arguments to function call, expected 2, have 1
+           ar1337->ep = v4l2_fwnode_endpoint_alloc_parse(endpoint);
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~         ^
+   include/media/v4l2-fwnode.h:282:5: note: 'v4l2_fwnode_endpoint_alloc_parse' declared here
+   int v4l2_fwnode_endpoint_alloc_parse(struct fwnode_handle *fwnode,
+       ^
+>> drivers/media/i2c/ar1337.c:606:30: error: use of undeclared identifier 'V4L2_MBUS_CSI2'; did you mean 'V4L2_MBUS_CSI1'?
+           if (ar1337->ep->bus_type != V4L2_MBUS_CSI2) {
+                                       ^~~~~~~~~~~~~~
+                                       V4L2_MBUS_CSI1
+   include/media/v4l2-mediabus.h:140:2: note: 'V4L2_MBUS_CSI1' declared here
+           V4L2_MBUS_CSI1,
+           ^
+>> drivers/media/i2c/ar1337.c:763:3: error: field designator 'probe_new' does not refer to any field in type 'struct i2c_driver'
+           .probe_new  = ar1337_probe,
+            ^
+>> drivers/media/i2c/ar1337.c:764:12: error: incompatible function pointer types initializing 'void (*)(struct i2c_client *)' with an expression of type 'int (struct i2c_client *)' [-Wincompatible-function-pointer-types]
+           .remove = ar1337_remove,
+                     ^~~~~~~~~~~~~
+   1 warning and 10 errors generated.
 
 
-vim +434 drivers/watchdog/sbsa_gwdt.c
+vim +349 drivers/media/i2c/ar1337.c
 
+   229	
+   230	static int ar1337_set_register_array(struct ar1337 *ar1337,
+   231					     const struct ar1337_regval *settings,
+   232					     unsigned int num_settings)
+   233	{
+   234		unsigned int i;
+   235		int ret;
+   236	
+   237		for (i = 0; i < num_settings; ++i, ++settings) {
+   238			ret = ar1337_write_reg16(ar1337, settings->reg, settings->val);
+   239			if (ret < 0)
+   240				return ret;
+   241	
+   242			/* Settle time is 10ms for all registers */
+   243			msleep(10);
+   244		}
+   245	
+   246		return 0;
+   247	}
+   248	/*
+   249	static int ar1337_write_buffered_reg(struct ar1337 *ar1337, u16 address_low,
+   250					     u8 nr_regs, u32 value)
+   251	{
+   252		unsigned int i;
+   253		int ret;
+   254	
+   255		ret = ar1337_write_reg8(ar1337, AR1337_REG_HOLD, 0x01);
+   256		if (ret) {
+   257			dev_err(ar1337->dev, "Error setting hold register\n");
+   258			return ret;
+   259		}
+   260	
+   261		for (i = 0; i < nr_regs; i++) {
+   262			ret = ar1337_write_reg(ar1337, address_low + i,
+   263					       (u8)(value >> (i * 8)));
+   264			if (ret) {
+   265				dev_err(ar1337->dev, "Error writing buffered registers\n");
+   266				return ret;
+   267			}
+   268		}
+   269	
+   270		ret = ar1337_write_reg8(ar1337, AR1337_REG_HOLD, 0x00);
+   271		if (ret) {
+   272			dev_err(ar1337->dev, "Error setting hold register\n");
+   273			return ret;
+   274		}
+   275	
+   276		return ret;
+   277	}
+   278	*/
+   279	static int ar1337_set_gain(struct ar1337 *ar1337, u32 value)
+   280	{
+ > 281		int ret;
+   282	/*
+   283		ret = ar1337_write_buffered_reg(ar1337, AR1337_GAIN_HIGH, 1,
+   284						(u8)((value >> 8) & 0xFF));
+   285		if (ret < 0)
+   286			return ret;
+   287	
+   288		ret = ar1337_write_buffered_reg(ar1337, AR1337_GAIN_HIGH, 1,
+   289						(u8)((value) & 0xFF));
+   290		if (ret < 0)
+   291			return ret;
+   292	*/
+   293		return 0;
+   294	}
+   295	
+   296	/* Stop streaming */
+   297	static int ar1337_stop_streaming(struct ar1337 *ar1337)
+   298	{
+   299		return ar1337_write_reg8(ar1337, AR1337_REG_MODE, 0x00);
+   300	}
+   301	
+   302	static int ar1337_set_ctrl(struct v4l2_ctrl *ctrl)
+   303	{
+   304		struct ar1337 *ar1337 = container_of(ctrl->handler,
+   305						     struct ar1337, ctrls);
+   306		int ret = 0;
+   307	
+   308		/* V4L2 controls values will be applied only when power is already up */
+   309		if (!pm_runtime_get_if_in_use(ar1337->dev))
+   310			return 0;
+   311	
+   312		switch (ctrl->id) {
+   313		case V4L2_CID_GAIN:
+   314			ret = ar1337_set_gain(ar1337, ctrl->val);
+   315			break;
+   316		default:
+   317			ret = -EINVAL;
+   318			break;
+   319		}
+   320	
+   321		pm_runtime_put(ar1337->dev);
+   322	
+   323		return ret;
+   324	}
+   325	
+   326	static const struct v4l2_ctrl_ops ar1337_ctrl_ops = {
+   327		.s_ctrl = ar1337_set_ctrl,
+   328	};
+   329	
+   330	static int ar1337_enum_mbus_code(struct v4l2_subdev *sd,
+   331					 struct v4l2_subdev_pad_config *cfg,
+   332					 struct v4l2_subdev_mbus_code_enum *code)
+   333	{
+   334		code->code = AR1337_DEFAULT_FORMAT;
+   335	
+   336		return 0;
+   337	}
+   338	
+   339	static int ar1337_get_fmt(struct v4l2_subdev *sd,
+   340				  struct v4l2_subdev_pad_config *cfg,
+   341				  struct v4l2_subdev_format *fmt)
+   342	{
+   343		struct ar1337 *ar1337 = to_ar1337(sd);
+   344		struct v4l2_mbus_framefmt *framefmt;
+   345	
+   346		mutex_lock(&ar1337->lock);
+   347	
+   348		if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+ > 349			framefmt = v4l2_subdev_get_try_format(&ar1337->sd, cfg,
+   350							      fmt->pad);
+   351		else
+   352			framefmt = &ar1337->current_format;
+   353	
+   354		fmt->format = *framefmt;
+   355	
+   356		mutex_unlock(&ar1337->lock);
+   357	
+   358		return 0;
+   359	}
+   360	
+   361	static const struct ar1337_mode *
+   362	ar1337_find_nearest_mode(unsigned int width, unsigned int height)
+   363	{
+   364		unsigned int max_dist_match = (unsigned int) - 1;
+   365		int i, n = 0;
+   366	
+   367		for (i = 0; i < ARRAY_SIZE(ar1337_modes); i++) {
+   368			unsigned int dist = min(width, ar1337_modes[i].width)
+   369					* min(height, ar1337_modes[i].height);
+   370			dist = ar1337_modes[i].width * ar1337_modes[i].height +
+   371				width * height - 2 * dist;
+   372			if (dist < max_dist_match) {
+   373				n = i;
+   374				max_dist_match = dist;
+   375			}
+   376		}
+   377	
+   378		return &ar1337_modes[n];
+   379	}
+   380	
+   381	static int ar1337_set_fmt(struct v4l2_subdev *sd,
+   382				  struct v4l2_subdev_pad_config *cfg,
+   383				  struct v4l2_subdev_format *fmt)
+   384	{
+   385		struct ar1337 *ar1337 = to_ar1337(sd);
+   386		const struct ar1337_mode *mode;
+   387		struct v4l2_mbus_framefmt *format;
+   388		int ret = 0;
+   389	
+   390		mutex_lock(&ar1337->lock);
+   391	
+   392		mode = ar1337_find_nearest_mode(fmt->format.width, fmt->format.height);
+   393	
+   394		fmt->format.width = mode->width;
+   395		fmt->format.height = mode->height;
+   396	
+   397		fmt->format.code = AR1337_DEFAULT_FORMAT;
+   398		fmt->format.field = V4L2_FIELD_NONE;
+   399	
+   400		if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+ > 401			format = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+   402		} else {
+   403			format = &ar1337->current_format;
+   404			__v4l2_ctrl_s_ctrl_int64(ar1337->pixel_rate, mode->pixel_rate);
+   405	
+   406			ar1337->current_mode = mode;
+   407		}
    408	
-   409	static int sbsa_gwdt_probe(struct platform_device *pdev)
-   410	{
-   411		void __iomem *rf_base, *cf_base;
-   412		void __iomem *cpu_ctrl_base = NULL, *mng_base = NULL,
-   413			     *rst_ctrl_base = NULL;
-   414		struct device *dev = &pdev->dev;
-   415		struct device_node *np = pdev->dev.of_node;
-   416		struct watchdog_device *wdd;
-   417		struct sbsa_gwdt *gwdt;
-   418		struct resource *res;
-   419		int ret, irq;
-   420		bool marvell = false;
-   421		u32 status, id, val;
-   422	
-   423		gwdt = devm_kzalloc(dev, sizeof(*gwdt), GFP_KERNEL);
-   424		if (!gwdt)
-   425			return -ENOMEM;
-   426		platform_set_drvdata(pdev, gwdt);
-   427	
-   428		if (of_device_is_compatible(np, "marvell,ac5-wd")) {
-   429			marvell = true;
-   430			gwdt->soc_reg_ops = &smc_reg_ops;
-   431			res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   432			if (IS_ERR(res))
-   433				return PTR_ERR(res);
- > 434			cf_base = res->start;
-   435	
-   436			res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-   437			if (IS_ERR(res))
-   438				return PTR_ERR(res);
-   439			rf_base = res->start;
-   440	
-   441			res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
-   442			if (IS_ERR(res))
-   443				return PTR_ERR(res);
-   444			cpu_ctrl_base = res->start;
-   445			mng_base = devm_platform_ioremap_resource(pdev, 3);
-   446			if (IS_ERR(mng_base))
-   447				return PTR_ERR(mng_base);
-   448			rst_ctrl_base = devm_platform_ioremap_resource(pdev, 4);
-   449			if (IS_ERR(rst_ctrl_base))
-   450				return PTR_ERR(rst_ctrl_base);
-   451		} else {
-   452			gwdt->soc_reg_ops = &direct_reg_ops;
-   453			cf_base = devm_platform_ioremap_resource(pdev, 0);
-   454			if (IS_ERR(cf_base))
-   455				return PTR_ERR(cf_base);
-   456	
-   457			rf_base = devm_platform_ioremap_resource(pdev, 1);
-   458			if (IS_ERR(rf_base))
-   459				return PTR_ERR(rf_base);
-   460		}
-   461	
-   462		/*
-   463		 * Get the frequency of system counter from the cp15 interface of ARM
-   464		 * Generic timer. We don't need to check it, because if it returns "0",
-   465		 * system would panic in very early stage.
-   466		 */
-   467		gwdt->clk = arch_timer_get_cntfrq();
-   468		gwdt->refresh_base = rf_base;
-   469		gwdt->control_base = cf_base;
-   470	
-   471		wdd = &gwdt->wdd;
-   472		wdd->parent = dev;
-   473		wdd->info = &sbsa_gwdt_info;
-   474		wdd->ops = &sbsa_gwdt_ops;
-   475		wdd->min_timeout = 1;
-   476		wdd->timeout = DEFAULT_TIMEOUT;
-   477		watchdog_set_drvdata(wdd, gwdt);
-   478		watchdog_set_nowayout(wdd, nowayout);
-   479		sbsa_gwdt_get_version(wdd);
-   480		if (gwdt->version == 0)
-   481			wdd->max_hw_heartbeat_ms = U32_MAX / gwdt->clk * 1000;
-   482		else
-   483			wdd->max_hw_heartbeat_ms = GENMASK_ULL(47, 0) / gwdt->clk * 1000;
-   484	
-   485		status = gwdt->soc_reg_ops->reg_read32(cf_base + SBSA_GWDT_WCS);
-   486		if (status & SBSA_GWDT_WCS_WS1) {
-   487			dev_warn(dev, "System reset by WDT.\n");
-   488			wdd->bootstatus |= WDIOF_CARDRESET;
-   489		}
-   490		if (status & SBSA_GWDT_WCS_EN)
-   491			set_bit(WDOG_HW_RUNNING, &wdd->status);
-   492	
-   493		if (action) {
-   494			irq = platform_get_irq(pdev, 0);
-   495			if (irq < 0) {
-   496				action = 0;
-   497				dev_warn(dev, "unable to get ws0 interrupt.\n");
-   498			} else {
-   499				/*
-   500				 * In case there is a pending ws0 interrupt, just ping
-   501				 * the watchdog before registering the interrupt routine
-   502				 */
-   503				gwdt->soc_reg_ops->reg_write32(0, rf_base + SBSA_GWDT_WRR);
-   504				if (devm_request_irq(dev, irq, sbsa_gwdt_interrupt, 0,
-   505						     pdev->name, gwdt)) {
-   506					action = 0;
-   507					dev_warn(dev, "unable to request IRQ %d.\n",
-   508						 irq);
-   509				}
-   510			}
-   511			if (!action)
-   512				dev_warn(dev, "falling back to single stage mode.\n");
-   513		}
-   514		/*
-   515		 * In the single stage mode, The first signal (WS0) is ignored,
-   516		 * the timeout is (WOR * 2), so the maximum timeout should be doubled.
-   517		 */
-   518		if (!action)
-   519			wdd->max_hw_heartbeat_ms *= 2;
-   520	
-   521		watchdog_init_timeout(wdd, timeout, dev);
-   522		/*
-   523		 * Update timeout to WOR.
-   524		 * Because of the explicit watchdog refresh mechanism,
-   525		 * it's also a ping, if watchdog is enabled.
-   526		 */
-   527		sbsa_gwdt_set_timeout(wdd, wdd->timeout);
-   528	
-   529		watchdog_stop_on_reboot(wdd);
-   530		ret = devm_watchdog_register_device(dev, wdd);
-   531		if (ret)
-   532			return ret;
-   533		/*
-   534		 * Marvell AC5/X/IM: need to configure the watchdog
-   535		 * HW to trigger reset on WS1 (Watchdog Signal 1):
-   536		 *
-   537		 * 1. Configure the watchdog signal enable (routing)
-   538		 *    according to configuration
-   539		 * 2. Unmask the wd_rst input signal to the reset unit
-   540		 */
-   541		if (marvell) {
-   542			gwdt->soc_reg_ops->reg_write32(reset, cpu_ctrl_base +
-   543						       SBSA_GWDT_MARVELL_CPU_WD_RST_EN_REG);
-   544			id = readl(mng_base + SBSA_GWDT_MARVELL_MNG_ID_REG) &
-   545				   SBSA_GWDT_MARVELL_ID_MASK;
-   546	
-   547			if (id == SBSA_GWDT_MARVELL_AC5_ID)
-   548				val = SBSA_GWDT_MARVELL_AC5_RST_UNIT_WD_BIT;
-   549			else
-   550				val = SBSA_GWDT_MARVELL_IRONMAN_RST_UNIT_WD_BIT;
-   551	
-   552			writel(readl(rst_ctrl_base + SBSA_GWDT_MARVELL_RST_CTRL_REG) & ~val,
-   553			       rst_ctrl_base + SBSA_GWDT_MARVELL_RST_CTRL_REG);
-   554		}
-   555		dev_info(dev, "Initialized with %ds timeout @ %u Hz, action=%d.%s\n",
-   556			 wdd->timeout, gwdt->clk, action,
-   557			 status & SBSA_GWDT_WCS_EN ? " [enabled]" : "");
-   558	
-   559		return 0;
-   560	}
-   561	
+   409		*format = fmt->format;
+   410	
+   411		mutex_unlock(&ar1337->lock);
+   412	
+   413		return ret;
+   414	}
+   415	
 
 -- 
 0-DAY CI Kernel Test Service
