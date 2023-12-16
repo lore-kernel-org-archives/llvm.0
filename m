@@ -1,99 +1,145 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C2D2C6A9;
-	Sat, 16 Dec 2023 13:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5F32E3E5;
+	Sat, 16 Dec 2023 15:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kckc8Fnl"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ce72730548so1523728b3a.1;
-        Sat, 16 Dec 2023 05:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702734517; x=1703339317; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cMdekASZxZHVFfSc7wnHzY7Tv4MkxPQPmvOEgSf0s3A=;
-        b=kckc8FnlYCir9TO/BgDDayTNe+5/9vt4rkvbPlbZpBnLbU3vOiyB6ZequJqENYjreK
-         s5rOnRwNBsZ0b1v+7qJIktjHWPZIdU27DLAlRFxGz5b39ySN/z7/9GU6GjBOWHy9b14K
-         qHYLekTtYMKGAC7qS2yDLxTT+E+rOuMceypCej2CI10lpSl+ZF43IUTyPkTufZGSD/Qt
-         VCfuG++ePanajxUw+ZJAaYpiDUlb1Bb70Ai2peJP7Yyk9aoCxlZbpcvp8ZWJhoyIFpHv
-         pfAbBNTLkfKmpM3lk+MQ2o6ZnS5BYECHWH4LjbNaNdpiopk2iog14N2hYzP9LVonwEYG
-         AhbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702734517; x=1703339317;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cMdekASZxZHVFfSc7wnHzY7Tv4MkxPQPmvOEgSf0s3A=;
-        b=iv63y32h5bbih5LxBbGFZ+9M1E0DiIGWl4/Aif0TN1SQ8o+FsMDolFFlqSRK/KQ+Wo
-         +u197Kfo72vGDhOClehQtOQcAGlBUKKF8uew64VJwm9tmz5RAsV9/GhALdOKvpCewdFY
-         6ejkB2TNzmA49chHtPB2BFKRIH+6CASNfF8EEmEM5oEHbv3vzhxRfDKTUm7/57XE7DDX
-         20QwSrBSo9NqcL934LTwIrqiK3oRRx9YR9nMecvpcKgSkujKaZfuvo1d+rj6BIyoSXZs
-         U3Fa45HU73l6MPtsdJQjB+F5RLMQN2xw/TECr079xd5O2g9g84Cn6I2Yv0vNouPKBwX9
-         GUoA==
-X-Gm-Message-State: AOJu0Yz7WwSwIgGGhXSixl/9L7X5eeFyYav7z2JNi3SMy6lWxBwSTkV4
-	/IVWzd7O0kY3/vVkYnVOE1g=
-X-Google-Smtp-Source: AGHT+IGMRI0tGh2WrcuWUWqrhXsQO6lqjkNVpRGJgVO1U3NtRTPQ1rpt6nhXUonl7sYzoRdwErziMQ==
-X-Received: by 2002:a05:6a20:54a9:b0:190:1c0:1c25 with SMTP id i41-20020a056a2054a900b0019001c01c25mr17316135pzk.91.1702734516764;
-        Sat, 16 Dec 2023 05:48:36 -0800 (PST)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id u17-20020aa78491000000b006cb98a269f1sm15142081pfn.125.2023.12.16.05.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Dec 2023 05:48:36 -0800 (PST)
-Message-ID: <2f92ca77-703b-403d-9dc9-b45d2d8d86a1@gmail.com>
-Date: Fri, 15 Dec 2023 13:34:35 -0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RrjqgRum"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702740502; x=1734276502;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tfoByuBnvOpssFBV59veNAdamP3HzMHPBlLK/amW5RI=;
+  b=RrjqgRumiHqwn+xL4LxSXk7C2K743UlGvXb18qRcG8t2vMn2LKunVep8
+   cHtm8Kx6ms65mnOm9XbGmEOPMp91iDiPrER1Igq8I0K4lbYnZXyCTxbM/
+   siNtWq1vHipo389lIPItDa1UWKndESm176jBL+6nyZXctGWkXXmfBmmKR
+   US8BrIuCDngt2QRH5weEdLwE7WV327A4kgqX/39w0zR6oAHsTz85UHLwo
+   +35Lh6TescXAXktIcu5lxyx5eAc54Zw0QQdkiOlzup4gMdtUXnLipiQCN
+   srcTGZTdW8seLcIS5aKgMiAT0zCJmeamL937v0MkSY8+gAcaRxW65yypo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="2464288"
+X-IronPort-AV: E=Sophos;i="6.04,281,1695711600"; 
+   d="scan'208";a="2464288"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2023 07:28:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="768329246"
+X-IronPort-AV: E=Sophos;i="6.04,281,1695711600"; 
+   d="scan'208";a="768329246"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2023 07:28:19 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rEWaP-0001mg-0A;
+	Sat, 16 Dec 2023 15:28:17 +0000
+Date: Sat, 16 Dec 2023 23:27:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next v3 2/6] bpf: Allow per unit prefill for
+ non-fix-size percpu memory allocator
+Message-ID: <202312162351.UuoFmjJk-lkp@intel.com>
+References: <20231216023015.3741144-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs: rust: remove `CC=clang` mentions
-To: Miguel Ojeda <ojeda@kernel.org>, Wedson Almeida Filho
- <wedsonaf@gmail.com>, Alex Gaynor <alex.gaynor@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
- <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, patches@lists.linux.dev,
- Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-doc@vger.kernel.org, llvm@lists.linux.dev
-References: <20231215124751.175191-1-ojeda@kernel.org>
-Content-Language: en-US
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20231215124751.175191-1-ojeda@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231216023015.3741144-1-yonghong.song@linux.dev>
 
-On 12/15/23 09:47, Miguel Ojeda wrote:
-> Nowadays all architectures except s390 recommend using `LLVM=1` instead of
-> `CC=clang`, and since commit a3c6bfba4429 ("Documentation/llvm: refresh
-> docs") the Kbuild LLVM documentation makes `LLVM=1` the way to go:
-> 
->      We want to encourage the use of ``LLVM=1`` rather than just
->      ``CC=clang``. Make that suggestion "above the fold" and "front and
->      center" in our docs.
-> 
-> In particular, that commit removes the examples with `CC=clang`.
-> 
-> Thus do the same in the Rust Quick Start guide, i.e. remove the `CC=clang`
-> mentions, especially since the architectures that have had their Rust
-> support upstreamed (or soon to be upstreamed) are all `LLVM=1` ones
-> anyway. And perhaps by the time Rust is supported for s390 (or new
-> architectures), it may have moved to `LLVM=1` anyway. Otherwise,
-> this can be added back if needed (or perhaps an extra link to
-> Documentation/kbuild/llvm.rst).
-> 
-> This should also help avoiding potential confusion around `CC=clang` [1].
-> 
-> Link: https://lore.kernel.org/rust-for-linux/6df6e8e5-8d5b-4d3d-91b5-bc0e90c424ea@nvidia.com/ [1]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
-> [...]
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Hi Yonghong,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yonghong-Song/bpf-Avoid-unnecessary-extra-percpu-memory-allocation/20231216-103310
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20231216023015.3741144-1-yonghong.song%40linux.dev
+patch subject: [PATCH bpf-next v3 2/6] bpf: Allow per unit prefill for non-fix-size percpu memory allocator
+config: x86_64-randconfig-003-20231216 (https://download.01.org/0day-ci/archive/20231216/202312162351.UuoFmjJk-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312162351.UuoFmjJk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312162351.UuoFmjJk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/memalloc.c:665:14: warning: variable 'objcg' is uninitialized when used here [-Wuninitialized]
+                   c->objcg = objcg;
+                              ^~~~~
+   kernel/bpf/memalloc.c:642:26: note: initialize the variable 'objcg' to silence this warning
+           struct obj_cgroup *objcg;
+                                   ^
+                                    = NULL
+   1 warning generated.
+
+
+vim +/objcg +665 kernel/bpf/memalloc.c
+
+   637	
+   638	int bpf_mem_alloc_percpu_unit_init(struct bpf_mem_alloc *ma, int size)
+   639	{
+   640		int cpu, i, err = 0, unit_size, percpu_size;
+   641		struct bpf_mem_caches *cc, __percpu *pcc;
+   642		struct obj_cgroup *objcg;
+   643		struct bpf_mem_cache *c;
+   644	
+   645		i = bpf_mem_cache_idx(size);
+   646		if (i < 0)
+   647			return -EINVAL;
+   648	
+   649		/* room for llist_node and per-cpu pointer */
+   650		percpu_size = LLIST_NODE_SZ + sizeof(void *);
+   651	
+   652		pcc = ma->caches;
+   653		unit_size = sizes[i];
+   654	
+   655	#ifdef CONFIG_MEMCG_KMEM
+   656		objcg = get_obj_cgroup_from_current();
+   657	#endif
+   658		for_each_possible_cpu(cpu) {
+   659			cc = per_cpu_ptr(pcc, cpu);
+   660			c = &cc->cache[i];
+   661			if (cpu == 0 && c->unit_size)
+   662				goto out;
+   663	
+   664			c->unit_size = unit_size;
+ > 665			c->objcg = objcg;
+   666			c->percpu_size = percpu_size;
+   667			c->tgt = c;
+   668	
+   669			init_refill_work(c);
+   670			prefill_mem_cache(c, cpu);
+   671	
+   672			if (cpu == 0) {
+   673				err = check_obj_size(c, i);
+   674				if (err) {
+   675					drain_mem_cache(c);
+   676					memset(c, 0, sizeof(*c));
+   677					goto out;
+   678				}
+   679			}
+   680		}
+   681	
+   682	out:
+   683		return err;
+   684	}
+   685	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
