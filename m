@@ -1,49 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F5E30F83;
-	Sat, 16 Dec 2023 17:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809613066C;
+	Sat, 16 Dec 2023 18:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YOyzlsWt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DnQQOI8D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702748079; x=1734284079;
+  t=1702750603; x=1734286603;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=402cdQLodVrpXuoqgrpWGCqbyHfuW6nE1Q3MXtfy9qk=;
-  b=YOyzlsWtfbWEUDmTbYV9guigtJFZBbOGXaPafIqH8ZEd7EYHDHqDRGUh
-   JpKfl5dOpVal8sr9XK/Ch9zszWW5XDuHFn5RoF5CpuiSbnzaqiuQTXtLN
-   Lys1P6w6r3kAyLHDx3IUm5OsKycScnRI2DZjQjEq/XmWc75GY3YKU8k+D
-   rgq+ZCYMBJ6Q9FjqjCd8Rh5L39RNDvSWAcU6gDZEqrxDbag0sxeL5t6Dv
-   zXxnTFS12k/Ks5NDnMnHANOAw03ICs1MKKad7UIraRtJZXcLYveoluBzJ
-   EjB795gSmfxylVSNf4eNQbo4lXF7fqR6I8jO7XFU864QgFuJZ3HlFdkOR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="2207957"
+  bh=EFU4IWelI910/BhThAkNF3VjB10ss8qH0dOaxo7jE08=;
+  b=DnQQOI8D0/WH/LK18HEXJkELde4S9Hn+pWzXdelJV+aLdfG6XUhOk7/N
+   zZDjd59amVlJIarcpSr170+IjpJ5hnRHOCQCXop/dS1CaiOSmwyTTAFjM
+   O366Iso018mG7B7Z9We+WVeicJUApLjJf5pAhmzDerQKzRLFHJrqKfTcM
+   y+AroYVmaGz2L6Tq1RbWgJD3pwaDWm7melRD4qKMVEerI0GrO/p014WWq
+   vPY4KHAxP56t2+jNdk2JykrqVbTkSxZ0kvYHYgrzZTJvTJle5PRs42zaa
+   /dfZNxOHlV6mHkmkSmdQPJKDyGOv642KzFchRbt0a3Pd8XGfPEATi8hbH
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="8809633"
 X-IronPort-AV: E=Sophos;i="6.04,281,1695711600"; 
-   d="scan'208";a="2207957"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2023 09:34:38 -0800
+   d="scan'208";a="8809633"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2023 10:16:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="809325571"
+X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="751298413"
 X-IronPort-AV: E=Sophos;i="6.04,281,1695711600"; 
-   d="scan'208";a="809325571"
+   d="scan'208";a="751298413"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 Dec 2023 09:34:36 -0800
+  by orsmga006.jf.intel.com with ESMTP; 16 Dec 2023 10:16:40 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rEYYb-0001xe-2L;
-	Sat, 16 Dec 2023 17:34:33 +0000
-Date: Sun, 17 Dec 2023 01:33:54 +0800
+	id 1rEZDK-00020W-1c;
+	Sat, 16 Dec 2023 18:16:38 +0000
+Date: Sun, 17 Dec 2023 02:16:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
+To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Babu Moger <babu.moger@amd.com>
-Subject: [morse:mpam/monitors_and_locking/v8 24/24] ld.lld: error: undefined
- symbol: lockdep_is_cpus_held
-Message-ID: <202312170155.WAkuJVpm-lkp@intel.com>
+	Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>
+Subject: [intel-tdx:guest 62/136] arch/x86/kernel/tdx.c:225:5: warning: no
+ previous prototype for function 'tdx_hcall_set_notify_intr'
+Message-ID: <202312170253.LKpNFmoD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,25 +51,64 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/monitors_and_locking/v8
-head:   b45f49cea5c2946c280481a479a2a9bd09a265be
-commit: b45f49cea5c2946c280481a479a2a9bd09a265be [24/24] x86/resctrl: Separate arch and fs resctrl locks
-config: x86_64-randconfig-002-20231216 (https://download.01.org/0day-ci/archive/20231217/202312170155.WAkuJVpm-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git guest
+head:   f3d7a7e86bf2f0d5ce629f2fb7be11dca88ac06d
+commit: 2c0498d3a27b537d428cc081fe9578605111569e [62/136] x86/tdx: Add SetupEventNotifyInterrupt TDX hypercall support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231217/202312170253.LKpNFmoD-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312170155.WAkuJVpm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312170253.LKpNFmoD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312170155.WAkuJVpm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312170253.LKpNFmoD-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: lockdep_is_cpus_held
-   >>> referenced by core.c:374 (arch/x86/kernel/cpu/resctrl/core.c:374)
-   >>>               arch/x86/kernel/cpu/resctrl/core.o:(get_domain_from_cpu) in archive vmlinux.a
-   >>> referenced by core.c:374 (arch/x86/kernel/cpu/resctrl/core.c:374)
-   >>>               arch/x86/kernel/cpu/resctrl/core.o:(rdt_ctrl_update) in archive vmlinux.a
+>> arch/x86/kernel/tdx.c:225:5: warning: no previous prototype for function 'tdx_hcall_set_notify_intr' [-Wmissing-prototypes]
+   int tdx_hcall_set_notify_intr(u8 vector)
+       ^
+   arch/x86/kernel/tdx.c:225:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_hcall_set_notify_intr(u8 vector)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/tdx_hcall_set_notify_intr +225 arch/x86/kernel/tdx.c
+
+   217	
+   218	/*
+   219	 * tdx_hcall_set_notify_intr() - Setup Event Notify Interrupt Vector.
+   220	 *
+   221	 * @vector        : Vector address to be used for notification.
+   222	 *
+   223	 * return 0 on success or failure error number.
+   224	 */
+ > 225	int tdx_hcall_set_notify_intr(u8 vector)
+   226	{
+   227		u64 ret;
+   228	
+   229		/* Minimum vector value allowed is 32 */
+   230		if (vector < 32)
+   231			return -EINVAL;
+   232	
+   233		/*
+   234		 * Register callback vector address with VMM. More details
+   235		 * about the ABI can be found in TDX Guest-Host-Communication
+   236		 * Interface (GHCI), sec 3.5.
+   237		 */
+   238		ret = _trace_tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, vector, 0, 0, 0,
+   239					   NULL);
+   240	
+   241		if (ret == TDVMCALL_SUCCESS)
+   242			return 0;
+   243		else if (ret == TDCALL_INVALID_OPERAND)
+   244			return -EINVAL;
+   245	
+   246		return -EIO;
+   247	}
+   248	
 
 -- 
 0-DAY CI Kernel Test Service
