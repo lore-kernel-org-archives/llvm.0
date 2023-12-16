@@ -1,53 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11541C32;
-	Sat, 16 Dec 2023 02:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9545F13FF1;
+	Sat, 16 Dec 2023 04:54:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T0mqh5Op"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iIiWkd0u"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702693381; x=1734229381;
+  t=1702702450; x=1734238450;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=2kCa92XAYxWzEh96fiCPzEeGN5kYGI03vKtWt214LVc=;
-  b=T0mqh5Op0texVyO1Ewkeu4+3gtYb454BW+Kf0axLcFV4SxaOCXf7fWch
-   S9nbf5Vf3BPi7I8cDjbeh2XrPlI5lDx9HSvf+hBIEFRUa0cIkIQSbSbGm
-   l3oz3L1J5us0VnJqkzckZK+eAe5uxHA2+1zUt+N9wNfAF+3y7jEBj/86y
-   7re8f7GgSYD9/Y+6RhnrDAwXS9pRIcWrexH4lUbf3L9jGUyYCh2dYWwqX
-   yu4h1o+yAvf8Ilyf7vsS8mmwACUztPBFloE4QvvsWhxvPgHQqy3AjI82c
-   HJ2QH4erpl9GoHisZqH9qlZLsoSCTXtkkoxsuwg0IZVJEIlfvb7TB4FFC
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="8773856"
+  bh=hbCzV9FRyfR9WQHmArq5wOV7koxOXpFFbjy3k1iOVwE=;
+  b=iIiWkd0u+l++9NKvsnPOdvQNOK+esIE9ooleHcK1qNVY1Clp5fUO2A0H
+   EiGbwxJ8hr7LcUeajNCRXYXgNSmLdUqsw50hCl8lOS1V50JgjFqy9Ec3F
+   s3+WlJqHFoWsWSp9yUIEqM6X0LHVMroRIeLrOpew5fgz+BdSaEfY8Nph6
+   ff3FnItSc8bxbHnnIwIqOdN6zqQtD0bK1zVZV98XD2txAdCsfyJabIcpe
+   e0W6N4xBwcU8jEekyEMtTPK0t8k7hjOkZeN7QkNXWcwEpJ3GHGWov57AG
+   yVlZ5lMZCr4VO+a0nVVK7MkUQJE8kfE4MmRBKieNEU+ya3GVi1gSJQMpZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="385777632"
 X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
-   d="scan'208";a="8773856"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 18:22:58 -0800
+   d="scan'208";a="385777632"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 20:54:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="774953870"
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="751162050"
 X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
-   d="scan'208";a="774953870"
+   d="scan'208";a="751162050"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 15 Dec 2023 18:22:54 -0800
+  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2023 20:54:04 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rEKKJ-00013G-2q;
-	Sat, 16 Dec 2023 02:22:51 +0000
-Date: Sat, 16 Dec 2023 10:21:52 +0800
+	id 1rEMga-0001Ac-1s;
+	Sat, 16 Dec 2023 04:54:01 +0000
+Date: Sat, 16 Dec 2023 12:53:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maksim Davydov <davydov-max@yandex-team.ru>,
-	linux-kernel@vger.kernel.org, x86@kernel.org
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davydov-max@yandex-team.ru, den-plotnikov@yandex-team.ru,
-	tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-	peterz@infradead.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org
-Subject: Re: [PATCH] x86/split_lock: add split lock counter
-Message-ID: <202312161022.Qq2mFAa2-lkp@intel.com>
-References: <20231215140113.57173-1-davydov-max@yandex-team.ru>
+	Boqun Feng <boqun.feng@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP
+ redirect.
+Message-ID: <202312161212.D5tju5i6-lkp@intel.com>
+References: <20231215171020.687342-21-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,154 +68,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231215140113.57173-1-davydov-max@yandex-team.ru>
+In-Reply-To: <20231215171020.687342-21-bigeasy@linutronix.de>
 
-Hi Maksim,
+Hi Sebastian,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/master tip/sched/core linus/master tip/auto-latest v6.7-rc5 next-20231215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maksim-Davydov/x86-split_lock-add-split-lock-counter/20231215-220639
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20231215140113.57173-1-davydov-max%40yandex-team.ru
-patch subject: [PATCH] x86/split_lock: add split lock counter
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20231216/202312161022.Qq2mFAa2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312161022.Qq2mFAa2-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Andrzej-Siewior/locking-local_lock-Introduce-guard-definition-for-local_lock/20231216-011911
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231215171020.687342-21-bigeasy%40linutronix.de
+patch subject: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP redirect.
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231216/202312161212.D5tju5i6-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312161212.D5tju5i6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312161022.Qq2mFAa2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312161212.D5tju5i6-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/proc/base.c:68:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/proc/base.c:68:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/proc/base.c:68:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> fs/proc/base.c:101:10: fatal error: 'asm/cpu.h' file not found
-     101 | #include <asm/cpu.h>
-         |          ^~~~~~~~~~~
-   6 warnings and 1 error generated.
+>> drivers/net/ethernet/intel/igb/igb_main.c:8620:3: error: cannot jump from this goto statement to its label
+                   goto xdp_out;
+                   ^
+   drivers/net/ethernet/intel/igb/igb_main.c:8624:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+           ^
+   include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:52:1: note: expanded from here
+   __UNIQUE_ID_guard753
+   ^
+   1 error generated.
 
 
-vim +101 fs/proc/base.c
+vim +8620 drivers/net/ethernet/intel/igb/igb_main.c
 
-    52	
-    53	#include <linux/errno.h>
-    54	#include <linux/time.h>
-    55	#include <linux/proc_fs.h>
-    56	#include <linux/stat.h>
-    57	#include <linux/task_io_accounting_ops.h>
-    58	#include <linux/init.h>
-    59	#include <linux/capability.h>
-    60	#include <linux/file.h>
-    61	#include <linux/fdtable.h>
-    62	#include <linux/generic-radix-tree.h>
-    63	#include <linux/string.h>
-    64	#include <linux/seq_file.h>
-    65	#include <linux/namei.h>
-    66	#include <linux/mnt_namespace.h>
-    67	#include <linux/mm.h>
-    68	#include <linux/swap.h>
-    69	#include <linux/rcupdate.h>
-    70	#include <linux/kallsyms.h>
-    71	#include <linux/stacktrace.h>
-    72	#include <linux/resource.h>
-    73	#include <linux/module.h>
-    74	#include <linux/mount.h>
-    75	#include <linux/security.h>
-    76	#include <linux/ptrace.h>
-    77	#include <linux/printk.h>
-    78	#include <linux/cache.h>
-    79	#include <linux/cgroup.h>
-    80	#include <linux/cpuset.h>
-    81	#include <linux/audit.h>
-    82	#include <linux/poll.h>
-    83	#include <linux/nsproxy.h>
-    84	#include <linux/oom.h>
-    85	#include <linux/elf.h>
-    86	#include <linux/pid_namespace.h>
-    87	#include <linux/user_namespace.h>
-    88	#include <linux/fs_struct.h>
-    89	#include <linux/slab.h>
-    90	#include <linux/sched/autogroup.h>
-    91	#include <linux/sched/mm.h>
-    92	#include <linux/sched/coredump.h>
-    93	#include <linux/sched/debug.h>
-    94	#include <linux/sched/stat.h>
-    95	#include <linux/posix-timers.h>
-    96	#include <linux/time_namespace.h>
-    97	#include <linux/resctrl.h>
-    98	#include <linux/cn_proc.h>
-    99	#include <linux/ksm.h>
-   100	#include <trace/events/oom.h>
- > 101	#include <asm/cpu.h>
-   102	#include "internal.h"
-   103	#include "fd.h"
-   104	
+b1bb2eb0a0deb0 Alexander Duyck           2017-02-06  8608  
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8609  static struct sk_buff *igb_run_xdp(struct igb_adapter *adapter,
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8610  				   struct igb_ring *rx_ring,
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8611  				   struct xdp_buff *xdp)
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8612  {
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8613  	int err, result = IGB_XDP_PASS;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8614  	struct bpf_prog *xdp_prog;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8615  	u32 act;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8616  
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8617  	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8618  
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8619  	if (!xdp_prog)
+9cbc948b5a20c9 Sven Auhagen              2020-09-02 @8620  		goto xdp_out;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8621  
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8622  	prefetchw(xdp->data_hard_start); /* xdp_frame write */
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8623  
+d568b111738dbb Sebastian Andrzej Siewior 2023-12-15  8624  	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8625  	act = bpf_prog_run_xdp(xdp_prog, xdp);
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8626  	switch (act) {
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8627  	case XDP_PASS:
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8628  		break;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8629  	case XDP_TX:
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8630  		result = igb_xdp_xmit_back(adapter, xdp);
+74431c40b9c5fa Magnus Karlsson           2021-05-10  8631  		if (result == IGB_XDP_CONSUMED)
+74431c40b9c5fa Magnus Karlsson           2021-05-10  8632  			goto out_failure;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8633  		break;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8634  	case XDP_REDIRECT:
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8635  		err = xdp_do_redirect(adapter->netdev, xdp, xdp_prog);
+74431c40b9c5fa Magnus Karlsson           2021-05-10  8636  		if (err)
+74431c40b9c5fa Magnus Karlsson           2021-05-10  8637  			goto out_failure;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8638  		result = IGB_XDP_REDIR;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8639  		break;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8640  	default:
+c8064e5b4adac5 Paolo Abeni               2021-11-30  8641  		bpf_warn_invalid_xdp_action(adapter->netdev, xdp_prog, act);
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8642  		fallthrough;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8643  	case XDP_ABORTED:
+74431c40b9c5fa Magnus Karlsson           2021-05-10  8644  out_failure:
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8645  		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8646  		fallthrough;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8647  	case XDP_DROP:
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8648  		result = IGB_XDP_CONSUMED;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8649  		break;
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8650  	}
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8651  xdp_out:
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8652  	return ERR_PTR(-result);
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8653  }
+9cbc948b5a20c9 Sven Auhagen              2020-09-02  8654  
 
 -- 
 0-DAY CI Kernel Test Service
