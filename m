@@ -1,170 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9545F13FF1;
-	Sat, 16 Dec 2023 04:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8C51170A;
+	Sat, 16 Dec 2023 05:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iIiWkd0u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IB7oeaNQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702702450; x=1734238450;
+  t=1702705238; x=1734241238;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hbCzV9FRyfR9WQHmArq5wOV7koxOXpFFbjy3k1iOVwE=;
-  b=iIiWkd0u+l++9NKvsnPOdvQNOK+esIE9ooleHcK1qNVY1Clp5fUO2A0H
-   EiGbwxJ8hr7LcUeajNCRXYXgNSmLdUqsw50hCl8lOS1V50JgjFqy9Ec3F
-   s3+WlJqHFoWsWSp9yUIEqM6X0LHVMroRIeLrOpew5fgz+BdSaEfY8Nph6
-   ff3FnItSc8bxbHnnIwIqOdN6zqQtD0bK1zVZV98XD2txAdCsfyJabIcpe
-   e0W6N4xBwcU8jEekyEMtTPK0t8k7hjOkZeN7QkNXWcwEpJ3GHGWov57AG
-   yVlZ5lMZCr4VO+a0nVVK7MkUQJE8kfE4MmRBKieNEU+ya3GVi1gSJQMpZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="385777632"
+   in-reply-to:mime-version;
+  bh=mUIMVDaBoVZYfgSguB3hRcjBMYZLMem1CgwudJP3WpU=;
+  b=IB7oeaNQSDKJ9pxk+iurBlLjeoF29f6QwpBm+9VSrN7MkvHnS2/7sQex
+   uNc6CuxHw8vwDN1i64dkQufFZUavtSLJ2fL7BvTZxiSp2Hr+gF4Kx7m/k
+   lizTOK3b5V/EnuxQHXvIN+QbphXog/AgMhweqxC4fCZOv5LFlJxYOJEpR
+   f4a3rCGhOQncayuKsvRv4uCWpquTXqTHsb9qvFkz+QgPuPUiU9GWYgvJl
+   W7vujFK7NsLnYuOax4NPY7h3k4i4TxZOj2OmUaGiuAG9cG+8cg5rnDZ6P
+   NXvZ+J4fgZTBlus+vUYc5JDJ05V5DlCLGTXVzyyP+iESvR+rjtWPQhpcR
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="398146705"
 X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
-   d="scan'208";a="385777632"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 20:54:10 -0800
+   d="scan'208";a="398146705"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 21:40:37 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="751162050"
 X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
-   d="scan'208";a="751162050"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2023 20:54:04 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rEMga-0001Ac-1s;
-	Sat, 16 Dec 2023 04:54:01 +0000
-Date: Sat, 16 Dec 2023 12:53:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP
- redirect.
-Message-ID: <202312161212.D5tju5i6-lkp@intel.com>
-References: <20231215171020.687342-21-bigeasy@linutronix.de>
+   d="scan'208";a="16535726"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orviesa002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 15 Dec 2023 21:40:38 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 15 Dec 2023 21:40:36 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 15 Dec 2023 21:40:36 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Fri, 15 Dec 2023 21:40:36 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 15 Dec 2023 21:40:36 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZNFOWUK/ARXGBF7VGAI4WynxhxQzRhjamP156FGx67x/+d2EEI7caHgiZd+8WTz5aBNPMd6dxTq+lMz1bC/NcwfXmUVp0c4T8VYg0bi50wF6NKxwGCQw1Sjn8KmJ9+aL01Yc3ViLvuB3n+mxUetmLWoTFQIGeeUAESmKUc19XTzfHjV4XKMs59B3JbP3YqGBG/FSKhhlZTMhj1IxJa7C1/6Gi53BwSuDI1v6MXw1jzxAvxcfK0Mlg2ay4dF34GKcLJ/kYg+RBetN4yd4Qou3bR7e5qlv13bXPvoT9CL6k2PysLMua7/MDIgbYe7+Cr8A71y+Qx3sfp6zL9Y9+CHqcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K5Ysf0gP7dVtch84eBWpsnTgzvbWeryXcwrb764TTuQ=;
+ b=Ee+fCkqZzJzYppSthZ28qfO0tFHHy5M+AqGil9BYs7ps9Gy3WMazqAwsEO6NZ4jT1owhkPhecO+L0Vg5iyeM4kVUYHDru4OHqFZeGaqifRLQdArV0XJoIkMIHpp5u2oVcYKacrBXsNhEBkARX+2BT1ZIehBWqmICkyqtbDOpRJ7e31RFDthu71LfVx4MI/sBqGY4pFrMdcgNn/LULEEgibRK81nDqsYx9htxbfv0vf15ElHauDaVPXWky5Pi3wbr8HgS06w2IHCeA1G6ZT1u6LgW92wp3cRSXzAp7QmcFpHVh76UUUzmyI2GTM5OJ94i+M6ZijnUnpQ44cZRiW2AFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
+ by CO6PR11MB5633.namprd11.prod.outlook.com (2603:10b6:303:13c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.32; Sat, 16 Dec
+ 2023 05:40:34 +0000
+Received: from BL0PR11MB2995.namprd11.prod.outlook.com
+ ([fe80::2f1a:e62e:9fff:ae67]) by BL0PR11MB2995.namprd11.prod.outlook.com
+ ([fe80::2f1a:e62e:9fff:ae67%5]) with mapi id 15.20.7091.030; Sat, 16 Dec 2023
+ 05:40:33 +0000
+Date: Sat, 16 Dec 2023 13:40:24 +0800
+From: Philip Li <philip.li@intel.com>
+To: kernel test robot <lkp@intel.com>
+CC: Kees Cook <keescook@chromium.org>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>, "Miquel
+ Raynal" <miquel.raynal@bootlin.com>, "Gustavo A. R. Silva"
+	<gustavoars@kernel.org>
+Subject: Re: scripts/kernel-doc: drivers/mtd/nand/raw/marvell_nand.c:352:
+ warning: Excess struct member 'sels' description in 'marvell_nand_chip'
+Message-ID: <ZX04SC/YF4c45QGS@rli9-mobl>
+References: <202312160703.nnQfaSja-lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <202312160703.nnQfaSja-lkp@intel.com>
+X-ClientProxiedBy: SG2PR04CA0165.apcprd04.prod.outlook.com (2603:1096:4::27)
+ To BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215171020.687342-21-bigeasy@linutronix.de>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR11MB2995:EE_|CO6PR11MB5633:EE_
+X-MS-Office365-Filtering-Correlation-Id: 67397a9d-857a-4cfc-4d88-08dbfdf984d6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hjo2lDUnoJndTLwKTVQESlpQI9VtGkZuHGqMl9d3LFmB+4qz577ki3H0/b7KKGOkvbLgepi4sFrGpqapyVfsng0YgRw8nS+9DjRpMyqaF/HznnUZ4e76d25QvO8PkIxQM592WB6UopXTVWg/4oHRYRcL+e3A+E4mLnKd+NlVyDeLdHZz2oKDQl2hV5FbfAJtVLdSljwqVo7nzFYNlaCnj/Kn5KMD8ldDT712etRo/Mnp3rzOasZ48XyRYxdWF2wBRdMP2+c+5GODTKie2C6rrzDhbQfM9ZSYldXuIZMfp8ru72Tq0foRCcWbFDAyqXLbbJcvDAKtrfQD3G+dZxJuWsoMNqIplyS98ZfZbM5q/r0LeXy7JjE0m7wrlSSm2V6qDaaSHuQ1akwdeR90QAKM7kJv37O7qnIt9qoeJZT/HZ+nj4D4dpzBK2h9DeV741+r03kElzcm5FPDRxFjWs3ymUuGN4Zbdlb8ogPX0q8Dp7qGT/JCCCFpfNGBqRGc27TSSDUQnebhpKWq+Xaoz49MmA7SBP7cnM7Sf85iPuTbCI4GJ/c3q+4s7XZ8eKEp5cbjuGazT6Amh3yf8hBnelkeD9B1fAn6RNYeyVJmU03qbZVY86wpbUkfnXlZN2y2p1jcK/15sZofqCSDHazzsNw6tG5726h2dAI67RkEHhEoejY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB2995.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(136003)(346002)(376002)(366004)(396003)(230173577357003)(230273577357003)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(33716001)(82960400001)(2906002)(5660300002)(6666004)(6506007)(38100700002)(26005)(9686003)(83380400001)(6512007)(4326008)(478600001)(41300700001)(54906003)(66476007)(66556008)(66946007)(6486002)(966005)(6862004)(8676002)(8936002)(86362001)(316002)(6636002)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zhc7OaXmIBLzGHlLmq2BK1E4fjOe9nSka4rVvm+x0wBZl3E9MmQhaze41+Nj?=
+ =?us-ascii?Q?RM4l1/laMdGcfnhdB3ihplSl0hrRhHspmcAedb5binATV0nrRA4Ms7hrXJm3?=
+ =?us-ascii?Q?2w6cRZkZ9641b9QSEIfWwbwOaF6uV3ZnxgrIeSRmYVKwKA44ZdKJXM9Se50A?=
+ =?us-ascii?Q?QjRPD/LtOrVfwL3IZbb4nI0eWJt5uUByESFi28YvW1VlBfSFNTMItL90nifG?=
+ =?us-ascii?Q?OqDIU6OVbfjvgg+NNK5X/bUmLO0Bjsbf8+BFVJ27T9AUsvZjSgrwxlJKpjlC?=
+ =?us-ascii?Q?W3QNnY6zU5wdKXU2zr0rU8iJ5P0lS14oyD7TjGD/zrsY9tjkp1/9BVAvWApR?=
+ =?us-ascii?Q?SLDKPWBbtbA7Tv3ReZwgZCbiPsON69PbW/M0XxPv8nq0l7Hb2I2NOCE4UM2t?=
+ =?us-ascii?Q?uVVEqao1bUnIiVlnj44+2Ru3cpAmVW4MtCVBm3FdEja6tEKra8eiWGFD3z/q?=
+ =?us-ascii?Q?qcOEfXp3Ka3JPOdOi9jiVZOUrRAR5XfUYRE/LNjwn9mGgt5HXC7tObEGiXN7?=
+ =?us-ascii?Q?C8vrZ2zxJ+0qBorjS3a/H7FbH+nUX+IFbfLNxWj70TwCq2In3JkpJPbF5VR1?=
+ =?us-ascii?Q?FwSMYhD1jGAGCTAzALOMNlngK3eczCK9c7a1s95FIQViX8FNC7IYopb89zXd?=
+ =?us-ascii?Q?CUEfL22Pq0lzt9n1kh1lQA3onvKCXKNO9W+bznNtDwSjOprm4MrX+4ObG5S5?=
+ =?us-ascii?Q?YdEev189zJMM/ts7a2ibudwRsoD+rOw4PA64ssvUvkVonqFOfmwgNTurdO2b?=
+ =?us-ascii?Q?ufDgv0TxU3YBhey1Z92oAol6dRxFOsR6KJSPp0sMnVQYP9vNiULfW+1l9a/S?=
+ =?us-ascii?Q?dQTnNSi9pv2KWL2GmXwOC8esBC0XhcZFzNS5+NWor8VB3hMI47Z3pgq9bAFw?=
+ =?us-ascii?Q?hEzGrHrt8T9lZxQR4p2vrnS3NSrjqLq2g2Ku8rkJjsOVnPieDPBsOxrL3yz5?=
+ =?us-ascii?Q?81QE69MJjxSBOYnJRXtqqVkD/JEAnp1+yyGHwoisBXrnVK7aFfIIyQ98Z20F?=
+ =?us-ascii?Q?MMXxzl5hY+OeoTwfT7V1uYlFSmmYHEaCZTlK0ZHAzap8yBg6MHWrQW0OQt2t?=
+ =?us-ascii?Q?B3mlxkz1KhTdY5AgSQtzfgVcBZxI9xgd5dKJmnvIcoxmKS6xNwzpH+bvgKhV?=
+ =?us-ascii?Q?Q2W969nPqhqLiEWDdJBSZaJZS2SWNJ5YELhtZNFEU828G5jXXQTehtOBRWsD?=
+ =?us-ascii?Q?/oRgzUzomJjuBaUu6+9hUwfWgNSIHQZ5h6hehYh2ktNCEOSIRJFIY7loDCNq?=
+ =?us-ascii?Q?RV6DmZIpKzCxXwZLU4VDU6oZSYN5QMqe4u4UpUEzzr8AQtPf4PW1EX5cRnmx?=
+ =?us-ascii?Q?I6vl/OkUEKmg/eKQWA+ujobVR0Wc5nZay0tyC0ZqJFMZv1hdgzKEiY8GgFju?=
+ =?us-ascii?Q?H1Vo20biMFgcVFPkIPjTBXslhA2vFoMWU2ne/WJjF+3Jp18gHvh+0WveVZDi?=
+ =?us-ascii?Q?S49PG0ybk2f0A9FRHQie9K0af+VQ0R3x+LxU9bW5r0/S4giLLWn+Esyt4pcS?=
+ =?us-ascii?Q?XSMrH73bzNyCN8uDZA5gEnc0TNdfcpG7/sHPxv4voHdOcrbIJ40GGSDFZqys?=
+ =?us-ascii?Q?wJ1gRU9yRSBh3raEaJzElWmPnByQUmNUiHCsjXq1?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67397a9d-857a-4cfc-4d88-08dbfdf984d6
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB2995.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2023 05:40:32.3682
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: peZlX+chA0AVq/zntUwNp9LDCWvTW5E2e8zsDoEmDkNj0vMO3DxRF4qRyhYJiJMp5s1LrJ8FruAg6JKRHYgkaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5633
+X-OriginatorOrg: intel.com
 
-Hi Sebastian,
+On Sat, Dec 16, 2023 at 07:39:43AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   3bd7d748816927202268cb335921f7f68b3ca723
+> commit: a8eaf3ef549980719c5fcca257d5b220ac0f3f1b mtd: rawnand: marvell: Annotate struct marvell_nand_chip with __counted_by
+> date:   3 months ago
+> config: arm-randconfig-002-20231215 (https://download.01.org/0day-ci/archive/20231216/202312160703.nnQfaSja-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312160703.nnQfaSja-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
 
-kernel test robot noticed the following build errors:
+Kindly ignore this report and others that are related to __counted_by annotation.
+We will look for a way to avoid such reports which are duplicated with same cause.
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Andrzej-Siewior/locking-local_lock-Introduce-guard-definition-for-local_lock/20231216-011911
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20231215171020.687342-21-bigeasy%40linutronix.de
-patch subject: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP redirect.
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20231216/202312161212.D5tju5i6-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312161212.D5tju5i6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312161212.D5tju5i6-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/igb/igb_main.c:8620:3: error: cannot jump from this goto statement to its label
-                   goto xdp_out;
-                   ^
-   drivers/net/ethernet/intel/igb/igb_main.c:8624:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-           guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
-           ^
-   include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
-           CLASS(_name, __UNIQUE_ID(guard))
-                        ^
-   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
-   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-                               ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-   #define __PASTE(a,b) ___PASTE(a,b)
-                        ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-   #define ___PASTE(a,b) a##b
-                         ^
-   <scratch space>:52:1: note: expanded from here
-   __UNIQUE_ID_guard753
-   ^
-   1 error generated.
-
-
-vim +8620 drivers/net/ethernet/intel/igb/igb_main.c
-
-b1bb2eb0a0deb0 Alexander Duyck           2017-02-06  8608  
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8609  static struct sk_buff *igb_run_xdp(struct igb_adapter *adapter,
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8610  				   struct igb_ring *rx_ring,
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8611  				   struct xdp_buff *xdp)
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8612  {
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8613  	int err, result = IGB_XDP_PASS;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8614  	struct bpf_prog *xdp_prog;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8615  	u32 act;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8616  
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8617  	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8618  
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8619  	if (!xdp_prog)
-9cbc948b5a20c9 Sven Auhagen              2020-09-02 @8620  		goto xdp_out;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8621  
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8622  	prefetchw(xdp->data_hard_start); /* xdp_frame write */
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8623  
-d568b111738dbb Sebastian Andrzej Siewior 2023-12-15  8624  	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8625  	act = bpf_prog_run_xdp(xdp_prog, xdp);
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8626  	switch (act) {
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8627  	case XDP_PASS:
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8628  		break;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8629  	case XDP_TX:
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8630  		result = igb_xdp_xmit_back(adapter, xdp);
-74431c40b9c5fa Magnus Karlsson           2021-05-10  8631  		if (result == IGB_XDP_CONSUMED)
-74431c40b9c5fa Magnus Karlsson           2021-05-10  8632  			goto out_failure;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8633  		break;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8634  	case XDP_REDIRECT:
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8635  		err = xdp_do_redirect(adapter->netdev, xdp, xdp_prog);
-74431c40b9c5fa Magnus Karlsson           2021-05-10  8636  		if (err)
-74431c40b9c5fa Magnus Karlsson           2021-05-10  8637  			goto out_failure;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8638  		result = IGB_XDP_REDIR;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8639  		break;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8640  	default:
-c8064e5b4adac5 Paolo Abeni               2021-11-30  8641  		bpf_warn_invalid_xdp_action(adapter->netdev, xdp_prog, act);
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8642  		fallthrough;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8643  	case XDP_ABORTED:
-74431c40b9c5fa Magnus Karlsson           2021-05-10  8644  out_failure:
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8645  		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8646  		fallthrough;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8647  	case XDP_DROP:
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8648  		result = IGB_XDP_CONSUMED;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8649  		break;
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8650  	}
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8651  xdp_out:
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8652  	return ERR_PTR(-result);
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8653  }
-9cbc948b5a20c9 Sven Auhagen              2020-09-02  8654  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202312160703.nnQfaSja-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> scripts/kernel-doc: drivers/mtd/nand/raw/marvell_nand.c:352: warning: Excess struct member 'sels' description in 'marvell_nand_chip'
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
