@@ -1,49 +1,72 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9B331A7E;
-	Sat, 16 Dec 2023 19:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5A931A7E;
+	Sat, 16 Dec 2023 19:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVuCUAps"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kzkwdQsr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702754987; x=1734290987;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gRLCqr4JUDG0VdzH2duGiRbdzMX6tt0CVsaC03rWDr8=;
-  b=YVuCUAps3Z9QvRIbL6cx819yiUbsFtwnnOp24FZrrTS3jrGEnmu8DQ2k
-   ou1/L2jKbf58HeNXWYvtUV/z3rPfF3YzOGSVQDPQq4CSauJS6ETlnklq5
-   DaKBjvINahcflGgQ4/V+ktOFpgg3vDGXJtL2s73Phd5OeMw14JmfRnrpx
-   RmF+S5yGlW4XAJbs5527eBRp3wcMye6HM9sSINUGDXZ+UXOQm7t4Sj995
-   FsuNdaamDMROaBtDHzWOLeks1ig2WBvyF9YC6pMHvk7P6bi97R5WYYQH9
-   8GV0hu6sp+KGTKykWMhCBjX7+ynyczyJFy3KDkg1ZdFnOG6qhN8ZDImm4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="2562057"
+  t=1702754993; x=1734290993;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lv3QWQrUmLYLwZ4qvXCie7B7tfjyaTDxGvtcOhoJsN8=;
+  b=kzkwdQsr6B/PDKEHk0c6E3WrPMcdbSoB2xQvtl3Q9DoEC09ewhD9h3Om
+   omb8kTMKmP41TsiJ/uwXc8/UCF6g2rADjEX4G9Oka/L41tk0iqRer9xsZ
+   N7kzHu3zdog6kj+4XAToHWZvsbS2LWSzpSmAu/U4tuHzwb4GEcGaewLwC
+   ey0HXuDh0UUt/mOFQ3cXE/5UJDTiIyEr1CE8FC3qPlM/hYZ+NW2pOqRfi
+   7SacYY/YnpB2eORvsMlxScJskp5AGfMCR099nyLROBMQHIkG+MAHNPPO5
+   zfwbK6iCohhDyC7t2AebihFDKZSsub4wgBdRRrzQ7Ge3i6VBByqpJzHOZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="2562066"
 X-IronPort-AV: E=Sophos;i="6.04,281,1695711600"; 
-   d="scan'208";a="2562057"
+   d="scan'208";a="2562066"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2023 11:29:46 -0800
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2023 11:29:53 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="751307214"
+X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="751307209"
 X-IronPort-AV: E=Sophos;i="6.04,281,1695711600"; 
-   d="scan'208";a="751307214"
+   d="scan'208";a="751307209"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
   by orsmga006.jf.intel.com with ESMTP; 16 Dec 2023 11:29:45 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rEaM2-00027I-2G;
+	id 1rEaM2-00027G-2B;
 	Sat, 16 Dec 2023 19:29:42 +0000
-Date: Sun, 17 Dec 2023 03:28:47 +0800
+Date: Sun, 17 Dec 2023 03:28:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-xe@lists.freedesktop.org,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [drm-xe:drm-xe-next 989/1016]
- drivers/gpu/drm/xe/xe_wait_user_fence.c:46:2: warning: variable 'passed' is
- used uninitialized whenever switch default is taken
-Message-ID: <202312170357.KPSinwPs-lkp@intel.com>
+	Boqun Feng <boqun.feng@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>, Hao Luo <haoluo@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Juergen Gross <jgross@suse.com>, KP Singh <kpsingh@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH net-next 16/24] net: netkit, veth, tun, virt*: Use
+ nested-BH locking for XDP redirect.
+Message-ID: <202312170350.n7ssgNDP-lkp@intel.com>
+References: <20231215171020.687342-17-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,85 +75,188 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231215171020.687342-17-bigeasy@linutronix.de>
 
-tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-head:   c54005fdd0347a17088e7ff78070a55bf9103bc4
-commit: ad7d86415578e1a5deedb0ceed5c281f7367d66d [989/1016] drm/xe: Enable W=1 warnings by default
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231217/202312170357.KPSinwPs-lkp@intel.com/config)
+Hi Sebastian,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Andrzej-Siewior/locking-local_lock-Introduce-guard-definition-for-local_lock/20231216-011911
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231215171020.687342-17-bigeasy%40linutronix.de
+patch subject: [PATCH net-next 16/24] net: netkit, veth, tun, virt*: Use nested-BH locking for XDP redirect.
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20231217/202312170350.n7ssgNDP-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312170357.KPSinwPs-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312170350.n7ssgNDP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312170357.KPSinwPs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312170350.n7ssgNDP-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   warning: unknown warning option '-Wrestrict' [-Wunknown-warning-option]
-   warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
-   warning: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
-   warning: unknown warning option '-Wformat-truncation' [-Wunknown-warning-option]
-   warning: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
-   warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
->> drivers/gpu/drm/xe/xe_wait_user_fence.c:46:2: warning: variable 'passed' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-           default:
-           ^~~~~~~
-   drivers/gpu/drm/xe/xe_wait_user_fence.c:50:9: note: uninitialized use occurs here
-           return passed ? 0 : 1;
-                  ^~~~~~
-   drivers/gpu/drm/xe/xe_wait_user_fence.c:21:13: note: initialize the variable 'passed' to silence this warning
-           bool passed;
-                      ^
-                       = 0
-   7 warnings generated.
+>> drivers/net/hyperv/netvsc_bpf.c:53:3: error: cannot jump from this goto statement to its label
+                   goto out;
+                   ^
+   drivers/net/hyperv/netvsc_bpf.c:61:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+           ^
+   include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:81:1: note: expanded from here
+   __UNIQUE_ID_guard635
+   ^
+   drivers/net/hyperv/netvsc_bpf.c:46:3: error: cannot jump from this goto statement to its label
+                   goto out;
+                   ^
+   drivers/net/hyperv/netvsc_bpf.c:61:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+           ^
+   include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:81:1: note: expanded from here
+   __UNIQUE_ID_guard635
+   ^
+   drivers/net/hyperv/netvsc_bpf.c:41:3: error: cannot jump from this goto statement to its label
+                   goto out;
+                   ^
+   drivers/net/hyperv/netvsc_bpf.c:61:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+           ^
+   include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:81:1: note: expanded from here
+   __UNIQUE_ID_guard635
+   ^
+   3 errors generated.
 
 
-vim +/passed +46 drivers/gpu/drm/xe/xe_wait_user_fence.c
+vim +53 drivers/net/hyperv/netvsc_bpf.c
 
-dd08ebf6c3525a Matthew Brost   2023-03-30  16  
-dd08ebf6c3525a Matthew Brost   2023-03-30  17  static int do_compare(u64 addr, u64 value, u64 mask, u16 op)
-dd08ebf6c3525a Matthew Brost   2023-03-30  18  {
-dd08ebf6c3525a Matthew Brost   2023-03-30  19  	u64 rvalue;
-dd08ebf6c3525a Matthew Brost   2023-03-30  20  	int err;
-dd08ebf6c3525a Matthew Brost   2023-03-30  21  	bool passed;
-dd08ebf6c3525a Matthew Brost   2023-03-30  22  
-dd08ebf6c3525a Matthew Brost   2023-03-30  23  	err = copy_from_user(&rvalue, u64_to_user_ptr(addr), sizeof(rvalue));
-dd08ebf6c3525a Matthew Brost   2023-03-30  24  	if (err)
-dd08ebf6c3525a Matthew Brost   2023-03-30  25  		return -EFAULT;
-dd08ebf6c3525a Matthew Brost   2023-03-30  26  
-dd08ebf6c3525a Matthew Brost   2023-03-30  27  	switch (op) {
-76d52e37187b73 Rodrigo Vivi    2023-11-14  28  	case DRM_XE_UFENCE_WAIT_OP_EQ:
-dd08ebf6c3525a Matthew Brost   2023-03-30  29  		passed = (rvalue & mask) == (value & mask);
-dd08ebf6c3525a Matthew Brost   2023-03-30  30  		break;
-76d52e37187b73 Rodrigo Vivi    2023-11-14  31  	case DRM_XE_UFENCE_WAIT_OP_NEQ:
-dd08ebf6c3525a Matthew Brost   2023-03-30  32  		passed = (rvalue & mask) != (value & mask);
-dd08ebf6c3525a Matthew Brost   2023-03-30  33  		break;
-76d52e37187b73 Rodrigo Vivi    2023-11-14  34  	case DRM_XE_UFENCE_WAIT_OP_GT:
-dd08ebf6c3525a Matthew Brost   2023-03-30  35  		passed = (rvalue & mask) > (value & mask);
-dd08ebf6c3525a Matthew Brost   2023-03-30  36  		break;
-76d52e37187b73 Rodrigo Vivi    2023-11-14  37  	case DRM_XE_UFENCE_WAIT_OP_GTE:
-dd08ebf6c3525a Matthew Brost   2023-03-30  38  		passed = (rvalue & mask) >= (value & mask);
-dd08ebf6c3525a Matthew Brost   2023-03-30  39  		break;
-76d52e37187b73 Rodrigo Vivi    2023-11-14  40  	case DRM_XE_UFENCE_WAIT_OP_LT:
-dd08ebf6c3525a Matthew Brost   2023-03-30  41  		passed = (rvalue & mask) < (value & mask);
-dd08ebf6c3525a Matthew Brost   2023-03-30  42  		break;
-76d52e37187b73 Rodrigo Vivi    2023-11-14  43  	case DRM_XE_UFENCE_WAIT_OP_LTE:
-dd08ebf6c3525a Matthew Brost   2023-03-30  44  		passed = (rvalue & mask) <= (value & mask);
-dd08ebf6c3525a Matthew Brost   2023-03-30  45  		break;
-dd08ebf6c3525a Matthew Brost   2023-03-30 @46  	default:
-5e0e3070659519 Francois Dugast 2023-07-27  47  		XE_WARN_ON("Not possible");
-dd08ebf6c3525a Matthew Brost   2023-03-30  48  	}
-dd08ebf6c3525a Matthew Brost   2023-03-30  49  
-dd08ebf6c3525a Matthew Brost   2023-03-30  50  	return passed ? 0 : 1;
-dd08ebf6c3525a Matthew Brost   2023-03-30  51  }
-dd08ebf6c3525a Matthew Brost   2023-03-30  52  
-
-:::::: The code at line 46 was first introduced by commit
-:::::: dd08ebf6c3525a7ea2186e636df064ea47281987 drm/xe: Introduce a new DRM driver for Intel GPUs
-
-:::::: TO: Matthew Brost <matthew.brost@intel.com>
-:::::: CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
+351e1581395fcc Haiyang Zhang             2020-01-23   23  
+351e1581395fcc Haiyang Zhang             2020-01-23   24  u32 netvsc_run_xdp(struct net_device *ndev, struct netvsc_channel *nvchan,
+351e1581395fcc Haiyang Zhang             2020-01-23   25  		   struct xdp_buff *xdp)
+351e1581395fcc Haiyang Zhang             2020-01-23   26  {
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   27  	struct netvsc_stats_rx *rx_stats = &nvchan->rx_stats;
+351e1581395fcc Haiyang Zhang             2020-01-23   28  	void *data = nvchan->rsc.data[0];
+351e1581395fcc Haiyang Zhang             2020-01-23   29  	u32 len = nvchan->rsc.len[0];
+351e1581395fcc Haiyang Zhang             2020-01-23   30  	struct page *page = NULL;
+351e1581395fcc Haiyang Zhang             2020-01-23   31  	struct bpf_prog *prog;
+351e1581395fcc Haiyang Zhang             2020-01-23   32  	u32 act = XDP_PASS;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   33  	bool drop = true;
+351e1581395fcc Haiyang Zhang             2020-01-23   34  
+351e1581395fcc Haiyang Zhang             2020-01-23   35  	xdp->data_hard_start = NULL;
+351e1581395fcc Haiyang Zhang             2020-01-23   36  
+351e1581395fcc Haiyang Zhang             2020-01-23   37  	rcu_read_lock();
+351e1581395fcc Haiyang Zhang             2020-01-23   38  	prog = rcu_dereference(nvchan->bpf_prog);
+351e1581395fcc Haiyang Zhang             2020-01-23   39  
+351e1581395fcc Haiyang Zhang             2020-01-23   40  	if (!prog)
+351e1581395fcc Haiyang Zhang             2020-01-23   41  		goto out;
+351e1581395fcc Haiyang Zhang             2020-01-23   42  
+505e3f00c3f364 Andrea Parri (Microsoft   2021-01-14   43) 	/* Ensure that the below memcpy() won't overflow the page buffer. */
+505e3f00c3f364 Andrea Parri (Microsoft   2021-01-14   44) 	if (len > ndev->mtu + ETH_HLEN) {
+505e3f00c3f364 Andrea Parri (Microsoft   2021-01-14   45) 		act = XDP_DROP;
+505e3f00c3f364 Andrea Parri (Microsoft   2021-01-14   46) 		goto out;
+505e3f00c3f364 Andrea Parri (Microsoft   2021-01-14   47) 	}
+505e3f00c3f364 Andrea Parri (Microsoft   2021-01-14   48) 
+351e1581395fcc Haiyang Zhang             2020-01-23   49  	/* allocate page buffer for data */
+351e1581395fcc Haiyang Zhang             2020-01-23   50  	page = alloc_page(GFP_ATOMIC);
+351e1581395fcc Haiyang Zhang             2020-01-23   51  	if (!page) {
+351e1581395fcc Haiyang Zhang             2020-01-23   52  		act = XDP_DROP;
+351e1581395fcc Haiyang Zhang             2020-01-23  @53  		goto out;
+351e1581395fcc Haiyang Zhang             2020-01-23   54  	}
+351e1581395fcc Haiyang Zhang             2020-01-23   55  
+43b5169d8355cc Lorenzo Bianconi          2020-12-22   56  	xdp_init_buff(xdp, PAGE_SIZE, &nvchan->xdp_rxq);
+be9df4aff65f18 Lorenzo Bianconi          2020-12-22   57  	xdp_prepare_buff(xdp, page_address(page), NETVSC_XDP_HDRM, len, false);
+351e1581395fcc Haiyang Zhang             2020-01-23   58  
+351e1581395fcc Haiyang Zhang             2020-01-23   59  	memcpy(xdp->data, data, len);
+351e1581395fcc Haiyang Zhang             2020-01-23   60  
+31dbfc0f055c7d Sebastian Andrzej Siewior 2023-12-15   61  	guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+351e1581395fcc Haiyang Zhang             2020-01-23   62  	act = bpf_prog_run_xdp(prog, xdp);
+351e1581395fcc Haiyang Zhang             2020-01-23   63  
+351e1581395fcc Haiyang Zhang             2020-01-23   64  	switch (act) {
+351e1581395fcc Haiyang Zhang             2020-01-23   65  	case XDP_PASS:
+351e1581395fcc Haiyang Zhang             2020-01-23   66  	case XDP_TX:
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   67  		drop = false;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   68  		break;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   69  
+351e1581395fcc Haiyang Zhang             2020-01-23   70  	case XDP_DROP:
+351e1581395fcc Haiyang Zhang             2020-01-23   71  		break;
+351e1581395fcc Haiyang Zhang             2020-01-23   72  
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   73  	case XDP_REDIRECT:
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   74  		if (!xdp_do_redirect(ndev, xdp, prog)) {
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   75  			nvchan->xdp_flush = true;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   76  			drop = false;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   77  
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   78  			u64_stats_update_begin(&rx_stats->syncp);
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   79  
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   80  			rx_stats->xdp_redirect++;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   81  			rx_stats->packets++;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   82  			rx_stats->bytes += nvchan->rsc.pktlen;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   83  
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   84  			u64_stats_update_end(&rx_stats->syncp);
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   85  
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   86  			break;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   87  		} else {
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   88  			u64_stats_update_begin(&rx_stats->syncp);
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   89  			rx_stats->xdp_drop++;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   90  			u64_stats_update_end(&rx_stats->syncp);
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   91  		}
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   92  
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   93  		fallthrough;
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07   94  
+351e1581395fcc Haiyang Zhang             2020-01-23   95  	case XDP_ABORTED:
+351e1581395fcc Haiyang Zhang             2020-01-23   96  		trace_xdp_exception(ndev, prog, act);
+351e1581395fcc Haiyang Zhang             2020-01-23   97  		break;
+351e1581395fcc Haiyang Zhang             2020-01-23   98  
+351e1581395fcc Haiyang Zhang             2020-01-23   99  	default:
+c8064e5b4adac5 Paolo Abeni               2021-11-30  100  		bpf_warn_invalid_xdp_action(ndev, prog, act);
+351e1581395fcc Haiyang Zhang             2020-01-23  101  	}
+351e1581395fcc Haiyang Zhang             2020-01-23  102  
+351e1581395fcc Haiyang Zhang             2020-01-23  103  out:
+351e1581395fcc Haiyang Zhang             2020-01-23  104  	rcu_read_unlock();
+351e1581395fcc Haiyang Zhang             2020-01-23  105  
+1cb9d3b6185b2a Haiyang Zhang             2022-04-07  106  	if (page && drop) {
+351e1581395fcc Haiyang Zhang             2020-01-23  107  		__free_page(page);
+351e1581395fcc Haiyang Zhang             2020-01-23  108  		xdp->data_hard_start = NULL;
+351e1581395fcc Haiyang Zhang             2020-01-23  109  	}
+351e1581395fcc Haiyang Zhang             2020-01-23  110  
+351e1581395fcc Haiyang Zhang             2020-01-23  111  	return act;
+351e1581395fcc Haiyang Zhang             2020-01-23  112  }
+351e1581395fcc Haiyang Zhang             2020-01-23  113  
 
 -- 
 0-DAY CI Kernel Test Service
