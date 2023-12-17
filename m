@@ -1,106 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87AA44363;
-	Sun, 17 Dec 2023 12:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E61F44380;
+	Sun, 17 Dec 2023 13:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S1sR076o"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702816993; x=1734352993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ACMZYUw/c3LU7bK9uq07xvXLyS+mDBY6zrKqOWw9xCs=;
-  b=S1sR076oIn/zdyP+bSNvFkuJMSvftT+Lp8ToGFfdwwWqHJYHxQyyRDe0
-   OA5BF7ZQzEMlpB7b579jFVBU4tDRwnzgWtVDWonmZhmZzavtNA2t7u82G
-   6ZQPxy4K+1jl4/b0Yg70scF45oc6vUpEF1s7NAaT7c7sUz1fc3NuezVN+
-   g5EogIre0pk+38uZqnYnsS0ATBhjJQAls51vZWKUKgvIHa9Ihhf/IcJcU
-   +Wx8DtgLRbYVDz4o7GWlLXKANLWP7U2kAYQitLFTjGL8KZd6mfAbfj4RN
-   fn7vMSnWJ1L+DUNE2sMz+ry5B5fj5X3vHKeWsAQ/i0jWKnR9uDnRw5wZJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="2239726"
-X-IronPort-AV: E=Sophos;i="6.04,283,1695711600"; 
-   d="scan'208";a="2239726"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2023 04:43:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="865926572"
-X-IronPort-AV: E=Sophos;i="6.04,283,1695711600"; 
-   d="scan'208";a="865926572"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Dec 2023 04:43:09 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rEqU6-00032G-2T;
-	Sun, 17 Dec 2023 12:43:06 +0000
-Date: Sun, 17 Dec 2023 20:42:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: yang.guang5@zte.com.cn, davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jiang.xuexin@zte.com.cn, chen.haonan2@zte.com.cn,
-	cgel.zte@gmail.com, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, sd@queasysnail.net, netdev@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SoOlbdvN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B387C433C8;
+	Sun, 17 Dec 2023 13:41:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702820476;
+	bh=czOgyizie6+0WHtT+D4zbad4G/EaHbGm28IGylTfNsg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=SoOlbdvNX10qBzbXJxBRoqki5rDrAf96KVcZt5zXcOZDKWPOH/CLpGwUybxjn+Iu6
+	 ZxcegYUrQcrR10vcUkbmn4j93xxX32cVfosBxzQ3LRjQxQHxYeYLPpV4FlVk2JBCOV
+	 f37m9b8ao3ICMOTkahmlOAsyiA3UvcQ9vW/4dxhD/n9x6ndbAtGyHLpeaXmHiHBA6M
+	 i4sxf/spSpUZnwemDhrW4YuxhBIN32et+lHh8zpF0TiqhwDYzMqKIREKMWR+AxBLM7
+	 uoTQg1UMbLif2EhWg/EF5q55GHVtTr6P9vAlvb8hTlPcQvuySXSI7n+caHj2fcn/k3
+	 ccQ5/ITP87trA==
+From: Will Deacon <will@kernel.org>
+To: linux-arm-kernel@lists.infradead.org,
+	mark.rutland@arm.com,
+	linux-next@vger.kernel.org,
+	u.kleine-koenig@pengutronix.de,
+	linux-perf-users@vger.kernel.org,
+	James Clark <james.clark@arm.com>
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next] mlxsw: spectrum: use netif_is_macsec()
- instead of open code
-Message-ID: <202312172042.gMYseKZQ-lkp@intel.com>
-References: <202312152145312776210@zte.com.cn>
+Subject: Re: [PATCH v2 0/1] arm: perf: Fix ARCH=arm build with GCC
+Date: Sun, 17 Dec 2023 13:41:05 +0000
+Message-Id: <170281440108.359132.7914631025593499836.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20231215175648.3397170-1-james.clark@arm.com>
+References: <20231215175648.3397170-1-james.clark@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202312152145312776210@zte.com.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi,
+On Fri, 15 Dec 2023 17:56:47 +0000, James Clark wrote:
+> Changes since V1:
+> 
+>   * Instead of wrapping everything in #if, just use GENMASK_ULL instead
+>     which fixes both issues in one commit.
+> 
+> A fix for the broken build with GCC currently in linux-next
+> (next-20231214)
+> 
+> [...]
 
-kernel test robot noticed the following build warnings:
+Applied to will (for-next/perf), thanks!
 
-[auto build test WARNING on next-20231215]
+[1/1] arm: perf: Fix ARCH=arm build with GCC
+      https://git.kernel.org/will/c/bb339db4d363
 
-url:    https://github.com/intel-lab-lkp/linux/commits/yang-guang5-zte-com-cn/mlxsw-spectrum-use-netif_is_macsec-instead-of-open-code/20231215-214631
-base:   next-20231215
-patch link:    https://lore.kernel.org/r/202312152145312776210%40zte.com.cn
-patch subject: [PATCH linux-next] mlxsw: spectrum: use netif_is_macsec() instead of open code
-config: i386-buildonly-randconfig-003-20231217 (https://download.01.org/0day-ci/archive/20231217/202312172042.gMYseKZQ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312172042.gMYseKZQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312172042.gMYseKZQ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/cgroup/cgroup.c:33:
-   In file included from include/linux/bpf-cgroup.h:11:
-   In file included from include/net/sock.h:46:
->> include/linux/netdevice.h:5105:1: warning: all paths through this function will call itself [-Winfinite-recursion]
-   {
-   ^
-   1 warning generated.
-
-
-vim +5105 include/linux/netdevice.h
-
-7967168cefdbc6 Herbert Xu      2006-06-22  5098  
-14d7b8122fd591 Jakub Kicinski  2022-05-05  5099  void netif_set_tso_max_size(struct net_device *dev, unsigned int size);
-14d7b8122fd591 Jakub Kicinski  2022-05-05  5100  void netif_set_tso_max_segs(struct net_device *dev, unsigned int segs);
-6df6398f7c8b48 Jakub Kicinski  2022-05-05  5101  void netif_inherit_tso_max(struct net_device *to,
-6df6398f7c8b48 Jakub Kicinski  2022-05-05  5102  			   const struct net_device *from);
-6df6398f7c8b48 Jakub Kicinski  2022-05-05  5103  
-3c17578473b9be Sabrina Dubroca 2016-03-11  5104  static inline bool netif_is_macsec(const struct net_device *dev)
-3c17578473b9be Sabrina Dubroca 2016-03-11 @5105  {
-55cddeca5e222e Yang Guang      2023-12-15  5106  	return netif_is_macsec(dev);
-3c17578473b9be Sabrina Dubroca 2016-03-11  5107  }
-3c17578473b9be Sabrina Dubroca 2016-03-11  5108  
-
+Cheers,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
