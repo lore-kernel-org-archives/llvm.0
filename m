@@ -1,108 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5711FB2;
-	Sun, 17 Dec 2023 09:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAB91FAD;
+	Sun, 17 Dec 2023 09:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YvDSZegZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702805512; x=1734341512;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8CmUDMEII9/rkK/xBUgKb9ssodth2FynBayIxqHFPPs=;
-  b=YvDSZegZljjH/uafYU+tMGr1ez3idup5VJYIcAusNStdXrAiBCR3PvZ9
-   iBQkewzbn6RT1WYgqxI8nPMRnaA5g/PUeBU2UOcHoh7hP91DyXYjfcP9l
-   pBpC596V8kREUYzUyQa+9Xxduh7MU/BKnEpoiVq98dDLZp5OyRzfmHZQf
-   T8OViUijNZM+jY25tlZmRxlKnI9h6Ngmtoft7LZCVyDbieUNThvEJlOrF
-   hCcmOIGEC4RYj9Rbntu9Dt1IRcep/bUyjpSpQjeGAZoBDNk4lb/Q5TEvO
-   a1RGRBqzTpnTA4W2LffxJmBx2vRrkrjKvAP3TQFU2rt5nY4txYwjiIMJp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10926"; a="395145064"
-X-IronPort-AV: E=Sophos;i="6.04,283,1695711600"; 
-   d="scan'208";a="395145064"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2023 01:31:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,283,1695711600"; 
-   d="scan'208";a="23375128"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 17 Dec 2023 01:31:49 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rEnUw-0002tj-1A;
-	Sun, 17 Dec 2023 09:31:46 +0000
-Date: Sun, 17 Dec 2023 17:31:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kmo@daterainc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kmo@daterainc.com>
-Subject: [bcachefs:header_cleanup 3/50]
- arch/x86/include/asm/paravirt.h:792:47: warning: declaration of 'struct
- mm_struct' will not be visible outside of this function
-Message-ID: <202312171728.fspqyQQR-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j1Dt7ai7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563ABC433C7;
+	Sun, 17 Dec 2023 09:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702806303;
+	bh=SjfgyypNeosBVUqUNZsJw8cMhrT9jSZeCkrmvE4/Y+8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=j1Dt7ai7IL2Mw9arRQR+7Xj5rc21ImNRqH50Z+YB0LWCDx2gs24JwSyjPVXoMDsnd
+	 ac/Cz0gOQVsrvRElRAsWhEyoV+DU3ZI4lsxDPwDpSIsWF1m1nfRqLVQABOk9MokKlG
+	 VPAFM962VT0d70+AcDa1UFx/Z3Wt46HbJVKN6kwKQClHzmLeZzx7NRbJoCKCCn3Tjm
+	 J9unESeVGTj9nHvXsFumQhyLgD0i+YTxkPDAh7YMmw+GjqrgCNSZFnFznJNRa9lGnJ
+	 xXqd7cYraSLZFx1+NgKLni537Evy9EGh6465noKcxCrvxAzoY0W5WvLS9EpIYQ1wKC
+	 K4aCqc4Xj/esA==
+From: Simon Horman <horms@kernel.org>
+Date: Sun, 17 Dec 2023 09:44:50 +0000
+Subject: [PATCH iwl-next] i40e: Avoid unnecessary use of comma operator
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231217-i40e-comma-v1-1-85c075eff237@kernel.org>
+X-B4-Tracking: v=1; b=H4sIABHDfmUC/x3MQQqAIBBA0avIrBtIC6SuEi3UphooDY0SorsnL
+ d/i/wcSRaYEvXgg0sWJgy+QlQC3Gr8Q8lQMqlaNVFIjtzWhC/tuULvWOqusmXQHJTgizZz/2QB
+ 8b+gpnzC+7wdEuNfSZgAAAA==
+To: Jesse Brandeburg <jesse.brandeburg@intel.com>, 
+ Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
+ llvm@lists.linux.dev
+X-Mailer: b4 0.12.3
 
-tree:   https://evilpiepirate.org/git/bcachefs.git header_cleanup
-head:   7288b19e061b7aa3f46f685e9944af128f10ffd5
-commit: 33d882857eb5393e3acbc770e469d9044aaa0b35 [3/50] x86/lib/cache-smp.c: fix missing include
-config: i386-buildonly-randconfig-002-20231217 (https://download.01.org/0day-ci/archive/20231217/202312171728.fspqyQQR-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312171728.fspqyQQR-lkp@intel.com/reproduce)
+Although it does not seem to have any untoward side-effects,
+the use of ';' to separate to assignments seems more appropriate than ','.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312171728.fspqyQQR-lkp@intel.com/
+Flagged by clang-17 -Wcomma
 
-All warnings (new ones prefixed by >>):
+No functional change intended.
+Compile tested only.
 
-   In file included from arch/x86/lib/cache-smp.c:2:
-   In file included from arch/x86/include/asm/paravirt.h:7:
-   arch/x86/include/asm/paravirt_types.h:8:2: error: unknown type name 'u8'
-           u8 *instr;              /* original instructions */
-           ^
-   arch/x86/include/asm/paravirt_types.h:9:2: error: unknown type name 'u8'
-           u8 type;                /* type of this instruction */
-           ^
-   arch/x86/include/asm/paravirt_types.h:10:2: error: unknown type name 'u8'
-           u8 len;                 /* length of original instruction */
-           ^
-   In file included from arch/x86/lib/cache-smp.c:2:
->> arch/x86/include/asm/paravirt.h:792:47: warning: declaration of 'struct mm_struct' will not be visible outside of this function [-Wvisibility]
-   static inline void paravirt_enter_mmap(struct mm_struct *mm)
-                                                 ^
-   arch/x86/include/asm/paravirt.h:798:51: warning: declaration of 'struct mm_struct' will not be visible outside of this function [-Wvisibility]
-   static inline void paravirt_arch_exit_mmap(struct mm_struct *mm)
-                                                     ^
-   2 warnings and 3 errors generated.
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+ drivers/net/ethernet/intel/i40e/i40e_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c b/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
+index 812d04747bd0..f542f2671957 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
+@@ -1917,7 +1917,7 @@ int i40e_get_eeprom(struct net_device *netdev,
+ 			len = eeprom->len - (I40E_NVM_SECTOR_SIZE * i);
+ 			last = true;
+ 		}
+-		offset = eeprom->offset + (I40E_NVM_SECTOR_SIZE * i),
++		offset = eeprom->offset + (I40E_NVM_SECTOR_SIZE * i);
+ 		ret_val = i40e_aq_read_nvm(hw, 0x0, offset, len,
+ 				(u8 *)eeprom_buff + (I40E_NVM_SECTOR_SIZE * i),
+ 				last, NULL);
 
-vim +792 arch/x86/include/asm/paravirt.h
-
-fdc0269e8958a1 Juergen Gross 2018-08-28  789  
-a1ea1c032b8f8c Dave Hansen   2014-11-18  790  #ifndef __ASSEMBLY__
-fdc0269e8958a1 Juergen Gross 2018-08-28  791  #ifndef CONFIG_PARAVIRT_XXL
-c9ae1b10d95610 Juergen Gross 2023-02-07 @792  static inline void paravirt_enter_mmap(struct mm_struct *mm)
-a1ea1c032b8f8c Dave Hansen   2014-11-18  793  {
-a1ea1c032b8f8c Dave Hansen   2014-11-18  794  }
-fdc0269e8958a1 Juergen Gross 2018-08-28  795  #endif
-a1ea1c032b8f8c Dave Hansen   2014-11-18  796  
-
-:::::: The code at line 792 was first introduced by commit
-:::::: c9ae1b10d9561012a222e05f0d3ab4e93d301f06 x86/paravirt: Merge activate_mm() and dup_mmap() callbacks
-
-:::::: TO: Juergen Gross <jgross@suse.com>
-:::::: CC: Borislav Petkov (AMD) <bp@alien8.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
