@@ -1,146 +1,111 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700743A1C3
-	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 14:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7b7a245dc28so349527239f.3
-        for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 06:44:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702910667; x=1703515467;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i4doMgNiRAG0oY64YZBGbw9i5anbFAngH6k0NEAjhqo=;
-        b=VQbVISnZCekm2WlP+ZFrw1cwmMz/xeFLvoJn+3IvIbUA68hgY8RQftstdZhYctDTA/
-         7DCGxkJIXYmgBPPQ4jrxi5SDTHKLfronsYEpVKJnOrqsY3tEZQYKyfHB+N4+7JW9+Cti
-         ML8f+RHz0enxTKODr/1T0dd1iV14ZX27CeTmd52qa9AE51gpyudF6OvfbvXN+6JoBzU4
-         g+fY+qZsw0/c+jtzjSl/qSOyqd7H4nQVi8BFcbzqHZGvZigW6qyB4hW2bOOjTPwHq9Xs
-         BiCEyvC8vXzwpDrN35/iPoVNm08NQdwR4ODggODwr8sXPiD9UnEXPkccGgPwxEjM2E13
-         mc7Q==
-X-Gm-Message-State: AOJu0YzQNAMMEYl3O00dvckIZZRS3uAecnvzB8IBfDraKEy7hP242vrr
-	VYFVSiLRLVPs4XipV4mNu4mgdiMLkoObYPJtI0UeK+6wAUqi
-X-Google-Smtp-Source: AGHT+IF+8OhGLaiuZnCCoA2uK6/w0OxH5geCmM5R01yRSiNAdaXlgQLnnE2pkdQ4gJgKxExnUfLz9P5sAVWuSRqxMffEzZUXxVhB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D005BFBE;
+	Mon, 18 Dec 2023 16:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+0BAugT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702915655; x=1734451655;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IWLzx5NW4r06kIV4xDr3qPvWDu/nR6Sy07HNHq0oZcI=;
+  b=E+0BAugT33qDdMz/UZoQVVoFQFRwckTRQt9sPP8jZDFGb1hNgiqXx45X
+   KDSlh6z/qbaOez4Vt2b+cVwafS69KcFxPo+j/CZokNmdnzMVyP5NGr02L
+   hxzYDltv4lJ5O1xziVF/pJqYBqAZ5l3F9K+PzyeS5oM+upjMMOkh+99YM
+   qBcTVyDxJM5Ut7kxwH0Up5AS68Y6JTVxMH894aPlYUyjENvaxLT/NKEJc
+   Uh+aFd7Ysip5/QmeBpxFuO+klZHDxMeY4EymeSpOaMyE44dK8O98ut1N5
+   J4kIMtHf8jB34+6uF8QcmskZ+jLG83TamfGozrxE/6sFQ+mlvyVW8D4hh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="426660157"
+X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
+   d="scan'208";a="426660157"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 08:07:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="845992548"
+X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
+   d="scan'208";a="845992548"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Dec 2023 08:07:33 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rFG9T-0004Hj-05;
+	Mon, 18 Dec 2023 16:07:31 +0000
+Date: Tue, 19 Dec 2023 00:06:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bvanassche:mq-deadline 4/4] block/mq-deadline.c:222:16: error: call
+ to undeclared function 'blk_rq_zone_no'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202312190011.JYlG3HVC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1445:b0:44a:fe65:d743 with SMTP id
- l5-20020a056638144500b0044afe65d743mr647000jad.0.1702910667748; Mon, 18 Dec
- 2023 06:44:27 -0800 (PST)
-Date: Mon, 18 Dec 2023 06:44:27 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006f7cb5060cc9c9ac@google.com>
-Subject: [syzbot] [bpf?] UBSAN: shift-out-of-bounds in adjust_reg_min_max_vals
-From: syzbot <syzbot+46700eea57ecc7f84776@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+tree:   https://github.com/bvanassche/linux mq-deadline
+head:   f1201b17a2fec011e8cdd6be24a413a5693941b7
+commit: f1201b17a2fec011e8cdd6be24a413a5693941b7 [4/4] block/mq-deadline: Prevent zoned write reordering due to I/O prioritization
+config: i386-randconfig-016-20231218 (https://download.01.org/0day-ci/archive/20231219/202312190011.JYlG3HVC-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312190011.JYlG3HVC-lkp@intel.com/reproduce)
 
-syzbot found the following issue on:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312190011.JYlG3HVC-lkp@intel.com/
 
-HEAD commit:    b1dfc0f76231 net: phy: skip LED triggers on PHYs on SFP mo..
-git tree:       net
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15d0331ee80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e043d554f0a5f852
-dashboard link: https://syzkaller.appspot.com/bug?extid=46700eea57ecc7f84776
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=128c8ad1e80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12456fb6e80000
+All errors (new ones prefixed by >>):
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fcd0802bfd92/disk-b1dfc0f7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d3d9e5ecc7f0/vmlinux-b1dfc0f7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4b04f82a5ed6/bzImage-b1dfc0f7.xz
-
-The issue was bisected to:
-
-commit f63181b6ae79fd3b034cde641db774268c2c3acf
-Author: Andrii Nakryiko <andrii@kernel.org>
-Date:   Fri Nov 4 16:36:47 2022 +0000
-
-    bpf: stop setting precise in current state
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10eed821e80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=12eed821e80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=14eed821e80000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+46700eea57ecc7f84776@syzkaller.appspotmail.com
-Fixes: f63181b6ae79 ("bpf: stop setting precise in current state")
-
-================================================================================
-UBSAN: shift-out-of-bounds in kernel/bpf/verifier.c:13571:63
-shift exponent 1073741824 is too large for 32-bit type 'int'
-CPU: 0 PID: 5069 Comm: syz-executor200 Not tainted 6.7.0-rc5-syzkaller-00167-gb1dfc0f76231 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/17/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2a6/0x480 lib/ubsan.c:387
- scalar32_min_max_arsh kernel/bpf/verifier.c:13571 [inline]
- adjust_scalar_min_max_vals kernel/bpf/verifier.c:13759 [inline]
- adjust_reg_min_max_vals.cold+0x162/0x221 kernel/bpf/verifier.c:13860
- check_alu_op+0x498/0x3a60 kernel/bpf/verifier.c:14092
- do_check kernel/bpf/verifier.c:17517 [inline]
- do_check_common+0x1b30/0xd690 kernel/bpf/verifier.c:20177
- do_check_main kernel/bpf/verifier.c:20240 [inline]
- bpf_check+0x77d9/0xa5e0 kernel/bpf/verifier.c:20877
- bpf_prog_load+0x1531/0x2200 kernel/bpf/syscall.c:2716
- __sys_bpf+0xbf7/0x4920 kernel/bpf/syscall.c:5383
- __do_sys_bpf kernel/bpf/syscall.c:5487 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5485 [inline]
- __x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5485
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7ff0c7237af9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff01650e58 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff0c7237af9
-RDX: 0000000000000048 RSI: 00000000200054c0 RDI: 0000000000000005
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000006
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000003a28
-R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-================================================================================
+>> block/mq-deadline.c:222:16: error: call to undeclared function 'blk_rq_zone_no'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   while (rq && blk_rq_zone_no(rq) == zno) {
+                                ^
+   1 error generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +/blk_rq_zone_no +222 block/mq-deadline.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+   204	
+   205	/*
+   206	 * If any sequential write requests are pending for the zone containing @pos,
+   207	 * return the I/O priority for these write requests.
+   208	 */
+   209	static enum dd_prio dd_zone_prio(struct deadline_data *dd,
+   210					 struct block_device *bdev, sector_t pos)
+   211	{
+   212		struct gendisk *disk = bdev->bd_disk;
+   213		const unsigned int zno = disk_zone_no(disk, pos);
+   214		enum dd_prio prio;
+   215	
+   216		pos -= bdev_offset_from_zone_start(bdev, pos);
+   217		for (prio = DD_PRIO_MIN; prio <= DD_PRIO_MAX; prio++) {
+   218			struct dd_per_prio *per_prio = &dd->per_prio[prio];
+   219			struct request *rq;
+   220	
+   221			rq = deadline_first_rq_past_pos(per_prio, DD_WRITE, pos);
+ > 222			while (rq && blk_rq_zone_no(rq) == zno) {
+   223				struct rb_node *node;
+   224	
+   225				if (blk_rq_is_seq_zoned_write(rq))
+   226					return prio;
+   227				node = rb_next(&rq->rb_node);
+   228				if (!node)
+   229					break;
+   230				rq = rb_entry_rq(node);
+   231			}
+   232		}
+   233		return DD_INVALID_PRIO;
+   234	}
+   235	
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
