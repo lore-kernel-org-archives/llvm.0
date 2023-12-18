@@ -1,111 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8298442392;
-	Mon, 18 Dec 2023 16:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A55442042
+	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 16:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YUa8SDEL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F56EC433CA;
-	Mon, 18 Dec 2023 16:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702918556;
-	bh=XxYFNWhdg6eNVhPoZXUc3S141TGv0s2xTcNREUNTq7o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YUa8SDEL75yXavrxPAYBpehaZiKrcorHkBA1Wj8WefvK3li6SRC3XDFYV8QlYMW76
-	 tvULE9CwNEEMCIV6xWZvLTW8tfqKlMrPClyWKdzVbtH8goOiTK0Zwc6y4PuYOAabpY
-	 o/EDHdfU4h0GyMMMzpO3Qxcx+tBfLtlasauNZIeTki4FRxoIyLTlpG19dhMX3SmPew
-	 gOTbIlydNrIMoe7742V2XU/zikhBTBNM1GVq4GaCG4eOhExNYD9M7grJuLO5BvRBP9
-	 /flc7yzO1Pv1ru47bpeCszg73rfq0qcks2W58H1adz2cNgC07y73x3ApVDQQ2vsOVT
-	 oNMYBCsdW8WBg==
-Date: Mon, 18 Dec 2023 09:55:52 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] docs: rust: remove `CC=clang` mentions
-Message-ID: <20231218165552.GA601326@dev-arch.thelio-3990X>
-References: <20231215124751.175191-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Zm9/+p89"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3365e85a4easo1986903f8f.1
+        for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 08:58:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702918691; x=1703523491; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d+zh+2q3MwXuVdLRjXTJZI4JkIaqitTixEyhaPMNfTc=;
+        b=Zm9/+p89DULuJ9YE5zc1vqPenAotnanYC+CiDZWysEtiGsFqT52Hd1AslxPZvsYMv5
+         6WqqTHzjQfC80MhnnWr6kySmU94lR3iYEQnVhZxaIaBywhUooHHMJOBoFi0bhRWkxkj/
+         S27fAa2QiLM23MCAkRlFuU7QbOUQWCt5yA0p1Et6M+RpfBjf/0WHhpkVOnxl+1hCAbWD
+         810HIBBMQuNHyN7BORqnjFTS4gk/o6FlA+gofqNs/p0wl4ldgRojEoDe8/hw2NFpk3kh
+         s8sAYcGW47dhTFGgF1p7QzDcbaE83CbcC/wsoRYdxSEA0aqYnIUKth+7t7z6XefKfDLJ
+         s7+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702918691; x=1703523491;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d+zh+2q3MwXuVdLRjXTJZI4JkIaqitTixEyhaPMNfTc=;
+        b=rYPvNzHEVAhixjnCy8naNbek5s/vQ4H+rISpT4jeu+BrYKpVSV44l+2U21OnsfKhcv
+         ZuRUdiwog/8M/JklJE/VSEJbR647AtzIUurt5iQ3ktG+LwQAxvt/jFF/tYsVZWO7pLCp
+         M/7SdHu4sj7kd7rTGMACMeYlbSmwSuSkH7ulxhi0Udhmo4lkKV/22gEfVt9ZeZbal60Y
+         dlqJ1JbQWuqcIUs7mknX5QMemRk3z071Q6bCQSpl31VukOEt7BGk/EYECupaMn64UvfR
+         27KKgYRmz3Uv0/IsDpz/0ceg8R9GlRPK/lF2EFOvPoRnR9Abi/O8bZzVsotZxHr2vIur
+         /zdg==
+X-Gm-Message-State: AOJu0Yz/iyJ1AJisOfGn7BH/WRs9CBm/Hj6rQn8Bzs+LOehcSCWZrfOA
+	pmhi0i24/T5LkKbMt4exXBDwG/VQH0v3BeY5Zo8dXw==
+X-Google-Smtp-Source: AGHT+IFChuEHlZwlMDTWLGHUh6HXy10BpvXeAadBWV8pWnZyYA1TdhfpH2w2v0z8e/FNeEuXgwglDmYDNbTy1g+Wmz0=
+X-Received: by 2002:a05:6000:cd1:b0:332:e2b0:c217 with SMTP id
+ dq17-20020a0560000cd100b00332e2b0c217mr8371467wrb.62.1702918691137; Mon, 18
+ Dec 2023 08:58:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215124751.175191-1-ojeda@kernel.org>
+References: <20231214-libstringheader-v2-0-0f195dcff204@google.com>
+ <20231214-libstringheader-v2-1-0f195dcff204@google.com> <ZXx5DyidpHFhRevy@smile.fi.intel.com>
+ <CAE-cH4p5VJ_A91BAkURBN67ACA0_u7T8UhApUYLQDWeeRY6FWA@mail.gmail.com> <CAHp75Vdo=g7ZBAuk79PtLOYs-YHo5sCTp1WVFESHA0xN0zGEmQ@mail.gmail.com>
+In-Reply-To: <CAHp75Vdo=g7ZBAuk79PtLOYs-YHo5sCTp1WVFESHA0xN0zGEmQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 18 Dec 2023 08:57:59 -0800
+Message-ID: <CAKwvOdmMqJacYRfwohY-DXBbmNmz_M4EKUL1KuTv=tT2dO_p1g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] sh: Added kernel.h to word-at-a-time
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Tanzir Hasan <tanzirh@google.com>, Andy Shevchenko <andy@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
+	Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 15, 2023 at 01:47:51PM +0100, Miguel Ojeda wrote:
-> Nowadays all architectures except s390 recommend using `LLVM=1` instead of
-> `CC=clang`, and since commit a3c6bfba4429 ("Documentation/llvm: refresh
-> docs") the Kbuild LLVM documentation makes `LLVM=1` the way to go:
-> 
->     We want to encourage the use of ``LLVM=1`` rather than just
->     ``CC=clang``. Make that suggestion "above the fold" and "front and
->     center" in our docs.
-> 
-> In particular, that commit removes the examples with `CC=clang`.
-> 
-> Thus do the same in the Rust Quick Start guide, i.e. remove the `CC=clang`
-> mentions, especially since the architectures that have had their Rust
-> support upstreamed (or soon to be upstreamed) are all `LLVM=1` ones
-> anyway. And perhaps by the time Rust is supported for s390 (or new
-> architectures), it may have moved to `LLVM=1` anyway. Otherwise,
-> this can be added back if needed (or perhaps an extra link to
-> Documentation/kbuild/llvm.rst).
-> 
-> This should also help avoiding potential confusion around `CC=clang` [1].
-> 
-> Link: https://lore.kernel.org/rust-for-linux/6df6e8e5-8d5b-4d3d-91b5-bc0e90c424ea@nvidia.com/ [1]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+On Fri, Dec 15, 2023 at 11:09=E2=80=AFAM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Fri, Dec 15, 2023 at 8:31=E2=80=AFPM Tanzir Hasan <tanzirh@google.com>=
+ wrote:
+> > On Fri, Dec 15, 2023 at 8:04=E2=80=AFAM Andy Shevchenko <andy@kernel.or=
+g> wrote:
+> >> On Thu, Dec 14, 2023 at 09:06:12PM +0000, tanzirh@google.com wrote:
+>
+> ...
+>
+> >> > +#include <linux/kernel.h>
+> >>
+> >> I highly discourage from doing that. Instead, split what is needed to
+> >> the separate (new) header and include that one.
+> >
+> >
+> > I think it would make the most sense to do this in a separate patch.
+> > What word-at-a-time.h needs from kernel.h is REPEAT_BYTE and to my know=
+ledge,
+> > almost every other version of word-at-a-time.h includes kernel.h gets t=
+his by
+> > including kernel.h. A future change could be removing REPEAT_BYTE
+> > out of kernel.h
+>
+> Just create a patch that either moves that macro (along with upper_*()
+> and lower_*() APIs) to a more distinguishable header
+> (maybe bytes.h or words.h or wordpart.h, etc) and use it in your case
+> and fix others.
 
-Yes, the fact that no architecture that CONFIG_RUST supports requires
-CC=clang seems reason enough for this to be eliminated from the Rust
-documentation.
+Andy,
+These are good suggestions and we should do them...
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+...and Tanzir only has 3 weeks left of his internship.  I don't want
+him to get bogged down chasing build regressions from modifying the
+headers themselves.  I think what's best for him from here through the
+remainder of his internship is to stay focused on applying suggestions
+from IWYU to just modify the #include list of .c files, and not start
+splitting .h files.  Splitting the .h files will be the next step, and
+is made easier by having the codebase not have so many indirect
+includes (via IWYU), but we need time to soak header changes, and time
+Tanzir does not have.  Please can we keep the suggestions focused on
+whether the modifications to the header includes (and the tangential
+cleanups) are correct?
 
-> ---
->  Documentation/rust/quick-start.rst | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quick-start.rst
-> index f382914f4191..75faa987079a 100644
-> --- a/Documentation/rust/quick-start.rst
-> +++ b/Documentation/rust/quick-start.rst
-> @@ -76,7 +76,7 @@ libclang
->  
->  ``libclang`` (part of LLVM) is used by ``bindgen`` to understand the C code
->  in the kernel, which means LLVM needs to be installed; like when the kernel
-> -is compiled with ``CC=clang`` or ``LLVM=1``.
-> +is compiled with ``LLVM=1``.
->  
->  Linux distributions are likely to have a suitable one available, so it is
->  best to check that first.
-> @@ -229,10 +229,6 @@ at the moment. That is::
->  
->  	make LLVM=1
->  
-> -For architectures that do not support a full LLVM toolchain, use::
-> -
-> -	make CC=clang
-> -
->  Using GCC also works for some configurations, but it is very experimental at
->  the moment.
->  
-> 
-> base-commit: a39b6ac3781d46ba18193c9dbb2110f31e9bffe9
-> -- 
-> 2.43.0
-> 
+While REPEAT_BYTE has a manageable number of users, upper_* and
+lower_* have significantly more; I worry about moving those causing
+regressions.  We can move them, but such changes would need
+significantly more soak time than this series IMO.  Tanzir is also
+working on statistical analysis; I suspect if he analyzes
+include/linux/kernel.h, he can comment on whether the usage of
+REPEAT_BYTE is correlated with the usage of upper_* and lower_* in
+order to inform whether they should be grouped together or not.
+--=20
+Thanks,
+~Nick Desaulniers
