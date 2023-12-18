@@ -1,44 +1,43 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A55442042
-	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 16:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAE65A86C
+	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 17:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Zm9/+p89"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3365e85a4easo1986903f8f.1
-        for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 08:58:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o6e0M8qv"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-425c1d7d72eso592881cf.1
+        for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 09:06:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702918691; x=1703523491; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d+zh+2q3MwXuVdLRjXTJZI4JkIaqitTixEyhaPMNfTc=;
-        b=Zm9/+p89DULuJ9YE5zc1vqPenAotnanYC+CiDZWysEtiGsFqT52Hd1AslxPZvsYMv5
-         6WqqTHzjQfC80MhnnWr6kySmU94lR3iYEQnVhZxaIaBywhUooHHMJOBoFi0bhRWkxkj/
-         S27fAa2QiLM23MCAkRlFuU7QbOUQWCt5yA0p1Et6M+RpfBjf/0WHhpkVOnxl+1hCAbWD
-         810HIBBMQuNHyN7BORqnjFTS4gk/o6FlA+gofqNs/p0wl4ldgRojEoDe8/hw2NFpk3kh
-         s8sAYcGW47dhTFGgF1p7QzDcbaE83CbcC/wsoRYdxSEA0aqYnIUKth+7t7z6XefKfDLJ
-         s7+A==
+        d=google.com; s=20230601; t=1702919169; x=1703523969; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x29irrX3xXEqtqEYM+OJ0BBAXCsgyxR+RF6i+7rkCJM=;
+        b=o6e0M8qvnkYkdRNMRiZlgFUiopRyQ38evIwRtidplWN9PBi4hBYDvjySFcGZJXYgkw
+         EuBKJ5evG8wmmfCBht5Y720Ycgbn3Pfeq2Q2hWP65uqBywD38rbftqv211pf+3SZ3Qmi
+         O/l+TBntkccoW8FxmKYCP8jdbGYqKHzA1NfhvFJEubWX1OZwqRNtqxKFuYijwRupmV/A
+         4WD7rTlFwECICIiw8X2H7V6ygKq84XmUGBdmcDE+x6tgj7lajVfT6UOmphKmnoXZ1Z3U
+         qSM7i5SNB3TtOhA1OPxGWrRyqGiokMiJRVW7Jierv0kYG3EoIIuE7gXe7tdInFACjM/g
+         Cakg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702918691; x=1703523491;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d+zh+2q3MwXuVdLRjXTJZI4JkIaqitTixEyhaPMNfTc=;
-        b=rYPvNzHEVAhixjnCy8naNbek5s/vQ4H+rISpT4jeu+BrYKpVSV44l+2U21OnsfKhcv
-         ZuRUdiwog/8M/JklJE/VSEJbR647AtzIUurt5iQ3ktG+LwQAxvt/jFF/tYsVZWO7pLCp
-         M/7SdHu4sj7kd7rTGMACMeYlbSmwSuSkH7ulxhi0Udhmo4lkKV/22gEfVt9ZeZbal60Y
-         dlqJ1JbQWuqcIUs7mknX5QMemRk3z071Q6bCQSpl31VukOEt7BGk/EYECupaMn64UvfR
-         27KKgYRmz3Uv0/IsDpz/0ceg8R9GlRPK/lF2EFOvPoRnR9Abi/O8bZzVsotZxHr2vIur
-         /zdg==
-X-Gm-Message-State: AOJu0Yz/iyJ1AJisOfGn7BH/WRs9CBm/Hj6rQn8Bzs+LOehcSCWZrfOA
-	pmhi0i24/T5LkKbMt4exXBDwG/VQH0v3BeY5Zo8dXw==
-X-Google-Smtp-Source: AGHT+IFChuEHlZwlMDTWLGHUh6HXy10BpvXeAadBWV8pWnZyYA1TdhfpH2w2v0z8e/FNeEuXgwglDmYDNbTy1g+Wmz0=
-X-Received: by 2002:a05:6000:cd1:b0:332:e2b0:c217 with SMTP id
- dq17-20020a0560000cd100b00332e2b0c217mr8371467wrb.62.1702918691137; Mon, 18
- Dec 2023 08:58:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702919169; x=1703523969;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x29irrX3xXEqtqEYM+OJ0BBAXCsgyxR+RF6i+7rkCJM=;
+        b=tse6jYCQpMtfSceHiIZMmLZwFwhsfGpLKXR+59wG/WyOfZpngk5f5Ul4Mc+2KQhsvm
+         7DIz/lVplWTgthI6V0ir2bJpHBXXcooVjWZzOhggOp8/5o6WUZD64EbpvU+KtcpB50/o
+         9Cli26Dt0tRG/701aIjd5kPexDLUJI3f5FNiK+YReV/BWMBr+o/M0sKUfwNfuYxU7dWQ
+         ISNGOg26PSpm/zXT6QrF18XM8mYKuPnGhv6g69xCOmty6Mts/oLj/VnogkzuBstH7AnZ
+         Nb9WOrmuDJDMVLwU/oGbHQCQZBoely3WmZpwTt/d6kkw2jOqaaqI2TMqDRLP2HKwhAIs
+         1IoQ==
+X-Gm-Message-State: AOJu0Yw9qV3KIV6w3cY7WJ9LL7FAAR4rcwUv8DIAHzAn0k7bEX48y2sU
+	gXSNLGsXh2g5dZMRI2z7MsHph3jTcaxl+RN/aOL/CwME1f3s
+X-Google-Smtp-Source: AGHT+IHDcKVJi48DWxUiRF0cSlxxE9luXr2JxmQw2R42ge6ILA0VXUS7myKPno4BTplV6A8qHqw1BOYXjCT3w8L6d/E=
+X-Received: by 2002:ac8:570e:0:b0:423:8dd5:338 with SMTP id
+ 14-20020ac8570e000000b004238dd50338mr451777qtw.14.1702919168821; Mon, 18 Dec
+ 2023 09:06:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,74 +46,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20231214-libstringheader-v2-0-0f195dcff204@google.com>
  <20231214-libstringheader-v2-1-0f195dcff204@google.com> <ZXx5DyidpHFhRevy@smile.fi.intel.com>
- <CAE-cH4p5VJ_A91BAkURBN67ACA0_u7T8UhApUYLQDWeeRY6FWA@mail.gmail.com> <CAHp75Vdo=g7ZBAuk79PtLOYs-YHo5sCTp1WVFESHA0xN0zGEmQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vdo=g7ZBAuk79PtLOYs-YHo5sCTp1WVFESHA0xN0zGEmQ@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 18 Dec 2023 08:57:59 -0800
-Message-ID: <CAKwvOdmMqJacYRfwohY-DXBbmNmz_M4EKUL1KuTv=tT2dO_p1g@mail.gmail.com>
+ <CAE-cH4p5VJ_A91BAkURBN67ACA0_u7T8UhApUYLQDWeeRY6FWA@mail.gmail.com>
+ <CAHp75Vdo=g7ZBAuk79PtLOYs-YHo5sCTp1WVFESHA0xN0zGEmQ@mail.gmail.com> <CAKwvOdmMqJacYRfwohY-DXBbmNmz_M4EKUL1KuTv=tT2dO_p1g@mail.gmail.com>
+In-Reply-To: <CAKwvOdmMqJacYRfwohY-DXBbmNmz_M4EKUL1KuTv=tT2dO_p1g@mail.gmail.com>
+From: Tanzir Hasan <tanzirh@google.com>
+Date: Mon, 18 Dec 2023 09:05:56 -0800
+Message-ID: <CAE-cH4oQ+nM6G897PaUwd8zaaAvqq3QL77=4739sZovVgkG9XA@mail.gmail.com>
 Subject: Re: [PATCH v2 1/2] sh: Added kernel.h to word-at-a-time
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Tanzir Hasan <tanzirh@google.com>, Andy Shevchenko <andy@kernel.org>, 
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, Andy Shevchenko <andy@kernel.org>, 
 	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>, 
 	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
 	Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 15, 2023 at 11:09=E2=80=AFAM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Fri, Dec 15, 2023 at 8:31=E2=80=AFPM Tanzir Hasan <tanzirh@google.com>=
- wrote:
-> > On Fri, Dec 15, 2023 at 8:04=E2=80=AFAM Andy Shevchenko <andy@kernel.or=
-g> wrote:
-> >> On Thu, Dec 14, 2023 at 09:06:12PM +0000, tanzirh@google.com wrote:
->
-> ...
->
-> >> > +#include <linux/kernel.h>
-> >>
-> >> I highly discourage from doing that. Instead, split what is needed to
-> >> the separate (new) header and include that one.
-> >
-> >
-> > I think it would make the most sense to do this in a separate patch.
-> > What word-at-a-time.h needs from kernel.h is REPEAT_BYTE and to my know=
-ledge,
-> > almost every other version of word-at-a-time.h includes kernel.h gets t=
-his by
-> > including kernel.h. A future change could be removing REPEAT_BYTE
-> > out of kernel.h
->
-> Just create a patch that either moves that macro (along with upper_*()
-> and lower_*() APIs) to a more distinguishable header
-> (maybe bytes.h or words.h or wordpart.h, etc) and use it in your case
-> and fix others.
+> While REPEAT_BYTE has a manageable number of users, upper_* and
+> lower_* have significantly more; I worry about moving those causing
+> regressions.  We can move them, but such changes would need
+> significantly more soak time than this series IMO.  Tanzir is also
+> working on statistical analysis; I suspect if he analyzes
+> include/linux/kernel.h, he can comment on whether the usage of
+> REPEAT_BYTE is correlated with the usage of upper_* and lower_* in
+> order to inform whether they should be grouped together or not.
 
-Andy,
-These are good suggestions and we should do them...
+Removing REPEAT_BYTE is manageable and I have already moved it. I will
+be pushing a patch that moves just that into another file called wordpart.h.
+There are too many instances of the other functions for it to make sense to
+remove them all in this patch.
 
-...and Tanzir only has 3 weeks left of his internship.  I don't want
-him to get bogged down chasing build regressions from modifying the
-headers themselves.  I think what's best for him from here through the
-remainder of his internship is to stay focused on applying suggestions
-from IWYU to just modify the #include list of .c files, and not start
-splitting .h files.  Splitting the .h files will be the next step, and
-is made easier by having the codebase not have so many indirect
-includes (via IWYU), but we need time to soak header changes, and time
-Tanzir does not have.  Please can we keep the suggestions focused on
-whether the modifications to the header includes (and the tangential
-cleanups) are correct?
-
-While REPEAT_BYTE has a manageable number of users, upper_* and
-lower_* have significantly more; I worry about moving those causing
-regressions.  We can move them, but such changes would need
-significantly more soak time than this series IMO.  Tanzir is also
-working on statistical analysis; I suspect if he analyzes
-include/linux/kernel.h, he can comment on whether the usage of
-REPEAT_BYTE is correlated with the usage of upper_* and lower_* in
-order to inform whether they should be grouped together or not.
---=20
-Thanks,
-~Nick Desaulniers
+Best,
+Tanzir
