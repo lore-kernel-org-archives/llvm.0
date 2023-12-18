@@ -1,115 +1,90 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF535D759
-	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 18:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tanzirh.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B621D12F;
+	Mon, 18 Dec 2023 18:57:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VunvSKzh"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5e744f7ca3bso7471207b3.2
-        for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 10:44:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702925094; x=1703529894; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpo/c9r9EIu18GNZd0zUoly513OzCu9h8vUVs3exmy8=;
-        b=VunvSKzh+gNuQopyStqz+LSBUCt04Q7C9vbQ+jPjHu7la3ANfxaJvfKwAc8/5pD2pv
-         7Xj0vpxNPZM2LMWOUYnWn6Qfj6Nml9RqddpFWUmyVIGLpXdoTq4sYsuuBaSnZiJAfsQ9
-         num4LiFds4zR7N04f4tSbrFx23SuHWjDTaC9YK3Lnn/ns+lOlxnnkL1IcCaXOykyw5Yg
-         8mQ8+8gtnXG+gR5XBWgJhcsRJJaU8bV4PUXkAMK6pIAh8GiQ1dvKu0vq5FF2TCY3Yvyf
-         vLjy2UV6IEGRIKRRRKUlaQ5jRUzAtitJccKJUmc3lC+GO+VyeTJXS72mSHvbKHBDO5hL
-         tYLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702925094; x=1703529894;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpo/c9r9EIu18GNZd0zUoly513OzCu9h8vUVs3exmy8=;
-        b=uFLzJ/TSGWEI3SgL7PsaEdkwkXYJ4AmPZRkqTcwWbDv90nNMbkkUh1oG6zexC/XI/j
-         QTN65wp/VZyT38l1NTgAj1btGPfRjLRKPanf8fY7/VIDAHtpYqTIMbim6Jxf3I2uWAN0
-         IckTCPJVi6Zlrhag2Cjdm9v1ydmG4ZsAW1F5T6hYrG3snGvYujBwVmYvslIp9H4rvPU8
-         NYuN8tmFjdysuMb3hryT6wBQ/qli07mY5velVVjD0C/L04l9AgnxIYkVulYhWqD7lkix
-         A1+rnuuTLegKiHZ+KoFAnUzvCQ0W3EEhfwJpfqoo065foOQAlujw1i+Gh2/kg7eGvr+G
-         c0ew==
-X-Gm-Message-State: AOJu0YxHvNo6pUJ5OjtVe/cSYeev7+17EX5HUCeMC1PRKTguTVGiWFRC
-	Qyvcp5b+iGHDkZokWjrvddT9M6ilXlFE
-X-Google-Smtp-Source: AGHT+IEL+Dx1RotMvLWMcY1+5+NuvVxZsWdNSosBAVYxXmnwighAQ9gxwlp64utMUoi9SVx3v+rGiCMwFKtq
-X-Received: from tanz.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:c4a])
- (user=tanzirh job=sendgmr) by 2002:a05:690c:f09:b0:5e6:27ee:67fb with SMTP id
- dc9-20020a05690c0f0900b005e627ee67fbmr1094009ywb.4.1702925094663; Mon, 18 Dec
- 2023 10:44:54 -0800 (PST)
-Date: Mon, 18 Dec 2023 18:44:48 +0000
-In-Reply-To: <20231218-libstringheader-v3-0-500bd58f0f75@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AuIRk08S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B97C433CC;
+	Mon, 18 Dec 2023 18:57:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702925844;
+	bh=naWCIvEvEYAGR9D+SB7trHx4NFczsGHbAbhUSikK+Iw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AuIRk08SsI+UpAyDSVo0ImPh8Fn19MhReuLtOioVxSzWtF1i0+dC5GJGD3swpkezQ
+	 QSGB18YfBE5H3m7mAv/Pe75BclcdpDGUhq+8l6EeI8ZdDN1Uog33DF+wk3n7lkTUR5
+	 13WTlvMEKY8xrNlyERBRRI67LO2J7II30ZyDqWNXZcjwpShwPg1lxzYQlBFUfxd/f5
+	 j4grjaKAHP+2h/W8/9Vsmycgm1RcaZHnK4zdEDp0T7CQwQ+F0tTYUmQclhRiZhY/hI
+	 mYDxGY5aFtXSCAJl7Yo+0g+onRqLXwujflynuPrRl0FiQ/rjNr79zWco5wu+HsHPgl
+	 VkT3vP2IHOt5Q==
+Date: Mon, 18 Dec 2023 11:57:22 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, intel-xe@lists.freedesktop.org,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: Re: [drm-xe:drm-xe-next 989/1016]
+ drivers/gpu/drm/xe/xe_wait_user_fence.c:46:2: warning: variable 'passed' is
+ used uninitialized whenever switch default is taken
+Message-ID: <20231218185722.GA2863043@dev-arch.thelio-3990X>
+References: <202312170357.KPSinwPs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20231218-libstringheader-v3-0-500bd58f0f75@google.com>
-X-Developer-Key: i=tanzirh@google.com; a=ed25519; pk=UeRjcUcv5W9AeLGEbAe2+0LptQpcY+o1Zg0LHHo7VN4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1702925089; l=1465;
- i=tanzirh@google.com; s=20231204; h=from:subject:message-id;
- bh=gV26WBhHZ984rQ1se1KmnC1yaoC0r21Ttaqbp2LY4BY=; b=jxTx/p2T2Ohx/6qrHcl3jtgDOOmwmAwnPNqfbYw6tFl7hSTnsJb4wAi6wJ+SdIgs/+BwK8LRr
- GBsNJwdWCtgBkIP7kkNwrDxrAz71X+t1oXylc5I7LWotslSU7lJgd2K
-X-Mailer: b4 0.12.3
-Message-ID: <20231218-libstringheader-v3-2-500bd58f0f75@google.com>
-Subject: [PATCH v3 2/2] lib/string: shrink lib/string.i via IWYU
-From: tanzirh@google.com
-To: Kees Cook <keescook@chromium.org>
-Cc: Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
-	Tanzir Hasan <tanzirh@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202312170357.KPSinwPs-lkp@intel.com>
 
-This diff uses an open source tool include-what-you-use (IWYU) to modify
-the include list changing indirect includes to direct includes.
-IWYU is implemented using the IWYUScripts github repository which is a tool that is
-currently undergoing development. These changes seek to improve build times.
+On Sun, Dec 17, 2023 at 03:28:47AM +0800, kernel test robot wrote:
+> tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+> head:   c54005fdd0347a17088e7ff78070a55bf9103bc4
+> commit: ad7d86415578e1a5deedb0ceed5c281f7367d66d [989/1016] drm/xe: Enable W=1 warnings by default
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231217/202312170357.KPSinwPs-lkp@intel.com/config)
+> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312170357.KPSinwPs-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202312170357.KPSinwPs-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    warning: unknown warning option '-Wrestrict' [-Wunknown-warning-option]
+>    warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
+>    warning: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+>    warning: unknown warning option '-Wformat-truncation' [-Wunknown-warning-option]
+>    warning: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
+>    warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
 
-This change to lib/string.c resulted in a preprocessed size of
-lib/string.i from 26371 lines to 5263 lines (-80%) for the x86
-defconfig.
+I am not sure why these warnings are even showing up in the first place,
+they are wrapped with cc-option, which should be catching that they are
+not supported... Is 0day doing something funky with KCFLAGS?
+Regardless...
 
-Link: https://github.com/ClangBuiltLinux/IWYUScripts
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Tanzir Hasan <tanzirh@google.com>
----
- lib/string.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> >> drivers/gpu/drm/xe/xe_wait_user_fence.c:46:2: warning: variable 'passed' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+>            default:
+>            ^~~~~~~
+>    drivers/gpu/drm/xe/xe_wait_user_fence.c:50:9: note: uninitialized use occurs here
+>            return passed ? 0 : 1;
+>                   ^~~~~~
+>    drivers/gpu/drm/xe/xe_wait_user_fence.c:21:13: note: initialize the variable 'passed' to silence this warning
+>            bool passed;
+>                       ^
+>                        = 0
+>    7 warnings generated.
 
-diff --git a/lib/string.c b/lib/string.c
-index be26623953d2..6e24a4967dd7 100644
---- a/lib/string.c
-+++ b/lib/string.c
-@@ -16,18 +16,18 @@
- 
- #define __NO_FORTIFY
- #include <linux/types.h>
--#include <linux/string.h>
--#include <linux/ctype.h>
--#include <linux/kernel.h>
--#include <linux/export.h>
-+#include <linux/bits.h>
- #include <linux/bug.h>
- #include <linux/errno.h>
--#include <linux/slab.h>
--
-+#include <linux/linkage.h>
-+#include <linux/stddef.h>
-+#include <linux/string.h>
-+#include <linux/ctype.h>
- #include <asm/unaligned.h>
--#include <asm/byteorder.h>
-+#include <asm/rwonce.h>
- #include <asm/word-at-a-time.h>
- #include <asm/page.h>
-+#include <vdso/limits.h>
- 
- #ifndef __HAVE_ARCH_STRNCASECMP
- /**
+I was surprised that this was not caught sooner as
+-Wsometimes-uninitialized is a part of -Wall but it looks like
+drivers/gpu/drm/xe/Makefile was forked from the i915 Makefile before
+commit 43192617f781 ("drm/i915: Enable -Wsometimes-uninitialized") was
+added. It is good to see that the warnings are aligned now so that
+trivial uninitialized warnings can be caught by clang because they are
+disabled for GCC since commit 78a5255ffb6a ("Stop the ad-hoc games with
+-Wno-maybe-initialized") in 5.7. Will this be fixed as a separate patch?
 
--- 
-2.43.0.472.g3155946c3a-goog
-
+Cheers,
+Nathan
