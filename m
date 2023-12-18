@@ -1,50 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4B9156CC;
-	Mon, 18 Dec 2023 10:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2o1J3U/J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5CCC433C8;
-	Mon, 18 Dec 2023 10:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1702895983;
-	bh=gsBFtvcLQEB2OPxEzYU/lJVtb0niJX/qEG4k+iaW8j8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=2o1J3U/JYyyJ8shRx7yP2P7QwM05LT3pBibGCUKDaacFJoWilnkMX44IJvSX6HZlc
-	 fpBzv+GKWEgjorubg9rThSmIkD88jXI+t5cqITOTzLNuNSl3KFGi4rjqg6mHoLSWXI
-	 XqdYR9e4fQRuAVB8JnR/572Z++7Y+p+zJXbL3wR4=
-Date: Mon, 18 Dec 2023 11:39:41 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>, Fangrui Song <maskray@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>, stable@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: Apply b8ec60e1186cdcfce41e7db4c827cb107e459002 to linux-6.6.y
-Message-ID: <2023121835-ditch-tanned-4a46@gregkh>
-References: <20231213000338.GA866722@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700743A1C3
+	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 14:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7b7a245dc28so349527239f.3
+        for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 06:44:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702910667; x=1703515467;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i4doMgNiRAG0oY64YZBGbw9i5anbFAngH6k0NEAjhqo=;
+        b=VQbVISnZCekm2WlP+ZFrw1cwmMz/xeFLvoJn+3IvIbUA68hgY8RQftstdZhYctDTA/
+         7DCGxkJIXYmgBPPQ4jrxi5SDTHKLfronsYEpVKJnOrqsY3tEZQYKyfHB+N4+7JW9+Cti
+         ML8f+RHz0enxTKODr/1T0dd1iV14ZX27CeTmd52qa9AE51gpyudF6OvfbvXN+6JoBzU4
+         g+fY+qZsw0/c+jtzjSl/qSOyqd7H4nQVi8BFcbzqHZGvZigW6qyB4hW2bOOjTPwHq9Xs
+         BiCEyvC8vXzwpDrN35/iPoVNm08NQdwR4ODggODwr8sXPiD9UnEXPkccGgPwxEjM2E13
+         mc7Q==
+X-Gm-Message-State: AOJu0YzQNAMMEYl3O00dvckIZZRS3uAecnvzB8IBfDraKEy7hP242vrr
+	VYFVSiLRLVPs4XipV4mNu4mgdiMLkoObYPJtI0UeK+6wAUqi
+X-Google-Smtp-Source: AGHT+IF+8OhGLaiuZnCCoA2uK6/w0OxH5geCmM5R01yRSiNAdaXlgQLnnE2pkdQ4gJgKxExnUfLz9P5sAVWuSRqxMffEzZUXxVhB
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231213000338.GA866722@dev-arch.thelio-3990X>
+X-Received: by 2002:a05:6638:1445:b0:44a:fe65:d743 with SMTP id
+ l5-20020a056638144500b0044afe65d743mr647000jad.0.1702910667748; Mon, 18 Dec
+ 2023 06:44:27 -0800 (PST)
+Date: Mon, 18 Dec 2023 06:44:27 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006f7cb5060cc9c9ac@google.com>
+Subject: [syzbot] [bpf?] UBSAN: shift-out-of-bounds in adjust_reg_min_max_vals
+From: syzbot <syzbot+46700eea57ecc7f84776@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com, 
+	yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Dec 12, 2023 at 05:03:38PM -0700, Nathan Chancellor wrote:
-> Hi Greg and Sasha,
-> 
-> Please consider applying commit b8ec60e1186c ("x86/speculation, objtool:
-> Use absolute relocations for annotations") to linux-6.6.y, which is the
-> only supported stable version that has the prerequisite commit
-> 1c0c1faf5692 ("objtool: Use relative pointers for annotations"). This
-> fixes a bunch of warnings along the lines of the one in the commit
-> message that are seen when linking ARCH=i386 kernels with ld.lld 18+. It
-> picks cleanly for me.
+Hello,
 
-Now queued up, thanks.
+syzbot found the following issue on:
 
-greg k-h
+HEAD commit:    b1dfc0f76231 net: phy: skip LED triggers on PHYs on SFP mo..
+git tree:       net
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15d0331ee80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e043d554f0a5f852
+dashboard link: https://syzkaller.appspot.com/bug?extid=46700eea57ecc7f84776
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=128c8ad1e80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12456fb6e80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fcd0802bfd92/disk-b1dfc0f7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d3d9e5ecc7f0/vmlinux-b1dfc0f7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/4b04f82a5ed6/bzImage-b1dfc0f7.xz
+
+The issue was bisected to:
+
+commit f63181b6ae79fd3b034cde641db774268c2c3acf
+Author: Andrii Nakryiko <andrii@kernel.org>
+Date:   Fri Nov 4 16:36:47 2022 +0000
+
+    bpf: stop setting precise in current state
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10eed821e80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12eed821e80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14eed821e80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+46700eea57ecc7f84776@syzkaller.appspotmail.com
+Fixes: f63181b6ae79 ("bpf: stop setting precise in current state")
+
+================================================================================
+UBSAN: shift-out-of-bounds in kernel/bpf/verifier.c:13571:63
+shift exponent 1073741824 is too large for 32-bit type 'int'
+CPU: 0 PID: 5069 Comm: syz-executor200 Not tainted 6.7.0-rc5-syzkaller-00167-gb1dfc0f76231 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/17/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x2a6/0x480 lib/ubsan.c:387
+ scalar32_min_max_arsh kernel/bpf/verifier.c:13571 [inline]
+ adjust_scalar_min_max_vals kernel/bpf/verifier.c:13759 [inline]
+ adjust_reg_min_max_vals.cold+0x162/0x221 kernel/bpf/verifier.c:13860
+ check_alu_op+0x498/0x3a60 kernel/bpf/verifier.c:14092
+ do_check kernel/bpf/verifier.c:17517 [inline]
+ do_check_common+0x1b30/0xd690 kernel/bpf/verifier.c:20177
+ do_check_main kernel/bpf/verifier.c:20240 [inline]
+ bpf_check+0x77d9/0xa5e0 kernel/bpf/verifier.c:20877
+ bpf_prog_load+0x1531/0x2200 kernel/bpf/syscall.c:2716
+ __sys_bpf+0xbf7/0x4920 kernel/bpf/syscall.c:5383
+ __do_sys_bpf kernel/bpf/syscall.c:5487 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5485 [inline]
+ __x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5485
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+RIP: 0033:0x7ff0c7237af9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff01650e58 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff0c7237af9
+RDX: 0000000000000048 RSI: 00000000200054c0 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000006
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000003a28
+R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
