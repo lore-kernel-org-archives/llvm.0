@@ -1,91 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7504403;
-	Mon, 18 Dec 2023 02:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A903063D6
+	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 05:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LeZUZ6//"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702865818; x=1734401818;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kBmXvgQDiWTkCbNOVpIf4GG9M8SJ19N5IMBsSlYQ4Cc=;
-  b=LeZUZ6//h1h1bkhEagT67DuNvQaBoPeHwaAKceXgDsPyO9AZXxpYnB7t
-   g+7d1j7JAbljCYUvWem/xqktC4WEifn8jgkl0rG2U2kLktkLZPQdd/gp8
-   Y1u2asHZZVxrStGPf5qV5uWO1SBvueOdpcdt3pfXGmp7q/PirD1jU/9my
-   ygqIcjBl8i1uF/uiO4CN4Bbpu1Ogmfyqu2kEXujaogFucIJgPmz8s1ncr
-   E9sY4nv/dlzWt/wXvqzal/CcGDCN2AElwk8/XDMjEtl99BhU5JHZShaTL
-   JlKx6wc1CSXZBf97gjEJoQrKRStIFGmHdCZpUnwQe/ZftAnpKuDJbc3pv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="17001472"
-X-IronPort-AV: E=Sophos;i="6.04,284,1695711600"; 
-   d="scan'208";a="17001472"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2023 18:16:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="751591090"
-X-IronPort-AV: E=Sophos;i="6.04,284,1695711600"; 
-   d="scan'208";a="751591090"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Dec 2023 18:16:45 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rF3AQ-0003fV-00;
-	Mon, 18 Dec 2023 02:15:46 +0000
-Date: Mon, 18 Dec 2023 10:15:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [djiang:cxl-hmem-report 20/24] drivers/cxl/mem.c:288:3: error: use
- of undeclared identifier 'dev_attr_mem_qos_class'; did you mean
- 'dev_attr_pmem_qos_class'?
-Message-ID: <202312181027.SHwTaBA8-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y6i/s3IH"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3bb53e20a43so46846b6e.1
+        for <llvm@lists.linux.dev>; Sun, 17 Dec 2023 21:52:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702878742; x=1703483542; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yvwPqpJZdoxCPgLCCQ91PkXr1gejT72qQ4VC8gFnpTs=;
+        b=y6i/s3IHfvm1t/mIp3rXkLaV/BcjoN6Z2UndxymPFDjidZGp7ssd5COTHpxy4Xj0ao
+         13NXnki2YA9dghuLqGvZT+bGvzxL2cPqat4bdM2bdkrU1ne/McYTWsaWVYi6rICpqRcO
+         pmVC+kEpJe8GcqTiiNbMnUUKCg6Bzr4u2H18K965fIdf+rcHHV4tefx1xohrDJAERTuG
+         tvCq97UD+9vWvcJOO+62bbP+JZaaXETVDcvDSB4Ue6X4EVaR5H6wo0EZneHtho1dX2yQ
+         d1HHl49S3QBBHxYTqaiF/uqJPQDuUVgvHVJVNFrp3KYEu2FyiYNbHP2+hmau+3HEj7oB
+         +QCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702878742; x=1703483542;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yvwPqpJZdoxCPgLCCQ91PkXr1gejT72qQ4VC8gFnpTs=;
+        b=iZMu30nJAqtb0dLGb0Qy96UvqR4t8liqrDBAGseffIJdM2Qg95zfnDyVTb5ayE3tNy
+         /c6Yc2er3ahDYk3rbJOKdyzfLz/A1AOTRwT/jP2pFgNScUPu1qLlCWBSK33RpT8BA5v2
+         iIAzScdbdTxEF0RpKa62qT1o409DgRn4pYL0JiW6XmjZyj4Gxk3a9/QW0LXcqAus37YM
+         Fs/7j9vtPeYbKAtYiICoYRAfZd+RcAKR8trkH8yuh2ArtWVmBPgiV7UQrg9LNrIvJv10
+         +Kbe0b1xDwyKuYm7S+1YO0UhnKqYV8qxLt4Z5Q/U/k0AX0MNcpnZlcjrvpUDCjXvA0yM
+         qPyw==
+X-Gm-Message-State: AOJu0Yxre818aMgMBmW6JnbbTMRJZKHvJOaMFAGv39ewPIs/1lGTajC4
+	+ToqFKSJB+Rjn96nI548yT7vzg==
+X-Google-Smtp-Source: AGHT+IHWHiyRld+78HNnonHpwfExXg/FXJeL90CmfG3Tsyqw7E5D1sTLDotXmziyEbh9oFThjWFZvA==
+X-Received: by 2002:a05:6808:17a0:b0:3b9:d53f:452a with SMTP id bg32-20020a05680817a000b003b9d53f452amr20483672oib.70.1702878742764;
+        Sun, 17 Dec 2023 21:52:22 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id t19-20020a056a0021d300b006ce77ffcc75sm16344940pfj.165.2023.12.17.21.52.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Dec 2023 21:52:22 -0800 (PST)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH V3] docs: rust: Document the rustupoverride target
+Date: Mon, 18 Dec 2023 11:22:16 +0530
+Message-Id: <c22eca4c308b72cdf750087622b61d3839ca40cc.1702878682.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-hmem-report
-head:   da30cd12e1d2c65f67dcdae7cb4842d73184d98e
-commit: d1877054cac84876a5263ea668dc0b76d321049d [20/24] fixup missing chunk
-config: i386-randconfig-014-20231218 (https://download.01.org/0day-ci/archive/20231218/202312181027.SHwTaBA8-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231218/202312181027.SHwTaBA8-lkp@intel.com/reproduce)
+Document the newly added Make target: rustupoverride.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312181027.SHwTaBA8-lkp@intel.com/
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+V2->V3:
+- Remove the O= part and document rustupoverride target.
 
-All errors (new ones prefixed by >>):
+ Documentation/rust/quick-start.rst | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
->> drivers/cxl/mem.c:288:3: error: use of undeclared identifier 'dev_attr_mem_qos_class'; did you mean 'dev_attr_pmem_qos_class'?
-           &dev_attr_mem_qos_class.attr,
-            ^~~~~~~~~~~~~~~~~~~~~~
-            dev_attr_pmem_qos_class
-   drivers/cxl/mem.c:261:32: note: 'dev_attr_pmem_qos_class' declared here
-   static struct device_attribute dev_attr_pmem_qos_class =
-                                  ^
-   1 error generated.
-
-
-vim +288 drivers/cxl/mem.c
-
-   285	
-   286	static struct attribute *cxl_mem_attrs[] = {
-   287		&dev_attr_trigger_poison_list.attr,
- > 288		&dev_attr_mem_qos_class.attr,
-   289		&dev_attr_pmem_qos_class.attr,
-   290		NULL
-   291	};
-   292	
-
+diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quick-start.rst
+index f382914f4191..c13e2e479e29 100644
+--- a/Documentation/rust/quick-start.rst
++++ b/Documentation/rust/quick-start.rst
+@@ -33,10 +33,9 @@ A particular version of the Rust compiler is required. Newer versions may or
+ may not work because, for the moment, the kernel depends on some unstable
+ Rust features.
+ 
+-If ``rustup`` is being used, enter the checked out source code directory
+-and run::
++If ``rustup`` is being used, run the following Make target::
+ 
+-	rustup override set $(scripts/min-tool-version.sh rustc)
++	make LLVM=1 rustupoverride
+ 
+ This will configure your working directory to use the correct version of
+ ``rustc`` without affecting your default toolchain. If you are not using
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.31.1.272.g89b43f80a514
+
