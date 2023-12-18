@@ -1,111 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D005BFBE;
-	Mon, 18 Dec 2023 16:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60211DFE1
+	for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 16:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+0BAugT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702915655; x=1734451655;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IWLzx5NW4r06kIV4xDr3qPvWDu/nR6Sy07HNHq0oZcI=;
-  b=E+0BAugT33qDdMz/UZoQVVoFQFRwckTRQt9sPP8jZDFGb1hNgiqXx45X
-   KDSlh6z/qbaOez4Vt2b+cVwafS69KcFxPo+j/CZokNmdnzMVyP5NGr02L
-   hxzYDltv4lJ5O1xziVF/pJqYBqAZ5l3F9K+PzyeS5oM+upjMMOkh+99YM
-   qBcTVyDxJM5Ut7kxwH0Up5AS68Y6JTVxMH894aPlYUyjENvaxLT/NKEJc
-   Uh+aFd7Ysip5/QmeBpxFuO+klZHDxMeY4EymeSpOaMyE44dK8O98ut1N5
-   J4kIMtHf8jB34+6uF8QcmskZ+jLG83TamfGozrxE/6sFQ+mlvyVW8D4hh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="426660157"
-X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="426660157"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 08:07:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="845992548"
-X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="845992548"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Dec 2023 08:07:33 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rFG9T-0004Hj-05;
-	Mon, 18 Dec 2023 16:07:31 +0000
-Date: Tue, 19 Dec 2023 00:06:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bvanassche:mq-deadline 4/4] block/mq-deadline.c:222:16: error: call
- to undeclared function 'blk_rq_zone_no'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202312190011.JYlG3HVC-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MXSO86Fu"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3365f1326e4so2104497f8f.1
+        for <llvm@lists.linux.dev>; Mon, 18 Dec 2023 08:32:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702917163; x=1703521963; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qxF72wKyjSEZjuqzTvuY0Vstw6URgB5M3BZ+UT5BCpI=;
+        b=MXSO86Fubcg2u1gH2asI4hIqDBn78EHtX7SnSxEp8xMd4/ytytN0qiW3tvixIX2+Ds
+         YdKGTQunBXu12+t1Yye+SRgpLj2pwzntEbVH3YNhW2DygJ0wUvND80yJtb35TlQWH4Ix
+         IlQuzGt+dBK550RPXsT7srES7MLIzenDPKgKTK6WgpyQb5p9o0ceh9Arvco42Ekgo3Cw
+         aIG1NkB2D2razgwRE4rjNZEkPX7oxZwQVK3qa5PXQQ0Q5Vv7BJlHlm3iOGMYErnNhk7S
+         OtC4NXMAW+ATeDrAkjsC3nC2t3CvaP+8jcKVRxTEiG0VDseHbaa5tHS8o+fzCPNRDpfG
+         FDbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702917163; x=1703521963;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qxF72wKyjSEZjuqzTvuY0Vstw6URgB5M3BZ+UT5BCpI=;
+        b=Jxd87mD+LSJLHJkOLuBioAGRMdGIjR8EAcnic7sJNJIT94rHS/9RWGM153KgZFDgYS
+         a/4/4bS4Z6T5B92q0Af0vYbqi701Wv2NI0uavp6bpHsow33s/njGt4P8Gv2oOfcmqlmH
+         ojqgGYi1bIz3o8BXFTgV5+Pqo524NDLtI6P4HgfgP4WsKzNV8YzbdoFACz7WlYhgwrZ3
+         o0TueJFlN27ayyXdrqHDg+CBWzciUL7z4S5+KenNVi8tnVe0leU4lyPyeHzclV+RdFKb
+         Lxq7oWHJqfAygrY6kbnVWzBGp5cyrPH8L8gPDbNlRKV/iVCZPPx2CJc5Ro8Rxrry333Z
+         xh7Q==
+X-Gm-Message-State: AOJu0Yyis+GdzJQY38BpWj1uedGfmevugxumElLlXd/ttgcBzdwCh7yB
+	KocHK+3BLhah3T4hiDlV8gj4ph7v+gvU1LFgYbKzfw==
+X-Google-Smtp-Source: AGHT+IHGfFW6R6JOaRG0q4/dC5NXDsnHxuGOKtVw5DDYC+yH+BCIjfLy0MnSQI2L3kNO0XZL8vOkfR4p88ZhQAopGz4=
+X-Received: by 2002:a5d:4cd2:0:b0:336:42b9:6a75 with SMTP id
+ c18-20020a5d4cd2000000b0033642b96a75mr4813068wrt.31.1702917162922; Mon, 18
+ Dec 2023 08:32:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20231217-i40e-comma-v1-1-85c075eff237@kernel.org>
+In-Reply-To: <20231217-i40e-comma-v1-1-85c075eff237@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 18 Dec 2023 08:32:28 -0800
+Message-ID: <CAKwvOd=ZKV6KsgX0UxBX4Y89YEgpry00jG6K6qSjodwY3DLAzA@mail.gmail.com>
+Subject: Re: [PATCH iwl-next] i40e: Avoid unnecessary use of comma operator
+To: Simon Horman <horms@kernel.org>
+Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, intel-wired-lan@lists.osuosl.org, 
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/bvanassche/linux mq-deadline
-head:   f1201b17a2fec011e8cdd6be24a413a5693941b7
-commit: f1201b17a2fec011e8cdd6be24a413a5693941b7 [4/4] block/mq-deadline: Prevent zoned write reordering due to I/O prioritization
-config: i386-randconfig-016-20231218 (https://download.01.org/0day-ci/archive/20231219/202312190011.JYlG3HVC-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312190011.JYlG3HVC-lkp@intel.com/reproduce)
+On Sun, Dec 17, 2023 at 1:45=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> Although it does not seem to have any untoward side-effects,
+> the use of ';' to separate to assignments seems more appropriate than ','=
+.
+>
+> Flagged by clang-17 -Wcomma
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312190011.JYlG3HVC-lkp@intel.com/
+Yikes! This kind of example is why I hate the comma operator!
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
->> block/mq-deadline.c:222:16: error: call to undeclared function 'blk_rq_zone_no'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   while (rq && blk_rq_zone_no(rq) == zno) {
-                                ^
-   1 error generated.
+(Is -Wcomma enabled by -Wall?)
+
+Is there a fixes tag we can add?
+
+>
+> No functional change intended.
+> Compile tested only.
+>
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
+>  drivers/net/ethernet/intel/i40e/i40e_ethtool.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c b/drivers/net=
+/ethernet/intel/i40e/i40e_ethtool.c
+> index 812d04747bd0..f542f2671957 100644
+> --- a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
+> @@ -1917,7 +1917,7 @@ int i40e_get_eeprom(struct net_device *netdev,
+>                         len =3D eeprom->len - (I40E_NVM_SECTOR_SIZE * i);
+>                         last =3D true;
+>                 }
+> -               offset =3D eeprom->offset + (I40E_NVM_SECTOR_SIZE * i),
+> +               offset =3D eeprom->offset + (I40E_NVM_SECTOR_SIZE * i);
+>                 ret_val =3D i40e_aq_read_nvm(hw, 0x0, offset, len,
+>                                 (u8 *)eeprom_buff + (I40E_NVM_SECTOR_SIZE=
+ * i),
+>                                 last, NULL);
+>
+>
 
 
-vim +/blk_rq_zone_no +222 block/mq-deadline.c
-
-   204	
-   205	/*
-   206	 * If any sequential write requests are pending for the zone containing @pos,
-   207	 * return the I/O priority for these write requests.
-   208	 */
-   209	static enum dd_prio dd_zone_prio(struct deadline_data *dd,
-   210					 struct block_device *bdev, sector_t pos)
-   211	{
-   212		struct gendisk *disk = bdev->bd_disk;
-   213		const unsigned int zno = disk_zone_no(disk, pos);
-   214		enum dd_prio prio;
-   215	
-   216		pos -= bdev_offset_from_zone_start(bdev, pos);
-   217		for (prio = DD_PRIO_MIN; prio <= DD_PRIO_MAX; prio++) {
-   218			struct dd_per_prio *per_prio = &dd->per_prio[prio];
-   219			struct request *rq;
-   220	
-   221			rq = deadline_first_rq_past_pos(per_prio, DD_WRITE, pos);
- > 222			while (rq && blk_rq_zone_no(rq) == zno) {
-   223				struct rb_node *node;
-   224	
-   225				if (blk_rq_is_seq_zoned_write(rq))
-   226					return prio;
-   227				node = rb_next(&rq->rb_node);
-   228				if (!node)
-   229					break;
-   230				rq = rb_entry_rq(node);
-   231			}
-   232		}
-   233		return DD_INVALID_PRIO;
-   234	}
-   235	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
