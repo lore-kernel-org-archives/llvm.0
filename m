@@ -1,90 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B621D12F;
-	Mon, 18 Dec 2023 18:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8D77146A;
+	Mon, 18 Dec 2023 19:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AuIRk08S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B97C433CC;
-	Mon, 18 Dec 2023 18:57:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtBSFMcs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 442E2C433CA;
+	Mon, 18 Dec 2023 19:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702925844;
-	bh=naWCIvEvEYAGR9D+SB7trHx4NFczsGHbAbhUSikK+Iw=;
+	s=k20201202; t=1702926058;
+	bh=VApFh3cRumz6BLzq1kdAeoE0D33106JBTlF4Ob27DSg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AuIRk08SsI+UpAyDSVo0ImPh8Fn19MhReuLtOioVxSzWtF1i0+dC5GJGD3swpkezQ
-	 QSGB18YfBE5H3m7mAv/Pe75BclcdpDGUhq+8l6EeI8ZdDN1Uog33DF+wk3n7lkTUR5
-	 13WTlvMEKY8xrNlyERBRRI67LO2J7II30ZyDqWNXZcjwpShwPg1lxzYQlBFUfxd/f5
-	 j4grjaKAHP+2h/W8/9Vsmycgm1RcaZHnK4zdEDp0T7CQwQ+F0tTYUmQclhRiZhY/hI
-	 mYDxGY5aFtXSCAJl7Yo+0g+onRqLXwujflynuPrRl0FiQ/rjNr79zWco5wu+HsHPgl
-	 VkT3vP2IHOt5Q==
-Date: Mon, 18 Dec 2023 11:57:22 -0700
+	b=KtBSFMcsOxj1N0SaNjSviRGYpMENFKp7sNvzql/Z+d+Q5EBYkme6rrWcaBnpFzokT
+	 mnUhEyPn/1J7SGFTBlVi9IB1YaUXXtr7iu1DTuik9c+O/SnpYZJMbUOLCRlrsxnn/v
+	 xx0YGhthVVS5L+2HFXiJ+E0ZDZe2rgRxcE/vPe6bSAgIVaI7gQDKWcxwc2hiyRHjrJ
+	 omOwu3Zeww79+vv7L8bRgRRgsMsnxMaT/MYj4BtTmllEWVWmT4IP4Q0xYEzyRtaGRb
+	 QywvQhrNi7Qww36KtXcJXZg3/C3OpoV3JjFmLx7C5OB3qX6q6E64CdVfsiQ3s8lGRn
+	 dVdiT2uak84pA==
+Date: Mon, 18 Dec 2023 12:00:55 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, intel-xe@lists.freedesktop.org,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: Re: [drm-xe:drm-xe-next 989/1016]
- drivers/gpu/drm/xe/xe_wait_user_fence.c:46:2: warning: variable 'passed' is
- used uninitialized whenever switch default is taken
-Message-ID: <20231218185722.GA2863043@dev-arch.thelio-3990X>
-References: <202312170357.KPSinwPs-lkp@intel.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Simon Horman <horms@kernel.org>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH iwl-next] i40e: Avoid unnecessary use of comma operator
+Message-ID: <20231218190055.GB2863043@dev-arch.thelio-3990X>
+References: <20231217-i40e-comma-v1-1-85c075eff237@kernel.org>
+ <CAKwvOd=ZKV6KsgX0UxBX4Y89YEgpry00jG6K6qSjodwY3DLAzA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202312170357.KPSinwPs-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=ZKV6KsgX0UxBX4Y89YEgpry00jG6K6qSjodwY3DLAzA@mail.gmail.com>
 
-On Sun, Dec 17, 2023 at 03:28:47AM +0800, kernel test robot wrote:
-> tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-> head:   c54005fdd0347a17088e7ff78070a55bf9103bc4
-> commit: ad7d86415578e1a5deedb0ceed5c281f7367d66d [989/1016] drm/xe: Enable W=1 warnings by default
-> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231217/202312170357.KPSinwPs-lkp@intel.com/config)
-> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231217/202312170357.KPSinwPs-lkp@intel.com/reproduce)
+On Mon, Dec 18, 2023 at 08:32:28AM -0800, Nick Desaulniers wrote:
+> On Sun, Dec 17, 2023 at 1:45 AM Simon Horman <horms@kernel.org> wrote:
+> >
+> > Although it does not seem to have any untoward side-effects,
+> > the use of ';' to separate to assignments seems more appropriate than ','.
+> >
+> > Flagged by clang-17 -Wcomma
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202312170357.KPSinwPs-lkp@intel.com/
+> Yikes! This kind of example is why I hate the comma operator!
 > 
-> All warnings (new ones prefixed by >>):
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > 
->    warning: unknown warning option '-Wrestrict' [-Wunknown-warning-option]
->    warning: unknown warning option '-Wpacked-not-aligned'; did you mean '-Wpacked-non-pod'? [-Wunknown-warning-option]
->    warning: unknown warning option '-Wformat-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
->    warning: unknown warning option '-Wformat-truncation' [-Wunknown-warning-option]
->    warning: unknown warning option '-Wstringop-overflow'; did you mean '-Wshift-overflow'? [-Wunknown-warning-option]
->    warning: unknown warning option '-Wstringop-truncation'; did you mean '-Wstring-concatenation'? [-Wunknown-warning-option]
+> (Is -Wcomma enabled by -Wall?)
 
-I am not sure why these warnings are even showing up in the first place,
-they are wrapped with cc-option, which should be catching that they are
-not supported... Is 0day doing something funky with KCFLAGS?
-Regardless...
+No and last time that I looked into enabling it, there were a lot of
+instances in the kernel:
 
-> >> drivers/gpu/drm/xe/xe_wait_user_fence.c:46:2: warning: variable 'passed' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->            default:
->            ^~~~~~~
->    drivers/gpu/drm/xe/xe_wait_user_fence.c:50:9: note: uninitialized use occurs here
->            return passed ? 0 : 1;
->                   ^~~~~~
->    drivers/gpu/drm/xe/xe_wait_user_fence.c:21:13: note: initialize the variable 'passed' to silence this warning
->            bool passed;
->                       ^
->                        = 0
->    7 warnings generated.
+https://lore.kernel.org/20230630192825.GA2745548@dev-arch.thelio-3990X/
 
-I was surprised that this was not caught sooner as
--Wsometimes-uninitialized is a part of -Wall but it looks like
-drivers/gpu/drm/xe/Makefile was forked from the i915 Makefile before
-commit 43192617f781 ("drm/i915: Enable -Wsometimes-uninitialized") was
-added. It is good to see that the warnings are aligned now so that
-trivial uninitialized warnings can be caught by clang because they are
-disabled for GCC since commit 78a5255ffb6a ("Stop the ad-hoc games with
--Wno-maybe-initialized") in 5.7. Will this be fixed as a separate patch?
+It is still probably worth pursuing at some point but that is a lot of
+instances to clean up (along with potentially having a decent amount of
+pushback depending on the changes necessary to eliminate all instances).
 
-Cheers,
-Nathan
+> Is there a fixes tag we can add?
+> 
+> >
+> > No functional change intended.
+> > Compile tested only.
+> >
+> > Signed-off-by: Simon Horman <horms@kernel.org>
+> > ---
+> >  drivers/net/ethernet/intel/i40e/i40e_ethtool.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c b/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
+> > index 812d04747bd0..f542f2671957 100644
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
+> > @@ -1917,7 +1917,7 @@ int i40e_get_eeprom(struct net_device *netdev,
+> >                         len = eeprom->len - (I40E_NVM_SECTOR_SIZE * i);
+> >                         last = true;
+> >                 }
+> > -               offset = eeprom->offset + (I40E_NVM_SECTOR_SIZE * i),
+> > +               offset = eeprom->offset + (I40E_NVM_SECTOR_SIZE * i);
+> >                 ret_val = i40e_aq_read_nvm(hw, 0x0, offset, len,
+> >                                 (u8 *)eeprom_buff + (I40E_NVM_SECTOR_SIZE * i),
+> >                                 last, NULL);
+> >
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
+> 
