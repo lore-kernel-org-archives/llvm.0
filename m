@@ -1,75 +1,172 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513011F93E
-	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 16:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17A620DD1
+	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 16:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NrLY/GIL"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33668163949so2675641f8f.2
-        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 08:49:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UikkrwA0"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3366ddd1eddso2096975f8f.0
+        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 08:55:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703004579; x=1703609379; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1703004933; x=1703609733; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VRDzLjiMAJP8BbJu7ca4CzlHn8br6Q4rynefqovgK2E=;
-        b=NrLY/GILI/9cD7I0WdE8q6z3AR8S7KcAWfwRmx6+zPRVKDp1Fw475LeMNhQF8ieEqy
-         fpnbWFi9RH/RI1yFqOhKjzOQhlisdo9GOHmVk9DpLaejGl1VCnn7WPiD5SyPRU25K6IV
-         7Vn6I3kD3rG4ASq/kQvZtsnTWnOI/V5TDYbhf1zPZc3RxQHhgCK6rX4zfEQ984EOzjhe
-         uS/viyaeRX+BoHLl/ZElwXMP+t0n3QR+++io8NRq2tXyP5+vgFx0mq6/NgiqF46GtBkJ
-         8lY7S8NfSGKN/izhNOGSKjuJO9Z7awm3wgu43Ou9QfTQA02Hp0IRE6LVsmqI+I+gcTft
-         s78Q==
+        bh=Pr1gwYwEAqV3CPDFt5tJeZc4Ej3mhik7sPY5D9i4L+4=;
+        b=UikkrwA0bUksIBJDUKzOH4z3OPaS21jUdslJpn7zp/amnEG6PZai4HPya0VU8gehH9
+         YaCFhDIfhqPIKMFeaU6BuIL3LVVhwAXDcZN4rVBnmqwkjfov3ACZRlpJQAZn3LglGMYE
+         Z2BJl7Pa3Hr7lHGRIhos6dbeo/26+kV+ggaZqg2RzB0xAI30gzKaOjYe9jjsP58o8SD+
+         PtwJVGCEuugg5vfHJz+Cadnn4f6/7Ffg5443arPJFekvKSVRZ3wa7JfQLvbU2jB7ru4c
+         WRQi61uypHC1gs2Q4ebeLu8/K0oM5mKP9XllzCJoWEM860LVVxy1bDLBx8yMwFfFwQ56
+         neAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703004579; x=1703609379;
+        d=1e100.net; s=20230601; t=1703004933; x=1703609733;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VRDzLjiMAJP8BbJu7ca4CzlHn8br6Q4rynefqovgK2E=;
-        b=jruIKzggrCk5EvkuaHN+3Ge3eovybsskYJWIhbvp3Bv29e/qbtBxRU4UgImRPWMtLO
-         xAdxp31r0SO7OXA+mSqhKbuZCIh+TSDiCT/PKdZZ5XBtUwFib/BXx7PKMrxgSQ+c2Bgt
-         TbhQicuvgodQMHmD+TtNga6KDWmJA4vzoxvWgX1aLkvk1uUyt1FVX5rkPFrUbyUvHQtC
-         YKLlM9pXasK2/Wo0OZ4yKG3Wp+mtIyQdjQ1IlEUbfJ8rFQ9JP+saYb2yY+aCesmpxnpg
-         T/W0LPumS38Li4xRNS6N/mM+ZrswUadF1XUIl8epi/fY58yU5JW0Vjqv5MdDCeMEyvH9
-         kCEQ==
-X-Gm-Message-State: AOJu0Yx34FU+cI8MXOzzM+MWIaw9ISwKDUuWbg7wwAiMJ+bt6UsE8HoW
-	fYEQ2y1Q87m54xvYhM+0xIG30ke1i0qmf3U7hpmB2g==
-X-Google-Smtp-Source: AGHT+IGkSnbETqevyS5YLD3SJEnIfiIu+J0X0Py1heMFhXlPrhe8Yn8VmdFtz1I98N0U0C5dSxJ7i2tWrus4KMvpVek=
-X-Received: by 2002:adf:fb49:0:b0:333:53b9:441b with SMTP id
- c9-20020adffb49000000b0033353b9441bmr4989922wrs.47.1703004579412; Tue, 19 Dec
- 2023 08:49:39 -0800 (PST)
+        bh=Pr1gwYwEAqV3CPDFt5tJeZc4Ej3mhik7sPY5D9i4L+4=;
+        b=nkgbOLdzfxl3iYD3kpQqJYfovI9336hdlpZ8QZbMk6+RtfqpuRg80xyokvEd3OzSn3
+         /cs///B+qhOWXMJOE9CklFCJ1wEwz3m2m2yWtJ91CM9ZrGPQ7Ka79zmNNLXFJV0rTuWH
+         QE7WyqioTJtSsM0awv2B6f4uycQH2Cdt/9uIoG7RO1gxIwmfWQYQDQ3R5TVtJeKbbr0r
+         MyjXObp5F1Bumgupp4A4MD27GEJKmfY0ICbzJQRBnXWP4Qb6MHjUOBQ++t4MCKyJPAko
+         EkfdFVYnHsaWGtdj4J6bw0jsCfQLz8WiS7voVdcPZggjOtlnaf1Bgh12Hxd4xIJ+6Nnz
+         ko9Q==
+X-Gm-Message-State: AOJu0YxwbKWQ862y5W0NuxjwlhfBZeXU025xLIeJgGm+Qd7DwOdx1ZEW
+	kb99URtK0P774Y+Pl0z1LsO97Z0VoAMtho7QbQAfoQ==
+X-Google-Smtp-Source: AGHT+IHdJSnW1uoy3+KysPNVwLZ4H/jx1KVZ/uOvjz42emCllqfn1IhGJ3uQ5Ral4Y9max8Bshqiu+TgQgc/H/ReIBY=
+X-Received: by 2002:adf:e4c3:0:b0:336:60da:7530 with SMTP id
+ v3-20020adfe4c3000000b0033660da7530mr1849799wrm.158.1703004932880; Tue, 19
+ Dec 2023 08:55:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231215-llvm-decode-stacktrace-v1-1-201cb86f4879@quicinc.com>
- <CAKwvOdmY=Jysqai3KOYO8+c5idP9JjNGKL2xZn2sDNdj5MjTVA@mail.gmail.com> <CAFhGd8qA8Hh63iZPP33Nsxu61OycP7oqT50mDgUO-HFNUWHZxQ@mail.gmail.com>
-In-Reply-To: <CAFhGd8qA8Hh63iZPP33Nsxu61OycP7oqT50mDgUO-HFNUWHZxQ@mail.gmail.com>
+References: <20231215171020.687342-21-bigeasy@linutronix.de>
+ <202312161212.D5tju5i6-lkp@intel.com> <20231219000116.GA3956476@dev-arch.thelio-3990X>
+In-Reply-To: <20231219000116.GA3956476@dev-arch.thelio-3990X>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 19 Dec 2023 08:49:28 -0800
-Message-ID: <CAKwvOdmMCmcHVd7+ymKgVUe5uZrSvUYMaD9Fz5GSBtHBMPTnSQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts/decode_stacktrace.sh: Use LLVM environment variable
-To: Justin Stitt <justinstitt@google.com>
-Cc: Elliot Berman <quic_eberman@quicinc.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, Manuel Traut <manut@linutronix.de>, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Will Deacon <will@kernel.org>
+Date: Tue, 19 Dec 2023 08:55:21 -0800
+Message-ID: <CAKwvOdkfjyKz6686RzAGjfKMVPriLM8XuNueYyWcd_Sj-WnJbg@mail.gmail.com>
+Subject: Re: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP redirect.
+To: Nathan Chancellor <nathan@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Boqun Feng <boqun.feng@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eric Dumazet <edumazet@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Jesse Brandeburg <jesse.brandeburg@intel.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, bpf@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 18, 2023 at 4:17=E2=80=AFPM Justin Stitt <justinstitt@google.co=
-m> wrote:
+On Mon, Dec 18, 2023 at 4:01=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> Interestingly, I am getting good stack traces on mainline with a
-> LLVM-built kernel -- both with and without that patch.
+> On Sat, Dec 16, 2023 at 12:53:43PM +0800, kernel test robot wrote:
+> > Hi Sebastian,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on net-next/main]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Andrze=
+j-Siewior/locking-local_lock-Introduce-guard-definition-for-local_lock/2023=
+1216-011911
+> > base:   net-next/main
+> > patch link:    https://lore.kernel.org/r/20231215171020.687342-21-bigea=
+sy%40linutronix.de
+> > patch subject: [PATCH net-next 20/24] net: intel: Use nested-BH locking=
+ for XDP redirect.
+> > config: arm-defconfig (https://download.01.org/0day-ci/archive/20231216=
+/202312161212.D5tju5i6-lkp@intel.com/config)
+> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.gi=
+t f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20231216/202312161212.D5tju5i6-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202312161212.D5tju5i6-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> drivers/net/ethernet/intel/igb/igb_main.c:8620:3: error: cannot jump=
+ from this goto statement to its label
+> >                    goto xdp_out;
+> >                    ^
 
-Probably because:
-1. you have GNU binutils installed.
-2. you're not testing .o files from an LTO build (which GNU binutils
-cannot decode).
+^ The problematic goto should be replaced with an early return. (and
+perhaps a comment that you can't jump over __cleanup variable
+initialization).
+
+Otherwise the compiler cannot put the cleanup in the destination basic
+block; it would have to split the edges and have all the happy paths
+go to a synthesized basic block that runs the cleanup, then jumps to
+the original destination.
+
+> >    drivers/net/ethernet/intel/igb/igb_main.c:8624:2: note: jump bypasse=
+s initialization of variable with __attribute__((cleanup))
+> >            guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+> >            ^
+> >    include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
+> >            CLASS(_name, __UNIQUE_ID(guard))
+> >                         ^
+> >    include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE=
+_ID'
+> >    #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), _=
+_COUNTER__)
+> >                                ^
+> >    include/linux/compiler_types.h:84:22: note: expanded from macro '__P=
+ASTE'
+> >    #define __PASTE(a,b) ___PASTE(a,b)
+> >                         ^
+> >    include/linux/compiler_types.h:83:23: note: expanded from macro '___=
+PASTE'
+> >    #define ___PASTE(a,b) a##b
+> >                          ^
+> >    <scratch space>:52:1: note: expanded from here
+> >    __UNIQUE_ID_guard753
+> >    ^
+> >    1 error generated.
+>
+> I initially thought that this may have been
+> https://github.com/ClangBuiltLinux/linux/issues/1886 but asm goto is not
+> involved here.
+>
+> This error occurs because jumping over the initialization of a variable
+> declared with __attribute__((__cleanup__(...))) does not prevent the
+> clean up function from running as one may expect it to, but could
+> instead result in the clean up function getting run on uninitialized
+> memory. A contrived example (see the bottom of the "Output" tabs for the
+> execution output):
+>
+> https://godbolt.org/z/9bvGboxvc
+>
+> While there is a warning from GCC in that example, I don't see one in
+> the kernel's case. I see there is an open GCC issue around this problem:
+>
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D91951
+>
+> While it is possible that there may not actually be a problem with how
+> the kernel uses __attribute__((__cleanup__(...))) and gotos, I think
+> clang's behavior is reasonable given the potential footguns that this
+> construct has.
+>
+> Cheers,
+> Nathan
+>
+
 
 --=20
 Thanks,
