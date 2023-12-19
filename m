@@ -1,96 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628AF63AC;
-	Tue, 19 Dec 2023 02:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B717486;
+	Tue, 19 Dec 2023 06:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKxIo+tt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68741C433C7;
-	Tue, 19 Dec 2023 02:19:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702952396;
-	bh=bMdUl2uM1U9HzkZZycGPzYls2j01kCAcRdaJWF7S5hk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oKxIo+ttsXwYuS2A/o13gROjgVIStuzRJmAk1ZJ/x5kKOENmzst+VCC2/QR0c9KFP
-	 C1S53I64cpV/2Acld30kcDlyuyNo2sUBk6Nq2tjC2WWTBMXsDjUFRxQ5ZSnvubxzjp
-	 NaxIh0OKLvsdqVlYRtBHmqAMIuzgoRpthZ4F2nkqWWXUtcDeZprJYRwTnJ4m5OkCV8
-	 VuMMYHpe4Al0eIWoYDfKrrsMcTAALcRCAUj2v0jVzRiUYf6pLiGaDimL9OXB38/tNW
-	 JbCl2EgkNMjaXKNxu35/9iHjwz43JZ3pxBrSALuGwrCeuiS1Yv5+xb33XUB2atIkhO
-	 HgOYxyAX08F3g==
-From: SeongJae Park <sj@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	damon@lists.linux.dev
-Subject: Re: [sj:damon/next 18/24] mm/damon/sysfs.c:96:30: error: 'counted_by' only applies to C99 flexible array members
-Date: Tue, 19 Dec 2023 02:19:54 +0000
-Message-Id: <20231219021954.105864-1-sj@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <202312190546.yhWbDA8A-lkp@intel.com>
-References: 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UoiwMn92"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702965630; x=1734501630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KuZnLO475ngFLg9EV3A/3KeAGUlrMD5qDq4De+BpMew=;
+  b=UoiwMn92Zii51g6BpCJXGoe1sxc26DPUcN9A+7QARu0xXPbcdG7S4k8q
+   ewioqmIMHyRcMdoIY3WGrLo4efgt1jClaQJOZchQk6qMhMGu5ZU334Ssp
+   v0o4wwvThJaZbayr5R04jBhBJD/T/78fu86oD49HKz92d5mqf/mUJQbR8
+   zB/oR+b9sa46X2wwdo/1Otjxq3fXvjs06PIEGrqOXne8bhpN0a1obTl5a
+   hA/XYIVyu9KzdH+hcYnIScU0PKON9cPxcxUua0QcxQaZxqg/kneCVKmJf
+   retujuRZluag/mUM4nLP0FbpUZh58GULIOFtLv3DAi6W4I1tYwzf/ls9j
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="392785563"
+X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
+   d="scan'208";a="392785563"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 22:00:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="769108675"
+X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
+   d="scan'208";a="769108675"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 18 Dec 2023 22:00:24 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rFT9R-0004uu-0t;
+	Tue, 19 Dec 2023 06:00:21 +0000
+Date: Tue, 19 Dec 2023 14:00:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>, Keith Busch <kbusch@kernel.org>,
+	James Smart <james.smart@broadcom.com>,
+	Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
+Subject: Re: [PATCH v3 15/16] nvmet-fc: avoid deadlock on delete association
+ path
+Message-ID: <202312191347.7X0VJgnV-lkp@intel.com>
+References: <20231218153105.12717-16-dwagner@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231218153105.12717-16-dwagner@suse.de>
 
-Hello,
+Hi Daniel,
 
-On Tue, 19 Dec 2023 05:30:54 +0800 kernel test robot <lkp@intel.com> wrote:
+kernel test robot noticed the following build errors:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-> head:   04cc9f72453632bf9e13e06f85c11147583e5d5d
-> commit: 375af4a6e206c1aeb2edb1d80cbb42fd3349b287 [18/24] mm/damon/sysfs: add __counted_by() annotation
-> config: arm-randconfig-001-20231219 (https://download.01.org/0day-ci/archive/20231219/202312190546.yhWbDA8A-lkp@intel.com/config)
-> compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 5ac12951b4e9bbfcc5791282d0961ec2b65575e9)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312190546.yhWbDA8A-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202312190546.yhWbDA8A-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> mm/damon/sysfs.c:96:30: error: 'counted_by' only applies to C99 flexible array members
->       96 |         struct damon_sysfs_region **regions_arr __counted_by(nr);
->          |                                     ^~~~~~~~~~~
->    mm/damon/sysfs.c:292:30: error: 'counted_by' only applies to C99 flexible array members
->      292 |         struct damon_sysfs_target **targets_arr __counted_by(nr);
->          |                                     ^~~~~~~~~~~
->    mm/damon/sysfs.c:815:31: error: 'counted_by' only applies to C99 flexible array members
->      815 |         struct damon_sysfs_context **contexts_arr __counted_by(nr);
->          |                                      ^~~~~~~~~~~~
->    mm/damon/sysfs.c:1666:31: error: 'counted_by' only applies to C99 flexible array members
->     1666 |         struct damon_sysfs_kdamond **kdamonds_arr __counted_by(nr);
->          |                                      ^~~~~~~~~~~~
->    4 errors generated.
-> 
-> 
-> vim +/counted_by +96 mm/damon/sysfs.c
-> 
->     89	
->     90	/*
->     91	 * init_regions directory
->     92	 */
->     93	
->     94	struct damon_sysfs_regions {
->     95		struct kobject kobj;
->   > 96		struct damon_sysfs_region **regions_arr __counted_by(nr);
->     97		int nr;
->     98	};
->     99	
+[auto build test ERROR on linux-nvme/nvme-6.8]
+[also build test ERROR on linus/master v6.7-rc6 next-20231218]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thank you for this report.  I will remove the commit from the tree.
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Wagner/nvmet-fc-remove-unnecessary-bracket/20231219-003117
+base:   git://git.infradead.org/nvme.git nvme-6.8
+patch link:    https://lore.kernel.org/r/20231218153105.12717-16-dwagner%40suse.de
+patch subject: [PATCH v3 15/16] nvmet-fc: avoid deadlock on delete association path
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231219/202312191347.7X0VJgnV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312191347.7X0VJgnV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312191347.7X0VJgnV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/nvme/target/fc.c:253:2: error: call to undeclared function 'nvmet_fc_tgtport_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           nvmet_fc_tgtport_put(tgtport);
+           ^
+>> drivers/nvme/target/fc.c:259:13: error: static declaration of 'nvmet_fc_tgtport_put' follows non-static declaration
+   static void nvmet_fc_tgtport_put(struct nvmet_fc_tgtport *tgtport);
+               ^
+   drivers/nvme/target/fc.c:253:2: note: previous implicit declaration is here
+           nvmet_fc_tgtport_put(tgtport);
+           ^
+   2 errors generated.
 
 
-Thanks,
-SJ
+vim +/nvmet_fc_tgtport_put +253 drivers/nvme/target/fc.c
 
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+   244	
+   245	
+   246	static void nvmet_fc_handle_ls_rqst_work(struct work_struct *work);
+   247	static void nvmet_fc_fcp_rqst_op_defer_work(struct work_struct *work);
+   248	static void nvmet_fc_put_tgtport_work(struct work_struct *work)
+   249	{
+   250		struct nvmet_fc_tgtport *tgtport =
+   251			container_of(work, struct nvmet_fc_tgtport, put_work);
+   252	
+ > 253		nvmet_fc_tgtport_put(tgtport);
+   254	}
+   255	static void nvmet_fc_tgt_a_put(struct nvmet_fc_tgt_assoc *assoc);
+   256	static int nvmet_fc_tgt_a_get(struct nvmet_fc_tgt_assoc *assoc);
+   257	static void nvmet_fc_tgt_q_put(struct nvmet_fc_tgt_queue *queue);
+   258	static int nvmet_fc_tgt_q_get(struct nvmet_fc_tgt_queue *queue);
+ > 259	static void nvmet_fc_tgtport_put(struct nvmet_fc_tgtport *tgtport);
+   260	static int nvmet_fc_tgtport_get(struct nvmet_fc_tgtport *tgtport);
+   261	static void nvmet_fc_handle_fcp_rqst(struct nvmet_fc_tgtport *tgtport,
+   262						struct nvmet_fc_fcp_iod *fod);
+   263	static void nvmet_fc_delete_target_assoc(struct nvmet_fc_tgt_assoc *assoc);
+   264	static void nvmet_fc_xmt_ls_rsp(struct nvmet_fc_tgtport *tgtport,
+   265					struct nvmet_fc_ls_iod *iod);
+   266	
+   267	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
