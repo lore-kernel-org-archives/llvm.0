@@ -1,45 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44CC49893;
-	Mon, 18 Dec 2023 22:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7FE7472;
+	Tue, 19 Dec 2023 00:01:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MaCcpc6z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702939464; x=1734475464;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Db2rUnV+9PkumFk9lUJ8SC3prJA+6j00yxsYlM5j6JM=;
-  b=MaCcpc6zCToxPvq/vNaQQcoTM5doLgmHf+ARCIFEA5VCAIJEFmKv6aAd
-   rPTp+vTt6ZCAjx0y644qE4LWAtvofn/ZzBujXDTUPq2+RCz68ZMl9Az9H
-   JmrS8kIr57jSuqpEVbDINd6zNCB61KRr+x/szs4DGvP8TE8DFsK61znqM
-   qCJhoDnVDqxnYjzg+7rrO79ms6c63ZhxMal1X8LnPfvNAQN8bzWryWECN
-   ybC67mhnZG2uMVzxXhlsShWRrelyIhSqTnHv9Xy9KxC9XHgS1qHIiYAj1
-   YBdTs47gIuyEHXVPqcff2D2tq63YBbYqxyaZsJhLD3W69LRkbvSkirkJc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="395304918"
-X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="395304918"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 14:44:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="1022913941"
-X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="1022913941"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Dec 2023 14:44:23 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rFMLU-0004bI-1k;
-	Mon, 18 Dec 2023 22:44:20 +0000
-Date: Tue, 19 Dec 2023 06:43:57 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to
- !ENDBR: arch_kexec_pre_free_pages+0x33
-Message-ID: <202312190630.DujmQGO4-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rr8a9wCc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C79BC433C8;
+	Tue, 19 Dec 2023 00:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702944079;
+	bh=fMgl5f1cxsDp2Ro+Gy0GmSHDb4UdBfrTzpxZdw6xSOI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rr8a9wCcxzUWjy+33BEpF+Rz/shtCM1gzDwv6ucq4Mp+VdWWx+hVaiF+tmXKbzUQ7
+	 wObo1de1uj0lA8td3opQu8p2rEAxvlh+inTqEEmqXhxdvD0qtAD6IhSfTs4NII0EIG
+	 lw+Zey2sh4dFZYPEWd/NGIGXAmjGKubHZm5SgQzagOwYliWG5sFMICElNin3u4lOHE
+	 f6rzfFg29C//Uw1vAdwPHRcW3a2mGwhnNKM0o95Z/7d3mbznhulW2VnALuxSiCMA34
+	 aRbeIFGIE9JczjyLsDc+cmS8RyBopRKqHd967KNsrt6slkFwU68j+plOP3/yNrqDAf
+	 r20wNTWUyx20g==
+Date: Mon, 18 Dec 2023 17:01:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP
+ redirect.
+Message-ID: <20231219000116.GA3956476@dev-arch.thelio-3990X>
+References: <20231215171020.687342-21-bigeasy@linutronix.de>
+ <202312161212.D5tju5i6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,72 +51,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202312161212.D5tju5i6-lkp@intel.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Ze Gao <zegao2021@gmail.com>
-CC: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-CC: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Sat, Dec 16, 2023 at 12:53:43PM +0800, kernel test robot wrote:
+> Hi Sebastian,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on net-next/main]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Andrzej-Siewior/locking-local_lock-Introduce-guard-definition-for-local_lock/20231216-011911
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20231215171020.687342-21-bigeasy%40linutronix.de
+> patch subject: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP redirect.
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20231216/202312161212.D5tju5i6-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312161212.D5tju5i6-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202312161212.D5tju5i6-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/net/ethernet/intel/igb/igb_main.c:8620:3: error: cannot jump from this goto statement to its label
+>                    goto xdp_out;
+>                    ^
+>    drivers/net/ethernet/intel/igb/igb_main.c:8624:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+>            guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
+>            ^
+>    include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
+>            CLASS(_name, __UNIQUE_ID(guard))
+>                         ^
+>    include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+>    #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+>                                ^
+>    include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+>    #define __PASTE(a,b) ___PASTE(a,b)
+>                         ^
+>    include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+>    #define ___PASTE(a,b) a##b
+>                          ^
+>    <scratch space>:52:1: note: expanded from here
+>    __UNIQUE_ID_guard753
+>    ^
+>    1 error generated.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2cf4f94d8e8646803f8fb0facf134b0cd7fb691a
-commit: 571a2a50a8fc546145ffd3bf673547e9fe128ed2 rethook, fprobe: do not trace rethook related functions
-date:   7 months ago
-config: x86_64-buildonly-randconfig-006-20231219 (https://download.01.org/0day-ci/archive/20231219/202312190630.DujmQGO4-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312190630.DujmQGO4-lkp@intel.com/reproduce)
+I initially thought that this may have been
+https://github.com/ClangBuiltLinux/linux/issues/1886 but asm goto is not
+involved here.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312190630.DujmQGO4-lkp@intel.com/
+This error occurs because jumping over the initialization of a variable
+declared with __attribute__((__cleanup__(...))) does not prevent the
+clean up function from running as one may expect it to, but could
+instead result in the clean up function getting run on uninitialized
+memory. A contrived example (see the bottom of the "Output" tabs for the
+execution output):
 
-All warnings (new ones prefixed by >>):
+https://godbolt.org/z/9bvGboxvc
 
->> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: arch_kexec_pre_free_pages+0x33
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0x105: relocation to !ENDBR: native_write_cr4+0x4
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0x111: relocation to !ENDBR: native_write_cr4+0x4
+While there is a warning from GCC in that example, I don't see one in
+the kernel's case. I see there is an open GCC issue around this problem:
 
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951
 
-objdump-func vmlinux.o set_ftrace_ops_ro:
-0000 000000000006d3a0 <set_ftrace_ops_ro>:
-0000    6d3a0:	f3 0f 1e fa          	endbr64
-0004    6d3a4:	41 57                	push   %r15
-0006    6d3a6:	41 56                	push   %r14
-0008    6d3a8:	41 54                	push   %r12
-000a    6d3aa:	53                   	push   %rbx
-000b    6d3ab:	48 8b 1d 00 00 00 00 	mov    0x0(%rip),%rbx        # 6d3b2 <set_ftrace_ops_ro+0x12>	6d3ae: R_X86_64_PC32	ftrace_ops_list-0x4
-0012    6d3b2:	49 c7 c6 00 00 00 00 	mov    $0x0,%r14	6d3b5: R_X86_64_32S	ftrace_list_end
-0019    6d3b9:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	6d3bc: R_X86_64_32S	ftrace_regs_caller
-0020    6d3c0:	48 f7 d8             	neg    %rax
-0023    6d3c3:	4c 8d 3c 05 00 00 00 00 	lea    0x0(,%rax,1),%r15	6d3c7: R_X86_64_32S	ftrace_regs_caller_end+0x1008
-002b    6d3cb:	49 c1 ef 0c          	shr    $0xc,%r15
-002f    6d3cf:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	6d3d2: R_X86_64_32S	ftrace_caller
-0036    6d3d6:	48 f7 d8             	neg    %rax
-0039    6d3d9:	4c 8d 24 05 00 00 00 00 	lea    0x0(,%rax,1),%r12	6d3dd: R_X86_64_32S	ftrace_caller_end+0x1008
-0041    6d3e1:	49 c1 ec 0c          	shr    $0xc,%r12
-0045    6d3e5:	48 8b 43 10          	mov    0x10(%rbx),%rax
-0049    6d3e9:	a9 00 08 00 00       	test   $0x800,%eax
-004e    6d3ee:	74 15                	je     6d405 <set_ftrace_ops_ro+0x65>
-0050    6d3f0:	a8 04                	test   $0x4,%al
-0052    6d3f2:	48 8b bb 60 01 00 00 	mov    0x160(%rbx),%rdi
-0059    6d3f9:	44 89 fe             	mov    %r15d,%esi
-005c    6d3fc:	41 0f 44 f4          	cmove  %r12d,%esi
-0060    6d400:	e8 00 00 00 00       	call   6d405 <set_ftrace_ops_ro+0x65>	6d401: R_X86_64_PLT32	set_memory_ro-0x4
-0065    6d405:	48 8b 5b 08          	mov    0x8(%rbx),%rbx
-0069    6d409:	48 85 db             	test   %rbx,%rbx
-006c    6d40c:	74 05                	je     6d413 <set_ftrace_ops_ro+0x73>
-006e    6d40e:	4c 39 f3             	cmp    %r14,%rbx
-0071    6d411:	75 d2                	jne    6d3e5 <set_ftrace_ops_ro+0x45>
-0073    6d413:	5b                   	pop    %rbx
-0074    6d414:	41 5c                	pop    %r12
-0076    6d416:	41 5e                	pop    %r14
-0078    6d418:	41 5f                	pop    %r15
-007a    6d41a:	31 c0                	xor    %eax,%eax
-007c    6d41c:	31 ff                	xor    %edi,%edi
-007e    6d41e:	31 f6                	xor    %esi,%esi
-0080    6d420:	c3                   	ret
-0081    6d421:	66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+While it is possible that there may not actually be a problem with how
+the kernel uses __attribute__((__cleanup__(...))) and gotos, I think
+clang's behavior is reasonable given the potential footguns that this
+construct has.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
