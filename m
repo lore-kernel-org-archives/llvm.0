@@ -1,39 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D345D14265;
-	Tue, 19 Dec 2023 10:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C076C14275;
+	Tue, 19 Dec 2023 10:12:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bf0ZkjDF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB051C433C7;
-	Tue, 19 Dec 2023 10:05:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PFDC4x1b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4A0C433C9;
+	Tue, 19 Dec 2023 10:12:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702980328;
-	bh=BhpwEVgkX8t5FMZrEaOtiZBqFEAb7r/etFz6GvlMCVg=;
+	s=k20201202; t=1702980727;
+	bh=BZrEszKUcvt1KXwaUy68ZV34ShH2PIpSZfr+gPHVJ5w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bf0ZkjDFVCYcf+YVApvlzzFraAlgWb5am3k0eE/qi69tprIMIzpFuIHZ1FfIa6XQv
-	 MBBV4AlpXXPUBc28+uqe+BQRzoside80HYSw3iw0sa0dT51WR1AVlniQdNcWT2C2Id
-	 QWn8GnQHG9t0lHLvYRyRO5ewL0Sgrrgcnfp9zWRT2bvOlo2vjs70+8ynLy7UlGdwzk
-	 xhZt0+17AazmZ2IaWUX4XkXlJI6e4TRdnrRbZ87nliT/wBZtns2jTkg2L2E0rGYMvO
-	 xDSCwTmmWjqoMWKfxm2yFvMpx9pLmq6UnwMdDXMpypOF+TQTnmqDufdCxhrBGgTYpw
-	 rVAiC7czOc4IQ==
-Date: Tue, 19 Dec 2023 10:05:23 +0000
+	b=PFDC4x1bzF7SYYERBSQ1gwN/ak71N/qbFUgU6UiGwaWGVWvji8GH0uQsrS+Otgu2F
+	 JwO6pxATBL/T+GsWdMp/Fusw0op/jcG3XXcNglyDMnPf98wVCoGMeoDX+UKZTXHmQ2
+	 RWMPK07weHFS6BinjNo8kyLSjLCI066r5HtBRM8R0Erc0l4VJxr2Jdp0r8u1NRXpYj
+	 yQzUyDxaI7eWSgqjjxZLD9GTNPCvMtjptnHG5UUcOxMocUHDvsQlAaxA+7XnPppa16
+	 Piwq7FMhKXrdCI7KBPlYi0A5tJ+wrLMHmNIsOu0F5N+D2U6Gha2ouGkaxXa/Mzh7Ev
+	 hvb6x71W/9X1w==
+Date: Tue, 19 Dec 2023 10:12:02 +0000
 From: Simon Horman <horms@kernel.org>
 To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>,
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
 	Tony Nguyen <anthony.l.nguyen@intel.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
 	llvm@lists.linux.dev
 Subject: Re: [PATCH iwl-next] i40e: Avoid unnecessary use of comma operator
-Message-ID: <20231219100523.GD811967@kernel.org>
+Message-ID: <20231219101202.GE811967@kernel.org>
 References: <20231217-i40e-comma-v1-1-85c075eff237@kernel.org>
  <CAKwvOd=ZKV6KsgX0UxBX4Y89YEgpry00jG6K6qSjodwY3DLAzA@mail.gmail.com>
+ <20231218190055.GB2863043@dev-arch.thelio-3990X>
+ <CAKwvOd=LjM08FyiXu-Qn7JmtM0oBD7rf4qkr=oo3QKeP+njRUw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,56 +45,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=ZKV6KsgX0UxBX4Y89YEgpry00jG6K6qSjodwY3DLAzA@mail.gmail.com>
+In-Reply-To: <CAKwvOd=LjM08FyiXu-Qn7JmtM0oBD7rf4qkr=oo3QKeP+njRUw@mail.gmail.com>
 
-On Mon, Dec 18, 2023 at 08:32:28AM -0800, Nick Desaulniers wrote:
-> On Sun, Dec 17, 2023 at 1:45 AM Simon Horman <horms@kernel.org> wrote:
+On Mon, Dec 18, 2023 at 11:08:38AM -0800, Nick Desaulniers wrote:
+> On Mon, Dec 18, 2023 at 11:00 AM Nathan Chancellor <nathan@kernel.org> wrote:
 > >
-> > Although it does not seem to have any untoward side-effects,
-> > the use of ';' to separate to assignments seems more appropriate than ','.
+> > On Mon, Dec 18, 2023 at 08:32:28AM -0800, Nick Desaulniers wrote:
+> > > (Is -Wcomma enabled by -Wall?)
 > >
-> > Flagged by clang-17 -Wcomma
+> > No and last time that I looked into enabling it, there were a lot of
+> > instances in the kernel:
+> >
+> > https://lore.kernel.org/20230630192825.GA2745548@dev-arch.thelio-3990X/
+> >
+> > It is still probably worth pursuing at some point but that is a lot of
+> > instances to clean up (along with potentially having a decent amount of
+> > pushback depending on the changes necessary to eliminate all instances).
 > 
-> Yikes! This kind of example is why I hate the comma operator!
-> 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> (Is -Wcomma enabled by -Wall?)
-> 
-> Is there a fixes tag we can add?
+> Filed this todo:
+> https://github.com/ClangBuiltLinux/linux/issues/1968
+> I'd be happy if Simon keeps poking at getting that warning enabled.
 
-Hi Nick,
+FWIIW, since the discussion cited above I have been keeping an eye on
+-Wcomma, mostly wrt to patches for Networking code.
 
-I don't believe this resolves a user-visible bug,
-so for Networking code a fixes tag isn't appropriate.
+My subjective feelings on this are:
 
-> 
-> >
-> > No functional change intended.
-> > Compile tested only.
-> >
-> > Signed-off-by: Simon Horman <horms@kernel.org>
-> > ---
-> >  drivers/net/ethernet/intel/i40e/i40e_ethtool.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c b/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
-> > index 812d04747bd0..f542f2671957 100644
-> > --- a/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
-> > +++ b/drivers/net/ethernet/intel/i40e/i40e_ethtool.c
-> > @@ -1917,7 +1917,7 @@ int i40e_get_eeprom(struct net_device *netdev,
-> >                         len = eeprom->len - (I40E_NVM_SECTOR_SIZE * i);
-> >                         last = true;
-> >                 }
-> > -               offset = eeprom->offset + (I40E_NVM_SECTOR_SIZE * i),
-> > +               offset = eeprom->offset + (I40E_NVM_SECTOR_SIZE * i);
-> >                 ret_val = i40e_aq_read_nvm(hw, 0x0, offset, len,
-> >                                 (u8 *)eeprom_buff + (I40E_NVM_SECTOR_SIZE * i),
-> >                                 last, NULL);
-> >
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+* Few new instances seem to be added
+* There are some, though I wouldn't say a lot, of existing
+  instances in files that are that is being updated.
+* I don't recall any of the instances, new or old, being bugs.
+  Though perhaps a very small number were.
+
+So while I'm all for more checks.
+And I'm all for only using the comma where it is necessary
+(I suspect that often it is a typo).
+I do not get the feeling that we are sitting on a trove of nasty bugs.
