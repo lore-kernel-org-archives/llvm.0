@@ -1,52 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B717486;
-	Tue, 19 Dec 2023 06:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E7F7468;
+	Tue, 19 Dec 2023 06:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UoiwMn92"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XH8jescH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702965630; x=1734501630;
+  t=1702966287; x=1734502287;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KuZnLO475ngFLg9EV3A/3KeAGUlrMD5qDq4De+BpMew=;
-  b=UoiwMn92Zii51g6BpCJXGoe1sxc26DPUcN9A+7QARu0xXPbcdG7S4k8q
-   ewioqmIMHyRcMdoIY3WGrLo4efgt1jClaQJOZchQk6qMhMGu5ZU334Ssp
-   v0o4wwvThJaZbayr5R04jBhBJD/T/78fu86oD49HKz92d5mqf/mUJQbR8
-   zB/oR+b9sa46X2wwdo/1Otjxq3fXvjs06PIEGrqOXne8bhpN0a1obTl5a
-   hA/XYIVyu9KzdH+hcYnIScU0PKON9cPxcxUua0QcxQaZxqg/kneCVKmJf
-   retujuRZluag/mUM4nLP0FbpUZh58GULIOFtLv3DAi6W4I1tYwzf/ls9j
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="392785563"
+  bh=I3niG70hDmYdaHrCMys+P5v5syUQfvbA6vVa3Q34db8=;
+  b=XH8jescH0Y9xWcHTc8GgJhJnMZoec/aR6Bg5JV1sfxBRXhGNWEJXAAOQ
+   lLzkndiQqGAiEHxhA1BR4tVQT8YCX5vHSvHp3M13ckYV7kG8QVv0rqoEs
+   c7FdPrfjy4d9le4VWCHQ8w6I+lkkTZ6TrjZfVAfd4JImHv7mMoWMUM8yl
+   yjING+CPkKhC8sCIVHjgaZcq6XZJIjeKbbwTYtb/cSx4rPqfqQm9FAHKx
+   ALZVhi/mJpxxjjHV5fq5U5VnBrUVPVXoplX6dL+Eqgn82l5gRkH2vWmue
+   cv4qDz7M8hm7hiQtqhjrT98eJgD00GMFhFT6TYcjrthDyP8FUJCo266A8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="14300851"
 X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
-   d="scan'208";a="392785563"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 22:00:27 -0800
+   d="scan'208";a="14300851"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 22:11:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="769108675"
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="1023024232"
 X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
-   d="scan'208";a="769108675"
+   d="scan'208";a="1023024232"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 18 Dec 2023 22:00:24 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 18 Dec 2023 22:11:24 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rFT9R-0004uu-0t;
-	Tue, 19 Dec 2023 06:00:21 +0000
-Date: Tue, 19 Dec 2023 14:00:12 +0800
+	id 1rFTK6-0004v9-15;
+	Tue, 19 Dec 2023 06:11:22 +0000
+Date: Tue, 19 Dec 2023 14:10:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>, Keith Busch <kbusch@kernel.org>,
-	James Smart <james.smart@broadcom.com>,
-	Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: Re: [PATCH v3 15/16] nvmet-fc: avoid deadlock on delete association
- path
-Message-ID: <202312191347.7X0VJgnV-lkp@intel.com>
-References: <20231218153105.12717-16-dwagner@suse.de>
+To: Eric Woudstra <ericwouds@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC net-next 2/2] Add the Airoha EN8811H PHY driver
+Message-ID: <202312191343.AXWGUtmC-lkp@intel.com>
+References: <20231216194432.18963-3-ericwouds@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,71 +50,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231218153105.12717-16-dwagner@suse.de>
+In-Reply-To: <20231216194432.18963-3-ericwouds@gmail.com>
 
-Hi Daniel,
+Hi Eric,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linux-nvme/nvme-6.8]
-[also build test ERROR on linus/master v6.7-rc6 next-20231218]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Wagner/nvmet-fc-remove-unnecessary-bracket/20231219-003117
-base:   git://git.infradead.org/nvme.git nvme-6.8
-patch link:    https://lore.kernel.org/r/20231218153105.12717-16-dwagner%40suse.de
-patch subject: [PATCH v3 15/16] nvmet-fc: avoid deadlock on delete association path
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231219/202312191347.7X0VJgnV-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Woudstra/Add-the-Airoha-EN8811H-PHY-driver/20231217-034635
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231216194432.18963-3-ericwouds%40gmail.com
+patch subject: [PATCH RFC net-next 2/2] Add the Airoha EN8811H PHY driver
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231219/202312191343.AXWGUtmC-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312191347.7X0VJgnV-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312191343.AXWGUtmC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312191347.7X0VJgnV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312191343.AXWGUtmC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/nvme/target/fc.c:253:2: error: call to undeclared function 'nvmet_fc_tgtport_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           nvmet_fc_tgtport_put(tgtport);
-           ^
->> drivers/nvme/target/fc.c:259:13: error: static declaration of 'nvmet_fc_tgtport_put' follows non-static declaration
-   static void nvmet_fc_tgtport_put(struct nvmet_fc_tgtport *tgtport);
+   drivers/net/phy/air_en8811h.c:199:17: error: use of undeclared identifier 'TRIGGER_NETDEV_LINK_2500'
+                                                  BIT(TRIGGER_NETDEV_LINK_2500)   |
+                                                      ^
+   drivers/net/phy/air_en8811h.c:587:19: error: use of undeclared identifier 'TRIGGER_NETDEV_LINK_2500'
+           if (rules & (BIT(TRIGGER_NETDEV_LINK_2500) | BIT(TRIGGER_NETDEV_LINK))) {
+                            ^
+   drivers/net/phy/air_en8811h.c:737:23: error: use of undeclared identifier 'TRIGGER_NETDEV_LINK_2500'
+           priv->led[0].rules = AIR_DEFAULT_TRIGGER_LED0;
+                                ^
+   drivers/net/phy/air_en8811h.c:143:39: note: expanded from macro 'AIR_DEFAULT_TRIGGER_LED0'
+   #define AIR_DEFAULT_TRIGGER_LED0 (BIT(TRIGGER_NETDEV_LINK_2500) | \
+                                         ^
+   drivers/net/phy/air_en8811h.c:738:23: error: use of undeclared identifier 'TRIGGER_NETDEV_LINK_2500'
+           priv->led[1].rules = AIR_DEFAULT_TRIGGER_LED1;
+                                ^
+   drivers/net/phy/air_en8811h.c:147:39: note: expanded from macro 'AIR_DEFAULT_TRIGGER_LED1'
+   #define AIR_DEFAULT_TRIGGER_LED1 (BIT(TRIGGER_NETDEV_LINK_2500) | \
+                                         ^
+>> drivers/net/phy/air_en8811h.c:875:5: warning: no previous prototype for function 'en8811h_c45_read_link' [-Wmissing-prototypes]
+   int en8811h_c45_read_link(struct phy_device *phydev)
+       ^
+   drivers/net/phy/air_en8811h.c:875:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int en8811h_c45_read_link(struct phy_device *phydev)
+   ^
+   static 
+   drivers/net/phy/air_en8811h.c:1012:12: warning: no previous prototype for function 'en8811h_phy_driver_register' [-Wmissing-prototypes]
+   int __init en8811h_phy_driver_register(void)
+              ^
+   drivers/net/phy/air_en8811h.c:1012:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init en8811h_phy_driver_register(void)
+   ^
+   static 
+   drivers/net/phy/air_en8811h.c:1024:13: warning: no previous prototype for function 'en8811h_phy_driver_unregister' [-Wmissing-prototypes]
+   void __exit en8811h_phy_driver_unregister(void)
                ^
-   drivers/nvme/target/fc.c:253:2: note: previous implicit declaration is here
-           nvmet_fc_tgtport_put(tgtport);
-           ^
-   2 errors generated.
+   drivers/net/phy/air_en8811h.c:1024:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __exit en8811h_phy_driver_unregister(void)
+   ^
+   static 
+   3 warnings and 4 errors generated.
 
 
-vim +/nvmet_fc_tgtport_put +253 drivers/nvme/target/fc.c
+vim +/en8811h_c45_read_link +875 drivers/net/phy/air_en8811h.c
 
-   244	
-   245	
-   246	static void nvmet_fc_handle_ls_rqst_work(struct work_struct *work);
-   247	static void nvmet_fc_fcp_rqst_op_defer_work(struct work_struct *work);
-   248	static void nvmet_fc_put_tgtport_work(struct work_struct *work)
-   249	{
-   250		struct nvmet_fc_tgtport *tgtport =
-   251			container_of(work, struct nvmet_fc_tgtport, put_work);
-   252	
- > 253		nvmet_fc_tgtport_put(tgtport);
-   254	}
-   255	static void nvmet_fc_tgt_a_put(struct nvmet_fc_tgt_assoc *assoc);
-   256	static int nvmet_fc_tgt_a_get(struct nvmet_fc_tgt_assoc *assoc);
-   257	static void nvmet_fc_tgt_q_put(struct nvmet_fc_tgt_queue *queue);
-   258	static int nvmet_fc_tgt_q_get(struct nvmet_fc_tgt_queue *queue);
- > 259	static void nvmet_fc_tgtport_put(struct nvmet_fc_tgtport *tgtport);
-   260	static int nvmet_fc_tgtport_get(struct nvmet_fc_tgtport *tgtport);
-   261	static void nvmet_fc_handle_fcp_rqst(struct nvmet_fc_tgtport *tgtport,
-   262						struct nvmet_fc_fcp_iod *fod);
-   263	static void nvmet_fc_delete_target_assoc(struct nvmet_fc_tgt_assoc *assoc);
-   264	static void nvmet_fc_xmt_ls_rsp(struct nvmet_fc_tgtport *tgtport,
-   265					struct nvmet_fc_ls_iod *iod);
-   266	
-   267	
+   874	
+ > 875	int en8811h_c45_read_link(struct phy_device *phydev)
+   876	{
+   877		int val;
+   878	
+   879		/* Read link state from known reliable register (latched) */
+   880	
+   881		if (!phy_polling_mode(phydev) || !phydev->link) {
+   882			val = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_STAT1);
+   883			if (val < 0)
+   884				return val;
+   885			phydev->link = !!(val & MDIO_STAT1_LSTATUS);
+   886	
+   887			if (phydev->link)
+   888				return 0;
+   889		}
+   890	
+   891		val = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_STAT1);
+   892		if (val < 0)
+   893			return val;
+   894		phydev->link = !!(val & MDIO_STAT1_LSTATUS);
+   895	
+   896		return 0;
+   897	}
+   898	
 
 -- 
 0-DAY CI Kernel Test Service
