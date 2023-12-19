@@ -1,173 +1,128 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17A620DD1
-	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 16:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBB937D07;
+	Tue, 19 Dec 2023 17:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UikkrwA0"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3366ddd1eddso2096975f8f.0
-        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 08:55:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703004933; x=1703609733; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pr1gwYwEAqV3CPDFt5tJeZc4Ej3mhik7sPY5D9i4L+4=;
-        b=UikkrwA0bUksIBJDUKzOH4z3OPaS21jUdslJpn7zp/amnEG6PZai4HPya0VU8gehH9
-         YaCFhDIfhqPIKMFeaU6BuIL3LVVhwAXDcZN4rVBnmqwkjfov3ACZRlpJQAZn3LglGMYE
-         Z2BJl7Pa3Hr7lHGRIhos6dbeo/26+kV+ggaZqg2RzB0xAI30gzKaOjYe9jjsP58o8SD+
-         PtwJVGCEuugg5vfHJz+Cadnn4f6/7Ffg5443arPJFekvKSVRZ3wa7JfQLvbU2jB7ru4c
-         WRQi61uypHC1gs2Q4ebeLu8/K0oM5mKP9XllzCJoWEM860LVVxy1bDLBx8yMwFfFwQ56
-         neAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703004933; x=1703609733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pr1gwYwEAqV3CPDFt5tJeZc4Ej3mhik7sPY5D9i4L+4=;
-        b=nkgbOLdzfxl3iYD3kpQqJYfovI9336hdlpZ8QZbMk6+RtfqpuRg80xyokvEd3OzSn3
-         /cs///B+qhOWXMJOE9CklFCJ1wEwz3m2m2yWtJ91CM9ZrGPQ7Ka79zmNNLXFJV0rTuWH
-         QE7WyqioTJtSsM0awv2B6f4uycQH2Cdt/9uIoG7RO1gxIwmfWQYQDQ3R5TVtJeKbbr0r
-         MyjXObp5F1Bumgupp4A4MD27GEJKmfY0ICbzJQRBnXWP4Qb6MHjUOBQ++t4MCKyJPAko
-         EkfdFVYnHsaWGtdj4J6bw0jsCfQLz8WiS7voVdcPZggjOtlnaf1Bgh12Hxd4xIJ+6Nnz
-         ko9Q==
-X-Gm-Message-State: AOJu0YxwbKWQ862y5W0NuxjwlhfBZeXU025xLIeJgGm+Qd7DwOdx1ZEW
-	kb99URtK0P774Y+Pl0z1LsO97Z0VoAMtho7QbQAfoQ==
-X-Google-Smtp-Source: AGHT+IHdJSnW1uoy3+KysPNVwLZ4H/jx1KVZ/uOvjz42emCllqfn1IhGJ3uQ5Ral4Y9max8Bshqiu+TgQgc/H/ReIBY=
-X-Received: by 2002:adf:e4c3:0:b0:336:60da:7530 with SMTP id
- v3-20020adfe4c3000000b0033660da7530mr1849799wrm.158.1703004932880; Tue, 19
- Dec 2023 08:55:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hyLDq8Xd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703005650; x=1734541650;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7CCydjYpVFyCE1NmWRWu9KhqfwmO/JAH6rhqygekUeY=;
+  b=hyLDq8XdkGB700CRHoM7J+LYHWFemiU3Ro91rdLMi3E2LUkxhKBrp3hk
+   amdOFB+UbJFDoNY8bL8XQh+7Cz2+6WcQjHSvLZkifHbTBGCBCv/INdrPR
+   0nX7WutNsSKQfWRGfcFb1RXGgkJEekNkJjL9D49/NFL/jdcL2uGbB5++l
+   DL/bf0/bfRCC8VoCRYkrADkmVojRbVs8piBwlu/xF9VVr+RFKIzTDB3h8
+   hnUIHbmDQuD5ZvafN07gxwLOu80p0iOTkKou+siIPeC1al2JdTw3k0cCS
+   JY2rPF6RdY2Q+zjk6cWnc58zQ/bJfwQiWdrOBNk2BFOur6nvx+NlVCkms
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="462142440"
+X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
+   d="scan'208";a="462142440"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 09:07:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="752223097"
+X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
+   d="scan'208";a="752223097"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 Dec 2023 09:07:10 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rFdYh-0005iP-2u;
+	Tue, 19 Dec 2023 17:07:07 +0000
+Date: Wed, 20 Dec 2023 01:06:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal Kubiak <michal.kubiak@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexander Lobakin <aleksander.lobakin@intel.com>
+Subject: [alobakin:idpf-libie 32/36]
+ drivers/net/ethernet/intel/idpf/idpf_txrx.c:747: warning: Function parameter
+ or member 'arg' not described in 'idpf_xdp_rxq_info_init'
+Message-ID: <202312200100.eqIFXLJr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231215171020.687342-21-bigeasy@linutronix.de>
- <202312161212.D5tju5i6-lkp@intel.com> <20231219000116.GA3956476@dev-arch.thelio-3990X>
-In-Reply-To: <20231219000116.GA3956476@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 19 Dec 2023 08:55:21 -0800
-Message-ID: <CAKwvOdkfjyKz6686RzAGjfKMVPriLM8XuNueYyWcd_Sj-WnJbg@mail.gmail.com>
-Subject: Re: [PATCH net-next 20/24] net: intel: Use nested-BH locking for XDP redirect.
-To: Nathan Chancellor <nathan@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Boqun Feng <boqun.feng@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eric Dumazet <edumazet@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Jesse Brandeburg <jesse.brandeburg@intel.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, bpf@vger.kernel.org, 
-	intel-wired-lan@lists.osuosl.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Dec 18, 2023 at 4:01=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Sat, Dec 16, 2023 at 12:53:43PM +0800, kernel test robot wrote:
-> > Hi Sebastian,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on net-next/main]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Andrze=
-j-Siewior/locking-local_lock-Introduce-guard-definition-for-local_lock/2023=
-1216-011911
-> > base:   net-next/main
-> > patch link:    https://lore.kernel.org/r/20231215171020.687342-21-bigea=
-sy%40linutronix.de
-> > patch subject: [PATCH net-next 20/24] net: intel: Use nested-BH locking=
- for XDP redirect.
-> > config: arm-defconfig (https://download.01.org/0day-ci/archive/20231216=
-/202312161212.D5tju5i6-lkp@intel.com/config)
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.gi=
-t f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20231216/202312161212.D5tju5i6-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202312161212.D5tju5i6-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> drivers/net/ethernet/intel/igb/igb_main.c:8620:3: error: cannot jump=
- from this goto statement to its label
-> >                    goto xdp_out;
-> >                    ^
+tree:   https://github.com/alobakin/linux idpf-libie
+head:   53bb970b70f1017bf36da5a9067d2e04617b4f49
+commit: ded9bfd3402769c0e3ef15041f46b55ce22c590d [32/36] idpf: prepare structures to support xdp
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231220/202312200100.eqIFXLJr-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231220/202312200100.eqIFXLJr-lkp@intel.com/reproduce)
 
-^ The problematic goto should be replaced with an early return. (and
-perhaps a comment that you can't jump over __cleanup variable
-initialization).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312200100.eqIFXLJr-lkp@intel.com/
 
-Otherwise the compiler cannot put the cleanup in the destination basic
-block; it would have to split the edges and have all the happy paths
-go to a synthesized basic block that runs the cleanup, then jumps to
-the original destination.
+All warnings (new ones prefixed by >>):
 
-> >    drivers/net/ethernet/intel/igb/igb_main.c:8624:2: note: jump bypasse=
-s initialization of variable with __attribute__((cleanup))
-> >            guard(local_lock_nested_bh)(&bpf_run_lock.redirect_lock);
-> >            ^
-> >    include/linux/cleanup.h:142:15: note: expanded from macro 'guard'
-> >            CLASS(_name, __UNIQUE_ID(guard))
-> >                         ^
-> >    include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE=
-_ID'
-> >    #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), _=
-_COUNTER__)
-> >                                ^
-> >    include/linux/compiler_types.h:84:22: note: expanded from macro '__P=
-ASTE'
-> >    #define __PASTE(a,b) ___PASTE(a,b)
-> >                         ^
-> >    include/linux/compiler_types.h:83:23: note: expanded from macro '___=
-PASTE'
-> >    #define ___PASTE(a,b) a##b
-> >                          ^
-> >    <scratch space>:52:1: note: expanded from here
-> >    __UNIQUE_ID_guard753
-> >    ^
-> >    1 error generated.
->
-> I initially thought that this may have been
-> https://github.com/ClangBuiltLinux/linux/issues/1886 but asm goto is not
-> involved here.
->
-> This error occurs because jumping over the initialization of a variable
-> declared with __attribute__((__cleanup__(...))) does not prevent the
-> clean up function from running as one may expect it to, but could
-> instead result in the clean up function getting run on uninitialized
-> memory. A contrived example (see the bottom of the "Output" tabs for the
-> execution output):
->
-> https://godbolt.org/z/9bvGboxvc
->
-> While there is a warning from GCC in that example, I don't see one in
-> the kernel's case. I see there is an open GCC issue around this problem:
->
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D91951
->
-> While it is possible that there may not actually be a problem with how
-> the kernel uses __attribute__((__cleanup__(...))) and gotos, I think
-> clang's behavior is reasonable given the potential footguns that this
-> construct has.
->
-> Cheers,
-> Nathan
->
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:747: warning: Function parameter or member 'arg' not described in 'idpf_xdp_rxq_info_init'
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:747: warning: Excess function parameter 'splitq' description in 'idpf_xdp_rxq_info_init'
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:777: warning: Function parameter or member 'arg' not described in 'idpf_xdp_rxq_info_deinit'
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +747 drivers/net/ethernet/intel/idpf/idpf_txrx.c
+
+   738	
+   739	/**
+   740	 * idpf_xdp_rxq_info_init - Setup XDP RxQ info for a given Rx queue
+   741	 * @rxq: Rx queue for which the resources are setup
+   742	 * @splitq: flag indicating if the HW works in split queue mode
+   743	 *
+   744	 * Return: 0 on success, negative on failure.
+   745	 */
+   746	static int idpf_xdp_rxq_info_init(struct idpf_queue *rxq, void *arg)
+ > 747	{
+   748		const struct idpf_vport *vport = rxq->vport;
+   749		const struct page_pool *pp;
+   750		struct xdp_mem_info *mem;
+   751		int err;
+   752	
+   753		err = __xdp_rxq_info_reg(&rxq->xdp_rxq, vport->netdev, rxq->idx,
+   754					 rxq->q_vector->napi.napi_id,
+   755					 rxq->rx_buf_size);
+   756		if (err)
+   757			return err;
+   758	
+   759		pp = arg ? rxq->rxq_grp->splitq.bufq_sets[0].bufq.pp : rxq->pp;
+   760	
+   761		/* Memory model is already registered by libie, just copy the ID */
+   762		mem = &rxq->xdp_rxq.mem;
+   763		mem->type = MEM_TYPE_PAGE_POOL;
+   764		mem->id = pp->xdp_mem_id;
+   765	
+   766		rxq->xdpqs = vport->txqs[vport->xdp_txq_offset];
+   767		rxq->num_xdp_txq = vport->num_xdp_txq;
+   768	
+   769		return 0;
+   770	}
+   771	
+   772	/**
+   773	 * idpf_xdp_rxq_info_deinit - Deinit XDP RxQ info for a given Rx queue
+   774	 * @rxq: Rx queue for which the resources are destroyed
+   775	 */
+   776	static int idpf_xdp_rxq_info_deinit(struct idpf_queue *rxq, void *arg)
+ > 777	{
+   778		rxq->xdpqs = NULL;
+   779		rxq->num_xdp_txq = 0;
+   780	
+   781		/* Memory model is managed by libie */
+   782		memset(&rxq->xdp_rxq, 0, sizeof(rxq->xdp_rxq));
+   783	
+   784		return 0;
+   785	}
+   786	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
