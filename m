@@ -1,48 +1,36 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07AAC2031A;
-	Tue, 19 Dec 2023 14:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O9J2V3TO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702997998; x=1734533998;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ka/xTThvuxrMrbNmjd7YloPMsKbLXmeY/GI2hUSi8Cw=;
-  b=O9J2V3TOvh+fZvwIbVGowGM8+TzSskoCJRBbDaccklsWOLi3JjO18kf3
-   bRK9xam9ozF/qx7Y89McGtVobXsKfQp9chEp04OkHgeHlqqRW7Pp1zMQE
-   TyQQmxM8lI+feUX5rypikx3t9DycGD95uTYe0K/4IZhFz5zLLowrnWdM1
-   yfRQrGVc2Bq4XOtRs2AsORX+Sk8Dq3vZVTyzDVdAD/pNaW3BS51Wb5ePr
-   ABZqDoGCgwhT0ppmwX0xCi4LD0by2L88WO5QEprGq25hkBNsWDhQRIVSQ
-   VQZ2nE3nvL6yyMbPCtKEFiOjc96HRKqetg+u6cM/EqzGDT3n8+63hA5lA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="481858669"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9071D541
+	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 15:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="2501827"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="481858669"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 06:59:57 -0800
+   d="scan'208";a="2501827"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 07:51:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="949189744"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="841919777"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="949189744"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 19 Dec 2023 06:59:55 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rFbZZ-0005Uv-0b;
-	Tue, 19 Dec 2023 14:59:53 +0000
-Date: Tue, 19 Dec 2023 22:58:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefan Binding <sbinding@opensource.cirrus.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Takashi Iwai <tiwai@suse.de>
-Subject: [linux-next:master 8770/9096] ld.lld: error: undefined symbol:
- spi_setup
-Message-ID: <202312192256.lJelQEoZ-lkp@intel.com>
+   d="scan'208";a="841919777"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 07:50:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy@kernel.org>)
+	id 1rFcMd-00000007IkS-34jQ;
+	Tue, 19 Dec 2023 17:50:35 +0200
+Date: Tue, 19 Dec 2023 17:50:35 +0200
+From: Andy Shevchenko <andy@kernel.org>
+To: tanzirh@google.com
+Cc: Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+	Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v3 1/2] kernel.h: removed REPEAT_BYTE from kernel.h
+Message-ID: <ZYG7y0A0lzzN0GqR@smile.fi.intel.com>
+References: <20231218-libstringheader-v3-0-500bd58f0f75@google.com>
+ <20231218-libstringheader-v3-1-500bd58f0f75@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,25 +39,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231218-libstringheader-v3-1-500bd58f0f75@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   aa4db8324c4d0e67aa4670356df4e9fae14b4d37
-commit: b592ed2e1d78a475f781802e441c499ab446975b [8770/9096] ALSA: hda: cs35l41: Support additional ASUS ROG 2023 models
-config: arm64-randconfig-002-20231219 (https://download.01.org/0day-ci/archive/20231219/202312192256.lJelQEoZ-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 5ac12951b4e9bbfcc5791282d0961ec2b65575e9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312192256.lJelQEoZ-lkp@intel.com/reproduce)
+On Mon, Dec 18, 2023 at 06:44:47PM +0000, tanzirh@google.com wrote:
+> This patch creates wordpart.h and includes it in asm/word-at-a-time.h
+> for the all architectures. WORD_AT_A_TIME_CONSTANTS depends on kernel.h
+> because of REPEAT_BYTE. Moving this to another header and including it
+> where necessary allows us to not include the bloated kernel.h. Making
+> this implicit dependancy on REPEAT_BYTE explicit allows for later
+> improvements in the lib/string.c inclusion list.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312192256.lJelQEoZ-lkp@intel.com/
+...
 
-All errors (new ones prefixed by >>):
+>  #include <linux/kernel.h>
+> +#include <linux/wordpart.h>
 
->> ld.lld: error: undefined symbol: spi_setup
-   >>> referenced by cs35l41_hda_property.c
-   >>>               sound/pci/hda/cs35l41_hda_property.o:(generic_dsd_config) in archive vmlinux.a
+Expected is to get rid of kernel.h completely.
+For instance, in arch/arm/include/asm/word-at-a-time.h case this
+should become:
+
+#include <linux/bitops.h>
+#include <linux/wordpart.h>
+
+(Briefly looking the same is for include/asm-generic/word-at-a-time.h)
+
+And so on...
+
+...
+
+> --- a/include/linux/kernel.h
+> +++ b/include/linux/kernel.h
+> @@ -39,13 +39,6 @@
+
+> -/**
+> - * REPEAT_BYTE - repeat the value @x multiple times as an unsigned long value
+> - * @x: value to repeat
+> - *
+> - * NOTE: @x is not checked for > 0xff; larger values produce odd results.
+> - */
+> -#define REPEAT_BYTE(x)	((~0ul / 0xff) * (x))
+
+Okay, we don't back include because we changing all the users at once.
+
+...
+
+> +++ b/include/linux/wordpart.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+
+> +/*
+> + * Copyright (C) 2023 Google LLC <tanzirh@google.com>
+> + */
+
+Can be on a single line.
+
+Is it? Personally I skip this from the split headers, but I'm not your lawyer.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
