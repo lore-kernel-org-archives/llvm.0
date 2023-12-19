@@ -1,134 +1,85 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35253B198
-	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 21:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF46B3D0B1
+	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 21:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRokQp45"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-67f645f2e3fso4646846d6.1
-        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 13:48:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QLZDMjTO"
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3ba4850f65dso2809272b6e.2
+        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 13:52:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703022498; x=1703627298; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1703022740; x=1703627540; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r1JR2619YMG5mo1u6s9CGtT+m7a20YcNHq4R9VhkzMY=;
-        b=RRokQp4539MD0NJaaBrPp4s0yXBUqQe+V0lMISR1KZQ9KqML2CRvLzw6WAsFAHZCtY
-         m8qVBtSQ2bpAUFQdASHQV2+LbpVbdRfyXVgqGjkUR2BIFzSKtGqF0DWoi6yf4cHiBmPO
-         O7YTR4/NhIgDpt11ivI+xoywiV70hJmhFnM8ViA1mYDFL5R+af2LK60uY8mj2Q6gzlrO
-         miDHRiMKg0BtBLLxU8Bva+NTPeb1R5wOCf4TK/aUBwfs4SVN6JOwVXryrDZYvi2lAKAS
-         YzjsAWD/U4Sl5WbS3zff5xrZgpcfhwo8bTqTs2OZ456yF2xwn2sx1qi6ybL4DfTj6sWb
-         lL2A==
+        bh=h/HELoxRBihubnQTIbfT46yyuCF92jjoc5j2WnCAxMg=;
+        b=QLZDMjTOT1QN5FpBLMPfUoCQs6EyptjHaMHhHhvv6s+XMBrcF70pqm4HVEen3XLOF4
+         8FY44YbU7B6pts8d3Ro5flPzhKHeIrYLEUmXaiV7tysZjmp4i6IPF89IIfEZAuxgrksn
+         qlnzhV24xMMo07FoASBnUskiJzUrJOtSraFt/gZRpkXQvhXueRlPzWLLDo6HuqCvwIGv
+         RyuRYN5BlcASFHdTZbmm3pLjdWS6J+RTbJTR9e2CNd5Kx9P+tAnfsbrv6bIE/xS5hdyo
+         4ZOjUtNzrmP24QtGmywPLRMNB8UlD/hgdchEmRVIMtWwHm2wJQx0qZkoeXjPGQwMAIjE
+         nn8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703022498; x=1703627298;
+        d=1e100.net; s=20230601; t=1703022740; x=1703627540;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=r1JR2619YMG5mo1u6s9CGtT+m7a20YcNHq4R9VhkzMY=;
-        b=h+wkahvjd4lpyfozWMS4cvWTHe/yjT9yOyubmgc/ysNR9Gv2t9vnUFhOKQMQ9U/qDn
-         HTlsd7/a8geiCg7bdw0ReIkDpjydJcLvcHG/qnq9EzrZp9w3obotG9U44udQKHyPuRmm
-         ag+r/W9eqofhFo3UvQrJLyoLEtkQ+imnw0eOboH1HEPojr6Yof8sMOQSIjdu9I0iSoSY
-         oi5sUmcVxbPTwHCPWezc5G9uDPDZYJVGhbA/O6lt8BxBaxu4sHgGLIioupH9Xj6P91Ub
-         wkMrpE1V2ZoK0Kf18sAKNqkzFG6Q0rGI3fJj7X4QRZk/pBAgzxxt11QtzRAloMOlBS1j
-         bz/w==
-X-Gm-Message-State: AOJu0Yyfio/PD3LpgHgL7ORVQr1etBtpjScgBx74uRfu13hrVnOoVMjI
-	L9zzES4APrFqDT+jSAGyeH2BU8B354UKLJgVX58=
-X-Google-Smtp-Source: AGHT+IEuvOxivrGVKXoBh8W4o6i+lQHNJN5ZZNaEp5+HZ5Cw1Mu1UB3uQjBUlayK5Rax9O7HaOG6biGrh8l54QSI5PE=
-X-Received: by 2002:a05:6214:1c09:b0:67f:30ad:26c0 with SMTP id
- u9-20020a0562141c0900b0067f30ad26c0mr7483675qvc.55.1703022498521; Tue, 19 Dec
- 2023 13:48:18 -0800 (PST)
+        bh=h/HELoxRBihubnQTIbfT46yyuCF92jjoc5j2WnCAxMg=;
+        b=IBcaZXBQs2eEUJcDYy88BmooWn5TTAHL4IUJOeXEfa78UHkwuUSuHjCvxgw7kxRhWb
+         5d5MnQFr+cOiI1wW4B0izaZVBXfrWN8er6S58dGpLR8beHA0Wtyf6sSf0emu/zdbTgoQ
+         l0FmuuTEwFGrAjxT2kejY23yjjCZILKqKjZgq3FREBAIImFmrcVgqoLjZz57B8Zc409t
+         r8x61Xnglj60dCiCNo4/4BVTmTt/tywEK3Ej65BkYeBMPy6fhxjBf/1XR1UblpqqyjP6
+         SI4VOT7KChSNa1o+InqiK26uAidoLwqqDHM0ztIPrYzcpfB3ZLl6wTQvc/VfOrq6ch24
+         SCcg==
+X-Gm-Message-State: AOJu0YztEtp8pvCJGcOeEyxozQekIGN8dDvXmk+17fDbSEn0QhKi0++k
+	yhMnLK6NI3tQ/qtip+5eUk1hF9nQ44iJuU59AqQ=
+X-Google-Smtp-Source: AGHT+IEYMovugHC3Wx2wWk978fWVMiH69UO6ZUgo0IecWqN29PEQku+lqbLZS9m5zTdKhg7b9KpHO8lfRDjZN6HORQs=
+X-Received: by 2002:a05:6808:10d4:b0:3bb:67fb:a451 with SMTP id
+ s20-20020a05680810d400b003bb67fba451mr1114878ois.114.1703022739808; Tue, 19
+ Dec 2023 13:52:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231219-libstringheader-v4-0-aaeb26495d2f@google.com> <20231219-libstringheader-v4-1-aaeb26495d2f@google.com>
-In-Reply-To: <20231219-libstringheader-v4-1-aaeb26495d2f@google.com>
+References: <20231219-libstringheader-v5-0-206d4afd309a@google.com> <20231219-libstringheader-v5-1-206d4afd309a@google.com>
+In-Reply-To: <20231219-libstringheader-v5-1-206d4afd309a@google.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 19 Dec 2023 23:47:42 +0200
-Message-ID: <CAHp75VdCb7FX31LkaJg3+a6mttvRGECPt6JS9fNp0SCxqbuqJQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] kernel.h: removed REPEAT_BYTE from kernel.h
+Date: Tue, 19 Dec 2023 23:51:43 +0200
+Message-ID: <CAHp75VfS7rYZwRP50cm5vYq_EO9ozA=_qrEm4u7jB1WMwOVc0A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] kernel.h: removed REPEAT_BYTE from kernel.h
 To: Tanzir Hasan <tanzirh@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Nick DeSaulniers <nnn@google.com>, 
+Cc: Kees Cook <keescook@chromium.org>, Nick Desaulniers <nnn@google.com>, 
 	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	llvm@lists.linux.dev, Al Viro <viro@zeniv.linux.org.uk>
+	Greg KH <gregkh@linuxfoundation.org>, llvm@lists.linux.dev, 
+	Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 19, 2023 at 8:10=E2=80=AFPM Tanzir Hasan <tanzirh@google.com> w=
+On Tue, Dec 19, 2023 at 8:48=E2=80=AFPM Tanzir Hasan <tanzirh@google.com> w=
 rote:
 >
 > This patch creates wordpart.h and includes it in asm/word-at-a-time.h
 > for the all architectures. WORD_AT_A_TIME_CONSTANTS depends on kernel.h
-
-for all
-
-("all" doesn't go with article)
-
 > because of REPEAT_BYTE. Moving this to another header and including it
 > where necessary allows us to not include the bloated kernel.h. Making
 > this implicit dependency on REPEAT_BYTE explicit allows for later
 > improvements in the lib/string.c inclusion list.
 
-...
+Same comments as per v4 apply here.
+According to the Submitting Patches the best time between versions is
+~1w. I understand your desire to close this quicker, but the result is
+actually the opposite. Take your time and check carefully what others
+commented and recommended. With this series it's fine to send a couple
+of times per (working) week. It sounds to me balanced between the
+complexity of the change and the people's willingness (having time?)
+to review.
 
-> --- a/arch/arm/include/asm/word-at-a-time.h
-> +++ b/arch/arm/include/asm/word-at-a-time.h
-
-> -#include <linux/kernel.h>
-> +#include <linux/wordpart.h>
-
-No, please, read what I told you carefully.
-
-...
-
-> --- a/arch/x86/include/asm/word-at-a-time.h
-> +++ b/arch/x86/include/asm/word-at-a-time.h
-> @@ -3,6 +3,7 @@
->  #define _ASM_WORD_AT_A_TIME_H
->
->  #include <linux/kernel.h>
-
-No, the macros used in this file doesn't require (after your patch)
-the kernel.h, these are in particular in asm/asm.h and
-asm/extable_fixup_types.h. I haven't looked at this closely to find a
-common header that kinda guarantees those two to be included.
-Otherwise we can use them directly.
-
-> +#include <linux/wordpart.h>
-
-...
-
->  #include <linux/init.h>
->  #include <linux/export.h>
-> -#include <linux/kernel.h>
-> +#include <linux/wordpart.h>
-
-Try to keep it more or less ordered. At list with given context it
-goes either after the slab.h or below (after those starting with 'f').
-
->  #include <linux/slab.h>
->  #include <linux/fs.h>
->  #include <linux/filelock.h>
-
-...
-
-> --- a/include/asm-generic/word-at-a-time.h
-> +++ b/include/asm-generic/word-at-a-time.h
-> @@ -2,7 +2,7 @@
->  #ifndef _ASM_WORD_AT_A_TIME_H
->  #define _ASM_WORD_AT_A_TIME_H
->
-> -#include <linux/kernel.h>
-> +#include <linux/wordpart.h>
->  #include <asm/byteorder.h>
-
-Same as in the above remark, read what I said in the previous round of revi=
-ews.
+Otherwise it's a good start!
 
 --=20
 With Best Regards,
