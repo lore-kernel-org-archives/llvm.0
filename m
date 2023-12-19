@@ -1,177 +1,136 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702BC2C6BF
-	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 16:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12621225CF
+	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 16:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YudzROjj"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40c3ceded81so47696795e9.1
-        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 08:43:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vWh5naqU"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-336746a545fso471632f8f.0
+        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 08:47:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703004197; x=1703608997; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1703004435; x=1703609235; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7yZxJx1cWmHeTwDIsoftViKVMbEIpjqlvBdK4HE8zHY=;
-        b=YudzROjjdJ7ipLL7RytIPcdrv86OeaYu4x6bfpKx1fHA3CQfm5GaTLjrzo9mG1gys1
-         gtpJDhG6TV4RZB23yFTPcBLRPV/XueCgSimWg64ED5yxD/oxjSp5YevBJHM6bkI76kRG
-         L/TYTo+HB+w8yqj0Cx6uo334HPFDg3aYtBJXf9AqtU6hBvZAH+quKf+GLDzWD+7epia6
-         fRNmKDZ+6ZMF7FRqgGCrfIGDULMbSmoWpf9anYkjtTcBBWHn+3gIVjZrTPQuBHotSpW7
-         yDLgxyJ2Ac3UCYSb6UjIAUqrib9DNUrwGQHbYHQ7k1PpoBjX2Ug13xrQeOA7CDeb6/4o
-         2Scw==
+        bh=z5zHcx7dkVEiF/efxCTuNtIR7mWk9m/p2X8vD2feHuM=;
+        b=vWh5naqUuapFD6Uyh13Yllafx50nEjYo51vhIx7Av+eezLqTiwpWT9k+JKBI5vJjIk
+         0pltlAnH+F2kLhiXbSr7xMddhYyX0pv+gjKQumHRLJuhwKC8rhRAVYm6SZat5B6n/LRj
+         +LcHlLoFFdjP8UkNa3Cg2rmqAz5JlRUbfPUJsmosH4fqY96SXCZ7+YCywe7ixTpGpKyY
+         itfCE5blDM6ffyZFN1tlSh+JWCD0zoXXlIP60hYwJ1zIQdrcMCCrWrlLRYRaKgNzdqGL
+         ED6vtW1S0sC/uIE4fwvxWV4O5wpBfgMnuXGOiG5EbKc9JvsTsvWLZeQYt33bhTvMvgVl
+         yT5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703004197; x=1703608997;
+        d=1e100.net; s=20230601; t=1703004435; x=1703609235;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7yZxJx1cWmHeTwDIsoftViKVMbEIpjqlvBdK4HE8zHY=;
-        b=S1tpW5q1TyJtGdQZbXfT+hh4sccX+vEnJ+ciTv7i0LSn1x33lspelFGBOMuo7dAo5X
-         yMLNK5rFQtnJivBGeQe/FsKbA4HL/4wWsV0T5C4t02fUjWq6KnLnSzGrVsSt+jE37+z6
-         8Ex+ldChWa8xPPf6XsjMx4jAuIK+1t0XBMMVRvgLyrMmaEeWTsSpLGKZExqh+nV4XYNK
-         IvOx8L0M4MVFtqaxBs6DV3Q3wZ63Lmut+DTDYapqTTysvOzR9tWrRek4cksHgfSx0QzB
-         ylUvyHNIPIkNPenw9uWLsMDBTrocYqdVyOgvLvBYcmY8g6nvXk7SdIt2TIUVWnPxonkM
-         ChTw==
-X-Gm-Message-State: AOJu0YxI0h1SRmX6z4m1pzX38EQvKPFhSUYPQ361YezSi1ejb7cUPwPw
-	LJP2Ej8u/eppQfu8bQcJPfxFHQAdBgwJWElID24dEg==
-X-Google-Smtp-Source: AGHT+IFCEwQvWYi051sDKnZS/vCosn8IFK6NHq4Z3M2iWFR1+/WyPMNdvfFI1SH/zh+bt6YmFxNQvnhuIahxA/po9/w=
-X-Received: by 2002:a05:600c:35c5:b0:40d:2399:e8ab with SMTP id
- r5-20020a05600c35c500b0040d2399e8abmr720646wmq.119.1703004197354; Tue, 19 Dec
- 2023 08:43:17 -0800 (PST)
+        bh=z5zHcx7dkVEiF/efxCTuNtIR7mWk9m/p2X8vD2feHuM=;
+        b=l1+/00qHgU03WHSqlEIsxR9zSS4USiutaAlGFs6OuokLHdmnkNZboY6NsmLlyxu3cm
+         j2K+vrOdRFhzBgIFsI8xD187nzbKTSbuK7IuqtqZZK/SuFJgMlChDjT8EuV6PJ0AQlV5
+         7EqOZ9Vblj+Wyfs5EL4XHH1nHL+r+KJvmmoyiQXEzxRi/2+H0UrsK/QQRSAPWT+7AqjS
+         yWtu70LH/2VYwU76R1Bppz/D+qoXTnEcFSnFlPWTfPfGGZi7lPIvYc5yAREr438VxhbY
+         8VMv/tzxp00Nqu1llNzdKv+K/qmlUBcTC7gu5pfJFGrGXhum0cc6B5Wzdq173ecAZYlL
+         POoA==
+X-Gm-Message-State: AOJu0YwOoaX0kPfBSOFn2fjWxiNSoHP245XPfs8k7rJjpW4vdE9Hm2rv
+	HnVcgOfRoU0BTMwONpF1r5u65s/hPU76SvtD8tCYZdV9OtsqhUlCzc4=
+X-Google-Smtp-Source: AGHT+IEB6Q2g8LHRFKTeYXCUcUVzYrIbfCS0SaIJo6WAyCg8owfEAy5KCGFincyZ4n7AKX4y6E2NV7fA48BKrHj3w+E=
+X-Received: by 2002:a5d:564c:0:b0:336:1d85:a87 with SMTP id
+ j12-20020a5d564c000000b003361d850a87mr657452wrw.12.1703004434990; Tue, 19 Dec
+ 2023 08:47:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231218-libstringheader-v3-0-500bd58f0f75@google.com>
- <20231218-libstringheader-v3-2-500bd58f0f75@google.com> <ZYG83l5AW_zVw2aR@smile.fi.intel.com>
-In-Reply-To: <ZYG83l5AW_zVw2aR@smile.fi.intel.com>
+References: <202312190546.yhWbDA8A-lkp@intel.com> <20231219021954.105864-1-sj@kernel.org>
+In-Reply-To: <20231219021954.105864-1-sj@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 19 Dec 2023 08:43:01 -0800
-Message-ID: <CAKwvOd=OXOHAiwue98jfqZ=TJSe21ecfgtf6jEihy8F=0EvWnA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] lib/string: shrink lib/string.i via IWYU
-To: Andy Shevchenko <andy@kernel.org>
-Cc: tanzirh@google.com, Kees Cook <keescook@chromium.org>, 
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Nick DeSaulniers <nnn@google.com>, Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
-	Greg KH <gregkh@linuxfoundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
+Date: Tue, 19 Dec 2023 08:47:03 -0800
+Message-ID: <CAKwvOdkvGTGiWzqEFq=kzqvxSYP5vUj3g9Z-=MZSQROzzSa_dg@mail.gmail.com>
+Subject: Re: [sj:damon/next 18/24] mm/damon/sysfs.c:96:30: error: 'counted_by'
+ only applies to C99 flexible array members
+To: SeongJae Park <sj@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	damon@lists.linux.dev, Kees Cook <keescook@chromium.org>, 
+	Bill Wendling <morbo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 19, 2023 at 7:55=E2=80=AFAM Andy Shevchenko <andy@kernel.org> w=
-rote:
+On Mon, Dec 18, 2023 at 6:20=E2=80=AFPM SeongJae Park <sj@kernel.org> wrote=
+:
 >
-> On Mon, Dec 18, 2023 at 06:44:48PM +0000, tanzirh@google.com wrote:
-> > This diff uses an open source tool include-what-you-use (IWYU) to modif=
-y
-> > the include list changing indirect includes to direct includes.
-> > IWYU is implemented using the IWYUScripts github repository which is a =
-tool that is
-> > currently undergoing development. These changes seek to improve build t=
-imes.
+> Hello,
+>
+> On Tue, 19 Dec 2023 05:30:54 +0800 kernel test robot <lkp@intel.com> wrot=
+e:
+>
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git da=
+mon/next
+> > head:   04cc9f72453632bf9e13e06f85c11147583e5d5d
+> > commit: 375af4a6e206c1aeb2edb1d80cbb42fd3349b287 [18/24] mm/damon/sysfs=
+: add __counted_by() annotation
+> > config: arm-randconfig-001-20231219 (https://download.01.org/0day-ci/ar=
+chive/20231219/202312190546.yhWbDA8A-lkp@intel.com/config)
+> > compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project=
+ 5ac12951b4e9bbfcc5791282d0961ec2b65575e9)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20231219/202312190546.yhWbDA8A-lkp@intel.com/reproduce)
 > >
-> > This change to lib/string.c resulted in a preprocessed size of
-> > lib/string.i from 26371 lines to 5263 lines (-80%) for the x86
-> > defconfig.
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202312190546.yhWbDA8A-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> mm/damon/sysfs.c:96:30: error: 'counted_by' only applies to C99 flex=
+ible array members
+> >       96 |         struct damon_sysfs_region **regions_arr __counted_by=
+(nr);
+> >          |                                     ^~~~~~~~~~~
+> >    mm/damon/sysfs.c:292:30: error: 'counted_by' only applies to C99 fle=
+xible array members
+> >      292 |         struct damon_sysfs_target **targets_arr __counted_by=
+(nr);
+> >          |                                     ^~~~~~~~~~~
+> >    mm/damon/sysfs.c:815:31: error: 'counted_by' only applies to C99 fle=
+xible array members
+> >      815 |         struct damon_sysfs_context **contexts_arr __counted_=
+by(nr);
+> >          |                                      ^~~~~~~~~~~~
+> >    mm/damon/sysfs.c:1666:31: error: 'counted_by' only applies to C99 fl=
+exible array members
+> >     1666 |         struct damon_sysfs_kdamond **kdamonds_arr __counted_=
+by(nr);
+> >          |                                      ^~~~~~~~~~~~
+> >    4 errors generated.
+> >
+> >
+> > vim +/counted_by +96 mm/damon/sysfs.c
+> >
+> >     89
+> >     90        /*
+> >     91         * init_regions directory
+> >     92         */
+> >     93
+> >     94        struct damon_sysfs_regions {
+> >     95                struct kobject kobj;
+> >   > 96                struct damon_sysfs_region **regions_arr __counted=
+_by(nr);
+> >     97                int nr;
+> >     98        };
+> >     99
 >
-> ...
->
-> >  #define __NO_FORTIFY
-> >  #include <linux/types.h>
-> > -#include <linux/string.h>
-> > -#include <linux/ctype.h>
-> > -#include <linux/kernel.h>
-> > -#include <linux/export.h>
-> > +#include <linux/bits.h>
-> >  #include <linux/bug.h>
-> >  #include <linux/errno.h>
-> > -#include <linux/slab.h>
->
-> > -
->
-> Why this blank is removed?
+> Thank you for this report.  I will remove the commit from the tree.
 
-The automation isn't aware of any convention around having blank lines
-separate linux/* vs asm/*.  Is that a convention we have throughout
-the kernel, or just this file?
-
-If we rerun the automation on this file after Tanzir's patch here, we
-get no further changes.  If we manually touch up the results, then
-rerun the automation, it will undo the manual touch ups.
-
-I don't mind saying "you might have to manually touch up the results
-of the automation to comply with <link to documentation on stated
-kernel policy/style guide>" but on the other hand I also think it
-would be nice if other folks run the automation so that they don't get
-additional changes.  I'd like to avoid drive-by patches that just undo
-any manual touch ups.
-
->
-> > +#include <linux/linkage.h>
-> > +#include <linux/stddef.h>
-> > +#include <linux/string.h>
-> > +#include <linux/ctype.h>
-> >  #include <asm/unaligned.h>
-> > -#include <asm/byteorder.h>
-> > +#include <asm/rwonce.h>
-> >  #include <asm/word-at-a-time.h>
-> >  #include <asm/page.h>
->
-> Sort this group alphabetically as well.
-
-By default the automation sorts the result.  I asked Tanzir to
-explicitly disable that; otherwise the resulting diffstat is hard to
-tell precisely what was removed/added vs simply moved.
-
-If he kept the default behavior, I highly suspect the feedback would
-have been along the lines of "please don't sort the result; I can't
-tell what moved vs was added or removed."
-
-Perhaps we should add another commit on the series that manually sorts
-the results _after_ the automation?
-
-Do we have anything in Documentation/process/coding-style.rst about
-sorting headers? There's a blip about clang-format sorting them, but
-we don't have strong guidance along the lines of "you ought to sort
-your includes (when you don't have special cases like x-macros)."
-
->
-> > +#include <vdso/limits.h>
->
-> Just use linux/limits.h.
->
-> VDSO is a very special UAPI case. So it's even stricter rule
-> than for asm/ for using anything from there.
-
-We can add a special rule for this, Tanzir, please add. And remember
-to re-measure the results of that change for this patch's commit
-message.
-
->
-> Expected result:
->
-> #include <linux/bits.h>
-> #include <linux/bug.h>
-> #include <linux/ctype.h>
-> #include <linux/errno.h>
-> #include <linux/limits.h>
-> #include <linux/linkage.h>
-> #include <linux/stddef.h>
-> #include <linux/string.h>
-> #include <linux/types.h>
->
-> #include <asm/page.h>
-> #include <asm/rwonce.h>
-> #include <asm/unaligned.h>
-> #include <asm/word-at-a-time.h>
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+Being able to annotate pointers with this attribute is in the works
+(but is not ready yet). Thanks for thinking of this and trying it out
+though! Consider adding a todo to add such attribute in the future!
 
 
 --=20
