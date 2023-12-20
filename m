@@ -1,140 +1,97 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E223D0CA
-	for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 23:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB9AFBE1;
+	Wed, 20 Dec 2023 00:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lfb3I6zX"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40c29f7b068so56087765e9.0
-        for <llvm@lists.linux.dev>; Tue, 19 Dec 2023 15:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703026843; x=1703631643; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fZwm6JZ4sNLkRRVAKkvheMbMEQKEA6/K7E70Hl7Hv90=;
-        b=lfb3I6zX+1JPZ8XXZoDwZP83z6Hy10btjHV+GyWrKOSDOfAISDAVIkywGqCUBkOKHZ
-         g00nXV9bs5+WGlRUdjsUrA8xywcrcZ6oCX/tLSjjByQSZXS7XeSRInL8wSXd47/+cZBi
-         9B1wO6xSslsYNOwdq7SFXFJ7aFCop8fQ+4OT3FUOhVkRQ8FTM7Hl4oaAnoFju2OWcXaC
-         A/2iYzbcOvvNmByC32vdVqpNkvK51De4ZAabJIKKMjpiSzQlISgizNINmOQIvAJiewIz
-         zXDa/zDylXcgq6UJSNz9UHv1jyM3xxq8jChpxgdKVbKpx23wySl8TIqdEvpSawjSIKsq
-         ZYEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703026843; x=1703631643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fZwm6JZ4sNLkRRVAKkvheMbMEQKEA6/K7E70Hl7Hv90=;
-        b=Ia1Kw8CH2mhv+5HOJ8xKGIGVBc7O54yDPCtxfXaFxZVDzQhDjY74nKnuwm3pY05Noq
-         fGAm75O5aGh6nzzRwZFF0Ihl68UocFfeYykiLRQaIWEZrsd63NkgANtpiEs5sQJc0ril
-         YrXM6wWQ/VD8URhGxFJnaWxlLbRzQadacYN3pL6NTOx8Z9pA4/9K1T62bnf1TCVfXfjc
-         sB8ZnjN0xu+xREkla4zRQ0NKskwo/xpP6zZx6N/75F3GGsFY5FF7XRuTjEO8eOsnXRLZ
-         EkLkUUIZYl66X/hFz2U3J9z3dr895wwaZU4c4rzHUt7x0p64NcoHRkJ2ITLHIj2uswlj
-         cW+w==
-X-Gm-Message-State: AOJu0YxRmSlD9jvzBxtMi72nFn23YXo5055zU5iNnLd4HzSS1PrbQFYB
-	A/7/T7HJsPHrDJE4Wl/RRfT+YXsdZcZNFPov2RYd6A==
-X-Google-Smtp-Source: AGHT+IFDk+YH98DmlhP5rDwghASFHtsZ/cHCbLg8dD2/9C72D6slrbK8ZNqM/SwdSooilIR08O9ljo3i9+rmU7rlaP4=
-X-Received: by 2002:a05:600c:5486:b0:40c:6e0b:69e4 with SMTP id
- iv6-20020a05600c548600b0040c6e0b69e4mr4366526wmb.18.1703026842524; Tue, 19
- Dec 2023 15:00:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NPBvIxB6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703033324; x=1734569324;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XBIC58myc3ASs9hyCERLWBAimfb3eQYpoSIUk/hXRFI=;
+  b=NPBvIxB6udD+HyUi24EZ3ZHtCXU8L37k+YMRksFFANRIoRgjh78qhBwv
+   qz+xoj49eBQJflp28HDcaSu7hVDC3kpKS6WOZ6u5GtVZuwZ5FlXNZzuGf
+   9NwziIw6bsQUCFfrw/LJt8PHuwuj4guV2WpWjEpY3Xmq4kcHKEQEnBKX0
+   cwQUS9PZwUMAV1GhS8FY9EhJaEnXJcJYm5u1QAPiObEa80j7i7S8YaVOd
+   KePiBhuPZaWtVRpOfRsgF4ulrXuW439sgYwkHcgMFpnaIW2xVspFfj5Fq
+   ruC943DD8EJcqzc88FlZIAjp1mZ+LCebKkbGx1RGkHKDApGNoBxgN1pKE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="2961324"
+X-IronPort-AV: E=Sophos;i="6.04,289,1695711600"; 
+   d="scan'208";a="2961324"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 16:48:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="769409417"
+X-IronPort-AV: E=Sophos;i="6.04,289,1695711600"; 
+   d="scan'208";a="769409417"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 19 Dec 2023 16:48:32 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rFklC-00068l-0C;
+	Wed, 20 Dec 2023 00:48:30 +0000
+Date: Wed, 20 Dec 2023 08:48:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gregory Price <gourry.memverge@gmail.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+	x86@kernel.org, akpm@linux-foundation.org, arnd@arndb.de,
+	tglx@linutronix.de, luto@kernel.org, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, hpa@zytor.com, mhocko@kernel.org,
+	tj@kernel.org, ying.huang@intel.com, gregory.price@memverge.com,
+	corbet@lwn.net, rakie.kim@sk.com, hyeongtak.ji@sk.com,
+	honggyu.kim@sk.com, vtavarespetr@micron.com, peterz@infradead.org,
+	jgroves@micron.com, ravis.opensrc@micron.com, sthanneeru@micron.com,
+	emirakhur@micron.com, Hasan.Maruf@amd.com, seungjun.ha@samsung.com
+Subject: Re: [PATCH v4 10/11] mm/mempolicy: add the mbind2 syscall
+Message-ID: <202312200802.cGZtboPs-lkp@intel.com>
+References: <20231218194631.21667-11-gregory.price@memverge.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20231219-libstringheader-v4-0-aaeb26495d2f@google.com>
- <20231219-libstringheader-v4-1-aaeb26495d2f@google.com> <2023121938-stargazer-purse-0dc1@gregkh>
- <CAE-cH4p-TzH3zyJfmSg3r=fw78j8y-0t0dp-NvaLyVYAMULw1w@mail.gmail.com> <2023121928-propose-florist-5898@gregkh>
-In-Reply-To: <2023121928-propose-florist-5898@gregkh>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 19 Dec 2023 15:00:22 -0800
-Message-ID: <CAKwvOdnW_vZyiO3BE=Vce4OrcX4+pb6QrEFbmeya0Z+w_5d=zw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] kernel.h: removed REPEAT_BYTE from kernel.h
-To: Greg KH <gregkh@linuxfoundation.org>, Tanzir Hasan <tanzirh@google.com>, 
-	Ingo Molnar <mingo@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Andy Shevchenko <andy@kernel.org>, 
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
-	Al Viro <viro@zeniv.linux.org.uk>, Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231218194631.21667-11-gregory.price@memverge.com>
 
-On Tue, Dec 19, 2023 at 11:10=E2=80=AFAM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
->
-> > > Legal note, this file is NOT copyright Google as no Google employe
-> > > actually wrote the logcal contents of it.
-> > >
-> > > Please be VERY careful when doing stuff like this, it has potentially
-> > > big repercussions, and you don't want to have to talk to lots of
-> > > lawyers a few years from now and explain how you messed it all up :(
-> > >
-> > > Nick, odds are there's a Google copyright class that Tanzir should ta=
-ke
-> > > here, if not, I recommend the free LF one that anyone can take online
-> > > that explains the issues here:
-> > >         https://training.linuxfoundation.org/training/open-source-lic=
-ensing-basics-for-software-developers/
->
-> Please take the time to either learn what the Google-specific rules are,
-> or take the above training, before submitting a new version of the
-> patch.
+Hi Gregory,
 
-It was my mistake to suggest to Tanzir to add his copyright to this
-newly created header. I'm sorry; we do have such resources available
-and I should have reviewed them.
+kernel test robot noticed the following build errors:
 
-I've:
-1. reviewed our internal training materials on copyright assignment
-  - go/gti-os-self-study
-  - go/patching#license-headers-and-copyright-notices
-2. reviewed kernel docs:
-  - Documentation/process/1.Intro.rst
-  - Documentation/process/kernel-enforcement-statement.rst
-3. asked Tanzir to do the same
-4. discovered who to ask internally for further questions
-<opensource-licensing@google.com>
+[auto build test ERROR on perf-tools/perf-tools]
+[also build test ERROR on linus/master v6.7-rc6]
+[cannot apply to perf-tools-next/perf-tools-next tip/perf/core acme/perf/core next-20231219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Is there further due diligence you would like to see?
+url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/mm-mempolicy-implement-the-sysfs-based-weighted_interleave-interface/20231219-074837
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools.git perf-tools
+patch link:    https://lore.kernel.org/r/20231218194631.21667-11-gregory.price%40memverge.com
+patch subject: [PATCH v4 10/11] mm/mempolicy: add the mbind2 syscall
+config: arm64-randconfig-003-20231219 (https://download.01.org/0day-ci/archive/20231220/202312200802.cGZtboPs-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 5ac12951b4e9bbfcc5791282d0961ec2b65575e9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231220/202312200802.cGZtboPs-lkp@intel.com/reproduce)
 
----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312200802.cGZtboPs-lkp@intel.com/
 
-For Google specific guidance, I'll quote what they have:
+All errors (new ones prefixed by >>):
 
-> License Headers and Copyright Notices
-> Googlers should add Google's copyright notice (or a "The Project Authors"=
- style copyright notice) to new files being added to the library if permitt=
-ed by the project maintainers.
+>> ld.lld: error: undefined symbol: __arm64_sys_get_mbind2
+   >>> referenced by sys32.c
+   >>>               arch/arm64/kernel/sys32.o:(compat_sys_call_table) in archive vmlinux.a
 
-Then the relevant section of 1.Intro.rst:
-
-> Copyright assignments are not required (or requested) for code contribute=
-d
-> to the kernel.
-
-Shall I interpret those together to mean that the "project
-maintainers" don't permit copyright assignments for "new files being
-added," and thus Tanzir SHOULD NOT be adding a copyright assignment to
-the newly created header?
-
-Or shall I leave the interpretation up to an explicit discussion with
-opensource-licensing@google.com?
-
----
-
-While I think we have the answer for Tanzir's patch, I don't think we
-do for if we intend to split other header files in the future if those
-have explicit copyright assignments.  I wonder if this question has
-come up in Ingo's header refactoring work, and if so, what the
-guidance is there?
-
-For example, consider include/linux/sysfs.h.  It's 600+ lines long and
-contains 4 copyright assignments explicitly in sources. If we split
-that header file in half, which copyright assignments do we transfer
-to the new half, if any?
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
