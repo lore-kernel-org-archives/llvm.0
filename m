@@ -1,49 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AECF8BF6;
-	Wed, 20 Dec 2023 02:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CD68BEB;
+	Wed, 20 Dec 2023 03:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DH+asZcf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ph1na75L"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703038381; x=1734574381;
+  t=1703042222; x=1734578222;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qvElR0VuNTsTCRh739xalK/xA37rYZ++RNiKjcrnyYQ=;
-  b=DH+asZcfHMAu1yyOk46CtiE+kIuViTl/uL6+qpmQqPkcNz6zE64/BmgY
-   OvompPKrtBMXsgBcQggd66tdPknYuuu7lsohGvo2Rr+Dx+OkyrppHo2X7
-   vDBivj1vAGTFr2IoBkzG8bgqZZb03ro+/n1uJ/w+nk3EISr/oinEeQxsE
-   K4GWEOX+iiTEJA6J+QSFI0GAFNyHD5exelOZinLwO697vq2Xt0b5hZTZA
-   pc/KmYdJRaa+ZKXrXfOTy/CUsZ4rmtew7lj3n5xbYkkgn0M8t4EdlwmKD
-   s8mgPsP7IjzX5wUQfXZQh8Y9u0SfFvDc0696Tr4c/rJJb0OGSbwMPljFv
+  bh=Ebt8MnqECr1X0gcAYVgWHpq3MGr19w1aV9NwTwCFcvU=;
+  b=Ph1na75LCFIdMUp37qfPj6exCbI//jfG89nEJtfN9R99p3JNN1crmqz7
+   W5UpzCw1ArLtDEQ9BiYW6HSe9Ft6dQzLzCLkx2ZciIGBq5RMsWC6husjm
+   yT7gN61+Ray18MjWqBD5twFDsc0F/+QK3JgkXbl5aWjRpXdU0gNbVT3GN
+   bO7lPA5ttU7BoDh+naRWyvCorY2siGKfNoT4NWi9VU6PRys/g4FY4aEpd
+   Lm/MzTQ5Un//FdDUOHvFUHgRdaAxY98zX+9+nct7is8J1rpzLxSPDFfVX
+   6oXkajU6jpHe0y8SlW/wqA6GrZlpcYlSutyLtZVVmaoaRlcDMJ/iV5s5P
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="9211883"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="394639601"
 X-IronPort-AV: E=Sophos;i="6.04,290,1695711600"; 
-   d="scan'208";a="9211883"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 18:13:00 -0800
+   d="scan'208";a="394639601"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 19:17:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="1023328218"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="919824658"
 X-IronPort-AV: E=Sophos;i="6.04,290,1695711600"; 
-   d="scan'208";a="1023328218"
+   d="scan'208";a="919824658"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Dec 2023 18:12:57 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 19 Dec 2023 19:17:00 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rFm4r-0006DF-2Z;
-	Wed, 20 Dec 2023 02:12:53 +0000
-Date: Wed, 20 Dec 2023 10:12:47 +0800
+	id 1rFn4s-0006Fs-24;
+	Wed, 20 Dec 2023 03:16:58 +0000
+Date: Wed, 20 Dec 2023 11:05:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marco Elver <elver@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: /bin/bash: line 1:  9839 Segmentation fault
-      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
- --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
- --btf_gen_optimized --btf_base vmlinux drivers/media/i2c/s5c73m3/s5c73m3.ko
-Message-ID: <202312201039.FtWl6EvV-lkp@intel.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:fork-batching 43/43] mm/memory.c:972:23: error:
+ call to undeclared function 'pte_next_pfn'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202312201029.HLyooDGf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,27 +51,65 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   55cb5f43689d7a9ea5bf35ef050f12334f197347
-commit: aebc7b0d8d91bbc69e976909963046bc48bca4fd list: Introduce CONFIG_LIST_HARDENED
-date:   4 months ago
-config: hexagon-randconfig-r021-20220917 (https://download.01.org/0day-ci/archive/20231220/202312201039.FtWl6EvV-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231220/202312201039.FtWl6EvV-lkp@intel.com/reproduce)
+tree:   https://github.com/davidhildenbrand/linux fork-batching
+head:   05bc057b414c5bd673e6a8dce1d195be1bfdac67
+commit: 05bc057b414c5bd673e6a8dce1d195be1bfdac67 [43/43] mm/memory: optimize fork() with PTE-mapped THP
+config: mips-allnoconfig (https://download.01.org/0day-ci/archive/20231220/202312201029.HLyooDGf-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 5ac12951b4e9bbfcc5791282d0961ec2b65575e9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231220/202312201029.HLyooDGf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312201039.FtWl6EvV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312201029.HLyooDGf-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   die__process_unit: DW_TAG_member (0xd) @ <0x12b7b> not handled!
-   die__process_unit: tag not supported 0xd (member)!
-   die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
-   die__process_unit: DW_TAG_member (0xd) @ <0x33951> not handled!
-   die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
->> /bin/bash: line 1:  9839 Segmentation fault      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j --lang_exclude=rust --skip_encoding_btf_inconsistent_proto --btf_gen_optimized --btf_base vmlinux drivers/media/i2c/s5c73m3/s5c73m3.ko
+>> mm/memory.c:972:23: error: call to undeclared function 'pte_next_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     972 |         pte_t expected_pte = pte_next_pfn(pte);
+         |                              ^
+>> mm/memory.c:972:8: error: initializing 'pte_t' with an expression of incompatible type 'int'
+     972 |         pte_t expected_pte = pte_next_pfn(pte);
+         |               ^              ~~~~~~~~~~~~~~~~~
+>> mm/memory.c:990:16: error: assigning to 'pte_t' from incompatible type 'int'
+     990 |                 expected_pte = pte_next_pfn(expected_pte);
+         |                              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +/pte_next_pfn +972 mm/memory.c
+
+   966	
+   967	static inline int folio_pte_batch(struct folio *folio, pte_t *start_ptep,
+   968			pte_t pte, unsigned long addr, int max_nr)
+   969	{
+   970		unsigned long folio_end_pfn = folio_pfn(folio) + folio_nr_pages(folio);
+   971		const pte_t *end_ptep = start_ptep + max_nr;
+ > 972		pte_t expected_pte = pte_next_pfn(pte);
+   973		pte_t *ptep = start_ptep + 1;
+   974	
+   975		while (ptep != end_ptep) {
+   976			pte = ptep_get(ptep);
+   977	
+   978			/* Do all PTE bits match, and the PFN is consecutive? */
+   979			if (!pte_same(pte, expected_pte))
+   980				break;
+   981	
+   982			/*
+   983			 * Stop immediately once we reached the end of the folio. In
+   984			 * corner cases the next PFN might fall into a different
+   985			 * folio.
+   986			 */
+   987			if (pte_pfn(pte) == folio_end_pfn - 1)
+   988				break;
+   989	
+ > 990			expected_pte = pte_next_pfn(expected_pte);
+   991			ptep++;
+   992		}
+   993	
+   994		return ptep - start_ptep;
+   995	}
+   996	
 
 -- 
 0-DAY CI Kernel Test Service
