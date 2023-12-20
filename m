@@ -1,137 +1,80 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950D453B1
-	for <llvm@lists.linux.dev>; Wed, 20 Dec 2023 01:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AECF8BF6;
+	Wed, 20 Dec 2023 02:13:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HQZTY+on"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703034684;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=epLVZC+IiV/0UUy7rVzb9O19c3lIKpZMVh2KWDj8UBo=;
-	b=HQZTY+onzHn0fCD1FvulMDOU2jrl2PTHS9KrZCJUarPZ4IKwgKnp6KHgIG5gwpLCKZ5H1o
-	jqKvH3WD2tQ6AfHi9gF/XUz/EpFKvcjPZfIIS5BOPVh5W1xT6Ke7ZxPT5VNtloBj/XSJHq
-	uPJONO+qy63w/GKNQQBWgaZtDJsavF0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-686-wHfCeLS0M2eVVLn528JK5w-1; Tue, 19 Dec 2023 20:11:22 -0500
-X-MC-Unique: wHfCeLS0M2eVVLn528JK5w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08E5B80BEC2
-	for <llvm@lists.linux.dev>; Wed, 20 Dec 2023 01:11:22 +0000 (UTC)
-Received: from [172.64.11.28] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E5F892166B31;
-	Wed, 20 Dec 2023 01:11:21 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
- (6.7.0-rc6, mainline.kernel.org-clang, 2cf4f94d)
-Date: Wed, 20 Dec 2023 01:11:21 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DH+asZcf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703038381; x=1734574381;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qvElR0VuNTsTCRh739xalK/xA37rYZ++RNiKjcrnyYQ=;
+  b=DH+asZcfHMAu1yyOk46CtiE+kIuViTl/uL6+qpmQqPkcNz6zE64/BmgY
+   OvompPKrtBMXsgBcQggd66tdPknYuuu7lsohGvo2Rr+Dx+OkyrppHo2X7
+   vDBivj1vAGTFr2IoBkzG8bgqZZb03ro+/n1uJ/w+nk3EISr/oinEeQxsE
+   K4GWEOX+iiTEJA6J+QSFI0GAFNyHD5exelOZinLwO697vq2Xt0b5hZTZA
+   pc/KmYdJRaa+ZKXrXfOTy/CUsZ4rmtew7lj3n5xbYkkgn0M8t4EdlwmKD
+   s8mgPsP7IjzX5wUQfXZQh8Y9u0SfFvDc0696Tr4c/rJJb0OGSbwMPljFv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="9211883"
+X-IronPort-AV: E=Sophos;i="6.04,290,1695711600"; 
+   d="scan'208";a="9211883"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 18:13:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="1023328218"
+X-IronPort-AV: E=Sophos;i="6.04,290,1695711600"; 
+   d="scan'208";a="1023328218"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Dec 2023 18:12:57 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rFm4r-0006DF-2Z;
+	Wed, 20 Dec 2023 02:12:53 +0000
+Date: Wed, 20 Dec 2023 10:12:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marco Elver <elver@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: /bin/bash: line 1:  9839 Segmentation fault
+      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
+ --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
+ --btf_gen_optimized --btf_base vmlinux drivers/media/i2c/s5c73m3/s5c73m3.ko
+Message-ID: <202312201039.FtWl6EvV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
-Message-Id: <41498.123121920112200270@us-mta-686.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   55cb5f43689d7a9ea5bf35ef050f12334f197347
+commit: aebc7b0d8d91bbc69e976909963046bc48bca4fd list: Introduce CONFIG_LIST_HARDENED
+date:   4 months ago
+config: hexagon-randconfig-r021-20220917 (https://download.01.org/0day-ci/archive/20231220/202312201039.FtWl6EvV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231220/202312201039.FtWl6EvV-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312201039.FtWl6EvV-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+   die__process_unit: DW_TAG_member (0xd) @ <0x12b7b> not handled!
+   die__process_unit: tag not supported 0xd (member)!
+   die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
+   die__process_unit: DW_TAG_member (0xd) @ <0x33951> not handled!
+   die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
+>> /bin/bash: line 1:  9839 Segmentation fault      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j --lang_exclude=rust --skip_encoding_btf_inconsistent_proto --btf_gen_optimized --btf_base vmlinux drivers/media/i2c/s5c73m3/s5c73m3.ko
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/119731
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: Storage: swraid scsi_raid: WARNING: possible circular lockin=
-g dependency detected
-            URL: https://datawarehouse.cki-project.org/issue/-/regex/1122
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
-ubby
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1819
-            Affected tests:
-                  x86_64 - kdump - sysrq-c
-
-Tests that were not ran because of internal issues:=20
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
