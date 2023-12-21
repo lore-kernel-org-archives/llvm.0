@@ -1,138 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1F3539FD
-	for <llvm@lists.linux.dev>; Thu, 21 Dec 2023 15:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IHChwDBJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703173884;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=msSy+x11IY0T7oftHd8XojfFMFKvx8I1/XWm5PwnZjQ=;
-	b=IHChwDBJ9K3Xp7r+55nC1z/95yoZ8RpbJV+aL1DFBBIRBJ8LaLu8CKafQ6nfUBgKSoRcae
-	KbOaQJBcnSeYKk+Dt0wJ2ToB/w6E4cXX0RvQJccPOu6GjijmfJB8Ek2Fv4hgI3TEdQWya1
-	qxNaO9BGVkLET674UlsXM+xRi2dGb+o=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-33-CaMhsXOzPSSqWewFixqOcA-1; Thu,
- 21 Dec 2023 10:51:22 -0500
-X-MC-Unique: CaMhsXOzPSSqWewFixqOcA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD7442837800
-	for <llvm@lists.linux.dev>; Thu, 21 Dec 2023 15:51:21 +0000 (UTC)
-Received: from [172.64.11.28] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CA2C640C6EB9;
-	Thu, 21 Dec 2023 15:51:21 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
- (6.7.0-rc6, mainline.kernel.org-clang, eee7f5b4)
-Date: Thu, 21 Dec 2023 15:51:21 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9A61643D
+	for <llvm@lists.linux.dev>; Thu, 21 Dec 2023 16:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="3235103"
+X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
+   d="scan'208";a="3235103"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 08:38:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="847160659"
+X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
+   d="scan'208";a="847160659"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 08:38:13 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy@kernel.org>)
+	id 1rGM3m-00000007tct-14wL;
+	Thu, 21 Dec 2023 18:38:10 +0200
+Date: Thu, 21 Dec 2023 18:38:09 +0200
+From: Andy Shevchenko <andy@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: tanzirh@google.com, Kees Cook <keescook@chromium.org>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nick DeSaulniers <nnn@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v3 2/2] lib/string: shrink lib/string.i via IWYU
+Message-ID: <ZYRp8cn_4pwyBe_m@smile.fi.intel.com>
+References: <20231218-libstringheader-v3-0-500bd58f0f75@google.com>
+ <20231218-libstringheader-v3-2-500bd58f0f75@google.com>
+ <ZYG83l5AW_zVw2aR@smile.fi.intel.com>
+ <CAKwvOd=OXOHAiwue98jfqZ=TJSe21ecfgtf6jEihy8F=0EvWnA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <33412.123122110512200919@us-mta-33.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=OXOHAiwue98jfqZ=TJSe21ecfgtf6jEihy8F=0EvWnA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi, we tested your kernel and here are the results:
+On Tue, Dec 19, 2023 at 08:43:01AM -0800, Nick Desaulniers wrote:
+> On Tue, Dec 19, 2023 at 7:55 AM Andy Shevchenko <andy@kernel.org> wrote:
+> > On Mon, Dec 18, 2023 at 06:44:48PM +0000, tanzirh@google.com wrote:
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+...
 
-Tested-by: CKI Project <cki-project@redhat.com>
+> > >  #define __NO_FORTIFY
+> > >  #include <linux/types.h>
+> > > -#include <linux/string.h>
+> > > -#include <linux/ctype.h>
+> > > -#include <linux/kernel.h>
+> > > -#include <linux/export.h>
+> > > +#include <linux/bits.h>
+> > >  #include <linux/bug.h>
+> > >  #include <linux/errno.h>
+> > > -#include <linux/slab.h>
+> >
+> > > -
+> >
+> > Why this blank is removed?
+> 
+> The automation isn't aware of any convention around having blank lines
+> separate linux/* vs asm/*.  Is that a convention we have throughout
+> the kernel, or just this file?
 
-Kernel information:
-    Commit message: Merge tag '6.7-rc6-smb3-client-fixes' of git://git.samb=
-a.org/sfrench/cifs-2.6
+There is no documented conventions like this. Probably one has to add some,
+let's say, recommendations.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/119998
+This way (alphabetical ordering and grouping) it is easier to maintain and
+in long term makes easier (less possible conflicts) when backporting.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
-ubby
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1819
-            Affected tests:
-                  x86_64 - kdump - sysrq-c
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
+> If we rerun the automation on this file after Tanzir's patch here, we
+> get no further changes.  If we manually touch up the results, then
+> rerun the automation, it will undo the manual touch ups.
+> 
+> I don't mind saying "you might have to manually touch up the results
+> of the automation to comply with <link to documentation on stated
+> kernel policy/style guide>" but on the other hand I also think it
+> would be nice if other folks run the automation so that they don't get
+> additional changes.  I'd like to avoid drive-by patches that just undo
+> any manual touch ups.
 
-Tests that were not ran because of internal issues:=20
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
+I agree with this, but we have many maintainers and reviewers and some
+ask one way, the others another way and so on... Without documentation
+one can use a common sense and rationale behind it.
 
+I don't really care about blank lines (however grouping is still done
+as of today in this file), but I do care about ordering and grouping.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+...
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+> > > +#include <linux/linkage.h>
+> > > +#include <linux/stddef.h>
+> > > +#include <linux/string.h>
+> > > +#include <linux/ctype.h>
+> > >  #include <asm/unaligned.h>
+> > > -#include <asm/byteorder.h>
+> > > +#include <asm/rwonce.h>
+> > >  #include <asm/word-at-a-time.h>
+> > >  #include <asm/page.h>
+> >
+> > Sort this group alphabetically as well.
+> 
+> By default the automation sorts the result.  I asked Tanzir to
+> explicitly disable that; otherwise the resulting diffstat is hard to
+> tell precisely what was removed/added vs simply moved.
+> 
+> If he kept the default behavior, I highly suspect the feedback would
+> have been along the lines of "please don't sort the result; I can't
+> tell what moved vs was added or removed."
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Do you have such examples IRL?
+
+In any case, how would you satisfy the maintainer's request which asks for
+sorting?
+
+> Perhaps we should add another commit on the series that manually sorts
+> the results _after_ the automation?
+
+I have no objections for this way (doing it in a two separate changes).
+With the proposed you can satisfy any maintainer basically. Ones who
+do not want sorting, may skip that patch, indeed.
+
+> Do we have anything in Documentation/process/coding-style.rst about
+> sorting headers? There's a blip about clang-format sorting them, but
+> we don't have strong guidance along the lines of "you ought to sort
+> your includes (when you don't have special cases like x-macros)."
+
+Actually there is a rising trend to follow clang-format.
+I have no idea what it does, but my rationale is explained above.
+
+...
+
+> > > +#include <vdso/limits.h>
+> >
+> > Just use linux/limits.h.
+> >
+> > VDSO is a very special UAPI case. So it's even stricter rule
+> > than for asm/ for using anything from there.
+> 
+> We can add a special rule for this, Tanzir, please add. And remember
+> to re-measure the results of that change for this patch's commit
+> message.
+
+Yes, please do.
+
+...
+
+> > Expected result:
+> >
+> > #include <linux/bits.h>
+> > #include <linux/bug.h>
+> > #include <linux/ctype.h>
+> > #include <linux/errno.h>
+> > #include <linux/limits.h>
+> > #include <linux/linkage.h>
+> > #include <linux/stddef.h>
+> > #include <linux/string.h>
+> > #include <linux/types.h>
+> >
+> > #include <asm/page.h>
+> > #include <asm/rwonce.h>
+> > #include <asm/unaligned.h>
+> > #include <asm/word-at-a-time.h>
+
+So, let's have above with one or two patches.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
