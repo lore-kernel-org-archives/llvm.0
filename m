@@ -1,181 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9A61643D
-	for <llvm@lists.linux.dev>; Thu, 21 Dec 2023 16:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="3235103"
-X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="3235103"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 08:38:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="847160659"
-X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="847160659"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 08:38:13 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rGM3m-00000007tct-14wL;
-	Thu, 21 Dec 2023 18:38:10 +0200
-Date: Thu, 21 Dec 2023 18:38:09 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: tanzirh@google.com, Kees Cook <keescook@chromium.org>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nick DeSaulniers <nnn@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v3 2/2] lib/string: shrink lib/string.i via IWYU
-Message-ID: <ZYRp8cn_4pwyBe_m@smile.fi.intel.com>
-References: <20231218-libstringheader-v3-0-500bd58f0f75@google.com>
- <20231218-libstringheader-v3-2-500bd58f0f75@google.com>
- <ZYG83l5AW_zVw2aR@smile.fi.intel.com>
- <CAKwvOd=OXOHAiwue98jfqZ=TJSe21ecfgtf6jEihy8F=0EvWnA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0385822F;
+	Thu, 21 Dec 2023 17:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OU9C4gpH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA25C433C7;
+	Thu, 21 Dec 2023 17:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703178249;
+	bh=AysrOZqlgDc9SH4JdkOPA/Ij/sFWqRmgvn05g9ch6eY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=OU9C4gpHAmQFAZbNin+YimkeoUoRvhV1Q6ltOAIXJv2wZWB6QtXJvL9Chvz5lwTEa
+	 dBE5zM/lmFKrIBj/GjYvdbKLSywpoJ9cj5IbqYzM7SAOh537K3FUyF5SEhzHH5/zA0
+	 N3w4uz290mLGyKEZI5AUV7EIxZPF19FmJAK3kXbPaR+7tJHZxKvz7HVsyLNUTAEbzX
+	 EYZDCR0ozA4ldOE4qwMskL0nGHxcaU2LurAab//q0+QhxHYZWF76ERp9gPooKZE187
+	 7/VGKvzeZiswWWZudsFzVo3QKhBEIVcsmp3f/3icbSGXB9BwxNfmyZG3tZSHPGqWot
+	 CpXQDFqGUI89g==
+From: Simon Horman <horms@kernel.org>
+Date: Thu, 21 Dec 2023 18:03:52 +0100
+Subject: [PATCH bpf-next] bpf: Avoid unnecessary use of comma operator in
+ verifier
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=OXOHAiwue98jfqZ=TJSe21ecfgtf6jEihy8F=0EvWnA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231221-bpf-verifier-comma-v1-1-cde2530912e9@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPdvhGUC/x2MQQqAMAzAviI9W3AVFfyKeOhmpz04ZRMRxL87P
+ QaS3JAkqiToixuinJp0CxlMWYBbOMyCOmUGqqg2RAbt7vHMjVeJ6LZ1ZWQnTOxsZ9sGcrhH8Xr
+ 90wE+P8h1wPg8LzZvRNluAAAA
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ bpf@vger.kernel.org, llvm@lists.linux.dev
+X-Mailer: b4 0.12.3
 
-On Tue, Dec 19, 2023 at 08:43:01AM -0800, Nick Desaulniers wrote:
-> On Tue, Dec 19, 2023 at 7:55 AM Andy Shevchenko <andy@kernel.org> wrote:
-> > On Mon, Dec 18, 2023 at 06:44:48PM +0000, tanzirh@google.com wrote:
+Although it does not seem to have any untoward side-effects,
+the use of ';' to separate to assignments seems more appropriate than ','.
 
-...
+Flagged by clang-17 -Wcomma
 
-> > >  #define __NO_FORTIFY
-> > >  #include <linux/types.h>
-> > > -#include <linux/string.h>
-> > > -#include <linux/ctype.h>
-> > > -#include <linux/kernel.h>
-> > > -#include <linux/export.h>
-> > > +#include <linux/bits.h>
-> > >  #include <linux/bug.h>
-> > >  #include <linux/errno.h>
-> > > -#include <linux/slab.h>
-> >
-> > > -
-> >
-> > Why this blank is removed?
-> 
-> The automation isn't aware of any convention around having blank lines
-> separate linux/* vs asm/*.  Is that a convention we have throughout
-> the kernel, or just this file?
+No functional change intended.
+Compile tested only.
 
-There is no documented conventions like this. Probably one has to add some,
-let's say, recommendations.
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This way (alphabetical ordering and grouping) it is easier to maintain and
-in long term makes easier (less possible conflicts) when backporting.
-
-> If we rerun the automation on this file after Tanzir's patch here, we
-> get no further changes.  If we manually touch up the results, then
-> rerun the automation, it will undo the manual touch ups.
-> 
-> I don't mind saying "you might have to manually touch up the results
-> of the automation to comply with <link to documentation on stated
-> kernel policy/style guide>" but on the other hand I also think it
-> would be nice if other folks run the automation so that they don't get
-> additional changes.  I'd like to avoid drive-by patches that just undo
-> any manual touch ups.
-
-I agree with this, but we have many maintainers and reviewers and some
-ask one way, the others another way and so on... Without documentation
-one can use a common sense and rationale behind it.
-
-I don't really care about blank lines (however grouping is still done
-as of today in this file), but I do care about ordering and grouping.
-
-...
-
-> > > +#include <linux/linkage.h>
-> > > +#include <linux/stddef.h>
-> > > +#include <linux/string.h>
-> > > +#include <linux/ctype.h>
-> > >  #include <asm/unaligned.h>
-> > > -#include <asm/byteorder.h>
-> > > +#include <asm/rwonce.h>
-> > >  #include <asm/word-at-a-time.h>
-> > >  #include <asm/page.h>
-> >
-> > Sort this group alphabetically as well.
-> 
-> By default the automation sorts the result.  I asked Tanzir to
-> explicitly disable that; otherwise the resulting diffstat is hard to
-> tell precisely what was removed/added vs simply moved.
-> 
-> If he kept the default behavior, I highly suspect the feedback would
-> have been along the lines of "please don't sort the result; I can't
-> tell what moved vs was added or removed."
-
-Do you have such examples IRL?
-
-In any case, how would you satisfy the maintainer's request which asks for
-sorting?
-
-> Perhaps we should add another commit on the series that manually sorts
-> the results _after_ the automation?
-
-I have no objections for this way (doing it in a two separate changes).
-With the proposed you can satisfy any maintainer basically. Ones who
-do not want sorting, may skip that patch, indeed.
-
-> Do we have anything in Documentation/process/coding-style.rst about
-> sorting headers? There's a blip about clang-format sorting them, but
-> we don't have strong guidance along the lines of "you ought to sort
-> your includes (when you don't have special cases like x-macros)."
-
-Actually there is a rising trend to follow clang-format.
-I have no idea what it does, but my rationale is explained above.
-
-...
-
-> > > +#include <vdso/limits.h>
-> >
-> > Just use linux/limits.h.
-> >
-> > VDSO is a very special UAPI case. So it's even stricter rule
-> > than for asm/ for using anything from there.
-> 
-> We can add a special rule for this, Tanzir, please add. And remember
-> to re-measure the results of that change for this patch's commit
-> message.
-
-Yes, please do.
-
-...
-
-> > Expected result:
-> >
-> > #include <linux/bits.h>
-> > #include <linux/bug.h>
-> > #include <linux/ctype.h>
-> > #include <linux/errno.h>
-> > #include <linux/limits.h>
-> > #include <linux/linkage.h>
-> > #include <linux/stddef.h>
-> > #include <linux/string.h>
-> > #include <linux/types.h>
-> >
-> > #include <asm/page.h>
-> > #include <asm/rwonce.h>
-> > #include <asm/unaligned.h>
-> > #include <asm/word-at-a-time.h>
-
-So, let's have above with one or two patches.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f13008d27f35..a376eb609c41 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9616,7 +9616,7 @@ static int set_find_vma_callback_state(struct bpf_verifier_env *env,
+ 	callee->regs[BPF_REG_2].type = PTR_TO_BTF_ID;
+ 	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
+ 	callee->regs[BPF_REG_2].btf =  btf_vmlinux;
+-	callee->regs[BPF_REG_2].btf_id = btf_tracing_ids[BTF_TRACING_TYPE_VMA],
++	callee->regs[BPF_REG_2].btf_id = btf_tracing_ids[BTF_TRACING_TYPE_VMA];
+ 
+ 	/* pointer to stack or null */
+ 	callee->regs[BPF_REG_3] = caller->regs[BPF_REG_4];
 
