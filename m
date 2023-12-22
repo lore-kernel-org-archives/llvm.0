@@ -1,84 +1,154 @@
-Received: from helios.alatek.com.pl (helios.alatek.com.pl [85.14.123.227])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17A22F868;
-	Fri, 22 Dec 2023 22:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alatek.krakow.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alatek.krakow.pl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF1D33CD3;
+	Fri, 22 Dec 2023 23:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=alatek.krakow.pl header.i=@alatek.krakow.pl header.b="Th/67DuH"
-Received: from localhost (localhost [127.0.0.1])
-	by helios.alatek.com.pl (Postfix) with ESMTP id 7D1642D20692;
-	Fri, 22 Dec 2023 23:43:44 +0100 (CET)
-Received: from helios.alatek.com.pl ([127.0.0.1])
- by localhost (helios.alatek.com.pl [127.0.0.1]) (amavis, port 10032)
- with ESMTP id QlR8na06gDHs; Fri, 22 Dec 2023 23:43:40 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by helios.alatek.com.pl (Postfix) with ESMTP id 129E12D20696;
-	Fri, 22 Dec 2023 23:43:40 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 helios.alatek.com.pl 129E12D20696
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alatek.krakow.pl;
-	s=99EE5E86-D06A-11EC-BE24-DBCCD0A148D3; t=1703285020;
-	bh=7hMMwVJ9BHPVf5oT5QW8fMTlzszBSOKi19RlT3xHXEw=;
-	h=Message-ID:Date:MIME-Version:To:From;
-	b=Th/67DuHWSEaat8POJCsMeJloAbaUh5yjzRzv6pqu6MKsQ1wAyXXm/nUtcjkUCU3+
-	 3ghaBoc+rZFbaHrkuvI/1Cn1D63D4n3R7DYBPTPYShz2Q9+PT9p6qljqBeJ741rCpq
-	 oRrAmJaAx6Pd7n6iN1eYBEIc7A38jEEzUkHm1fTsAgFZIU2j10kt1X6LkwNNXj5X+t
-	 4+NUtSXiwr4UrKrZ3lVtWQ01soUeU7v0kqSzuDha+I08/Y2R5Hxfj7eyBlZuaEPsXp
-	 sWqP3Pr7xmhdBJyyKL7CivG9mq+W3XLMkAkTo/Re0BOGyYNickK5NbQluleZgzU8LM
-	 DP67uFDArGfCg==
-X-Virus-Scanned: amavis at alatek.com.pl
-Received: from helios.alatek.com.pl ([127.0.0.1])
- by localhost (helios.alatek.com.pl [127.0.0.1]) (amavis, port 10026)
- with ESMTP id jQavP4A7IbgG; Fri, 22 Dec 2023 23:43:40 +0100 (CET)
-Received: from [10.125.125.1] (unknown [10.125.125.1])
-	by helios.alatek.com.pl (Postfix) with ESMTPSA id 5B3032D20692;
-	Fri, 22 Dec 2023 23:43:39 +0100 (CET)
-Message-ID: <d3ada600-c0ed-486d-98d0-e161059099f3@alatek.krakow.pl>
-Date: Fri, 22 Dec 2023 23:43:38 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VkzPZxHC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703286547; x=1734822547;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mE+/rA1kW3jYRzqy+tN5kOQRkiH4WOFAewKMLD7BFQ8=;
+  b=VkzPZxHCVcMbcOwygemvpvpeQI69myoP6/eFYFQTl8nAoWMLUhlucSXt
+   DQd99ZsszBIOH66Nc+fc1ylYjmDP/A2c1+vk3SanZ8yUPEI5sWMHC59ul
+   kAzpClXzMHf/SUzPNo/CPFX8BrbKaz90bW/64bHp/Q4QMQRCbT/qbylv/
+   AWQRIU17G51oU7G7pOpkLbK6L2azP6g9Sji8peuyYYRywSxnv5bY7gbrL
+   VaMC5A9BtOF/5/PH/fCuwyDhHnrDjR5xZLApkRFWXoCnE/a4BQzmC3VHH
+   x1TEq2ogmEyEFBQkUFksfigxeKRlx+wHfpog9hb3jlm63JL1wh/1Apa3B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="462605121"
+X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
+   d="scan'208";a="462605121"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 15:08:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="895619632"
+X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
+   d="scan'208";a="895619632"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Dec 2023 15:08:52 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rGocX-0009y9-11;
+	Fri, 22 Dec 2023 23:08:25 +0000
+Date: Sat, 23 Dec 2023 07:07:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Philo Lu <lulie@linux.alibaba.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
+	xuanzhuo@linux.alibaba.com, dust.li@linux.alibaba.com,
+	alibuda@linux.alibaba.com, guwen@linux.alibaba.com,
+	hengqi@linux.alibaba.com, shung-hsi.yu@suse.com
+Subject: Re: [PATCH bpf-next 1/3] bpf: implement relay map basis
+Message-ID: <202312230638.IYDD8JOz-lkp@intel.com>
+References: <20231222122146.65519-2-lulie@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] dmaengine: xilinx: xdma: Fix two clang warnings
-To: Nathan Chancellor <nathan@kernel.org>, lizhi.hou@amd.com,
- brian.xu@amd.com, raj.kumar.rampelli@amd.com, vkoul@kernel.org
-Cc: dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-References: <20231222-dma-xilinx-xdma-clang-fixes-v1-0-84a18ff184d2@kernel.org>
-Content-Language: en-US
-From: Jan Kuliga <jankul@alatek.krakow.pl>
-In-Reply-To: <20231222-dma-xilinx-xdma-clang-fixes-v1-0-84a18ff184d2@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231222122146.65519-2-lulie@linux.alibaba.com>
 
-Hi all,
+Hi Philo,
 
-On 22.12.2023 19:06, Nathan Chancellor wrote:
-> Hi all,
-> 
-> This series fixes two clang warnings that I see after
-> commit 2f8f90cd2f8d ("dmaengine: xilinx: xdma: Implement interleaved DMA
-> transfers"). They have just been build tested but I think the logic is
-> sound, please double check though.
-> 
-> ---
-> Nathan Chancellor (2):
->       dmaengine: xilinx: xdma: Fix operator precedence in xdma_prep_interleaved_dma()
->       dmaengine: xilinx: xdma: Fix initialization location of desc in xdma_channel_isr()
-> 
->  drivers/dma/xilinx/xdma.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> ---
-> base-commit: 3d0b2176e04261ab4ac095ff2a17db077fc1e46d
-> change-id: 20231222-dma-xilinx-xdma-clang-fixes-b9c2c3f5d0f3
-> 
-> Best regards,
+kernel test robot noticed the following build warnings:
 
-Thanks for fixing my broken patches Nathan. Next time I submit any patch, I have to pay more attention to use proper compiler flags for sure (I didn't use those flags so I didn't get any warnings/errors). The logic is okay.
+[auto build test WARNING on bpf-next/master]
 
-Thanks,
-Jan
+url:    https://github.com/intel-lab-lkp/linux/commits/Philo-Lu/bpf-implement-relay-map-basis/20231222-204545
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20231222122146.65519-2-lulie%40linux.alibaba.com
+patch subject: [PATCH bpf-next 1/3] bpf: implement relay map basis
+config: arm-randconfig-001-20231223 (https://download.01.org/0day-ci/archive/20231223/202312230638.IYDD8JOz-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230638.IYDD8JOz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312230638.IYDD8JOz-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/relaymap.c:79:13: warning: address of array 'attr->map_name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+      79 |         if (!attr->map_name || strlen(attr->map_name) == 0)
+         |             ~~~~~~~^~~~~~~~
+   1 warning generated.
+
+
+vim +79 kernel/bpf/relaymap.c
+
+    43	
+    44	/* bpf_attr is used as follows:
+    45	 * - key size: must be 0
+    46	 * - value size: value will be used as directory name by map_update_elem
+    47	 *   (to create relay files). If passed as 0, it will be set to NAME_MAX as
+    48	 *   default
+    49	 *
+    50	 * - max_entries: subbuf size
+    51	 * - map_extra: subbuf num, default as 8
+    52	 *
+    53	 * When alloc, we do not set up relay files considering dir_name conflicts.
+    54	 * Instead we use relay_late_setup_files() in map_update_elem(), and thus the
+    55	 * value is used as dir_name, and map->name is used as base_filename.
+    56	 */
+    57	static struct bpf_map *relay_map_alloc(union bpf_attr *attr)
+    58	{
+    59		struct bpf_relay_map *rmap;
+    60	
+    61		if (unlikely(attr->map_flags & ~RELAY_CREATE_FLAG_MASK))
+    62			return ERR_PTR(-EINVAL);
+    63	
+    64		/* key size must be 0 in relay map */
+    65		if (unlikely(attr->key_size))
+    66			return ERR_PTR(-EINVAL);
+    67	
+    68		if (unlikely(attr->value_size > NAME_MAX)) {
+    69			pr_warn("value_size should be no more than %d\n", NAME_MAX);
+    70			return ERR_PTR(-EINVAL);
+    71		} else if (attr->value_size == 0)
+    72			attr->value_size = NAME_MAX;
+    73	
+    74		/* set default subbuf num */
+    75		attr->map_extra = attr->map_extra & UINT_MAX;
+    76		if (!attr->map_extra)
+    77			attr->map_extra = 8;
+    78	
+  > 79		if (!attr->map_name || strlen(attr->map_name) == 0)
+    80			return ERR_PTR(-EINVAL);
+    81	
+    82		rmap = bpf_map_area_alloc(sizeof(*rmap), NUMA_NO_NODE);
+    83		if (!rmap)
+    84			return ERR_PTR(-ENOMEM);
+    85	
+    86		bpf_map_init_from_attr(&rmap->map, attr);
+    87	
+    88		rmap->relay_cb.create_buf_file = create_buf_file_handler;
+    89		rmap->relay_cb.remove_buf_file = remove_buf_file_handler;
+    90		if (attr->map_flags & BPF_F_OVERWRITE)
+    91			rmap->relay_cb.subbuf_start = subbuf_start_overwrite;
+    92	
+    93		rmap->relay_chan = relay_open(NULL, NULL,
+    94								attr->max_entries, attr->map_extra,
+    95								&rmap->relay_cb, NULL);
+    96		if (!rmap->relay_chan)
+    97			return ERR_PTR(-EINVAL);
+    98	
+    99		return &rmap->map;
+   100	}
+   101	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
