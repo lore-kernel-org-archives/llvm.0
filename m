@@ -1,236 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22E82376B;
-	Fri, 22 Dec 2023 15:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E612C18E;
+	Fri, 22 Dec 2023 18:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mKNejfdB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703259588; x=1734795588;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VDLNYzAYvM2DIBK39pq90vyWFGOh1dP4R0LL0E9Ol9I=;
-  b=mKNejfdBo/MmgZU05mfR23AyFkKeRG3RhBUo3f+taZq6Ap6CzW9zLKIk
-   5MHj9p6D4tB6wKtMtWsKTZlBSjhUdSDiOcTCKQIJsykxycv9aSB/kgNBR
-   W8fAN6gNLA+oGpHdMas5wetuVURYRLz9H0sVcJ0Rwp1ZlttlN9u6xHZDc
-   5K5FqJ9+szmQbdNwVsia+3PcTUUVB/ZnPGbBTmmZXw1fiffBVfPnRnv2f
-   L5+hGUbPtF6OaKpW6KsLCI+8/yMuJTbNM8MXhbHVFJAJPYBIeMPUYm3b6
-   14vNwP7Y9B+7ahZTxrtYAp8HOQAjh2cauay1B1yNLlfBHT+8DXIGCXeO/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="3383442"
-X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
-   d="scan'208";a="3383442"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 07:39:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="805971647"
-X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
-   d="scan'208";a="805971647"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 22 Dec 2023 07:39:46 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rGhck-0009b3-2n;
-	Fri, 22 Dec 2023 15:39:43 +0000
-Date: Fri, 22 Dec 2023 23:38:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org
-Subject: [sailus-media-tree:metadata 36/36]
- drivers/media/i2c/ov2740.c:1074:17: error: member reference type 'struct
- v4l2_mbus_framefmt *' is a pointer; did you mean to use '->'?
-Message-ID: <202312222333.UhK70B00-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hoMX/lvn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6855FC433C7;
+	Fri, 22 Dec 2023 18:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703268409;
+	bh=R22+CnodvVYDrZNCk7av0uKuvv/+igMAIQJpzYsYOak=;
+	h=From:Subject:Date:To:Cc:From;
+	b=hoMX/lvnXTbBHvD4fhc97/hJpLxrpGFvuGCuKRsMlSprEQ3BySIc4uL7n/u40XaYs
+	 y+tkibKR3Yd4InfLhIsNrYsGJ/RU1Xn/yPEqYbgJPq2azrL7xUXNztUIzsOQ+mZLvc
+	 m4BuaXYTIaVjfm+PqRAUzkKT0NWUQJz+nTu9SRWGkV3x1pTjCU1QJ8aAFweS33AxV/
+	 W/hCaxcY6DMW/hge6AoTOlZt9HpI4r1ua1IbqpPw7HfWu4OFZ2Gi1cJOEpNbVUe1hx
+	 zz/brMxG+TpW8fV+MoNOiBsh+1+iX8lN8lXmXyZR+nEB5D9a8W8c6LPvpgT/IbqbLD
+	 1sHWYtIQGuxcQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] dmaengine: xilinx: xdma: Fix two clang warnings
+Date: Fri, 22 Dec 2023 11:06:43 -0700
+Message-Id: <20231222-dma-xilinx-xdma-clang-fixes-v1-0-84a18ff184d2@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADTQhWUC/x2MQQqAMAwEvyI5G9AUD/oV8aBtqgGt0oIUpH83e
+ tthh3kgcRROMFQPRL4lyRkU2roCu81hZRSnDNSQaYkI3TFjll1Cxvxtu6uFXjInXHpL1vjONd6
+ AFq7I/6GBcSrlBavfjittAAAA
+To: lizhi.hou@amd.com, brian.xu@amd.com, raj.kumar.rampelli@amd.com, 
+ vkoul@kernel.org, jankul@alatek.krakow.pl
+Cc: dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=736; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=R22+CnodvVYDrZNCk7av0uKuvv/+igMAIQJpzYsYOak=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKmtFyy+LDvwxeXi+/bdzPM/qX66W5weZJK550bglvqJq
+ cXfS58YdpSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJ8M5gZPg1oS3N50Wmy1+9
+ k89FLzd4PJ9S6my/MH1FuVz+w6iNy7oZfrNxNPwTPH9Hu2X+vstXvmS4J6y/dXUXu+G/6Xf697D
+ VpfIBAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   git://linuxtv.org/sailus/media_tree.git metadata
-head:   bef5b741be2fd2b49dc6b8ac2dfadb5b58e97c1d
-commit: bef5b741be2fd2b49dc6b8ac2dfadb5b58e97c1d [36/36] media: ov2740: Add support for embedded data
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231222/202312222333.UhK70B00-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231222/202312222333.UhK70B00-lkp@intel.com/reproduce)
+Hi all,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312222333.UhK70B00-lkp@intel.com/
+This series fixes two clang warnings that I see after
+commit 2f8f90cd2f8d ("dmaengine: xilinx: xdma: Implement interleaved DMA
+transfers"). They have just been build tested but I think the logic is
+sound, please double check though.
 
-All errors (new ones prefixed by >>):
+---
+Nathan Chancellor (2):
+      dmaengine: xilinx: xdma: Fix operator precedence in xdma_prep_interleaved_dma()
+      dmaengine: xilinx: xdma: Fix initialization location of desc in xdma_channel_isr()
 
->> drivers/media/i2c/ov2740.c:1074:17: error: member reference type 'struct v4l2_mbus_framefmt *' is a pointer; did you mean to use '->'?
-                                         format.width, format.height);
-                                         ~~~~~~^
-                                               ->
-   include/media/v4l2-common.h:419:4: note: expanded from macro 'v4l2_find_nearest_size'
-                           width, height);                                 \
-                           ^~~~~
-   drivers/media/i2c/ov2740.c:1074:31: error: member reference type 'struct v4l2_mbus_framefmt *' is a pointer; did you mean to use '->'?
-                                         format.width, format.height);
-                                                       ~~~~~~^
-                                                             ->
-   include/media/v4l2-common.h:419:11: note: expanded from macro 'v4l2_find_nearest_size'
-                           width, height);                                 \
-                                  ^~~~~~
->> drivers/media/i2c/ov2740.c:1175:28: error: use of undeclared identifier 'ov2740'
-           ov2740_update_pad_format(&ov2740->supported_modes[0], &format);
-                                     ^
-   3 errors generated.
+ drivers/dma/xilinx/xdma.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+---
+base-commit: 3d0b2176e04261ab4ac095ff2a17db077fc1e46d
+change-id: 20231222-dma-xilinx-xdma-clang-fixes-b9c2c3f5d0f3
 
-
-vim +1074 drivers/media/i2c/ov2740.c
-
-  1041	
-  1042	static int __ov2740_set_format(struct v4l2_subdev *sd,
-  1043				       struct v4l2_subdev_state *sd_state,
-  1044				       struct v4l2_mbus_framefmt *format,
-  1045				       enum v4l2_subdev_format_whence which,
-  1046				       unsigned int pad, unsigned int stream)
-  1047	{
-  1048		struct v4l2_mbus_framefmt *src_pix_fmt, *src_meta_fmt, *pix_fmt,
-  1049			*meta_fmt;
-  1050		struct ov2740 *ov2740 = to_ov2740(sd);
-  1051		const struct ov2740_mode *mode;
-  1052		s32 vblank_def, h_blank;
-  1053	
-  1054		/*
-  1055		 * Allow setting format on internal pixel pad as well as the source
-  1056		 * pad's pixel stream (for compatibility).
-  1057		 */
-  1058		if (pad == OV2740_PAD_SOURCE || pad == OV2740_PAD_META ||
-  1059		    stream == OV2740_STREAM_META) {
-  1060			*format = *v4l2_subdev_state_get_format(sd_state, pad, stream);
-  1061			return 0;
-  1062		}
-  1063	
-  1064		pix_fmt = v4l2_subdev_state_get_format(sd_state, OV2740_PAD_PIXEL, 0);
-  1065		meta_fmt = v4l2_subdev_state_get_format(sd_state, OV2740_PAD_META, 0);
-  1066		src_pix_fmt = v4l2_subdev_state_get_format(sd_state, OV2740_PAD_SOURCE,
-  1067							   OV2740_STREAM_PIXEL);
-  1068		src_meta_fmt = v4l2_subdev_state_get_format(sd_state, OV2740_PAD_SOURCE,
-  1069							    OV2740_STREAM_META);
-  1070	
-  1071		mode = v4l2_find_nearest_size(ov2740->supported_modes,
-  1072					      ov2740->supported_modes_count,
-  1073					      width, height,
-> 1074					      format.width, format.height);
-  1075		ov2740_update_pad_format(mode, pix_fmt);
-  1076		*format = *src_pix_fmt = *pix_fmt;
-  1077	
-  1078		meta_fmt->code = MEDIA_BUS_FMT_OV2740_EMBEDDED;
-  1079		meta_fmt->width = OV2740_META_WIDTH;
-  1080		meta_fmt->height = OV2740_META_HEIGHT;
-  1081		*src_meta_fmt = *meta_fmt;
-  1082		src_meta_fmt->code = MEDIA_BUS_FMT_META_8;
-  1083	
-  1084		if (which == V4L2_SUBDEV_FORMAT_TRY)
-  1085			return 0;
-  1086	
-  1087		ov2740->cur_mode = mode;
-  1088		__v4l2_ctrl_s_ctrl(ov2740->link_freq, mode->link_freq_index);
-  1089		__v4l2_ctrl_s_ctrl_int64(ov2740->pixel_rate,
-  1090					 to_pixel_rate(mode->link_freq_index));
-  1091	
-  1092		/* Update limits and set FPS to default */
-  1093		vblank_def = mode->vts_def - mode->height;
-  1094		__v4l2_ctrl_modify_range(ov2740->vblank,
-  1095					 mode->vts_min - mode->height,
-  1096					 mode->vts_max - mode->height, 1, vblank_def);
-  1097		__v4l2_ctrl_s_ctrl(ov2740->vblank, vblank_def);
-  1098		h_blank = mode->hts - mode->width;
-  1099		__v4l2_ctrl_modify_range(ov2740->hblank, h_blank, h_blank, 1, h_blank);
-  1100	
-  1101		return 0;
-  1102	}
-  1103	
-  1104	static int ov2740_set_format(struct v4l2_subdev *sd,
-  1105				     struct v4l2_subdev_state *sd_state,
-  1106				     struct v4l2_subdev_format *fmt)
-  1107	{
-  1108		return __ov2740_set_format(sd, sd_state, &fmt->format, fmt->which,
-  1109					   fmt->pad, fmt->stream);
-  1110	}
-  1111	
-  1112	static int ov2740_enum_mbus_code(struct v4l2_subdev *sd,
-  1113					 struct v4l2_subdev_state *sd_state,
-  1114					 struct v4l2_subdev_mbus_code_enum *code)
-  1115	{
-  1116		if (code->index > 0)
-  1117			return -EINVAL;
-  1118	
-  1119		code->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-  1120	
-  1121		return 0;
-  1122	}
-  1123	
-  1124	static int ov2740_enum_frame_size(struct v4l2_subdev *sd,
-  1125					  struct v4l2_subdev_state *sd_state,
-  1126					  struct v4l2_subdev_frame_size_enum *fse)
-  1127	{
-  1128		struct ov2740 *ov2740 = to_ov2740(sd);
-  1129		const struct ov2740_mode *supported_modes = ov2740->supported_modes;
-  1130	
-  1131		if (fse->index >= ov2740->supported_modes_count)
-  1132			return -EINVAL;
-  1133	
-  1134		if (fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
-  1135			return -EINVAL;
-  1136	
-  1137		fse->min_width = supported_modes[fse->index].width;
-  1138		fse->max_width = fse->min_width;
-  1139		fse->min_height = supported_modes[fse->index].height;
-  1140		fse->max_height = fse->min_height;
-  1141	
-  1142		return 0;
-  1143	}
-  1144	
-  1145	static int ov2740_init_state(struct v4l2_subdev *sd,
-  1146				     struct v4l2_subdev_state *sd_state)
-  1147	{
-  1148		struct v4l2_subdev_route routes[] = {
-  1149			{
-  1150				.sink_pad = OV2740_PAD_PIXEL,
-  1151				.source_pad = OV2740_PAD_SOURCE,
-  1152				.source_stream = OV2740_STREAM_PIXEL,
-  1153				.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-  1154			}, {
-  1155				.sink_pad = OV2740_PAD_META,
-  1156				.source_pad = OV2740_PAD_SOURCE,
-  1157				.source_stream = OV2740_STREAM_META,
-  1158				.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-  1159			},
-  1160		};
-  1161		struct v4l2_subdev_krouting routing = {
-  1162			.routes = routes,
-  1163			.num_routes = ARRAY_SIZE(routes),
-  1164		};
-  1165		struct v4l2_subdev_state *active_state;
-  1166		struct v4l2_mbus_framefmt format = { 0 };
-  1167		int ret;
-  1168	
-  1169		ret = v4l2_subdev_set_routing(sd, sd_state, &routing);
-  1170		if (ret)
-  1171			return ret;
-  1172	
-  1173		active_state = v4l2_subdev_get_locked_active_state(sd);
-  1174	
-> 1175		ov2740_update_pad_format(&ov2740->supported_modes[0], &format);
-  1176	
-  1177		return __ov2740_set_format(sd, sd_state, &format,
-  1178					   active_state == sd_state ?
-  1179					   V4L2_SUBDEV_FORMAT_ACTIVE :
-  1180					   V4L2_SUBDEV_FORMAT_TRY, OV2740_PAD_PIXEL, 0);
-  1181	}
-  1182	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
