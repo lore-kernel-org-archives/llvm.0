@@ -1,47 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E96C2C18E;
-	Fri, 22 Dec 2023 18:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E27B2E820;
+	Fri, 22 Dec 2023 19:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UiXFzEDv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gQLr+kZW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703269191; x=1734805191;
+  t=1703274072; x=1734810072;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fxrLzV0i5D69JYQdwuTnobUMyBmILdzrweabpjLV5/U=;
-  b=UiXFzEDv01L7kieDFfIlBNQzJj363PkMKTWgO6zzc2tm5y7TBO+Gkz7D
-   opWjnMzbgHnDNLzNmIlJ5WY0ZHULcpzqGG6TEHukF4Q+WKmqa//9YvnbG
-   xov8YAssNH87CKIYLJrv+Ehao6DUnTV4r/fmMh+ObD7j0PB3GfZgj0l+e
-   +j4DsOiAWZ1O6zWnlcSYVWlnzFRoL7m9Vy4oDEsCh8pKjXmbFO8IGpUJg
-   y5SZoYV42RyZ7X4Lhw1RfMp3Ywcyf+A2atvH6e2pDZ2OinpfR+DDnDvUI
-   tfg8UDM4rr+CZWeduxJTbYfVTrOy3OaEX6OUrV/8/KL7J6Y4GKmrtsvLa
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="386568936"
+  bh=I8g1yXF40h8tKyhq4V3lfGGp+EsazSiuLYaJqMSpKX4=;
+  b=gQLr+kZW53myUaIES8j8q103iLLBMBGjzJXP3RoUxhwK8zGKlS4OtfrB
+   AFJA9Xl/uVZOciakOfjwTpjAo4R+MhnIKAWJyJPnbC/8mK1t+0vRxb+1t
+   1bDBYlU+20ooMzPMNmtZzUoELUmuA60sUwfgD+54rY1xJpxlhlILFR+8O
+   nfQD6+fmdJMtfTlcJux6T7bAO0PZU3TxskAHvNlfSmZ9hqvOmVSRLA0j4
+   T9HxTognTaYcUQARdYpwdYIw1zZb9BR4TK/uAigRa6pUztwmmXjZjUzAn
+   mwZ4aV/9Vc1BpPyvRzBuGaSNr8g9rAO80Pj8QpAvUbHl0mvqYtOw779j6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="395891731"
 X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="386568936"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 10:19:50 -0800
+   d="scan'208";a="395891731"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 11:41:11 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="950350124"
 X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="950350124"
+   d="scan'208";a="19117416"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2023 10:19:48 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 22 Dec 2023 11:41:10 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rGk7e-0009jj-0X;
-	Fri, 22 Dec 2023 18:19:46 +0000
-Date: Sat, 23 Dec 2023 02:15:35 +0800
+	id 1rGlNv-0009p5-0L;
+	Fri, 22 Dec 2023 19:40:47 +0000
+Date: Sat, 23 Dec 2023 03:37:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:mpam/snapshot/v6.7-rc2 106/110]
- drivers/perf/arm-cmn.c:2458:19: error: incompatible integer to pointer
- conversion passing 'int' to parameter of type 'const void *'
-Message-ID: <202312230222.3SvrJDsC-lkp@intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Lee Jones <lee@kernel.org>
+Subject: [lee-backlight:for-backlight-next 8/8]
+ drivers/video/backlight/mp3309c.c:134:9: error: call to undeclared function
+ 'pwm_apply_might_sleep'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202312230335.JEXfYvyo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,119 +52,117 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.7-rc2
-head:   b530deed244d9b45f3bce3cccde91f6ed0ebf7ea
-commit: af8184da77bf79023a968bab12ad78de7f7311f1 [106/110] perf/arm-cmn: Stop claiming all the resources
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231223/202312230222.3SvrJDsC-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git for-backlight-next
+head:   f7baa9ccef93ba1c36a8ecf58c2f4e86fb3181b9
+commit: f7baa9ccef93ba1c36a8ecf58c2f4e86fb3181b9 [8/8] backlight: mp3309c: Rename  pwm_apply_state() to pwm_apply_might_sleep()
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231223/202312230335.JEXfYvyo-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230222.3SvrJDsC-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230335.JEXfYvyo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312230222.3SvrJDsC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312230335.JEXfYvyo-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/perf/arm-cmn.c:2458:19: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
-                           return PTR_ERR(-EINVAL);
-                                          ^~~~~~~
-   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
-   static inline long __must_check PTR_ERR(__force const void *ptr)
-                                                               ^
-   1 error generated.
+>> drivers/video/backlight/mp3309c.c:134:9: error: call to undeclared function 'pwm_apply_might_sleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = pwm_apply_might_sleep(chip->pwmd, &pwmstate);
+                         ^
+   drivers/video/backlight/mp3309c.c:134:9: note: did you mean 'regmap_might_sleep'?
+   include/linux/regmap.h:1276:6: note: 'regmap_might_sleep' declared here
+   bool regmap_might_sleep(struct regmap *map);
+        ^
+   drivers/video/backlight/mp3309c.c:396:9: error: call to undeclared function 'pwm_apply_might_sleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = pwm_apply_might_sleep(chip->pwmd, &pwmstate);
+                         ^
+   2 errors generated.
 
 
-vim +2458 drivers/perf/arm-cmn.c
+vim +/pwm_apply_might_sleep +134 drivers/video/backlight/mp3309c.c
 
-  2429	
-  2430	static int arm_cmn_probe(struct platform_device *pdev)
-  2431	{
-  2432		struct arm_cmn *cmn;
-  2433		const char *name;
-  2434		static atomic_t id;
-  2435		struct resource *cfg;
-  2436		int err, rootnode, this_id;
-  2437	
-  2438		cmn = devm_kzalloc(&pdev->dev, sizeof(*cmn), GFP_KERNEL);
-  2439		if (!cmn)
-  2440			return -ENOMEM;
-  2441	
-  2442		cmn->dev = &pdev->dev;
-  2443		cmn->part = (unsigned long)device_get_match_data(cmn->dev);
-  2444		platform_set_drvdata(pdev, cmn);
-  2445	
-  2446		if (cmn->part == PART_CMN600 && has_acpi_companion(cmn->dev)) {
-  2447			rootnode = arm_cmn600_acpi_probe(pdev, cmn);
-  2448		} else {
-  2449			rootnode = 0;
-  2450	
-  2451			/*
-  2452			 * Avoid registering resources as the PMUs registers are
-  2453			 * scattered through CMN, and may appear either side of
-  2454			 * registers for other 'devices'. (e.g. the MPAM MSC controls).
-  2455			 */
-  2456			cfg = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-  2457			if (!cfg)
-> 2458				return PTR_ERR(-EINVAL);
-  2459			cmn->base = devm_ioremap(&pdev->dev, cfg->start, resource_size(cfg));
-  2460			if (IS_ERR(cmn->base))
-  2461				return PTR_ERR(cmn->base);
-  2462			if (cmn->part == PART_CMN600)
-  2463				rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
-  2464		}
-  2465		if (rootnode < 0)
-  2466			return rootnode;
-  2467	
-  2468		err = arm_cmn_discover(cmn, rootnode);
-  2469		if (err)
-  2470			return err;
-  2471	
-  2472		err = arm_cmn_init_dtcs(cmn);
-  2473		if (err)
-  2474			return err;
-  2475	
-  2476		err = arm_cmn_init_irqs(cmn);
-  2477		if (err)
-  2478			return err;
-  2479	
-  2480		cmn->cpu = cpumask_local_spread(0, dev_to_node(cmn->dev));
-  2481		cmn->pmu = (struct pmu) {
-  2482			.module = THIS_MODULE,
-  2483			.attr_groups = arm_cmn_attr_groups,
-  2484			.capabilities = PERF_PMU_CAP_NO_EXCLUDE,
-  2485			.task_ctx_nr = perf_invalid_context,
-  2486			.pmu_enable = arm_cmn_pmu_enable,
-  2487			.pmu_disable = arm_cmn_pmu_disable,
-  2488			.event_init = arm_cmn_event_init,
-  2489			.add = arm_cmn_event_add,
-  2490			.del = arm_cmn_event_del,
-  2491			.start = arm_cmn_event_start,
-  2492			.stop = arm_cmn_event_stop,
-  2493			.read = arm_cmn_event_read,
-  2494			.start_txn = arm_cmn_start_txn,
-  2495			.commit_txn = arm_cmn_commit_txn,
-  2496			.cancel_txn = arm_cmn_end_txn,
-  2497		};
-  2498	
-  2499		this_id = atomic_fetch_inc(&id);
-  2500		name = devm_kasprintf(cmn->dev, GFP_KERNEL, "arm_cmn_%d", this_id);
-  2501		if (!name)
-  2502			return -ENOMEM;
-  2503	
-  2504		err = cpuhp_state_add_instance(arm_cmn_hp_state, &cmn->cpuhp_node);
-  2505		if (err)
-  2506			return err;
-  2507	
-  2508		err = perf_pmu_register(&cmn->pmu, name, -1);
-  2509		if (err)
-  2510			cpuhp_state_remove_instance_nocalls(arm_cmn_hp_state, &cmn->cpuhp_node);
-  2511		else
-  2512			arm_cmn_debugfs_init(cmn, this_id);
-  2513	
-  2514		return err;
-  2515	}
-  2516	
+   116	
+   117	static int mp3309c_bl_update_status(struct backlight_device *bl)
+   118	{
+   119		struct mp3309c_chip *chip = bl_get_data(bl);
+   120		int brightness = backlight_get_brightness(bl);
+   121		struct pwm_state pwmstate;
+   122		unsigned int analog_val, bits_val;
+   123		int i, ret;
+   124	
+   125		if (chip->pdata->dimming_mode == DIMMING_PWM) {
+   126			/*
+   127			 * PWM control mode
+   128			 */
+   129			pwm_get_state(chip->pwmd, &pwmstate);
+   130			pwm_set_relative_duty_cycle(&pwmstate,
+   131						    chip->pdata->levels[brightness],
+   132						    chip->pdata->levels[chip->pdata->max_brightness]);
+   133			pwmstate.enabled = true;
+ > 134			ret = pwm_apply_might_sleep(chip->pwmd, &pwmstate);
+   135			if (ret)
+   136				return ret;
+   137	
+   138			switch (chip->pdata->status) {
+   139			case FIRST_POWER_ON:
+   140			case BACKLIGHT_OFF:
+   141				/*
+   142				 * After 20ms of low pwm signal level, the chip turns
+   143				 * off automatically. In this case, before enabling the
+   144				 * chip again, we must wait about 10ms for pwm signal to
+   145				 * stabilize.
+   146				 */
+   147				if (brightness > 0) {
+   148					msleep(10);
+   149					mp3309c_enable_device(chip);
+   150					chip->pdata->status = BACKLIGHT_ON;
+   151				} else {
+   152					chip->pdata->status = BACKLIGHT_OFF;
+   153				}
+   154				break;
+   155			case BACKLIGHT_ON:
+   156				if (brightness == 0)
+   157					chip->pdata->status = BACKLIGHT_OFF;
+   158				break;
+   159			}
+   160		} else {
+   161			/*
+   162			 * Analog (by I2C command) control mode
+   163			 *
+   164			 * The first time, before setting brightness, we must enable the
+   165			 * device
+   166			 */
+   167			if (chip->pdata->status == FIRST_POWER_ON)
+   168				mp3309c_enable_device(chip);
+   169	
+   170			/*
+   171			 * Dimming mode I2C command (fixed dimming range 0..31)
+   172			 *
+   173			 * The 5 bits of the dimming analog value D4..D0 is allocated
+   174			 * in the I2C register #0, in the following way:
+   175			 *
+   176			 *     +--+--+--+--+--+--+--+--+
+   177			 *     |EN|D0|D1|D2|D3|D4|XX|XX|
+   178			 *     +--+--+--+--+--+--+--+--+
+   179			 */
+   180			analog_val = brightness;
+   181			bits_val = 0;
+   182			for (i = 0; i <= 5; i++)
+   183				bits_val += ((analog_val >> i) & 0x01) << (6 - i);
+   184			ret = regmap_update_bits(chip->regmap, REG_I2C_0,
+   185						 ANALOG_I2C_REG_MASK, bits_val);
+   186			if (ret)
+   187				return ret;
+   188	
+   189			if (brightness > 0)
+   190				chip->pdata->status = BACKLIGHT_ON;
+   191			else
+   192				chip->pdata->status = BACKLIGHT_OFF;
+   193		}
+   194	
+   195		return 0;
+   196	}
+   197	
 
 -- 
 0-DAY CI Kernel Test Service
