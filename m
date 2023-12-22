@@ -1,55 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF1D33CD3;
-	Fri, 22 Dec 2023 23:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A259B1EB4F;
+	Fri, 22 Dec 2023 23:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VkzPZxHC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FX+ULMIN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703286547; x=1734822547;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mE+/rA1kW3jYRzqy+tN5kOQRkiH4WOFAewKMLD7BFQ8=;
-  b=VkzPZxHCVcMbcOwygemvpvpeQI69myoP6/eFYFQTl8nAoWMLUhlucSXt
-   DQd99ZsszBIOH66Nc+fc1ylYjmDP/A2c1+vk3SanZ8yUPEI5sWMHC59ul
-   kAzpClXzMHf/SUzPNo/CPFX8BrbKaz90bW/64bHp/Q4QMQRCbT/qbylv/
-   AWQRIU17G51oU7G7pOpkLbK6L2azP6g9Sji8peuyYYRywSxnv5bY7gbrL
-   VaMC5A9BtOF/5/PH/fCuwyDhHnrDjR5xZLApkRFWXoCnE/a4BQzmC3VHH
-   x1TEq2ogmEyEFBQkUFksfigxeKRlx+wHfpog9hb3jlm63JL1wh/1Apa3B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="462605121"
+  t=1703288079; x=1734824079;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IlE9zVK9IPc02wWB7JPozwEAdYb40JOV3XTLtW5KvDw=;
+  b=FX+ULMINtBZjWakocaeAx3Sc6lN5SZCP+lOTyzAgdN+UfUJJIC1wfxE2
+   su8+rXUmMItCkkoALFOszQ2qOfOSLIaX0VigBuoilLHQrIahySFxwpzEh
+   OIsXcWTnU3qKJmdmGpSMjZG3bIhlRQoUdVMiw9KiXjg/y+w1SYOMoCXST
+   HFE5CkgSbMj/yWPRkiKXQubeY78nMvLFGbW7e5O/gFfjlag8f7UwG8wpY
+   FzXUGUV98TP5sNUg8X/Th4uQ3SDgR7IxO6EvqInIBELjATtCGXo37H7jJ
+   euyGbuifPF5xMDhBj5g7cmmrFDwb53d+GEWr2gwwJ0SbCJSG5DaSXLG5q
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="14848456"
 X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="462605121"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 15:08:59 -0800
+   d="scan'208";a="14848456"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 15:33:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="895619632"
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="780723506"
 X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="895619632"
+   d="scan'208";a="780723506"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Dec 2023 15:08:52 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 22 Dec 2023 15:33:05 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rGocX-0009y9-11;
-	Fri, 22 Dec 2023 23:08:25 +0000
-Date: Sat, 23 Dec 2023 07:07:25 +0800
+	id 1rGp0E-0009zj-0Z;
+	Fri, 22 Dec 2023 23:32:47 +0000
+Date: Sat, 23 Dec 2023 07:28:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Philo Lu <lulie@linux.alibaba.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org,
-	xuanzhuo@linux.alibaba.com, dust.li@linux.alibaba.com,
-	alibuda@linux.alibaba.com, guwen@linux.alibaba.com,
-	hengqi@linux.alibaba.com, shung-hsi.yu@suse.com
-Subject: Re: [PATCH bpf-next 1/3] bpf: implement relay map basis
-Message-ID: <202312230638.IYDD8JOz-lkp@intel.com>
-References: <20231222122146.65519-2-lulie@linux.alibaba.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:zap-batching 43/50] include/linux/pgtable.h:220:3:
+ error: implicit declaration of function 'ptep_set_wrprotect' is invalid in
+ C99
+Message-ID: <202312230700.OBz2GkED-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,96 +50,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231222122146.65519-2-lulie@linux.alibaba.com>
 
-Hi Philo,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Philo-Lu/bpf-implement-relay-map-basis/20231222-204545
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20231222122146.65519-2-lulie%40linux.alibaba.com
-patch subject: [PATCH bpf-next 1/3] bpf: implement relay map basis
-config: arm-randconfig-001-20231223 (https://download.01.org/0day-ci/archive/20231223/202312230638.IYDD8JOz-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230638.IYDD8JOz-lkp@intel.com/reproduce)
+tree:   https://github.com/davidhildenbrand/linux zap-batching
+head:   a87ca0519e9108ec48b13a88d4a30a7756923d83
+commit: 7ddc8bfc39055b1ed487d6639b4125e1c77a9e4b [43/50] mm/memory: optimize fork() with PTE-mapped THP
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231223/202312230700.OBz2GkED-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230700.OBz2GkED-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312230638.IYDD8JOz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312230700.OBz2GkED-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/relaymap.c:79:13: warning: address of array 'attr->map_name' will always evaluate to 'true' [-Wpointer-bool-conversion]
-      79 |         if (!attr->map_name || strlen(attr->map_name) == 0)
-         |             ~~~~~~~^~~~~~~~
-   1 warning generated.
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:29:
+   include/linux/pgtable.h:211:38: error: use of undeclared identifier 'PFN_PTE_SHIFT'
+           return __pte(pte_val(pte) + (1UL << PFN_PTE_SHIFT));
+                                               ^
+>> include/linux/pgtable.h:220:3: error: implicit declaration of function 'ptep_set_wrprotect' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ptep_set_wrprotect(mm, addr, ptep);
+                   ^
+   include/linux/pgtable.h:220:3: note: did you mean 'pte_wrprotect'?
+   arch/arm/include/asm/pgtable.h:226:21: note: 'pte_wrprotect' declared here
+   static inline pte_t pte_wrprotect(pte_t pte)
+                       ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:29:
+   include/linux/pgtable.h:631:20: error: static declaration of 'ptep_set_wrprotect' follows non-static declaration
+   static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long address, pte_t *ptep)
+                      ^
+   include/linux/pgtable.h:220:3: note: previous implicit declaration is here
+                   ptep_set_wrprotect(mm, addr, ptep);
+                   ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1095:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1095:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1095:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1095:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1095:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1095:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1095:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
 
 
-vim +79 kernel/bpf/relaymap.c
+vim +/ptep_set_wrprotect +220 include/linux/pgtable.h
 
-    43	
-    44	/* bpf_attr is used as follows:
-    45	 * - key size: must be 0
-    46	 * - value size: value will be used as directory name by map_update_elem
-    47	 *   (to create relay files). If passed as 0, it will be set to NAME_MAX as
-    48	 *   default
-    49	 *
-    50	 * - max_entries: subbuf size
-    51	 * - map_extra: subbuf num, default as 8
-    52	 *
-    53	 * When alloc, we do not set up relay files considering dir_name conflicts.
-    54	 * Instead we use relay_late_setup_files() in map_update_elem(), and thus the
-    55	 * value is used as dir_name, and map->name is used as base_filename.
-    56	 */
-    57	static struct bpf_map *relay_map_alloc(union bpf_attr *attr)
-    58	{
-    59		struct bpf_relay_map *rmap;
-    60	
-    61		if (unlikely(attr->map_flags & ~RELAY_CREATE_FLAG_MASK))
-    62			return ERR_PTR(-EINVAL);
-    63	
-    64		/* key size must be 0 in relay map */
-    65		if (unlikely(attr->key_size))
-    66			return ERR_PTR(-EINVAL);
-    67	
-    68		if (unlikely(attr->value_size > NAME_MAX)) {
-    69			pr_warn("value_size should be no more than %d\n", NAME_MAX);
-    70			return ERR_PTR(-EINVAL);
-    71		} else if (attr->value_size == 0)
-    72			attr->value_size = NAME_MAX;
-    73	
-    74		/* set default subbuf num */
-    75		attr->map_extra = attr->map_extra & UINT_MAX;
-    76		if (!attr->map_extra)
-    77			attr->map_extra = 8;
-    78	
-  > 79		if (!attr->map_name || strlen(attr->map_name) == 0)
-    80			return ERR_PTR(-EINVAL);
-    81	
-    82		rmap = bpf_map_area_alloc(sizeof(*rmap), NUMA_NO_NODE);
-    83		if (!rmap)
-    84			return ERR_PTR(-ENOMEM);
-    85	
-    86		bpf_map_init_from_attr(&rmap->map, attr);
-    87	
-    88		rmap->relay_cb.create_buf_file = create_buf_file_handler;
-    89		rmap->relay_cb.remove_buf_file = remove_buf_file_handler;
-    90		if (attr->map_flags & BPF_F_OVERWRITE)
-    91			rmap->relay_cb.subbuf_start = subbuf_start_overwrite;
-    92	
-    93		rmap->relay_chan = relay_open(NULL, NULL,
-    94								attr->max_entries, attr->map_extra,
-    95								&rmap->relay_cb, NULL);
-    96		if (!rmap->relay_chan)
-    97			return ERR_PTR(-EINVAL);
-    98	
-    99		return &rmap->map;
-   100	}
-   101	
+   214	
+   215	#ifndef wrprotect_ptes
+   216	static inline void wrprotect_ptes(struct mm_struct *mm, unsigned long addr,
+   217			pte_t *ptep, unsigned int nr)
+   218	{
+   219		for (;;) {
+ > 220			ptep_set_wrprotect(mm, addr, ptep);
+   221			if (--nr == 0)
+   222				break;
+   223			ptep++;
+   224			addr += PAGE_SIZE;
+   225		}
+   226	}
+   227	#endif
+   228	
 
 -- 
 0-DAY CI Kernel Test Service
