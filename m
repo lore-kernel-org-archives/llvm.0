@@ -1,91 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3E72C19A;
-	Fri, 22 Dec 2023 18:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E96C2C18E;
+	Fri, 22 Dec 2023 18:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOsqJa9Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0766C433CB;
-	Fri, 22 Dec 2023 18:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703268411;
-	bh=1NacUmbt0EL+svtNIQXZRZLRDTEQIO2JqZEQWM/2bL4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=bOsqJa9Z2mcuE07Kuz2eSAWosTxeaDtF/q2v65sbHGA7ebEHuNTiSVjILmaTGKqm0
-	 1viWAz+89BjuLjd0fo7Vf7K3baMl0HfFHMT5utV0/eEEGIGknPAqI5gKSvfOvXLKg0
-	 vUQw6x7EXx3m8T4FzUvL2XZJh+vcW0xKLAvEGQyVB8TbJ0Y62++OOtbpnxIzfe+HcY
-	 AOlRCcjhwSokLf46G1Yk2dT8jCdV/pviSByjpFHe9iuvbEEbqCdSvU/7J42v+/0I6D
-	 Cbo0nRCToqM/HhW9CTqyLPxYuOG7/KLWd4gNyQdOcKgSeuQn6tUrwkUObA5IdfLhW8
-	 pWWX19xVjAw+Q==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 22 Dec 2023 11:06:45 -0700
-Subject: [PATCH 2/2] dmaengine: xilinx: xdma: Fix initialization location
- of desc in xdma_channel_isr()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UiXFzEDv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703269191; x=1734805191;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fxrLzV0i5D69JYQdwuTnobUMyBmILdzrweabpjLV5/U=;
+  b=UiXFzEDv01L7kieDFfIlBNQzJj363PkMKTWgO6zzc2tm5y7TBO+Gkz7D
+   opWjnMzbgHnDNLzNmIlJ5WY0ZHULcpzqGG6TEHukF4Q+WKmqa//9YvnbG
+   xov8YAssNH87CKIYLJrv+Ehao6DUnTV4r/fmMh+ObD7j0PB3GfZgj0l+e
+   +j4DsOiAWZ1O6zWnlcSYVWlnzFRoL7m9Vy4oDEsCh8pKjXmbFO8IGpUJg
+   y5SZoYV42RyZ7X4Lhw1RfMp3Ywcyf+A2atvH6e2pDZ2OinpfR+DDnDvUI
+   tfg8UDM4rr+CZWeduxJTbYfVTrOy3OaEX6OUrV/8/KL7J6Y4GKmrtsvLa
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="386568936"
+X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
+   d="scan'208";a="386568936"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 10:19:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="950350124"
+X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
+   d="scan'208";a="950350124"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2023 10:19:48 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rGk7e-0009jj-0X;
+	Fri, 22 Dec 2023 18:19:46 +0000
+Date: Sat, 23 Dec 2023 02:15:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot/v6.7-rc2 106/110]
+ drivers/perf/arm-cmn.c:2458:19: error: incompatible integer to pointer
+ conversion passing 'int' to parameter of type 'const void *'
+Message-ID: <202312230222.3SvrJDsC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231222-dma-xilinx-xdma-clang-fixes-v1-2-84a18ff184d2@kernel.org>
-References: <20231222-dma-xilinx-xdma-clang-fixes-v1-0-84a18ff184d2@kernel.org>
-In-Reply-To: <20231222-dma-xilinx-xdma-clang-fixes-v1-0-84a18ff184d2@kernel.org>
-To: lizhi.hou@amd.com, brian.xu@amd.com, raj.kumar.rampelli@amd.com, 
- vkoul@kernel.org, jankul@alatek.krakow.pl
-Cc: dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1437; i=nathan@kernel.org;
- h=from:subject:message-id; bh=1NacUmbt0EL+svtNIQXZRZLRDTEQIO2JqZEQWM/2bL4=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKmtFyz1xZ3TE51/h8nMXfzmg90qwSjOtSXl6o9Pl51zm
- iDiani6o5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEykRJrhn8lFq0c/dhlvlqi7
- stmgek3Xfq3Sl+pm5T0v1NoS4l7tCmL4X8m6dGvo+leXfKrMLm/T04zVfqj6yKvxqkqfoL3LB9Y
- rjAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Clang warns (or errors with CONFIG_WERROR=y):
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.7-rc2
+head:   b530deed244d9b45f3bce3cccde91f6ed0ebf7ea
+commit: af8184da77bf79023a968bab12ad78de7f7311f1 [106/110] perf/arm-cmn: Stop claiming all the resources
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231223/202312230222.3SvrJDsC-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230222.3SvrJDsC-lkp@intel.com/reproduce)
 
-  drivers/dma/xilinx/xdma.c:894:3: error: variable 'desc' is uninitialized when used here [-Werror,-Wuninitialized]
-    894 |                 desc->error = true;
-        |                 ^~~~
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312230222.3SvrJDsC-lkp@intel.com/
 
-The initialization of desc was moved too far forward, move it back so
-that this assignment does not result in a potential crash at runtime
-while clearing up the warning.
+All errors (new ones prefixed by >>):
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1972
-Fixes: 2f8f90cd2f8d ("dmaengine: xilinx: xdma: Implement interleaved DMA transfers")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/dma/xilinx/xdma.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+>> drivers/perf/arm-cmn.c:2458:19: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+                           return PTR_ERR(-EINVAL);
+                                          ^~~~~~~
+   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
+   static inline long __must_check PTR_ERR(__force const void *ptr)
+                                                               ^
+   1 error generated.
 
-diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
-index d5b9fc3fd955..ee595d1ebc63 100644
---- a/drivers/dma/xilinx/xdma.c
-+++ b/drivers/dma/xilinx/xdma.c
-@@ -888,6 +888,8 @@ static irqreturn_t xdma_channel_isr(int irq, void *dev_id)
- 	if (ret)
- 		goto out;
- 
-+	desc = to_xdma_desc(vd);
-+
- 	st &= XDMA_CHAN_STATUS_MASK;
- 	if ((st & XDMA_CHAN_ERROR_MASK) ||
- 	    !(st & (CHAN_CTRL_IE_DESC_COMPLETED | CHAN_CTRL_IE_DESC_STOPPED))) {
-@@ -901,7 +903,6 @@ static irqreturn_t xdma_channel_isr(int irq, void *dev_id)
- 	if (ret)
- 		goto out;
- 
--	desc = to_xdma_desc(vd);
- 	if (desc->interleaved_dma) {
- 		xchan->busy = false;
- 		desc->completed_desc_num += complete_desc_num;
+
+vim +2458 drivers/perf/arm-cmn.c
+
+  2429	
+  2430	static int arm_cmn_probe(struct platform_device *pdev)
+  2431	{
+  2432		struct arm_cmn *cmn;
+  2433		const char *name;
+  2434		static atomic_t id;
+  2435		struct resource *cfg;
+  2436		int err, rootnode, this_id;
+  2437	
+  2438		cmn = devm_kzalloc(&pdev->dev, sizeof(*cmn), GFP_KERNEL);
+  2439		if (!cmn)
+  2440			return -ENOMEM;
+  2441	
+  2442		cmn->dev = &pdev->dev;
+  2443		cmn->part = (unsigned long)device_get_match_data(cmn->dev);
+  2444		platform_set_drvdata(pdev, cmn);
+  2445	
+  2446		if (cmn->part == PART_CMN600 && has_acpi_companion(cmn->dev)) {
+  2447			rootnode = arm_cmn600_acpi_probe(pdev, cmn);
+  2448		} else {
+  2449			rootnode = 0;
+  2450	
+  2451			/*
+  2452			 * Avoid registering resources as the PMUs registers are
+  2453			 * scattered through CMN, and may appear either side of
+  2454			 * registers for other 'devices'. (e.g. the MPAM MSC controls).
+  2455			 */
+  2456			cfg = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+  2457			if (!cfg)
+> 2458				return PTR_ERR(-EINVAL);
+  2459			cmn->base = devm_ioremap(&pdev->dev, cfg->start, resource_size(cfg));
+  2460			if (IS_ERR(cmn->base))
+  2461				return PTR_ERR(cmn->base);
+  2462			if (cmn->part == PART_CMN600)
+  2463				rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
+  2464		}
+  2465		if (rootnode < 0)
+  2466			return rootnode;
+  2467	
+  2468		err = arm_cmn_discover(cmn, rootnode);
+  2469		if (err)
+  2470			return err;
+  2471	
+  2472		err = arm_cmn_init_dtcs(cmn);
+  2473		if (err)
+  2474			return err;
+  2475	
+  2476		err = arm_cmn_init_irqs(cmn);
+  2477		if (err)
+  2478			return err;
+  2479	
+  2480		cmn->cpu = cpumask_local_spread(0, dev_to_node(cmn->dev));
+  2481		cmn->pmu = (struct pmu) {
+  2482			.module = THIS_MODULE,
+  2483			.attr_groups = arm_cmn_attr_groups,
+  2484			.capabilities = PERF_PMU_CAP_NO_EXCLUDE,
+  2485			.task_ctx_nr = perf_invalid_context,
+  2486			.pmu_enable = arm_cmn_pmu_enable,
+  2487			.pmu_disable = arm_cmn_pmu_disable,
+  2488			.event_init = arm_cmn_event_init,
+  2489			.add = arm_cmn_event_add,
+  2490			.del = arm_cmn_event_del,
+  2491			.start = arm_cmn_event_start,
+  2492			.stop = arm_cmn_event_stop,
+  2493			.read = arm_cmn_event_read,
+  2494			.start_txn = arm_cmn_start_txn,
+  2495			.commit_txn = arm_cmn_commit_txn,
+  2496			.cancel_txn = arm_cmn_end_txn,
+  2497		};
+  2498	
+  2499		this_id = atomic_fetch_inc(&id);
+  2500		name = devm_kasprintf(cmn->dev, GFP_KERNEL, "arm_cmn_%d", this_id);
+  2501		if (!name)
+  2502			return -ENOMEM;
+  2503	
+  2504		err = cpuhp_state_add_instance(arm_cmn_hp_state, &cmn->cpuhp_node);
+  2505		if (err)
+  2506			return err;
+  2507	
+  2508		err = perf_pmu_register(&cmn->pmu, name, -1);
+  2509		if (err)
+  2510			cpuhp_state_remove_instance_nocalls(arm_cmn_hp_state, &cmn->cpuhp_node);
+  2511		else
+  2512			arm_cmn_debugfs_init(cmn, this_id);
+  2513	
+  2514		return err;
+  2515	}
+  2516	
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
