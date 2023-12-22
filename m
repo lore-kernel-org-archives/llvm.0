@@ -1,238 +1,84 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from helios.alatek.com.pl (helios.alatek.com.pl [85.14.123.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAF62E831;
-	Fri, 22 Dec 2023 20:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17A22F868;
+	Fri, 22 Dec 2023 22:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alatek.krakow.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alatek.krakow.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MmSdDrmv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703276074; x=1734812074;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7KvrfUBuDJWsLYn6DKnutSiX/U794E0nm9Hg9vcFODI=;
-  b=MmSdDrmvFPEyDuI5g4YtavFmqhnM1VpVyuEk2IIWSYkllNlHWoVmP5U/
-   cmvuxV/XQHtNqc+2vdA/MfB2r5jYE8f9srY5eh433A9UtqEL5BWUThOzt
-   gimB7tymDPAt+lejWDnJhEFH8L8mYR2hc/Zz9+sbgZlpkrcqflsS1wUgK
-   6pQBN08vwMGjKtVbmphRXTTOoMfPuMlvYxyVyw5tTkqx5xLfToP9h+V+P
-   LoBOSHYG7U0FS4FnKZV5QMM2myQYAEwTtR/htqDaQniXIasrTx+yjjkJk
-   ZG7FBL8UYvxPSqVF0+gVX9uWUHuOE9NJQe5KqKwI4kp9p8yTBXYkSnt3e
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="462593277"
-X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="462593277"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 12:14:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="843034099"
-X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="843034099"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Dec 2023 12:14:29 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rGluK-0009q3-0q;
-	Fri, 22 Dec 2023 20:14:19 +0000
-Date: Sat, 23 Dec 2023 04:10:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mina Almasry <almasrymina@google.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, kvm@vger.kernel.org,
-	virtualization@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mina Almasry <almasrymina@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	David Howells <dhowells@redhat.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Shakeel Butt <shakeelb@google.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH net-next v3 3/3] net: add netmem_ref to skb_frag_t
-Message-ID: <202312230340.iCf8sOop-lkp@intel.com>
-References: <20231220214505.2303297-4-almasrymina@google.com>
+	dkim=temperror (0-bit key) header.d=alatek.krakow.pl header.i=@alatek.krakow.pl header.b="Th/67DuH"
+Received: from localhost (localhost [127.0.0.1])
+	by helios.alatek.com.pl (Postfix) with ESMTP id 7D1642D20692;
+	Fri, 22 Dec 2023 23:43:44 +0100 (CET)
+Received: from helios.alatek.com.pl ([127.0.0.1])
+ by localhost (helios.alatek.com.pl [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id QlR8na06gDHs; Fri, 22 Dec 2023 23:43:40 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by helios.alatek.com.pl (Postfix) with ESMTP id 129E12D20696;
+	Fri, 22 Dec 2023 23:43:40 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 helios.alatek.com.pl 129E12D20696
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alatek.krakow.pl;
+	s=99EE5E86-D06A-11EC-BE24-DBCCD0A148D3; t=1703285020;
+	bh=7hMMwVJ9BHPVf5oT5QW8fMTlzszBSOKi19RlT3xHXEw=;
+	h=Message-ID:Date:MIME-Version:To:From;
+	b=Th/67DuHWSEaat8POJCsMeJloAbaUh5yjzRzv6pqu6MKsQ1wAyXXm/nUtcjkUCU3+
+	 3ghaBoc+rZFbaHrkuvI/1Cn1D63D4n3R7DYBPTPYShz2Q9+PT9p6qljqBeJ741rCpq
+	 oRrAmJaAx6Pd7n6iN1eYBEIc7A38jEEzUkHm1fTsAgFZIU2j10kt1X6LkwNNXj5X+t
+	 4+NUtSXiwr4UrKrZ3lVtWQ01soUeU7v0kqSzuDha+I08/Y2R5Hxfj7eyBlZuaEPsXp
+	 sWqP3Pr7xmhdBJyyKL7CivG9mq+W3XLMkAkTo/Re0BOGyYNickK5NbQluleZgzU8LM
+	 DP67uFDArGfCg==
+X-Virus-Scanned: amavis at alatek.com.pl
+Received: from helios.alatek.com.pl ([127.0.0.1])
+ by localhost (helios.alatek.com.pl [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id jQavP4A7IbgG; Fri, 22 Dec 2023 23:43:40 +0100 (CET)
+Received: from [10.125.125.1] (unknown [10.125.125.1])
+	by helios.alatek.com.pl (Postfix) with ESMTPSA id 5B3032D20692;
+	Fri, 22 Dec 2023 23:43:39 +0100 (CET)
+Message-ID: <d3ada600-c0ed-486d-98d0-e161059099f3@alatek.krakow.pl>
+Date: Fri, 22 Dec 2023 23:43:38 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231220214505.2303297-4-almasrymina@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] dmaengine: xilinx: xdma: Fix two clang warnings
+To: Nathan Chancellor <nathan@kernel.org>, lizhi.hou@amd.com,
+ brian.xu@amd.com, raj.kumar.rampelli@amd.com, vkoul@kernel.org
+Cc: dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20231222-dma-xilinx-xdma-clang-fixes-v1-0-84a18ff184d2@kernel.org>
+Content-Language: en-US
+From: Jan Kuliga <jankul@alatek.krakow.pl>
+In-Reply-To: <20231222-dma-xilinx-xdma-clang-fixes-v1-0-84a18ff184d2@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Mina,
+Hi all,
 
-kernel test robot noticed the following build errors:
+On 22.12.2023 19:06, Nathan Chancellor wrote:
+> Hi all,
+> 
+> This series fixes two clang warnings that I see after
+> commit 2f8f90cd2f8d ("dmaengine: xilinx: xdma: Implement interleaved DMA
+> transfers"). They have just been build tested but I think the logic is
+> sound, please double check though.
+> 
+> ---
+> Nathan Chancellor (2):
+>       dmaengine: xilinx: xdma: Fix operator precedence in xdma_prep_interleaved_dma()
+>       dmaengine: xilinx: xdma: Fix initialization location of desc in xdma_channel_isr()
+> 
+>  drivers/dma/xilinx/xdma.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> ---
+> base-commit: 3d0b2176e04261ab4ac095ff2a17db077fc1e46d
+> change-id: 20231222-dma-xilinx-xdma-clang-fixes-b9c2c3f5d0f3
+> 
+> Best regards,
 
-[auto build test ERROR on net-next/main]
+Thanks for fixing my broken patches Nathan. Next time I submit any patch, I have to pay more attention to use proper compiler flags for sure (I didn't use those flags so I didn't get any warnings/errors). The logic is okay.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mina-Almasry/vsock-virtio-use-skb_frag_-helpers/20231222-164637
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20231220214505.2303297-4-almasrymina%40google.com
-patch subject: [PATCH net-next v3 3/3] net: add netmem_ref to skb_frag_t
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231223/202312230340.iCf8sOop-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230340.iCf8sOop-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312230340.iCf8sOop-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/kcm/kcmsock.c:637:39: error: no member named 'bv_len' in 'struct skb_frag'
-     637 |                         msize += skb_shinfo(skb)->frags[i].bv_len;
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   1 error generated.
-
-
-vim +637 net/kcm/kcmsock.c
-
-cd6e111bf5be5c Tom Herbert       2016-03-07  578  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  579  /* Write any messages ready on the kcm socket.  Called with kcm sock lock
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  580   * held.  Return bytes actually sent or error.
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  581   */
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  582  static int kcm_write_msgs(struct kcm_sock *kcm)
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  583  {
-c31a25e1db486f David Howells     2023-06-09  584  	unsigned int total_sent = 0;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  585  	struct sock *sk = &kcm->sk;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  586  	struct kcm_psock *psock;
-c31a25e1db486f David Howells     2023-06-09  587  	struct sk_buff *head;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  588  	int ret = 0;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  589  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  590  	kcm->tx_wait_more = false;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  591  	psock = kcm->tx_psock;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  592  	if (unlikely(psock && psock->tx_stopped)) {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  593  		/* A reserved psock was aborted asynchronously. Unreserve
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  594  		 * it and we'll retry the message.
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  595  		 */
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  596  		unreserve_psock(kcm);
-cd6e111bf5be5c Tom Herbert       2016-03-07  597  		kcm_report_tx_retry(kcm);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  598  		if (skb_queue_empty(&sk->sk_write_queue))
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  599  			return 0;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  600  
-c31a25e1db486f David Howells     2023-06-09  601  		kcm_tx_msg(skb_peek(&sk->sk_write_queue))->started_tx = false;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  602  	}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  603  
-c31a25e1db486f David Howells     2023-06-09  604  retry:
-c31a25e1db486f David Howells     2023-06-09  605  	while ((head = skb_peek(&sk->sk_write_queue))) {
-c31a25e1db486f David Howells     2023-06-09  606  		struct msghdr msg = {
-c31a25e1db486f David Howells     2023-06-09  607  			.msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES,
-c31a25e1db486f David Howells     2023-06-09  608  		};
-c31a25e1db486f David Howells     2023-06-09  609  		struct kcm_tx_msg *txm = kcm_tx_msg(head);
-c31a25e1db486f David Howells     2023-06-09  610  		struct sk_buff *skb;
-c31a25e1db486f David Howells     2023-06-09  611  		unsigned int msize;
-c31a25e1db486f David Howells     2023-06-09  612  		int i;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  613  
-c31a25e1db486f David Howells     2023-06-09  614  		if (!txm->started_tx) {
-c31a25e1db486f David Howells     2023-06-09  615  			psock = reserve_psock(kcm);
-c31a25e1db486f David Howells     2023-06-09  616  			if (!psock)
-c31a25e1db486f David Howells     2023-06-09  617  				goto out;
-c31a25e1db486f David Howells     2023-06-09  618  			skb = head;
-c31a25e1db486f David Howells     2023-06-09  619  			txm->frag_offset = 0;
-c31a25e1db486f David Howells     2023-06-09  620  			txm->sent = 0;
-c31a25e1db486f David Howells     2023-06-09  621  			txm->started_tx = true;
-c31a25e1db486f David Howells     2023-06-09  622  		} else {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  623  			if (WARN_ON(!psock)) {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  624  				ret = -EINVAL;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  625  				goto out;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  626  			}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  627  			skb = txm->frag_skb;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  628  		}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  629  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  630  		if (WARN_ON(!skb_shinfo(skb)->nr_frags)) {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  631  			ret = -EINVAL;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  632  			goto out;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  633  		}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  634  
-c31a25e1db486f David Howells     2023-06-09  635  		msize = 0;
-c31a25e1db486f David Howells     2023-06-09  636  		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++)
-c31a25e1db486f David Howells     2023-06-09 @637  			msize += skb_shinfo(skb)->frags[i].bv_len;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  638  
-b2e5852793b6eb Mina Almasry      2023-12-20  639  		/* The cast to struct bio_vec* here assumes the frags are
-b2e5852793b6eb Mina Almasry      2023-12-20  640  		 * struct page based. WARN if there is no page in this skb.
-b2e5852793b6eb Mina Almasry      2023-12-20  641  		 */
-b2e5852793b6eb Mina Almasry      2023-12-20  642  		DEBUG_NET_WARN_ON_ONCE(
-b2e5852793b6eb Mina Almasry      2023-12-20  643  			!skb_frag_page(&skb_shinfo(skb)->frags[0]));
-b2e5852793b6eb Mina Almasry      2023-12-20  644  
-c31a25e1db486f David Howells     2023-06-09  645  		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE,
-b2e5852793b6eb Mina Almasry      2023-12-20  646  			      (const struct bio_vec *)skb_shinfo(skb)->frags,
-b2e5852793b6eb Mina Almasry      2023-12-20  647  			      skb_shinfo(skb)->nr_frags, msize);
-c31a25e1db486f David Howells     2023-06-09  648  		iov_iter_advance(&msg.msg_iter, txm->frag_offset);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  649  
-c31a25e1db486f David Howells     2023-06-09  650  		do {
-264ba53fac79b0 David Howells     2023-06-09  651  			ret = sock_sendmsg(psock->sk->sk_socket, &msg);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  652  			if (ret <= 0) {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  653  				if (ret == -EAGAIN) {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  654  					/* Save state to try again when there's
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  655  					 * write space on the socket
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  656  					 */
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  657  					txm->frag_skb = skb;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  658  					ret = 0;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  659  					goto out;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  660  				}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  661  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  662  				/* Hard failure in sending message, abort this
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  663  				 * psock since it has lost framing
-71a2fae50895b3 Bhaskar Chowdhury 2021-03-27  664  				 * synchronization and retry sending the
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  665  				 * message from the beginning.
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  666  				 */
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  667  				kcm_abort_tx_psock(psock, ret ? -ret : EPIPE,
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  668  						   true);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  669  				unreserve_psock(kcm);
-9f8d0dc0ec4a4b David Howells     2023-06-15  670  				psock = NULL;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  671  
-c31a25e1db486f David Howells     2023-06-09  672  				txm->started_tx = false;
-cd6e111bf5be5c Tom Herbert       2016-03-07  673  				kcm_report_tx_retry(kcm);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  674  				ret = 0;
-c31a25e1db486f David Howells     2023-06-09  675  				goto retry;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  676  			}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  677  
-c31a25e1db486f David Howells     2023-06-09  678  			txm->sent += ret;
-c31a25e1db486f David Howells     2023-06-09  679  			txm->frag_offset += ret;
-cd6e111bf5be5c Tom Herbert       2016-03-07  680  			KCM_STATS_ADD(psock->stats.tx_bytes, ret);
-c31a25e1db486f David Howells     2023-06-09  681  		} while (msg.msg_iter.count > 0);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  682  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  683  		if (skb == head) {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  684  			if (skb_has_frag_list(skb)) {
-c31a25e1db486f David Howells     2023-06-09  685  				txm->frag_skb = skb_shinfo(skb)->frag_list;
-c31a25e1db486f David Howells     2023-06-09  686  				txm->frag_offset = 0;
-c31a25e1db486f David Howells     2023-06-09  687  				continue;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  688  			}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  689  		} else if (skb->next) {
-c31a25e1db486f David Howells     2023-06-09  690  			txm->frag_skb = skb->next;
-c31a25e1db486f David Howells     2023-06-09  691  			txm->frag_offset = 0;
-c31a25e1db486f David Howells     2023-06-09  692  			continue;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  693  		}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  694  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  695  		/* Successfully sent the whole packet, account for it. */
-c31a25e1db486f David Howells     2023-06-09  696  		sk->sk_wmem_queued -= txm->sent;
-c31a25e1db486f David Howells     2023-06-09  697  		total_sent += txm->sent;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  698  		skb_dequeue(&sk->sk_write_queue);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  699  		kfree_skb(head);
-cd6e111bf5be5c Tom Herbert       2016-03-07  700  		KCM_STATS_INCR(psock->stats.tx_msgs);
-c31a25e1db486f David Howells     2023-06-09  701  	}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  702  out:
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  703  	if (!head) {
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  704  		/* Done with all queued messages. */
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  705  		WARN_ON(!skb_queue_empty(&sk->sk_write_queue));
-9f8d0dc0ec4a4b David Howells     2023-06-15  706  		if (psock)
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  707  			unreserve_psock(kcm);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  708  	}
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  709  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  710  	/* Check if write space is available */
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  711  	sk->sk_write_space(sk);
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  712  
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  713  	return total_sent ? : ret;
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  714  }
-ab7ac4eb9832e3 Tom Herbert       2016-03-07  715  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Jan
