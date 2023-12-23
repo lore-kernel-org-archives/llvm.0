@@ -1,109 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BC24433;
-	Sat, 23 Dec 2023 00:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF92EA3
+	for <llvm@lists.linux.dev>; Sat, 23 Dec 2023 02:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b7oahVnx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703290522; x=1734826522;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ws0TygMMtf/phnOvtmj/fglneDu5qG5xFkyTN/kvubk=;
-  b=b7oahVnxhlzLmDhUTQ5gD5lWJBSuHKmi77IHwB2rUkY8dbPAvZtTkeL+
-   kC2vInC3N7w25Gwp7Jh0UULdiQAvLsRLwbOT0XCDqYWV/L9oLORfdjYE9
-   +osnpsAzEVuQKfPQZgZ+bB8qmklNqhlGYPJhppTj20+RADyuc0IpX4eQ+
-   l6Wv1tHgAav2lufhgM6BiAbAx+OhiyNU5G5adO/sry64Sq+Bms/3BMqbM
-   9ks11apEwPyZaaB0432ITG87pr/lsIF2k3tXdarGvEI/1z4dog20t0zSO
-   C2So4UyTNyZkqyIVOwssLSEaNZ0kb6aJA2MeQ1AGD5ApEHomJ6opKxWR0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="17740307"
-X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="17740307"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 16:15:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="920821874"
-X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="920821874"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2023 16:15:17 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rGpeO-000A1n-1R;
-	Sat, 23 Dec 2023 00:14:39 +0000
-Date: Sat, 23 Dec 2023 08:11:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, olivia@selenic.com,
-	herbert@gondor.apana.org.au, jiajie.ho@starfivetech.com,
-	conor.dooley@microchip.com, martin@kaiser.cx, mmyangfl@gmail.com,
-	jenny.zhang@starfivetech.com, robh@kernel.org,
-	l.stelmach@samsung.com, ardb@kernel.org,
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	CobeChen@zhaoxin.com, TonyWWang@zhaoxin.com, YunShen@zhaoxin.com,
-	LeoLiu@zhaoxin.com, LeoLiuoc <LeoLiu-oc@zhaoxin.com>
-Subject: Re: [PATCH v3] hwrng: add Zhaoxin rng driver base on rep_xstore
- instruction
-Message-ID: <202312230731.XIJLqDeg-lkp@intel.com>
-References: <20231221062602.799432-1-LeoLiu-oc@zhaoxin.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hrnC//9K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1703299885;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UlMXULYEYKexh0WP0L5YLY/+THYnweQFZZPAIT/ZWkQ=;
+	b=hrnC//9KYTuTqh51VJG/0lSdwlu2xhKHeU5tOZkeVWhUacUsr+++AHD4yKqVKHQcGEGNgt
+	CAVYVwb41xHFbyO/9JMPfuQ1Ag1mrk7XZgl1ahmqHYoBhKqq7xQEJqsQ7mlIiJmIa8hygB
+	v6IWqqPGkPnD373ggvunUdp5iZpZBD8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-502-sT6k2gSgN-W3_KGeVN9C9A-1; Fri, 22 Dec 2023 21:51:23 -0500
+X-MC-Unique: sT6k2gSgN-W3_KGeVN9C9A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFAF48350E1
+	for <llvm@lists.linux.dev>; Sat, 23 Dec 2023 02:51:23 +0000 (UTC)
+Received: from [172.64.11.28] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 99AA051D5;
+	Sat, 23 Dec 2023 02:51:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
+ (6.7.0-rc6, mainline.kernel.org-clang, 8afe6f0e)
+Date: Sat, 23 Dec 2023 02:51:23 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231221062602.799432-1-LeoLiu-oc@zhaoxin.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <34567.123122221512400112@us-mta-502.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi LeoLiu-oc,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master linus/master v6.7-rc6 next-20231222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/LeoLiu-oc/hwrng-add-Zhaoxin-rng-driver-base-on-rep_xstore-instruction/20231222-174625
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20231221062602.799432-1-LeoLiu-oc%40zhaoxin.com
-patch subject: [PATCH v3] hwrng: add Zhaoxin rng driver base on rep_xstore instruction
-config: i386-buildonly-randconfig-003-20231223 (https://download.01.org/0day-ci/archive/20231223/202312230731.XIJLqDeg-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230731.XIJLqDeg-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2023-12-22' of git://anongit.freed=
+esktop.org/drm/drm
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312230731.XIJLqDeg-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/120267
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
+ubby
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1819
+            Affected tests:
+                  x86_64 - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
-   drivers/char/hw_random/via-rng.c:38:32: warning: tentative array definition assumed to have one element
-   static const struct x86_cpu_id via_rng_cpu_ids[];
-                                  ^
->> drivers/char/hw_random/via-rng.c:220:26: warning: unused variable 'via_rng_cpu_id' [-Wunused-variable]
-   static struct x86_cpu_id via_rng_cpu_id[] = {
-                            ^
-   2 warnings generated.
+Tests that were not ran because of internal issues:=20
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
 
 
-vim +/via_rng_cpu_id +220 drivers/char/hw_random/via-rng.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   219	
- > 220	static struct x86_cpu_id via_rng_cpu_id[] = {
-   221		X86_MATCH_VENDOR_FAM_FEATURE(CENTAUR, 6, X86_FEATURE_XSTORE, NULL),
-   222		{}
-   223	};
-   224	MODULE_DEVICE_TABLE(x86cpu, via_rng_cpu_id);
-   225	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
