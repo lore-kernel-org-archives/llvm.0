@@ -1,64 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FD510961;
-	Sat, 23 Dec 2023 16:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E60E10940;
+	Sat, 23 Dec 2023 17:04:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cp5axuEG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jUoEP2DW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703350179; x=1734886179;
+  t=1703351096; x=1734887096;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/S5uzL9+H61s2Jns5PxqIIJyFYN0g/vKObALDuHWy6o=;
-  b=Cp5axuEG1gSI6TMoQX6XtO7Fmz8488mvaiHHxUcMoPLncQPytrDLcemC
-   JPJ4QV0x/NZlPcETo1tFQs46K80R83W8onDNMedheBGbjNWIqkeLr86So
-   kON6oXXRhsMvQJYMCa1M8LNAzzfOeNVdEjymQSyhnlc7EbRkogov9oXJs
-   ktHKktJ+9w5nTOUTjWMt/Z9EVRsqZLd3/xJaiLLKemt3FtCBJrEVYKdzR
-   FiAO5gkZ6HkTog7Ipdn8MKDXoxSktRJu+62LHJREYIiyC/vi89neOFyfT
-   lHKjNlh4eIwr8KU+b6FXWI4yTzzC9gff93ur3fUJrCcpS8Pl8poakX+8w
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10933"; a="9599611"
+  bh=kEFd7MhTmJumlNW/XsckxCIHQkiQQHT0Q8nvzk57iQk=;
+  b=jUoEP2DWoF6fCE5hvHMBCUQfhHzuEuFT67pX3Dx5vzd1mZqZbBtFVd+/
+   y7BcUgNysXxYwrf8lu0Tmv1PTA255pvq27Fw5eikBPkLJZc9RNNar6aY5
+   tv+9cOlOJlD+4ZVjgwAD52CfGPo21d6w1BXmQnBqlKBB+ifEoEkuatv1m
+   F0YSahNOWZMJWn1WZ61KR0sWcgfD0VTYRkZqQ8cOug9pxo4kUEBgjVajO
+   +W0iKpix4Pn8oE+IGx7LH96w6egpHhzYjYgk41W99/L0lTQ7ATXLwXqtG
+   B5QduvMLR/YJTlfzYA9RRyppN/yg/Qm/7dMlXmbnYm39+yk/vCqU/QqzB
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10933"; a="395095585"
 X-IronPort-AV: E=Sophos;i="6.04,299,1695711600"; 
-   d="scan'208";a="9599611"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2023 08:49:39 -0800
+   d="scan'208";a="395095585"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2023 09:04:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10933"; a="811652591"
+X-IronPort-AV: E=McAfee;i="6600,9927,10933"; a="727163995"
 X-IronPort-AV: E=Sophos;i="6.04,299,1695711600"; 
-   d="scan'208";a="811652591"
+   d="scan'208";a="727163995"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 23 Dec 2023 08:49:33 -0800
+  by orsmga003.jf.intel.com with ESMTP; 23 Dec 2023 09:04:52 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rH5BW-000BDP-2q;
-	Sat, 23 Dec 2023 16:49:17 +0000
-Date: Sun, 24 Dec 2023 00:41:50 +0800
+	id 1rH5QU-000BEF-26;
+	Sat, 23 Dec 2023 17:04:43 +0000
+Date: Sun, 24 Dec 2023 01:03:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Hasemeyer <markhas@chromium.org>,
-	LKML <linux-kernel@vger.kernel.org>
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Raul Rangel <rrangel@chromium.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
-	Mark Hasemeyer <markhas@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>, Lee Jones <lee@kernel.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	Rob Barnes <robbarnes@google.com>,
-	Stephen Boyd <swboyd@chromium.org>, chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v2 22/22] platform/chrome: cros_ec: Use PM subsystem to
- manage wakeirq
-Message-ID: <202312240045.wiFeDc1T-lkp@intel.com>
-References: <20231220165423.v2.22.Ieee574a0e94fbaae01fd6883ffe2ceeb98d7df28@changeid>
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	virtualization@lists.linux.dev
+Subject: Re: [PATCH net-next 3/6] virtio_net: support device stats
+Message-ID: <202312240041.YOiIXVkG-lkp@intel.com>
+References: <20231222033021.20649-4-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,60 +56,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231220165423.v2.22.Ieee574a0e94fbaae01fd6883ffe2ceeb98d7df28@changeid>
+In-Reply-To: <20231222033021.20649-4-xuanzhuo@linux.alibaba.com>
 
-Hi Mark,
+Hi Xuan,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on chrome-platform/for-next chrome-platform/for-firmware-next wsa/i2c/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.7-rc6 next-20231222]
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.7-rc6]
+[cannot apply to net-next/main horms-ipvs/master next-20231222]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Hasemeyer/gpiolib-acpi-Modify-acpi_dev_irq_wake_get_by-to-use-resource/20231222-172104
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20231220165423.v2.22.Ieee574a0e94fbaae01fd6883ffe2ceeb98d7df28%40changeid
-patch subject: [PATCH v2 22/22] platform/chrome: cros_ec: Use PM subsystem to manage wakeirq
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20231224/202312240045.wiFeDc1T-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231224/202312240045.wiFeDc1T-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/virtio_net-introduce-device-stats-feature-and-structures/20231222-175505
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20231222033021.20649-4-xuanzhuo%40linux.alibaba.com
+patch subject: [PATCH net-next 3/6] virtio_net: support device stats
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231224/202312240041.YOiIXVkG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231224/202312240041.YOiIXVkG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312240045.wiFeDc1T-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312240041.YOiIXVkG-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/platform/chrome/cros_ec_lpc.c:66:2: error: expected ';' after top level declarator
-   }
-    ^
-    ;
-   1 error generated.
+>> drivers/net/virtio_net.c:224:2: warning: shift count >= width of type [-Wshift-count-overflow]
+           VIRTNET_DEVICE_STATS_MAP_ITEM(CVQ, cvq, CQ),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/virtio_net.c:215:3: note: expanded from macro 'VIRTNET_DEVICE_STATS_MAP_ITEM'
+                   VIRTIO_NET_STATS_TYPE_##TYPE,                   \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:61:1: note: expanded from here
+   VIRTIO_NET_STATS_TYPE_CVQ
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/virtio_net.h:419:45: note: expanded from macro 'VIRTIO_NET_STATS_TYPE_CVQ'
+   #define VIRTIO_NET_STATS_TYPE_CVQ       (1L << 32)
+                                               ^  ~~
+   1 warning generated.
 
 
-vim +66 drivers/platform/chrome/cros_ec_lpc.c
+vim +224 drivers/net/virtio_net.c
 
-    51	
-    52	static const struct dmi_system_id untrusted_fw_irq_wake_capable[] = {
-    53		{
-    54			.ident = "Brya",
-    55			.matches = {
-    56				DMI_MATCH(DMI_PRODUCT_FAMILY, "Google_Brya")
-    57			}
-    58		},
-    59		{
-    60			.ident = "Brask",
-    61			.matches = {
-    62				DMI_MATCH(DMI_PRODUCT_FAMILY, "Google_Brask")
-    63			}
-    64		},
-    65		{ }
-  > 66	}
-    67	MODULE_DEVICE_TABLE(dmi, untrusted_fw_irq_wake_capable);
-    68	
+   212	
+   213	#define VIRTNET_DEVICE_STATS_MAP_ITEM(TYPE, type, queue_type)	\
+   214		{							\
+   215			VIRTIO_NET_STATS_TYPE_##TYPE,			\
+   216			sizeof(struct virtio_net_stats_ ## type),	\
+   217			ARRAY_SIZE(virtnet_stats_ ## type ##_desc),	\
+   218			VIRTNET_STATS_Q_TYPE_##queue_type,		\
+   219			VIRTIO_NET_STATS_TYPE_REPLY_##TYPE,		\
+   220			&virtnet_stats_##type##_desc[0]			\
+   221		}
+   222	
+   223	static struct virtnet_stats_map virtio_net_stats_map[] = {
+ > 224		VIRTNET_DEVICE_STATS_MAP_ITEM(CVQ, cvq, CQ),
+   225	
+   226		VIRTNET_DEVICE_STATS_MAP_ITEM(RX_BASIC, rx_basic, RX),
+   227		VIRTNET_DEVICE_STATS_MAP_ITEM(RX_CSUM,  rx_csum,  RX),
+   228		VIRTNET_DEVICE_STATS_MAP_ITEM(RX_GSO,   rx_gso,   RX),
+   229		VIRTNET_DEVICE_STATS_MAP_ITEM(RX_SPEED, rx_speed, RX),
+   230	
+   231		VIRTNET_DEVICE_STATS_MAP_ITEM(TX_BASIC, tx_basic, TX),
+   232		VIRTNET_DEVICE_STATS_MAP_ITEM(TX_CSUM,  tx_csum,  TX),
+   233		VIRTNET_DEVICE_STATS_MAP_ITEM(TX_GSO,   tx_gso,   TX),
+   234		VIRTNET_DEVICE_STATS_MAP_ITEM(TX_SPEED, tx_speed, TX),
+   235	};
+   236	
 
 -- 
 0-DAY CI Kernel Test Service
