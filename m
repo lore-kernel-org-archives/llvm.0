@@ -1,53 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0017E36091;
-	Fri, 22 Dec 2023 23:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BC24433;
+	Sat, 23 Dec 2023 00:15:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JAjS/7Ga"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b7oahVnx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703288493; x=1734824493;
+  t=1703290522; x=1734826522;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=BKjLPR1XFtYzZGRa6QjbRckx/IglWwU8GkTNRWNre7k=;
-  b=JAjS/7GaEtrprDukDia7UoznW55W1S4+I98n4Sd/XhyhF6KhJyBPYqBl
-   CX2SOommTiftlnj2vDkimh+27Z2GY1wkk7xfWV5ZCzvl1cjkxaB83VQtb
-   X1F9qRJ7SYeeJjzE96scLcT/QCgc/u+IiO82Tb73n3UKx5FLB93TBz8Kd
-   appKL0yKYKoTpQ8WEDSVU1P+e/6p0gz1fQlYH2vnlfgaPK+BLmxw+oWPD
-   /NhG82DU7NCh22joIx0X8Bob+mkSPw8MjiVLEXJHdkwUXqWS8Xcn/4Ujj
-   MuZYF7IXtAdB2A1rAA9ubcCp82o+qmJA4C1HkMs1eO+WdeVAKXXp4NOD9
+  bh=Ws0TygMMtf/phnOvtmj/fglneDu5qG5xFkyTN/kvubk=;
+  b=b7oahVnxhlzLmDhUTQ5gD5lWJBSuHKmi77IHwB2rUkY8dbPAvZtTkeL+
+   kC2vInC3N7w25Gwp7Jh0UULdiQAvLsRLwbOT0XCDqYWV/L9oLORfdjYE9
+   +osnpsAzEVuQKfPQZgZ+bB8qmklNqhlGYPJhppTj20+RADyuc0IpX4eQ+
+   l6Wv1tHgAav2lufhgM6BiAbAx+OhiyNU5G5adO/sry64Sq+Bms/3BMqbM
+   9ks11apEwPyZaaB0432ITG87pr/lsIF2k3tXdarGvEI/1z4dog20t0zSO
+   C2So4UyTNyZkqyIVOwssLSEaNZ0kb6aJA2MeQ1AGD5ApEHomJ6opKxWR0
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="482347686"
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="17740307"
 X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="482347686"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 15:41:26 -0800
+   d="scan'208";a="17740307"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 16:15:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="806114428"
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="920821874"
 X-IronPort-AV: E=Sophos;i="6.04,297,1695711600"; 
-   d="scan'208";a="806114428"
+   d="scan'208";a="920821874"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 22 Dec 2023 15:41:22 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2023 16:15:17 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rGp8m-000A0Q-1m;
-	Fri, 22 Dec 2023 23:41:18 +0000
-Date: Sat, 23 Dec 2023 07:39:31 +0800
+	id 1rGpeO-000A1n-1R;
+	Sat, 23 Dec 2023 00:14:39 +0000
+Date: Sat, 23 Dec 2023 08:11:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
-	peterz@infradead.org, juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	imran.f.khan@oracle.com, aaron.lu@intel.com,
-	linux-kernel@vger.kernel.org
+To: LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, olivia@selenic.com,
+	herbert@gondor.apana.org.au, jiajie.ho@starfivetech.com,
+	conor.dooley@microchip.com, martin@kaiser.cx, mmyangfl@gmail.com,
+	jenny.zhang@starfivetech.com, robh@kernel.org,
+	l.stelmach@samsung.com, ardb@kernel.org,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] sched: Fix tg->load when offlining a CPU
-Message-ID: <202312230731.vxFaJB7G-lkp@intel.com>
-References: <20231221164014.447122-1-vincent.guittot@linaro.org>
+	CobeChen@zhaoxin.com, TonyWWang@zhaoxin.com, YunShen@zhaoxin.com,
+	LeoLiu@zhaoxin.com, LeoLiuoc <LeoLiu-oc@zhaoxin.com>
+Subject: Re: [PATCH v3] hwrng: add Zhaoxin rng driver base on rep_xstore
+ instruction
+Message-ID: <202312230731.XIJLqDeg-lkp@intel.com>
+References: <20231221062602.799432-1-LeoLiu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,133 +58,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231221164014.447122-1-vincent.guittot@linaro.org>
+In-Reply-To: <20231221062602.799432-1-LeoLiu-oc@zhaoxin.com>
 
-Hi Vincent,
+Hi LeoLiu-oc,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on peterz-queue/sched/core linus/master v6.7-rc6 next-20231222]
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master linus/master v6.7-rc6 next-20231222]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Guittot/sched-Fix-tg-load-when-offlining-a-CPU/20231222-172438
-base:   tip/sched/core
-patch link:    https://lore.kernel.org/r/20231221164014.447122-1-vincent.guittot%40linaro.org
-patch subject: [PATCH] sched: Fix tg->load when offlining a CPU
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20231223/202312230731.vxFaJB7G-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230731.vxFaJB7G-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/LeoLiu-oc/hwrng-add-Zhaoxin-rng-driver-base-on-rep_xstore-instruction/20231222-174625
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20231221062602.799432-1-LeoLiu-oc%40zhaoxin.com
+patch subject: [PATCH v3] hwrng: add Zhaoxin rng driver base on rep_xstore instruction
+config: i386-buildonly-randconfig-003-20231223 (https://download.01.org/0day-ci/archive/20231223/202312230731.XIJLqDeg-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312230731.XIJLqDeg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312230731.vxFaJB7G-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312230731.XIJLqDeg-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> kernel/sched/fair.c:12498:2: error: call to undeclared function 'clear_tg_offline_cfs_rqs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    12498 |         clear_tg_offline_cfs_rqs(rq);
-          |         ^
-   kernel/sched/fair.c:12498:2: note: did you mean 'unthrottle_offline_cfs_rqs'?
-   kernel/sched/fair.c:6620:20: note: 'unthrottle_offline_cfs_rqs' declared here
-    6620 | static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
-         |                    ^
-   kernel/sched/fair.c:13124:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
-    13124 | void free_fair_sched_group(struct task_group *tg) { }
-          |      ^
-   kernel/sched/fair.c:13124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    13124 | void free_fair_sched_group(struct task_group *tg) { }
-          | ^
-          | static 
-   kernel/sched/fair.c:13126:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
-    13126 | int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-          |     ^
-   kernel/sched/fair.c:13126:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    13126 | int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-          | ^
-          | static 
-   kernel/sched/fair.c:13131:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
-    13131 | void online_fair_sched_group(struct task_group *tg) { }
-          |      ^
-   kernel/sched/fair.c:13131:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    13131 | void online_fair_sched_group(struct task_group *tg) { }
-          | ^
-          | static 
-   kernel/sched/fair.c:13133:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
-    13133 | void unregister_fair_sched_group(struct task_group *tg) { }
-          |      ^
-   kernel/sched/fair.c:13133:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    13133 | void unregister_fair_sched_group(struct task_group *tg) { }
-          | ^
-          | static 
-   10 warnings and 1 error generated.
+   drivers/char/hw_random/via-rng.c:38:32: warning: tentative array definition assumed to have one element
+   static const struct x86_cpu_id via_rng_cpu_ids[];
+                                  ^
+>> drivers/char/hw_random/via-rng.c:220:26: warning: unused variable 'via_rng_cpu_id' [-Wunused-variable]
+   static struct x86_cpu_id via_rng_cpu_id[] = {
+                            ^
+   2 warnings generated.
 
 
-vim +/clear_tg_offline_cfs_rqs +12498 kernel/sched/fair.c
+vim +/via_rng_cpu_id +220 drivers/char/hw_random/via-rng.c
 
- 12489	
- 12490	static void rq_offline_fair(struct rq *rq)
- 12491	{
- 12492		update_sysctl();
- 12493	
- 12494		/* Ensure any throttled groups are reachable by pick_next_task */
- 12495		unthrottle_offline_cfs_rqs(rq);
- 12496	
- 12497		/* Ensure that we remove rq contribution to group share */
- 12498		clear_tg_offline_cfs_rqs(rq);
- 12499	}
- 12500	
+   219	
+ > 220	static struct x86_cpu_id via_rng_cpu_id[] = {
+   221		X86_MATCH_VENDOR_FAM_FEATURE(CENTAUR, 6, X86_FEATURE_XSTORE, NULL),
+   222		{}
+   223	};
+   224	MODULE_DEVICE_TABLE(x86cpu, via_rng_cpu_id);
+   225	
 
 -- 
 0-DAY CI Kernel Test Service
