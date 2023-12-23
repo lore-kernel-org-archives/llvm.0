@@ -1,144 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF92EA3
-	for <llvm@lists.linux.dev>; Sat, 23 Dec 2023 02:51:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98356ABF;
+	Sat, 23 Dec 2023 06:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hrnC//9K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703299885;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=UlMXULYEYKexh0WP0L5YLY/+THYnweQFZZPAIT/ZWkQ=;
-	b=hrnC//9KYTuTqh51VJG/0lSdwlu2xhKHeU5tOZkeVWhUacUsr+++AHD4yKqVKHQcGEGNgt
-	CAVYVwb41xHFbyO/9JMPfuQ1Ag1mrk7XZgl1ahmqHYoBhKqq7xQEJqsQ7mlIiJmIa8hygB
-	v6IWqqPGkPnD373ggvunUdp5iZpZBD8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-502-sT6k2gSgN-W3_KGeVN9C9A-1; Fri, 22 Dec 2023 21:51:23 -0500
-X-MC-Unique: sT6k2gSgN-W3_KGeVN9C9A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFAF48350E1
-	for <llvm@lists.linux.dev>; Sat, 23 Dec 2023 02:51:23 +0000 (UTC)
-Received: from [172.64.11.28] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 99AA051D5;
-	Sat, 23 Dec 2023 02:51:23 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
- (6.7.0-rc6, mainline.kernel.org-clang, 8afe6f0e)
-Date: Sat, 23 Dec 2023 02:51:23 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GwIM5UA+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703312624; x=1734848624;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BmsPPm3X9FukrKuoK8rzzxZ/RObXZnA0uGPF96SNcDw=;
+  b=GwIM5UA+yveVtXtxuJi0mmx7hllH0FIe9OaAyx1aAN5Lij89TuPFcrm0
+   FAon2qZ4IWN7HWakm351TqpauCdzZ874pF610B7Z7jCe7uXeOrNaWApQo
+   SZJxDI84WAz+YdJqIZWK84C9+RfANJEOitZwSxt2c1coQOzAOpTVDuQyQ
+   Ztpbo5g6Y/KmtV0lmhsyJqJQgxP3vxja9oNEj6DDLBolJwosO6IlLHrmJ
+   NRAtqdkPdgUXToHI+r56ZPIItbpNl1xhQzcrWbniuHO0GyDO8yK5CzdRK
+   2Tex5qx10M0VHoJPC+VGzVlaaxk/AmkCCk+V2KqjfEfu8JrGJ2XBolGB0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="381166662"
+X-IronPort-AV: E=Sophos;i="6.04,298,1695711600"; 
+   d="scan'208";a="381166662"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 22:23:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="780808569"
+X-IronPort-AV: E=Sophos;i="6.04,298,1695711600"; 
+   d="scan'208";a="780808569"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Dec 2023 22:23:40 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rGvQ3-000ANF-15;
+	Sat, 23 Dec 2023 06:23:37 +0000
+Date: Sat, 23 Dec 2023 14:22:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, pavan.chebbi@broadcom.com,
+	andrew.gospodarek@broadcom.com
+Subject: Re: [PATCH net-next 04/13] bnxt_en: Refactor L2 filter alloc/free
+ firmware commands.
+Message-ID: <202312231448.DVjORC4c-lkp@intel.com>
+References: <20231221220218.197386-5-michael.chan@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <34567.123122221512400112@us-mta-502.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231221220218.197386-5-michael.chan@broadcom.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Michael,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on net-next/main]
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2023-12-22' of git://anongit.freed=
-esktop.org/drm/drm
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Chan/bnxt_en-Refactor-bnxt_ntuple_filter-structure/20231222-174043
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20231221220218.197386-5-michael.chan%40broadcom.com
+patch subject: [PATCH net-next 04/13] bnxt_en: Refactor L2 filter alloc/free firmware commands.
+config: powerpc-randconfig-001-20231223 (https://download.01.org/0day-ci/archive/20231223/202312231448.DVjORC4c-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231223/202312231448.DVjORC4c-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/120267
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312231448.DVjORC4c-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
-ubby
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1819
-            Affected tests:
-                  x86_64 - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+All errors (new ones prefixed by >>):
 
-Tests that were not ran because of internal issues:=20
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
+>> drivers/net/ethernet/broadcom/bnxt/bnxt.c:5443:35: error: subscript of pointer to incomplete type 'struct bnxt_vf_info'
+           struct bnxt_vf_info *vf = &pf->vf[vf_idx];
+                                      ~~~~~~^
+   drivers/net/ethernet/broadcom/bnxt/bnxt.h:1332:9: note: forward declaration of 'struct bnxt_vf_info'
+           struct bnxt_vf_info     *vf;
+                  ^
+>> drivers/net/ethernet/broadcom/bnxt/bnxt.c:5445:11: error: incomplete definition of type 'struct bnxt_vf_info'
+           return vf->fw_fid;
+                  ~~^
+   drivers/net/ethernet/broadcom/bnxt/bnxt.h:1332:9: note: forward declaration of 'struct bnxt_vf_info'
+           struct bnxt_vf_info     *vf;
+                  ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:13583:44: warning: shift count >= width of type [-Wshift-count-overflow]
+           if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64)) != 0 &&
+                                                     ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 2 errors generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +5443 drivers/net/ethernet/broadcom/bnxt/bnxt.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  5440	
+  5441	static u16 bnxt_vf_target_id(struct bnxt_pf_info *pf, u16 vf_idx)
+  5442	{
+> 5443		struct bnxt_vf_info *vf = &pf->vf[vf_idx];
+  5444	
+> 5445		return vf->fw_fid;
+  5446	}
+  5447	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
