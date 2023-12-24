@@ -1,131 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F745663
-	for <llvm@lists.linux.dev>; Sun, 24 Dec 2023 14:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7B15663;
+	Sun, 24 Dec 2023 14:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NfyZZhcM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703428886;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RkUt1UZZ13+ylVJGbbjNN9pzrJwEJo8z0LexkXI5Wmg=;
-	b=NfyZZhcMrj3UORVsPgFy5h/MKBesg2BY9tMy3u2HcEkNTPDJgtUT2+lQxizYF5BnpskzbQ
-	2s6ofANLlV7n+/ZDzVzXt5BD2Nes4pdDZeq7BWkMlyzCKNf9KW+tGxDmYE0m9VLVMVOneY
-	RfGMcarKSnpvucUEEFnqTE/QP8/ZwxU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-253-yz6clfZFM8GFGMecHPmsSg-1; Sun,
- 24 Dec 2023 09:41:24 -0500
-X-MC-Unique: yz6clfZFM8GFGMecHPmsSg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C2CB29AA3B3
-	for <llvm@lists.linux.dev>; Sun, 24 Dec 2023 14:41:24 +0000 (UTC)
-Received: from [172.64.11.28] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7423F2166B31;
-	Sun, 24 Dec 2023 14:41:24 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
- (6.7.0-rc7, mainline.kernel.org-clang, 861deac3)
-Date: Sun, 24 Dec 2023 14:41:24 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D2KC4nj8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703429703; x=1734965703;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8upH4h+ydesTW9EE2ichDjlWcgSj5zQ0VTbr0Pf4Bms=;
+  b=D2KC4nj8/dTBTyr0tVuvn/kLNPSVZciZkHIQy2vNpCjBVs/UyXRlyLd8
+   g1cACGn1qEvrIGylNlQoXw9Mb/sg9CdBuL7uOFcTn67S4jz9RbYwqEGga
+   shTr4yi5QDXW/XwYdAHhw5rFO/8gD0A9ND2TbrYvqD/ABmMvUaUnydf4A
+   7wsFtMtU5bb/4QuMnjtrG+jR6t6JERNGS6/fQpsj7QYXTo4HdA6lNhiHa
+   k/FwtCYGB7+axpWw+ENVeHPX45Ng80S9r3GMPY0Fgy19/gbjfU4EB9pea
+   iJkENFyvtuLsUkZmTz7NTKskAPV1/n90yHzirRSB/SRL/CMHN5n/nO4Bj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="482417353"
+X-IronPort-AV: E=Sophos;i="6.04,301,1695711600"; 
+   d="scan'208";a="482417353"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2023 06:55:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="806475966"
+X-IronPort-AV: E=Sophos;i="6.04,301,1695711600"; 
+   d="scan'208";a="806475966"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 24 Dec 2023 06:55:01 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rHPsC-000CM5-1E;
+	Sun, 24 Dec 2023 14:54:39 +0000
+Date: Sun, 24 Dec 2023 22:54:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal Kubiak <michal.kubiak@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexander Lobakin <aleksander.lobakin@intel.com>
+Subject: [alobakin:idpf-libie 45/48]
+ drivers/net/ethernet/intel/idpf/idpf_xsk.c:402: warning: Excess function
+ parameter 'pool' description in 'idpf_xsk_pool_enable'
+Message-ID: <202312242233.onWAiHR3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
-Message-Id: <26274.123122409412400245@us-mta-253.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/alobakin/linux idpf-libie
+head:   2ad48b3813615378a8dc05f601405904a3e11ad5
+commit: 434c89dbb5af328460429a9f731c91b7d6830ef7 [45/48] idpf: add XSk pool initialization
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231224/202312242233.onWAiHR3-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231224/202312242233.onWAiHR3-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312242233.onWAiHR3-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Linux 6.7-rc7
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/120301
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
-ubby
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1819
-            Affected tests:
-                  x86_64 - kdump - sysrq-c
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-Tests that were not ran because of internal issues:=20
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
+>> drivers/net/ethernet/intel/idpf/idpf_xsk.c:402: warning: Excess function parameter 'pool' description in 'idpf_xsk_pool_enable'
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +402 drivers/net/ethernet/intel/idpf/idpf_xsk.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   373	
+   374	/**
+   375	 * idpf_xsk_pool_disable - disables a BUFF POOL region
+   376	 * @vport: vport to allocate the buffer pool on
+   377	 * @qid: queue id
+   378	 *
+   379	 * Returns 0 on success, negative on error
+   380	 */
+   381	static int idpf_xsk_pool_disable(struct idpf_vport *vport, u16 qid)
+   382	{
+   383		struct idpf_vport_user_config_data *cfg_data;
+   384	
+   385		if (!vport->rxq_grps)
+   386			return -EINVAL;
+   387	
+   388		cfg_data = &vport->adapter->vport_config[vport->idx]->user_config;
+   389	
+   390		return libie_xsk_disable_pool(vport->netdev, qid,
+   391					      cfg_data->af_xdp_zc_qps);
+   392	}
+   393	/**
+   394	 * idpf_xsk_pool_enable - enables a BUFF POOL region
+   395	 * @vport: vport to allocate the buffer pool on
+   396	 * @pool: pointer to a requested BUFF POOL region
+   397	 * @qid: queue id
+   398	 *
+   399	 * Returns 0 on success, negative on error
+   400	 */
+   401	static int idpf_xsk_pool_enable(struct idpf_vport *vport, u16 qid)
+ > 402	{
+   403		struct idpf_vport_user_config_data *cfg_data;
+   404	
+   405		cfg_data = &vport->adapter->vport_config[vport->idx]->user_config;
+   406	
+   407		return libie_xsk_enable_pool(vport->netdev, qid,
+   408					     cfg_data->af_xdp_zc_qps);
+   409	}
+   410	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
