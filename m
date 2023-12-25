@@ -1,49 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24771E504;
-	Mon, 25 Dec 2023 22:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C32219ED;
+	Mon, 25 Dec 2023 23:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJdYMkFh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K7QWOIU8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703544670; x=1735080670;
+  t=1703547076; x=1735083076;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qd8m4Zb1VE+AwX3lsSqH93CaM4ubS6DMcu9/thPDiYE=;
-  b=jJdYMkFhuvQ6pRq3JBaH21dF7vaSBQ1QWGdk9U9sThCi4AAXuNXnTzTQ
-   fod8Igia8FIXlGFqiW/HGYVuy/+aYYbiAe9gpCelEaxt8c3cfJnIu/1a0
-   gW7z6EwJYC91cmBLSmokdVk48IfbCj3jCfAVwnH7tWUP7/noLFFvQU+DD
-   AgyvV2XSHTP0qVLvzLQnQuLSjAR2xNFTcwTLv1+FiZQXXwplwvEc2yyXW
-   8TWm8tW1X8IeFQfrxuWFlAhNCP61MFz0vYOA/1ujdagX/XiUeGBFibzsL
-   iirSMZqlTccKOJNZI5fPqhdQia1PpMJSfGiKINCTSBDoIn1SilOKjemyT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="482482615"
+  bh=5SMN0AzloiLbP8beEL+tP2MzpuhkZtwKpAax1CA2Udg=;
+  b=K7QWOIU8s9nmwIKUadWNG9iuxqcFRhiLzuX9U9WmVwTG4rm27NZuyLYz
+   JLmv0LUARDgIFvp/dCQfYaX829PKpAwPhbgHjSsR0u1sB3uAKK2FibV1h
+   Cutey/3mFmzn7+hcY20oNylUSJzobIoiicivZ6MA7WFI5L5IeCt8LN785
+   P4Ldro1l4FFpNJfb+rs95RxoCUj00TygqMmiW8zW6xChW3A5mzJsPuUp6
+   hyDbZL/Q3RcUDGLn9MFdmalltVtmTPeKcyloYVYrwJaNwDY2jKml4u3qP
+   ul5qY3oBoMdzuZaz7u71nZC2vflQWiiwSb4P/1/qcmbUpTaz3EljQvbLk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="9838288"
 X-IronPort-AV: E=Sophos;i="6.04,304,1695711600"; 
-   d="scan'208";a="482482615"
+   d="scan'208";a="9838288"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2023 14:51:08 -0800
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2023 15:31:14 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="771026525"
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="771030390"
 X-IronPort-AV: E=Sophos;i="6.04,304,1695711600"; 
-   d="scan'208";a="771026525"
+   d="scan'208";a="771030390"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 25 Dec 2023 14:51:06 -0800
+  by orsmga007.jf.intel.com with ESMTP; 25 Dec 2023 15:31:09 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rHtmq-000DkV-0e;
-	Mon, 25 Dec 2023 22:51:04 +0000
-Date: Tue, 26 Dec 2023 06:50:15 +0800
+	id 1rHuPa-000DmL-2L;
+	Mon, 25 Dec 2023 23:31:06 +0000
+Date: Tue, 26 Dec 2023 07:30:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zhipeng Lu <alexious@zju.edu.cn>
+To: Lino Sanfilippo <l.sanfilippo@kunbus.com>, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: hdsp: fix some memleaks in snd_hdsp_hwdep_ioctl
-Message-ID: <202312260629.HwV1r2MX-lkp@intel.com>
-References: <20231224082533.3540468-1-alexious@zju.edu.cn>
+	u.kleine-koenig@pengutronix.de, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com, cniedermaier@dh-electronics.com,
+	hugo@hugovil.com, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, LinoSanfilippo@gmx.de,
+	lukas@wunner.de, p.rosenberger@kunbus.com,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v6 6/7] serial: omap: do not override settings for RS485
+ support
+Message-ID: <202312260719.mI12i497-lkp@intel.com>
+References: <20231225113524.8800-7-l.sanfilippo@kunbus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,242 +59,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231224082533.3540468-1-alexious@zju.edu.cn>
+In-Reply-To: <20231225113524.8800-7-l.sanfilippo@kunbus.com>
 
-Hi Zhipeng,
+Hi Lino,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on tiwai-sound/for-linus linus/master v6.7-rc7 next-20231222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on ceb6a6f023fd3e8b07761ed900352ef574010bcb]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhipeng-Lu/ALSA-hdsp-fix-some-memleaks-in-snd_hdsp_hwdep_ioctl/20231225-155210
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20231224082533.3540468-1-alexious%40zju.edu.cn
-patch subject: [PATCH] ALSA: hdsp: fix some memleaks in snd_hdsp_hwdep_ioctl
-config: i386-buildonly-randconfig-004-20231225 (https://download.01.org/0day-ci/archive/20231226/202312260629.HwV1r2MX-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231226/202312260629.HwV1r2MX-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lino-Sanfilippo/serial-Do-not-hold-the-port-lock-when-setting-rx-during-tx-GPIO/20231225-193833
+base:   ceb6a6f023fd3e8b07761ed900352ef574010bcb
+patch link:    https://lore.kernel.org/r/20231225113524.8800-7-l.sanfilippo%40kunbus.com
+patch subject: [PATCH v6 6/7] serial: omap: do not override settings for RS485 support
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231226/202312260719.mI12i497-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231226/202312260719.mI12i497-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312260629.HwV1r2MX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312260719.mI12i497-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/pci/rme9652/hdsp.c:4917:1: warning: unused label 'err' [-Wunused-label]
-   err:
-   ^~~~
->> sound/pci/rme9652/hdsp.c:4918:9: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-           return err;
-                  ^~~
-   sound/pci/rme9652/hdsp.c:4732:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   2 warnings generated.
+>> drivers/tty/serial/omap-serial.c:1501:29: error: use of undeclared identifier 'serial_omap_rs485_supported'
+    1501 |         up->port.rs485_supported = serial_omap_rs485_supported;
+         |                                    ^
+   1 error generated.
 
 
-vim +/err +4917 sound/pci/rme9652/hdsp.c
+vim +/serial_omap_rs485_supported +1501 drivers/tty/serial/omap-serial.c
 
-  4727	
-  4728	static int snd_hdsp_hwdep_ioctl(struct snd_hwdep *hw, struct file *file, unsigned int cmd, unsigned long arg)
-  4729	{
-  4730		struct hdsp *hdsp = hw->private_data;
-  4731		void __user *argp = (void __user *)arg;
-  4732		int err;
-  4733	
-  4734		switch (cmd) {
-  4735		case SNDRV_HDSP_IOCTL_GET_PEAK_RMS: {
-  4736			struct hdsp_peak_rms __user *peak_rms = (struct hdsp_peak_rms __user *)arg;
-  4737	
-  4738			err = hdsp_check_for_iobox(hdsp);
-  4739			if (err < 0)
-  4740				return err;
-  4741	
-  4742			err = hdsp_check_for_firmware(hdsp, 1);
-  4743			if (err < 0)
-  4744				return err;
-  4745	
-  4746			if (!(hdsp->state & HDSP_FirmwareLoaded)) {
-  4747				dev_err(hdsp->card->dev,
-  4748					"firmware needs to be uploaded to the card.\n");
-  4749				return -EINVAL;
-  4750			}
-  4751	
-  4752			switch (hdsp->io_type) {
-  4753			case H9652:
-  4754				return hdsp_9652_get_peak(hdsp, peak_rms);
-  4755			case H9632:
-  4756				return hdsp_9632_get_peak(hdsp, peak_rms);
-  4757			default:
-  4758				return hdsp_get_peak(hdsp, peak_rms);
-  4759			}
-  4760		}
-  4761		case SNDRV_HDSP_IOCTL_GET_CONFIG_INFO: {
-  4762			struct hdsp_config_info info;
-  4763			unsigned long flags;
-  4764			int i;
-  4765	
-  4766			err = hdsp_check_for_iobox(hdsp);
-  4767			if (err < 0)
-  4768				return err;
-  4769	
-  4770			err = hdsp_check_for_firmware(hdsp, 1);
-  4771			if (err < 0)
-  4772				return err;
-  4773	
-  4774			memset(&info, 0, sizeof(info));
-  4775			spin_lock_irqsave(&hdsp->lock, flags);
-  4776			info.pref_sync_ref = (unsigned char)hdsp_pref_sync_ref(hdsp);
-  4777			info.wordclock_sync_check = (unsigned char)hdsp_wc_sync_check(hdsp);
-  4778			if (hdsp->io_type != H9632)
-  4779			    info.adatsync_sync_check = (unsigned char)hdsp_adatsync_sync_check(hdsp);
-  4780			info.spdif_sync_check = (unsigned char)hdsp_spdif_sync_check(hdsp);
-  4781			for (i = 0; i < ((hdsp->io_type != Multiface && hdsp->io_type != RPM && hdsp->io_type != H9632) ? 3 : 1); ++i)
-  4782				info.adat_sync_check[i] = (unsigned char)hdsp_adat_sync_check(hdsp, i);
-  4783			info.spdif_in = (unsigned char)hdsp_spdif_in(hdsp);
-  4784			info.spdif_out = (unsigned char)hdsp_toggle_setting(hdsp,
-  4785					HDSP_SPDIFOpticalOut);
-  4786			info.spdif_professional = (unsigned char)
-  4787				hdsp_toggle_setting(hdsp, HDSP_SPDIFProfessional);
-  4788			info.spdif_emphasis = (unsigned char)
-  4789				hdsp_toggle_setting(hdsp, HDSP_SPDIFEmphasis);
-  4790			info.spdif_nonaudio = (unsigned char)
-  4791				hdsp_toggle_setting(hdsp, HDSP_SPDIFNonAudio);
-  4792			info.spdif_sample_rate = hdsp_spdif_sample_rate(hdsp);
-  4793			info.system_sample_rate = hdsp->system_sample_rate;
-  4794			info.autosync_sample_rate = hdsp_external_sample_rate(hdsp);
-  4795			info.system_clock_mode = (unsigned char)hdsp_system_clock_mode(hdsp);
-  4796			info.clock_source = (unsigned char)hdsp_clock_source(hdsp);
-  4797			info.autosync_ref = (unsigned char)hdsp_autosync_ref(hdsp);
-  4798			info.line_out = (unsigned char)
-  4799				hdsp_toggle_setting(hdsp, HDSP_LineOut);
-  4800			if (hdsp->io_type == H9632) {
-  4801				info.da_gain = (unsigned char)hdsp_da_gain(hdsp);
-  4802				info.ad_gain = (unsigned char)hdsp_ad_gain(hdsp);
-  4803				info.phone_gain = (unsigned char)hdsp_phone_gain(hdsp);
-  4804				info.xlr_breakout_cable =
-  4805					(unsigned char)hdsp_toggle_setting(hdsp,
-  4806						HDSP_XLRBreakoutCable);
-  4807	
-  4808			} else if (hdsp->io_type == RPM) {
-  4809				info.da_gain = (unsigned char) hdsp_rpm_input12(hdsp);
-  4810				info.ad_gain = (unsigned char) hdsp_rpm_input34(hdsp);
-  4811			}
-  4812			if (hdsp->io_type == H9632 || hdsp->io_type == H9652)
-  4813				info.analog_extension_board =
-  4814					(unsigned char)hdsp_toggle_setting(hdsp,
-  4815						    HDSP_AnalogExtensionBoard);
-  4816			spin_unlock_irqrestore(&hdsp->lock, flags);
-  4817			if (copy_to_user(argp, &info, sizeof(info)))
-  4818				return -EFAULT;
-  4819			break;
-  4820		}
-  4821		case SNDRV_HDSP_IOCTL_GET_9632_AEB: {
-  4822			struct hdsp_9632_aeb h9632_aeb;
-  4823	
-  4824			if (hdsp->io_type != H9632) return -EINVAL;
-  4825			h9632_aeb.aebi = hdsp->ss_in_channels - H9632_SS_CHANNELS;
-  4826			h9632_aeb.aebo = hdsp->ss_out_channels - H9632_SS_CHANNELS;
-  4827			if (copy_to_user(argp, &h9632_aeb, sizeof(h9632_aeb)))
-  4828				return -EFAULT;
-  4829			break;
-  4830		}
-  4831		case SNDRV_HDSP_IOCTL_GET_VERSION: {
-  4832			struct hdsp_version hdsp_version;
-  4833			int err;
-  4834	
-  4835			if (hdsp->io_type == H9652 || hdsp->io_type == H9632) return -EINVAL;
-  4836			if (hdsp->io_type == Undefined) {
-  4837				err = hdsp_get_iobox_version(hdsp);
-  4838				if (err < 0)
-  4839					return err;
-  4840			}
-  4841			memset(&hdsp_version, 0, sizeof(hdsp_version));
-  4842			hdsp_version.io_type = hdsp->io_type;
-  4843			hdsp_version.firmware_rev = hdsp->firmware_rev;
-  4844			if (copy_to_user(argp, &hdsp_version, sizeof(hdsp_version)))
-  4845				return -EFAULT;
-  4846			break;
-  4847		}
-  4848		case SNDRV_HDSP_IOCTL_UPLOAD_FIRMWARE: {
-  4849			struct hdsp_firmware firmware;
-  4850			u32 __user *firmware_data;
-  4851			int err;
-  4852	
-  4853			if (hdsp->io_type == H9652 || hdsp->io_type == H9632) return -EINVAL;
-  4854			/* SNDRV_HDSP_IOCTL_GET_VERSION must have been called */
-  4855			if (hdsp->io_type == Undefined) return -EINVAL;
-  4856	
-  4857			if (hdsp->state & (HDSP_FirmwareCached | HDSP_FirmwareLoaded))
-  4858				return -EBUSY;
-  4859	
-  4860			dev_info(hdsp->card->dev,
-  4861				 "initializing firmware upload\n");
-  4862			if (copy_from_user(&firmware, argp, sizeof(firmware)))
-  4863				return -EFAULT;
-  4864			firmware_data = (u32 __user *)firmware.firmware_data;
-  4865	
-  4866			if (hdsp_check_for_iobox (hdsp))
-  4867				return -EIO;
-  4868	
-  4869			if (!hdsp->fw_uploaded) {
-  4870				hdsp->fw_uploaded = vmalloc(HDSP_FIRMWARE_SIZE);
-  4871				if (!hdsp->fw_uploaded)
-  4872					return -ENOMEM;
-  4873			}
-  4874	
-  4875			if (copy_from_user(hdsp->fw_uploaded, firmware_data,
-  4876					   HDSP_FIRMWARE_SIZE)) {
-  4877				err = -EFAULT;
-  4878				goto free_fw_uploaded;
-  4879			}
-  4880	
-  4881			hdsp->state |= HDSP_FirmwareCached;
-  4882	
-  4883			err = snd_hdsp_load_firmware_from_cache(hdsp);
-  4884			if (err < 0)
-  4885				goto free_fw_uploaded;
-  4886	
-  4887			if (!(hdsp->state & HDSP_InitializationComplete)) {
-  4888				err = snd_hdsp_enable_io(hdsp);
-  4889				if (err < 0)
-  4890					goto free_fw_uploaded;
-  4891	
-  4892				snd_hdsp_initialize_channels(hdsp);
-  4893				snd_hdsp_initialize_midi_flush(hdsp);
-  4894	
-  4895				err = snd_hdsp_create_alsa_devices(hdsp->card, hdsp);
-  4896				if (err < 0) {
-  4897					dev_err(hdsp->card->dev,
-  4898						"error creating alsa devices\n");
-  4899					goto free_fw_uploaded;
-  4900				}
-  4901			}
-  4902			break;
-  4903		}
-  4904		case SNDRV_HDSP_IOCTL_GET_MIXER: {
-  4905			struct hdsp_mixer __user *mixer = (struct hdsp_mixer __user *)argp;
-  4906			if (copy_to_user(mixer->matrix, hdsp->mixer_matrix, sizeof(unsigned short)*HDSP_MATRIX_MIXER_SIZE))
-  4907				return -EFAULT;
-  4908			break;
-  4909		}
-  4910		default:
-  4911			return -EINVAL;
-  4912		}
-  4913		return 0;
-  4914	free_fw_uploaded:
-  4915		vfree(hdsp->fw_uploaded);
-  4916		hdsp->fw_uploaded = NULL;
-> 4917	err:
-> 4918		return err;
-  4919	}
-  4920	
+  1485	
+  1486	static int serial_omap_probe_rs485(struct uart_omap_port *up,
+  1487					   struct device *dev)
+  1488	{
+  1489		struct serial_rs485 *rs485conf = &up->port.rs485;
+  1490		struct device_node *np = dev->of_node;
+  1491		enum gpiod_flags gflags;
+  1492		int ret;
+  1493	
+  1494		rs485conf->flags = 0;
+  1495		up->rts_gpiod = NULL;
+  1496	
+  1497		if (!np)
+  1498			return 0;
+  1499	
+  1500		up->port.rs485_config = serial_omap_config_rs485;
+> 1501		up->port.rs485_supported = serial_omap_rs485_supported;
+  1502	
+  1503		ret = uart_get_rs485_mode(&up->port);
+  1504		if (ret)
+  1505			return ret;
+  1506	
+  1507		if (of_property_read_bool(np, "rs485-rts-active-high")) {
+  1508			rs485conf->flags |= SER_RS485_RTS_ON_SEND;
+  1509			rs485conf->flags &= ~SER_RS485_RTS_AFTER_SEND;
+  1510		} else {
+  1511			rs485conf->flags &= ~SER_RS485_RTS_ON_SEND;
+  1512			rs485conf->flags |= SER_RS485_RTS_AFTER_SEND;
+  1513		}
+  1514	
+  1515		/* check for tx enable gpio */
+  1516		gflags = rs485conf->flags & SER_RS485_RTS_AFTER_SEND ?
+  1517			GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
+  1518		up->rts_gpiod = devm_gpiod_get_optional(dev, "rts", gflags);
+  1519		if (IS_ERR(up->rts_gpiod)) {
+  1520			ret = PTR_ERR(up->rts_gpiod);
+  1521		        if (ret == -EPROBE_DEFER)
+  1522				return ret;
+  1523	
+  1524			up->rts_gpiod = NULL;
+  1525			up->port.rs485_supported = (const struct serial_rs485) { };
+  1526			if (rs485conf->flags & SER_RS485_ENABLED) {
+  1527				dev_err(dev, "disabling RS-485 (rts-gpio missing in device tree)\n");
+  1528				memset(rs485conf, 0, sizeof(*rs485conf));
+  1529			}
+  1530		} else {
+  1531			gpiod_set_consumer_name(up->rts_gpiod, "omap-serial");
+  1532		}
+  1533	
+  1534		return 0;
+  1535	}
+  1536	
 
 -- 
 0-DAY CI Kernel Test Service
