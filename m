@@ -1,140 +1,142 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F8C52F77;
-	Mon, 25 Dec 2023 18:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6481438DC0;
+	Mon, 25 Dec 2023 20:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AQoXN31n"
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BPInQnJ010630;
-	Mon, 25 Dec 2023 18:52:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:date:subject:mime-version:content-type
-	:content-transfer-encoding:message-id:to:cc; s=qcppdkim1; bh=ftp
-	HYL73P0PMwcf3vm6rL6xXEEG/VlZNKCFd75Qx88M=; b=AQoXN31nsRXM+bWTSC9
-	AT/dKG5dko7Cw0WYc3z4om1PipbitdlYYQ0Q/expTtMhUgcrearW3Chk12WKrFFj
-	p3He9K/lOFndAZBDn3zH+xGyE90VaI/mwF5fk6IxSZ12X0/ZqMznZOGg+ONYtpwF
-	C/047i0DsKtx9/s+ACtzGYbP/9NJKIYlQmol809v8z/SVjrFBIEErlbkAEpC2ixX
-	ifUbOF9FHfwxou30ZT7h0CwF6iBEI72qDct6GwFoCBlbTl99YAKFMr9QUPUIXgkH
-	SA2qRIX7ywpsPECo0up7CsK1rrUqRK3NdiBpVI13Mfz4Fg2c5pG5uKEUz27M/f9u
-	daQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v5pgvc5cy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Dec 2023 18:52:58 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BPIqwfk022033
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Dec 2023 18:52:58 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 25 Dec
- 2023 10:52:57 -0800
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-Date: Mon, 25 Dec 2023 10:52:57 -0800
-Subject: [PATCH] scripts/decode_stacktrace.sh: Support LLVM addr2line
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXmuJEIf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703536648; x=1735072648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q1mIITEft+t9JsoofwE77gF4Vd8IZinqlK4yVXS5Tro=;
+  b=OXmuJEIf2JoVN3WZr5oYyV4ZNPiQOv7/Ha3bdAPB2OC502Hs3oMd8WM/
+   c7RXa3zORSfRAlsGgPQ9pcVs/3nQNGvKJHvoB9CcouGY7naGF9AKswNcs
+   sGVjPUT1ERJm0IpohBGP7PtqmA8/NDyjhfWGdak/BAp2zL2Sh5XgI966W
+   +PCES3drF32045scJaWmD/xyTJSVMXSwt501pnZtuKJdihj7ilB4RBS2u
+   o4qCYjEXiwy/dqVIxYVNpyuXTnGLctZglgcNi8G1o2QfiARFbztUlQZNO
+   C1BtMVkgZR/ykrj4nMsGpOk7+gganUbMt+B6sUB/3F9T5pBr8jAOQL7gn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="14982714"
+X-IronPort-AV: E=Sophos;i="6.04,304,1695711600"; 
+   d="scan'208";a="14982714"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2023 12:37:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="951047368"
+X-IronPort-AV: E=Sophos;i="6.04,304,1695711600"; 
+   d="scan'208";a="951047368"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 25 Dec 2023 12:37:25 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rHrgL-000DfV-1F;
+	Mon, 25 Dec 2023 20:36:38 +0000
+Date: Tue, 26 Dec 2023 04:36:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew W Carlis <mattc@purestorage.com>, helgaas@kernel.org,
+	bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+	linux-pci@vger.kernel.org, mika.westerberg@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Matthew W Carlis <mattc@purestorage.com>
+Subject: Re: [PATCH 1/1] PCI/portdrv: Allow DPC if the OS controls AER
+ natively.
+Message-ID: <202312260431.ZXppQZ1I-lkp@intel.com>
+References: <20231223212235.34293-2-mattc@purestorage.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231225-decode-stacktrace-llvm-v1-1-abb9aa220cbf@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAIjPiWUC/x2NQQrCQAwAv1JyNtBsdQ9+RTyk2dQurlvZ1CKU/
- t3gcQaG2cG0ZTW4djs03bLlpTrQqQOZuT4Uc3KG0IeBQrhgUlmSoq0sz7WxKJayvXAKsWeKdB4
- igccjm+LYuMrsef2U4vLddMrf/+12P44fVyVADX0AAAA=
-To: Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt
-	<justinstitt@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, Bjorn Andersson <quic_bjorande@quicinc.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1703530377; l=2236;
- i=quic_bjorande@quicinc.com; s=20230915; h=from:subject:message-id;
- bh=oJebOxoPeoTym3cgqwcxkxFxxmZ7qB8J295Bv1j1YBg=;
- b=97Upa7nXp3PiuUtOwM3kJionIy4dQgtXEXbbwd+uM7nAkgxJxyOYhxsUf27He321eLdJXgJ7gxYL
- nBKfsPEdDaPG+ME4g8l0bJE1n6GSYPkNtXYkTqxNnjZsNzI35egZ
-X-Developer-Key: i=quic_bjorande@quicinc.com; a=ed25519;
- pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0Q6qqyDAQf7p6PPC7zDFoVfT5vqx8IGS
-X-Proofpoint-ORIG-GUID: 0Q6qqyDAQf7p6PPC7zDFoVfT5vqx8IGS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- suspectscore=0 phishscore=0 adultscore=0 impostorscore=0 mlxlogscore=752
- malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312250149
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231223212235.34293-2-mattc@purestorage.com>
 
-The kernel build system adhere to the LLVM environment variable, to
-select building the kernel using clang/llvm. In combination with the
-ARCH environment variable the kernel can be cross-compiled without the
-user specifying the CROSS_COMPILE variable.
+Hi Matthew,
 
-The LLVM environment variable is used to specify the suffix of the llvm
-executables (such as LLVM=-12 for llvm-addr2line-12), or to omit the
-suffix when set to "1" (e.g. llvm-addr2line).
+kernel test robot noticed the following build errors:
 
-decode_stacktrace.sh allows invoking a specific addr2line executable by
-prefixing the command with CROSS_COMPILE. At best allows the user to
-trick decode_stacktrace.sh into invoking llvm-addr2line, and it does not
-support specifying an alternative version based on the suffix.
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master v6.7-rc7 next-20231222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Teach decode_stacktrace.sh about the two cases of the LLVM environment
-variable, and use this to determine which addr2line to use. The current
-behavior is maintained when the LLVM variable is not set.
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-W-Carlis/PCI-portdrv-Allow-DPC-if-the-OS-controls-AER-natively/20231225-154046
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20231223212235.34293-2-mattc%40purestorage.com
+patch subject: [PATCH 1/1] PCI/portdrv: Allow DPC if the OS controls AER natively.
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231226/202312260431.ZXppQZ1I-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231226/202312260431.ZXppQZ1I-lkp@intel.com/reproduce)
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- scripts/decode_stacktrace.sh | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312260431.ZXppQZ1I-lkp@intel.com/
 
-diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
-index 564c5632e1a2..adf1d64477a1 100755
---- a/scripts/decode_stacktrace.sh
-+++ b/scripts/decode_stacktrace.sh
-@@ -16,6 +16,13 @@ elif type c++filt >/dev/null 2>&1 ; then
- 	cppfilt_opts=-i
- fi
- 
-+# Determine which addr2line to use
-+case "$LLVM" in
-+	""	) addr2line="${CROSS_COMPILE}addr2line";;
-+	"1"	) addr2line="llvm-addr2line";;
-+	*	) addr2line="llvm-addr2line${LLVM}";;
-+esac
-+
- if [[ $1 == "-r" ]] ; then
- 	vmlinux=""
- 	basepath="auto"
-@@ -169,7 +176,7 @@ parse_symbol() {
- 	if [[ $aarray_support == true && "${cache[$module,$address]+isset}" == "isset" ]]; then
- 		local code=${cache[$module,$address]}
- 	else
--		local code=$(${CROSS_COMPILE}addr2line -i -e "$objfile" "$address" 2>/dev/null)
-+		local code=$(${addr2line} -i -e "$objfile" "$address" 2>/dev/null)
- 		if [[ $aarray_support == true ]]; then
- 			cache[$module,$address]=$code
- 		fi
+All errors (new ones prefixed by >>):
 
----
-base-commit: 39676dfe52331dba909c617f213fdb21015c8d10
-change-id: 20231225-decode-stacktrace-llvm-f260a1614361
+>> drivers/pci/pcie/portdrv.c:272:12: error: no member named 'aer_cap' in 'struct pci_dev'; did you mean 'acs_cap'?
+               (dev->aer_cap && host->native_aer)))
+                     ^~~~~~~
+                     acs_cap
+   include/linux/pci.h:519:7: note: 'acs_cap' declared here
+           u16             acs_cap;        /* ACS Capability offset */
+                           ^
+   1 error generated.
 
-Best regards,
+
+vim +272 drivers/pci/pcie/portdrv.c
+
+   244	
+   245		/* Root Ports and Root Complex Event Collectors may generate PMEs */
+   246		if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+   247		     pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
+   248		    (pcie_ports_native || host->native_pme)) {
+   249			services |= PCIE_PORT_SERVICE_PME;
+   250	
+   251			/*
+   252			 * Disable PME interrupt on this port in case it's been enabled
+   253			 * by the BIOS (the PME service driver will enable it when
+   254			 * necessary).
+   255			 */
+   256			pcie_pme_interrupt_enable(dev, false);
+   257		}
+   258	
+   259		/*
+   260		 * _OSC AER Control is required by the OS & requires OS to control AER,
+   261		 * but _OSC DPC Control isn't required by the OS to control DPC; however
+   262		 * it does require the OS to control DPC. _OSC DPC Control also requres
+   263		 * _OSC EDR Control (Error Disconnect Recovery) (PCI Firmware - DPC ECN rev3.2)
+   264		 * PCI_Express_Base 6.1, 6.2.11 Determination of DPC Control recommends
+   265		 * platform fw or OS always link control of DPC to AER.
+   266		 *
+   267		 * With dpc-native, allow Linux to use DPC even if it doesn't have
+   268		 * permission to use AER.
+   269		 */
+   270		if (pci_find_ext_capability(dev, PCI_EXT_CAP_ID_DPC) &&
+   271		    pci_aer_available() && (pcie_ports_dpc_native ||
+ > 272		    (dev->aer_cap && host->native_aer)))
+   273			services |= PCIE_PORT_SERVICE_DPC;
+   274	
+   275		if (pci_pcie_type(dev) == PCI_EXP_TYPE_DOWNSTREAM ||
+   276		    pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT) {
+   277			u32 linkcap;
+   278	
+   279			pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &linkcap);
+   280			if (linkcap & PCI_EXP_LNKCAP_LBNC)
+   281				services |= PCIE_PORT_SERVICE_BWNOTIF;
+   282		}
+   283	
+   284		return services;
+   285	}
+   286	
+
 -- 
-Bjorn Andersson <quic_bjorande@quicinc.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
