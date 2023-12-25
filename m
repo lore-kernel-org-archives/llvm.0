@@ -1,46 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C9D10FE;
-	Mon, 25 Dec 2023 06:10:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225311C2E;
+	Mon, 25 Dec 2023 08:09:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XKMtIqV2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wq2mzm4p"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703484624; x=1735020624;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uI57m9mGCzrlUk6+DSJtNVJaVoQP0VoLGQPuVRI2u40=;
-  b=XKMtIqV2SOXmm1L4ZhoD+Q6VXwF5IwlnvztgTcXMYhYhjnxz04mEfHI1
-   Jl72qUhX45FF6278OogANDJYbC6jDsOXrNSFAGEsPV1hyFu0wM9ZzvTZB
-   GbqX8bJH1/b6ClzNp0cPr13BfhN+TqViFf4HU8XN2BXCcDhAQxowBTZs6
-   YHBKn6YV+37tOhm8b8mgQypAZ/UyV3dZgCm+pzF0APPMCrFjhEQaz44G1
-   SZ5Vy/z1l30iYksRcQz1PQCKlq5RN2PDvpGBejl3N1QfHVGTBQTydKtC2
-   EYoaID47WUfoV4ZMg7t/kwQiihqtZI6opmDLVAFZkeIjFgeD4jLx9kpp9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="376409355"
+  t=1703491769; x=1735027769;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2aChuv2hSCHAdNRDTEHx6SASmQDX/0FLKZ+/kzJ26Qo=;
+  b=Wq2mzm4pPXfRnp3qY1wpyHNxUEoSA6YQ2IWv5njvNG3B1XnIIVTkaZna
+   lM3ov/E1D8SXjgKyrDwSwIBuQkpuu7j2ePMnd9rc2uMuLuMkwAlqhgRWQ
+   uiwSaL6DLevdR9TJPmStNhDVjmwedsLhMZ9wqyHWeU++nYKb8phSCi78Z
+   Wj5y9t915fdKeB1gcixNTKrllsdBLVpfcYvmdegCq6WaYAeeSqm7eieY3
+   qEEBGYH8CBiIjopkvblGk62wz/tYv6WqmdM8Ex8hhdWF7c9mjQrk2YNp8
+   wkpBHn7xYm/n/3jxa8UFhaElmtDVbJ+F0M/bLIkgDu0serlZyg/+oupXY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="3107836"
 X-IronPort-AV: E=Sophos;i="6.04,302,1695711600"; 
-   d="scan'208";a="376409355"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2023 22:10:23 -0800
+   d="scan'208";a="3107836"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2023 00:09:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="921285939"
 X-IronPort-AV: E=Sophos;i="6.04,302,1695711600"; 
-   d="scan'208";a="921285939"
+   d="scan'208";a="19397032"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Dec 2023 22:10:22 -0800
+  by orviesa002.jf.intel.com with ESMTP; 25 Dec 2023 00:09:24 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rHe8f-000D1I-38;
-	Mon, 25 Dec 2023 06:09:03 +0000
-Date: Mon, 25 Dec 2023 14:05:16 +0800
+	id 1rHg1Z-000D8v-1B;
+	Mon, 25 Dec 2023 08:09:21 +0000
+Date: Mon, 25 Dec 2023 16:09:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Aahil Awatramani <aahila@google.com>,
+	Mahesh Bandewar <maheshb@google.com>,
+	Jay Vosburgh <j.vosburgh@gmail.com>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:cifs-netfs 50/53] fs/smb/client/inode.c:38:48: error:
- too few arguments to function call, expected 3, have 2
-Message-ID: <202312251331.WbrilXdF-lkp@intel.com>
+Subject: Re: [PATCH next] bonding: Extending LACP MUX State Machine to
+ include a Collecting State.
+Message-ID: <202312251524.jjgo5nFR-lkp@intel.com>
+References: <20231221023650.3208767-1-aahila@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,46 +60,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231221023650.3208767-1-aahila@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git cifs-netfs
-head:   4eaec420b0b0b7fab9042432c8a3aaf665d6052f
-commit: 89290190eb6aafd8831b148797ec5f781ed1c596 [50/53] cifs: Cut over to using netfslib
-config: i386-buildonly-randconfig-002-20231225 (https://download.01.org/0day-ci/archive/20231225/202312251331.WbrilXdF-lkp@intel.com/config)
+Hi Aahil,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20231222]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aahil-Awatramani/bonding-Extending-LACP-MUX-State-Machine-to-include-a-Collecting-State/20231222-174732
+base:   next-20231222
+patch link:    https://lore.kernel.org/r/20231221023650.3208767-1-aahila%40google.com
+patch subject: [PATCH next] bonding: Extending LACP MUX State Machine to include a Collecting State.
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231225/202312251524.jjgo5nFR-lkp@intel.com/config)
 compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231225/202312251331.WbrilXdF-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231225/202312251524.jjgo5nFR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312251331.WbrilXdF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312251524.jjgo5nFR-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/smb/client/inode.c:38:48: error: too few arguments to function call, expected 3, have 2
-           netfs_inode_init(&cifs_i->netfs, &cifs_req_ops);
-           ~~~~~~~~~~~~~~~~                              ^
-   include/linux/netfs.h:465:20: note: 'netfs_inode_init' declared here
-   static inline void netfs_inode_init(struct netfs_inode *ctx,
-                      ^
-   1 error generated.
+>> drivers/net/bonding/bond_3ad.c:2016: warning: Excess function parameter 'update_slave_arr' description in 'ad_enable_collecting'
 
 
-vim +38 fs/smb/client/inode.c
+vim +2016 drivers/net/bonding/bond_3ad.c
 
-    29	
-    30	/*
-    31	 * Set parameters for the netfs library
-    32	 */
-    33	static void cifs_set_netfs_context(struct inode *inode)
-    34	{
-    35		struct cifsInodeInfo *cifs_i = CIFS_I(inode);
-    36		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-    37	
-  > 38		netfs_inode_init(&cifs_i->netfs, &cifs_req_ops);
-    39		if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_STRICT_IO)
-    40			__set_bit(NETFS_ICTX_WRITETHROUGH, &cifs_i->netfs.flags);
-    41	}
-    42	
+  2007	
+  2008	/**
+  2009	 * ad_enable_collecting - enable a port's receive
+  2010	 * @port: the port we're looking at
+  2011	 * @update_slave_arr: Does slave array need update?
+  2012	 *
+  2013	 * Enable @port if it's in an active aggregator
+  2014	 */
+  2015	static void ad_enable_collecting(struct port *port)
+> 2016	{
+  2017		if (port->aggregator->is_active) {
+  2018			struct slave *slave = port->slave;
+  2019	
+  2020			slave_dbg(slave->bond->dev, slave->dev,
+  2021				  "Enabling collecting on port %d (LAG %d)\n",
+  2022				  port->actor_port_number,
+  2023				  port->aggregator->aggregator_identifier);
+  2024			__enable_collecting_port(port);
+  2025		}
+  2026	}
+  2027	
 
 -- 
 0-DAY CI Kernel Test Service
