@@ -1,148 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C32219ED;
-	Mon, 25 Dec 2023 23:31:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA681E493
+	for <llvm@lists.linux.dev>; Tue, 26 Dec 2023 00:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K7QWOIU8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703547076; x=1735083076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5SMN0AzloiLbP8beEL+tP2MzpuhkZtwKpAax1CA2Udg=;
-  b=K7QWOIU8s9nmwIKUadWNG9iuxqcFRhiLzuX9U9WmVwTG4rm27NZuyLYz
-   JLmv0LUARDgIFvp/dCQfYaX829PKpAwPhbgHjSsR0u1sB3uAKK2FibV1h
-   Cutey/3mFmzn7+hcY20oNylUSJzobIoiicivZ6MA7WFI5L5IeCt8LN785
-   P4Ldro1l4FFpNJfb+rs95RxoCUj00TygqMmiW8zW6xChW3A5mzJsPuUp6
-   hyDbZL/Q3RcUDGLn9MFdmalltVtmTPeKcyloYVYrwJaNwDY2jKml4u3qP
-   ul5qY3oBoMdzuZaz7u71nZC2vflQWiiwSb4P/1/qcmbUpTaz3EljQvbLk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="9838288"
-X-IronPort-AV: E=Sophos;i="6.04,304,1695711600"; 
-   d="scan'208";a="9838288"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2023 15:31:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="771030390"
-X-IronPort-AV: E=Sophos;i="6.04,304,1695711600"; 
-   d="scan'208";a="771030390"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 25 Dec 2023 15:31:09 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rHuPa-000DmL-2L;
-	Mon, 25 Dec 2023 23:31:06 +0000
-Date: Tue, 26 Dec 2023 07:30:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lino Sanfilippo <l.sanfilippo@kunbus.com>, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	u.kleine-koenig@pengutronix.de, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com, cniedermaier@dh-electronics.com,
-	hugo@hugovil.com, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, LinoSanfilippo@gmx.de,
-	lukas@wunner.de, p.rosenberger@kunbus.com,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v6 6/7] serial: omap: do not override settings for RS485
- support
-Message-ID: <202312260719.mI12i497-lkp@intel.com>
-References: <20231225113524.8800-7-l.sanfilippo@kunbus.com>
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="f21kGUfi"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d430bac207so10686965ad.0
+        for <llvm@lists.linux.dev>; Mon, 25 Dec 2023 16:03:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1703548980; x=1704153780; darn=lists.linux.dev;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2hfvv+swjba6mg+pRtlk7kiaUfMDuo3bGE0uQDlvTgI=;
+        b=f21kGUfieqUHXY49DSntKTK9tJdJAcGJvtusQjk0sthyF0C+Cv82uMT7KobuDLJiOx
+         +GdjMSXT/L6O4xbf11tL3DFwdnJcqjwruxEzUdeNu/wx52HQzLELyTo1Blx88DvsHlKV
+         lRimN6lceqDnX2E1YTRtbu5yPa6AOZEk5iPJiboPY09Se4W1azvrq8dvgLxeDbpjla0T
+         nKrBP1gPDN/qc6cwh/Dm+4cD2ePCrssMxIj6KCLbiQRGj6BpMsusFD2fSgRWJcrnHh1Z
+         Ldol9F2v8Wk+bctafNosH83276Q++L+AWtcWstKW8OG7h4H4tB8KtisUWKs8uLVgjoqN
+         9A+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703548980; x=1704153780;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2hfvv+swjba6mg+pRtlk7kiaUfMDuo3bGE0uQDlvTgI=;
+        b=fDohbktSc0wk2frmVmlGU6/AMR69AH89/68Fes0wt+oIou4l2dANwn6hzAsIUyLy9J
+         TlcDOXu3mPVlEGEv9kroD5B+IZrmaLvKJ3+NMmRQIoqVAo3C/1fNXjwc1wQx1UJYayIM
+         Z03Up0Sz8Kvljrfa672YHIN/BESrNS+u178ImUNMMnMWIT1w/tjr4noDSFdLVr/NArrD
+         rSxrayR+Za3K+1RhObrfYuvr09zZh4sbrApmQRecqpMzDwnkJwDkboY7rp372tQnp4MT
+         bST3mDHvKMA6020a4eF41oSoy1Lutji9TXL/qKDCNtZpvmsIcvFrs5sUgQYRLUKvHb95
+         J+og==
+X-Gm-Message-State: AOJu0YyYvFHIMKlrDYkhPsq0+NRHt4aH1JL2DPXkk1iUvFFqbZnc37N7
+	oYYa+Zt+L476J5G3VrV+8vUt3gQwYd/xrg==
+X-Google-Smtp-Source: AGHT+IHn/FZCRK+EMtS92euiGxoVA3cXvrwT2tA9UAJLzNKOBroWCsL2sDSJFHdfeo7sg5N2nJB6/w==
+X-Received: by 2002:a17:90b:4b07:b0:286:6cd8:ef07 with SMTP id lx7-20020a17090b4b0700b002866cd8ef07mr7853048pjb.31.1703548979636;
+        Mon, 25 Dec 2023 16:02:59 -0800 (PST)
+Received: from dev-mattc2.dev.purestorage.com ([208.88.159.129])
+        by smtp.googlemail.com with ESMTPSA id y31-20020a17090a53a200b0028649b84907sm14082296pjh.16.2023.12.25.16.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Dec 2023 16:02:59 -0800 (PST)
+From: Matthew W Carlis <mattc@purestorage.com>
+To: lkp@intel.com
+Cc: bhelgaas@google.com,
+	helgaas@kernel.org,
+	linux-pci@vger.kernel.org,
+	llvm@lists.linux.dev,
+	mattc@purestorage.com,
+	mika.westerberg@linux.intel.com,
+	oe-kbuild-all@lists.linux.dev,
+	sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: [PATCH 1/1] PCI/portdrv: Allow DPC if the OS controls AER natively.
+Date: Mon, 25 Dec 2023 17:02:51 -0700
+Message-Id: <20231226000251.3182-1-mattc@purestorage.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <202312260431.ZXppQZ1I-lkp@intel.com>
+References: <202312260431.ZXppQZ1I-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231225113524.8800-7-l.sanfilippo@kunbus.com>
 
-Hi Lino,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on ceb6a6f023fd3e8b07761ed900352ef574010bcb]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lino-Sanfilippo/serial-Do-not-hold-the-port-lock-when-setting-rx-during-tx-GPIO/20231225-193833
-base:   ceb6a6f023fd3e8b07761ed900352ef574010bcb
-patch link:    https://lore.kernel.org/r/20231225113524.8800-7-l.sanfilippo%40kunbus.com
-patch subject: [PATCH v6 6/7] serial: omap: do not override settings for RS485 support
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20231226/202312260719.mI12i497-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231226/202312260719.mI12i497-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312260719.mI12i497-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/tty/serial/omap-serial.c:1501:29: error: use of undeclared identifier 'serial_omap_rs485_supported'
-    1501 |         up->port.rs485_supported = serial_omap_rs485_supported;
-         |                                    ^
-   1 error generated.
-
-
-vim +/serial_omap_rs485_supported +1501 drivers/tty/serial/omap-serial.c
-
-  1485	
-  1486	static int serial_omap_probe_rs485(struct uart_omap_port *up,
-  1487					   struct device *dev)
-  1488	{
-  1489		struct serial_rs485 *rs485conf = &up->port.rs485;
-  1490		struct device_node *np = dev->of_node;
-  1491		enum gpiod_flags gflags;
-  1492		int ret;
-  1493	
-  1494		rs485conf->flags = 0;
-  1495		up->rts_gpiod = NULL;
-  1496	
-  1497		if (!np)
-  1498			return 0;
-  1499	
-  1500		up->port.rs485_config = serial_omap_config_rs485;
-> 1501		up->port.rs485_supported = serial_omap_rs485_supported;
-  1502	
-  1503		ret = uart_get_rs485_mode(&up->port);
-  1504		if (ret)
-  1505			return ret;
-  1506	
-  1507		if (of_property_read_bool(np, "rs485-rts-active-high")) {
-  1508			rs485conf->flags |= SER_RS485_RTS_ON_SEND;
-  1509			rs485conf->flags &= ~SER_RS485_RTS_AFTER_SEND;
-  1510		} else {
-  1511			rs485conf->flags &= ~SER_RS485_RTS_ON_SEND;
-  1512			rs485conf->flags |= SER_RS485_RTS_AFTER_SEND;
-  1513		}
-  1514	
-  1515		/* check for tx enable gpio */
-  1516		gflags = rs485conf->flags & SER_RS485_RTS_AFTER_SEND ?
-  1517			GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
-  1518		up->rts_gpiod = devm_gpiod_get_optional(dev, "rts", gflags);
-  1519		if (IS_ERR(up->rts_gpiod)) {
-  1520			ret = PTR_ERR(up->rts_gpiod);
-  1521		        if (ret == -EPROBE_DEFER)
-  1522				return ret;
-  1523	
-  1524			up->rts_gpiod = NULL;
-  1525			up->port.rs485_supported = (const struct serial_rs485) { };
-  1526			if (rs485conf->flags & SER_RS485_ENABLED) {
-  1527				dev_err(dev, "disabling RS-485 (rts-gpio missing in device tree)\n");
-  1528				memset(rs485conf, 0, sizeof(*rs485conf));
-  1529			}
-  1530		} else {
-  1531			gpiod_set_consumer_name(up->rts_gpiod, "omap-serial");
-  1532		}
-  1533	
-  1534		return 0;
-  1535	}
-  1536	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I guess we don't build aer_cap into pci_dev without CONFIG_PCIEAER...
+Wonder if I should just drop the check for aer_cap since its likely
+not necessary anyways.
