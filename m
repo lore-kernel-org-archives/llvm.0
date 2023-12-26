@@ -1,65 +1,60 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8166E4F61E
-	for <llvm@lists.linux.dev>; Tue, 26 Dec 2023 18:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFCE5024E
+	for <llvm@lists.linux.dev>; Tue, 26 Dec 2023 18:00:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tanzirh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H02ShcXl"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1d3eff55aa5so50406795ad.2
-        for <llvm@lists.linux.dev>; Tue, 26 Dec 2023 10:00:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L2z2KNm4"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5e73e6a17d5so82458897b3.0
+        for <llvm@lists.linux.dev>; Tue, 26 Dec 2023 10:00:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703613649; x=1704218449; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uL68m7/nloxAmVxHBhyXARaUNsJ4FqLRMv7smk0VXkU=;
-        b=H02ShcXldwEzraqqpF76B53xMeTGqkXOuaGkJztp6kg+xFbXeEyJ6bpL2cnvaaK5L6
-         NfNLhZ7gaHNBAhxUzJLu2IoRxiY4k13bzqGic5RKhWU3+dfJjB7RyP/DYS2xBKwwmlZu
-         747fa0PknwpQpiKbRIcvQdtOaxN+n2IjDCZk5tsNXu65dF2i3S3zWK8oTsyOuxhJI+3l
-         1NLGaDHirVzAKuGm7hj1kMw9HJ/CVTS53uKvs0FyckKKq60m0hdMAQ1V3MdoCvTCA7/H
-         /uxClIfK+0DuHSd/c9qLcZcUgqP1/TNMce/36biP73i5ic8vwwxASaOvvTQyadyYTJFj
-         FmVQ==
+        d=google.com; s=20230601; t=1703613650; x=1704218450; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zRl3IvQBK/S8r0wMAY81Jjlb+fSoxXp/kN5gJ/doMRc=;
+        b=L2z2KNm455V9meZMyPPLrnG9TlhduM6makoTMR/3/nOh2fTFBem4bYrPkXj4iFq9hF
+         dFxWQYMyJx5MogySFcnFid68kY60hrGV43nlKLGpaakVlGmA5jaNBQjuYTjgqKiDEM5p
+         EjgaeVCGZCDmTwMso16z4lniSRdhpTApXMqOsv6nhxfFOeao7RQLrKEADttln+YjPGjc
+         XOLo5CsE8MPVmB8I4MLXhuVD2WxiUehr6yKb/Goa8zhhq8gi9WRqN2ar+SioKbkD2T+h
+         rsKHFLr6Vn1sv9ULOM9Vm6QWcUVZB1Jqz1Of3SRWQU0Hs8BV7Uq9VuZnVJSi8LNeJo/j
+         OlNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703613649; x=1704218449;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uL68m7/nloxAmVxHBhyXARaUNsJ4FqLRMv7smk0VXkU=;
-        b=YLIpEDUA3l5PAbk61nHrSUky/LzZmWN0y4J5LKpWX6Pq4NwGNazy77f1cevEswhWzn
-         VxHet0G1ERm5B2pLAi8viSmQojTVdiOiBqVwRnrCSB+D4I80ZA3Ro0Joww2YASXB19bF
-         JDBTSaeChKQxHllTdr3275LJqDPUXxA5MRFHO6/Ph9F7Vk8KbzHC9CeMivd0P9qDY50K
-         nvrLBPxBCGoUoN4b/qoZWYKHkhUCbPqpv6XHdiSlqYYnf/HbF1HpocWT9KSdzJ00mclG
-         IbY1DagVAt9yb/dtt8SWqJXheUxRnANJcZkdpDCuKtXAgF4Gotknn6Vt5PpByyQ/HK7p
-         bTSg==
-X-Gm-Message-State: AOJu0YysaonZd1Fm1REG3iujoZMhrj6efuG0H/VAUr1vxgc+aDtnzq6i
-	59oFB9maq/l91M+veuybGQudAXLzHoNAW/gbmKY=
-X-Google-Smtp-Source: AGHT+IHvB4n72zhphWG0KAwIt3BqQtmNnGxtZajtuTZQqOlIgqHluySRRvP5+OuOqf07zfouccipiRqRDjXP
+        d=1e100.net; s=20230601; t=1703613650; x=1704218450;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zRl3IvQBK/S8r0wMAY81Jjlb+fSoxXp/kN5gJ/doMRc=;
+        b=VdnIwCXtpg/8TfVA1ZMICeXHjFfy0jEGb+0VAJLRENc6QXbAZYOlninkrYWjwpXmRa
+         +iUjZPhW/r6+q5rtASasjcYurn/SFqzxm4i801esMa8Zvb2Lxf5jnLvHaJyoF88ByWw4
+         IeufMbq4hDS+UPI3fJIhoEDLW7iQaIyJP/kDxuci8d0BXPyAhrRfLDZ1cqIWg3GCFRsR
+         9HSe6uTRp1rvsDtwRhVrmoz9YrhSeaFztUcbWKdcsLSCzdkXD6T4SrqyICb+aMYq4jKi
+         I01EYmB6QF/taZGKdWYjg3qsEi7Qa75Utr0gU6K5ctQ9irWKOx9TdAS2uJtwo4HBhDzZ
+         AtJg==
+X-Gm-Message-State: AOJu0Yy7cBkuxC+e/eyq9uX6qknQI6xMjT6enmDxwqkPZbR1XqbglSd2
+	9QO1DHSLirOztTDILo2/eSWBsZnOSDhJwwWZnPA=
+X-Google-Smtp-Source: AGHT+IFRPUKj51WecaqI4THLAuvY5XiRmjq7J5vmGoW3BOStZVw2cSXzhLAT58EK9vhe2LUl55MdwfThsnfj
 X-Received: from tanz.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:c4a])
- (user=tanzirh job=sendgmr) by 2002:a17:903:1c2:b0:1d4:3bcd:4317 with SMTP id
- e2-20020a17090301c200b001d43bcd4317mr228480plh.7.1703613648926; Tue, 26 Dec
- 2023 10:00:48 -0800 (PST)
-Date: Tue, 26 Dec 2023 17:59:59 +0000
+ (user=tanzirh job=sendgmr) by 2002:a05:690c:368c:b0:5d3:8857:b78e with SMTP
+ id fu12-20020a05690c368c00b005d38857b78emr3998773ywb.10.1703613650634; Tue,
+ 26 Dec 2023 10:00:50 -0800 (PST)
+Date: Tue, 26 Dec 2023 18:00:00 +0000
+In-Reply-To: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAJ8Ui2UC/42Uy4rbQBBFf2XQOgpV/ajuymr+I2TRjypb4LGCN
- JiEwf+elgnBsTTIyxKcew/dXfroZpkGmbtvLx/dJJdhHsZzG+jLS1eO6XyQfqht7gwYiwZcfxr
- y/D4N58NRUpWpF2OjmKRepHSN+jmJDr9uid9/tPk4zO/j9PtWcMHl6+dZF+yxL1Sto2QyB349j
- OPhJF/L+LZk/wX9NhiUiw8WvE3h9fCWhtONWyQuZqfYLMVZbSjGIXh3x//rxU0Oeps1SLCZkLa
- FPwNBkX0tqk3pHrwZ2x1j24ydjwFi1cjZbxrHLQ56D5Crjwoa/KrY7RS7pVgzuoIcnMqzxa4VU
- 9AYHGCGYLePirfBlCQbcu24jK6M/Y6xb8aqGNlxuyRHzxr75Y6SRvBGNEZ+2ngBDVB1SasFTit
- jujfeeM60GBsSowgaCz9rTK1Yg7YtwJgo5VVx2CkOrVgIDFrCKKU+7lHc4WPjTSrMJTLmIo887 /DceLDaVkbFOi6PPMJOAEJLYEpsCCgKxVUC7iUs/xKKPosPbU3qf2dwvV7/AAPVY7szBQAA
+References: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
 X-Developer-Key: i=tanzirh@google.com; a=ed25519; pk=UeRjcUcv5W9AeLGEbAe2+0LptQpcY+o1Zg0LHHo7VN4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1703613647; l=2420;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1703613647; l=6769;
  i=tanzirh@google.com; s=20231204; h=from:subject:message-id;
- bh=vEaBhflrd5vMapldmscLIaaJ/z8U/1AZB7sFpnB7nVk=; b=eCLsBksk7Ew4KMhKgVxOJ0lTDMKkj1WQmj/2pbxoPN3s8KVL4V+lNNy2NA433QAJhnskjoZ0u
- eB9DdT/PIVNC0Ci9WXitVLr3qccFXLHfRaaVpgh8L22m9iS0ZeiY82L
+ bh=hIYeBjXsSax2iHEZlDh3Xt19cOiTxbSkrynkTtDAKho=; b=1b4ZUQXbUSIDZ1hxa5E5zrunUIoOIn1VeJ8hz3PiqfvblTOESIGkFCuK0H3AONFcHdMQUnTM+
+ vFtTl8nVvYcAvcAO5K3/jd6Mrp97rLOHO9ZBPfMblEBk+13qCWDnvkP
 X-Mailer: b4 0.12.4
-Message-ID: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
-Subject: [PATCH v6 0/2] shrink lib/string.i via IWYU
+Message-ID: <20231226-libstringheader-v6-1-80aa08c7652c@google.com>
+Subject: [PATCH v6 1/2] kernel.h: removed REPEAT_BYTE from kernel.h
 From: Tanzir Hasan <tanzirh@google.com>
 To: Kees Cook <keescook@chromium.org>, Nick Desaulniers <nnn@google.com>
 Cc: Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org, 
@@ -69,46 +64,17 @@ Cc: Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org,
 	Tanzir Hasan <tanzirh@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-This patch series changes the include list of string.c to minimize
-the preprocessing size. The patch series intends to remove REPEAT_BYE
-from kernel.h and move it into its own header file because
-word-at-a-time.h has an implicit dependancy on it but it is declared
-in kernel.h which is bloated.
+This patch creates wordpart.h and includes it in asm/word-at-a-time.h
+for all architectures. WORD_AT_A_TIME_CONSTANTS depends on kernel.h
+because of REPEAT_BYTE. Moving this to another header and including it
+where necessary allows us to not include the bloated kernel.h. Making
+this implicit dependency on REPEAT_BYTE explicit allows for later
+improvements in the lib/string.c inclusion list.
 
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Tanzir Hasan <tanzirh@google.com>
 ---
-
----
-Changes in v6:
-- added linux/bitops.h to wordpart.h
-- removed kernel.h from x86
-- Link to v5: https://lore.kernel.org/r/20231219-libstringheader-v5-0-206d4afd309a@google.com
-
-Changes in v5:
-- Removed bad copyright.
-- Link to v4: https://lore.kernel.org/r/20231219-libstringheader-v4-0-aaeb26495d2f@google.com
-
-Changes in v4:
-- Fixed personal email client so name appears instead of just email
-- Removed kernel.h where not needed.
-- Sorted include list in lib/string.c and used linux/limits.h
-- Link to v3: https://lore.kernel.org/r/20231218-libstringheader-v3-0-500bd58f0f75@google.com
-
-Changes in v3:
-- Moved REPEAT_BYTE out of kernel.h and into wordpart.h.
-- Included wordpart.h where REPEAT_BYTE was necessary.
-- Link to v2: https://lore.kernel.org/r/20231214-libstringheader-v2-0-0f195dcff204@google.com
-
-Changes in v2:
-- Transformed into a patch series
-- Changed asm inclusions to linux inclusions
-- added a patch to sh
-- Link to v1: https://lore.kernel.org/r/20231205-libstringheader-v1-1-7f9c573053a7@gmail.com
-
----
-Tanzir Hasan (2):
-      kernel.h: removed REPEAT_BYTE from kernel.h
-      lib/string: shrink lib/string.i via IWYU
-
  arch/arm/include/asm/word-at-a-time.h     |  3 ++-
  arch/arm64/include/asm/word-at-a-time.h   |  3 ++-
  arch/powerpc/include/asm/word-at-a-time.h |  4 ++--
@@ -121,13 +87,185 @@ Tanzir Hasan (2):
  include/asm-generic/word-at-a-time.h      |  3 ++-
  include/linux/kernel.h                    |  7 -------
  include/linux/wordpart.h                  | 14 ++++++++++++++
- lib/string.c                              | 17 +++++++++--------
- 13 files changed, 41 insertions(+), 24 deletions(-)
----
-base-commit: ceb6a6f023fd3e8b07761ed900352ef574010bcb
-change-id: 20231204-libstringheader-e238e2af5eec
+ 12 files changed, 32 insertions(+), 16 deletions(-)
 
-Best regards,
+diff --git a/arch/arm/include/asm/word-at-a-time.h b/arch/arm/include/asm/word-at-a-time.h
+index 352ab213520d..f9a3897b06e7 100644
+--- a/arch/arm/include/asm/word-at-a-time.h
++++ b/arch/arm/include/asm/word-at-a-time.h
+@@ -8,7 +8,8 @@
+  * Little-endian word-at-a-time zero byte handling.
+  * Heavily based on the x86 algorithm.
+  */
+-#include <linux/kernel.h>
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ 
+ struct word_at_a_time {
+ 	const unsigned long one_bits, high_bits;
+diff --git a/arch/arm64/include/asm/word-at-a-time.h b/arch/arm64/include/asm/word-at-a-time.h
+index f3b151ed0d7a..14251abee23c 100644
+--- a/arch/arm64/include/asm/word-at-a-time.h
++++ b/arch/arm64/include/asm/word-at-a-time.h
+@@ -9,7 +9,8 @@
+ 
+ #ifndef __AARCH64EB__
+ 
+-#include <linux/kernel.h>
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ 
+ struct word_at_a_time {
+ 	const unsigned long one_bits, high_bits;
+diff --git a/arch/powerpc/include/asm/word-at-a-time.h b/arch/powerpc/include/asm/word-at-a-time.h
+index 30a12d208687..54653a863414 100644
+--- a/arch/powerpc/include/asm/word-at-a-time.h
++++ b/arch/powerpc/include/asm/word-at-a-time.h
+@@ -4,8 +4,8 @@
+ /*
+  * Word-at-a-time interfaces for PowerPC.
+  */
+-
+-#include <linux/kernel.h>
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ #include <asm/asm-compat.h>
+ #include <asm/extable.h>
+ 
+diff --git a/arch/riscv/include/asm/word-at-a-time.h b/arch/riscv/include/asm/word-at-a-time.h
+index 7c086ac6ecd4..fae33cc04f8d 100644
+--- a/arch/riscv/include/asm/word-at-a-time.h
++++ b/arch/riscv/include/asm/word-at-a-time.h
+@@ -9,7 +9,8 @@
+ #define _ASM_RISCV_WORD_AT_A_TIME_H
+ 
+ 
+-#include <linux/kernel.h>
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ 
+ struct word_at_a_time {
+ 	const unsigned long one_bits, high_bits;
+diff --git a/arch/s390/include/asm/word-at-a-time.h b/arch/s390/include/asm/word-at-a-time.h
+index 2579f1694b82..203acd6e431b 100644
+--- a/arch/s390/include/asm/word-at-a-time.h
++++ b/arch/s390/include/asm/word-at-a-time.h
+@@ -2,7 +2,8 @@
+ #ifndef _ASM_WORD_AT_A_TIME_H
+ #define _ASM_WORD_AT_A_TIME_H
+ 
+-#include <linux/kernel.h>
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ #include <asm/asm-extable.h>
+ #include <asm/bitsperlong.h>
+ 
+diff --git a/arch/sh/include/asm/word-at-a-time.h b/arch/sh/include/asm/word-at-a-time.h
+index 4aa398455b94..95100ce128d6 100644
+--- a/arch/sh/include/asm/word-at-a-time.h
++++ b/arch/sh/include/asm/word-at-a-time.h
+@@ -5,6 +5,8 @@
+ #ifdef CONFIG_CPU_BIG_ENDIAN
+ # include <asm-generic/word-at-a-time.h>
+ #else
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ /*
+  * Little-endian version cribbed from x86.
+  */
+diff --git a/arch/x86/include/asm/word-at-a-time.h b/arch/x86/include/asm/word-at-a-time.h
+index 46b4f1f7f354..e8d7d4941c4c 100644
+--- a/arch/x86/include/asm/word-at-a-time.h
++++ b/arch/x86/include/asm/word-at-a-time.h
+@@ -2,7 +2,8 @@
+ #ifndef _ASM_WORD_AT_A_TIME_H
+ #define _ASM_WORD_AT_A_TIME_H
+ 
+-#include <linux/kernel.h>
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ 
+ /*
+  * This is largely generic for little-endian machines, but the
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index c57e181bba21..75d0f6b11a48 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -47,6 +47,7 @@
+ #include <linux/kern_levels.h>
+ #include <linux/kstrtox.h>
+ #include <linux/kthread.h>
++#include <linux/wordpart.h>
+ 
+ #include <asm/page.h>
+ #include <asm/memtype.h>
+diff --git a/fs/namei.c b/fs/namei.c
+index 71c13b2990b4..189ea53ad635 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -17,8 +17,8 @@
+ 
+ #include <linux/init.h>
+ #include <linux/export.h>
+-#include <linux/kernel.h>
+ #include <linux/slab.h>
++#include <linux/wordpart.h>
+ #include <linux/fs.h>
+ #include <linux/filelock.h>
+ #include <linux/namei.h>
+diff --git a/include/asm-generic/word-at-a-time.h b/include/asm-generic/word-at-a-time.h
+index 95a1d214108a..ef3f841c6625 100644
+--- a/include/asm-generic/word-at-a-time.h
++++ b/include/asm-generic/word-at-a-time.h
+@@ -2,7 +2,8 @@
+ #ifndef _ASM_WORD_AT_A_TIME_H
+ #define _ASM_WORD_AT_A_TIME_H
+ 
+-#include <linux/kernel.h>
++#include <linux/bitops.h>
++#include <linux/wordpart.h>
+ #include <asm/byteorder.h>
+ 
+ #ifdef __BIG_ENDIAN
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index d9ad21058eed..162660af5b7d 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -39,13 +39,6 @@
+ 
+ #define STACK_MAGIC	0xdeadbeef
+ 
+-/**
+- * REPEAT_BYTE - repeat the value @x multiple times as an unsigned long value
+- * @x: value to repeat
+- *
+- * NOTE: @x is not checked for > 0xff; larger values produce odd results.
+- */
+-#define REPEAT_BYTE(x)	((~0ul / 0xff) * (x))
+ 
+ /* generic data direction definitions */
+ #define READ			0
+diff --git a/include/linux/wordpart.h b/include/linux/wordpart.h
+new file mode 100644
+index 000000000000..43c1a8ae5152
+--- /dev/null
++++ b/include/linux/wordpart.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _LINUX_WORDPART_H
++#define _LINUX_WORDPART_H
++/**
++ * REPEAT_BYTE - repeat the value @x multiple times as an unsigned long value
++ * @x: value to repeat
++ *
++ * NOTE: @x is not checked for > 0xff; larger values produce odd results.
++ */
++#define REPEAT_BYTE(x)	((~0ul / 0xff) * (x))
++
++#endif // _LINUX_WORDPART_H
++
+
 -- 
-Tanzir Hasan <tanzirh@google.com>
+2.43.0.472.g3155946c3a-goog
 
