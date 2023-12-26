@@ -1,148 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600444F883;
-	Tue, 26 Dec 2023 16:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8166E4F61E
+	for <llvm@lists.linux.dev>; Tue, 26 Dec 2023 18:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tanzirh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hyoEySQd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B5FC433C8;
-	Tue, 26 Dec 2023 16:54:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703609685;
-	bh=3qM2GHh77DRCqEQvJaFuJ3OPumR+rWFKPmfNaFK09E8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hyoEySQdPRqvopBhVvKfA83jPoJIz0P6THQ1jeUtceYWcDZeRZW1jcFBAvdLWkqMe
-	 frKLy7VUSRSjJQfc+reCBX7hp9ANBukZNVXEwM4p/dU8O2geuf8PC57yDjHEPNsvlI
-	 E4vKIvBhMpQdA3341bpZkfJ7JHjoRmNhXyyO7fdFjPxHkb8rcFGSlGXjrsYbVxi0dZ
-	 SBFfT1xUJKTeDW+oKt+mmjGGSV3PNdjQDn2oRYEUWiwe+EsfhMQYlo4r+cxZ/bmj66
-	 TZFcKGOwzCsSvPV0AwndM3MugXdYA2GSDrjrm+Zki38tWEUoO8HbiBJjk8RiqrDPOg
-	 1uHSFsFaNMGEA==
-Date: Tue, 26 Dec 2023 09:54:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: Jeff Layton <jlayton@kernel.org>, Steve French <smfrench@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Ilya Dryomov <idryomov@gmail.com>,
-	Christian Brauner <christian@brauner.io>, linux-cachefs@redhat.com,
-	linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-	linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-	v9fs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 15/40] netfs: Add support for DIO buffering
-Message-ID: <20231226165442.GA1202197@dev-arch.thelio-3990X>
-References: <20231221132400.1601991-1-dhowells@redhat.com>
- <20231221132400.1601991-16-dhowells@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H02ShcXl"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1d3eff55aa5so50406795ad.2
+        for <llvm@lists.linux.dev>; Tue, 26 Dec 2023 10:00:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1703613649; x=1704218449; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uL68m7/nloxAmVxHBhyXARaUNsJ4FqLRMv7smk0VXkU=;
+        b=H02ShcXldwEzraqqpF76B53xMeTGqkXOuaGkJztp6kg+xFbXeEyJ6bpL2cnvaaK5L6
+         NfNLhZ7gaHNBAhxUzJLu2IoRxiY4k13bzqGic5RKhWU3+dfJjB7RyP/DYS2xBKwwmlZu
+         747fa0PknwpQpiKbRIcvQdtOaxN+n2IjDCZk5tsNXu65dF2i3S3zWK8oTsyOuxhJI+3l
+         1NLGaDHirVzAKuGm7hj1kMw9HJ/CVTS53uKvs0FyckKKq60m0hdMAQ1V3MdoCvTCA7/H
+         /uxClIfK+0DuHSd/c9qLcZcUgqP1/TNMce/36biP73i5ic8vwwxASaOvvTQyadyYTJFj
+         FmVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703613649; x=1704218449;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uL68m7/nloxAmVxHBhyXARaUNsJ4FqLRMv7smk0VXkU=;
+        b=YLIpEDUA3l5PAbk61nHrSUky/LzZmWN0y4J5LKpWX6Pq4NwGNazy77f1cevEswhWzn
+         VxHet0G1ERm5B2pLAi8viSmQojTVdiOiBqVwRnrCSB+D4I80ZA3Ro0Joww2YASXB19bF
+         JDBTSaeChKQxHllTdr3275LJqDPUXxA5MRFHO6/Ph9F7Vk8KbzHC9CeMivd0P9qDY50K
+         nvrLBPxBCGoUoN4b/qoZWYKHkhUCbPqpv6XHdiSlqYYnf/HbF1HpocWT9KSdzJ00mclG
+         IbY1DagVAt9yb/dtt8SWqJXheUxRnANJcZkdpDCuKtXAgF4Gotknn6Vt5PpByyQ/HK7p
+         bTSg==
+X-Gm-Message-State: AOJu0YysaonZd1Fm1REG3iujoZMhrj6efuG0H/VAUr1vxgc+aDtnzq6i
+	59oFB9maq/l91M+veuybGQudAXLzHoNAW/gbmKY=
+X-Google-Smtp-Source: AGHT+IHvB4n72zhphWG0KAwIt3BqQtmNnGxtZajtuTZQqOlIgqHluySRRvP5+OuOqf07zfouccipiRqRDjXP
+X-Received: from tanz.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:c4a])
+ (user=tanzirh job=sendgmr) by 2002:a17:903:1c2:b0:1d4:3bcd:4317 with SMTP id
+ e2-20020a17090301c200b001d43bcd4317mr228480plh.7.1703613648926; Tue, 26 Dec
+ 2023 10:00:48 -0800 (PST)
+Date: Tue, 26 Dec 2023 17:59:59 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231221132400.1601991-16-dhowells@redhat.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAJ8Ui2UC/42Uy4rbQBBFf2XQOgpV/ajuymr+I2TRjypb4LGCN
+ JiEwf+elgnBsTTIyxKcew/dXfroZpkGmbtvLx/dJJdhHsZzG+jLS1eO6XyQfqht7gwYiwZcfxr
+ y/D4N58NRUpWpF2OjmKRepHSN+jmJDr9uid9/tPk4zO/j9PtWcMHl6+dZF+yxL1Sto2QyB349j
+ OPhJF/L+LZk/wX9NhiUiw8WvE3h9fCWhtONWyQuZqfYLMVZbSjGIXh3x//rxU0Oeps1SLCZkLa
+ FPwNBkX0tqk3pHrwZ2x1j24ydjwFi1cjZbxrHLQ56D5Crjwoa/KrY7RS7pVgzuoIcnMqzxa4VU
+ 9AYHGCGYLePirfBlCQbcu24jK6M/Y6xb8aqGNlxuyRHzxr75Y6SRvBGNEZ+2ngBDVB1SasFTit
+ jujfeeM60GBsSowgaCz9rTK1Yg7YtwJgo5VVx2CkOrVgIDFrCKKU+7lHc4WPjTSrMJTLmIo887 /DceLDaVkbFOi6PPMJOAEJLYEpsCCgKxVUC7iUs/xKKPosPbU3qf2dwvV7/AAPVY7szBQAA
+X-Developer-Key: i=tanzirh@google.com; a=ed25519; pk=UeRjcUcv5W9AeLGEbAe2+0LptQpcY+o1Zg0LHHo7VN4=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1703613647; l=2420;
+ i=tanzirh@google.com; s=20231204; h=from:subject:message-id;
+ bh=vEaBhflrd5vMapldmscLIaaJ/z8U/1AZB7sFpnB7nVk=; b=eCLsBksk7Ew4KMhKgVxOJ0lTDMKkj1WQmj/2pbxoPN3s8KVL4V+lNNy2NA433QAJhnskjoZ0u
+ eB9DdT/PIVNC0Ci9WXitVLr3qccFXLHfRaaVpgh8L22m9iS0ZeiY82L
+X-Mailer: b4 0.12.4
+Message-ID: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
+Subject: [PATCH v6 0/2] shrink lib/string.i via IWYU
+From: Tanzir Hasan <tanzirh@google.com>
+To: Kees Cook <keescook@chromium.org>, Nick Desaulniers <nnn@google.com>
+Cc: Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
+	Greg KH <gregkh@linuxfoundation.org>, llvm@lists.linux.dev, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	Tanzir Hasan <tanzirh@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, Dec 21, 2023 at 01:23:10PM +0000, David Howells wrote:
-> Add a bvec array pointer and an iterator to netfs_io_request for either
-> holding a copy of a DIO iterator or a list of all the bits of buffer
-> pointed to by a DIO iterator.
-> 
-> There are two problems:  Firstly, if an iovec-class iov_iter is passed to
-> ->read_iter() or ->write_iter(), this cannot be passed directly to
-> kernel_sendmsg() or kernel_recvmsg() as that may cause locking recursion if
-> a fault is generated, so we need to keep track of the pages involved
-> separately.
-> 
-> Secondly, if the I/O is asynchronous, we must copy the iov_iter describing
-> the buffer before returning to the caller as it may be immediately
-> deallocated.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
-> cc: linux-cachefs@redhat.com
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-mm@kvack.org
-> ---
->  fs/netfs/objects.c    | 10 ++++++++++
->  include/linux/netfs.h |  4 ++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/fs/netfs/objects.c b/fs/netfs/objects.c
-> index 1bd20bdad983..4df5e5eeada6 100644
-> --- a/fs/netfs/objects.c
-> +++ b/fs/netfs/objects.c
-> @@ -76,6 +76,7 @@ static void netfs_free_request(struct work_struct *work)
->  {
->  	struct netfs_io_request *rreq =
->  		container_of(work, struct netfs_io_request, work);
-> +	unsigned int i;
->  
->  	trace_netfs_rreq(rreq, netfs_rreq_trace_free);
->  	netfs_proc_del_rreq(rreq);
-> @@ -84,6 +85,15 @@ static void netfs_free_request(struct work_struct *work)
->  		rreq->netfs_ops->free_request(rreq);
->  	if (rreq->cache_resources.ops)
->  		rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
-> +	if (rreq->direct_bv) {
-> +		for (i = 0; i < rreq->direct_bv_count; i++) {
-> +			if (rreq->direct_bv[i].bv_page) {
-> +				if (rreq->direct_bv_unpin)
-> +					unpin_user_page(rreq->direct_bv[i].bv_page);
-> +			}
-> +		}
-> +		kvfree(rreq->direct_bv);
-> +	}
->  	kfree_rcu(rreq, rcu);
->  	netfs_stat_d(&netfs_n_rh_rreq);
->  }
-> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-> index 3da962e977f5..bbb33ccbf719 100644
-> --- a/include/linux/netfs.h
-> +++ b/include/linux/netfs.h
-> @@ -190,6 +190,9 @@ struct netfs_io_request {
->  	struct iov_iter		iter;		/* Unencrypted-side iterator */
->  	struct iov_iter		io_iter;	/* I/O (Encrypted-side) iterator */
->  	void			*netfs_priv;	/* Private data for the netfs */
-> +	struct bio_vec		*direct_bv	/* DIO buffer list (when handling iovec-iter) */
-> +	__counted_by(direct_bv_count);
+This patch series changes the include list of string.c to minimize
+the preprocessing size. The patch series intends to remove REPEAT_BYE
+from kernel.h and move it into its own header file because
+word-at-a-time.h has an implicit dependancy on it but it is declared
+in kernel.h which is bloated.
 
-This will break the build with versions of clang that have support for
-counted_by (as it has been reverted in main but reapplication to main is
-being actively worked on) because while annotating pointers with this
-attribute is a goal of the counted_by attribute, it is not ready yet.
-Please consider removing this and adding a TODO to annotate it when
-support is available.
+---
 
-  In file included from /builds/linux/fs/ceph/crypto.c:14:
-  In file included from /builds/linux/fs/ceph/super.h:20:
-  /builds/linux/include/linux/netfs.h:259:19: error: 'counted_by' only applies to C99 flexible array members
-    259 |         struct bio_vec          *direct_bv      /* DIO buffer list (when handling iovec-iter) */
-        |                                  ^~~~~~~~~
-  1 error generated.
+---
+Changes in v6:
+- added linux/bitops.h to wordpart.h
+- removed kernel.h from x86
+- Link to v5: https://lore.kernel.org/r/20231219-libstringheader-v5-0-206d4afd309a@google.com
 
-Some additional context from another recent error like this:
+Changes in v5:
+- Removed bad copyright.
+- Link to v4: https://lore.kernel.org/r/20231219-libstringheader-v4-0-aaeb26495d2f@google.com
 
-https://lore.kernel.org/CAKwvOdkvGTGiWzqEFq=kzqvxSYP5vUj3g9Z-=MZSQROzzSa_dg@mail.gmail.com/
+Changes in v4:
+- Fixed personal email client so name appears instead of just email
+- Removed kernel.h where not needed.
+- Sorted include list in lib/string.c and used linux/limits.h
+- Link to v3: https://lore.kernel.org/r/20231218-libstringheader-v3-0-500bd58f0f75@google.com
 
-Cheers,
-Nathan
+Changes in v3:
+- Moved REPEAT_BYTE out of kernel.h and into wordpart.h.
+- Included wordpart.h where REPEAT_BYTE was necessary.
+- Link to v2: https://lore.kernel.org/r/20231214-libstringheader-v2-0-0f195dcff204@google.com
 
-> +	unsigned int		direct_bv_count; /* Number of elements in direct_bv[] */
->  	unsigned int		debug_id;
->  	atomic_t		nr_outstanding;	/* Number of ops in progress */
->  	atomic_t		nr_copy_ops;	/* Number of copy-to-cache ops in progress */
-> @@ -197,6 +200,7 @@ struct netfs_io_request {
->  	size_t			len;		/* Length of the request */
->  	short			error;		/* 0 or error that occurred */
->  	enum netfs_io_origin	origin;		/* Origin of the request */
-> +	bool			direct_bv_unpin; /* T if direct_bv[] must be unpinned */
->  	loff_t			i_size;		/* Size of the file */
->  	loff_t			start;		/* Start position */
->  	pgoff_t			no_unlock_folio; /* Don't unlock this folio after read */
-> 
+Changes in v2:
+- Transformed into a patch series
+- Changed asm inclusions to linux inclusions
+- added a patch to sh
+- Link to v1: https://lore.kernel.org/r/20231205-libstringheader-v1-1-7f9c573053a7@gmail.com
+
+---
+Tanzir Hasan (2):
+      kernel.h: removed REPEAT_BYTE from kernel.h
+      lib/string: shrink lib/string.i via IWYU
+
+ arch/arm/include/asm/word-at-a-time.h     |  3 ++-
+ arch/arm64/include/asm/word-at-a-time.h   |  3 ++-
+ arch/powerpc/include/asm/word-at-a-time.h |  4 ++--
+ arch/riscv/include/asm/word-at-a-time.h   |  3 ++-
+ arch/s390/include/asm/word-at-a-time.h    |  3 ++-
+ arch/sh/include/asm/word-at-a-time.h      |  2 ++
+ arch/x86/include/asm/word-at-a-time.h     |  3 ++-
+ arch/x86/kvm/mmu/mmu.c                    |  1 +
+ fs/namei.c                                |  2 +-
+ include/asm-generic/word-at-a-time.h      |  3 ++-
+ include/linux/kernel.h                    |  7 -------
+ include/linux/wordpart.h                  | 14 ++++++++++++++
+ lib/string.c                              | 17 +++++++++--------
+ 13 files changed, 41 insertions(+), 24 deletions(-)
+---
+base-commit: ceb6a6f023fd3e8b07761ed900352ef574010bcb
+change-id: 20231204-libstringheader-e238e2af5eec
+
+Best regards,
+-- 
+Tanzir Hasan <tanzirh@google.com>
+
