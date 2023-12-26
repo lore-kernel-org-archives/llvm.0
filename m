@@ -1,150 +1,84 @@
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0429E4E1A0;
-	Tue, 26 Dec 2023 10:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="qctTj9H1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1703585548; x=1704190348; i=markus.elfring@web.de;
-	bh=dPv4vm2V0dtNM9i6ea9tTX3+xLFfWPWmI5QeWJPTnZk=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=qctTj9H1YVuIc3m8+kAdWWGMz52a5nerjKipKUSb6X8ybQ8HqLI6Fm7K+JOA1q/j
-	 chiHL60LtJaQG8B58YOM4rEr9Xx+MEj4DQLXr80xtHmwVA+t2Lzh4Juxb/xXQLn/8
-	 JUBotIqKsiDzTLSsPto/n+/GwCINXYPM13DmwzXE3nBTKZ+uqlOqTu4ESJcHDKrKB
-	 o/oPJWLn42XMytEJk9QA5fSpUPH3u+Ga9weIjWDsGTDlmxjN/45/L3ayhy8ZxKW7l
-	 NbMKFMb2jaAQxa7Z6K9Os2ldxslTommCScCEiAI7p6J++Oe1zU6KUu5yMo0Y+dwts
-	 Ih+seoMJWTukJthKvw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MgzaR-1qmKZd2f09-00h0gW; Tue, 26
- Dec 2023 11:12:28 +0100
-Message-ID: <7bf9a4fa-1675-45a6-88dd-82549ae2c6e0@web.de>
-Date: Tue, 26 Dec 2023 11:12:23 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E224E617;
+	Tue, 26 Dec 2023 12:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Szv4h5Tm1z1R6Hw;
+	Tue, 26 Dec 2023 20:20:52 +0800 (CST)
+Received: from kwepemi500024.china.huawei.com (unknown [7.221.188.100])
+	by mail.maildlp.com (Postfix) with ESMTPS id F10C21402DE;
+	Tue, 26 Dec 2023 20:22:11 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 26 Dec 2023 20:22:11 +0800
+Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
+ dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2507.035;
+ Tue, 26 Dec 2023 20:22:11 +0800
+From: "Gonglei (Arei)" <arei.gonglei@huawei.com>
+To: Markus Elfring <Markus.Elfring@web.de>, kernel test robot <lkp@intel.com>,
+	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>, "David
+ S. Miller" <davem@davemloft.net>, Herbert Xu <herbert@gondor.apana.org.au>,
+	Jason Wang <jasowang@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>,
+	"Xuan Zhuo" <xuanzhuo@linux.alibaba.com>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, LKML
+	<linux-kernel@vger.kernel.org>, "cocci@inria.fr" <cocci@inria.fr>
+Subject: RE: [PATCH v2] crypto: virtio - Less function calls in
+ __virtio_crypto_akcipher_do_req() after error detection
+Thread-Topic: [PATCH v2] crypto: virtio - Less function calls in
+ __virtio_crypto_akcipher_do_req() after error detection
+Thread-Index: AQHaN+QUjZOxb6ORnEG4ZWEqtSGvn7C7fD+A
+Date: Tue, 26 Dec 2023 12:22:11 +0000
+Message-ID: <deb25ea00a57448d94496db1c46af693@huawei.com>
+References: <2413f22f-f0c3-45e0-9f6b-a551bdf0f54c@web.de>
+ <202312260852.0ge5O8IL-lkp@intel.com>
+ <7bf9a4fa-1675-45a6-88dd-82549ae2c6e0@web.de>
+In-Reply-To: <7bf9a4fa-1675-45a6-88dd-82549ae2c6e0@web.de>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2] crypto: virtio - Less function calls in
- __virtio_crypto_akcipher_do_req() after error detection
-Content-Language: en-GB
-To: kernel test robot <lkp@intel.com>, virtualization@lists.linux.dev,
- linux-crypto@vger.kernel.org, kernel-janitors@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Gonglei <arei.gonglei@huawei.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, Jason Wang <jasowang@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- netdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
-References: <2413f22f-f0c3-45e0-9f6b-a551bdf0f54c@web.de>
- <202312260852.0ge5O8IL-lkp@intel.com>
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <202312260852.0ge5O8IL-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:YN0MO2vfA1atqF0nbfqn3SUIOjqrjmmzVaCGbVBzhr1uK75lo+t
- Z+XanIEq02qD07l7cGh0qCNmrpZhVE1z34Lyp8XzjJZz1NMCNGi0WvNA0YgL+CUCd3AkrUH
- u4m7w4Ne71OdUv3nbMx76OomPu4ThXd6ZHN3zMk7meKGBNwTcpJaMKYb1ZhMM9nhYIGQd72
- CDypDzv2I327qYKzDGLtg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:8nuqnBAmzpc=;fggNP23Hu6H5jAMVog3j6WuwsVy
- SNSPoYpjKMwrNPMQKvNUF2W2BCNiSMXM6+szPZlgk5czdie42gPPZHtJ7lVD+Ve9gzqracOJ/
- vJ5Nm0XtiPrhTYtne9KKJkgViiSJ9VRdwEOQg6qSSh0Mb6GF61My09Xu6t5blbdrTD8JCW+hi
- ZTyonCXTwrNSC5ybEZGjj1n1oSG7o6W0ZyXTEGYjlWq1Uw0g/0LYWTSyw0Ul4AyVOp9mf5bar
- LyyuaOfeY/6x8vmc4qN2V+wcRolHAdWvCkMblNmdfH5VNDTOO/6vgqOkQJ+4I+RmhODXe5aEk
- zcSDuO/zOLanNfFuqFZDqVUBziTSeoqXMdbMmvR+VbZse1YRLch5Kgaddv1kU57k/LvAdCeV/
- jITnam948vgtGL4CSq8sG+SNxwq7haNKwfXVlqMV0PvdcaZKULiS7OwcIu+JAjAExqHxn9VhC
- sQxEIQsHz0Vros/asQqPXaV9By64fZ4xZV9YTcYW9kYUMzFbACzWecX2MxryUt7VZdNL0hAKD
- h8b9hiub2b7uHr2lWE6sgLF0Lza1HRxLQE4P1gx/2/FK+TdMtwfi6fdlCUq0YAtkVAjhJ3Itc
- 7IQDzC6bKhG423ry4K5JJNPQrTieQVnchifFCJs9ji2RXXV7XAHJXJVTFsCMbvMSzqAYgrCjE
- ju2Lwc6iP4UF7ZT3PH1U5EkOjtkCUdjCEKcUxI9LG/RG9IQd4xrfJgOvxzxFRAa0hNFbco+mU
- 3K0PdeaQhY/3yQPOjtIfTCJAM0mn9o5LiJ/TwzfQnF6fBQgzwjZPllvg7PJdAgRahw1GDP0AU
- 4q0P9MY9OqRHgjCkBcqICAHF0Pb6L3gb166r70ry43nveXIZQuABdfP9ZVueBQ6dIV4gzclr9
- T3QMf/bkPp2VN9TN5sd/4dEflY8gfYX/vQqODRKtrK+Izhm70lJna8tRR0QH1TcGjBgoTUfi3
- VOtIf1J/PSAE+RJkUJCU2HoAB14=
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Tue, 26 Dec 2023 11:00:20 +0100
-
-The kfree() function was called in up to two cases by the
-__virtio_crypto_akcipher_do_req() function during error handling
-even if the passed variable contained a null pointer.
-This issue was detected by using the Coccinelle software.
-
-* Adjust jump targets.
-
-* Delete two initialisations which became unnecessary
-  with this refactoring.
-
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
-
-v2:
-A typo was fixed for the delimiter of a label.
-
- drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers=
-/crypto/virtio/virtio_crypto_akcipher_algs.c
-index 2621ff8a9376..057da5bd8d30 100644
-=2D-- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-+++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-@@ -224,11 +224,11 @@ static int __virtio_crypto_akcipher_do_req(struct vi=
-rtio_crypto_akcipher_request
- 	struct virtio_crypto *vcrypto =3D ctx->vcrypto;
- 	struct virtio_crypto_op_data_req *req_data =3D vc_req->req_data;
- 	struct scatterlist *sgs[4], outhdr_sg, inhdr_sg, srcdata_sg, dstdata_sg;
--	void *src_buf =3D NULL, *dst_buf =3D NULL;
-+	void *src_buf, *dst_buf =3D NULL;
- 	unsigned int num_out =3D 0, num_in =3D 0;
- 	int node =3D dev_to_node(&vcrypto->vdev->dev);
- 	unsigned long flags;
--	int ret =3D -ENOMEM;
-+	int ret;
- 	bool verify =3D vc_akcipher_req->opcode =3D=3D VIRTIO_CRYPTO_AKCIPHER_VE=
-RIFY;
- 	unsigned int src_len =3D verify ? req->src_len + req->dst_len : req->src=
-_len;
-
-@@ -239,7 +239,7 @@ static int __virtio_crypto_akcipher_do_req(struct virt=
-io_crypto_akcipher_request
- 	/* src data */
- 	src_buf =3D kcalloc_node(src_len, 1, GFP_KERNEL, node);
- 	if (!src_buf)
--		goto err;
-+		return -ENOMEM;
-
- 	if (verify) {
- 		/* for verify operation, both src and dst data work as OUT direction */
-@@ -254,7 +254,7 @@ static int __virtio_crypto_akcipher_do_req(struct virt=
-io_crypto_akcipher_request
- 		/* dst data */
- 		dst_buf =3D kcalloc_node(req->dst_len, 1, GFP_KERNEL, node);
- 		if (!dst_buf)
--			goto err;
-+			goto free_src;
-
- 		sg_init_one(&dstdata_sg, dst_buf, req->dst_len);
- 		sgs[num_out + num_in++] =3D &dstdata_sg;
-@@ -277,9 +277,9 @@ static int __virtio_crypto_akcipher_do_req(struct virt=
-io_crypto_akcipher_request
- 	return 0;
-
- err:
--	kfree(src_buf);
- 	kfree(dst_buf);
--
-+free_src:
-+	kfree(src_buf);
- 	return -ENOMEM;
- }
-
-=2D-
-2.43.0
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFya3VzIEVsZnJpbmcg
+W21haWx0bzpNYXJrdXMuRWxmcmluZ0B3ZWIuZGVdDQo+IFNlbnQ6IFR1ZXNkYXksIERlY2VtYmVy
+IDI2LCAyMDIzIDY6MTIgUE0NCj4gVG86IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29t
+PjsgdmlydHVhbGl6YXRpb25AbGlzdHMubGludXguZGV2Ow0KPiBsaW51eC1jcnlwdG9Admdlci5r
+ZXJuZWwub3JnOyBrZXJuZWwtamFuaXRvcnNAdmdlci5rZXJuZWwub3JnOyBEYXZpZCBTLiBNaWxs
+ZXINCj4gPGRhdmVtQGRhdmVtbG9mdC5uZXQ+OyBHb25nbGVpIChBcmVpKSA8YXJlaS5nb25nbGVp
+QGh1YXdlaS5jb20+OyBIZXJiZXJ0DQo+IFh1IDxoZXJiZXJ0QGdvbmRvci5hcGFuYS5vcmcuYXU+
+OyBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPjsNCj4gTWljaGFlbCBTLiBUc2lya2lu
+IDxtc3RAcmVkaGF0LmNvbT47IFh1YW4gWmh1bw0KPiA8eHVhbnpodW9AbGludXguYWxpYmFiYS5j
+b20+DQo+IENjOiBsbHZtQGxpc3RzLmxpbnV4LmRldjsgb2Uta2J1aWxkLWFsbEBsaXN0cy5saW51
+eC5kZXY7IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7DQo+IExLTUwgPGxpbnV4LWtlcm5lbEB2Z2Vy
+Lmtlcm5lbC5vcmc+OyBjb2NjaUBpbnJpYS5mcg0KPiBTdWJqZWN0OiBbUEFUQ0ggdjJdIGNyeXB0
+bzogdmlydGlvIC0gTGVzcyBmdW5jdGlvbiBjYWxscyBpbg0KPiBfX3ZpcnRpb19jcnlwdG9fYWtj
+aXBoZXJfZG9fcmVxKCkgYWZ0ZXIgZXJyb3IgZGV0ZWN0aW9uDQo+IA0KPiBGcm9tOiBNYXJrdXMg
+RWxmcmluZyA8ZWxmcmluZ0B1c2Vycy5zb3VyY2Vmb3JnZS5uZXQ+DQo+IERhdGU6IFR1ZSwgMjYg
+RGVjIDIwMjMgMTE6MDA6MjAgKzAxMDANCj4gDQo+IFRoZSBrZnJlZSgpIGZ1bmN0aW9uIHdhcyBj
+YWxsZWQgaW4gdXAgdG8gdHdvIGNhc2VzIGJ5IHRoZQ0KPiBfX3ZpcnRpb19jcnlwdG9fYWtjaXBo
+ZXJfZG9fcmVxKCkgZnVuY3Rpb24gZHVyaW5nIGVycm9yIGhhbmRsaW5nIGV2ZW4gaWYgdGhlDQo+
+IHBhc3NlZCB2YXJpYWJsZSBjb250YWluZWQgYSBudWxsIHBvaW50ZXIuDQo+IFRoaXMgaXNzdWUg
+d2FzIGRldGVjdGVkIGJ5IHVzaW5nIHRoZSBDb2NjaW5lbGxlIHNvZnR3YXJlLg0KPiANCj4gKiBB
+ZGp1c3QganVtcCB0YXJnZXRzLg0KPiANCj4gKiBEZWxldGUgdHdvIGluaXRpYWxpc2F0aW9ucyB3
+aGljaCBiZWNhbWUgdW5uZWNlc3NhcnkNCj4gICB3aXRoIHRoaXMgcmVmYWN0b3JpbmcuDQo+IA0K
+PiBTaWduZWQtb2ZmLWJ5OiBNYXJrdXMgRWxmcmluZyA8ZWxmcmluZ0B1c2Vycy5zb3VyY2Vmb3Jn
+ZS5uZXQ+DQo+IC0tLQ0KPiANCj4gdjI6DQo+IEEgdHlwbyB3YXMgZml4ZWQgZm9yIHRoZSBkZWxp
+bWl0ZXIgb2YgYSBsYWJlbC4NCj4gDQo+ICBkcml2ZXJzL2NyeXB0by92aXJ0aW8vdmlydGlvX2Ny
+eXB0b19ha2NpcGhlcl9hbGdzLmMgfCAxMiArKysrKystLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2Vk
+LCA2IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pDQo+IA0KDQpSZXZpZXdlZC1ieTogR29u
+Z2xlaSA8YXJlaS5nb25nbGVpQGh1YXdlaS5jb20+DQoNCg0KUmVnYXJkcywNCi1Hb25nbGVpDQo=
