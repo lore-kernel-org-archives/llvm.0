@@ -1,46 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F671FA3;
-	Wed, 27 Dec 2023 01:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6208E20E3;
+	Wed, 27 Dec 2023 02:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mtbo93lT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E0chSsRq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703642109; x=1735178109;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7v/ujX87syrPOWCR/vt8j3eTIvgnEYcg6Sg664+Dpmc=;
-  b=Mtbo93lTtAXGoyhUxwNSd2y2gWgTqgO5v3MiY3QTJENQhrLmnDykysUO
-   Y25MfxyEoVhLW0bYtKp7nMR8wTgA+Y5K1YzM4UBDASLMS31kiTrcpDxhn
-   rJQllam/ESJiDpUG8kdxhjwbKig1mP4K5lG8sEGSkhCpJtCVGyLwBJnJA
-   3bF43+Uu1C3YeodD1Nt8ee2uM1nKqDv+9hxaDku8Ex6rBcvjVxxKiPCjC
-   KQRRQ+xHu96WFbo7rWrTXvj2PJ4G+x4YzJ2pvbiTwnHDll02exucBxvYN
-   SV9HZMTUkDp49t5HxgXpXrz6whu0FQsGqUaN+iQo88Gd2cx4OpGPN2sS5
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10935"; a="3489027"
+  t=1703644571; x=1735180571;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eOJDRRxQCcECcUtLbWLmwY+VO9XB6AP8zj/voHh5AJw=;
+  b=E0chSsRqssc4H3gbMZhYDLm9puBweowsqNyYMnvIjvXybr98/oCc6wB/
+   zbmkF1dPEJ3CSAoKVBLJ3njlf3zG3Gv+THLV61nVOru62WF1p6Yu1MY9S
+   CCZAOCx+VWkREcsA66fKtMGgj1LdcFPbMMJgcv929hOiyk/b2pFFAHPZt
+   gjDTboBKhxkui+IYz8YwcXs/EP8BzKcKpcF+l/gN2LGsAezi7Y4oWZBlw
+   J9mEvObILhPo8tosWDc6VqVYTUEE4GHwzuUtzMhvPyyLwq4gt+WvXmAg3
+   VQeDzev8r2hs2z/Sv64uxbOh/jWIcBBgYNL8ssIUW5gNTDnpT3IwgDi81
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10935"; a="393558226"
 X-IronPort-AV: E=Sophos;i="6.04,307,1695711600"; 
-   d="scan'208";a="3489027"
+   d="scan'208";a="393558226"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2023 17:55:08 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2023 18:36:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10935"; a="1109506143"
+X-IronPort-AV: E=McAfee;i="6600,9927,10935"; a="1109512652"
 X-IronPort-AV: E=Sophos;i="6.04,307,1695711600"; 
-   d="scan'208";a="1109506143"
+   d="scan'208";a="1109512652"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Dec 2023 17:55:06 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 26 Dec 2023 18:36:07 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rIJ8S-000ExN-2O;
-	Wed, 27 Dec 2023 01:55:04 +0000
-Date: Wed, 27 Dec 2023 09:54:57 +0800
+	id 1rIJm9-000EyZ-1z;
+	Wed, 27 Dec 2023 02:36:05 +0000
+Date: Wed, 27 Dec 2023 10:35:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [frederic-dynticks:timers/core 6/11] ld.lld: error: undefined
- symbol: tick_cpu_dying
-Message-ID: <202312270913.zbMZDVVQ-lkp@intel.com>
+To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>, marcel@holtmann.org,
+	johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	amitkumar.karwar@nxp.com, neeraj.sanjaykale@nxp.com,
+	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+	sherry.sun@nxp.com, rohit.fule@nxp.com
+Subject: Re: [PATCH v2] Bluetooth: btnxpuart: Resolve TX timeout error in
+ power save stress test
+Message-ID: <202312271021.m0of6rmb-lkp@intel.com>
+References: <20231226113110.3923962-1-neeraj.sanjaykale@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,24 +55,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231226113110.3923962-1-neeraj.sanjaykale@nxp.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/core
-head:   018d96d27486694a8496e3937ac2f7270442c7c3
-commit: 0f851847642e32105fa0ace39063fa5018379f8c [6/11] timers: Start centralizing tick related CPU hotplug operations
-config: arm-randconfig-002-20231227 (https://download.01.org/0day-ci/archive/20231227/202312270913.zbMZDVVQ-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231227/202312270913.zbMZDVVQ-lkp@intel.com/reproduce)
+Hi Neeraj,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.7-rc7 next-20231222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Neeraj-Sanjay-Kale/Bluetooth-btnxpuart-Resolve-TX-timeout-error-in-power-save-stress-test/20231226-193718
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+patch link:    https://lore.kernel.org/r/20231226113110.3923962-1-neeraj.sanjaykale%40nxp.com
+patch subject: [PATCH v2] Bluetooth: btnxpuart: Resolve TX timeout error in power save stress test
+config: arm-randconfig-003-20231227 (https://download.01.org/0day-ci/archive/20231227/202312271021.m0of6rmb-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231227/202312271021.m0of6rmb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312270913.zbMZDVVQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312271021.m0of6rmb-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: tick_cpu_dying
-   >>> referenced by cpu.c
-   >>>               kernel/cpu.o:(cpuhp_hp_states) in archive vmlinux.a
+>> drivers/bluetooth/btnxpuart.c:356:4: error: call to undeclared function 'usleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     356 |                         usleep(2000); /* Allow chip to detect UART-break and enter sleep */
+         |                         ^
+   1 error generated.
+
+
+vim +/usleep +356 drivers/bluetooth/btnxpuart.c
+
+   333	
+   334	static void ps_control(struct hci_dev *hdev, u8 ps_state)
+   335	{
+   336		struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
+   337		struct ps_data *psdata = &nxpdev->psdata;
+   338		int status;
+   339	
+   340		if (psdata->ps_state == ps_state ||
+   341		    !test_bit(BTNXPUART_SERDEV_OPEN, &nxpdev->tx_state))
+   342			return;
+   343	
+   344		mutex_lock(&psdata->ps_lock);
+   345		switch (psdata->cur_h2c_wakeupmode) {
+   346		case WAKEUP_METHOD_DTR:
+   347			if (ps_state == PS_STATE_AWAKE)
+   348				status = serdev_device_set_tiocm(nxpdev->serdev, TIOCM_DTR, 0);
+   349			else
+   350				status = serdev_device_set_tiocm(nxpdev->serdev, 0, TIOCM_DTR);
+   351			break;
+   352		case WAKEUP_METHOD_BREAK:
+   353		default:
+   354			if (ps_state == PS_STATE_AWAKE) {
+   355				status = serdev_device_break_ctl(nxpdev->serdev, 0);
+ > 356				usleep(2000); /* Allow chip to detect UART-break and enter sleep */
+   357			} else {
+   358				status = serdev_device_break_ctl(nxpdev->serdev, -1);
+   359			}
+   360			bt_dev_dbg(hdev, "Set UART break: %s, status=%d",
+   361				   str_on_off(ps_state == PS_STATE_SLEEP), status);
+   362			break;
+   363		}
+   364		if (!status)
+   365			psdata->ps_state = ps_state;
+   366		mutex_unlock(&psdata->ps_lock);
+   367	
+   368		if (ps_state == PS_STATE_AWAKE)
+   369			btnxpuart_tx_wakeup(nxpdev);
+   370	}
+   371	
 
 -- 
 0-DAY CI Kernel Test Service
