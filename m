@@ -1,134 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3131149888;
-	Wed, 27 Dec 2023 22:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C352A495CD;
+	Wed, 27 Dec 2023 22:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="avgTaL6L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703716135; x=1735252135;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uLvKxjmPAQNCDQWSKf+PXALi8yQg+Zp/bXNKwKOpNE4=;
-  b=avgTaL6LgrfYq76ybT8bFtorhTN0/LgbOpU00OEtCjAIh3vOztsYlnwj
-   aF/xjRjtjbCjx+TSAimSxWVqHquMNVZ1Z96E0KBmsSf3jXIM/0bw11hi2
-   dyf7uRfUKIqyvIcTX0Ahz1t0Ww56UOlu6bI4rvFnqI0+D8jPoxmx1E3ID
-   fYfJuXUSDLyhjYik16O2yfSi+2Bq1fwC6e+BjRJuRiVB8fl/7JJZhcN7K
-   Q43E1RET95ONx02UFOJZ1z+UOMpdLhuVyGUgJHasGElOuOqC9d9Ei9PTH
-   jrcmxOQafdaElhjdHPmaEOrV0V+UoUKDB3u9cRm6Zt42tPrCd3goq62wr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="3335455"
-X-IronPort-AV: E=Sophos;i="6.04,310,1695711600"; 
-   d="scan'208";a="3335455"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2023 14:28:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="778340767"
-X-IronPort-AV: E=Sophos;i="6.04,310,1695711600"; 
-   d="scan'208";a="778340767"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 27 Dec 2023 14:28:50 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rIcOO-000FnF-1P;
-	Wed, 27 Dec 2023 22:28:48 +0000
-Date: Thu, 28 Dec 2023 06:28:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mm] kasan: stop leaking stack trace handles
-Message-ID: <202312280603.WqS3sWfa-lkp@intel.com>
-References: <20231226225121.235865-1-andrey.konovalov@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LwxFJKvb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852D9C433C8;
+	Wed, 27 Dec 2023 22:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703717021;
+	bh=uX1Meyulucy4zV+vHFUDHB1WYbmSXHxfUM3z3NO4+Ec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LwxFJKvbdZ56g3kVVJidUQgFE25JjLfgq6esyOQ1xYqonuA7BOZEdZ1bF6OjJbzpd
+	 8UZ93HU/6gKDYvXgp70ZphRXYMuKCsxWgvONji0hX6mefw8Ehg8bTrhtYEPamkVxX6
+	 nptUOajHmhnKMlfzrIwZ2BippRG3FN3+8z0HuMgjw0vqdynYw0yqe8kMfyzdWdqtuF
+	 1nUYyHcLEeHwhm8tx3Sr27tHf2ae8wUDyhq/3OGVPFBAuCDEgCc4bbrK1g/sJe47O2
+	 R1HJiu6zMI18AbuJm5QlTOhfrLilk+yUHEiT9ps3xEx6nLXyR9cLMmqo2StkcTmd+A
+	 cHpQUfTj2+Pkg==
+Date: Wed, 27 Dec 2023 15:43:38 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yujie Liu <yujie.liu@intel.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org, dwarves@vger.kernel.org
+Subject: Re: [bcachefs:header_cleanup 21/51] /bin/bash: line 1: 19420
+ Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
+ --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
+ --btf_gen_optimized --btf_base vmlinux drivers/misc/eeprom/at24.ko
+Message-ID: <20231227224338.GA267659@dev-arch.thelio-3990X>
+References: <202312192107.wMIKiZWw-lkp@intel.com>
+ <20231219205348.wvvxyicaatmljxm2@moria.home.lan>
+ <CAKwvOdmrvwdbFrtzsOjoLJJZ1pDZOBWBiEb=Mx5bCHuKU2wPzQ@mail.gmail.com>
+ <20231219210454.GA540439@dev-arch.thelio-3990X>
+ <ZYKWxl9oQXODIoNe@yujie-X299>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231226225121.235865-1-andrey.konovalov@linux.dev>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZYKWxl9oQXODIoNe@yujie-X299>
 
-Hi,
++ Arnaldo and dwarves list
 
-kernel test robot noticed the following build warnings:
+On Wed, Dec 20, 2023 at 03:24:54PM +0800, Yujie Liu wrote:
+> On Tue, Dec 19, 2023 at 02:04:54PM -0700, Nathan Chancellor wrote:
+> > On Tue, Dec 19, 2023 at 12:58:28PM -0800, Nick Desaulniers wrote:
+> > > On Tue, Dec 19, 2023 at 12:54 PM Kent Overstreet
+> > > <kent.overstreet@linux.dev> wrote:
+> > > >
+> > > > On Tue, Dec 19, 2023 at 09:40:09PM +0800, kernel test robot wrote:
+> > > > > tree:   https://evilpiepirate.org/git/bcachefs.git header_cleanup
+> > > > > head:   89188fceb7a49e3c4b0578d86f6f6e647f202821
+> > > > > commit: 1db61740aeb7d6b1c7bfb2a98708a65a6679d068 [21/51] locking/seqlock: Split out seqlock_types.h
+> > > > > config: hexagon-randconfig-r005-20220913 (https://download.01.org/0day-ci/archive/20231219/202312192107.wMIKiZWw-lkp@intel.com/config)
+> > > > > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> > > > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312192107.wMIKiZWw-lkp@intel.com/reproduce)
+> > > > >
+> > > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > > > the same patch/commit), kindly add following tags
+> > > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202312192107.wMIKiZWw-lkp@intel.com/
+> > > > >
+> > > > > All errors (new ones prefixed by >>):
+> > > > >
+> > > > >    die__process_unit: DW_TAG_member (0xd) @ <0xc689> not handled!
+> > > > >    die__process_unit: tag not supported 0xd (member)!
+> > > > >    die__process_function: DW_TAG_compile_unit (0x11) @ <0xc697> not handled!
+> > > > >    die__process_function: tag not supported 0x11 (compile_unit)!
+> > > > >    die__process_function: DW_TAG_member (0xd) @ <0xc6db> not handled!
+> > > > >    die__process_function: DW_TAG_compile_unit (0x11) @ <0xc6e5> not handled!
+> > > > >    die__process_class: DW_TAG_compile_unit (0x11) @ <0xc778> not handled!
+> > > > >    namespace__recode_dwarf_types: couldn't find 0xc689 type for 0xc66b (member)!
+> > > > >    namespace__recode_dwarf_types: couldn't find 0xc638 type for 0xc674 (member)!
+> > > > >    namespace__recode_dwarf_types: couldn't find 0xc638 type for 0xc67e (member)!
+> > > > > >> /bin/bash: line 1: 19420 Segmentation fault      LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j --lang_exclude=rust --skip_encoding_btf_inconsistent_proto --btf_gen_optimized --btf_base vmlinux drivers/misc/eeprom/at24.ko
+> > > >
+> > > > Not sure how likely a header cleanup is to cause a segfault in
+> > > > llvm-objcopy and I don't have the toolchain to repro this - could
+> > > > hexagon people take a look?
+> > 
+> > For what it's worth in case you were not aware, I provide copies of LLVM
+> > on kernel.org that can be installed in some prefix and invoked with
+> > LLVM=<prefix>/bin/, which can make reproducing reports such as these
+> > relatively easy.
+> > 
+> > https://mirrors.edge.kernel.org/pub/tools/llvm/
+> > 
+> > > Is it a segfault in llvm-objcopy, or pahole?
+> > 
+> > Should be pahole. I have not been able to reproduce these crashes in
+> > pahole v1.25 in the past when they come up every so often. 0day folks,
+> > what version of pahole are you testing with?
+> 
+> We clone pahole source code from [1] and build it on the master branch.
+> The current head is commit c129fa757948 which is newer than v1.25.
+> 
+> c129fa757948 ("pahole: Add --btf_features_strict to reject unknown BTF features")
+> 
+> [1] https://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[cannot apply to linus/master v6.7-rc7 next-20231222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for that additional information but I can reproduce this at v1.25
+as well, I just tried:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/andrey-konovalov-linux-dev/kasan-stop-leaking-stack-trace-handles/20231227-065314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20231226225121.235865-1-andrey.konovalov%40linux.dev
-patch subject: [PATCH mm] kasan: stop leaking stack trace handles
-config: arm-randconfig-002-20231227 (https://download.01.org/0day-ci/archive/20231228/202312280603.WqS3sWfa-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231228/202312280603.WqS3sWfa-lkp@intel.com/reproduce)
+  $ git fetch https://evilpiepirate.org/git/bcachefs.git 1db61740aeb7d6b1c7bfb2a98708a65a6679d068
+  $ git reset --hard FETCH_HEAD
+  $ curl -LSso .config https://download.01.org/0day-ci/archive/20231219/202312192107.wMIKiZWw-lkp@intel.com/config
+  $ curl -LSs https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-16.0.6-x86_64.tar.xz | tar -xJf -
+  $ make -skj"$(nproc)" ARCH=hexagon LLVM=$PWD/llvm-16.0.6-x86_64/bin/ olddefconfig all
+  ...
+  die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
+  die__create_new_enumeration: DW_TAG_array_type (0x1) @ <0x120b1> not handled!
+  die__create_new_enumeration: DW_TAG_pointer_type (0xf) @ <0x120b7> not handled!
+  die__process_unit: DW_TAG_member (0xd) @ <0x3669> not handled!
+  die__process_unit: tag not supported 0xd (member)!
+  die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
+  die__process_unit: DW_TAG_member (0xd) @ <0x3650> not handled!
+  die__process_unit: tag not supported 0xd (member)!
+  die__process: got compile_unit unexpected tag after DW_TAG_compile_unit!
+  die__create_new_enumeration: DW_TAG_array_type (0x1) @ <0x9cb5> not handled!
+  die__create_new_enumeration: DW_TAG_pointer_type (0xf) @ <0x9cbb> not handled!
+  die__process_unit: DW_TAG_enumerator (0x28) @ <0x705a> not handled!
+  die__process_unit: tag not supported 0x28 (enumerator)!
+  ...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312280603.WqS3sWfa-lkp@intel.com/
+I do not get a segfault personally but there are definitely a lot of
+errors from pahole at the end. Arnaldo, is pahole not handling something
+that it should with regards to clang's debug info?
 
-All warnings (new ones prefixed by >>):
-
->> mm/kasan/generic.c:506:6: warning: no previous prototype for function 'release_alloc_meta' [-Wmissing-prototypes]
-     506 | void release_alloc_meta(struct kasan_alloc_meta *meta)
-         |      ^
-   mm/kasan/generic.c:506:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     506 | void release_alloc_meta(struct kasan_alloc_meta *meta)
-         | ^
-         | static 
->> mm/kasan/generic.c:517:6: warning: no previous prototype for function 'release_free_meta' [-Wmissing-prototypes]
-     517 | void release_free_meta(const void *object, struct kasan_free_meta *meta)
-         |      ^
-   mm/kasan/generic.c:517:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     517 | void release_free_meta(const void *object, struct kasan_free_meta *meta)
-         | ^
-         | static 
-   2 warnings generated.
-
-
-vim +/release_alloc_meta +506 mm/kasan/generic.c
-
-   505	
- > 506	void release_alloc_meta(struct kasan_alloc_meta *meta)
-   507	{
-   508		/* Evict the stack traces from stack depot. */
-   509		stack_depot_put(meta->alloc_track.stack);
-   510		stack_depot_put(meta->aux_stack[0]);
-   511		stack_depot_put(meta->aux_stack[1]);
-   512	
-   513		/* Zero out alloc meta to mark it as invalid. */
-   514		__memset(meta, 0, sizeof(*meta));
-   515	}
-   516	
- > 517	void release_free_meta(const void *object, struct kasan_free_meta *meta)
-   518	{
-   519		/* Check if free meta is valid. */
-   520		if (*(u8 *)kasan_mem_to_shadow(object) != KASAN_SLAB_FREE_META)
-   521			return;
-   522	
-   523		/* Evict the stack trace from the stack depot. */
-   524		stack_depot_put(meta->free_track.stack);
-   525	
-   526		/* Mark free meta as invalid. */
-   527		*(u8 *)kasan_mem_to_shadow(object) = KASAN_SLAB_FREE;
-   528	}
-   529	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
