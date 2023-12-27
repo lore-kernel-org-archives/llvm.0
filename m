@@ -1,164 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384CB63AA;
-	Wed, 27 Dec 2023 06:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B280347A44
+	for <llvm@lists.linux.dev>; Wed, 27 Dec 2023 14:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F9hDv3eB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z757I6BC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703660079; x=1735196079;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qnFR3LxawdswpjevdUT6pQJauyrKx5paQ2H5adPAklg=;
-  b=F9hDv3eBjBesCGlcPASBMbhrGTdqFsu6FOqbgOxTmGkZmcYZUv4Qm/gw
-   Oky+9xWUBnxZWsuaaTcPjNu99BnMLR/vE1Sj8B49R1jVy/r3zY9imjSWQ
-   xBRj7SzNWHXWzH37Gxkkk/KdgwzxoRr63xIuI2VqFdXFeDfRilp3obkus
-   UBMv+wcp2JwR1uyzSvnjyxdpuPXhacSkjemiVqirY31U0V1GnSVNdur7/
-   goWu8Fhtzroq8WmiayeTuk0pM+uRewkd9y77vajU+IGnXsA96va3oYmV+
-   TsDLD8JcvzAW7VvDj3eQKZEyYlbBgI0hjN9gWq76a1T68+wJR+ytV+EFQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10935"; a="400235414"
-X-IronPort-AV: E=Sophos;i="6.04,308,1695711600"; 
-   d="scan'208";a="400235414"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2023 22:54:38 -0800
+  t=1703686389; x=1735222389;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=nvBGJUcJtr71cpFCLG59Xr1Xq8kzh3+99ef9ENvhXhE=;
+  b=Z757I6BCWLK+wuCqCG7q8xV/atg4TnjHzOvWIpROJHuEt9VWxfxPuw6W
+   IpoNYjhF7++vPR5bxN9zwPCH0ciAz+DSbwWog8t805IkzErcaH+m+qTyS
+   s/+cq9JQDLt5bdExGpZpi0548ECTIfF0pvUg1VW+42ovbzh7lUObF+0QM
+   2f+2OTAF7gf9hMG/OUg2gyjo+RGhK+IRSg7olyruUwhhDYw0r/MT4vT4W
+   ad8RUHSXwymbJQPB+Tr9SRZUOlDM3H3d40cN3QLyuM9rViR8XLEvArSc+
+   izZ2Wsdk2F59XIkKaZCM1Pj+m3DEXRTIsCUUsB5lC6skNXwsXTBbzpsJX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="427619448"
+X-IronPort-AV: E=Sophos;i="6.04,309,1695711600"; 
+   d="scan'208";a="427619448"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2023 06:13:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,308,1695711600"; 
-   d="scan'208";a="26503020"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 26 Dec 2023 22:54:36 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rINoI-000F8X-0E;
-	Wed, 27 Dec 2023 06:54:34 +0000
-Date: Wed, 27 Dec 2023 14:53:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keyur Parekh <keyur.parekh@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michal Simek <monstr@monstr.eu>,
-	Gregory Williams <gregory.williams@amd.com>,
-	Hua Jiang <hua.jiang@amd.com>, .@3429e2599065
-Subject: [pinchartl-media:muxed/2023.1/base 919/929]
- drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c:181:13: warning:
- variable 'row' is uninitialized when used here
-Message-ID: <202312271450.C9YmLJn2-lkp@intel.com>
+X-IronPort-AV: E=Sophos;i="6.04,309,1695711600"; 
+   d="scan'208";a="20297518"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 27 Dec 2023 06:13:08 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 27 Dec 2023 06:13:07 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 27 Dec 2023 06:13:07 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Wed, 27 Dec 2023 06:13:07 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 27 Dec 2023 06:13:07 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I1PvxFnY+mDdLBiI57SgBCTJSBP6zAdqJ4Sj5b0SaS+cXCAs4DJm9Agnpb/A5fEANO4xYK4KVSfbFDvkGWXe9nsa6lu0KLJcwdRPAsrghX4+Xy9cYzzkgZvuXqeowq8T0NEbPGGnDydbaW8Nyssfn7Ys4tgcV3crzAGhsinTOB0U9QZbV1/8lFRw1hLUX0CC0NcDITx03cCUDWQKKSr70shwHvXvuqgkj4224yCzcR3xWh7RLxXbK934hSiMcIF7MAS5LaFJVfU0pp277R9Cri+Ftu2oarO31az9aZs628oPQuxPm6+T8G59EHvm6WRjuPNqREjqNusiNAVfueAVpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ClwIts4hVxJ0R9vLEWzQ4mv8cx1o6PXZ0GUZyqPwp/Y=;
+ b=gIaChxT8DxgkF2OV42UtR+TARjH8jTEFZvY0Xh+HmYSA4tvSeksOjZRGo2WBvIv5FIq8X7Ckbl6welDuc1qkhDhxvKOWHjLcKRVbq7usXPh41kIH8dYmbz5ZUhF1lFY2AF9BUi2awA8BSXCR/g6nOp7Spc37bvfH1KE3SAILVA4YV4dz9pEBA4twIB4sS1gtPS6jcIxWUxuRndXrrPiRMfbfGN3Uncm6g+ou/OY81HE8IGJWElNnXpUcC5NqfZHyVMMLclgZKuklYhls2kclhHsPaq0bAR/aReq9rNceO9eSdg7ZBM5o1xbXFTPm3GfItPWDC0MRceZySsw3B3PwUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL0PR11MB3122.namprd11.prod.outlook.com (2603:10b6:208:75::32)
+ by IA1PR11MB6146.namprd11.prod.outlook.com (2603:10b6:208:3ee::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.27; Wed, 27 Dec
+ 2023 14:13:05 +0000
+Received: from BL0PR11MB3122.namprd11.prod.outlook.com
+ ([fe80::954:6050:f988:740f]) by BL0PR11MB3122.namprd11.prod.outlook.com
+ ([fe80::954:6050:f988:740f%4]) with mapi id 15.20.7113.026; Wed, 27 Dec 2023
+ 14:13:05 +0000
+From: "Pucha, HimasekharX Reddy" <himasekharx.reddy.pucha@intel.com>
+To: Simon Horman <horms@kernel.org>, "Brandeburg, Jesse"
+	<jesse.brandeburg@intel.com>, "Nguyen, Anthony L"
+	<anthony.l.nguyen@intel.com>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>, "Nathan
+ Chancellor" <nathan@kernel.org>, Eric Dumazet <edumazet@google.com>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>, "Bill
+ Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "David S.
+ Miller" <davem@davemloft.net>
+Subject: RE: [Intel-wired-lan] [PATCH iwl-next] i40e: Avoid unnecessary use of
+ comma operator
+Thread-Topic: [Intel-wired-lan] [PATCH iwl-next] i40e: Avoid unnecessary use
+ of comma operator
+Thread-Index: AQHaMM3TRLmxVQW9RkuRabcKuoy747C9O6uw
+Date: Wed, 27 Dec 2023 14:13:05 +0000
+Message-ID: <BL0PR11MB3122584DE882D5AD0C80AAF0BD9FA@BL0PR11MB3122.namprd11.prod.outlook.com>
+References: <20231217-i40e-comma-v1-1-85c075eff237@kernel.org>
+In-Reply-To: <20231217-i40e-comma-v1-1-85c075eff237@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL0PR11MB3122:EE_|IA1PR11MB6146:EE_
+x-ms-office365-filtering-correlation-id: 8440b259-0507-40dd-00b3-08dc06e5f1a4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: x9uBUIZst08c8hV4Ey68tsngTdOhvSayahSYK7oSEur14nokR3SHLVQtevrvaWj5EwlRPATa6JCyzghoNIE7ENcS63pSD7bmg81q8HJIcqQ9N//sStsEGGK9jODruB7HR8zdAkkvfI4+h5FCQDMz4xyf8MU51PCsrumFtsjMZCwOTaowhSUo45vMr1tLlReLF9lPLa86uZkhdqRYMQfmvt0MBgfEZvIcvSYj4w9iO+Gj1394a/81IpMVWc4bBCmyPpR0WgN4rqL0Q3a7cMrSlF3+S3wEJM6VfNq9uXEvtFYjrrGQeag5DcoJLuin0rdF9JED+Omj93UnTVC/CAM4DtU4aFuI5bPg9A8Kr1gYXn/55EOLWHiAJOqCuG7ccbD7uia0QEUxjoWkDU0OIGBWH1i42dKu5+XOq1oTj6TIWj6EQbwIqoUzXj+v0bPYyZSR+3LEtV7BwqwSxMd72578wApLED1B/V0Wgzrygu0cg2VLGE/8dUyvMGyqmyf5SxMj2VHsyvo/UxtmXl+M2zqprOKe0E+krG3kwK4+fhwSxsW9qGfBhmZG8fEsQ4MumK9hvDAA7NIIKic8543NtQ5vNQRJ02V8uqIHfdeklFk4Q5afCUnkNcD2sUlht6+dP32w
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB3122.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(39860400002)(346002)(366004)(396003)(230922051799003)(451199024)(64100799003)(1800799012)(186009)(26005)(6506007)(7696005)(9686003)(478600001)(83380400001)(71200400001)(7416002)(5660300002)(52536014)(4326008)(4744005)(41300700001)(53546011)(2906002)(8676002)(8936002)(76116006)(110136005)(316002)(66946007)(6636002)(54906003)(64756008)(66446008)(66476007)(66556008)(86362001)(82960400001)(122000001)(38100700002)(33656002)(38070700009)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wRoy8QNhEPtvzWHqBHyVE2XU01gjWm/+6+Xnt4FvOY9bEiQ3h8ogxukX/MsE?=
+ =?us-ascii?Q?v/CtD1Ta/aQ8rLokf2OtzAaYdRdZU557Wvyt9zwUmwE/i9hVSG8YD90DqrmJ?=
+ =?us-ascii?Q?A5zQOjMeMCno1FuZEt80Gsjuhmu8YLXcCms46idrihx+Wp8avWyZ1CpFEEb1?=
+ =?us-ascii?Q?BGHCNDYlNdOweMgt47QNxCPwGeo/6YH60MdFbYCrERDfDlQWD5UqVcKuZ4Rr?=
+ =?us-ascii?Q?3gDHisWXJV1PkoJlsua0GTmfTcBDrTNqx4xd5di6dJFo63q+u7BnppVVkF2g?=
+ =?us-ascii?Q?ib+mlmZ4Btfu68Fajihod/eIJ0G1p7TRGe8RuzSzr68O6Crukd6n3R+eTAiV?=
+ =?us-ascii?Q?grY85Q0iJWYkinkn2wZ8Xi6CXl0JUqtVDbwVI7exHjaYVIxXOxtRw6ogHVEQ?=
+ =?us-ascii?Q?+8Oc2tbTI62lcTYpb99L2z9GhseUF5/IImFUeCk4p9h3g6czGOzwfyzue2A5?=
+ =?us-ascii?Q?qLzrUX/TBL0D6RwWgNNXdobefZvimmSR5Eckogw1VGcYNH0m66Yn8oxgpEUV?=
+ =?us-ascii?Q?43wWAykxn2FAziPVYiwcsFlreaVcojKmpbA2nH1lXaalLAoDUcOpYN+Zmmlr?=
+ =?us-ascii?Q?ZuhcVY5aSKR22/eTvgaa2a6bm4WDhkivxERw42v/Vhx8PEDtxniVWiQR9vdn?=
+ =?us-ascii?Q?T6SNphpA0ac05K746fMLxVG0IfaCB2dgA8X+JsQ2BVRDQ51SeCUJDmQcacg2?=
+ =?us-ascii?Q?M4pEdcUrd9mAPCXVwYJfyLT2e+BjhNA3TD/0ZDYlLHgZLqC4UkM0wBiXDEVv?=
+ =?us-ascii?Q?8vXF1g3cBR3cdv84mkVLKmpMwKJgdqTG5SsQpBxWL7fWV5G5Wd4/eAoB8e09?=
+ =?us-ascii?Q?aOn/Iwb/Ju2/d2wWDqgPJcMgqCZsrE1nU7tpyoGlYaF5UT3GICKEQhHAMhGH?=
+ =?us-ascii?Q?vVOxv02irIHruuAMaX4mLmFckGRvczoAoQcWGu65t0awILxqSFbqE8ZJDNm8?=
+ =?us-ascii?Q?o9b3s3ugyeFsFCta7Qt6OnP+bv2kzn+rA32ZVQ6KDePElVTM9UzYAsxiHDeK?=
+ =?us-ascii?Q?eX3wPmxuV6wJpijc3C3A5F0C8iVpw74oOgQCiac+PiVDRp8VBowQDor05bL5?=
+ =?us-ascii?Q?Eeey8pS7u666BzJh7RLLBFCDbEUufxOFp9/5g2OeVTVVUU7jzt3s1qxeqeFQ?=
+ =?us-ascii?Q?17+Ix4z6abB9PIv31ElvQsJYig0fhTy23/Li+9ICZuRU8byGFD8Jtww7KLzB?=
+ =?us-ascii?Q?P4LnJyMKcIcsCJVum65qU5kUkaCOLQriW0PU5w4lolEyve3KZ6rFUjz/i9Vn?=
+ =?us-ascii?Q?VKPLX22wcbVVFfFfPvNiPdPSNoUeFEW1jy3WUOXVM7pthtMhwgvjpJgx6AVS?=
+ =?us-ascii?Q?wRg+QcJEFy2iMRBqvCcPm/Zg+dvO6GFJWdRaLLWQaWUrEYYpoTxlL6hHkSSo?=
+ =?us-ascii?Q?fq+dOqdMOL53xizA6txoCxG/nzYT5asckbMxqbfyveZ5ogroePzAPKqutzxI?=
+ =?us-ascii?Q?28NuM5EnKFlYFCFHdc57XSZpw4wpaDlpP/hIVYHmW3zP6sSmqxIKuMUZqXjw?=
+ =?us-ascii?Q?KSwVnkU9V/EaW8ho0TOZIx4mqTRudmPsSMq7BjbBpAecdVgnLMMp0N+BjVSv?=
+ =?us-ascii?Q?EXhJFBMqv7VDRW5pLTQF3WWkRcuBp+r8f1XjhJ8cGfZ+jJPIJlP4tiiWTJHb?=
+ =?us-ascii?Q?ng=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB3122.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8440b259-0507-40dd-00b3-08dc06e5f1a4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Dec 2023 14:13:05.0986
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EWzW2NIuPsHqOC9gQywmBY0ujBNpoQCzno9pz82bTLxok/i3zLYFN6PlP5j/49P/8dYHf5Zis5w+biVPo4ppPP4hDTz5Wx1IwjdPDG92yGY6UU1E3WBrUpUzCc7Cl+G6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6146
+X-OriginatorOrg: intel.com
 
-tree:   git://linuxtv.org/pinchartl/media.git muxed/2023.1/base
-head:   f9c8e14ae03c937a79e1c904d004d80a0db3647e
-commit: d4dee8ba45dc097ed26da8b10600301b6aebb029 [919/929] misc: xilinx-ai-engine: Add status dump API for AIEML
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231227/202312271450.C9YmLJn2-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231227/202312271450.C9YmLJn2-lkp@intel.com/reproduce)
+> -----Original Message-----
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of S=
+imon Horman
+> Sent: Sunday, December 17, 2023 3:15 PM
+> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L <an=
+thony.l.nguyen@intel.com>
+> Cc: netdev@vger.kernel.org; llvm@lists.linux.dev; Nick Desaulniers <ndesa=
+ulniers@google.com>; Nathan Chancellor <nathan@kernel.org>; Eric Dumazet <e=
+dumazet@google.com>; intel-wired-lan@lists.osuosl.org; Bill Wendling <morbo=
+@google.com>; Justin Stitt <justinstitt@google.com>; Jakub Kicinski <kuba@k=
+ernel.org>; Paolo Abeni <pabeni@redhat.com>; David S. Miller <davem@davemlo=
+ft.net>
+> Subject: [Intel-wired-lan] [PATCH iwl-next] i40e: Avoid unnecessary use o=
+f comma operator
+>
+> Although it does not seem to have any untoward side-effects,
+> the use of ';' to separate to assignments seems more appropriate than ','=
+.
+>
+> Flagged by clang-17 -Wcomma
+>
+> No functional change intended.
+> Compile tested only.
+>
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
+>  drivers/net/ethernet/intel/i40e/i40e_ethtool.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312271450.C9YmLJn2-lkp@intel.com/
+Tested-by: Pucha Himasekhar Reddy <himasekharx.reddy.pucha@intel.com> (A Co=
+ntingent worker at Intel)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c:181:13: warning: variable 'row' is uninitialized when used here [-Wuninitialized]
-     181 |         loc->row = row;
-         |                    ^~~
-   drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c:162:37: note: initialize the variable 'row' to silence this warning
-     162 |         u32 ttype, num_locks, lock_val, row, col;
-         |                                            ^
-         |                                             = 0
->> drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c:182:13: warning: variable 'col' is uninitialized when used here [-Wuninitialized]
-     182 |         loc->col = col;
-         |                    ^~~
-   drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c:162:42: note: initialize the variable 'col' to silence this warning
-     162 |         u32 ttype, num_locks, lock_val, row, col;
-         |                                                 ^
-         |                                                  = 0
-   2 warnings generated.
-
-
-vim +/row +181 drivers/misc/xilinx-ai-engine/ai-engine-status-dump.c
-
-   148	
-   149	/**
-   150	 * aie_lock_status() - Stores AI engine Tile Lock status values to a tile
-   151	 *                        column structure.
-   152	 * @apart: AI engine Partition.
-   153	 * @status: Pointer to Structure which store status value of Tile Lock registers
-   154	 * @loc: Location of AI Engine Tile
-   155	 * @return: 0 for success, negative value for failure
-   156	 */
-   157	static int aie_lock_status(struct aie_partition *apart, struct aie_col_status *status,
-   158				   struct aie_location *loc)
-   159	{
-   160		struct aie_core_tile_status *sts_coretile;
-   161		struct aie_shim_tile_status *sts_shimtile;
-   162		u32 ttype, num_locks, lock_val, row, col;
-   163		struct aie_mem_tile_status *sts_memtile;
-   164		u8 i, tile_st, memtile_st, index;
-   165		int ret;
-   166	
-   167		if (apart->adev->dev_gen != AIE_DEVICE_GEN_AIEML) {
-   168			dev_warn(&apart->dev, "Skipping Lock Status For Non AIEML Devices\n");
-   169			return 0;
-   170		}
-   171	
-   172		ret = mutex_lock_interruptible(&apart->mlock);
-   173		if (ret) {
-   174			dev_err(&apart->dev, "Failed to acquire lock Process was interrupted by fatal signals\n");
-   175			return ret;
-   176		}
-   177	
-   178		tile_st = apart->adev->ttype_attr[AIE_TILE_TYPE_TILE].start_row;
-   179		memtile_st = apart->adev->ttype_attr[AIE_TILE_TYPE_MEMORY].start_row;
-   180	
- > 181		loc->row = row;
- > 182		loc->col = col;
-   183		ttype = apart->adev->ops->get_tile_type(apart->adev,
-   184							loc);
-   185	
-   186		if (aie_part_check_clk_enable_loc(apart, loc)) {
-   187			const struct aie_tile_operations *ops;
-   188	
-   189			ops = apart->adev->ops;
-   190			sts_coretile = status[loc->col].core_tile;
-   191			sts_memtile = status[loc->col].mem_tile;
-   192			sts_shimtile = status[loc->col].shim_tile;
-   193	
-   194			if (ttype == AIE_TILE_TYPE_TILE)
-   195				num_locks = apart->adev->mem_lock->num_locks;
-   196			else if (ttype == AIE_TILE_TYPE_MEMORY)
-   197				num_locks = apart->adev->memtile_lock->num_locks;
-   198			else
-   199				num_locks = apart->adev->pl_lock->num_locks;
-   200	
-   201			for (i = 0; i < num_locks; i++) {
-   202				lock_val = ops->get_lock_status(apart, loc, i);
-   203	
-   204				if (ttype == AIE_TILE_TYPE_TILE) {
-   205					index = loc->row - tile_st;
-   206					sts_coretile[index].lock_value[i] = lock_val;
-   207				} else if (ttype == AIE_TILE_TYPE_MEMORY) {
-   208					index = loc->row - memtile_st;
-   209					sts_memtile[index].lock_value[i] = lock_val;
-   210				} else {
-   211					sts_shimtile[loc->row].lock_value[i] = lock_val;
-   212				}
-   213			}
-   214		}
-   215		mutex_unlock(&apart->mlock);
-   216	
-   217		return 0;
-   218	}
-   219	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
