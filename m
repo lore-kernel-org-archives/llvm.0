@@ -1,49 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7018CDF41;
-	Thu, 28 Dec 2023 15:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DC210A09;
+	Thu, 28 Dec 2023 16:58:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GK4M28/s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703776950; x=1735312950;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HPObERDwqzpvTIiprRq2etao0O5omsmb5bMJk9MpmaU=;
-  b=GK4M28/stcpcEU3cDo30f5vCtGr36oNfNiWCitbsK1mp9jzgE7SVMREb
-   RHjExh/PNAnPzFQsq1C9pYKJlCNDUVtVLpFzem2ImkFpqgBFUYKLtWGRX
-   LlZzHMAr3UKfpq+Ze71Pk3WK4kdQeKQqLCXapn11chwoZLLKPqqu571um
-   FYLzpTxs+7Gkf/va+xlPjePYOipjCdpIbgGnu2hEf+qnd/Ga1gxrFLxbp
-   BuprO93HTQJMkdRPqr500Twkmx009Wl0U7EEpQMXATLnkr1GP8R3ywd8H
-   nrsxwmY9pZKA6zU62Z3hY6x2ILCMqsTXJzOhUcER8heP5GyJELIbyq3IE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="482734089"
-X-IronPort-AV: E=Sophos;i="6.04,312,1695711600"; 
-   d="scan'208";a="482734089"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2023 07:22:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="812816942"
-X-IronPort-AV: E=Sophos;i="6.04,312,1695711600"; 
-   d="scan'208";a="812816942"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 28 Dec 2023 07:22:26 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rIsDI-000GZ1-2K;
-	Thu, 28 Dec 2023 15:22:24 +0000
-Date: Thu, 28 Dec 2023 23:22:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hsiao Chien Sung <shawn.sung@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, arm@kernel.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: [soc:mediatek/soc-drivers 7/24]
- drivers/soc/mediatek/mt8188-mmsys.h:126:3: error: use of undeclared
- identifier 'MT8188_VDO0_RST_DISP_OVL0'
-Message-ID: <202312282303.RiMNsTV5-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWpAGoY8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9499CC433C9;
+	Thu, 28 Dec 2023 16:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703782714;
+	bh=LtB9LsZRFoK2mRick0kUYbdhu9aPS6cGfKbd+Bt8FtI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lWpAGoY88Go6sFhC5oHMizbI6XpsDbe3P9/irSiWfwoLQGwfrrdzSswLuoybnRUFT
+	 Y+XqOp9YWoQsYRrr6bvMkd8mxSERkT48kgdNRqDjCUUttR5Q3H3U0h6pPQweVEORBc
+	 I8WSnOqHV1rhNFbW5BbgKKPNaTH+Ac5AbrB8xN5rrfXe+tCgqQs5Rp1ezx8NBaLOU2
+	 N34MiXPPv82Oc2WqM4yvpi5XSNSYcpVl0ehK6ySaDLDFWybSeNgF8bZuALCNNz0wJQ
+	 6D8Um8C0blfpXdkHQK5vaSPd/HhcXAfTjTliP0Y6lp9eN5VXRU/sim+RtVXRhf+tQ6
+	 UVcz4gfMLuMIw==
+Date: Thu, 28 Dec 2023 09:58:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+	Steve French <smfrench@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Christian Brauner <christian@brauner.io>, linux-cachefs@redhat.com,
+	linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+	linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+	v9fs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v5 15/40] netfs: Add support for DIO buffering
+Message-ID: <20231228165831.GA348702@dev-arch.thelio-3990X>
+References: <20231221132400.1601991-1-dhowells@redhat.com>
+ <20231221132400.1601991-16-dhowells@redhat.com>
+ <20231226165442.GA1202197@dev-arch.thelio-3990X>
+ <20231228-wohlbefinden-museen-c5efad4e0d84@brauner>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,109 +50,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231228-wohlbefinden-museen-c5efad4e0d84@brauner>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git mediatek/soc-drivers
-head:   2bfbf82956e2de75249ce83901800c68d17d9e62
-commit: 27222a779d0404d6faab8aeaf028db4ac4de9b1f [7/24] soc: mediatek: Add MT8188 VDOSYS reset bit map
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231228/202312282303.RiMNsTV5-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231228/202312282303.RiMNsTV5-lkp@intel.com/reproduce)
+On Thu, Dec 28, 2023 at 11:47:45AM +0100, Christian Brauner wrote:
+> > This will break the build with versions of clang that have support for
+> > counted_by (as it has been reverted in main but reapplication to main is
+> > being actively worked on) because while annotating pointers with this
+> > attribute is a goal of the counted_by attribute, it is not ready yet.
+> > Please consider removing this and adding a TODO to annotate it when
+> > support is available.
+> 
+> It's really unpleasant that we keep getting new attributes that we
+> seemingly are encouraged to use and get sent patches for it. And then we
+> learn a little later that that stuff isn't ready yet. It's annoying. I
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312282303.RiMNsTV5-lkp@intel.com/
+I will assume the "get sent patches for it" is referring to the patches
+that Kees has been sending out to add this attribute to flexible array
+members. In his defense, that part of the attribute is very nearly ready
+(it is only the pointer annotations that are not ready, as in not worked
+on at all as far as I am aware). In fact, it was merged in clang's main
+branch for some time and the only reason that it was backed out was
+because adoption in the kernel had pointed out bugs in the original
+implementation that were harder to fix than initially thought; in other
+words, only because we started adding this attribute to the kernel were
+we able to realize that the initial implementation in clang needed to be
+improved, otherwise this feature may have shipped completely broken in
+clang 18.1.0 because it had not been stress tested yet. Now we can get
+it right.
 
-All errors (new ones prefixed by >>):
+However, I do not necessarily disagree that it is annoying for
+maintainers who are not following this saga but are just receiving
+patches to add these annotatations because adds additional things to
+check for. Perhaps there should be some guidance added to the
+__counted_by definition or Documentation around how it is expected to be
+used so that there is clear advice for both developers and maintainers?
 
-   In file included from drivers/soc/mediatek/mtk-mmsys.c:21:
->> drivers/soc/mediatek/mt8188-mmsys.h:126:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_OVL0'
-     126 |         [MT8188_VDO0_RST_DISP_OVL0]     = MMSYS_RST_NR(0, 0),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:127:3: error: use of undeclared identifier 'MT8188_VDO0_RST_FAKE_ENG0'
-     127 |         [MT8188_VDO0_RST_FAKE_ENG0]     = MMSYS_RST_NR(0, 2),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:128:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_CCORR0'
-     128 |         [MT8188_VDO0_RST_DISP_CCORR0]   = MMSYS_RST_NR(0, 4),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:129:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_MUTEX0'
-     129 |         [MT8188_VDO0_RST_DISP_MUTEX0]   = MMSYS_RST_NR(0, 6),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:130:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_GAMMA0'
-     130 |         [MT8188_VDO0_RST_DISP_GAMMA0]   = MMSYS_RST_NR(0, 8),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:131:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_DITHER0'
-     131 |         [MT8188_VDO0_RST_DISP_DITHER0]  = MMSYS_RST_NR(0, 10),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:132:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_WDMA0'
-     132 |         [MT8188_VDO0_RST_DISP_WDMA0]    = MMSYS_RST_NR(0, 17),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:133:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_RDMA0'
-     133 |         [MT8188_VDO0_RST_DISP_RDMA0]    = MMSYS_RST_NR(0, 19),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:134:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DSI0'
-     134 |         [MT8188_VDO0_RST_DSI0]          = MMSYS_RST_NR(0, 21),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:135:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DSI1'
-     135 |         [MT8188_VDO0_RST_DSI1]          = MMSYS_RST_NR(0, 22),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:136:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DSC_WRAP0'
-     136 |         [MT8188_VDO0_RST_DSC_WRAP0]     = MMSYS_RST_NR(0, 23),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:137:3: error: use of undeclared identifier 'MT8188_VDO0_RST_VPP_MERGE0'
-     137 |         [MT8188_VDO0_RST_VPP_MERGE0]    = MMSYS_RST_NR(0, 24),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:138:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DP_INTF0'
-     138 |         [MT8188_VDO0_RST_DP_INTF0]      = MMSYS_RST_NR(0, 25),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:139:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_AAL0'
-     139 |         [MT8188_VDO0_RST_DISP_AAL0]     = MMSYS_RST_NR(0, 26),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:140:3: error: use of undeclared identifier 'MT8188_VDO0_RST_INLINEROT0'
-     140 |         [MT8188_VDO0_RST_INLINEROT0]    = MMSYS_RST_NR(0, 27),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:141:3: error: use of undeclared identifier 'MT8188_VDO0_RST_APB_BUS'
-     141 |         [MT8188_VDO0_RST_APB_BUS]       = MMSYS_RST_NR(0, 28),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:142:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_COLOR0'
-     142 |         [MT8188_VDO0_RST_DISP_COLOR0]   = MMSYS_RST_NR(0, 29),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:143:3: error: use of undeclared identifier 'MT8188_VDO0_RST_MDP_WROT0'
-     143 |         [MT8188_VDO0_RST_MDP_WROT0]     = MMSYS_RST_NR(0, 30),
-         |          ^
->> drivers/soc/mediatek/mt8188-mmsys.h:144:3: error: use of undeclared identifier 'MT8188_VDO0_RST_DISP_RSZ0'
-     144 |         [MT8188_VDO0_RST_DISP_RSZ0]     = MMSYS_RST_NR(0, 31),
-         |          ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+> know it isn't your fault but it would be wise to be a little more
+> careful. IOW, unless both clang and gcc do support that thing
+> appropriately don't send patches to various subsystems for this.
 
+I will assume this was not necessarily directed at me because I have not
+sent any patches for __counted_by.
 
-vim +/MT8188_VDO0_RST_DISP_OVL0 +126 drivers/soc/mediatek/mt8188-mmsys.h
+> In any case, this is now fixed. I pulled an updated version from David.
 
-   124	
-   125	static const u8 mmsys_mt8188_vdo0_rst_tb[] = {
- > 126		[MT8188_VDO0_RST_DISP_OVL0]	= MMSYS_RST_NR(0, 0),
- > 127		[MT8188_VDO0_RST_FAKE_ENG0]	= MMSYS_RST_NR(0, 2),
- > 128		[MT8188_VDO0_RST_DISP_CCORR0]	= MMSYS_RST_NR(0, 4),
- > 129		[MT8188_VDO0_RST_DISP_MUTEX0]	= MMSYS_RST_NR(0, 6),
- > 130		[MT8188_VDO0_RST_DISP_GAMMA0]	= MMSYS_RST_NR(0, 8),
- > 131		[MT8188_VDO0_RST_DISP_DITHER0]	= MMSYS_RST_NR(0, 10),
- > 132		[MT8188_VDO0_RST_DISP_WDMA0]	= MMSYS_RST_NR(0, 17),
- > 133		[MT8188_VDO0_RST_DISP_RDMA0]	= MMSYS_RST_NR(0, 19),
- > 134		[MT8188_VDO0_RST_DSI0]		= MMSYS_RST_NR(0, 21),
- > 135		[MT8188_VDO0_RST_DSI1]		= MMSYS_RST_NR(0, 22),
- > 136		[MT8188_VDO0_RST_DSC_WRAP0]	= MMSYS_RST_NR(0, 23),
- > 137		[MT8188_VDO0_RST_VPP_MERGE0]	= MMSYS_RST_NR(0, 24),
- > 138		[MT8188_VDO0_RST_DP_INTF0]	= MMSYS_RST_NR(0, 25),
- > 139		[MT8188_VDO0_RST_DISP_AAL0]	= MMSYS_RST_NR(0, 26),
- > 140		[MT8188_VDO0_RST_INLINEROT0]	= MMSYS_RST_NR(0, 27),
- > 141		[MT8188_VDO0_RST_APB_BUS]	= MMSYS_RST_NR(0, 28),
- > 142		[MT8188_VDO0_RST_DISP_COLOR0]	= MMSYS_RST_NR(0, 29),
- > 143		[MT8188_VDO0_RST_MDP_WROT0]	= MMSYS_RST_NR(0, 30),
- > 144		[MT8188_VDO0_RST_DISP_RSZ0]	= MMSYS_RST_NR(0, 31),
-   145	};
-   146	
+Thanks a lot.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
