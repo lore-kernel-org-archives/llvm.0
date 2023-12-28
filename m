@@ -1,50 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674B31FAA;
-	Thu, 28 Dec 2023 01:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE653D8E;
+	Thu, 28 Dec 2023 05:19:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NoMxAmru"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="leMcDOfQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703728440; x=1735264440;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FO3iTRX116ezNIrkmxRj4P+4PaUO5zWeJwg4IniOlWw=;
-  b=NoMxAmruLDzNilG81OPKQ/MInTndXkz9K9tCKsAVK1qjYYx9Z8TdZQaY
-   uneeUWjYuM4xMhh/FUoxVptevRV/BZ8l/IeYbi3+emXbkO6TLSRNP99Sv
-   UHZRDmG47y/TmU5rM0wvf0bSiIGSQx0LFiEXqqPIRbWdLjkFj6+RQWIqe
-   KuMvN+hP4st0ZLbt+HssSBzdzlSiLq7IgOl+ZUEzm3iDaBBmJE7nM+vSp
-   dLaMcME/txhTwxH2XhH7xn6v2pF0XqL1EJcGh8LKPX3Brxi4WwkhlzqdB
-   z5DuKdFLbA/leid/Qndo9i0di0hsydSdw0w0ryObgfpVG76IeoddVCcbt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="395391554"
-X-IronPort-AV: E=Sophos;i="6.04,310,1695711600"; 
-   d="scan'208";a="395391554"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2023 17:53:59 -0800
+  t=1703740775; x=1735276775;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fjzv33XZnTp/hjoEz1NbDHsqkwJlpvQsmcq1xLwrCy4=;
+  b=leMcDOfQe9twVBPZdgz+PAMsAHbagZ9ovAFoPABFRRMihP6v8VqjZ4AK
+   Q0iiByGoJrm1JRa2CMbmV80SdswEG0xXjBpaIJWIh53WzYQHRggupsMne
+   haIPLK07YT7Sv3tMCceEF+yTnZ+gNBWdSqKbidln6r3lRGKx4W9grmr8g
+   WLYFnWegcprQzlvMMV6TxupSvZTckm5JjEf1q+uFrq04q1LWJeuKVmXVG
+   GAbn87CLswGL6KezBal6d59aOQSHq0M0ajJjPWlqLdezA16FJ8AwqlUzs
+   SHL6Duojzs+UubPSTLkZkY/FWod6t/EV0cau2w8lLzKOFkoi7O9uRDXjP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="482692893"
+X-IronPort-AV: E=Sophos;i="6.04,311,1695711600"; 
+   d="scan'208";a="482692893"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2023 21:19:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="771581453"
-X-IronPort-AV: E=Sophos;i="6.04,310,1695711600"; 
-   d="scan'208";a="771581453"
+X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="754643982"
+X-IronPort-AV: E=Sophos;i="6.04,311,1695711600"; 
+   d="scan'208";a="754643982"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 27 Dec 2023 17:53:56 -0800
+  by orsmga006.jf.intel.com with ESMTP; 27 Dec 2023 21:19:26 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rIfas-000Fvx-1B;
-	Thu, 28 Dec 2023 01:53:54 +0000
-Date: Thu, 28 Dec 2023 09:53:05 +0800
+	id 1rIinj-000G85-36;
+	Thu, 28 Dec 2023 05:19:23 +0000
+Date: Thu, 28 Dec 2023 13:18:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ranjan Kumar <ranjan.kumar@broadcom.com>, linux-scsi@vger.kernel.org,
-	martin.petersen@oracle.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-	Ranjan Kumar <ranjan.kumar@broadcom.com>
-Subject: Re: [PATCH v2 1/2] mpt3sas: Reload SBR without rebooting HBA
-Message-ID: <202312280909.MZyhxwBL-lkp@intel.com>
-References: <20231227110610.18276-2-ranjan.kumar@broadcom.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [frederic-dynticks:timers/core 6/11] kernel/cpu.c:2214:22: error:
+ use of undeclared identifier 'tick_cpu_dying'
+Message-ID: <202312281344.woLNgsmp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,137 +49,272 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231227110610.18276-2-ranjan.kumar@broadcom.com>
 
-Hi Ranjan,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linus/master v6.7-rc7 next-20231222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ranjan-Kumar/mpt3sas-Reload-SBR-without-rebooting-HBA/20231227-191013
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20231227110610.18276-2-ranjan.kumar%40broadcom.com
-patch subject: [PATCH v2 1/2] mpt3sas: Reload SBR without rebooting HBA
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231228/202312280909.MZyhxwBL-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231228/202312280909.MZyhxwBL-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/core
+head:   853f95518ac9ba0370a1418edd728d2cc73c638e
+commit: 2a549e1aca77faca676414e03099b8faa4048b50 [6/11] timers: Start centralizing tick related CPU hotplug operations
+config: hexagon-randconfig-001-20231228 (https://download.01.org/0day-ci/archive/20231228/202312281344.woLNgsmp-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231228/202312281344.woLNgsmp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312280909.MZyhxwBL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312281344.woLNgsmp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/scsi/mpt3sas/mpt3sas_base.c:8025:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-    8025 |                         msleep(MPI2_HARD_RESET_PCIE_SECOND_READ_DELAY_MICRO_SEC/1000);
-         |                         ^
-   drivers/scsi/mpt3sas/mpt3sas_base.c:8021:3: note: previous statement is here
-    8021 |                 if (!(host_diagnostic & MPI2_DIAG_RESET_ADAPTER))
-         |                 ^
-   1 warning generated.
+   In file included from kernel/cpu.c:13:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/cpu.c:13:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/cpu.c:13:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> kernel/cpu.c:2214:22: error: use of undeclared identifier 'tick_cpu_dying'
+    2214 |                 .teardown.single        = tick_cpu_dying,
+         |                                           ^
+>> kernel/cpu.c:2083:26: warning: tentative array definition assumed to have one element
+    2083 | static struct cpuhp_step cpuhp_hp_states[] = {
+         |                          ^
+   7 warnings and 1 error generated.
 
 
-vim +/if +8025 drivers/scsi/mpt3sas/mpt3sas_base.c
+vim +/tick_cpu_dying +2214 kernel/cpu.c
 
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7976  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7977  /**
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7978   * _base_diag_reset - the "big hammer" start of day reset
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7979   * @ioc: per adapter object
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7980   *
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7981   * Return: 0 for success, non-zero for failure.
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7982   */
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7983  static int
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7984  _base_diag_reset(struct MPT3SAS_ADAPTER *ioc)
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7985  {
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7986  	u32 host_diagnostic;
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7987  	u32 ioc_state;
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7988  	u32 count;
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7989  	u32 hcb_size;
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7990  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7991  	ioc_info(ioc, "sending diag reset !!\n");
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7992  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7993  	pci_cfg_access_lock(ioc->pdev);
-f92363d1235949 Sreekanth Reddy  2012-11-30  7994  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7995  	drsprintk(ioc, ioc_info(ioc, "clear interrupts\n"));
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7996  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7997  	mutex_lock(&ioc->hostdiag_unlock_mutex);
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7998  	if (mpt3sas_base_unlock_and_get_host_diagnostic(ioc, &host_diagnostic))
-2af5cddbc76400 Ranjan Kumar     2023-12-27  7999  		goto out;
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8000  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8001  	hcb_size = ioc->base_readl(&ioc->chip->HCBSize);
-919d8a3f3fef99 Joe Perches      2018-09-17  8002  	drsprintk(ioc, ioc_info(ioc, "diag reset: issued\n"));
-f92363d1235949 Sreekanth Reddy  2012-11-30  8003  	writel(host_diagnostic | MPI2_DIAG_RESET_ADAPTER,
-f92363d1235949 Sreekanth Reddy  2012-11-30  8004  	     &ioc->chip->HostDiagnostic);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8005  
-b453ff84de6caf Sreekanth Reddy  2013-06-29  8006  	/* This delay allows the chip PCIe hardware time to finish reset tasks */
-b453ff84de6caf Sreekanth Reddy  2013-06-29  8007  	msleep(MPI2_HARD_RESET_PCIE_FIRST_READ_DELAY_MICRO_SEC/1000);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8008  
-b453ff84de6caf Sreekanth Reddy  2013-06-29  8009  	/* Approximately 300 second max wait */
-b453ff84de6caf Sreekanth Reddy  2013-06-29  8010  	for (count = 0; count < (300000000 /
-b453ff84de6caf Sreekanth Reddy  2013-06-29  8011  	    MPI2_HARD_RESET_PCIE_SECOND_READ_DELAY_MICRO_SEC); count++) {
-f92363d1235949 Sreekanth Reddy  2012-11-30  8012  
-4ca10f3e31745d Ranjan Kumar     2023-08-29  8013  		host_diagnostic = ioc->base_readl_ext_retry(&ioc->chip->HostDiagnostic);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8014  
-5b061980e36282 Sreekanth Reddy  2019-12-26  8015  		if (host_diagnostic == 0xFFFFFFFF) {
-5b061980e36282 Sreekanth Reddy  2019-12-26  8016  			ioc_info(ioc,
-5b061980e36282 Sreekanth Reddy  2019-12-26  8017  			    "Invalid host diagnostic register value\n");
-af6ec1eee5ed68 Suganath Prabu S 2020-07-30  8018  			_base_dump_reg_set(ioc);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8019  			goto out;
-5b061980e36282 Sreekanth Reddy  2019-12-26  8020  		}
-f92363d1235949 Sreekanth Reddy  2012-11-30  8021  		if (!(host_diagnostic & MPI2_DIAG_RESET_ADAPTER))
-f92363d1235949 Sreekanth Reddy  2012-11-30  8022  			break;
-f92363d1235949 Sreekanth Reddy  2012-11-30  8023  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8024  		/* Wait to pass the second read delay window */
-98c56ad32c33f0 Calvin Owens     2016-07-28 @8025  			msleep(MPI2_HARD_RESET_PCIE_SECOND_READ_DELAY_MICRO_SEC/1000);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8026  	}
-f92363d1235949 Sreekanth Reddy  2012-11-30  8027  
-f92363d1235949 Sreekanth Reddy  2012-11-30  8028  	if (host_diagnostic & MPI2_DIAG_HCB_MODE) {
-f92363d1235949 Sreekanth Reddy  2012-11-30  8029  
-919d8a3f3fef99 Joe Perches      2018-09-17  8030  		drsprintk(ioc,
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8031  			ioc_info(ioc, "restart the adapter assuming the\n"
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8032  					"HCB Address points to good F/W\n"));
-f92363d1235949 Sreekanth Reddy  2012-11-30  8033  		host_diagnostic &= ~MPI2_DIAG_BOOT_DEVICE_SELECT_MASK;
-f92363d1235949 Sreekanth Reddy  2012-11-30  8034  		host_diagnostic |= MPI2_DIAG_BOOT_DEVICE_SELECT_HCDW;
-f92363d1235949 Sreekanth Reddy  2012-11-30  8035  		writel(host_diagnostic, &ioc->chip->HostDiagnostic);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8036  
-919d8a3f3fef99 Joe Perches      2018-09-17  8037  		drsprintk(ioc, ioc_info(ioc, "re-enable the HCDW\n"));
-f92363d1235949 Sreekanth Reddy  2012-11-30  8038  		writel(hcb_size | MPI2_HCB_SIZE_HCB_ENABLE,
-f92363d1235949 Sreekanth Reddy  2012-11-30  8039  		    &ioc->chip->HCBSize);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8040  	}
-f92363d1235949 Sreekanth Reddy  2012-11-30  8041  
-919d8a3f3fef99 Joe Perches      2018-09-17  8042  	drsprintk(ioc, ioc_info(ioc, "restart the adapter\n"));
-f92363d1235949 Sreekanth Reddy  2012-11-30  8043  	writel(host_diagnostic & ~MPI2_DIAG_HOLD_IOC_RESET,
-f92363d1235949 Sreekanth Reddy  2012-11-30  8044  	    &ioc->chip->HostDiagnostic);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8045  
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8046  	mpt3sas_base_lock_host_diagnostic(ioc);
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8047  	mutex_unlock(&ioc->hostdiag_unlock_mutex);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8048  
-919d8a3f3fef99 Joe Perches      2018-09-17  8049  	drsprintk(ioc, ioc_info(ioc, "Wait for FW to go to the READY state\n"));
-98c56ad32c33f0 Calvin Owens     2016-07-28  8050  	ioc_state = _base_wait_on_iocstate(ioc, MPI2_IOC_STATE_READY, 20);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8051  	if (ioc_state) {
-919d8a3f3fef99 Joe Perches      2018-09-17  8052  		ioc_err(ioc, "%s: failed going to ready state (ioc_state=0x%x)\n",
-919d8a3f3fef99 Joe Perches      2018-09-17  8053  			__func__, ioc_state);
-af6ec1eee5ed68 Suganath Prabu S 2020-07-30  8054  		_base_dump_reg_set(ioc);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8055  		goto out;
-f92363d1235949 Sreekanth Reddy  2012-11-30  8056  	}
-f92363d1235949 Sreekanth Reddy  2012-11-30  8057  
-3c8604691d2acc Sreekanth Reddy  2021-03-30  8058  	pci_cfg_access_unlock(ioc->pdev);
-919d8a3f3fef99 Joe Perches      2018-09-17  8059  	ioc_info(ioc, "diag reset: SUCCESS\n");
-f92363d1235949 Sreekanth Reddy  2012-11-30  8060  	return 0;
-f92363d1235949 Sreekanth Reddy  2012-11-30  8061  
-f92363d1235949 Sreekanth Reddy  2012-11-30  8062   out:
-3c8604691d2acc Sreekanth Reddy  2021-03-30  8063  	pci_cfg_access_unlock(ioc->pdev);
-919d8a3f3fef99 Joe Perches      2018-09-17  8064  	ioc_err(ioc, "diag reset: FAILED\n");
-2af5cddbc76400 Ranjan Kumar     2023-12-27  8065  	mutex_unlock(&ioc->hostdiag_unlock_mutex);
-f92363d1235949 Sreekanth Reddy  2012-11-30  8066  	return -EFAULT;
-f92363d1235949 Sreekanth Reddy  2012-11-30  8067  }
-f92363d1235949 Sreekanth Reddy  2012-11-30  8068  
+  2081	
+  2082	/* Boot processor state steps */
+> 2083	static struct cpuhp_step cpuhp_hp_states[] = {
+  2084		[CPUHP_OFFLINE] = {
+  2085			.name			= "offline",
+  2086			.startup.single		= NULL,
+  2087			.teardown.single	= NULL,
+  2088		},
+  2089	#ifdef CONFIG_SMP
+  2090		[CPUHP_CREATE_THREADS]= {
+  2091			.name			= "threads:prepare",
+  2092			.startup.single		= smpboot_create_threads,
+  2093			.teardown.single	= NULL,
+  2094			.cant_stop		= true,
+  2095		},
+  2096		[CPUHP_PERF_PREPARE] = {
+  2097			.name			= "perf:prepare",
+  2098			.startup.single		= perf_event_init_cpu,
+  2099			.teardown.single	= perf_event_exit_cpu,
+  2100		},
+  2101		[CPUHP_RANDOM_PREPARE] = {
+  2102			.name			= "random:prepare",
+  2103			.startup.single		= random_prepare_cpu,
+  2104			.teardown.single	= NULL,
+  2105		},
+  2106		[CPUHP_WORKQUEUE_PREP] = {
+  2107			.name			= "workqueue:prepare",
+  2108			.startup.single		= workqueue_prepare_cpu,
+  2109			.teardown.single	= NULL,
+  2110		},
+  2111		[CPUHP_HRTIMERS_PREPARE] = {
+  2112			.name			= "hrtimers:prepare",
+  2113			.startup.single		= hrtimers_prepare_cpu,
+  2114			.teardown.single	= NULL,
+  2115		},
+  2116		[CPUHP_SMPCFD_PREPARE] = {
+  2117			.name			= "smpcfd:prepare",
+  2118			.startup.single		= smpcfd_prepare_cpu,
+  2119			.teardown.single	= smpcfd_dead_cpu,
+  2120		},
+  2121		[CPUHP_RELAY_PREPARE] = {
+  2122			.name			= "relay:prepare",
+  2123			.startup.single		= relay_prepare_cpu,
+  2124			.teardown.single	= NULL,
+  2125		},
+  2126		[CPUHP_SLAB_PREPARE] = {
+  2127			.name			= "slab:prepare",
+  2128			.startup.single		= slab_prepare_cpu,
+  2129			.teardown.single	= slab_dead_cpu,
+  2130		},
+  2131		[CPUHP_RCUTREE_PREP] = {
+  2132			.name			= "RCU/tree:prepare",
+  2133			.startup.single		= rcutree_prepare_cpu,
+  2134			.teardown.single	= rcutree_dead_cpu,
+  2135		},
+  2136		/*
+  2137		 * On the tear-down path, timers_dead_cpu() must be invoked
+  2138		 * before blk_mq_queue_reinit_notify() from notify_dead(),
+  2139		 * otherwise a RCU stall occurs.
+  2140		 */
+  2141		[CPUHP_TIMERS_PREPARE] = {
+  2142			.name			= "timers:prepare",
+  2143			.startup.single		= timers_prepare_cpu,
+  2144			.teardown.single	= timers_dead_cpu,
+  2145		},
+  2146	
+  2147	#ifdef CONFIG_HOTPLUG_SPLIT_STARTUP
+  2148		/*
+  2149		 * Kicks the AP alive. AP will wait in cpuhp_ap_sync_alive() until
+  2150		 * the next step will release it.
+  2151		 */
+  2152		[CPUHP_BP_KICK_AP] = {
+  2153			.name			= "cpu:kick_ap",
+  2154			.startup.single		= cpuhp_kick_ap_alive,
+  2155		},
+  2156	
+  2157		/*
+  2158		 * Waits for the AP to reach cpuhp_ap_sync_alive() and then
+  2159		 * releases it for the complete bringup.
+  2160		 */
+  2161		[CPUHP_BRINGUP_CPU] = {
+  2162			.name			= "cpu:bringup",
+  2163			.startup.single		= cpuhp_bringup_ap,
+  2164			.teardown.single	= finish_cpu,
+  2165			.cant_stop		= true,
+  2166		},
+  2167	#else
+  2168		/*
+  2169		 * All-in-one CPU bringup state which includes the kick alive.
+  2170		 */
+  2171		[CPUHP_BRINGUP_CPU] = {
+  2172			.name			= "cpu:bringup",
+  2173			.startup.single		= bringup_cpu,
+  2174			.teardown.single	= finish_cpu,
+  2175			.cant_stop		= true,
+  2176		},
+  2177	#endif
+  2178		/* Final state before CPU kills itself */
+  2179		[CPUHP_AP_IDLE_DEAD] = {
+  2180			.name			= "idle:dead",
+  2181		},
+  2182		/*
+  2183		 * Last state before CPU enters the idle loop to die. Transient state
+  2184		 * for synchronization.
+  2185		 */
+  2186		[CPUHP_AP_OFFLINE] = {
+  2187			.name			= "ap:offline",
+  2188			.cant_stop		= true,
+  2189		},
+  2190		/* First state is scheduler control. Interrupts are disabled */
+  2191		[CPUHP_AP_SCHED_STARTING] = {
+  2192			.name			= "sched:starting",
+  2193			.startup.single		= sched_cpu_starting,
+  2194			.teardown.single	= sched_cpu_dying,
+  2195		},
+  2196		[CPUHP_AP_RCUTREE_DYING] = {
+  2197			.name			= "RCU/tree:dying",
+  2198			.startup.single		= NULL,
+  2199			.teardown.single	= rcutree_dying_cpu,
+  2200		},
+  2201		[CPUHP_AP_SMPCFD_DYING] = {
+  2202			.name			= "smpcfd:dying",
+  2203			.startup.single		= NULL,
+  2204			.teardown.single	= smpcfd_dying_cpu,
+  2205		},
+  2206		[CPUHP_AP_HRTIMERS_DYING] = {
+  2207			.name			= "hrtimers:dying",
+  2208			.startup.single		= NULL,
+  2209			.teardown.single	= hrtimers_cpu_dying,
+  2210		},
+  2211		[CPUHP_AP_TICK_DYING] = {
+  2212			.name			= "tick:dying",
+  2213			.startup.single		= NULL,
+> 2214			.teardown.single	= tick_cpu_dying,
+  2215		},
+  2216		/* Entry state on starting. Interrupts enabled from here on. Transient
+  2217		 * state for synchronsization */
+  2218		[CPUHP_AP_ONLINE] = {
+  2219			.name			= "ap:online",
+  2220		},
+  2221		/*
+  2222		 * Handled on control processor until the plugged processor manages
+  2223		 * this itself.
+  2224		 */
+  2225		[CPUHP_TEARDOWN_CPU] = {
+  2226			.name			= "cpu:teardown",
+  2227			.startup.single		= NULL,
+  2228			.teardown.single	= takedown_cpu,
+  2229			.cant_stop		= true,
+  2230		},
+  2231	
+  2232		[CPUHP_AP_SCHED_WAIT_EMPTY] = {
+  2233			.name			= "sched:waitempty",
+  2234			.startup.single		= NULL,
+  2235			.teardown.single	= sched_cpu_wait_empty,
+  2236		},
+  2237	
+  2238		/* Handle smpboot threads park/unpark */
+  2239		[CPUHP_AP_SMPBOOT_THREADS] = {
+  2240			.name			= "smpboot/threads:online",
+  2241			.startup.single		= smpboot_unpark_threads,
+  2242			.teardown.single	= smpboot_park_threads,
+  2243		},
+  2244		[CPUHP_AP_IRQ_AFFINITY_ONLINE] = {
+  2245			.name			= "irq/affinity:online",
+  2246			.startup.single		= irq_affinity_online_cpu,
+  2247			.teardown.single	= NULL,
+  2248		},
+  2249		[CPUHP_AP_PERF_ONLINE] = {
+  2250			.name			= "perf:online",
+  2251			.startup.single		= perf_event_init_cpu,
+  2252			.teardown.single	= perf_event_exit_cpu,
+  2253		},
+  2254		[CPUHP_AP_WATCHDOG_ONLINE] = {
+  2255			.name			= "lockup_detector:online",
+  2256			.startup.single		= lockup_detector_online_cpu,
+  2257			.teardown.single	= lockup_detector_offline_cpu,
+  2258		},
+  2259		[CPUHP_AP_WORKQUEUE_ONLINE] = {
+  2260			.name			= "workqueue:online",
+  2261			.startup.single		= workqueue_online_cpu,
+  2262			.teardown.single	= workqueue_offline_cpu,
+  2263		},
+  2264		[CPUHP_AP_RANDOM_ONLINE] = {
+  2265			.name			= "random:online",
+  2266			.startup.single		= random_online_cpu,
+  2267			.teardown.single	= NULL,
+  2268		},
+  2269		[CPUHP_AP_RCUTREE_ONLINE] = {
+  2270			.name			= "RCU/tree:online",
+  2271			.startup.single		= rcutree_online_cpu,
+  2272			.teardown.single	= rcutree_offline_cpu,
+  2273		},
+  2274	#endif
+  2275		/*
+  2276		 * The dynamically registered state space is here
+  2277		 */
+  2278	
 
 -- 
 0-DAY CI Kernel Test Service
