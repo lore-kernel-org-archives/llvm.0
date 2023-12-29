@@ -1,54 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD50A567C;
-	Fri, 29 Dec 2023 03:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9731E5669;
+	Fri, 29 Dec 2023 03:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O3DujJQa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ah/aicGE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703820329; x=1735356329;
+  t=1703821574; x=1735357574;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=GI0BYWNxggUK+/8olzYfOrKAOiCpg0a33yjnkKk3bOs=;
-  b=O3DujJQaB7ErIhGEK9lAPobzmvZzAlGTLllC8/WXv5RrvxwojkrsDdwu
-   V4NbVeJISaTTQD3+ie0vAdPxOiIvaW8RTcFNUAVOHQn/pemsYqzNAcYPJ
-   29sEbRjh71Q9BvBOPkBFevei0FEA9SAvtBcAIdOi8FxYG6YKuW/kqKT9N
-   YosthFIqbMTvw/TcfHJLzfw6lU+8/dFsOuB7A2SjisusNMCcHvpog9Mqr
-   L9aYV2uwSj9fy8VgqufEiVMBC+fq5IlzJEMPrwsnSdDu8CMzu5Wu5MTlu
-   1JQfr1V/rYVr7y+o0sDBk+6VOxQYo2u5Qq5nqrylXFRcGYzK0513ENTDF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="463028804"
+  bh=Vm6p9nuxloRluzYcX979ML+GT8QFdDfRTL49gEoXQn4=;
+  b=Ah/aicGELwRB1UDR92/tVtkjEliD2YeJgdQDbaXjBdctPgzi1culLNtX
+   2T+o2BGygwzY0sQOK0XSbm4wcHrmP3+esO5Xvm9A7CXR8kE/vRo0LtBTh
+   h1G7m5tunRj+UAwDhYaTlgC1Hq3HENcTFxJ6IPnfUYjls0PwrERExeXJc
+   bWYkOVu+FyXg1Nqr/p2E2xOpQjWTbeZYh4mhbky2K7MgKcmMpUEuhTLnn
+   TlpjEK8Y1k3MIs3U+kDTHaLil7io1Sno8jzKRT44Q1C56Ap3wr6xZBlIy
+   ABP8grqmDyheonJ2TCgqO5yw4/pppY0ndFCSTG0jIO4YF4LyjAWkSr0m6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="381591514"
 X-IronPort-AV: E=Sophos;i="6.04,313,1695711600"; 
-   d="scan'208";a="463028804"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2023 19:25:28 -0800
+   d="scan'208";a="381591514"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2023 19:46:13 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="778711269"
 X-IronPort-AV: E=Sophos;i="6.04,313,1695711600"; 
-   d="scan'208";a="13178180"
+   d="scan'208";a="778711269"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Dec 2023 19:25:23 -0800
+  by orsmga002.jf.intel.com with ESMTP; 28 Dec 2023 19:46:10 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rJ3TK-000H3V-2U;
-	Fri, 29 Dec 2023 03:24:13 +0000
-Date: Fri, 29 Dec 2023 11:21:24 +0800
+	id 1rJ3oz-000H4F-1U;
+	Fri, 29 Dec 2023 03:46:06 +0000
+Date: Fri, 29 Dec 2023 11:42:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sagi Maimon <maimon.sagi@gmail.com>, richardcochran@gmail.com,
-	luto@kernel.org, datglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, arnd@arndb.de, geert@linux-m68k.org,
-	peterz@infradead.org, hannes@cmpxchg.org, sohil.mehta@intel.com,
-	rick.p.edgecombe@intel.com, nphamcs@gmail.com, palmer@sifive.com,
-	keescook@chromium.org, legion@kernel.org, mark.rutland@arm.com
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Stanimir Varbanov <svarbanov@mm-sol.com>,
+	Andrew Murray <amurray@thegoodpenguin.co.uk>,
+	Vinod Koul <vkoul@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3] posix-timers: add multi_clock_gettime system call
-Message-ID: <202312291148.zfhZ9vDJ-lkp@intel.com>
-References: <20231228122411.3189-1-maimon.sagi@gmail.com>
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 4/4] PCI: qcom: Implement RC shutdown/power up
+Message-ID: <202312291155.8v6ZEtrf-lkp@intel.com>
+References: <20231227-topic-8280_pcie-v1-4-095491baf9e4@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,39 +63,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231228122411.3189-1-maimon.sagi@gmail.com>
+In-Reply-To: <20231227-topic-8280_pcie-v1-4-095491baf9e4@linaro.org>
 
-Hi Sagi,
+Hi Konrad,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on tip/x86/asm]
-[also build test ERROR on arnd-asm-generic/master tip/timers/core linus/master v6.7-rc7]
-[cannot apply to next-20231222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 39676dfe52331dba909c617f213fdb21015c8d10]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sagi-Maimon/posix-timers-add-multi_clock_gettime-system-call/20231228-202632
-base:   tip/x86/asm
-patch link:    https://lore.kernel.org/r/20231228122411.3189-1-maimon.sagi%40gmail.com
-patch subject: [PATCH v3] posix-timers: add multi_clock_gettime system call
-config: x86_64-buildonly-randconfig-002-20231229 (https://download.01.org/0day-ci/archive/20231229/202312291148.zfhZ9vDJ-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231229/202312291148.zfhZ9vDJ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/PCI-qcom-Reshuffle-reset-logic-in-2_7_0-init/20231228-062002
+base:   39676dfe52331dba909c617f213fdb21015c8d10
+patch link:    https://lore.kernel.org/r/20231227-topic-8280_pcie-v1-4-095491baf9e4%40linaro.org
+patch subject: [PATCH 4/4] PCI: qcom: Implement RC shutdown/power up
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231229/202312291155.8v6ZEtrf-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 8a4266a626914765c0c69839e8a51be383013c1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231229/202312291155.8v6ZEtrf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312291148.zfhZ9vDJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312291155.8v6ZEtrf-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/multi_clock.h:14:2: error: unknown type name 'clockid_t'
-      14 |         clockid_t clkid_arr[MULTI_PTP_MAX_CLOCKS]; /* list of clock IDs */
-         |         ^
-   1 error generated.
+>> ld.lld: error: undefined symbol: cmd_db_ready
+   >>> referenced by pcie-qcom.c
+   >>>               drivers/pci/controller/dwc/pcie-qcom.o:(qcom_pcie_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: crc8_populate_msb
+   >>> referenced by pcie-qcom.c
+   >>>               drivers/pci/controller/dwc/pcie-qcom.o:(qcom_pcie_config_sid_1_9_0) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: crc8
+   >>> referenced by pcie-qcom.c
+   >>>               drivers/pci/controller/dwc/pcie-qcom.o:(qcom_pcie_config_sid_1_9_0) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
