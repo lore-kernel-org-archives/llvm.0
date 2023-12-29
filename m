@@ -1,39 +1,39 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B382310A09
-	for <llvm@lists.linux.dev>; Fri, 29 Dec 2023 09:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC9510A1A
+	for <llvm@lists.linux.dev>; Fri, 29 Dec 2023 10:41:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BszFIIbG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LR7s/ZYZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703843484;
+	s=mimecast20190719; t=1703846481;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=/EFs6b1aC4OaNCRIt1OO1rWxy8KH1ujae/m5XVLCwKc=;
-	b=BszFIIbGwWefcR9kGUUnm673MAW+JTUYUVK98YLraelU8No7VMC9W+/8fVL3pOjmi5CuhC
-	PXPSZQ7qckFYy+mSHP+OPOjmvIEotl/m1CsxgUyUwCBGIcSIu8yY7S78Dj1/uFtkegQp1l
-	iAAfmGOxAAocwZdA6dEbblueHhzknyg=
+	bh=Sk05ZTLQKXTcqgT6LWek4Taov2RkrUADfIrtpJorrX0=;
+	b=LR7s/ZYZ933vBH0Orgx6FE4JIf1uae91KJNaGT2yHPet+nDHZx8+oFpH3xDyqdIaEkBNm9
+	UEMCggK2HZlhzLzkyxog43pA5bizbA8Gi6uEodGpXBfL5gunUgmseFsrBveClIOZ9PVI5m
+	E0Y9oVgr6lT7rYE3EPqomJmaa407qGM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-482-RpfYWkPwMXavfc4aiYTqWA-1; Fri, 29 Dec 2023 04:51:20 -0500
-X-MC-Unique: RpfYWkPwMXavfc4aiYTqWA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-595-Jd7NwiviP22tP5YS6G7DBQ-1; Fri, 29 Dec 2023 05:41:19 -0500
+X-MC-Unique: Jd7NwiviP22tP5YS6G7DBQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0053845DC1
-	for <llvm@lists.linux.dev>; Fri, 29 Dec 2023 09:51:19 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1DD66185A783
+	for <llvm@lists.linux.dev>; Fri, 29 Dec 2023 10:41:19 +0000 (UTC)
 Received: from [172.64.11.28] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BD229492BC6;
-	Fri, 29 Dec 2023 09:51:19 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0A8AAC15E6C;
+	Fri, 29 Dec 2023 10:41:19 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
- (6.7.0-rc7, mainline.kernel.org-clang, 505e701c)
-Date: Fri, 29 Dec 2023 09:51:19 -0000
+ (6.7.0-rc7, mainline.kernel.org-clang, 8735c7c8)
+Date: Fri, 29 Dec 2023 10:41:19 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -41,8 +41,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <28752.123122904512000266@us-mta-482.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <82252.123122905411900177@us-mta-595.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -58,22 +58,28 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'kbuild-fixes-v6.7-2' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+    Commit message: Merge tag '6.7rc7-smb3-srv-fix' of git://git.samba.org/=
+ksmbd
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/120443
+    https://datawarehouse.cki-project.org/kcidb/checkouts/120444
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
+        Issue: [upstream] stress-ng: avc denial on secretmemory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
+l-tests/-/issues/1752
             Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
+ubby
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1819
+            Affected tests:
+                  x86_64 - kdump - sysrq-c
         Issue: xfstests generic/245: cannot overwrite File exists
             URL: https://www.spinics.net/lists/fstests/msg23667.html
             Affected tests:
@@ -88,37 +94,31 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
-ubby
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1819
-            Affected tests:
-                  x86_64 - kdump - sysrq-c
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1267
             Affected tests:
                  ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
 Tests that were not ran because of internal issues:=20
       x86_64 - kdump - file-load
