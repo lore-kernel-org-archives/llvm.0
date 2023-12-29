@@ -1,302 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D103710A1A;
-	Fri, 29 Dec 2023 08:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B382310A09
+	for <llvm@lists.linux.dev>; Fri, 29 Dec 2023 09:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JKtKndqA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703840024; x=1735376024;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5rjYo9oP6i1bR7sOWzCgxdIBIM7V7qc09Qiqt4MFB4A=;
-  b=JKtKndqAkEq6TNkO6nuAy3DxIu9M5vKuw4XV4tkRglSyRnkq0o6iKL3j
-   tu0clEP7NUibDzD99zhUeV6R/xil0gzaMOFwzeCrQwF3tDkVKjvgWJCkH
-   pjKVw23stfVMPZNZJ995tA/uYx6KutNWHTAmpWxBj42LD7KT1QwNplaCG
-   S7ye313nPspr86GgaRiclQeL2akrvmA8zKNMJ0Ux6sxUvdKKXp7JIt4OY
-   QMUCJ84/Z3gOVyJnvx/QIIS1XL5AwgnuqMSh+rtvgTkOTj1lyhHFtpRR+
-   IzybfM3TGLzinGgzpxEh7jg+jueKLMZaj5R0j+ZnvN/Y7A1RzT9TGRQw9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="396359564"
-X-IronPort-AV: E=Sophos;i="6.04,314,1695711600"; 
-   d="scan'208";a="396359564"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2023 00:53:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="778768885"
-X-IronPort-AV: E=Sophos;i="6.04,314,1695711600"; 
-   d="scan'208";a="778768885"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 29 Dec 2023 00:53:40 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rJ8cR-000HFn-1t;
-	Fri, 29 Dec 2023 08:53:27 +0000
-Date: Fri, 29 Dec 2023 16:52:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: "larry.lai" <larry.lai@yunjingtech.com>, lee@kernel.org,
-	andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
-	pavel@ucw.cz, krzk@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-leds@vger.kernel.org, GaryWang@aaeon.com.tw,
-	musa.lin@yunjingtech.com, jack.chang@yunjingtech.com,
-	noah.hung@yunjingtech.com, "larry.lai" <larry.lai@yunjingtech.com>
-Subject: Re: [PATCH V8 2/3] pinctrl: Add support pin control for UP board
- CPLD/FPGA
-Message-ID: <202312291646.wfn6dxdH-lkp@intel.com>
-References: <20231228151544.14408-3-larry.lai@yunjingtech.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BszFIIbG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1703843484;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/EFs6b1aC4OaNCRIt1OO1rWxy8KH1ujae/m5XVLCwKc=;
+	b=BszFIIbGwWefcR9kGUUnm673MAW+JTUYUVK98YLraelU8No7VMC9W+/8fVL3pOjmi5CuhC
+	PXPSZQ7qckFYy+mSHP+OPOjmvIEotl/m1CsxgUyUwCBGIcSIu8yY7S78Dj1/uFtkegQp1l
+	iAAfmGOxAAocwZdA6dEbblueHhzknyg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-482-RpfYWkPwMXavfc4aiYTqWA-1; Fri, 29 Dec 2023 04:51:20 -0500
+X-MC-Unique: RpfYWkPwMXavfc4aiYTqWA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0053845DC1
+	for <llvm@lists.linux.dev>; Fri, 29 Dec 2023 09:51:19 +0000 (UTC)
+Received: from [172.64.11.28] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BD229492BC6;
+	Fri, 29 Dec 2023 09:51:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
+ (6.7.0-rc7, mainline.kernel.org-clang, 505e701c)
+Date: Fri, 29 Dec 2023 09:51:19 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231228151544.14408-3-larry.lai@yunjingtech.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Message-Id: <28752.123122904512000266@us-mta-482.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi larry.lai,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on 4fe89d07dcc2804c8b562f6c7896a45643d34b2f]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/larry-lai/mfd-Add-support-for-UP-board-CPLD-FPGA/20231228-231750
-base:   4fe89d07dcc2804c8b562f6c7896a45643d34b2f
-patch link:    https://lore.kernel.org/r/20231228151544.14408-3-larry.lai%40yunjingtech.com
-patch subject: [PATCH V8 2/3] pinctrl: Add support pin control for UP board CPLD/FPGA
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231229/202312291646.wfn6dxdH-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231229/202312291646.wfn6dxdH-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'kbuild-fixes-v6.7-2' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312291646.wfn6dxdH-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/120443
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
+ubby
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1819
+            Affected tests:
+                  x86_64 - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
->> drivers/pinctrl/pinctrl-upboard.c:709:13: warning: variable length array used [-Wvla]
-     709 |         int offset[pctrl->pctldesc->npins];
-         |                    ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:1089:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1089 |                 .ident = BOARD_UP_APL01,
-         |                          ^~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:46:27: note: expanded from macro 'BOARD_UP_APL01'
-      46 | #define BOARD_UP_APL01                          1
-         |                                                 ^
-   drivers/pinctrl/pinctrl-upboard.c:1096:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1096 |                 .ident = BOARD_UP_APL01,
-         |                          ^~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:46:27: note: expanded from macro 'BOARD_UP_APL01'
-      46 | #define BOARD_UP_APL01                          1
-         |                                                 ^
-   drivers/pinctrl/pinctrl-upboard.c:1103:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1103 |                 .ident = BOARD_UP_APL03,
-         |                          ^~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:53:27: note: expanded from macro 'BOARD_UP_APL03'
-      53 | #define BOARD_UP_APL03                          9
-         |                                                 ^
-   drivers/pinctrl/pinctrl-upboard.c:1110:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1110 |                 .ident = BOARD_UP_WHL01,
-         |                          ^~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:50:27: note: expanded from macro 'BOARD_UP_WHL01'
-      50 | #define BOARD_UP_WHL01                          5
-         |                                                 ^
-   drivers/pinctrl/pinctrl-upboard.c:1117:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1117 |                 .ident = BOARD_UPX_TGL,
-         |                          ^~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:55:26: note: expanded from macro 'BOARD_UPX_TGL'
-      55 | #define BOARD_UPX_TGL                           11
-         |                                                 ^~
-   drivers/pinctrl/pinctrl-upboard.c:1124:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1124 |                 .ident = BOARD_UPN_EHL01,
-         |                          ^~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:57:28: note: expanded from macro 'BOARD_UPN_EHL01'
-      57 | #define BOARD_UPN_EHL01                         13
-         |                                                 ^~
-   drivers/pinctrl/pinctrl-upboard.c:1131:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1131 |                 .ident = BOARD_UPS_EHL01,
-         |                          ^~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:58:28: note: expanded from macro 'BOARD_UPS_EHL01'
-      58 | #define BOARD_UPS_EHL01                         BOARD_UPN_EHL01
-         |                                                 ^~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:57:28: note: expanded from macro 'BOARD_UPN_EHL01'
-      57 | #define BOARD_UPN_EHL01                         13
-         |                                                 ^~
-   drivers/pinctrl/pinctrl-upboard.c:1138:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1138 |                 .ident = BOARD_UPX_ADLP01,
-         |                          ^~~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:59:28: note: expanded from macro 'BOARD_UPX_ADLP01'
-      59 | #define BOARD_UPX_ADLP01                        15
-         |                                                 ^~
-   drivers/pinctrl/pinctrl-upboard.c:1145:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1145 |                 .ident = BOARD_UPN_ADLN01,
-         |                          ^~~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:60:28: note: expanded from macro 'BOARD_UPN_ADLN01'
-      60 | #define BOARD_UPN_ADLN01                        16
-         |                                                 ^~
-   drivers/pinctrl/pinctrl-upboard.c:1152:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1152 |                 .ident = BOARD_UPS_ADLP01,
-         |                          ^~~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:61:28: note: expanded from macro 'BOARD_UPS_ADLP01'
-      61 | #define BOARD_UPS_ADLP01                        BOARD_UPX_ADLP01
-         |                                                 ^~~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:59:28: note: expanded from macro 'BOARD_UPX_ADLP01'
-      59 | #define BOARD_UPX_ADLP01                        15
-         |                                                 ^~
-   drivers/pinctrl/pinctrl-upboard.c:1159:12: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-    1159 |                 .ident = BOARD_UP_ADLN01,
-         |                          ^~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-upboard.c:62:28: note: expanded from macro 'BOARD_UP_ADLN01'
-      62 | #define BOARD_UP_ADLN01                         18
-         |                                                 ^~
-   drivers/pinctrl/pinctrl-upboard.c:1185:12: error: incompatible pointer to integer conversion assigning to 'int' from 'const char *const' [-Wint-conversion]
-    1185 |                 board_id = system_id->ident;
-         |                          ^ ~~~~~~~~~~~~~~~~
-   1 warning and 12 errors generated.
+Tests that were not ran because of internal issues:=20
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
 
 
-vim +709 drivers/pinctrl/pinctrl-upboard.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   705	
-   706	static void upboard_alt_func_enable(struct gpio_chip *gc, const char *name, int id)
-   707	{
-   708		struct upboard_pinctrl *pctrl = container_of(gc, struct upboard_pinctrl, chip);
- > 709		int offset[pctrl->pctldesc->npins];
-   710		int i, cnt;
-   711		bool input;
-   712		int mode;
-   713		unsigned int val;
-   714	
-   715		/* find all pins */
-   716		for (i = 0, cnt = 0; i < pctrl->pctldesc->npins; i++) {
-   717			if (strstr(pctrl->pctldesc->pins[i].name, name))
-   718				offset[cnt++] = i;
-   719		}
-   720	
-   721		/* change to alternate function */
-   722		for (i = 0; i < cnt; i++) {
-   723			if (pctrl->pins[offset[i]].regs == NULL)
-   724				continue;
-   725			input = false;
-   726			mode = 0; /* default GPIO */
-   727			val = readl(pctrl->pins[offset[i]].regs);
-   728	
-   729			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "I2C") ||
-   730			    strstr(pctrl->pctldesc->pins[offset[i]].name, "PINMUX")) {
-   731				mode = 1;
-   732				switch (id) {
-   733				case BOARD_UPN_ADLN01:
-   734				case BOARD_UPX_ADLP01:
-   735					mode = 2;
-   736					break;
-   737				default:
-   738					break;
-   739				}
-   740	
-   741				val |= mode<<PADCFG0_PMODE_SHIFT;
-   742				writel(val, pctrl->pins[offset[i]].regs);
-   743				upboard_fpga_request_free(pctrl->pctldev, offset[i]);
-   744				continue;
-   745			}
-   746	
-   747			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "UART")) {
-   748				mode = 1;
-   749				switch (id) {
-   750				case BOARD_UPN_EHL01:
-   751					mode = 4;
-   752					break;
-   753				case BOARD_UP_ADLN01:
-   754				case BOARD_UPN_ADLN01:
-   755				case BOARD_UPX_ADLP01:
-   756					mode = 2;
-   757					break;
-   758				default:
-   759					break;
-   760				}
-   761			}
-   762	
-   763			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "SPI")) {
-   764				mode = 1;
-   765				switch (id) {
-   766				case BOARD_UP_WHL01:
-   767					mode = 3;
-   768					break;
-   769				case BOARD_UP_ADLN01:
-   770				case BOARD_UPN_ADLN01:
-   771				case BOARD_UPX_ADLP01:
-   772					mode = 7;
-   773					if (strstr(pctrl->pctldesc->pins[offset[i]].name, "MOSI")) {
-   774						val &= ~PADCFG0_GPIOTXDIS;
-   775						val |= PADCFG0_GPIORXDIS;
-   776					}
-   777	
-   778					if (strstr(pctrl->pctldesc->pins[offset[i]].name, "MISO"))
-   779						val |= PADCFG0_GPIORXDIS;
-   780	
-   781					if (strstr(pctrl->pctldesc->pins[offset[i]].name, "CLK")) {
-   782						val &= ~PADCFG0_GPIOTXDIS;
-   783						val |= PADCFG0_GPIORXDIS;
-   784					}
-   785					if (strstr(pctrl->pctldesc->pins[offset[i]].name, "CS0"))
-   786						val |= PADCFG0_GPIORXDIS;
-   787	
-   788					if (strstr(pctrl->pctldesc->pins[offset[i]].name, "CS1"))
-   789						continue;
-   790					break;
-   791				default:
-   792					break;
-   793				}
-   794			}
-   795	
-   796			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "I2S")) {
-   797				mode = 1;
-   798				switch (id) {
-   799				case BOARD_UPX_ADLP01:
-   800					mode = 4;
-   801					break;
-   802				default:
-   803					break;
-   804				}
-   805			}
-   806	
-   807			val |= mode<<PADCFG0_PMODE_SHIFT;
-   808			writel(val, pctrl->pins[offset[i]].regs);
-   809	
-   810			/* input pins */
-   811			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "RX"))
-   812				input = true;
-   813	
-   814			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "CTS"))
-   815				input = true;
-   816	
-   817			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "ADC")) {
-   818				input = true;
-   819				if (id == BOARD_UP_APL01)
-   820					upboard_fpga_request_enable(pctrl->pctldev, NULL, offset[i]);
-   821				else
-   822					upboard_fpga_request_free(pctrl->pctldev, offset[i]);
-   823			}
-   824	
-   825			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "MISO"))
-   826				input = true;
-   827	
-   828			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "DIN"))
-   829				input = true;
-   830	
-   831			if (strstr(pctrl->pctldesc->pins[offset[i]].name, "SDI"))
-   832				input = true;
-   833	
-   834			upboard_fpga_set_direction(pctrl->pctldev, NULL, offset[i], input);
-   835		}
-   836	}
-   837	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
