@@ -1,59 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF571369;
-	Fri, 29 Dec 2023 00:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F697486;
+	Fri, 29 Dec 2023 02:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GGsBezV7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vk3aek5l"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703810751; x=1735346751;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=h0d7MyfanjVVQK9qj4fu4bv00Y+gJQB03toFTcpEIak=;
-  b=GGsBezV7z6MIe8RWSE8a85DR3LiQBH//4/534YWd452bLnq1RSyPS8s+
-   xpYrSe2fn0L9F8H0uIe/qM3JVIRJLwzUfb9qCZwSxbVrZpVbX8PVQRdLk
-   JNmXc5TcwEaAE4pjptWrM0kmraYIgywC6sJTRLLykCnfWYEF9w1VIAKyo
-   I9tqYyS/tY1qAqwQfoIdCA9gmdTnFWBlVTX2RuC4YrrdV+twjPoG2Hlsw
-   gXJ11YjkL/ZXdRlguuD5Nd05fMUBc035W1z8EQWCOszJZ2u5JtP1zKqTp
-   Gw2sJcp45JOgUG20rSj8Bi0OkrPY/SVhwYOhudTxJt7XfZKLZyisy6EtN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="381578336"
+  t=1703815281; x=1735351281;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OeNoaZ7taCmsuLp2W0XkwMYUfWiAlERHF/sjwouYjvI=;
+  b=Vk3aek5lL/03iG2mqCjlEuKXzYldW0fPDgIKFEz5wtbBNmghZ+Yok1xy
+   8lDz55shuIE4WlAUmaeTpDmwdBFqaGraWcL77rF3thVtXirdTkSCs/b7u
+   0WOXkPk22zVJf5AQ47MAnPTmES8W/izcoiEv+HoTmGbYFPJTXPUxwq9aX
+   o2I/NMCLNx3Aq9mCgMXpp7sLlNLOWwePfD55wiOSY5EVBfYYIbawrx997
+   mQqDJq26zPtfZKoxPxjrN/pcZRhy8sPBjwfy0W0czIIJOxpK5KPfeKDbh
+   MMquoHm0GWmIt6YBnrmv6sooO4gcG3H4vx0V380wVRLcNEbPoNzFwt35G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="396332078"
 X-IronPort-AV: E=Sophos;i="6.04,313,1695711600"; 
-   d="scan'208";a="381578336"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2023 16:45:50 -0800
+   d="scan'208";a="396332078"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2023 18:01:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="869261577"
 X-IronPort-AV: E=Sophos;i="6.04,313,1695711600"; 
-   d="scan'208";a="869261577"
+   d="scan'208";a="20742077"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Dec 2023 16:45:46 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 28 Dec 2023 18:01:19 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rJ10S-000Gxl-0Y;
-	Fri, 29 Dec 2023 00:45:44 +0000
-Date: Fri, 29 Dec 2023 08:44:49 +0800
+	id 1rJ2AN-000Gzm-0d;
+	Fri, 29 Dec 2023 02:00:07 +0000
+Date: Fri, 29 Dec 2023 09:59:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Tsao <peter.tsao@mediatek.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Von Dentz <luiz.dentz@gmail.com>
+To: Sunil Vaghela <sunil.vaghela@softnautics.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Wang <sean.wang@mediatek.com>,
-	Deren Wu <deren.Wu@mediatek.com>, Chris Lu <chris.lu@mediatek.com>,
-	Aaron Hou <aaron.hou@mediatek.com>,
-	Steve Lee <steve.lee@mediatek.com>,
-	linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-mediatek <linux-mediatek@lists.infradead.org>,
-	Peter Tsao <peter.tsao@mediatek.com>
-Subject: Re: [PATCH] Bluetooth: btusb: Fix MT7925 fail to send download patch
- command
-Message-ID: <202312290838.c0zcBoUz-lkp@intel.com>
-References: <20231228092014.23184-1-peter.tsao@mediatek.com>
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:fileYHFGVC 44/44]
+ sound/soc/xilinx/xlnx_formatter_pcm.c:572:21: error: no member named 'nodes'
+ in 'struct xlnx_pcm_drv_data'
+Message-ID: <202312290910.aS3V9YFt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,231 +50,161 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231228092014.23184-1-peter.tsao@mediatek.com>
 
-Hi Peter,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.7-rc7 next-20231222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Tsao/Bluetooth-btusb-Fix-MT7925-fail-to-send-download-patch-command/20231228-172328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20231228092014.23184-1-peter.tsao%40mediatek.com
-patch subject: [PATCH] Bluetooth: btusb: Fix MT7925 fail to send download patch command
-config: i386-buildonly-randconfig-002-20231229 (https://download.01.org/0day-ci/archive/20231229/202312290838.c0zcBoUz-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231229/202312290838.c0zcBoUz-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git fileYHFGVC
+head:   0e2c1956239767ca526c9e05bc061076068cbf4a
+commit: 0e2c1956239767ca526c9e05bc061076068cbf4a [44/44] ASoC: xilinx: Embed IEC958 sample rate val to channel status register
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20231229/202312290910.aS3V9YFt-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d3ef86708241a3bee902615c190dead1638c4e09)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231229/202312290910.aS3V9YFt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312290838.c0zcBoUz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312290910.aS3V9YFt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/bluetooth/btusb.c:3122:49: error: use of undeclared identifier 'val'
-    3122 |                 btusb_mtk_uhw_reg_read(data, MT7925_SLPPROT, &val);
-         |                                                               ^
-   drivers/bluetooth/btusb.c:3123:3: error: use of undeclared identifier 'val'
-    3123 |                 val |= SLPPROT_BYPASS;
-         |                 ^
-   drivers/bluetooth/btusb.c:3124:49: error: use of undeclared identifier 'val'
-    3124 |                 btusb_mtk_uhw_reg_write(data, MT7925_SLPPROT, val);
-         |                                                               ^
-   3 errors generated.
+>> sound/soc/xilinx/xlnx_formatter_pcm.c:572:21: error: no member named 'nodes' in 'struct xlnx_pcm_drv_data'
+     572 |         if ((strstr(adata->nodes[XLNX_PLAYBACK]->name, "hdmi")) ||
+         |                     ~~~~~  ^
+>> sound/soc/xilinx/xlnx_formatter_pcm.c:572:27: error: use of undeclared identifier 'XLNX_PLAYBACK'
+     572 |         if ((strstr(adata->nodes[XLNX_PLAYBACK]->name, "hdmi")) ||
+         |                                  ^
+   sound/soc/xilinx/xlnx_formatter_pcm.c:573:21: error: no member named 'nodes' in 'struct xlnx_pcm_drv_data'
+     573 |             (strstr(adata->nodes[XLNX_PLAYBACK]->name, "dp"))) {
+         |                     ~~~~~  ^
+   sound/soc/xilinx/xlnx_formatter_pcm.c:573:27: error: use of undeclared identifier 'XLNX_PLAYBACK'
+     573 |             (strstr(adata->nodes[XLNX_PLAYBACK]->name, "dp"))) {
+         |                                  ^
+   4 errors generated.
 
 
-vim +/val +3122 drivers/bluetooth/btusb.c
+vim +572 sound/soc/xilinx/xlnx_formatter_pcm.c
 
-  3068	
-  3069	static int btusb_mtk_setup(struct hci_dev *hdev)
-  3070	{
-  3071		struct btusb_data *data = hci_get_drvdata(hdev);
-  3072		struct btmtk_hci_wmt_params wmt_params;
-  3073		ktime_t calltime, delta, rettime;
-  3074		struct btmtk_tci_sleep tci_sleep;
-  3075		unsigned long long duration;
-  3076		struct sk_buff *skb;
-  3077		const char *fwname;
-  3078		int err, status;
-  3079		u32 dev_id = 0;
-  3080		char fw_bin_name[64];
-  3081		u32 fw_version = 0;
-  3082		u8 param;
-  3083		struct btmediatek_data *mediatek;
-  3084	
-  3085		calltime = ktime_get();
-  3086	
-  3087		err = btusb_mtk_id_get(data, 0x80000008, &dev_id);
-  3088		if (err < 0) {
-  3089			bt_dev_err(hdev, "Failed to get device id (%d)", err);
-  3090			return err;
-  3091		}
-  3092	
-  3093		if (!dev_id || dev_id != 0x7663) {
-  3094			err = btusb_mtk_id_get(data, 0x70010200, &dev_id);
-  3095			if (err < 0) {
-  3096				bt_dev_err(hdev, "Failed to get device id (%d)", err);
-  3097				return err;
-  3098			}
-  3099			err = btusb_mtk_id_get(data, 0x80021004, &fw_version);
-  3100			if (err < 0) {
-  3101				bt_dev_err(hdev, "Failed to get fw version (%d)", err);
-  3102				return err;
-  3103			}
-  3104		}
-  3105	
-  3106		mediatek = hci_get_priv(hdev);
-  3107		mediatek->dev_id = dev_id;
-  3108		mediatek->reset_sync = btusb_mtk_reset;
-  3109	
-  3110		err = btmtk_register_coredump(hdev, btusb_driver.name, fw_version);
-  3111		if (err < 0)
-  3112			bt_dev_err(hdev, "Failed to register coredump (%d)", err);
-  3113	
-  3114		switch (dev_id) {
-  3115		case 0x7663:
-  3116			fwname = FIRMWARE_MT7663;
-  3117			break;
-  3118		case 0x7668:
-  3119			fwname = FIRMWARE_MT7668;
-  3120			break;
-  3121		case 0x7925:
-> 3122			btusb_mtk_uhw_reg_read(data, MT7925_SLPPROT, &val);
-  3123			val |= SLPPROT_BYPASS;
-  3124			btusb_mtk_uhw_reg_write(data, MT7925_SLPPROT, val);
-  3125			fallthrough;
-  3126		case 0x7922:
-  3127		case 0x7961:
-  3128			if (dev_id == 0x7925)
-  3129				snprintf(fw_bin_name, sizeof(fw_bin_name),
-  3130					 "mediatek/mt%04x/BT_RAM_CODE_MT%04x_1_%x_hdr.bin",
-  3131					 dev_id & 0xffff, dev_id & 0xffff, (fw_version & 0xff) + 1);
-  3132			else
-  3133				snprintf(fw_bin_name, sizeof(fw_bin_name),
-  3134					 "mediatek/BT_RAM_CODE_MT%04x_1_%x_hdr.bin",
-  3135					 dev_id & 0xffff, (fw_version & 0xff) + 1);
-  3136	
-  3137			err = btmtk_setup_firmware_79xx(hdev, fw_bin_name,
-  3138							btusb_mtk_hci_wmt_sync);
-  3139			if (err < 0) {
-  3140				bt_dev_err(hdev, "Failed to set up firmware (%d)", err);
-  3141				return err;
-  3142			}
-  3143	
-  3144			/* It's Device EndPoint Reset Option Register */
-  3145			btusb_mtk_uhw_reg_write(data, MTK_EP_RST_OPT, MTK_EP_RST_IN_OUT_OPT);
-  3146	
-  3147			/* Enable Bluetooth protocol */
-  3148			param = 1;
-  3149			wmt_params.op = BTMTK_WMT_FUNC_CTRL;
-  3150			wmt_params.flag = 0;
-  3151			wmt_params.dlen = sizeof(param);
-  3152			wmt_params.data = &param;
-  3153			wmt_params.status = NULL;
-  3154	
-  3155			err = btusb_mtk_hci_wmt_sync(hdev, &wmt_params);
-  3156			if (err < 0) {
-  3157				bt_dev_err(hdev, "Failed to send wmt func ctrl (%d)", err);
-  3158				return err;
-  3159			}
-  3160	
-  3161			hci_set_msft_opcode(hdev, 0xFD30);
-  3162			hci_set_aosp_capable(hdev);
-  3163			goto done;
-  3164		default:
-  3165			bt_dev_err(hdev, "Unsupported hardware variant (%08x)",
-  3166				   dev_id);
-  3167			return -ENODEV;
-  3168		}
-  3169	
-  3170		/* Query whether the firmware is already download */
-  3171		wmt_params.op = BTMTK_WMT_SEMAPHORE;
-  3172		wmt_params.flag = 1;
-  3173		wmt_params.dlen = 0;
-  3174		wmt_params.data = NULL;
-  3175		wmt_params.status = &status;
-  3176	
-  3177		err = btusb_mtk_hci_wmt_sync(hdev, &wmt_params);
-  3178		if (err < 0) {
-  3179			bt_dev_err(hdev, "Failed to query firmware status (%d)", err);
-  3180			return err;
-  3181		}
-  3182	
-  3183		if (status == BTMTK_WMT_PATCH_DONE) {
-  3184			bt_dev_info(hdev, "firmware already downloaded");
-  3185			goto ignore_setup_fw;
-  3186		}
-  3187	
-  3188		/* Setup a firmware which the device definitely requires */
-  3189		err = btmtk_setup_firmware(hdev, fwname,
-  3190					   btusb_mtk_hci_wmt_sync);
-  3191		if (err < 0)
-  3192			return err;
-  3193	
-  3194	ignore_setup_fw:
-  3195		err = readx_poll_timeout(btusb_mtk_func_query, hdev, status,
-  3196					 status < 0 || status != BTMTK_WMT_ON_PROGRESS,
-  3197					 2000, 5000000);
-  3198		/* -ETIMEDOUT happens */
-  3199		if (err < 0)
-  3200			return err;
-  3201	
-  3202		/* The other errors happen in btusb_mtk_func_query */
-  3203		if (status < 0)
-  3204			return status;
-  3205	
-  3206		if (status == BTMTK_WMT_ON_DONE) {
-  3207			bt_dev_info(hdev, "function already on");
-  3208			goto ignore_func_on;
-  3209		}
-  3210	
-  3211		/* Enable Bluetooth protocol */
-  3212		param = 1;
-  3213		wmt_params.op = BTMTK_WMT_FUNC_CTRL;
-  3214		wmt_params.flag = 0;
-  3215		wmt_params.dlen = sizeof(param);
-  3216		wmt_params.data = &param;
-  3217		wmt_params.status = NULL;
-  3218	
-  3219		err = btusb_mtk_hci_wmt_sync(hdev, &wmt_params);
-  3220		if (err < 0) {
-  3221			bt_dev_err(hdev, "Failed to send wmt func ctrl (%d)", err);
-  3222			return err;
-  3223		}
-  3224	
-  3225	ignore_func_on:
-  3226		/* Apply the low power environment setup */
-  3227		tci_sleep.mode = 0x5;
-  3228		tci_sleep.duration = cpu_to_le16(0x640);
-  3229		tci_sleep.host_duration = cpu_to_le16(0x640);
-  3230		tci_sleep.host_wakeup_pin = 0;
-  3231		tci_sleep.time_compensation = 0;
-  3232	
-  3233		skb = __hci_cmd_sync(hdev, 0xfc7a, sizeof(tci_sleep), &tci_sleep,
-  3234				     HCI_INIT_TIMEOUT);
-  3235		if (IS_ERR(skb)) {
-  3236			err = PTR_ERR(skb);
-  3237			bt_dev_err(hdev, "Failed to apply low power setting (%d)", err);
-  3238			return err;
-  3239		}
-  3240		kfree_skb(skb);
-  3241	
-  3242	done:
-  3243		rettime = ktime_get();
-  3244		delta = ktime_sub(rettime, calltime);
-  3245		duration = (unsigned long long)ktime_to_ns(delta) >> 10;
-  3246	
-  3247		bt_dev_info(hdev, "Device setup in %llu usecs", duration);
-  3248	
-  3249		return 0;
-  3250	}
-  3251	
+   488	
+   489	static int xlnx_formatter_pcm_hw_params(struct snd_soc_component *component,
+   490						struct snd_pcm_substream *substream,
+   491						struct snd_pcm_hw_params *params)
+   492	{
+   493		void __iomem *reg;
+   494		u32 low, high, active_ch, val, bytes_per_ch, bits_per_sample;
+   495		u32 aes_reg1_val, aes_reg2_val, sample_rate, ch_sts;
+   496		u64 size;
+   497		struct snd_pcm_runtime *runtime = substream->runtime;
+   498		struct xlnx_pcm_stream_param *stream_data = runtime->private_data;
+   499		struct xlnx_pcm_drv_data *adata = dev_get_drvdata(component->dev);
+   500	
+   501		active_ch = params_channels(params);
+   502		if (active_ch > stream_data->ch_limit)
+   503			return -EINVAL;
+   504	
+   505		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
+   506		    adata->sysclk) {
+   507			unsigned int mclk_fs = adata->sysclk / params_rate(params);
+   508	
+   509			if (adata->sysclk % params_rate(params) != 0) {
+   510				dev_warn(component->dev, "sysclk %u not divisible by rate %u\n",
+   511					 adata->sysclk, params_rate(params));
+   512				return -EINVAL;
+   513			}
+   514	
+   515			writel(mclk_fs, stream_data->mmio + XLNX_AUD_FS_MULTIPLIER);
+   516		}
+   517	
+   518		if (substream->stream == SNDRV_PCM_STREAM_CAPTURE &&
+   519		    stream_data->xfer_mode == AES_TO_PCM) {
+   520			val = readl(stream_data->mmio + XLNX_AUD_STS);
+   521			if (val & AUD_STS_CH_STS_MASK) {
+   522				aes_reg1_val = readl(stream_data->mmio +
+   523						     XLNX_AUD_CH_STS_START);
+   524				aes_reg2_val = readl(stream_data->mmio +
+   525						     XLNX_AUD_CH_STS_START + 0x4);
+   526	
+   527				xlnx_parse_aes_params(aes_reg1_val, aes_reg2_val,
+   528						      component->dev);
+   529			}
+   530		}
+   531	
+   532		size = params_buffer_bytes(params);
+   533	
+   534		stream_data->buffer_size = size;
+   535	
+   536		low = lower_32_bits(runtime->dma_addr);
+   537		high = upper_32_bits(runtime->dma_addr);
+   538		writel(low, stream_data->mmio + XLNX_AUD_BUFF_ADDR_LSB);
+   539		writel(high, stream_data->mmio + XLNX_AUD_BUFF_ADDR_MSB);
+   540	
+   541		val = readl(stream_data->mmio + XLNX_AUD_CTRL);
+   542		bits_per_sample = params_width(params);
+   543		switch (bits_per_sample) {
+   544		case 8:
+   545			val |= (BIT_DEPTH_8 << AUD_CTRL_DATA_WIDTH_SHIFT);
+   546			break;
+   547		case 16:
+   548			val |= (BIT_DEPTH_16 << AUD_CTRL_DATA_WIDTH_SHIFT);
+   549			break;
+   550		case 20:
+   551			val |= (BIT_DEPTH_20 << AUD_CTRL_DATA_WIDTH_SHIFT);
+   552			break;
+   553		case 24:
+   554			val |= (BIT_DEPTH_24 << AUD_CTRL_DATA_WIDTH_SHIFT);
+   555			break;
+   556		case 32:
+   557			val |= (BIT_DEPTH_32 << AUD_CTRL_DATA_WIDTH_SHIFT);
+   558			break;
+   559		default:
+   560			return -EINVAL;
+   561		}
+   562	
+   563		val |= active_ch << AUD_CTRL_ACTIVE_CH_SHIFT;
+   564		writel(val, stream_data->mmio + XLNX_AUD_CTRL);
+   565	
+   566		val = (params_periods(params) << PERIOD_CFG_PERIODS_SHIFT)
+   567			| params_period_bytes(params);
+   568		writel(val, stream_data->mmio + XLNX_AUD_PERIOD_CONFIG);
+   569		bytes_per_ch = DIV_ROUND_UP(params_period_bytes(params), active_ch);
+   570		writel(bytes_per_ch, stream_data->mmio + XLNX_BYTES_PER_CH);
+   571	
+ > 572		if ((strstr(adata->nodes[XLNX_PLAYBACK]->name, "hdmi")) ||
+   573		    (strstr(adata->nodes[XLNX_PLAYBACK]->name, "dp"))) {
+   574			sample_rate = params_rate(params);
+   575			dev_info(component->dev, "%s: sample_rate=%d\n", __func__, sample_rate);
+   576	
+   577			/* As per IEC 60958 standards, whenever transmitting a valid audio
+   578			 * stream, HDMI/DP Sources shall always include valid and correct
+   579			 * information in Channel Status bits 24 through 27. For L-PCM audio,
+   580			 * these bits shall indicate the audio sample frequency. For
+   581			 * compressed audio formats, these bits shall indicate the IEC 60958
+   582			 * frame-rate.
+   583			 *
+   584			 * Channel Status Bit Number     Sample Frequency or Frame Rate
+   585			 *   24    25     26    27
+   586			 *   -----------------------     ------------------------------
+   587			 *    1     1      0     0                    32 kHz
+   588			 *    0     0      0     0                    44.1 kHz
+   589			 *    0     0      0     1                    88.2 kHz
+   590			 *    0     0      1     1                    176.4 kHz
+   591			 *    0     1      0     0                    48 kHz
+   592			 *    0     1      0     1                    96 kHz
+   593			 *    0     1      1     1                    192 kHz
+   594			 *    1     0      0     1                    768 kHz
+   595			 */
+   596	
+   597			ch_sts = xlnx_formatter_get_iec958_ch_status(sample_rate);
+   598			dev_info(component->dev, "%s: iec60958 channel status bits 24 to 27 value for sample rate %dHz = 0x%08x\n",
+   599				 __func__, sample_rate, ch_sts);
+   600			ch_sts <<= 24;
+   601			reg = adata->mmio + XLNX_MM2S_OFFSET + XLNX_AUD_CH_STS_START;
+   602			aes_reg1_val = ioread32(reg);
+   603			aes_reg1_val |= ch_sts;
+   604			dev_info(component->dev, "%s: MM2S: AES Encode channel status register value 0x%08x\n",
+   605				 __func__, aes_reg1_val);
+   606			iowrite32(aes_reg1_val, reg);
+   607		}
+   608		return 0;
+   609	}
+   610	
 
 -- 
 0-DAY CI Kernel Test Service
