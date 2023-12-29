@@ -1,54 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0093714267;
-	Fri, 29 Dec 2023 20:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D837014281;
+	Fri, 29 Dec 2023 21:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RH/r6IL/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z6EzOKEo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703881421; x=1735417421;
+  t=1703883830; x=1735419830;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zhcP1s+xHtIa280S64WwBQn6834wuT45tSu7NBxVVpI=;
-  b=RH/r6IL/EWMZuo5mT/F7MaIIjabB82Wsha+6plMRPh+3ElF3Sf+khGce
-   qb7dzOEVu42PZkQqnbR5egSVM54OH/t6Yvl6ST+lMBVrQWnCvI9XKphUR
-   LKiq3lN9Z2TY3T65JAk0QkJUMxqKA1T6ddPLj1PniMzqYVpc9hLt1lQOq
-   NK0RYdC87f6PgNbTQj0xfTfP3YosALGBOzG7ceoh0wDSeURjNj9JAEHjc
-   BFL/snYr9X/ox3PGNP/hKpl2v842zVR7iTV61XyuGXsTyvGbgsvlZHLmj
-   2k2/zQG0sTXHVVFWnbeDcrdoT/RoLpJJylcZPLWIBnhouGwhLxqsqb214
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10938"; a="10057231"
+  bh=+izWk5xu+lIGF06WtqPEf5Zuf5OC+evaUFTMbMp8EHQ=;
+  b=Z6EzOKEo5YgYhnzdeQcuu4fzfmIz5yq8f2gy5twwfuqhpTp7PZoxuKmi
+   Kv3kB9opsxI+SYN4/o7wwm4u7EeHy6ECVM7Yt/Ogr8Rx4N5B5bhZQEEkx
+   7cHO2x44jNVSqpDQ719M1zzIaAnKnpxlvu44XE0Jqb3d/fcgUmlx5D2p+
+   moqAmfHoEaE8v8C9jOfk6vtnEf/aKBn8F5Z/t36+d59wC6nVl+LrwlUIh
+   kmxzCbHIJRJQt/4i3rTMIJUTUMDn8ciGOusaHMkszJR1Y2PqH5SwlH40y
+   fpuSUf6yZXtJwslnmUK+tfHSN+Aa81CN9dzFCCOj/MRZRLsNm0KkT+qnE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10938"; a="376154926"
 X-IronPort-AV: E=Sophos;i="6.04,316,1695711600"; 
-   d="scan'208";a="10057231"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2023 12:23:40 -0800
+   d="scan'208";a="376154926"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2023 13:03:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10938"; a="778876607"
+X-IronPort-AV: E=McAfee;i="6600,9927,10938"; a="1110251621"
 X-IronPort-AV: E=Sophos;i="6.04,316,1695711600"; 
-   d="scan'208";a="778876607"
+   d="scan'208";a="1110251621"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 29 Dec 2023 12:23:37 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 29 Dec 2023 13:03:45 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rJJOI-000HnN-28;
-	Fri, 29 Dec 2023 20:23:34 +0000
-Date: Sat, 30 Dec 2023 04:22:42 +0800
+	id 1rJK19-000Hof-2X;
+	Fri, 29 Dec 2023 21:03:43 +0000
+Date: Sat, 30 Dec 2023 05:03:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chunyan Zhang <chunyan.zhang@unisoc.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <chunyan.zhang@unisoc.com>
-Subject: Re: [PATCH 3/3] clk: sprd: add support for UMS9620
-Message-ID: <202312300411.tYRuXlfZ-lkp@intel.com>
-References: <20231229085156.1490233-4-chunyan.zhang@unisoc.com>
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 23/27] virtio_net: xsk: rx: support recv
+ merge mode
+Message-ID: <202312300404.1R72Ssbh-lkp@intel.com>
+References: <20231229073108.57778-24-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,272 +61,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231229085156.1490233-4-chunyan.zhang@unisoc.com>
+In-Reply-To: <20231229073108.57778-24-xuanzhuo@linux.alibaba.com>
 
-Hi Chunyan,
+Hi Xuan,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on robh/for-next linus/master v6.7-rc7 next-20231222]
+[auto build test WARNING on mst-vhost/linux-next]
+[cannot apply to net-next/main linus/master horms-ipvs/master v6.7-rc7 next-20231222]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chunyan-Zhang/dt-bindings-clk-sprd-Add-UMS9620-support/20231229-165718
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20231229085156.1490233-4-chunyan.zhang%40unisoc.com
-patch subject: [PATCH 3/3] clk: sprd: add support for UMS9620
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231230/202312300411.tYRuXlfZ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/virtio_net-rename-free_old_xmit_skbs-to-free_old_xmit/20231229-155253
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20231229073108.57778-24-xuanzhuo%40linux.alibaba.com
+patch subject: [PATCH net-next v3 23/27] virtio_net: xsk: rx: support recv merge mode
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20231230/202312300404.1R72Ssbh-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231230/202312300411.tYRuXlfZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231230/202312300404.1R72Ssbh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312300411.tYRuXlfZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312300404.1R72Ssbh-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/clk/sprd/ums9620-clk.c:1671:37: warning: unused variable 'pmu_26m_parents' [-Wunused-const-variable]
-    1671 | static const struct clk_parent_data pmu_26m_parents[] = {
-         |                                     ^~~~~~~~~~~~~~~
->> drivers/clk/sprd/ums9620-clk.c:2642:37: warning: unused variable 'depth_parents' [-Wunused-const-variable]
-    2642 | static const struct clk_parent_data depth_parents[] = {
-         |                                     ^~~~~~~~~~~~~
-   2 warnings generated.
+>> drivers/net/virtio/xsk.c:216:17: warning: variable 'xdp' is uninitialized when used here [-Wuninitialized]
+     216 |                 xsk_buff_free(xdp);
+         |                               ^~~
+   drivers/net/virtio/xsk.c:210:22: note: initialize the variable 'xdp' to silence this warning
+     210 |         struct xdp_buff *xdp;
+         |                             ^
+         |                              = NULL
+   1 warning generated.
 
 
-vim +/pmu_26m_parents +1671 drivers/clk/sprd/ums9620-clk.c
+vim +/xdp +216 drivers/net/virtio/xsk.c
 
-  1451	
-  1452	/* aon apb clks */
-  1453	static const struct clk_parent_data aon_apb_parents[] = {
-  1454		{ .hw = &rco_100m_4m.hw },
-  1455		{ .hw = &clk_4m3.hw },
-  1456		{ .hw = &clk_13m.hw },
-  1457		{ .hw = &rco_100m_25m.hw },
-  1458		{ .fw_name = "ext-26m" },
-  1459		{ .fw_name = "rco-100m" },
-  1460		{ .hw = &tgpll_128m.hw },
-  1461		{ .hw = &tgpll_153m6.hw },
-  1462	};
-  1463	static SPRD_COMP_CLK_DATA_OFFSET(aon_apb, "aon-apb", aon_apb_parents, 0x28,
-  1464				    0, 3, -4, 0, 2, 0);
-  1465	
-  1466	static const struct clk_parent_data adi_parents[] = {
-  1467		{ .hw = &rco_100m_4m.hw },
-  1468		{ .fw_name = "ext-26m" },
-  1469		{ .hw = &rco_100m_25m.hw },
-  1470		{ .hw = &tgpll_38m4.hw },
-  1471		{ .hw = &tgpll_51m2.hw },
-  1472	};
-  1473	static SPRD_MUX_CLK_DATA(adi, "adi", adi_parents, 0x34,
-  1474			    0, 3, UMS9620_MUX_FLAG);
-  1475	
-  1476	static const struct clk_parent_data pwm_parents[] = {
-  1477		{ .fw_name = "ext-32k" },
-  1478		{ .fw_name = "ext-26m" },
-  1479		{ .hw = &rco_100m_4m.hw },
-  1480		{ .hw = &rco_100m_25m.hw },
-  1481		{ .hw = &tgpll_48m.hw },
-  1482	};
-  1483	static SPRD_MUX_CLK_DATA(pwm0, "pwm0", pwm_parents, 0x40,
-  1484			    0, 3, UMS9620_MUX_FLAG);
-  1485	static SPRD_MUX_CLK_DATA(pwm1, "pwm1", pwm_parents, 0x4c,
-  1486			    0, 3, UMS9620_MUX_FLAG);
-  1487	static SPRD_MUX_CLK_DATA(pwm2, "pwm2", pwm_parents, 0x58,
-  1488			    0, 3, UMS9620_MUX_FLAG);
-  1489	static SPRD_MUX_CLK_DATA(pwm3, "pwm3", pwm_parents, 0x64,
-  1490			    0, 3, UMS9620_MUX_FLAG);
-  1491	
-  1492	static const struct clk_parent_data efuse_parents[] = {
-  1493		{ .hw = &rco_100m_25m.hw },
-  1494		{ .fw_name = "ext-26m" },
-  1495	};
-  1496	static SPRD_MUX_CLK_DATA(efuse, "efuse", efuse_parents, 0x70,
-  1497			    0, 1, UMS9620_MUX_FLAG);
-  1498	
-  1499	static const struct clk_parent_data uart_parents[] = {
-  1500		{ .hw = &rco_100m_4m.hw },
-  1501		{ .fw_name = "ext-26m" },
-  1502		{ .hw = &tgpll_48m.hw },
-  1503		{ .hw = &tgpll_51m2.hw },
-  1504		{ .hw = &tgpll_96m.hw },
-  1505		{ .fw_name = "rco-100m" },
-  1506		{ .hw = &tgpll_128m.hw },
-  1507	};
-  1508	static SPRD_MUX_CLK_DATA(uart0, "uart0", uart_parents, 0x7c,
-  1509			    0, 3, UMS9620_MUX_FLAG);
-  1510	static SPRD_MUX_CLK_DATA(uart1, "uart1", uart_parents, 0x88,
-  1511			    0, 3, UMS9620_MUX_FLAG);
-  1512	static SPRD_MUX_CLK_DATA(uart2, "uart2", uart_parents, 0x94,
-  1513			    0, 3, UMS9620_MUX_FLAG);
-  1514	
-  1515	static const struct clk_parent_data thm_parents[] = {
-  1516		{ .fw_name = "ext-32k" },
-  1517		{ .hw = &clk_250k.hw },
-  1518	};
-  1519	static SPRD_MUX_CLK_DATA(thm0, "thm0", thm_parents, 0xc4,
-  1520			    0, 1, UMS9620_MUX_FLAG);
-  1521	static SPRD_MUX_CLK_DATA(thm1, "thm1", thm_parents, 0xd0,
-  1522			    0, 1, UMS9620_MUX_FLAG);
-  1523	static SPRD_MUX_CLK_DATA(thm2, "thm2", thm_parents, 0xdc,
-  1524			    0, 1, UMS9620_MUX_FLAG);
-  1525	static SPRD_MUX_CLK_DATA(thm3, "thm3", thm_parents, 0xe8,
-  1526			    0, 1, UMS9620_MUX_FLAG);
-  1527	
-  1528	static const struct clk_parent_data aon_iis_parents[] = {
-  1529		{ .fw_name = "ext-26m" },
-  1530		{ .hw = &tgpll_128m.hw },
-  1531		{ .hw = &tgpll_153m6.hw },
-  1532	};
-  1533	static SPRD_MUX_CLK_DATA(aon_iis, "aon-iis", aon_iis_parents, 0x118,
-  1534			    0, 2, UMS9620_MUX_FLAG);
-  1535	
-  1536	static const struct clk_parent_data scc_parents[] = {
-  1537		{ .fw_name = "ext-26m" },
-  1538		{ .hw = &tgpll_48m.hw },
-  1539		{ .hw = &tgpll_51m2.hw },
-  1540		{ .hw = &tgpll_96m.hw },
-  1541	};
-  1542	static SPRD_MUX_CLK_DATA(scc, "scc", scc_parents, 0x124,
-  1543			    0, 2, UMS9620_MUX_FLAG);
-  1544	
-  1545	static const struct clk_parent_data apcpu_dap_parents[] = {
-  1546		{ .fw_name = "ext-26m" },
-  1547		{ .hw = &rco_100m_4m.hw },
-  1548		{ .hw = &tgpll_76m8.hw },
-  1549		{ .fw_name = "rco-100m" },
-  1550		{ .hw = &tgpll_128m.hw },
-  1551		{ .hw = &tgpll_153m6.hw },
-  1552	};
-  1553	static SPRD_MUX_CLK_DATA(apcpu_dap, "apcpu-dap", apcpu_dap_parents, 0x130,
-  1554			    0, 3, UMS9620_MUX_FLAG);
-  1555	
-  1556	static const struct clk_parent_data apcpu_ts_parents[] = {
-  1557		{ .fw_name = "ext-32k" },
-  1558		{ .fw_name = "ext-26m" },
-  1559		{ .hw = &tgpll_128m.hw },
-  1560		{ .hw = &tgpll_153m6.hw },
-  1561	};
-  1562	static SPRD_MUX_CLK_DATA(apcpu_ts, "apcpu-ts", apcpu_ts_parents, 0x13c,
-  1563			    0, 2, UMS9620_MUX_FLAG);
-  1564	
-  1565	static const struct clk_parent_data debug_ts_parents[] = {
-  1566		{ .fw_name = "ext-26m" },
-  1567		{ .hw = &tgpll_76m8.hw },
-  1568		{ .hw = &tgpll_128m.hw },
-  1569		{ .hw = &tgpll_192m.hw },
-  1570	};
-  1571	static SPRD_MUX_CLK_DATA(debug_ts, "debug-ts", debug_ts_parents, 0x148,
-  1572			    0, 2, UMS9620_MUX_FLAG);
-  1573	
-  1574	static const struct clk_parent_data pri_sbi_parents[] = {
-  1575		{ .fw_name = "ext-26m" },
-  1576		{ .fw_name = "ext-52m" },
-  1577		{ .hw = &tgpll_96m.hw },
-  1578	};
-  1579	static SPRD_MUX_CLK_DATA(pri_sbi, "pri-sbi", pri_sbi_parents, 0x154,
-  1580			    0, 2, UMS9620_MUX_FLAG);
-  1581	
-  1582	static const struct clk_parent_data xo_sel_parents[] = {
-  1583		{ .fw_name = "ext-26m" },
-  1584		{ .fw_name = "ext-52m" },
-  1585	};
-  1586	static SPRD_MUX_CLK_DATA(xo_sel, "xo-sel", xo_sel_parents, 0x160,
-  1587			    0, 1, UMS9620_MUX_FLAG);
-  1588	
-  1589	static const struct clk_parent_data rfti_lth_parents[] = {
-  1590		{ .fw_name = "ext-26m" },
-  1591		{ .fw_name = "ext-52m" },
-  1592	};
-  1593	static SPRD_MUX_CLK_DATA(rfti_lth, "rfti-lth", rfti_lth_parents, 0x16c,
-  1594			    0, 1, UMS9620_MUX_FLAG);
-  1595	
-  1596	static const struct clk_parent_data afc_lth_parents[] = {
-  1597		{ .fw_name = "ext-26m" },
-  1598		{ .fw_name = "ext-52m" },
-  1599	};
-  1600	static SPRD_MUX_CLK_DATA(afc_lth, "afc-lth", afc_lth_parents, 0x178,
-  1601			    0, 1, UMS9620_MUX_FLAG);
-  1602	
-  1603	static SPRD_DIV_CLK_FW_NAME(rco100m_fdk, "rco100m-fdk", "rco-100m", 0x18c,
-  1604			    0, 6, 0);
-  1605	
-  1606	static SPRD_DIV_CLK_FW_NAME(rco60m_fdk, "rco60m-fdk", "rco-60m", 0x1a4,
-  1607			    0, 5, 0);
-  1608	static const struct clk_parent_data rco6m_ref_parents[] = {
-  1609		{ .hw = &clk_16k.hw },
-  1610		{ .hw = &clk_2m.hw },
-  1611	};
-  1612	static SPRD_COMP_CLK_DATA_OFFSET(rco6m_ref, "rco6m-ref", rco6m_ref_parents, 0x1b4,
-  1613				    0, 1, -4, 0, 5, 0);
-  1614	static SPRD_DIV_CLK_FW_NAME(rco6m_fdk, "rco6m-fdk", "rco-6m", 0x1bc,
-  1615			    0, 9, 0);
-  1616	
-  1617	static const struct clk_parent_data djtag_tck_parents[] = {
-  1618		{ .hw = &rco_100m_4m.hw },
-  1619		{ .fw_name = "ext-26m" },
-  1620	};
-  1621	static SPRD_MUX_CLK_DATA(djtag_tck, "djtag-tck", djtag_tck_parents, 0x1cc,
-  1622			    0, 1, UMS9620_MUX_FLAG);
-  1623	
-  1624	static const struct clk_parent_data aon_tmr_parents[] = {
-  1625		{ .hw = &rco_100m_4m.hw },
-  1626		{ .hw = &rco_100m_25m.hw },
-  1627		{ .fw_name = "ext-26m" },
-  1628	};
-  1629	static SPRD_MUX_CLK_DATA(aon_tmr, "aon-tmr", aon_tmr_parents, 0x1f0,
-  1630			    0, 2, UMS9620_MUX_FLAG);
-  1631	
-  1632	static const struct clk_parent_data aon_pmu_parents[] = {
-  1633		{ .fw_name = "ext-32k" },
-  1634		{ .hw = &rco_100m_4m.hw },
-  1635		{ .hw = &clk_4m3.hw },
-  1636		{ .hw = &rco_60m_4m.hw },
-  1637	};
-  1638	static SPRD_MUX_CLK_DATA(aon_pmu, "aon-pmu", aon_pmu_parents, 0x208,
-  1639			    0, 2, UMS9620_MUX_FLAG);
-  1640	
-  1641	static const struct clk_parent_data debounce_parents[] = {
-  1642		{ .fw_name = "ext-32k" },
-  1643		{ .hw = &rco_100m_4m.hw },
-  1644		{ .hw = &rco_100m_25m.hw },
-  1645		{ .fw_name = "ext-26m" },
-  1646		{ .hw = &rco_60m_4m.hw },
-  1647		{ .hw = &rco_60m_20m.hw },
-  1648	};
-  1649	static SPRD_MUX_CLK_DATA(debounce, "debounce", debounce_parents, 0x214,
-  1650			    0, 3, UMS9620_MUX_FLAG);
-  1651	
-  1652	static const struct clk_parent_data apcpu_pmu_parents[] = {
-  1653		{ .fw_name = "ext-26m" },
-  1654		{ .hw = &tgpll_76m8.hw },
-  1655		{ .fw_name = "rco-60m" },
-  1656		{ .fw_name = "rco-100m" },
-  1657		{ .hw = &tgpll_128m.hw },
-  1658	};
-  1659	static SPRD_MUX_CLK_DATA(apcpu_pmu, "apcpu-pmu", apcpu_pmu_parents, 0x220,
-  1660			    0, 3, UMS9620_MUX_FLAG);
-  1661	
-  1662	static const struct clk_parent_data top_dvfs_parents[] = {
-  1663		{ .fw_name = "ext-26m" },
-  1664		{ .hw = &tgpll_96m.hw },
-  1665		{ .fw_name = "rco-100m" },
-  1666		{ .hw = &tgpll_128m.hw },
-  1667	};
-  1668	static SPRD_MUX_CLK_DATA(top_dvfs, "top-dvfs", top_dvfs_parents, 0x22c,
-  1669			    0, 2, UMS9620_MUX_FLAG);
-  1670	
-> 1671	static const struct clk_parent_data pmu_26m_parents[] = {
-  1672		{ .hw = &rco_100m_20m.hw },
-  1673		{ .fw_name = "ext-26m" },
-  1674		{ .hw = &rco_60m_20m.hw },
-  1675	};
-  1676	static SPRD_MUX_CLK_DATA(pmu_26m, "pmu-26m", aon_pmu_parents, 0x238,
-  1677			    0, 2, UMS9620_MUX_FLAG);
-  1678	
+   202	
+   203	struct sk_buff *virtnet_receive_xsk_buf(struct virtnet_info *vi, struct virtnet_rq *rq,
+   204						void *buf, u32 len,
+   205						unsigned int *xdp_xmit,
+   206						struct virtnet_rq_stats *stats)
+   207	{
+   208		struct net_device *dev = vi->dev;
+   209		struct sk_buff *skb = NULL;
+   210		struct xdp_buff *xdp;
+   211	
+   212		if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
+   213			pr_debug("%s: short packet %i\n", dev->name, len);
+   214			DEV_STATS_INC(dev, rx_length_errors);
+   215	
+ > 216			xsk_buff_free(xdp);
+   217			return NULL;
+   218		}
+   219	
+   220		len -= vi->hdr_len;
+   221	
+   222		u64_stats_add(&stats->bytes, len);
+   223	
+   224		xdp = buf_to_xdp(vi, rq, buf, len);
+   225		if (!xdp)
+   226			return NULL;
+   227	
+   228		if (vi->mergeable_rx_bufs)
+   229			skb = virtnet_receive_xsk_merge(dev, vi, rq, xdp, xdp_xmit, stats);
+   230	
+   231		return skb;
+   232	}
+   233	
 
 -- 
 0-DAY CI Kernel Test Service
