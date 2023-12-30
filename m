@@ -1,68 +1,102 @@
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA51BA46
-	for <llvm@lists.linux.dev>; Sat, 30 Dec 2023 18:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-35fe765d63eso43170045ab.0
-        for <llvm@lists.linux.dev>; Sat, 30 Dec 2023 10:24:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703960648; x=1704565448;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLSqQXflCKXSuE0x3+EU2nuQ/UIrEEdd7MZHamp9QFc=;
-        b=QYvxz63YK38QYjyGrs90y+QG3mx+J1oHrMBaVNxPGttHVW820OUFkbT/7mRbtj14Du
-         CSQ52Q8cC51X6TxvVhzdThlmILqgGjK6HwGlhGCA0todeWZgQXNCb45VMYh87lBUwVvc
-         nGL5g7Y7aaWBqBIyymm28lwlfCDsp0Eqk6/BrcnI9nV1AutXy8wkidJDxuyBudqqYxy1
-         DqwC8DOmNLtZEtv1rvI9FDQ5TXmsdE1F3uvff7D+Q8gJSuP8OPJHFv/8aX1F8BbgPuCu
-         eihoC3S/dUpjXiHmv+pGVJ1ZIyExjrsY/fm7/AS9n2SbL0OXZsw4drx3irwyKSo7Wgiv
-         KJ0A==
-X-Gm-Message-State: AOJu0YwxgqYc5t8w+dPe78TRuOKidGcwR+3ersz5aGhSa7y6V89poLI3
-	qnBNKxBa478uVdLehWYePQ107N7eDkx9+d0B7XkY2yDfYIDZ
-X-Google-Smtp-Source: AGHT+IFWqTXNE8q8KmjU9VLfd4+RDLQxAjj4HgpJLHUx2jLQOVYptHdZLmafnKg5V4WQxG2bXL1tHOtyf5V7a0Wphhc/pZROnxKe
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC08BE4C;
+	Sat, 30 Dec 2023 19:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SmyJdi25"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703962851; x=1735498851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=whfhzrFP1XaKEEFEkjtUukTNpb1Ux0LYaBu1esD0LBE=;
+  b=SmyJdi25Ufi1zgYd9ic4IaVpLp6nEt1iHhksNZL0h1WVSD/plUhAe4Bw
+   U3lRJMQekPL2VFd0c9c3Ik7X76rehbborYPleCA3qe8+mFX9eVnX6MlWq
+   XfODt3DvO+ILDiQwVXp1FzVN+p/CDfEsLxP6IyE1OH65yGyQytnmB0lfQ
+   P2S/ToWBQ9q6jtNMmfPdtpFr0sctyHYkJX0UkQSTPslXFI/ifMm1HkKgz
+   V0idrmYhp6LSRVx+WkK/vD3BatsRdMKsTR+dFd1eZk8xBCswIcTfdM4e2
+   MwrEB5rpBrIbe4bjyWaaouFCL/LBi49Rx/3lF2fXZ7S/gNPFw5oj/mYk9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10939"; a="15365888"
+X-IronPort-AV: E=Sophos;i="6.04,318,1695711600"; 
+   d="scan'208";a="15365888"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2023 10:56:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10939"; a="772212696"
+X-IronPort-AV: E=Sophos;i="6.04,318,1695711600"; 
+   d="scan'208";a="772212696"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 30 Dec 2023 10:56:18 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rJeVM-000Ih9-0T;
+	Sat, 30 Dec 2023 18:56:16 +0000
+Date: Sun, 31 Dec 2023 02:55:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaolei Wang <xiaolei.wang@windriver.com>, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	linux-imx@nxp.com, peng.fan@nxp.com, treding@nvidia.com,
+	yibin.gong@nxp.com, robh@kernel.org, ranjani.vaidyanathan@nxp.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: imx: scu: ensure wakeup procedure calls
+ pm_system_wakeup()
+Message-ID: <202312310227.7eLUYzgH-lkp@intel.com>
+References: <20231230053831.67661-1-xiaolei.wang@windriver.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a6c:b0:360:134:535e with SMTP id
- w12-20020a056e021a6c00b003600134535emr1613798ilv.1.1703960648201; Sat, 30 Dec
- 2023 10:24:08 -0800 (PST)
-Date: Sat, 30 Dec 2023 10:24:08 -0800
-In-Reply-To: <000000000000fdfe4b060b91993f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000025c17f060dbe41ef@google.com>
-Subject: Re: [syzbot] [fs?] general protection fault in pagemap_scan_hugetlb_entry
-From: syzbot <syzbot+6e2ccedb96d1174e6a5f@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, brauner@kernel.org, dan.carpenter@linaro.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	sidhartha.kumar@oracle.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231230053831.67661-1-xiaolei.wang@windriver.com>
 
-syzbot suspects this issue was fixed by commit:
+Hi Xiaolei,
 
-commit 4a3ef6be03e6700037fc20e63aa5ffd972e435ca
-Author: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Date:   Mon Dec 4 18:32:34 2023 +0000
+kernel test robot noticed the following build warnings:
 
-    mm/hugetlb: have CONFIG_HUGETLB_PAGE select CONFIG_XARRAY_MULTI
+[auto build test WARNING on shawnguo/for-next]
+[also build test WARNING on linus/master v6.7-rc7 next-20231222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=126d4145e80000
-start commit:   df60cee26a2e Merge tag '6.7-rc3-smb3-server-fixes' of git:..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bb39fe85d254f638
-dashboard link: https://syzkaller.appspot.com/bug?extid=6e2ccedb96d1174e6a5f
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17befd62e80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d5a90ce80000
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/firmware-imx-scu-ensure-wakeup-procedure-calls-pm_system_wakeup/20231230-134202
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+patch link:    https://lore.kernel.org/r/20231230053831.67661-1-xiaolei.wang%40windriver.com
+patch subject: [PATCH] firmware: imx: scu: ensure wakeup procedure calls pm_system_wakeup()
+config: i386-buildonly-randconfig-003-20231230 (https://download.01.org/0day-ci/archive/20231231/202312310227.7eLUYzgH-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231231/202312310227.7eLUYzgH-lkp@intel.com/reproduce)
 
-If the result looks correct, please mark the issue as fixed by replying with:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312310227.7eLUYzgH-lkp@intel.com/
 
-#syz fix: mm/hugetlb: have CONFIG_HUGETLB_PAGE select CONFIG_XARRAY_MULTI
+All warnings (new ones prefixed by >>):
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>> drivers/firmware/imx/imx-scu.c:365:32: warning: unused variable 'imx_scu_pm_ops' [-Wunused-const-variable]
+     365 | static const struct dev_pm_ops imx_scu_pm_ops = {
+         |                                ^~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/imx_scu_pm_ops +365 drivers/firmware/imx/imx-scu.c
+
+   364	
+ > 365	static const struct dev_pm_ops imx_scu_pm_ops = {
+   366		SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(imx_scu_suspend_noirq,
+   367					      imx_scu_resume_noirq)
+   368	};
+   369	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
