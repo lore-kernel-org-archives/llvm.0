@@ -1,348 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A15E20F2
-	for <llvm@lists.linux.dev>; Sun, 31 Dec 2023 08:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE95BE47;
+	Sun, 31 Dec 2023 22:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T/I9/rOf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704011482;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZIxBgU+aBP87AMAOd0tNlNwCnnl6EjxtJLXdxIlNdzE=;
-	b=T/I9/rOfCr/GqMjthfetcK2mINiyBIUKXip8+r/SdPGDe9W8YZaz9fPvYotfe/UCahsO4+
-	uA+MrEh/cKOoViCBUHN6b7SfMYFo/mP4yWgYx+ASjP0qXWR7AQb/yRe1+/1M5nGx29a4SS
-	kMRYMsdepPfpCekX7hQZB5i1lIvJBVI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-314-8cTPLlCPPui0KxTMGrnnyA-1; Sun, 31 Dec 2023 03:31:20 -0500
-X-MC-Unique: 8cTPLlCPPui0KxTMGrnnyA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 537C1101A58F
-	for <llvm@lists.linux.dev>; Sun, 31 Dec 2023 08:31:20 +0000 (UTC)
-Received: from [172.64.11.28] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 254B82026D66;
-	Sun, 31 Dec 2023 08:31:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 8 of 226): Test report for master
- (6.7.0-rc7, mainline.kernel.org-clang, 453f5db0)
-Date: Sun, 31 Dec 2023 08:31:20 -0000
-To: jbastian@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cAs6avvz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704060560; x=1735596560;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8d1J15Mon+CMCpSQt5t6iUCErEXV8Fkc4EcOwdHGg+c=;
+  b=cAs6avvzwstDeVpo1UznLzHp1Bl5ttVRCDXQA8cMNm+QWHQD+Kqk7zHZ
+   RvgzlXnkB1HQl9DiIOVMmNEbr3Ps8iGy51WEVz3IlXG3Y1Fq07royI2pH
+   02TVlTWYr1ebMdu/pybjgV8368+HN5Y4zA8wpIgPhaxi3P5Q1G6qzOH5H
+   exa0eKZEeXjp1Y3EjlhoTbRB2l5GFeyZHhB5/iS5aO6BHYGkFTts/Tv3m
+   +UYbU1RVJFYRQR3a494V7ADfUYDeQW9h8TQLWPgBSAP+RUXMXxn9uZTmc
+   d1t13YCRc3xzszxZ4w+LafGd1qvQCjpWgY74FNKLGVGlZbdQXMz53PHsX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="395645657"
+X-IronPort-AV: E=Sophos;i="6.04,320,1695711600"; 
+   d="scan'208";a="395645657"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2023 14:09:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="1026390035"
+X-IronPort-AV: E=Sophos;i="6.04,320,1695711600"; 
+   d="scan'208";a="1026390035"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Dec 2023 14:09:14 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rK3zc-000Jlw-1V;
+	Sun, 31 Dec 2023 22:09:12 +0000
+Date: Mon, 1 Jan 2024 06:09:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Markus Elfring <Markus.Elfring@web.de>, linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	"D. Wythe" <alibuda@linux.alibaba.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Jan Karcher <jaka@linux.ibm.com>,
+	Paolo Abeni <pabeni@redhat.com>, Tony Lu <tonylu@linux.alibaba.com>,
+	Wen Gu <guwen@linux.alibaba.com>,
+	Wenjia Zhang <wenjia@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] net/smc: Improve exception handling in
+ smc_llc_cli_add_link_invite()
+Message-ID: <202401010536.XhzcWDPH-lkp@intel.com>
+References: <5253e660-6b66-4775-ae2f-06f5a1d40be5@web.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <07378.123123103312000267@us-mta-314.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5253e660-6b66-4775-ae2f-06f5a1d40be5@web.de>
 
-Hi, we tested your kernel and here are the results:
+Hi Markus,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on net/main]
+[also build test WARNING on net-next/main linus/master v6.7-rc7 next-20231222]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'trace-v6.7-rc7' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/trace/linux-trace
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/net-smc-Return-directly-after-a-failed-kzalloc-in-smc_fill_gid_list/20231231-231406
+base:   net/main
+patch link:    https://lore.kernel.org/r/5253e660-6b66-4775-ae2f-06f5a1d40be5%40web.de
+patch subject: [PATCH 2/2] net/smc: Improve exception handling in smc_llc_cli_add_link_invite()
+config: x86_64-randconfig-002-20231231 (https://download.01.org/0day-ci/archive/20240101/202401010536.XhzcWDPH-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240101/202401010536.XhzcWDPH-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/120500
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401010536.XhzcWDPH-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746734
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - stress: stress-ng - cpu-cache
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746742
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746744
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746748
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746763
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746767
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746769
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746776
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746780
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         aarch64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746784
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         ppc64le - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746890
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         ppc64le - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746902
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         ppc64le - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746906
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         ppc64le - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746913
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-         ppc64le - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746915
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746788
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - stress: stress-ng - cpu-cache
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746792
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746794
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746798
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746812
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746816
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746819
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746823
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-           s390x - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746825
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746829
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746840
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746844
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746863
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746867
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746874
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746876
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746880
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746886
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746705
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746720
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746724
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10746730
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
-ubby
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1819
-            Affected tests:
-                  x86_64 - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-Tests that were not ran because of internal issues:=20
-     ppc64le - kdump - sysrq-c
-     ppc64le - kdump - file-load
-     ppc64le - Reboot test
-      x86_64 (debug) - Hardware - CPU: Die Test
-      x86_64 (debug) - Storage - swraid scsi_raid
-      x86_64 (debug) - Reboot test
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
+>> net/smc/smc_llc.c:1175:34: warning: '&&' within '||' [-Wlogical-op-parentheses]
+    1174 |             lgr->type == SMC_LGR_ASYMMETRIC_PEER ||
+         |                                                  ~~
+    1175 |             lgr->type == SMC_LGR_SINGLE && lgr->max_links <= 1)
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc_llc.c:1175:34: note: place parentheses around the '&&' expression to silence this warning
+    1175 |             lgr->type == SMC_LGR_SINGLE && lgr->max_links <= 1)
+         |                                         ^                     
+         |             (                                                 )
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +1175 net/smc/smc_llc.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  1160	
+  1161	/* as an SMC client, invite server to start the add_link processing */
+  1162	static void smc_llc_cli_add_link_invite(struct smc_link *link,
+  1163						struct smc_llc_qentry *qentry)
+  1164	{
+  1165		struct smc_link_group *lgr = smc_get_lgr(link);
+  1166		struct smc_init_info *ini;
+  1167	
+  1168		if (lgr->smc_version == SMC_V2) {
+  1169			smc_llc_send_request_add_link(link);
+  1170			goto free_qentry;
+  1171		}
+  1172	
+  1173		if (lgr->type == SMC_LGR_SYMMETRIC ||
+  1174		    lgr->type == SMC_LGR_ASYMMETRIC_PEER ||
+> 1175		    lgr->type == SMC_LGR_SINGLE && lgr->max_links <= 1)
+  1176			goto free_qentry;
+  1177	
+  1178		ini = kzalloc(sizeof(*ini), GFP_KERNEL);
+  1179		if (!ini)
+  1180			goto free_qentry;
+  1181	
+  1182		ini->vlan_id = lgr->vlan_id;
+  1183		smc_pnet_find_alt_roce(lgr, ini, link->smcibdev);
+  1184		if (!ini->ib_dev)
+  1185			goto out;
+  1186	
+  1187		smc_llc_send_add_link(link, ini->ib_dev->mac[ini->ib_port - 1],
+  1188				      ini->ib_gid, NULL, SMC_LLC_REQ);
+  1189	out:
+  1190		kfree(ini);
+  1191	free_qentry:
+  1192		kfree(qentry);
+  1193	}
+  1194	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
