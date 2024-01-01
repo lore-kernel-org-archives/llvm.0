@@ -1,142 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE95BE47;
-	Sun, 31 Dec 2023 22:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5BC7FD;
+	Mon,  1 Jan 2024 00:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cAs6avvz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eu/oa86J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704060560; x=1735596560;
+  t=1704070472; x=1735606472;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8d1J15Mon+CMCpSQt5t6iUCErEXV8Fkc4EcOwdHGg+c=;
-  b=cAs6avvzwstDeVpo1UznLzHp1Bl5ttVRCDXQA8cMNm+QWHQD+Kqk7zHZ
-   RvgzlXnkB1HQl9DiIOVMmNEbr3Ps8iGy51WEVz3IlXG3Y1Fq07royI2pH
-   02TVlTWYr1ebMdu/pybjgV8368+HN5Y4zA8wpIgPhaxi3P5Q1G6qzOH5H
-   exa0eKZEeXjp1Y3EjlhoTbRB2l5GFeyZHhB5/iS5aO6BHYGkFTts/Tv3m
-   +UYbU1RVJFYRQR3a494V7ADfUYDeQW9h8TQLWPgBSAP+RUXMXxn9uZTmc
-   d1t13YCRc3xzszxZ4w+LafGd1qvQCjpWgY74FNKLGVGlZbdQXMz53PHsX
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="395645657"
-X-IronPort-AV: E=Sophos;i="6.04,320,1695711600"; 
-   d="scan'208";a="395645657"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2023 14:09:18 -0800
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=bq5FZFx3Ptya3CmiaIHeqnx7z0srP/JD06vcWqWmOB0=;
+  b=Eu/oa86JrGTgl3RxOPFXfovB025Ii62YJWnKuC2o6HnwXl6quJVUWFdB
+   4UiPG/WV40m+p3ILRzn5TLu4BPTYCcB3L/4jpFaD3mgjsZUofAXbLy4bK
+   nntvEdY5jFKTqR5x4r3mzOvYpAxfrW3nn02GY/L4WAQHutqKDWNzYUMZV
+   Gy5qCOXGKegnsK2TFqugnlmMH1QRlwsrlQjSEk/Cnn0IqsVqOzS8iZXVo
+   fto3J45jWWWP4yXwUU4dakCuu9K9nwOcF6S2jbO2/mZyvbHJHceB6wi9j
+   lgB1GkoBfGqQEX7nGBOClmJ4nv2KlzikEqe+P+h8bCHPEzOrDjJKAq8gA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="463176670"
+X-IronPort-AV: E=Sophos;i="6.04,321,1695711600"; 
+   d="scan'208";a="463176670"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2023 16:54:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="1026390035"
-X-IronPort-AV: E=Sophos;i="6.04,320,1695711600"; 
-   d="scan'208";a="1026390035"
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="772469584"
+X-IronPort-AV: E=Sophos;i="6.04,321,1695711600"; 
+   d="scan'208";a="772469584"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Dec 2023 14:09:14 -0800
+  by orsmga007.jf.intel.com with ESMTP; 31 Dec 2023 16:54:27 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rK3zc-000Jlw-1V;
-	Sun, 31 Dec 2023 22:09:12 +0000
-Date: Mon, 1 Jan 2024 06:09:07 +0800
+	id 1rK6ZU-000Jsa-24;
+	Mon, 01 Jan 2024 00:54:24 +0000
+Date: Mon, 1 Jan 2024 08:54:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>, linux-s390@vger.kernel.org,
-	netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+To: Markus Elfring <Markus.Elfring@web.de>, netdev@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Anjali Kulkarni <anjali.k.kulkarni@oracle.com>,
 	"David S. Miller" <davem@davemloft.net>,
-	"D. Wythe" <alibuda@linux.alibaba.com>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Jan Karcher <jaka@linux.ibm.com>,
-	Paolo Abeni <pabeni@redhat.com>, Tony Lu <tonylu@linux.alibaba.com>,
-	Wen Gu <guwen@linux.alibaba.com>,
-	Wenjia Zhang <wenjia@linux.ibm.com>
+	Jakub Kicinski <kuba@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] net/smc: Improve exception handling in
- smc_llc_cli_add_link_invite()
-Message-ID: <202401010536.XhzcWDPH-lkp@intel.com>
-References: <5253e660-6b66-4775-ae2f-06f5a1d40be5@web.de>
+Subject: Re: [PATCH 2/4] netlink: Move =?utf-8?Q?an?=
+ =?utf-8?Q?_assignment_for_the_variable_=E2=80=9Csk?= =?utf-8?B?4oCd?= in
+ __netlink_kernel_create()
+Message-ID: <202401010855.4iU6im1B-lkp@intel.com>
+References: <223a61e9-f826-4f37-b514-ca6ed53b1269@web.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5253e660-6b66-4775-ae2f-06f5a1d40be5@web.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <223a61e9-f826-4f37-b514-ca6ed53b1269@web.de>
 
 Hi Markus,
 
 kernel test robot noticed the following build warnings:
 
 [auto build test WARNING on net/main]
-[also build test WARNING on net-next/main linus/master v6.7-rc7 next-20231222]
-[cannot apply to horms-ipvs/master]
+[also build test WARNING on net-next/main linus/master horms-ipvs/master v6.7-rc8 next-20231222]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/net-smc-Return-directly-after-a-failed-kzalloc-in-smc_fill_gid_list/20231231-231406
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/netlink-Improve-exception-handling-in-__netlink_kernel_create/20240101-015025
 base:   net/main
-patch link:    https://lore.kernel.org/r/5253e660-6b66-4775-ae2f-06f5a1d40be5%40web.de
-patch subject: [PATCH 2/2] net/smc: Improve exception handling in smc_llc_cli_add_link_invite()
-config: x86_64-randconfig-002-20231231 (https://download.01.org/0day-ci/archive/20240101/202401010536.XhzcWDPH-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240101/202401010536.XhzcWDPH-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/223a61e9-f826-4f37-b514-ca6ed53b1269%40web.de
+patch subject: [PATCH 2/4] netlink: Move an assignment for the variable “sk” in __netlink_kernel_create()
+config: arm-randconfig-001-20240101 (https://download.01.org/0day-ci/archive/20240101/202401010855.4iU6im1B-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 8a4266a626914765c0c69839e8a51be383013c1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240101/202401010855.4iU6im1B-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401010536.XhzcWDPH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401010855.4iU6im1B-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> net/smc/smc_llc.c:1175:34: warning: '&&' within '||' [-Wlogical-op-parentheses]
-    1174 |             lgr->type == SMC_LGR_ASYMMETRIC_PEER ||
-         |                                                  ~~
-    1175 |             lgr->type == SMC_LGR_SINGLE && lgr->max_links <= 1)
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:1175:34: note: place parentheses around the '&&' expression to silence this warning
-    1175 |             lgr->type == SMC_LGR_SINGLE && lgr->max_links <= 1)
-         |                                         ^                     
-         |             (                                                 )
+>> net/netlink/af_netlink.c:2044:6: warning: variable 'sk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    2044 |         if (!listeners)
+         |             ^~~~~~~~~~
+   net/netlink/af_netlink.c:2081:25: note: uninitialized use occurs here
+    2081 |         netlink_kernel_release(sk);
+         |                                ^~
+   net/netlink/af_netlink.c:2044:2: note: remove the 'if' if its condition is always false
+    2044 |         if (!listeners)
+         |         ^~~~~~~~~~~~~~~
+    2045 |                 goto out_netlink_release_sock;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/netlink/af_netlink.c:2021:17: note: initialize the variable 'sk' to silence this warning
+    2021 |         struct sock *sk;
+         |                        ^
+         |                         = NULL
    1 warning generated.
 
 
-vim +1175 net/smc/smc_llc.c
+vim +2044 net/netlink/af_netlink.c
 
-  1160	
-  1161	/* as an SMC client, invite server to start the add_link processing */
-  1162	static void smc_llc_cli_add_link_invite(struct smc_link *link,
-  1163						struct smc_llc_qentry *qentry)
-  1164	{
-  1165		struct smc_link_group *lgr = smc_get_lgr(link);
-  1166		struct smc_init_info *ini;
-  1167	
-  1168		if (lgr->smc_version == SMC_V2) {
-  1169			smc_llc_send_request_add_link(link);
-  1170			goto free_qentry;
-  1171		}
-  1172	
-  1173		if (lgr->type == SMC_LGR_SYMMETRIC ||
-  1174		    lgr->type == SMC_LGR_ASYMMETRIC_PEER ||
-> 1175		    lgr->type == SMC_LGR_SINGLE && lgr->max_links <= 1)
-  1176			goto free_qentry;
-  1177	
-  1178		ini = kzalloc(sizeof(*ini), GFP_KERNEL);
-  1179		if (!ini)
-  1180			goto free_qentry;
-  1181	
-  1182		ini->vlan_id = lgr->vlan_id;
-  1183		smc_pnet_find_alt_roce(lgr, ini, link->smcibdev);
-  1184		if (!ini->ib_dev)
-  1185			goto out;
-  1186	
-  1187		smc_llc_send_add_link(link, ini->ib_dev->mac[ini->ib_port - 1],
-  1188				      ini->ib_gid, NULL, SMC_LLC_REQ);
-  1189	out:
-  1190		kfree(ini);
-  1191	free_qentry:
-  1192		kfree(qentry);
-  1193	}
-  1194	
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2009  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2010  /*
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2011   *	We export these functions to other modules. They provide a
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2012   *	complete set of kernel non-blocking support for message
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2013   *	queueing.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2014   */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2015  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2016  struct sock *
+9f00d9776bc5be Pablo Neira Ayuso 2012-09-08  2017  __netlink_kernel_create(struct net *net, int unit, struct module *module,
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2018  			struct netlink_kernel_cfg *cfg)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2019  {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2020  	struct socket *sock;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2021  	struct sock *sk;
+77247bbb309424 Patrick McHardy   2005-08-14  2022  	struct netlink_sock *nlk;
+5c398dc8f5a58b Eric Dumazet      2010-10-24  2023  	struct listeners *listeners = NULL;
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2024  	struct mutex *cb_mutex = cfg ? cfg->cb_mutex : NULL;
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2025  	unsigned int groups;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2026  
+fab2caf62ed03d Akinobu Mita      2006-08-29  2027  	BUG_ON(!nl_table);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2028  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2029  	if (unit < 0 || unit >= MAX_LINKS)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2030  		return NULL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2031  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2032  	if (sock_create_lite(PF_NETLINK, SOCK_DGRAM, unit, &sock))
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2033  		return NULL;
+13d3078e22f565 Eric W. Biederman 2015-05-08  2034  
+13d3078e22f565 Eric W. Biederman 2015-05-08  2035  	if (__netlink_create(net, sock, cb_mutex, unit, 1) < 0)
+23fe18669e7fda Pavel Emelyanov   2008-01-30  2036  		goto out_sock_release_nosk;
+23fe18669e7fda Pavel Emelyanov   2008-01-30  2037  
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2038  	if (!cfg || cfg->groups < 32)
+4277a083ecd2c8 Patrick McHardy   2006-03-20  2039  		groups = 32;
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2040  	else
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2041  		groups = cfg->groups;
+4277a083ecd2c8 Patrick McHardy   2006-03-20  2042  
+5c398dc8f5a58b Eric Dumazet      2010-10-24  2043  	listeners = kzalloc(sizeof(*listeners) + NLGRPSZ(groups), GFP_KERNEL);
+4277a083ecd2c8 Patrick McHardy   2006-03-20 @2044  	if (!listeners)
+90ae404765d263 Markus Elfring    2023-12-31  2045  		goto out_netlink_release_sock;
+4277a083ecd2c8 Patrick McHardy   2006-03-20  2046  
+e547df909ec09d Markus Elfring    2023-12-31  2047  	sk = sock->sk;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2048  	sk->sk_data_ready = netlink_data_ready;
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2049  	if (cfg && cfg->input)
+a31f2d17b331db Pablo Neira Ayuso 2012-06-29  2050  		nlk_sk(sk)->netlink_rcv = cfg->input;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2051  
+8ea65f4a2dfaaf Herbert Xu        2015-01-26  2052  	if (netlink_insert(sk, 0))
+77247bbb309424 Patrick McHardy   2005-08-14  2053  		goto out_sock_release;
+4fdb3bb723db46 Harald Welte      2005-08-09  2054  
+77247bbb309424 Patrick McHardy   2005-08-14  2055  	nlk = nlk_sk(sk);
+8fe08d70a2b61b Eric Dumazet      2023-08-11  2056  	set_bit(NETLINK_F_KERNEL_SOCKET, &nlk->flags);
+4fdb3bb723db46 Harald Welte      2005-08-09  2057  
+4fdb3bb723db46 Harald Welte      2005-08-09  2058  	netlink_table_grab();
+b4b510290b056b Eric W. Biederman 2007-09-12  2059  	if (!nl_table[unit].registered) {
+4277a083ecd2c8 Patrick McHardy   2006-03-20  2060  		nl_table[unit].groups = groups;
+5c398dc8f5a58b Eric Dumazet      2010-10-24  2061  		rcu_assign_pointer(nl_table[unit].listeners, listeners);
+af65bdfce98d79 Patrick McHardy   2007-04-20  2062  		nl_table[unit].cb_mutex = cb_mutex;
+77247bbb309424 Patrick McHardy   2005-08-14  2063  		nl_table[unit].module = module;
+9785e10aedfa0f Pablo Neira Ayuso 2012-09-08  2064  		if (cfg) {
+9785e10aedfa0f Pablo Neira Ayuso 2012-09-08  2065  			nl_table[unit].bind = cfg->bind;
+6251edd932ce3f Hiroaki SHIMODA   2014-11-13  2066  			nl_table[unit].unbind = cfg->unbind;
+a4c9a56e6a2cde Anjali Kulkarni   2023-07-19  2067  			nl_table[unit].release = cfg->release;
+9785e10aedfa0f Pablo Neira Ayuso 2012-09-08  2068  			nl_table[unit].flags = cfg->flags;
+9785e10aedfa0f Pablo Neira Ayuso 2012-09-08  2069  		}
+ab33a1711cf60b Patrick McHardy   2005-08-14  2070  		nl_table[unit].registered = 1;
+f937f1f46b6d2f Jesper Juhl       2007-10-15  2071  	} else {
+f937f1f46b6d2f Jesper Juhl       2007-10-15  2072  		kfree(listeners);
+869e58f87094b1 Denis V. Lunev    2008-01-18  2073  		nl_table[unit].registered++;
+b4b510290b056b Eric W. Biederman 2007-09-12  2074  	}
+4fdb3bb723db46 Harald Welte      2005-08-09  2075  	netlink_table_ungrab();
+77247bbb309424 Patrick McHardy   2005-08-14  2076  	return sk;
+77247bbb309424 Patrick McHardy   2005-08-14  2077  
+4fdb3bb723db46 Harald Welte      2005-08-09  2078  out_sock_release:
+4277a083ecd2c8 Patrick McHardy   2006-03-20  2079  	kfree(listeners);
+90ae404765d263 Markus Elfring    2023-12-31  2080  out_netlink_release_sock:
+9dfbec1fb2bedf Denis V. Lunev    2008-02-29  2081  	netlink_kernel_release(sk);
+23fe18669e7fda Pavel Emelyanov   2008-01-30  2082  	return NULL;
+23fe18669e7fda Pavel Emelyanov   2008-01-30  2083  
+23fe18669e7fda Pavel Emelyanov   2008-01-30  2084  out_sock_release_nosk:
+4fdb3bb723db46 Harald Welte      2005-08-09  2085  	sock_release(sock);
+77247bbb309424 Patrick McHardy   2005-08-14  2086  	return NULL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2087  }
+9f00d9776bc5be Pablo Neira Ayuso 2012-09-08  2088  EXPORT_SYMBOL(__netlink_kernel_create);
+b7c6ba6eb1234e Denis V. Lunev    2008-01-28  2089  
 
 -- 
 0-DAY CI Kernel Test Service
