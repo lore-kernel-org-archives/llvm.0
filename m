@@ -1,202 +1,414 @@
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12136171C4;
-	Wed,  3 Jan 2024 03:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC63F1798A
+	for <llvm@lists.linux.dev>; Wed,  3 Jan 2024 05:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b="Nz5xGUBN"
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 403316Ii003028;
-	Wed, 3 Jan 2024 03:43:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
-	 h=subject:to:cc:references:from:message-id:date:in-reply-to
-	:content-type:content-transfer-encoding:mime-version; s=
-	PPS06212021; bh=BYBJKTXu+BqaMKAdDzUNuTkuhM7SIlZurWmerJnll1s=; b=
-	Nz5xGUBNATtWaSAEwrf32fNKKYu8E6B0oe6kesLU1t8c6l7bzWG1ZXjMoj8bYXV4
-	qDsf4CBzk6yD/c0REQ93BvVY2VIQRLazS28avHMS9f04GeJQ37QwZ7Fqel21spFM
-	9vWKRBct40hUDx04Ec75XIL9DvhfYSRWQtMTLAfGZqgsRHMGy8Smpo1GkENNyw26
-	9V/u6/CeKWdYpsPUSEwoj9o6T5OTpwHORPNCos6WeJPRzzgKi25AWBsVDs1Vcmqh
-	YrGXunB1Db2lqpHAB8uV2TPZWkO5wnnN3Dm5BO65UkdQGHxew1RhRCE++TyqlCyE
-	ru7u0qVoLNQQDN77guKSmA==
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3va8dxbp96-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jan 2024 03:43:56 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qo78t5aYory4uF0xAuc4/ZrrEBAnadjc+d2PSMLHv4yM3N+fFhKpWJvY0c62nK+Sz1ClT81xlok3G59r6wG4OAEL9gJAtUb/ESxDUGfNa1ihJ+E715wROIl+tRnQa3QkddtRSa1rE7quEchEE3mtT/sZu4DG4eomswx9eipMw3S7oDM9cgX/QTb6f8RsarKL4nlcJoQNqcEBeDZgWpQn7le76h0ZiTNig8dj/jOXjIGB9umF0ru67/cGBgoYKuIVgAFeOJFlE7ZpOCSLQWuVP0aDFzC3RPO8j2emld/eUuGXFKSk5/dmMYl3ZcaqoCfp7Fk/pR/GeOoXnwlkJYsMAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BYBJKTXu+BqaMKAdDzUNuTkuhM7SIlZurWmerJnll1s=;
- b=fU4TT7r/YOYPzCwH0DTp1bl90i9J3dOXmyoS1OMO6c8ZwVBoxi8MRRWNblrfGjNxLIXbm2kiQwNEYCPa7C3Muw35gYIoab81BpCiG3MMK/vc4jAT5Mvk1bXBINVTUfd886B7mO/TK5Gen/oHe7941U3avsZGaGRXA7EME9tQ47FAIK/qzzixVwmv7q6JtZyMeTabxBFivJBfzHD/dssaOiTy5glRrHQXMo5pKTaBNB47DZ5VaResK40IdEk2r5w0RR9HODV/0u8asLFl/yA2wzmgaHapi2LK6/JbDK1AJAEzO9oRCZnnHuiDTsVIttHRouCrxBMD74FBY4Q0dsZs+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from MW5PR11MB5764.namprd11.prod.outlook.com (2603:10b6:303:197::8)
- by MW3PR11MB4522.namprd11.prod.outlook.com (2603:10b6:303:2d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13; Wed, 3 Jan
- 2024 03:43:54 +0000
-Received: from MW5PR11MB5764.namprd11.prod.outlook.com
- ([fe80::6147:120e:d511:3ece]) by MW5PR11MB5764.namprd11.prod.outlook.com
- ([fe80::6147:120e:d511:3ece%3]) with mapi id 15.20.7135.023; Wed, 3 Jan 2024
- 03:43:54 +0000
-Subject: Re: [PATCH] firmware: imx: scu: ensure wakeup procedure calls
- pm_system_wakeup()
-To: kernel test robot <lkp@intel.com>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, peng.fan@nxp.com, treding@nvidia.com,
-        yibin.gong@nxp.com, robh@kernel.org, ranjani.vaidyanathan@nxp.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20231230053831.67661-1-xiaolei.wang@windriver.com>
- <202312310227.7eLUYzgH-lkp@intel.com>
-From: wangxiaolei <xiaolei.wang@windriver.com>
-Message-ID: <30273b0d-11db-356e-09cf-f8a97c0a0406@windriver.com>
-Date: Wed, 3 Jan 2024 11:43:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-In-Reply-To: <202312310227.7eLUYzgH-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: TYCP301CA0034.JPNP301.PROD.OUTLOOK.COM
- (2603:1096:400:380::14) To MW5PR11MB5764.namprd11.prod.outlook.com
- (2603:10b6:303:197::8)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZxRJdLZl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282AAC433CD
+	for <llvm@lists.linux.dev>; Wed,  3 Jan 2024 05:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704259031;
+	bh=Ftpkj8e4e/uJKLz0f6l5DA/ZEcA8s4mTAOFPduXaCbI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZxRJdLZlbSrkV7T82ZKgPZx+llIrTh1kkLZc/KEO7WxKtoanyk3NZKivKe6QXK0L2
+	 Xu+chuiAZYryC0swEd9TBWTSF9Au9oBBPt3TNzesNPUCOYmZC5MCc1wCzoFRsloYmG
+	 5ZZyhjm0H9noaYSTNk8Bay5WbI41FsYHxeJUcGzWawzag55KMgf1s2OThovcAqEHTQ
+	 xJ7osUUwAW+uZj5K8co7VMeys0upolKqVDqo2Tt7D1SrAR3GBCNpc7AiPxtbYM0D8e
+	 FWjHlugYXJ4RV5mL/rOPl8XxamR3HNYnu5j2UUzCV5KVc9XwS5odBWtj9x98XJ6R10
+	 NB8qYe7fqkh1A==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-2041e117abaso4916324fac.0
+        for <llvm@lists.linux.dev>; Tue, 02 Jan 2024 21:17:11 -0800 (PST)
+X-Gm-Message-State: AOJu0YxMBliOAuQlTjbZVcb3eDQpIxFnxTjU103fwxL5Fj5qIcgn2Tlm
+	G58mvE1fLOitZZZe8TqxOOEvDGUdzGZHJ960cvI=
+X-Google-Smtp-Source: AGHT+IE4S3FLEXM55aEyV/3DkpRfihQLelFHpLW6nefXRLOPEfw7AVJL15lBRzfviRegU7+JEIHwQsIrADmKgZIeMcc=
+X-Received: by 2002:a05:6871:1c5:b0:204:5a14:c4c9 with SMTP id
+ q5-20020a05687101c500b002045a14c4c9mr12651064oad.52.1704259030325; Tue, 02
+ Jan 2024 21:17:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW5PR11MB5764:EE_|MW3PR11MB4522:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3262787-5093-45be-f02f-08dc0c0e3507
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	nOo5jjJWBl+GypQYyNg9rRjJroW623Q+PPKEJKCuRmIthG1WUuzKs/LhtuzyVAomJw/imCnfrvRPD064VPTPZvea1NUeDzLDCnUGk4HxWty7gBA8RgMiJPaLLopnMvd5O3PBa1VuNU1IuxI7ESZ5+EKyiOW3KOLMJ6v/IIrV/Iwm+hwXXAUL+KHzeDCQPw/ZsK9MZAvtbcAuZNR5juAzo+DVzWJpSRJGtj80eTzhnb6O+S9VlNRux2gJtsim68LAN2Sn7T67BnZ+tt9LTCh4aQ4iXJDhOFcflBJxYLcvXsUYG5eYh2pNVs7rvc6J4+WLOQd/ov3r7xPrjKJHY7X0Z3dC25/672Xfbb3kaxk1mR6Czt/Wedp92TrLhXf9s8mSsf+obHi57lAbROJPQ2C+PT/346Wy9nfP2HnrV05yp0OMgRXAUoMF4j4ORj6UTPcdGYOk64wEWQtYFzDGuLHNi/RHoe9HBn/6OwnN7fFgtWJG+UltzBAvjOi00yNFS1tPX6aAmTZr2LxG2gAT96mOeGkD1lh3KEleIMaKl3rJtII1oX1eaz/N9CNt7bGSdLSDLQireQP/Wqv/8EQge7YnKec/iYDUQZpjJDz4EprAI4h0vsly/DqyjPx0rKVig17+vo82eXqzbM8xa6RNWNhxTb4eynQBPCRFBbDiscL4EoFeYg52crZv8jyCSbmR4nwe61UP43QZnTZr8ETD10/jO2728l7ACOfbyq/MkBj7eVEk/B6ypzJWe7ZvhVAJGEYEPRutj6aXdQe6pPON0KfUwQ==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5764.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(39850400004)(346002)(376002)(366004)(230922051799003)(230173577357003)(230273577357003)(451199024)(1800799012)(186009)(64100799003)(6506007)(38100700002)(36756003)(921011)(31686004)(31696002)(86362001)(53546011)(966005)(83380400001)(478600001)(6666004)(4326008)(66556008)(66476007)(66946007)(6486002)(26005)(316002)(2616005)(8936002)(8676002)(6512007)(41300700001)(7416002)(5660300002)(2906002)(43062005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?VDVQM1hMQ0ZoRVJsUjJ1RXpyTmtibllVRmxlRTEwZXBWL0x3cGFsN0ZlMlYr?=
- =?utf-8?B?SzFaMFpuM1BPSS9xTDFLT0dTMjJxeDVpSEpXa3VQZ1hFd0FHeHlNYmFaTlc1?=
- =?utf-8?B?eFlXK2dFUkVvenlxNVFya1BQdXZVWXppVHdUVWs4emFpVE1LTE5vRUx6VnR4?=
- =?utf-8?B?b3VUN3E0NGFXdE5LeWJFeThva0JxVE42cGJnUVJJU2h6WEU2ZDF4TFhOd29C?=
- =?utf-8?B?dzhzN3d0b3ltODJRa3pZblNFbFhWVWZVMWZ3VGtmcEtzeExqY2xUbzFNNFlk?=
- =?utf-8?B?a3VyZmZjallXTW9wVDlURnFXZ2dCMXRvUi9HeVNlZDhBcjM3Mk40N2xsbjgx?=
- =?utf-8?B?YjZHdGlVVnc4WlZhMHRleG1MMHJjM0VycHRMMjdLZXB1NkFoNnpOQmJCYjM5?=
- =?utf-8?B?RFk2UjhQQ2R6U0JUcklGcUp0ZnlOOGRvdXM4bXJRR2hNN1ZiU2JOYkhXaXpz?=
- =?utf-8?B?M0Y2ajdYRmJlTWc3cGRFcjFPem9oOEtIQUhIQlBicU1KQTF3NUhjeGE2SzZT?=
- =?utf-8?B?aXVhaDlzS3JCQnZxYnJtZE16aFJWelA2RGNQV2tlSWEzL1RIaEoyZWhQU1JF?=
- =?utf-8?B?b1dVMG9WdUJkU3g5T0RkdlBaYnlvVmQvVGN5dGh5KzlMdHl4K3hhMDJJcDh0?=
- =?utf-8?B?a2pKWFhDY3J6dm1MU2VsOXE3NG5JM21aSVhvNld6by9RVGVXODdmd05tVzVi?=
- =?utf-8?B?azJsb1FMR01yL0F6cjFJNnhQUWRVQWR6V2Jta2J6V1JZekd4dGdobENXbWQx?=
- =?utf-8?B?b2xKSGNJUDlaRXExNTRrYy83SGhqRFRTME1HTFYzR0NLaFhDN2F5MUtHUzl6?=
- =?utf-8?B?RUNKVTVXdWhRUzlQdjYxNnNWcS9GRWRhMWl3dTliYW45aHZHYVlkRTlvU2Jz?=
- =?utf-8?B?WjdnQ0dyNVdSS25BbTJtVEljaEVrT01YL3NLaG5Xbms1bzh3U3NYMnJ1eEh4?=
- =?utf-8?B?djdmUlN3MHRWV1NNTnl6OXlvL0NSU0VabnNtTzg0bnE1MnFFYVFzT0ZGclNy?=
- =?utf-8?B?YkQ5SUNlNnpHVnVZNDRPNGtDd21UbG81T2puR0dNUElkK0Nkd0VkVWliZW91?=
- =?utf-8?B?dzAyV21WSmRCWWNuZjhVRVFYNG95NFZ6dk94QVdObWhScC9jSFRFaUY4WTBk?=
- =?utf-8?B?ZSthWkZTRzBFaUhoeTZndy9nSktLS2lucUw4UWdtWU9FVHpiNks2OEVlK05p?=
- =?utf-8?B?VEd2RWhDYjVHUmFsMHprVFlFdEVmZnZkeXh0TkEyaWlyWHNWajF0NnVIcU9r?=
- =?utf-8?B?eExqdXZXZVprZ0NuV00rUDhrc3I0THk0QlVYcmI2em9wbnZXVWhqNmg1aFVk?=
- =?utf-8?B?WndMcmErQmtBYXhZSkxlYTRQUkhTMXZPMHZFWU9CWmNNSEs4TVEvcFV1U2dO?=
- =?utf-8?B?WTl3Wm5jSkRDcmwwUllZSkNCTVEvTDZKVVRmb3k2bXpOL3cvNzAyRExwbCtT?=
- =?utf-8?B?ajdsNS9aVkxHZWU2WFhvREdwYUVjWXFaVUZYd1R2R1N3MExOdW56VGlTci9H?=
- =?utf-8?B?dUw3YlZiaSszVUtuenczNzZRRm9TMmM2Sko5Z2pwblJQYmF3M3VEUDZGbjU3?=
- =?utf-8?B?QytITFpDQzNveTVQSTlrTC85V2Q5eVF5cTNwZWpCOUJEbG5LcTFZZ2RwVk5E?=
- =?utf-8?B?eURnY3lEWG1WZWEvRVhnR3JWNWFtVHp2REwzWWw2RExBK1FxbzhTdWhyNUdL?=
- =?utf-8?B?U0RXR0JMS1JjVldGOEFmVS9IeGo3bm5oNmVBNElPM25rTEJ5Q2ZtVGI2U2g0?=
- =?utf-8?B?VHBQdlBvMFJvOXNYVko4TE44dU16RGdpVkp3azZvWkJ4MnZnNnYyWWJlMDBm?=
- =?utf-8?B?WlJod29CM0w3Yzl6dVR6ZWxTWU5IQnBSbXZ5YWJuOTNUZU4ySzZSOTZ6OUp3?=
- =?utf-8?B?dUpiSmtSRVlUeUpIams1U0tRbkJ4THgzVlU1MDRmZ1RaS2J5c0dWMVVoVlpl?=
- =?utf-8?B?LzBHYkJLcmZ2cHY5SW01Y2xXZVJrUXRiWXZiVGYrc3JCelZVNVh0SktocGJJ?=
- =?utf-8?B?U2VtajkvMHVNSkFRUitVNko0WDREVmxiOUdIU2o2VlJIQUNOSklwM1FQUzNR?=
- =?utf-8?B?MjNQMnpoejExYVpmNTBwcUdpNHdTaHhEQUlPQkhEbHRrUXh3T0dTZW5WaU1J?=
- =?utf-8?B?d2JqMWNJeEcwc2ZxZHRIOFk4ZW82MjBFUUJDTTdNc01pT1FtK2hYd3RHOWlI?=
- =?utf-8?B?MXc9PQ==?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3262787-5093-45be-f02f-08dc0c0e3507
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5764.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2024 03:43:53.9661
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R7VfKnKU8EL/pHuUf+RJ5HRFD4GCBGVo6h+4XsodZbJXci2nPNb94xAW/8CGqnX7qHI9PPI+cTKqWOE2+c+5dU4L5o3imQ08CccrthcI5ro=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4522
-X-Proofpoint-GUID: KNW6eEHWzqQbIoXw8oeJVvWjP8HcMGMI
-X-Proofpoint-ORIG-GUID: KNW6eEHWzqQbIoXw8oeJVvWjP8HcMGMI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-16_25,2023-11-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- adultscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
- clxscore=1011 mlxlogscore=999 priorityscore=1501 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
- definitions=main-2401030027
+References: <20231204214635.2916691-1-alessandro.carminati@gmail.com>
+ <CAK7LNASo6dDrgt=cyLDBqSuZKdb=+SpJCnigBXWN8Y5ricECKQ@mail.gmail.com> <CAPp5cGSYUvOXdR8e_N-LcJY74hrXFQitykCWN3NDYmQ48nyBNA@mail.gmail.com>
+In-Reply-To: <CAPp5cGSYUvOXdR8e_N-LcJY74hrXFQitykCWN3NDYmQ48nyBNA@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 3 Jan 2024 14:16:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARZ07hnAH_LT0QDKuHmn23Mgs-v124B3rpVjvBD=j21fA@mail.gmail.com>
+Message-ID: <CAK7LNARZ07hnAH_LT0QDKuHmn23Mgs-v124B3rpVjvBD=j21fA@mail.gmail.com>
+Subject: Re: [PATCH v7] scripts/link-vmlinux.sh: Add alias to duplicate
+ symbols for kallsyms
+To: Alessandro Carminati <alessandro.carminati@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Mladek <pmladek@suse.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Daniel Bristot de Oliveira <bristot@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
+	Nick Alcock <nick.alcock@oracle.com>, Kris Van Hees <kris.van.hees@oracle.com>, 
+	Eugene Loh <eugene.loh@oracle.com>, Francis Laniel <flaniel@linux.microsoft.com>, 
+	Viktor Malik <vmalik@redhat.com>, Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jan 1, 2024 at 8:11=E2=80=AFPM Alessandro Carminati
+<alessandro.carminati@gmail.com> wrote:
+>
+> Hello,
+>
+>
+>
+> Il giorno dom 31 dic 2023 alle ore 06:35 Masahiro Yamada
+> <masahiroy@kernel.org> ha scritto:
+> >
+> > On Tue, Dec 5, 2023 at 6:48=E2=80=AFAM Alessandro Carminati (Red Hat)
+> > <alessandro.carminati@gmail.com> wrote:
+> > >
+> > > In the kernel environment, situations frequently arise where identica=
+l
+> > > names are shared among symbols within both the core image and modules=
+.
+> > > While this doesn't pose issues for the kernel's binary itself, it
+> > > complicates trace or probe operations using tools like kprobe.
+> > >
+> > > This patch introduces "kas_alias" to address this challenge.
+> > >
+> > > During the kernel's build process, just before linking the vmlinux
+> > > image in the "scripts/link-vmlinux.sh", symbol name frequencies are
+> > > collected.
+> > > This collection includes both the core kernel components and modules.
+> > > Subsequently, within the same action, the nm data relative to vmlinux
+> > > is modified by adding aliases based on the comprehensive symbol
+> > > information gathered.
+> > >
+> > > The collection process occurs in two phases:
+> > >
+> > > 1. First phase: Executed during the linking of vmlinux, "kas_alias" s=
+cans
+> > >    all symbols provided by the 'nm' data against the vmlinux core ima=
+ge
+> > >    and all objects used for module linkage. This phase requires all
+> > >    modules objects to be produced at this stage, thereby adding a vml=
+inux
+> > >    dependency for linking modules in 'scripts/Makefile.modfinal'.
+> > >
+> > > 2. Second phase: In a subsequent run in the same build, "kas_alias"
+> > >    processes module objects and injects aliases into the objects' sym=
+bol
+> > >    tables where necessary. This operation is done by modifying
+> > >    'scripts/Makefile.modfinal' to include an action for each processe=
+d
+> > >    module.
+> > >
+> > > Example:
+> > >
+> > > Consider the symbol "device_show", you can expect an output like the
+> > > following:
+> > >
+> > >  ~ # cat /proc/kallsyms | grep " name_show"
+> > > ffffcaa2bb4f01c8 t name_show
+> > > ffffcaa2bb4f01c8 t name_show@kernel_irq_irqdesc_c_264
+> > > ffffcaa2bb9c1a30 t name_show
+> > > ffffcaa2bb9c1a30 t name_show@drivers_pnp_card_c_186
+> > > ffffcaa2bbac4754 t name_show
+> > > ffffcaa2bbac4754 t name_show@drivers_regulator_core_c_678
+> > > ffffcaa2bbba4900 t name_show
+> > > ffffcaa2bbba4900 t name_show@drivers_base_power_wakeup_stats_c_93
+> > > ffffcaa2bbec4038 t name_show
+> > > ffffcaa2bbec4038 t name_show@drivers_rtc_sysfs_c_26
+> > > ffffcaa2bbecc920 t name_show
+> > > ffffcaa2bbecc920 t name_show@drivers_i2c_i2c_core_base_c_660
+> > > ffffcaa2bbed3840 t name_show
+> > > ffffcaa2bbed3840 t name_show@drivers_i2c_i2c_dev_c_100
+> > > ffffcaa2bbef7210 t name_show
+> > > ffffcaa2bbef7210 t name_show@drivers_pps_sysfs_c_66
+> > > ffffcaa2bbf03328 t name_show
+> > > ffffcaa2bbf03328 t name_show@drivers_hwmon_hwmon_c_72
+> > > ffffcaa2bbff6f3c t name_show
+> > > ffffcaa2bbff6f3c t name_show@drivers_remoteproc_remoteproc_sysfs_c_21=
+5
+> > > ffffcaa2bbff8d78 t name_show
+> > > ffffcaa2bbff8d78 t name_show@drivers_rpmsg_rpmsg_core_c_455
+> > > ffffcaa2bbfff7a4 t name_show
+> > > ffffcaa2bbfff7a4 t name_show@drivers_devfreq_devfreq_c_1395
+> > > ffffcaa2bc001f60 t name_show
+> > > ffffcaa2bc001f60 t name_show@drivers_extcon_extcon_c_389
+> > > ffffcaa2bc009890 t name_show
+> > > ffffcaa2bc009890 t name_show@drivers_iio_industrialio_core_c_1396
+> > > ffffcaa2bc01212c t name_show
+> > > ffffcaa2bc01212c t name_show@drivers_iio_industrialio_trigger_c_51
+> > > ffffcaa2bc025e2c t name_show
+> > > ffffcaa2bc025e2c t name_show@drivers_fpga_fpga_mgr_c_618
+> > > ffffcaa2a052102c t name_show    [hello]
+> > > ffffcaa2a052102c t name_show@hello_hello_c_8    [hello]
+> > > ffffcaa2a051955c t name_show    [rpmsg_char]
+> > > ffffcaa2a051955c t name_show@drivers_rpmsg_rpmsg_char_c_365     [rpms=
+g_char]
+> > >
+> > > where hello, is a plain helloworld module built OOT.
+> > >
+> > > Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@g=
+mail.com>
+> > >
+> > > ---
+> > >
+> > > NOTE1:
+> > > About the symbols name duplication that happens as consequence of the
+> > > inclusion compat_binfmt_elf.c does, it is evident that this corner is
+> > > inherently challenging the addr2line approach.
+> > > Attempting to conceal this limitation would be counterproductive.
+> > >
+> > > compat_binfmt_elf.c includes directly binfmt_elf.c, addr2line can't h=
+elp
+> > > but report all functions and data declared by that file, coming from
+> > > binfmt_elf.c.
+> > >
+> > > My position is that, rather than producing a more complicated pipelin=
+e
+> > > to handle this corner case, it is better to fix the compat_binfmt_elf=
+.c
+> > > anomaly.
+> > >
+> > > This patch does not deal with the two potentially problematic symbols
+> > > defined by compat_binfmt_elf.c
+> > >
+> > > Changes from v1:
+> > > * Integrated changes requested by Masami to exclude symbols with pref=
+ixes
+> > >   "_cfi" and "_pfx".
+> > > * Introduced a small framework to handle patterns that need to be exc=
+luded
+> > >   from the alias production.
+> > > * Excluded other symbols using the framework.
+> > > * Introduced the ability to discriminate between text and data symbol=
+s.
+> > > * Added two new config symbols in this version:
+> > >   CONFIG_KALLSYMS_ALIAS_DATA, which allows data for data, and
+> > >   CONFIG_KALLSYMS_ALIAS_DATA_ALL, which excludes all filters and prov=
+ides
+> > >   an alias for each duplicated symbol.
+> > >
+> > > https://lore.kernel.org/all/20230711151925.1092080-1-alessandro.carmi=
+nati@gmail.com/
+> > >
+> > > Changes from v2:
+> > > * Alias tags are created by querying DWARF information from the vmlin=
+ux.
+> > > * The filename + line number is normalized and appended to the origin=
+al
+> > >   name.
+> > > * The tag begins with '@' to indicate the symbol source.
+> > > * Not a change, but worth mentioning, since the alias is added to the
+> > >   existing list, the old duplicated name is preserved, and the livepa=
+tch
+> > >   way of dealing with duplicates is maintained.
+> > > * Acknowledging the existence of scenarios where inlined functions
+> > >   declared in header files may result in multiple copies due to compi=
+ler
+> > >   behavior, though it is not actionable as it does not pose an operat=
+ional
+> > >   issue.
+> > > * Highlighting a single exception where the same name refers to diffe=
+rent
+> > >   functions: the case of "compat_binfmt_elf.c," which directly includ=
+es
+> > >   "binfmt_elf.c" producing identical function copies in two separate
+> > >   modules.
+> > >
+> > > https://lore.kernel.org/all/20230714150326.1152359-1-alessandro.carmi=
+nati@gmail.com/
+> > >
+> > > Changes from v3:
+> > > * kas_alias was rewritten in Python to create a more concise and
+> > >   maintainable codebase.
+> > > * The previous automation process used by kas_alias to locate the vml=
+inux
+> > >   and the addr2line has been replaced with an explicit command-line s=
+witch
+> > >   for specifying these requirements.
+> > > * addr2line has been added into the main Makefile.
+> > > * A new command-line switch has been introduced, enabling users to ex=
+tend
+> > >   the alias to global data names.
+> > >
+> > > https://lore.kernel.org/all/20230828080423.3539686-1-alessandro.carmi=
+nati@gmail.com/
+> > >
+> > > Changes from v4:
+> > > * Fixed the O=3D<build dir> build issue
+> > > * The tool halts execution upon encountering major issues, thereby en=
+suring
+> > >   the pipeline is interrupted.
+> > > * A cmdline option to specify the source directory added.
+> > > * Minor code adjusments.
+> > > * Tested on mips32 and i386
+> > >
+> > > https://lore.kernel.org/all/20230919193948.465340-1-alessandro.carmin=
+ati@gmail.com/
+> > >
+> > > Changes from v5:
+> > > * Regex filter extended to all symbols
+> > > * Alias creation extended to module objects
+> > > * Code cleaned and commented
+> > > * kas_alias verbose execution via KAS_ALIAS_DEBUG env variable
+> > > * CONFIG_KALLSYMS_ALIAS_SRCLINE selects KBUILD_BUILTIN to ensure no r=
+aces
+> > >   during modules build
+> > > * Tested on x86_64, aarch64 and i386
+> > >
+> > > https://lore.kernel.org/all/20230927173516.1456594-1-alessandro.carmi=
+nati@gmail.com/
+> > >
+> > > Changes from v6:
+> > > * Generate a file to facilitate the construction of custom OOT module=
+s using aliases.
+> > >   In this context, it is needed to export the modules.symbfreq file, =
+a product of
+> > >   the build.
+> > > * Previously, kas_alias was intended to run once, executing all tasks=
+ within the same
+> > >   session. In this version, two targets have been introduced to split=
+ the work into
+> > >   distinct phases: one for creating aliases for the core image and an=
+other for
+> > >   generating aliases for modules.
+> > > * The module aliases production statement has been inserted in the
+> > >   scripts/Makefile.modfinal. Instead of being executed individually f=
+or each module,
+> > >   it now runs once for all modules.
+> > > * The approach for excluding symbols in .init and .exit ELF sections =
+has undergone a
+> > >   rewrite.
+> > > * kas_alias is now capable of applying aliases to OOT modules. Howeve=
+r, for this to
+> > >   occur, the 'modules.symbfreq' file needs to be accessible during th=
+e build.
+> > >   If it is not found, aliases won't be added.
+> > >
+> > > https://lore.kernel.org/all/20231024201157.748254-1-alessandro.carmin=
+ati@gmail.com/
+> >
+> >
+> >
+> >
+> >
+> > I am concerned with your code.
+> > At least, I'd like you to understand the Makefile principle.
+> >
+> >
+> >
+> >
+> >
+> > <output>: <input>
+> >        <command>
+> >
+> >
+> >
+> > The <command> reads <input> and generates <output>.
+> >
+> > The <command> must not modify <input>.
+> >
+> >
+> > If you deviate from this principle,
+> > we will never know where build artifacts are updated.
+> >
+> >
+> >
+> >
+> > Your code looks like this:
+> >
+> >
+> > %.ko:  %.o %.mod.o
+> >         Your script inserts aliases to %.o
+> >         Link %.o and %.mod.o into %.ko
+> >
+> >
+> >
+> > Your script updates the input file, %.o.
+> > This is never acceptable.
+> >
+> >
+> >
+>
+> I truly appreciate your guidance regarding the Makefile principle. I real=
+ize
+> now that my self-taught approach overlooked key aspects, particularly the
+> importance of not modifying the input file, and I'm committed to aligning=
+ my
+> code with this principle.
+>
+> Before I proceed, I seek a better understanding of how the kernel communi=
+ty
+> aims to address the duplicate symbols issue.
+>
+> > Anyway, @FILENAME_LINE seems a cheesy workaround after all,
+> > and I do not see a good reason to grow the ugliness.
+>
+> Regarding the FILENAME_LINE implementation, my assumption stemmed from
+> notable comments by
+>
+> Luis Chamberlain
+> https://lore.kernel.org/all/ZLVxUQiC5iF+xTPQ@bombadil.infradead.org/
+>
+> Petr Mladek
+> https://lore.kernel.org/all/ZQFtdJEKJ9taYpA0@alley/
+>
+> within the threads related to my work, but the idea itself originated
+> elsewhere: the erlies message I'm aware of, carrying this contents is a
+> Petr's message as answer to another thread.
+> https://lore.kernel.org/all/ZEeO_rWL4bDh5vui@alley/
+>
+> If FILENAME_LINE doesn't serve the community's purpose, and my interpreta=
+tion
+> was mistaken, I apologize for any inconvenience caused and will cease wor=
+k on
+> this aspect.
 
 
-On 12/31/23 2:55 AM, kernel test robot wrote:
-> CAUTION: This email comes from a non Wind River email account!
-> Do not click links or open attachments unless you recognize the sender and know the content is safe.
->
-> Hi Xiaolei,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on shawnguo/for-next]
-> [also build test WARNING on linus/master v6.7-rc7 next-20231222]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/firmware-imx-scu-ensure-wakeup-procedure-calls-pm_system_wakeup/20231230-134202
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20231230053831.67661-1-xiaolei.wang%40windriver.com
-> patch subject: [PATCH] firmware: imx: scu: ensure wakeup procedure calls pm_system_wakeup()
-> config: i386-buildonly-randconfig-003-20231230 (https://download.01.org/0day-ci/archive/20231231/202312310227.7eLUYzgH-lkp@intel.com/config)
-> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231231/202312310227.7eLUYzgH-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202312310227.7eLUYzgH-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/firmware/imx/imx-scu.c:365:32: warning: unused variable 'imx_scu_pm_ops' [-Wunused-const-variable]
->       365 | static const struct dev_pm_ops imx_scu_pm_ops = {
->           |                                ^~~~~~~~~~~~~~
->     1 warning generated.
->
->
-> vim +/imx_scu_pm_ops +365 drivers/firmware/imx/imx-scu.c
->
->     364
->   > 365  static const struct dev_pm_ops imx_scu_pm_ops = {
->     366          SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(imx_scu_suspend_noirq,
->     367                                        imx_scu_resume_noirq)
->     368  };
->     369
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+There is no common opinion in the community.
+It is just that every person has a different thought.
 
 
-drop this patch, There are still some issues that I will continue to 
-research
+
+When I use GDB for debugging, the debug info is optional;
+even without debug info, I can use minimal functionality;
+assembler-level debugging, break-point setting by specifying
+an address.
+
+By loading the symbol table, I can have better experiences;
+for example, source code debugging, break-point setting by
+a function name, etc.
 
 
-thanks
 
-xiaolei
 
+I wonder if we can do something similar for this case.
+We can use ftrace/kprobe without CONFIG_DEBUG_INFO.
+This covers most use cases because kallsyms records
+(address, symbol-name) tuples.
+
+With debug info loaded, every symbol address is associated
+with more info such as file name, line number, etc.
+
+
+In many distributions, the debug info files of vmlinux
+and modules are available under /usr/lib/debug/.
+
+
+Your patch already depends on CONFIG_DEBUG_INFO,
+so you have the ones in your build directory at least.
+
+Adding <func>@<filename>_<line> aliases seems a
+niche workaround, as this is duplicated data
+transformed from what you already have in debug info.
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
