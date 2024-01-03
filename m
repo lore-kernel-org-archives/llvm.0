@@ -1,47 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBAA1D525;
-	Wed,  3 Jan 2024 20:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153DD1D52E;
+	Wed,  3 Jan 2024 20:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TJE8q8ii"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AMg2N5hI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704312638; x=1735848638;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EkgkorH10bDoNN7f1pRGPWal9omxB/Gr6HSpc8mlLlU=;
-  b=TJE8q8iiQR3KqxjwU1t2E7rqxDO92uY9R0mbJwyr46PadgqoKSRe2oLh
-   kgwM9QDp0Umgo2WTAJn+YtvBcfyfzjgWzNg46JtJE0qoJimzOMoXUb8M+
-   p8i2uohGSa7ZQVXgEwXqw3FPMde/PpMBx3Q21DeWzp2BBH/gy+IScvISP
-   Fe9KPE8NhlXqyBueyO+8XfFDhIHFmt8fLkeOpJoNO1zKAQmJTRpl9f26p
-   +c0RWRQMIV/2l+odTc4J4kMdgWqssVmgZRyHBjzljxn3CUxKzpHEJCpDB
-   mcYIfAxV+oVfo6t6EX6Ck2BErNsUWXgeZfStCqurUrqCANRN58EINlNSV
+  t=1704313314; x=1735849314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vgm8K58iZ83lULNb8SnKKP0qiNGCo1sVMEr08z4LBCs=;
+  b=AMg2N5hIoMObcZBAb217U/RTDmHflndNsVyF9lLjqXokaFxYpchyojnG
+   o0pkcANp5qSX1CvXBC+o3VhiS7IHQhEClQMalg5oir2QQ0JyTmLGTKopm
+   3vX3zLCM8Q435HFNriL6f4DL2oNyWQuXeJ/uZN7jLKb2q5fTIXmqipVhA
+   pdvPN8xjCDueJ1XIIJ+osALDQiJCdkdp2MFgD9Zev8GvnN0n0wYqdeGSb
+   qvlax7ZIAYJRUSw6ANPHPFGnP2eLEo6PnPDxmmtGiIydy5zq9+dVMBCoJ
+   bfVb/1AIAcLVgcAUrl5XT1sVizfVpgq0GTlE2Fj7bYrKuAxLWIvsqMDUt
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="15698014"
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="3829989"
 X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
-   d="scan'208";a="15698014"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 12:10:29 -0800
+   d="scan'208";a="3829989"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 12:21:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="773229438"
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="780094216"
 X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
-   d="scan'208";a="773229438"
+   d="scan'208";a="780094216"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 03 Jan 2024 12:10:26 -0800
+  by orsmga002.jf.intel.com with ESMTP; 03 Jan 2024 12:21:51 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rL7ZH-000MWK-2d;
-	Wed, 03 Jan 2024 20:10:23 +0000
-Date: Thu, 4 Jan 2024 04:09:30 +0800
+	id 1rL7kL-000MWW-0v;
+	Wed, 03 Jan 2024 20:21:49 +0000
+Date: Thu, 4 Jan 2024 04:20:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
+To: Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:b4/vfs-bdev-file 41/42] fs/ntfs3/fsntfs.c:1011:23:
- warning: unused variable 'bdev'
-Message-ID: <202401040431.fnq6ljbX-lkp@intel.com>
+	Jani Nikula <jani.nikula@intel.com>
+Subject: Re: [PATCH v2 23/39] drm/bridge: nxp-ptn3460: switch to ->edid_read
+ callback
+Message-ID: <202401040455.PPhqJiVr-lkp@intel.com>
+References: <87fb7fd52d087dd9a15b7194f3915b6b1c4146d6.1704276309.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,67 +58,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <87fb7fd52d087dd9a15b7194f3915b6b1c4146d6.1704276309.git.jani.nikula@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git b4/vfs-bdev-file
-head:   81a0b5d317a5188e7e8aaf68adf070d44c7a3eea
-commit: 6d26064a464a6f8ace90a2176a17bd6f853825e0 [41/42] [DRAFT] buffer: port block device access to files and get rid of bd_inode access
-config: i386-buildonly-randconfig-002-20240103 (https://download.01.org/0day-ci/archive/20240104/202401040431.fnq6ljbX-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240104/202401040431.fnq6ljbX-lkp@intel.com/reproduce)
+Hi Jani,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.7-rc8 next-20240103]
+[cannot apply to drm-intel/for-linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-bridge-add-edid_read-hook-and-drm_bridge_edid_read/20240103-181513
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/87fb7fd52d087dd9a15b7194f3915b6b1c4146d6.1704276309.git.jani.nikula%40intel.com
+patch subject: [PATCH v2 23/39] drm/bridge: nxp-ptn3460: switch to ->edid_read callback
+config: arm-randconfig-001-20240103 (https://download.01.org/0day-ci/archive/20240104/202401040455.PPhqJiVr-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240104/202401040455.PPhqJiVr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401040431.fnq6ljbX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401040455.PPhqJiVr-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/ntfs3/fsntfs.c:1011:23: warning: unused variable 'bdev' [-Wunused-variable]
-    1011 |         struct block_device *bdev = sb->s_bdev;
-         |                              ^~~~
-   fs/ntfs3/fsntfs.c:1041:23: warning: unused variable 'bdev' [-Wunused-variable]
-    1041 |         struct block_device *bdev = sb->s_bdev;
-         |                              ^~~~
-   2 warnings generated.
+>> drivers/gpu/drm/bridge/nxp-ptn3460.c:170:6: warning: variable 'drm_edid' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     170 |         if (!edid) {
+         |             ^~~~~
+   drivers/gpu/drm/bridge/nxp-ptn3460.c:189:9: note: uninitialized use occurs here
+     189 |         return drm_edid;
+         |                ^~~~~~~~
+   drivers/gpu/drm/bridge/nxp-ptn3460.c:170:2: note: remove the 'if' if its condition is always false
+     170 |         if (!edid) {
+         |         ^~~~~~~~~~~~
+     171 |                 DRM_ERROR("Failed to allocate EDID\n");
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     172 |                 goto out;
+         |                 ~~~~~~~~~
+     173 |         }
+         |         ~
+   drivers/gpu/drm/bridge/nxp-ptn3460.c:161:33: note: initialize the variable 'drm_edid' to silence this warning
+     161 |         const struct drm_edid *drm_edid;
+         |                                        ^
+         |                                         = NULL
+   1 warning generated.
 
 
-vim +/bdev +1011 fs/ntfs3/fsntfs.c
+vim +170 drivers/gpu/drm/bridge/nxp-ptn3460.c
 
-82cae269cfa953 Konstantin Komarov 2021-08-13  1008  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1009  int ntfs_sb_read(struct super_block *sb, u64 lbo, size_t bytes, void *buffer)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1010  {
-82cae269cfa953 Konstantin Komarov 2021-08-13 @1011  	struct block_device *bdev = sb->s_bdev;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1012  	u32 blocksize = sb->s_blocksize;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1013  	u64 block = lbo >> sb->s_blocksize_bits;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1014  	u32 off = lbo & (blocksize - 1);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1015  	u32 op = blocksize - off;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1016  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1017  	for (; bytes; block += 1, off = 0, op = blocksize) {
-6d26064a464a6f Christian Brauner  2024-01-02  1018  		struct buffer_head *bh = __bread(sb->s_f_bdev, block, blocksize);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1019  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1020  		if (!bh)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1021  			return -EIO;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1022  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1023  		if (op > bytes)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1024  			op = bytes;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1025  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1026  		memcpy(buffer, bh->b_data + off, op);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1027  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1028  		put_bh(bh);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1029  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1030  		bytes -= op;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1031  		buffer = Add2Ptr(buffer, op);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1032  	}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1033  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1034  	return 0;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1035  }
-82cae269cfa953 Konstantin Komarov 2021-08-13  1036  
-
-:::::: The code at line 1011 was first introduced by commit
-:::::: 82cae269cfa953032fbb8980a7d554d60fb00b17 fs/ntfs3: Add initialization of super block
-
-:::::: TO: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-:::::: CC: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  155  
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  156  
+dd6c2ed9dace84 drivers/gpu/drm/bridge/nxp-ptn3460.c Jani Nikula  2024-01-03  157  static const struct drm_edid *ptn3460_edid_read(struct drm_bridge *bridge,
+4151c14cdda689 drivers/gpu/drm/bridge/nxp-ptn3460.c Sam Ravnborg 2020-07-27  158  						struct drm_connector *connector)
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  159  {
+4151c14cdda689 drivers/gpu/drm/bridge/nxp-ptn3460.c Sam Ravnborg 2020-07-27  160  	struct ptn3460_bridge *ptn_bridge = bridge_to_ptn3460(bridge);
+dd6c2ed9dace84 drivers/gpu/drm/bridge/nxp-ptn3460.c Jani Nikula  2024-01-03  161  	const struct drm_edid *drm_edid;
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  162  	bool power_off;
+4151c14cdda689 drivers/gpu/drm/bridge/nxp-ptn3460.c Sam Ravnborg 2020-07-27  163  	u8 *edid;
+4151c14cdda689 drivers/gpu/drm/bridge/nxp-ptn3460.c Sam Ravnborg 2020-07-27  164  	int ret;
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  165  
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  166  	power_off = !ptn_bridge->enabled;
+94d50d57c4403a drivers/gpu/drm/bridge/ptn3460.c     Ajay Kumar   2015-01-20  167  	ptn3460_pre_enable(&ptn_bridge->bridge);
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  168  
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  169  	edid = kmalloc(EDID_LENGTH, GFP_KERNEL);
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24 @170  	if (!edid) {
+94d50d57c4403a drivers/gpu/drm/bridge/ptn3460.c     Ajay Kumar   2015-01-20  171  		DRM_ERROR("Failed to allocate EDID\n");
+4151c14cdda689 drivers/gpu/drm/bridge/nxp-ptn3460.c Sam Ravnborg 2020-07-27  172  		goto out;
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  173  	}
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  174  
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  175  	ret = ptn3460_read_bytes(ptn_bridge, PTN3460_EDID_ADDR, edid,
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  176  				 EDID_LENGTH);
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  177  	if (ret) {
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  178  		kfree(edid);
+dd6c2ed9dace84 drivers/gpu/drm/bridge/nxp-ptn3460.c Jani Nikula  2024-01-03  179  		drm_edid = NULL;
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  180  		goto out;
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  181  	}
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  182  
+dd6c2ed9dace84 drivers/gpu/drm/bridge/nxp-ptn3460.c Jani Nikula  2024-01-03  183  	drm_edid = drm_edid_alloc(edid, EDID_LENGTH);
+dd6c2ed9dace84 drivers/gpu/drm/bridge/nxp-ptn3460.c Jani Nikula  2024-01-03  184  
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  185  out:
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  186  	if (power_off)
+94d50d57c4403a drivers/gpu/drm/bridge/ptn3460.c     Ajay Kumar   2015-01-20  187  		ptn3460_disable(&ptn_bridge->bridge);
+a9fe713d7d45c6 drivers/gpu/drm/bridge/ptn3460.c     Sean Paul    2014-02-24  188  
+dd6c2ed9dace84 drivers/gpu/drm/bridge/nxp-ptn3460.c Jani Nikula  2024-01-03  189  	return drm_edid;
+4151c14cdda689 drivers/gpu/drm/bridge/nxp-ptn3460.c Sam Ravnborg 2020-07-27  190  }
+4151c14cdda689 drivers/gpu/drm/bridge/nxp-ptn3460.c Sam Ravnborg 2020-07-27  191  
 
 -- 
 0-DAY CI Kernel Test Service
