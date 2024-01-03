@@ -1,79 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCF11DA2C;
-	Wed,  3 Jan 2024 21:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712E21DA32
+	for <llvm@lists.linux.dev>; Wed,  3 Jan 2024 22:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gz/p9MW9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA87C433C7;
-	Wed,  3 Jan 2024 21:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704318681;
-	bh=wFZCcR/vAARfo3nJl86sOjbtJABriCt7XbbSfUIfxwA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gz/p9MW9Q0Vpcv8sl0kgS8hBMXeFgfHWV/w9eMrWHoapUjSJhAZifONEt1FPQ4iC3
-	 6A1qORhhdEC1msYHv4KRyapQdyJvRVsOfybKBLXMRQPTVZCaYXaDbr3/FgkYmqZ9j5
-	 XkWz7pRZfQemyVNyrnG32u37gBBlsNm02ebERdOihAVjxAJJN3Lmz8AqUN/qEupkZl
-	 b7f7+jW0wGlWpmHAkT8xfHVEI8P0OJxAqqFXOlAcI+LUjbAdruTUZHo1AmjhbsiRbu
-	 tx3vtx8mg/XzqaHdpEuf9Qpecq+Dk7NmXyT8j4fjLOatnP1kT2GC8GG98FVWfCn9Zs
-	 5f2V2Mrl3OLww==
-Date: Wed, 3 Jan 2024 14:51:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] x86/tools: objdump_reformat.awk: Skip bad instructions
- from llvm-objdump
-Message-ID: <20240103215119.GB155391@dev-arch.thelio-3990X>
-References: <20231205-objdump_reformat-awk-handle-llvm-objdump-bad_expr-v1-1-b4a74f39396f@kernel.org>
- <20240103181542.GA629234@dev-arch.thelio-3990X>
- <20240103181852.GDZZWlDJMVvqAZdpfV@fat_crate.local>
- <20240103205506.GA152662@dev-arch.thelio-3990X>
- <20240103212616.GGZZXQ+IKGPb+EqVcu@fat_crate.local>
- <20240103214804.GA155391@dev-arch.thelio-3990X>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qXEOFqn/"
+Date: Wed, 3 Jan 2024 17:03:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1704319401;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NBzUZuT0BfcxoAprbvM1KtRefqBl5uevb744fGCS3+E=;
+	b=qXEOFqn/2nRxNpIUFJ4QCjwmv1xawSPcOdnsBwwrt4yv7Azgubi79Kd+n6LNVP1/wGz5xu
+	vdbBT/5WSh0cshC0M9O8eprXPWgsr7A2XPCbvQ/NrLlTjHPzAKk6t2bB0+i0PfgcWYXFpg
+	hi8XWrN21CqhpJcnBxvJdZCOGYhdLWc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Brian Cain <bcain@quicinc.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Yujie Liu <yujie.liu@intel.com>, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-hexagon@vger.kernel.org, dwarves@vger.kernel.org, Mark Wielaard <mark@klomp.org>
+Subject: Re: [bcachefs:header_cleanup 21/51] /bin/bash: line 1: 19420
+ Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
+ --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
+ --btf_gen_optimized --btf_base vmlinux drivers/misc/eeprom/at24.ko
+Message-ID: <f6moe6xstxuj2wrnqftc2w7kx4yrnjyoqnigxprvnv4ymtgre6@6ioujgedt72e>
+References: <20231219205348.wvvxyicaatmljxm2@moria.home.lan>
+ <CAKwvOdmrvwdbFrtzsOjoLJJZ1pDZOBWBiEb=Mx5bCHuKU2wPzQ@mail.gmail.com>
+ <20231219210454.GA540439@dev-arch.thelio-3990X>
+ <ZYKWxl9oQXODIoNe@yujie-X299>
+ <20231227224338.GA267659@dev-arch.thelio-3990X>
+ <ZY2EUr+EYzyro3NH@kernel.org>
+ <20231228173404.GA412881@dev-arch.thelio-3990X>
+ <ZZQ6CpBnqpBgxSgp@kernel.org>
+ <20240102175342.GH26453@gnu.wildebeest.org>
+ <CAKwvOd=AAuqKk4GXV0jWORwJKJ0gao2zVd_RYWXoA90A77c47A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240103214804.GA155391@dev-arch.thelio-3990X>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=AAuqKk4GXV0jWORwJKJ0gao2zVd_RYWXoA90A77c47A@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jan 03, 2024 at 02:48:09PM -0700, Nathan Chancellor wrote:
-> On Wed, Jan 03, 2024 at 10:26:16PM +0100, Borislav Petkov wrote:
-> > On Wed, Jan 03, 2024 at 01:55:06PM -0700, Nathan Chancellor wrote:
-> > > On Wed, Jan 03, 2024 at 07:18:52PM +0100, Borislav Petkov wrote:
-> > > > On Wed, Jan 03, 2024 at 11:15:42AM -0700, Nathan Chancellor wrote:
-> > > > > Ping? I am still seeing this issue.
-> > > > 
-> > > > Does this need a Fixes tag and needs to go to Linus now or are you fine
-> > > > with 6.8-rc0?
-> > > 
-> > > This is only needed due to the recent changes from Sam and myself in
-> > > x86/build
-> > 
-> > I don't understand: those three commits seem unrelated to LLVM objdump
-> > outputting "<unknown>".
-> > 
-> > Or are you saying that you've *started* running the insn decoder selftest
-> > with llvm's objdump and those three commits are addressing differences
-> > in the output and this outstanding commit is needed too for the bad
-> > opcode case?
+On Wed, Jan 03, 2024 at 08:20:10AM -0800, Nick Desaulniers wrote:
+> On Tue, Jan 2, 2024 at 9:53 AM Mark Wielaard <mark@klomp.org> wrote:
+> >
+> > This seems to need Qualcomm to upstream support for this processor
+> > type to bintuils and elfutils.
 > 
-> Prior to commit 5225952d74d4 ("x86/tools: Remove chkobjdump.awk"), the
-> insn decoder selftest would not actually run with llvm-objdump
-> altogether because chkobjdump.awk would fail (because it was only
-> written for GNU objdump). The two commits prior to 5225952d74d4 were
-> cleaning up differences between the output of each objdump
-> implementations and this change should have been a part of that work as
-> well, I just did not build enough configurations to see it. Hopefully
-> that clears things up.
+> Probably should disable BTF for hexagon until then.
 
-For the record, this explanation really should have been in the commit
-message of 5225952d74d4 but I guess I was not thinking at the time.
-
-Cheers,
-Nathan
+Do we want to include a patch for that in the header cleanup tree?
