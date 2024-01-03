@@ -1,84 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465701D522;
-	Wed,  3 Jan 2024 20:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB021D522;
+	Wed,  3 Jan 2024 20:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gwn/u0yH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704313914; x=1735849914;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YZ05VNNjcmH++LVoRCkEfx6RPzJBopest22eQyg/bbA=;
-  b=Gwn/u0yHt4H1Yl/J1kuGDX+bbrqnnKcT+eP6wFXxJ5EbAekYXtjf+f//
-   8SlWmfaHa7QVFakwee+Gns54WwZXYmXMSOhhziv2K1TE0epAFXuT4ttem
-   NcUcrKOIoHhERd1sD6MXao3wIro2dl2DhluE/b8pMMNlbGiNDJvy8T1Xl
-   oEVP+PtzDjuZJ4BVhMrshF3W53VMHyybljO65Q2WncVTWFW4GgkWLQcpx
-   E9RRH2RXL9f4ghNDFVJ4utni/+RXjk8bm+CDdCrMCkWsZssOE+8edjxU8
-   6d15hHSwwS2kELJraZsOESEf6wkDF8vsgip6IFoHIGnN/7P2vZU0B9dHO
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="10458683"
-X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
-   d="scan'208";a="10458683"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 12:31:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="783611563"
-X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
-   d="scan'208";a="783611563"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Jan 2024 12:31:52 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rL7u2-000MXo-05;
-	Wed, 03 Jan 2024 20:31:50 +0000
-Date: Thu, 4 Jan 2024 04:31:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	"Borislav Petkov (AMD)" <bp@alien8.de>
-Subject: [tip:ras/core 11/13] include/linux/ras.h:9:10: fatal error:
- 'uapi/asm/mce.h' file not found
-Message-ID: <202401040401.z915YJoV-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAo5QiYb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EC0C433C7;
+	Wed,  3 Jan 2024 20:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704314703;
+	bh=FMv5vBS+OUl9IhdRIkoDxynEByJXpgOPngDtTzyaGNE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AAo5QiYbvDoWm0D/5TxV/LeNO6csxAU8d+ETptz56L7+9FexS07VOsCW6H0i+AjEe
+	 nVPQTiA4LdMZSaF/ac8p74zbb7vTZpvX1xlZcSm0P03plS0cIjk5D5hmyKHLr8Xw0g
+	 C+pU5GILpvjtcFZsqJsHj3z6DQJwoXsZ+GguLAvC0iQeTJjtwhBHwxAcOM2tkqu3mp
+	 OOyVBiVh7/O6Phua4ecA8WlsuKgVDj7zk3dX8Pq9CPzWGeOHrBaD7sZiVtg9P7kQvn
+	 KsrE17EbYbXFcCHn3fPVZC3LCuRgoMftvZ0ouvCfXx0LIkBPbe368uXEHnU8039bb5
+	 k1Gwd4hheUp0g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 23CD6403EF; Wed,  3 Jan 2024 17:45:01 -0300 (-03)
+Date: Wed, 3 Jan 2024 17:45:01 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Brian Cain <bcain@quicinc.com>
+Cc: Mark Wielaard <mark@klomp.org>, Nathan Chancellor <nathan@kernel.org>,
+	Yujie Liu <yujie.liu@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	kernel test robot <lkp@intel.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+	"dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
+	Sid Manning <sidneym@quicinc.com>
+Subject: Re: [bcachefs:header_cleanup 21/51] /bin/bash: line 1: 19420
+ Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
+ --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
+ --btf_gen_optimized --btf_base vmlinux drivers/misc/eep...
+Message-ID: <ZZXHTawRETL4XNmc@kernel.org>
+References: <20231219205348.wvvxyicaatmljxm2@moria.home.lan>
+ <CAKwvOdmrvwdbFrtzsOjoLJJZ1pDZOBWBiEb=Mx5bCHuKU2wPzQ@mail.gmail.com>
+ <20231219210454.GA540439@dev-arch.thelio-3990X>
+ <ZYKWxl9oQXODIoNe@yujie-X299>
+ <20231227224338.GA267659@dev-arch.thelio-3990X>
+ <ZY2EUr+EYzyro3NH@kernel.org>
+ <20231228173404.GA412881@dev-arch.thelio-3990X>
+ <ZZQ6CpBnqpBgxSgp@kernel.org>
+ <20240102175342.GH26453@gnu.wildebeest.org>
+ <SN6PR02MB42057525427B47481F1934D5B860A@SN6PR02MB4205.namprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SN6PR02MB42057525427B47481F1934D5B860A@SN6PR02MB4205.namprd02.prod.outlook.com>
+X-Url: http://acmel.wordpress.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
-head:   d48d30d8c358004c7b1cb2e16969a569d45953b3
-commit: 8e1d0790e0a749a62428ff039c7a9050a06e9feb [11/13] RAS: Introduce AMD Address Translation Library
-config: arm-randconfig-002-20240103 (https://download.01.org/0day-ci/archive/20240104/202401040401.z915YJoV-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240104/202401040401.z915YJoV-lkp@intel.com/reproduce)
+Em Wed, Jan 03, 2024 at 05:25:11PM +0000, Brian Cain escreveu:
+> > From: Mark Wielaard <mark@klomp.org>
+> > To: Arnaldo Carvalho de Melo <acme@kernel.org>
+> > > llvm-dwarfdump is the only that is managing to process this file on a
+> > > fedora:39 system, more work needed to figure out if this is something
+> > > elfutils is planning to support, what amount of work would be necessary,
+> > > etc.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401040401.z915YJoV-lkp@intel.com/
+> > > Mark, do you know about work on elfutils to support:
 
-All errors (new ones prefixed by >>):
+> > > ⬢[acme@toolbox hexagon-randconfig-r005-20220913-pahole-crash]$ llvm-
+> > dwarfdump at24.ko | head -22
+> > > at24.ko:        file format elf32-hexagon
 
-   In file included from drivers/ras/ras.c:10:
->> include/linux/ras.h:9:10: fatal error: 'uapi/asm/mce.h' file not found
-   #include <uapi/asm/mce.h>
-            ^~~~~~~~~~~~~~~~
-   1 error generated.
+> > That seems to identify itself as an EM_QDSP6 (QUALCOMM DSP6) 32bit ELF
+> > file. Neither binutils not elfutils seems to know how to resolve
+> > EM_QDSP6 specific relocations. Normally that wouldn't be necessary,
+> > but sadly kernel modules are still ET_REL files, so eu-readelf/readelf
+> > needs relocations resolved to process the DWARF .debug sections.
 
+> > This seems to need Qualcomm to upstream support for this processor
+> > type to bintuils and elfutils.
+ 
+> We can take a look at this.  But - please forgive my inexperience here
+> -- do the corresponding tools such as llvm-readelf not suffice here?
+> Would it be welcome for us to change pahole to support those if it
+> doesn't already?
 
-vim +9 include/linux/ras.h
+pahole uses the DWARF library that comes with elfutils, so the changes
+that were made to the DWARF library used by llvm-readelf would have to
+be done to elfutils' DWARF library for pahole to be able to process
+these files.
 
-     8	
-   > 9	#include <uapi/asm/mce.h>
-    10	
+IANAL to say if you can copy code across these these codebases.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Arnaldo
