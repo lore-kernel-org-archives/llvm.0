@@ -1,97 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB021D522;
-	Wed,  3 Jan 2024 20:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E001D545;
+	Wed,  3 Jan 2024 20:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAo5QiYb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EC0C433C7;
-	Wed,  3 Jan 2024 20:45:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4X7C9t8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB4FC433C7;
+	Wed,  3 Jan 2024 20:55:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704314703;
-	bh=FMv5vBS+OUl9IhdRIkoDxynEByJXpgOPngDtTzyaGNE=;
+	s=k20201202; t=1704315309;
+	bh=3q+VwmOix6aQg6CQ0wgCt1OP44XfMfdBlSVNaMA1U3k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AAo5QiYbvDoWm0D/5TxV/LeNO6csxAU8d+ETptz56L7+9FexS07VOsCW6H0i+AjEe
-	 nVPQTiA4LdMZSaF/ac8p74zbb7vTZpvX1xlZcSm0P03plS0cIjk5D5hmyKHLr8Xw0g
-	 C+pU5GILpvjtcFZsqJsHj3z6DQJwoXsZ+GguLAvC0iQeTJjtwhBHwxAcOM2tkqu3mp
-	 OOyVBiVh7/O6Phua4ecA8WlsuKgVDj7zk3dX8Pq9CPzWGeOHrBaD7sZiVtg9P7kQvn
-	 KsrE17EbYbXFcCHn3fPVZC3LCuRgoMftvZ0ouvCfXx0LIkBPbe368uXEHnU8039bb5
-	 k1Gwd4hheUp0g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 23CD6403EF; Wed,  3 Jan 2024 17:45:01 -0300 (-03)
-Date: Wed, 3 Jan 2024 17:45:01 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Brian Cain <bcain@quicinc.com>
-Cc: Mark Wielaard <mark@klomp.org>, Nathan Chancellor <nathan@kernel.org>,
-	Yujie Liu <yujie.liu@intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	kernel test robot <lkp@intel.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-	"dwarves@vger.kernel.org" <dwarves@vger.kernel.org>,
-	Sid Manning <sidneym@quicinc.com>
-Subject: Re: [bcachefs:header_cleanup 21/51] /bin/bash: line 1: 19420
- Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
- --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
- --btf_gen_optimized --btf_base vmlinux drivers/misc/eep...
-Message-ID: <ZZXHTawRETL4XNmc@kernel.org>
-References: <20231219205348.wvvxyicaatmljxm2@moria.home.lan>
- <CAKwvOdmrvwdbFrtzsOjoLJJZ1pDZOBWBiEb=Mx5bCHuKU2wPzQ@mail.gmail.com>
- <20231219210454.GA540439@dev-arch.thelio-3990X>
- <ZYKWxl9oQXODIoNe@yujie-X299>
- <20231227224338.GA267659@dev-arch.thelio-3990X>
- <ZY2EUr+EYzyro3NH@kernel.org>
- <20231228173404.GA412881@dev-arch.thelio-3990X>
- <ZZQ6CpBnqpBgxSgp@kernel.org>
- <20240102175342.GH26453@gnu.wildebeest.org>
- <SN6PR02MB42057525427B47481F1934D5B860A@SN6PR02MB4205.namprd02.prod.outlook.com>
+	b=r4X7C9t85BwGuaYvwuaQPhWFFthcoV7xZGi+Dlkl8CsBytn2DLNGjOtaGE2hcrHRi
+	 hJ9gNpiSLPYmHo+3zrtb1+9xWD1nQGObr11KxXHWi7I2ktNsgpERYXiTnfOk4KbHgv
+	 Uaj+WM4EvHellN3pglhCqyRrq/Da4HdATZn3euwUoIdHC/H8aavTGWW95ApB7rMzeF
+	 xk8usk/S94bHwmcr8jaZwWJmzrhTThpGwQmudRggVPvKm8tUXjgPFf5DcnoggNvVJe
+	 n3CP/14znA+hYRORHt42ZAAd42CZ7p/cYYP90HCIOC89oad7xZbUpw+cU2b+GPC6K+
+	 3uldmw+GUS2TQ==
+Date: Wed, 3 Jan 2024 13:55:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] x86/tools: objdump_reformat.awk: Skip bad instructions
+ from llvm-objdump
+Message-ID: <20240103205506.GA152662@dev-arch.thelio-3990X>
+References: <20231205-objdump_reformat-awk-handle-llvm-objdump-bad_expr-v1-1-b4a74f39396f@kernel.org>
+ <20240103181542.GA629234@dev-arch.thelio-3990X>
+ <20240103181852.GDZZWlDJMVvqAZdpfV@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <SN6PR02MB42057525427B47481F1934D5B860A@SN6PR02MB4205.namprd02.prod.outlook.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20240103181852.GDZZWlDJMVvqAZdpfV@fat_crate.local>
 
-Em Wed, Jan 03, 2024 at 05:25:11PM +0000, Brian Cain escreveu:
-> > From: Mark Wielaard <mark@klomp.org>
-> > To: Arnaldo Carvalho de Melo <acme@kernel.org>
-> > > llvm-dwarfdump is the only that is managing to process this file on a
-> > > fedora:39 system, more work needed to figure out if this is something
-> > > elfutils is planning to support, what amount of work would be necessary,
-> > > etc.
+On Wed, Jan 03, 2024 at 07:18:52PM +0100, Borislav Petkov wrote:
+> On Wed, Jan 03, 2024 at 11:15:42AM -0700, Nathan Chancellor wrote:
+> > Ping? I am still seeing this issue.
+> 
+> Does this need a Fixes tag and needs to go to Linus now or are you fine
+> with 6.8-rc0?
 
-> > > Mark, do you know about work on elfutils to support:
+This is only needed due to the recent changes from Sam and myself in
+x86/build, so no need to rush it to Linus. I just wanted to make sure it
+was not lost before the chaos of the merge window.
 
-> > > ⬢[acme@toolbox hexagon-randconfig-r005-20220913-pahole-crash]$ llvm-
-> > dwarfdump at24.ko | head -22
-> > > at24.ko:        file format elf32-hexagon
-
-> > That seems to identify itself as an EM_QDSP6 (QUALCOMM DSP6) 32bit ELF
-> > file. Neither binutils not elfutils seems to know how to resolve
-> > EM_QDSP6 specific relocations. Normally that wouldn't be necessary,
-> > but sadly kernel modules are still ET_REL files, so eu-readelf/readelf
-> > needs relocations resolved to process the DWARF .debug sections.
-
-> > This seems to need Qualcomm to upstream support for this processor
-> > type to bintuils and elfutils.
- 
-> We can take a look at this.  But - please forgive my inexperience here
-> -- do the corresponding tools such as llvm-readelf not suffice here?
-> Would it be welcome for us to change pahole to support those if it
-> doesn't already?
-
-pahole uses the DWARF library that comes with elfutils, so the changes
-that were made to the DWARF library used by llvm-readelf would have to
-be done to elfutils' DWARF library for pahole to be able to process
-these files.
-
-IANAL to say if you can copy code across these these codebases.
-
-- Arnaldo
+Cheers,
+Nathan
