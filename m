@@ -1,73 +1,141 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33D81C694;
-	Wed,  3 Jan 2024 18:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594CE1BDCA;
+	Wed,  3 Jan 2024 18:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="IF9rG6EF"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 945D440E01FB;
-	Wed,  3 Jan 2024 18:19:10 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id tIVUWCeT5Roq; Wed,  3 Jan 2024 18:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1704305948; bh=41ckwIQ1cOsTanraxssYiLysA3mszDJQngRh8ndGtWE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IF9rG6EF6vgcO37vd44iR8uhe74ZYsVsHCGg3gc/8Aj1AIhESxNfqRSi9gy3N3tMa
-	 xexNQSYLw/Y2Bn+swerZ0kdEAfN/LX4ebJvBBNioCAbzwVGISkh+SYZlOxFqJG1a3i
-	 O3q2b+AMbtW5NWDV3LoTjfJPk1vaANxU2aoSnPFwrg/S7V7HzGpGCZuzGF9xfCYIbs
-	 x597oHg9c3jOEA27pieOcCmkXy7YgaJplvJsXB/cLJ5LlpZEAwtNsBGthfGkPtdd1z
-	 PWNgm3LSoUjE9JTTdB9b8Mejb4j0iIQQv0F6bNALKei/3m77J2Zwcwf9DG0Wy44pB4
-	 VOQnSt+7na6TUICD3+vkPjtO6ST3GjlTHimadW/2qJYqmF1xYGR7lnftZD0lzXnR3l
-	 wPyPECi6Y4fepwJVleQ53Z5kTUxbBZUEsxJS2/yzp06ybbSGoZkCxARedfwDxZZf1Z
-	 vNdmLueV3kj2wCbP0nDMSJSK9OyaSoU0gdKk4fCy0ksvnHoQL+AZS7IFwh9NMViKFu
-	 +lf0dw7900bacnH4Oy7N9hVzCTBDjOAh7S56QyYjJmJ/hwd3vrvar7j/MUG9C4aqPS
-	 f0rvZ56Ck0r9fXV4rmbjftIj0gEGF5X9xHjKfvpeQo0tJcXy4FFJsPL/35GHAyNQsk
-	 NzaZh+It+5Nura1Tne5PTsoE=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6BA0D40E01F7;
-	Wed,  3 Jan 2024 18:18:59 +0000 (UTC)
-Date: Wed, 3 Jan 2024 19:18:52 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] x86/tools: objdump_reformat.awk: Skip bad instructions
- from llvm-objdump
-Message-ID: <20240103181852.GDZZWlDJMVvqAZdpfV@fat_crate.local>
-References: <20231205-objdump_reformat-awk-handle-llvm-objdump-bad_expr-v1-1-b4a74f39396f@kernel.org>
- <20240103181542.GA629234@dev-arch.thelio-3990X>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KbvBzzKF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704306950; x=1735842950;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Gb+3J5yYCe0XIwRIh1RUMwek4B2SGFnQ6F/zFPpNpN0=;
+  b=KbvBzzKFCDNXXb1rS+t7diQSm2PuIF55aeQ4TLpFP/YzblriWTLHVLR0
+   4uB8xfbrH9bfu6umQxIbcikReKgXGC/7neZguumM3bZA4HBkbFqaMXHmW
+   dbbxSA00MEmeaYgWucxR649GJLEmMb9cGBaMu4S57fTk+gIX3JrDpsa5F
+   cIN0adKQSG9shgI8C3haDUrflaUSU9d/d65JZauX0Zvybj1MY8LAIF67R
+   7eoiST4NtgBVBDFMaTG+RGp6Yl0+QorXbekq1DnxdBCzmiZzmYyni0/zY
+   Lu9ehbifzIGd5PwU7PIMLanr95upiFddNeNAr3vP8WYWE6F+aTS0EaFW4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="15684850"
+X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
+   d="scan'208";a="15684850"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 10:35:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
+   d="scan'208";a="21855067"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 03 Jan 2024 10:35:48 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rL65g-000MS4-2E;
+	Wed, 03 Jan 2024 18:35:44 +0000
+Date: Thu, 4 Jan 2024 02:35:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Chan <michael.chan@broadcom.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Vasundhara Volam <vasundhara-v.volam@broadcom.com>,
+	Andy Gospodarek <andrew.gospodarek@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>
+Subject: [linux-next:master 11916/12223]
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c:14028:9: error: call to undeclared
+ function 'rps_may_expire_flow'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202401040200.5tvkIIgP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240103181542.GA629234@dev-arch.thelio-3990X>
 
-On Wed, Jan 03, 2024 at 11:15:42AM -0700, Nathan Chancellor wrote:
-> Ping? I am still seeing this issue.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   0fef202ac2f8e6d9ad21aead648278f1226b9053
+commit: 59cde76f33fa4ae5cdc7f51ce87bab9e531ca183 [11916/12223] bnxt_en: Refactor filter insertion logic in bnxt_rx_flow_steer().
+config: arm-randconfig-002-20240103 (https://download.01.org/0day-ci/archive/20240104/202401040200.5tvkIIgP-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240104/202401040200.5tvkIIgP-lkp@intel.com/reproduce)
 
-Does this need a Fixes tag and needs to go to Linus now or are you fine
-with 6.8-rc0?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401040200.5tvkIIgP-lkp@intel.com/
 
-I.e., the answer probably depends on what kernels you're running the
-llvm tests...
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/broadcom/bnxt/bnxt.c:14028:9: error: call to undeclared function 'rps_may_expire_flow'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                                   if (rps_may_expire_flow(bp->dev, fltr->base.rxq,
+                                       ^
+   1 error generated.
+
+
+vim +/rps_may_expire_flow +14028 drivers/net/ethernet/broadcom/bnxt/bnxt.c
+
+c0c050c58d8409 Michael Chan   2015-10-22  14012  
+c0c050c58d8409 Michael Chan   2015-10-22  14013  static void bnxt_cfg_ntp_filters(struct bnxt *bp)
+c0c050c58d8409 Michael Chan   2015-10-22  14014  {
+c0c050c58d8409 Michael Chan   2015-10-22  14015  	int i;
+c0c050c58d8409 Michael Chan   2015-10-22  14016  
+c0c050c58d8409 Michael Chan   2015-10-22  14017  	for (i = 0; i < BNXT_NTP_FLTR_HASH_SIZE; i++) {
+c0c050c58d8409 Michael Chan   2015-10-22  14018  		struct hlist_head *head;
+c0c050c58d8409 Michael Chan   2015-10-22  14019  		struct hlist_node *tmp;
+c0c050c58d8409 Michael Chan   2015-10-22  14020  		struct bnxt_ntuple_filter *fltr;
+c0c050c58d8409 Michael Chan   2015-10-22  14021  		int rc;
+c0c050c58d8409 Michael Chan   2015-10-22  14022  
+c0c050c58d8409 Michael Chan   2015-10-22  14023  		head = &bp->ntp_fltr_hash_tbl[i];
+992d38d2b988a7 Michael Chan   2023-12-22  14024  		hlist_for_each_entry_safe(fltr, tmp, head, base.hash) {
+c0c050c58d8409 Michael Chan   2015-10-22  14025  			bool del = false;
+c0c050c58d8409 Michael Chan   2015-10-22  14026  
+992d38d2b988a7 Michael Chan   2023-12-22  14027  			if (test_bit(BNXT_FLTR_VALID, &fltr->base.state)) {
+992d38d2b988a7 Michael Chan   2023-12-22 @14028  				if (rps_may_expire_flow(bp->dev, fltr->base.rxq,
+c0c050c58d8409 Michael Chan   2015-10-22  14029  							fltr->flow_id,
+992d38d2b988a7 Michael Chan   2023-12-22  14030  							fltr->base.sw_id)) {
+c0c050c58d8409 Michael Chan   2015-10-22  14031  					bnxt_hwrm_cfa_ntuple_filter_free(bp,
+c0c050c58d8409 Michael Chan   2015-10-22  14032  									 fltr);
+c0c050c58d8409 Michael Chan   2015-10-22  14033  					del = true;
+c0c050c58d8409 Michael Chan   2015-10-22  14034  				}
+c0c050c58d8409 Michael Chan   2015-10-22  14035  			} else {
+c0c050c58d8409 Michael Chan   2015-10-22  14036  				rc = bnxt_hwrm_cfa_ntuple_filter_alloc(bp,
+c0c050c58d8409 Michael Chan   2015-10-22  14037  								       fltr);
+c0c050c58d8409 Michael Chan   2015-10-22  14038  				if (rc)
+c0c050c58d8409 Michael Chan   2015-10-22  14039  					del = true;
+c0c050c58d8409 Michael Chan   2015-10-22  14040  				else
+992d38d2b988a7 Michael Chan   2023-12-22  14041  					set_bit(BNXT_FLTR_VALID, &fltr->base.state);
+c0c050c58d8409 Michael Chan   2015-10-22  14042  			}
+c0c050c58d8409 Michael Chan   2015-10-22  14043  
+c0c050c58d8409 Michael Chan   2015-10-22  14044  			if (del) {
+c0c050c58d8409 Michael Chan   2015-10-22  14045  				spin_lock_bh(&bp->ntp_fltr_lock);
+ee908d05dd2acd Michael Chan   2023-12-22  14046  				if (!test_and_clear_bit(BNXT_FLTR_INSERTED, &fltr->base.state)) {
+ee908d05dd2acd Michael Chan   2023-12-22  14047  					spin_unlock_bh(&bp->ntp_fltr_lock);
+ee908d05dd2acd Michael Chan   2023-12-22  14048  					continue;
+ee908d05dd2acd Michael Chan   2023-12-22  14049  				}
+992d38d2b988a7 Michael Chan   2023-12-22  14050  				hlist_del_rcu(&fltr->base.hash);
+c0c050c58d8409 Michael Chan   2015-10-22  14051  				bp->ntp_fltr_count--;
+c0c050c58d8409 Michael Chan   2015-10-22  14052  				spin_unlock_bh(&bp->ntp_fltr_lock);
+bfeabf7e4615bf Michael Chan   2023-12-22  14053  				bnxt_del_l2_filter(bp, fltr->l2_fltr);
+c0c050c58d8409 Michael Chan   2015-10-22  14054  				synchronize_rcu();
+992d38d2b988a7 Michael Chan   2023-12-22  14055  				clear_bit(fltr->base.sw_id, bp->ntp_fltr_bmap);
+c0c050c58d8409 Michael Chan   2015-10-22  14056  				kfree(fltr);
+c0c050c58d8409 Michael Chan   2015-10-22  14057  			}
+c0c050c58d8409 Michael Chan   2015-10-22  14058  		}
+c0c050c58d8409 Michael Chan   2015-10-22  14059  	}
+19241368443ff9 Jeffrey Huang  2016-02-26  14060  	if (test_and_clear_bit(BNXT_HWRM_PF_UNLOAD_SP_EVENT, &bp->sp_event))
+9a005c3898aa07 Jonathan Lemon 2020-02-24  14061  		netdev_info(bp->dev, "Receive PF driver unload event!\n");
+c0c050c58d8409 Michael Chan   2015-10-22  14062  }
+c0c050c58d8409 Michael Chan   2015-10-22  14063  
+
+:::::: The code at line 14028 was first introduced by commit
+:::::: 992d38d2b988a7d71c2416dad9af2b769f51ac25 bnxt_en: Refactor bnxt_ntuple_filter structure.
+
+:::::: TO: Michael Chan <michael.chan@broadcom.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
