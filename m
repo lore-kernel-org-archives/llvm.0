@@ -1,78 +1,168 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876BE1BDCF
-	for <llvm@lists.linux.dev>; Wed,  3 Jan 2024 16:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89DC1C290;
+	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vytUIVMv"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33674f60184so10651811f8f.1
-        for <llvm@lists.linux.dev>; Wed, 03 Jan 2024 08:20:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1704298825; x=1704903625; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nTmw2+iVdS8ogQZe3NCKn/UpJ3GhZUJEv6WLGyTPS8M=;
-        b=vytUIVMvJe9hWjZMkusosIe6Qwv2W9GozixOoGyxmgkVeGmG5uufX09IOUemqmQplZ
-         WdLGlc3u24e5FjxOCUpolodZ8JxD/uBoHPc2aG+83QtoLVkX/32Ab5ua7D5kufBZBind
-         j8kgN32d9vNTu4v4161zFXXExk6wLleyUeJr7cCcbH+UoSYF3DoDddjjoh1tt3MhXM7L
-         gOWUoLN7N3AzxE5a/y8OO3VkIaFA9RsWygMAYqfGg87lr/bqULNqXhR/kc4RzXOOywJb
-         r8mxPAKlxvKkYNGRA37uwyAvIsNjlCyGBP4VuN8muH11B3M7nlF4CnpZpaoBBHavOywC
-         U8rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704298825; x=1704903625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nTmw2+iVdS8ogQZe3NCKn/UpJ3GhZUJEv6WLGyTPS8M=;
-        b=A1DVc1OEPL9UeIbD0kEY9SlUDm6Ab4azusfTMcqlSnZniJzxm7D0+YGXS9JEqNvDDv
-         oBwGXa9jaXGc+qJjo/Q1+Et1PYt9PcOtTF0w8A/8fQhaPbAY22zd8zFApkMIt35lOI1d
-         w77U4lDdrUDyiJ01ewJNHFhhUKtwxijSXM3wKFxDxfA+eZb3t3HwpQtvgIjbporpN9ck
-         p67sABOy5Z7bhwlQxs3Xh1/iSUhuvrFQTRzFcrd7j6u5KOvS3May2VV8yAyZcXILrp/y
-         ndYesRcEWE1noWSsxZlotSBoHER8cwZEgr1pyUGeI+L8BYBBSeppDvpzELIzz2kOa0pC
-         Ochg==
-X-Gm-Message-State: AOJu0YwXrq50oqci9MOEwzay/r4vP6xZZYrCReUrgYZ8uVvF/dpXo93A
-	tloPmXpywgHPrcrDuOhs/BWwpEfQlor5ZYL7hzN1PZhuvKaB
-X-Google-Smtp-Source: AGHT+IHfxuTaOBCg0jN9m2vHrKIYM9kBku6unbrT3PNPIC9Bme5F6ozo1UxVEQiGATU6TRybam7ND/gLdS4mIw7PJD8=
-X-Received: by 2002:a5d:4ace:0:b0:336:8d41:5b03 with SMTP id
- y14-20020a5d4ace000000b003368d415b03mr8121259wrs.79.1704298824696; Wed, 03
- Jan 2024 08:20:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYOVHk2X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40EA1C433C8;
+	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704301032;
+	bh=Dg2dDaPNZtNW//yG71kg8XZ8E7Hu6Q4eVI6C38LDthI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=iYOVHk2XhpQokWq7/u1JypdHbjqJIiozmZIPP46+vKl8+c5MNTwZ6lIeawQdtTHlV
+	 fD/GNag5+BHJ3/XEBKZ3BU3o036DXxaNh+5e+43uCAJq6l8sBZedNQmiO+XtajmUV9
+	 fCBitXICxXvR2TVg8YtfB2MjhLHc7sLAZSYCFMcrWb2WrAIXYYKmQ113Vw5m2m9rHz
+	 o/GeuEn1DesYlKAWVMgrpROoZySLAsZwhabV9haMU4APb5I6MSdePpHfCgha9sfVM5
+	 5NecWyk06XBBXjdFEdq95t21rkwffHIloaFf5YhpyfgWsftyXx+XgHBDIV9kfMux5D
+	 A0IKqSxubn/Sw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 03 Jan 2024 09:57:07 -0700
+Subject: [PATCH] power: supply: bq24190_charger: Fix "initializer element
+ is not constant" error
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202312192107.wMIKiZWw-lkp@intel.com> <20231219205348.wvvxyicaatmljxm2@moria.home.lan>
- <CAKwvOdmrvwdbFrtzsOjoLJJZ1pDZOBWBiEb=Mx5bCHuKU2wPzQ@mail.gmail.com>
- <20231219210454.GA540439@dev-arch.thelio-3990X> <ZYKWxl9oQXODIoNe@yujie-X299>
- <20231227224338.GA267659@dev-arch.thelio-3990X> <ZY2EUr+EYzyro3NH@kernel.org>
- <20231228173404.GA412881@dev-arch.thelio-3990X> <ZZQ6CpBnqpBgxSgp@kernel.org> <20240102175342.GH26453@gnu.wildebeest.org>
-In-Reply-To: <20240102175342.GH26453@gnu.wildebeest.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 3 Jan 2024 08:20:10 -0800
-Message-ID: <CAKwvOd=AAuqKk4GXV0jWORwJKJ0gao2zVd_RYWXoA90A77c47A@mail.gmail.com>
-Subject: Re: [bcachefs:header_cleanup 21/51] /bin/bash: line 1: 19420
- Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
- --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
- --btf_gen_optimized --btf_base vmlinux drivers/misc/eeprom/at24.ko
-To: Nathan Chancellor <nathan@kernel.org>, Brian Cain <bcain@quicinc.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Yujie Liu <yujie.liu@intel.com>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-hexagon@vger.kernel.org, 
-	dwarves@vger.kernel.org, Mark Wielaard <mark@klomp.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240103-fix-bq24190_charger-vbus_desc-non-const-v1-1-115ddf798c70@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOKRlWUC/x2N0QqDMAxFf0XyvEBaRXC/MoasaXR9SbdkE0H89
+ 5U9HrjnngNcrIjDtTvAZCteqjYIlw74+dBVsOTGECkOFKjHpeyY3nEIE81tYasYbunrcxZn1Kr
+ IVf2DPKaFKGQepwzt7WXS1H/pdj/PHxCHbTp5AAAA
+To: sre@kernel.org
+Cc: chenhuiz@axis.com, linux-pm@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5503; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Dg2dDaPNZtNW//yG71kg8XZ8E7Hu6Q4eVI6C38LDthI=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKlTJ74w+KGgfPuA2GGRZGmtJnFX1sCTLfPF89kTBesaf
+ 0nwf77WUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbiO5nhf2Cw+8YJE3meun/0
+ trPeHP7hkEg663+bHsYk7nvWam3vPRkZ+lVfdFmtn2Te5xzC9vn95czL5/vPbpKOuFWgVcWztXY
+ yCwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Jan 2, 2024 at 9:53=E2=80=AFAM Mark Wielaard <mark@klomp.org> wrote=
-:
->
-> This seems to need Qualcomm to upstream support for this processor
-> type to bintuils and elfutils.
+When building with a version of GCC prior to 8.x, there is an error
+around non-constant initializer elements:
 
-Probably should disable BTF for hexagon until then.
---=20
-Thanks,
-~Nick Desaulniers
+  drivers/power/supply/bq24190_charger.c:1978:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:1978:16: note: (near initialization for 'bq24190_chip_info_tbl[0].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:1989:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:1989:16: note: (near initialization for 'bq24190_chip_info_tbl[1].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:2000:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:2000:16: note: (near initialization for 'bq24190_chip_info_tbl[2].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:2011:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:2011:16: note: (near initialization for 'bq24190_chip_info_tbl[3].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:2022:16: error: initializer element is not constant
+     .vbus_desc = bq24296_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:2022:16: note: (near initialization for 'bq24190_chip_info_tbl[4].vbus_desc')
+
+Clang versions prior to 17.x show a similar error:
+
+  drivers/power/supply/bq24190_charger.c:1978:16: error: initializer element is not a compile-time constant
+                  .vbus_desc = bq24190_vbus_desc,
+                               ^~~~~~~~~~~~~~~~~
+  1 error generated.
+
+Newer compilers have decided to accept these structures as compile time
+constants as an extension. To resolve this issue for all supported
+compilers, change the vbus_desc member in 'struct bq24190_chip_info' to
+a pointer, as it is only ever passed by reference anyways, and adjust
+the assignments accordingly.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1973
+Fixes: b150a703b56f ("power: supply: bq24190_charger: Add support for BQ24296")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/power/supply/bq24190_charger.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index a8995a21fadb..2b393eb5c282 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -246,7 +246,7 @@ struct bq24190_dev_info {
+ struct bq24190_chip_info {
+ 	int ichg_array_size;
+ #ifdef CONFIG_REGULATOR
+-	const struct regulator_desc vbus_desc;
++	const struct regulator_desc *vbus_desc;
+ #endif
+ 	int (*check_chip)(struct bq24190_dev_info *bdi);
+ 	int (*set_chg_config)(struct bq24190_dev_info *bdi, const u8 chg_config);
+@@ -728,7 +728,7 @@ static int bq24190_register_vbus_regulator(struct bq24190_dev_info *bdi)
+ 	else
+ 		cfg.init_data = &bq24190_vbus_init_data;
+ 	cfg.driver_data = bdi;
+-	reg = devm_regulator_register(bdi->dev, &bdi->info->vbus_desc, &cfg);
++	reg = devm_regulator_register(bdi->dev, bdi->info->vbus_desc, &cfg);
+ 	if (IS_ERR(reg)) {
+ 		ret = PTR_ERR(reg);
+ 		dev_err(bdi->dev, "Can't register regulator: %d\n", ret);
+@@ -1975,7 +1975,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24190] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -1986,7 +1986,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24192] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -1997,7 +1997,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24192i] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -2008,7 +2008,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24196] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -2019,7 +2019,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24296] = {
+ 		.ichg_array_size = BQ24296_CCC_ICHG_VALUES_LEN,
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24296_vbus_desc,
++		.vbus_desc = &bq24296_vbus_desc,
+ #endif
+ 		.check_chip = bq24296_check_chip,
+ 		.set_chg_config = bq24296_battery_set_chg_config,
+
+---
+base-commit: b150a703b56fb6eb282d059b421652ccd9155c23
+change-id: 20240103-fix-bq24190_charger-vbus_desc-non-const-c6bf001dc69d
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
