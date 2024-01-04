@@ -1,78 +1,181 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9BF1EA85;
-	Thu,  4 Jan 2024 08:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B4C20B03
+	for <llvm@lists.linux.dev>; Thu,  4 Jan 2024 10:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="gtVej27l"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8622C40E01A1;
-	Thu,  4 Jan 2024 08:59:08 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id gK9ccJe0EGyQ; Thu,  4 Jan 2024 08:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1704358746; bh=RtrcR3Qo98X35zKZN99wfN8TVVrIa293mVZlo2XepOo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gtVej27lOwudhs/9JrgIn+QbgPA8TK+L7Oz1Z4y9PogKgOjyCeNt9RMpSbGdrUgSI
-	 fhGQLFSndY7erp0jbVRTGc0YTth7REpJYsl676bhlCtRbCG2We9Yf72g1mLxpRsX4r
-	 AqHSbAjpYjlRoKvlCbu2B9clcC6mFtVkL7ZPKb2UhVLI63LTLmoJbizVMDIqknlQDY
-	 XEsrvHpq4kK/CSdaWIKti6icWRYe7l9pReIFqXljx650TysqIwzglUxe02xJATwpRw
-	 UVFsE/rMNcDWPuYzT8me8S7d8CMbqZDdkmwyJhcdEwT46JP7hkpVufp+ZFw2XDReHl
-	 UsUhxVi/P/FuNpRRHzjzNloGJaXw8pqtzvKUsYjxi0Vy5n3FaiRMyD0H+Pt5jfj0Ul
-	 WmJ1Z+Yaar2bFl6YTpr/RYAUKa4Gn3E7+kp2qln7QQwLZBbwgWVjvoCUWxAWDgFcfg
-	 aMQZeu4SS2DZXeXusDcTSgTlowluOceHCjjy2KCUPcvOtOnGfS/QUN6Dj9BMs4MTJq
-	 uvqZE0BW7ZS/1Ek8+7li+QjYSBToEt4XI3+O/E2kwTRXxJg09EjN/KlzPHj8spmJy4
-	 sPSW7kliB1kHBIt2rlSIeg+gMzv5PSREGO054dGy/hGwVariClPyxHOjqcuywbPiPP
-	 gctpPu/CuMOb4huVMrRtxPOM=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dwfcLoox"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704362503;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=p5FnPTRSV2kp4dC2h8Qo6Hc2MiUK40G58CqH9exA9gg=;
+	b=dwfcLooxqUga+flDDeYE+Qojt2r0Xd56Kc6MdAz0qSLTPss8FZJyySz0yoQWNhxfsjdftd
+	GPPdu6HzTiAJpFKg3ZLc+eKaqO0qDYLawYI7FIdJrjSQVl42QkPXgOiZy6C6kPrGxZnAGq
+	ka286xYVoJ19CDYczmVFwjJhqN+Ue1s=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-39-kN-VygvYPq-ikjrVk4oYug-1; Thu,
+ 04 Jan 2024 05:01:41 -0500
+X-MC-Unique: kN-VygvYPq-ikjrVk4oYug-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5221A40E01F7;
-	Thu,  4 Jan 2024 08:58:57 +0000 (UTC)
-Date: Thu, 4 Jan 2024 09:58:51 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] x86/tools: objdump_reformat.awk: Skip bad instructions
- from llvm-objdump
-Message-ID: <20240104085851.GCZZZzS/QAtd9dfqWp@fat_crate.local>
-References: <20231205-objdump_reformat-awk-handle-llvm-objdump-bad_expr-v1-1-b4a74f39396f@kernel.org>
- <20240103181542.GA629234@dev-arch.thelio-3990X>
- <20240103181852.GDZZWlDJMVvqAZdpfV@fat_crate.local>
- <20240103205506.GA152662@dev-arch.thelio-3990X>
- <20240103212616.GGZZXQ+IKGPb+EqVcu@fat_crate.local>
- <20240103214804.GA155391@dev-arch.thelio-3990X>
- <20240103215119.GB155391@dev-arch.thelio-3990X>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D9EE1C06911
+	for <llvm@lists.linux.dev>; Thu,  4 Jan 2024 10:01:41 +0000 (UTC)
+Received: from [172.64.3.46] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 56D4651D5;
+	Thu,  4 Jan 2024 10:01:41 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 2 of 226): Test report for master
+ (6.7.0-rc8, mainline.kernel.org-clang, ac865f00)
+Date: Thu, 04 Jan 2024 10:01:41 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240103215119.GB155391@dev-arch.thelio-3990X>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <61018.124010405014200151@us-mta-39.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 03, 2024 at 02:51:19PM -0700, Nathan Chancellor wrote:
-> For the record, this explanation really should have been in the commit
-> message of 5225952d74d4 but I guess I was not thinking at the time.
+Hi, we tested your kernel and here are the results:
 
-That's fine - we have the Link tag. Lemme refer to that thread and we're
-good.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Thx.
+Tested-by: CKI Project <cki-project@redhat.com>
 
--- 
-Regards/Gruss,
-    Boris.
+Kernel information:
+    Commit message: Merge tag 'pci-v6.7-fixes-2' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/pci/pci
 
-https://people.kernel.org/tglx/notes-about-netiquette
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/120883
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [rawhide] kdump:  Problem: problem with installed package sd=
+ubby
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2243872
+            Affected tests:
+                  x86_64 - kdump - sysrq-c
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+Tests that were not ran because of internal issues:=20
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
