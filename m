@@ -1,47 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27004C60;
-	Thu,  4 Jan 2024 01:20:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2B618EBF;
+	Thu,  4 Jan 2024 05:44:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Num5mb19"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VXOD+NOL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704331214; x=1735867214;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4Ze0Tdgo1fQGOsqQ1lqVwA3BRdBAUETvSb8m1oaGkKU=;
-  b=Num5mb19r15VdHPYGl7Op6yw0nnOM+hxgRX4GY+ZQU03hJdNeYUskwnL
-   URgr4AF8o6+zGjSZFiTYr00doGV9/Q22x8SA7/TC1G6HbExHypaTQxGyu
-   qRIWWYbXjHxaLBmXNojoMPwgIzuMxezPNKnm0n6dk+9+f1se9VVR3cN0O
-   XLA1UThjy211IIrmH1aECHSnlBgNK6Kqh5NXituE3dhqJRs6fvGitazBm
-   Il6VIuWdLcR2qRx3F8ITNf7VUjb1sMw4l3HsvM4BlVpVKa9Pl0wXVnFhY
-   dT/Oszv3Pcqkzlueh95EWBOH9fAQyWnXrI+xYacyTZ2DFdGZfrSwCySBd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="382060190"
+  t=1704347084; x=1735883084;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WCQl4HHwjWumQMxOLxbnfx18djvT1HdWFGR04jg8I2I=;
+  b=VXOD+NOLchaL5bSifV/G/xUFmB3iXiCxpGCQhkrw/gdhz3Fp5t5Bx4fL
+   1tzeJ3UzKBhGei8CXhNRrRVFAaQmpDbTszZioum6611DIItn7BsnZseP8
+   qtfk71K0yBR4aeSd1XjTJx/xy2G4Lg6c5UVHx+bR1R6Tssb71jf3sr3l+
+   9m9OpcPMlQq7sRF+304lwOisOjvCGrT6pVjiJw3h8gODBYDcl5Jd0Opyl
+   /Re9yGS91wRHcfJdLmnl/3Yz9/9EQ9MFV0WPplai4XCmSOpn4aJUXPGt1
+   utInK7n8wlfxCsVl1ykXGE23RWSUdpsIWqP3H8y9uGpBw8rnWQf+uuLJr
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="396854550"
 X-IronPort-AV: E=Sophos;i="6.04,329,1695711600"; 
-   d="scan'208";a="382060190"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 17:20:13 -0800
+   d="scan'208";a="396854550"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 21:44:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="1111541250"
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="850665483"
 X-IronPort-AV: E=Sophos;i="6.04,329,1695711600"; 
-   d="scan'208";a="1111541250"
+   d="scan'208";a="850665483"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Jan 2024 17:20:12 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 03 Jan 2024 21:44:41 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rLCP4-000Mkm-0e;
-	Thu, 04 Jan 2024 01:20:10 +0000
-Date: Thu, 4 Jan 2024 09:19:34 +0800
+	id 1rLGX1-000MwK-05;
+	Thu, 04 Jan 2024 05:44:39 +0000
+Date: Thu, 4 Jan 2024 13:44:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [frederic-dynticks:timers/core 13/15]
- kernel/time/tick-sched.c:1563:23: error: too few arguments to function call,
- expected 2, have 1
-Message-ID: <202401040915.501Ru1Ez-lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jani Nikula <jani.nikula@intel.com>
+Subject: Re: [PATCH v2 34/39] drm: bridge: dw_hdmi: switch to ->edid_read
+ callback
+Message-ID: <202401041305.NcTmAmOJ-lkp@intel.com>
+References: <a8f71940221fb085b8767f8123f496c9b36b22cc.1704276309.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,115 +58,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <a8f71940221fb085b8767f8123f496c9b36b22cc.1704276309.git.jani.nikula@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/core
-head:   0597d80e45327e79c48f36f941bad088404dc746
-commit: 003b9fd66c1eebaa2d362901c1907fe69e8fe2ca [13/15] tick: Split nohz and highres features from nohz_mode
-config: hexagon-randconfig-001-20240104 (https://download.01.org/0day-ci/archive/20240104/202401040915.501Ru1Ez-lkp@intel.com/config)
+Hi Jani,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.7-rc8 next-20240103]
+[cannot apply to drm-intel/for-linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-bridge-add-edid_read-hook-and-drm_bridge_edid_read/20240103-181513
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/a8f71940221fb085b8767f8123f496c9b36b22cc.1704276309.git.jani.nikula%40intel.com
+patch subject: [PATCH v2 34/39] drm: bridge: dw_hdmi: switch to ->edid_read callback
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20240104/202401041305.NcTmAmOJ-lkp@intel.com/config)
 compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240104/202401040915.501Ru1Ez-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240104/202401041305.NcTmAmOJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401040915.501Ru1Ez-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401041305.NcTmAmOJ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/time/tick-sched.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/time/tick-sched.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/time/tick-sched.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> kernel/time/tick-sched.c:1563:23: error: too few arguments to function call, expected 2, have 1
-    1563 |         tick_nohz_activate(ts);
-         |         ~~~~~~~~~~~~~~~~~~   ^
-   kernel/time/tick-sched.c:1509:20: note: 'tick_nohz_activate' declared here
-    1509 | static inline void tick_nohz_activate(struct tick_sched *ts, int mode) { }
-         |                    ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+>> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2473:3: warning: variable 'edid' is uninitialized when used here [-Wuninitialized]
+    2473 |                 edid->width_cm, edid->height_cm);
+         |                 ^~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c:2461:25: note: initialize the variable 'edid' to silence this warning
+    2461 |         const struct edid *edid;
+         |                                ^
+         |                                 = NULL
+   1 warning generated.
 
 
-vim +1563 kernel/time/tick-sched.c
+vim +/edid +2473 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
 
-  1531	
-  1532	/**
-  1533	 * tick_setup_sched_timer - setup the tick emulation timer
-  1534	 * @mode: tick_nohz_mode to setup for
-  1535	 */
-  1536	void tick_setup_sched_timer(bool hrtimer)
-  1537	{
-  1538		struct tick_sched *ts = this_cpu_ptr(&tick_cpu_sched);
-  1539	
-  1540		/* Emulate tick processing via per-CPU hrtimers: */
-  1541		hrtimer_init(&ts->sched_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_HARD);
-  1542		if (hrtimer) {
-  1543			tick_sched_flag_set(ts, TS_FLAG_HIGHRES);
-  1544			ts->sched_timer.function = tick_nohz_highres_handler;
-  1545		}
-  1546	
-  1547		/* Get the next period (per-CPU) */
-  1548		hrtimer_set_expires(&ts->sched_timer, tick_init_jiffy_update());
-  1549	
-  1550		/* Offset the tick to avert 'jiffies_lock' contention. */
-  1551		if (sched_skew_tick) {
-  1552			u64 offset = TICK_NSEC >> 1;
-  1553			do_div(offset, num_possible_cpus());
-  1554			offset *= smp_processor_id();
-  1555			hrtimer_add_expires_ns(&ts->sched_timer, offset);
-  1556		}
-  1557	
-  1558		hrtimer_forward_now(&ts->sched_timer, TICK_NSEC);
-  1559		if (hrtimer)
-  1560			hrtimer_start_expires(&ts->sched_timer, HRTIMER_MODE_ABS_PINNED_HARD);
-  1561		else
-  1562			tick_program_event(hrtimer_get_expires(&ts->sched_timer), 1);
-> 1563		tick_nohz_activate(ts);
-  1564	}
-  1565	
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  2456  
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2457  static const struct drm_edid *dw_hdmi_edid_read(struct dw_hdmi *hdmi,
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2458  						struct drm_connector *connector)
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  2459  {
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2460  	const struct drm_edid *drm_edid;
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2461  	const struct edid *edid;
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  2462  
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  2463  	if (!hdmi->ddc)
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2464  		return NULL;
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  2465  
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2466  	drm_edid = drm_edid_read_ddc(connector, hdmi->ddc);
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2467  	if (!drm_edid) {
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2468  		dev_dbg(hdmi->dev, "failed to get edid\n");
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2469  		return NULL;
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2470  	}
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2471  
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  2472  	dev_dbg(hdmi->dev, "got edid: width[%d] x height[%d]\n",
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29 @2473  		edid->width_cm, edid->height_cm);
+9aaf880ed4ee3c drivers/staging/imx-drm/imx-hdmi.c        Fabio Estevam    2013-11-29  2474  
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2475  	/*
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2476  	 * FIXME: This should use connector->display_info.is_hdmi and
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2477  	 * connector->display_info.has_audio from a path that has read the EDID
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2478  	 * and called drm_edid_connector_update().
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2479  	 */
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2480  	edid = drm_edid_raw(drm_edid);
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2481  
+05b1342f5014b7 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-07-21  2482  	hdmi->sink_is_hdmi = drm_detect_hdmi_monitor(edid);
+f709ec07e38a71 drivers/gpu/drm/bridge/dw_hdmi.c          Russell King     2015-07-21  2483  	hdmi->sink_has_audio = drm_detect_monitor_audio(edid);
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2484  
+fcb55de55cf341 drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Jani Nikula      2024-01-03  2485  	return drm_edid;
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2486  }
+ec971aaa6775cf drivers/gpu/drm/bridge/synopsys/dw-hdmi.c Laurent Pinchart 2020-05-26  2487  
 
 -- 
 0-DAY CI Kernel Test Service
