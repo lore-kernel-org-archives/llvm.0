@@ -1,84 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD3C1F939;
-	Wed,  3 Jan 2024 23:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D628371;
+	Thu,  4 Jan 2024 00:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VadaSLZ3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D4AC433C7;
-	Wed,  3 Jan 2024 23:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704326146;
-	bh=hwTcID2H2X8/mEb7kXNbwxxeSCC0oergI4q2KvRnCw8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VadaSLZ3K7jde2kzFOAgBzYxJOMmT83Z2eIG6SqPK6UMOue2zD+XxAO4fhKNW1sSZ
-	 Cx1PSYOgQ2KIzvucc+S780XvfipE935WoUsfNEk5ol9xW9Az3KG1Js1vzHM3R+krlf
-	 uc6Ef/uOr7ycnugactjhk5OOLFxxo7kiQ0CT3+4KccmPPA0SXjte8kqsSrIEvudn9R
-	 w7KjiiU9mgYzvF31OAk5HeN6Mc8RC4N7eVq3TkLoQ+w2wQoB93TwBp1RZIfj+NYGio
-	 dTVpievtWJ3XoxunCIvd7hlZZter7fCOetTglA28YE5hWZJFc7XR+5UNnftuNmM3aW
-	 BBP5P+s/jveDg==
-Date: Wed, 3 Jan 2024 16:55:43 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Brian Cain <bcain@quicinc.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Yujie Liu <yujie.liu@intel.com>, kernel test robot <lkp@intel.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hexagon@vger.kernel.org, dwarves@vger.kernel.org,
-	Mark Wielaard <mark@klomp.org>
-Subject: Re: [bcachefs:header_cleanup 21/51] /bin/bash: line 1: 19420
- Segmentation fault LLVM_OBJCOPY="llvm-objcopy" pahole -J --btf_gen_floats -j
- --lang_exclude=rust --skip_encoding_btf_inconsistent_proto
- --btf_gen_optimized --btf_base vmlinux drivers/misc/eeprom/at24.ko
-Message-ID: <20240103235543.GA696229@dev-arch.thelio-3990X>
-References: <CAKwvOdmrvwdbFrtzsOjoLJJZ1pDZOBWBiEb=Mx5bCHuKU2wPzQ@mail.gmail.com>
- <20231219210454.GA540439@dev-arch.thelio-3990X>
- <ZYKWxl9oQXODIoNe@yujie-X299>
- <20231227224338.GA267659@dev-arch.thelio-3990X>
- <ZY2EUr+EYzyro3NH@kernel.org>
- <20231228173404.GA412881@dev-arch.thelio-3990X>
- <ZZQ6CpBnqpBgxSgp@kernel.org>
- <20240102175342.GH26453@gnu.wildebeest.org>
- <CAKwvOd=AAuqKk4GXV0jWORwJKJ0gao2zVd_RYWXoA90A77c47A@mail.gmail.com>
- <f6moe6xstxuj2wrnqftc2w7kx4yrnjyoqnigxprvnv4ymtgre6@6ioujgedt72e>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qf6cqASp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704327376; x=1735863376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J2mVultJttywMWzo72cxl7a4ROmKo5Py2nb8ykvjPXc=;
+  b=Qf6cqASpaxRkEcVJx7nELlTPuO7u770MyjTEHhfAWSGXl5e/PWLaurNK
+   inruPIoexMxtmdtNVzL+SBOT7PKyFqNimigzoLccBQg2Tt+stKN2tANhI
+   lFfVprCHDJShE7J3z84o/QBIaAkMgQcfJyCC4ey4cxMdf3DPG2WM0z2b+
+   cLutV48lGSMj5EjwNh5Law1ZZaUwHVYdnmbjNNfPeeWz/GpzKoaEJegP5
+   4BbFcF2QZKELUB2pS2qTjT8usZNAU9TBXIWSeE35EnxMku6gosPBcpzYk
+   7c5hDg80M81ZgFJptOIITi1m28LD8fxlGuD4FYrelJILAV/NZ75oa/jyL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="394237445"
+X-IronPort-AV: E=Sophos;i="6.04,329,1695711600"; 
+   d="scan'208";a="394237445"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 16:16:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="1027223913"
+X-IronPort-AV: E=Sophos;i="6.04,329,1695711600"; 
+   d="scan'208";a="1027223913"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2024 16:16:12 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rLBP6-000Mi0-0i;
+	Thu, 04 Jan 2024 00:16:08 +0000
+Date: Thu, 4 Jan 2024 08:15:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+	kuba@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrew@lunn.ch,
+	f.fainelli@gmail.com, olteanv@gmail.com, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] net: dsa: mv88e6xxx: Add LED infrastructure
+Message-ID: <202401040808.PYrPvsd9-lkp@intel.com>
+References: <20240103103351.1188835-2-tobias@waldekranz.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f6moe6xstxuj2wrnqftc2w7kx4yrnjyoqnigxprvnv4ymtgre6@6ioujgedt72e>
+In-Reply-To: <20240103103351.1188835-2-tobias@waldekranz.com>
 
-On Wed, Jan 03, 2024 at 05:03:17PM -0500, Kent Overstreet wrote:
-> On Wed, Jan 03, 2024 at 08:20:10AM -0800, Nick Desaulniers wrote:
-> > On Tue, Jan 2, 2024 at 9:53 AM Mark Wielaard <mark@klomp.org> wrote:
-> > >
-> > > This seems to need Qualcomm to upstream support for this processor
-> > > type to bintuils and elfutils.
-> > 
-> > Probably should disable BTF for hexagon until then.
-> 
-> Do we want to include a patch for that in the header cleanup tree?
+Hi Tobias,
 
-This issue is reproducible on mainline so I don't think there needs to
-be a patch for this in the header cleanup tree.
+kernel test robot noticed the following build warnings:
 
-As for the patch, I assume it would look something like this?
+[auto build test WARNING on net-next/main]
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 4405f81248fb..1b939f5583eb 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -378,6 +378,8 @@ config DEBUG_INFO_BTF
- 	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
- 	depends on BPF_SYSCALL
- 	depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >= 121
-+	# pahole uses elfutils, which does not have support for Hexagon relocations
-+	depends on !HEXAGON
- 	help
- 	  Generate deduplicated BTF type information from DWARF debug info.
- 	  Turning this on expects presence of pahole tool, which will convert
+url:    https://github.com/intel-lab-lkp/linux/commits/Tobias-Waldekranz/net-dsa-mv88e6xxx-Add-LED-infrastructure/20240103-183726
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240103103351.1188835-2-tobias%40waldekranz.com
+patch subject: [PATCH net-next 1/2] net: dsa: mv88e6xxx: Add LED infrastructure
+config: arm-orion5x_defconfig (https://download.01.org/0day-ci/archive/20240104/202401040808.PYrPvsd9-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240104/202401040808.PYrPvsd9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401040808.PYrPvsd9-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/dsa/mv88e6xxx/leds.c:171:5: warning: no previous prototype for function 'mv88e6xxx_port_setup_leds' [-Wmissing-prototypes]
+     171 | int mv88e6xxx_port_setup_leds(struct dsa_switch *ds, int port)
+         |     ^
+   drivers/net/dsa/mv88e6xxx/leds.c:171:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     171 | int mv88e6xxx_port_setup_leds(struct dsa_switch *ds, int port)
+         | ^
+         | static 
+   1 warning generated.
+
+
+vim +/mv88e6xxx_port_setup_leds +171 drivers/net/dsa/mv88e6xxx/leds.c
+
+   170	
+ > 171	int mv88e6xxx_port_setup_leds(struct dsa_switch *ds, int port)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
