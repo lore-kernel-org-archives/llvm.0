@@ -1,46 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A6915BE;
-	Sat,  6 Jan 2024 11:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0147468;
+	Sat,  6 Jan 2024 13:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iiYkgs55"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VEy9fWwt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704540214; x=1736076214;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=na2IvgtcsxM8r4u0dVnCU1Paxkw5pEKmSUMQNQ7GYXw=;
-  b=iiYkgs55Pj7hywSyJHFCuUT/tJ+ktYTGo5BZD50P+rgUIgMHi2MtobDv
-   hZVSaIny2BEvRGmdjylOWVYUa4myg2O0jcykrLEY7Eun41C32EZF8Zuew
-   S8yG4iEMdTQROv1I5tOZp2DopE1N04Vri3AoweicjxC8zr2uTM1a+N3I0
-   iu6I8ezyTDZxqE3H5zGem8puPQIbme7c/UqUdbED75SsRO1VXKmFwk5I8
-   tkrFhlB2et40ZHz6GaUE+UvoBwh189SAgy21ON87gBy1OQ7bjOqkgJ6NO
-   LRhtq72zUyzECewyOJ46MccKFhBDoQSF7ejCPrq6ACfSzN9rPaGj/fgh2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10944"; a="396535243"
-X-IronPort-AV: E=Sophos;i="6.04,336,1695711600"; 
-   d="scan'208";a="396535243"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 03:23:28 -0800
+  t=1704549424; x=1736085424;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iEJTJz2Jddibopjfs8jx4G+D3yybQkJE2N06E9WrvVQ=;
+  b=VEy9fWwtalopt6pPZve840cZA6m6SorzhXFd4VZccVpkXmD9YWHcLluf
+   gCqtbpO0oXXHBkcg8ZPfwCCN7R4zXWN0MXmDq6O1t0VEVpTPZ2yfTaCVr
+   n/AIcRzdVl3ycXPcUHMSb7qLXlrutXiwmC7XT/I3H3YSB9Ajeuq+It9LU
+   5nJZ1e3Cf256JHXoM9l6evoxcociBJKbskOoWlK3tz8JVIpKLl5JlqanV
+   iuAhu3xxLCBG6diByktU/M3/tlv/7tqTxK03bYiwOAEZTn1XTm6aJKEd7
+   Z1xKJ9ZdlSk8POIXqg6oxvUvzBDZlDfi0oEFL3TwlIJTd8FCq3bPKLrAI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="11012494"
+X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
+   d="scan'208";a="11012494"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 05:56:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,336,1695711600"; 
-   d="scan'208";a="15472699"
+X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="846810525"
+X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
+   d="scan'208";a="846810525"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 06 Jan 2024 03:23:27 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 06 Jan 2024 05:56:53 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rM4lw-0002Pa-10;
-	Sat, 06 Jan 2024 11:23:24 +0000
-Date: Sat, 6 Jan 2024 19:22:24 +0800
+	id 1rM7AR-0002Xk-1L;
+	Sat, 06 Jan 2024 13:56:51 +0000
+Date: Sat, 6 Jan 2024 21:56:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Oleksandr Tyshchenko <olekstysh@gmail.com>,
+	xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: drivers/powercap/dtpm.c:602: warning: Function parameter or member
- 'dtpm_match_table' not described in 'dtpm_create_hierarchy'
-Message-ID: <202401061934.0O0E30H8-lkp@intel.com>
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Daniel Vetter <daniel@ffwll.ch>, Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>
+Subject: Re: [PATCH] xen/gntdev: Fix the abuse of underlying struct page in
+ DMA-buf import
+Message-ID: <202401062122.it6zvLG0-lkp@intel.com>
+References: <20240104185327.177376-1-olekstysh@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,61 +56,152 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240104185327.177376-1-olekstysh@gmail.com>
 
-Hi Daniel,
+Hi Oleksandr,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   95c8a35f1c017327eab3b6a2ff5c04255737c856
-commit: 3759ec678e8944dc2ea70cab77a300408f78ae27 powercap/drivers/dtpm: Add hierarchy creation
-date:   1 year, 11 months ago
-config: i386-randconfig-003-20240105 (https://download.01.org/0day-ci/archive/20240106/202401061934.0O0E30H8-lkp@intel.com/config)
+[auto build test WARNING on xen-tip/linux-next]
+[also build test WARNING on linus/master v6.7-rc8 next-20240105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksandr-Tyshchenko/xen-gntdev-Fix-the-abuse-of-underlying-struct-page-in-DMA-buf-import/20240105-025516
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
+patch link:    https://lore.kernel.org/r/20240104185327.177376-1-olekstysh%40gmail.com
+patch subject: [PATCH] xen/gntdev: Fix the abuse of underlying struct page in DMA-buf import
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240106/202401062122.it6zvLG0-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240106/202401061934.0O0E30H8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240106/202401062122.it6zvLG0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401061934.0O0E30H8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401062122.it6zvLG0-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/powercap/dtpm.c:602: warning: Function parameter or member 'dtpm_match_table' not described in 'dtpm_create_hierarchy'
->> drivers/powercap/dtpm.c:602: warning: Excess function parameter 'hierarchy' description in 'dtpm_create_hierarchy'
+>> drivers/xen/gntdev-dmabuf.c:623:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     623 |         if (!gfns)
+         |             ^~~~~
+   drivers/xen/gntdev-dmabuf.c:660:9: note: uninitialized use occurs here
+     660 |         return ret;
+         |                ^~~
+   drivers/xen/gntdev-dmabuf.c:623:2: note: remove the 'if' if its condition is always false
+     623 |         if (!gfns)
+         |         ^~~~~~~~~~
+     624 |                 goto fail_unmap;
+         |                 ~~~~~~~~~~~~~~~
+   drivers/xen/gntdev-dmabuf.c:569:43: note: initialize the variable 'ret' to silence this warning
+     569 |         struct gntdev_dmabuf *gntdev_dmabuf, *ret;
+         |                                                  ^
+         |                                                   = NULL
+   1 warning generated.
 
 
-vim +602 drivers/powercap/dtpm.c
+vim +623 drivers/xen/gntdev-dmabuf.c
 
-   574	
-   575	/**
-   576	 * dtpm_create_hierarchy - Create the dtpm hierarchy
-   577	 * @hierarchy: An array of struct dtpm_node describing the hierarchy
-   578	 *
-   579	 * The function is called by the platform specific code with the
-   580	 * description of the different node in the hierarchy. It creates the
-   581	 * tree in the sysfs filesystem under the powercap dtpm entry.
-   582	 *
-   583	 * The expected tree has the format:
-   584	 *
-   585	 * struct dtpm_node hierarchy[] = {
-   586	 *	[0] { .name = "topmost", type =  DTPM_NODE_VIRTUAL },
-   587	 *	[1] { .name = "package", .type = DTPM_NODE_VIRTUAL, .parent = &hierarchy[0] },
-   588	 *	[2] { .name = "/cpus/cpu0", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
-   589	 *	[3] { .name = "/cpus/cpu1", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
-   590	 *	[4] { .name = "/cpus/cpu2", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
-   591	 *	[5] { .name = "/cpus/cpu3", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
-   592	 *	[6] { }
-   593	 * };
-   594	 *
-   595	 * The last element is always an empty one and marks the end of the
-   596	 * array.
-   597	 *
-   598	 * Return: zero on success, a negative value in case of error. Errors
-   599	 * are reported back from the underlying functions.
-   600	 */
-   601	int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
- > 602	{
+   564	
+   565	static struct gntdev_dmabuf *
+   566	dmabuf_imp_to_refs(struct gntdev_dmabuf_priv *priv, struct device *dev,
+   567			   int fd, int count, int domid)
+   568	{
+   569		struct gntdev_dmabuf *gntdev_dmabuf, *ret;
+   570		struct dma_buf *dma_buf;
+   571		struct dma_buf_attachment *attach;
+   572		struct sg_table *sgt;
+   573		struct sg_dma_page_iter sg_iter;
+   574		unsigned long *gfns;
+   575		int i;
+   576	
+   577		dma_buf = dma_buf_get(fd);
+   578		if (IS_ERR(dma_buf))
+   579			return ERR_CAST(dma_buf);
+   580	
+   581		gntdev_dmabuf = dmabuf_imp_alloc_storage(count);
+   582		if (IS_ERR(gntdev_dmabuf)) {
+   583			ret = gntdev_dmabuf;
+   584			goto fail_put;
+   585		}
+   586	
+   587		gntdev_dmabuf->priv = priv;
+   588		gntdev_dmabuf->fd = fd;
+   589	
+   590		attach = dma_buf_attach(dma_buf, dev);
+   591		if (IS_ERR(attach)) {
+   592			ret = ERR_CAST(attach);
+   593			goto fail_free_obj;
+   594		}
+   595	
+   596		gntdev_dmabuf->u.imp.attach = attach;
+   597	
+   598		sgt = dma_buf_map_attachment_unlocked(attach, DMA_BIDIRECTIONAL);
+   599		if (IS_ERR(sgt)) {
+   600			ret = ERR_CAST(sgt);
+   601			goto fail_detach;
+   602		}
+   603	
+   604		/* Check that we have zero offset. */
+   605		if (sgt->sgl->offset) {
+   606			ret = ERR_PTR(-EINVAL);
+   607			pr_debug("DMA buffer has %d bytes offset, user-space expects 0\n",
+   608				 sgt->sgl->offset);
+   609			goto fail_unmap;
+   610		}
+   611	
+   612		/* Check number of pages that imported buffer has. */
+   613		if (attach->dmabuf->size != gntdev_dmabuf->nr_pages << PAGE_SHIFT) {
+   614			ret = ERR_PTR(-EINVAL);
+   615			pr_debug("DMA buffer has %zu pages, user-space expects %d\n",
+   616				 attach->dmabuf->size, gntdev_dmabuf->nr_pages);
+   617			goto fail_unmap;
+   618		}
+   619	
+   620		gntdev_dmabuf->u.imp.sgt = sgt;
+   621	
+   622		gfns = kcalloc(count, sizeof(*gfns), GFP_KERNEL);
+ > 623		if (!gfns)
+   624			goto fail_unmap;
+   625	
+   626		/* Now convert sgt to array of gfns without accessing underlying pages. */
+   627		i = 0;
+   628		for_each_sgtable_dma_page(sgt, &sg_iter, 0) {
+   629			dma_addr_t addr = sg_page_iter_dma_address(&sg_iter);
+   630			unsigned long pfn = bfn_to_pfn(XEN_PFN_DOWN(dma_to_phys(dev, addr)));
+   631	
+   632			gfns[i++] = pfn_to_gfn(pfn);
+   633		}
+   634	
+   635		ret = ERR_PTR(dmabuf_imp_grant_foreign_access(gfns,
+   636							      gntdev_dmabuf->u.imp.refs,
+   637							      count, domid));
+   638		kfree(gfns);
+   639		if (IS_ERR(ret))
+   640			goto fail_end_access;
+   641	
+   642		pr_debug("Imported DMA buffer with fd %d\n", fd);
+   643	
+   644		mutex_lock(&priv->lock);
+   645		list_add(&gntdev_dmabuf->next, &priv->imp_list);
+   646		mutex_unlock(&priv->lock);
+   647	
+   648		return gntdev_dmabuf;
+   649	
+   650	fail_end_access:
+   651		dmabuf_imp_end_foreign_access(gntdev_dmabuf->u.imp.refs, count);
+   652	fail_unmap:
+   653		dma_buf_unmap_attachment_unlocked(attach, sgt, DMA_BIDIRECTIONAL);
+   654	fail_detach:
+   655		dma_buf_detach(dma_buf, attach);
+   656	fail_free_obj:
+   657		dmabuf_imp_free_storage(gntdev_dmabuf);
+   658	fail_put:
+   659		dma_buf_put(dma_buf);
+   660		return ret;
+   661	}
+   662	
 
 -- 
 0-DAY CI Kernel Test Service
