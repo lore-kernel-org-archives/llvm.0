@@ -1,54 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FAF1FB9;
-	Sat,  6 Jan 2024 04:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E4D4426;
+	Sat,  6 Jan 2024 07:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JH0neAiR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HdLliv++"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704515421; x=1736051421;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GxgAll06JSrUu0EJvq2url0vnem0z+UeoNCYdhG/ZPQ=;
-  b=JH0neAiRfFCIFIByFnLNZciUTtPuw2jSU8xG/kvPlW3nSWrAALe+TSBf
-   WLBSee0va6ifkeF+qnqeO9ZZLkLjTr4doP8hxq++OOfqqQBJMzP2pTtca
-   EXhYYqBqvzvKP4K2pXcyk0G+lfmz6B1nGnt9VMO6wmL0blh18wZN7j5FJ
-   JS4sKxzSOpqn25DuOdxqkIt8GKoVHGiWkmKzhtPzUJp1vV5/ejo3mvuTv
-   GB5hic5eK13Pgbtr0WR6SwKihV0TeCvFtX4/MRveqfSFyRRymMSaVYVdk
-   Auwqh7hB/v3/aGm9dLFYvHlMZgCcLDnJRX+VZzGY44f2Ys8fxJZfCZ/lN
+  t=1704527693; x=1736063693;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MJbYPYyFG10Jn2xVuv0ZuOd+hmT1c4HudNkZXqaVXJY=;
+  b=HdLliv++KCnlxHUNPMPmvRk1vVhKtpNC3K5qEE+Rbksg44ZR2X0PVZYO
+   5F5Ujj3rUbWitTtpi3b/dav27I2/ZtGU11ezt0Rz9gCUhEjpiHdeGum9b
+   MGqUVnGOSSdEsBKpqWIP7Qz8D4anPhPfOqtGMfi1DvlhchVYWQ/CxHfmj
+   MHoh2sHr83VWFLW6p+vjpmftZOHj8uP4Bf7qDuPaEIcjtaNITiGwYy2Oo
+   EZFBzzZzozbZkx/WunxmjuXKQmIj9Cy0uHtbWp+v5uHqBDF2IHoDR2G1I
+   im4TZ/wOFcMLh7LmkXYHw6wskpZhYavspYoZjU/rwtIoXCe1Dslo7Q251
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10944"; a="401417605"
-X-IronPort-AV: E=Sophos;i="6.04,335,1695711600"; 
-   d="scan'208";a="401417605"
+X-IronPort-AV: E=McAfee;i="6600,9927,10944"; a="4447809"
+X-IronPort-AV: E=Sophos;i="6.04,336,1695711600"; 
+   d="scan'208";a="4447809"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2024 20:30:21 -0800
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2024 23:54:52 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10944"; a="784376576"
-X-IronPort-AV: E=Sophos;i="6.04,335,1695711600"; 
-   d="scan'208";a="784376576"
+X-IronPort-AV: E=McAfee;i="6600,9927,10944"; a="784395756"
+X-IronPort-AV: E=Sophos;i="6.04,336,1695711600"; 
+   d="scan'208";a="784395756"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Jan 2024 20:30:17 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 05 Jan 2024 23:54:50 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rLyK7-00021c-26;
-	Sat, 06 Jan 2024 04:30:15 +0000
-Date: Sat, 6 Jan 2024 12:29:39 +0800
+	id 1rM1W4-0002Cc-25;
+	Sat, 06 Jan 2024 07:54:48 +0000
+Date: Sat, 6 Jan 2024 15:53:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leonardo Bras <leobras@redhat.com>, Oleg Nesterov <oleg@redhat.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	Arnd Bergmann <arnd@arndb.de>, Guo Hui <guohui@uniontech.com>
+To: Vlastimil Babka <vbabka@suse.cz>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] arm64: remove unnecessary ifdefs around
- is_compat_task()
-Message-ID: <202401061219.Y2LD7LTx-lkp@intel.com>
-References: <20240105041458.126602-3-leobras@redhat.com>
+	linux-kernel@vger.kernel.org, Roman Gushchin <guro@fb.com>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: mm/slub.c:2142:15: warning: variable 'partial_slabs' set but not used
+Message-ID: <202401061535.b3xgfK51-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,65 +50,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240105041458.126602-3-leobras@redhat.com>
 
-Hi Leonardo,
+Hi Vlastimil,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on linus/master v6.7-rc8 next-20240105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Leonardo-Bras/arm64-remove-unnecessary-ifdefs-around-is_compat_task/20240105-121957
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20240105041458.126602-3-leobras%40redhat.com
-patch subject: [PATCH v1 1/1] arm64: remove unnecessary ifdefs around is_compat_task()
-config: arm64-randconfig-001-20240105 (https://download.01.org/0day-ci/archive/20240106/202401061219.Y2LD7LTx-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240106/202401061219.Y2LD7LTx-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   95c8a35f1c017327eab3b6a2ff5c04255737c856
+commit: bb192ed9aa7191a5d65548f82c42b6750d65f569 mm/slub: Convert most struct page to struct slab by spatch
+date:   2 years ago
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20240106/202401061535.b3xgfK51-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240106/202401061535.b3xgfK51-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401061219.Y2LD7LTx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401061535.b3xgfK51-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/arm64/kernel/ptrace.c:2121:11: error: use of undeclared identifier 'user_aarch32_view'; did you mean 'user_aarch64_view'?
-    2121 |                 return &user_aarch32_view;
-         |                         ^~~~~~~~~~~~~~~~~
-         |                         user_aarch64_view
-   arch/arm64/kernel/ptrace.c:1591:38: note: 'user_aarch64_view' declared here
-    1591 | static const struct user_regset_view user_aarch64_view = {
-         |                                      ^
->> arch/arm64/kernel/ptrace.c:2123:11: error: use of undeclared identifier 'user_aarch32_ptrace_view'
-    2123 |                 return &user_aarch32_ptrace_view;
-         |                         ^
-   2 errors generated.
+>> mm/slub.c:2142:15: warning: variable 'partial_slabs' set but not used [-Wunused-but-set-variable]
+    2142 |         unsigned int partial_slabs = 0;
+         |                      ^
+   mm/slub.c:1681:21: warning: unused function 'kmalloc_large_node_hook' [-Wunused-function]
+    1681 | static inline void *kmalloc_large_node_hook(void *ptr, size_t size, gfp_t flags)
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +2121 arch/arm64/kernel/ptrace.c
+vim +/partial_slabs +2142 mm/slub.c
 
-478fcb2cdb2351 Will Deacon     2012-03-05  2111  
-478fcb2cdb2351 Will Deacon     2012-03-05  2112  const struct user_regset_view *task_user_regset_view(struct task_struct *task)
-478fcb2cdb2351 Will Deacon     2012-03-05  2113  {
-5d220ff9420f8b Catalin Marinas 2015-07-14  2114  	/*
-5d220ff9420f8b Catalin Marinas 2015-07-14  2115  	 * Core dumping of 32-bit tasks or compat ptrace requests must use the
-5d220ff9420f8b Catalin Marinas 2015-07-14  2116  	 * user_aarch32_view compatible with arm32. Native ptrace requests on
-5d220ff9420f8b Catalin Marinas 2015-07-14  2117  	 * 32-bit children use an extended user_aarch32_ptrace_view to allow
-5d220ff9420f8b Catalin Marinas 2015-07-14  2118  	 * access to the TLS register.
-5d220ff9420f8b Catalin Marinas 2015-07-14  2119  	 */
-5d220ff9420f8b Catalin Marinas 2015-07-14  2120  	if (is_compat_task())
-478fcb2cdb2351 Will Deacon     2012-03-05 @2121  		return &user_aarch32_view;
-5d220ff9420f8b Catalin Marinas 2015-07-14  2122  	else if (is_compat_thread(task_thread_info(task)))
-5d220ff9420f8b Catalin Marinas 2015-07-14 @2123  		return &user_aarch32_ptrace_view;
-e802ab35101cdf Leonardo Bras   2024-01-05  2124  
-478fcb2cdb2351 Will Deacon     2012-03-05  2125  	return &user_aarch64_view;
-478fcb2cdb2351 Will Deacon     2012-03-05  2126  }
-478fcb2cdb2351 Will Deacon     2012-03-05  2127  
+  2132	
+  2133	/*
+  2134	 * Try to allocate a partial slab from a specific node.
+  2135	 */
+  2136	static void *get_partial_node(struct kmem_cache *s, struct kmem_cache_node *n,
+  2137				      struct slab **ret_slab, gfp_t gfpflags)
+  2138	{
+  2139		struct slab *slab, *slab2;
+  2140		void *object = NULL;
+  2141		unsigned long flags;
+> 2142		unsigned int partial_slabs = 0;
+  2143	
+  2144		/*
+  2145		 * Racy check. If we mistakenly see no partial slabs then we
+  2146		 * just allocate an empty slab. If we mistakenly try to get a
+  2147		 * partial slab and there is none available then get_partial()
+  2148		 * will return NULL.
+  2149		 */
+  2150		if (!n || !n->nr_partial)
+  2151			return NULL;
+  2152	
+  2153		spin_lock_irqsave(&n->list_lock, flags);
+  2154		list_for_each_entry_safe(slab, slab2, &n->partial, slab_list) {
+  2155			void *t;
+  2156	
+  2157			if (!pfmemalloc_match(slab, gfpflags))
+  2158				continue;
+  2159	
+  2160			t = acquire_slab(s, n, slab, object == NULL);
+  2161			if (!t)
+  2162				break;
+  2163	
+  2164			if (!object) {
+  2165				*ret_slab = slab;
+  2166				stat(s, ALLOC_FROM_PARTIAL);
+  2167				object = t;
+  2168			} else {
+  2169				put_cpu_partial(s, slab, 0);
+  2170				stat(s, CPU_PARTIAL_NODE);
+  2171				partial_slabs++;
+  2172			}
+  2173	#ifdef CONFIG_SLUB_CPU_PARTIAL
+  2174			if (!kmem_cache_has_cpu_partial(s)
+  2175				|| partial_slabs > s->cpu_partial_slabs / 2)
+  2176				break;
+  2177	#else
+  2178			break;
+  2179	#endif
+  2180	
+  2181		}
+  2182		spin_unlock_irqrestore(&n->list_lock, flags);
+  2183		return object;
+  2184	}
+  2185	
 
 -- 
 0-DAY CI Kernel Test Service
