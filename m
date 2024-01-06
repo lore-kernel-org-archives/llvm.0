@@ -1,53 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0147468;
-	Sat,  6 Jan 2024 13:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1CF79F0;
+	Sat,  6 Jan 2024 14:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VEy9fWwt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K4I6mFWQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704549424; x=1736085424;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iEJTJz2Jddibopjfs8jx4G+D3yybQkJE2N06E9WrvVQ=;
-  b=VEy9fWwtalopt6pPZve840cZA6m6SorzhXFd4VZccVpkXmD9YWHcLluf
-   gCqtbpO0oXXHBkcg8ZPfwCCN7R4zXWN0MXmDq6O1t0VEVpTPZ2yfTaCVr
-   n/AIcRzdVl3ycXPcUHMSb7qLXlrutXiwmC7XT/I3H3YSB9Ajeuq+It9LU
-   5nJZ1e3Cf256JHXoM9l6evoxcociBJKbskOoWlK3tz8JVIpKLl5JlqanV
-   iuAhu3xxLCBG6diByktU/M3/tlv/7tqTxK03bYiwOAEZTn1XTm6aJKEd7
-   Z1xKJ9ZdlSk8POIXqg6oxvUvzBDZlDfi0oEFL3TwlIJTd8FCq3bPKLrAI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="11012494"
+  t=1704550077; x=1736086077;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hqDPk+rea7dosfnqB1kajy1T3c0u6ALIVOATHUi782s=;
+  b=K4I6mFWQD/SvsBzljrBqI2L4ToHzNQCCzgbqWIkM3vqFQzPmBMyGeCfL
+   S+wmRNOU9Pe6O7GjZ6NiK+ptO9IHnI+QAClhG+iHm0dwCfhzqutDgjOPf
+   y8R4sk0BrnrnSg7HGlDsaiW1Psi0u2y56sz+at34zBTqe6KDQoDInJCSP
+   H2NSfWZ/GvNClarZMnUBAqpNS0TtUQsuBZUDJZ5JMo+q1x06SJzuUOs+g
+   FUl2y81JGM4Mf1jj/rKPVrFRbXKr7NWZrv0MqeK13ccqKLgxAM8wd63er
+   qGLKaqno8d4QZDWNXQnGLBYO6LH/btRvF9U/ZuuQ5Iex3essjbqgUjbVK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="4427244"
 X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
-   d="scan'208";a="11012494"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 05:56:56 -0800
+   d="scan'208";a="4427244"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 06:07:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="846810525"
 X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
-   d="scan'208";a="846810525"
+   d="scan'208";a="29356787"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Jan 2024 05:56:53 -0800
+  by orviesa001.jf.intel.com with ESMTP; 06 Jan 2024 06:07:54 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rM7AR-0002Xk-1L;
-	Sat, 06 Jan 2024 13:56:51 +0000
-Date: Sat, 6 Jan 2024 21:56:45 +0800
+	id 1rM7L5-0002YK-2F;
+	Sat, 06 Jan 2024 14:07:51 +0000
+Date: Sat, 6 Jan 2024 22:07:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oleksandr Tyshchenko <olekstysh@gmail.com>,
-	xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>
-Subject: Re: [PATCH] xen/gntdev: Fix the abuse of underlying struct page in
- DMA-buf import
-Message-ID: <202401062122.it6zvLG0-lkp@intel.com>
-References: <20240104185327.177376-1-olekstysh@gmail.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:filelock-6.9 8/11] fs/ceph/locks.c:230:32: error: no member
+ named 'fl_flags' in 'struct file_lock'
+Message-ID: <202401062221.U5Akwk2z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,152 +48,215 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240104185327.177376-1-olekstysh@gmail.com>
 
-Hi Oleksandr,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on xen-tip/linux-next]
-[also build test WARNING on linus/master v6.7-rc8 next-20240105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksandr-Tyshchenko/xen-gntdev-Fix-the-abuse-of-underlying-struct-page-in-DMA-buf-import/20240105-025516
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
-patch link:    https://lore.kernel.org/r/20240104185327.177376-1-olekstysh%40gmail.com
-patch subject: [PATCH] xen/gntdev: Fix the abuse of underlying struct page in DMA-buf import
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240106/202401062122.it6zvLG0-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git filelock-6.9
+head:   fbf183d9e9c1309edc5fca747309c7c595c12090
+commit: 586ee3906f3c1613803f09e75c9459424992edce [8/11] filelock: move fl_flags into fl_core
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240106/202401062221.U5Akwk2z-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240106/202401062122.it6zvLG0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240106/202401062221.U5Akwk2z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401062122.it6zvLG0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401062221.U5Akwk2z-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/xen/gntdev-dmabuf.c:623:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     623 |         if (!gfns)
-         |             ^~~~~
-   drivers/xen/gntdev-dmabuf.c:660:9: note: uninitialized use occurs here
-     660 |         return ret;
-         |                ^~~
-   drivers/xen/gntdev-dmabuf.c:623:2: note: remove the 'if' if its condition is always false
-     623 |         if (!gfns)
-         |         ^~~~~~~~~~
-     624 |                 goto fail_unmap;
-         |                 ~~~~~~~~~~~~~~~
-   drivers/xen/gntdev-dmabuf.c:569:43: note: initialize the variable 'ret' to silence this warning
-     569 |         struct gntdev_dmabuf *gntdev_dmabuf, *ret;
-         |                                                  ^
-         |                                                   = NULL
-   1 warning generated.
+>> fs/ceph/locks.c:230:32: error: no member named 'fl_flags' in 'struct file_lock'
+     230 |         unsigned int orig_flags = fl->fl_flags;
+         |                                   ~~  ^
+   fs/ceph/locks.c:231:6: error: no member named 'fl_flags' in 'struct file_lock'
+     231 |         fl->fl_flags |= FL_EXISTS;
+         |         ~~  ^
+   fs/ceph/locks.c:233:6: error: no member named 'fl_flags' in 'struct file_lock'
+     233 |         fl->fl_flags = orig_flags;
+         |         ~~  ^
+   fs/ceph/locks.c:256:12: error: no member named 'fl_flags' in 'struct file_lock'
+     256 |         if (!(fl->fl_flags & FL_POSIX))
+         |               ~~  ^
+   fs/ceph/locks.c:322:12: error: no member named 'fl_flags' in 'struct file_lock'
+     322 |         if (!(fl->fl_flags & FL_FLOCK))
+         |               ~~  ^
+   5 errors generated.
+--
+>> fs/fuse/file.c:2572:20: error: no member named 'fl_flags' in 'struct file_lock'
+    2572 |         int opcode = (fl->fl_flags & FL_SLEEP) ? FUSE_SETLKW : FUSE_SETLK;
+         |                       ~~  ^
+   fs/fuse/file.c:2583:11: error: no member named 'fl_flags' in 'struct file_lock'
+    2583 |         if ((fl->fl_flags & FL_CLOSE_POSIX) == FL_CLOSE_POSIX)
+         |              ~~  ^
+   2 errors generated.
+--
+>> fs/gfs2/file.c:1443:12: error: no member named 'fl_flags' in 'struct file_lock'
+    1443 |         if (!(fl->fl_flags & FL_POSIX))
+         |               ~~  ^
+   fs/gfs2/file.c:1499:11: error: no member named 'fl_flags' in 'struct file_lock'
+    1499 |                 request.fl_flags = FL_FLOCK;
+         |                 ~~~~~~~ ^
+   fs/gfs2/file.c:1560:12: error: no member named 'fl_flags' in 'struct file_lock'
+    1560 |         if (!(fl->fl_flags & FL_FLOCK))
+         |               ~~  ^
+   3 errors generated.
+--
+>> fs/ocfs2/locks.c:57:11: error: no member named 'fl_flags' in 'struct file_lock'
+      57 |                 request.fl_flags = FL_FLOCK;
+         |                 ~~~~~~~ ^
+   fs/ocfs2/locks.c:103:12: error: no member named 'fl_flags' in 'struct file_lock'
+     103 |         if (!(fl->fl_flags & FL_FLOCK))
+         |               ~~  ^
+   fs/ocfs2/locks.c:121:12: error: no member named 'fl_flags' in 'struct file_lock'
+     121 |         if (!(fl->fl_flags & FL_POSIX))
+         |               ~~  ^
+   3 errors generated.
+--
+>> fs/smb/client/file.c:1313:13: error: no member named 'fl_flags' in 'struct file_lock'
+    1313 |                                         flock->fl_flags, &conf_lock,
+         |                                         ~~~~~  ^
+   fs/smb/client/file.c:1404:14: error: no member named 'fl_flags' in 'struct file_lock'
+    1404 |         if ((flock->fl_flags & FL_POSIX) == 0)
+         |              ~~~~~  ^
+   fs/smb/client/file.c:1432:14: error: no member named 'fl_flags' in 'struct file_lock'
+    1432 |         if ((flock->fl_flags & FL_POSIX) == 0)
+         |              ~~~~~  ^
+   fs/smb/client/file.c:1664:13: error: no member named 'fl_flags' in 'struct file_lock'
+    1664 |         if (flock->fl_flags & FL_POSIX)
+         |             ~~~~~  ^
+   fs/smb/client/file.c:1666:13: error: no member named 'fl_flags' in 'struct file_lock'
+    1666 |         if (flock->fl_flags & FL_FLOCK)
+         |             ~~~~~  ^
+   fs/smb/client/file.c:1668:13: error: no member named 'fl_flags' in 'struct file_lock'
+    1668 |         if (flock->fl_flags & FL_SLEEP) {
+         |             ~~~~~  ^
+   fs/smb/client/file.c:1672:13: error: no member named 'fl_flags' in 'struct file_lock'
+    1672 |         if (flock->fl_flags & FL_ACCESS)
+         |             ~~~~~  ^
+   fs/smb/client/file.c:1674:13: error: no member named 'fl_flags' in 'struct file_lock'
+    1674 |         if (flock->fl_flags & FL_LEASE)
+         |             ~~~~~  ^
+   fs/smb/client/file.c:1676:13: error: no member named 'fl_flags' in 'struct file_lock'
+    1676 |         if (flock->fl_flags &
+         |             ~~~~~  ^
+   fs/smb/client/file.c:1679:53: error: no member named 'fl_flags' in 'struct file_lock'
+    1679 |                 cifs_dbg(FYI, "Unknown lock flags 0x%x\n", flock->fl_flags);
+         |                                                            ~~~~~  ^
+   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
+      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
+         |                                                  ^~~~~~~~~~~
+   fs/smb/client/cifs_debug.h:66:23: note: expanded from macro 'cifs_dbg_func'
+      66 |                                       __FILE__, ##__VA_ARGS__);         \
+         |                                                   ^~~~~~~~~~~
+   include/linux/printk.h:634:38: note: expanded from macro 'pr_debug_once'
+     634 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |                                             ^~~~~~~~~~~
+   include/linux/printk.h:129:17: note: expanded from macro 'no_printk'
+     129 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                               ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   fs/smb/client/file.c:1679:53: error: no member named 'fl_flags' in 'struct file_lock'
+    1679 |                 cifs_dbg(FYI, "Unknown lock flags 0x%x\n", flock->fl_flags);
+         |                                                            ~~~~~  ^
+   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
+      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
+         |                                                  ^~~~~~~~~~~
+   fs/smb/client/cifs_debug.h:68:38: note: expanded from macro 'cifs_dbg_func'
+      68 |                 pr_err_ ## ratefunc("VFS: " fmt, ##__VA_ARGS__);        \
+         |                                                    ^~~~~~~~~~~
+   include/linux/printk.h:611:38: note: expanded from macro 'pr_err_once'
+     611 |         printk_once(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                                             ^~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/once_lite.h:31:9: note: expanded from macro 'DO_ONCE_LITE_IF'
+      31 |                         func(__VA_ARGS__);                              \
+         |                              ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   fs/smb/client/file.c:1679:53: error: no member named 'fl_flags' in 'struct file_lock'
+    1679 |                 cifs_dbg(FYI, "Unknown lock flags 0x%x\n", flock->fl_flags);
+         |                                                            ~~~~~  ^
+   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
+      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
+         |                                                  ^~~~~~~~~~~
+   fs/smb/client/cifs_debug.h:70:32: note: expanded from macro 'cifs_dbg_func'
+      70 |                 pr_debug_ ## ratefunc(fmt, ##__VA_ARGS__);              \
+         |                                              ^~~~~~~~~~~
+   include/linux/printk.h:634:38: note: expanded from macro 'pr_debug_once'
+     634 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |                                             ^~~~~~~~~~~
+   include/linux/printk.h:129:17: note: expanded from macro 'no_printk'
+     129 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                               ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   fs/smb/client/file.c:1679:53: error: no member named 'fl_flags' in 'struct file_lock'
+    1679 |                 cifs_dbg(FYI, "Unknown lock flags 0x%x\n", flock->fl_flags);
+         |                                                            ~~~~~  ^
+   fs/smb/client/cifs_debug.h:79:43: note: expanded from macro 'cifs_dbg'
+      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
+         |                                                         ^~~~~~~~~~~
+   fs/smb/client/cifs_debug.h:66:23: note: expanded from macro 'cifs_dbg_func'
+      66 |                                       __FILE__, ##__VA_ARGS__);         \
+         |                                                   ^~~~~~~~~~~
+   include/linux/printk.h:692:50: note: expanded from macro 'pr_debug_ratelimited'
+--
+>> fs/smb/client/smb2file.c:231:17: error: no member named 'fl_flags' in 'struct file_lock'
+     231 |                         if (!(flock->fl_flags & (FL_FLOCK | FL_OFDLCK)))
+         |                               ~~~~~  ^
+   1 error generated.
+--
+   fs/ocfs2/locks.c:14:10: error: 'cluster/masklog.h' file not found with <angled> include; use "quotes" instead
+      14 | #include <cluster/masklog.h>
+         |          ^~~~~~~~~~~~~~~~~~~
+         |          "cluster/masklog.h"
+>> fs/ocfs2/locks.c:57:11: error: no member named 'fl_flags' in 'struct file_lock'
+      57 |                 request.fl_flags = FL_FLOCK;
+         |                 ~~~~~~~ ^
+   fs/ocfs2/locks.c:103:12: error: no member named 'fl_flags' in 'struct file_lock'
+     103 |         if (!(fl->fl_flags & FL_FLOCK))
+         |               ~~  ^
+   fs/ocfs2/locks.c:121:12: error: no member named 'fl_flags' in 'struct file_lock'
+     121 |         if (!(fl->fl_flags & FL_POSIX))
+         |               ~~  ^
+   4 errors generated.
 
 
-vim +623 drivers/xen/gntdev-dmabuf.c
+vim +230 fs/ceph/locks.c
 
-   564	
-   565	static struct gntdev_dmabuf *
-   566	dmabuf_imp_to_refs(struct gntdev_dmabuf_priv *priv, struct device *dev,
-   567			   int fd, int count, int domid)
-   568	{
-   569		struct gntdev_dmabuf *gntdev_dmabuf, *ret;
-   570		struct dma_buf *dma_buf;
-   571		struct dma_buf_attachment *attach;
-   572		struct sg_table *sgt;
-   573		struct sg_dma_page_iter sg_iter;
-   574		unsigned long *gfns;
-   575		int i;
-   576	
-   577		dma_buf = dma_buf_get(fd);
-   578		if (IS_ERR(dma_buf))
-   579			return ERR_CAST(dma_buf);
-   580	
-   581		gntdev_dmabuf = dmabuf_imp_alloc_storage(count);
-   582		if (IS_ERR(gntdev_dmabuf)) {
-   583			ret = gntdev_dmabuf;
-   584			goto fail_put;
-   585		}
-   586	
-   587		gntdev_dmabuf->priv = priv;
-   588		gntdev_dmabuf->fd = fd;
-   589	
-   590		attach = dma_buf_attach(dma_buf, dev);
-   591		if (IS_ERR(attach)) {
-   592			ret = ERR_CAST(attach);
-   593			goto fail_free_obj;
-   594		}
-   595	
-   596		gntdev_dmabuf->u.imp.attach = attach;
-   597	
-   598		sgt = dma_buf_map_attachment_unlocked(attach, DMA_BIDIRECTIONAL);
-   599		if (IS_ERR(sgt)) {
-   600			ret = ERR_CAST(sgt);
-   601			goto fail_detach;
-   602		}
-   603	
-   604		/* Check that we have zero offset. */
-   605		if (sgt->sgl->offset) {
-   606			ret = ERR_PTR(-EINVAL);
-   607			pr_debug("DMA buffer has %d bytes offset, user-space expects 0\n",
-   608				 sgt->sgl->offset);
-   609			goto fail_unmap;
-   610		}
-   611	
-   612		/* Check number of pages that imported buffer has. */
-   613		if (attach->dmabuf->size != gntdev_dmabuf->nr_pages << PAGE_SHIFT) {
-   614			ret = ERR_PTR(-EINVAL);
-   615			pr_debug("DMA buffer has %zu pages, user-space expects %d\n",
-   616				 attach->dmabuf->size, gntdev_dmabuf->nr_pages);
-   617			goto fail_unmap;
-   618		}
-   619	
-   620		gntdev_dmabuf->u.imp.sgt = sgt;
-   621	
-   622		gfns = kcalloc(count, sizeof(*gfns), GFP_KERNEL);
- > 623		if (!gfns)
-   624			goto fail_unmap;
-   625	
-   626		/* Now convert sgt to array of gfns without accessing underlying pages. */
-   627		i = 0;
-   628		for_each_sgtable_dma_page(sgt, &sg_iter, 0) {
-   629			dma_addr_t addr = sg_page_iter_dma_address(&sg_iter);
-   630			unsigned long pfn = bfn_to_pfn(XEN_PFN_DOWN(dma_to_phys(dev, addr)));
-   631	
-   632			gfns[i++] = pfn_to_gfn(pfn);
-   633		}
-   634	
-   635		ret = ERR_PTR(dmabuf_imp_grant_foreign_access(gfns,
-   636							      gntdev_dmabuf->u.imp.refs,
-   637							      count, domid));
-   638		kfree(gfns);
-   639		if (IS_ERR(ret))
-   640			goto fail_end_access;
-   641	
-   642		pr_debug("Imported DMA buffer with fd %d\n", fd);
-   643	
-   644		mutex_lock(&priv->lock);
-   645		list_add(&gntdev_dmabuf->next, &priv->imp_list);
-   646		mutex_unlock(&priv->lock);
-   647	
-   648		return gntdev_dmabuf;
-   649	
-   650	fail_end_access:
-   651		dmabuf_imp_end_foreign_access(gntdev_dmabuf->u.imp.refs, count);
-   652	fail_unmap:
-   653		dma_buf_unmap_attachment_unlocked(attach, sgt, DMA_BIDIRECTIONAL);
-   654	fail_detach:
-   655		dma_buf_detach(dma_buf, attach);
-   656	fail_free_obj:
-   657		dmabuf_imp_free_storage(gntdev_dmabuf);
-   658	fail_put:
-   659		dma_buf_put(dma_buf);
-   660		return ret;
-   661	}
-   662	
+9280be24dc9c7a Yan, Zheng 2014-10-14  226  
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  227  static int try_unlock_file(struct file *file, struct file_lock *fl)
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  228  {
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  229  	int err;
+bbb480ab05b2c1 Yan, Zheng 2020-02-11 @230  	unsigned int orig_flags = fl->fl_flags;
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  231  	fl->fl_flags |= FL_EXISTS;
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  232  	err = locks_lock_file_wait(file, fl);
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  233  	fl->fl_flags = orig_flags;
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  234  	if (err == -ENOENT) {
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  235  		if (!(orig_flags & FL_EXISTS))
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  236  			err = 0;
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  237  		return err;
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  238  	}
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  239  	return 1;
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  240  }
+bbb480ab05b2c1 Yan, Zheng 2020-02-11  241  
+
+:::::: The code at line 230 was first introduced by commit
+:::::: bbb480ab05b2c148d8f8378660bfddd46761e86e ceph: check if file lock exists before sending unlock request
+
+:::::: TO: Yan, Zheng <zyan@redhat.com>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
