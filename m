@@ -1,114 +1,176 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4F1125AD;
-	Sun,  7 Jan 2024 05:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A7012B61
+	for <llvm@lists.linux.dev>; Sun,  7 Jan 2024 07:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hDDUrmo7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704606965; x=1736142965;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CDM7O/aNwXft08O1jKgAlrtcGQec92BLDNxyXa3INsU=;
-  b=hDDUrmo7RLRkswS3MJUInTfQkOXkcYQ7NJ4Jgp+nbOLEqxbCl3jxUZdO
-   v20Q4jFGXEdyzXwEkR7oD1Kz6J87uxVYALHMKzrWAVaauQ5rna0qmt41L
-   g36U8dA+SdqZ/bZh6+KnBCdL26InqAhvZi6Q3nUf3kizDria3dOHaBpfh
-   Dt22F9uwn5BN7agzINeaXaPOYhgAUubCNQglPfzbg5CE1lAwS1Ct3BkAS
-   DRHqH9mOFftw3c+4DxVOMP1egwnJnLrOXKn0KzqbEChOBrBMby12xDk+u
-   QLRvztM8gXdifesd578gR+A7HUSNCu9MfWTcY4oQWDDl12iYfl477HdtZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="4457721"
-X-IronPort-AV: E=Sophos;i="6.04,338,1695711600"; 
-   d="scan'208";a="4457721"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 21:56:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="730823476"
-X-IronPort-AV: E=Sophos;i="6.04,338,1695711600"; 
-   d="scan'208";a="730823476"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 06 Jan 2024 21:56:02 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rMM8e-0003SM-1E;
-	Sun, 07 Jan 2024 05:56:00 +0000
-Date: Sun, 7 Jan 2024 13:55:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <simon.horman@corigine.com>
-Subject: drivers/net/ethernet/freescale/enetc/enetc.c:2713:3: warning:
- 'snprintf' will always be truncated; specified size is 80, but format string
- expands to at least 110
-Message-ID: <202401071345.gs4ThqGA-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZyY8k4uj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704612087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ezTD6Fh0yY4KhO+65LbEcv/OG3/fwwQEhxVhKjiR5U8=;
+	b=ZyY8k4ujZRwJ61ZLcFVcLJQjJ4JBsAQ2NMo4LqnyHvy0VlYn0cWRNoVQpkSwCckKhJaX3T
+	YOGG56ZgopBU5ogWsqg5t+pjZwguPIuUoh6cMG0jKYYgG3xqxmcrXrPpqy7qEA34n+8YzH
+	HnitdB94uCXx2zD//vg0xCZY974VMLQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-607-WK9zuFqYMhi0aXN8bL-viQ-1; Sun, 07 Jan 2024 02:21:23 -0500
+X-MC-Unique: WK9zuFqYMhi0aXN8bL-viQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5095803915
+	for <llvm@lists.linux.dev>; Sun,  7 Jan 2024 07:21:23 +0000 (UTC)
+Received: from [172.64.3.46] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A150740C6EB9;
+	Sun,  7 Jan 2024 07:21:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 1 of 226): Test report for master
+ (6.7.0-rc8, mainline.kernel.org-clang, 52b1853b)
+Date: Sun, 07 Jan 2024 07:21:23 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <51974.124010702212400152@us-mta-607.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   52b1853b080a082ec3749c3a9577f6c71b1d4a90
-commit: 800db2d125c2bc22c448e2386c3518e663d6db71 net: enetc: ensure we always have a minimum number of TXQs for stack
-date:   11 months ago
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240107/202401071345.gs4ThqGA-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240107/202401071345.gs4ThqGA-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401071345.gs4ThqGA-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> drivers/net/ethernet/freescale/enetc/enetc.c:2713:3: warning: 'snprintf' will always be truncated; specified size is 80, but format string expands to at least 110 [-Wformat-truncation]
-    2713 |                 NL_SET_ERR_MSG_FMT_MOD(extack,
-         |                 ^
-   include/linux/netlink.h:131:2: note: expanded from macro 'NL_SET_ERR_MSG_FMT_MOD'
-     131 |         NL_SET_ERR_MSG_FMT((extack), KBUILD_MODNAME ": " fmt, ##args)
-         |         ^
-   include/linux/netlink.h:116:6: note: expanded from macro 'NL_SET_ERR_MSG_FMT'
-     116 |         if (snprintf(__extack->_msg_buf, NETLINK_MAX_FMTMSG_LEN,               \
-         |             ^
-   1 warning generated.
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.7-final' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/wsa/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/121425
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
-vim +/snprintf +2713 drivers/net/ethernet/freescale/enetc/enetc.c
+Tests that were not ran because of internal issues:=20
+     ppc64le - Reboot test
 
-  2703	
-  2704	static int enetc_setup_xdp_prog(struct net_device *ndev, struct bpf_prog *prog,
-  2705					struct netlink_ext_ack *extack)
-  2706	{
-  2707		int num_xdp_tx_queues = prog ? num_possible_cpus() : 0;
-  2708		struct enetc_ndev_priv *priv = netdev_priv(ndev);
-  2709		bool extended;
-  2710	
-  2711		if (priv->min_num_stack_tx_queues + num_xdp_tx_queues >
-  2712		    priv->num_tx_rings) {
-> 2713			NL_SET_ERR_MSG_FMT_MOD(extack,
-  2714					       "Reserving %d XDP TXQs does not leave a minimum of %d TXQs for network stack (total %d available)",
-  2715					       num_xdp_tx_queues,
-  2716					       priv->min_num_stack_tx_queues,
-  2717					       priv->num_tx_rings);
-  2718			return -EBUSY;
-  2719		}
-  2720	
-  2721		extended = !!(priv->active_offloads & ENETC_F_RX_TSTAMP);
-  2722	
-  2723		/* The buffer layout is changing, so we need to drain the old
-  2724		 * RX buffers and seed new ones.
-  2725		 */
-  2726		return enetc_reconfigure(priv, extended, enetc_reconfigure_xdp_cb, prog);
-  2727	}
-  2728	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
