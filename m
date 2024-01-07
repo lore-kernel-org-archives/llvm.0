@@ -1,50 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E241415A0;
-	Sun,  7 Jan 2024 01:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4F1125AD;
+	Sun,  7 Jan 2024 05:56:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jc7hgGbM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hDDUrmo7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704590939; x=1736126939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7O1UL8cXY0lJE1zmCzGXxOgYFADLmsa5MNEHePLgsoY=;
-  b=jc7hgGbM1cxuuN0kXwBp9NVYxu3OohWJ2if0B82lTkpzsO9+BttdEZFg
-   Thuoq5msOzpfHNZMB8vR1UX4W5+dWbFqMvF4LT0YsqNEr7Qavffj3eLk5
-   anvsnPqzUTNVz2F6NdUBEEazsr/fFXwcuVoXvlorRENQ4bj6+nSIYuOV4
-   +o5VymJm2oSYi/Ea/ab30YAIO8sxKbhP0qDNyVs9siprjfdeP+hg3rr6y
-   HvIEvAp19FOHm9tJ/kD5cgyBt1vIb2CHfUlbR1gydnofTtkTkIZS56y8j
-   7eJy4GhFfEohGQpCSruDgVq/PO2pkcKpOboDkyIDnYtlfPKTGVoWh8uYV
+  t=1704606965; x=1736142965;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CDM7O/aNwXft08O1jKgAlrtcGQec92BLDNxyXa3INsU=;
+  b=hDDUrmo7RLRkswS3MJUInTfQkOXkcYQ7NJ4Jgp+nbOLEqxbCl3jxUZdO
+   v20Q4jFGXEdyzXwEkR7oD1Kz6J87uxVYALHMKzrWAVaauQ5rna0qmt41L
+   g36U8dA+SdqZ/bZh6+KnBCdL26InqAhvZi6Q3nUf3kizDria3dOHaBpfh
+   Dt22F9uwn5BN7agzINeaXaPOYhgAUubCNQglPfzbg5CE1lAwS1Ct3BkAS
+   DRHqH9mOFftw3c+4DxVOMP1egwnJnLrOXKn0KzqbEChOBrBMby12xDk+u
+   QLRvztM8gXdifesd578gR+A7HUSNCu9MfWTcY4oQWDDl12iYfl477HdtZ
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="428875596"
+X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="4457721"
 X-IronPort-AV: E=Sophos;i="6.04,338,1695711600"; 
-   d="scan'208";a="428875596"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 17:28:45 -0800
+   d="scan'208";a="4457721"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 21:56:05 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="730823476"
 X-IronPort-AV: E=Sophos;i="6.04,338,1695711600"; 
-   d="scan'208";a="23179110"
+   d="scan'208";a="730823476"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 06 Jan 2024 17:28:43 -0800
+  by orsmga003.jf.intel.com with ESMTP; 06 Jan 2024 21:56:02 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rMHxx-0003F7-0m;
-	Sun, 07 Jan 2024 01:28:41 +0000
-Date: Sun, 7 Jan 2024 09:28:33 +0800
+	id 1rMM8e-0003SM-1E;
+	Sun, 07 Jan 2024 05:56:00 +0000
+Date: Sun, 7 Jan 2024 13:55:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brett Creeley <brett.creeley@amd.com>, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	shannon.nelson@amd.com, brett.creeley@amd.com
-Subject: Re: [PATCH net-next 4/8] pds_core: Prevent race issues involving the
- adminq
-Message-ID: <202401070931.tvTUY2US-lkp@intel.com>
-References: <20240104171221.31399-5-brett.creeley@amd.com>
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+	Simon Horman <simon.horman@corigine.com>
+Subject: drivers/net/ethernet/freescale/enetc/enetc.c:2713:3: warning:
+ 'snprintf' will always be truncated; specified size is 80, but format string
+ expands to at least 110
+Message-ID: <202401071345.gs4ThqGA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,60 +52,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240104171221.31399-5-brett.creeley@amd.com>
 
-Hi Brett,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Brett-Creeley/pds_core-Prevent-health-thread-from-running-during-reset-remove/20240105-011706
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240104171221.31399-5-brett.creeley%40amd.com
-patch subject: [PATCH net-next 4/8] pds_core: Prevent race issues involving the adminq
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240107/202401070931.tvTUY2US-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240107/202401070931.tvTUY2US-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   52b1853b080a082ec3749c3a9577f6c71b1d4a90
+commit: 800db2d125c2bc22c448e2386c3518e663d6db71 net: enetc: ensure we always have a minimum number of TXQs for stack
+date:   11 months ago
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240107/202401071345.gs4ThqGA-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240107/202401071345.gs4ThqGA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401070931.tvTUY2US-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401071345.gs4ThqGA-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/amd/pds_core/core.c:518:6: warning: no previous prototype for function 'pdsc_adminq_wait_and_dec_once_unused' [-Wmissing-prototypes]
-     518 | void pdsc_adminq_wait_and_dec_once_unused(struct pdsc *pdsc)
-         |      ^
-   drivers/net/ethernet/amd/pds_core/core.c:518:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     518 | void pdsc_adminq_wait_and_dec_once_unused(struct pdsc *pdsc)
-         | ^
-         | static 
+>> drivers/net/ethernet/freescale/enetc/enetc.c:2713:3: warning: 'snprintf' will always be truncated; specified size is 80, but format string expands to at least 110 [-Wformat-truncation]
+    2713 |                 NL_SET_ERR_MSG_FMT_MOD(extack,
+         |                 ^
+   include/linux/netlink.h:131:2: note: expanded from macro 'NL_SET_ERR_MSG_FMT_MOD'
+     131 |         NL_SET_ERR_MSG_FMT((extack), KBUILD_MODNAME ": " fmt, ##args)
+         |         ^
+   include/linux/netlink.h:116:6: note: expanded from macro 'NL_SET_ERR_MSG_FMT'
+     116 |         if (snprintf(__extack->_msg_buf, NETLINK_MAX_FMTMSG_LEN,               \
+         |             ^
    1 warning generated.
 
 
-vim +/pdsc_adminq_wait_and_dec_once_unused +518 drivers/net/ethernet/amd/pds_core/core.c
+vim +/snprintf +2713 drivers/net/ethernet/freescale/enetc/enetc.c
 
-   517	
- > 518	void pdsc_adminq_wait_and_dec_once_unused(struct pdsc *pdsc)
-   519	{
-   520		/* The driver initializes the adminq_refcnt to 1 when the adminq is
-   521		 * allocated and ready for use. Other users/requesters will increment
-   522		 * the refcnt while in use. If the refcnt is down to 1 then the adminq
-   523		 * is not in use and the refcnt can be cleared and adminq freed. Before
-   524		 * calling this function the driver will set PDSC_S_FW_DEAD, which
-   525		 * prevent subsequent attempts to use the adminq and increment the
-   526		 * refcnt to fail. This guarantees that this function will eventually
-   527		 * exit.
-   528		 */
-   529		while (!refcount_dec_if_one(&pdsc->adminq_refcnt)) {
-   530			dev_dbg_ratelimited(pdsc->dev, "%s: adminq in use\n",
-   531					    __func__);
-   532			cpu_relax();
-   533		}
-   534	}
-   535	
+  2703	
+  2704	static int enetc_setup_xdp_prog(struct net_device *ndev, struct bpf_prog *prog,
+  2705					struct netlink_ext_ack *extack)
+  2706	{
+  2707		int num_xdp_tx_queues = prog ? num_possible_cpus() : 0;
+  2708		struct enetc_ndev_priv *priv = netdev_priv(ndev);
+  2709		bool extended;
+  2710	
+  2711		if (priv->min_num_stack_tx_queues + num_xdp_tx_queues >
+  2712		    priv->num_tx_rings) {
+> 2713			NL_SET_ERR_MSG_FMT_MOD(extack,
+  2714					       "Reserving %d XDP TXQs does not leave a minimum of %d TXQs for network stack (total %d available)",
+  2715					       num_xdp_tx_queues,
+  2716					       priv->min_num_stack_tx_queues,
+  2717					       priv->num_tx_rings);
+  2718			return -EBUSY;
+  2719		}
+  2720	
+  2721		extended = !!(priv->active_offloads & ENETC_F_RX_TSTAMP);
+  2722	
+  2723		/* The buffer layout is changing, so we need to drain the old
+  2724		 * RX buffers and seed new ones.
+  2725		 */
+  2726		return enetc_reconfigure(priv, extended, enetc_reconfigure_xdp_cb, prog);
+  2727	}
+  2728	
 
 -- 
 0-DAY CI Kernel Test Service
