@@ -1,48 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A93BDDD6;
-	Sat,  6 Jan 2024 18:36:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E241415A0;
+	Sun,  7 Jan 2024 01:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVnwx9S8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jc7hgGbM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704566166; x=1736102166;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ICS92sbB1/1x+lo2Aj30UTbltsE+tini1b/jh30UYBY=;
-  b=YVnwx9S85rHC6Tq+uHGozEkNTkbBAhfmWtgyGUPWJdFmGiQDtLzcU2go
-   P53wZgPLau2jwjJYWv2WsebladNT+Utme/SJvMvlZQcwvy/9XgT75MSC2
-   RUvKctldBMbI0mUbZwh3PEUVHjnj/nqNWM8issq2OCNCaIlkb3pZNIhHb
-   m/O6vlxgx2TKla1Jwt+Du/FJNN4tdI6/VR3RM05mosGJRKE+/cjEY+noB
-   kRUgG2TRx2AJWWSj0ROmG3RROF6+nsXQc7UBJEO/RkGY8eBtaeMLaT9l/
-   fnmigi4HqgXcHNOtHKp4fvDgPNdcVXEfTrxKCM/VoWj2FpXlkoaMQJWXa
+  t=1704590939; x=1736126939;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7O1UL8cXY0lJE1zmCzGXxOgYFADLmsa5MNEHePLgsoY=;
+  b=jc7hgGbM1cxuuN0kXwBp9NVYxu3OohWJ2if0B82lTkpzsO9+BttdEZFg
+   Thuoq5msOzpfHNZMB8vR1UX4W5+dWbFqMvF4LT0YsqNEr7Qavffj3eLk5
+   anvsnPqzUTNVz2F6NdUBEEazsr/fFXwcuVoXvlorRENQ4bj6+nSIYuOV4
+   +o5VymJm2oSYi/Ea/ab30YAIO8sxKbhP0qDNyVs9siprjfdeP+hg3rr6y
+   HvIEvAp19FOHm9tJ/kD5cgyBt1vIb2CHfUlbR1gydnofTtkTkIZS56y8j
+   7eJy4GhFfEohGQpCSruDgVq/PO2pkcKpOboDkyIDnYtlfPKTGVoWh8uYV
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="401454882"
-X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
-   d="scan'208";a="401454882"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 10:36:05 -0800
+X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="428875596"
+X-IronPort-AV: E=Sophos;i="6.04,338,1695711600"; 
+   d="scan'208";a="428875596"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 17:28:45 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
-   d="scan'208";a="22781219"
+X-IronPort-AV: E=Sophos;i="6.04,338,1695711600"; 
+   d="scan'208";a="23179110"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 06 Jan 2024 10:36:04 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 06 Jan 2024 17:28:43 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rMBWb-0002se-0T;
-	Sat, 06 Jan 2024 18:36:01 +0000
-Date: Sun, 7 Jan 2024 02:35:04 +0800
+	id 1rMHxx-0003F7-0m;
+	Sun, 07 Jan 2024 01:28:41 +0000
+Date: Sun, 7 Jan 2024 09:28:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <sean.j.christopherson@intel.com>
+To: Brett Creeley <brett.creeley@amd.com>, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-	Serge Ayoun <serge.ayoun@intel.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: arch/x86/kernel/cpu/sgx/main.c:124: warning: Function parameter or
- member 'low' not described in 'sgx_calc_section_metric'
-Message-ID: <202401070210.pQcalZHm-lkp@intel.com>
+	shannon.nelson@amd.com, brett.creeley@amd.com
+Subject: Re: [PATCH net-next 4/8] pds_core: Prevent race issues involving the
+ adminq
+Message-ID: <202401070931.tvTUY2US-lkp@intel.com>
+References: <20240104171221.31399-5-brett.creeley@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,45 +53,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240104171221.31399-5-brett.creeley@amd.com>
 
-Hi Sean,
+Hi Brett,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   95c8a35f1c017327eab3b6a2ff5c04255737c856
-commit: e7e0545299d8cb0fd6fe3ba50401b7f5c3937362 x86/sgx: Initialize metadata for Enclave Page Cache (EPC) sections
-date:   3 years, 2 months ago
-config: x86_64-buildonly-randconfig-006-20240105 (https://download.01.org/0day-ci/archive/20240107/202401070210.pQcalZHm-lkp@intel.com/config)
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Brett-Creeley/pds_core-Prevent-health-thread-from-running-during-reset-remove/20240105-011706
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240104171221.31399-5-brett.creeley%40amd.com
+patch subject: [PATCH net-next 4/8] pds_core: Prevent race issues involving the adminq
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240107/202401070931.tvTUY2US-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240107/202401070210.pQcalZHm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240107/202401070931.tvTUY2US-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401070210.pQcalZHm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401070931.tvTUY2US-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kernel/cpu/sgx/main.c:124: warning: Function parameter or member 'low' not described in 'sgx_calc_section_metric'
->> arch/x86/kernel/cpu/sgx/main.c:124: warning: Function parameter or member 'high' not described in 'sgx_calc_section_metric'
->> arch/x86/kernel/cpu/sgx/main.c:124: warning: expecting prototype for A section metric is concatenated in a way that @low bits 12(). Prototype was for sgx_calc_section_metric() instead
+>> drivers/net/ethernet/amd/pds_core/core.c:518:6: warning: no previous prototype for function 'pdsc_adminq_wait_and_dec_once_unused' [-Wmissing-prototypes]
+     518 | void pdsc_adminq_wait_and_dec_once_unused(struct pdsc *pdsc)
+         |      ^
+   drivers/net/ethernet/amd/pds_core/core.c:518:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     518 | void pdsc_adminq_wait_and_dec_once_unused(struct pdsc *pdsc)
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +124 arch/x86/kernel/cpu/sgx/main.c
+vim +/pdsc_adminq_wait_and_dec_once_unused +518 drivers/net/ethernet/amd/pds_core/core.c
 
-   117	
-   118	/**
-   119	 * A section metric is concatenated in a way that @low bits 12-31 define the
-   120	 * bits 12-31 of the metric and @high bits 0-19 define the bits 32-51 of the
-   121	 * metric.
-   122	 */
-   123	static inline u64 __init sgx_calc_section_metric(u64 low, u64 high)
- > 124	{
-   125		return (low & GENMASK_ULL(31, 12)) +
-   126		       ((high & GENMASK_ULL(19, 0)) << 32);
-   127	}
-   128	
+   517	
+ > 518	void pdsc_adminq_wait_and_dec_once_unused(struct pdsc *pdsc)
+   519	{
+   520		/* The driver initializes the adminq_refcnt to 1 when the adminq is
+   521		 * allocated and ready for use. Other users/requesters will increment
+   522		 * the refcnt while in use. If the refcnt is down to 1 then the adminq
+   523		 * is not in use and the refcnt can be cleared and adminq freed. Before
+   524		 * calling this function the driver will set PDSC_S_FW_DEAD, which
+   525		 * prevent subsequent attempts to use the adminq and increment the
+   526		 * refcnt to fail. This guarantees that this function will eventually
+   527		 * exit.
+   528		 */
+   529		while (!refcount_dec_if_one(&pdsc->adminq_refcnt)) {
+   530			dev_dbg_ratelimited(pdsc->dev, "%s: adminq in use\n",
+   531					    __func__);
+   532			cpu_relax();
+   533		}
+   534	}
+   535	
 
 -- 
 0-DAY CI Kernel Test Service
