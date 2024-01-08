@@ -1,344 +1,361 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC42A11711;
-	Mon,  8 Jan 2024 09:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C8D45BE5
+	for <llvm@lists.linux.dev>; Mon,  8 Jan 2024 14:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WWMaPPU2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704706262; x=1736242262;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E62yb6m6HTmEbGX9G2MZ0Cv44SIxbiKEXobterk8kn8=;
-  b=WWMaPPU2FQBXNPEFEmm+aqJc4nalq1Mkum8PG/XtrPcqj9OgF0760x/o
-   2WPp/lyAhfOjqq0CvL0azHvl6L13znnRj1uvE01vk/kI924Ri/CWpwa1k
-   sabeyx1WRIcX5iUgj5c+zlwlNxbiFfjLav2BDqdA/HXnCbfycEs1irpKx
-   HHCu/MD0x8pNZ2JOD0fipLnnHOZffsSS+05SbFrsrmFGvSo27Ye6Rc+Wo
-   fEiHCPdW0ZeKUR2738tNik9iAyGZuAqz8HojZ8qKJAaS9kqLUrMwCs75z
-   gnbHgcgGaFt+/rBy3umIfV80ZgEp/5BUbvQmUN0NrLPyV/NWm3XqdMVpX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="401624447"
-X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="401624447"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 01:31:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="15868033"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Jan 2024 01:30:59 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rMlyA-0004a8-3D;
-	Mon, 08 Jan 2024 09:30:55 +0000
-Date: Mon, 8 Jan 2024 17:30:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [lunn:v6.7-rc6-net-next-mv88e6xxx-leds-v3 8/8]
- drivers/net/dsa/qca/qca8k-leds.c:84:1: warning: no previous prototype for
- function 'qca8k_led_brightness_set'
-Message-ID: <202401081748.rICFp8NY-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SqVjRlEX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704725571;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=794xssVY3UWprU6xtQn72foNfENfQl/zR70PtdxL1SY=;
+	b=SqVjRlEXMafn5QAbX1/crn1Zj2V6kViTpF7TvMYHGGFAu0+lHHyN4JB2TD5gx4WuP+5aZj
+	vZEW3zuKwfPxFcSEoY03kVTcidhABjqKM1SQyFgDoEomV3sjvNeP4BoY2zseid5YmhIO8N
+	cl2IM7YxGxodY39Fix5HAFxus0ycXuk=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-240-OyYfFdZ1MjWPjcqJh1yriQ-1; Mon, 08 Jan 2024 09:52:50 -0500
+X-MC-Unique: OyYfFdZ1MjWPjcqJh1yriQ-1
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-50e81d186e2so1446783e87.0
+        for <llvm@lists.linux.dev>; Mon, 08 Jan 2024 06:52:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704725568; x=1705330368;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=794xssVY3UWprU6xtQn72foNfENfQl/zR70PtdxL1SY=;
+        b=QYHa72yTzmxIoTWvoCtFl1ZclaxBu1ER68ldurkRoQ0RLuIEALb7jQe0uyIF2nsCpj
+         PNbdP2Xxl8ZFvkfghrRm+b2Ulestfmgvm2Z/+Hu9R1CYDgPO+YdrfdYFiDzU5/zduQl7
+         aVG/AOTLoQhzDay+q7cqSz82LRp553OQtFTENFfiYeQ6cyEBWT4DKAMcyLmd+GMwLPbA
+         hnr243vHCxFSz6y2iGcD3AY5GX0C3oh+fPP1YctcUtHu8E/aGsneUwIGMHjz+O1t2WVH
+         QdkDEcu/SiHOMFy42/8kAzsclTE7O0A55GhcvqYvjH+O5XWB9DKtJIc1xni9/dX+ishT
+         3sag==
+X-Gm-Message-State: AOJu0YwzYgsZZ47guu3D5za5BKJDFa5VVYGltRADJ6TqKJJ8dBPYqbdy
+	tH8ST9YS5jkg0HRV6QGH5EhtJJtFvWkwGYsijycChUakVxW3ykVNvS35awkFXIPb8fX4TaMauHK
+	CuDCC+GyXJqVEPypGUHcmug==
+X-Received: by 2002:a19:8c57:0:b0:50e:b204:b6d4 with SMTP id i23-20020a198c57000000b0050eb204b6d4mr1449620lfj.35.1704725568591;
+        Mon, 08 Jan 2024 06:52:48 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFTda8KnSzcfucxjSOMlVVPp7393wkBNdRpKd1j6z4nNnIHCLj7t3gH6YaBxn+pCz3Krz8KOg==
+X-Received: by 2002:a19:8c57:0:b0:50e:b204:b6d4 with SMTP id i23-20020a198c57000000b0050eb204b6d4mr1449605lfj.35.1704725568149;
+        Mon, 08 Jan 2024 06:52:48 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id s27-20020a170906bc5b00b00a2699a54888sm3985890ejv.64.2024.01.08.06.52.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jan 2024 06:52:47 -0800 (PST)
+Message-ID: <6186419a-8107-47e6-b631-1ce8b4a42819@redhat.com>
+Date: Mon, 8 Jan 2024 15:52:46 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] platform/x86: intel-uncore-freq: Fix types in sysfs
+ callbacks
+To: Nathan Chancellor <nathan@kernel.org>,
+ srinivas.pandruvada@linux.intel.com, ilpo.jarvinen@linux.intel.com
+Cc: keescook@chromium.org, samitolvanen@google.com,
+ platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev
+References: <20240104-intel-uncore-freq-kcfi-fix-v1-1-bf1e8939af40@kernel.org>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240104-intel-uncore-freq-kcfi-fix-v1-1-bf1e8939af40@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/lunn/linux.git v6.7-rc6-net-next-mv88e6xxx-leds-v3
-head:   9a48ae1a616c32799d10fcde6a9eea1bbade8496
-commit: 9a48ae1a616c32799d10fcde6a9eea1bbade8496 [8/8] dsa: qca8k: Use netdev_leds common code for LEDs
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240108/202401081748.rICFp8NY-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240108/202401081748.rICFp8NY-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401081748.rICFp8NY-lkp@intel.com/
+On 1/4/24 23:59, Nathan Chancellor wrote:
+> When booting a kernel with CONFIG_CFI_CLANG, there is a CFI failure when
+> accessing any of the values under
+> /sys/devices/system/cpu/intel_uncore_frequency/package_00_die_00:
+> 
+>   $ cat /sys/devices/system/cpu/intel_uncore_frequency/package_00_die_00/max_freq_khz
+>   fish: Job 1, 'cat /sys/devices/system/cpu/int…' terminated by signal SIGSEGV (Address boundary error)
+> 
+>   $ sudo dmesg &| grep 'CFI failure'
+>   [  170.953925] CFI failure at kobj_attr_show+0x19/0x30 (target: show_max_freq_khz+0x0/0xc0 [intel_uncore_frequency_common]; expected type: 0xd34078c5
+> 
+> The sysfs callback functions such as show_domain_id() are written as if
+> they are going to be called by dev_attr_show() but as the above message
+> shows, they are instead called by kobj_attr_show(). kCFI checks that the
+> destination of an indirect jump has the exact same type as the prototype
+> of the function pointer it is called through and fails when they do not.
+> 
+> These callbacks are called through kobj_attr_show() because
+> uncore_root_kobj was initialized with kobject_create_and_add(), which
+> means uncore_root_kobj has a ->sysfs_ops of kobj_sysfs_ops from
+> kobject_create(), which uses kobj_attr_show() as its ->show() value.
+> 
+> The only reason there has not been a more noticeable problem until this
+> point is that 'struct kobj_attribute' and 'struct device_attribute' have
+> the same layout, so getting the callback from container_of() works the
+> same with either value.
+> 
+> Change all the callbacks and their uses to be compatible with
+> kobj_attr_show() and kobj_attr_store(), which resolves the kCFI failure
+> and allows the sysfs files to work properly.
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1974
+> Fixes: ae7b2ce57851 ("platform/x86/intel/uncore-freq: Use sysfs API to create attributes")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> I think I got the fixes tag right. I only started seeing this because of
+> commit 27f2b08735c9 ("platform/x86: intel-uncore-freq: Add additional
+> client processors"), which allows this driver to load on my i7-11700
+> test system but I think the commit in the Fixes tag incorrectly changes
+> the types of the callbacks.
 
-All warnings (new ones prefixed by >>):
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
->> drivers/net/dsa/qca/qca8k-leds.c:84:1: warning: no previous prototype for function 'qca8k_led_brightness_set' [-Wmissing-prototypes]
-      84 | qca8k_led_brightness_set(struct net_device *ndev, u8 led_num,
-         | ^
-   drivers/net/dsa/qca/qca8k-leds.c:83:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      83 | int
-         | ^
-         | static 
->> drivers/net/dsa/qca/qca8k-leds.c:148:1: warning: no previous prototype for function 'qca8k_led_blink_set' [-Wmissing-prototypes]
-     148 | qca8k_led_blink_set(struct net_device *ndev, u8 led_num,
-         | ^
-   drivers/net/dsa/qca/qca8k-leds.c:147:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     147 | int
-         | ^
-         | static 
->> drivers/net/dsa/qca/qca8k-leds.c:233:1: warning: no previous prototype for function 'qca8k_led_hw_control_is_supported' [-Wmissing-prototypes]
-     233 | qca8k_led_hw_control_is_supported(struct net_device *ndev, u8 led,
-         | ^
-   drivers/net/dsa/qca/qca8k-leds.c:232:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     232 | int
-         | ^
-         | static 
->> drivers/net/dsa/qca/qca8k-leds.c:242:1: warning: no previous prototype for function 'qca8k_led_hw_control_set' [-Wmissing-prototypes]
-     242 | qca8k_led_hw_control_set(struct net_device *ndev, u8 led_num,
-         | ^
-   drivers/net/dsa/qca/qca8k-leds.c:241:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     241 | int
-         | ^
-         | static 
->> drivers/net/dsa/qca/qca8k-leds.c:271:1: warning: no previous prototype for function 'qca8k_led_hw_control_get' [-Wmissing-prototypes]
-     271 | qca8k_led_hw_control_get(struct net_device *ndev, u8 led_num,
-         | ^
-   drivers/net/dsa/qca/qca8k-leds.c:270:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     270 | int
-         | ^
-         | static 
-   5 warnings generated.
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
+
+Regards,
+
+Hans
 
 
-vim +/qca8k_led_brightness_set +84 drivers/net/dsa/qca/qca8k-leds.c
 
-    82	
-    83	int
-  > 84	qca8k_led_brightness_set(struct net_device *ndev, u8 led_num,
-    85				 enum led_brightness brightness)
-    86	{
-    87		struct dsa_switch *ds = dsa_user_to_ds(ndev);
-    88		struct qca8k_led_pattern_en reg_info;
-    89		struct qca8k_priv *priv = ds->priv;
-    90		int port = dsa_user_to_index(ndev);
-    91		u32 mask, val;
-    92		int port_num;
-    93	
-    94		port_num = qca8k_port_to_phy(port);
-    95		qca8k_get_enable_led_reg(port_num, led_num, &reg_info);
-    96	
-    97		val = QCA8K_LED_ALWAYS_OFF;
-    98		if (brightness)
-    99			val = QCA8K_LED_ALWAYS_ON;
-   100	
-   101		/* HW regs to control brightness is special and port 1-2-3
-   102		 * are placed in a different reg.
-   103		 *
-   104		 * To control port 0 brightness:
-   105		 * - the 2 bit (15, 14) of:
-   106		 *   - QCA8K_LED_CTRL0_REG for led1
-   107		 *   - QCA8K_LED_CTRL1_REG for led2
-   108		 *   - QCA8K_LED_CTRL2_REG for led3
-   109		 *
-   110		 * To control port 4:
-   111		 * - the 2 bit (31, 30) of:
-   112		 *   - QCA8K_LED_CTRL0_REG for led1
-   113		 *   - QCA8K_LED_CTRL1_REG for led2
-   114		 *   - QCA8K_LED_CTRL2_REG for led3
-   115		 *
-   116		 * To control port 1:
-   117		 *   - the 2 bit at (9, 8) of QCA8K_LED_CTRL3_REG are used for led1
-   118		 *   - the 2 bit at (11, 10) of QCA8K_LED_CTRL3_REG are used for led2
-   119		 *   - the 2 bit at (13, 12) of QCA8K_LED_CTRL3_REG are used for led3
-   120		 *
-   121		 * To control port 2:
-   122		 *   - the 2 bit at (15, 14) of QCA8K_LED_CTRL3_REG are used for led1
-   123		 *   - the 2 bit at (17, 16) of QCA8K_LED_CTRL3_REG are used for led2
-   124		 *   - the 2 bit at (19, 18) of QCA8K_LED_CTRL3_REG are used for led3
-   125		 *
-   126		 * To control port 3:
-   127		 *   - the 2 bit at (21, 20) of QCA8K_LED_CTRL3_REG are used for led1
-   128		 *   - the 2 bit at (23, 22) of QCA8K_LED_CTRL3_REG are used for led2
-   129		 *   - the 2 bit at (25, 24) of QCA8K_LED_CTRL3_REG are used for led3
-   130		 *
-   131		 * To abstract this and have less code, we use the port and led numm
-   132		 * to calculate the shift and the correct reg due to this problem of
-   133		 * not having a 1:1 map of LED with the regs.
-   134		 */
-   135		if (port_num == 0 || port_num == 4) {
-   136			mask = QCA8K_LED_PATTERN_EN_MASK;
-   137			val <<= QCA8K_LED_PATTERN_EN_SHIFT;
-   138		} else {
-   139			mask = QCA8K_LED_PHY123_PATTERN_EN_MASK;
-   140		}
-   141	
-   142		return regmap_update_bits(priv->regmap, reg_info.reg,
-   143					  mask << reg_info.shift,
-   144					  val << reg_info.shift);
-   145	}
-   146	
-   147	int
- > 148	qca8k_led_blink_set(struct net_device *ndev, u8 led_num,
-   149			    unsigned long *delay_on, unsigned long *delay_off)
-   150	{
-   151		struct dsa_switch *ds = dsa_user_to_ds(ndev);
-   152		u32 mask, val = QCA8K_LED_ALWAYS_BLINK_4HZ;
-   153		struct qca8k_led_pattern_en reg_info;
-   154		struct qca8k_priv *priv = ds->priv;
-   155		int port = dsa_user_to_index(ndev);
-   156		int port_num;
-   157	
-   158		port_num = qca8k_port_to_phy(port);
-   159	
-   160		if (*delay_on == 0 && *delay_off == 0) {
-   161			*delay_on = 125;
-   162			*delay_off = 125;
-   163		}
-   164	
-   165		if (*delay_on != 125 || *delay_off != 125) {
-   166			/* The hardware only supports blinking at 4Hz. Fall back
-   167			 * to software implementation in other cases.
-   168			 */
-   169			return -EINVAL;
-   170		}
-   171	
-   172		qca8k_get_enable_led_reg(port_num, led_num, &reg_info);
-   173	
-   174		if (port_num == 0 || port_num == 4) {
-   175			mask = QCA8K_LED_PATTERN_EN_MASK;
-   176			val <<= QCA8K_LED_PATTERN_EN_SHIFT;
-   177		} else {
-   178			mask = QCA8K_LED_PHY123_PATTERN_EN_MASK;
-   179		}
-   180	
-   181		regmap_update_bits(priv->regmap, reg_info.reg, mask << reg_info.shift,
-   182				   val << reg_info.shift);
-   183	
-   184		return 0;
-   185	}
-   186	
-   187	static int
-   188	qca8k_led_trigger_offload(struct qca8k_priv *priv, int port_num, u8 led_num,
-   189				  bool enable)
-   190	{
-   191		struct qca8k_led_pattern_en reg_info;
-   192		u32 mask, val = QCA8K_LED_ALWAYS_OFF;
-   193	
-   194		qca8k_get_enable_led_reg(port_num, led_num, &reg_info);
-   195	
-   196		if (enable)
-   197			val = QCA8K_LED_RULE_CONTROLLED;
-   198	
-   199		if (port_num == 0 || port_num == 4) {
-   200			mask = QCA8K_LED_PATTERN_EN_MASK;
-   201			val <<= QCA8K_LED_PATTERN_EN_SHIFT;
-   202		} else {
-   203			mask = QCA8K_LED_PHY123_PATTERN_EN_MASK;
-   204		}
-   205	
-   206		return regmap_update_bits(priv->regmap, reg_info.reg, mask << reg_info.shift,
-   207					  val << reg_info.shift);
-   208	}
-   209	
-   210	static bool
-   211	qca8k_led_hw_control_status(struct qca8k_priv *priv, int port_num, u8 led_num)
-   212	{
-   213		struct qca8k_led_pattern_en reg_info;
-   214		u32 val;
-   215	
-   216		qca8k_get_enable_led_reg(port_num, led_num, &reg_info);
-   217	
-   218		regmap_read(priv->regmap, reg_info.reg, &val);
-   219	
-   220		val >>= reg_info.shift;
-   221	
-   222		if (port_num == 0 || port_num == 4) {
-   223			val &= QCA8K_LED_PATTERN_EN_MASK;
-   224			val >>= QCA8K_LED_PATTERN_EN_SHIFT;
-   225		} else {
-   226			val &= QCA8K_LED_PHY123_PATTERN_EN_MASK;
-   227		}
-   228	
-   229		return val == QCA8K_LED_RULE_CONTROLLED;
-   230	}
-   231	
-   232	int
- > 233	qca8k_led_hw_control_is_supported(struct net_device *ndev, u8 led,
-   234					  unsigned long rules)
-   235	{
-   236		u32 offload_trigger = 0;
-   237	
-   238		return qca8k_parse_netdev(rules, &offload_trigger);
-   239	}
-   240	
-   241	int
- > 242	qca8k_led_hw_control_set(struct net_device *ndev, u8 led_num,
-   243				 unsigned long rules)
-   244	{
-   245		struct dsa_switch *ds = dsa_user_to_ds(ndev);
-   246		struct qca8k_led_pattern_en reg_info;
-   247		struct qca8k_priv *priv = ds->priv;
-   248		int port = dsa_user_to_index(ndev);
-   249		u32 offload_trigger = 0;
-   250		int port_num;
-   251		int ret;
-   252	
-   253		port_num = qca8k_port_to_phy(port);
-   254	
-   255		ret = qca8k_parse_netdev(rules, &offload_trigger);
-   256		if (ret)
-   257			return ret;
-   258	
-   259		ret = qca8k_led_trigger_offload(priv, port_num, led_num, true);
-   260		if (ret)
-   261			return ret;
-   262	
-   263		qca8k_get_control_led_reg(port_num, led_num, &reg_info);
-   264	
-   265		return regmap_update_bits(priv->regmap, reg_info.reg,
-   266					  QCA8K_LED_RULE_MASK << reg_info.shift,
-   267					  offload_trigger << reg_info.shift);
-   268	}
-   269	
-   270	int
- > 271	qca8k_led_hw_control_get(struct net_device *ndev, u8 led_num,
-   272				 unsigned long *rules)
-   273	{
-   274		struct dsa_switch *ds = dsa_user_to_ds(ndev);
-   275		struct qca8k_led_pattern_en reg_info;
-   276		struct qca8k_priv *priv = ds->priv;
-   277		int port = dsa_user_to_index(ndev);
-   278		int port_num;
-   279		u32 val;
-   280		int ret;
-   281	
-   282		port_num = qca8k_port_to_phy(port);
-   283	
-   284		/* With hw control not active return err */
-   285		if (!qca8k_led_hw_control_status(priv, port_num, led_num))
-   286			return -EINVAL;
-   287	
-   288		qca8k_get_control_led_reg(port_num, led_num, &reg_info);
-   289	
-   290		ret = regmap_read(priv->regmap, reg_info.reg, &val);
-   291		if (ret)
-   292			return ret;
-   293	
-   294		val >>= reg_info.shift;
-   295		val &= QCA8K_LED_RULE_MASK;
-   296	
-   297		/* Parsing specific to netdev trigger */
-   298		if (val & QCA8K_LED_TX_BLINK_MASK)
-   299			set_bit(TRIGGER_NETDEV_TX, rules);
-   300		if (val & QCA8K_LED_RX_BLINK_MASK)
-   301			set_bit(TRIGGER_NETDEV_RX, rules);
-   302		if (val & QCA8K_LED_LINK_10M_EN_MASK)
-   303			set_bit(TRIGGER_NETDEV_LINK_10, rules);
-   304		if (val & QCA8K_LED_LINK_100M_EN_MASK)
-   305			set_bit(TRIGGER_NETDEV_LINK_100, rules);
-   306		if (val & QCA8K_LED_LINK_1000M_EN_MASK)
-   307			set_bit(TRIGGER_NETDEV_LINK_1000, rules);
-   308		if (val & QCA8K_LED_HALF_DUPLEX_MASK)
-   309			set_bit(TRIGGER_NETDEV_HALF_DUPLEX, rules);
-   310		if (val & QCA8K_LED_FULL_DUPLEX_MASK)
-   311			set_bit(TRIGGER_NETDEV_FULL_DUPLEX, rules);
-   312	
-   313		return 0;
-   314	}
-   315	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  .../uncore-frequency/uncore-frequency-common.c     | 82 +++++++++++-----------
+>  .../uncore-frequency/uncore-frequency-common.h     | 32 ++++-----
+>  2 files changed, 57 insertions(+), 57 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+> index 33ab207493e3..33bb58dc3f78 100644
+> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+> @@ -23,23 +23,23 @@ static int (*uncore_read)(struct uncore_data *data, unsigned int *min, unsigned
+>  static int (*uncore_write)(struct uncore_data *data, unsigned int input, unsigned int min_max);
+>  static int (*uncore_read_freq)(struct uncore_data *data, unsigned int *freq);
+>  
+> -static ssize_t show_domain_id(struct device *dev, struct device_attribute *attr, char *buf)
+> +static ssize_t show_domain_id(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+>  {
+> -	struct uncore_data *data = container_of(attr, struct uncore_data, domain_id_dev_attr);
+> +	struct uncore_data *data = container_of(attr, struct uncore_data, domain_id_kobj_attr);
+>  
+>  	return sprintf(buf, "%u\n", data->domain_id);
+>  }
+>  
+> -static ssize_t show_fabric_cluster_id(struct device *dev, struct device_attribute *attr, char *buf)
+> +static ssize_t show_fabric_cluster_id(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+>  {
+> -	struct uncore_data *data = container_of(attr, struct uncore_data, fabric_cluster_id_dev_attr);
+> +	struct uncore_data *data = container_of(attr, struct uncore_data, fabric_cluster_id_kobj_attr);
+>  
+>  	return sprintf(buf, "%u\n", data->cluster_id);
+>  }
+>  
+> -static ssize_t show_package_id(struct device *dev, struct device_attribute *attr, char *buf)
+> +static ssize_t show_package_id(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+>  {
+> -	struct uncore_data *data = container_of(attr, struct uncore_data, package_id_dev_attr);
+> +	struct uncore_data *data = container_of(attr, struct uncore_data, package_id_kobj_attr);
+>  
+>  	return sprintf(buf, "%u\n", data->package_id);
+>  }
+> @@ -97,30 +97,30 @@ static ssize_t show_perf_status_freq_khz(struct uncore_data *data, char *buf)
+>  }
+>  
+>  #define store_uncore_min_max(name, min_max)				\
+> -	static ssize_t store_##name(struct device *dev,		\
+> -				     struct device_attribute *attr,	\
+> +	static ssize_t store_##name(struct kobject *kobj,		\
+> +				     struct kobj_attribute *attr,	\
+>  				     const char *buf, size_t count)	\
+>  	{								\
+> -		struct uncore_data *data = container_of(attr, struct uncore_data, name##_dev_attr);\
+> +		struct uncore_data *data = container_of(attr, struct uncore_data, name##_kobj_attr);\
+>  									\
+>  		return store_min_max_freq_khz(data, buf, count,	\
+>  					      min_max);		\
+>  	}
+>  
+>  #define show_uncore_min_max(name, min_max)				\
+> -	static ssize_t show_##name(struct device *dev,		\
+> -				    struct device_attribute *attr, char *buf)\
+> +	static ssize_t show_##name(struct kobject *kobj,		\
+> +				    struct kobj_attribute *attr, char *buf)\
+>  	{                                                               \
+> -		struct uncore_data *data = container_of(attr, struct uncore_data, name##_dev_attr);\
+> +		struct uncore_data *data = container_of(attr, struct uncore_data, name##_kobj_attr);\
+>  									\
+>  		return show_min_max_freq_khz(data, buf, min_max);	\
+>  	}
+>  
+>  #define show_uncore_perf_status(name)					\
+> -	static ssize_t show_##name(struct device *dev,		\
+> -				   struct device_attribute *attr, char *buf)\
+> +	static ssize_t show_##name(struct kobject *kobj,		\
+> +				   struct kobj_attribute *attr, char *buf)\
+>  	{                                                               \
+> -		struct uncore_data *data = container_of(attr, struct uncore_data, name##_dev_attr);\
+> +		struct uncore_data *data = container_of(attr, struct uncore_data, name##_kobj_attr);\
+>  									\
+>  		return show_perf_status_freq_khz(data, buf); \
+>  	}
+> @@ -134,11 +134,11 @@ show_uncore_min_max(max_freq_khz, 1);
+>  show_uncore_perf_status(current_freq_khz);
+>  
+>  #define show_uncore_data(member_name)					\
+> -	static ssize_t show_##member_name(struct device *dev,	\
+> -					   struct device_attribute *attr, char *buf)\
+> +	static ssize_t show_##member_name(struct kobject *kobj,	\
+> +					   struct kobj_attribute *attr, char *buf)\
+>  	{                                                               \
+>  		struct uncore_data *data = container_of(attr, struct uncore_data,\
+> -							  member_name##_dev_attr);\
+> +							  member_name##_kobj_attr);\
+>  									\
+>  		return sysfs_emit(buf, "%u\n",				\
+>  				 data->member_name);			\
+> @@ -149,29 +149,29 @@ show_uncore_data(initial_max_freq_khz);
+>  
+>  #define init_attribute_rw(_name)					\
+>  	do {								\
+> -		sysfs_attr_init(&data->_name##_dev_attr.attr);	\
+> -		data->_name##_dev_attr.show = show_##_name;		\
+> -		data->_name##_dev_attr.store = store_##_name;		\
+> -		data->_name##_dev_attr.attr.name = #_name;		\
+> -		data->_name##_dev_attr.attr.mode = 0644;		\
+> +		sysfs_attr_init(&data->_name##_kobj_attr.attr);	\
+> +		data->_name##_kobj_attr.show = show_##_name;		\
+> +		data->_name##_kobj_attr.store = store_##_name;		\
+> +		data->_name##_kobj_attr.attr.name = #_name;		\
+> +		data->_name##_kobj_attr.attr.mode = 0644;		\
+>  	} while (0)
+>  
+>  #define init_attribute_ro(_name)					\
+>  	do {								\
+> -		sysfs_attr_init(&data->_name##_dev_attr.attr);	\
+> -		data->_name##_dev_attr.show = show_##_name;		\
+> -		data->_name##_dev_attr.store = NULL;			\
+> -		data->_name##_dev_attr.attr.name = #_name;		\
+> -		data->_name##_dev_attr.attr.mode = 0444;		\
+> +		sysfs_attr_init(&data->_name##_kobj_attr.attr);	\
+> +		data->_name##_kobj_attr.show = show_##_name;		\
+> +		data->_name##_kobj_attr.store = NULL;			\
+> +		data->_name##_kobj_attr.attr.name = #_name;		\
+> +		data->_name##_kobj_attr.attr.mode = 0444;		\
+>  	} while (0)
+>  
+>  #define init_attribute_root_ro(_name)					\
+>  	do {								\
+> -		sysfs_attr_init(&data->_name##_dev_attr.attr);	\
+> -		data->_name##_dev_attr.show = show_##_name;		\
+> -		data->_name##_dev_attr.store = NULL;			\
+> -		data->_name##_dev_attr.attr.name = #_name;		\
+> -		data->_name##_dev_attr.attr.mode = 0400;		\
+> +		sysfs_attr_init(&data->_name##_kobj_attr.attr);	\
+> +		data->_name##_kobj_attr.show = show_##_name;		\
+> +		data->_name##_kobj_attr.store = NULL;			\
+> +		data->_name##_kobj_attr.attr.name = #_name;		\
+> +		data->_name##_kobj_attr.attr.mode = 0400;		\
+>  	} while (0)
+>  
+>  static int create_attr_group(struct uncore_data *data, char *name)
+> @@ -186,21 +186,21 @@ static int create_attr_group(struct uncore_data *data, char *name)
+>  
+>  	if (data->domain_id != UNCORE_DOMAIN_ID_INVALID) {
+>  		init_attribute_root_ro(domain_id);
+> -		data->uncore_attrs[index++] = &data->domain_id_dev_attr.attr;
+> +		data->uncore_attrs[index++] = &data->domain_id_kobj_attr.attr;
+>  		init_attribute_root_ro(fabric_cluster_id);
+> -		data->uncore_attrs[index++] = &data->fabric_cluster_id_dev_attr.attr;
+> +		data->uncore_attrs[index++] = &data->fabric_cluster_id_kobj_attr.attr;
+>  		init_attribute_root_ro(package_id);
+> -		data->uncore_attrs[index++] = &data->package_id_dev_attr.attr;
+> +		data->uncore_attrs[index++] = &data->package_id_kobj_attr.attr;
+>  	}
+>  
+> -	data->uncore_attrs[index++] = &data->max_freq_khz_dev_attr.attr;
+> -	data->uncore_attrs[index++] = &data->min_freq_khz_dev_attr.attr;
+> -	data->uncore_attrs[index++] = &data->initial_min_freq_khz_dev_attr.attr;
+> -	data->uncore_attrs[index++] = &data->initial_max_freq_khz_dev_attr.attr;
+> +	data->uncore_attrs[index++] = &data->max_freq_khz_kobj_attr.attr;
+> +	data->uncore_attrs[index++] = &data->min_freq_khz_kobj_attr.attr;
+> +	data->uncore_attrs[index++] = &data->initial_min_freq_khz_kobj_attr.attr;
+> +	data->uncore_attrs[index++] = &data->initial_max_freq_khz_kobj_attr.attr;
+>  
+>  	ret = uncore_read_freq(data, &freq);
+>  	if (!ret)
+> -		data->uncore_attrs[index++] = &data->current_freq_khz_dev_attr.attr;
+> +		data->uncore_attrs[index++] = &data->current_freq_khz_kobj_attr.attr;
+>  
+>  	data->uncore_attrs[index] = NULL;
+>  
+> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
+> index 7afb69977c7e..0e5bf507e555 100644
+> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
+> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
+> @@ -26,14 +26,14 @@
+>   * @instance_id:	Unique instance id to append to directory name
+>   * @name:		Sysfs entry name for this instance
+>   * @uncore_attr_group:	Attribute group storage
+> - * @max_freq_khz_dev_attr: Storage for device attribute max_freq_khz
+> - * @mix_freq_khz_dev_attr: Storage for device attribute min_freq_khz
+> - * @initial_max_freq_khz_dev_attr: Storage for device attribute initial_max_freq_khz
+> - * @initial_min_freq_khz_dev_attr: Storage for device attribute initial_min_freq_khz
+> - * @current_freq_khz_dev_attr: Storage for device attribute current_freq_khz
+> - * @domain_id_dev_attr: Storage for device attribute domain_id
+> - * @fabric_cluster_id_dev_attr: Storage for device attribute fabric_cluster_id
+> - * @package_id_dev_attr: Storage for device attribute package_id
+> + * @max_freq_khz_kobj_attr: Storage for kobject attribute max_freq_khz
+> + * @mix_freq_khz_kobj_attr: Storage for kobject attribute min_freq_khz
+> + * @initial_max_freq_khz_kobj_attr: Storage for kobject attribute initial_max_freq_khz
+> + * @initial_min_freq_khz_kobj_attr: Storage for kobject attribute initial_min_freq_khz
+> + * @current_freq_khz_kobj_attr: Storage for kobject attribute current_freq_khz
+> + * @domain_id_kobj_attr: Storage for kobject attribute domain_id
+> + * @fabric_cluster_id_kobj_attr: Storage for kobject attribute fabric_cluster_id
+> + * @package_id_kobj_attr: Storage for kobject attribute package_id
+>   * @uncore_attrs:	Attribute storage for group creation
+>   *
+>   * This structure is used to encapsulate all data related to uncore sysfs
+> @@ -53,14 +53,14 @@ struct uncore_data {
+>  	char name[32];
+>  
+>  	struct attribute_group uncore_attr_group;
+> -	struct device_attribute max_freq_khz_dev_attr;
+> -	struct device_attribute min_freq_khz_dev_attr;
+> -	struct device_attribute initial_max_freq_khz_dev_attr;
+> -	struct device_attribute initial_min_freq_khz_dev_attr;
+> -	struct device_attribute current_freq_khz_dev_attr;
+> -	struct device_attribute domain_id_dev_attr;
+> -	struct device_attribute fabric_cluster_id_dev_attr;
+> -	struct device_attribute package_id_dev_attr;
+> +	struct kobj_attribute max_freq_khz_kobj_attr;
+> +	struct kobj_attribute min_freq_khz_kobj_attr;
+> +	struct kobj_attribute initial_max_freq_khz_kobj_attr;
+> +	struct kobj_attribute initial_min_freq_khz_kobj_attr;
+> +	struct kobj_attribute current_freq_khz_kobj_attr;
+> +	struct kobj_attribute domain_id_kobj_attr;
+> +	struct kobj_attribute fabric_cluster_id_kobj_attr;
+> +	struct kobj_attribute package_id_kobj_attr;
+>  	struct attribute *uncore_attrs[9];
+>  };
+>  
+> 
+> ---
+> base-commit: 236f7d8034ff401d02fa6d74bae494a2b54e1834
+> change-id: 20240104-intel-uncore-freq-kcfi-fix-6ef07053db58
+> 
+> Best regards,
+
