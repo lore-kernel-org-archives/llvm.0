@@ -1,2471 +1,407 @@
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B1F8BE3
-	for <llvm@lists.linux.dev>; Mon,  8 Jan 2024 06:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB818BEB;
+	Mon,  8 Jan 2024 07:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="pfRiuRgj"
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3bbbd4d2b4aso1666590b6e.0
-        for <llvm@lists.linux.dev>; Sun, 07 Jan 2024 22:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1704696911; x=1705301711; darn=lists.linux.dev;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CwUKVpTIydT9cphq3EsiRlwT/17YhtKwzkZt8PUgBQs=;
-        b=pfRiuRgjp8oVQqqk1LATqXpuXbcNOTbbnFoaG3+gse+qqwKq2I36H9i68Db/nEWI/3
-         nx8lrKGxFuSYQ2ZDty/aAJehL35MwZ4GzsBg9sm2oIenmqZmnuVm0Sd7umS1CitI56Qi
-         T0G4E0rwO74HCXwXDYR5ChPksKxURpQ/VF3wG3k6ZEwwI3cZu1/KPm+aD4ojGXivun6F
-         I58qiS4jQSUESvNUmiaYvFODJa/O+C27DeawjcI4lD5pUy9GAJSMNmGYSEAC6WQDLFT9
-         8FoQdb9TaQ1AqOvQiXeXQr8Yc3dzXkHHaJW4iBtjchc01NjUKGGuBeqSDLsOMKZUtDPF
-         ZMnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704696911; x=1705301711;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CwUKVpTIydT9cphq3EsiRlwT/17YhtKwzkZt8PUgBQs=;
-        b=pOVGjf8vfCWnnBsM4S7dnzaE7eom8+jqQj/+D0WjllQoD6MjIMqH8oI/Ub3fOOyir0
-         k8sfZNqV1TkSccOi6wxGedqNi9aPjE43Gr3SG3h224UXsePBBropzayZ9H4VMI4DDU1h
-         flmq68ukRUkVgkG4kqxVyppGXWTtkJGjzZoV4Vs/2LKSQttOS8cvmBug48okReH085T7
-         UPcjNoALLxPvIzElLr+EP0LEyncqLdmCMqP9z/wwoXDigR+/HoUOBuWYhsfP+aVuki1N
-         dUDuSqgsfpQroU5JIbXmHtHJH+HQP8GG5KQ95FgGPyjamXWc7jv/L/EIuxBgVvkkgCny
-         YR8g==
-X-Gm-Message-State: AOJu0YyxL1U4PyGXbw67mgSe3y76h7G+YZBO9XMwXO5itxxXjHkIjRjF
-	BPJ7QIn7qQNRH6toBWNC9RwMuA1eC2XG73Q91bnbmWYQvzk=
-X-Google-Smtp-Source: AGHT+IHRGJ8/wBl1jUVjeRjSCr77QA6OBLpz8XG2Fn7QCPskyvxsY3fawc6Q2LRzRglnldzHZ6FCig==
-X-Received: by 2002:a05:6808:1526:b0:3bb:dfe9:4a1a with SMTP id u38-20020a056808152600b003bbdfe94a1amr4320486oiw.103.1704696909477;
-        Sun, 07 Jan 2024 22:55:09 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id fh25-20020a056a00391900b006dadbd91739sm3733451pfb.6.2024.01.07.22.55.07
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jan 2024 22:55:08 -0800 (PST)
-Message-ID: <659b9c4c.050a0220.e7662.855a@mx.google.com>
-Date: Sun, 07 Jan 2024 22:55:08 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kjJS8ses"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704698771; x=1736234771;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=t6JdDo7xTP7NKQrtltT04TeMALKB9CtyfJpucnmy0SY=;
+  b=kjJS8sestEeaJ97OhdaMQXt37Owp5mswRCwKxUSCy7iqcwEAMHKwMFBF
+   ANSJnfH4S1eLzCuNgw+Z8pFDJylSFhmyTn3Li/BCEZr0z3pagHThexYAU
+   cOn9/UumfidySUa6ca1N888gutz/1iHYlNLLNFgFejPr7GgtBAlt8RzHS
+   zytVF1vn2rvuZRcmKx2HB3seDqq/OzPRux93u6aPmlQtCkksSWGggo8Ac
+   lAzuYTa68UgzeIJ9Mk73ti1c2smn8F3/VTW9LYQVCVYHZRT5LBiYQdIR0
+   k4rjbIiUdDg1DvbjhhdbIL1fzT3fzqss3ilVdOdZBM0iaa7Qkjf36L1iZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="4572793"
+X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
+   d="scan'208";a="4572793"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2024 23:25:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="1028316816"
+X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
+   d="scan'208";a="1028316816"
+Received: from spandruv-desk.jf.intel.com (HELO spandruv-desk.amr.corp.intel.com) ([10.54.75.14])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2024 23:25:53 -0800
+Message-ID: <4867adc4063d8b808c05141942eac426ac78bab9.camel@linux.intel.com>
+Subject: Re: [PATCH] platform/x86: intel-uncore-freq: Fix types in sysfs
+ callbacks
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>, hdegoede@redhat.com, 
+	ilpo.jarvinen@linux.intel.com
+Cc: keescook@chromium.org, samitolvanen@google.com, 
+	platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Date: Sun, 07 Jan 2024 23:25:53 -0800
+In-Reply-To: <20240104-intel-uncore-freq-kcfi-fix-v1-1-bf1e8939af40@kernel.org>
+References: 
+	<20240104-intel-uncore-freq-kcfi-fix-v1-1-bf1e8939af40@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20240108
-X-Kernelci-Report-Type: build
-Subject: next/master build: 180 builds: 8 failed, 172 passed, 7 errors,
- 362 warnings (next-20240108)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/master build: 180 builds: 8 failed, 172 passed, 7 errors, 362 warnings=
- (next-20240108)
+T24gVGh1LCAyMDI0LTAxLTA0IGF0IDE1OjU5IC0wNzAwLCBOYXRoYW4gQ2hhbmNlbGxvciB3cm90
+ZToKPiBXaGVuIGJvb3RpbmcgYSBrZXJuZWwgd2l0aCBDT05GSUdfQ0ZJX0NMQU5HLCB0aGVyZSBp
+cyBhIENGSSBmYWlsdXJlCj4gd2hlbgo+IGFjY2Vzc2luZyBhbnkgb2YgdGhlIHZhbHVlcyB1bmRl
+cgo+IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2ludGVsX3VuY29yZV9mcmVxdWVuY3kvcGFja2Fn
+ZV8wMF9kaWVfMDA6Cj4gCj4gwqAgJCBjYXQKPiAvc3lzL2RldmljZXMvc3lzdGVtL2NwdS9pbnRl
+bF91bmNvcmVfZnJlcXVlbmN5L3BhY2thZ2VfMDBfZGllXzAwL21heF8KPiBmcmVxX2toego+IMKg
+IGZpc2g6IEpvYiAxLCAnY2F0IC9zeXMvZGV2aWNlcy9zeXN0ZW0vY3B1L2ludOKApicgdGVybWlu
+YXRlZCBieQo+IHNpZ25hbCBTSUdTRUdWIChBZGRyZXNzIGJvdW5kYXJ5IGVycm9yKQo+IAo+IMKg
+ICQgc3VkbyBkbWVzZyAmfCBncmVwICdDRkkgZmFpbHVyZScKPiDCoCBbwqAgMTcwLjk1MzkyNV0g
+Q0ZJIGZhaWx1cmUgYXQga29ial9hdHRyX3Nob3crMHgxOS8weDMwICh0YXJnZXQ6Cj4gc2hvd19t
+YXhfZnJlcV9raHorMHgwLzB4YzAgW2ludGVsX3VuY29yZV9mcmVxdWVuY3lfY29tbW9uXTsgZXhw
+ZWN0ZWQKPiB0eXBlOiAweGQzNDA3OGM1Cj4gCj4gVGhlIHN5c2ZzIGNhbGxiYWNrIGZ1bmN0aW9u
+cyBzdWNoIGFzIHNob3dfZG9tYWluX2lkKCkgYXJlIHdyaXR0ZW4gYXMKPiBpZgo+IHRoZXkgYXJl
+IGdvaW5nIHRvIGJlIGNhbGxlZCBieSBkZXZfYXR0cl9zaG93KCkgYnV0IGFzIHRoZSBhYm92ZQo+
+IG1lc3NhZ2UKPiBzaG93cywgdGhleSBhcmUgaW5zdGVhZCBjYWxsZWQgYnkga29ial9hdHRyX3No
+b3coKS4ga0NGSSBjaGVja3MgdGhhdAo+IHRoZQo+IGRlc3RpbmF0aW9uIG9mIGFuIGluZGlyZWN0
+IGp1bXAgaGFzIHRoZSBleGFjdCBzYW1lIHR5cGUgYXMgdGhlCj4gcHJvdG90eXBlCj4gb2YgdGhl
+IGZ1bmN0aW9uIHBvaW50ZXIgaXQgaXMgY2FsbGVkIHRocm91Z2ggYW5kIGZhaWxzIHdoZW4gdGhl
+eSBkbwo+IG5vdC4KPiAKPiBUaGVzZSBjYWxsYmFja3MgYXJlIGNhbGxlZCB0aHJvdWdoIGtvYmpf
+YXR0cl9zaG93KCkgYmVjYXVzZQo+IHVuY29yZV9yb290X2tvYmogd2FzIGluaXRpYWxpemVkIHdp
+dGgga29iamVjdF9jcmVhdGVfYW5kX2FkZCgpLCB3aGljaAo+IG1lYW5zIHVuY29yZV9yb290X2tv
+YmogaGFzIGEgLT5zeXNmc19vcHMgb2Yga29ial9zeXNmc19vcHMgZnJvbQo+IGtvYmplY3RfY3Jl
+YXRlKCksIHdoaWNoIHVzZXMga29ial9hdHRyX3Nob3coKSBhcyBpdHMgLT5zaG93KCkgdmFsdWUu
+Cj4gCj4gVGhlIG9ubHkgcmVhc29uIHRoZXJlIGhhcyBub3QgYmVlbiBhIG1vcmUgbm90aWNlYWJs
+ZSBwcm9ibGVtIHVudGlsCj4gdGhpcwo+IHBvaW50IGlzIHRoYXQgJ3N0cnVjdCBrb2JqX2F0dHJp
+YnV0ZScgYW5kICdzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZScKPiBoYXZlCj4gdGhlIHNhbWUgbGF5
+b3V0LCBzbyBnZXR0aW5nIHRoZSBjYWxsYmFjayBmcm9tIGNvbnRhaW5lcl9vZigpIHdvcmtzCj4g
+dGhlCj4gc2FtZSB3aXRoIGVpdGhlciB2YWx1ZS4KPiAKPiBDaGFuZ2UgYWxsIHRoZSBjYWxsYmFj
+a3MgYW5kIHRoZWlyIHVzZXMgdG8gYmUgY29tcGF0aWJsZSB3aXRoCj4ga29ial9hdHRyX3Nob3co
+KSBhbmQga29ial9hdHRyX3N0b3JlKCksIHdoaWNoIHJlc29sdmVzIHRoZSBrQ0ZJCj4gZmFpbHVy
+ZQo+IGFuZCBhbGxvd3MgdGhlIHN5c2ZzIGZpbGVzIHRvIHdvcmsgcHJvcGVybHkuCj4gCj4gQ2xv
+c2VzOiBodHRwczovL2dpdGh1Yi5jb20vQ2xhbmdCdWlsdExpbnV4L2xpbnV4L2lzc3Vlcy8xOTc0
+Cj4gRml4ZXM6IGFlN2IyY2U1Nzg1MSAoInBsYXRmb3JtL3g4Ni9pbnRlbC91bmNvcmUtZnJlcTog
+VXNlIHN5c2ZzIEFQSQo+IHRvIGNyZWF0ZSBhdHRyaWJ1dGVzIikKPiBTaWduZWQtb2ZmLWJ5OiBO
+YXRoYW4gQ2hhbmNlbGxvciA8bmF0aGFuQGtlcm5lbC5vcmc+CkRvIHlvdSBuZWVkIENjOiBzdGFi
+bGVAdmdlci5rZXJuZWwub3JnIAoKIEFja2VkLWJ5OiBTcmluaXZhcyBQYW5kcnV2YWRhIDxzcmlu
+aXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4KCj4gLS0tCj4gSSB0aGluayBJIGdvdCB0
+aGUgZml4ZXMgdGFnIHJpZ2h0LiBJIG9ubHkgc3RhcnRlZCBzZWVpbmcgdGhpcyBiZWNhdXNlCj4g
+b2YKPiBjb21taXQgMjdmMmIwODczNWM5ICgicGxhdGZvcm0veDg2OiBpbnRlbC11bmNvcmUtZnJl
+cTogQWRkIGFkZGl0aW9uYWwKPiBjbGllbnQgcHJvY2Vzc29ycyIpLCB3aGljaCBhbGxvd3MgdGhp
+cyBkcml2ZXIgdG8gbG9hZCBvbiBteSBpNy0xMTcwMAo+IHRlc3Qgc3lzdGVtIGJ1dCBJIHRoaW5r
+IHRoZSBjb21taXQgaW4gdGhlIEZpeGVzIHRhZyBpbmNvcnJlY3RseQo+IGNoYW5nZXMKPiB0aGUg
+dHlwZXMgb2YgdGhlIGNhbGxiYWNrcy4KPiAtLS0KPiDCoC4uLi91bmNvcmUtZnJlcXVlbmN5L3Vu
+Y29yZS1mcmVxdWVuY3ktY29tbW9uLmPCoMKgwqDCoCB8IDgyICsrKysrKysrKysrLQo+IC0tLS0t
+LS0tLS0KPiDCoC4uLi91bmNvcmUtZnJlcXVlbmN5L3VuY29yZS1mcmVxdWVuY3ktY29tbW9uLmjC
+oMKgwqDCoCB8IDMyICsrKystLS0tLQo+IMKgMiBmaWxlcyBjaGFuZ2VkLCA1NyBpbnNlcnRpb25z
+KCspLCA1NyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9wbGF0Zm9ybS94
+ODYvaW50ZWwvdW5jb3JlLWZyZXF1ZW5jeS91bmNvcmUtCj4gZnJlcXVlbmN5LWNvbW1vbi5jIGIv
+ZHJpdmVycy9wbGF0Zm9ybS94ODYvaW50ZWwvdW5jb3JlLQo+IGZyZXF1ZW5jeS91bmNvcmUtZnJl
+cXVlbmN5LWNvbW1vbi5jCj4gaW5kZXggMzNhYjIwNzQ5M2UzLi4zM2JiNThkYzNmNzggMTAwNjQ0
+Cj4gLS0tIGEvZHJpdmVycy9wbGF0Zm9ybS94ODYvaW50ZWwvdW5jb3JlLWZyZXF1ZW5jeS91bmNv
+cmUtZnJlcXVlbmN5LQo+IGNvbW1vbi5jCj4gKysrIGIvZHJpdmVycy9wbGF0Zm9ybS94ODYvaW50
+ZWwvdW5jb3JlLWZyZXF1ZW5jeS91bmNvcmUtZnJlcXVlbmN5LQo+IGNvbW1vbi5jCj4gQEAgLTIz
+LDIzICsyMywyMyBAQCBzdGF0aWMgaW50ICgqdW5jb3JlX3JlYWQpKHN0cnVjdCB1bmNvcmVfZGF0
+YQo+ICpkYXRhLCB1bnNpZ25lZCBpbnQgKm1pbiwgdW5zaWduZWQKPiDCoHN0YXRpYyBpbnQgKCp1
+bmNvcmVfd3JpdGUpKHN0cnVjdCB1bmNvcmVfZGF0YSAqZGF0YSwgdW5zaWduZWQgaW50Cj4gaW5w
+dXQsIHVuc2lnbmVkIGludCBtaW5fbWF4KTsKPiDCoHN0YXRpYyBpbnQgKCp1bmNvcmVfcmVhZF9m
+cmVxKShzdHJ1Y3QgdW5jb3JlX2RhdGEgKmRhdGEsIHVuc2lnbmVkCj4gaW50ICpmcmVxKTsKPiDC
+oAo+IC1zdGF0aWMgc3NpemVfdCBzaG93X2RvbWFpbl9pZChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0
+cnVjdAo+IGRldmljZV9hdHRyaWJ1dGUgKmF0dHIsIGNoYXIgKmJ1ZikKPiArc3RhdGljIHNzaXpl
+X3Qgc2hvd19kb21haW5faWQoc3RydWN0IGtvYmplY3QgKmtvYmosIHN0cnVjdAo+IGtvYmpfYXR0
+cmlidXRlICphdHRyLCBjaGFyICpidWYpCj4gwqB7Cj4gLcKgwqDCoMKgwqDCoMKgc3RydWN0IHVu
+Y29yZV9kYXRhICpkYXRhID0gY29udGFpbmVyX29mKGF0dHIsIHN0cnVjdAo+IHVuY29yZV9kYXRh
+LCBkb21haW5faWRfZGV2X2F0dHIpOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCB1bmNvcmVfZGF0
+YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRyLCBzdHJ1Y3QKPiB1bmNvcmVfZGF0YSwgZG9tYWlu
+X2lkX2tvYmpfYXR0cik7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHNwcmludGYoYnVm
+LCAiJXVcbiIsIGRhdGEtPmRvbWFpbl9pZCk7Cj4gwqB9Cj4gwqAKPiAtc3RhdGljIHNzaXplX3Qg
+c2hvd19mYWJyaWNfY2x1c3Rlcl9pZChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdAo+IGRldmlj
+ZV9hdHRyaWJ1dGUgKmF0dHIsIGNoYXIgKmJ1ZikKPiArc3RhdGljIHNzaXplX3Qgc2hvd19mYWJy
+aWNfY2x1c3Rlcl9pZChzdHJ1Y3Qga29iamVjdCAqa29iaiwgc3RydWN0Cj4ga29ial9hdHRyaWJ1
+dGUgKmF0dHIsIGNoYXIgKmJ1ZikKPiDCoHsKPiAtwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgdW5jb3Jl
+X2RhdGEgKmRhdGEgPSBjb250YWluZXJfb2YoYXR0ciwgc3RydWN0Cj4gdW5jb3JlX2RhdGEsIGZh
+YnJpY19jbHVzdGVyX2lkX2Rldl9hdHRyKTsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgdW5jb3Jl
+X2RhdGEgKmRhdGEgPSBjb250YWluZXJfb2YoYXR0ciwgc3RydWN0Cj4gdW5jb3JlX2RhdGEsIGZh
+YnJpY19jbHVzdGVyX2lkX2tvYmpfYXR0cik7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJu
+IHNwcmludGYoYnVmLCAiJXVcbiIsIGRhdGEtPmNsdXN0ZXJfaWQpOwo+IMKgfQo+IMKgCj4gLXN0
+YXRpYyBzc2l6ZV90IHNob3dfcGFja2FnZV9pZChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdAo+
+IGRldmljZV9hdHRyaWJ1dGUgKmF0dHIsIGNoYXIgKmJ1ZikKPiArc3RhdGljIHNzaXplX3Qgc2hv
+d19wYWNrYWdlX2lkKHN0cnVjdCBrb2JqZWN0ICprb2JqLCBzdHJ1Y3QKPiBrb2JqX2F0dHJpYnV0
+ZSAqYXR0ciwgY2hhciAqYnVmKQo+IMKgewo+IC3CoMKgwqDCoMKgwqDCoHN0cnVjdCB1bmNvcmVf
+ZGF0YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRyLCBzdHJ1Y3QKPiB1bmNvcmVfZGF0YSwgcGFj
+a2FnZV9pZF9kZXZfYXR0cik7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IHVuY29yZV9kYXRhICpk
+YXRhID0gY29udGFpbmVyX29mKGF0dHIsIHN0cnVjdAo+IHVuY29yZV9kYXRhLCBwYWNrYWdlX2lk
+X2tvYmpfYXR0cik7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHNwcmludGYoYnVmLCAi
+JXVcbiIsIGRhdGEtPnBhY2thZ2VfaWQpOwo+IMKgfQo+IEBAIC05NywzMCArOTcsMzAgQEAgc3Rh
+dGljIHNzaXplX3Qgc2hvd19wZXJmX3N0YXR1c19mcmVxX2toeihzdHJ1Y3QKPiB1bmNvcmVfZGF0
+YSAqZGF0YSwgY2hhciAqYnVmKQo+IMKgfQo+IMKgCj4gwqAjZGVmaW5lIHN0b3JlX3VuY29yZV9t
+aW5fbWF4KG5hbWUsCj4gbWluX21heCnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwKPiAtwqDCoMKgwqDCoMKgwqBzdGF0aWMgc3NpemVfdCBz
+dG9yZV8jI25hbWUoc3RydWN0IGRldmljZSAqZGV2LMKgwqDCoMKgwqDCoMKgwqDCoFwKPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZQo+ICphdHRyLMKgwqDCoMKgwqBcCj4g
+K8KgwqDCoMKgwqDCoMKgc3RhdGljIHNzaXplX3Qgc3RvcmVfIyNuYW1lKHN0cnVjdCBrb2JqZWN0
+Cj4gKmtvYmoswqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHN0cnVjdCBrb2JqX2F0dHJpYnV0ZQo+ICphdHRyLMKgwqDCoMKgwqDCoMKgXAo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBjb25zdCBjaGFyICpidWYsIHNpemVfdAo+IGNvdW50KcKgwqDCoMKgwqBcCj4gwqDC
+oMKgwqDCoMKgwqDCoHvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAKPiDCoMKgwqBcCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoHN0cnVjdCB1bmNvcmVfZGF0YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRyLCBzdHJ1
+Y3QKPiB1bmNvcmVfZGF0YSwgbmFtZSMjX2Rldl9hdHRyKTtcCj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHN0cnVjdCB1bmNvcmVfZGF0YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRy
+LCBzdHJ1Y3QKPiB1bmNvcmVfZGF0YSwgbmFtZSMjX2tvYmpfYXR0cik7XAo+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoAo+IMKgwqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHJldHVybiBzdG9yZV9taW5fbWF4X2ZyZXFfa2h6KGRhdGEsIGJ1ZiwgY291bnQswqBcCj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG1pbl9tYXgpO8KgwqDCoMKgwqDCoMKgwqDC
+oFwKPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCj4gwqAjZGVmaW5lIHNob3dfdW5jb3JlX21pbl9t
+YXgobmFtZSwKPiBtaW5fbWF4KcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gLcKgwqDCoMKgwqDCoMKgc3RhdGljIHNzaXplX3Qgc2hv
+d18jI25hbWUoc3RydWN0IGRldmljZSAqZGV2LMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZSAqYXR0ciwKPiBjaGFyICpidWYpXAo+ICvC
+oMKgwqDCoMKgwqDCoHN0YXRpYyBzc2l6ZV90IHNob3dfIyNuYW1lKHN0cnVjdCBrb2JqZWN0Cj4g
+KmtvYmoswqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0
+cnVjdCBrb2JqX2F0dHJpYnV0ZSAqYXR0ciwgY2hhcgo+ICpidWYpXAo+IMKgwqDCoMKgwqDCoMKg
+wqB7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgCj4gwqDCoCBcCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVj
+dCB1bmNvcmVfZGF0YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRyLCBzdHJ1Y3QKPiB1bmNvcmVf
+ZGF0YSwgbmFtZSMjX2Rldl9hdHRyKTtcCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHN0cnVjdCB1bmNvcmVfZGF0YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRyLCBzdHJ1Y3QKPiB1
+bmNvcmVfZGF0YSwgbmFtZSMjX2tvYmpfYXR0cik7XAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oAo+IMKgwqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBzaG93
+X21pbl9tYXhfZnJlcV9raHooZGF0YSwgYnVmLAo+IG1pbl9tYXgpO8KgwqDCoMKgwqDCoMKgXAo+
+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAKPiDCoCNkZWZpbmUKPiBzaG93X3VuY29yZV9wZXJmX3N0
+YXR1cyhuYW1lKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoHN0YXRpYyBzc2l6ZV90IHNo
+b3dfIyNuYW1lKHN0cnVjdCBkZXZpY2UgKmRldizCoMKgwqDCoMKgwqDCoMKgwqDCoFwKPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHN0cnVjdCBkZXZpY2VfYXR0cmlidXRlICphdHRyLAo+IGNoYXIgKmJ1ZilcCj4gK8Kg
+wqDCoMKgwqDCoMKgc3RhdGljIHNzaXplX3Qgc2hvd18jI25hbWUoc3RydWN0IGtvYmplY3QKPiAq
+a29iaizCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVj
+dCBrb2JqX2F0dHJpYnV0ZSAqYXR0ciwgY2hhcgo+ICpidWYpXAo+IMKgwqDCoMKgwqDCoMKgwqB7
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgCj4gwqDCoCBcCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCB1
+bmNvcmVfZGF0YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRyLCBzdHJ1Y3QKPiB1bmNvcmVfZGF0
+YSwgbmFtZSMjX2Rldl9hdHRyKTtcCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0
+cnVjdCB1bmNvcmVfZGF0YSAqZGF0YSA9IGNvbnRhaW5lcl9vZihhdHRyLCBzdHJ1Y3QKPiB1bmNv
+cmVfZGF0YSwgbmFtZSMjX2tvYmpfYXR0cik7XAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+
+IMKgwqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBzaG93X3Bl
+cmZfc3RhdHVzX2ZyZXFfa2h6KGRhdGEsIGJ1Zik7IFwKPiDCoMKgwqDCoMKgwqDCoMKgfQo+IEBA
+IC0xMzQsMTEgKzEzNCwxMSBAQCBzaG93X3VuY29yZV9taW5fbWF4KG1heF9mcmVxX2toeiwgMSk7
+Cj4gwqBzaG93X3VuY29yZV9wZXJmX3N0YXR1cyhjdXJyZW50X2ZyZXFfa2h6KTsKPiDCoAo+IMKg
+I2RlZmluZQo+IHNob3dfdW5jb3JlX2RhdGEobWVtYmVyX25hbWUpwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gLcKg
+wqDCoMKgwqDCoMKgc3RhdGljIHNzaXplX3Qgc2hvd18jI21lbWJlcl9uYW1lKHN0cnVjdCBkZXZp
+Y2UgKmRldizCoMKgwqBcCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGRldmlj
+ZV9hdHRyaWJ1dGUKPiAqYXR0ciwgY2hhciAqYnVmKVwKPiArwqDCoMKgwqDCoMKgwqBzdGF0aWMg
+c3NpemVfdCBzaG93XyMjbWVtYmVyX25hbWUoc3RydWN0IGtvYmplY3QgKmtvYmoswqBcCj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGtvYmpfYXR0cmlidXRlCj4gKmF0dHIsIGNo
+YXIgKmJ1ZilcCj4gwqDCoMKgwqDCoMKgwqDCoHvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiDCoMKgIFwKPiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCB1bmNvcmVfZGF0YSAqZGF0YSA9IGNvbnRhaW5l
+cl9vZihhdHRyLCBzdHJ1Y3QKPiB1bmNvcmVfZGF0YSxcCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiBtZW1iZXJfbmFtZSMjX2Rldl9h
+dHRyKTtcCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAKPiBtZW1iZXJfbmFtZSMjX2tvYmpfYXR0cik7XAo+IMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoAo+IMKgwqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
+biBzeXNmc19lbWl0KGJ1ZiwKPiAiJXVcbiIswqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRhdGEtCj4gPm1lbWJlcl9uYW1lKTvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IEBAIC0xNDksMjkgKzE0
+OSwyOSBAQCBzaG93X3VuY29yZV9kYXRhKGluaXRpYWxfbWF4X2ZyZXFfa2h6KTsKPiDCoAo+IMKg
+I2RlZmluZQo+IGluaXRfYXR0cmlidXRlX3J3KF9uYW1lKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwK
+PiDCoMKgwqDCoMKgwqDCoMKgZG8KPiB7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBzeXNmc19hdHRyX2luaXQoJmRhdGEtPl9uYW1lIyNfZGV2X2F0dHIuYXR0cik7wqDC
+oFwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+X25hbWUjI19kZXZfYXR0
+ci5zaG93ID0KPiBzaG93XyMjX25hbWU7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gLcKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEtPl9uYW1lIyNfZGV2X2F0dHIuc3RvcmUg
+PQo+IHN0b3JlXyMjX25hbWU7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwKPiAtwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+X25hbWUjI19kZXZfYXR0ci5hdHRyLm5hbWUgPQo+ICNf
+bmFtZTvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBkYXRhLT5fbmFtZSMjX2Rldl9hdHRyLmF0dHIubW9kZSA9Cj4gMDY0NDvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgc3lzZnNfYXR0cl9pbml0KCZkYXRhLT5fbmFtZSMjX2tvYmpfYXR0ci5hdHRyKTvCoFwK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+X25hbWUjI19rb2JqX2F0dHIu
+c2hvdyA9Cj4gc2hvd18jI19uYW1lO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+X25hbWUjI19rb2JqX2F0dHIuc3RvcmUgPQo+
+IHN0b3JlXyMjX25hbWU7wqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoGRhdGEtPl9uYW1lIyNfa29ial9hdHRyLmF0dHIubmFtZSA9Cj4gI19uYW1l
+O8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBkYXRhLT5fbmFtZSMjX2tvYmpfYXR0ci5hdHRyLm1vZGUgPQo+IDA2NDQ7wqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IMKgwqDCoMKgwqDCoMKgwqB9IHdoaWxlICgwKQo+IMKg
+Cj4gwqAjZGVmaW5lCj4gaW5pdF9hdHRyaWJ1dGVfcm8oX25hbWUpwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgXAo+IMKgwqDCoMKgwqDCoMKgwqBkbwo+IHvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gLcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHN5c2ZzX2F0dHJfaW5pdCgmZGF0YS0+X25hbWUjI19kZXZfYXR0ci5hdHRy
+KTvCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT5fbmFtZSMjX2Rl
+dl9hdHRyLnNob3cgPQo+IHNob3dfIyNfbmFtZTvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFwK
+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+X25hbWUjI19kZXZfYXR0ci5z
+dG9yZSA9Cj4gTlVMTDvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT5fbmFtZSMjX2Rldl9hdHRyLmF0
+dHIubmFtZSA9Cj4gI19uYW1lO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gLcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEtPl9uYW1lIyNfZGV2X2F0dHIuYXR0ci5tb2Rl
+ID0KPiAwNDQ0O8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBzeXNmc19hdHRyX2luaXQoJmRhdGEtPl9uYW1lIyNfa29ial9h
+dHRyLmF0dHIpO8KgXAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT5fbmFt
+ZSMjX2tvYmpfYXR0ci5zaG93ID0KPiBzaG93XyMjX25hbWU7wqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgXAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT5fbmFtZSMjX2tvYmpf
+YXR0ci5zdG9yZSA9Cj4gTlVMTDvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oFwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+X25hbWUjI19rb2JqX2F0
+dHIuYXR0ci5uYW1lID0KPiAjX25hbWU7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEtPl9uYW1lIyNfa29ial9hdHRyLmF0dHIu
+bW9kZSA9Cj4gMDQ0NDvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4gwqDCoMKgwqDC
+oMKgwqDCoH0gd2hpbGUgKDApCj4gwqAKPiDCoCNkZWZpbmUKPiBpbml0X2F0dHJpYnV0ZV9yb290
+X3JvKF9uYW1lKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+IMKgwqDCoMKgwqDCoMKgwqBkbwo+IHvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBcCj4g
+LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN5c2ZzX2F0dHJfaW5pdCgmZGF0YS0+X25h
+bWUjI19kZXZfYXR0ci5hdHRyKTvCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBkYXRhLT5fbmFtZSMjX2Rldl9hdHRyLnNob3cgPQo+IHNob3dfIyNfbmFtZTvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoFwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+
+X25hbWUjI19kZXZfYXR0ci5zdG9yZSA9Cj4gTlVMTDvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgXAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT5f
+bmFtZSMjX2Rldl9hdHRyLmF0dHIubmFtZSA9Cj4gI19uYW1lO8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBcCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEtPl9uYW1lIyNf
+ZGV2X2F0dHIuYXR0ci5tb2RlID0KPiAwNDAwO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgXAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzeXNmc19hdHRyX2luaXQoJmRh
+dGEtPl9uYW1lIyNfa29ial9hdHRyLmF0dHIpO8KgXAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBkYXRhLT5fbmFtZSMjX2tvYmpfYXR0ci5zaG93ID0KPiBzaG93XyMjX25hbWU7wqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgXAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBk
+YXRhLT5fbmFtZSMjX2tvYmpfYXR0ci5zdG9yZSA9Cj4gTlVMTDvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoFwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0
+YS0+X25hbWUjI19rb2JqX2F0dHIuYXR0ci5uYW1lID0KPiAjX25hbWU7wqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBcCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEtPl9uYW1l
+IyNfa29ial9hdHRyLmF0dHIubW9kZSA9Cj4gMDQwMDvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBcCj4gwqDCoMKgwqDCoMKgwqDCoH0gd2hpbGUgKDApCj4gwqAKPiDCoHN0YXRpYyBpbnQg
+Y3JlYXRlX2F0dHJfZ3JvdXAoc3RydWN0IHVuY29yZV9kYXRhICpkYXRhLCBjaGFyICpuYW1lKQo+
+IEBAIC0xODYsMjEgKzE4NiwyMSBAQCBzdGF0aWMgaW50IGNyZWF0ZV9hdHRyX2dyb3VwKHN0cnVj
+dCB1bmNvcmVfZGF0YQo+ICpkYXRhLCBjaGFyICpuYW1lKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDC
+oGlmIChkYXRhLT5kb21haW5faWQgIT0gVU5DT1JFX0RPTUFJTl9JRF9JTlZBTElEKSB7Cj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbml0X2F0dHJpYnV0ZV9yb290X3JvKGRvbWFp
+bl9pZCk7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRhdGEtPnVuY29yZV9hdHRy
+c1tpbmRleCsrXSA9ICZkYXRhLQo+ID5kb21haW5faWRfZGV2X2F0dHIuYXR0cjsKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+dW5jb3JlX2F0dHJzW2luZGV4KytdID0gJmRh
+dGEtCj4gPmRvbWFpbl9pZF9rb2JqX2F0dHIuYXR0cjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGluaXRfYXR0cmlidXRlX3Jvb3Rfcm8oZmFicmljX2NsdXN0ZXJfaWQpOwo+IC3C
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT51bmNvcmVfYXR0cnNbaW5kZXgrK10g
+PSAmZGF0YS0KPiA+ZmFicmljX2NsdXN0ZXJfaWRfZGV2X2F0dHIuYXR0cjsKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+dW5jb3JlX2F0dHJzW2luZGV4KytdID0gJmRhdGEt
+Cj4gPmZhYnJpY19jbHVzdGVyX2lkX2tvYmpfYXR0ci5hdHRyOwo+IMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgaW5pdF9hdHRyaWJ1dGVfcm9vdF9ybyhwYWNrYWdlX2lkKTsKPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGF0YS0+dW5jb3JlX2F0dHJzW2luZGV4KytdID0g
+JmRhdGEtCj4gPnBhY2thZ2VfaWRfZGV2X2F0dHIuYXR0cjsKPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgZGF0YS0+dW5jb3JlX2F0dHJzW2luZGV4KytdID0gJmRhdGEtCj4gPnBhY2th
+Z2VfaWRfa29ial9hdHRyLmF0dHI7Cj4gwqDCoMKgwqDCoMKgwqDCoH0KPiDCoAo+IC3CoMKgwqDC
+oMKgwqDCoGRhdGEtPnVuY29yZV9hdHRyc1tpbmRleCsrXSA9ICZkYXRhLQo+ID5tYXhfZnJlcV9r
+aHpfZGV2X2F0dHIuYXR0cjsKPiAtwqDCoMKgwqDCoMKgwqBkYXRhLT51bmNvcmVfYXR0cnNbaW5k
+ZXgrK10gPSAmZGF0YS0KPiA+bWluX2ZyZXFfa2h6X2Rldl9hdHRyLmF0dHI7Cj4gLcKgwqDCoMKg
+wqDCoMKgZGF0YS0+dW5jb3JlX2F0dHJzW2luZGV4KytdID0gJmRhdGEtCj4gPmluaXRpYWxfbWlu
+X2ZyZXFfa2h6X2Rldl9hdHRyLmF0dHI7Cj4gLcKgwqDCoMKgwqDCoMKgZGF0YS0+dW5jb3JlX2F0
+dHJzW2luZGV4KytdID0gJmRhdGEtCj4gPmluaXRpYWxfbWF4X2ZyZXFfa2h6X2Rldl9hdHRyLmF0
+dHI7Cj4gK8KgwqDCoMKgwqDCoMKgZGF0YS0+dW5jb3JlX2F0dHJzW2luZGV4KytdID0gJmRhdGEt
+Cj4gPm1heF9mcmVxX2toel9rb2JqX2F0dHIuYXR0cjsKPiArwqDCoMKgwqDCoMKgwqBkYXRhLT51
+bmNvcmVfYXR0cnNbaW5kZXgrK10gPSAmZGF0YS0KPiA+bWluX2ZyZXFfa2h6X2tvYmpfYXR0ci5h
+dHRyOwo+ICvCoMKgwqDCoMKgwqDCoGRhdGEtPnVuY29yZV9hdHRyc1tpbmRleCsrXSA9ICZkYXRh
+LQo+ID5pbml0aWFsX21pbl9mcmVxX2toel9rb2JqX2F0dHIuYXR0cjsKPiArwqDCoMKgwqDCoMKg
+wqBkYXRhLT51bmNvcmVfYXR0cnNbaW5kZXgrK10gPSAmZGF0YS0KPiA+aW5pdGlhbF9tYXhfZnJl
+cV9raHpfa29ial9hdHRyLmF0dHI7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gdW5jb3Jl
+X3JlYWRfZnJlcShkYXRhLCAmZnJlcSk7Cj4gwqDCoMKgwqDCoMKgwqDCoGlmICghcmV0KQo+IC3C
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT51bmNvcmVfYXR0cnNbaW5kZXgrK10g
+PSAmZGF0YS0KPiA+Y3VycmVudF9mcmVxX2toel9kZXZfYXR0ci5hdHRyOwo+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBkYXRhLT51bmNvcmVfYXR0cnNbaW5kZXgrK10gPSAmZGF0YS0K
+PiA+Y3VycmVudF9mcmVxX2toel9rb2JqX2F0dHIuYXR0cjsKPiDCoAo+IMKgwqDCoMKgwqDCoMKg
+wqBkYXRhLT51bmNvcmVfYXR0cnNbaW5kZXhdID0gTlVMTDsKPiDCoAo+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC91bmNvcmUtZnJlcXVlbmN5L3VuY29yZS0KPiBmcmVx
+dWVuY3ktY29tbW9uLmggYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC91bmNvcmUtCj4gZnJl
+cXVlbmN5L3VuY29yZS1mcmVxdWVuY3ktY29tbW9uLmgKPiBpbmRleCA3YWZiNjk5NzdjN2UuLjBl
+NWJmNTA3ZTU1NSAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC91bmNv
+cmUtZnJlcXVlbmN5L3VuY29yZS1mcmVxdWVuY3ktCj4gY29tbW9uLmgKPiArKysgYi9kcml2ZXJz
+L3BsYXRmb3JtL3g4Ni9pbnRlbC91bmNvcmUtZnJlcXVlbmN5L3VuY29yZS1mcmVxdWVuY3ktCj4g
+Y29tbW9uLmgKPiBAQCAtMjYsMTQgKzI2LDE0IEBACj4gwqAgKiBAaW5zdGFuY2VfaWQ6wqDCoMKg
+wqDCoMKgwqBVbmlxdWUgaW5zdGFuY2UgaWQgdG8gYXBwZW5kIHRvIGRpcmVjdG9yeQo+IG5hbWUK
+PiDCoCAqIEBuYW1lOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTeXNmcyBlbnRyeSBuYW1l
+IGZvciB0aGlzIGluc3RhbmNlCj4gwqAgKiBAdW5jb3JlX2F0dHJfZ3JvdXA6wqBBdHRyaWJ1dGUg
+Z3JvdXAgc3RvcmFnZQo+IC0gKiBAbWF4X2ZyZXFfa2h6X2Rldl9hdHRyOiBTdG9yYWdlIGZvciBk
+ZXZpY2UgYXR0cmlidXRlIG1heF9mcmVxX2toego+IC0gKiBAbWl4X2ZyZXFfa2h6X2Rldl9hdHRy
+OiBTdG9yYWdlIGZvciBkZXZpY2UgYXR0cmlidXRlIG1pbl9mcmVxX2toego+IC0gKiBAaW5pdGlh
+bF9tYXhfZnJlcV9raHpfZGV2X2F0dHI6IFN0b3JhZ2UgZm9yIGRldmljZSBhdHRyaWJ1dGUKPiBp
+bml0aWFsX21heF9mcmVxX2toego+IC0gKiBAaW5pdGlhbF9taW5fZnJlcV9raHpfZGV2X2F0dHI6
+IFN0b3JhZ2UgZm9yIGRldmljZSBhdHRyaWJ1dGUKPiBpbml0aWFsX21pbl9mcmVxX2toego+IC0g
+KiBAY3VycmVudF9mcmVxX2toel9kZXZfYXR0cjogU3RvcmFnZSBmb3IgZGV2aWNlIGF0dHJpYnV0
+ZQo+IGN1cnJlbnRfZnJlcV9raHoKPiAtICogQGRvbWFpbl9pZF9kZXZfYXR0cjogU3RvcmFnZSBm
+b3IgZGV2aWNlIGF0dHJpYnV0ZSBkb21haW5faWQKPiAtICogQGZhYnJpY19jbHVzdGVyX2lkX2Rl
+dl9hdHRyOiBTdG9yYWdlIGZvciBkZXZpY2UgYXR0cmlidXRlCj4gZmFicmljX2NsdXN0ZXJfaWQK
+PiAtICogQHBhY2thZ2VfaWRfZGV2X2F0dHI6IFN0b3JhZ2UgZm9yIGRldmljZSBhdHRyaWJ1dGUg
+cGFja2FnZV9pZAo+ICsgKiBAbWF4X2ZyZXFfa2h6X2tvYmpfYXR0cjogU3RvcmFnZSBmb3Iga29i
+amVjdCBhdHRyaWJ1dGUKPiBtYXhfZnJlcV9raHoKPiArICogQG1peF9mcmVxX2toel9rb2JqX2F0
+dHI6IFN0b3JhZ2UgZm9yIGtvYmplY3QgYXR0cmlidXRlCj4gbWluX2ZyZXFfa2h6Cj4gKyAqIEBp
+bml0aWFsX21heF9mcmVxX2toel9rb2JqX2F0dHI6IFN0b3JhZ2UgZm9yIGtvYmplY3QgYXR0cmli
+dXRlCj4gaW5pdGlhbF9tYXhfZnJlcV9raHoKPiArICogQGluaXRpYWxfbWluX2ZyZXFfa2h6X2tv
+YmpfYXR0cjogU3RvcmFnZSBmb3Iga29iamVjdCBhdHRyaWJ1dGUKPiBpbml0aWFsX21pbl9mcmVx
+X2toego+ICsgKiBAY3VycmVudF9mcmVxX2toel9rb2JqX2F0dHI6IFN0b3JhZ2UgZm9yIGtvYmpl
+Y3QgYXR0cmlidXRlCj4gY3VycmVudF9mcmVxX2toego+ICsgKiBAZG9tYWluX2lkX2tvYmpfYXR0
+cjogU3RvcmFnZSBmb3Iga29iamVjdCBhdHRyaWJ1dGUgZG9tYWluX2lkCj4gKyAqIEBmYWJyaWNf
+Y2x1c3Rlcl9pZF9rb2JqX2F0dHI6IFN0b3JhZ2UgZm9yIGtvYmplY3QgYXR0cmlidXRlCj4gZmFi
+cmljX2NsdXN0ZXJfaWQKPiArICogQHBhY2thZ2VfaWRfa29ial9hdHRyOiBTdG9yYWdlIGZvciBr
+b2JqZWN0IGF0dHJpYnV0ZSBwYWNrYWdlX2lkCj4gwqAgKiBAdW5jb3JlX2F0dHJzOsKgwqDCoMKg
+wqDCoEF0dHJpYnV0ZSBzdG9yYWdlIGZvciBncm91cCBjcmVhdGlvbgo+IMKgICoKPiDCoCAqIFRo
+aXMgc3RydWN0dXJlIGlzIHVzZWQgdG8gZW5jYXBzdWxhdGUgYWxsIGRhdGEgcmVsYXRlZCB0byB1
+bmNvcmUKPiBzeXNmcwo+IEBAIC01MywxNCArNTMsMTQgQEAgc3RydWN0IHVuY29yZV9kYXRhIHsK
+PiDCoMKgwqDCoMKgwqDCoMKgY2hhciBuYW1lWzMyXTsKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBz
+dHJ1Y3QgYXR0cmlidXRlX2dyb3VwIHVuY29yZV9hdHRyX2dyb3VwOwo+IC3CoMKgwqDCoMKgwqDC
+oHN0cnVjdCBkZXZpY2VfYXR0cmlidXRlIG1heF9mcmVxX2toel9kZXZfYXR0cjsKPiAtwqDCoMKg
+wqDCoMKgwqBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZSBtaW5fZnJlcV9raHpfZGV2X2F0dHI7Cj4g
+LcKgwqDCoMKgwqDCoMKgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgaW5pdGlhbF9tYXhfZnJlcV9r
+aHpfZGV2X2F0dHI7Cj4gLcKgwqDCoMKgwqDCoMKgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgaW5p
+dGlhbF9taW5fZnJlcV9raHpfZGV2X2F0dHI7Cj4gLcKgwqDCoMKgwqDCoMKgc3RydWN0IGRldmlj
+ZV9hdHRyaWJ1dGUgY3VycmVudF9mcmVxX2toel9kZXZfYXR0cjsKPiAtwqDCoMKgwqDCoMKgwqBz
+dHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZSBkb21haW5faWRfZGV2X2F0dHI7Cj4gLcKgwqDCoMKgwqDC
+oMKgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgZmFicmljX2NsdXN0ZXJfaWRfZGV2X2F0dHI7Cj4g
+LcKgwqDCoMKgwqDCoMKgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgcGFja2FnZV9pZF9kZXZfYXR0
+cjsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga29ial9hdHRyaWJ1dGUgbWF4X2ZyZXFfa2h6X2tv
+YmpfYXR0cjsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga29ial9hdHRyaWJ1dGUgbWluX2ZyZXFf
+a2h6X2tvYmpfYXR0cjsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga29ial9hdHRyaWJ1dGUgaW5p
+dGlhbF9tYXhfZnJlcV9raHpfa29ial9hdHRyOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBrb2Jq
+X2F0dHJpYnV0ZSBpbml0aWFsX21pbl9mcmVxX2toel9rb2JqX2F0dHI7Cj4gK8KgwqDCoMKgwqDC
+oMKgc3RydWN0IGtvYmpfYXR0cmlidXRlIGN1cnJlbnRfZnJlcV9raHpfa29ial9hdHRyOwo+ICvC
+oMKgwqDCoMKgwqDCoHN0cnVjdCBrb2JqX2F0dHJpYnV0ZSBkb21haW5faWRfa29ial9hdHRyOwo+
+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBrb2JqX2F0dHJpYnV0ZSBmYWJyaWNfY2x1c3Rlcl9pZF9r
+b2JqX2F0dHI7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IGtvYmpfYXR0cmlidXRlIHBhY2thZ2Vf
+aWRfa29ial9hdHRyOwo+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgYXR0cmlidXRlICp1bmNvcmVf
+YXR0cnNbOV07Cj4gwqB9Owo+IMKgCj4gCj4gLS0tCj4gYmFzZS1jb21taXQ6IDIzNmY3ZDgwMzRm
+ZjQwMWQwMmZhNmQ3NGJhZTQ5NGEyYjU0ZTE4MzQKPiBjaGFuZ2UtaWQ6IDIwMjQwMTA0LWludGVs
+LXVuY29yZS1mcmVxLWtjZmktZml4LTZlZjA3MDUzZGI1OAo+IAo+IEJlc3QgcmVnYXJkcywKCg==
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20240108/
-
-Tree: next
-Branch: master
-Git Describe: next-20240108
-Git Commit: bffdfd2e7e63175ae261131a620f809d946cf9a7
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arc:
-    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
-
-i386:
-    i386_defconfig: (gcc-10) FAIL
-    i386_defconfig+debug: (gcc-10) FAIL
-    i386_defconfig+kselftest: (gcc-10) FAIL
-
-x86_64:
-    x86_64_defconfig: (gcc-10) FAIL
-    x86_64_defconfig+kselftest: (gcc-10) FAIL
-    x86_64_defconfig+x86-board: (gcc-10) FAIL
-    x86_64_defconfig+x86-board+kselftest: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    allnoconfig (gcc-10): 1 warning
-    axs103_defconfig (gcc-10): 1 warning
-    axs103_smp_defconfig (gcc-10): 1 warning
-    haps_hs_defconfig (gcc-10): 1 warning
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
-    haps_hs_smp_defconfig+debug (gcc-10): 2 warnings
-    haps_hs_smp_defconfig+kselftest (gcc-10): 2 warnings
-    hsdk_defconfig (gcc-10): 1 warning
-    nsimosci_hs_defconfig (gcc-10): 2 warnings
-    nsimosci_hs_smp_defconfig (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-    vdk_hs38_defconfig (gcc-10): 1 warning
-    vdk_hs38_smp_defconfig (gcc-10): 1 warning
-
-arm64:
-    defconfig (gcc-10): 1 warning
-    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 1 warning
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 3 warnings
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-10): 1 warning
-    defconfig+arm64-chromebook (gcc-10): 1 warning
-    defconfig+arm64-chromebook+kselftest (gcc-10): 2 warnings
-    defconfig+arm64-chromebook+videodec (gcc-10): 1 warning
-    defconfig+kselftest (gcc-10): 2 warnings
-    defconfig+videodec (gcc-10): 1 warning
-
-arm:
-    collie_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-    mxs_defconfig (gcc-10): 1 warning
-    omap2plus_defconfig (gcc-10): 1 warning
-    pxa_defconfig (gcc-10): 1 warning
-
-i386:
-    i386_defconfig (gcc-10): 1 error, 1 warning
-    i386_defconfig+debug (gcc-10): 1 error, 1 warning
-    i386_defconfig+kselftest (gcc-10): 1 error, 1 warning
-
-mips:
-    ath79_defconfig (gcc-10): 3 warnings
-    bcm63xx_defconfig (gcc-10): 8 warnings
-    bigsur_defconfig (gcc-10): 15 warnings
-    cavium_octeon_defconfig (gcc-10): 12 warnings
-    cobalt_defconfig (gcc-10): 2 warnings
-    db1xxx_defconfig (gcc-10): 27 warnings
-    decstation_64_defconfig (gcc-10): 9 warnings
-    decstation_defconfig (gcc-10): 9 warnings
-    decstation_r4k_defconfig (gcc-10): 9 warnings
-    fuloong2e_defconfig (gcc-10): 1 warning
-    gpr_defconfig (gcc-10): 7 warnings
-    ip22_defconfig (gcc-10): 7 warnings
-    ip27_defconfig (gcc-10): 13 warnings
-    ip28_defconfig (gcc-10): 9 warnings
-    ip32_defconfig (gcc-10): 8 warnings
-    jazz_defconfig (gcc-10): 6 warnings
-    lemote2f_defconfig (gcc-10): 22 warnings
-    loongson1b_defconfig (gcc-10): 1 warning
-    loongson1c_defconfig (gcc-10): 1 warning
-    loongson2k_defconfig (gcc-10): 4 warnings
-    loongson3_defconfig (gcc-10): 5 warnings
-    maltaaprp_defconfig (gcc-10): 4 warnings
-    mtx1_defconfig (gcc-10): 6 warnings
-    omega2p_defconfig (gcc-10): 2 warnings
-    pic32mzda_defconfig (gcc-10): 1 warning
-    rb532_defconfig (gcc-10): 3 warnings
-    rbtx49xx_defconfig (gcc-10): 1 warning
-    rm200_defconfig (gcc-10): 9 warnings
-    rt305x_defconfig (gcc-10): 2 warnings
-    sb1250_swarm_defconfig (gcc-10): 16 warnings
-    vocore2_defconfig (gcc-10): 2 warnings
-
-riscv:
-    defconfig (gcc-10): 1 warning
-    defconfig+kselftest (gcc-10): 1 warning
-
-sparc:
-    allnoconfig (gcc-10): 5 warnings
-    sparc32_defconfig (gcc-10): 6 warnings
-    sparc64_defconfig (gcc-10): 26 warnings
-    sparc64_defconfig+debug (gcc-10): 24 warnings
-    sparc64_defconfig+kselftest (gcc-10): 25 warnings
-    tinyconfig (gcc-10): 5 warnings
-
-x86_64:
-    x86_64_defconfig (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+kselftest (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+kselftest (rustc-1.74): 1 warning
-    x86_64_defconfig+x86-board (gcc-10): 1 error, 1 warning
-    x86_64_defconfig+x86-board+kselftest (gcc-10): 1 error, 1 warning
-
-Errors summary:
-
-    3    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_me=
-mcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    2    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
-32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    2    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
-nds]
-
-Warnings summary:
-
-    13   arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
-r 'syscall_trace_enter' [-Wmissing-prototypes]
-    11   security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
-t 32 is out of the bounds [0, 0] [-Warray-bounds]
-    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    7    cc1: all warnings being treated as errors
-    5    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype fo=
-r =E2=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    5    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
-or 'arc_kprobe_handler' [-Wmissing-prototypes]
-    3    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98fre=
-e_dma=E2=80=99 [-Wmissing-prototypes]
-    3    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98req=
-uest_dma=E2=80=99 [-Wmissing-prototypes]
-    3    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_=
-memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    3    include/linux/fortify-string.h:402:12: warning: writing 1 byte int=
-o a region of size 0 [-Wstringop-overflow=3D]
-    3    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
-=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    3    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    3    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
- =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =
-=E2=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =
-=E2=80=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
- for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
-e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
-ypes]
-    3    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
-e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
- for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
-e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
-pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
-or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
-for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    3    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
-for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =
-=E2=80=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =
-=E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototyp=
-e for =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototyp=
-e for =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous protot=
-ype for =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =
-=E2=80=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =
-=E2=80=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =
-=E2=80=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =
-=E2=80=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =
-=E2=80=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype fo=
-r =E2=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/setup.c:57:13: warning: no previous proto=
-type for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototy=
-pe for =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/prom.c:48:13: warning: no previous protot=
-ype for =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/prom.c:127:12: warning: no previous proto=
-type for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    3    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prot=
-otype for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    2    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =
-=E2=80=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
-    2    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous =
-prototype for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
-    2    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
- for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototyp=
-e for =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous=
- prototype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previou=
-s prototype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous=
- prototype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous pr=
-ototype for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous p=
-rototype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous pr=
-ototype for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous protot=
-ype for =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototy=
-pe for =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototyp=
-e for =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for=
- =E2=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype fo=
-r =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype fo=
-r =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype fo=
-r =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype f=
-or =E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson32/common/platform.c:71:5: warning: no previous =
-prototype for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
-    2    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previou=
-s prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-protot=
-ypes]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x14d2f9
-    1    include/linux/array_size.h:11:25: warning: overflow in conversion =
-from =E2=80=98long unsigned int=E2=80=99 to =E2=80=98int=E2=80=99 changes v=
-alue from =E2=80=9818446744073709551615=E2=80=99 to =E2=80=98-1=E2=80=99 [-=
-Woverflow]
-    1    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous pro=
-totype for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototy=
-pe for =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototy=
-pe for =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/tty/serial/serial_txx9.c:933:12: warning: no previous prot=
-otype for =E2=80=98early_serial_txx9_setup=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous protot=
-ype for =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous protot=
-ype for =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-pic32-evic.c:164:5: warning: no previous proto=
-type for =E2=80=98pic32_irq_domain_xlate=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype f=
-or =E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous protot=
-ype for =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prot=
-otype for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous protot=
-ype for =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
-    1    drivers/gpu/drm/imagination/pvr_fw_mips.c:140:60: warning: array s=
-ubscript 0 is outside the bounds of an interior zero-length array =E2=80=98=
-dma_addr_t[0]=E2=80=99 {aka =E2=80=98long long unsigned int[]=E2=80=99} [-W=
-zero-length-bounds]
-    1    arch/sparc/include/asm/string.h:15:25: warning: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    1    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =
-=E2=80=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =
-=E2=80=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =
-=E2=80=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =
-=E2=80=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=
-=80=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=
-=80=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=
-=80=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =
-=E2=80=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototy=
-pe for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype=
- for =E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototyp=
-e for =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototy=
-pe for =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous proto=
-type for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototy=
-pe for =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous protot=
-ype for =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototyp=
-e for =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototy=
-pe for =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prot=
-otype for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous protot=
-ype for =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/ip32-reset.c:93:6: warning: no previous prototy=
-pe for =E2=80=98ip32_prepare_poweroff=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/ip32-memory.c:21:13: warning: no previous proto=
-type for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/ip32-berr.c:35:13: warning: no previous prototy=
-pe for =E2=80=98ip32_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/crime.c:93:13: warning: no previous prototype f=
-or =E2=80=98crime_cpuerr_intr=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/crime.c:42:13: warning: no previous prototype f=
-or =E2=80=98crime_memerr_intr=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip32/crime.c:26:13: warning: no previous prototype f=
-or =E2=80=98crime_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:56:6: warning: no previous prototype=
- for =E2=80=98nmi_cpu_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:37:6: warning: no previous prototype=
- for =E2=80=98install_cpu_nmi_handler=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:30:6: warning: no previous prototype=
- for =E2=80=98nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:183:1: warning: no previous prototyp=
-e for =E2=80=98cont_nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:174:1: warning: no previous prototyp=
-e for =E2=80=98nmi_eframes_save=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:156:6: warning: no previous prototyp=
-e for =E2=80=98nmi_node_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-nmi.c:132:6: warning: no previous prototyp=
-e for =E2=80=98nmi_dump_hub_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-memory.c:391:13: warning: no previous prot=
-otype for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-irq.c:250:6: warning: no previous prototyp=
-e for =E2=80=98install_ipi=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-hubio.c:30:15: warning: no previous protot=
-ype for =E2=80=98hub_pio_map=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-hubio.c:175:6: warning: no previous protot=
-ype for =E2=80=98hub_pio_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-berr.c:82:13: warning: no previous prototy=
-pe for =E2=80=98ip27_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip27/ip27-berr.c:60:5: warning: no previous prototyp=
-e for =E2=80=98ip27_be_handler=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototy=
-pe for =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip28-berr.c:469:13: warning: no previous protot=
-ype for =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip28-berr.c:440:6: warning: no previous prototy=
-pe for =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototy=
-pe for =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip22-berr.c:89:6: warning: no previous prototyp=
-e for =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/sgi-ip22/ip22-berr.c:113:13: warning: no previous protot=
-ype for =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for=
- =E2=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/rb532/prom.c:49:13: warning: no previous prototype for =
-=E2=80=98prom_setup_cmdline=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/rb532/gpio.c:200:12: warning: no previous prototype for =
-=E2=80=98rb532_gpio_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/pci/pcie-octeon.c:1465:5: warning: no previous prototype=
- for =E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype =
-for =E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype =
-for =E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for=
- =E2=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for=
- =E2=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =
-=E2=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =
-=E2=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous pr=
-ototype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous pr=
-ototype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous =
-prototype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous =
-prototype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no prev=
-ious prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prot=
-otype for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prot=
-otype for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous pro=
-totype for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous pro=
-totype for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: n=
-o previous prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: n=
-o previous prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-pr=
-ototypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no=
- previous prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: n=
-o previous prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: n=
-o previous prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: n=
-o previous prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no=
- previous prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-proto=
-types]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no=
- previous prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: n=
-o previous prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: n=
-o previous prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-pr=
-ototypes]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no=
- previous prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-proto=
-types]
-    1    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no=
- previous prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prot=
-otypes]
-    1    arch/mips/kvm/loongson_ipi.c:190:6: warning: no previous prototype=
- for =E2=80=98kvm_init_loongson_ipi=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype fo=
-r =E2=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype fo=
-r =E2=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype fo=
-r =E2=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype fo=
-r =E2=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototy=
-pe for =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous protot=
-ype for =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototyp=
-e for =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototy=
-pe for =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/setup.c:54:13: warning: no previous prototype for =
-=E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =
-=E2=80=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=
-=80=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=
-=80=98disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =
-=E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cobalt/reset.c:46:6: warning: no previous prototype for =
-=E2=80=98cobalt_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cobalt/reset.c:32:6: warning: no previous prototype for =
-=E2=80=98cobalt_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototyp=
-e for =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no prev=
-ious prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: w=
-arning: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en=
-_enable=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warni=
-ng: no previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd=
-_order_cdr=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/timer.c:181:5: warning: no previous prototype fo=
-r =E2=80=98bcm63xx_timer_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/setup.c:162:12: warning: no previous prototype f=
-or =E2=80=98bcm63xx_register_devices=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =
-=E2=80=98__dispatch_internal_64=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =
-=E2=80=98__dispatch_internal_32=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/dev-wdt.c:37:12: warning: no previous prototype =
-for =E2=80=98bcm63xx_wdt_register=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/dev-uart.c:52:12: warning: no previous prototype=
- for =E2=80=98bcm63xx_uart_register=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/dev-rng.c:29:12: warning: no previous prototype =
-for =E2=80=98bcm63xx_rng_register=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/bcm63xx/boards/board_bcm963xx.c:705:5: warning: no previ=
-ous prototype for =E2=80=98bcm63xx_get_fallback_sprom=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous=
- prototype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-pro=
-totypes]
-    1    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previou=
-s prototype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/mips/alchemy/devboards/db1xxx.c:57:13: warning: no previous p=
-rototype for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous p=
-rototype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous =
-prototype for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous p=
-rototype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous =
-prototype for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous =
-prototype for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous =
-prototype for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous =
-prototype for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous =
-prototype for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1000.c:93:12: warning: no previous p=
-rototype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1000.c:451:12: warning: no previous =
-prototype for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/devboards/db1000.c:35:12: warning: no previous p=
-rototype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/board-mtx1.c:53:13: warning: no previous prototy=
-pe for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/alchemy/board-gpr.c:61:13: warning: no previous prototyp=
-e for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    1    ................................................./arch/sparc/kerne=
-l/traps_64.c:253:6: warning: no previous prototype for =E2=80=98is_no_fault=
-_exception=E2=80=99 [-Wmissing-prototypes]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
- mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
-dma=E2=80=99 [-Wmissing-prototypes]
-    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
-=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
-=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
-=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/irqchip/irq-ath79-cpu.c:89:13: warning: no previous prototype f=
-or =E2=80=98ath79_cpu_irq_init=E2=80=99 [-Wmissing-prototypes]
-    drivers/irqchip/irq-ath79-misc.c:26:5: warning: no previous prototype f=
-or =E2=80=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    drivers/irqchip/irq-ath79-misc.c:181:13: warning: no previous prototype=
- for =E2=80=98ath79_misc_irq_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/bcm63xx/boards/board_bcm963xx.c:705:5: warning: no previous p=
-rototype for =E2=80=98bcm63xx_get_fallback_sprom=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =E2=80=
-=98__dispatch_internal_32=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/irq.c:75:6: warning: no previous prototype for =E2=80=
-=98__dispatch_internal_64=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/timer.c:181:5: warning: no previous prototype for =E2=
-=80=98bcm63xx_timer_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/setup.c:162:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_register_devices=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/dev-rng.c:29:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_rng_register=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/dev-uart.c:52:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_uart_register=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/bcm63xx/dev-wdt.c:37:12: warning: no previous prototype for =
-=E2=80=98bcm63xx_wdt_register=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 15 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/sibyte/bcm1480/setup.c:104:13: warning: no previous prototype=
- for =E2=80=98bcm1480_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/irq.c:200:13: warning: no previous prototype f=
-or =E2=80=98init_bcm1480_irqs=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/time.c:10:13: warning: no previous prototype f=
-or =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/smp.c:49:6: warning: no previous prototype for=
- =E2=80=98bcm1480_smp_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/bcm1480/smp.c:158:6: warning: no previous prototype fo=
-r =E2=80=98bcm1480_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
- =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
-otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
-totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
-otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
-ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-bcm1480.c:96:6: warning: no previous prototype fo=
-r =E2=80=98sb1480_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/csrc-bcm1480.c:37:13: warning: no previous prototype f=
-or =E2=80=98sb1480_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
-=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 12 warning=
-s, 0 section mismatches
-
-Warnings:
-    arch/mips/cavium-octeon/executive/cvmx-interrupt-decodes.c:53:6: warnin=
-g: no previous prototype for =E2=80=98__cvmx_interrupt_gmxx_rxx_int_en_enab=
-le=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/cavium-octeon/executive/cvmx-helper-errata.c:49:6: warning: n=
-o previous prototype for =E2=80=98__cvmx_helper_errata_qlm_disable_2nd_orde=
-r_cdr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/cavium-octeon/octeon-platform.c:701:13: warning: no previous =
-prototype for =E2=80=98octeon_fill_mac_addresses=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/mips/cavium-octeon/smp.c:100:6: warning: no previous prototype for=
- =E2=80=98octeon_send_ipi_single=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:297:5: warning: no previous prototype for =E2=
-=80=98register_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:303:5: warning: no previous prototype for =E2=
-=80=98unregister_co_cache_error_notifier=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:342:17: warning: no previous prototype for =E2=
-=80=98cache_parity_error_octeon_recoverable=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/c-octeon.c:351:17: warning: no previous prototype for =E2=
-=80=98cache_parity_error_octeon_non_recoverable=E2=80=99 [-Wmissing-prototy=
-pes]
-    arch/mips/pci/pci-octeon.c:234:12: warning: no previous prototype for =
-=E2=80=98octeon_pci_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/pci/pcie-octeon.c:1465:5: warning: no previous prototype for =
-=E2=80=98octeon_pcie_pcibios_map_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/pci/msi-octeon.c:343:12: warning: no previous prototype for =
-=E2=80=98octeon_msi_initialize=E2=80=99 [-Wmissing-prototypes]
-    drivers/watchdog/octeon-wdt-main.c:210:6: warning: no previous prototyp=
-e for =E2=80=98octeon_wdt_nmi_stage3=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/cobalt/reset.c:32:6: warning: no previous prototype for =E2=
-=80=98cobalt_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/cobalt/reset.c:46:6: warning: no previous prototype for =E2=
-=80=98cobalt_machine_restart=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype f=
-or =E2=80=98pcmcia_collie_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 27 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/alchemy/common/prom.c:48:13: warning: no previous prototype f=
-or =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototype fo=
-r =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:127:12: warning: no previous prototype =
-for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prototype=
- for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/setup.c:57:13: warning: no previous prototype =
-for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/platform.c:68:12: warning: no previous prot=
-otype for =E2=80=98db1x_register_pcmcia_socket=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/alchemy/devboards/platform.c:152:12: warning: no previous pro=
-totype for =E2=80=98db1x_register_norflash=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1000.c:35:12: warning: no previous protot=
-ype for =E2=80=98db1000_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1000.c:93:12: warning: no previous protot=
-ype for =E2=80=98db1500_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1000.c:451:12: warning: no previous proto=
-type for =E2=80=98db1000_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1200.c:116:12: warning: no previous proto=
-type for =E2=80=98db1200_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1200.c:799:12: warning: no previous proto=
-type for =E2=80=98db1200_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1550.c:56:12: warning: no previous protot=
-ype for =E2=80=98db1550_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1550.c:501:12: warning: no previous proto=
-type for =E2=80=98db1550_pci_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1550.c:582:12: warning: no previous proto=
-type for =E2=80=98db1550_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1300.c:786:12: warning: no previous proto=
-type for =E2=80=98db1300_dev_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1300.c:855:12: warning: no previous proto=
-type for =E2=80=98db1300_board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1xxx.c:52:13: warning: no previous protot=
-ype for =E2=80=98get_system_type=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/devboards/db1xxx.c:57:13: warning: no previous protot=
-ype for =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:138:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_setmode=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:235:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_fb_setcolreg=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:294:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_fb_pan_display=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:341:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_fb_mmap=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:523:6: warning: no previous prototype fo=
-r =E2=80=98au1100fb_drv_remove=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:548:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_drv_suspend=E2=80=99 [-Wmissing-prototypes]
-    drivers/video/fbdev/au1100fb.c:565:5: warning: no previous prototype fo=
-r =E2=80=98au1100fb_drv_resume=E2=80=99 [-Wmissing-prototypes]
-    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
-type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
-=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
-=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
-=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
-=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
-=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
- =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
- =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
-or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
-=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
-=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
-=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
-=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
-=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
-=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
- =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
- =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
-or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
-=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warning=
-s, 0 section mismatches
-
-Warnings:
-    arch/mips/dec/reset.c:22:17: warning: no previous prototype for =E2=80=
-=98dec_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:27:17: warning: no previous prototype for =E2=80=
-=98dec_machine_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:32:17: warning: no previous prototype for =E2=80=
-=98dec_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/reset.c:38:13: warning: no previous prototype for =E2=80=
-=98dec_intr_halt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/setup.c:780:25: warning: no previous prototype for =E2=80=
-=98dec_irq_dispatch=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:15:5: warning: no previous prototype for=
- =E2=80=98ds1287_timer_state=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:20:5: warning: no previous prototype for=
- =E2=80=98ds1287_set_base_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-ds1287.c:103:12: warning: no previous prototype f=
-or =E2=80=98ds1287_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/dec/prom/init.c:45:13: warning: no previous prototype for =E2=
-=80=98which_prom=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 1 warning, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 3 warnings, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-    drivers/gpu/drm/imagination/pvr_fw_mips.c:140:60: warning: array subscr=
-ipt 0 is outside the bounds of an interior zero-length array =E2=80=98dma_a=
-ddr_t[0]=E2=80=99 {aka =E2=80=98long long unsigned int[]=E2=80=99} [-Wzero-=
-length-bounds]
-    include/linux/array_size.h:11:25: warning: overflow in conversion from =
-=E2=80=98long unsigned int=E2=80=99 to =E2=80=98int=E2=80=99 changes value =
-from =E2=80=9818446744073709551615=E2=80=99 to =E2=80=98-1=E2=80=99 [-Wover=
-flow]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 1 warning, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 1 warning, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 2 warnings, 0 section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    include/linux/fortify-string.h:402:12: warning: writing 1 byte into a r=
-egion of size 0 [-Wstringop-overflow=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 1 warning, 0 section mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:402:12: warning: writing 1 byte into a r=
-egion of size 0 [-Wstringop-overflow=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    include/linux/fortify-string.h:402:12: warning: writing 1 byte into a r=
-egion of size 0 [-Wstringop-overflow=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
-totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 7 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/mips/alchemy/common/prom.c:48:13: warning: no previous prototype f=
-or =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototype fo=
-r =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:127:12: warning: no previous prototype =
-for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/board-gpr.c:61:13: warning: no previous prototype for=
- =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prototype=
- for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/setup.c:57:13: warning: no previous prototype =
-for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    drivers/net/ethernet/amd/au1000_eth.c:574:6: warning: no previous proto=
-type for =E2=80=98au1000_ReleaseDB=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
-ngs, 0 section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 0 errors, 2 w=
-arnings, 0 section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
-ection mismatches
-
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
- 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 7 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous prototype f=
-or =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-berr.c:89:6: warning: no previous prototype for=
- =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-berr.c:113:13: warning: no previous prototype f=
-or =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototype for=
- =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototype fo=
-r =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
-=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 13 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/sgi-ip27/ip27-berr.c:60:5: warning: no previous prototype for=
- =E2=80=98ip27_be_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-berr.c:82:13: warning: no previous prototype fo=
-r =E2=80=98ip27_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-irq.c:250:6: warning: no previous prototype for=
- =E2=80=98install_ipi=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-memory.c:391:13: warning: no previous prototype=
- for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:30:6: warning: no previous prototype for =
-=E2=80=98nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:37:6: warning: no previous prototype for =
-=E2=80=98install_cpu_nmi_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:56:6: warning: no previous prototype for =
-=E2=80=98nmi_cpu_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:132:6: warning: no previous prototype for=
- =E2=80=98nmi_dump_hub_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:156:6: warning: no previous prototype for=
- =E2=80=98nmi_node_eframe_save=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:174:1: warning: no previous prototype for=
- =E2=80=98nmi_eframes_save=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-nmi.c:183:1: warning: no previous prototype for=
- =E2=80=98cont_nmi_dump=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-hubio.c:30:15: warning: no previous prototype f=
-or =E2=80=98hub_pio_map=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip27/ip27-hubio.c:175:6: warning: no previous prototype f=
-or =E2=80=98hub_pio_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/sgi-ip22/ip22-time.c:119:18: warning: no previous prototype f=
-or =E2=80=98indy_8254timer_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:249:6: warning: no previous prototype for=
- =E2=80=98ip22_gio_set_64bit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-gio.c:398:12: warning: no previous prototype fo=
-r =E2=80=98ip22_gio_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip28-berr.c:440:6: warning: no previous prototype fo=
-r =E2=80=98ip22_be_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip28-berr.c:469:13: warning: no previous prototype f=
-or =E2=80=98ip22_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip28-berr.c:474:5: warning: no previous prototype fo=
-r =E2=80=98ip28_show_be_info=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip22/ip22-eisa.c:95:12: warning: no previous prototype fo=
-r =E2=80=98ip22_eisa_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    drivers/scsi/sgiwd93.c:173:6: warning: no previous prototype for =E2=80=
-=98sgiwd93_reset=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/sgi-ip32/ip32-berr.c:35:13: warning: no previous prototype fo=
-r =E2=80=98ip32_be_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/ip32-reset.c:93:6: warning: no previous prototype fo=
-r =E2=80=98ip32_prepare_poweroff=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/crime.c:26:13: warning: no previous prototype for =
-=E2=80=98crime_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/crime.c:42:13: warning: no previous prototype for =
-=E2=80=98crime_memerr_intr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/crime.c:93:13: warning: no previous prototype for =
-=E2=80=98crime_cpuerr_intr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sgi-ip32/ip32-memory.c:21:13: warning: no previous prototype =
-for =E2=80=98prom_meminit=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-    drivers/net/ethernet/sgi/meth.c:271:5: warning: no previous prototype f=
-or =E2=80=98meth_reset=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/jazz/irq.c:38:6: warning: no previous prototype for =E2=80=98=
-disable_r4030_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/irq.c:55:13: warning: no previous prototype for =E2=80=
-=98init_r4030_ints=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/irq.c:128:13: warning: no previous prototype for =E2=80=
-=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/reset.c:49:6: warning: no previous prototype for =E2=80=
-=98jazz_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/jazz/setup.c:54:13: warning: no previous prototype for =E2=80=
-=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 22 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no prev=
-ious prototype for =E2=80=98pci_ide_write_reg=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no prev=
-ious prototype for =E2=80=98pci_ide_read_reg=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no prev=
-ious prototype for =E2=80=98pci_acc_write_reg=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no prev=
-ious prototype for =E2=80=98pci_acc_read_reg=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: no pre=
-vious prototype for =E2=80=98pci_ohci_write_reg=E2=80=99 [-Wmissing-prototy=
-pes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: no pre=
-vious prototype for =E2=80=98pci_ohci_read_reg=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no prev=
-ious prototype for =E2=80=98pci_isa_write_bar=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: no pre=
-vious prototype for =E2=80=98pci_isa_read_bar=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: no pre=
-vious prototype for =E2=80=98pci_isa_write_reg=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: no pre=
-vious prototype for =E2=80=98pci_isa_read_reg=E2=80=99 [-Wmissing-prototype=
-s]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: no pre=
-vious prototype for =E2=80=98pci_ehci_write_reg=E2=80=99 [-Wmissing-prototy=
-pes]
-    arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: no pre=
-vious prototype for =E2=80=98pci_ehci_read_reg=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/common/machtype.c:34:20: warning: no previous pro=
-totype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:59:13: warning: no previous prototype=
- for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:66:12: warning: no previous prototype=
- for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:114:13: warning: no previous prototyp=
-e for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/common/pm.c:118:13: warning: no previous prototyp=
-e for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/machtype.c:10:13: warning: no previous =
-prototype for =E2=80=98mach_prom_init_machtype=E2=80=99 [-Wmissing-prototyp=
-es]
-    arch/mips/loongson2ef/lemote-2f/pm.c:52:6: warning: no previous prototy=
-pe for =E2=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/pm.c:90:5: warning: no previous prototy=
-pe for =E2=80=98wakeup_loongson=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/pm.c:137:13: warning: no previous proto=
-type for =E2=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson2ef/lemote-2f/pm.c:142:13: warning: no previous proto=
-type for =E2=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
-type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson32/common/platform.c:71:5: warning: no previous proto=
-type for =E2=80=98ls1x_eth_mux_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype for =
-=E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype for =E2=
-=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype for =E2=
-=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype for =E2=
-=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/loongson64/dma.c:25:13: warning: no previous prototype for =
-=E2=80=98plat_swiotlb_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:59:13: warning: no previous prototype for =E2=
-=80=98setup_wakeup_events=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:63:13: warning: no previous prototype for =E2=
-=80=98mach_suspend=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/loongson64/pm.c:67:13: warning: no previous prototype for =E2=
-=80=98mach_resume=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kvm/loongson_ipi.c:190:6: warning: no previous prototype for =
-=E2=80=98kvm_init_loongson_ipi=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/kernel/vpe-mt.c:177:7: warning: no previous prototype for =E2=
-=80=98vpe_alloc=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/vpe-mt.c:195:5: warning: no previous prototype for =E2=
-=80=98vpe_start=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/vpe-mt.c:205:5: warning: no previous prototype for =E2=
-=80=98vpe_stop=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/vpe-mt.c:226:5: warning: no previous prototype for =E2=
-=80=98vpe_free=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/alchemy/common/prom.c:48:13: warning: no previous prototype f=
-or =E2=80=98prom_init_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:59:7: warning: no previous prototype fo=
-r =E2=80=98prom_getenv=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/prom.c:127:12: warning: no previous prototype =
-for =E2=80=98prom_get_ethernet_addr=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/board-mtx1.c:53:13: warning: no previous prototype fo=
-r =E2=80=98board_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/clock.c:140:13: warning: no previous prototype=
- for =E2=80=98alchemy_set_lpj=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/alchemy/common/setup.c:57:13: warning: no previous prototype =
-for =E2=80=98plat_mem_setup=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    include/linux/fortify-string.h:57:29: warning: =E2=80=98__builtin_memcp=
-y=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    drivers/irqchip/irq-mxs.c:133:39: warning: no previous prototype for =
-=E2=80=98icoll_handle_irq=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
-=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
-=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    drivers/irqchip/irq-pic32-evic.c:164:5: warning: no previous prototype =
-for =E2=80=98pic32_irq_domain_xlate=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/rb532/serial.c:48:12: warning: no previous prototype for =E2=
-=80=98setup_serial_port=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/rb532/prom.c:49:13: warning: no previous prototype for =E2=80=
-=98prom_setup_cmdline=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/rb532/gpio.c:200:12: warning: no previous prototype for =E2=
-=80=98rb532_gpio_init=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    drivers/tty/serial/serial_txx9.c:933:12: warning: no previous prototype=
- for =E2=80=98early_serial_txx9_setup=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/sni/reset.c:28:6: warning: no previous prototype for =E2=80=
-=98sni_machine_restart=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/reset.c:45:6: warning: no previous prototype for =E2=80=
-=98sni_machine_power_off=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:211:6: warning: no previous prototype for =E2=80=
-=98sni_rm200_mask_and_ack_8259A=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:331:6: warning: no previous prototype for =E2=80=
-=98sni_rm200_init_8259A=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:387:13: warning: no previous prototype for =E2=80=
-=98sni_rm200_i8259_irqs=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/rm200.c:428:6: warning: no previous prototype for =E2=80=
-=98disable_rm200_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/pcimt.c:206:6: warning: no previous prototype for =E2=80=
-=98disable_pcimt_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sni/pcit.c:168:6: warning: no previous prototype for =E2=80=
-=98disable_pcit_irq=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/fw/arc/memory.c:40:29: warning: no previous prototype for =E2=
-=80=98ArcGetMemoryDescriptor=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
-=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
-=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 16 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/mips/sibyte/sb1250/setup.c:79:5: warning: no previous prototype fo=
-r =E2=80=98sb1250_m3_workaround_needed=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/setup.c:168:13: warning: no previous prototype =
-for =E2=80=98sb1250_setup=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/irq.c:182:13: warning: no previous prototype fo=
-r =E2=80=98init_sb1250_irqs=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/time.c:10:13: warning: no previous prototype fo=
-r =E2=80=98plat_time_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/smp.c:38:6: warning: no previous prototype for =
-=E2=80=98sb1250_smp_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/sb1250/smp.c:147:6: warning: no previous prototype for=
- =E2=80=98sb1250_mailbox_interrupt=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/setup.c:59:5: warning: no previous prototype for=
- =E2=80=98swarm_be_handler=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:108:5: warning: no previous prot=
-otype for =E2=80=98xicor_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:167:10: warning: no previous pro=
-totype for =E2=80=98xicor_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_xicor1241.c:203:5: warning: no previous prot=
-otype for =E2=80=98xicor_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:139:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_set_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:186:10: warning: no previous protot=
-ype for =E2=80=98m41t81_get_time=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/sibyte/swarm/rtc_m41t81.c:219:5: warning: no previous prototy=
-pe for =E2=80=98m41t81_probe=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/cevt-sb1250.c:95:6: warning: no previous prototype for=
- =E2=80=98sb1250_clockevent_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/kernel/csrc-sb1250.c:53:13: warning: no previous prototype fo=
-r =E2=80=98sb1250_clocksource_init=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/mm/cerr-sb1.c:165:17: warning: no previous prototype for =E2=
-=80=98sb1_cache_error=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
-dma=E2=80=99 [-Wmissing-prototypes]
-    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
-=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
-=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
-=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 24 warnin=
-gs, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 25 wa=
-rnings, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    ................................................./arch/sparc/kernel/tra=
-ps_64.c:253:6: warning: no previous prototype for =E2=80=98is_no_fault_exce=
-ption=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/include/asm/string.h:15:25: warning: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Warray-bounds]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
-matches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    kernel/dma.c:70:5: warning: no previous prototype for =E2=80=98request_=
-dma=E2=80=99 [-Wmissing-prototypes]
-    kernel/dma.c:88:6: warning: no previous prototype for =E2=80=98free_dma=
-=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/cmpdi2.c:6:11: warning: no previous prototype for =E2=80=
-=98__cmpdi2=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for =E2=
-=80=98__ucmpdi2=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/mips/ralink/irq.c:86:5: warning: no previous prototype for =E2=80=
-=98get_c0_perfcount_int=E2=80=99 [-Wmissing-prototypes]
-    arch/mips/ralink/irq.c:92:14: warning: no previous prototype for =E2=80=
-=98get_c0_compare_int=E2=80=99 [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x14d2f9
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust-samples (x86_64, rustc-1.74) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-board (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warn=
-ing, 0 section mismatches
-
-Errors:
-    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-board+kselftest (x86_64, gcc-10) =E2=80=94 FAIL, 1 err=
-or, 1 warning, 0 section mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: =E2=80=98__builtin_memcpy=
-=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----
-For more info write to <info@kernelci.org>
