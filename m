@@ -1,361 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C8D45BE5
-	for <llvm@lists.linux.dev>; Mon,  8 Jan 2024 14:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678FC4C3DC;
+	Mon,  8 Jan 2024 15:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SqVjRlEX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704725571;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=794xssVY3UWprU6xtQn72foNfENfQl/zR70PtdxL1SY=;
-	b=SqVjRlEXMafn5QAbX1/crn1Zj2V6kViTpF7TvMYHGGFAu0+lHHyN4JB2TD5gx4WuP+5aZj
-	vZEW3zuKwfPxFcSEoY03kVTcidhABjqKM1SQyFgDoEomV3sjvNeP4BoY2zseid5YmhIO8N
-	cl2IM7YxGxodY39Fix5HAFxus0ycXuk=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-240-OyYfFdZ1MjWPjcqJh1yriQ-1; Mon, 08 Jan 2024 09:52:50 -0500
-X-MC-Unique: OyYfFdZ1MjWPjcqJh1yriQ-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-50e81d186e2so1446783e87.0
-        for <llvm@lists.linux.dev>; Mon, 08 Jan 2024 06:52:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704725568; x=1705330368;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=794xssVY3UWprU6xtQn72foNfENfQl/zR70PtdxL1SY=;
-        b=QYHa72yTzmxIoTWvoCtFl1ZclaxBu1ER68ldurkRoQ0RLuIEALb7jQe0uyIF2nsCpj
-         PNbdP2Xxl8ZFvkfghrRm+b2Ulestfmgvm2Z/+Hu9R1CYDgPO+YdrfdYFiDzU5/zduQl7
-         aVG/AOTLoQhzDay+q7cqSz82LRp553OQtFTENFfiYeQ6cyEBWT4DKAMcyLmd+GMwLPbA
-         hnr243vHCxFSz6y2iGcD3AY5GX0C3oh+fPP1YctcUtHu8E/aGsneUwIGMHjz+O1t2WVH
-         QdkDEcu/SiHOMFy42/8kAzsclTE7O0A55GhcvqYvjH+O5XWB9DKtJIc1xni9/dX+ishT
-         3sag==
-X-Gm-Message-State: AOJu0YwzYgsZZ47guu3D5za5BKJDFa5VVYGltRADJ6TqKJJ8dBPYqbdy
-	tH8ST9YS5jkg0HRV6QGH5EhtJJtFvWkwGYsijycChUakVxW3ykVNvS35awkFXIPb8fX4TaMauHK
-	CuDCC+GyXJqVEPypGUHcmug==
-X-Received: by 2002:a19:8c57:0:b0:50e:b204:b6d4 with SMTP id i23-20020a198c57000000b0050eb204b6d4mr1449620lfj.35.1704725568591;
-        Mon, 08 Jan 2024 06:52:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFTda8KnSzcfucxjSOMlVVPp7393wkBNdRpKd1j6z4nNnIHCLj7t3gH6YaBxn+pCz3Krz8KOg==
-X-Received: by 2002:a19:8c57:0:b0:50e:b204:b6d4 with SMTP id i23-20020a198c57000000b0050eb204b6d4mr1449605lfj.35.1704725568149;
-        Mon, 08 Jan 2024 06:52:48 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id s27-20020a170906bc5b00b00a2699a54888sm3985890ejv.64.2024.01.08.06.52.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jan 2024 06:52:47 -0800 (PST)
-Message-ID: <6186419a-8107-47e6-b631-1ce8b4a42819@redhat.com>
-Date: Mon, 8 Jan 2024 15:52:46 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jer3Io5O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704726693; x=1736262693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jyoSU0rdsdQzYOBLs4/Tihy6Pvy3AI1hql9RL97Lr8E=;
+  b=Jer3Io5OupGV5zTYxJtOy0lFC3ncv4Sl34UerRkLe+ErvxfREFR2Q+LT
+   NS3t71PoQ3257rvn1XAItkYwgZqCQeaby3Uv+juz3Mf3BhUV0pIr/szMn
+   3m9WCPNxFWXLgC11mdi61O3wYCWs95WnlMTJ08WL3ToB65odJICFdAftO
+   D0ylnxCCmYQQH0fgkReCCHPNYeYDW4cHxw3Hzib9QxPETKvfICOg80oBW
+   tH0hTbDkfC9Dx0x57DTuHCTOn/WjYGM8ZBCKc7EutpggntJcRu3S/2zdn
+   RbPD00NwZJ8hjaGaJHWqA0m66vAnjdPaFRtRVBWmVokmJhs4iEHiaatkd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="396791915"
+X-IronPort-AV: E=Sophos;i="6.04,180,1695711600"; 
+   d="scan'208";a="396791915"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 07:11:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="904831304"
+X-IronPort-AV: E=Sophos;i="6.04,180,1695711600"; 
+   d="scan'208";a="904831304"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Jan 2024 07:11:27 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rMrHh-0004oU-0m;
+	Mon, 08 Jan 2024 15:11:25 +0000
+Date: Mon, 8 Jan 2024 23:10:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Subject: Re: [PATCH v2 1/4] media: v4l: Add a helper for setting up
+ link-frequencies control
+Message-ID: <202401082245.yka9kMRc-lkp@intel.com>
+References: <20240108075221.15757-2-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] platform/x86: intel-uncore-freq: Fix types in sysfs
- callbacks
-To: Nathan Chancellor <nathan@kernel.org>,
- srinivas.pandruvada@linux.intel.com, ilpo.jarvinen@linux.intel.com
-Cc: keescook@chromium.org, samitolvanen@google.com,
- platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev
-References: <20240104-intel-uncore-freq-kcfi-fix-v1-1-bf1e8939af40@kernel.org>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240104-intel-uncore-freq-kcfi-fix-v1-1-bf1e8939af40@kernel.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240108075221.15757-2-sakari.ailus@linux.intel.com>
 
-Hi,
+Hi Sakari,
 
-On 1/4/24 23:59, Nathan Chancellor wrote:
-> When booting a kernel with CONFIG_CFI_CLANG, there is a CFI failure when
-> accessing any of the values under
-> /sys/devices/system/cpu/intel_uncore_frequency/package_00_die_00:
-> 
->   $ cat /sys/devices/system/cpu/intel_uncore_frequency/package_00_die_00/max_freq_khz
->   fish: Job 1, 'cat /sys/devices/system/cpu/int…' terminated by signal SIGSEGV (Address boundary error)
-> 
->   $ sudo dmesg &| grep 'CFI failure'
->   [  170.953925] CFI failure at kobj_attr_show+0x19/0x30 (target: show_max_freq_khz+0x0/0xc0 [intel_uncore_frequency_common]; expected type: 0xd34078c5
-> 
-> The sysfs callback functions such as show_domain_id() are written as if
-> they are going to be called by dev_attr_show() but as the above message
-> shows, they are instead called by kobj_attr_show(). kCFI checks that the
-> destination of an indirect jump has the exact same type as the prototype
-> of the function pointer it is called through and fails when they do not.
-> 
-> These callbacks are called through kobj_attr_show() because
-> uncore_root_kobj was initialized with kobject_create_and_add(), which
-> means uncore_root_kobj has a ->sysfs_ops of kobj_sysfs_ops from
-> kobject_create(), which uses kobj_attr_show() as its ->show() value.
-> 
-> The only reason there has not been a more noticeable problem until this
-> point is that 'struct kobj_attribute' and 'struct device_attribute' have
-> the same layout, so getting the callback from container_of() works the
-> same with either value.
-> 
-> Change all the callbacks and their uses to be compatible with
-> kobj_attr_show() and kobj_attr_store(), which resolves the kCFI failure
-> and allows the sysfs files to work properly.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1974
-> Fixes: ae7b2ce57851 ("platform/x86/intel/uncore-freq: Use sysfs API to create attributes")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> I think I got the fixes tag right. I only started seeing this because of
-> commit 27f2b08735c9 ("platform/x86: intel-uncore-freq: Add additional
-> client processors"), which allows this driver to load on my i7-11700
-> test system but I think the commit in the Fixes tag incorrectly changes
-> the types of the callbacks.
+kernel test robot noticed the following build errors:
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linuxtv-media-stage/master sailus-media-tree/streams linus/master v6.7 next-20240108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-Add-a-helper-for-setting-up-link-frequencies-control/20240108-155716
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20240108075221.15757-2-sakari.ailus%40linux.intel.com
+patch subject: [PATCH v2 1/4] media: v4l: Add a helper for setting up link-frequencies control
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240108/202401082245.yka9kMRc-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240108/202401082245.yka9kMRc-lkp@intel.com/reproduce)
 
-I will include this patch in my next fixes pull-req to Linus
-for the current kernel development cycle.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401082245.yka9kMRc-lkp@intel.com/
 
-Regards,
+All errors (new ones prefixed by >>):
 
-Hans
+>> drivers/media/v4l2-core/v4l2-common.c:634:19: error: use of undeclared identifier 'v4l2_link_frequencies_to_bitmap'; did you mean 'v4l2_link_freq_to_bitmap'?
+     634 | EXPORT_SYMBOL_GPL(v4l2_link_frequencies_to_bitmap);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                   v4l2_link_freq_to_bitmap
+   include/linux/export.h:87:48: note: expanded from macro 'EXPORT_SYMBOL_GPL'
+      87 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                                        ^
+   include/linux/export.h:83:54: note: expanded from macro '_EXPORT_SYMBOL'
+      83 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                                         ^
+   include/linux/export.h:74:16: note: expanded from macro '__EXPORT_SYMBOL'
+      74 |         extern typeof(sym) sym;                                 \
+         |                       ^
+   drivers/media/v4l2-core/v4l2-common.c:589:5: note: 'v4l2_link_freq_to_bitmap' declared here
+     589 | int v4l2_link_freq_to_bitmap(struct device *dev, const u64 *fw_link_freqs,
+         |     ^
+   1 error generated.
 
 
+vim +634 drivers/media/v4l2-core/v4l2-common.c
 
+   588	
+   589	int v4l2_link_freq_to_bitmap(struct device *dev, const u64 *fw_link_freqs,
+   590				     unsigned int num_of_fw_link_freqs,
+   591				     const s64 *driver_link_freqs,
+   592				     unsigned int num_of_driver_link_freqs,
+   593				     unsigned long *bitmap)
+   594	{
+   595		unsigned int i;
+   596	
+   597		*bitmap = 0;
+   598	
+   599		if (!num_of_fw_link_freqs) {
+   600			dev_err(dev, "no link frequencies in firmware\n");
+   601			return -ENODATA;
+   602		}
+   603	
+   604		for (i = 0; i < num_of_fw_link_freqs; i++) {
+   605			unsigned int j;
+   606	
+   607			for (j = 0; j < num_of_driver_link_freqs; j++) {
+   608				if (fw_link_freqs[i] != driver_link_freqs[j])
+   609					continue;
+   610	
+   611				dev_dbg(dev, "enabling link frequency %lld Hz\n",
+   612					driver_link_freqs[j]);
+   613				*bitmap |= BIT(j);
+   614				break;
+   615			}
+   616		}
+   617	
+   618		if (!*bitmap) {
+   619			dev_err(dev, "no matching link frequencies found\n");
+   620	
+   621			dev_dbg(dev, "specified in firmware:\n");
+   622			for (i = 0; i < num_of_fw_link_freqs; i++)
+   623				dev_dbg(dev, "\t%llu Hz\n", fw_link_freqs[i]);
+   624	
+   625			dev_dbg(dev, "driver supported:\n");
+   626			for (i = 0; i < num_of_driver_link_freqs; i++)
+   627				dev_dbg(dev, "\t%lld Hz\n", driver_link_freqs[i]);
+   628	
+   629			return -ENOENT;
+   630		}
+   631	
+   632		return 0;
+   633	}
+ > 634	EXPORT_SYMBOL_GPL(v4l2_link_frequencies_to_bitmap);
 
-> ---
->  .../uncore-frequency/uncore-frequency-common.c     | 82 +++++++++++-----------
->  .../uncore-frequency/uncore-frequency-common.h     | 32 ++++-----
->  2 files changed, 57 insertions(+), 57 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-> index 33ab207493e3..33bb58dc3f78 100644
-> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-> @@ -23,23 +23,23 @@ static int (*uncore_read)(struct uncore_data *data, unsigned int *min, unsigned
->  static int (*uncore_write)(struct uncore_data *data, unsigned int input, unsigned int min_max);
->  static int (*uncore_read_freq)(struct uncore_data *data, unsigned int *freq);
->  
-> -static ssize_t show_domain_id(struct device *dev, struct device_attribute *attr, char *buf)
-> +static ssize_t show_domain_id(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
->  {
-> -	struct uncore_data *data = container_of(attr, struct uncore_data, domain_id_dev_attr);
-> +	struct uncore_data *data = container_of(attr, struct uncore_data, domain_id_kobj_attr);
->  
->  	return sprintf(buf, "%u\n", data->domain_id);
->  }
->  
-> -static ssize_t show_fabric_cluster_id(struct device *dev, struct device_attribute *attr, char *buf)
-> +static ssize_t show_fabric_cluster_id(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
->  {
-> -	struct uncore_data *data = container_of(attr, struct uncore_data, fabric_cluster_id_dev_attr);
-> +	struct uncore_data *data = container_of(attr, struct uncore_data, fabric_cluster_id_kobj_attr);
->  
->  	return sprintf(buf, "%u\n", data->cluster_id);
->  }
->  
-> -static ssize_t show_package_id(struct device *dev, struct device_attribute *attr, char *buf)
-> +static ssize_t show_package_id(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
->  {
-> -	struct uncore_data *data = container_of(attr, struct uncore_data, package_id_dev_attr);
-> +	struct uncore_data *data = container_of(attr, struct uncore_data, package_id_kobj_attr);
->  
->  	return sprintf(buf, "%u\n", data->package_id);
->  }
-> @@ -97,30 +97,30 @@ static ssize_t show_perf_status_freq_khz(struct uncore_data *data, char *buf)
->  }
->  
->  #define store_uncore_min_max(name, min_max)				\
-> -	static ssize_t store_##name(struct device *dev,		\
-> -				     struct device_attribute *attr,	\
-> +	static ssize_t store_##name(struct kobject *kobj,		\
-> +				     struct kobj_attribute *attr,	\
->  				     const char *buf, size_t count)	\
->  	{								\
-> -		struct uncore_data *data = container_of(attr, struct uncore_data, name##_dev_attr);\
-> +		struct uncore_data *data = container_of(attr, struct uncore_data, name##_kobj_attr);\
->  									\
->  		return store_min_max_freq_khz(data, buf, count,	\
->  					      min_max);		\
->  	}
->  
->  #define show_uncore_min_max(name, min_max)				\
-> -	static ssize_t show_##name(struct device *dev,		\
-> -				    struct device_attribute *attr, char *buf)\
-> +	static ssize_t show_##name(struct kobject *kobj,		\
-> +				    struct kobj_attribute *attr, char *buf)\
->  	{                                                               \
-> -		struct uncore_data *data = container_of(attr, struct uncore_data, name##_dev_attr);\
-> +		struct uncore_data *data = container_of(attr, struct uncore_data, name##_kobj_attr);\
->  									\
->  		return show_min_max_freq_khz(data, buf, min_max);	\
->  	}
->  
->  #define show_uncore_perf_status(name)					\
-> -	static ssize_t show_##name(struct device *dev,		\
-> -				   struct device_attribute *attr, char *buf)\
-> +	static ssize_t show_##name(struct kobject *kobj,		\
-> +				   struct kobj_attribute *attr, char *buf)\
->  	{                                                               \
-> -		struct uncore_data *data = container_of(attr, struct uncore_data, name##_dev_attr);\
-> +		struct uncore_data *data = container_of(attr, struct uncore_data, name##_kobj_attr);\
->  									\
->  		return show_perf_status_freq_khz(data, buf); \
->  	}
-> @@ -134,11 +134,11 @@ show_uncore_min_max(max_freq_khz, 1);
->  show_uncore_perf_status(current_freq_khz);
->  
->  #define show_uncore_data(member_name)					\
-> -	static ssize_t show_##member_name(struct device *dev,	\
-> -					   struct device_attribute *attr, char *buf)\
-> +	static ssize_t show_##member_name(struct kobject *kobj,	\
-> +					   struct kobj_attribute *attr, char *buf)\
->  	{                                                               \
->  		struct uncore_data *data = container_of(attr, struct uncore_data,\
-> -							  member_name##_dev_attr);\
-> +							  member_name##_kobj_attr);\
->  									\
->  		return sysfs_emit(buf, "%u\n",				\
->  				 data->member_name);			\
-> @@ -149,29 +149,29 @@ show_uncore_data(initial_max_freq_khz);
->  
->  #define init_attribute_rw(_name)					\
->  	do {								\
-> -		sysfs_attr_init(&data->_name##_dev_attr.attr);	\
-> -		data->_name##_dev_attr.show = show_##_name;		\
-> -		data->_name##_dev_attr.store = store_##_name;		\
-> -		data->_name##_dev_attr.attr.name = #_name;		\
-> -		data->_name##_dev_attr.attr.mode = 0644;		\
-> +		sysfs_attr_init(&data->_name##_kobj_attr.attr);	\
-> +		data->_name##_kobj_attr.show = show_##_name;		\
-> +		data->_name##_kobj_attr.store = store_##_name;		\
-> +		data->_name##_kobj_attr.attr.name = #_name;		\
-> +		data->_name##_kobj_attr.attr.mode = 0644;		\
->  	} while (0)
->  
->  #define init_attribute_ro(_name)					\
->  	do {								\
-> -		sysfs_attr_init(&data->_name##_dev_attr.attr);	\
-> -		data->_name##_dev_attr.show = show_##_name;		\
-> -		data->_name##_dev_attr.store = NULL;			\
-> -		data->_name##_dev_attr.attr.name = #_name;		\
-> -		data->_name##_dev_attr.attr.mode = 0444;		\
-> +		sysfs_attr_init(&data->_name##_kobj_attr.attr);	\
-> +		data->_name##_kobj_attr.show = show_##_name;		\
-> +		data->_name##_kobj_attr.store = NULL;			\
-> +		data->_name##_kobj_attr.attr.name = #_name;		\
-> +		data->_name##_kobj_attr.attr.mode = 0444;		\
->  	} while (0)
->  
->  #define init_attribute_root_ro(_name)					\
->  	do {								\
-> -		sysfs_attr_init(&data->_name##_dev_attr.attr);	\
-> -		data->_name##_dev_attr.show = show_##_name;		\
-> -		data->_name##_dev_attr.store = NULL;			\
-> -		data->_name##_dev_attr.attr.name = #_name;		\
-> -		data->_name##_dev_attr.attr.mode = 0400;		\
-> +		sysfs_attr_init(&data->_name##_kobj_attr.attr);	\
-> +		data->_name##_kobj_attr.show = show_##_name;		\
-> +		data->_name##_kobj_attr.store = NULL;			\
-> +		data->_name##_kobj_attr.attr.name = #_name;		\
-> +		data->_name##_kobj_attr.attr.mode = 0400;		\
->  	} while (0)
->  
->  static int create_attr_group(struct uncore_data *data, char *name)
-> @@ -186,21 +186,21 @@ static int create_attr_group(struct uncore_data *data, char *name)
->  
->  	if (data->domain_id != UNCORE_DOMAIN_ID_INVALID) {
->  		init_attribute_root_ro(domain_id);
-> -		data->uncore_attrs[index++] = &data->domain_id_dev_attr.attr;
-> +		data->uncore_attrs[index++] = &data->domain_id_kobj_attr.attr;
->  		init_attribute_root_ro(fabric_cluster_id);
-> -		data->uncore_attrs[index++] = &data->fabric_cluster_id_dev_attr.attr;
-> +		data->uncore_attrs[index++] = &data->fabric_cluster_id_kobj_attr.attr;
->  		init_attribute_root_ro(package_id);
-> -		data->uncore_attrs[index++] = &data->package_id_dev_attr.attr;
-> +		data->uncore_attrs[index++] = &data->package_id_kobj_attr.attr;
->  	}
->  
-> -	data->uncore_attrs[index++] = &data->max_freq_khz_dev_attr.attr;
-> -	data->uncore_attrs[index++] = &data->min_freq_khz_dev_attr.attr;
-> -	data->uncore_attrs[index++] = &data->initial_min_freq_khz_dev_attr.attr;
-> -	data->uncore_attrs[index++] = &data->initial_max_freq_khz_dev_attr.attr;
-> +	data->uncore_attrs[index++] = &data->max_freq_khz_kobj_attr.attr;
-> +	data->uncore_attrs[index++] = &data->min_freq_khz_kobj_attr.attr;
-> +	data->uncore_attrs[index++] = &data->initial_min_freq_khz_kobj_attr.attr;
-> +	data->uncore_attrs[index++] = &data->initial_max_freq_khz_kobj_attr.attr;
->  
->  	ret = uncore_read_freq(data, &freq);
->  	if (!ret)
-> -		data->uncore_attrs[index++] = &data->current_freq_khz_dev_attr.attr;
-> +		data->uncore_attrs[index++] = &data->current_freq_khz_kobj_attr.attr;
->  
->  	data->uncore_attrs[index] = NULL;
->  
-> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
-> index 7afb69977c7e..0e5bf507e555 100644
-> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
-> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
-> @@ -26,14 +26,14 @@
->   * @instance_id:	Unique instance id to append to directory name
->   * @name:		Sysfs entry name for this instance
->   * @uncore_attr_group:	Attribute group storage
-> - * @max_freq_khz_dev_attr: Storage for device attribute max_freq_khz
-> - * @mix_freq_khz_dev_attr: Storage for device attribute min_freq_khz
-> - * @initial_max_freq_khz_dev_attr: Storage for device attribute initial_max_freq_khz
-> - * @initial_min_freq_khz_dev_attr: Storage for device attribute initial_min_freq_khz
-> - * @current_freq_khz_dev_attr: Storage for device attribute current_freq_khz
-> - * @domain_id_dev_attr: Storage for device attribute domain_id
-> - * @fabric_cluster_id_dev_attr: Storage for device attribute fabric_cluster_id
-> - * @package_id_dev_attr: Storage for device attribute package_id
-> + * @max_freq_khz_kobj_attr: Storage for kobject attribute max_freq_khz
-> + * @mix_freq_khz_kobj_attr: Storage for kobject attribute min_freq_khz
-> + * @initial_max_freq_khz_kobj_attr: Storage for kobject attribute initial_max_freq_khz
-> + * @initial_min_freq_khz_kobj_attr: Storage for kobject attribute initial_min_freq_khz
-> + * @current_freq_khz_kobj_attr: Storage for kobject attribute current_freq_khz
-> + * @domain_id_kobj_attr: Storage for kobject attribute domain_id
-> + * @fabric_cluster_id_kobj_attr: Storage for kobject attribute fabric_cluster_id
-> + * @package_id_kobj_attr: Storage for kobject attribute package_id
->   * @uncore_attrs:	Attribute storage for group creation
->   *
->   * This structure is used to encapsulate all data related to uncore sysfs
-> @@ -53,14 +53,14 @@ struct uncore_data {
->  	char name[32];
->  
->  	struct attribute_group uncore_attr_group;
-> -	struct device_attribute max_freq_khz_dev_attr;
-> -	struct device_attribute min_freq_khz_dev_attr;
-> -	struct device_attribute initial_max_freq_khz_dev_attr;
-> -	struct device_attribute initial_min_freq_khz_dev_attr;
-> -	struct device_attribute current_freq_khz_dev_attr;
-> -	struct device_attribute domain_id_dev_attr;
-> -	struct device_attribute fabric_cluster_id_dev_attr;
-> -	struct device_attribute package_id_dev_attr;
-> +	struct kobj_attribute max_freq_khz_kobj_attr;
-> +	struct kobj_attribute min_freq_khz_kobj_attr;
-> +	struct kobj_attribute initial_max_freq_khz_kobj_attr;
-> +	struct kobj_attribute initial_min_freq_khz_kobj_attr;
-> +	struct kobj_attribute current_freq_khz_kobj_attr;
-> +	struct kobj_attribute domain_id_kobj_attr;
-> +	struct kobj_attribute fabric_cluster_id_kobj_attr;
-> +	struct kobj_attribute package_id_kobj_attr;
->  	struct attribute *uncore_attrs[9];
->  };
->  
-> 
-> ---
-> base-commit: 236f7d8034ff401d02fa6d74bae494a2b54e1834
-> change-id: 20240104-intel-uncore-freq-kcfi-fix-6ef07053db58
-> 
-> Best regards,
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
