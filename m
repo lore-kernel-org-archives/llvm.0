@@ -1,133 +1,80 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C720125AB;
-	Sun,  7 Jan 2024 22:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lU78CNDl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704666783; x=1736202783;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dwuvkjK+YjmXYxC+RxKdXyRyCQxEe699I/o3VBpTdNo=;
-  b=lU78CNDldskP3sjRGi8JsMrADMZV5oBJ3QMm2HrefBCqv6SBWaEhEjIr
-   Qoi/f4iZtWNkmzM98gUrtlpyYWd5DkPZ4kWmOtdvtjDqBYUaoaYA44GcD
-   hu7fIYXFL683+xd1uTkmY9wA6bK0GDSRUOtRJoIhXuz6h/kAdyNfJhdYa
-   hsSDzFajxOGu/Es2GVeyHjMmi//takYKLvlEJQN/Ce+VNoTrcppQy66Ju
-   hN5CdlwDblpBZw1tQFSO0arEZdt3jE/nJ8+ztS25biIcrjlun0cHJ6G7l
-   +rxnLrq2RBH9x/tXCKVaZ/NoqNHX2a0UxZwYh8sfXBECR3HBhCFm47rpk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="396645165"
-X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="396645165"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2024 14:33:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="757452548"
-X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="757452548"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jan 2024 14:33:00 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rMbhS-0004Dw-0g;
-	Sun, 07 Jan 2024 22:32:58 +0000
-Date: Mon, 8 Jan 2024 06:32:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiqian Chen <Jiqian.Chen@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC KERNEL PATCH v4 2/3] xen/pvh: Setup gsi for passthrough
- device
-Message-ID: <202401080644.Pr19bqHH-lkp@intel.com>
-References: <20240105062217.349645-3-Jiqian.Chen@amd.com>
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3EC7F;
+	Mon,  8 Jan 2024 03:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.22.232.245])
+	by gateway (Coremail) with SMTP id _____8DxPumsbJtlfgUDAA--.1590S3;
+	Mon, 08 Jan 2024 11:31:56 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.22.232.245])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx34epbJtldugGAA--.17876S2;
+	Mon, 08 Jan 2024 11:31:55 +0800 (CST)
+From: WANG Rui <wangrui@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	loongson-kernel@lists.loongnix.cn,
+	WANG Rui <wangrui@loongson.cn>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH] scripts/min-tool-version.sh: Raise min clang version to 18.0.0 for loongarch
+Date: Mon,  8 Jan 2024 11:31:38 +0800
+Message-ID: <20240108033138.217032-1-wangrui@loongson.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240105062217.349645-3-Jiqian.Chen@amd.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Bx34epbJtldugGAA--.17876S2
+X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtrW8Ar13AF4UCw45Jw1UArc_yoWftrX_J3
+	Z2v3WxZr45Jr4Svan7tFn5Zry2ka93Xw4rCF1rWrWDA340k3s0qF1DJFWDAF1Y9rsrGrs3
+	W39FqryxCry7CosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb2kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E87Iv
+	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
+	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
+	CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0HUDJUUUUU==
 
-Hi Jiqian,
+The existing mainline clang development version encounters diffculties
+compiling the LoongArch kernel module. It is anticipated that this issue
+will be resolved in the upcoming 18.0.0 release. To prevent user
+confusion arising from broken builds, it is advisable to raise the
+minimum required clang version for LoongArch to 18.0.0.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: WANG Rui <wangrui@loongson.cn>
+---
+ scripts/min-tool-version.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[auto build test ERROR on xen-tip/linux-next]
-[also build test ERROR on pci/next pci/for-linus tip/x86/core rafael-pm/linux-next rafael-pm/acpi-bus rafael-pm/devprop linus/master v6.7-rc8 next-20240105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiqian-Chen/xen-pci-Add-xen_reset_device_state-function/20240105-142527
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
-patch link:    https://lore.kernel.org/r/20240105062217.349645-3-Jiqian.Chen%40amd.com
-patch subject: [RFC KERNEL PATCH v4 2/3] xen/pvh: Setup gsi for passthrough device
-config: arm64-randconfig-001-20240107 (https://download.01.org/0day-ci/archive/20240108/202401080644.Pr19bqHH-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240108/202401080644.Pr19bqHH-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401080644.Pr19bqHH-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/xen/xen-pciback/pci_stub.c:23:
->> include/xen/acpi.h:63:37: error: too few arguments provided to function-like macro invocation
-      63 |                         &xen_acpi_notify_hypervisor_sleep);
-         |                                                          ^
-   include/linux/acpi.h:1110:9: note: macro 'acpi_os_set_prepare_sleep' defined here
-    1110 | #define acpi_os_set_prepare_sleep(func, pm1a_ctrl, pm1b_ctrl) do { } while (0)
-         |         ^
-   In file included from drivers/xen/xen-pciback/pci_stub.c:23:
->> include/xen/acpi.h:62:3: error: use of undeclared identifier 'acpi_os_set_prepare_sleep'; did you mean 'acpi_os_enter_sleep'?
-      62 |                 acpi_os_set_prepare_sleep(
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 acpi_os_enter_sleep
-   include/acpi/acpiosxf.h:326:13: note: 'acpi_os_enter_sleep' declared here
-     326 | acpi_status acpi_os_enter_sleep(u8 sleep_state, u32 rega_value, u32 regb_value);
-         |             ^
-   In file included from drivers/xen/xen-pciback/pci_stub.c:23:
->> include/xen/acpi.h:64:3: error: call to undeclared function 'acpi_os_set_prepare_extended_sleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      64 |                 acpi_os_set_prepare_extended_sleep(
-         |                 ^
->> include/xen/acpi.h:67:3: error: use of undeclared identifier 'acpi_suspend_lowlevel'
-      67 |                 acpi_suspend_lowlevel = xen_acpi_suspend_lowlevel;
-         |                 ^
-   include/xen/acpi.h:62:3: warning: expression result unused [-Wunused-value]
-      62 |                 acpi_os_set_prepare_sleep(
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 4 errors generated.
-
-
-vim +63 include/xen/acpi.h
-
-068e0dc7b7c1db Konrad Rzeszutek Wilk 2013-05-14  58  
-268a207563f933 Liu Jinsong           2013-02-14  59  static inline void xen_acpi_sleep_register(void)
-268a207563f933 Liu Jinsong           2013-02-14  60  {
-068e0dc7b7c1db Konrad Rzeszutek Wilk 2013-05-14  61  	if (xen_initial_domain()) {
-268a207563f933 Liu Jinsong           2013-02-14 @62  		acpi_os_set_prepare_sleep(
-be6b25d15f5e67 Ben Guthro            2013-07-30 @63  			&xen_acpi_notify_hypervisor_sleep);
-be6b25d15f5e67 Ben Guthro            2013-07-30 @64  		acpi_os_set_prepare_extended_sleep(
-be6b25d15f5e67 Ben Guthro            2013-07-30  65  			&xen_acpi_notify_hypervisor_extended_sleep);
-068e0dc7b7c1db Konrad Rzeszutek Wilk 2013-05-14  66  
-068e0dc7b7c1db Konrad Rzeszutek Wilk 2013-05-14 @67  		acpi_suspend_lowlevel = xen_acpi_suspend_lowlevel;
-068e0dc7b7c1db Konrad Rzeszutek Wilk 2013-05-14  68  	}
-268a207563f933 Liu Jinsong           2013-02-14  69  }
-fa25bcf76b7984 Jiqian Chen           2024-01-05  70  int xen_pvh_passthrough_gsi(struct pci_dev *dev);
-268a207563f933 Liu Jinsong           2013-02-14  71  #else
-268a207563f933 Liu Jinsong           2013-02-14  72  static inline void xen_acpi_sleep_register(void)
-268a207563f933 Liu Jinsong           2013-02-14  73  {
-268a207563f933 Liu Jinsong           2013-02-14  74  }
-fa25bcf76b7984 Jiqian Chen           2024-01-05  75  
-
+diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+index c62066825f53..9faa4d3d91e3 100755
+--- a/scripts/min-tool-version.sh
++++ b/scripts/min-tool-version.sh
+@@ -26,6 +26,8 @@ gcc)
+ llvm)
+ 	if [ "$SRCARCH" = s390 ]; then
+ 		echo 15.0.0
++	elif [ "$SRCARCH" = loongarch ]; then
++		echo 18.0.0
+ 	else
+ 		echo 11.0.0
+ 	fi
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
