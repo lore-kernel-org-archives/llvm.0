@@ -1,58 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD306375;
-	Tue,  9 Jan 2024 00:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF171873;
+	Tue,  9 Jan 2024 00:39:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UB6dsE4M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jeZYs0wg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704760166; x=1736296166;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ICS0Q1nES6wmFGgjB/iavarHm9pD/C1AFIAVIA7DcCg=;
-  b=UB6dsE4MWliEPB2d3l/bJQRQrzVICOxbEcBw80umsOR0+aGFAY3I9KsJ
-   xOWgzkgb2y/p80qCJksXJGCL7/t6od9UWGdQ7i9FiSEJ8oW5AaELx+eQx
-   p3Nht/gtJ+wHVN18LQmsGHSTT3ffOj9ecE5w09iSPa75n9rtL4gqoJVLX
-   919xhEv81R084j3N01pToEkoIQaOX4/Pz1biCWrRheyIM3R/MRokFaCDk
-   TM7IZ58FNpmwNmBv88An2zPeVvluYTrIlJReYcrECY9vK1NdXkSFI2qEX
-   FKMCi1ZCKwbX/poePiDJQWBGq0LfO7dOED6QBsDpk5DPS9uOUqaisRlsw
+  t=1704760762; x=1736296762;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZmN8coU66H1BEdXHWW87cPKMegsesMyTmjSUTImXv08=;
+  b=jeZYs0wgjAbgmDPd+riCRQ6Jrem6gTwNR2e9Iow0z2nZfkIx1WzD5MAy
+   mIvTBNjz5K7sJaGUPC8Xj5JNTaJqyWYVVlSL8tsv8AAKbJ/kM4Elmh31l
+   2xzpbp8vdrWV342+fw0k5gYK1I/qJLWzdfGndSTT45vFGKorIoklrjZgi
+   VcJ9n8u0UUXhgBFku6Z+l4alk+jL9Dtac6Y02nxwqIm1Ov6IT+GS85EvN
+   xNrauLZTupXnK4gJ6HenCq/dF3Z4UXvRXeJqeLBe9ReXiiDn3S2UEDiID
+   xvBiP9GCSRodPTuWKbaUuelK2gUMynV+i7oiRh3mb+PT3M0F2by6hclQL
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="396911418"
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="4822717"
 X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
-   d="scan'208";a="396911418"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 16:29:25 -0800
+   d="scan'208";a="4822717"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 16:39:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="900547474"
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="781597604"
 X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
-   d="scan'208";a="900547474"
+   d="scan'208";a="781597604"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Jan 2024 16:29:19 -0800
+  by orsmga002.jf.intel.com with ESMTP; 08 Jan 2024 16:39:20 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rMzzZ-0005G6-28;
-	Tue, 09 Jan 2024 00:29:17 +0000
-Date: Tue, 9 Jan 2024 08:28:59 +0800
+	id 1rN09F-0005GQ-2a;
+	Tue, 09 Jan 2024 00:39:17 +0000
+Date: Tue, 9 Jan 2024 08:39:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, javierm@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
- into setup_data.h
-Message-ID: <202401090800.UOBEKB3W-lkp@intel.com>
-References: <20240108095903.8427-3-tzimmermann@suse.de>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ambarus:gs101-peric0-usi-uart-i2c-v3 15/23]
+ arch/x86/include/asm/irq.h:39:56: warning: declaration of 'struct pt_regs'
+ will not be visible outside of this function
+Message-ID: <202401090827.6Qt43Hqk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,61 +50,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240108095903.8427-3-tzimmermann@suse.de>
 
-Hi Thomas,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/x86/core]
-[also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
-patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
-config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
+tree:   https://github.com/ambarus/linux-0day gs101-peric0-usi-uart-i2c-v3
+head:   a88abf89a889072bee04c2661c3e48a5db574fc6
+commit: e92862fb09390e4aae4e76ef2e5528c0340e31d0 [15/23] tty: serial: samsung: sort headers alphabetically
+config: i386-buildonly-randconfig-004-20240109 (https://download.01.org/0day-ci/archive/20240109/202401090827.6Qt43Hqk-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090827.6Qt43Hqk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401090827.6Qt43Hqk-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/realmode/rm/wakemain.c:3:
-   In file included from arch/x86/boot/boot.h:24:
-   In file included from arch/x86/include/asm/setup.h:10:
-   In file included from arch/x86/include/asm/page_types.h:7:
-   In file included from include/linux/mem_encrypt.h:17:
-   In file included from arch/x86/include/asm/mem_encrypt.h:18:
-   In file included from arch/x86/include/uapi/asm/bootparam.h:5:
->> arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-      10 |         struct setup_data data;
-         |                           ^
-   1 warning generated.
+   In file included from drivers/tty/serial/samsung_tty.c:24:
+>> arch/x86/include/asm/irq.h:39:56: warning: declaration of 'struct pt_regs' will not be visible outside of this function [-Wvisibility]
+      39 | extern void __handle_irq(struct irq_desc *desc, struct pt_regs *regs);
+         |                                                        ^
+>> arch/x86/include/asm/irq.h:44:50: warning: declaration of 'struct cpumask' will not be visible outside of this function [-Wvisibility]
+      44 | void arch_trigger_cpumask_backtrace(const struct cpumask *mask,
+         |                                                  ^
+   2 warnings generated.
 
 
-vim +10 arch/x86/include/asm/setup_data.h
+vim +39 arch/x86/include/asm/irq.h
 
-     8	
-     9	struct pci_setup_rom {
-  > 10		struct setup_data data;
-    11		uint16_t vendor;
-    12		uint16_t devid;
-    13		uint64_t pcilen;
-    14		unsigned long segment;
-    15		unsigned long bus;
-    16		unsigned long device;
-    17		unsigned long function;
-    18		uint8_t romdata[];
-    19	};
-    20	
+a782a7e46bb508 arch/x86/include/asm/irq.h Thomas Gleixner   2015-08-02  38  
+7c2a57364cae0f arch/x86/include/asm/irq.h Thomas Gleixner   2020-05-21 @39  extern void __handle_irq(struct irq_desc *desc, struct pt_regs *regs);
+22067d4501bfb4 include/asm-x86/irq.h      Thomas Gleixner   2008-05-02  40  
+d9112f43021554 arch/x86/include/asm/irq.h Thomas Gleixner   2009-08-20  41  extern void init_ISA_irqs(void);
+d9112f43021554 arch/x86/include/asm/irq.h Thomas Gleixner   2009-08-20  42  
+b52e0a7c4e4100 arch/x86/include/asm/irq.h Michel Lespinasse 2013-06-06  43  #ifdef CONFIG_X86_LOCAL_APIC
+9a01c3ed5cdb35 arch/x86/include/asm/irq.h Chris Metcalf     2016-10-07 @44  void arch_trigger_cpumask_backtrace(const struct cpumask *mask,
+8d539b84f1e347 arch/x86/include/asm/irq.h Douglas Anderson  2023-08-04  45  				    int exclude_cpu);
+89f579ce99f7e0 arch/x86/include/asm/irq.h Yi Wang           2018-11-22  46  
+
+:::::: The code at line 39 was first introduced by commit
+:::::: 7c2a57364cae0f2e070a27d728f1df6844ffff56 x86/irq: Rework handle_irq() for 64-bit
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
 0-DAY CI Kernel Test Service
