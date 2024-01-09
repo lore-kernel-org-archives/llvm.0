@@ -1,67 +1,97 @@
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6793BB43
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 18:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7b7fdde8b58so379745139f.1
-        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 10:17:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704824227; x=1705429027;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mquk6hN27KMTsR9z/GB7mTDogoqyzMeGHcwgy9O7SRw=;
-        b=LSkUPUDpi2fVDTw1OsaPZz6t2DbkX3fXRFuo06Wi6/layXX1my4YFBKRn4NZwmr37h
-         ki+Z2sZHtP09ipRPhbngi8KLlOoqwZS2l5mUuaj8RV0riQ+iBgJV9GPyaW3n7vH4OGUd
-         C/H7l0C+AABU4NibQVjeL3N9GynMBsI7JF6yfHgij09F6VRPQXDUsAmRSqs/wTB7AejW
-         Q4os1QQSJ/Kh4QhkPfgdyhTm9u9SRKz9MlGz3IqWp4vLzT+gqX7lHTHBY9yySieff1UL
-         0Qilf+++NaWRlxJtYBy3UN4xXCtJr+gjTtZz9zwvs4lLcU47XK3R6kgj70ixpMEoZ5ZB
-         Yodw==
-X-Gm-Message-State: AOJu0Yz06cUbfslF59ODT9cFGlqRUeWwQ8RwjcBPzwjmO3zLFfwJ24xw
-	cYfpSwRwZfcEuDhQcA+9LJLr4yZutXvL2S1uFBNr8RxBntbT
-X-Google-Smtp-Source: AGHT+IEZQnABXCenyNgGnqplvmc4QrkSe9Qt76qn9RD2khoyFBeZdp5kgZLrjhRHQ7ZnnuJDzF1+5aiYVwVGywORFcHcA5BvInCD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8873B790;
+	Tue,  9 Jan 2024 19:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BZx7rfd1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704826831; x=1736362831;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zmAa0KCltHoQ3zl7+mtFEvcvP8OjsOqBbxuXdBDluC0=;
+  b=BZx7rfd1tvcAWF28zeykhmVujsjEa96Zr8ZPjSbg1nOd1rTP8VpIMGqO
+   78UDli70eQMnTRFSoIdkCccVIhQoJqp6cV4i7tReFiVv2r9o6nxKt1Pr3
+   ksHhr+7oY30TxBVsG5BRxbtjv04vZELkyJcXxSJooZ39T1VtkCDCvmhtC
+   eg7z4JO0R4zH+cPmASTGRz3s4wjR8HwId7hLkTzyAJLHhoLmlfrg34yQ3
+   jbPF9Id4k/ksTyEx1pY3rCwnP7qOGKHPB3rWHNuvut0cNj5dRqxoqOkJU
+   Dx9qjuhxcL2oCJZvp4QYHlqTOZ5lmBelrR4EkJtYkfB1Ip4Z5KYjBOjC4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="484476987"
+X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
+   d="scan'208";a="484476987"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 11:00:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
+   d="scan'208";a="16376771"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 09 Jan 2024 11:00:28 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rNHKs-0006Aw-0q;
+	Tue, 09 Jan 2024 19:00:26 +0000
+Date: Wed, 10 Jan 2024 03:00:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Steev Klimaszewski <steev@kali.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [steev:c630-linux-v6.7.0-rc8 160/165]
+ sound/soc/codecs/wsa884x.c:1782:33: error: no member named 'dev' in 'struct
+ sdw_stream_runtime'
+Message-ID: <202401100218.KlrV1OaK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4e06:b0:46e:3b37:fec8 with SMTP id
- ep6-20020a0566384e0600b0046e3b37fec8mr60814jab.6.1704824227588; Tue, 09 Jan
- 2024 10:17:07 -0800 (PST)
-Date: Tue, 09 Jan 2024 10:17:07 -0800
-In-Reply-To: <0000000000006655c10608ddfb6d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007d7565060e8752d6@google.com>
-Subject: Re: [syzbot] [mm?] general protection fault in __hugetlb_zap_begin
-From: syzbot <syzbot+ec9435c038e451be48ff@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, eadavis@qq.com, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, lizhi.xu@windriver.com, llvm@lists.linux.dev, 
-	mike.kravetz@oracle.com, muchun.song@linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, riel@surriel.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-syzbot suspects this issue was fixed by commit:
+tree:   https://github.com/steev/linux c630-linux-v6.7.0-rc8
+head:   ff607c5b78e72a98f85de6a64124da02cca916b9
+commit: 36178948b637e43373619370cac68c51fd4fffdd [160/165] ASoC: codecs: wsa884x: check if set_stream is called for proper bus
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240110/202401100218.KlrV1OaK-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240110/202401100218.KlrV1OaK-lkp@intel.com/reproduce)
 
-commit 187da0f8250aa94bd96266096aef6f694e0b4cd2
-Author: Mike Kravetz <mike.kravetz@oracle.com>
-Date:   Tue Nov 14 01:20:33 2023 +0000
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401100218.KlrV1OaK-lkp@intel.com/
 
-    hugetlb: fix null-ptr-deref in hugetlb_vma_lock_write
+All errors (new ones prefixed by >>):
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17f5054de80000
-start commit:   9b6de136b5f0 Merge tag 'loongarch-fixes-6.7-1' of git://gi..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=52c9552def2a0fdd
-dashboard link: https://syzkaller.appspot.com/bug?extid=ec9435c038e451be48ff
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=150a257ce80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13481ff0e80000
+>> sound/soc/codecs/wsa884x.c:1782:33: error: no member named 'dev' in 'struct sdw_stream_runtime'
+    1782 |         if (sdw->bus->dev != sruntime->dev)
+         |                              ~~~~~~~~  ^
+   1 error generated.
 
-If the result looks correct, please mark the issue as fixed by replying with:
 
-#syz fix: hugetlb: fix null-ptr-deref in hugetlb_vma_lock_write
+vim +1782 sound/soc/codecs/wsa884x.c
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+  1773	
+  1774	static int wsa884x_set_stream(struct snd_soc_dai *dai,
+  1775				      void *stream, int direction)
+  1776	{
+  1777		struct wsa884x_priv *wsa884x = dev_get_drvdata(dai->dev);
+  1778		struct sdw_stream_runtime *sruntime = stream;
+  1779		struct sdw_slave *sdw = dev_to_sdw_dev(dai->dev);
+  1780	
+  1781		/* Check if this belongs to same bus */
+> 1782		if (sdw->bus->dev != sruntime->dev)
+  1783			return 0;
+  1784	
+  1785		wsa884x->sruntime = stream;
+  1786	
+  1787		return 0;
+  1788	}
+  1789	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
