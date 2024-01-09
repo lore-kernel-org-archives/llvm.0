@@ -1,122 +1,86 @@
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BA039AC6
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 14:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC173A1A0;
+	Tue,  9 Jan 2024 15:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="kPi6NH8C"
-Received: from eig-obgw-5002a.ext.cloudfilter.net ([10.0.29.215])
-	by cmsmtp with ESMTPS
-	id NBECrdJyYTHHuNCiOrjYw9; Tue, 09 Jan 2024 14:04:24 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id NCiNrxJHbBnVCNCiNr6MTH; Tue, 09 Jan 2024 14:04:23 +0000
-X-Authority-Analysis: v=2.4 cv=H+TIfsUi c=1 sm=1 tr=0 ts=659d5267
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=GfQleyYEO+cc22AUyTT7qQ==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=dEuoMetlWLkA:10 a=wYkD_t78qR0A:10 a=cm27Pg_UAAAA:8
- a=VwQbUJbxAAAA:8 a=mDV3o1hIAAAA:8 a=Twlkf-z8AAAA:8 a=NEAV23lmAAAA:8
- a=1aWQwmh1cChWapziH08A:9 a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22
- a=AjGcO6oz07-iQ99wixmX:22 a=_FVE-zBwftR9WsbkzFJk:22 a=-74SuR6ZdpOK_LpdRCUo:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=uvdyQdGzfT0A8h+hoTqs6rlhElqEBmHJSqddMJ5qdek=; b=kPi6NH8CRvPxouEWeClMnHA7jf
-	/LRlRLQu4hrPNkXUermY1YK7HfZ6O9ejSDLZyoBh4JGH/EKRKAg118auyA8mbZ1Rv7tZDbtpv3Yfu
-	v02r+md2I1q450BfoN6bdmQLG9IS75blkmyaITNg2E6Mh7kJ1V/dLuqe240Xwg+ADzb/UkRXPWkc6
-	41cIy0afe9Ru8NZc8tsWQ+ZH1SV4U4W3xpWsXDkUUg1p/BVXhuTmVR48yy9c4kR06QfFZNVtzvUHK
-	MAjePADpKn/camno87g9HLHHMH9R0zyB4Qo5dt6vOlSu+JQQfFtNIUbI06uT5SAFWwqs9nt4IOLKZ
-	69r8zn9A==;
-Received: from 187.184.157.186.cable.dyn.cableonline.com.mx ([187.184.157.186]:58081 helo=[192.168.0.10])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1rNCiM-0004lh-1x;
-	Tue, 09 Jan 2024 08:04:22 -0600
-Message-ID: <374bf411-9f51-4326-adb3-ca384ded1e4a@embeddedor.com>
-Date: Tue, 9 Jan 2024 08:04:20 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BfwH8xmT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50FCCC433F1;
+	Tue,  9 Jan 2024 15:26:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704813996;
+	bh=+lV/DrwzrTu5CK485TUWaE1tfOdwjxBJErdXczf0neQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BfwH8xmTVnrqoKhO8DjPGGYDey+YpqKsQ2VQu5WlWEwAk3xuuYU4ed9ci7hf1Z5dN
+	 xv8v/kckLQXJLtarReV96ZqcLB5lrP5r+mOqpHnpn6n4IOSH4jRz7PFX7Wnrd+zKRa
+	 sj0sasMxp3dX37NNIgYm7gm0UW/bvc/asKQHbPZQVX1TfbBFUuT3iMNMCSmyO/yEou
+	 5bGG1X5TKCnjvtwMlgTkMCyqkkxB3mZ9VwBJ3l8ou+Kj3wWO2c4L10hc31L+MOBe4G
+	 Kp1awsUdphcKkgt0UjyLLKNL38yupEwNkB/IuV++5cDJqEPMZcthGDNi2GGhwTSkIa
+	 2E/pBOrLdhv2A==
+Date: Tue, 9 Jan 2024 08:26:34 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: linux-stable <stable@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	lkft-triage@lists.linaro.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: Re: riscv: clang-nightly-allmodconfig: failed on stable-rc 6.6 and
+ 6.1
+Message-ID: <20240109152634.GA205272@dev-arch.thelio-3990X>
+References: <CA+G9fYtbTSVtYQF4gdKK_SjibEZAV5KXFOtbC0YK9QF9Z8gSRw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Compiler Attributes: counted_by: bump compiler versions
-Content-Language: en-US
-To: Sergey Senozhatsky <senozhatsky@chromium.org>,
- Miguel Ojeda <ojeda@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240109133633.1103876-1-senozhatsky@chromium.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20240109133633.1103876-1-senozhatsky@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.184.157.186
-X-Source-L: No
-X-Exim-ID: 1rNCiM-0004lh-1x
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187.184.157.186.cable.dyn.cableonline.com.mx ([192.168.0.10]) [187.184.157.186]:58081
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 1
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfNEauJFU2vU9U4n9KDXP9M6rVWQasyLXfQDD25MtAL+bA1s/o5GWPUKtESW1fpiMHTOOQWpUvT4ktBqsnV4Dft4ohI0XZCEHlOuTmV7wdKXLoEKHiLRO
- aLbii64x+wBb/LFkcmdRL4xLJIwhK2+1/3Ro1HxxczwDhAMm1sUoVrvhcbkA2ddz8gq5//ZzcDCcgqHKG8Mw4jDSc+Rd60jVS0Q=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtbTSVtYQF4gdKK_SjibEZAV5KXFOtbC0YK9QF9Z8gSRw@mail.gmail.com>
 
+Hi Naresh,
 
-
-On 1/9/24 07:36, Sergey Senozhatsky wrote:
-> Bump compiler versions, as GCC is expected to implement it
-> in version 15 and current clang-18 still has no support for
-> counted_by(). Also fix clang URL - the project has moved
-> to github.
+On Tue, Jan 09, 2024 at 03:06:04PM +0530, Naresh Kamboju wrote:
+> The clang nightly build failures are noticed on stable-rc 6.6 and 6.1 for
+> riscv allmodconfig builds.
 > 
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks!
---
-Gustavo
-
-> ---
->   include/linux/compiler_attributes.h | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 28566624f008..1829c24c3357 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -95,11 +95,11 @@
->   #endif
->   
->   /*
-> - * Optional: only supported since gcc >= 14
-> - * Optional: only supported since clang >= 18
-> + * Optional: only supported since gcc >= 15
-> + * Optional: only supported since clang >= 19
->    *
->    *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
-> - * clang: https://reviews.llvm.org/D148381
-> + * clang: https://github.com/llvm/llvm-project/pull/76348
->    */
->   #if __has_attribute(__counted_by__)
->   # define __counted_by(member)		__attribute__((__counted_by__(member)))
+> Logs:
+> =====
+>  arch/riscv/kernel -I ./arch/riscv/kernel -dwarf-version=4 -mrelocation-model
+>   static -target-abi lp64 -mllvm -riscv-add-build-attributes
+>    -o arch/riscv/kernel/kexec_relocate.o /tmp/kexec_relocate-28089a.s
+> 
+>  #0 0x00007f5039e1667a llvm::sys::PrintStackTrace(llvm::raw_ostream&,
+> int) (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0xd6d67a)
+>  #1 0x00007f5039e146a4 llvm::sys::RunSignalHandlers()
+> (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0xd6b6a4)
+>  #2 0x00007f5039e16d3b (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0xd6dd3b)
+>  #3 0x00007f5038ba8510 (/lib/x86_64-linux-gnu/libc.so.6+0x3c510)
+>  #4 0x00007f503c8f50c8 (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x384c0c8)
+>  #5 0x00007f503b492cf5 (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x23e9cf5)
+>  #6 0x00007f503b492607 (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x23e9607)
+>  #7 0x00007f503b492300
+> llvm::MCExpr::evaluateAsRelocatableImpl(llvm::MCValue&,
+> llvm::MCAssembler const*, llvm::MCAsmLayout const*, llvm::MCFixup
+> const*, llvm::DenseMap<llvm::MCSection const*, unsigned long,
+> llvm::DenseMapInfo<llvm::MCSection const*, void>,
+> llvm::detail::DenseMapPair<llvm::MCSection const*, unsigned long>>
+> const*, bool) const (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x23e9300)
+
+Thank you for the report, this is an LLVM regression that I reported a
+few days ago and it has now been resolved upstream a few hours ago:
+
+https://github.com/llvm/llvm-project/pull/76552#issuecomment-1878952480
+https://github.com/llvm/llvm-project/pull/77236
+
+It may take a few days for it to be fixed on your side between the
+apt.llvm.org update cycle and the tuxmake container rebuild cycle.
+
+Cheers,
+Nathan
