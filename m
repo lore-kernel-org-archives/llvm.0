@@ -1,37 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852473D554;
-	Tue,  9 Jan 2024 19:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6A93DB83
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 21:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LAfY5LVm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B0E4C433C7;
-	Tue,  9 Jan 2024 19:56:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704830215;
-	bh=zkk7Wcpg9ZpGH6Lw1adVpVRSHJH154UMwD2xNTu+esQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LAfY5LVmydoWsfif0YRuDxNyqPVMq5BIALeS+EjEqg05vSLShesDcwNMnjxXD5L/n
-	 WXgj6+e8D9sT749flzBMnmftXD6hwkHglXYKTU4M22PyLVQ0xGzUNPG2ehrdoltncr
-	 lKiI0fttVlPni+Y062WjDOi9wkeqT4UxbKKA0w7FvpQGCNOF3B4i5q0Pxl14Ak0ABe
-	 /TAI6rlvRl8cEUB8wwjFgvd/y2TgPYeBl7lEEYe4YUQym6nhV/CFha3zNKdztW2r78
-	 i7DV4kdbQrPo+pxj4Dx/pO2AVdIxZijU9kHtSH4s4tL+OcEATs6ZCYxMWpKgNw6maQ
-	 sIqjze7Tyievw==
-Date: Tue, 9 Jan 2024 12:56:52 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Kees Cook <keescook@chromium.org>,
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="U4Q701n3"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6d9b5c4f332so1738462b3a.3
+        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 13:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1704834754; x=1705439554; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eqQUHChJf0/arFpvV2IRHuuXQmt67RRG08Y2Ov7HDGI=;
+        b=U4Q701n3+r5HUkc3voJpUuCZjiRr+3gTwItGeQG8d9Xq6h6WdpkP4FzHlZU0f1OxyG
+         dMq/c8pPbqjtBvDK/jlCv+YH2ZgiLrlUmUJPIBJayqDUK6DU+lyOLWm6yfSZ9yC8eplg
+         Vs4NHBiJmc+XVnAMg545i4Lu2AOg0SmJFm9jI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704834754; x=1705439554;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eqQUHChJf0/arFpvV2IRHuuXQmt67RRG08Y2Ov7HDGI=;
+        b=JGELeSw8LRkegjTgDv4zt7oIiO4/PyVFb0uiKuTiCGOH60MZ2F10RoUy/FZp45Rd7S
+         A3SuuQC/VGcKzlkPoechTp6p5FfY5gW55xzi6MB7X5HTCiFOJ4sOAOUpa52m43oRHA4W
+         lZffqf2Fn9UTfoA0/zzJjSo9rg3yzmVc6PdVSiB0Ke2wLJGKGbDKof3DqumS2hQwuIhq
+         Kv01dT0A1amJCbffjx4BkMRnf1zo/9hh5PybW0Ol0K+pDyuYnCYu8bqQW9HFJYX33fSL
+         E3FKJ2omUEH3qj/ADcH8Jmi4WCeox/54JzxRZK0B/iwETte5OUoPjffVkdWkGs4cX2GQ
+         w/Wg==
+X-Gm-Message-State: AOJu0YzIjy5SOGmAH0PLQGLaRJ7d86j7SV0EYsP1quaKtK1vQnuyBqVs
+	cIwZztJ2c6cXtcDhJLMrjf6ArIAALLnw
+X-Google-Smtp-Source: AGHT+IF9Df8jD6jo0r8n/3rNIJtxx3CS7IAQquzGY9SJyX43vHRj6T0RnfaCNO4tgaoUC6aOgdhndQ==
+X-Received: by 2002:a05:6a21:a58a:b0:199:83e3:dd67 with SMTP id gd10-20020a056a21a58a00b0019983e3dd67mr3000031pzc.40.1704834754458;
+        Tue, 09 Jan 2024 13:12:34 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id su6-20020a17090b534600b0028d136ba928sm8245175pjb.28.2024.01.09.13.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 13:12:33 -0800 (PST)
+Date: Tue, 9 Jan 2024 13:12:33 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
 	"Gustavo A . R . Silva" <gustavo@embeddedor.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
 Subject: Re: [PATCH] Compiler Attributes: counted_by: bump compiler versions
-Message-ID: <20240109195652.GA1253215@dev-arch.thelio-3990X>
+Message-ID: <202401091311.08D6FF677@keescook>
 References: <20240109133633.1103876-1-senozhatsky@chromium.org>
  <20240109153249.GA205400@dev-arch.thelio-3990X>
  <CANiq72kjHCh-inyv1aU=eNca1-+E0_85MGU-8qbZZtzbC_VwOQ@mail.gmail.com>
+ <20240109195652.GA1253215@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,43 +65,45 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72kjHCh-inyv1aU=eNca1-+E0_85MGU-8qbZZtzbC_VwOQ@mail.gmail.com>
+In-Reply-To: <20240109195652.GA1253215@dev-arch.thelio-3990X>
 
-On Tue, Jan 09, 2024 at 08:42:24PM +0100, Miguel Ojeda wrote:
-> On Tue, Jan 9, 2024 at 4:32 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > It is still possible in theory for this feature to make clang-18, as the
-> > release/18.x branch is not scheduled to be cut until the fourth Tuesday
-> > in January, which is two weeks from now. I don't have a good feeling for
-> > how close that pull request is to being mergeable though, so this is
-> > fine for now. I assume this won't go to Linus immediately so we would
-> > have time to change it if necessary.
+On Tue, Jan 09, 2024 at 12:56:52PM -0700, Nathan Chancellor wrote:
+> On Tue, Jan 09, 2024 at 08:42:24PM +0100, Miguel Ojeda wrote:
+> > On Tue, Jan 9, 2024 at 4:32 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > It is still possible in theory for this feature to make clang-18, as the
+> > > release/18.x branch is not scheduled to be cut until the fourth Tuesday
+> > > in January, which is two weeks from now. I don't have a good feeling for
+> > > how close that pull request is to being mergeable though, so this is
+> > > fine for now. I assume this won't go to Linus immediately so we would
+> > > have time to change it if necessary.
+> > 
+> > Yeah, I was wondering about the deadline too. If LLVM's `-rc1` is the
+> > latest time possible to merge it, we can wait the couple weeks (which
+> > are conveniently the merge window) and I apply it afterwards with the
+> > result :)
 > 
-> Yeah, I was wondering about the deadline too. If LLVM's `-rc1` is the
-> latest time possible to merge it, we can wait the couple weeks (which
-> are conveniently the merge window) and I apply it afterwards with the
-> result :)
+> If I understand the doucmentation at [1] correctly, the first round of
+> testing starts with -rc1 and ends with -rc2, so if the feature is not
+> merged by -rc2, it won't make that release cycle. I think counted_by
+> might be a hard sell even after -rc1 because the feature is not exactly
+> small but it is also not expansive (it is relatively self contained
+> from what I can tell). So I think your plan is reasonable.
+> 
+> Another alternative would be to split this patch in to three distinct
+> patches, not sure if that would be overkill for this though.
+> 
+> 1. Update the clang review link from reviews.llvm.org to github.com
+> 2. Update the GCC version from 14 to 15.
+> 3. Update the Clang version from 18 to 19.
+> 
+> The first two patches could be picked up immediately and the third one
+> could be sat on to see how the review and acceptance process works out
+> over the next couple of weeks. Up to you/Sergey. Thanks for taking a
+> look!
 
-If I understand the doucmentation at [1] correctly, the first round of
-testing starts with -rc1 and ends with -rc2, so if the feature is not
-merged by -rc2, it won't make that release cycle. I think counted_by
-might be a hard sell even after -rc1 because the feature is not exactly
-small but it is also not expansive (it is relatively self contained
-from what I can tell). So I think your plan is reasonable.
+Yeah, I think either the above split or just wait until the Clang 18
+cut, since we've got a while before the next kernel merge window.
 
-Another alternative would be to split this patch in to three distinct
-patches, not sure if that would be overkill for this though.
-
-1. Update the clang review link from reviews.llvm.org to github.com
-2. Update the GCC version from 14 to 15.
-3. Update the Clang version from 18 to 19.
-
-The first two patches could be picked up immediately and the third one
-could be sat on to see how the review and acceptance process works out
-over the next couple of weeks. Up to you/Sergey. Thanks for taking a
-look!
-
-[1]: https://llvm.org/docs/HowToReleaseLLVM.html#release-process-summary
-
-Cheers,
-Nathan
+-- 
+Kees Cook
