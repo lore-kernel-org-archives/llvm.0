@@ -1,47 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFE555C08;
-	Mon,  8 Jan 2024 23:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD306375;
+	Tue,  9 Jan 2024 00:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iuE/+hAR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UB6dsE4M"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704756435; x=1736292435;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=joC1a6aoOwPSOB4mechVjAGhoyUJl5+Rf1FFlOgT6h0=;
-  b=iuE/+hARJ8piSoNXCqFSVvkTAKHbB01NPkag5jpoeecaNbWUMnhAuDNm
-   9m9RhH0Pv0XOyVVk8eQB37WVAdrFRe6dr8fCeeMyCuLKft+UGqACj27Af
-   TnDKVH2/8DxX9cp98h4tmEBZYs+0FLS+GPMYYk/sDigyX1Ys76VA+OYE8
-   zVc2sHCOPw3q7IwXb1RkK2PTOYRE628pCfp0EeqkiOT73GvXO6xz48QOJ
-   CANAL+LOe4sQE1GvWo5ceMVow/3KWhxsiFPvXc9k/yel4U2fm6IU+2zeF
-   4Lb9ZuEiwwm4K9uXvdKuNJo/RjwquF1csSEwymhLDqS83IRbWbOWSqQSW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="462313472"
+  t=1704760166; x=1736296166;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ICS0Q1nES6wmFGgjB/iavarHm9pD/C1AFIAVIA7DcCg=;
+  b=UB6dsE4MWliEPB2d3l/bJQRQrzVICOxbEcBw80umsOR0+aGFAY3I9KsJ
+   xOWgzkgb2y/p80qCJksXJGCL7/t6od9UWGdQ7i9FiSEJ8oW5AaELx+eQx
+   p3Nht/gtJ+wHVN18LQmsGHSTT3ffOj9ecE5w09iSPa75n9rtL4gqoJVLX
+   919xhEv81R084j3N01pToEkoIQaOX4/Pz1biCWrRheyIM3R/MRokFaCDk
+   TM7IZ58FNpmwNmBv88An2zPeVvluYTrIlJReYcrECY9vK1NdXkSFI2qEX
+   FKMCi1ZCKwbX/poePiDJQWBGq0LfO7dOED6QBsDpk5DPS9uOUqaisRlsw
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="396911418"
 X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
-   d="scan'208";a="462313472"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 15:27:14 -0800
+   d="scan'208";a="396911418"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 16:29:25 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="815764922"
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="900547474"
 X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
-   d="scan'208";a="815764922"
+   d="scan'208";a="900547474"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 08 Jan 2024 15:27:13 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jan 2024 16:29:19 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rMz1T-0005Dq-0F;
-	Mon, 08 Jan 2024 23:27:11 +0000
-Date: Tue, 9 Jan 2024 07:26:31 +0800
+	id 1rMzzZ-0005G6-28;
+	Tue, 09 Jan 2024 00:29:17 +0000
+Date: Tue, 9 Jan 2024 08:28:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [iwlwifi-next:egrumbac_fixes_6.5 54/69]
- drivers/net/wireless/intel/iwlwifi/fw/dbg.c:3166:5: warning: no previous
- prototype for function 'iwl_fw_send_timestamp_marker_cmd'
-Message-ID: <202401090718.CZJR0atf-lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, javierm@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
+ into setup_data.h
+Message-ID: <202401090800.UOBEKB3W-lkp@intel.com>
+References: <20240108095903.8427-3-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,84 +61,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240108095903.8427-3-tzimmermann@suse.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git egrumbac_fixes_6.5
-head:   9020873b750549845a4f4526137b2e66d9001bcc
-commit: 38ffad1e8048085517946d1230f7e249b6c0db72 [54/69] MVM_CORE80
-config: i386-buildonly-randconfig-003-20240109 (https://download.01.org/0day-ci/archive/20240109/202401090718.CZJR0atf-lkp@intel.com/config)
+Hi Thomas,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
+patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090718.CZJR0atf-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401090718.CZJR0atf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/intel/iwlwifi/fw/dbg.c:3166:5: warning: no previous prototype for function 'iwl_fw_send_timestamp_marker_cmd' [-Wmissing-prototypes]
-    3166 | int iwl_fw_send_timestamp_marker_cmd(struct iwl_fw_runtime *fwrt)
-         |     ^
-   drivers/net/wireless/intel/iwlwifi/fw/dbg.c:3166:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    3166 | int iwl_fw_send_timestamp_marker_cmd(struct iwl_fw_runtime *fwrt)
-         | ^
-         | static 
+   In file included from arch/x86/realmode/rm/wakemain.c:3:
+   In file included from arch/x86/boot/boot.h:24:
+   In file included from arch/x86/include/asm/setup.h:10:
+   In file included from arch/x86/include/asm/page_types.h:7:
+   In file included from include/linux/mem_encrypt.h:17:
+   In file included from arch/x86/include/asm/mem_encrypt.h:18:
+   In file included from arch/x86/include/uapi/asm/bootparam.h:5:
+>> arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+      10 |         struct setup_data data;
+         |                           ^
    1 warning generated.
 
 
-vim +/iwl_fw_send_timestamp_marker_cmd +3166 drivers/net/wireless/intel/iwlwifi/fw/dbg.c
+vim +10 arch/x86/include/asm/setup_data.h
 
-b721f5b1be18ae6 Shahar S Matityahu 2019-05-21  3165  
-eeef0168e325573 Miri Korenblit     2023-06-20 @3166  int iwl_fw_send_timestamp_marker_cmd(struct iwl_fw_runtime *fwrt)
-eeef0168e325573 Miri Korenblit     2023-06-20  3167  {
-eeef0168e325573 Miri Korenblit     2023-06-20  3168  	struct iwl_mvm_marker marker = {
-eeef0168e325573 Miri Korenblit     2023-06-20  3169  		.dw_len = sizeof(struct iwl_mvm_marker) / 4,
-eeef0168e325573 Miri Korenblit     2023-06-20  3170  		.marker_id = MARKER_ID_SYNC_CLOCK,
-eeef0168e325573 Miri Korenblit     2023-06-20  3171  	};
-eeef0168e325573 Miri Korenblit     2023-06-20  3172  	struct iwl_host_cmd hcmd = {
-eeef0168e325573 Miri Korenblit     2023-06-20  3173  		.flags = CMD_ASYNC,
-eeef0168e325573 Miri Korenblit     2023-06-20  3174  		.id = WIDE_ID(LONG_GROUP, MARKER_CMD),
-eeef0168e325573 Miri Korenblit     2023-06-20  3175  		.dataflags = {},
-eeef0168e325573 Miri Korenblit     2023-06-20  3176  	};
-eeef0168e325573 Miri Korenblit     2023-06-20  3177  	struct iwl_mvm_marker_rsp *resp;
-eeef0168e325573 Miri Korenblit     2023-06-20  3178  	int cmd_ver = iwl_fw_lookup_cmd_ver(fwrt->fw,
-eeef0168e325573 Miri Korenblit     2023-06-20  3179  					    WIDE_ID(LONG_GROUP, MARKER_CMD),
-eeef0168e325573 Miri Korenblit     2023-06-20  3180  					    IWL_FW_CMD_VER_UNKNOWN);
-eeef0168e325573 Miri Korenblit     2023-06-20  3181  	int ret;
-eeef0168e325573 Miri Korenblit     2023-06-20  3182  
-eeef0168e325573 Miri Korenblit     2023-06-20  3183  	if (cmd_ver == 1) {
-eeef0168e325573 Miri Korenblit     2023-06-20  3184  		/* the real timestamp is taken from the ftrace clock
-eeef0168e325573 Miri Korenblit     2023-06-20  3185  		 * this is for finding the match between fw and kernel logs
-eeef0168e325573 Miri Korenblit     2023-06-20  3186  		 */
-eeef0168e325573 Miri Korenblit     2023-06-20  3187  		marker.timestamp = cpu_to_le64(fwrt->timestamp.seq++);
-eeef0168e325573 Miri Korenblit     2023-06-20  3188  	} else if (cmd_ver == 2) {
-eeef0168e325573 Miri Korenblit     2023-06-20  3189  		marker.timestamp = cpu_to_le64(ktime_get_boottime_ns());
-eeef0168e325573 Miri Korenblit     2023-06-20  3190  	} else {
-eeef0168e325573 Miri Korenblit     2023-06-20  3191  		IWL_DEBUG_INFO(fwrt,
-eeef0168e325573 Miri Korenblit     2023-06-20  3192  			       "Invalid version of Marker CMD. Ver = %d\n",
-eeef0168e325573 Miri Korenblit     2023-06-20  3193  			       cmd_ver);
-eeef0168e325573 Miri Korenblit     2023-06-20  3194  		return -EINVAL;
-eeef0168e325573 Miri Korenblit     2023-06-20  3195  	}
-eeef0168e325573 Miri Korenblit     2023-06-20  3196  
-eeef0168e325573 Miri Korenblit     2023-06-20  3197  	hcmd.data[0] = &marker;
-eeef0168e325573 Miri Korenblit     2023-06-20  3198  	hcmd.len[0] = sizeof(marker);
-eeef0168e325573 Miri Korenblit     2023-06-20  3199  
-eeef0168e325573 Miri Korenblit     2023-06-20  3200  	ret = iwl_trans_send_cmd(fwrt->trans, &hcmd);
-eeef0168e325573 Miri Korenblit     2023-06-20  3201  
-eeef0168e325573 Miri Korenblit     2023-06-20  3202  	if (cmd_ver > 1 && hcmd.resp_pkt) {
-eeef0168e325573 Miri Korenblit     2023-06-20  3203  		resp = (void *)hcmd.resp_pkt->data;
-38ffad1e8048085 Emmanuel Grumbach  2024-01-07  3204  		IWL_DEBUG_INFO(fwrt, "FW GP2 time: %u\n", le32_to_cpu(resp->gp2));
-eeef0168e325573 Miri Korenblit     2023-06-20  3205  	}
-eeef0168e325573 Miri Korenblit     2023-06-20  3206  
-eeef0168e325573 Miri Korenblit     2023-06-20  3207  	return ret;
-eeef0168e325573 Miri Korenblit     2023-06-20  3208  }
-eeef0168e325573 Miri Korenblit     2023-06-20  3209  
-
-:::::: The code at line 3166 was first introduced by commit
-:::::: eeef0168e3255732650ee81771e0d7e26e06a534 wifi: iwlwifi: fw: send marker cmd before suspend cmd
-
-:::::: TO: Miri Korenblit <miriam.rachel.korenblit@intel.com>
-:::::: CC: Johannes Berg <johannes.berg@intel.com>
+     8	
+     9	struct pci_setup_rom {
+  > 10		struct setup_data data;
+    11		uint16_t vendor;
+    12		uint16_t devid;
+    13		uint64_t pcilen;
+    14		unsigned long segment;
+    15		unsigned long bus;
+    16		unsigned long device;
+    17		unsigned long function;
+    18		uint8_t romdata[];
+    19	};
+    20	
 
 -- 
 0-DAY CI Kernel Test Service
