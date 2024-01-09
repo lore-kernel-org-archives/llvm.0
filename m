@@ -1,171 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C08F3A1D4
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 16:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBFD38DF8;
+	Tue,  9 Jan 2024 17:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gKcohBGp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704817832;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VofOwUgix7VLFySOOM4DxoXuVUrXqqXe7AW4zv/crl0=;
-	b=gKcohBGp4o58vc87DlPbeNmXVk9RTW3IgzJyBR76WsuTt+EBYpDtooLNIo9H8LT33zLcen
-	U+sJMlvmZKez4XW24h7Ua8sKU9p7GMGPCG68Jjw+iFUw3lvmGtkQRbBbR74QwtQyB5oavL
-	Yw06/SpehlW1H7GHD23Pv/rlIzC/RG4=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-632-Zh6HzlIsMWWV9iiYmwAtag-1; Tue,
- 09 Jan 2024 11:30:31 -0500
-X-MC-Unique: Zh6HzlIsMWWV9iiYmwAtag-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1FEF28B7404
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 16:30:30 +0000 (UTC)
-Received: from [172.64.3.46] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id AE3A6C15A0C;
-	Tue,  9 Jan 2024 16:30:30 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 3 of 226): Test report for master
- (6.7.0, mainline.kernel.org-clang, bfe8eb3b)
-Date: Tue, 09 Jan 2024 16:30:30 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBXR0hDI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD56C433F1;
+	Tue,  9 Jan 2024 17:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704823097;
+	bh=jPQukDAtVbClY9EBeS+NqfHyLacDsIvaawr24NohtKA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pBXR0hDIxuyEvjXNm0ZHkn82qvWJPxEeg8vRLhUWpcgwAjyw9QDysog3LK2PVQult
+	 9Go+Fi125jYvZDB64hW3vCXxDEcn1/BK+pt5NqtqqQKLTdqo9bY948RcuvcxU2solW
+	 4vKCSzlftGX3C8MVRS35uscVo5/xKVpYDqx9lrU9Apjy76V+ddXDE8gB+2mmN0AuZf
+	 oPcWHesQh5ieuYvzxayCuvHpRXx3KbE78X0kmN1z43HIDK8fHuuSm5D93GP6NTB/A2
+	 otf9gtIxEuJz5XBV4wxvbQ8xXHf1BOfBSoPrqMAdPLvPhwTHpw3vbnYVN41E5sHJLi
+	 jqPfsfuLkmYcA==
+Date: Tue, 9 Jan 2024 10:58:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, javierm@redhat.com, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
+ into setup_data.h
+Message-ID: <20240109175814.GA5981@dev-arch.thelio-3990X>
+References: <20240108095903.8427-3-tzimmermann@suse.de>
+ <202401090800.UOBEKB3W-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <41557.124010911303100955@us-mta-632.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202401090800.UOBEKB3W-lkp@intel.com>
 
-Hi, we tested your kernel and here are the results:
+On Tue, Jan 09, 2024 at 08:28:59AM +0800, kernel test robot wrote:
+> Hi Thomas,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on tip/x86/core]
+> [also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
+> base:   tip/x86/core
+> patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
+> patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
+> config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
+> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from arch/x86/realmode/rm/wakemain.c:3:
+>    In file included from arch/x86/boot/boot.h:24:
+>    In file included from arch/x86/include/asm/setup.h:10:
+>    In file included from arch/x86/include/asm/page_types.h:7:
+>    In file included from include/linux/mem_encrypt.h:17:
+>    In file included from arch/x86/include/asm/mem_encrypt.h:18:
+>    In file included from arch/x86/include/uapi/asm/bootparam.h:5:
+> >> arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+>       10 |         struct setup_data data;
+>          |                           ^
+>    1 warning generated.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I think this warning is expected. This structure is now included in the
+realmode part of arch/x86, which has its own set of build flags,
+including -Wall, which includes -Wgnu on clang. The kernel obviously
+uses GNU extensions and states this clearly with '-std=gnu11', so
+-Wno-gnu is unconditionally added to KBUILD_CFLAGS for clang. It seems
+that same treatment is needed for REALMODE_CFLAGS, which also matches
+arch/x86/boot/compressed/Makefile, see commit 6c3b56b19730 ("x86/boot:
+Disable Clang warnings about GNU extensions"):
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'sched-core-2024-01-08' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/121675
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-
-
-Tests that were not ran because of internal issues:=20
-      x86_64 (debug) - Hardware - CPU: Die Test
-      x86_64 (debug) - Storage - swraid scsi_raid
-      x86_64 (debug) - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 1a068de12a56..24076db59783 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -53,6 +53,9 @@ REALMODE_CFLAGS += -fno-stack-protector
+ REALMODE_CFLAGS += -Wno-address-of-packed-member
+ REALMODE_CFLAGS += $(cc_stack_align4)
+ REALMODE_CFLAGS += $(CLANG_FLAGS)
++ifdef CONFIG_CC_IS_CLANG
++REALMODE_CFLAGS += -Wno-gnu
++endif
+ export REALMODE_CFLAGS
+ 
+ # BITS is used as extension for files which are available in a 32 bit
