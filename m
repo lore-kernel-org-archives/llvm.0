@@ -1,168 +1,95 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BBD381D5
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 13:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C265F2206B
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 13:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D6Hc/0/v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704805293;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rr9EDoInNOriSMYa12XLLUTsI80jBupR2wog5XENzHs=;
-	b=D6Hc/0/v1LyJlnrHXBeKGo2uKFV7Tcuz8T5NA3er6h7jHTm+rE9hgPsWS2QvAG/Ii4KhKc
-	OS0fUlUi319U4gVJgY7Jj2O9cQOmjbIZ6GSFsy2fj7nOj7B2F3VQEJuJVwSx+aRQ2Eislo
-	QTI3BzwLD4EsUK+60T4yjkZL2qiBmdA=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-313-aPxkO-gJOi26IwQJkCw-6A-1; Tue,
- 09 Jan 2024 08:01:30 -0500
-X-MC-Unique: aPxkO-gJOi26IwQJkCw-6A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4590F3C1E9C9
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 13:01:30 +0000 (UTC)
-Received: from [172.64.3.46] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 303EA2166B32;
-	Tue,  9 Jan 2024 13:01:30 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0,
- mainline.kernel.org-clang, f0a78b3e)
-Date: Tue, 09 Jan 2024 13:01:30 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PfKZbXgD"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6d9b050e88cso1318855b3a.0
+        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 05:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1704807412; x=1705412212; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W1OkkIDMSc8Q0KyW2jakNuTKvRC/V38TH1jOx19EXCA=;
+        b=PfKZbXgDwhD32SeC9ZXG50OPtVFNo1XI1wzssFL8t2ad086YzpjeroLsenO3X0tXmB
+         0MynyYeoQII8dHwiHyIMVE/Q1Hv+5vVEUIyDLM0/Nbr41zmp48/eCfrHokwtkdWZePFX
+         XoePOIcdoRpxBL9EK6IkmRyQ0CgcG8wc0gPBM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704807412; x=1705412212;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W1OkkIDMSc8Q0KyW2jakNuTKvRC/V38TH1jOx19EXCA=;
+        b=sdo9NrfOpx24iIYiDrdOuCYXp+O0Hd4Aw/XN8y859IpmvwbY7TbVXInxi2MKPH06nM
+         1T0Ft/2PZX4zCHO4OAm/tjDeKKK/K3JjRFcUwryHKN7KSHmcSMi9dDH5zH2H9wV++NZ1
+         nK2K6mvE+a+bzyZjmyoXbmFkqqudnpYuG3egAnotqDceU+Wq88BqMDS2k2c3SvgKlDVW
+         cIXq4o3IYrsjUA+iNNhSXDYkF00JAl0kW58R7n8w0G+f7rtG8IvBN71mK7msSQDVytIX
+         3QJHLRJigv1OusuITw7J9861jwphW5J8sI9sTYxQ8MdOmPhLZqBFckfrj3edeGEFg28G
+         30mA==
+X-Gm-Message-State: AOJu0YxKEVN7dc1AwGr/ptd0Qr/u9k/ToJXoQKUb8lrTrx6u497ejuhk
+	4WMBgA+8gnNzDas16zd4JE+xAV/EFwoI
+X-Google-Smtp-Source: AGHT+IGjwjOduo3sVvMklylvN3XYhL/ktYo2abqFN5x1SN3P9np4ra0Um4OeWouTXow82nwY84Gm5Q==
+X-Received: by 2002:aa7:8c18:0:b0:6da:27f1:b8dd with SMTP id c24-20020aa78c18000000b006da27f1b8ddmr2452353pfd.0.1704807412116;
+        Tue, 09 Jan 2024 05:36:52 -0800 (PST)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:e7f6:5139:c752:8303])
+        by smtp.gmail.com with ESMTPSA id t185-20020a6281c2000000b006d97f80c4absm1727934pfd.41.2024.01.09.05.36.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 05:36:51 -0800 (PST)
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Kees Cook <keescook@chromium.org>
+Cc: "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH] Compiler Attributes: counted_by: bump compiler versions
+Date: Tue,  9 Jan 2024 22:36:24 +0900
+Message-ID: <20240109133633.1103876-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
-Message-Id: <98318.124010908013001115@us-mta-313.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+Bump compiler versions, as GCC is expected to implement it
+in version 15 and current clang-18 still has no support for
+counted_by(). Also fix clang URL - the project has moved
+to github.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ include/linux/compiler_attributes.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: arm64: Update __NR_compat_syscalls for statmount/listmo=
-unt
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/121673
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index 28566624f008..1829c24c3357 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -95,11 +95,11 @@
+ #endif
+ 
+ /*
+- * Optional: only supported since gcc >= 14
+- * Optional: only supported since clang >= 18
++ * Optional: only supported since gcc >= 15
++ * Optional: only supported since clang >= 19
+  *
+  *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+- * clang: https://reviews.llvm.org/D148381
++ * clang: https://github.com/llvm/llvm-project/pull/76348
+  */
+ #if __has_attribute(__counted_by__)
+ # define __counted_by(member)		__attribute__((__counted_by__(member)))
+-- 
+2.43.0.472.g3155946c3a-goog
 
