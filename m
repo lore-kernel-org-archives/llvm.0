@@ -1,94 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A2F15AA;
-	Tue,  9 Jan 2024 01:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D024680
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 02:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UoYIohds"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6373BC433F1;
-	Tue,  9 Jan 2024 01:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704764420;
-	bh=2x9g0HMaQU0iX9WQFIBG+M+vpIbfAwCaBiU+2zAJbBA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UoYIohdsLoCPJIdqIbXoPxXzpEL6lSppRCE5IjTooKUKIRVZWV5OotocomA60S8x7
-	 eFjQ+7kp06Wd9EPpmofHQUocTeU7tk4N7S9liGRTHksaw0ntDZ2DKH8yP/VJwfKdLH
-	 YTTUziIVV+hJUaNdIiappf1LO9KE+QWaoqxZ9IxDGv+EPC3kaicSuJsSGum4bIeugL
-	 zAHi0WBkLYs7AeM/nTqpW996EvAWBpqzGk41puPSPAV3/Vgb8EIEhYlsDbpfnnTE0F
-	 qLt9SpgNC6Ueo39lBEmTAb4yfzz2+jSaXuVOPwKpfC+0J7l7OGWcHP9Ry7Bf6uggvJ
-	 AQ78Zl0X5BxrA==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5572a9b3420so5859382a12.1;
-        Mon, 08 Jan 2024 17:40:20 -0800 (PST)
-X-Gm-Message-State: AOJu0YwboziWBzoxtYe3zCJTKVG6Hin2DbHF48R+7sEqj+RhAYtH0AU+
-	nzMNv0nn3BW0rRQiLA3heICwuoJ5PEl8wWQ0qaA=
-X-Google-Smtp-Source: AGHT+IEvIuDP8zcop8SzbUdvV9GzexD3OinQ7Y7YhFFrUWA/qkv+rf74cFDWQudgpXUwaPjeO9x8r43pegbA0ch8QzY=
-X-Received: by 2002:a17:906:3c50:b0:a28:f6a2:ca7c with SMTP id
- i16-20020a1709063c5000b00a28f6a2ca7cmr10082ejg.17.1704764418845; Mon, 08 Jan
- 2024 17:40:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b3wkBV8K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704766864;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=m0NfMJ6g/QLH7q/MkNc55acLBDW3xN4hVJdvGelRNuE=;
+	b=b3wkBV8KbD9L9SOgZ1FVNRyYNg6HTk555zJSw9li0tTxqJun+p4LL1QqXWNZRydWmwfjK1
+	WrF+wB4oIQtx4Wv81RqVL1FDOgB0JjeSVpmIeYjG2xwl4y9VSNpZdFCnwkeV2auf5BIAOH
+	9mabcSnPeWLgc/b6q1YLSw7CiZG1I7w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-530-e00IRRFaNEu3tlzhsw21hw-1; Mon, 08 Jan 2024 21:21:03 -0500
+X-MC-Unique: e00IRRFaNEu3tlzhsw21hw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D468585A58B
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 02:21:02 +0000 (UTC)
+Received: from [172.64.3.46] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BDC1CC159B0;
+	Tue,  9 Jan 2024 02:21:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0,
+ mainline.kernel.org-clang, ab5f3fcb)
+Date: Tue, 09 Jan 2024 02:21:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240108033138.217032-1-wangrui@loongson.cn> <20240108163759.GA2899468@dev-arch.thelio-3990X>
-In-Reply-To: <20240108163759.GA2899468@dev-arch.thelio-3990X>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 9 Jan 2024 09:40:06 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7Qu9yj1d+fAcE3vL0=1FUOD8x0v+AhCr7Bj5yuQstndQ@mail.gmail.com>
-Message-ID: <CAAhV-H7Qu9yj1d+fAcE3vL0=1FUOD8x0v+AhCr7Bj5yuQstndQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts/min-tool-version.sh: Raise min clang version to
- 18.0.0 for loongarch
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: WANG Rui <wangrui@loongson.cn>, WANG Xuerui <kernel@xen0n.name>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, 
-	loongson-kernel@lists.loongnix.cn, Tiezhu Yang <yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <04584.124010821210300137@us-mta-530.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Applied with R-b/A-b tags and fix typo together, thanks.
+Hi, we tested your kernel and here are the results:
 
-Huacai
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: MISSED
 
-On Tue, Jan 9, 2024 at 12:38=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Mon, Jan 08, 2024 at 11:31:38AM +0800, WANG Rui wrote:
-> > The existing mainline clang development version encounters diffculties
-> > compiling the LoongArch kernel module. It is anticipated that this issu=
+
+Kernel information:
+    Commit message: Merge tag 'arm64-upstream' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/arm64/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/121665
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/44779=
+1
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
 e
-> > will be resolved in the upcoming 18.0.0 release. To prevent user
-> > confusion arising from broken builds, it is advisable to raise the
-> > minimum required clang version for LoongArch to 18.0.0.
-> >
-> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > Signed-off-by: WANG Rui <wangrui@loongson.cn>
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> Thanks a lot for all the work driving getting everything to work
-> properly with LLVM!
->
-> > ---
-> >  scripts/min-tool-version.sh | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-> > index c62066825f53..9faa4d3d91e3 100755
-> > --- a/scripts/min-tool-version.sh
-> > +++ b/scripts/min-tool-version.sh
-> > @@ -26,6 +26,8 @@ gcc)
-> >  llvm)
-> >       if [ "$SRCARCH" =3D s390 ]; then
-> >               echo 15.0.0
-> > +     elif [ "$SRCARCH" =3D loongarch ]; then
-> > +             echo 18.0.0
-> >       else
-> >               echo 11.0.0
-> >       fi
-> > --
-> > 2.43.0
-> >
-> >
->
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
