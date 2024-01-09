@@ -1,97 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8873B790;
-	Tue,  9 Jan 2024 19:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8A43D975
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 19:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BZx7rfd1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704826831; x=1736362831;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zmAa0KCltHoQ3zl7+mtFEvcvP8OjsOqBbxuXdBDluC0=;
-  b=BZx7rfd1tvcAWF28zeykhmVujsjEa96Zr8ZPjSbg1nOd1rTP8VpIMGqO
-   78UDli70eQMnTRFSoIdkCccVIhQoJqp6cV4i7tReFiVv2r9o6nxKt1Pr3
-   ksHhr+7oY30TxBVsG5BRxbtjv04vZELkyJcXxSJooZ39T1VtkCDCvmhtC
-   eg7z4JO0R4zH+cPmASTGRz3s4wjR8HwId7hLkTzyAJLHhoLmlfrg34yQ3
-   jbPF9Id4k/ksTyEx1pY3rCwnP7qOGKHPB3rWHNuvut0cNj5dRqxoqOkJU
-   Dx9qjuhxcL2oCJZvp4QYHlqTOZ5lmBelrR4EkJtYkfB1Ip4Z5KYjBOjC4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="484476987"
-X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
-   d="scan'208";a="484476987"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 11:00:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
-   d="scan'208";a="16376771"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 09 Jan 2024 11:00:28 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rNHKs-0006Aw-0q;
-	Tue, 09 Jan 2024 19:00:26 +0000
-Date: Wed, 10 Jan 2024 03:00:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steev Klimaszewski <steev@kali.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [steev:c630-linux-v6.7.0-rc8 160/165]
- sound/soc/codecs/wsa884x.c:1782:33: error: no member named 'dev' in 'struct
- sdw_stream_runtime'
-Message-ID: <202401100218.KlrV1OaK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ns929DjR"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5f254d1a6daso31134937b3.2
+        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 11:42:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704829356; x=1705434156; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EJNz4LIbNCqWmT96jTcSPLTNmx+8SCupIJghMk4NpfY=;
+        b=Ns929DjR78zON2MdW+aFngjBOj8nYljEWBC3Zh75UG1dWz7TdbuNdY2Grz4oBeokfg
+         IstXuS8STZHfYuIF5EswkRCQoL+q9DT7O2HfetJfZEorZJKl7ljgUkA3+N9wRYV9di6J
+         nexM8laSmLFLU0+URdJOIQdjVO23P+V0dSkzu43/8lJQlQkaoke0RAOkfj5JP2RPRQP9
+         Z8iLhBYPpXTblmF2TM7OVm/urKzUh5hkZnzrmny08an/WYuKfvhgIkHQLctaXPsofda5
+         y6gKHdifHRQqY4ZLwIXe2zK6Kk8keJGMZvTS+TOKGptxghXaf2dnQu1jvwslGZqnUyU4
+         f20Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704829356; x=1705434156;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EJNz4LIbNCqWmT96jTcSPLTNmx+8SCupIJghMk4NpfY=;
+        b=NLAIQhMGCAx/KEcdhjvA934wX8+aco92zt2EHvZdCMrred+49rBdsTFySndhJloo30
+         RrYjsVVWWqRI9WM8sW0Djb9UEitCmb8vs8rD7TNEo8yMka5hGhmXNHqr0txP9H4gqq5P
+         jZWMnQmZ4djNHCYloF/osXprg4iGLlzVjRXXIezBG+jlqPRaC4AloPVxXO5rXITpltI1
+         oEPC6MWsUY3j+9bdRK87P/Ubl/aBXpPTy3grUZ+WdpY8yK9EL7j2hmwSekQ8jGOQE3Gm
+         3WAIj1a0Z0DPF8UEy2E24ZOjgVNk0uJjPBQn3tOHITgkoQq3cEJXiDUGUsr1DnboJkq0
+         xBPA==
+X-Gm-Message-State: AOJu0Yxa+e8Vym0Wz7u87593D8BYUaKtXO3MHbzeeNRFglqGqp81hYsX
+	vagJiKpCBWLSrZh8QwawPUC+jk2aQrGM8VmFN1M=
+X-Google-Smtp-Source: AGHT+IEnjsjlf6q7BBk0JyZkpxLkg/tDZHUnVSv9y5kFt++WeXhKxSWpGd+TwWfnd9LbK5shT3+u3d5PnUGjEldL6LE=
+X-Received: by 2002:a0d:ea52:0:b0:5e7:9474:bc7b with SMTP id
+ t79-20020a0dea52000000b005e79474bc7bmr11976ywe.11.1704829356117; Tue, 09 Jan
+ 2024 11:42:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240109133633.1103876-1-senozhatsky@chromium.org> <20240109153249.GA205400@dev-arch.thelio-3990X>
+In-Reply-To: <20240109153249.GA205400@dev-arch.thelio-3990X>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 9 Jan 2024 20:42:24 +0100
+Message-ID: <CANiq72kjHCh-inyv1aU=eNca1-+E0_85MGU-8qbZZtzbC_VwOQ@mail.gmail.com>
+Subject: Re: [PATCH] Compiler Attributes: counted_by: bump compiler versions
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, "Gustavo A . R . Silva" <gustavo@embeddedor.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/steev/linux c630-linux-v6.7.0-rc8
-head:   ff607c5b78e72a98f85de6a64124da02cca916b9
-commit: 36178948b637e43373619370cac68c51fd4fffdd [160/165] ASoC: codecs: wsa884x: check if set_stream is called for proper bus
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240110/202401100218.KlrV1OaK-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240110/202401100218.KlrV1OaK-lkp@intel.com/reproduce)
+On Tue, Jan 9, 2024 at 4:32=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> It is still possible in theory for this feature to make clang-18, as the
+> release/18.x branch is not scheduled to be cut until the fourth Tuesday
+> in January, which is two weeks from now. I don't have a good feeling for
+> how close that pull request is to being mergeable though, so this is
+> fine for now. I assume this won't go to Linus immediately so we would
+> have time to change it if necessary.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401100218.KlrV1OaK-lkp@intel.com/
+Yeah, I was wondering about the deadline too. If LLVM's `-rc1` is the
+latest time possible to merge it, we can wait the couple weeks (which
+are conveniently the merge window) and I apply it afterwards with the
+result :)
 
-All errors (new ones prefixed by >>):
-
->> sound/soc/codecs/wsa884x.c:1782:33: error: no member named 'dev' in 'struct sdw_stream_runtime'
-    1782 |         if (sdw->bus->dev != sruntime->dev)
-         |                              ~~~~~~~~  ^
-   1 error generated.
-
-
-vim +1782 sound/soc/codecs/wsa884x.c
-
-  1773	
-  1774	static int wsa884x_set_stream(struct snd_soc_dai *dai,
-  1775				      void *stream, int direction)
-  1776	{
-  1777		struct wsa884x_priv *wsa884x = dev_get_drvdata(dai->dev);
-  1778		struct sdw_stream_runtime *sruntime = stream;
-  1779		struct sdw_slave *sdw = dev_to_sdw_dev(dai->dev);
-  1780	
-  1781		/* Check if this belongs to same bus */
-> 1782		if (sdw->bus->dev != sruntime->dev)
-  1783			return 0;
-  1784	
-  1785		wsa884x->sruntime = stream;
-  1786	
-  1787		return 0;
-  1788	}
-  1789	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
