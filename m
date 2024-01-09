@@ -1,108 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBFD38DF8;
-	Tue,  9 Jan 2024 17:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBXR0hDI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD56C433F1;
-	Tue,  9 Jan 2024 17:58:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704823097;
-	bh=jPQukDAtVbClY9EBeS+NqfHyLacDsIvaawr24NohtKA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pBXR0hDIxuyEvjXNm0ZHkn82qvWJPxEeg8vRLhUWpcgwAjyw9QDysog3LK2PVQult
-	 9Go+Fi125jYvZDB64hW3vCXxDEcn1/BK+pt5NqtqqQKLTdqo9bY948RcuvcxU2solW
-	 4vKCSzlftGX3C8MVRS35uscVo5/xKVpYDqx9lrU9Apjy76V+ddXDE8gB+2mmN0AuZf
-	 oPcWHesQh5ieuYvzxayCuvHpRXx3KbE78X0kmN1z43HIDK8fHuuSm5D93GP6NTB/A2
-	 otf9gtIxEuJz5XBV4wxvbQ8xXHf1BOfBSoPrqMAdPLvPhwTHpw3vbnYVN41E5sHJLi
-	 jqPfsfuLkmYcA==
-Date: Tue, 9 Jan 2024 10:58:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, javierm@redhat.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
- into setup_data.h
-Message-ID: <20240109175814.GA5981@dev-arch.thelio-3990X>
-References: <20240108095903.8427-3-tzimmermann@suse.de>
- <202401090800.UOBEKB3W-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6793BB43
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 18:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7b7fdde8b58so379745139f.1
+        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 10:17:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704824227; x=1705429027;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mquk6hN27KMTsR9z/GB7mTDogoqyzMeGHcwgy9O7SRw=;
+        b=LSkUPUDpi2fVDTw1OsaPZz6t2DbkX3fXRFuo06Wi6/layXX1my4YFBKRn4NZwmr37h
+         ki+Z2sZHtP09ipRPhbngi8KLlOoqwZS2l5mUuaj8RV0riQ+iBgJV9GPyaW3n7vH4OGUd
+         C/H7l0C+AABU4NibQVjeL3N9GynMBsI7JF6yfHgij09F6VRPQXDUsAmRSqs/wTB7AejW
+         Q4os1QQSJ/Kh4QhkPfgdyhTm9u9SRKz9MlGz3IqWp4vLzT+gqX7lHTHBY9yySieff1UL
+         0Qilf+++NaWRlxJtYBy3UN4xXCtJr+gjTtZz9zwvs4lLcU47XK3R6kgj70ixpMEoZ5ZB
+         Yodw==
+X-Gm-Message-State: AOJu0Yz06cUbfslF59ODT9cFGlqRUeWwQ8RwjcBPzwjmO3zLFfwJ24xw
+	cYfpSwRwZfcEuDhQcA+9LJLr4yZutXvL2S1uFBNr8RxBntbT
+X-Google-Smtp-Source: AGHT+IEZQnABXCenyNgGnqplvmc4QrkSe9Qt76qn9RD2khoyFBeZdp5kgZLrjhRHQ7ZnnuJDzF1+5aiYVwVGywORFcHcA5BvInCD
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202401090800.UOBEKB3W-lkp@intel.com>
+X-Received: by 2002:a05:6638:4e06:b0:46e:3b37:fec8 with SMTP id
+ ep6-20020a0566384e0600b0046e3b37fec8mr60814jab.6.1704824227588; Tue, 09 Jan
+ 2024 10:17:07 -0800 (PST)
+Date: Tue, 09 Jan 2024 10:17:07 -0800
+In-Reply-To: <0000000000006655c10608ddfb6d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007d7565060e8752d6@google.com>
+Subject: Re: [syzbot] [mm?] general protection fault in __hugetlb_zap_begin
+From: syzbot <syzbot+ec9435c038e451be48ff@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, eadavis@qq.com, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, lizhi.xu@windriver.com, llvm@lists.linux.dev, 
+	mike.kravetz@oracle.com, muchun.song@linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, riel@surriel.com, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 09, 2024 at 08:28:59AM +0800, kernel test robot wrote:
-> Hi Thomas,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on tip/x86/core]
-> [also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
-> base:   tip/x86/core
-> patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
-> patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
-> config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
-> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from arch/x86/realmode/rm/wakemain.c:3:
->    In file included from arch/x86/boot/boot.h:24:
->    In file included from arch/x86/include/asm/setup.h:10:
->    In file included from arch/x86/include/asm/page_types.h:7:
->    In file included from include/linux/mem_encrypt.h:17:
->    In file included from arch/x86/include/asm/mem_encrypt.h:18:
->    In file included from arch/x86/include/uapi/asm/bootparam.h:5:
-> >> arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
->       10 |         struct setup_data data;
->          |                           ^
->    1 warning generated.
+syzbot suspects this issue was fixed by commit:
 
-I think this warning is expected. This structure is now included in the
-realmode part of arch/x86, which has its own set of build flags,
-including -Wall, which includes -Wgnu on clang. The kernel obviously
-uses GNU extensions and states this clearly with '-std=gnu11', so
--Wno-gnu is unconditionally added to KBUILD_CFLAGS for clang. It seems
-that same treatment is needed for REALMODE_CFLAGS, which also matches
-arch/x86/boot/compressed/Makefile, see commit 6c3b56b19730 ("x86/boot:
-Disable Clang warnings about GNU extensions"):
+commit 187da0f8250aa94bd96266096aef6f694e0b4cd2
+Author: Mike Kravetz <mike.kravetz@oracle.com>
+Date:   Tue Nov 14 01:20:33 2023 +0000
 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 1a068de12a56..24076db59783 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -53,6 +53,9 @@ REALMODE_CFLAGS += -fno-stack-protector
- REALMODE_CFLAGS += -Wno-address-of-packed-member
- REALMODE_CFLAGS += $(cc_stack_align4)
- REALMODE_CFLAGS += $(CLANG_FLAGS)
-+ifdef CONFIG_CC_IS_CLANG
-+REALMODE_CFLAGS += -Wno-gnu
-+endif
- export REALMODE_CFLAGS
- 
- # BITS is used as extension for files which are available in a 32 bit
+    hugetlb: fix null-ptr-deref in hugetlb_vma_lock_write
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17f5054de80000
+start commit:   9b6de136b5f0 Merge tag 'loongarch-fixes-6.7-1' of git://gi..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=52c9552def2a0fdd
+dashboard link: https://syzkaller.appspot.com/bug?extid=ec9435c038e451be48ff
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=150a257ce80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13481ff0e80000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: hugetlb: fix null-ptr-deref in hugetlb_vma_lock_write
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
