@@ -1,89 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B783A1A4;
-	Tue,  9 Jan 2024 15:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C08F3A1D4
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 16:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="urIOvyOe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7EFDC433F1;
-	Tue,  9 Jan 2024 15:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704814371;
-	bh=hDja7E4tLI84/B+LvKvpuGzDwB00YZ742js1mLiw8AE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=urIOvyOeYXKfa+n5L5JpW8d918D2fKc4i1SpRLtvR7WRQDMQ05W6MSBDoqt1ixtO/
-	 hVHMzKuzqzELPV8JUWHykNDc0Dcjte+zJrOyoKKr79ML/O3vPUvX/YU9bzWgZfgvVe
-	 VCT8xwJ6q519RUMfWR0Pf6cUJ5EV9kpk7DZMuWbTQS7Irjra/lyUsknqE1BYsaPC/z
-	 OC8qRED1dePHyyfuL1fJPo2rsu4MmmXDr11qXXun0G5iqbF0CIHbEoNNMfuwA5vY1Z
-	 SQc34JFXkU9rtl/4qrTMTWu0fpaw1eBDItt2B6XgsBEo+u+tHP+PNsLpPLkn6LkojA
-	 sHJ/BCMefuYIg==
-Date: Tue, 9 Jan 2024 08:32:49 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Kees Cook <keescook@chromium.org>,
-	"Gustavo A . R . Silva" <gustavo@embeddedor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] Compiler Attributes: counted_by: bump compiler versions
-Message-ID: <20240109153249.GA205400@dev-arch.thelio-3990X>
-References: <20240109133633.1103876-1-senozhatsky@chromium.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gKcohBGp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704817832;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VofOwUgix7VLFySOOM4DxoXuVUrXqqXe7AW4zv/crl0=;
+	b=gKcohBGp4o58vc87DlPbeNmXVk9RTW3IgzJyBR76WsuTt+EBYpDtooLNIo9H8LT33zLcen
+	U+sJMlvmZKez4XW24h7Ua8sKU9p7GMGPCG68Jjw+iFUw3lvmGtkQRbBbR74QwtQyB5oavL
+	Yw06/SpehlW1H7GHD23Pv/rlIzC/RG4=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-632-Zh6HzlIsMWWV9iiYmwAtag-1; Tue,
+ 09 Jan 2024 11:30:31 -0500
+X-MC-Unique: Zh6HzlIsMWWV9iiYmwAtag-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1FEF28B7404
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 16:30:30 +0000 (UTC)
+Received: from [172.64.3.46] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AE3A6C15A0C;
+	Tue,  9 Jan 2024 16:30:30 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 3 of 226): Test report for master
+ (6.7.0, mainline.kernel.org-clang, bfe8eb3b)
+Date: Tue, 09 Jan 2024 16:30:30 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240109133633.1103876-1-senozhatsky@chromium.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <41557.124010911303100955@us-mta-632.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 09, 2024 at 10:36:24PM +0900, Sergey Senozhatsky wrote:
-> Bump compiler versions, as GCC is expected to implement it
-> in version 15 and current clang-18 still has no support for
-> counted_by(). Also fix clang URL - the project has moved
-> to github.
-> 
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  include/linux/compiler_attributes.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 28566624f008..1829c24c3357 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -95,11 +95,11 @@
->  #endif
->  
->  /*
-> - * Optional: only supported since gcc >= 14
-> - * Optional: only supported since clang >= 18
-> + * Optional: only supported since gcc >= 15
-> + * Optional: only supported since clang >= 19
+Hi, we tested your kernel and here are the results:
 
-It is still possible in theory for this feature to make clang-18, as the
-release/18.x branch is not scheduled to be cut until the fourth Tuesday
-in January, which is two weeks from now. I don't have a good feeling for
-how close that pull request is to being mergeable though, so this is
-fine for now. I assume this won't go to Linus immediately so we would
-have time to change it if necessary.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-The link change is obviously good.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Kernel information:
+    Commit message: Merge tag 'sched-core-2024-01-08' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
-I should probably go through and try to update all the other
-review.llvm.org links to GitHub as well...
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/121675
 
->   *
->   *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
-> - * clang: https://reviews.llvm.org/D148381
-> + * clang: https://github.com/llvm/llvm-project/pull/76348
->   */
->  #if __has_attribute(__counted_by__)
->  # define __counted_by(member)		__attribute__((__counted_by__(member)))
-> -- 
-> 2.43.0.472.g3155946c3a-goog
-> 
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+
+
+Tests that were not ran because of internal issues:=20
+      x86_64 (debug) - Hardware - CPU: Die Test
+      x86_64 (debug) - Storage - swraid scsi_raid
+      x86_64 (debug) - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
