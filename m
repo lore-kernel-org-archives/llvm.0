@@ -1,37 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC173A1A0;
-	Tue,  9 Jan 2024 15:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B783A1A4;
+	Tue,  9 Jan 2024 15:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BfwH8xmT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50FCCC433F1;
-	Tue,  9 Jan 2024 15:26:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="urIOvyOe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7EFDC433F1;
+	Tue,  9 Jan 2024 15:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704813996;
-	bh=+lV/DrwzrTu5CK485TUWaE1tfOdwjxBJErdXczf0neQ=;
+	s=k20201202; t=1704814371;
+	bh=hDja7E4tLI84/B+LvKvpuGzDwB00YZ742js1mLiw8AE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BfwH8xmTVnrqoKhO8DjPGGYDey+YpqKsQ2VQu5WlWEwAk3xuuYU4ed9ci7hf1Z5dN
-	 xv8v/kckLQXJLtarReV96ZqcLB5lrP5r+mOqpHnpn6n4IOSH4jRz7PFX7Wnrd+zKRa
-	 sj0sasMxp3dX37NNIgYm7gm0UW/bvc/asKQHbPZQVX1TfbBFUuT3iMNMCSmyO/yEou
-	 5bGG1X5TKCnjvtwMlgTkMCyqkkxB3mZ9VwBJ3l8ou+Kj3wWO2c4L10hc31L+MOBe4G
-	 Kp1awsUdphcKkgt0UjyLLKNL38yupEwNkB/IuV++5cDJqEPMZcthGDNi2GGhwTSkIa
-	 2E/pBOrLdhv2A==
-Date: Tue, 9 Jan 2024 08:26:34 -0700
+	b=urIOvyOeYXKfa+n5L5JpW8d918D2fKc4i1SpRLtvR7WRQDMQ05W6MSBDoqt1ixtO/
+	 hVHMzKuzqzELPV8JUWHykNDc0Dcjte+zJrOyoKKr79ML/O3vPUvX/YU9bzWgZfgvVe
+	 VCT8xwJ6q519RUMfWR0Pf6cUJ5EV9kpk7DZMuWbTQS7Irjra/lyUsknqE1BYsaPC/z
+	 OC8qRED1dePHyyfuL1fJPo2rsu4MmmXDr11qXXun0G5iqbF0CIHbEoNNMfuwA5vY1Z
+	 SQc34JFXkU9rtl/4qrTMTWu0fpaw1eBDItt2B6XgsBEo+u+tHP+PNsLpPLkn6LkojA
+	 sHJ/BCMefuYIg==
+Date: Tue, 9 Jan 2024 08:32:49 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: linux-stable <stable@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	lkft-triage@lists.linaro.org,
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Kees Cook <keescook@chromium.org>,
+	"Gustavo A . R . Silva" <gustavo@embeddedor.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: Re: riscv: clang-nightly-allmodconfig: failed on stable-rc 6.6 and
- 6.1
-Message-ID: <20240109152634.GA205272@dev-arch.thelio-3990X>
-References: <CA+G9fYtbTSVtYQF4gdKK_SjibEZAV5KXFOtbC0YK9QF9Z8gSRw@mail.gmail.com>
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] Compiler Attributes: counted_by: bump compiler versions
+Message-ID: <20240109153249.GA205400@dev-arch.thelio-3990X>
+References: <20240109133633.1103876-1-senozhatsky@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,47 +37,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYtbTSVtYQF4gdKK_SjibEZAV5KXFOtbC0YK9QF9Z8gSRw@mail.gmail.com>
+In-Reply-To: <20240109133633.1103876-1-senozhatsky@chromium.org>
 
-Hi Naresh,
-
-On Tue, Jan 09, 2024 at 03:06:04PM +0530, Naresh Kamboju wrote:
-> The clang nightly build failures are noticed on stable-rc 6.6 and 6.1 for
-> riscv allmodconfig builds.
+On Tue, Jan 09, 2024 at 10:36:24PM +0900, Sergey Senozhatsky wrote:
+> Bump compiler versions, as GCC is expected to implement it
+> in version 15 and current clang-18 still has no support for
+> counted_by(). Also fix clang URL - the project has moved
+> to github.
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  include/linux/compiler_attributes.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> Logs:
-> =====
->  arch/riscv/kernel -I ./arch/riscv/kernel -dwarf-version=4 -mrelocation-model
->   static -target-abi lp64 -mllvm -riscv-add-build-attributes
->    -o arch/riscv/kernel/kexec_relocate.o /tmp/kexec_relocate-28089a.s
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 28566624f008..1829c24c3357 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -95,11 +95,11 @@
+>  #endif
+>  
+>  /*
+> - * Optional: only supported since gcc >= 14
+> - * Optional: only supported since clang >= 18
+> + * Optional: only supported since gcc >= 15
+> + * Optional: only supported since clang >= 19
+
+It is still possible in theory for this feature to make clang-18, as the
+release/18.x branch is not scheduled to be cut until the fourth Tuesday
+in January, which is two weeks from now. I don't have a good feeling for
+how close that pull request is to being mergeable though, so this is
+fine for now. I assume this won't go to Linus immediately so we would
+have time to change it if necessary.
+
+The link change is obviously good.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+I should probably go through and try to update all the other
+review.llvm.org links to GitHub as well...
+
+>   *
+>   *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> - * clang: https://reviews.llvm.org/D148381
+> + * clang: https://github.com/llvm/llvm-project/pull/76348
+>   */
+>  #if __has_attribute(__counted_by__)
+>  # define __counted_by(member)		__attribute__((__counted_by__(member)))
+> -- 
+> 2.43.0.472.g3155946c3a-goog
 > 
->  #0 0x00007f5039e1667a llvm::sys::PrintStackTrace(llvm::raw_ostream&,
-> int) (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0xd6d67a)
->  #1 0x00007f5039e146a4 llvm::sys::RunSignalHandlers()
-> (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0xd6b6a4)
->  #2 0x00007f5039e16d3b (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0xd6dd3b)
->  #3 0x00007f5038ba8510 (/lib/x86_64-linux-gnu/libc.so.6+0x3c510)
->  #4 0x00007f503c8f50c8 (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x384c0c8)
->  #5 0x00007f503b492cf5 (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x23e9cf5)
->  #6 0x00007f503b492607 (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x23e9607)
->  #7 0x00007f503b492300
-> llvm::MCExpr::evaluateAsRelocatableImpl(llvm::MCValue&,
-> llvm::MCAssembler const*, llvm::MCAsmLayout const*, llvm::MCFixup
-> const*, llvm::DenseMap<llvm::MCSection const*, unsigned long,
-> llvm::DenseMapInfo<llvm::MCSection const*, void>,
-> llvm::detail::DenseMapPair<llvm::MCSection const*, unsigned long>>
-> const*, bool) const (/lib/x86_64-linux-gnu/libLLVM-18.so.1+0x23e9300)
-
-Thank you for the report, this is an LLVM regression that I reported a
-few days ago and it has now been resolved upstream a few hours ago:
-
-https://github.com/llvm/llvm-project/pull/76552#issuecomment-1878952480
-https://github.com/llvm/llvm-project/pull/77236
-
-It may take a few days for it to be fixed on your side between the
-apt.llvm.org update cycle and the tuxmake container rebuild cycle.
-
-Cheers,
-Nathan
