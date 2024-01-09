@@ -1,95 +1,122 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C265F2206B
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 13:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BA039AC6
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 14:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PfKZbXgD"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6d9b050e88cso1318855b3a.0
-        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 05:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1704807412; x=1705412212; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=W1OkkIDMSc8Q0KyW2jakNuTKvRC/V38TH1jOx19EXCA=;
-        b=PfKZbXgDwhD32SeC9ZXG50OPtVFNo1XI1wzssFL8t2ad086YzpjeroLsenO3X0tXmB
-         0MynyYeoQII8dHwiHyIMVE/Q1Hv+5vVEUIyDLM0/Nbr41zmp48/eCfrHokwtkdWZePFX
-         XoePOIcdoRpxBL9EK6IkmRyQ0CgcG8wc0gPBM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704807412; x=1705412212;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W1OkkIDMSc8Q0KyW2jakNuTKvRC/V38TH1jOx19EXCA=;
-        b=sdo9NrfOpx24iIYiDrdOuCYXp+O0Hd4Aw/XN8y859IpmvwbY7TbVXInxi2MKPH06nM
-         1T0Ft/2PZX4zCHO4OAm/tjDeKKK/K3JjRFcUwryHKN7KSHmcSMi9dDH5zH2H9wV++NZ1
-         nK2K6mvE+a+bzyZjmyoXbmFkqqudnpYuG3egAnotqDceU+Wq88BqMDS2k2c3SvgKlDVW
-         cIXq4o3IYrsjUA+iNNhSXDYkF00JAl0kW58R7n8w0G+f7rtG8IvBN71mK7msSQDVytIX
-         3QJHLRJigv1OusuITw7J9861jwphW5J8sI9sTYxQ8MdOmPhLZqBFckfrj3edeGEFg28G
-         30mA==
-X-Gm-Message-State: AOJu0YxKEVN7dc1AwGr/ptd0Qr/u9k/ToJXoQKUb8lrTrx6u497ejuhk
-	4WMBgA+8gnNzDas16zd4JE+xAV/EFwoI
-X-Google-Smtp-Source: AGHT+IGjwjOduo3sVvMklylvN3XYhL/ktYo2abqFN5x1SN3P9np4ra0Um4OeWouTXow82nwY84Gm5Q==
-X-Received: by 2002:aa7:8c18:0:b0:6da:27f1:b8dd with SMTP id c24-20020aa78c18000000b006da27f1b8ddmr2452353pfd.0.1704807412116;
-        Tue, 09 Jan 2024 05:36:52 -0800 (PST)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:e7f6:5139:c752:8303])
-        by smtp.gmail.com with ESMTPSA id t185-20020a6281c2000000b006d97f80c4absm1727934pfd.41.2024.01.09.05.36.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jan 2024 05:36:51 -0800 (PST)
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Kees Cook <keescook@chromium.org>
-Cc: "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH] Compiler Attributes: counted_by: bump compiler versions
-Date: Tue,  9 Jan 2024 22:36:24 +0900
-Message-ID: <20240109133633.1103876-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
+	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="kPi6NH8C"
+Received: from eig-obgw-5002a.ext.cloudfilter.net ([10.0.29.215])
+	by cmsmtp with ESMTPS
+	id NBECrdJyYTHHuNCiOrjYw9; Tue, 09 Jan 2024 14:04:24 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id NCiNrxJHbBnVCNCiNr6MTH; Tue, 09 Jan 2024 14:04:23 +0000
+X-Authority-Analysis: v=2.4 cv=H+TIfsUi c=1 sm=1 tr=0 ts=659d5267
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=GfQleyYEO+cc22AUyTT7qQ==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=dEuoMetlWLkA:10 a=wYkD_t78qR0A:10 a=cm27Pg_UAAAA:8
+ a=VwQbUJbxAAAA:8 a=mDV3o1hIAAAA:8 a=Twlkf-z8AAAA:8 a=NEAV23lmAAAA:8
+ a=1aWQwmh1cChWapziH08A:9 a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22
+ a=AjGcO6oz07-iQ99wixmX:22 a=_FVE-zBwftR9WsbkzFJk:22 a=-74SuR6ZdpOK_LpdRCUo:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=uvdyQdGzfT0A8h+hoTqs6rlhElqEBmHJSqddMJ5qdek=; b=kPi6NH8CRvPxouEWeClMnHA7jf
+	/LRlRLQu4hrPNkXUermY1YK7HfZ6O9ejSDLZyoBh4JGH/EKRKAg118auyA8mbZ1Rv7tZDbtpv3Yfu
+	v02r+md2I1q450BfoN6bdmQLG9IS75blkmyaITNg2E6Mh7kJ1V/dLuqe240Xwg+ADzb/UkRXPWkc6
+	41cIy0afe9Ru8NZc8tsWQ+ZH1SV4U4W3xpWsXDkUUg1p/BVXhuTmVR48yy9c4kR06QfFZNVtzvUHK
+	MAjePADpKn/camno87g9HLHHMH9R0zyB4Qo5dt6vOlSu+JQQfFtNIUbI06uT5SAFWwqs9nt4IOLKZ
+	69r8zn9A==;
+Received: from 187.184.157.186.cable.dyn.cableonline.com.mx ([187.184.157.186]:58081 helo=[192.168.0.10])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1rNCiM-0004lh-1x;
+	Tue, 09 Jan 2024 08:04:22 -0600
+Message-ID: <374bf411-9f51-4326-adb3-ca384ded1e4a@embeddedor.com>
+Date: Tue, 9 Jan 2024 08:04:20 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Compiler Attributes: counted_by: bump compiler versions
+Content-Language: en-US
+To: Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240109133633.1103876-1-senozhatsky@chromium.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20240109133633.1103876-1-senozhatsky@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.184.157.186
+X-Source-L: No
+X-Exim-ID: 1rNCiM-0004lh-1x
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187.184.157.186.cable.dyn.cableonline.com.mx ([192.168.0.10]) [187.184.157.186]:58081
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfNEauJFU2vU9U4n9KDXP9M6rVWQasyLXfQDD25MtAL+bA1s/o5GWPUKtESW1fpiMHTOOQWpUvT4ktBqsnV4Dft4ohI0XZCEHlOuTmV7wdKXLoEKHiLRO
+ aLbii64x+wBb/LFkcmdRL4xLJIwhK2+1/3Ro1HxxczwDhAMm1sUoVrvhcbkA2ddz8gq5//ZzcDCcgqHKG8Mw4jDSc+Rd60jVS0Q=
 
-Bump compiler versions, as GCC is expected to implement it
-in version 15 and current clang-18 still has no support for
-counted_by(). Also fix clang URL - the project has moved
-to github.
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- include/linux/compiler_attributes.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-index 28566624f008..1829c24c3357 100644
---- a/include/linux/compiler_attributes.h
-+++ b/include/linux/compiler_attributes.h
-@@ -95,11 +95,11 @@
- #endif
- 
- /*
-- * Optional: only supported since gcc >= 14
-- * Optional: only supported since clang >= 18
-+ * Optional: only supported since gcc >= 15
-+ * Optional: only supported since clang >= 19
-  *
-  *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
-- * clang: https://reviews.llvm.org/D148381
-+ * clang: https://github.com/llvm/llvm-project/pull/76348
-  */
- #if __has_attribute(__counted_by__)
- # define __counted_by(member)		__attribute__((__counted_by__(member)))
--- 
-2.43.0.472.g3155946c3a-goog
+On 1/9/24 07:36, Sergey Senozhatsky wrote:
+> Bump compiler versions, as GCC is expected to implement it
+> in version 15 and current clang-18 still has no support for
+> counted_by(). Also fix clang URL - the project has moved
+> to github.
+> 
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks!
+--
+Gustavo
+
+> ---
+>   include/linux/compiler_attributes.h | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 28566624f008..1829c24c3357 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -95,11 +95,11 @@
+>   #endif
+>   
+>   /*
+> - * Optional: only supported since gcc >= 14
+> - * Optional: only supported since clang >= 18
+> + * Optional: only supported since gcc >= 15
+> + * Optional: only supported since clang >= 19
+>    *
+>    *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> - * clang: https://reviews.llvm.org/D148381
+> + * clang: https://github.com/llvm/llvm-project/pull/76348
+>    */
+>   #if __has_attribute(__counted_by__)
+>   # define __counted_by(member)		__attribute__((__counted_by__(member)))
