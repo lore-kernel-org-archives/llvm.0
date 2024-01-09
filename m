@@ -1,51 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B2A3E495;
-	Tue,  9 Jan 2024 23:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEA23F8D0
+	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 23:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jVxJ6tAp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704841604; x=1736377604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qB6rllY9Y9lF/uM8R45vNgHXRFEg+zZ+eoCghnpCI60=;
-  b=jVxJ6tApQ6k/f84mK8Lonb2Fp0pwhJcxrq95PRCT5diRMkMuKFLwiAaF
-   ap2VoTBIRebHhIXFcSCodqUtc/a4nYYjLKr4iBH3APiUXN8GsT8AmHHZC
-   Q8eSjEeuQZcS3zUiUp01z37J1x2lfmZVupELOWxKmX4OcXmEr2KnoXNhz
-   KVSg9hhCOMG01vL0Jjg0lGvOMbf3kBr3QRRsd+zSfh9rENpOmaTXyg4V0
-   4391sCrziteppLkQfW88uUmEB2oaqu33E1+GmEAE4VkjdU9jCiiTer8yo
-   II4lWXIf9JnpdzITansYeKTk/8ymweaWnEuZxbwrv3U9sL9oS26PcwYJe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="5122169"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="5122169"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 15:06:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="785405104"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="785405104"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jan 2024 15:05:57 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rNLAR-0006LG-0v;
-	Tue, 09 Jan 2024 23:05:55 +0000
-Date: Wed, 10 Jan 2024 07:05:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jun Miao <jun.miao@intel.com>, kirill.shutemov@linux.intel.com,
-	dave.hansen@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jun.miao@intel.com,
-	x86@kernel.org, linux-coco@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/tdx: Optimize try_accept_memory() to reduce 1GB page
- accepted failed times
-Message-ID: <202401100620.TjY1Uq2O-lkp@intel.com>
-References: <20240109054824.9023-1-jun.miao@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rM+ah8zr"
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3608e1d27ceso10820025ab.1
+        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 15:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1704843764; x=1705448564; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QIcPXVK1fYFTemMdjpiQGc+AOvdzW3M34c5/yKhDtd4=;
+        b=rM+ah8zr75xWxp7XGAdheDFg6D+01b9XVSwo0+BWSmyyAncwl1SXVepsbbRFUHjQFe
+         vTRnvdOk7Rv64ZUsOdLJTzP/rU1islva1IAn0psKGGVS7iQeRSRTv/r9aKp35RVMjqOl
+         PB9/ZfwEardsVDfNROJ531PVcJb0Vy1gelTFnAttbNUHnvOF4p6ksNbeVokNtCosbHRS
+         7cU7uv1Is5ASYkOk/HVOd+KZfgon4SyaR+UaTUHJEk4dl5+nisufyWg8kipsBFnrybVo
+         qJmjbJ7SNnQMiGJHpErz+ekzVNMLCA8YCwmjFjkvmn+Uc57NKnBnaen/e4NZ2prRGSMQ
+         j7vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704843764; x=1705448564;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QIcPXVK1fYFTemMdjpiQGc+AOvdzW3M34c5/yKhDtd4=;
+        b=bt8NS78Vn/cbLDravwaCC9ow3oaHx73R68G5/fQtwBv6CW5VRXI0JvIVWqnASpDmp7
+         c3Gzil80AmxMfvuhlpVIQk0wzu0x+OfuBLfS5uDQbMDF2nn9BR3flu1GJlNhz+S4EhIs
+         RC2C3eosuLPuFP3Y63Xm9QoVUj61yHdoV1+vYC3o3PsvYLPQGSB7N2JAXoAKc4fqbj4B
+         bDd0eiC6W/KulEfoIFFvDORtlGSw7sUE8MJxt9mFgCslnfeifEvtSXx3AQ8yIdQuvE+a
+         klQCUAxkTJyoEr23r70WQV5nCCg3sN1HyaUeQGfbmzmnX5VRRRJOSp9JwAGMALivVM2m
+         RNEA==
+X-Gm-Message-State: AOJu0YwaDDi2QzlHh31GriLdziO22AnhIH8bG2sERoxV7JPQ+dn+lHaV
+	5xQqffM888onrUCueFd50goXDDwHrbgp
+X-Google-Smtp-Source: AGHT+IFcCSzwyXxCeIeRPodhTFSjdMhuIXovQrmFwVT7Gt7z1oM7wbSewwsMzzo7BrlWgSVFYS5jcw==
+X-Received: by 2002:a05:6e02:3208:b0:360:5cd9:a73e with SMTP id cd8-20020a056e02320800b003605cd9a73emr300419ilb.6.1704843764645;
+        Tue, 09 Jan 2024 15:42:44 -0800 (PST)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id em17-20020a0566384db100b0046ceccc798asm954664jab.6.2024.01.09.15.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 15:42:44 -0800 (PST)
+Date: Tue, 9 Jan 2024 23:42:41 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: kernel test robot <lkp@intel.com>, virtualization@lists.linux.dev,
+	linux-crypto@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Gonglei <arei.gonglei@huawei.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Jason Wang <jasowang@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+Subject: Re: [PATCH v2] crypto: virtio - Less function calls in
+ __virtio_crypto_akcipher_do_req() after error detection
+Message-ID: <20240109234241.4q3ueqdjz5o54oan@google.com>
+References: <2413f22f-f0c3-45e0-9f6b-a551bdf0f54c@web.de>
+ <202312260852.0ge5O8IL-lkp@intel.com>
+ <7bf9a4fa-1675-45a6-88dd-82549ae2c6e0@web.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,83 +68,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240109054824.9023-1-jun.miao@intel.com>
+In-Reply-To: <7bf9a4fa-1675-45a6-88dd-82549ae2c6e0@web.de>
 
-Hi Jun,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Tue, Dec 26, 2023 at 11:12:23AM +0100, Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Tue, 26 Dec 2023 11:00:20 +0100
+>
+> The kfree() function was called in up to two cases by the
+> __virtio_crypto_akcipher_do_req() function during error handling
+> even if the passed variable contained a null pointer.
+> This issue was detected by using the Coccinelle software.
 
-[auto build test WARNING on tip/x86/tdx]
-[also build test WARNING on next-20240109]
-[cannot apply to linus/master v6.7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If the script is short and simple would you mind, in the future,
+including it below the fold -- this may help others do similar work down
+the line -- Or you could also link to a git-managed version like what
+Kees has been doing with his __counted_by patches [1].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jun-Miao/x86-tdx-Optimize-try_accept_memory-to-reduce-1GB-page-accepted-failed-times/20240109-134908
-base:   tip/x86/tdx
-patch link:    https://lore.kernel.org/r/20240109054824.9023-1-jun.miao%40intel.com
-patch subject: [PATCH] x86/tdx: Optimize try_accept_memory() to reduce 1GB page accepted failed times
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240110/202401100620.TjY1Uq2O-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240110/202401100620.TjY1Uq2O-lkp@intel.com/reproduce)
+>
+> * Adjust jump targets.
+>
+> * Delete two initialisations which became unnecessary
+>   with this refactoring.
+>
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401100620.TjY1Uq2O-lkp@intel.com/
+Nonetheless,
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+>
+> v2:
+> A typo was fixed for the delimiter of a label.
+>
+>  drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+> index 2621ff8a9376..057da5bd8d30 100644
+> --- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+> +++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
+> @@ -224,11 +224,11 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
+>  	struct virtio_crypto *vcrypto = ctx->vcrypto;
+>  	struct virtio_crypto_op_data_req *req_data = vc_req->req_data;
+>  	struct scatterlist *sgs[4], outhdr_sg, inhdr_sg, srcdata_sg, dstdata_sg;
+> -	void *src_buf = NULL, *dst_buf = NULL;
+> +	void *src_buf, *dst_buf = NULL;
+>  	unsigned int num_out = 0, num_in = 0;
+>  	int node = dev_to_node(&vcrypto->vdev->dev);
+>  	unsigned long flags;
+> -	int ret = -ENOMEM;
+> +	int ret;
+>  	bool verify = vc_akcipher_req->opcode == VIRTIO_CRYPTO_AKCIPHER_VERIFY;
+>  	unsigned int src_len = verify ? req->src_len + req->dst_len : req->src_len;
+>
+> @@ -239,7 +239,7 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
+>  	/* src data */
+>  	src_buf = kcalloc_node(src_len, 1, GFP_KERNEL, node);
+>  	if (!src_buf)
+> -		goto err;
+> +		return -ENOMEM;
+>
+>  	if (verify) {
+>  		/* for verify operation, both src and dst data work as OUT direction */
+> @@ -254,7 +254,7 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
+>  		/* dst data */
+>  		dst_buf = kcalloc_node(req->dst_len, 1, GFP_KERNEL, node);
+>  		if (!dst_buf)
+> -			goto err;
+> +			goto free_src;
+>
+>  		sg_init_one(&dstdata_sg, dst_buf, req->dst_len);
+>  		sgs[num_out + num_in++] = &dstdata_sg;
+> @@ -277,9 +277,9 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
+>  	return 0;
+>
+>  err:
+> -	kfree(src_buf);
+>  	kfree(dst_buf);
+> -
+> +free_src:
+> +	kfree(src_buf);
+>  	return -ENOMEM;
+>  }
+>
+> --
+> 2.43.0
+>
 
->> arch/x86/coco/tdx/tdx-shared.c:62:3: warning: '/*' within block comment [-Wcomment]
-      62 |                 /* The 4KB page case or accept 2MB page failed case. */
-         |                 ^
->> arch/x86/coco/tdx/tdx-shared.c:63:8: warning: variable 'accept_size' is uninitialized when used here [-Wuninitialized]
-      63 |                 if (!accept_size)
-         |                      ^~~~~~~~~~~
-   arch/x86/coco/tdx/tdx-shared.c:49:28: note: initialize the variable 'accept_size' to silence this warning
-      49 |                 unsigned long accept_size;
-         |                                          ^
-         |                                           = 0
-   2 warnings generated.
+[1]: https://lore.kernel.org/all/20230922175023.work.239-kees@kernel.org/
 
-
-vim +62 arch/x86/coco/tdx/tdx-shared.c
-
-    40	
-    41	bool tdx_accept_memory(phys_addr_t start, phys_addr_t end)
-    42	{
-    43		/*
-    44		 * For shared->private conversion, accept the page using
-    45		 * TDG_MEM_PAGE_ACCEPT TDX module call.
-    46		 */
-    47		while (start < end) {
-    48			unsigned long len = end - start;
-    49			unsigned long accept_size;
-    50	
-    51			/*
-    52			 * Try larger accepts first. It gives chance to VMM to keep
-    53			 * 1G/2M Secure EPT entries where possible and speeds up
-    54			 * process by cutting number of hypercalls (if successful).
-    55			 * Since per current TDX spec, only support for adding 4KB or
-    56			 * 2MB page dynamically.
-    57			 * /
-    58	
-    59			if (IS_ALIGNED(start, PMD_SIZE) && len >= PMD_SIZE)
-    60				accept_size = try_accept_one(start, len, PG_LEVEL_2M);
-    61	
-  > 62			/* The 4KB page case or accept 2MB page failed case. */
-  > 63			if (!accept_size)
-    64				accept_size = try_accept_one(start, len, PG_LEVEL_4K);
-    65			if (!accept_size)
-    66				return false;
-    67			start += accept_size;
-    68		}
-    69	
-    70		return true;
-    71	}
-    72	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+Justin
