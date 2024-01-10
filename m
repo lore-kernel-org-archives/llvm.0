@@ -1,65 +1,46 @@
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEA23F8D0
-	for <llvm@lists.linux.dev>; Tue,  9 Jan 2024 23:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D8538D;
+	Wed, 10 Jan 2024 01:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rM+ah8zr"
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3608e1d27ceso10820025ab.1
-        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 15:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1704843764; x=1705448564; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QIcPXVK1fYFTemMdjpiQGc+AOvdzW3M34c5/yKhDtd4=;
-        b=rM+ah8zr75xWxp7XGAdheDFg6D+01b9XVSwo0+BWSmyyAncwl1SXVepsbbRFUHjQFe
-         vTRnvdOk7Rv64ZUsOdLJTzP/rU1islva1IAn0psKGGVS7iQeRSRTv/r9aKp35RVMjqOl
-         PB9/ZfwEardsVDfNROJ531PVcJb0Vy1gelTFnAttbNUHnvOF4p6ksNbeVokNtCosbHRS
-         7cU7uv1Is5ASYkOk/HVOd+KZfgon4SyaR+UaTUHJEk4dl5+nisufyWg8kipsBFnrybVo
-         qJmjbJ7SNnQMiGJHpErz+ekzVNMLCA8YCwmjFjkvmn+Uc57NKnBnaen/e4NZ2prRGSMQ
-         j7vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704843764; x=1705448564;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QIcPXVK1fYFTemMdjpiQGc+AOvdzW3M34c5/yKhDtd4=;
-        b=bt8NS78Vn/cbLDravwaCC9ow3oaHx73R68G5/fQtwBv6CW5VRXI0JvIVWqnASpDmp7
-         c3Gzil80AmxMfvuhlpVIQk0wzu0x+OfuBLfS5uDQbMDF2nn9BR3flu1GJlNhz+S4EhIs
-         RC2C3eosuLPuFP3Y63Xm9QoVUj61yHdoV1+vYC3o3PsvYLPQGSB7N2JAXoAKc4fqbj4B
-         bDd0eiC6W/KulEfoIFFvDORtlGSw7sUE8MJxt9mFgCslnfeifEvtSXx3AQ8yIdQuvE+a
-         klQCUAxkTJyoEr23r70WQV5nCCg3sN1HyaUeQGfbmzmnX5VRRRJOSp9JwAGMALivVM2m
-         RNEA==
-X-Gm-Message-State: AOJu0YwaDDi2QzlHh31GriLdziO22AnhIH8bG2sERoxV7JPQ+dn+lHaV
-	5xQqffM888onrUCueFd50goXDDwHrbgp
-X-Google-Smtp-Source: AGHT+IFcCSzwyXxCeIeRPodhTFSjdMhuIXovQrmFwVT7Gt7z1oM7wbSewwsMzzo7BrlWgSVFYS5jcw==
-X-Received: by 2002:a05:6e02:3208:b0:360:5cd9:a73e with SMTP id cd8-20020a056e02320800b003605cd9a73emr300419ilb.6.1704843764645;
-        Tue, 09 Jan 2024 15:42:44 -0800 (PST)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id em17-20020a0566384db100b0046ceccc798asm954664jab.6.2024.01.09.15.42.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jan 2024 15:42:44 -0800 (PST)
-Date: Tue, 9 Jan 2024 23:42:41 +0000
-From: Justin Stitt <justinstitt@google.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: kernel test robot <lkp@intel.com>, virtualization@lists.linux.dev,
-	linux-crypto@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Gonglei <arei.gonglei@huawei.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Jason Wang <jasowang@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
-Subject: Re: [PATCH v2] crypto: virtio - Less function calls in
- __virtio_crypto_akcipher_do_req() after error detection
-Message-ID: <20240109234241.4q3ueqdjz5o54oan@google.com>
-References: <2413f22f-f0c3-45e0-9f6b-a551bdf0f54c@web.de>
- <202312260852.0ge5O8IL-lkp@intel.com>
- <7bf9a4fa-1675-45a6-88dd-82549ae2c6e0@web.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cImeVMeD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704848422; x=1736384422;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tP43jgXPpYAfjo/Dl+pi0GmMd9QLP+51As3B/QrHoUQ=;
+  b=cImeVMeDTlvFH0YeOyMgtLSMCgMJ9KcBLbN8qvdFr5/9/T2E0Vi0r6L4
+   H4e2FxMe/fBJCbUEoEBxuMhh3+ChpJ3SoLf6uiyoQKqHfyM4Tif0CleXY
+   ril5FA+8C9GqChR93hrwQdnPFS1HWHHWOKJUeiSFVPprq88I4awEw9kWa
+   Ko2W60jM9u3ujvfS8jVE1c+dTEfJ/aNs9NM5lUJtpgOc+lIpIL+fE5J8s
+   81a6L+iumOgeeJ5gX1ZpPd/uNjTGd4XN6i5A3fqjcpQsk9rpy1VyQYpD5
+   /Oc9SoNVrLPBhaD52SVgN9AV4QSc5lDNM5g8wGmwE0hU7WKzfYp2WJZ4V
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="19868466"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="19868466"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 17:00:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="30388572"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 09 Jan 2024 17:00:19 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rNMx7-0006Rq-1l;
+	Wed, 10 Jan 2024 01:00:17 +0000
+Date: Wed, 10 Jan 2024 09:00:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tina Zhang <tina.zhang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tinazhangzw:per-iommu_IOTLB_invalidation-20240109 11/11]
+ drivers/iommu/intel/svm.c:152:38: warning: variable 'dev_pasid' is
+ uninitialized when used here
+Message-ID: <202401100826.evbTGKns-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,96 +49,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7bf9a4fa-1675-45a6-88dd-82549ae2c6e0@web.de>
 
-Hi,
+tree:   https://github.com/TinaZhangZW/linux.git per-iommu_IOTLB_invalidation-20240109
+head:   74540430ca110f26be1eab1c6f36e915e3d94d66
+commit: 74540430ca110f26be1eab1c6f36e915e3d94d66 [11/11] iommu/vt-d: Remove superfluous IOMMU IOTLB invalidations
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240110/202401100826.evbTGKns-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240110/202401100826.evbTGKns-lkp@intel.com/reproduce)
 
-On Tue, Dec 26, 2023 at 11:12:23AM +0100, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Tue, 26 Dec 2023 11:00:20 +0100
->
-> The kfree() function was called in up to two cases by the
-> __virtio_crypto_akcipher_do_req() function during error handling
-> even if the passed variable contained a null pointer.
-> This issue was detected by using the Coccinelle software.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401100826.evbTGKns-lkp@intel.com/
 
-If the script is short and simple would you mind, in the future,
-including it below the fold -- this may help others do similar work down
-the line -- Or you could also link to a git-managed version like what
-Kees has been doing with his __counted_by patches [1].
+All warnings (new ones prefixed by >>):
 
->
-> * Adjust jump targets.
->
-> * Delete two initialisations which became unnecessary
->   with this refactoring.
->
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
+>> drivers/iommu/intel/svm.c:152:38: warning: variable 'dev_pasid' is uninitialized when used here [-Wuninitialized]
+     152 |                 qi_flush_piotlb(iommu_info->iommu, dev_pasid->did,
+         |                                                    ^~~~~~~~~
+   drivers/iommu/intel/svm.c:144:34: note: initialize the variable 'dev_pasid' to silence this warning
+     144 |         struct dev_pasid_info *dev_pasid;
+         |                                         ^
+         |                                          = NULL
+   1 warning generated.
 
-Nonetheless,
 
-Reviewed-by: Justin Stitt <justinstitt@google.com>
->
-> v2:
-> A typo was fixed for the delimiter of a label.
->
->  drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> index 2621ff8a9376..057da5bd8d30 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> @@ -224,11 +224,11 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
->  	struct virtio_crypto *vcrypto = ctx->vcrypto;
->  	struct virtio_crypto_op_data_req *req_data = vc_req->req_data;
->  	struct scatterlist *sgs[4], outhdr_sg, inhdr_sg, srcdata_sg, dstdata_sg;
-> -	void *src_buf = NULL, *dst_buf = NULL;
-> +	void *src_buf, *dst_buf = NULL;
->  	unsigned int num_out = 0, num_in = 0;
->  	int node = dev_to_node(&vcrypto->vdev->dev);
->  	unsigned long flags;
-> -	int ret = -ENOMEM;
-> +	int ret;
->  	bool verify = vc_akcipher_req->opcode == VIRTIO_CRYPTO_AKCIPHER_VERIFY;
->  	unsigned int src_len = verify ? req->src_len + req->dst_len : req->src_len;
->
-> @@ -239,7 +239,7 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
->  	/* src data */
->  	src_buf = kcalloc_node(src_len, 1, GFP_KERNEL, node);
->  	if (!src_buf)
-> -		goto err;
-> +		return -ENOMEM;
->
->  	if (verify) {
->  		/* for verify operation, both src and dst data work as OUT direction */
-> @@ -254,7 +254,7 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
->  		/* dst data */
->  		dst_buf = kcalloc_node(req->dst_len, 1, GFP_KERNEL, node);
->  		if (!dst_buf)
-> -			goto err;
-> +			goto free_src;
->
->  		sg_init_one(&dstdata_sg, dst_buf, req->dst_len);
->  		sgs[num_out + num_in++] = &dstdata_sg;
-> @@ -277,9 +277,9 @@ static int __virtio_crypto_akcipher_do_req(struct virtio_crypto_akcipher_request
->  	return 0;
->
->  err:
-> -	kfree(src_buf);
->  	kfree(dst_buf);
-> -
-> +free_src:
-> +	kfree(src_buf);
->  	return -ENOMEM;
->  }
->
-> --
-> 2.43.0
->
+vim +/dev_pasid +152 drivers/iommu/intel/svm.c
 
-[1]: https://lore.kernel.org/all/20230922175023.work.239-kees@kernel.org/
+   136	
+   137	static void __flush_svm_range(struct iommu_domain *domain,
+   138					  unsigned long address,
+   139					  unsigned long pages, int ih)
+   140	{
+   141		u32 pasid = mm_get_enqcmd_pasid(domain->mm);
+   142		struct device_domain_info *dev_info;
+   143		struct iommu_domain_info *iommu_info;
+   144		struct dev_pasid_info *dev_pasid;
+   145		unsigned long idx;
+   146	
+   147		if (WARN_ON(!pages))
+   148			return;
+   149	
+   150		rcu_read_lock();
+   151		xa_for_each(&to_dmar_domain(domain)->iommu_array, idx, iommu_info)
+ > 152			qi_flush_piotlb(iommu_info->iommu, dev_pasid->did,
+   153					pasid, address, pages, ih);
+   154	
+   155		list_for_each_entry_rcu(dev_pasid, &to_dmar_domain(domain)->dev_pasids, link_domain) {
+   156			dev_info = dev_iommu_priv_get(dev_pasid->dev);
+   157			if (dev_info->ats_enabled) {
+   158				qi_flush_dev_iotlb_pasid(dev_info->iommu, dev_pasid->sid, dev_info->pfsid,
+   159							 pasid, dev_pasid->qdep, address,
+   160							 order_base_2(pages));
+   161				quirk_extra_dev_tlb_flush(dev_info, address, order_base_2(pages),
+   162							  pasid, dev_pasid->qdep);
+   163			}
+   164		}
+   165		rcu_read_unlock();
+   166	}
+   167	
 
-Thanks
-Justin
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
