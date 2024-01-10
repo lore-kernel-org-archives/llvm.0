@@ -1,195 +1,165 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611E14C3AA
-	for <llvm@lists.linux.dev>; Wed, 10 Jan 2024 15:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2451A4BA9F;
+	Wed, 10 Jan 2024 15:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gsgmrmq9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704899509;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Us6X0KWkozMhwXcHdwQofSm6DacYndDqMN2hE48JuZg=;
-	b=Gsgmrmq9wpAzx0//nG1pxv4KtFGyBxfII/hanYy8QDe+njRdjIJJQ/zhX9V2psGZy+0F8D
-	fdEizJwCkWDZjCxXPLOPBYIlAGkHSi3MROQUn+HDekQAIWg23Wu87EUidxlxYGems/0WxV
-	3Z2S7+aWjN8kOsBZMpuWbD9aR++j/Hk=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-668-_RsQrNPdNrC3fcvsdCJcbg-1; Wed,
- 10 Jan 2024 10:11:48 -0500
-X-MC-Unique: _RsQrNPdNrC3fcvsdCJcbg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CFD9338130B4
-	for <llvm@lists.linux.dev>; Wed, 10 Jan 2024 15:11:47 +0000 (UTC)
-Received: from [172.64.3.46] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B80E53C2E;
-	Wed, 10 Jan 2024 15:11:47 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.7.0,
- mainline.kernel.org-clang, 30194002)
-Date: Wed, 10 Jan 2024 15:11:47 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K9b5hYLE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704900027; x=1736436027;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jgzQtNtP7d7ilSrAKXp1JWSP67QweptKQC9TivZz7f4=;
+  b=K9b5hYLEZCn+U0z6WyOr7IG3Nghj6ZYxRSOVs3uzYsls0WGtc10USCxb
+   f+zT3OFP7+u/a+GWXySRgoKWUogA+XANB4QM2hwCJYVrGONUCbIZPsuLO
+   mhVZhvBfXWzPO29+wUkRVH5uEKC7FXCabdHRSbPNZ66fBTU80/7vBt8sE
+   AXEhzYtCxZtmDZmIKDmjLZiAq5uArUCjiptzEclzXdgc2J2SBxkvt24RC
+   4j71Yfm8aDfkjEqr8ZbhqdW0Tzfr+mqJoog8yg+W850n7ME+QgzhTP0B1
+   bhZ/6pVBKm2Il7c19NOj4s2vXFyPlx4AMX09hNG+Qb1nHGs0jV1Sy5feh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="388988358"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="388988358"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 07:20:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="816384210"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="816384210"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Jan 2024 07:20:06 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rNaNA-0007Bj-0A;
+	Wed, 10 Jan 2024 15:20:04 +0000
+Date: Wed, 10 Jan 2024 23:19:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: block/blk-iocost.c:1183:6: warning: variable 'last_period' set but
+ not used
+Message-ID: <202401102335.GiWdeIo9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
-Message-Id: <22982.124011010114800396@us-mta-668.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ab27740f76654ed58dd32ac0ba0031c18a6dea3b
+commit: ac33e91e2daca40fcad66c68712276da7b40f169 blk-iocost: implement vtime loss compensation
+date:   3 years, 4 months ago
+config: x86_64-buildonly-randconfig-001-20240107 (https://download.01.org/0day-ci/archive/20240110/202401102335.GiWdeIo9-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240110/202401102335.GiWdeIo9-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401102335.GiWdeIo9-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'spi-v6.8' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/broonie/spi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/121927
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
-key"
-            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
-6fe731@paulmck-laptop/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
+>> block/blk-iocost.c:1183:6: warning: variable 'last_period' set but not used [-Wunused-but-set-variable]
+    1183 |         u64 last_period, cur_period;
+         |             ^
+   1 warning generated.
 
 
+vim +/last_period +1183 block/blk-iocost.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1179	
+  1180	static bool iocg_activate(struct ioc_gq *iocg, struct ioc_now *now)
+  1181	{
+  1182		struct ioc *ioc = iocg->ioc;
+> 1183		u64 last_period, cur_period;
+  1184		u64 vtime, vtarget;
+  1185		int i;
+  1186	
+  1187		/*
+  1188		 * If seem to be already active, just update the stamp to tell the
+  1189		 * timer that we're still active.  We don't mind occassional races.
+  1190		 */
+  1191		if (!list_empty(&iocg->active_list)) {
+  1192			ioc_now(ioc, now);
+  1193			cur_period = atomic64_read(&ioc->cur_period);
+  1194			if (atomic64_read(&iocg->active_period) != cur_period)
+  1195				atomic64_set(&iocg->active_period, cur_period);
+  1196			return true;
+  1197		}
+  1198	
+  1199		/* racy check on internal node IOs, treat as root level IOs */
+  1200		if (iocg->child_active_sum)
+  1201			return false;
+  1202	
+  1203		spin_lock_irq(&ioc->lock);
+  1204	
+  1205		ioc_now(ioc, now);
+  1206	
+  1207		/* update period */
+  1208		cur_period = atomic64_read(&ioc->cur_period);
+  1209		last_period = atomic64_read(&iocg->active_period);
+  1210		atomic64_set(&iocg->active_period, cur_period);
+  1211	
+  1212		/* already activated or breaking leaf-only constraint? */
+  1213		if (!list_empty(&iocg->active_list))
+  1214			goto succeed_unlock;
+  1215		for (i = iocg->level - 1; i > 0; i--)
+  1216			if (!list_empty(&iocg->ancestors[i]->active_list))
+  1217				goto fail_unlock;
+  1218	
+  1219		if (iocg->child_active_sum)
+  1220			goto fail_unlock;
+  1221	
+  1222		/*
+  1223		 * Always start with the target budget. On deactivation, we throw away
+  1224		 * anything above it.
+  1225		 */
+  1226		vtarget = now->vnow - ioc->margins.target;
+  1227		vtime = atomic64_read(&iocg->vtime);
+  1228	
+  1229		atomic64_add(vtarget - vtime, &iocg->vtime);
+  1230		atomic64_add(vtarget - vtime, &iocg->done_vtime);
+  1231		vtime = vtarget;
+  1232	
+  1233		/*
+  1234		 * Activate, propagate weight and start period timer if not
+  1235		 * running.  Reset hweight_gen to avoid accidental match from
+  1236		 * wrapping.
+  1237		 */
+  1238		iocg->hweight_gen = atomic_read(&ioc->hweight_gen) - 1;
+  1239		list_add(&iocg->active_list, &ioc->active_iocgs);
+  1240	
+  1241		propagate_weights(iocg, iocg->weight,
+  1242				  iocg->last_inuse ?: iocg->weight, true, now);
+  1243	
+  1244		TRACE_IOCG_PATH(iocg_activate, iocg, now,
+  1245				last_period, cur_period, vtime);
+  1246	
+  1247		iocg->activated_at = now->now;
+  1248	
+  1249		if (ioc->running == IOC_IDLE) {
+  1250			ioc->running = IOC_RUNNING;
+  1251			ioc->debt_busy_at = now->now;
+  1252			ioc_start_period(ioc, now);
+  1253		}
+  1254	
+  1255	succeed_unlock:
+  1256		spin_unlock_irq(&ioc->lock);
+  1257		return true;
+  1258	
+  1259	fail_unlock:
+  1260		spin_unlock_irq(&ioc->lock);
+  1261		return false;
+  1262	}
+  1263	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
