@@ -1,187 +1,158 @@
-Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4616E81F
-	for <llvm@lists.linux.dev>; Wed, 10 Jan 2024 01:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kevinloughlin.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03361378;
+	Wed, 10 Jan 2024 01:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y6FEDrCq"
-Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-7bad62322f0so413462139f.3
-        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 17:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1704850012; x=1705454812; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=k5v8oUBjXEAVbu4/vqslVZCTCJ0ygzsKmcB0GfrIu20=;
-        b=Y6FEDrCqauaXy350WCcMkpiwMMJjQg0QAsyTleEWWpjf8OjWRvwsJfsz7lcYcUDueC
-         G7gSbQDz/XOgJz8/d8ZIKJbezl6R2nsBA9lQ/I9EwiI7U5f7dIHRI3qmfcIRi1qZgres
-         YQ6VI8wnhmQgzmp0eqImx2RqwxQapNo/EjYvGU4hiYDL3Mhn+dGpMy3bdr9HQCTNcNj4
-         K3AacMIpiu/JtGXnNdp9CETzlpy0JMzYfZmk7le/tk3DJq8rrVytLjFkxK8R0WSYEKBo
-         BiJXKXyp8cGMAdUlqFpJMzfauRbOGdM9T90rbj9J3RWm6V5Pl+c5BSQ5QwmphbTY8l52
-         tv4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704850012; x=1705454812;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k5v8oUBjXEAVbu4/vqslVZCTCJ0ygzsKmcB0GfrIu20=;
-        b=nRRldwsLt8Dj7u0QCUpsY+bUWj75Q7P7JXaPLREMSUgsw93/j+X9bWg9zXn4WjWL90
-         rjWOdUajNqBf0Q77uIN09PRtQx8eZqtkPsWmDQ2knYyDdAtspo/KDh9N9v1mxlJ0Mn7X
-         7g1T2fj4m1DaMmEopw4DUtp0/tauG/HKq2Fo7EQ8o8g/67OwNkcH6a91Fru3vQb9Jel0
-         MeqgfaATX5EqPciJtEOXfEqGVThiZwVGduBwEFST2z03KRWuGEa9l7ECi9GNhgh+9Ctt
-         wBoktlNz4xlY14K0qOJaOBSRpfsKf+m3JnVy7/mtXFicCx4PSHIC3ZM6MPpbk200QHgH
-         8RVg==
-X-Gm-Message-State: AOJu0YxS4XJjoRUDv0Djp5hp0W91DhoRm6V8BUDNJcRjscog4pgBVM6d
-	64DxPuUVhJVm2n+hj2sLWX1P4bYVNgjjC8y6BphKIbG0fv8=
-X-Google-Smtp-Source: AGHT+IFw+G2FQxRDkksoxjc8deUmz4WU+ECeujMhwOD2760Mzm4ZYaoCgZNF2Ucn1CHML3j5eZGJdt5/7obNiAMBn9Jp
-X-Received: from loughlin00.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:1b6f])
- (user=kevinloughlin job=sendgmr) by 2002:a05:6638:2645:b0:46e:308a:832 with
- SMTP id n5-20020a056638264500b0046e308a0832mr15553jat.3.1704850012536; Tue,
- 09 Jan 2024 17:26:52 -0800 (PST)
-Date: Wed, 10 Jan 2024 01:26:39 +0000
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QEwwo7M3";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ebU4slKe";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qT90n4rs";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="GllvsqAA"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BDCE32219D;
+	Wed, 10 Jan 2024 01:59:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1704851970;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CSwDIRV4DZMIzyvFLCeYPmg0euy+erTMyxRLYBH8TCQ=;
+	b=QEwwo7M3J3ToASO/jzRmh4ktzgUBNhne74P823fd9a2tKaTyfnztsi5EeHeiNe8LEOEcll
+	nmee9fRgHV7GdUlJc5zy0qHOj34hvaPcgxoD4G532TaWg+oeGPfD6XV8Bo3X9SL3L4Xpxe
+	eJkuEgROHxtOnaMsUuHH0+Lha9kP6z8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1704851970;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CSwDIRV4DZMIzyvFLCeYPmg0euy+erTMyxRLYBH8TCQ=;
+	b=ebU4slKel5Xb3+2CPuaeDWSe8ePOIs9guxXzKMVnU8j6pdaJkXO8M8inuLuGeVwShZFWs2
+	eoVkD7ZTocBF4NDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1704851969;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CSwDIRV4DZMIzyvFLCeYPmg0euy+erTMyxRLYBH8TCQ=;
+	b=qT90n4rsVQFFN0sZezn6U6vVJVpKvhdshTsXLB9i2ID7ZFYsdB6oXVt2hQSAQKtsBFVc7q
+	KrUccxPhPwtzFFK/wS3EkuPzDWrnNB6wXdtObTPsCT8e+3G5l/QfxQMjTSMUPdZlYxyl5E
+	qHZLcwN/ImdI+K3eOv9W631v7VLQ1nc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1704851969;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CSwDIRV4DZMIzyvFLCeYPmg0euy+erTMyxRLYBH8TCQ=;
+	b=GllvsqAAIGwNxW/5c2Bn2N6il5D6rDj9CCh/36j3H+yz753+Dip84OHYIUZwvaHH0SaLiL
+	yCLfOnRFiZN2XRCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A21C313C94;
+	Wed, 10 Jan 2024 01:59:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 0oFlJwH6nWWBDgAAD6G6ig
+	(envelope-from <dsterba@suse.cz>); Wed, 10 Jan 2024 01:59:29 +0000
+Date: Wed, 10 Jan 2024 02:59:11 +0100
+From: David Sterba <dsterba@suse.cz>
+To: kernel test robot <lkp@intel.com>
+Cc: Qu Wenruo <wqu@suse.com>, linux-btrfs@vger.kernel.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 1/3] btrfs: zlib: fix and simplify the inline extent
+ decompression
+Message-ID: <20240110015800.GP28693@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <29b7793e53e1cdd559ad212ee69cec211a3b4db2.1704704328.git.wqu@suse.com>
+ <202401091012.pLm6PcKG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.43.0.275.g3460e3d667-goog
-Message-ID: <20240110012640.1335694-1-kevinloughlin@google.com>
-Subject: [RFC PATCH] x86/sev: x86/sev: enforce PC-relative addressing in clang
-From: Kevin Loughlin <kevinloughlin@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"GitAuthor: Kevin Loughlin" <kevinloughlin@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Kees Cook <keescook@chromium.org>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	Ze Gao <zegao2021@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Pengfei Xu <pengfei.xu@intel.com>, Brijesh Singh <brijesh.singh@amd.com>, 
-	Michael Roth <michael.roth@amd.com>, Ashish Kalra <ashish.kalra@amd.com>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	Joerg Roedel <jroedel@suse.de>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-coco@lists.linux.dev
-Cc: Adam Dunlap <acdunlap@google.com>, Peter Gonda <pgonda@google.com>, 
-	Jacob Xu <jacobhxu@google.com>, Sidharth Telang <sidtelang@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202401091012.pLm6PcKG-lkp@intel.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Level: ***
+X-Spamd-Bar: +++
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=qT90n4rs;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=GllvsqAA
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [3.29 / 50.00];
+	 ARC_NA(0.00)[];
+	 HAS_REPLYTO(0.30)[dsterba@suse.cz];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	 MIME_GOOD(-0.10)[text/plain];
+	 REPLYTO_ADDR_EQ_FROM(0.00)[];
+	 RCPT_COUNT_FIVE(0.00)[5];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.cz:+];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_SPAM_LONG(3.50)[1.000];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,git-scm.com:url,intel.com:email,suse.cz:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.00)[11.44%];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Score: 3.29
+X-Rspamd-Queue-Id: BDCE32219D
+X-Spam-Flag: NO
 
-SEV/SME code can execute prior to page table fixups for kernel
-relocation. However, as with global variables accessed in
-__startup_64(), clang does not currently generate PC-relative accesses
-for SEV/SME global variables, causing certain flavors of SEV hosts and
-guests to crash.
+On Tue, Jan 09, 2024 at 11:02:54AM +0800, kernel test robot wrote:
+> Hi Qu,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on kdave/for-next]
+> [also build test WARNING on next-20240108]
+> [cannot apply to linus/master v6.7]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-zlib-fix-and-simplify-the-inline-extent-decompression/20240108-171206
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+> patch link:    https://lore.kernel.org/r/29b7793e53e1cdd559ad212ee69cec211a3b4db2.1704704328.git.wqu%40suse.com
+> patch subject: [PATCH 1/3] btrfs: zlib: fix and simplify the inline extent decompression
+> config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240109/202401091012.pLm6PcKG-lkp@intel.com/config)
+> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401091012.pLm6PcKG-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202401091012.pLm6PcKG-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> fs/btrfs/zlib.c:402:15: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+>      401 |                 pr_warn_ratelimited("BTRFS: infalte failed, decompressed=%lu expected=%lu\n",
+>          |                                                                                       ~~~
+>          |                                                                                       %zu
+>      402 |                                         to_copy, destlen);
+>          |                                                  ^~~~~~~
 
-While an attempt was made to force PC-relative addressing for certain
-global SEV/SME variables via inline assembly (see snp_cpuid_get_table()
-for example), PC-relative addressing must be pervasively-enforced for
-SEV/SME global variables that can be accessed prior to page table
-fixups.
-
-To avoid the error-prone approach of manually referencing each SEV/SME
-global variable via a general form of snp_cpuid_get_table(), it is
-preferable to use compiler flags for position-independent code (ex:
-`-fPIE`) that result in PC-relative accesses. While architecture-
-specific code for Linux can be pervasively compiled as position-
-independent on select architectures (ex: RISC-V), this is not currently
-the case for x86-64 and would require extensive changes (see "[PATCH
-RFC 00/43] x86/pie: Make kernel image's virtual address flexible" for
-example).
-
-Fortunately, the relevant files for SEV/SME code do indeed support
-position-independent clang compilation, so we can use this technique to
-ensure all global variables in these files are accessed via PC-relative
-addressing.
-
-Unlike clang, gcc does not currently allow `-fPIE` in conjunction with
-`mcmodel=kernel`. Thus, to preserve existing gcc behavior, this patch
-does not remove the (otherwise unnecessary) inline assembly that
-already enforces PC-relative addressing for select SEV/SME globals
-(mentioned above). If gcc supports these joint options in the future,
-we can remove such inline assembly and also apply this patch to gcc
-builds.
-
-Tested by successful boot of SEV-SNP guest built with clang, alongside
-Adam Dunlap's necessary "[PATCH v2] x86/asm: Force native_apic_mem_read
-to use mov".
-
-Fixes: 95d33bfaa3e1 ("x86/sev: Register GHCB memory when SEV-SNP is active")
-Fixes: ee0bfa08a345 ("x86/compressed/64: Add support for SEV-SNP CPUID table in #VC handlers")
-Fixes: 1cd9c22fee3a ("x86/mm/encrypt: Move page table helpers into separate translation unit")
-Fixes: c9f09539e16e ("x86/head/64: Check SEV encryption before switching to kernel page-table")
-Fixes: b577f542f93c ("x86/coco: Add API to handle encryption mask")
-Tested-by: Kevin Loughlin <kevinloughlin@google.com>
-Signed-off-by: Kevin Loughlin <kevinloughlin@google.com>
----
- arch/x86/coco/Makefile   | 10 ++++++++++
- arch/x86/kernel/Makefile | 10 ++++++++++
- arch/x86/mm/Makefile     | 13 +++++++++++++
- 3 files changed, 33 insertions(+)
-
-diff --git a/arch/x86/coco/Makefile b/arch/x86/coco/Makefile
-index c816acf78b6a..286950596ee9 100644
---- a/arch/x86/coco/Makefile
-+++ b/arch/x86/coco/Makefile
-@@ -5,4 +5,14 @@ CFLAGS_core.o		+= -fno-stack-protector
- 
- obj-y += core.o
- 
-+# clang allows -fPIE with mcmodel=kernel; gcc currently does not.
-+ifdef CONFIG_CC_IS_CLANG
-+# Enforce PC-relative addressing for SEV/SME global variables.
-+CFLAGS_core.o		+= -fPIE
-+# Disable relocation relaxation in case the link is not PIE.
-+CFLAGS_core.o 		+= $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
-+# Avoid unnecessary GOT overhead in PC-relative addressing.
-+CFLAGS_core.o 		+= -include $(srctree)/include/linux/hidden.h
-+endif
-+
- obj-$(CONFIG_INTEL_TDX_GUEST)	+= tdx/
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 0000325ab98f..bf85f9de89e9 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -7,6 +7,16 @@ extra-y	+= vmlinux.lds
- 
- CPPFLAGS_vmlinux.lds += -U$(UTS_MACHINE)
- 
-+# clang allows -fPIE with mcmodel=kernel; gcc currently does not.
-+ifdef CONFIG_CC_IS_CLANG
-+# Enforce PC-relative addressing for SEV/SME global variables.
-+CFLAGS_sev.o += -fPIE
-+# Disable relocation relaxation in case the link is not PIE.
-+CFLAGS_sev.o += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
-+# Avoid unnecessary GOT overhead in PC-relative addressing.
-+CFLAGS_sev.o += -include $(srctree)/include/linux/hidden.h
-+endif
-+
- ifdef CONFIG_FUNCTION_TRACER
- # Do not profile debug and lowlevel utilities
- CFLAGS_REMOVE_tsc.o = -pg
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index c80febc44cd2..7abf20a94451 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -17,6 +17,19 @@ KCSAN_SANITIZE := n
- # Avoid recursion by not calling KMSAN hooks for CEA code.
- KMSAN_SANITIZE_cpu_entry_area.o := n
- 
-+# clang allows -fPIE with mcmodel=kernel; gcc currently does not.
-+ifdef CONFIG_CC_IS_CLANG
-+# Enforce PC-relative addressing for SEV/SME global variables.
-+CFLAGS_mem_encrypt_amd.o 	+= -fPIE
-+CFLAGS_mem_encrypt_identity.o 	+= -fPIE
-+# Disable relocation relaxation in case the link is not PIE.
-+CFLAGS_mem_encrypt_amd.o 	+= $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
-+CFLAGS_mem_encrypt_identity.o 	+= $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
-+# Avoid unnecessary GOT overhead in PC-relative addressing.
-+CFLAGS_mem_encrypt_amd.o 	+= -include $(srctree)/include/linux/hidden.h
-+CFLAGS_mem_encrypt_identity.o 	+= -include $(srctree)/include/linux/hidden.h
-+endif
-+
- ifdef CONFIG_FUNCTION_TRACER
- CFLAGS_REMOVE_mem_encrypt.o		= -pg
- CFLAGS_REMOVE_mem_encrypt_amd.o		= -pg
--- 
-2.43.0.275.g3460e3d667-goog
-
+Valid report but I can't reproduce it. Built with clang 17 and
+explicitly enabled -Wformat. We have additional warnings enabled per
+directory fs/btrfs/ so we can add -Wformat, I'd like to know what I'm
+missing, we've had fixups for the size_t printk format so it would make
+sense to catch it early.
