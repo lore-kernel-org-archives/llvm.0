@@ -1,92 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20F4495CC;
-	Wed, 10 Jan 2024 13:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808EC4BAA4;
+	Wed, 10 Jan 2024 14:56:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1jPPPfb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14496C433C7;
-	Wed, 10 Jan 2024 13:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704894507;
-	bh=Mpj9MmpWsZ0QXa3z+JG9y8iO9570kyRUme6G8UyY3ns=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V1jPPPfbtZjWicjR/pXvV3fvfEd+WTpUYKesK1ver/unl0yUXsY4TkjQIutQjBRsP
-	 rP/Oz0q/0h14UEjOgFaxFG624+eWlJ/AO+ivv3TYC1sZnL+hL4/+Alo/46tP000hXg
-	 zplNZ64lLrfkj8J9hOzdzzP2smKm7MeEZ/IYISeNp94tvvX509RdtM1WHeyhjMm5jx
-	 6PVp6J9lR2f0adpYnosG4kNDW+C6yKAzSmFoUpH39oONuTUSb402zXo2PYbzqdDyDw
-	 8BKfIvBQaR2VfeSzJy9k28uur98lcaUtFQRjhOYk1Xziu9Q+q1jecwOjEuD67FrH9y
-	 AnuUlci6GEj1Q==
-Date: Wed, 10 Jan 2024 13:48:20 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: akpm@linux-foundation.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-efi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-mm@kvack.org, bridge@lists.linux.dev, netdev@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] arch and include: Update LLVM Phabricator links
-Message-ID: <20240110-apostle-trident-533d4c2c9c97@spud>
-References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
- <20240109-update-llvm-links-v1-2-eb09b59db071@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MFMLifwQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704898567; x=1736434567;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=F3WiUFbxHTe7eB0jKLKknHEdlY9fonsHIWBBHR4FDH0=;
+  b=MFMLifwQxZI11JHF7HOvT52xSO3F0cySgeIGG+JwxdsngolR6/02YBs4
+   LbsukiWayriq9fG0hEJ4PTwhYcVV8wkKDukVIwHXZOhGz61KJ/oUqPJ5s
+   isapLn/c6Ri2wq0Dn+DQp6T4DZ/IeRkMwvO+YWG/ZOzHVnhsQrYjSAo3Q
+   XUR/uCFCEJkyrq5Gyg2Q4ps6Zv/U50AhjTV+ALYE27s+pl1AEe9zkYtZR
+   TKevRgg5zXbsBMPFwliE5Blc2GUx16TP9Rr62KO0eCaxPIWZljlFsVkos
+   FKsWaPWdHotSJ1Xpk1b0yUYP4VcwooQQdqL9Jo2NXWtS9o93Mc7GK9kX/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="11884695"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="11884695"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 06:56:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="16673378"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 10 Jan 2024 06:56:04 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rNZzt-000798-2j;
+	Wed, 10 Jan 2024 14:56:01 +0000
+Date: Wed, 10 Jan 2024 22:55:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vlad Buslov <vladbu@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Maor Dickman <maord@nvidia.com>, Roi Dayan <roid@nvidia.com>
+Subject: drivers/net/ethernet/mellanox/mlx5/core/esw/bridge.c:1833:4:
+ warning: 'snprintf' will always be truncated; specified size is 80, but
+ format string expands to at least 94
+Message-ID: <202401102205.XmxWrS5y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="p6SYI+U6gP5vpK1M"
-Content-Disposition: inline
-In-Reply-To: <20240109-update-llvm-links-v1-2-eb09b59db071@kernel.org>
-
-
---p6SYI+U6gP5vpK1M
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 09, 2024 at 03:16:30PM -0700, Nathan Chancellor wrote:
-> reviews.llvm.org was LLVM's Phabricator instances for code review. It
-> has been abandoned in favor of GitHub pull requests. While the majority
-> of links in the kernel sources still work because of the work Fangrui
-> has done turning the dynamic Phabricator instance into a static archive,
-> there are some issues with that work, so preemptively convert all the
-> links in the kernel sources to point to the commit on GitHub.
->=20
-> Most of the commits have the corresponding differential review link in
-> the commit message itself so there should not be any loss of fidelity in
-> the relevant information.
->=20
-> Link: https://discourse.llvm.org/t/update-on-github-pull-requests/71540/1=
-72
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ab27740f76654ed58dd32ac0ba0031c18a6dea3b
+commit: 70f0302b3f2053b64a6a653a76a20cb95438dc85 net/mlx5: Bridge, implement mdb offload
+date:   9 months ago
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240110/202401102205.XmxWrS5y-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 7e186d366d6c7def0543acc255931f617e76dff0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240110/202401102205.XmxWrS5y-lkp@intel.com/reproduce)
 
->  arch/riscv/Kconfig              | 2 +-
->  arch/riscv/include/asm/ftrace.h | 2 +-
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401102205.XmxWrS5y-lkp@intel.com/
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Conor.
+>> drivers/net/ethernet/mellanox/mlx5/core/esw/bridge.c:1833:4: warning: 'snprintf' will always be truncated; specified size is 80, but format string expands to at least 94 [-Wformat-truncation-non-kprintf]
+    1833 |                         NL_SET_ERR_MSG_FMT_MOD(extack,
+         |                         ^
+   include/linux/netlink.h:130:2: note: expanded from macro 'NL_SET_ERR_MSG_FMT_MOD'
+     130 |         NL_SET_ERR_MSG_FMT((extack), KBUILD_MODNAME ": " fmt, ##args)
+         |         ^
+   include/linux/netlink.h:115:6: note: expanded from macro 'NL_SET_ERR_MSG_FMT'
+     115 |         if (snprintf(__extack->_msg_buf, NETLINK_MAX_FMTMSG_LEN,               \
+         |             ^
+   1 warning generated.
 
---p6SYI+U6gP5vpK1M
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +/snprintf +1833 drivers/net/ethernet/mellanox/mlx5/core/esw/bridge.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZ6gJAAKCRB4tDGHoIJi
-0mIlAQCj5ZP6QEhEswWYjX38obn/p3pF8mt+Ve+vlBnVEhAW8QD8ClRvKxDiajR5
-Zp8ES/FLDyH/QJ5QjGuYLP5PATLeFAY=
-=SqXc
------END PGP SIGNATURE-----
+  1805	
+  1806	int mlx5_esw_bridge_port_mdb_add(u16 vport_num, u16 esw_owner_vhca_id, const unsigned char *addr,
+  1807					 u16 vid, struct mlx5_esw_bridge_offloads *br_offloads,
+  1808					 struct netlink_ext_ack *extack)
+  1809	{
+  1810		struct mlx5_esw_bridge_vlan *vlan;
+  1811		struct mlx5_esw_bridge_port *port;
+  1812		struct mlx5_esw_bridge *bridge;
+  1813		int err;
+  1814	
+  1815		port = mlx5_esw_bridge_port_lookup(vport_num, esw_owner_vhca_id, br_offloads);
+  1816		if (!port) {
+  1817			esw_warn(br_offloads->esw->dev,
+  1818				 "Failed to lookup bridge port to add MDB (MAC=%pM,vport=%u)\n",
+  1819				 addr, vport_num);
+  1820			NL_SET_ERR_MSG_FMT_MOD(extack,
+  1821					       "Failed to lookup bridge port to add MDB (MAC=%pM,vport=%u)\n",
+  1822					       addr, vport_num);
+  1823			return -EINVAL;
+  1824		}
+  1825	
+  1826		bridge = port->bridge;
+  1827		if (bridge->flags & MLX5_ESW_BRIDGE_VLAN_FILTERING_FLAG && vid) {
+  1828			vlan = mlx5_esw_bridge_vlan_lookup(vid, port);
+  1829			if (!vlan) {
+  1830				esw_warn(br_offloads->esw->dev,
+  1831					 "Failed to lookup bridge port vlan metadata to create MDB (MAC=%pM,vid=%u,vport=%u)\n",
+  1832					 addr, vid, vport_num);
+> 1833				NL_SET_ERR_MSG_FMT_MOD(extack,
+  1834						       "Failed to lookup bridge port vlan metadata to create MDB (MAC=%pM,vid=%u,vport=%u)\n",
+  1835						       addr, vid, vport_num);
+  1836				return -EINVAL;
+  1837			}
+  1838		}
+  1839	
+  1840		err = mlx5_esw_bridge_port_mdb_attach(port, addr, vid);
+  1841		if (err) {
+  1842			NL_SET_ERR_MSG_FMT_MOD(extack, "Failed to add MDB (MAC=%pM,vid=%u,vport=%u)\n",
+  1843					       addr, vid, vport_num);
+  1844			return err;
+  1845		}
+  1846	
+  1847		return 0;
+  1848	}
+  1849	
 
---p6SYI+U6gP5vpK1M--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
