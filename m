@@ -1,81 +1,62 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619784A34;
-	Wed, 10 Jan 2024 02:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E02D1871
+	for <llvm@lists.linux.dev>; Wed, 10 Jan 2024 02:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="eaUBz3w+";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="49iOJqPx";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="eaUBz3w+";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="49iOJqPx"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 22D0E221AC;
-	Wed, 10 Jan 2024 02:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1704854591;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VlOLXaLHsvBHWrXcO9mQTBfes0KgQuEY5TMFdGN05uE=;
-	b=eaUBz3w++O+GAjx7bmqiAFB4iYpgPTmG2ozstOmZk+M1VTSZ5fGCUcXIEge5elUEeBtAop
-	O2J27HQD7eYqBy6u5lL32V3rhC52l3sOxnVgvquEs4QyqAXm0grj0rwEY+musviHaQpWNj
-	fcXdn30z53LoS7rXq7ULGpXjBjznUKo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1704854591;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VlOLXaLHsvBHWrXcO9mQTBfes0KgQuEY5TMFdGN05uE=;
-	b=49iOJqPx0OLO2o8J58p5N7Fvftm70JjTiDNE6IwxrHUGdx6eH9FRyplYYeK1/SDEN6yrlR
-	37vrorziHQZ/1ZCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1704854591;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VlOLXaLHsvBHWrXcO9mQTBfes0KgQuEY5TMFdGN05uE=;
-	b=eaUBz3w++O+GAjx7bmqiAFB4iYpgPTmG2ozstOmZk+M1VTSZ5fGCUcXIEge5elUEeBtAop
-	O2J27HQD7eYqBy6u5lL32V3rhC52l3sOxnVgvquEs4QyqAXm0grj0rwEY+musviHaQpWNj
-	fcXdn30z53LoS7rXq7ULGpXjBjznUKo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1704854591;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VlOLXaLHsvBHWrXcO9mQTBfes0KgQuEY5TMFdGN05uE=;
-	b=49iOJqPx0OLO2o8J58p5N7Fvftm70JjTiDNE6IwxrHUGdx6eH9FRyplYYeK1/SDEN6yrlR
-	37vrorziHQZ/1ZCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F376A13786;
-	Wed, 10 Jan 2024 02:43:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Fcs+Oz4EnmUeJQAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Wed, 10 Jan 2024 02:43:10 +0000
-Date: Wed, 10 Jan 2024 03:42:56 +0100
-From: David Sterba <dsterba@suse.cz>
-To: Qu Wenruo <wqu@suse.com>
-Cc: dsterba@suse.cz, kernel test robot <lkp@intel.com>,
-	linux-btrfs@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 1/3] btrfs: zlib: fix and simplify the inline extent
- decompression
-Message-ID: <20240110024256.GR28693@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <29b7793e53e1cdd559ad212ee69cec211a3b4db2.1704704328.git.wqu@suse.com>
- <202401091012.pLm6PcKG-lkp@intel.com>
- <20240110015800.GP28693@twin.jikos.cz>
- <e3c5ace5-4266-4a6a-9836-f58f5fff66fe@suse.com>
- <20240110022643.GQ28693@twin.jikos.cz>
- <3fdafc03-91e6-4c36-9d10-417c07222d0b@suse.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WalxmtNe"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d542701796so17027075ad.1
+        for <llvm@lists.linux.dev>; Tue, 09 Jan 2024 18:56:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1704855380; x=1705460180; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Cqsu0sVJlmIzMpcIruHiSjowcwNftxKzZNL1LWKgYE=;
+        b=WalxmtNeDUcRr7RRHcWTbepU2gX2YWVQ0dJT7NhQm6cM31XZX2ZJSlXP07A2tFwF5h
+         aA3XYAl7oJQ3WngkMI6r/93IJxstbbL4wClN5PzBypSOklAwd/R1ry8UnQmkxZTiG8SG
+         8DxeoD2sOBIOUGUsU6BDcjBt9hufn4ivmMXmo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704855380; x=1705460180;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Cqsu0sVJlmIzMpcIruHiSjowcwNftxKzZNL1LWKgYE=;
+        b=eBzXv1z3f900aDZqez0oYvovySq+NUFjnHaHCb8X2dsT6Ywh35/BZ+jEcdx/iWa8EV
+         4nLlNCk3xvGCL7XkwyK+THKhCzZYJZ0j653dsKpbw1P3IWmFzvp0kMLR+uISW244mna4
+         Izm7nc9SCW18Bk0mxqJ5QU3b1tmkB94iFTy5qJJDH5oS+i840jNvkl5eG82eWlv0ZhBz
+         geeT56m/TuDLD7O+Vrj3lYhbd54Du+lwRIGBICaGym1ORMVTy18stWsZJKI09NMjb8DK
+         74LolmHWQ444FRCkdqrTXgbUxMHUU0zWNI6vqjRpbi5YgA9Kbj7aC3gb+oIYdUF6AKUD
+         ngKQ==
+X-Gm-Message-State: AOJu0Yy37QsrVRR6RJmH7KWq+FZvOGX/4V0Qa4IqcLoxgLxtO6lrIKHL
+	Gkyx6V2QTQ21BaMsS7jIP0+PF76tyBmx
+X-Google-Smtp-Source: AGHT+IEngKshpq/yhOR1WVK0GZhLIsH5bOdw67YXV/WIQFr2uAaYISZM9GXBETQxfJL/bytuG/mwLA==
+X-Received: by 2002:a17:903:32c7:b0:1d4:c97f:e6e4 with SMTP id i7-20020a17090332c700b001d4c97fe6e4mr349227plr.80.1704855379715;
+        Tue, 09 Jan 2024 18:56:19 -0800 (PST)
+Received: from google.com ([2401:fa00:8f:203:b1d0:e755:54c2:4518])
+        by smtp.gmail.com with ESMTPSA id jg5-20020a17090326c500b001d4ac461a6fsm2521332plb.86.2024.01.09.18.56.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 18:56:19 -0800 (PST)
+Date: Wed, 10 Jan 2024 11:56:14 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	"Gustavo A . R . Silva" <gustavo@embeddedor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] Compiler Attributes: counted_by: bump compiler versions
+Message-ID: <20240110025614.GA1282549@google.com>
+References: <20240109133633.1103876-1-senozhatsky@chromium.org>
+ <20240109153249.GA205400@dev-arch.thelio-3990X>
+ <CANiq72kjHCh-inyv1aU=eNca1-+E0_85MGU-8qbZZtzbC_VwOQ@mail.gmail.com>
+ <20240109195652.GA1253215@dev-arch.thelio-3990X>
+ <202401091311.08D6FF677@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,104 +65,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3fdafc03-91e6-4c36-9d10-417c07222d0b@suse.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Level: **
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 22D0E221AC
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=eaUBz3w+;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=49iOJqPx
-X-Spam-Score: -4.21
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-4.21 / 50.00];
-	 ARC_NA(0.00)[];
-	 HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 REPLYTO_ADDR_EQ_FROM(0.00)[];
-	 RCPT_COUNT_FIVE(0.00)[6];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 DKIM_TRACE(0.00)[suse.cz:+];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-0.977];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%]
+In-Reply-To: <202401091311.08D6FF677@keescook>
 
-On Wed, Jan 10, 2024 at 01:04:06PM +1030, Qu Wenruo wrote:
-> >>>>
-> >>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> >>>> the same patch/commit), kindly add following tags
-> >>>> | Reported-by: kernel test robot <lkp@intel.com>
-> >>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202401091012.pLm6PcKG-lkp@intel.com/
-> >>>>
-> >>>> All warnings (new ones prefixed by >>):
-> >>>>
-> >>>>>> fs/btrfs/zlib.c:402:15: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-> >>>>        401 |                 pr_warn_ratelimited("BTRFS: infalte failed, decompressed=%lu expected=%lu\n",
-> >>>>            |                                                                                       ~~~
-> >>>>            |                                                                                       %zu
-> >>>>        402 |                                         to_copy, destlen);
-> >>>>            |                                                  ^~~~~~~
-> >>>
-> >>> Valid report but I can't reproduce it. Built with clang 17 and
-> >>> explicitly enabled -Wformat. We have additional warnings enabled per
-> >>> directory fs/btrfs/ so we can add -Wformat, I'd like to know what I'm
-> >>> missing, we've had fixups for the size_t printk format so it would make
-> >>> sense to catch it early.
-> >>
-> >> I guess it's due to the platform? (The report is from 32bit system).
+On (24/01/09 13:12), Kees Cook wrote:
+> > If I understand the doucmentation at [1] correctly, the first round of
+> > testing starts with -rc1 and ends with -rc2, so if the feature is not
+> > merged by -rc2, it won't make that release cycle. I think counted_by
+> > might be a hard sell even after -rc1 because the feature is not exactly
+> > small but it is also not expansive (it is relatively self contained
+> > from what I can tell). So I think your plan is reasonable.
 > > 
-> > Ah I see, I build on 64bit platform but should the Wformat warning also
-> > point out mismatch there? The size_t type is an alias of unsigned long
-> > so it is not an error but when size_t and %zu don't match could be a
-> > platform-independent error, no? This would save us reports and followup
-> > fixups roundtrips.
+> > Another alternative would be to split this patch in to three distinct
+> > patches, not sure if that would be overkill for this though.
+> > 
+> > 1. Update the clang review link from reviews.llvm.org to github.com
+> > 2. Update the GCC version from 14 to 15.
+> > 3. Update the Clang version from 18 to 19.
+> > 
+> > The first two patches could be picked up immediately and the third one
+> > could be sat on to see how the review and acceptance process works out
+> > over the next couple of weeks. Up to you/Sergey. Thanks for taking a
+> > look!
 > 
-> size_t is defined differently, in include/uapi/asm-generic/posix_types.h:
-> 
-> /*
->   * Most 32 bit architectures use "unsigned int" size_t,
->   * and all 64 bit architectures use "unsigned long" size_t.
->   */
-> #ifndef __kernel_size_t
-> #if __BITS_PER_LONG != 64
-> typedef unsigned int    __kernel_size_t;
-> typedef int             __kernel_ssize_t;
-> typedef int             __kernel_ptrdiff_t;
-> #else
-> typedef __kernel_ulong_t __kernel_size_t;
-> typedef __kernel_long_t __kernel_ssize_t;
-> typedef __kernel_long_t __kernel_ptrdiff_t;
-> #endif
-> #endif
-> 
-> Thus this is the reason why we need @zu for size_t to handle the 
-> difference, and since for 64bit it's just unsigned long, thus compiler 
-> won't give any warning.
+> Yeah, I think either the above split or just wait until the Clang 18
+> cut, since we've got a while before the next kernel merge window.
 
-So it's the int/long difference and kernel does it in a special way due
-to absence of the standard libc headers.
+Thanks everyone for the comments!
 
-> (That's also why I tend to not use size_t at all, and why I like rust's 
-> explicit sized type, and we may want to go that path to prefer 
-> u8/u16/u32/u64 when possible)
-
-Yeah, from what I've seen so far is that size_t brings us only problems,
-I would not mind conversions to explicit types like u32 or u64. We do
-that in many places, I think it's namely on the interface boundaries
-where we provide a callback with a size_t type, but from that down it
-could be u64.
-
-Quick grep for size_t returns 300+ lines and 100+ of that is ssize_t,
-that's still a lot so the conversions should be targeted.
+I'd probably prefer to split the patch and take the obvious and
+trivial fixups now, and once clang -rc2 is tagged we can return
+to clang min version requirement (if we won't forget :))
