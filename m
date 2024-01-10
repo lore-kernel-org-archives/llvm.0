@@ -1,94 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C8C4EB5B;
-	Wed, 10 Jan 2024 20:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957234A9B7;
+	Wed, 10 Jan 2024 21:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddUka3t7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5333C433F1;
-	Wed, 10 Jan 2024 20:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704919615;
-	bh=Xg9lnyE22VXBwPU3Db8PJTmAlrZRAYVmPEj0reyp/xk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=ddUka3t7mdfb7aNEzNWt0XPMdGO8JhXJrDJZP9a6oDnAytItdEoD109gfkGMn8Yto
-	 ydF/Ld5JzHMD/xSELZsIua5ZOFI9VtemkNUiEAeY4071m5cFTkFsRPXMg40W8eb9ma
-	 he3Q2wU5l1t7D4lww4Crmv7BJXYfbZJki6+RAOu0m3p1Vmn3OxGWxLcRxJsM8mB00Q
-	 o1iI1xy0rzG5qvK/NBDFCitsDl2R6hbL65XJbS01RdjFBeoTgFNP4uVSmTMKWz68qz
-	 6MkiFE9uWzbxsyNde0ycmxnUmwehzMGvyxJWtdw/sx8OR76G1j/t2TUIsHftP/jY95
-	 mNRssX/YTxtNw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 10 Jan 2024 13:46:47 -0700
-Subject: [PATCH] drm/amd/display: Avoid enum conversion warning
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M+eI4sNx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704920432; x=1736456432;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c+zESqkNjNEwU25hDY2YZwHVqYRNYH8ez7OmV4ce+9Q=;
+  b=M+eI4sNx5Vr2CP8uiF0rBl8SzAQQIRI2twyo2e930Wsz9hzRNDunP3f4
+   J2mPdDMnec+8h4YCl0hELsbyj4s6v6R169sS+oOxgA5LK25hp5Ge5yHaI
+   t5c0lhTKo89PnEVA8SVC5RC1BLyw4IPHxRU3fnBsluXcpDxRONJll68Kf
+   kLVlNTv3gKDQ8cWJwIABctr/xnKRI1zPODMudOuf5QQag9A6+R0tpUyJ0
+   1osJ+s+Dxg6m6nTCqiXTHgUTyvpj/ajT51uINv5ATOf5HAJpkgHJYrDbj
+   0jnijJJH1/o+vTsVMATMHlMIa5OOcN8r4wTAIUhou0J31ymArsRD/rwFL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="484832821"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="484832821"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 13:00:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="816481782"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="816481782"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Jan 2024 13:00:29 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rNfgZ-0007UG-11;
+	Wed, 10 Jan 2024 21:00:27 +0000
+Date: Thu, 11 Jan 2024 04:59:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peichen Huang <peichen.huang@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Cruise Hung <cruise.hung@amd.com>
+Subject: [linux-next:master 12891/13109]
+ drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_dpia_bw.c:548:24:
+ warning: arithmetic between different enumeration types ('const enum
+ dc_link_rate' and 'const enum dc_lane_count')
+Message-ID: <202401110427.FNT67xeQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240110-amdgpu-display-enum-enum-conversion-v1-1-953ae94fe15e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIADYCn2UC/yWNQQqDMBBFryKz7kASUgpeRVxMzZgOmBgSFEW8u
- 9FuHrzF+/+Awlm4QNsckHmVInOsol8NDD+KnlFcdTDKWKW1QgrOpwWdlDTRjhyX8Mcwx5Xz3SM
- b+9bkvqOlD9SllHmU7Xnp+vO8ANYejTt1AAAA
-To: harry.wentland@amd.com, sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com, 
- alexander.deucher@amd.com
-Cc: christian.koenig@amd.com, Xinhui.Pan@amd.com, peichen.huang@amd.com, 
- cruise.hung@amd.com, arnd@arndb.de, amd-gfx@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2136; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Xg9lnyE22VXBwPU3Db8PJTmAlrZRAYVmPEj0reyp/xk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKnzmezmflB5KuXzq2ftB+Yf0q8vq8t/8jP2v7fI1bukf
- 4eE7ZqIjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRlbcZ/scdubnz1PZVen46
- 6h0fI09tVYic6uAwP6y0/pew3GzBI66MDI8cDxxJ3vRmmfSsb847Dv75b89ePy/wx8W54T7/3j0
- yn8wOAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Clang warns (or errors with CONFIG_WERROR=y) when performing arithmetic
-with different enumerated types, which is usually a bug:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   8cb47d7cd090a690c1785385b2f3d407d4a53ad0
+commit: 5f3bce13266e6fe2f7a46f94d8bc94d5274e276b [12891/13109] drm/amd/display: Request usb4 bw for mst streams
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240111/202401110427.FNT67xeQ-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240111/202401110427.FNT67xeQ-lkp@intel.com/reproduce)
 
-    drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_dpia_bw.c:548:24: error: arithmetic between different enumeration types ('const enum dc_link_rate' and 'const enum dc_lane_count') [-Werror,-Wenum-enum-conversion]
-      548 |                         link_cap->link_rate * link_cap->lane_count * LINK_RATE_REF_FREQ_IN_KHZ * 8;
-          |                         ~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-    1 error generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401110427.FNT67xeQ-lkp@intel.com/
 
-In this case, there is not a problem because the enumerated types are
-basically treated as '#define' values. Add an explicit cast to an
-integral type to silence the warning.
+All warnings (new ones prefixed by >>):
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1976
-Fixes: 5f3bce13266e ("drm/amd/display: Request usb4 bw for mst streams")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_dpia_bw.c:548:24: warning: arithmetic between different enumeration types ('const enum dc_link_rate' and 'const enum dc_lane_count') [-Wenum-enum-conversion]
+     548 |                         link_cap->link_rate * link_cap->lane_count * LINK_RATE_REF_FREQ_IN_KHZ * 8;
+         |                         ~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c
-index 4ef1a6a1d129..dd0d2b206462 100644
---- a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_dpia_bw.c
-@@ -544,8 +544,9 @@ int link_dp_dpia_get_dp_overhead_in_dp_tunneling(struct dc_link *link)
- 		 */
- 		const struct dc_link_settings *link_cap =
- 			dc_link_get_link_cap(link);
--		uint32_t link_bw_in_kbps =
--			link_cap->link_rate * link_cap->lane_count * LINK_RATE_REF_FREQ_IN_KHZ * 8;
-+		uint32_t link_bw_in_kbps = (uint32_t)link_cap->link_rate *
-+					   (uint32_t)link_cap->lane_count *
-+					   LINK_RATE_REF_FREQ_IN_KHZ * 8;
- 		link_mst_overhead = (link_bw_in_kbps / 64) + ((link_bw_in_kbps % 64) ? 1 : 0);
- 	}
- 
 
----
-base-commit: 6e7a29f011ac03a765f53844f7c3f04cdd421715
-change-id: 20240110-amdgpu-display-enum-enum-conversion-e2451adbf4a7
+vim +548 drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_dpia_bw.c
 
-Best regards,
+   531	
+   532	int link_dp_dpia_get_dp_overhead_in_dp_tunneling(struct dc_link *link)
+   533	{
+   534		int dp_overhead = 0, link_mst_overhead = 0;
+   535	
+   536		if (!get_bw_alloc_proceed_flag((link)))
+   537			return dp_overhead;
+   538	
+   539		/* if its mst link, add MTPH overhead */
+   540		if ((link->type == dc_connection_mst_branch) &&
+   541			!link->dpcd_caps.channel_coding_cap.bits.DP_128b_132b_SUPPORTED) {
+   542			/* For 8b/10b encoding: MTP is 64 time slots long, slot 0 is used for MTPH
+   543			 * MST overhead is 1/64 of link bandwidth (excluding any overhead)
+   544			 */
+   545			const struct dc_link_settings *link_cap =
+   546				dc_link_get_link_cap(link);
+   547			uint32_t link_bw_in_kbps =
+ > 548				link_cap->link_rate * link_cap->lane_count * LINK_RATE_REF_FREQ_IN_KHZ * 8;
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
