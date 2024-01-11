@@ -1,94 +1,118 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4B515483
-	for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 11:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB0D15AEF;
+	Thu, 11 Jan 2024 12:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SirfIEJb"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-336788cb261so4319168f8f.3
-        for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 03:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704971795; x=1705576595; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lMrj071u8QxSrpPG+XgJOGjzHRcUM7yJCNZgbHu8j4E=;
-        b=SirfIEJbnmj7KfWKB9dwcWzjaMkGihywvvtUTL3DEI6smlJE7vmzmWssppkKRnbvtg
-         gc0JVyUjlffRa6Zqz4twsWm75KkF03wN6b9uepPsHX/D7QgA+bs7BINcfCOLYZQ5Xaip
-         ZtC6KV+TFeuPpRoHOLP+MRk55kRoddxvCdIveb+Bi+lgmPopW75gFL3XitGMY3WfbiFg
-         5pPDBQa+UgKCPMXV9bzqa0tukvHaXUV5jqHunGmK0gwLZwsxb/zbXrvDudozqh73CEGj
-         ZOGwqNBwB+4qOW2bpem/clTiMi0s7hrF4Ivhj36aL1gN7NXU0Gz6VoU3jib4NG//wcuF
-         HPIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704971795; x=1705576595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lMrj071u8QxSrpPG+XgJOGjzHRcUM7yJCNZgbHu8j4E=;
-        b=MT+JWkpahZlBiAQC1floHyVB7iCDjT6qlOb8KGD1fL/zYrbqqnaVD/S5Tww+VLtmJj
-         H0i4klMl6jdZfvEDZeqL8kImmp5CXIzKR48Gi8yXldOeT1aSiedcQmE87ScgEF355J/r
-         uwRt69qC82tM0YjT8BQuijLDEywL5LERE25Vc+Ev6z0eUTPj85xMGnFHyM/g0/XdD3Ph
-         h9kAkiotezmYa5Lbjn06Cmc6XmTNGVKwnBPpqoeAAmFmCsJNZuWpY160Z5rPy7U22ymi
-         ZNnny+MA5IXWHM8xi9tQL6PoeBYF1uQkfKCVHlawqNv8rn1BAHaKnuJADqwtMlR2l6Fb
-         bkcg==
-X-Gm-Message-State: AOJu0YzfDPDlvAK7XnQfLTqYSCJaKDgb8RHJIGsjx/aKDj68JFjqvVpW
-	SVys0Vbu1nKsMUlDuKloaazuerPv23pZkQ==
-X-Google-Smtp-Source: AGHT+IEPPNVvbO5ZAGHaJIqpc3i4tc1NLOXiXRpJBAk/R+nqSaMM7qnZtN104k+NMK5aCMx5D6B0oA==
-X-Received: by 2002:a05:6000:11c9:b0:336:76dc:9b48 with SMTP id i9-20020a05600011c900b0033676dc9b48mr488079wrx.91.1704971794944;
-        Thu, 11 Jan 2024 03:16:34 -0800 (PST)
-Received: from localhost ([102.140.209.237])
-        by smtp.gmail.com with ESMTPSA id p19-20020adf9d93000000b003378ea9a7desm157130wre.33.2024.01.11.03.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jan 2024 03:16:34 -0800 (PST)
-Date: Thu, 11 Jan 2024 14:16:31 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Uladzislau Rezki <urezki@gmail.com>
-Cc: Linux-Next Mailing List <linux-next@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Linux Regressions <regressions@lists.linux.dev>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	lkft-triage@lists.linaro.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized
- when used here [-Werror,-Wuninitialized]
-Message-ID: <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
-References: <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BMV4yOHv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nrUdzr6x"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id F2A543200258;
+	Thu, 11 Jan 2024 07:55:47 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 11 Jan 2024 07:55:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1704977747; x=1705064147; bh=n7Flv4sDP2
+	we1RAcMNYutGo+Ms3cmgPKVxBB6NzlfbI=; b=BMV4yOHvD6RNJ4gKwjz8eJiho5
+	MuZnwjbYPMPctC3x5+8khcxrp10wy43dm0CuDs41cIlUu1itHZpeur4ThCGOpH5Q
+	R/PAKoF4uJsOX0MEAnGqPwYGrnWO/p/+j95ZAZ+QDHBUq4tJmU7oKoKgsLrD6kO8
+	iEctsAHd4R903F/Xwo8lb5OS5qB4dLUOi8kYU4qEsdY0Uwcv+7JOkjxJZ2MEVfUG
+	YbkpODU5INMHIbc5FoF9BBrOn/RvuYPryRLHuudMvQ5ZmjfPLczg+vVFgj1Jg1UJ
+	Wj8SrRapaSTz/aQkcPW6qo37nPlfqjQmK3PQptDu2j/IjRNAX6B2yr5+cggw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1704977747; x=1705064147; bh=n7Flv4sDP2we1RAcMNYutGo+Ms3c
+	mgPKVxBB6NzlfbI=; b=nrUdzr6x4aT4f4aJSErB7UJYRsMkiISvZnY5PXbhtgpb
+	EfBhv9SmKahvHIaV88z+Of1ai0prhzzuGiVJs4rB2qkZWdI7nFwoZ+J9xqORqhpi
+	q71KiRfmqJW6Wqn3TjQg54RZBrf7eALnwotOd1wW7baIjdpwRinDtkt/Yn0Th5ik
+	3STJ5Q5Gk4sLmlbyXfZAGxdRErWdtzIElfFVCzQpCnNu1/SDftDdLxbOvfuyaQT7
+	5Recd5pmgvGuJsAUyeo3OgFRQgYO0Oa4BixRO0eMUPzByzyTD9Y3lMZ4zmCeeHVj
+	R84jonajBxTqt2W2eiQzAOlQ4pCDKgOOkwh5dZ6yfA==
+X-ME-Sender: <xms:U-WfZUkRqQAutNFK73pQAn7MN559CMu1_vFdfU49PTOKXBRatGLlEA>
+    <xme:U-WfZT0OxrL_6yIlikHv9O7Im9GiUAccdFCDTSpVTE620IimfHTKZJHWPyf-4CSds
+    YgTU5j6WvBSU6ghLcE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeifedggeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:U-WfZSo2uwxG5HPRm8WLuHIXFz4D6xNqec1BKzgyXsAxM8qiBWVikg>
+    <xmx:U-WfZQk4-z096u_Db9SFTtSs4VkclUiZ19G40qwhZvtO_mr237SLbw>
+    <xmx:U-WfZS223sqdo6C1OMDpB0yg51BEwUzP2uKLxgqd4RGCiJ5fsUHMgw>
+    <xmx:U-WfZcpakV0xlJAzGCgiWztRhmxp5WRLdfsSsTaGZQ9f6qInK9BX-w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 1A00CB6008D; Thu, 11 Jan 2024 07:55:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
+Message-Id: <908325ed-08af-4b0c-926e-da9afba25772@app.fastmail.com>
+In-Reply-To: <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
+References: 
+ <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
+ <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
+Date: Thu, 11 Jan 2024 13:55:15 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Dan Carpenter" <dan.carpenter@linaro.org>,
+ "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ "Uladzislau Rezki" <urezki@gmail.com>
+Cc: linux-next <linux-next@vger.kernel.org>,
+ "open list" <linux-kernel@vger.kernel.org>,
+ "Linux Regressions" <regressions@lists.linux.dev>,
+ clang-built-linux <llvm@lists.linux.dev>, lkft-triage@lists.linaro.org,
+ "Andrew Morton" <akpm@linux-foundation.org>
+Subject: Re: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when used
+ here [-Werror,-Wuninitialized]
+Content-Type: text/plain
 
-On Thu, Jan 11, 2024 at 04:23:09PM +0530, Naresh Kamboju wrote:
-> Following build failures noticed on i386 and x86 with clang builds on the
-> Linux next-20240111 tag.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build error:
-> ----------
-> mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
-> used here [-Werror,-Wuninitialized]
->  4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
->       |                                       ^~~~
-> mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
-> this warning
->  4684 |         unsigned long addr;
->       |                           ^
->       |                            = 0
-> 1 error generated.
+On Thu, Jan 11, 2024, at 12:16, Dan Carpenter wrote:
+> On Thu, Jan 11, 2024 at 04:23:09PM +0530, Naresh Kamboju wrote:
+>> Following build failures noticed on i386 and x86 with clang builds on the
+>> Linux next-20240111 tag.
+>> 
+>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>> 
+>> Build error:
+>> ----------
+>> mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
+>> used here [-Werror,-Wuninitialized]
+>>  4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
+>>       |                                       ^~~~
+>> mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
+>> this warning
+>>  4684 |         unsigned long addr;
+>>       |                           ^
+>>       |                            = 0
+>> 1 error generated.
+>
+> We turned off uninitialized variable warnings for GCC a long time ago...
+> :/ I don't know if we'll be able to re-enable it in a -Werror world
+> although Clang seems to be managing alright so perhaps there is hope.
 
-We turned off uninitialized variable warnings for GCC a long time ago...
-:/ I don't know if we'll be able to re-enable it in a -Werror world
-although Clang seems to be managing alright so perhaps there is hope.
+The problem with gcc's warning is that it is non-deterministic and
+in recent versions actually got more false-positives even without
+-Os or -fsanitize=. Clang does not catch all that gcc does because
+it doesn't track state across inline functions, but at least its
+output is always the same regardless of optimization and other
+options.
 
-regards,
-dan carpenter
+At least this particular one is an obvious bug and easily gets
+caught by lkft and lkp even if gcc's -Wuninitilized doesn't
+flag it.
 
+    Arnd
