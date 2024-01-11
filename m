@@ -1,55 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD4053E14;
-	Thu, 11 Jan 2024 18:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D985955C18;
+	Thu, 11 Jan 2024 19:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zul+I/cv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704998689; x=1736534689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BLWkV4FwFpaHlahGmNWz/euarj5Ekb2SfjPuJA4VwmQ=;
-  b=Zul+I/cv0uj1Jx7QVKGzuL3he30Yx6RXde9S72JXT1fhMBxOapxEL8XG
-   6K8ew1kUvWqF4MakKSaaeSEePe+k35Xbcnc8Ff8nXilH/Rz5262Q3D9Ip
-   2jq0b3lYqrvUhtMlbtLaQ6VZurkkwtvBnyfcWUmq82tIdyYEs1r4dICur
-   8suWbwYOaVELCHQmgsY6xPAxu1nFBI5Fysg3/Z/OhF9VNSA8uP3/hJHR9
-   KMvc1hVtcsIcCxsLRV8Gxz0SahLqsgBoOpFv6Wiscow0A9iMWFFtjN/HD
-   1FGWwHf2L7ifl0urcgrW4vZR1x/G7yi5S3V/rK+GAzr15gWBQdjkKDprx
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="6036469"
-X-IronPort-AV: E=Sophos;i="6.04,187,1695711600"; 
-   d="scan'208";a="6036469"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 10:44:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="906047037"
-X-IronPort-AV: E=Sophos;i="6.04,187,1695711600"; 
-   d="scan'208";a="906047037"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Jan 2024 10:44:34 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rO02Z-0008cU-2C;
-	Thu, 11 Jan 2024 18:44:31 +0000
-Date: Fri, 12 Jan 2024 02:44:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel_team@skhynix.com, akpm@linux-foundation.org,
-	ying.huang@intel.com, namit@vmware.com, xhao@linux.alibaba.com,
-	mgorman@techsingularity.net, hughd@google.com, willy@infradead.org,
-	david@redhat.com, peterz@infradead.org, luto@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com
-Subject: Re: [v5 6/7] mm: Defer TLB flush by keeping both src and dst folios
- at migration
-Message-ID: <202401120213.rCOV7YQI-lkp@intel.com>
-References: <20240111060757.13563-7-byungchul@sk.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SPPtBjPT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE49C433C7;
+	Thu, 11 Jan 2024 19:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705002004;
+	bh=DmkLUwPO5pHCJHvVcwPy1P4sgjTzQNNak+Eq1cUdG4A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SPPtBjPT+YAd4ocTNd3PGbSKeEby62sm5DsaPgCv2HqVIW9AA61WpCKjUG1nFowUj
+	 3KfWsd59L33mr3lPW1pODJ4DxPp3c0FvcL65M+M43Xd0dsozkiXoWTzMQXYyp+ok+1
+	 Cb30aWs3Sxk5AodiSlMI4eMG+NABT1HgniB893pjpYDswpLiHA/yPSOP9UoGeJLbKt
+	 bnTkQNlGsDQqy8YOmI7KSXeLlghLdU+zlsbZoTu+RaMYkcWjxf+xdeMOQ8myzu+KXS
+	 4DFQ7cH+eAqKWFGmhszUBwC2NDKu/wiPRUDEP+5/MhjNc4xXnfccYuJTOa5a8NwKDV
+	 Z7nFRX4xsl/qg==
+Date: Thu, 11 Jan 2024 12:40:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, patches@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-efi@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linux-arch@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-mm@kvack.org,
+	bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, mykolal@fb.com,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 1/3] selftests/bpf: Update LLVM Phabricator links
+Message-ID: <20240111194001.GA3805856@dev-arch.thelio-3990X>
+References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
+ <20240109-update-llvm-links-v1-1-eb09b59db071@kernel.org>
+ <6a655e9f-9878-4292-9d16-f988c4bdfc73@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,47 +47,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240111060757.13563-7-byungchul@sk.com>
+In-Reply-To: <6a655e9f-9878-4292-9d16-f988c4bdfc73@linux.dev>
 
-Hi Byungchul,
+Hi Yonghong,
 
-kernel test robot noticed the following build errors:
+On Wed, Jan 10, 2024 at 08:05:36PM -0800, Yonghong Song wrote:
+> 
+> On 1/9/24 2:16 PM, Nathan Chancellor wrote:
+> > reviews.llvm.org was LLVM's Phabricator instances for code review. It
+> > has been abandoned in favor of GitHub pull requests. While the majority
+> > of links in the kernel sources still work because of the work Fangrui
+> > has done turning the dynamic Phabricator instance into a static archive,
+> > there are some issues with that work, so preemptively convert all the
+> > links in the kernel sources to point to the commit on GitHub.
+> > 
+> > Most of the commits have the corresponding differential review link in
+> > the commit message itself so there should not be any loss of fidelity in
+> > the relevant information.
+> > 
+> > Additionally, fix a typo in the xdpwall.c print ("LLMV" -> "LLVM") while
+> > in the area.
+> > 
+> > Link: https://discourse.llvm.org/t/update-on-github-pull-requests/71540/172
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Ack with one nit below.
+> 
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on tip/sched/core tip/x86/core arm64/for-next/core tip/x86/mm linus/master v6.7 next-20240111]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+<snip>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/x86-tlb-Add-APIs-manipulating-tlb-batch-s-arch-data/20240111-141049
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240111060757.13563-7-byungchul%40sk.com
-patch subject: [v5 6/7] mm: Defer TLB flush by keeping both src and dst folios at migration
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20240112/202401120213.rCOV7YQI-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240112/202401120213.rCOV7YQI-lkp@intel.com/reproduce)
+> > @@ -304,6 +304,6 @@ from running test_progs will look like:
+> >   .. code-block:: console
+> > -  test_xdpwall:FAIL:Does LLVM have https://reviews.llvm.org/D109073? unexpected error: -4007
+> > +  test_xdpwall:FAIL:Does LLVM have https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d5? unexpected error: -4007
+> > -__ https://reviews.llvm.org/D109073
+> > +__ https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d
+> 
+> To be consistent with other links, could you add the missing last alnum '5' to the above link?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401120213.rCOV7YQI-lkp@intel.com/
+Thanks a lot for catching this and providing an ack. Andrew, could you
+squash this update into selftests-bpf-update-llvm-phabricator-links.patch?
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: migrc_flush_start
-   >>> referenced by tlb.c
-   >>>               arch/x86/mm/tlb.o:(arch_tlbbatch_flush) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: migrc_flush_end
-   >>> referenced by tlb.c
-   >>>               arch/x86/mm/tlb.o:(arch_tlbbatch_flush) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: migrc_flush_free_folios
-   >>> referenced by memory.c
-   >>>               mm/memory.o:(handle_mm_fault) in archive vmlinux.a
-   >>> referenced by page_alloc.c
-   >>>               mm/page_alloc.o:(get_page_from_freelist) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+index b9a493f66557..e56034abb3c2 100644
+--- a/tools/testing/selftests/bpf/README.rst
++++ b/tools/testing/selftests/bpf/README.rst
+@@ -306,4 +306,4 @@ from running test_progs will look like:
+ 
+   test_xdpwall:FAIL:Does LLVM have https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d5? unexpected error: -4007
+ 
+-__ https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d
++__ https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d5
