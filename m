@@ -1,53 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DFF15E88;
-	Thu, 11 Jan 2024 13:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CC121378;
+	Thu, 11 Jan 2024 13:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tc29WRwQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XlCmgUxy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704978554; x=1736514554;
+  t=1704981017; x=1736517017;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qOuB30Dc16U0vCarITox+yCHGsdehgXMs3mhCYq968c=;
-  b=Tc29WRwQQxo1a9NsxNhKsuVT5hhIOq1Kl73FnJ85gaxCTtBtZ06l3E7V
-   Hp+kFihwaXb8eUdRhXpGDiKx7DozpZUk2KDbaW6AQZDNDZgHBWoqpFVXK
-   3nxxVk/naADbaJKa8p3TBieg8SF6K9jkxqbENuLZu6ZEIWJd8B7z/KLNt
-   BHcIBFCJsOaDoiCwyt1916en3UJQYXfVsuhyGTndBdPfDSPc6iO4lk1mk
-   kTs3Z+rNGqKnWp0GkXGZfekoFPM7rlyWCTN4/pbTeQCnxGwEE8WKoEkUn
-   77n1sJyEefz73bUFRIfMEEDt1yN+/+4bUFfeL5iBQMOOkGV0cmFi+ZWuO
+  bh=df3bhwFei4ovFhoesxHUexUNJ8++z5Jxwlx+x83xoIQ=;
+  b=XlCmgUxyV6MhvXdzP36tl35Wb5Tt1MyOJfE5mDi5qccbhFVEEmYiZNlE
+   QZe67pmFuF7BWWsTKdsIyV447fn/xZObIKvE6CIvHttm4XTZOUqJG0M/6
+   WwF2VAp5xEqrMu02/Uipu00nC5dNbR1zcSrmqxdZezzWR6+4lP242rXIh
+   VFxp2Z18CveAILnGtvvXWngxpZvoAuyMqA1UkHHh4LMliEsKDD2CzblmW
+   recfvAMxozGy5VOFdZ9QSBIGQkg+AohsMkbfBOGJLln7fP4O4ohxXtKbR
+   AQzLKy5VcSr2qIV8SLJXM8OOflLqOUQ3RgPkTjx6uRLbmE377a1hCdNFR
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="463125643"
+X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="5929641"
 X-IronPort-AV: E=Sophos;i="6.04,186,1695711600"; 
-   d="scan'208";a="463125643"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 05:09:14 -0800
+   d="scan'208";a="5929641"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 05:50:16 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="926018931"
 X-IronPort-AV: E=Sophos;i="6.04,186,1695711600"; 
-   d="scan'208";a="17039461"
+   d="scan'208";a="926018931"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Jan 2024 05:09:10 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jan 2024 05:50:11 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rNuo0-0008HM-1i;
-	Thu, 11 Jan 2024 13:09:08 +0000
-Date: Thu, 11 Jan 2024 21:08:13 +0800
+	id 1rNvRh-0008Jd-2N;
+	Thu, 11 Jan 2024 13:50:09 +0000
+Date: Thu, 11 Jan 2024 21:49:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Carlos Galo <carlosgalo@google.com>, rostedt@goodmis.org,
-	akpm@linux-foundation.org, surenb@google.com
+To: Frank Li <Frank.Li@nxp.com>, robh@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	android-mm@google.com, kernel-team@android.com,
-	Carlos Galo <carlosgalo@google.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH] mm: Update mark_victim tracepoints fields
-Message-ID: <202401112057.lJYUSJJe-lkp@intel.com>
-References: <20240111001155.746-1-carlosgalo@google.com>
+	alexandre.belloni@bootlin.com, conor.culhane@silvaco.com,
+	gregkh@linuxfoundation.org, imx@lists.linux.dev,
+	jirislaby@kernel.org, joe@perches.com,
+	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, miquel.raynal@bootlin.com,
+	zbigniew.lukwinski@linux.intel.com, devicetree@vger.kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v2 4/7] i3c: target: add svc target controller support
+Message-ID: <202401112149.TbWJpRfM-lkp@intel.com>
+References: <20240110175221.2335480-5-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,135 +57,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240111001155.746-1-carlosgalo@google.com>
+In-Reply-To: <20240110175221.2335480-5-Frank.Li@nxp.com>
 
-Hi Carlos,
+Hi Frank,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 0dd3ee31125508cd67f7e7172247f05b7fd1753a]
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next linus/master v6.7 next-20240111]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Carlos-Galo/mm-Update-mark_victim-tracepoints-fields/20240111-081635
-base:   0dd3ee31125508cd67f7e7172247f05b7fd1753a
-patch link:    https://lore.kernel.org/r/20240111001155.746-1-carlosgalo%40google.com
-patch subject: [PATCH] mm: Update mark_victim tracepoints fields
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240111/202401112057.lJYUSJJe-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/i3c-add-target-mode-support/20240111-015711
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20240110175221.2335480-5-Frank.Li%40nxp.com
+patch subject: [PATCH v2 4/7] i3c: target: add svc target controller support
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240111/202401112149.TbWJpRfM-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240111/202401112057.lJYUSJJe-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240111/202401112149.TbWJpRfM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401112057.lJYUSJJe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401112149.TbWJpRfM-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/oom_kill.c:54:
-   In file included from include/trace/events/oom.h:206:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:237:
->> include/trace/events/oom.h:96:3: error: called object type 'uid_t' (aka 'unsigned int') is not a function or function pointer
-      74 |         ),
-         |         ~~
-      75 | 
-      76 |         TP_fast_assign(
-         |         ~~~~~~~~~~~~~~~
-      77 |                 __entry->pid = task->pid;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~
-      78 |                 __entry->uid = uid;
-         |                 ~~~~~~~~~~~~~~~~~~~
-      79 |                 __assign_str(comm, task->comm);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      80 |                 __entry->oom_score_adj = task->signal->oom_score_adj;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      81 |         ),
-         |         ~~
-      82 | 
-      83 |         TP_printk("pid=%d uid=%u comm=%s oom_score_adj=%hd",
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      84 |                 __entry->pid,
-         |                 ~~~~~~~~~~~~~
-      85 |                 __entry->uid
-         |                 ~~~~~~~~~~~~
-      86 |                 __get_str(comm),
-         |                 ^~~~~~~~~~~~~~~~
-      87 |                 __entry->oom_score_adj,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~
-      88 |         )
-         |         ~
-      89 | );
-         | ~
-   include/trace/stages/stage3_trace_output.h:20:26: note: expanded from macro '__get_str'
-      20 | #define __get_str(field) ((char *)__get_dynamic_array(field))
-         |                          ^
-   include/trace/stages/stage3_trace_output.h:9:43: note: expanded from macro 'TP_printk'
-       9 | #define TP_printk(fmt, args...) fmt "\n", args
-         |                                           ^
-   include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
-      40 |         DECLARE_EVENT_CLASS(name,                              \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      41 |                              PARAMS(proto),                    \
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      42 |                              PARAMS(args),                     \
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      43 |                              PARAMS(tstruct),                  \
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      44 |                              PARAMS(assign),                   \
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      45 |                              PARAMS(print));                   \
-         |                              ~~~~~~~^~~~~~~
-   include/linux/tracepoint.h:107:25: note: expanded from macro 'PARAMS'
-     107 | #define PARAMS(args...) args
-         |                         ^
-   include/trace/trace_events.h:203:27: note: expanded from macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                  ^~~~~
-   In file included from mm/oom_kill.c:54:
-   In file included from include/trace/events/oom.h:206:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:237:
->> include/trace/events/oom.h:74:1: error: expected expression
-      74 | TRACE_EVENT(mark_victim,
+>> drivers/i3c/target/svc-i3c-target.c:211:40: warning: no previous prototype for function 'svc_i3c_get_features' [-Wmissing-prototypes]
+     211 | const struct i3c_target_ctrl_features *svc_i3c_get_features(struct i3c_target_ctrl *ctrl)
+         |                                        ^
+   drivers/i3c/target/svc-i3c-target.c:211:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     211 | const struct i3c_target_ctrl_features *svc_i3c_get_features(struct i3c_target_ctrl *ctrl)
+         |       ^
+         | static 
+>> drivers/i3c/target/svc-i3c-target.c:268:63: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+     268 | static int svc_i3c_target_queue(struct i3c_request *req, gfp_t)
+         |                                                               ^
+>> drivers/i3c/target/svc-i3c-target.c:666:5: warning: no previous prototype for function 'svc_i3c_fifo_status' [-Wmissing-prototypes]
+     666 | int svc_i3c_fifo_status(struct i3c_target_ctrl *ctrl, bool tx)
+         |     ^
+   drivers/i3c/target/svc-i3c-target.c:666:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     666 | int svc_i3c_fifo_status(struct i3c_target_ctrl *ctrl, bool tx)
          | ^
-   include/trace/trace_events.h:40:2: note: expanded from macro 'TRACE_EVENT'
-      40 |         DECLARE_EVENT_CLASS(name,                              \
-         |         ^
-   include/trace/trace_events.h:203:32: note: expanded from macro 'DECLARE_EVENT_CLASS'
-     203 |         trace_event_printf(iter, print);                                \
-         |                                       ^
-   2 errors generated.
+         | static 
+   3 warnings generated.
 
 
-vim +96 include/trace/events/oom.h
+vim +/svc_i3c_get_features +211 drivers/i3c/target/svc-i3c-target.c
 
-    73	
-  > 74	TRACE_EVENT(mark_victim,
-    75		TP_PROTO(struct task_struct *task, uid_t uid),
-    76	
-    77		TP_ARGS(task, uid),
-    78	
-    79		TP_STRUCT__entry(
-    80			__field(int, pid)
-    81			__field(uid_t, uid)
-    82			__string(comm, task->comm)
-    83			__field(short, oom_score_adj)
-    84		),
-    85	
-    86		TP_fast_assign(
-    87			__entry->pid = task->pid;
-    88			__entry->uid = uid;
-    89			__assign_str(comm, task->comm);
-    90			__entry->oom_score_adj = task->signal->oom_score_adj;
-    91		),
-    92	
-    93		TP_printk("pid=%d uid=%u comm=%s oom_score_adj=%hd",
-    94			__entry->pid,
-    95			__entry->uid
-  > 96			__get_str(comm),
-    97			__entry->oom_score_adj,
-    98		)
-    99	);
-   100	
+   210	
+ > 211	const struct i3c_target_ctrl_features *svc_i3c_get_features(struct i3c_target_ctrl *ctrl)
+   212	{
+   213		struct svc_i3c_target *svc;
+   214	
+   215		svc = dev_get_drvdata(&ctrl->dev);
+   216	
+   217		if (!svc)
+   218			return NULL;
+   219	
+   220		return &svc->features;
+   221	}
+   222	
+   223	static void svc_i3c_queue_complete(struct svc_i3c_target *svc, struct i3c_request *complete)
+   224	{
+   225		unsigned long flags;
+   226	
+   227		spin_lock_irqsave(&svc->cq_lock, flags);
+   228		list_add_tail(&complete->list, &svc->cq);
+   229		spin_unlock_irqrestore(&svc->cq_lock, flags);
+   230		queue_work(svc->workqueue, &svc->work);
+   231	}
+   232	
+   233	static void svc_i3c_fill_txfifo(struct svc_i3c_target *svc)
+   234	{
+   235		struct i3c_request *req, *complete = NULL;
+   236		unsigned long flags;
+   237		int val;
+   238	
+   239		spin_lock_irqsave(&svc->txq_lock, flags);
+   240		while ((!!(req = list_first_entry_or_null(&svc->txq, struct i3c_request, list))) &&
+   241		       !((readl_relaxed(svc->regs + I3C_SDATACTRL) & I3C_SDATACTRL_TXFULL_MASK))) {
+   242			while (!(readl_relaxed(svc->regs + I3C_SDATACTRL)
+   243						& I3C_SDATACTRL_TXFULL_MASK)) {
+   244				val = *(u8 *)(req->buf + req->actual);
+   245	
+   246				if (req->actual + 1 == req->length)
+   247					writel_relaxed(val, svc->regs + I3C_SWDATAE);
+   248				else
+   249					writel_relaxed(val, svc->regs + I3C_SWDATAB);
+   250	
+   251				req->actual++;
+   252	
+   253				if (req->actual == req->length) {
+   254					list_del(&req->list);
+   255					complete = req;
+   256					spin_unlock_irqrestore(&svc->txq_lock, flags);
+   257	
+   258					svc_i3c_queue_complete(svc, complete);
+   259	
+   260					spin_lock_irqsave(&svc->txq_lock, flags);
+   261					break;
+   262				}
+   263			}
+   264		}
+   265		spin_unlock_irqrestore(&svc->txq_lock, flags);
+   266	}
+   267	
+ > 268	static int svc_i3c_target_queue(struct i3c_request *req, gfp_t)
+   269	{
+   270		struct svc_i3c_target *svc;
+   271		struct list_head *q;
+   272		unsigned long flags;
+   273		spinlock_t *lk;
+   274	
+   275		svc = dev_get_drvdata(&req->ctrl->dev);
+   276		if (!svc)
+   277			return -EINVAL;
+   278	
+   279		if (req->tx) {
+   280			q = &svc->txq;
+   281			lk = &svc->txq_lock;
+   282		} else {
+   283			q = &svc->rxq;
+   284			lk = &svc->rxq_lock;
+   285		}
+   286	
+   287		spin_lock_irqsave(lk, flags);
+   288		list_add_tail(&req->list, q);
+   289		spin_unlock_irqrestore(lk, flags);
+   290	
+   291		if (req->tx)
+   292			svc_i3c_fill_txfifo(svc);
+   293	
+   294		if (req->tx)
+   295			writel_relaxed(I3C_SINT_TXSEND, svc->regs + I3C_SINTSET);
+   296		else
+   297			writel_relaxed(I3C_SINT_RXPEND, svc->regs + I3C_SINTSET);
+   298	
+   299		return 0;
+   300	}
+   301	
 
 -- 
 0-DAY CI Kernel Test Service
