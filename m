@@ -1,54 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CC121378;
-	Thu, 11 Jan 2024 13:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902C54CB3C;
+	Thu, 11 Jan 2024 15:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XlCmgUxy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704981017; x=1736517017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=df3bhwFei4ovFhoesxHUexUNJ8++z5Jxwlx+x83xoIQ=;
-  b=XlCmgUxyV6MhvXdzP36tl35Wb5Tt1MyOJfE5mDi5qccbhFVEEmYiZNlE
-   QZe67pmFuF7BWWsTKdsIyV447fn/xZObIKvE6CIvHttm4XTZOUqJG0M/6
-   WwF2VAp5xEqrMu02/Uipu00nC5dNbR1zcSrmqxdZezzWR6+4lP242rXIh
-   VFxp2Z18CveAILnGtvvXWngxpZvoAuyMqA1UkHHh4LMliEsKDD2CzblmW
-   recfvAMxozGy5VOFdZ9QSBIGQkg+AohsMkbfBOGJLln7fP4O4ohxXtKbR
-   AQzLKy5VcSr2qIV8SLJXM8OOflLqOUQ3RgPkTjx6uRLbmE377a1hCdNFR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="5929641"
-X-IronPort-AV: E=Sophos;i="6.04,186,1695711600"; 
-   d="scan'208";a="5929641"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 05:50:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="926018931"
-X-IronPort-AV: E=Sophos;i="6.04,186,1695711600"; 
-   d="scan'208";a="926018931"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jan 2024 05:50:11 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rNvRh-0008Jd-2N;
-	Thu, 11 Jan 2024 13:50:09 +0000
-Date: Thu, 11 Jan 2024 21:49:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>, robh@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alexandre.belloni@bootlin.com, conor.culhane@silvaco.com,
-	gregkh@linuxfoundation.org, imx@lists.linux.dev,
-	jirislaby@kernel.org, joe@perches.com,
-	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, miquel.raynal@bootlin.com,
-	zbigniew.lukwinski@linux.intel.com, devicetree@vger.kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH v2 4/7] i3c: target: add svc target controller support
-Message-ID: <202401112149.TbWJpRfM-lkp@intel.com>
-References: <20240110175221.2335480-5-Frank.Li@nxp.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3L9X7BE"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2cd8bd6ce1bso6964071fa.1;
+        Thu, 11 Jan 2024 07:38:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704987483; x=1705592283; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tB1E0ugJK0L2KvGbNzmJDN1gpsgaCYbTOW0J/2QoMFk=;
+        b=O3L9X7BEnSdJnTj0maaFf6rq3AkbrYG5059HaVx0BatOWZQc7ss0m16pj0eGoqrkal
+         /wzcAZE+cfL2rDj3C8Dui8hP1kcSXANZ5SDsWmP/qa0pR6zyLu2UWsjMS8C/WAJNr2vK
+         7PXkksiZKhdJ8R8Lzafhk4Z6JF2ljCTOpNLwdvoyPvAupk/qB5Ck+snekMsncNguNtv1
+         UVpBBJkylkW5C7kauB5xRF8YZvMMi0slPBX/vIvzhjeNnWUDUGo/9MkKy3ETOtof/amK
+         HRa5QyU3ILNxNFA8uXcJXmqGdVp/9JRtwORcejIHucuTc8ojTKt4GxkSNZrh9G/Gb1Ik
+         HJ4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704987483; x=1705592283;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tB1E0ugJK0L2KvGbNzmJDN1gpsgaCYbTOW0J/2QoMFk=;
+        b=xTekeRA5ffiKoY6NR68ph/W7zAc+0h66s2zh/Rtr7qMEl10223myccU5cj415iYmRZ
+         RksijpNX+mEJhn4GY+e8BIFl4GHs5rRxHQFYWC4xADoSNS59l+QFUgrBuPmtewJDxWnO
+         MhJKeneB4KbVsWswxllNaXAC4FP7W7lmu4SKsW1DibdzrRDudr6bEcWGR/urBJdOQhW3
+         k54lw9Sat1KDp56Y4iUaXvlsXXEcM7Ngf7cNxVOinUQs7xB4YSDl4HAwcD3OzHiwKPWq
+         eXwVtWzOyVGY7Dq5LLqvdrNay/VGrw7miHt7U3a4T7HqBn1X0sAyj1dmKYv1I22C4ico
+         IoFQ==
+X-Gm-Message-State: AOJu0YxZuLZv2dMjhNM9Wt/i7lzdvo17W89XpjqC9Wwj1k89e4LCV2de
+	Cj7SosJH4FvOnrX05iO6UzQ=
+X-Google-Smtp-Source: AGHT+IGSaV5E1Nu8lvLDmrSs+V2HXQYAgLdni6E7SHxF3rpvN64HoSAR4JS53m1gH71mWlE4IsfqJA==
+X-Received: by 2002:a05:6512:61c:b0:50e:ca97:5afb with SMTP id b28-20020a056512061c00b0050eca975afbmr420236lfe.18.1704987483272;
+        Thu, 11 Jan 2024 07:38:03 -0800 (PST)
+Received: from pc638.lan (host-185-121-47-193.sydskane.nu. [185.121.47.193])
+        by smtp.gmail.com with ESMTPSA id w11-20020a056512098b00b0050e8ea87dcesm225717lft.169.2024.01.11.07.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jan 2024 07:38:02 -0800 (PST)
+From: Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date: Thu, 11 Jan 2024 16:38:01 +0100
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Uladzislau Rezki (Sony)" <urezki@gmail.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [linux-next:master 12999/13245] mm/vmalloc.c:4652:25: warning:
+ variable 'addr' is uninitialized when used here
+Message-ID: <ZaALWUTLWUglNY0z@pc638.lan>
+References: <202401111304.N5dkFGNe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,148 +61,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240110175221.2335480-5-Frank.Li@nxp.com>
+In-Reply-To: <202401111304.N5dkFGNe-lkp@intel.com>
 
-Hi Frank,
+On Thu, Jan 11, 2024 at 01:13:59PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   9e21984d62c56a0f6d1fc6f76b646212cfd7fe88
+> commit: e88b85b81d5313a69cb62829b957d4a9ecde600b [12999/13245] mm: vmalloc: offload free_vmap_area_lock lock
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20240111/202401111304.N5dkFGNe-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240111/202401111304.N5dkFGNe-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202401111304.N5dkFGNe-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> mm/vmalloc.c:4652:25: warning: variable 'addr' is uninitialized when used here [-Wuninitialized]
+>                    va = __find_vmap_area(addr, &vn->busy.root);
+>                                          ^~~~
+>    mm/vmalloc.c:4645:20: note: initialize the variable 'addr' to silence this warning
+>            unsigned long addr;
+>                              ^
+>                               = 0
+>    1 warning generated.
+> 
+> 
+> vim +/addr +4652 mm/vmalloc.c
+> 
+> a10aa579878fc6 Christoph Lameter       2008-04-28  4637  
+> 5bb1bb353cfe34 Paul E. McKenney        2021-01-07  4638  #ifdef CONFIG_PRINTK
+> 98f180837a896e Paul E. McKenney        2020-12-08  4639  bool vmalloc_dump_obj(void *object)
+> 98f180837a896e Paul E. McKenney        2020-12-08  4640  {
+> 98f180837a896e Paul E. McKenney        2020-12-08  4641  	void *objp = (void *)PAGE_ALIGN((unsigned long)object);
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4642) 	const void *caller;
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4643) 	struct vmap_area *va;
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4644) 	struct vmap_node *vn;
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4645) 	unsigned long addr;
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4646) 	unsigned int nr_pages;
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4647) 	bool success = false;
+> 98f180837a896e Paul E. McKenney        2020-12-08  4648  
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4649) 	vn = addr_to_node((unsigned long)objp);
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4650) 
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4651) 	if (spin_trylock(&vn->busy.lock)) {
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02 @4652) 		va = __find_vmap_area(addr, &vn->busy.root);
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4653) 
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4654) 		if (va && va->vm) {
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4655) 			addr = (unsigned long)va->vm->addr;
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4656) 			caller = va->vm->caller;
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4657) 			nr_pages = va->vm->nr_pages;
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4658) 			success = true;
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4659) 		}
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4660) 
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4661) 		spin_unlock(&vn->busy.lock);
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4662) 	}
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4663) 
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4664) 	if (success)
+> bd34dcd4120d7e Paul E. McKenney        2020-12-09  4665  		pr_cont(" %u-page vmalloc region starting at %#lx allocated at %pS\n",
+> 0818e739b5c061 Joel Fernandes (Google  2023-09-04  4666) 			nr_pages, addr, caller);
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4667) 
+> 86817057732a9c Uladzislau Rezki (Sony  2024-01-02  4668) 	return success;
+> 98f180837a896e Paul E. McKenney        2020-12-08  4669  }
+> 5bb1bb353cfe34 Paul E. McKenney        2021-01-07  4670  #endif
+> 98f180837a896e Paul E. McKenney        2020-12-08  4671  
+> 
+> :::::: The code at line 4652 was first introduced by commit
+> :::::: 86817057732a9ce9cefdb6f513b6554a55ebbbbb mm: vmalloc: remove global vmap_area_root rb-tree
+> 
+> :::::: TO: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> :::::: CC: Andrew Morton <akpm@linux-foundation.org>
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-kernel test robot noticed the following build warnings:
+Same, i sent the patch, but just in case i post it here:
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next linus/master v6.7 next-20240111]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+<snip>
+From fa613edf6c3d700a02ef109cbd42633b5df30abb Mon Sep 17 00:00:00 2001
+From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Date: Thu, 11 Jan 2024 13:04:07 +0100
+Subject: [PATCH 1/2] mm: vmalloc: Fix a wrong value passed to
+ __find_vmap_area()
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/i3c-add-target-mode-support/20240111-015711
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20240110175221.2335480-5-Frank.Li%40nxp.com
-patch subject: [PATCH v2 4/7] i3c: target: add svc target controller support
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240111/202401112149.TbWJpRfM-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240111/202401112149.TbWJpRfM-lkp@intel.com/reproduce)
+There was a type in the vmalloc_dump_obj() function. Instead
+of passing a real address which is "objp" an "addr" was used
+what is wrong and not initialized.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401112149.TbWJpRfM-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e88b85b81d5 ("mm: vmalloc: offload free_vmap_area_lock lock")
+Closes: https://lore.kernel.org/oe-kbuild-all/202401111810.TKPIXLCs-lkp@intel.com/
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ mm/vmalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/i3c/target/svc-i3c-target.c:211:40: warning: no previous prototype for function 'svc_i3c_get_features' [-Wmissing-prototypes]
-     211 | const struct i3c_target_ctrl_features *svc_i3c_get_features(struct i3c_target_ctrl *ctrl)
-         |                                        ^
-   drivers/i3c/target/svc-i3c-target.c:211:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     211 | const struct i3c_target_ctrl_features *svc_i3c_get_features(struct i3c_target_ctrl *ctrl)
-         |       ^
-         | static 
->> drivers/i3c/target/svc-i3c-target.c:268:63: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-     268 | static int svc_i3c_target_queue(struct i3c_request *req, gfp_t)
-         |                                                               ^
->> drivers/i3c/target/svc-i3c-target.c:666:5: warning: no previous prototype for function 'svc_i3c_fifo_status' [-Wmissing-prototypes]
-     666 | int svc_i3c_fifo_status(struct i3c_target_ctrl *ctrl, bool tx)
-         |     ^
-   drivers/i3c/target/svc-i3c-target.c:666:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     666 | int svc_i3c_fifo_status(struct i3c_target_ctrl *ctrl, bool tx)
-         | ^
-         | static 
-   3 warnings generated.
-
-
-vim +/svc_i3c_get_features +211 drivers/i3c/target/svc-i3c-target.c
-
-   210	
- > 211	const struct i3c_target_ctrl_features *svc_i3c_get_features(struct i3c_target_ctrl *ctrl)
-   212	{
-   213		struct svc_i3c_target *svc;
-   214	
-   215		svc = dev_get_drvdata(&ctrl->dev);
-   216	
-   217		if (!svc)
-   218			return NULL;
-   219	
-   220		return &svc->features;
-   221	}
-   222	
-   223	static void svc_i3c_queue_complete(struct svc_i3c_target *svc, struct i3c_request *complete)
-   224	{
-   225		unsigned long flags;
-   226	
-   227		spin_lock_irqsave(&svc->cq_lock, flags);
-   228		list_add_tail(&complete->list, &svc->cq);
-   229		spin_unlock_irqrestore(&svc->cq_lock, flags);
-   230		queue_work(svc->workqueue, &svc->work);
-   231	}
-   232	
-   233	static void svc_i3c_fill_txfifo(struct svc_i3c_target *svc)
-   234	{
-   235		struct i3c_request *req, *complete = NULL;
-   236		unsigned long flags;
-   237		int val;
-   238	
-   239		spin_lock_irqsave(&svc->txq_lock, flags);
-   240		while ((!!(req = list_first_entry_or_null(&svc->txq, struct i3c_request, list))) &&
-   241		       !((readl_relaxed(svc->regs + I3C_SDATACTRL) & I3C_SDATACTRL_TXFULL_MASK))) {
-   242			while (!(readl_relaxed(svc->regs + I3C_SDATACTRL)
-   243						& I3C_SDATACTRL_TXFULL_MASK)) {
-   244				val = *(u8 *)(req->buf + req->actual);
-   245	
-   246				if (req->actual + 1 == req->length)
-   247					writel_relaxed(val, svc->regs + I3C_SWDATAE);
-   248				else
-   249					writel_relaxed(val, svc->regs + I3C_SWDATAB);
-   250	
-   251				req->actual++;
-   252	
-   253				if (req->actual == req->length) {
-   254					list_del(&req->list);
-   255					complete = req;
-   256					spin_unlock_irqrestore(&svc->txq_lock, flags);
-   257	
-   258					svc_i3c_queue_complete(svc, complete);
-   259	
-   260					spin_lock_irqsave(&svc->txq_lock, flags);
-   261					break;
-   262				}
-   263			}
-   264		}
-   265		spin_unlock_irqrestore(&svc->txq_lock, flags);
-   266	}
-   267	
- > 268	static int svc_i3c_target_queue(struct i3c_request *req, gfp_t)
-   269	{
-   270		struct svc_i3c_target *svc;
-   271		struct list_head *q;
-   272		unsigned long flags;
-   273		spinlock_t *lk;
-   274	
-   275		svc = dev_get_drvdata(&req->ctrl->dev);
-   276		if (!svc)
-   277			return -EINVAL;
-   278	
-   279		if (req->tx) {
-   280			q = &svc->txq;
-   281			lk = &svc->txq_lock;
-   282		} else {
-   283			q = &svc->rxq;
-   284			lk = &svc->rxq_lock;
-   285		}
-   286	
-   287		spin_lock_irqsave(lk, flags);
-   288		list_add_tail(&req->list, q);
-   289		spin_unlock_irqrestore(lk, flags);
-   290	
-   291		if (req->tx)
-   292			svc_i3c_fill_txfifo(svc);
-   293	
-   294		if (req->tx)
-   295			writel_relaxed(I3C_SINT_TXSEND, svc->regs + I3C_SINTSET);
-   296		else
-   297			writel_relaxed(I3C_SINT_RXPEND, svc->regs + I3C_SINTSET);
-   298	
-   299		return 0;
-   300	}
-   301	
-
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index e30dabf68263..43a6608e1397 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -4688,7 +4688,7 @@ bool vmalloc_dump_obj(void *object)
+ 	vn = addr_to_node((unsigned long)objp);
+ 
+ 	if (spin_trylock(&vn->busy.lock)) {
+-		va = __find_vmap_area(addr, &vn->busy.root);
++		va = __find_vmap_area((unsigned long)objp, &vn->busy.root);
+ 
+ 		if (va && va->vm) {
+ 			addr = (unsigned long)va->vm->addr;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+<snip>
+
+it can be folded into: e88b85b81d5 ("mm: vmalloc: offload free_vmap_area_lock lock")
+or applied as a separate patch.
+
+--
+Uladzislau Rezki
