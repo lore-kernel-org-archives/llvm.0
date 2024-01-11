@@ -1,81 +1,94 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6B214F6B
-	for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 10:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4B515483
+	for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 11:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iWR9lzRR"
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-4b743ca0597so1248351e0c.1
-        for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 02:53:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SirfIEJb"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-336788cb261so4319168f8f.3
+        for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 03:16:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704970400; x=1705575200; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2BxDnRoz+tciUL07Ky2uFARoSUgYzDQPvPnOjHTato0=;
-        b=iWR9lzRRinqd1FLbBNQCEl8Cin7kfjuWM0Bu6fIK1dW1ppb3/qmEK7bcgIWDEWW3+H
-         V780ppteHpm4zSENutQEDRdWt3LlHnm9ytJ4G9oghZrbG4K5HIc6HjHqUCR6/G67DWVs
-         h2UX1L2ShyHDzk2puucODoCuK7RdxOo6rMUxsMbhAKhDSaQo9CZKDYwNqrHJQM6EAp6f
-         TuQIxrpLnPJKbqGk2POlGKi5/xyC8aKV8pBjR5WJaeW5ODNYNodLmIBrcyDKKHJTerrD
-         vcRTD1OQ8LIiM87nwN5sb0H4eaX5r2wbrhQWnbgaW1F7sljq0CN4NvkLCuZMcmXSyQUI
-         2FuQ==
+        d=linaro.org; s=google; t=1704971795; x=1705576595; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lMrj071u8QxSrpPG+XgJOGjzHRcUM7yJCNZgbHu8j4E=;
+        b=SirfIEJbnmj7KfWKB9dwcWzjaMkGihywvvtUTL3DEI6smlJE7vmzmWssppkKRnbvtg
+         gc0JVyUjlffRa6Zqz4twsWm75KkF03wN6b9uepPsHX/D7QgA+bs7BINcfCOLYZQ5Xaip
+         ZtC6KV+TFeuPpRoHOLP+MRk55kRoddxvCdIveb+Bi+lgmPopW75gFL3XitGMY3WfbiFg
+         5pPDBQa+UgKCPMXV9bzqa0tukvHaXUV5jqHunGmK0gwLZwsxb/zbXrvDudozqh73CEGj
+         ZOGwqNBwB+4qOW2bpem/clTiMi0s7hrF4Ivhj36aL1gN7NXU0Gz6VoU3jib4NG//wcuF
+         HPIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704970400; x=1705575200;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2BxDnRoz+tciUL07Ky2uFARoSUgYzDQPvPnOjHTato0=;
-        b=lGwtwkDs2uZmBw0t5QZXfhvq3L61KcURlOuAhtUMPpz/+EIoJBVUesHYpgHAkDSkTb
-         IPCgOWHJf4DBvhQzj6pJPqljfjkkT5mwwGPnZWofNKRfKzdMtJkbwpoVD8a58VJI4xrd
-         FG8jNtcqrfptdp6gz1w1mCwP/XO/SPK7FyWS3b4LkEQLg5JoxFivCpakQSNT1kf4yHRG
-         NID3KzDAvZ/r0KoDZmYegtVvdBD1ZHrgc8Ncj8jyCduekM2t3bKyW+Es8cSd1XWlQhxE
-         HQOYeSqeTEcG57Y30vSnWfRpvi3mCt8Wqcn0AyOcPBsRijRydyUTlWhsDXifp3qrxkj3
-         0CqQ==
-X-Gm-Message-State: AOJu0YzcfPGtrhy06S00hy1B/44MWXaByZP5clRw0/cAJ9EiGDBDgsVz
-	pa8M43OkM7YyGfaJi0ReZJg7aNspkcBIlU34/fBy2Bor9XxERA==
-X-Google-Smtp-Source: AGHT+IGgSmqv9Y1WJTe266dMtLWoOwKf822h2X6Qyg98fN6FvdHnX82UlDzXJD8BpoL+3lFdSku871Xabj7RMWn9Q/Q=
-X-Received: by 2002:a05:6122:1499:b0:4b7:8d7c:3483 with SMTP id
- z25-20020a056122149900b004b78d7c3483mr254720vkp.19.1704970400539; Thu, 11 Jan
- 2024 02:53:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704971795; x=1705576595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lMrj071u8QxSrpPG+XgJOGjzHRcUM7yJCNZgbHu8j4E=;
+        b=MT+JWkpahZlBiAQC1floHyVB7iCDjT6qlOb8KGD1fL/zYrbqqnaVD/S5Tww+VLtmJj
+         H0i4klMl6jdZfvEDZeqL8kImmp5CXIzKR48Gi8yXldOeT1aSiedcQmE87ScgEF355J/r
+         uwRt69qC82tM0YjT8BQuijLDEywL5LERE25Vc+Ev6z0eUTPj85xMGnFHyM/g0/XdD3Ph
+         h9kAkiotezmYa5Lbjn06Cmc6XmTNGVKwnBPpqoeAAmFmCsJNZuWpY160Z5rPy7U22ymi
+         ZNnny+MA5IXWHM8xi9tQL6PoeBYF1uQkfKCVHlawqNv8rn1BAHaKnuJADqwtMlR2l6Fb
+         bkcg==
+X-Gm-Message-State: AOJu0YzfDPDlvAK7XnQfLTqYSCJaKDgb8RHJIGsjx/aKDj68JFjqvVpW
+	SVys0Vbu1nKsMUlDuKloaazuerPv23pZkQ==
+X-Google-Smtp-Source: AGHT+IEPPNVvbO5ZAGHaJIqpc3i4tc1NLOXiXRpJBAk/R+nqSaMM7qnZtN104k+NMK5aCMx5D6B0oA==
+X-Received: by 2002:a05:6000:11c9:b0:336:76dc:9b48 with SMTP id i9-20020a05600011c900b0033676dc9b48mr488079wrx.91.1704971794944;
+        Thu, 11 Jan 2024 03:16:34 -0800 (PST)
+Received: from localhost ([102.140.209.237])
+        by smtp.gmail.com with ESMTPSA id p19-20020adf9d93000000b003378ea9a7desm157130wre.33.2024.01.11.03.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jan 2024 03:16:34 -0800 (PST)
+Date: Thu, 11 Jan 2024 14:16:31 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Uladzislau Rezki <urezki@gmail.com>
+Cc: Linux-Next Mailing List <linux-next@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	lkft-triage@lists.linaro.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized
+ when used here [-Werror,-Wuninitialized]
+Message-ID: <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
+References: <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 11 Jan 2024 16:23:09 +0530
-Message-ID: <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
-Subject: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
- used here [-Werror,-Wuninitialized]
-To: Linux-Next Mailing List <linux-next@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	Linux Regressions <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>, 
-	lkft-triage@lists.linaro.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
 
-Following build failures noticed on i386 and x86 with clang builds on the
-Linux next-20240111 tag.
+On Thu, Jan 11, 2024 at 04:23:09PM +0530, Naresh Kamboju wrote:
+> Following build failures noticed on i386 and x86 with clang builds on the
+> Linux next-20240111 tag.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Build error:
+> ----------
+> mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
+> used here [-Werror,-Wuninitialized]
+>  4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
+>       |                                       ^~~~
+> mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
+> this warning
+>  4684 |         unsigned long addr;
+>       |                           ^
+>       |                            = 0
+> 1 error generated.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+We turned off uninitialized variable warnings for GCC a long time ago...
+:/ I don't know if we'll be able to re-enable it in a -Werror world
+although Clang seems to be managing alright so perhaps there is hope.
 
-Build error:
-----------
-mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
-used here [-Werror,-Wuninitialized]
- 4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
-      |                                       ^~~~
-mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
-this warning
- 4684 |         unsigned long addr;
-      |                           ^
-      |                            = 0
-1 error generated.
+regards,
+dan carpenter
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240111/testrun/22036090/suite/build/test/clang-lkftconfig/details/
-
---
-Linaro LKFT
-https://lkft.linaro.org
