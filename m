@@ -1,118 +1,191 @@
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB0D15AEF;
-	Thu, 11 Jan 2024 12:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DFF15E88;
+	Thu, 11 Jan 2024 13:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BMV4yOHv";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nrUdzr6x"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id F2A543200258;
-	Thu, 11 Jan 2024 07:55:47 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 11 Jan 2024 07:55:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1704977747; x=1705064147; bh=n7Flv4sDP2
-	we1RAcMNYutGo+Ms3cmgPKVxBB6NzlfbI=; b=BMV4yOHvD6RNJ4gKwjz8eJiho5
-	MuZnwjbYPMPctC3x5+8khcxrp10wy43dm0CuDs41cIlUu1itHZpeur4ThCGOpH5Q
-	R/PAKoF4uJsOX0MEAnGqPwYGrnWO/p/+j95ZAZ+QDHBUq4tJmU7oKoKgsLrD6kO8
-	iEctsAHd4R903F/Xwo8lb5OS5qB4dLUOi8kYU4qEsdY0Uwcv+7JOkjxJZ2MEVfUG
-	YbkpODU5INMHIbc5FoF9BBrOn/RvuYPryRLHuudMvQ5ZmjfPLczg+vVFgj1Jg1UJ
-	Wj8SrRapaSTz/aQkcPW6qo37nPlfqjQmK3PQptDu2j/IjRNAX6B2yr5+cggw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1704977747; x=1705064147; bh=n7Flv4sDP2we1RAcMNYutGo+Ms3c
-	mgPKVxBB6NzlfbI=; b=nrUdzr6x4aT4f4aJSErB7UJYRsMkiISvZnY5PXbhtgpb
-	EfBhv9SmKahvHIaV88z+Of1ai0prhzzuGiVJs4rB2qkZWdI7nFwoZ+J9xqORqhpi
-	q71KiRfmqJW6Wqn3TjQg54RZBrf7eALnwotOd1wW7baIjdpwRinDtkt/Yn0Th5ik
-	3STJ5Q5Gk4sLmlbyXfZAGxdRErWdtzIElfFVCzQpCnNu1/SDftDdLxbOvfuyaQT7
-	5Recd5pmgvGuJsAUyeo3OgFRQgYO0Oa4BixRO0eMUPzByzyTD9Y3lMZ4zmCeeHVj
-	R84jonajBxTqt2W2eiQzAOlQ4pCDKgOOkwh5dZ6yfA==
-X-ME-Sender: <xms:U-WfZUkRqQAutNFK73pQAn7MN559CMu1_vFdfU49PTOKXBRatGLlEA>
-    <xme:U-WfZT0OxrL_6yIlikHv9O7Im9GiUAccdFCDTSpVTE620IimfHTKZJHWPyf-4CSds
-    YgTU5j6WvBSU6ghLcE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeifedggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:U-WfZSo2uwxG5HPRm8WLuHIXFz4D6xNqec1BKzgyXsAxM8qiBWVikg>
-    <xmx:U-WfZQk4-z096u_Db9SFTtSs4VkclUiZ19G40qwhZvtO_mr237SLbw>
-    <xmx:U-WfZS223sqdo6C1OMDpB0yg51BEwUzP2uKLxgqd4RGCiJ5fsUHMgw>
-    <xmx:U-WfZcpakV0xlJAzGCgiWztRhmxp5WRLdfsSsTaGZQ9f6qInK9BX-w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1A00CB6008D; Thu, 11 Jan 2024 07:55:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tc29WRwQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704978554; x=1736514554;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qOuB30Dc16U0vCarITox+yCHGsdehgXMs3mhCYq968c=;
+  b=Tc29WRwQQxo1a9NsxNhKsuVT5hhIOq1Kl73FnJ85gaxCTtBtZ06l3E7V
+   Hp+kFihwaXb8eUdRhXpGDiKx7DozpZUk2KDbaW6AQZDNDZgHBWoqpFVXK
+   3nxxVk/naADbaJKa8p3TBieg8SF6K9jkxqbENuLZu6ZEIWJd8B7z/KLNt
+   BHcIBFCJsOaDoiCwyt1916en3UJQYXfVsuhyGTndBdPfDSPc6iO4lk1mk
+   kTs3Z+rNGqKnWp0GkXGZfekoFPM7rlyWCTN4/pbTeQCnxGwEE8WKoEkUn
+   77n1sJyEefz73bUFRIfMEEDt1yN+/+4bUFfeL5iBQMOOkGV0cmFi+ZWuO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="463125643"
+X-IronPort-AV: E=Sophos;i="6.04,186,1695711600"; 
+   d="scan'208";a="463125643"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 05:09:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,186,1695711600"; 
+   d="scan'208";a="17039461"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 11 Jan 2024 05:09:10 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rNuo0-0008HM-1i;
+	Thu, 11 Jan 2024 13:09:08 +0000
+Date: Thu, 11 Jan 2024 21:08:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Carlos Galo <carlosgalo@google.com>, rostedt@goodmis.org,
+	akpm@linux-foundation.org, surenb@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	android-mm@google.com, kernel-team@android.com,
+	Carlos Galo <carlosgalo@google.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH] mm: Update mark_victim tracepoints fields
+Message-ID: <202401112057.lJYUSJJe-lkp@intel.com>
+References: <20240111001155.746-1-carlosgalo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <908325ed-08af-4b0c-926e-da9afba25772@app.fastmail.com>
-In-Reply-To: <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
-References: 
- <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
- <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
-Date: Thu, 11 Jan 2024 13:55:15 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Dan Carpenter" <dan.carpenter@linaro.org>,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>,
- "Uladzislau Rezki" <urezki@gmail.com>
-Cc: linux-next <linux-next@vger.kernel.org>,
- "open list" <linux-kernel@vger.kernel.org>,
- "Linux Regressions" <regressions@lists.linux.dev>,
- clang-built-linux <llvm@lists.linux.dev>, lkft-triage@lists.linaro.org,
- "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when used
- here [-Werror,-Wuninitialized]
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240111001155.746-1-carlosgalo@google.com>
 
-On Thu, Jan 11, 2024, at 12:16, Dan Carpenter wrote:
-> On Thu, Jan 11, 2024 at 04:23:09PM +0530, Naresh Kamboju wrote:
->> Following build failures noticed on i386 and x86 with clang builds on the
->> Linux next-20240111 tag.
->> 
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->> 
->> Build error:
->> ----------
->> mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
->> used here [-Werror,-Wuninitialized]
->>  4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
->>       |                                       ^~~~
->> mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
->> this warning
->>  4684 |         unsigned long addr;
->>       |                           ^
->>       |                            = 0
->> 1 error generated.
->
-> We turned off uninitialized variable warnings for GCC a long time ago...
-> :/ I don't know if we'll be able to re-enable it in a -Werror world
-> although Clang seems to be managing alright so perhaps there is hope.
+Hi Carlos,
 
-The problem with gcc's warning is that it is non-deterministic and
-in recent versions actually got more false-positives even without
--Os or -fsanitize=. Clang does not catch all that gcc does because
-it doesn't track state across inline functions, but at least its
-output is always the same regardless of optimization and other
-options.
+kernel test robot noticed the following build errors:
 
-At least this particular one is an obvious bug and easily gets
-caught by lkft and lkp even if gcc's -Wuninitilized doesn't
-flag it.
+[auto build test ERROR on 0dd3ee31125508cd67f7e7172247f05b7fd1753a]
 
-    Arnd
+url:    https://github.com/intel-lab-lkp/linux/commits/Carlos-Galo/mm-Update-mark_victim-tracepoints-fields/20240111-081635
+base:   0dd3ee31125508cd67f7e7172247f05b7fd1753a
+patch link:    https://lore.kernel.org/r/20240111001155.746-1-carlosgalo%40google.com
+patch subject: [PATCH] mm: Update mark_victim tracepoints fields
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240111/202401112057.lJYUSJJe-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240111/202401112057.lJYUSJJe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401112057.lJYUSJJe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/oom_kill.c:54:
+   In file included from include/trace/events/oom.h:206:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:237:
+>> include/trace/events/oom.h:96:3: error: called object type 'uid_t' (aka 'unsigned int') is not a function or function pointer
+      74 |         ),
+         |         ~~
+      75 | 
+      76 |         TP_fast_assign(
+         |         ~~~~~~~~~~~~~~~
+      77 |                 __entry->pid = task->pid;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+      78 |                 __entry->uid = uid;
+         |                 ~~~~~~~~~~~~~~~~~~~
+      79 |                 __assign_str(comm, task->comm);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      80 |                 __entry->oom_score_adj = task->signal->oom_score_adj;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      81 |         ),
+         |         ~~
+      82 | 
+      83 |         TP_printk("pid=%d uid=%u comm=%s oom_score_adj=%hd",
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      84 |                 __entry->pid,
+         |                 ~~~~~~~~~~~~~
+      85 |                 __entry->uid
+         |                 ~~~~~~~~~~~~
+      86 |                 __get_str(comm),
+         |                 ^~~~~~~~~~~~~~~~
+      87 |                 __entry->oom_score_adj,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~
+      88 |         )
+         |         ~
+      89 | );
+         | ~
+   include/trace/stages/stage3_trace_output.h:20:26: note: expanded from macro '__get_str'
+      20 | #define __get_str(field) ((char *)__get_dynamic_array(field))
+         |                          ^
+   include/trace/stages/stage3_trace_output.h:9:43: note: expanded from macro 'TP_printk'
+       9 | #define TP_printk(fmt, args...) fmt "\n", args
+         |                                           ^
+   include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
+      40 |         DECLARE_EVENT_CLASS(name,                              \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      41 |                              PARAMS(proto),                    \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      42 |                              PARAMS(args),                     \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      43 |                              PARAMS(tstruct),                  \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      44 |                              PARAMS(assign),                   \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      45 |                              PARAMS(print));                   \
+         |                              ~~~~~~~^~~~~~~
+   include/linux/tracepoint.h:107:25: note: expanded from macro 'PARAMS'
+     107 | #define PARAMS(args...) args
+         |                         ^
+   include/trace/trace_events.h:203:27: note: expanded from macro 'DECLARE_EVENT_CLASS'
+     203 |         trace_event_printf(iter, print);                                \
+         |                                  ^~~~~
+   In file included from mm/oom_kill.c:54:
+   In file included from include/trace/events/oom.h:206:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:237:
+>> include/trace/events/oom.h:74:1: error: expected expression
+      74 | TRACE_EVENT(mark_victim,
+         | ^
+   include/trace/trace_events.h:40:2: note: expanded from macro 'TRACE_EVENT'
+      40 |         DECLARE_EVENT_CLASS(name,                              \
+         |         ^
+   include/trace/trace_events.h:203:32: note: expanded from macro 'DECLARE_EVENT_CLASS'
+     203 |         trace_event_printf(iter, print);                                \
+         |                                       ^
+   2 errors generated.
+
+
+vim +96 include/trace/events/oom.h
+
+    73	
+  > 74	TRACE_EVENT(mark_victim,
+    75		TP_PROTO(struct task_struct *task, uid_t uid),
+    76	
+    77		TP_ARGS(task, uid),
+    78	
+    79		TP_STRUCT__entry(
+    80			__field(int, pid)
+    81			__field(uid_t, uid)
+    82			__string(comm, task->comm)
+    83			__field(short, oom_score_adj)
+    84		),
+    85	
+    86		TP_fast_assign(
+    87			__entry->pid = task->pid;
+    88			__entry->uid = uid;
+    89			__assign_str(comm, task->comm);
+    90			__entry->oom_score_adj = task->signal->oom_score_adj;
+    91		),
+    92	
+    93		TP_printk("pid=%d uid=%u comm=%s oom_score_adj=%hd",
+    94			__entry->pid,
+    95			__entry->uid
+  > 96			__get_str(comm),
+    97			__entry->oom_score_adj,
+    98		)
+    99	);
+   100	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
