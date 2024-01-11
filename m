@@ -1,55 +1,63 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A211EBC
-	for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 00:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445D67ED
+	for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 00:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dPz6gqjo"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3bbbdf0b859so5072477b6e.3
-        for <llvm@lists.linux.dev>; Wed, 10 Jan 2024 16:07:43 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kQj1RYRG"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6db0fdd2b8fso1386042b3a.2
+        for <llvm@lists.linux.dev>; Wed, 10 Jan 2024 16:46:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1704931662; x=1705536462; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1704933967; x=1705538767; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TShArdENafTOCTnI/LZrgLzX+BUXpRaca4Iuv2KbFTM=;
-        b=dPz6gqjoGtivd53/ReuoauTJHf9p2qQ0QKpzc6Ms8vNJekgauVuw5NkD6lWT6S++tD
-         B5b7syHXEhUD5+DxKJGwfBvcpETyQ++oofnzRU/L07nBVY0CmbR6QgHaCDVmCeywetq3
-         RNK98NmzJpRlXYb8nIPpJafD+sN4L9I0B9EpQ=
+        bh=gueNhZrbsNiJzCN2gb4yLrjECQBWf6cwwXnoTcfXIT4=;
+        b=kQj1RYRGm4Aa++ruvyTfFI19APFq/BW9lxuVS6Ln36ACb5Z3HGszxACIHVq7Jbcbiw
+         /gdXfRPorgAndp4BxTY1YwjfpdHLj9RtNk6k9FjEzutBWT5h86y9WNUIPQJ9SlNhZRse
+         pcgGrGW9/1I8+LPBAW895c3WLpDgCRKSIgWvg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704931662; x=1705536462;
+        d=1e100.net; s=20230601; t=1704933967; x=1705538767;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TShArdENafTOCTnI/LZrgLzX+BUXpRaca4Iuv2KbFTM=;
-        b=vfRM6v+Rn8bYgEH0oGGrist/gYmSQd+8RUf3iQTCTy91UEyc3ntaQCiAc0Uv0t9LbU
-         R7e5dfq6YrqppfSIrbuGH/8qJXb1iNWXKsmZ4YPiwFxTmbw4QY0/ZHctoU7/01kUVKCT
-         fx3ELQn5jvJOu4e4EtJb74ptpsouoixXcrlqhWqpr7k4/hwz1zSKO/t681kb7P5bNtRq
-         p7IEtaR4jBWuEX++zeUv2jOXF0+/T868DJx6LgMAKpT3pJ6jvZDV84VjwuN7t6RFPhCV
-         O03KmFV4y0UhJn5I5MJQYNHXV8PcMleYQXCR1QOLptt/+jieYsLFBarULQ06VTfBjtgp
-         Z9tg==
-X-Gm-Message-State: AOJu0Yyx3SfhzU7H2UAMCTqj5vnfqElJun5NYLg2VDG4tP5PhxKSZI/X
-	TIpaR95yV5IYAWB/ZgrivJBLy/ovBB6c
-X-Google-Smtp-Source: AGHT+IF4wsWW4fsdG3n0P/pFi84A5z4SQ8M8M+ff5o1gwQ0sPG0mgKcVKIK/ayHuiVxMzj7fz7a14Q==
-X-Received: by 2002:a05:6808:3605:b0:3bd:48a1:c49f with SMTP id ct5-20020a056808360500b003bd48a1c49fmr416053oib.27.1704931662499;
-        Wed, 10 Jan 2024 16:07:42 -0800 (PST)
+        bh=gueNhZrbsNiJzCN2gb4yLrjECQBWf6cwwXnoTcfXIT4=;
+        b=uBuuORzV0XJ2ndF765EXICx7lNBJBMQYqaJh9T+AXhv4xFV9Wt8tq8YuR41QU7jCqe
+         1V8XVBCZ4iU5Buebw5ymA4SXgCM2IEbjsg/wk9Bu8rW6o28khBFyRYWxNrgvB7pk3pu0
+         gkJ7imsD0CQdXsR7HRdbd0tQUlxn8LOEnKj8R8d4V2nz55cm+QKrJ+lpoXkYtVp6Fu0P
+         aKpILco9E5gRk77ASpuJ7zu1OlpcikqEhEgTi9BXA/79DQ9eEIRCf1ewYFQ4RfxqFXjc
+         F3xjLRDjlk/O3Z3t1EzBESU5cGbaKm4cUJXkasCiz3vsZG/fmY1A4CaXqvxCmmYR6cXu
+         FisA==
+X-Gm-Message-State: AOJu0Yxe/E3pyIDrUfLkzPCybVxQg0AKVE7TGa4kE0XN/ZsoQNC46T1p
+	r5HzDBeHuZkAmy1AhFdv04dkMnQewEYI
+X-Google-Smtp-Source: AGHT+IGkiZ1hknB2+0UC/gxIH8jrVZxWAA/1vUWxP929828CA6Qm4M9e8Oxn46aJ8qOxkFFVf4GTPg==
+X-Received: by 2002:aa7:90d3:0:b0:6d9:a64c:c5d1 with SMTP id k19-20020aa790d3000000b006d9a64cc5d1mr504196pfk.26.1704933967538;
+        Wed, 10 Jan 2024 16:46:07 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g5-20020a62f945000000b006d997b5d009sm3997315pfm.69.2024.01.10.16.07.41
+        by smtp.gmail.com with ESMTPSA id y2-20020a62b502000000b006dac91d6da5sm4071344pfe.68.2024.01.10.16.46.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jan 2024 16:07:41 -0800 (PST)
-Date: Wed, 10 Jan 2024 16:07:41 -0800
+        Wed, 10 Jan 2024 16:46:06 -0800 (PST)
+Date: Wed, 10 Jan 2024 16:46:06 -0800
 From: Kees Cook <keescook@chromium.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Tanzir Hasan <tanzhasanwork@gmail.com>,
-	Andy Shevchenko <andy@kernel.org>, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nick DeSaulniers <nnn@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] lib/string: shrink lib/string.i via IWYU
-Message-ID: <202401101606.A31647E@keescook>
-References: <20231214-libstringheader-v2-0-0f195dcff204@google.com>
- <20231214-libstringheader-v2-2-0f195dcff204@google.com>
- <20240109214910.oeopqq5j2gyl33dc@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-efi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, mykolal@fb.com,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 0/3] Update LLVM Phabricator and Bugzilla links
+Message-ID: <202401101645.ED161519BA@keescook>
+References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,96 +66,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240109214910.oeopqq5j2gyl33dc@google.com>
+In-Reply-To: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
 
-On Tue, Jan 09, 2024 at 09:49:10PM +0000, Justin Stitt wrote:
-> On Thu, Dec 14, 2023 at 09:06:13PM +0000, tanzirh@google.com wrote:
-> > This diff uses an open source tool include-what-you-use (IWYU) to modify
-> > the include list changing indirect includes to direct includes.
-> > IWYU is implemented using the IWYUScripts github repository which is a tool that is
-> > currently undergoing development. These changes seek to improve build times.
-> >
-> > This change to lib/string.c resulted in a preprocessed size of
-> > lib/string.i from 26371 lines to 5259 lines (-80%) for the x86
-> > defconfig.
-> >
+On Tue, Jan 09, 2024 at 03:16:28PM -0700, Nathan Chancellor wrote:
+> This series updates all instances of LLVM Phabricator and Bugzilla links
+> to point to GitHub commits directly and LLVM's Bugzilla to GitHub issue
+> shortlinks respectively.
 > 
-> Tanzir, I wonder if you could include some of the symbol names used for
-> some of these more esoteric headers. Let me describe what I mean:
+> I split up the Phabricator patch into BPF selftests and the rest of the
+> kernel in case the BPF folks want to take it separately from the rest of
+> the series, there are obviously no dependency issues in that case. The
+> Bugzilla change was mechanical enough and should have no conflicts.
 > 
-> Andy talks about "why <vdso/...>" and perhaps some comments (in your
-> patch message, not in the source itself) about which symbols are being
-> used from these headers would serve useful. I believe IWYU can generate
-> this information and should clear up some confusion or lead to better
-> suggestions from reviewers if we understand why a header is being
-> included.
-
-If there aren't any other objections, I'd like to pick this up in my
-tree after the merge window closes.
-
+> I am aiming this at Andrew and CC'ing other lists, in case maintainers
+> want to chime in, but I think this is pretty uncontroversial (famous
+> last words...).
 > 
-> At any rate, this builds for me doing randconfigs on x86_64 with these
-> KCONFIG_SEEDs
-> 1: 0x3DD9D136
-> 2: 0xB4440EE4
-> 3: 0x98778270
-> 4: 0x8C237F26
-> 5: 0x244F8A64
-> 6: 0x5A5C5E5C
-> 7: 0xA77896BC
-> 8: 0x9B5FF0D5
-> 9: 0x24F23F6A
-> 10: 0x35C0A107
+> ---
+> Nathan Chancellor (3):
+>       selftests/bpf: Update LLVM Phabricator links
+>       arch and include: Update LLVM Phabricator links
+>       treewide: Update LLVM Bugzilla links
 > 
-> I applied your patch on top of 5db8752c3b81bd33.
+>  arch/arm64/Kconfig                                 |  4 +--
+>  arch/powerpc/Makefile                              |  4 +--
+>  arch/powerpc/kvm/book3s_hv_nested.c                |  2 +-
+>  arch/riscv/Kconfig                                 |  2 +-
+>  arch/riscv/include/asm/ftrace.h                    |  2 +-
+>  arch/s390/include/asm/ftrace.h                     |  2 +-
+>  arch/x86/power/Makefile                            |  2 +-
+>  crypto/blake2b_generic.c                           |  2 +-
+>  drivers/firmware/efi/libstub/Makefile              |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c           |  2 +-
+>  drivers/media/test-drivers/vicodec/codec-fwht.c    |  2 +-
+>  drivers/regulator/Kconfig                          |  2 +-
+>  include/asm-generic/vmlinux.lds.h                  |  2 +-
+>  include/linux/compiler-clang.h                     |  2 +-
+>  lib/Kconfig.kasan                                  |  2 +-
+>  lib/raid6/Makefile                                 |  2 +-
+>  lib/stackinit_kunit.c                              |  2 +-
+>  mm/slab_common.c                                   |  2 +-
+>  net/bridge/br_multicast.c                          |  2 +-
+>  security/Kconfig                                   |  2 +-
+>  tools/testing/selftests/bpf/README.rst             | 32 +++++++++++-----------
+>  tools/testing/selftests/bpf/prog_tests/xdpwall.c   |  2 +-
+>  .../selftests/bpf/progs/test_core_reloc_type_id.c  |  2 +-
+>  23 files changed, 40 insertions(+), 40 deletions(-)
+> ---
+> base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+> change-id: 20240109-update-llvm-links-d03f9d649e1e
 > 
-> Tested-by: Justin Stitt <justinstitt@google.com>
+> Best regards,
+> -- 
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
-Thanks for the testing!
+Excellent! Thanks for doing this. I spot checked a handful I was
+familiar with and everything looks good to me.
 
--Kees
-
-> > Link: https://github.com/ClangBuiltLinux/IWYUScripts
-> >
-> > Signed-off-by: Tanzir Hasan <tanzirh@google.com>
-> > ---
-> >  lib/string.c | 14 +++++++-------
-> >  1 file changed, 7 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/lib/string.c b/lib/string.c
-> > index be26623953d2..7fe1acefb1a1 100644
-> > --- a/lib/string.c
-> > +++ b/lib/string.c
-> > @@ -16,16 +16,16 @@
-> >
-> >  #define __NO_FORTIFY
-> >  #include <linux/types.h>
-> > -#include <linux/string.h>
-> > -#include <linux/ctype.h>
-> > -#include <linux/kernel.h>
-> > -#include <linux/export.h>
-> > +#include <linux/bits.h>
-> >  #include <linux/bug.h>
-> >  #include <linux/errno.h>
-> > -#include <linux/slab.h>
-> > -
-> > +#include <asm/rwonce.h>
-> > +#include <linux/linkage.h>
-> > +#include <linux/stddef.h>
-> > +#include <vdso/limits.h>
-> > +#include <linux/string.h>
-> > +#include <linux/ctype.h>
-> >  #include <asm/unaligned.h>
-> > -#include <asm/byteorder.h>
-> >  #include <asm/word-at-a-time.h>
-> >  #include <asm/page.h>
-> >
-> >
-> > --
-> > 2.43.0.472.g3155946c3a-goog
-> >
-> Thanks
-> Justin
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
