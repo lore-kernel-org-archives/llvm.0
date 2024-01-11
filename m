@@ -1,135 +1,104 @@
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375A650250;
-	Thu, 11 Jan 2024 16:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD4053E14;
+	Thu, 11 Jan 2024 18:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pIoaubWI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mlHrRsJ9"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 9FC743200A0F;
-	Thu, 11 Jan 2024 11:37:33 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 11 Jan 2024 11:37:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1704991053; x=1705077453; bh=LSf0SiijIV
-	zkqraaNl7VZeYKE9TrQNnQYNEHNGLb4m8=; b=pIoaubWIow5E/9yD4EaILySIjh
-	GpbArRXiopDzKgj/x5OSJP1/XrLuOiFYpW2OCZrAxPlGEEDEnMaQspUVvdGYNBeZ
-	9eqSS6uRBInNQjp0mSFBeMRycMepS2IZ/LumKkG2hovNWwHSfnNwg0V/cT1TiPKm
-	OY99U7plvUSsrXJF2u8wITKGJ4ybLeKw5PtBGzi8j4ry4SCDC6b0NP+EPr+8Z61l
-	C81i8xYvoW5uLVnjSzOSawclt2UYMTQKgHgi274QAuKVYsPYN2YLZCZrzUpjHyHB
-	sbd7NZEkdctr+xwi6R6vTMxc6rWcxKHsdmsM68DKRwi14iDGbyEtey+UqdQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1704991053; x=1705077453; bh=LSf0SiijIVzkqraaNl7VZeYKE9Tr
-	QNnQYNEHNGLb4m8=; b=mlHrRsJ9xxJZ9UagtFXuT/OJT5doT6uscqzyrs+n0D4Y
-	Pyg0iG1906ueZkDsppl4UAurbfyC3HKQNOjlZSZlcZEHrtbZO2+cgQC83edJ6T8Z
-	NFWyfkJwRaNGRD149FEE7YAdAMxJjupM8dNCDvrWRLlQuHUS9XNaD32Y6xPIxiQ5
-	TtubAhgrRmuHjBbClF4HGf3MT+BZj21t/Wg5XrEFzwz3+Yitjyz2zoPQFnP7fh4T
-	2hVTWhD+Jn91CKM8U03V1S2P+STQq+ODDAMzRmybN/CllIr8SPcsFbkzGoJI3Y7Q
-	9mZeahCRYW00ajKxKM9ijfioL7FN04QX74eg5RGsnQ==
-X-ME-Sender: <xms:TBmgZU229WBGtd_QXI9TXSe2-4gRumcA3JyJ-44zqCTcHXy7Shg4bw>
-    <xme:TBmgZfHoWScO662orEBhvNW6DT1eb6mQnRq4PmYyBtLTc31Y5QxHAz7mNwChOPO7H
-    tj-0msC_ic9l30ZK14>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeifedgkeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:TBmgZc4MHTy5-w9E7CFl6SQFvCiemLxW0lZhVSStFo-FBXYolIEu8w>
-    <xmx:TBmgZd3zqmj_j6cZVMftC_8YVk7uWgmoaLjtztaPthkuXd2yxW0Xig>
-    <xmx:TBmgZXEn4tnFkThHXyWwySxBN6U76OIeB-V2Or0mf985HK2yGWN0QQ>
-    <xmx:TRmgZc5IIbD0bZI_q2xGVAEOfKenrHdn_PdlPA_kAS68eWmjFC0eug>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id C0B46B6008D; Thu, 11 Jan 2024 11:37:32 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zul+I/cv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704998689; x=1736534689;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BLWkV4FwFpaHlahGmNWz/euarj5Ekb2SfjPuJA4VwmQ=;
+  b=Zul+I/cv0uj1Jx7QVKGzuL3he30Yx6RXde9S72JXT1fhMBxOapxEL8XG
+   6K8ew1kUvWqF4MakKSaaeSEePe+k35Xbcnc8Ff8nXilH/Rz5262Q3D9Ip
+   2jq0b3lYqrvUhtMlbtLaQ6VZurkkwtvBnyfcWUmq82tIdyYEs1r4dICur
+   8suWbwYOaVELCHQmgsY6xPAxu1nFBI5Fysg3/Z/OhF9VNSA8uP3/hJHR9
+   KMvc1hVtcsIcCxsLRV8Gxz0SahLqsgBoOpFv6Wiscow0A9iMWFFtjN/HD
+   1FGWwHf2L7ifl0urcgrW4vZR1x/G7yi5S3V/rK+GAzr15gWBQdjkKDprx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="6036469"
+X-IronPort-AV: E=Sophos;i="6.04,187,1695711600"; 
+   d="scan'208";a="6036469"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 10:44:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="906047037"
+X-IronPort-AV: E=Sophos;i="6.04,187,1695711600"; 
+   d="scan'208";a="906047037"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 11 Jan 2024 10:44:34 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rO02Z-0008cU-2C;
+	Thu, 11 Jan 2024 18:44:31 +0000
+Date: Fri, 12 Jan 2024 02:44:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel_team@skhynix.com, akpm@linux-foundation.org,
+	ying.huang@intel.com, namit@vmware.com, xhao@linux.alibaba.com,
+	mgorman@techsingularity.net, hughd@google.com, willy@infradead.org,
+	david@redhat.com, peterz@infradead.org, luto@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com
+Subject: Re: [v5 6/7] mm: Defer TLB flush by keeping both src and dst folios
+ at migration
+Message-ID: <202401120213.rCOV7YQI-lkp@intel.com>
+References: <20240111060757.13563-7-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <bb175a67-462b-41a7-804a-ec990291a00e@app.fastmail.com>
-In-Reply-To: <908325ed-08af-4b0c-926e-da9afba25772@app.fastmail.com>
-References: 
- <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
- <628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
- <908325ed-08af-4b0c-926e-da9afba25772@app.fastmail.com>
-Date: Thu, 11 Jan 2024 17:37:12 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Dan Carpenter" <dan.carpenter@linaro.org>,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>,
- "Uladzislau Rezki" <urezki@gmail.com>
-Cc: linux-next <linux-next@vger.kernel.org>,
- "open list" <linux-kernel@vger.kernel.org>,
- "Linux Regressions" <regressions@lists.linux.dev>,
- clang-built-linux <llvm@lists.linux.dev>, lkft-triage@lists.linaro.org,
- "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when used
- here [-Werror,-Wuninitialized]
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240111060757.13563-7-byungchul@sk.com>
 
-On Thu, Jan 11, 2024, at 13:55, Arnd Bergmann wrote:
-> On Thu, Jan 11, 2024, at 12:16, Dan Carpenter wrote:
->> On Thu, Jan 11, 2024 at 04:23:09PM +0530, Naresh Kamboju wrote:
->>> Following build failures noticed on i386 and x86 with clang builds on the
->>> Linux next-20240111 tag.
->>> 
->>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>> 
->>> Build error:
->>> ----------
->>> mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
->>> used here [-Werror,-Wuninitialized]
->>>  4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
->>>       |                                       ^~~~
->>> mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
->>> this warning
->>>  4684 |         unsigned long addr;
->>>       |                           ^
->>>       |                            = 0
->>> 1 error generated.
->>
->> We turned off uninitialized variable warnings for GCC a long time ago...
->> :/ I don't know if we'll be able to re-enable it in a -Werror world
->> although Clang seems to be managing alright so perhaps there is hope.
->
-> The problem with gcc's warning is that it is non-deterministic and
-> in recent versions actually got more false-positives even without
-> -Os or -fsanitize=. Clang does not catch all that gcc does because
-> it doesn't track state across inline functions, but at least its
-> output is always the same regardless of optimization and other
-> options.
->
-> At least this particular one is an obvious bug and easily gets
-> caught by lkft and lkp even if gcc's -Wuninitilized doesn't
-> flag it.
+Hi Byungchul,
 
-As it turns out, gcc did find this one in the default -Wuninitialized
-regardless of -Wmaybe-uninitialized:
+kernel test robot noticed the following build errors:
 
-mm/vmalloc.c: In function 'vmalloc_dump_obj':
-mm/vmalloc.c:4691:22: error: 'addr' is used uninitialized [-Werror=uninitialized]
- 4691 |                 va = __find_vmap_area(addr, &vn->busy.root);
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mm/vmalloc.c:4684:23: note: 'addr' was declared here
- 4684 |         unsigned long addr;
-      |                       ^~~~
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on tip/sched/core tip/x86/core arm64/for-next/core tip/x86/mm linus/master v6.7 next-20240111]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-and I see that Uladzislau Rezki already sent a fix, which
-is the same that I tried out in my randconfig tree:
-https://lore.kernel.org/lkml/ZaARXdbigD1hWuOS@pc638.lan/
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/x86-tlb-Add-APIs-manipulating-tlb-batch-s-arch-data/20240111-141049
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240111060757.13563-7-byungchul%40sk.com
+patch subject: [v5 6/7] mm: Defer TLB flush by keeping both src and dst folios at migration
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20240112/202401120213.rCOV7YQI-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240112/202401120213.rCOV7YQI-lkp@intel.com/reproduce)
 
-    Arnd
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401120213.rCOV7YQI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: migrc_flush_start
+   >>> referenced by tlb.c
+   >>>               arch/x86/mm/tlb.o:(arch_tlbbatch_flush) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: migrc_flush_end
+   >>> referenced by tlb.c
+   >>>               arch/x86/mm/tlb.o:(arch_tlbbatch_flush) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: migrc_flush_free_folios
+   >>> referenced by memory.c
+   >>>               mm/memory.o:(handle_mm_fault) in archive vmlinux.a
+   >>> referenced by page_alloc.c
+   >>>               mm/page_alloc.o:(get_page_from_freelist) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
