@@ -1,122 +1,678 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B43A56B6C;
-	Thu, 11 Jan 2024 20:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E7F5A0E0
+	for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 20:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pz76U6jP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C575C43390;
-	Thu, 11 Jan 2024 20:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705004407;
-	bh=+QavJfo5shHsDI54vIkucOEkmDxcfkwD6QfPD3io40U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pz76U6jPieOUiWYaAgRMSZ0RaLxs3b1cj+yfIzSrgCEHRBjcAABzNWoHXXaVgbbVR
-	 JNL9z6/6pKRr8TJbyGaLt7nR6s0+DfKU4aAcu4ZDw5Do5dHTvwf4BPKmoh0ZdmM/wj
-	 jISSXv6Gt4afZr8OahwxcH5973TMwOHw2ZxyVygTiXXrAn8B+w5p4KN/47VPigb+oS
-	 lYek+N6adK2I8qsxnhvl1i233QVbL1Z/OOAND2xJb1gcc/MqtuOAhpUYiVLBzA8k05
-	 Pn5/fUyVcxSYy0zI54/QOKcb1yk1mCMG9Vo/M2TPP27bkS1dSLsIkepje263KX/Vl3
-	 DZj5TG7UMZ1Rw==
-Date: Thu, 11 Jan 2024 13:20:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	clang-built-linux <llvm@lists.linux.dev>, patches@lists.linux.dev,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	ppc-dev <linuxppc-dev@lists.ozlabs.org>, kvm@vger.kernel.org,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	linux-trace-kernel@vger.kernel.org,
-	linux-s390 <linux-s390@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	linux-efi <linux-efi@vger.kernel.org>,
-	amd-gfx list <amd-gfx@lists.freedesktop.org>,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linux-arch <linux-arch@vger.kernel.org>,
-	kasan-dev <kasan-dev@googlegroups.com>,
-	linux-mm <linux-mm@kvack.org>, bridge@lists.linux.dev,
-	Network Development <netdev@vger.kernel.org>,
-	LSM List <linux-security-module@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH 1/3] selftests/bpf: Update LLVM Phabricator links
-Message-ID: <20240111202003.GA3418790@dev-arch.thelio-3990X>
-References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
- <20240109-update-llvm-links-v1-1-eb09b59db071@kernel.org>
- <6a655e9f-9878-4292-9d16-f988c4bdfc73@linux.dev>
- <20240111194001.GA3805856@dev-arch.thelio-3990X>
- <CAADnVQKFv2DKE=Um=+kcEzSWYCp9USQT_VpTawzNY6eRaUdu5g@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OnJu9m/d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705004510;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=f4nsM8XnG1NrA5MijKkJnG69PzedXpIuujc43A/2TcI=;
+	b=OnJu9m/dqjjfE0fpZVqFMEumT6H8T2QxHxlFLZZDUzvUH6TJBtd5S/2RhwZEiP97l+CmsS
+	Kg3XRiUGDCNKen12UQHppG6Iy17iFdvh/tz+SeCRPy5x83w2hdKzpaPfmOOrANZi9koiVH
+	AybkLpPPyG7VfbZn3i6eYiFCdlwXHJo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-172-Iii8EIsLNCe86XAQp0Lrow-1; Thu, 11 Jan 2024 15:21:49 -0500
+X-MC-Unique: Iii8EIsLNCe86XAQp0Lrow-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 183B110259AE
+	for <llvm@lists.linux.dev>; Thu, 11 Jan 2024 20:21:49 +0000 (UTC)
+Received: from [172.64.3.46] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D7D511121306;
+	Thu, 11 Jan 2024 20:21:48 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0,
+ mainline.kernel.org-clang, acc65769)
+Date: Thu, 11 Jan 2024 20:21:48 -0000
+To: omosnace@redhat.com, yizhan@redhat.com, llvm@lists.linux.dev,
+ jbastian@redhat.com, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKFv2DKE=Um=+kcEzSWYCp9USQT_VpTawzNY6eRaUdu5g@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <99931.124011115214900333@us-mta-172.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexei,
+Hi, we tested your kernel and here are the results:
 
-On Thu, Jan 11, 2024 at 12:00:50PM -0800, Alexei Starovoitov wrote:
-> On Thu, Jan 11, 2024 at 11:40 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Yonghong,
-> >
-> > On Wed, Jan 10, 2024 at 08:05:36PM -0800, Yonghong Song wrote:
-> > >
-> > > On 1/9/24 2:16 PM, Nathan Chancellor wrote:
-> > > > reviews.llvm.org was LLVM's Phabricator instances for code review. It
-> > > > has been abandoned in favor of GitHub pull requests. While the majority
-> > > > of links in the kernel sources still work because of the work Fangrui
-> > > > has done turning the dynamic Phabricator instance into a static archive,
-> > > > there are some issues with that work, so preemptively convert all the
-> > > > links in the kernel sources to point to the commit on GitHub.
-> > > >
-> > > > Most of the commits have the corresponding differential review link in
-> > > > the commit message itself so there should not be any loss of fidelity in
-> > > > the relevant information.
-> > > >
-> > > > Additionally, fix a typo in the xdpwall.c print ("LLMV" -> "LLVM") while
-> > > > in the area.
-> > > >
-> > > > Link: https://discourse.llvm.org/t/update-on-github-pull-requests/71540/172
-> > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > Ack with one nit below.
-> > >
-> > > Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> >
-> > <snip>
-> >
-> > > > @@ -304,6 +304,6 @@ from running test_progs will look like:
-> > > >   .. code-block:: console
-> > > > -  test_xdpwall:FAIL:Does LLVM have https://reviews.llvm.org/D109073? unexpected error: -4007
-> > > > +  test_xdpwall:FAIL:Does LLVM have https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d5? unexpected error: -4007
-> > > > -__ https://reviews.llvm.org/D109073
-> > > > +__ https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d
-> > >
-> > > To be consistent with other links, could you add the missing last alnum '5' to the above link?
-> >
-> > Thanks a lot for catching this and providing an ack. Andrew, could you
-> > squash this update into selftests-bpf-update-llvm-phabricator-links.patch?
-> 
-> Please send a new patch.
-> We'd like to take all bpf patches through the bpf tree to avoid conflicts.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Very well, I've sent a standalone v2 on top of bpf-next:
 
-https://lore.kernel.org/20240111-bpf-update-llvm-phabricator-links-v2-1-9a7ae976bd64@kernel.org/
+Kernel information:
+    Commit message: keys, dns: Fix size check of V1 server-list header
 
-Andrew, just drop selftests-bpf-update-llvm-phabricator-links.patch
-altogether in that case, the other two patches are fine to go via -mm I
-think.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/122241
 
-Cheers,
-Nathan
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865675
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865678
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/003
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/004
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/005
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/008
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/009
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/010
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/011
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/012
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/013
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/014
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/015
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/018
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/019
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/020
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/021
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/022
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/023
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/024
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/025
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/026
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/027
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/028
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/029
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/031
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/040
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+         aarch64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865679
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/031
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+         aarch64 - stress: stress-ng - cpu-cache
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865683
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865685
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865689
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865697
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+         aarch64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865704
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865708
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865710
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865714
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865717
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865721
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         aarch64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865725
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         ppc64le - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865806
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         ppc64le - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865814
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+         ppc64le - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865818
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         ppc64le - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865822
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         ppc64le - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865825
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         ppc64le - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865829
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+         ppc64le - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865831
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865765
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865766
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/003
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/004
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/005
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/008
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/009
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/010
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/011
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/012
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/013
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/014
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/015
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/018
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/019
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/020
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/021
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/022
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/023
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/024
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/025
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/026
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/027
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/028
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/029
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/031
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/040
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865767
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/031
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+           s390x - stress: stress-ng - cpu-cache
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865769
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865770
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865771
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865775
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865783
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+           s390x - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865789
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865793
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865796
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865800
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865802
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865835
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865839
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/003
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/004
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/005
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/008
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/009
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/010
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/011
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/012
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/013
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/014
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/015
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/018
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/019
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/020
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/021
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/022
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/023
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/024
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/025
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/026
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/027
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/028
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/029
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/031
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/040
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/041
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/042
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/043
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/044
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/045
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865840
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/003
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/004
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/005
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/008
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/009
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/010
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/011
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/012
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/013
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/014
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/015
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/018
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/019
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/020
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/021
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/022
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/023
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/024
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/025
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/026
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/027
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/028
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/031
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/040
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/041
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/042
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/043
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/044
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/045
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/047
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/048
+          x86_64 - stress: stress-ng - memory
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865845
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865846
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865850
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865858
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+          x86_64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865869
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865873
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865876
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865880
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865882
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865886
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865892
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865729
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865732
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865736
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+          x86_64 (debug) - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865743
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865751
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865755
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10865761
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
