@@ -1,30 +1,29 @@
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 8FBF41B283
-	for <llvm@lists.linux.dev>; Fri, 12 Jan 2024 04:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 06C061B28F
+	for <llvm@lists.linux.dev>; Fri, 12 Jan 2024 04:21:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
 Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 93801604F046F;
-	Fri, 12 Jan 2024 12:19:37 +0800 (CST)
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id CC6B9604F047A;
+	Fri, 12 Jan 2024 12:21:37 +0800 (CST)
 X-MD-Sfrom: suhui@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From: Su Hui <suhui@nfschina.com>
-To: artur.paszkiewicz@intel.com,
-	jejb@linux.ibm.com,
-	martin.petersen@oracle.com,
-	nathan@kernel.org,
+To: nathan@kernel.org,
 	ndesaulniers@google.com,
 	morbo@google.com,
 	justinstitt@google.com
 Cc: Su Hui <suhui@nfschina.com>,
-	dan.j.williams@intel.com,
-	linux-scsi@vger.kernel.org,
+	akpm@linux-foundation.org,
+	mudongliangabcd@gmail.com,
+	hch@tuxera.com,
+	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	kernel-janitors@vger.kernel.org
-Subject: [PATCH] scsi: isci: request: Fix an error code problem in isci_io_request_build
-Date: Fri, 12 Jan 2024 12:19:27 +0800
-Message-Id: <20240112041926.3924315-1-suhui@nfschina.com>
+Subject: [PATCH] fs: hfsplus: fix an error code problem in hfsplus_sync_fs
+Date: Fri, 12 Jan 2024 12:21:27 +0800
+Message-Id: <20240112042125.3930667-1-suhui@nfschina.com>
 X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -34,28 +33,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clang static complains that Value stored to 'status' is never read.
-Return 'status' rather than 'SCI_SUCCESS'.
+Clang static checker wanrning: Value stored to 'error2' is never read.
+Fix this typo error by assigning 'error2' to 'error'.
 
-Fixes: f1f52e75939b ("isci: uplevel request infrastructure")
+Fixes: 52399b171dfa ("hfsplus: use raw bio access for the volume headers")
 Signed-off-by: Su Hui <suhui@nfschina.com>
 ---
- drivers/scsi/isci/request.c | 2 +-
+ fs/hfsplus/super.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/isci/request.c b/drivers/scsi/isci/request.c
-index 71f711cb0628..355a0bc0828e 100644
---- a/drivers/scsi/isci/request.c
-+++ b/drivers/scsi/isci/request.c
-@@ -3387,7 +3387,7 @@ static enum sci_status isci_io_request_build(struct isci_host *ihost,
- 		return SCI_FAILURE;
- 	}
- 
--	return SCI_SUCCESS;
-+	return status;
- }
- 
- static struct isci_request *isci_request_from_tag(struct isci_host *ihost, u16 tag)
+diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
+index 1986b4f18a90..9f45582faf36 100644
+--- a/fs/hfsplus/super.c
++++ b/fs/hfsplus/super.c
+@@ -233,7 +233,7 @@ static int hfsplus_sync_fs(struct super_block *sb, int wait)
+ 				  sbi->s_backup_vhdr_buf, NULL, REQ_OP_WRITE |
+ 				  REQ_SYNC);
+ 	if (!error)
+-		error2 = error;
++		error = error2;
+ out:
+ 	mutex_unlock(&sbi->alloc_mutex);
+ 	mutex_unlock(&sbi->vh_mutex);
 -- 
 2.30.2
 
