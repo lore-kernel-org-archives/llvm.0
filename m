@@ -1,137 +1,67 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0358E111A;
-	Fri, 12 Jan 2024 02:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6D5EBD;
+	Fri, 12 Jan 2024 02:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NkZHiGgo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1705027585;
-	bh=KzTy9q41J+Iz61mM8YvhQ8+Vz6G42mnYqSFsJShOuN4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NkZHiGgoSR7guJRAt+YOwPSHIZ6rN3xqHulVZsTyRy8nZ3H40yLiLGe11v8Mygxh4
-	 M3XGFuiUnVMS1wfQDxwKwAUEbDlOEcYxjhu90Uhw3EgX7oZa6e7CBTwBHsVN3VveoA
-	 j3yU6Qf83WLGKlKgyr1NKVRf88Jh/a+K8U44kamy1vNOWHx070EzTmZ6ogeJYZSRKK
-	 sQIzIrSczY8TPzPBL91uojbOilesRU7fig98xyuybIeAUUpib0qWkWHjqmC5LLZP3a
-	 2OuSEb3cXIxhr+TQ0eMr2GhhwHPGv6phMDY2DWRhxX1Ks/YTv1rKLXSR3EKSj0l4zf
-	 Zv+pa5qgAjqiA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TB5X04LnGz4x5h;
-	Fri, 12 Jan 2024 13:46:24 +1100 (AEDT)
-Date: Fri, 12 Jan 2024 13:46:22 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Dan Carpenter" <dan.carpenter@linaro.org>, "Naresh Kamboju"
- <naresh.kamboju@linaro.org>, "Uladzislau Rezki" <urezki@gmail.com>,
- linux-next <linux-next@vger.kernel.org>, "open list"
- <linux-kernel@vger.kernel.org>, "Linux Regressions"
- <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>,
- lkft-triage@lists.linaro.org, "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized
- when used here [-Werror,-Wuninitialized]
-Message-ID: <20240112134556.1c73c072@oak>
-In-Reply-To: <bb175a67-462b-41a7-804a-ec990291a00e@app.fastmail.com>
-References: <CA+G9fYvDNksfKNvtfERaBa9t2MJNucfD_s3LgKGw_z2otW+nyw@mail.gmail.com>
-	<628bf675-77fc-4ccc-be2f-9c3ec8a7b0b8@moroto.mountain>
-	<908325ed-08af-4b0c-926e-da9afba25772@app.fastmail.com>
-	<bb175a67-462b-41a7-804a-ec990291a00e@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hyk9lYk2"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7971BC43390;
+	Fri, 12 Jan 2024 02:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705027829;
+	bh=3odjx/yD9/fQgMq9jz/RyMQs9Xu4ltu9qq8siYucaN8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Hyk9lYk2J6u1/dssGHNjc6XwNBET6pSExwv5Ln1q8AmN8onAb6cYHofLglBAcdJhA
+	 q67z6Z9l08DeEWrgZnLMikecgX/8LaTe9/K85yqTd+feDheuUy+xgVLc04Kmo13z7b
+	 v6W1BMzPbXg6Ei9gEJhrjeydr8VfOuEedV7E8cPow0OerSoVqULl1Az95mcimS+7CQ
+	 KgHV9MBrguPLKYt/J6Piw8RowsIUWe6f9t/6wDJWMuAyH69RDvq2EBx4FSJNQ5PO8+
+	 hkhlyaitHhjy+RIsUNTx6waX+Jn+AJhFIGFUhbB0SIqgbXqOVChWK+M1FEM/4bZWwe
+	 KaXSP8w17bkeg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 65268D8C96C;
+	Fri, 12 Jan 2024 02:50:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FXcs1LWAtjjuljVrt8TKt6X";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Update LLVM Phabricator links
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170502782940.19866.16464441843592001659.git-patchwork-notify@kernel.org>
+Date: Fri, 12 Jan 2024 02:50:29 +0000
+References: <20240111-bpf-update-llvm-phabricator-links-v2-1-9a7ae976bd64@kernel.org>
+In-Reply-To: <20240111-bpf-update-llvm-phabricator-links-v2-1-9a7ae976bd64@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, mykolal@fb.com,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, patches@lists.linux.dev,
+ llvm@lists.linux.dev, yonghong.song@linux.dev
 
---Sig_/FXcs1LWAtjjuljVrt8TKt6X
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-Hi all,
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu, 11 Jan 2024 17:37:12 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
->
-> On Thu, Jan 11, 2024, at 13:55, Arnd Bergmann wrote:
-> > On Thu, Jan 11, 2024, at 12:16, Dan Carpenter wrote: =20
-> >> On Thu, Jan 11, 2024 at 04:23:09PM +0530, Naresh Kamboju wrote: =20
-> >>> Following build failures noticed on i386 and x86 with clang builds on=
- the
-> >>> Linux next-20240111 tag.
-> >>>=20
-> >>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >>>=20
-> >>> Build error:
-> >>> ----------
-> >>> mm/vmalloc.c:4691:25: error: variable 'addr' is uninitialized when
-> >>> used here [-Werror,-Wuninitialized]
-> >>>  4691 |                 va =3D __find_vmap_area(addr, &vn->busy.root);
-> >>>       |                                       ^~~~
-> >>> mm/vmalloc.c:4684:20: note: initialize the variable 'addr' to silence
-> >>> this warning
-> >>>  4684 |         unsigned long addr;
-> >>>       |                           ^
-> >>>       |                            =3D 0
-> >>> 1 error generated. =20
-> >>
-> >> We turned off uninitialized variable warnings for GCC a long time ago.=
-..
-> >> :/ I don't know if we'll be able to re-enable it in a -Werror world
-> >> although Clang seems to be managing alright so perhaps there is hope. =
-=20
-> >
-> > The problem with gcc's warning is that it is non-deterministic and
-> > in recent versions actually got more false-positives even without
-> > -Os or -fsanitize=3D. Clang does not catch all that gcc does because
-> > it doesn't track state across inline functions, but at least its
-> > output is always the same regardless of optimization and other
-> > options.
-> >
-> > At least this particular one is an obvious bug and easily gets
-> > caught by lkft and lkp even if gcc's -Wuninitilized doesn't
-> > flag it. =20
->=20
-> As it turns out, gcc did find this one in the default -Wuninitialized
-> regardless of -Wmaybe-uninitialized:
->=20
-> mm/vmalloc.c: In function 'vmalloc_dump_obj':
-> mm/vmalloc.c:4691:22: error: 'addr' is used uninitialized [-Werror=3Dunin=
-itialized]
->  4691 |                 va =3D __find_vmap_area(addr, &vn->busy.root);
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> mm/vmalloc.c:4684:23: note: 'addr' was declared here
->  4684 |         unsigned long addr;
->       |                       ^~~~
->=20
-> and I see that Uladzislau Rezki already sent a fix, which
-> is the same that I tried out in my randconfig tree:
-> https://lore.kernel.org/lkml/ZaARXdbigD1hWuOS@pc638.lan/
+On Thu, 11 Jan 2024 13:16:48 -0700 you wrote:
+> reviews.llvm.org was LLVM's Phabricator instances for code review. It
+> has been abandoned in favor of GitHub pull requests. While the majority
+> of links in the kernel sources still work because of the work Fangrui
+> has done turning the dynamic Phabricator instance into a static archive,
+> there are some issues with that work, so preemptively convert all the
+> links in the kernel sources to point to the commit on GitHub.
+> 
+> [...]
 
-I have applied that to linux-next today.
+Here is the summary with links:
+  - [bpf-next,v2] selftests/bpf: Update LLVM Phabricator links
+    https://git.kernel.org/bpf/bpf-next/c/32e14348077c
 
---=20
-Cheers,
-Stephen Rothwell
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---Sig_/FXcs1LWAtjjuljVrt8TKt6X
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmWgp/4ACgkQAVBC80lX
-0GyUgQf7BqMWgH6cRs1tGNAs4BKWtftlLyJyZxCjYclzY9kjUIECSS6YKmZqH13Q
-XPy97i7GodFZJWaOwgf0RGtGB45wBjK/odZHpxLGmPVddDW3Lw4b+hoz/VnPzUyx
-3UcHxWZrX2sjM7MHASXOmNlRvTr7BYVDTUFIojzdOFpELAaDHgIp+25i3NT/s7b9
-xuE4cywwHA7i49iKZHBCPahxT9wcIaREwKMcClWM824G0oTEZ9hFjkTlOUy7EGfV
-vxgUIvc4KBRGUXq+ghdfru/SDnFXSjVxQzBF/Y/+u6CbLJpXsl4/zAmHH01c39q4
-Tf4CfWS8RbJHiEfFwPeSAw5ayu+f/w==
-=YCNG
------END PGP SIGNATURE-----
-
---Sig_/FXcs1LWAtjjuljVrt8TKt6X--
