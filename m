@@ -1,132 +1,160 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70880FBF8;
-	Thu, 11 Jan 2024 22:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0406510A15;
+	Fri, 12 Jan 2024 00:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfvTIE3Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2ECC433F1;
-	Thu, 11 Jan 2024 22:41:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LilUtoxj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56467C433C7;
+	Fri, 12 Jan 2024 00:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705012870;
-	bh=+WwJWrlRns8EY2E9CLCbBROU9LT8j8Mr6e6ahvyEWOU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OfvTIE3YPZ6MdksK4thbEF0gX4EYWItfgro+p6au+ae/0L1Rn5KPQUey1MO2mF7sb
-	 912wFQwxWJt6Eqz5rquvRdwVK23gOw+mZN3QMJzBuw9omsgfklBLL4ldqAI5eFHiMf
-	 UwH3kwKHmW649e28JAQ6P8MeeoY5YOS78K9x583/YWF7UJuVj+KZu6omk0vxfKcOhP
-	 NdiX663P8dwv8VefWE36YU8/vmf1Hpt79kYUnhnu0IyL1nEAxmLnqQ0zgq6NMjjG59
-	 7vahCIA30Sn0UeqmjWeNnB4C048bpJkLlXFQL2KrAO5l8ShyZvKdAqNwDxW80aGjE4
-	 KMyE7A/fIix6w==
-Date: Thu, 11 Jan 2024 15:41:08 -0700
+	s=k20201202; t=1705020049;
+	bh=HwjbaJjrteKjt3TiJuiyZijGvloQtp4+JKX0Ij2rFrI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=LilUtoxjJKW1ggthMbr6tUEN0wnO1Nqqz5hw9Yz7q0hFmCo69MJCWCMuRYRtp6/hX
+	 HC/RVdmGWHbWfjM5qLNH9SC9me9dx/AxHdf0cPtOdQoj+byfhvkDYJaQfV1SS3LLpq
+	 HEjpJq4q/x/emJ30pa8w9PjI9B4EuTZTOhRJoR70Tfbt/N5D1Gyg76rm9HF/1Kv7S1
+	 8bmc34QjS+WRipAtjgEBbYaYXHSsiaLm5X3zGsDy3KEHqaeRT23jVrWPovJMNNoccO
+	 f5iX4nNGApTYPiGQUy31TP6W8DMMDtzrvxAhSTNPTriXAcWGFnmm3LvW0vM7LNjl6v
+	 JickBn/NkewAQ==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: kernel test robot <lkp@intel.com>, ardb@kernel.org, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, bhelgaas@google.com, arnd@arndb.de,
-	zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
-	jmorris@namei.org, serge@hallyn.com, javierm@redhat.com,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
- into setup_data.h
-Message-ID: <20240111224108.GA227186@dev-arch.thelio-3990X>
-References: <20240108095903.8427-3-tzimmermann@suse.de>
- <202401090800.UOBEKB3W-lkp@intel.com>
- <20240109175814.GA5981@dev-arch.thelio-3990X>
- <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
+Date: Thu, 11 Jan 2024 17:40:36 -0700
+Subject: [PATCH] media: mxl5xx: Move xpt structures off stack
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240111-dvb-mxl5xx-move-structs-off-stack-v1-1-ca4230e67c11@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIOKoGUC/x2NQQqDMBAAvyJ77kJ2UYR+pfSgcdMuVlOyGgLi3
+ w3eZi4zB5gkFYNnc0CSrKZxrUKPBvx3WD+COlUHdtw6IsIpj7iUX1cKLjEL2pZ2vxnGECoPfkY
+ hpp5HkuAYauefJGi5H6/3eV5ihne/cwAAAA==
+To: mchehab@kernel.org
+Cc: ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+ linux-media@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5603; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=HwjbaJjrteKjt3TiJuiyZijGvloQtp4+JKX0Ij2rFrI=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKkLuib2eyb6ynxj2Zyw6MkHJ4m41L3mLN06qhM+h+xZl
+ ZFXHNHfUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACay8wgjw/R210XM+nr7A/h1
+ Fk92ElywfdrTJAfnPdEmHdudP21qbGdkeFvwmfnNJC7JqOjCN1qtxSV7bx44nLqqz/JR3CnFcqu
+ v/AA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Thu, Jan 11, 2024 at 10:50:43AM +0100, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 09.01.24 um 18:58 schrieb Nathan Chancellor:
-> > On Tue, Jan 09, 2024 at 08:28:59AM +0800, kernel test robot wrote:
-> > > Hi Thomas,
-> > > 
-> > > kernel test robot noticed the following build warnings:
-> > > 
-> > > [auto build test WARNING on tip/x86/core]
-> > > [also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
-> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > > And when submitting patch, we suggest to use '--base' as documented in
-> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
-> > > base:   tip/x86/core
-> > > patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
-> > > patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
-> > > config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
-> > > compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > >     In file included from arch/x86/realmode/rm/wakemain.c:3:
-> > >     In file included from arch/x86/boot/boot.h:24:
-> > >     In file included from arch/x86/include/asm/setup.h:10:
-> > >     In file included from arch/x86/include/asm/page_types.h:7:
-> > >     In file included from include/linux/mem_encrypt.h:17:
-> > >     In file included from arch/x86/include/asm/mem_encrypt.h:18:
-> > >     In file included from arch/x86/include/uapi/asm/bootparam.h:5:
-> > > > > arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-> > >        10 |         struct setup_data data;
-> > >           |                           ^
-> > >     1 warning generated.
-> > 
-> > I think this warning is expected. This structure is now included in the
-> > realmode part of arch/x86, which has its own set of build flags,
-> > including -Wall, which includes -Wgnu on clang. The kernel obviously
-> > uses GNU extensions and states this clearly with '-std=gnu11', so
-> > -Wno-gnu is unconditionally added to KBUILD_CFLAGS for clang. It seems
-> > that same treatment is needed for REALMODE_CFLAGS, which also matches
-> > arch/x86/boot/compressed/Makefile, see commit 6c3b56b19730 ("x86/boot:
-> > Disable Clang warnings about GNU extensions"):
-> > 
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 1a068de12a56..24076db59783 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -53,6 +53,9 @@ REALMODE_CFLAGS += -fno-stack-protector
-> >   REALMODE_CFLAGS += -Wno-address-of-packed-member
-> >   REALMODE_CFLAGS += $(cc_stack_align4)
-> >   REALMODE_CFLAGS += $(CLANG_FLAGS)
-> > +ifdef CONFIG_CC_IS_CLANG
-> > +REALMODE_CFLAGS += -Wno-gnu
-> > +endif
-> 
-> Thanks. Shall I include this change in the patchset?
+When building for LoongArch with clang 18.0.0, the stack usage of
+probe() is larger than the allowed 2048 bytes:
 
-Yes, I think so to keep the build clean.
+  drivers/media/dvb-frontends/mxl5xx.c:1698:12: warning: stack frame size (2368) exceeds limit (2048) in 'probe' [-Wframe-larger-than]
+   1698 | static int probe(struct mxl *state, struct mxl5xx_cfg *cfg)
+        |            ^
+  1 warning generated.
 
-> Best regards
-> Thomas
-> 
-> >   export REALMODE_CFLAGS
-> >   # BITS is used as extension for files which are available in a 32 bit
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Frankenstrasse 146, 90461 Nuernberg, Germany
-> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-> HRB 36809 (AG Nuernberg)
+This is the result of the linked LLVM commit, which changes how the
+arrays of structures in config_ts() get handled with
+CONFIG_INIT_STACK_ZERO and CONFIG_INIT_STACK_PATTERN, which causes the
+above warning in combination with inlining, as config_ts() gets inlined
+into probe().
 
+This warning can be easily fixed by moving the array of structures off
+of the stackvia 'static const', which is a better location for these
+variables anyways because they are static data that is only ever read
+from, never modified, so allocating the stack space is wasteful.
 
+This drops the stack usage from 2368 bytes to 256 bytes with the same
+compiler and configuration.
+
+Cc: stable@vger.kernel.org
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1977
+Link: https://github.com/llvm/llvm-project/commit/afe8b93ffdfef5d8879e1894b9d7dda40dee2b8d
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/media/dvb-frontends/mxl5xx.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/media/dvb-frontends/mxl5xx.c b/drivers/media/dvb-frontends/mxl5xx.c
+index 4ebbcf05cc09..91e9c378397c 100644
+--- a/drivers/media/dvb-frontends/mxl5xx.c
++++ b/drivers/media/dvb-frontends/mxl5xx.c
+@@ -1381,57 +1381,57 @@ static int config_ts(struct mxl *state, enum MXL_HYDRA_DEMOD_ID_E demod_id,
+ 	u32 nco_count_min = 0;
+ 	u32 clk_type = 0;
+ 
+-	struct MXL_REG_FIELD_T xpt_sync_polarity[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_sync_polarity[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x90700010, 8, 1}, {0x90700010, 9, 1},
+ 		{0x90700010, 10, 1}, {0x90700010, 11, 1},
+ 		{0x90700010, 12, 1}, {0x90700010, 13, 1},
+ 		{0x90700010, 14, 1}, {0x90700010, 15, 1} };
+-	struct MXL_REG_FIELD_T xpt_clock_polarity[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_clock_polarity[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x90700010, 16, 1}, {0x90700010, 17, 1},
+ 		{0x90700010, 18, 1}, {0x90700010, 19, 1},
+ 		{0x90700010, 20, 1}, {0x90700010, 21, 1},
+ 		{0x90700010, 22, 1}, {0x90700010, 23, 1} };
+-	struct MXL_REG_FIELD_T xpt_valid_polarity[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_valid_polarity[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x90700014, 0, 1}, {0x90700014, 1, 1},
+ 		{0x90700014, 2, 1}, {0x90700014, 3, 1},
+ 		{0x90700014, 4, 1}, {0x90700014, 5, 1},
+ 		{0x90700014, 6, 1}, {0x90700014, 7, 1} };
+-	struct MXL_REG_FIELD_T xpt_ts_clock_phase[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_ts_clock_phase[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x90700018, 0, 3}, {0x90700018, 4, 3},
+ 		{0x90700018, 8, 3}, {0x90700018, 12, 3},
+ 		{0x90700018, 16, 3}, {0x90700018, 20, 3},
+ 		{0x90700018, 24, 3}, {0x90700018, 28, 3} };
+-	struct MXL_REG_FIELD_T xpt_lsb_first[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_lsb_first[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x9070000C, 16, 1}, {0x9070000C, 17, 1},
+ 		{0x9070000C, 18, 1}, {0x9070000C, 19, 1},
+ 		{0x9070000C, 20, 1}, {0x9070000C, 21, 1},
+ 		{0x9070000C, 22, 1}, {0x9070000C, 23, 1} };
+-	struct MXL_REG_FIELD_T xpt_sync_byte[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_sync_byte[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x90700010, 0, 1}, {0x90700010, 1, 1},
+ 		{0x90700010, 2, 1}, {0x90700010, 3, 1},
+ 		{0x90700010, 4, 1}, {0x90700010, 5, 1},
+ 		{0x90700010, 6, 1}, {0x90700010, 7, 1} };
+-	struct MXL_REG_FIELD_T xpt_enable_output[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_enable_output[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x9070000C, 0, 1}, {0x9070000C, 1, 1},
+ 		{0x9070000C, 2, 1}, {0x9070000C, 3, 1},
+ 		{0x9070000C, 4, 1}, {0x9070000C, 5, 1},
+ 		{0x9070000C, 6, 1}, {0x9070000C, 7, 1} };
+-	struct MXL_REG_FIELD_T xpt_err_replace_sync[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_err_replace_sync[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x9070000C, 24, 1}, {0x9070000C, 25, 1},
+ 		{0x9070000C, 26, 1}, {0x9070000C, 27, 1},
+ 		{0x9070000C, 28, 1}, {0x9070000C, 29, 1},
+ 		{0x9070000C, 30, 1}, {0x9070000C, 31, 1} };
+-	struct MXL_REG_FIELD_T xpt_err_replace_valid[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_err_replace_valid[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x90700014, 8, 1}, {0x90700014, 9, 1},
+ 		{0x90700014, 10, 1}, {0x90700014, 11, 1},
+ 		{0x90700014, 12, 1}, {0x90700014, 13, 1},
+ 		{0x90700014, 14, 1}, {0x90700014, 15, 1} };
+-	struct MXL_REG_FIELD_T xpt_continuous_clock[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_continuous_clock[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x907001D4, 0, 1}, {0x907001D4, 1, 1},
+ 		{0x907001D4, 2, 1}, {0x907001D4, 3, 1},
+ 		{0x907001D4, 4, 1}, {0x907001D4, 5, 1},
+ 		{0x907001D4, 6, 1}, {0x907001D4, 7, 1} };
+-	struct MXL_REG_FIELD_T xpt_nco_clock_rate[MXL_HYDRA_DEMOD_MAX] = {
++	static const struct MXL_REG_FIELD_T xpt_nco_clock_rate[MXL_HYDRA_DEMOD_MAX] = {
+ 		{0x90700044, 16, 80}, {0x90700044, 16, 81},
+ 		{0x90700044, 16, 82}, {0x90700044, 16, 83},
+ 		{0x90700044, 16, 84}, {0x90700044, 16, 85},
+
+---
+base-commit: 02d4e62ae2452c83e4a3e279b8e4cb4dcbad4b31
+change-id: 20240111-dvb-mxl5xx-move-structs-off-stack-e12172b1ef02
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
