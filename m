@@ -1,248 +1,216 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D865D74C;
-	Fri, 12 Jan 2024 08:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBF4537E4
+	for <llvm@lists.linux.dev>; Fri, 12 Jan 2024 08:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J9INWCe4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705046700; x=1736582700;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uv6Ype/eC4lHKRzgMxquVIgBBZeHuFiDJm+CmozdVpA=;
-  b=J9INWCe4D8bHE4qPlpdkn7i0qon7ffELLjtEXEzF1leKU8HveYltYNZR
-   V5rFvL+yYZOrjEVOo9xna0dbQ+3vR39V3lPn8fZeWR34DC1hzOCt6RN4L
-   TSEM3YdDOWuDZ19ni8R81xLjyoMOJMaXvcV3HYRnzIwjNlLkgFL+6Ow+p
-   63qig2mzwt6qmSmytcY/Fj7BO9WUftWuoi+FmYEHq8A5s9AtXRIF7dd/7
-   6/Hh8+OfIqdAgafNhz2TUDgCzMNLcvTW0qNlG0SkeYwY78iVaz32QE1Yo
-   aC4mZXwJtSI0QCtHiL7DjwftpCYBKB8qTtDwmZuyCcreld8EI9LkREAth
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="20577912"
-X-IronPort-AV: E=Sophos;i="6.04,188,1695711600"; 
-   d="scan'208";a="20577912"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 00:04:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="926312678"
-X-IronPort-AV: E=Sophos;i="6.04,188,1695711600"; 
-   d="scan'208";a="926312678"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2024 00:02:34 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rOCUR-0009DU-2u;
-	Fri, 12 Jan 2024 08:02:20 +0000
-Date: Fri, 12 Jan 2024 16:01:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	lgirdwood@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, broonie@kernel.org,
-	perex@perex.cz, tiwai@suse.com, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, ribalda@chromium.org,
-	nicolas.ferre@microchip.com, u.kleine-koenig@pengutronix.de,
-	kuninori.morimoto.gx@renesas.com, nfraprado@collabora.com,
-	alsa-devel@alsa-project.org, trevor.wu@mediatek.com,
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 6/7] ASoC: mediatek: mt8192-afe-pcm: Simplify with
- dev_err_probe()
-Message-ID: <202401121548.rwSkkCvR-lkp@intel.com>
-References: <20240111105247.117766-7-angelogioacchino.delregno@collabora.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MZW32H1D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705049444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jQ7fGFuIdT0J57BYSI0b+40wJJ8SUrX7vFxmW2FNmP8=;
+	b=MZW32H1DNfEHc7bBQaWcmmHua6/XzDTtTUWqUzeDKonu098kna9jcGYAayfWBQPH4bp0Ts
+	ohc28m681VcSIgpW19it4rtEl/66czKCVQMMXl2U943pYyTIIUFUC86ohUegTqo2oI8cD1
+	ntSiMIhV3JtzO9/AOin0ImD5tmczMJw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-80-CZ1mfZn7PQqIOFkceEmPhA-1; Fri,
+ 12 Jan 2024 03:50:43 -0500
+X-MC-Unique: CZ1mfZn7PQqIOFkceEmPhA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7D893C100B6
+	for <llvm@lists.linux.dev>; Fri, 12 Jan 2024 08:50:42 +0000 (UTC)
+Received: from [172.64.3.46] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D03625012;
+	Fri, 12 Jan 2024 08:50:42 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0,
+ mainline.kernel.org-clang, 457e4f99)
+Date: Fri, 12 Jan 2024 08:50:42 -0000
+To: omosnace@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240111105247.117766-7-angelogioacchino.delregno@collabora.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <31871.124011203504300257@us-mta-80.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi AngeloGioacchino,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on broonie-spi/for-next tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.7 next-20240112]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/ASoC-mediatek-mt8173-afe-pcm-Convert-to-devm_pm_runtime_enable/20240111-185734
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20240111105247.117766-7-angelogioacchino.delregno%40collabora.com
-patch subject: [PATCH 6/7] ASoC: mediatek: mt8192-afe-pcm: Simplify with dev_err_probe()
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240112/202401121548.rwSkkCvR-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 9bde5becb44ea071f5e1fa1f5d4071dc8788b18c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240112/202401121548.rwSkkCvR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401121548.rwSkkCvR-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> sound/soc/mediatek/mt8192/mt8192-afe-pcm.c:2284:46: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-    2284 |                         return dev_err_probe(afe->dev, ret, "dai %d register fail");
-         |                                                                  ~^
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +2284 sound/soc/mediatek/mt8192/mt8192-afe-pcm.c
+Kernel information:
+    Commit message: Merge tag 'auxdisplay-6.8' of https://github.com/ojeda/=
+linux
 
-  2172	
-  2173	static int mt8192_afe_pcm_dev_probe(struct platform_device *pdev)
-  2174	{
-  2175		struct mtk_base_afe *afe;
-  2176		struct mt8192_afe_private *afe_priv;
-  2177		struct device *dev;
-  2178		struct reset_control *rstc;
-  2179		int i, ret, irq_id;
-  2180	
-  2181		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
-  2182		if (ret)
-  2183			return ret;
-  2184	
-  2185		afe = devm_kzalloc(&pdev->dev, sizeof(*afe), GFP_KERNEL);
-  2186		if (!afe)
-  2187			return -ENOMEM;
-  2188		platform_set_drvdata(pdev, afe);
-  2189	
-  2190		afe->platform_priv = devm_kzalloc(&pdev->dev, sizeof(*afe_priv),
-  2191						  GFP_KERNEL);
-  2192		if (!afe->platform_priv)
-  2193			return -ENOMEM;
-  2194		afe_priv = afe->platform_priv;
-  2195	
-  2196		afe->dev = &pdev->dev;
-  2197		dev = afe->dev;
-  2198	
-  2199		/* init audio related clock */
-  2200		ret = mt8192_init_clock(afe);
-  2201		if (ret) {
-  2202			dev_err(dev, "init clock error\n");
-  2203			return ret;
-  2204		}
-  2205	
-  2206		/* reset controller to reset audio regs before regmap cache */
-  2207		rstc = devm_reset_control_get_exclusive(dev, "audiosys");
-  2208		if (IS_ERR(rstc))
-  2209			return dev_err_probe(dev, PTR_ERR(rstc), "could not get audiosys reset\n");
-  2210	
-  2211		ret = reset_control_reset(rstc);
-  2212		if (ret)
-  2213			return dev_err_probe(dev, ret, "failed to trigger audio reset\n");
-  2214	
-  2215		ret = devm_pm_runtime_enable(&pdev->dev);
-  2216		if (ret)
-  2217			return ret;
-  2218	
-  2219		/* regmap init */
-  2220		afe->regmap = syscon_node_to_regmap(dev->parent->of_node);
-  2221		if (IS_ERR(afe->regmap))
-  2222			return dev_err_probe(dev, PTR_ERR(afe->regmap),
-  2223					     "could not get regmap from parent");
-  2224	
-  2225		ret = regmap_attach_dev(dev, afe->regmap, &mt8192_afe_regmap_config);
-  2226		if (ret)
-  2227			return dev_err_probe(dev, ret, "regmap_attach_dev fail\n");
-  2228	
-  2229		/* enable clock for regcache get default value from hw */
-  2230		afe_priv->pm_runtime_bypass_reg_ctl = true;
-  2231		pm_runtime_get_sync(&pdev->dev);
-  2232	
-  2233		ret = regmap_reinit_cache(afe->regmap, &mt8192_afe_regmap_config);
-  2234		if (ret)
-  2235			return dev_err_probe(dev, ret, "regmap_reinit_cache fail\n");
-  2236	
-  2237		pm_runtime_put_sync(&pdev->dev);
-  2238		afe_priv->pm_runtime_bypass_reg_ctl = false;
-  2239	
-  2240		regcache_cache_only(afe->regmap, true);
-  2241		regcache_mark_dirty(afe->regmap);
-  2242	
-  2243		/* init memif */
-  2244		afe->memif_size = MT8192_MEMIF_NUM;
-  2245		afe->memif = devm_kcalloc(dev, afe->memif_size, sizeof(*afe->memif),
-  2246					  GFP_KERNEL);
-  2247		if (!afe->memif)
-  2248			return -ENOMEM;
-  2249	
-  2250		for (i = 0; i < afe->memif_size; i++) {
-  2251			afe->memif[i].data = &memif_data[i];
-  2252			afe->memif[i].irq_usage = memif_irq_usage[i];
-  2253			afe->memif[i].const_irq = 1;
-  2254		}
-  2255	
-  2256		mutex_init(&afe->irq_alloc_lock);	/* needed when dynamic irq */
-  2257	
-  2258		/* init irq */
-  2259		afe->irqs_size = MT8192_IRQ_NUM;
-  2260		afe->irqs = devm_kcalloc(dev, afe->irqs_size, sizeof(*afe->irqs),
-  2261					 GFP_KERNEL);
-  2262		if (!afe->irqs)
-  2263			return -ENOMEM;
-  2264	
-  2265		for (i = 0; i < afe->irqs_size; i++)
-  2266			afe->irqs[i].irq_data = &irq_data[i];
-  2267	
-  2268		/* request irq */
-  2269		irq_id = platform_get_irq(pdev, 0);
-  2270		if (irq_id < 0)
-  2271			return irq_id;
-  2272	
-  2273		ret = devm_request_irq(dev, irq_id, mt8192_afe_irq_handler,
-  2274				       IRQF_TRIGGER_NONE, "asys-isr", (void *)afe);
-  2275		if (ret)
-  2276			return dev_err_probe(dev, ret, "could not request_irq for Afe_ISR_Handle\n");
-  2277	
-  2278		/* init sub_dais */
-  2279		INIT_LIST_HEAD(&afe->sub_dais);
-  2280	
-  2281		for (i = 0; i < ARRAY_SIZE(dai_register_cbs); i++) {
-  2282			ret = dai_register_cbs[i](afe);
-  2283			if (ret)
-> 2284				return dev_err_probe(afe->dev, ret, "dai %d register fail");
-  2285		}
-  2286	
-  2287		/* init dai_driver and component_driver */
-  2288		ret = mtk_afe_combine_sub_dai(afe);
-  2289		if (ret)
-  2290			return dev_err_probe(afe->dev, ret, "mtk_afe_combine_sub_dai fail\n");
-  2291	
-  2292		/* others */
-  2293		afe->mtk_afe_hardware = &mt8192_afe_hardware;
-  2294		afe->memif_fs = mt8192_memif_fs;
-  2295		afe->irq_fs = mt8192_irq_fs;
-  2296		afe->get_dai_fs = mt8192_get_dai_fs;
-  2297		afe->get_memif_pbuf_size = mt8192_get_memif_pbuf_size;
-  2298		afe->memif_32bit_supported = 1;
-  2299	
-  2300		afe->runtime_resume = mt8192_afe_runtime_resume;
-  2301		afe->runtime_suspend = mt8192_afe_runtime_suspend;
-  2302	
-  2303		/* register platform */
-  2304		ret = devm_snd_soc_register_component(&pdev->dev,
-  2305						      &mt8192_afe_component, NULL, 0);
-  2306		if (ret)
-  2307			return dev_err_probe(dev, ret, "Couldn't register AFE component\n");
-  2308	
-  2309		ret = devm_snd_soc_register_component(&pdev->dev,
-  2310						      &mt8192_afe_pcm_component,
-  2311						      afe->dai_drivers,
-  2312						      afe->num_dai_drivers);
-  2313		if (ret)
-  2314			return dev_err_probe(dev, ret, "Couldn't register AFE-PCM component\n");
-  2315	
-  2316		return 0;
-  2317	}
-  2318	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/122456
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10885508
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+         ppc64le - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10885465
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+           s390x - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10885559
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+          x86_64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10885673
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+          x86_64 (debug) - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10885594
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
+key"
+            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
+6fe731@paulmck-laptop/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
