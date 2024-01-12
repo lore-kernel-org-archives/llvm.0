@@ -1,51 +1,80 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202A65822D;
-	Fri, 12 Jan 2024 10:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A62B6A026;
+	Fri, 12 Jan 2024 12:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fq4nAbmg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FcToq9du"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705056606; x=1736592606;
+  t=1705061859; x=1736597859;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jBcbNO/emXMnFd8vU5REf/lVFMfe1N3qhJIffw/+PT0=;
-  b=fq4nAbmgLqXPtUM2QrpXjBXdTK/1xhYm8vmAVDvySLdbWs36VLPVy0ax
-   Kbus7Sb/zEC2jbxcL7LiTcVSuIDt5/1WWO2dSYUVeoANlhM63Q9fyGpYJ
-   fYQHfJF0+YaD4pGU9Dtzpu85uH+cULDnnsghL3eiX3NpoUZvvEAkUncMu
-   RCMvh7piJ65P9pxpQNvwFf2Lx4Km0HlxfKN8LOEwJFQKqQyYWp+cSi4Ex
-   Xc1NLX6+vYXMbnDikKVYh7dxEHBnwZhZZh9bSVyK0x2/Uqa1ZDTk2I3vk
-   fkdRMfm/3Y36/V+s3qk8bGPIziEZaAYB9X8u/B1+DDoqMe/TWRt19T/0+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="6505405"
+  bh=xvCX4d6bX2d4IAUESbi7SQnSQnl8gaBJl/nEkzGvOoo=;
+  b=FcToq9durZcYm9L3BiWAr+IYgsb8X76Ndg+JDIc2XvToq7/E0SkuPIxC
+   m2LVSBt/fJLGTKrLKnZqDkvexW664YnbSqU5VZzLcvG922nVnpNfwSpKv
+   l8vz0mfBWbnV4xVYQK1MaOp+PWYYUxuLb5riREbcPqN64X3lq4l1+HsW/
+   4mvVxR00kCsKDla/0bzPv35XQC3sy9mx8zpsNRhxQUCW9PCrdDXkxU6nn
+   wqJFKOypXY/Gym/UlRpMZHrmrMNakBWP/QG1pALCAeIMQmKHzdLp0SLYC
+   /c6sw/Jq9qlZlzvdd0D9eQ/xIfEO2geOAnMUezs3GddmK4rDOYvZVmTKu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="20627411"
 X-IronPort-AV: E=Sophos;i="6.04,189,1695711600"; 
-   d="scan'208";a="6505405"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 02:50:05 -0800
+   d="scan'208";a="20627411"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 04:17:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="759093869"
+X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="775990528"
 X-IronPort-AV: E=Sophos;i="6.04,189,1695711600"; 
-   d="scan'208";a="759093869"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jan 2024 02:50:02 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rOF6t-0009LA-2e;
-	Fri, 12 Jan 2024 10:49:59 +0000
-Date: Fri, 12 Jan 2024 18:49:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wupeng Ma <mawupeng1@huawei.com>, akpm@linux-foundation.org,
-	dave.hansen@linux.intel.com, luto@kernel.org, tglx@linutronix.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org, mawupeng1@huawei.com,
-	bp@suse.de, mingo@redhat.com
-Subject: Re: [PATCH v3 2/3] x86/mm/pat: Cleanup unused parameter in
- follow_phys
-Message-ID: <202401121839.yeX0qcR8-lkp@intel.com>
-References: <20240111120929.2694440-3-mawupeng1@huawei.com>
+   d="scan'208";a="775990528"
+Received: from kschuele-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.213.195])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 04:17:27 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+	id 13ED110A557; Fri, 12 Jan 2024 15:17:25 +0300 (+03)
+Date: Fri, 12 Jan 2024 15:17:25 +0300
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: Kevin Loughlin <kevinloughlin@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Michael Kelley <mikelley@microsoft.com>,
+	Pankaj Gupta <pankaj.gupta@amd.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Steve Rutherford <srutherford@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Hou Wenlong <houwenlong.hwl@antgroup.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Wang Jinchao <wangjinchao@xfusion.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Michael Roth <michael.roth@amd.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-coco@lists.linux.dev,
+	Ashish Kalra <ashish.kalra@amd.com>,
+	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>,
+	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>,
+	Sidharth Telang <sidtelang@google.com>
+Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+Message-ID: <20240112121725.3amxlumpifhagamb@box>
+References: <ZZ7YuEexYSaZYmLK@tassilo>
+ <20240111223650.3502633-1-kevinloughlin@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,78 +83,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240111120929.2694440-3-mawupeng1@huawei.com>
+In-Reply-To: <20240111223650.3502633-1-kevinloughlin@google.com>
 
-Hi Wupeng,
+On Thu, Jan 11, 2024 at 10:36:50PM +0000, Kevin Loughlin wrote:
+> SEV/SME code can execute prior to page table fixups for kernel
+> relocation. However, as with global variables accessed in
+> __startup_64(), the compiler is not required to generate RIP-relative
+> accesses for SEV/SME global variables, causing certain flavors of SEV
+> hosts and guests built with clang to crash during boot.
+> 
+> While an attempt was made to force RIP-relative addressing for certain
+> global SEV/SME variables via inline assembly (see snp_cpuid_get_table()
+> for example), RIP-relative addressing must be pervasively-enforced for
+> SEV/SME global variables when accessed prior to page table fixups.
+> 
+> __startup_64() already handles this issue for select non-SEV/SME global
+> variables using fixup_pointer(), which adjusts the pointer relative to
+> a `physaddr` argument. To avoid having to pass around this `physaddr`
+> argument across all functions needing to apply pointer fixups, this
+> patch introduces the macro GET_RIP_RELATIVE_PTR() (an abstraction of
+> the existing snp_cpuid_get_table()), which generates an RIP-relative
+> pointer to a passed variable. Similarly, PTR_TO_RIP_RELATIVE_PTR() is
+> introduced to fixup an existing pointer value with RIP-relative logic.
 
-kernel test robot noticed the following build warnings:
+Can we replace existing fixup_pointer() (and other fixup_*()) with the new
+thing? I don't think we need two confusing things for the same function.
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on tip/x86/mm tip/master linus/master v6.7 next-20240112]
-[cannot apply to tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wupeng-Ma/x86-mm-pat-Move-follow_phys-to-pat-related-file/20240111-201305
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240111120929.2694440-3-mawupeng1%40huawei.com
-patch subject: [PATCH v3 2/3] x86/mm/pat: Cleanup unused parameter in follow_phys
-config: i386-buildonly-randconfig-002-20240112 (https://download.01.org/0day-ci/archive/20240112/202401121839.yeX0qcR8-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240112/202401121839.yeX0qcR8-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401121839.yeX0qcR8-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/x86/mm/pat/memtype.c:973:2: error: call to undeclared function 'kunmap_local'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     973 |         pte_unmap_unlock(ptep, ptl);
-         |         ^
-   include/linux/mm.h:2965:2: note: expanded from macro 'pte_unmap_unlock'
-    2965 |         pte_unmap(pte);                                 \
-         |         ^
-   include/linux/pgtable.h:103:2: note: expanded from macro 'pte_unmap'
-     103 |         kunmap_local((pte));    \
-         |         ^
->> arch/x86/mm/pat/memtype.c:972:1: warning: unused label 'unlock' [-Wunused-label]
-     972 | unlock:
-         | ^~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +/unlock +972 arch/x86/mm/pat/memtype.c
-
-5899329b19100c0 arch/x86/mm/pat.c         venkatesh.pallipadi@intel.com 2008-12-18  952  
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  953  static int follow_phys(struct vm_area_struct *vma,
-76b476f1ffb4bf1 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  954  		unsigned long address,  unsigned long *prot,
-76b476f1ffb4bf1 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  955  		resource_size_t *phys)
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  956  {
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  957  	int ret = -EINVAL;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  958  	pte_t *ptep, pte;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  959  	spinlock_t *ptl;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  960  
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  961  	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  962  		goto out;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  963  
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  964  	if (follow_pte(vma->vm_mm, address, &ptep, &ptl))
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  965  		goto out;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  966  	pte = ptep_get(ptep);
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  967  
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  968  	*prot = pgprot_val(pte_pgprot(pte));
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  969  	*phys = (resource_size_t)pte_pfn(pte) << PAGE_SHIFT;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  970  
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  971  	ret = 0;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11 @972  unlock:
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11 @973  	pte_unmap_unlock(ptep, ptl);
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  974  out:
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  975  	return ret;
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  976  }
-b4e07d9667b7ae8 arch/x86/mm/pat/memtype.c Ma Wupeng                     2024-01-11  977  
+Also, is there any reason why GET_RIP_RELATIVE_PTR() and
+PTR_TO_RIP_RELATIVE_PTR() have to be macros? Inline functions would be
+cleaner.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  Kiryl Shutsemau / Kirill A. Shutemov
