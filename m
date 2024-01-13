@@ -1,209 +1,99 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62BC1642D
-	for <llvm@lists.linux.dev>; Fri, 12 Jan 2024 22:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E6DFBEC;
+	Sat, 13 Jan 2024 06:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UXTCuzh0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705098638;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yn/XTPt3Zg1g97VqxTWC7+LvrVgpLwXynfvQ8/9YOYg=;
-	b=UXTCuzh0ChEM7PXWDMjCE/pvLE38bwuYV0JAsNg9K0WJidTOl2ql4oLDjUuFyWS9TEFIoA
-	Uh/nuFJuzZhGLVLx8oxC7SxMdAFKgpeVokBapnO1ysBMYCPijpVyKwR4nUYp/4GWLTSDtZ
-	2Ph88UtpvL/8nogqjCvwFar0RnU/Pug=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-483-woNhP0ZMNvOU1eXKjwP0sQ-1; Fri,
- 12 Jan 2024 17:30:36 -0500
-X-MC-Unique: woNhP0ZMNvOU1eXKjwP0sQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D7AF29AA384
-	for <llvm@lists.linux.dev>; Fri, 12 Jan 2024 22:30:36 +0000 (UTC)
-Received: from [172.64.5.47] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 480242166B31;
-	Fri, 12 Jan 2024 22:30:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0,
- mainline.kernel.org-clang, 5b9b4161)
-Date: Fri, 12 Jan 2024 22:30:36 -0000
-To: omosnace@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lSeNw7Hg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705127259; x=1736663259;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j98s5NZ8fEGR+sOr/XDd4Ut/ZG0+myZ3kkI1NCOFYos=;
+  b=lSeNw7HgC0fzBIgg5CAj6OEqWZyr/628fl30wTDx1vxiGSMD5/2TPuJn
+   QvFUoG7FGVQ0i04mBW9uyI9HJAexrhAkUExfunhIi1fAZGr7txsl/wb4/
+   SDF0qjti1cPUUnrZ2DFYBDFwUyYOtaQ4o2u4GHhk/SqpkqRa/TTmHbjME
+   jtY6uPlN0EOYA5IJPQbRLgT5Sbixtvf/CkI/jjbUaCtJyULMdlxWK4olF
+   0fLdMP+2++zspOI6fncsr/LLzg9TUJNAxkRQv/McgqOAHUmhendkdDQ5o
+   U3h0BmZiGJz4jNi3LZZtPAUOPOziUiiA6FjsXqxpuUKIkw+LdyS8HIJWt
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="399034838"
+X-IronPort-AV: E=Sophos;i="6.04,191,1695711600"; 
+   d="scan'208";a="399034838"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 22:27:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,191,1695711600"; 
+   d="scan'208";a="31611499"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 12 Jan 2024 22:27:35 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rOXUS-000AAp-38;
+	Sat, 13 Jan 2024 06:27:32 +0000
+Date: Sat, 13 Jan 2024 14:27:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 12/15] drm/i915: Simplify intel_initial_plane_config()
+ calling convention
+Message-ID: <202401131457.PbfNaUDC-lkp@intel.com>
+References: <20231215105929.29568-13-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
-Message-Id: <18709.124011217303600312@us-mta-483.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231215105929.29568-13-ville.syrjala@linux.intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Ville,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip linus/master next-20240112]
+[cannot apply to drm-intel/for-linux-next-fixes v6.7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'docs-6.8' of git://git.lwn.net/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-i915-Use-struct-resource-for-memory-region-IO-as-well/20240112-020958
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20231215105929.29568-13-ville.syrjala%40linux.intel.com
+patch subject: [PATCH v2 12/15] drm/i915: Simplify intel_initial_plane_config() calling convention
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240113/202401131457.PbfNaUDC-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 9bde5becb44ea071f5e1fa1f5d4071dc8788b18c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240113/202401131457.PbfNaUDC-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/122515
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401131457.PbfNaUDC-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10889744
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-         ppc64le - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10889604
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-           s390x - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10889573
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-          x86_64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10889648
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-          x86_64 (debug) - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10889700
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
-key"
-            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
-6fe731@paulmck-laptop/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> drivers/gpu/drm/xe/display/xe_plane_initial.c:270:6: warning: no previous prototype for function 'intel_crtc_initial_plane_config' [-Wmissing-prototypes]
+     270 | void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
+         |      ^
+   drivers/gpu/drm/xe/display/xe_plane_initial.c:270:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     270 | void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
+         | ^
+         | static 
+   1 warning generated.
 
 
+vim +/intel_crtc_initial_plane_config +270 drivers/gpu/drm/xe/display/xe_plane_initial.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+44e694958b9539 Maarten Lankhorst 2023-08-17  269  
+44e694958b9539 Maarten Lankhorst 2023-08-17 @270  void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
