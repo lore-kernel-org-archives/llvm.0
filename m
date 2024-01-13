@@ -1,210 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0BC210F6
-	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 13:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9834A32;
+	Sat, 13 Jan 2024 16:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DHJS+jJA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705150903;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=C2flbUwW/n0qJIakGARfLQP/iCqGUy9OMwTnWzL6KjA=;
-	b=DHJS+jJAOoMegs//qqIbiRNWCFaEmO/olGQ8HUdEKJ2i5zG7bytB/HBvm9Tq3GM13RQpTx
-	BJtSPLrhg+gNCDLE0mTNE+tgV/R13NH4O+T0WPFtO8roEU5QoA+fPKzaF9q7/aguPxr03b
-	87tCCDcCFeVdRZwdC0xin90il0qFsv0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-671-6ZjGG6okO-6nSZITaAuUVA-1; Sat, 13 Jan 2024 08:01:41 -0500
-X-MC-Unique: 6ZjGG6okO-6nSZITaAuUVA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 62F20185A781
-	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 13:01:41 +0000 (UTC)
-Received: from [172.64.5.47] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4AC32492BF0;
-	Sat, 13 Jan 2024 13:01:41 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0,
- mainline.kernel.org-clang, a3cc31e7)
-Date: Sat, 13 Jan 2024 13:01:41 -0000
-To: omosnace@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dh09Ofg8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705164333; x=1736700333;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bm/SfBNiMr+aBPw8PwkAWvb31LwV1RgCPvzwVvGOVxA=;
+  b=dh09Ofg8DH3YT2CXrvm8n5mvK98MJyMuIn0qGdINlhe46wHDwSjnBWYx
+   Zgpm57aP8c0J0DwVMBRbAxLoNT4PevjIaW9k2AP0pl2k0IwKTtlt7S7eH
+   zSCfeRaHmksrOjmEuXn7f15o65vl0aUOx3kPG6yNs+WyUeWbtVG9VxvFU
+   XYhtLL/gKWsj1boomchuCcavDhaJLN6qglSOafnz6Ymv2BvqZhHY4im6Q
+   0a4riZp3la9O+l0ipmTQqfPJlU+tuU+LdEt7Lj9joDVoLh4JmItaAySPR
+   NMxzDYAtSDLF4JIsmYnXzCpBEZyNJaPYOgwliRaSGsNQntnl3oszNntmR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="485556161"
+X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
+   d="scan'208";a="485556161"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 08:45:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
+   d="scan'208";a="25335145"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 13 Jan 2024 08:45:31 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rOh8S-000Ahk-33;
+	Sat, 13 Jan 2024 16:45:28 +0000
+Date: Sun, 14 Jan 2024 00:44:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Serge Semin <fancer.lancer@gmail.com>
+Subject: [morimoto:renesas-bsp/v6.1.71-2024-01-10 381/551]
+ drivers/pci/controller/dwc/pcie-rcar-gen4.c:286:9: error: use of undeclared
+ identifier 'PCIE_T_PVPERL_MS'
+Message-ID: <202401140012.za4bCpGl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <72496.124011308014101633@us-mta-671.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/morimoto/linux renesas-bsp/v6.1.71-2024-01-10
+head:   7942223d600b4cbaffeb04e8a3d6695f7a46e49d
+commit: 06b40d191034800f8ddb02522843b3d6ed7b190f [381/551] PCI: rcar-gen4: Add R-Car Gen4 PCIe controller support for host mode
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240114/202401140012.za4bCpGl-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240114/202401140012.za4bCpGl-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401140012.za4bCpGl-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'libnvdimm-for-6.8' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/nvdimm/nvdimm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/122798
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10908562
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-         ppc64le - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10908517
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-           s390x - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10908488
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-          x86_64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10908396
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-          x86_64 (debug) - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10908448
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
-key"
-            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
-6fe731@paulmck-laptop/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> drivers/pci/controller/dwc/pcie-rcar-gen4.c:286:9: error: use of undeclared identifier 'PCIE_T_PVPERL_MS'
+     286 |         msleep(PCIE_T_PVPERL_MS);       /* pe_rst requires 100msec delay */
+         |                ^
+   1 error generated.
 
 
+vim +/PCIE_T_PVPERL_MS +286 drivers/pci/controller/dwc/pcie-rcar-gen4.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   257	
+   258	/* Host mode */
+   259	static int rcar_gen4_pcie_host_init(struct dw_pcie_rp *pp)
+   260	{
+   261		struct dw_pcie *dw = to_dw_pcie_from_pp(pp);
+   262		struct rcar_gen4_pcie *rcar = to_rcar_gen4_pcie(dw);
+   263		int ret;
+   264		u32 val;
+   265	
+   266		gpiod_set_value_cansleep(dw->pe_rst, 1);
+   267	
+   268		ret = rcar_gen4_pcie_common_init(rcar);
+   269		if (ret)
+   270			return ret;
+   271	
+   272		/*
+   273		 * According to the section 3.5.7.2 "RC Mode" in DWC PCIe Dual Mode
+   274		 * Rev.5.20a and 3.5.6.1 "RC mode" in DWC PCIe RC databook v5.20a, we
+   275		 * should disable two BARs to avoid unnecessary memory assignment
+   276		 * during device enumeration.
+   277		 */
+   278		dw_pcie_writel_dbi2(dw, PCI_BASE_ADDRESS_0, 0x0);
+   279		dw_pcie_writel_dbi2(dw, PCI_BASE_ADDRESS_1, 0x0);
+   280	
+   281		/* Enable MSI interrupt signal */
+   282		val = readl(rcar->base + PCIEINTSTS0EN);
+   283		val |= MSI_CTRL_INT;
+   284		writel(val, rcar->base + PCIEINTSTS0EN);
+   285	
+ > 286		msleep(PCIE_T_PVPERL_MS);	/* pe_rst requires 100msec delay */
+   287	
+   288		gpiod_set_value_cansleep(dw->pe_rst, 0);
+   289	
+   290		return 0;
+   291	}
+   292	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
