@@ -1,210 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E723D210E6
-	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68F020DF7;
+	Sat, 13 Jan 2024 12:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GCXmP8cQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705146639;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xAFfKQ9B0KTEhTXHx9wzfwu028ZMEyMMwbxNeqvExZY=;
-	b=GCXmP8cQiRJtD5E9zt1VGV0K63AjDhTbEh2CPIvXnOpV5aooNiLRHadjIzD4+LJ76XI+VI
-	yBM79Dk2I6ST9YKvAQNy9xe7CEm1xe+GoNtS2AuxpdDwMDmlUGdgGxqgcwrq39G8wSCCw8
-	nqevE1i/asoeeO+0Bjdj1Jcmw8KGaI4=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-49-JXCfXOkjNIaTSDoA6pt6tA-1; Sat,
- 13 Jan 2024 06:50:38 -0500
-X-MC-Unique: JXCfXOkjNIaTSDoA6pt6tA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA6B03C11C88
-	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:50:37 +0000 (UTC)
-Received: from [172.64.5.47] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A5300492BF0;
-	Sat, 13 Jan 2024 11:50:37 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0,
- mainline.kernel.org-clang, cf65598d)
-Date: Sat, 13 Jan 2024 11:50:37 -0000
-To: omosnace@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="euTGOcpa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705149343; x=1736685343;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=usKIZbizhgqVoWIwBsn59W/HWPvosNw1FQOK/lfJ4jA=;
+  b=euTGOcpa7hQSkfrQekwGMRhLWs0O3Z7GLBz/AJr/Ki5YW+BMw5VHj9v4
+   UOk8rOzZRuvEP7pHkk9VCWiyzwiSk/Lpi9BKQl/5zHZceSBfr6WKQ3ob2
+   4lhVcD0R0Aade46clNCVIOPxEvIp6cv+fs8Ysk9ppyMr6cqWc7S7gHnv/
+   cIaKDD+GTlENvHVRiM1aJ1BXt2k2ZPGIumftTTVt9wXg4fqztxtk1cs/W
+   DwDirwRDfTwjdehaSr1jjbEL7awUl3syUJNp90miDcDEZ/jVKnxguCAGB
+   ETJfwO/g/FMgJtxK20NSGDue1zPtTEhdPptBns2LF53XsuZx+zlt58G6V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="465758218"
+X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
+   d="scan'208";a="465758218"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 04:35:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="817362831"
+X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
+   d="scan'208";a="817362831"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 13 Jan 2024 04:35:41 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rOdEg-000ATM-30;
+	Sat, 13 Jan 2024 12:35:38 +0000
+Date: Sat, 13 Jan 2024 20:35:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: mm/slub.c:1946:34: error: unused function 'memcg_from_slab_obj'
+Message-ID: <202401132054.I2L6evrk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <02544.124011306503800153@us-mta-49.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   052d534373b7ed33712a63d5e17b2b6cdbce84fd
+commit: 0bedcc66d2a43a50ab660273842f4737a293dd8a mm/slab: move memcg related functions from slab.h to slub.c
+date:   5 weeks ago
+config: x86_64-sof-customedconfig-edison-defconfig (https://download.01.org/0day-ci/archive/20240113/202401132054.I2L6evrk-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240113/202401132054.I2L6evrk-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401132054.I2L6evrk-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'drm-next-2024-01-10' of git://anongit.freede=
-sktop.org/drm/drm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/122784
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10906722
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-         ppc64le - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10906430
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-           s390x - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10906772
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-          x86_64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10906510
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-          x86_64 (debug) - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10906465
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Test
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
-key"
-            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
-6fe731@paulmck-laptop/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> mm/slub.c:1946:34: error: unused function 'memcg_from_slab_obj' [-Werror,-Wunused-function]
+    1946 | static inline struct mem_cgroup *memcg_from_slab_obj(void *ptr)
+         |                                  ^~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +/memcg_from_slab_obj +1946 mm/slub.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1915	
+  1916	static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+  1917						void **p, int objects)
+  1918	{
+  1919		struct obj_cgroup **objcgs;
+  1920		int i;
+  1921	
+  1922		if (!memcg_kmem_online())
+  1923			return;
+  1924	
+  1925		objcgs = slab_objcgs(slab);
+  1926		if (!objcgs)
+  1927			return;
+  1928	
+  1929		for (i = 0; i < objects; i++) {
+  1930			struct obj_cgroup *objcg;
+  1931			unsigned int off;
+  1932	
+  1933			off = obj_to_index(s, slab, p[i]);
+  1934			objcg = objcgs[off];
+  1935			if (!objcg)
+  1936				continue;
+  1937	
+  1938			objcgs[off] = NULL;
+  1939			obj_cgroup_uncharge(objcg, obj_full_size(s));
+  1940			mod_objcg_state(objcg, slab_pgdat(slab), cache_vmstat_idx(s),
+  1941					-obj_full_size(s));
+  1942			obj_cgroup_put(objcg);
+  1943		}
+  1944	}
+  1945	#else /* CONFIG_MEMCG_KMEM */
+> 1946	static inline struct mem_cgroup *memcg_from_slab_obj(void *ptr)
+  1947	{
+  1948		return NULL;
+  1949	}
+  1950	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
