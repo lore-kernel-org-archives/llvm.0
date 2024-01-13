@@ -1,48 +1,48 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E148320DEA
-	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E723D210E6
+	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LlPQj0YR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GCXmP8cQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705144279;
+	s=mimecast20190719; t=1705146639;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=d+xsEVR1W5QCijijgVoVqBFAkfR4tZTAaX7uphiRg+c=;
-	b=LlPQj0YRmmiX4U4xi2GvROrCVZnti09XNVHUhu69bIDlE5jPBppvEs5AByhJdWiLKoYsem
-	P2dNRRngFvFElL4r54nVKJ7ISM6J+vurx4zgi06e4xLxWd+PaGHvGg51xks3V53P832eW4
-	CKqPyYGki0ORzXDZwkrrG7C03sZwMZc=
+	bh=xAFfKQ9B0KTEhTXHx9wzfwu028ZMEyMMwbxNeqvExZY=;
+	b=GCXmP8cQiRJtD5E9zt1VGV0K63AjDhTbEh2CPIvXnOpV5aooNiLRHadjIzD4+LJ76XI+VI
+	yBM79Dk2I6ST9YKvAQNy9xe7CEm1xe+GoNtS2AuxpdDwMDmlUGdgGxqgcwrq39G8wSCCw8
+	nqevE1i/asoeeO+0Bjdj1Jcmw8KGaI4=
 Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-173-I7xt6t-YMEmLxu4bf7a3qw-1; Sat,
- 13 Jan 2024 06:11:16 -0500
-X-MC-Unique: I7xt6t-YMEmLxu4bf7a3qw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-49-JXCfXOkjNIaTSDoA6pt6tA-1; Sat,
+ 13 Jan 2024 06:50:38 -0500
+X-MC-Unique: JXCfXOkjNIaTSDoA6pt6tA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BFA0381180B
-	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:11:16 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA6B03C11C88
+	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:50:37 +0000 (UTC)
 Received: from [172.64.5.47] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0E23C1121313;
-	Sat, 13 Jan 2024 11:11:15 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A5300492BF0;
+	Sat, 13 Jan 2024 11:50:37 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 49 of 226): Test report for master
- (6.7.0, mainline.kernel.org-clang, 7912a639)
-Date: Sat, 13 Jan 2024 11:11:15 -0000
-To: bgoncalv@redhat.com, omosnace@redhat.com, llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.7.0,
+ mainline.kernel.org-clang, cf65598d)
+Date: Sat, 13 Jan 2024 11:50:37 -0000
+To: omosnace@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <57731.124011306111600215@us-mta-173.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <02544.124011306503800153@us-mta-49.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -57,59 +57,42 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'sound-6.8-rc1' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/tiwai/sound
+    Commit message: Merge tag 'drm-next-2024-01-10' of git://anongit.freede=
+sktop.org/drm/drm
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/122796
+    https://datawarehouse.cki-project.org/kcidb/checkouts/122784
 
 One or more kernel tests failed:
     Unrecognized or new issues:
          aarch64 - Libkcapi AF_ALG test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10907758
+10906722
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL Test
          ppc64le - Libkcapi AF_ALG test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10907798
+10906430
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL Test
            s390x - Libkcapi AF_ALG test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10907837
+10906772
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL Test
-          x86_64 - Boot test
+          x86_64 - Libkcapi AF_ALG test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10907875
+10906510
                    Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-          x86_64 - Boot test
+                       =E2=9D=8C FAIL Test
+          x86_64 (debug) - Libkcapi AF_ALG test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10907911
+10906465
                    Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10907707
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-10907726
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
+                       =E2=9D=8C FAIL Test
 
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
-key"
-            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
-6fe731@paulmck-laptop/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
         Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
 =3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
 system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
@@ -125,9 +108,52 @@ s=3Dchr_file permissive=3D1
                    s390x - stress: stress-ng - cpu-cache
                    s390x - Reboot test
                   x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
                   x86_64 - Reboot test
                   x86_64 (debug) - Boot test
                   x86_64 (debug) - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
+key"
+            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
+6fe731@paulmck-laptop/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: blktests nvme/ failure due to latest nvme-cli update
             URL: https://github.com/osandov/blktests/pull/131
             Affected tests:
@@ -161,64 +187,7 @@ l-tests/-/issues/1752
 l-tests/-/issues/1544
             Affected tests:
                  aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
 
-
-Tests that were not ran because of internal issues:=20
-      x86_64 (debug) - POSIX pjd-fstest suites
-      x86_64 (debug) - Filesystem - Loopdev Sanity
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-      x86_64 (debug) - Networking - Ethernet drivers sanity
-      x86_64 (debug) - Networking cki netfilter test
-      x86_64 (debug) - Libkcapi AF_ALG test
-      x86_64 (debug) - Hardware - pciutils: sanity smoke test
-      x86_64 (debug) - Storage - dm/common
-      x86_64 (debug) - Storage - lvm thinp sanity
-      x86_64 (debug) - Storage - iSCSI parameters
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-      x86_64 - POSIX pjd-fstest suites
-      x86_64 - Filesystem - Loopdev Sanity
-      x86_64 - Memory function: memfd_create
-      x86_64 - AMTU (Abstract Machine Test Utility)
-      x86_64 - Networking - Ethernet drivers sanity
-      x86_64 - Networking cki netfilter test
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - multipath mapping test
-      x86_64 - Storage - dm/common
-      x86_64 - Storage - lvm thinp sanity
-      x86_64 - Storage - iSCSI parameters
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-      x86_64 - kdump - sysrq-c
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 - xfstests - ext4
-      x86_64 - xfstests - xfs
-      x86_64 - xfstests - btrfs
-      x86_64 - xfstests - nfsv4.2
-      x86_64 - xfstests - cifsv3.11
-      x86_64 - Reboot test
 
 
 If you find a failure unrelated to your changes, please ask the test mainta=
