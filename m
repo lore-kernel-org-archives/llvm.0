@@ -1,99 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E6DFBEC;
-	Sat, 13 Jan 2024 06:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C16EC5
+	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 09:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lSeNw7Hg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705127259; x=1736663259;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j98s5NZ8fEGR+sOr/XDd4Ut/ZG0+myZ3kkI1NCOFYos=;
-  b=lSeNw7HgC0fzBIgg5CAj6OEqWZyr/628fl30wTDx1vxiGSMD5/2TPuJn
-   QvFUoG7FGVQ0i04mBW9uyI9HJAexrhAkUExfunhIi1fAZGr7txsl/wb4/
-   SDF0qjti1cPUUnrZ2DFYBDFwUyYOtaQ4o2u4GHhk/SqpkqRa/TTmHbjME
-   jtY6uPlN0EOYA5IJPQbRLgT5Sbixtvf/CkI/jjbUaCtJyULMdlxWK4olF
-   0fLdMP+2++zspOI6fncsr/LLzg9TUJNAxkRQv/McgqOAHUmhendkdDQ5o
-   U3h0BmZiGJz4jNi3LZZtPAUOPOziUiiA6FjsXqxpuUKIkw+LdyS8HIJWt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="399034838"
-X-IronPort-AV: E=Sophos;i="6.04,191,1695711600"; 
-   d="scan'208";a="399034838"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 22:27:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,191,1695711600"; 
-   d="scan'208";a="31611499"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 12 Jan 2024 22:27:35 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rOXUS-000AAp-38;
-	Sat, 13 Jan 2024 06:27:32 +0000
-Date: Sat, 13 Jan 2024 14:27:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ville Syrjala <ville.syrjala@linux.intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 12/15] drm/i915: Simplify intel_initial_plane_config()
- calling convention
-Message-ID: <202401131457.PbfNaUDC-lkp@intel.com>
-References: <20231215105929.29568-13-ville.syrjala@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pH6+cONu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67746C43399
+	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 09:58:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705139902;
+	bh=FfxGNilRrWVWSgO9NIzqF6+pAz99j8vZeiAam+1t2cQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pH6+cONuPR1UUdPeEz4KrGgqpDVqyZVmGvT/KsRlvKTIVMJw9LSxRB9BkOXGJOFYf
+	 BPn6EMtWeEFulOBSd3f8MG6pqwqvlk6c3CnTHJQmYOBodgFRId9kqzgSemzb059sPe
+	 I5T47a1wdImvd7ZQy0t0f8ZTyaqAfrOaXh74dBV9VIk+ueZUAZBDaP9Srd96jkHSOh
+	 z6d66bgsJGtu2OI30WxUOZacWIcI/k/YE9OKAAjA/Hikmj1YWk4vMs7HMCY3VshKeL
+	 8mhuP1RQNCENgNP+daFdY057gV5lo2tut45ti7YtENPFoC7+2vlvVGd7fOj56382nl
+	 azl7cG4DVDyjg==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-203fbbff863so3221817fac.0
+        for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 01:58:22 -0800 (PST)
+X-Gm-Message-State: AOJu0YyXE/U1EEFZtErqkJBk0z9ve7mrwDXl78g0A6f1BrkLn/bm7fs/
+	+0HL/tRd4GRPpkqMjY8eNa7WgGeAAkAekwvHBQI=
+X-Google-Smtp-Source: AGHT+IE1zNVfRyZXDjtOGlgSbTOnebJDrwvdklW58RioZiUXyKLrfSiZNygDH+VTpnbQ97TSIfDDXK2iUoj5GQfpPpU=
+X-Received: by 2002:a05:6870:de12:b0:206:ad36:5a46 with SMTP id
+ qg18-20020a056870de1200b00206ad365a46mr1284007oab.9.1705139901720; Sat, 13
+ Jan 2024 01:58:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215105929.29568-13-ville.syrjala@linux.intel.com>
+References: <20240110165339.GA3105@dev-arch.thelio-3990X>
+In-Reply-To: <20240110165339.GA3105@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 13 Jan 2024 18:57:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT1GBr1pKRuJp2YKZdQQ_TDSKdbHojbPtBvt7cRQdCReg@mail.gmail.com>
+Message-ID: <CAK7LNAT1GBr1pKRuJp2YKZdQQ_TDSKdbHojbPtBvt7cRQdCReg@mail.gmail.com>
+Subject: Re: [RFC] Bumping the minimum supported version of LLVM to 13.0.1
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ville,
+On Thu, Jan 11, 2024 at 1:53=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Hi all,
+>
+> It has been some time since we have bumped the minimum supported version
+> of LLVM for building the kernel, the last time being commit df05c0e9496c
+> ("Documentation: Raise the minimum supported version of LLVM to 11.0.0")
+> in November of 2021. While I think we have done a pretty good job around
+> supporting the current range of LLVM versions, it may be worth
+> considering bumping the minimum supported version to 13.0.1 for a few
+> reasons:
+>
+> 1. It would immediately resolve the massive build breakage with LLVM 11
+>    in -next:
+>
+>    https://github.com/ClangBuiltLinux/linux/issues/1958#issuecomment-1836=
+559075
+>
+> 2. It would immediately save us almost 1300 builds per week with our
+>    current CI matrix, as we would be able to drop mainline and -next,
+>    which are our most frequently built trees.
+>
+> 3. It allows us to drop a good number of Kconfig and source workarounds.
+>    I have included a sample diff below.
+>
+> The downside of upgrading the minimum version is leaving distributions
+> that have an older clang version behind. However, based on examining
+> Docker images for the currently supported versions of the big
+> distributions, I do not believe this upgrade should impact distribution
+> support too much.
+>
+>     archlinux:latest              clang version 16.0.6
+>     debian:oldoldstable-slim      clang version 7.0.1-8+deb10u2 (tags/REL=
+EASE_701/final)
+>     debian:oldstable-slim         Debian clang version 11.0.1-2
+>     debian:stable-slim            Debian clang version 14.0.6
+>     debian:testing-slim           Debian clang version 16.0.6 (19)
+>     debian:unstable-slim          Debian clang version 16.0.6 (19)
+>     fedora:38                     clang version 16.0.6 (Fedora 16.0.6-3.f=
+c38)
+>     fedora:latest                 clang version 17.0.6 (Fedora 17.0.6-1.f=
+c39)
+>     fedora:rawhide                clang version 17.0.6 (Fedora 17.0.6-1.f=
+c40)
+>     opensuse/leap:latest          clang version 15.0.7
+>     opensuse/tumbleweed:latest    clang version 17.0.6
+>     ubuntu:focal                  clang version 10.0.0-4ubuntu1
+>     ubuntu:latest                 Ubuntu clang version 14.0.0-1ubuntu1.1
+>     ubuntu:rolling                Ubuntu clang version 16.0.6 (15)
+>     ubuntu:devel                  Ubuntu clang version 17.0.6 (3)
+>
+> As we can see, the only distribution in that list that would be impacted
+> by this change would be Debian Bullseye (oldstable), as its clang
+> version in the default repositories is 11.0.1. Other distributions that
+> have a clang older than 11.0.1 already cannot build the upstream kernel.
+> In Debian's case, access to newer versions of LLVM is relatively simple
+> because of https://apt.llvm.org. There is also the kernel.org LLVM
+> toolchains I publish: https://mirrors.edge.kernel.org/pub/tools/llvm/
+>
+> Thoughts or concerns?
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on drm-tip/drm-tip linus/master next-20240112]
-[cannot apply to drm-intel/for-linux-next-fixes v6.7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-i915-Use-struct-resource-for-memory-region-IO-as-well/20240112-020958
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20231215105929.29568-13-ville.syrjala%40linux.intel.com
-patch subject: [PATCH v2 12/15] drm/i915: Simplify intel_initial_plane_config() calling convention
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240113/202401131457.PbfNaUDC-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 9bde5becb44ea071f5e1fa1f5d4071dc8788b18c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240113/202401131457.PbfNaUDC-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401131457.PbfNaUDC-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/xe/display/xe_plane_initial.c:270:6: warning: no previous prototype for function 'intel_crtc_initial_plane_config' [-Wmissing-prototypes]
-     270 | void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
-         |      ^
-   drivers/gpu/drm/xe/display/xe_plane_initial.c:270:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     270 | void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
-         | ^
-         | static 
-   1 warning generated.
 
 
-vim +/intel_crtc_initial_plane_config +270 drivers/gpu/drm/xe/display/xe_plane_initial.c
+No objection from me.
 
-44e694958b9539 Maarten Lankhorst 2023-08-17  269  
-44e694958b9539 Maarten Lankhorst 2023-08-17 @270  void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> I have posted this on GitHub as well in case people want to chime in
+> there instead of here for some reason:
+>
+> https://github.com/ClangBuiltLinux/linux/issues/1975
+>
+> Cheers,
+> Nathan
+>
+> diff --git a/Makefile b/Makefile
+> index f1b2fd977275..32f42f4470ec 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -948,15 +948,6 @@ CC_FLAGS_LTO       +=3D -fvisibility=3Dhidden
+>  # Limit inlining across translation units to reduce binary size
+>  KBUILD_LDFLAGS +=3D -mllvm -import-instr-limit=3D5
+>
+> -# Check for frame size exceeding threshold during prolog/epilog insertio=
+n
+> -# when using lld < 13.0.0.
+> -ifneq ($(CONFIG_FRAME_WARN),0)
+> -ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+> -KBUILD_LDFLAGS +=3D -plugin-opt=3D-warn-stack-size=3D$(CONFIG_FRAME_WARN=
+)
+> -endif
+> -endif
+> -endif
+> -
+
+The last 'endif' should be kept.
+
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
