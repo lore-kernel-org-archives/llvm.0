@@ -1,109 +1,241 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C8F1EF1A;
-	Sat, 13 Jan 2024 10:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E148320DEA
+	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RhtHFoH8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705141728; x=1736677728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NcXtWDYE1l26Z+EO8wj7DrnFq2sZpKD4cbxy9EEC3xA=;
-  b=RhtHFoH8DcwDTq09x0yPKz/UCDo6AyLjxL+/zl2kHfVdoksBspB4IqGw
-   8jWLgUEAuBPv3uUPh+J7vLtFb80NPD7d9oUuDFMbTict0g1lFCtQuEdNN
-   wTWza/D72VIB+dpuJZnxTYEHT6qpd14uyarIJIqmmdHJOwXddBr61dutk
-   8IB9Czk/pQg/CWZAcG3WDTfUZgQOR3NGaYhWWQweYvigRJ7Mk2dAhgGHp
-   gLLXX58aOZCyubSxBCk3AnmsGi8SOp5wjN6ysrcrRm8FxMwnt+Ycv02FL
-   s7SyqfErFBMzYwBsqGNVSrdCMxX8MVT1vMXsOqd9MmhO3Trrvg4ztJ63J
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="399047117"
-X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
-   d="scan'208";a="399047117"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 02:28:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
-   d="scan'208";a="25272553"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Jan 2024 02:28:44 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rObFp-000ALu-25;
-	Sat, 13 Jan 2024 10:28:41 +0000
-Date: Sat, 13 Jan 2024 18:27:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] ARM64: dts: nuvoton: Add initial yosemitev4
- device tree
-Message-ID: <202401131809.AEhtmGWi-lkp@intel.com>
-References: <20240112013654.1424451-3-Delphine_CC_Chiu@wiwynn.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LlPQj0YR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705144279;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=d+xsEVR1W5QCijijgVoVqBFAkfR4tZTAaX7uphiRg+c=;
+	b=LlPQj0YRmmiX4U4xi2GvROrCVZnti09XNVHUhu69bIDlE5jPBppvEs5AByhJdWiLKoYsem
+	P2dNRRngFvFElL4r54nVKJ7ISM6J+vurx4zgi06e4xLxWd+PaGHvGg51xks3V53P832eW4
+	CKqPyYGki0ORzXDZwkrrG7C03sZwMZc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-173-I7xt6t-YMEmLxu4bf7a3qw-1; Sat,
+ 13 Jan 2024 06:11:16 -0500
+X-MC-Unique: I7xt6t-YMEmLxu4bf7a3qw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BFA0381180B
+	for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 11:11:16 +0000 (UTC)
+Received: from [172.64.5.47] (unknown [10.30.32.29])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0E23C1121313;
+	Sat, 13 Jan 2024 11:11:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 49 of 226): Test report for master
+ (6.7.0, mainline.kernel.org-clang, 7912a639)
+Date: Sat, 13 Jan 2024 11:11:15 -0000
+To: bgoncalv@redhat.com, omosnace@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240112013654.1424451-3-Delphine_CC_Chiu@wiwynn.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <57731.124011306111600215@us-mta-173.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Delphine,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.7 next-20240112]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Delphine-CC-Chiu/dt-bindings-arm-nuvoton-add-Facebook-Yosemite-4-board/20240112-094033
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240112013654.1424451-3-Delphine_CC_Chiu%40wiwynn.com
-patch subject: [PATCH v1 2/2] ARM64: dts: nuvoton: Add initial yosemitev4 device tree
-config: arm64-randconfig-003-20240112 (https://download.01.org/0day-ci/archive/20240113/202401131809.AEhtmGWi-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 9bde5becb44ea071f5e1fa1f5d4071dc8788b18c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240113/202401131809.AEhtmGWi-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401131809.AEhtmGWi-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-yosemite4.dts:6:10: fatal error: 'nuvoton-npcm845-pincfg-evb.dtsi' file not found
-       6 | #include "nuvoton-npcm845-pincfg-evb.dtsi"
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +6 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-yosemite4.dts
+Kernel information:
+    Commit message: Merge tag 'sound-6.8-rc1' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/tiwai/sound
 
-     3	
-     4	/dts-v1/;
-     5	#include "nuvoton-npcm845.dtsi"
-   > 6	#include "nuvoton-npcm845-pincfg-evb.dtsi"
-     7	#include <dt-bindings/i2c/i2c.h>
-     8	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/122796
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10907758
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+         ppc64le - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10907798
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+           s390x - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10907837
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Test
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10907875
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10907911
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10907707
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+10907726
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] [BUG] KASAN "INFO: trying to register non-static =
+key"
+            URL: https://lore.kernel.org/all/5cc0f83c-e1d6-45c5-be89-9b8674=
+6fe731@paulmck-laptop/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+Tests that were not ran because of internal issues:=20
+      x86_64 (debug) - POSIX pjd-fstest suites
+      x86_64 (debug) - Filesystem - Loopdev Sanity
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+      x86_64 (debug) - Networking - Ethernet drivers sanity
+      x86_64 (debug) - Networking cki netfilter test
+      x86_64 (debug) - Libkcapi AF_ALG test
+      x86_64 (debug) - Hardware - pciutils: sanity smoke test
+      x86_64 (debug) - Storage - dm/common
+      x86_64 (debug) - Storage - lvm thinp sanity
+      x86_64 (debug) - Storage - iSCSI parameters
+      x86_64 (debug) - kselftests upstream - net
+      x86_64 (debug) - kselftests upstream - bpf
+      x86_64 (debug) - kselftests upstream - bpf_test_progs
+      x86_64 (debug) - Reboot test
+      x86_64 (debug) - xfstests - ext4
+      x86_64 (debug) - xfstests - xfs
+      x86_64 (debug) - xfstests - btrfs
+      x86_64 (debug) - xfstests - nfsv4.2
+      x86_64 (debug) - xfstests - cifsv3.11
+      x86_64 (debug) - Reboot test
+      x86_64 - POSIX pjd-fstest suites
+      x86_64 - Filesystem - Loopdev Sanity
+      x86_64 - Memory function: memfd_create
+      x86_64 - AMTU (Abstract Machine Test Utility)
+      x86_64 - Networking - Ethernet drivers sanity
+      x86_64 - Networking cki netfilter test
+      x86_64 - Networking vnic: ipvlan/basic
+      x86_64 - Libkcapi AF_ALG test
+      x86_64 - Hardware - pciutils: sanity smoke test
+      x86_64 - Storage - multipath mapping test
+      x86_64 - Storage - dm/common
+      x86_64 - Storage - lvm thinp sanity
+      x86_64 - Storage - iSCSI parameters
+      x86_64 - kdump - kexec_boot
+      x86_64 - kdump - kexec-file-load
+      x86_64 - kselftests upstream - net
+      x86_64 - kselftests upstream - bpf
+      x86_64 - kselftests upstream - bpf_test_progs
+      x86_64 - Reboot test
+      x86_64 - kdump - sysrq-c
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
+      x86_64 - xfstests - ext4
+      x86_64 - xfstests - xfs
+      x86_64 - xfstests - btrfs
+      x86_64 - xfstests - nfsv4.2
+      x86_64 - xfstests - cifsv3.11
+      x86_64 - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
