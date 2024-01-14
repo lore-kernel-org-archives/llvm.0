@@ -1,50 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C899313AE9;
-	Sun, 14 Jan 2024 23:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8C52C1A4;
+	Sun, 14 Jan 2024 23:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k/CfRm+1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h35U55ok"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705273641; x=1736809641;
+  t=1705275499; x=1736811499;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ul5LxjoVAGj+T21ZGU67V27kHziwuFjxBxMjDR3PjfY=;
-  b=k/CfRm+1dvpIqorXt1byWXOTtAwGwbpERp7JcgnHAYWVJM1WHpWiNAey
-   BD8gy/W2SVQL5fQ2txSKquyGJHZw6tOgfqp0/QfPFiSWWBxNZtc9uvbKA
-   MDlmd3MaE8Zul+KBOZt9uYKoZBegJU3dw2GqeTOFKG17PTutPWwBtCU1v
-   uCAAgbjoBjE3/Y7WWQgYXNMin5hs3PC0o0eeHG55Nh/0Gn2eSN+h5H4Qt
-   AnoXBwEFnbBXXWeM+Pre+aW9SmJeuuMzdZJ5e7cTsRrNmTrGcx+vbuqv6
-   vO/e+p6vufVPXyjLF+dAYfdN3XZhUO4v5CjrTTt0wp9DYwKhpgBuGA0hw
+  bh=X5yqbSnE/WUDsZXtY4+3D4G94Ta+8acvu1Eq/NS7K88=;
+  b=h35U55okSKi0VsDmocKpXLXMHGCjBp+ef69qoDTSLTu4cCT4Bczkp34f
+   M7al9kfUL05rXP8+4rMXVQgD1WbCrhvY2QgH+akxiKQyJ+0gt42gvo79P
+   QiuVSCVP8wkP8R+O6qC8mieB6vmpeOV1dPqAEAzKelPMZ8q2SXk551n2U
+   MYHE3w1r3MF66cd0/RDtzgVYnEMhc1IIxedW6voItVZfd/JDvmrahfYAN
+   fPbuMa6Vkq5zYsVAf5kLpst87JHgH9ejB6tM6h9QS1v0EPHx4y/vRxKuA
+   tmWVC/C4oCOQtfaGBUjQXxYSlQWarpvZaCEKcDDT+sl3fYjmfcay3sm1t
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="6592283"
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="463780955"
 X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
-   d="scan'208";a="6592283"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 15:07:20 -0800
+   d="scan'208";a="463780955"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 15:38:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="776564186"
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="783634360"
 X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
-   d="scan'208";a="776564186"
+   d="scan'208";a="783634360"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2024 15:07:17 -0800
+  by orsmga002.jf.intel.com with ESMTP; 14 Jan 2024 15:38:17 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rP9ZS-000Buk-2Q;
-	Sun, 14 Jan 2024 23:07:14 +0000
-Date: Mon, 15 Jan 2024 07:06:39 +0800
+	id 1rPA3T-000Bvs-1J;
+	Sun, 14 Jan 2024 23:38:15 +0000
+Date: Mon, 15 Jan 2024 07:38:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
-	benjamin.tissoires@redhat.com, hdegoede@redhat.com,
-	ivan.orlov0322@gmail.com, heikki.krogerus@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
-Subject: Re: [PATCH] usb: roles: try to get/put all relevant modules
-Message-ID: <202401150608.0Ok2pmGw-lkp@intel.com>
-References: <20240112080108.1147450-1-xu.yang_2@nxp.com>
+To: alison.schofield@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] cxl/region: Allow out of order assembly of
+ autodiscovered regions
+Message-ID: <202401150741.uj6rLfNF-lkp@intel.com>
+References: <20240113050421.1622533-1-alison.schofield@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,71 +51,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240112080108.1147450-1-xu.yang_2@nxp.com>
+In-Reply-To: <20240113050421.1622533-1-alison.schofield@intel.com>
 
-Hi Xu,
+Hi,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus hid/for-next westeri-thunderbolt/next linus/master v6.7 next-20240112]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 3601311593eb44d34f142b993cb6f38f9a7863b3]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Yang/usb-roles-try-to-get-put-all-relevant-modules/20240112-155735
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20240112080108.1147450-1-xu.yang_2%40nxp.com
-patch subject: [PATCH] usb: roles: try to get/put all relevant modules
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240115/202401150608.0Ok2pmGw-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 9bde5becb44ea071f5e1fa1f5d4071dc8788b18c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401150608.0Ok2pmGw-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/alison-schofield-intel-com/cxl-region-Allow-out-of-order-assembly-of-autodiscovered-regions/20240113-130553
+base:   3601311593eb44d34f142b993cb6f38f9a7863b3
+patch link:    https://lore.kernel.org/r/20240113050421.1622533-1-alison.schofield%40intel.com
+patch subject: [RFC PATCH] cxl/region: Allow out of order assembly of autodiscovered regions
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240115/202401150741.uj6rLfNF-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401150741.uj6rLfNF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401150608.0Ok2pmGw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401150741.uj6rLfNF-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/usb/roles/class.c:37:6: warning: no previous prototype for function 'usb_role_switch_get_modules' [-Wmissing-prototypes]
-      37 | void usb_role_switch_get_modules(struct device *dev)
+>> drivers/cxl/core/region.c:756:6: warning: no previous prototype for function 'auto_order_ok' [-Wmissing-prototypes]
+     756 | bool auto_order_ok(struct cxl_port *port, struct cxl_region *cxlr_a,
          |      ^
-   drivers/usb/roles/class.c:37:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      37 | void usb_role_switch_get_modules(struct device *dev)
+   drivers/cxl/core/region.c:756:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     756 | bool auto_order_ok(struct cxl_port *port, struct cxl_region *cxlr_a,
          | ^
          | static 
->> drivers/usb/roles/class.c:46:6: warning: no previous prototype for function 'usb_role_switch_put_modules' [-Wmissing-prototypes]
-      46 | void usb_role_switch_put_modules(struct device *dev)
-         |      ^
-   drivers/usb/roles/class.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      46 | void usb_role_switch_put_modules(struct device *dev)
-         | ^
-         | static 
-   2 warnings generated.
+   1 warning generated.
 
 
-vim +/usb_role_switch_get_modules +37 drivers/usb/roles/class.c
+vim +/auto_order_ok +756 drivers/cxl/core/region.c
 
-    36	
-  > 37	void usb_role_switch_get_modules(struct device *dev)
-    38	{
-    39		while (dev) {
-    40			if (dev->driver)
-    41				WARN_ON(!try_module_get(dev->driver->owner));
-    42			dev = dev->parent;
-    43		}
-    44	}
-    45	
-  > 46	void usb_role_switch_put_modules(struct device *dev)
-    47	{
-    48		while (dev) {
-    49			if (dev->driver)
-    50				module_put(dev->driver->owner);
-    51			dev = dev->parent;
-    52		}
-    53	}
-    54	
+   755	
+ > 756	bool auto_order_ok(struct cxl_port *port, struct cxl_region *cxlr_a,
+   757			   struct cxl_region *cxlr_b)
+   758	{
+   759		struct cxl_region_ref *cxl_rr;
+   760		struct cxl_decoder *cxld_a, *cxld_b;
+   761	
+   762		/*
+   763		 * Allow the out of order assembly of auto-discovered regions as
+   764		 * long as correct decoder programming order can be verified.
+   765		 *
+   766		 * Per CXL Spec 3.1 8.2.4.20.12 Committing Decoder Programming,
+   767		 * software must commit decoders in HPA order. Therefore it is
+   768		 * sufficient to sanity check that the lowered number decoder
+   769		 * has the lower HPA starting address.
+   770		 */
+   771		if (!test_bit(CXL_REGION_F_AUTO, &cxlr_a->flags))
+   772			return false;
+   773	
+   774		cxld_a = cxl_region_find_decoder(port, cxlr_a);
+   775		cxl_rr = cxl_rr_load(port, cxlr_b);
+   776		cxld_b = cxl_rr->decoder;
+   777	
+   778		if (cxld_b->id > cxld_a->id) {
+   779			dev_dbg(&cxlr_a->dev,
+   780				"allow out of order region ref alloc\n");
+   781			return true;
+   782		}
+   783	
+   784		return false;
+   785	}
+   786	
 
 -- 
 0-DAY CI Kernel Test Service
