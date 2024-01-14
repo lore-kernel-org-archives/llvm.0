@@ -1,80 +1,47 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70B11846
-	for <llvm@lists.linux.dev>; Sun, 14 Jan 2024 06:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844C51FAD;
+	Sun, 14 Jan 2024 10:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="STIV+eUZ"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5989d8decbfso2279832eaf.2
-        for <llvm@lists.linux.dev>; Sat, 13 Jan 2024 22:49:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705214947; x=1705819747; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KXgb9X1CWd/PEEQiac+jZy6kkV3an6+pNU+vSf7jMVI=;
-        b=STIV+eUZhp+uxhuAdqdJLsLJDcizNau1prk8Te1MhFN3LUTeuhxxPnH/iuo+T+noUE
-         V+rHz7+uqcI+qEvuD5KmXJx0KQl1tMfnS86zp3NhMF++bBSHl2LoAvGVD7zk4hjrrjzF
-         UPdxdlGkOXGLUirKFsW4MknDsA5FVL4LSB8rgdVQdSUReJSbVVaEE4hvEzUcmGGIpuNq
-         WeV5EQ+MQn2Lsn6fUnbMqu8A25rzNxqiwLfzLMqb0NatSLZPKujKu10L6edsm6O20Kpt
-         UaWLJB8MKur524MAtKFt8602BP+KgcRcX8nyk5Shk+kUQ2B0uHLMshOpY0T0D8w2Gw6P
-         8zZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705214947; x=1705819747;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KXgb9X1CWd/PEEQiac+jZy6kkV3an6+pNU+vSf7jMVI=;
-        b=eqDZNhPcS4Mldx4g4OZeMrTsD3BVwVJNsF22XYxeHXjAf4viUGWtBbJC6ifdeYmKY/
-         fyC8XBwFoEXRlzAMUiGrIYMy89qIf5Puh2/CZe8xmLFUqSwAeJpRLwus/ZhC9GsR6lU7
-         6rNvj8FFWU81c1aq5McZQ+NzC/AQp1+rCbpi5KZ4w1SwJtbR6iV0o0EEzWBB81EuqUfi
-         EKMYZ0JdgfehoDA1WwK9QGF4dWL7kFIkoIMYnT7InR0H5i4ZCVCe4+7cRYTTRE24wbFZ
-         Dh7Cshw7lPJWvyTp76PxC/OXp9FN7y4N3esu2DTr9k+rE7jXr60NOD0TQoD1FyZZTl5q
-         rtxQ==
-X-Gm-Message-State: AOJu0Yzk+c1cEDWUYSKmu8Q5tMWJk56IDqqWZHkJg0OMHD27ceAxuIDx
-	02aBL6HFbDijAtz9vd3B4ic=
-X-Google-Smtp-Source: AGHT+IF+BhC+uyf16yTJ+jUA9mpcMjuWd8QqAGGlDxYx1+oguvtkEI4G6Be+ISFZ+jyWpVAJfh2wPQ==
-X-Received: by 2002:a05:6358:9fb0:b0:175:a9ce:e69c with SMTP id fy48-20020a0563589fb000b00175a9cee69cmr16814rwb.44.1705214947397;
-        Sat, 13 Jan 2024 22:49:07 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:d314:4131:10f8:370e])
-        by smtp.gmail.com with ESMTPSA id sn15-20020a17090b2e8f00b0028bd303dc58sm7292213pjb.11.2024.01.13.22.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jan 2024 22:49:06 -0800 (PST)
-Date: Sat, 13 Jan 2024 22:49:01 -0800
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: torvalds@linux-foundation.org, keescook@chromium.org,
-	gregkh@linuxfoundation.org, pbonzini@redhat.com,
-	masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-	nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-	vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-	mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
-	dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-	adrian.hunter@intel.com, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-	frederic@kernel.org, quic_neeraju@quicinc.com,
-	joel@joelfernandes.org, josh@joshtriplett.org,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-	42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-	dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-	john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-	tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 03/57] locking: Introduce __cleanup() based
- infrastructure
-Message-ID: <ZaOD3UWFppRDJ6bs@google.com>
-References: <20230612090713.652690195@infradead.org>
- <20230612093537.614161713@infradead.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aC/6I1Td"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705227069; x=1736763069;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0kmOfz6LdHhe6/24+2PFSa+rXp+e0TCj6EO4hV3Ksek=;
+  b=aC/6I1TdwkRIBPxIjI6MwuX8HUx9H9OM5nDBxT3Wk09hOAyYls0Oobsd
+   wchKKsNCV5qy58/HhbechSo+qCWnXzu2Lb7ZfpjQtffzSuKCdxeJ9FB6O
+   eswFjpVp6AtMS4VnAJ3MonwEduG2684uYhcJUM0WDcZ+QDVVlIUSFoGGP
+   /S1KkofsGsG1sYAEJZHjahOHHzy4ghDCalusc3FS/G6AxUlZeUMIbSZBl
+   17kmiWDQFg4dq2wy8KDjnUZH29G8aa/FLg0IvaMwKosKvsSkNaRVUivVw
+   UpTxWK0heSQ1JZB/Bw0NnhvPU8+DkxEdNK4/rzVXVjxINV+zjYJwDzYBS
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="399125115"
+X-IronPort-AV: E=Sophos;i="6.04,194,1695711600"; 
+   d="scan'208";a="399125115"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 02:11:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="1030373078"
+X-IronPort-AV: E=Sophos;i="6.04,194,1695711600"; 
+   d="scan'208";a="1030373078"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Jan 2024 02:11:06 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rOxSK-000BOe-2s;
+	Sun, 14 Jan 2024 10:11:04 +0000
+Date: Sun, 14 Jan 2024 18:11:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [alobakin:idpf-libie 2/51] include/linux/dma-mapping.h:381:2: error:
+ call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202401141822.drvNpiIk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,29 +50,447 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612093537.614161713@infradead.org>
 
-Hi Peter,
+tree:   https://github.com/alobakin/linux idpf-libie
+head:   29cca1ea6c555a8b97694e38f18926da7969dcfe
+commit: 9a3aa944b33041331d3bf1c1ad194ecffee0cbf0 [2/51] dma: compile-out DMA sync operations when not used
+config: um-randconfig-001-20240114 (https://download.01.org/0day-ci/archive/20240114/202401141822.drvNpiIk-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 9bde5becb44ea071f5e1fa1f5d4071dc8788b18c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240114/202401141822.drvNpiIk-lkp@intel.com/reproduce)
 
-On Mon, Jun 12, 2023 at 11:07:16AM +0200, Peter Zijlstra wrote:
->  
-> +DEFINE_GUARD(mutex, struct mutex *, mutex_lock(_T), mutex_unlock(_T))
-> +DEFINE_FREE(mutex, struct mutex *, if (_T) mutex_unlock(_T))
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401141822.drvNpiIk-lkp@intel.com/
 
-I got excited with the ability to have mutexes released automatically,
-however the code I work with typically uses mutex_lock_interruptible()
-and friends, where resource acquisition may fail. Additionally, the
-return values are integers and not pointers, which makes them unsuitable
-for something like
+All errors (new ones prefixed by >>):
 
-	struct mutex *guard __free(mutex) = mutex_lock_interruptible(...);
+   In file included from net/ipv6/tcpv6_offload.c:9:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/ipv6/tcpv6_offload.c:9:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/ipv6/tcpv6_offload.c:9:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from net/ipv6/tcpv6_offload.c:9:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:381:2: error: call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     381 |         __dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:381:2: note: did you mean 'dma_sync_single_for_cpu'?
+   include/linux/dma-mapping.h:227:20: note: 'dma_sync_single_for_cpu' declared here
+     227 | static inline void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+         |                    ^
+>> include/linux/dma-mapping.h:389:2: error: call to undeclared function '__dma_sync_single_for_device'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     389 |         __dma_sync_single_for_device(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:389:2: note: did you mean 'dma_sync_single_for_device'?
+   include/linux/dma-mapping.h:231:20: note: 'dma_sync_single_for_device' declared here
+     231 | static inline void dma_sync_single_for_device(struct device *dev,
+         |                    ^
+   12 warnings and 2 errors generated.
+--
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:381:2: error: call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     381 |         __dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:381:2: note: did you mean 'dma_sync_single_for_cpu'?
+   include/linux/dma-mapping.h:227:20: note: 'dma_sync_single_for_cpu' declared here
+     227 | static inline void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+         |                    ^
+>> include/linux/dma-mapping.h:389:2: error: call to undeclared function '__dma_sync_single_for_device'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     389 |         __dma_sync_single_for_device(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:389:2: note: did you mean 'dma_sync_single_for_device'?
+   include/linux/dma-mapping.h:231:20: note: 'dma_sync_single_for_device' declared here
+     231 | static inline void dma_sync_single_for_device(struct device *dev,
+         |                    ^
+   arch/um/os-Linux/drivers/tuntap_kern.c:56:5: warning: no previous prototype for function 'tuntap_setup' [-Wmissing-prototypes]
+      56 | int tuntap_setup(char *str, char **mac_out, void *data)
+         |     ^
+   arch/um/os-Linux/drivers/tuntap_kern.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      56 | int tuntap_setup(char *str, char **mac_out, void *data)
+         | ^
+         | static 
+   13 warnings and 2 errors generated.
+--
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:381:2: error: call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     381 |         __dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:381:2: note: did you mean 'dma_sync_single_for_cpu'?
+   include/linux/dma-mapping.h:227:20: note: 'dma_sync_single_for_cpu' declared here
+     227 | static inline void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+         |                    ^
+>> include/linux/dma-mapping.h:389:2: error: call to undeclared function '__dma_sync_single_for_device'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     389 |         __dma_sync_single_for_device(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:389:2: note: did you mean 'dma_sync_single_for_device'?
+   include/linux/dma-mapping.h:231:20: note: 'dma_sync_single_for_device' declared here
+     231 | static inline void dma_sync_single_for_device(struct device *dev,
+         |                    ^
+   arch/um/os-Linux/drivers/ethertap_kern.c:66:5: warning: no previous prototype for function 'ethertap_setup' [-Wmissing-prototypes]
+      66 | int ethertap_setup(char *str, char **mac_out, void *data)
+         |     ^
+   arch/um/os-Linux/drivers/ethertap_kern.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      66 | int ethertap_setup(char *str, char **mac_out, void *data)
+         | ^
+         | static 
+   13 warnings and 2 errors generated.
+--
+   In file included from kernel/sysctl.c:24:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/sysctl.c:24:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/sysctl.c:24:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from kernel/sysctl.c:35:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:381:2: error: call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     381 |         __dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:381:2: note: did you mean 'dma_sync_single_for_cpu'?
+   include/linux/dma-mapping.h:227:20: note: 'dma_sync_single_for_cpu' declared here
+     227 | static inline void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+         |                    ^
+>> include/linux/dma-mapping.h:389:2: error: call to undeclared function '__dma_sync_single_for_device'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     389 |         __dma_sync_single_for_device(dev, addr + offset, size, dir);
+         |         ^
+   include/linux/dma-mapping.h:389:2: note: did you mean 'dma_sync_single_for_device'?
+   include/linux/dma-mapping.h:231:20: note: 'dma_sync_single_for_device' declared here
+     231 | static inline void dma_sync_single_for_device(struct device *dev,
+         |                    ^
+   In file included from kernel/sysctl.c:53:
+   In file included from include/linux/nfs_fs.h:31:
+   In file included from include/linux/sunrpc/auth.h:13:
+   In file included from include/linux/sunrpc/sched.h:19:
+   include/linux/sunrpc/xdr.h:782:46: warning: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     782 |         if (U32_MAX >= SIZE_MAX / sizeof(*p) && len > SIZE_MAX / sizeof(*p))
+         |                                                 ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
+   13 warnings and 2 errors generated.
+..
 
-I guess we could make wrappers around mutex_lock...() family to return
-either the mutex or ERR_PTR-encoded error, but that feels quite ugly.
 
-Do you have any suggestions here?
+vim +/__dma_sync_single_for_cpu +381 include/linux/dma-mapping.h
 
-Thanks.
+   375	
+   376	static inline void
+   377	__dma_sync_single_range_for_cpu(struct device *dev, dma_addr_t addr,
+   378					unsigned long offset, size_t size,
+   379					enum dma_data_direction dir)
+   380	{
+ > 381		__dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+   382	}
+   383	
+   384	static inline void
+   385	__dma_sync_single_range_for_device(struct device *dev, dma_addr_t addr,
+   386					   unsigned long offset, size_t size,
+   387					   enum dma_data_direction dir)
+   388	{
+ > 389		__dma_sync_single_for_device(dev, addr + offset, size, dir);
+   390	}
+   391	
 
 -- 
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
