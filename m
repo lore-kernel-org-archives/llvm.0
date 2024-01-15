@@ -1,106 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D362115BB;
-	Mon, 15 Jan 2024 02:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D4617D5;
+	Mon, 15 Jan 2024 02:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G4uob0gd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TBHePou1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1705287291; x=1736823291;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=srwuYYGom2ZS4W5k3lZVCuKq6F8VJrRPXChD69St4WQ=;
-  b=G4uob0gd7Npr7+n9f7bQy21xpww3LQKEKDKicLgQDTv+ZwwhnTiTgM0u
-   sCA9t2NGmIxPfYQKiVKn5xjtvwxGzYKk6/a/VXp1eAOehZ7qpi3JsCYmH
-   iDhLKtI0Fsq0ItM7LwMgcGUGtxpxCsXs//VXGgNguZXnm2milh5RUAj4e
-   /5eD6TgRLwVr0ZfzApDqIm5HGSB6wYFvPLymNKbin1Z0iWK/uxBja3l+Y
-   Ofk/d6FoIau3W2TsxioECjUxqlW3sQYCqIQjIDzKaNoJRwStALmEPZIAt
-   xMc59o3K9rxmUJZe5lRO1M2VoWeH0KjnlU52osXzLHGZ3X9zeXHNJnjs3
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="6616601"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PmrqYi3b29cZ7UVE5sDTUs30E0JOvsUHpC87EcpooHg=;
+  b=TBHePou1Px2a26EJG1gNAyKjMycDsgu9aiAIJfkpTv48K6itNiETfyxL
+   hKf29f2GtX5al9kfy4OBvwakX0rngUwqZLka9GgGiWxI9I0yTIdzYr8Ca
+   7KKom/F8VAkY89zw2M0CrqB+4a6UYuG2hAxnf1rJQQMbtbjPorhsPI9al
+   Ntm7H8ruJGsfFiVVdczCLtdkKwZ3xtVFj9dZyHCDQoOt4vPyCcfTWuoE/
+   G830KQC+daxztHr4OJeLStDePOjOKDnXel9wPdmno3A3+VEqo8GFR0HLl
+   d9v1whHYRF45TQs0NOQi5mQdgpPLDnpP3K2xjqxIEUr3E/QUL4AX/iH6S
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="465902125"
 X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
-   d="scan'208";a="6616601"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 18:54:50 -0800
+   d="scan'208";a="465902125"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 18:54:50 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="733176597"
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="873962223"
 X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
-   d="scan'208";a="733176597"
+   d="scan'208";a="873962223"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Jan 2024 18:54:47 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jan 2024 18:54:49 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rPD7a-000C2O-0M;
-	Mon, 15 Jan 2024 02:54:42 +0000
-Date: Mon, 15 Jan 2024 10:53:48 +0800
+	id 1rPD7c-000C2Q-1m;
+	Mon, 15 Jan 2024 02:54:45 +0000
+Date: Mon, 15 Jan 2024 10:53:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel@collabora.com,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	Brian Norris <briannorris@chromium.org>,
-	Julius Werner <jwerner@chromium.org>,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] firmware: google: cbmem: Add to module device table
-Message-ID: <202401151013.Xioj5wZo-lkp@intel.com>
-References: <20240111151226.842603-4-nfraprado@collabora.com>
+To: Alexey Gladkov <legion@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [legion:patchset/meminfo/v2.1 2/6] fs/proc/cpuinfo.c:16:16: error:
+ array initializer must be an initializer list
+Message-ID: <202401151021.zhwCz9Ij-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240111151226.842603-4-nfraprado@collabora.com>
 
-Hi Nícolas,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on next-20240111]
-[also build test WARNING on v6.7]
-[cannot apply to chrome-platform/for-next chrome-platform/for-firmware-next masahiroy-kbuild/for-next masahiroy-kbuild/fixes arm64/for-next/core linus/master v6.7 v6.7-rc8 v6.7-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/N-colas-F-R-A-Prado/firmware-coreboot-Generate-modalias-uevent-for-devices/20240111-231841
-base:   next-20240111
-patch link:    https://lore.kernel.org/r/20240111151226.842603-4-nfraprado%40collabora.com
-patch subject: [PATCH 3/4] firmware: google: cbmem: Add to module device table
-config: i386-randconfig-013-20240115 (https://download.01.org/0day-ci/archive/20240115/202401151013.Xioj5wZo-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/legion/linux.git patchset/meminfo/v2.1
+head:   b26ce8a047fe25e6d094cd573ab62709263545fd
+commit: 894d5981f7e7db9482ef95472cf73f4bcc68a551 [2/6] proc: Implement /proc/self/cpuinfo
+config: i386-randconfig-011-20240115 (https://download.01.org/0day-ci/archive/20240115/202401151021.zhwCz9Ij-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401151013.Xioj5wZo-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401151021.zhwCz9Ij-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401151013.Xioj5wZo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401151021.zhwCz9Ij-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/firmware/google/cbmem.c:118:40: warning: unused variable 'cbmem_ids' [-Wunused-const-variable]
-     118 | static const struct coreboot_device_id cbmem_ids[] = {
-         |                                        ^~~~~~~~~
-   1 warning generated.
+>> fs/proc/cpuinfo.c:16:16: error: array initializer must be an initializer list
+      16 |         cpumask_var_t mask = NULL;
+         |                       ^
+   1 error generated.
 
 
-vim +/cbmem_ids +118 drivers/firmware/google/cbmem.c
+vim +16 fs/proc/cpuinfo.c
 
-   117	
- > 118	static const struct coreboot_device_id cbmem_ids[] = {
-   119		{ .tag = LB_TAG_CBMEM_ENTRY },
-   120		{ /* sentinel */ }
-   121	};
-   122	MODULE_DEVICE_TABLE(coreboot, cbmem_ids);
-   123	
+    12	
+    13	static bool cpu_allowed(struct seq_file *m, int cpu)
+    14	{
+    15		struct task_struct *task;
+  > 16		cpumask_var_t mask = NULL;
+    17	
+    18		if (cpu >= nr_cpu_ids)
+    19			return false;
+    20	
+    21		task = get_proc_task(file_inode(m->file));
+    22		if (!task)
+    23			return false;
+    24	
+    25		cpuset_cpus_allowed(task, mask);
+    26		put_task_struct(task);
+    27	
+    28		return cpumask_test_cpu(cpu, mask);
+    29	}
+    30	
 
 -- 
 0-DAY CI Kernel Test Service
