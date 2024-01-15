@@ -1,97 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1890E17BC3;
-	Mon, 15 Jan 2024 14:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2F17586;
+	Mon, 15 Jan 2024 14:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jatAhGwG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705329739; x=1736865739;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u5wMbpTlz7Wcf8NUxZ2HrPiETv3TSAPdjxFz5Luxkp4=;
-  b=jatAhGwGAlk3g7B4RZToE0VvO+2bV5wnLLjlXRcdHU4iNLIAN5bENQYb
-   gaAbG0nnTdO1nK/jlT0pB1rtULW5hK59JpIy3KdL2qF5RCkX+SRVjzYcF
-   tT9cAzhqk8ZHuT1f/2IOfzSKzte6phBXBfhdtEMaXLQfyqdwAWahTsmEQ
-   oayOOeUAR0w5O5z6RCVQrSU2fFaHxuKRgJspWoVmG/5uff+NYIhpa4d8D
-   jMt0Gigr4tn1pl4qnpOf/RDG/bsCMtduPOV4e/QtzHf6JoZySSXmDC19J
-   u9ORLb7b6v2jII0wxO/ik023c4TZvqERw/s0b0EL0bsZnmRQaanIpH3cB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="12984146"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="12984146"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 06:42:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="1030663343"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="1030663343"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jan 2024 06:42:16 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rPO9v-000CXU-1A;
-	Mon, 15 Jan 2024 14:41:53 +0000
-Date: Mon, 15 Jan 2024 22:40:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steev Klimaszewski <steev@kali.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [steev:c630-linux-6.7.y 160/172] sound/soc/codecs/wsa884x.c:1782:33:
- error: no member named 'dev' in 'struct sdw_stream_runtime'
-Message-ID: <202401152241.JjKK4P38-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlHDqaRr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58883C433F1;
+	Mon, 15 Jan 2024 14:55:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705330516;
+	bh=V1QxLjvPnVMPlTlSTDG52+q0fs567yHxFjw6qdGppHQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dlHDqaRrh30zqtKkn7nxWWCawfQ6Oumfne1MQxy/gg5KpOeczrrjYKh+t3gBL8vuN
+	 lw5NdoP87QMekcDM9TOErDI1SVMQCRTSnArkdbuwOZZzYm3hx+LzrZ4yewktN0EvwQ
+	 HKABwOCF+KjWr/iReB6r6WJWbZnppq9d5GD5Gn9pHpOER8flXBGTueepdpnuW31+RB
+	 /IVQvG1OqpKTzgEwsVPQeJ9Y8lvq0Pp1b4HOqszzhD4We5YbGGuo6gt/wijhdSTbl5
+	 NqQSuP56e0l8l/fQ9lcALAZCrJgihSCRJlqSoUJiGB4XXVZHMXpIKedn7LsdV6XrDz
+	 U/L61HjEdJ+lA==
+Message-ID: <404c0524-f245-49fe-954e-136351e35e19@kernel.org>
+Date: Mon, 15 Jan 2024 15:55:11 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [steev:c630-linux-6.7.y 160/172]
+ sound/soc/codecs/wsa884x.c:1782:33: error: no member named 'dev' in 'struct
+ sdw_stream_runtime'
+Content-Language: en-US
+To: Steev Klimaszewski <steev@kali.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ kernel test robot <lkp@intel.com>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <202401152241.JjKK4P38-lkp@intel.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <202401152241.JjKK4P38-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/steev/linux c630-linux-6.7.y
-head:   1e38da45fb7002ca38a657441f21dc4c93fb8cf3
-commit: 73e51a60212fd2c7e76a32a01b4c22a2cbfc24ad [160/172] ASoC: codecs: wsa884x: check if set_stream is called for proper bus
-config: i386-randconfig-013-20240115 (https://download.01.org/0day-ci/archive/20240115/202401152241.JjKK4P38-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401152241.JjKK4P38-lkp@intel.com/reproduce)
+On 15/01/2024 15:40, kernel test robot wrote:
+> tree:   https://github.com/steev/linux c630-linux-6.7.y
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401152241.JjKK4P38-lkp@intel.com/
+Steev, please limit the testing of your tree, so we won't get notified
+on such cases (it's third or fourth email).
 
-All errors (new ones prefixed by >>):
+Best regards,
+Krzysztof
 
->> sound/soc/codecs/wsa884x.c:1782:33: error: no member named 'dev' in 'struct sdw_stream_runtime'
-    1782 |         if (sdw->bus->dev != sruntime->dev)
-         |                              ~~~~~~~~  ^
-   1 error generated.
-
-
-vim +1782 sound/soc/codecs/wsa884x.c
-
-  1773	
-  1774	static int wsa884x_set_stream(struct snd_soc_dai *dai,
-  1775				      void *stream, int direction)
-  1776	{
-  1777		struct wsa884x_priv *wsa884x = dev_get_drvdata(dai->dev);
-  1778		struct sdw_stream_runtime *sruntime = stream;
-  1779		struct sdw_slave *sdw = dev_to_sdw_dev(dai->dev);
-  1780	
-  1781		/* Check if this belongs to same bus */
-> 1782		if (sdw->bus->dev != sruntime->dev)
-  1783			return 0;
-  1784	
-  1785		wsa884x->sruntime = stream;
-  1786	
-  1787		return 0;
-  1788	}
-  1789	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
