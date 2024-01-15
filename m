@@ -1,79 +1,48 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24433182A3;
-	Mon, 15 Jan 2024 13:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1890E17BC3;
+	Mon, 15 Jan 2024 14:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="jUtq8cYK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PurxCMc+";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="jUtq8cYK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PurxCMc+"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3C30721EF0;
-	Mon, 15 Jan 2024 13:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1705326101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6jA5Cu9AWaUNPG7ZmLl1Q9dS9vTQjhzxdsBE+iAkyms=;
-	b=jUtq8cYKSaU3axuFDd9TAXNHTpSqZ0HO0f61mPKt8OnTYiqjB2lbm9z1vKjcp/0eY/pJQh
-	+p1pA6Lq5fpDBScDPHVJKSqufWbdrKP3/Oarhj1yg0DIy/tIKewTVeqnu7OtGcW8cH3kZ9
-	HNBJjfkgaP5EHDbaaE04lesB18Bu1rk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1705326101;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6jA5Cu9AWaUNPG7ZmLl1Q9dS9vTQjhzxdsBE+iAkyms=;
-	b=PurxCMc+LLigIrY8HAOAcwkNZ2VpzAZI+H5VTJhjNosVrLykFaplsTvf9s7i+11uriEpE/
-	Ru/z7dKQP7JLuQDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1705326101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6jA5Cu9AWaUNPG7ZmLl1Q9dS9vTQjhzxdsBE+iAkyms=;
-	b=jUtq8cYKSaU3axuFDd9TAXNHTpSqZ0HO0f61mPKt8OnTYiqjB2lbm9z1vKjcp/0eY/pJQh
-	+p1pA6Lq5fpDBScDPHVJKSqufWbdrKP3/Oarhj1yg0DIy/tIKewTVeqnu7OtGcW8cH3kZ9
-	HNBJjfkgaP5EHDbaaE04lesB18Bu1rk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1705326101;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6jA5Cu9AWaUNPG7ZmLl1Q9dS9vTQjhzxdsBE+iAkyms=;
-	b=PurxCMc+LLigIrY8HAOAcwkNZ2VpzAZI+H5VTJhjNosVrLykFaplsTvf9s7i+11uriEpE/
-	Ru/z7dKQP7JLuQDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2ACC9136F5;
-	Mon, 15 Jan 2024 13:41:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0GxnChU2pWWkZAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 15 Jan 2024 13:41:41 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id DBD14A07EA; Mon, 15 Jan 2024 14:41:40 +0100 (CET)
-Date: Mon, 15 Jan 2024 14:41:40 +0100
-From: Jan Kara <jack@suse.cz>
-To: syzbot <syzbot+f91c29a5d5a01ada051a@syzkaller.appspotmail.com>
-Cc: almaz.alexandrovich@paragon-software.com, axboe@kernel.dk,
-	brauner@kernel.org, bvanassche@acm.org, hch@lst.de, jack@suse.cz,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, martin.petersen@oracle.com, nathan@kernel.org,
-	ndesaulniers@google.com, ntfs3@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com,
-	viro@zeniv.linux.org.uk, yanaijie@huawei.com
-Subject: Re: [syzbot] [ntfs3?] possible deadlock in ntfs_set_state
-Message-ID: <20240115134140.a2jcs5dosdsizorj@quack3>
-References: <000000000000ed1df405f05224aa@google.com>
- <0000000000008942ff060edc57fb@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jatAhGwG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705329739; x=1736865739;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u5wMbpTlz7Wcf8NUxZ2HrPiETv3TSAPdjxFz5Luxkp4=;
+  b=jatAhGwGAlk3g7B4RZToE0VvO+2bV5wnLLjlXRcdHU4iNLIAN5bENQYb
+   gaAbG0nnTdO1nK/jlT0pB1rtULW5hK59JpIy3KdL2qF5RCkX+SRVjzYcF
+   tT9cAzhqk8ZHuT1f/2IOfzSKzte6phBXBfhdtEMaXLQfyqdwAWahTsmEQ
+   oayOOeUAR0w5O5z6RCVQrSU2fFaHxuKRgJspWoVmG/5uff+NYIhpa4d8D
+   jMt0Gigr4tn1pl4qnpOf/RDG/bsCMtduPOV4e/QtzHf6JoZySSXmDC19J
+   u9ORLb7b6v2jII0wxO/ik023c4TZvqERw/s0b0EL0bsZnmRQaanIpH3cB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="12984146"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="12984146"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 06:42:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="1030663343"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="1030663343"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Jan 2024 06:42:16 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rPO9v-000CXU-1A;
+	Mon, 15 Jan 2024 14:41:53 +0000
+Date: Mon, 15 Jan 2024 22:40:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Steev Klimaszewski <steev@kali.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [steev:c630-linux-6.7.y 160/172] sound/soc/codecs/wsa884x.c:1782:33:
+ error: no member named 'dev' in 'struct sdw_stream_runtime'
+Message-ID: <202401152241.JjKK4P38-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,67 +51,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000008942ff060edc57fb@google.com>
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=jUtq8cYK;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=PurxCMc+
-X-Spamd-Result: default: False [2.68 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=94632a8e2ffd08bb];
-	 TAGGED_RCPT(0.00)[f91c29a5d5a01ada051a];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BAYES_HAM(-0.01)[51.24%];
-	 R_RATELIMIT(0.00)[to_ip_from(RLgtcj9mh9ghuanj5qgfrqcyig)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 DKIM_TRACE(0.00)[suse.cz:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_TWELVE(0.00)[18];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Score: 2.68
-X-Rspamd-Queue-Id: 3C30721EF0
-X-Spam-Level: **
-X-Spam-Flag: NO
-X-Spamd-Bar: ++
 
-On Sat 13-01-24 15:43:04, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
-> 
-> commit 6f861765464f43a71462d52026fbddfc858239a5
-> Author: Jan Kara <jack@suse.cz>
-> Date:   Wed Nov 1 17:43:10 2023 +0000
-> 
->     fs: Block writes to mounted block devices
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10f71683e80000
-> start commit:   8f6f76a6a29f Merge tag 'mm-nonmm-stable-2023-11-02-14-08' ..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=94632a8e2ffd08bb
-> dashboard link: https://syzkaller.appspot.com/bug?extid=f91c29a5d5a01ada051a
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15af0317680000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10de04b0e80000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
+tree:   https://github.com/steev/linux c630-linux-6.7.y
+head:   1e38da45fb7002ca38a657441f21dc4c93fb8cf3
+commit: 73e51a60212fd2c7e76a32a01b4c22a2cbfc24ad [160/172] ASoC: codecs: wsa884x: check if set_stream is called for proper bus
+config: i386-randconfig-013-20240115 (https://download.01.org/0day-ci/archive/20240115/202401152241.JjKK4P38-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401152241.JjKK4P38-lkp@intel.com/reproduce)
 
-Makes sense
- 
-#syz fix: fs: Block writes to mounted block devices
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401152241.JjKK4P38-lkp@intel.com/
 
-								Honza
+All errors (new ones prefixed by >>):
+
+>> sound/soc/codecs/wsa884x.c:1782:33: error: no member named 'dev' in 'struct sdw_stream_runtime'
+    1782 |         if (sdw->bus->dev != sruntime->dev)
+         |                              ~~~~~~~~  ^
+   1 error generated.
+
+
+vim +1782 sound/soc/codecs/wsa884x.c
+
+  1773	
+  1774	static int wsa884x_set_stream(struct snd_soc_dai *dai,
+  1775				      void *stream, int direction)
+  1776	{
+  1777		struct wsa884x_priv *wsa884x = dev_get_drvdata(dai->dev);
+  1778		struct sdw_stream_runtime *sruntime = stream;
+  1779		struct sdw_slave *sdw = dev_to_sdw_dev(dai->dev);
+  1780	
+  1781		/* Check if this belongs to same bus */
+> 1782		if (sdw->bus->dev != sruntime->dev)
+  1783			return 0;
+  1784	
+  1785		wsa884x->sruntime = stream;
+  1786	
+  1787		return 0;
+  1788	}
+  1789	
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
