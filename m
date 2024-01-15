@@ -1,124 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8C52C1A4;
-	Sun, 14 Jan 2024 23:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D362115BB;
+	Mon, 15 Jan 2024 02:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h35U55ok"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G4uob0gd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705275499; x=1736811499;
+  t=1705287291; x=1736823291;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X5yqbSnE/WUDsZXtY4+3D4G94Ta+8acvu1Eq/NS7K88=;
-  b=h35U55okSKi0VsDmocKpXLXMHGCjBp+ef69qoDTSLTu4cCT4Bczkp34f
-   M7al9kfUL05rXP8+4rMXVQgD1WbCrhvY2QgH+akxiKQyJ+0gt42gvo79P
-   QiuVSCVP8wkP8R+O6qC8mieB6vmpeOV1dPqAEAzKelPMZ8q2SXk551n2U
-   MYHE3w1r3MF66cd0/RDtzgVYnEMhc1IIxedW6voItVZfd/JDvmrahfYAN
-   fPbuMa6Vkq5zYsVAf5kLpst87JHgH9ejB6tM6h9QS1v0EPHx4y/vRxKuA
-   tmWVC/C4oCOQtfaGBUjQXxYSlQWarpvZaCEKcDDT+sl3fYjmfcay3sm1t
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="463780955"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=srwuYYGom2ZS4W5k3lZVCuKq6F8VJrRPXChD69St4WQ=;
+  b=G4uob0gd7Npr7+n9f7bQy21xpww3LQKEKDKicLgQDTv+ZwwhnTiTgM0u
+   sCA9t2NGmIxPfYQKiVKn5xjtvwxGzYKk6/a/VXp1eAOehZ7qpi3JsCYmH
+   iDhLKtI0Fsq0ItM7LwMgcGUGtxpxCsXs//VXGgNguZXnm2milh5RUAj4e
+   /5eD6TgRLwVr0ZfzApDqIm5HGSB6wYFvPLymNKbin1Z0iWK/uxBja3l+Y
+   Ofk/d6FoIau3W2TsxioECjUxqlW3sQYCqIQjIDzKaNoJRwStALmEPZIAt
+   xMc59o3K9rxmUJZe5lRO1M2VoWeH0KjnlU52osXzLHGZ3X9zeXHNJnjs3
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="6616601"
 X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
-   d="scan'208";a="463780955"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 15:38:19 -0800
+   d="scan'208";a="6616601"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 18:54:50 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="783634360"
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="733176597"
 X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
-   d="scan'208";a="783634360"
+   d="scan'208";a="733176597"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jan 2024 15:38:17 -0800
+  by orsmga003.jf.intel.com with ESMTP; 14 Jan 2024 18:54:47 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rPA3T-000Bvs-1J;
-	Sun, 14 Jan 2024 23:38:15 +0000
-Date: Mon, 15 Jan 2024 07:38:05 +0800
+	id 1rPD7a-000C2O-0M;
+	Mon, 15 Jan 2024 02:54:42 +0000
+Date: Mon, 15 Jan 2024 10:53:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: alison.schofield@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] cxl/region: Allow out of order assembly of
- autodiscovered regions
-Message-ID: <202401150741.uj6rLfNF-lkp@intel.com>
-References: <20240113050421.1622533-1-alison.schofield@intel.com>
+To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel@collabora.com,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Brian Norris <briannorris@chromium.org>,
+	Julius Werner <jwerner@chromium.org>,
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] firmware: google: cbmem: Add to module device table
+Message-ID: <202401151013.Xioj5wZo-lkp@intel.com>
+References: <20240111151226.842603-4-nfraprado@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240113050421.1622533-1-alison.schofield@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240111151226.842603-4-nfraprado@collabora.com>
 
-Hi,
+Hi Nícolas,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 3601311593eb44d34f142b993cb6f38f9a7863b3]
+[auto build test WARNING on next-20240111]
+[also build test WARNING on v6.7]
+[cannot apply to chrome-platform/for-next chrome-platform/for-firmware-next masahiroy-kbuild/for-next masahiroy-kbuild/fixes arm64/for-next/core linus/master v6.7 v6.7-rc8 v6.7-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/alison-schofield-intel-com/cxl-region-Allow-out-of-order-assembly-of-autodiscovered-regions/20240113-130553
-base:   3601311593eb44d34f142b993cb6f38f9a7863b3
-patch link:    https://lore.kernel.org/r/20240113050421.1622533-1-alison.schofield%40intel.com
-patch subject: [RFC PATCH] cxl/region: Allow out of order assembly of autodiscovered regions
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240115/202401150741.uj6rLfNF-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/N-colas-F-R-A-Prado/firmware-coreboot-Generate-modalias-uevent-for-devices/20240111-231841
+base:   next-20240111
+patch link:    https://lore.kernel.org/r/20240111151226.842603-4-nfraprado%40collabora.com
+patch subject: [PATCH 3/4] firmware: google: cbmem: Add to module device table
+config: i386-randconfig-013-20240115 (https://download.01.org/0day-ci/archive/20240115/202401151013.Xioj5wZo-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401150741.uj6rLfNF-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401151013.Xioj5wZo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401150741.uj6rLfNF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401151013.Xioj5wZo-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/cxl/core/region.c:756:6: warning: no previous prototype for function 'auto_order_ok' [-Wmissing-prototypes]
-     756 | bool auto_order_ok(struct cxl_port *port, struct cxl_region *cxlr_a,
-         |      ^
-   drivers/cxl/core/region.c:756:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     756 | bool auto_order_ok(struct cxl_port *port, struct cxl_region *cxlr_a,
-         | ^
-         | static 
+>> drivers/firmware/google/cbmem.c:118:40: warning: unused variable 'cbmem_ids' [-Wunused-const-variable]
+     118 | static const struct coreboot_device_id cbmem_ids[] = {
+         |                                        ^~~~~~~~~
    1 warning generated.
 
 
-vim +/auto_order_ok +756 drivers/cxl/core/region.c
+vim +/cbmem_ids +118 drivers/firmware/google/cbmem.c
 
-   755	
- > 756	bool auto_order_ok(struct cxl_port *port, struct cxl_region *cxlr_a,
-   757			   struct cxl_region *cxlr_b)
-   758	{
-   759		struct cxl_region_ref *cxl_rr;
-   760		struct cxl_decoder *cxld_a, *cxld_b;
-   761	
-   762		/*
-   763		 * Allow the out of order assembly of auto-discovered regions as
-   764		 * long as correct decoder programming order can be verified.
-   765		 *
-   766		 * Per CXL Spec 3.1 8.2.4.20.12 Committing Decoder Programming,
-   767		 * software must commit decoders in HPA order. Therefore it is
-   768		 * sufficient to sanity check that the lowered number decoder
-   769		 * has the lower HPA starting address.
-   770		 */
-   771		if (!test_bit(CXL_REGION_F_AUTO, &cxlr_a->flags))
-   772			return false;
-   773	
-   774		cxld_a = cxl_region_find_decoder(port, cxlr_a);
-   775		cxl_rr = cxl_rr_load(port, cxlr_b);
-   776		cxld_b = cxl_rr->decoder;
-   777	
-   778		if (cxld_b->id > cxld_a->id) {
-   779			dev_dbg(&cxlr_a->dev,
-   780				"allow out of order region ref alloc\n");
-   781			return true;
-   782		}
-   783	
-   784		return false;
-   785	}
-   786	
+   117	
+ > 118	static const struct coreboot_device_id cbmem_ids[] = {
+   119		{ .tag = LB_TAG_CBMEM_ENTRY },
+   120		{ /* sentinel */ }
+   121	};
+   122	MODULE_DEVICE_TABLE(coreboot, cbmem_ids);
+   123	
 
 -- 
 0-DAY CI Kernel Test Service
