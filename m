@@ -1,159 +1,211 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880E463AE
-	for <llvm@lists.linux.dev>; Mon, 15 Jan 2024 08:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF31882F;
+	Mon, 15 Jan 2024 08:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WfwsZnT5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XAySov6z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705308357; x=1736844357;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=My0uI92q84Lo6/lEX8aFg5JajQVkuOQZNbNUzVxZ0NE=;
-  b=WfwsZnT5YptGUorDg0LsNX0sshpZnlqOQ5La1DlGvUAS6yNnqx60FBi9
-   2lm3xQhsLPB/yueQCqAmy3+TJWfRQV14nc+LghTUZE85MsSrWgrVabKL1
-   F58bzrUWlZmYK8FLJDfMqVAK6C3P30lPhhi3nr2WtimNZs5FOVPJqaV0A
-   cXKNAdHyFCDmsbIq3RpGKtFLA91uy3INnBo3K8MwLOuITYyfSuozYCbPo
-   GW8QMlWvLLLp+2OBOgpmt0uBdME2qU/eIpbRQXj16X1BJ5MWp9sKuS5dt
-   qLQmaq0CB2oSHzQPMemeTJPeuImvzqG2NqPHc4n3FcvtsogxBxVBWpvGs
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="485725814"
+  t=1705308431; x=1736844431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1xWgi5kASA6dlTRDZTtCD0Jx+ThrEje1kmGZAUhdOXs=;
+  b=XAySov6zmPxl5hPrlHfG9RkIIvwxFCNubJqilSbsz0YRthBPaJ2uvRfs
+   LFUYuKkIUDSdAgnw0a5XmJkGKZ1oV6ljCZmmDVOl7AgNqBmC5a1m+dZR+
+   pnHBjKIPNwHXHuTcLhSSresuwfr938Kh+HQMwiDB1KhS0YPKcaH7SvZVf
+   OY7K7kgEJBI5AeSeLg+N8up7ANbzRAHmf6cxunBf4mm+o67Rar9ui4p1P
+   rQrTO4o5IZH5ILHx1P3Z62ShW3f4Tw9t+3R3DCSdfl+1dqFWrqGwCbJRb
+   SFMH9ccPVoHE6VX3pqqRGp4WcpiT04Z2q/Jni9R34lntQL9p41QjAQ4pv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="396705789"
 X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="485725814"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 00:45:56 -0800
+   d="scan'208";a="396705789"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 00:47:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="733244107"
 X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="733244107"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 15 Jan 2024 00:45:55 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 15 Jan 2024 00:45:55 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Mon, 15 Jan 2024 00:45:55 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 15 Jan 2024 00:45:54 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N8ZuF2az6cxMr0Di4meE/M+u771kKWR4d3lvNQXG2xDjLrqsFtIq5cHXchIC6Pld53CLUaZKDimXBVDsZByueEPMWgiMyYkTHYgrDQek25Jf/TFQos/wgZW0x9Y7Ln6UuA3/f9VqI7swE6cKXxTvEN945IfhhbGTKvjrweBZuPgr5Uc5GNNu5mAWebH2TUTrzkn2saY8MabSFhaahJO6biv8bDK35pdl4x6Y2IoxrWbC0PPJTP4NmbJplO21uMbf4q3WmHWMzFVwA9Z5alKMY3GdkVUWS7dASB2/1axyTUMkRP0Lr9486iFp9sZE2ZxIguc0seWUrfyfdXVWck7ONQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xKea/BF354z85m8KS3l6AUvsbavpE5dfje7xCQRhDlo=;
- b=hzeB8TFA8rdv1rTLC7p9u2W2hMuWR6B22/kYJw6ZhkkPQEgTDsMP5+l26T8N2rcBpsKS3Hck6yeQ+0ftIIqXNkmnShfVOePywv0WxAdaWVWbdFy5gXnwpm/NCTMTxTBBZqP42euKqWkGGm8TwgRMmXty177ErurJwKBqKcXAIjJQMpL2vpZq+979Zj59nojWOIpCP4N06I0Wgy9kTARHOY9winl8bfyPAQFhpzszeQktz251wS7kHNxDbQtM3yEE1+7uc8y1HeoxZwOS9YWz8ib6T3ULJa1tSW6UUJKC5hBqzZce51WbQ4HDMT5zvjRpwerX0eqhtWBpvGZ1JOXu9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from LV8PR11MB8724.namprd11.prod.outlook.com (2603:10b6:408:1fd::5)
- by PH0PR11MB5831.namprd11.prod.outlook.com (2603:10b6:510:14b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.23; Mon, 15 Jan
- 2024 08:45:53 +0000
-Received: from LV8PR11MB8724.namprd11.prod.outlook.com
- ([fe80::28ed:e2f9:9973:b40]) by LV8PR11MB8724.namprd11.prod.outlook.com
- ([fe80::28ed:e2f9:9973:b40%5]) with mapi id 15.20.7159.020; Mon, 15 Jan 2024
- 08:45:52 +0000
-Message-ID: <ebb7908c-d28c-4549-8aa2-1e0e62c62e8a@intel.com>
-Date: Mon, 15 Jan 2024 09:45:47 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: isci: request: Fix an error code problem in
- isci_io_request_build
-To: Su Hui <suhui@nfschina.com>, <jejb@linux.ibm.com>,
-	<martin.petersen@oracle.com>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-	<morbo@google.com>, <justinstitt@google.com>
-CC: <dan.j.williams@intel.com>, <linux-scsi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<kernel-janitors@vger.kernel.org>
-References: <20240112041926.3924315-1-suhui@nfschina.com>
-Content-Language: en-US
-From: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
-In-Reply-To: <20240112041926.3924315-1-suhui@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0053.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4a::6) To LV8PR11MB8724.namprd11.prod.outlook.com
- (2603:10b6:408:1fd::5)
+   d="scan'208";a="18093072"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 15 Jan 2024 00:47:08 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rPIbp-000CLO-0K;
+	Mon, 15 Jan 2024 08:46:40 +0000
+Date: Mon, 15 Jan 2024 16:44:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kevin Loughlin <kevinloughlin@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+Message-ID: <202401151649.U1tYCHdv-lkp@intel.com>
+References: <20240111223650.3502633-1-kevinloughlin@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR11MB8724:EE_|PH0PR11MB5831:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a638728-2408-40dd-3199-08dc15a661ac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xr4UxziVfvPNTLYJWZyjd5qy18Lqll73JNfMS0fgompzINaRUYYLZsOUzSzSf6ZRGsPNIYcPOT5pE1FQeIgyciZKJyIsNtO1lhSKt/v1iSkWGWeIB6bPuP2Gp7IQ0yvnDgrSj+hrcRoF5KHISvVa3B1UQhPV2Y8fY9T9m1axJjL2jP1JwlLcrnIUk3iSgW40EHSD9GFfQV0gouljBVbOvCqE/37OZjIWM1IbU0y7hyUJ16YtOHBI4Sl2DP89sNuI/QL284hoIPIbgI22E4xERjAsFOV4+A4del/itCiU7kRQjmNIyv4e7F5p/6hKH0ZZHV+KzNgXqfuXjwE8ieq9kjm61NwICgBujFODe1Jy1rlOiA93RnVoPMl9l2k+uQDarxvh8uEp8xxoztWgH34tfhyFVAHKL6bOFRC7qv3TmyCfnPrLnoL/53WJM6Mnktw7JTodQRkPAFMYkj0SjPszB2lsiVd79PckZ5v++kf84tEBgvcgk1oj0se7Q690gHFGbnwr6fQdWaSkiERxdpzHEAgo7v6CW0f5G/irq82wfKfJ1tP3POzEeZdQc0ptkemS5uOr18hNh7ccBlIc6cyHMNlmc0F9s8YizPoDNpyYYEtuhx/RLQHzmw4sDeFv0V2qKsGRbjOYXLAN6WI9ZEFWvQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR11MB8724.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(346002)(136003)(39860400002)(366004)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(8936002)(4326008)(8676002)(44832011)(31686004)(31696002)(86362001)(83380400001)(5660300002)(2906002)(4744005)(7416002)(82960400001)(6512007)(2616005)(41300700001)(478600001)(26005)(6486002)(53546011)(6666004)(6506007)(66946007)(316002)(36756003)(38100700002)(66476007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUYza0VrbHVwZUUxbDVGUFIvR2J6MUphSm1yaHB1bnRpYnM1ZFYrYUNNc2Zs?=
- =?utf-8?B?a1plVEhGM3R0b3ZIZlFTSENFc0pKekhldDhKYTZwckI1L2ptaWhEMUdMbDFB?=
- =?utf-8?B?bjk4bGwrSFVUVGxtTUdSLzJML1FvbktXbS8vSXUzeDZoZUJkanNzSGlUTDZs?=
- =?utf-8?B?R0JDVUpleEVmTWtVRldqTmlZV0JOZmNxV3EyVDVVNkRaS3dmcnp3SUFxNkx5?=
- =?utf-8?B?dUowQ29hUTMwSGh1Vmd1ME0rNks4UEhjcklFVUQya0FzMXZjT3dRYUI1Q2s3?=
- =?utf-8?B?TXJIbmI1bVNqWFowR1BJeldHN2N1MnZnMkthQU9vd2ZHQlRIR2JsSXp6RXBr?=
- =?utf-8?B?bUtIQnlBK3ROWkxZN1NkK0J3UnVUQzZmS3BRcDBIbVNlcDdUVktNM3RESGRI?=
- =?utf-8?B?T0VDYjFETFBvOENQWjBydUpOalI0L3pMdE5EOWZLc3lTc05iaXVFdFlHeWFt?=
- =?utf-8?B?d0tISWs4M2tyQTJxcFkva2x6OEtxaHNZYW5GbUZBa0Ric2pGSmdKWFJqUnRV?=
- =?utf-8?B?ZEwvU2lCVzJXUzhDL01ISXdDeGM1YXVUanNKNU5YUTZmTmErWDlSKzg4UUVL?=
- =?utf-8?B?aUEvdENCS2J3YlZCdWlrRVkwWExTWm5FSGJBNVNkb3dLS3N6ZzVjcEJCV1dX?=
- =?utf-8?B?UXY4WFBCTm1iSGQwZVdBbVJ3QmNZM1JWbXM0NE9KMU9YOGtJbTI2RXh5bEM5?=
- =?utf-8?B?QllaNXQvaXhmeGRoU3BOc21DQ1ZjdEU1SnZaVzVlcDJ4TDlSVzdRVHhJRGl0?=
- =?utf-8?B?aitmcFFJaXZrRVlqakFwaHpSWGpNWG1zcWNrNG5NbUhyZ2R3SVNkODBmRTcy?=
- =?utf-8?B?Rm9kQkJQZGtWZDl6SFhhYzdRRkVKWnpKb2EySUtwbzJSaDdBSUt3bWpLMTg0?=
- =?utf-8?B?MG1QTjBRdnRMY0FwUWlLd3FNTmJNaUFHZ3MrY2pDbTRwUHE1TThmMzdYUXJJ?=
- =?utf-8?B?SS9mUFl1bUVndjVic0JSRUcvQzRINXpEa3UvaDZzNllqNkZPeFFLNEFwRzNX?=
- =?utf-8?B?MkxBRFlMblJ6VGNKbHVJWlVTWVk4d1pObi9hamEyZWxYTFNDOHFpWFFEbE5a?=
- =?utf-8?B?aUt5cWlBeU5qQ0FwNkh3blZjU1g3Zlp0eHFZUDFLaG9NaGlhZlliWFJHUmk1?=
- =?utf-8?B?NC9odHlMYWxBK2tQN1hveVdBS0lDRldqSy9aNGt6dzFWS2Uxc1NMNitXcHls?=
- =?utf-8?B?OUcvZGFtd2t5L1FadkpuU2owUmhsbC9BTVB0cVg2TEpkR1g5a3ZFYzVsMG1G?=
- =?utf-8?B?QWlKcFVSY3dOVWx6MFdLNWgzeTBQL0NWYlkzYmV6bHNwdUV6SnZ5VkJ1amVm?=
- =?utf-8?B?VEhSMTI3UzJLcVZ2RFk1anlxbUdGNk52ekRuN0YzY3Q4RG5oTHlPeGkvb0cw?=
- =?utf-8?B?aEVqNXd4OEtCQ04rY3ZDbmJyZmdBZ2xGUitTRkp1YzFRRXRNRkpBVDNMd0RD?=
- =?utf-8?B?UkFlQ3pBbTZlRWZZYS92UFJ6UHFxNnF0TlRESExzWWhYalhXL1NIZEhlOFNi?=
- =?utf-8?B?NEU2N0VPMEdId1ZqTjZrbHpsYStKSkE5Y0JKY1FFRmFKU3lyODBGeEVkNTYr?=
- =?utf-8?B?bDZSdjEvQkRwZTNKaEpmb1RrdUkyYXNsOXlyYTVUb2l4VytPK2M5MDFwWFNK?=
- =?utf-8?B?WnorTnBNM2Niekp6ZVMrMWt5dW1Sa1BXZE1vQVZRVTFRU01WMUZPdVlHTVM1?=
- =?utf-8?B?Rm9LaS9uYlNQZlRNSkJ5N09sL3BrN2pTbEFCbFk1UVN6VnAxTVRSV0NtS3JF?=
- =?utf-8?B?alp2cjNYdVd2RENrekprVzY1M2dGRG90R2c4a3Z0cDJRQmpLQTlLN2hFOUZv?=
- =?utf-8?B?VU5tRlBjb1RWWnVWUG5hVUp0Y1cwbXh5VTFRMlhwa0VFT0YreVFGZWc5NGc5?=
- =?utf-8?B?ZS82eTVsVUltN256Tk55SjVIbnUrY3RGSiswZHlCQnpLYU0yQ3ptYTRuWVhF?=
- =?utf-8?B?NUxab2VMMElNUzVuNFpGQlN3Vy9oT1hSc1BabDBRVDhqOHJScTd4bnVmLzgr?=
- =?utf-8?B?cXFYNWQzUWptNnVIVkNUUzhWWi96NVlHUWtWeWRxMHFjSVpEemgzRU9ZaUFH?=
- =?utf-8?B?VlFiWGtLQ2NsSjRQTG9iamtUaDFsaTgvLzJLUXFKT1BLOG9DeUZtWDd6OGZh?=
- =?utf-8?B?R3Qzd2NsOXNxQkFYQnphZS9rKzIrWjhQc2k1c3RWVWdJSEJRWUhCbEdrNXY1?=
- =?utf-8?B?S0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a638728-2408-40dd-3199-08dc15a661ac
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR11MB8724.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2024 08:45:52.9394
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8yXHXQK+crS4bXF7xiZBvnjBQOVSpgprdT9NxbNFhGjnunt+L1/JdlsyRNbHKJANGWeffLjivtPNKFbHU2jJpUg9A8RWQ60waUsNq8gQVzY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5831
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240111223650.3502633-1-kevinloughlin@google.com>
 
-On 1/12/24 05:19, Su Hui wrote:
-> Clang static complains that Value stored to 'status' is never read.
-> Return 'status' rather than 'SCI_SUCCESS'.
-> 
-> Fixes: f1f52e75939b ("isci: uplevel request infrastructure")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
+Hi Kevin,
 
-Reviewed-by: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on tip/master tip/x86/mm linus/master v6.7 next-20240112]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kevin-Loughlin/x86-sev-enforce-RIP-relative-accesses-in-early-SEV-SME-code/20240112-063856
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20240111223650.3502633-1-kevinloughlin%40google.com
+patch subject: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early SEV/SME code
+config: i386-randconfig-011-20240115 (https://download.01.org/0day-ci/archive/20240115/202401151649.U1tYCHdv-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401151649.U1tYCHdv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401151649.U1tYCHdv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:15:
+   In file included from include/linux/completion.h:12:
+   In file included from include/linux/swait.h:7:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from arch/x86/include/asm/preempt.h:9:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:12:
+   In file included from arch/x86/include/asm/page.h:9:
+   In file included from arch/x86/include/asm/page_types.h:7:
+   In file included from include/linux/mem_encrypt.h:17:
+>> arch/x86/include/asm/mem_encrypt.h:139:19: error: cannot take the address of an rvalue of type 'unsigned long long'
+     139 |         return *((u64 *) GET_RIP_RELATIVE_PTR(sme_me_mask));
+         |                          ^                    ~~~~~~~~~~~
+   arch/x86/include/asm/mem_encrypt.h:30:10: note: expanded from macro 'GET_RIP_RELATIVE_PTR'
+      30 |                 : "p" (&var));          \
+         |                        ^~~~
+   arch/x86/include/asm/mem_encrypt.h:144:19: error: cannot take the address of an rvalue of type 'unsigned long long'
+     144 |         return *((u64 *) GET_RIP_RELATIVE_PTR(sev_status));
+         |                          ^                    ~~~~~~~~~~
+   arch/x86/include/asm/mem_encrypt.h:30:10: note: expanded from macro 'GET_RIP_RELATIVE_PTR'
+      30 |                 : "p" (&var));          \
+         |                        ^~~~
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      97 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     113 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+
+
+vim +139 arch/x86/include/asm/mem_encrypt.h
+
+   136	
+   137	static inline u64 sme_get_me_mask_fixup(void)
+   138	{
+ > 139		return *((u64 *) GET_RIP_RELATIVE_PTR(sme_me_mask));
+   140	}
+   141	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
