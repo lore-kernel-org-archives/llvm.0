@@ -1,254 +1,259 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3901CF82
-	for <llvm@lists.linux.dev>; Tue, 16 Jan 2024 18:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705431087; cv=fail; b=bGnazcnhgAknwo+j3SSwCOp3O0+xDkf3LLyJeecgjz8tO1Mk6V2rB0IOTsOhgScdFLvV1Z6vg1asHApmdbF5EN4aLRKsdiAe1J+/1TQztCu7BsaWYqBphOHgaEILMBMoQJpTpfE5MUQGZQW/d7Ko67eC+CkkrwANxKhs2+A5Y6U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705431087; c=relaxed/simple;
-	bh=4SYyLae4ur5AH6co9+rKUIGUVJ9nMTFO+AjGNRfVp5k=;
-	h=ARC-Message-Signature:ARC-Authentication-Results:DKIM-Signature:
-	 Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 Content-Type:Content-Disposition:In-Reply-To:X-ClientProxiedBy:
-	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped; b=m25NVldjwk/csnKnHSTEejfYHwJI2+Yx+npa/uDatoIaCBtrsge4LNgjNIajByT3o9HOWwxEpUjMF6OFoeRxGBcqhvbT21rOtWS+igKRMeDwSWOrr1BR0uCP7yC8W7xhNLXJfUchletidLgvg3hIgRqS8LzZ+KS/NsVOS88S/s8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mhrcITwR; arc=fail smtp.client-ip=40.107.92.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556691EB4F;
+	Tue, 16 Jan 2024 19:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705434171; cv=none; b=SQ2QAG8MEHhHTKDUeoT+GXyxx7SsXWSUQ1HvNNUJFmGwGpRsxf64si6jwfae0Ij9T6er49VVR7BF+7dIudCCq1X2XUBvABk2qQfl6jZvpzHbeEm5AvKV2O0eHdFLuR/EXYVXdMLl5kVuzQFHfXr1/qURlbos7He8bncYskqHp/o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705434171; c=relaxed/simple;
+	bh=VLPD9k6rnpYEto5RbuNi8aqGwxQuGvH9H86d70Wgxbw=;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=QHqAs+HVz9F+OClcB3h8SXoN5uAQa6bR0y3bF7dmsQqr8zAlFFTfnAbPXWNIJikNoZV3/R1CN4WzOfcPBqPmYDMVntJHoVQE/HPz7P9Bc6H7XL73+vQOYTK/eteymwMXT13D9caIUHQyMRP331TVEQMDb+LC8rrHi9WtwL+96Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lJnRrSCe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mhrcITwR"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mJOE1PugYO+le3Tm643yh8saKyXtYK2W6EiFnjWsqkO5Z5fPr0tSyZ2ZKMya1ygRP1/I5t1e+OottTKYMQXvuSuLm9MBHV2Z2CwMuCDrKhjj3sdKqGCD2PUo6mD7aMcBb/lDiBMi0rOvRRFDsAHhyS2QljFer8h9nONekKJ36MmfIRTIt41gJxoxmEYeGV9Oow351cBrG7bKyQUTjWpOyhtqp+scrf84FoGD80TPKX5VGYbyJUjg9ZjclsQIKc3Igw6uY0k6OZC5n6Hhnk5BY0vy67Ey1hRK3HW3ix1xK0Rpr5vTBx05nECZ4QPV1YbnkHREed0NDImw5ycP14Vy2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3usiNmFGiZLs6gCwlCNUZQPmQsp7B9UsD5p4Ojmv82g=;
- b=KIoTevUi5P+kMYReg5TXL8jtYT4nUnl9qlYGudZFttN25p29nNQT00rpPcLLdU0+nWoUEc4eh3Yxe0HvcgC/vk9IrDq5JiqUjlGJD0IWURwkRtkS2U4hBfayjTccwH0VH9EGWNuGhN7pk/+XOSARc6GH7BhH3MNGBr0Yyg3jj8u/Q82dMEhCL1Nua6n2KFZdi3cx3FteD721PCd6xTuSgaQET+alaxHaUr+FcZnWmthwEB2zOQNlUQjyNg/uPaKhB0Iwewz4fILmQZn1pijjt8mmcQq1N3SEovUz8f+BK5aBi6BGxtTZH9Rqn+jPXko/5TxW7ZKoIWVxc0P657MqvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3usiNmFGiZLs6gCwlCNUZQPmQsp7B9UsD5p4Ojmv82g=;
- b=mhrcITwRLoHW26abLYLmHatEuVlATcKYSrR83bC6Mmwk40Y0SA8jyY+rAAbxTsjBtxypd79xzFn2ADBDXFrpalhRVh8j3U2pa0X8tVHN0rMRcV405dv2MWDYciVdzDPDz4zLjO0tbN3TmEpIeDzH4duGD5Yn5c4ATrG0RUqPL7dda7j4f51hIcEOC04beZlSBJnUS08JbeSmzjibqr5b0tnct53oNklEF9NgztceJeD/XvIUgYRKpxiDqxjwh2/9Cl1hQs5gwGxxvM6vP1a34ceUBRsDDyDTvbEc0LUDKdHG7xiTRGG/mlESepM07Hhp6f4K+5KEeh5WPFJHCLl76w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH2PR12MB4134.namprd12.prod.outlook.com (2603:10b6:610:a7::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.23; Tue, 16 Jan
- 2024 18:51:22 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7181.020; Tue, 16 Jan 2024
- 18:51:22 +0000
-Date: Tue, 16 Jan 2024 14:51:21 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Niklas Schnelle <schnelle@linux.ibm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <20240116185121.GB980613@nvidia.com>
-References: <ZWSOwT2OyMXD1lmo@arm.com>
- <20231127134505.GI436702@nvidia.com>
- <ZW4NAzI_jvwoq8dL@arm.com>
- <20231204182330.GK1493156@nvidia.com>
- <ZW9cF0ALVwgvcQMy@arm.com>
- <20231205175127.GJ2692119@nvidia.com>
- <ZW97VdHYH3HYVyd5@arm.com>
- <20231205195130.GM2692119@nvidia.com>
- <ZXBWXodu2rxQ7Szz@arm.com>
- <20231206125919.GP2692119@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231206125919.GP2692119@nvidia.com>
-X-ClientProxiedBy: BL1P223CA0010.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:208:2c4::15) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lJnRrSCe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878D8C43390;
+	Tue, 16 Jan 2024 19:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705434170;
+	bh=VLPD9k6rnpYEto5RbuNi8aqGwxQuGvH9H86d70Wgxbw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=lJnRrSCeQyl5JJInPLxKbH/3iBAIvWXlHgYY32nr7yMIKTmTxT11xFv6BtrUVLgb5
+	 4FH5snjCs4wx53j8V//zMHXaN5WvBKRl+Zb/yINglstsXMp6aPZkRXxltE/t/I4m+p
+	 iSkeMcMDfbbNZihf3LHp754aZ/8BP5yqOQaYB1pD+TZAtFXQvP0IgIdMAGwPUwtmby
+	 6UQZLp1ld3QeqOiBQqSV4wNK3kiZyuI5A9P+OFFcHLta6mxpWIvV0nPsBfHvsdpApk
+	 GW3IeRvSFl7oP9lDbs7+sZU7qSPe7qyprWx60uJQumcMi5gIGM0Ii4o5V1XGuzyo9/
+	 4LxpyTAtkUv2Q==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	daniel@iogearbox.net,
+	nathan@kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.7 005/108] libbpf: Fix potential uninitialized tail padding with LIBBPF_OPTS_RESET
+Date: Tue, 16 Jan 2024 14:38:31 -0500
+Message-ID: <20240116194225.250921-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240116194225.250921-1-sashal@kernel.org>
+References: <20240116194225.250921-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH2PR12MB4134:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e93351b-8e71-4155-c917-08dc16c42221
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	lT7d2AJ3X+gUbaZagsjP4HmbCNAi1TxhsFAiRlGtOBTR/2eiMXllkfPkRp1EnP54W0i2GBsPfwjbHaoCLOviW3B01w8IwP6trkKRInNFMVHryastb3zFuO89SdJ3zyYD9f7z12S374UE6Jj7dyZIdDYFkWVrg8xVy4XdBGwECRO6ufdkTk9pf+J5+KAF/AZHhD/rcWHnMNcZKOW0WWd8Eal1F6oRSzg/0jWkGP8aGO+VCADKJs0ZEUKAaQzpU+Gn1dLq0gdLwN1Ng2+naJq0Lu8V9C0ZMGxO31idyksmXugbtQW3M8HxFf74j/vqy9yaV6NRiWC/Q4JLnZcuG1YfLdbKtkVSiLdtXhSk5EDosMxF5hz9C15YnsI5OFypcW508SyTmur/13dXWflhvRurWe1uC5tWqS++wNfvi/1xuCw0BWAqFpLl1/s9w4nuTsMYfkWVYROve4yi8BwqNd3t5Vqtff3E5HxQPJ+PCc7UGhVkLg74P0FFwbgTO2LLvAV51ZhbuOS4MVqVxuW0zdKXqN7TRZTycgggrAtonv7/oYjQ6Sbou19AQZFoOcpSJ7aLaqAr8CSShvLthnIfOGC4XgaAHPK1krh7fBuBFZ1CknygNbDvu2hW60LrMaJV4YK5
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(346002)(366004)(39860400002)(396003)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(41300700001)(38100700002)(33656002)(86362001)(54906003)(66946007)(316002)(66476007)(66556008)(6916009)(8936002)(7416002)(2906002)(8676002)(4326008)(5660300002)(2616005)(1076003)(26005)(6486002)(478600001)(6506007)(6512007)(36756003)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BLCLtu5xw4CO5lLB8RQhvU0QGY/po1K4wQKzyVOZO6Dj0zuLsUQTSlzI1i5o?=
- =?us-ascii?Q?DaQCRMWOY3w0LqQi1vL/FsV1ATrmOIokK2Ye7j52pQ8/9ud9qW/DcGasw4xA?=
- =?us-ascii?Q?/fNvj9/LCe8UnVFxFrdoZO5/+Fa3Lmza/r087hUhvZeSABtckCiNsl/WLsIG?=
- =?us-ascii?Q?EUP8CWeUSgu6RSU5To35b3WiiH3pIlWS1KwZGBisGx9LHfAm5Y0jag2c/W06?=
- =?us-ascii?Q?4r2ASNubqiCFG8GKn5Ynrr3qhPKQDJkYubPW4kvNLPaAd81HaQoG1z90+NHs?=
- =?us-ascii?Q?7tCDTpf+h7KpB0Xp59xf/JXDGyllO0WEt+m3bFdELL4KWN2ORBhz1ghfsTTI?=
- =?us-ascii?Q?480X9D8GWCcywHzceQS0Ow5G7SWFPpRmouvIZ94uMfHmzLMsRnnaj355Kxif?=
- =?us-ascii?Q?mJ3qdS34e2UNmcG+T+RnMsoJDGAH/4HczibhwT6P1oTBbQqTtslCUtDsmKDl?=
- =?us-ascii?Q?/w0nqcnwEF4panHyVpVSA4SDn+zhJUxqYqGRhWCJYwZ1F9DDzLqeicaF7dV2?=
- =?us-ascii?Q?unXumFrTv2Xc20IscHsK+uyst92jzE3ggwK1OUtxbskbKmPdFKeOyCFe1G/Z?=
- =?us-ascii?Q?KSKZeD3mcgArjQ6w63zmYXFu9zpbWH/P7CL4EspWwvZOWXv5U/KDT/Zi1W+D?=
- =?us-ascii?Q?Cwajf4qnJ2CEyAcir//Isloo4meowxpmVdE8JxrFv1mScyALB0F35GnMAP8C?=
- =?us-ascii?Q?go3IMlKLF/uwBTKPaVFruiWTV3OrIwhL7RyxqKNAIqR9fPGWOJDcE8dP9SHf?=
- =?us-ascii?Q?CMInc6J3VQVHIUzs0Bnl9s7XJ0pxP4uWHeX/k7Pt+yhPuwmcSiCVxLu9QeMx?=
- =?us-ascii?Q?+cujD9RxZHfPK2zcTX/mBnC0CODFP9CmhBNCEIsValD+MAqI9Aj2K4M74pcW?=
- =?us-ascii?Q?Liigicc4MHp4XXy8/XMaR02UlsUJoHsCrSXjpONkITVqiUY8gk7XO1ETm1Ss?=
- =?us-ascii?Q?o3I0rNEZoWXJOA5INVsd/agZutyFicuQmhgaZFuS6sbqHQ3ayxKlgNDDjPr8?=
- =?us-ascii?Q?VjyRA/nk71JONprsNLyJhRBbXQ+MJXNUOQ8Xc6wzAySYiP+MmPOrHlnwL1WB?=
- =?us-ascii?Q?HNB2qs4pY499/T6jVBTovzh2gJZ9zSE3h5qpEfZlPCeaO9/OBGbR8lUKfmH9?=
- =?us-ascii?Q?sedoGyeA33g4W4LhEoZk5hN2L0nZSeSk4SU2GaUA0heIqDtKs9zyGzip6GE8?=
- =?us-ascii?Q?3iSuhE0Ps8GolmnnMNDhkoIUELduAPBHPMJeen0ava/aaMbhYYtabu0T1oY9?=
- =?us-ascii?Q?XqDHKWCq8MFWnm8b0vO8V0L3celFGSXQwN7+TzTvmmWA0X14LbnTYTym3Adz?=
- =?us-ascii?Q?gcfOFIypL6numrBuKEgwl4mUijIkERtig4kDPuIGPB8SMLnh/OVJUgeJjYDu?=
- =?us-ascii?Q?cDEf4VYlXcXPEDoSBbGYxg42sRo0fK87aWjQIxyyRDYoixkLgOj9JYKXk5Oc?=
- =?us-ascii?Q?X1kdGuiFlZaMgfpUFazmGZZXB1hvr8NDwXIMAl83wsWXjInLKKuZu4bNhL4D?=
- =?us-ascii?Q?eojwP7UyeyS321WdqqNG1dZS1MYhGsznPv8me3Iy+O31JuiSqh5QYm4Z5tZU?=
- =?us-ascii?Q?c9CRu77RaUkb48UNsNzwCS1bB+L3W2hoZBnzR4o4?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e93351b-8e71-4155-c917-08dc16c42221
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2024 18:51:22.3345
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NYNN4dt3a5DaW4/fYLXcsn81nTtWnlbVlAx82sE+ykYdhStD8qdAnnZEA/BMYrk9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4134
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7
+Content-Transfer-Encoding: 8bit
 
-Hey Catalin,
+From: Yonghong Song <yonghong.song@linux.dev>
 
-I'm just revising this and I'm wondering if you know why ARM64 has this:
+[ Upstream commit 7f7c43693c1b46652cfafb7af67ba31726d6ec4e ]
 
-#define __raw_writeq __raw_writeq
-static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
-{
-	asm volatile("str %x0, [%1]" : : "rZ" (val), "r" (addr));
-}
+Martin reported that there is a libbpf complaining of non-zero-value tail
+padding with LIBBPF_OPTS_RESET macro if struct bpf_netkit_opts is modified
+to have a 4-byte tail padding. This only happens to clang compiler.
+The commend line is: ./test_progs -t tc_netkit_multi_links
+Martin and I did some investigation and found this indeed the case and
+the following are the investigation details.
 
-Instead of
+Clang:
+  clang version 18.0.0
+  <I tried clang15/16/17 and they all have similar results>
 
-#define __raw_writeq __raw_writeq
-static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
-{
-	asm volatile("str %x0, %1" : : "rZ" (val), "m" (*(volatile u64 *)addr));
-}
+tools/lib/bpf/libbpf_common.h:
+  #define LIBBPF_OPTS_RESET(NAME, ...)                                      \
+        do {                                                                \
+                memset(&NAME, 0, sizeof(NAME));                             \
+                NAME = (typeof(NAME)) {                                     \
+                        .sz = sizeof(NAME),                                 \
+                        __VA_ARGS__                                         \
+                };                                                          \
+        } while (0)
 
-?? Like x86 has.
+  #endif
 
-The codegen for a 64 byte unrolled copy loop is way better with "m" on gcc:
+tools/lib/bpf/libbpf.h:
+  struct bpf_netkit_opts {
+        /* size of this struct, for forward/backward compatibility */
+        size_t sz;
+        __u32 flags;
+        __u32 relative_fd;
+        __u32 relative_id;
+        __u64 expected_revision;
+        size_t :0;
+  };
+  #define bpf_netkit_opts__last_field expected_revision
+In the above struct bpf_netkit_opts, there is no tail padding.
 
-"r" constraint (gcc 13.2.0):
+prog_tests/tc_netkit.c:
+  static void serial_test_tc_netkit_multi_links_target(int mode, int target)
+  {
+        ...
+        LIBBPF_OPTS(bpf_netkit_opts, optl);
+        ...
+        LIBBPF_OPTS_RESET(optl,
+                .flags = BPF_F_BEFORE,
+                .relative_fd = bpf_program__fd(skel->progs.tc1),
+        );
+        ...
+  }
 
-.L3:
-        ldr     x3, [x1]
-        str x3, [x0]
-        ldr     x3, [x1, 8]
-        add     x4, x0, 8
-        str x3, [x4]
-        ldr     x3, [x1, 16]
-        add     x4, x0, 16
-        str x3, [x4]
-        ldr     x3, [x1, 24]
-        add     x4, x0, 24
-        str x3, [x4]
-        ldr     x3, [x1, 32]
-        add     x4, x0, 32
-        str x3, [x4]
-        ldr     x3, [x1, 40]
-        add     x4, x0, 40
-        str x3, [x4]
-        ldr     x3, [x1, 48]
-        add     x4, x0, 48
-        str x3, [x4]
-        ldr     x3, [x1, 56]
-        add     x4, x0, 56
-        str x3, [x4]
-        add     x1, x1, 64
-        add     x0, x0, 64
-        cmp     x2, x1
-        bhi     .L3
+Let us make the following source change, note that we have a 4-byte
+tailing padding now.
+  diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+  index 6cd9c501624f..0dd83910ae9a 100644
+  --- a/tools/lib/bpf/libbpf.h
+  +++ b/tools/lib/bpf/libbpf.h
+  @@ -803,13 +803,13 @@ bpf_program__attach_tcx(const struct bpf_program *prog, int ifindex,
+   struct bpf_netkit_opts {
+        /* size of this struct, for forward/backward compatibility */
+        size_t sz;
+  -       __u32 flags;
+        __u32 relative_fd;
+        __u32 relative_id;
+        __u64 expected_revision;
+  +       __u32 flags;
+        size_t :0;
+   };
+  -#define bpf_netkit_opts__last_field expected_revision
+  +#define bpf_netkit_opts__last_field flags
 
-"m" constraint:
+The clang 18 generated asm code looks like below:
+    ;       LIBBPF_OPTS_RESET(optl,
+    55e3: 48 8d 7d 98                   leaq    -0x68(%rbp), %rdi
+    55e7: 31 f6                         xorl    %esi, %esi
+    55e9: ba 20 00 00 00                movl    $0x20, %edx
+    55ee: e8 00 00 00 00                callq   0x55f3 <serial_test_tc_netkit_multi_links_target+0x18d3>
+    55f3: 48 c7 85 10 fd ff ff 20 00 00 00      movq    $0x20, -0x2f0(%rbp)
+    55fe: 48 8b 85 68 ff ff ff          movq    -0x98(%rbp), %rax
+    5605: 48 8b 78 18                   movq    0x18(%rax), %rdi
+    5609: e8 00 00 00 00                callq   0x560e <serial_test_tc_netkit_multi_links_target+0x18ee>
+    560e: 89 85 18 fd ff ff             movl    %eax, -0x2e8(%rbp)
+    5614: c7 85 1c fd ff ff 00 00 00 00 movl    $0x0, -0x2e4(%rbp)
+    561e: 48 c7 85 20 fd ff ff 00 00 00 00      movq    $0x0, -0x2e0(%rbp)
+    5629: c7 85 28 fd ff ff 08 00 00 00 movl    $0x8, -0x2d8(%rbp)
+    5633: 48 8b 85 10 fd ff ff          movq    -0x2f0(%rbp), %rax
+    563a: 48 89 45 98                   movq    %rax, -0x68(%rbp)
+    563e: 48 8b 85 18 fd ff ff          movq    -0x2e8(%rbp), %rax
+    5645: 48 89 45 a0                   movq    %rax, -0x60(%rbp)
+    5649: 48 8b 85 20 fd ff ff          movq    -0x2e0(%rbp), %rax
+    5650: 48 89 45 a8                   movq    %rax, -0x58(%rbp)
+    5654: 48 8b 85 28 fd ff ff          movq    -0x2d8(%rbp), %rax
+    565b: 48 89 45 b0                   movq    %rax, -0x50(%rbp)
+    ;       link = bpf_program__attach_netkit(skel->progs.tc2, ifindex, &optl);
 
-.L3:
-        ldp     x10, x9, [x1]
-        ldp     x8, x7, [x1, 16]
-        ldp     x6, x5, [x1, 32]
-        ldp     x4, x3, [x1, 48]
-        str x10, [x0]
-        str x9, [x0, 8]
-        str x8, [x0, 16]
-        str x7, [x0, 24]
-        str x6, [x0, 32]
-        str x5, [x0, 40]
-        str x4, [x0, 48]
-        str x3, [x0, 56]
-        add     x1, x1, 64
-        add     x0, x0, 64
-        cmp     x2, x1
-        bhi     .L3
+At -O0 level, the clang compiler creates an intermediate copy.
+We have below to store 'flags' with 4-byte store and leave another 4 byte
+in the same 8-byte-aligned storage undefined,
+    5629: c7 85 28 fd ff ff 08 00 00 00 movl    $0x8, -0x2d8(%rbp)
+and later we store 8-byte to the original zero'ed buffer
+    5654: 48 8b 85 28 fd ff ff          movq    -0x2d8(%rbp), %rax
+    565b: 48 89 45 b0                   movq    %rax, -0x50(%rbp)
 
-clang 17 doesn't do any better either way, it doesn't seem to do
-anything with 'm', but I guess it could..
+This caused a problem as the 4-byte value at [%rbp-0x2dc, %rbp-0x2e0)
+may be garbage.
 
-clang 17 (either):
+gcc (gcc 11.4) does not have this issue as it does zeroing struct first before
+doing assignments:
+  ;       LIBBPF_OPTS_RESET(optl,
+    50fd: 48 8d 85 40 fc ff ff          leaq    -0x3c0(%rbp), %rax
+    5104: ba 20 00 00 00                movl    $0x20, %edx
+    5109: be 00 00 00 00                movl    $0x0, %esi
+    510e: 48 89 c7                      movq    %rax, %rdi
+    5111: e8 00 00 00 00                callq   0x5116 <serial_test_tc_netkit_multi_links_target+0x1522>
+    5116: 48 8b 45 f0                   movq    -0x10(%rbp), %rax
+    511a: 48 8b 40 18                   movq    0x18(%rax), %rax
+    511e: 48 89 c7                      movq    %rax, %rdi
+    5121: e8 00 00 00 00                callq   0x5126 <serial_test_tc_netkit_multi_links_target+0x1532>
+    5126: 48 c7 85 40 fc ff ff 00 00 00 00      movq    $0x0, -0x3c0(%rbp)
+    5131: 48 c7 85 48 fc ff ff 00 00 00 00      movq    $0x0, -0x3b8(%rbp)
+    513c: 48 c7 85 50 fc ff ff 00 00 00 00      movq    $0x0, -0x3b0(%rbp)
+    5147: 48 c7 85 58 fc ff ff 00 00 00 00      movq    $0x0, -0x3a8(%rbp)
+    5152: 48 c7 85 40 fc ff ff 20 00 00 00      movq    $0x20, -0x3c0(%rbp)
+    515d: 89 85 48 fc ff ff             movl    %eax, -0x3b8(%rbp)
+    5163: c7 85 58 fc ff ff 08 00 00 00 movl    $0x8, -0x3a8(%rbp)
+  ;       link = bpf_program__attach_netkit(skel->progs.tc2, ifindex, &optl);
 
-.LBB0_2:                                // =>This Inner Loop Header: Depth=1
-        ldp     x9, x10, [x1]
-        add     x14, x0, #8
-        add     x18, x0, #40
-        ldp     x11, x12, [x1, #16]
-        add     x2, x0, #48
-        add     x3, x0, #56
-        ldp     x13, x15, [x1, #32]
-        ldp     x16, x17, [x1, #48]
-        str     x9, [x0]
-        str     x10, [x14]
-        add     x9, x0, #16
-        add     x10, x0, #24
-        add     x14, x0, #32
-        str     x11, [x9]
-        str     x12, [x10]
-        str     x13, [x14]
-        str     x15, [x18]
-        str     x16, [x2]
-        str     x17, [x3]
-        add     x1, x1, #64
-        add     x0, x0, #64
-        cmp     x1, x8
-        b.lo    .LBB0_2
+It is not clear how to resolve the compiler code generation as the compiler
+generates correct code w.r.t. how to handle unnamed padding in C standard.
+So this patch changed LIBBPF_OPTS_RESET macro to avoid uninitialized tail
+padding. We already knows LIBBPF_OPTS macro works on both gcc and clang,
+even with tail padding. So LIBBPF_OPTS_RESET is changed to be a
+LIBBPF_OPTS followed by a memcpy(), thus avoiding uninitialized tail padding.
 
-It doesn't matter for this series, but it seems like something ARM64
-might want to look at to improve..
+The below is asm code generated with this patch and with clang compiler:
+    ;       LIBBPF_OPTS_RESET(optl,
+    55e3: 48 8d bd 10 fd ff ff          leaq    -0x2f0(%rbp), %rdi
+    55ea: 31 f6                         xorl    %esi, %esi
+    55ec: ba 20 00 00 00                movl    $0x20, %edx
+    55f1: e8 00 00 00 00                callq   0x55f6 <serial_test_tc_netkit_multi_links_target+0x18d6>
+    55f6: 48 c7 85 10 fd ff ff 20 00 00 00      movq    $0x20, -0x2f0(%rbp)
+    5601: 48 8b 85 68 ff ff ff          movq    -0x98(%rbp), %rax
+    5608: 48 8b 78 18                   movq    0x18(%rax), %rdi
+    560c: e8 00 00 00 00                callq   0x5611 <serial_test_tc_netkit_multi_links_target+0x18f1>
+    5611: 89 85 18 fd ff ff             movl    %eax, -0x2e8(%rbp)
+    5617: c7 85 1c fd ff ff 00 00 00 00 movl    $0x0, -0x2e4(%rbp)
+    5621: 48 c7 85 20 fd ff ff 00 00 00 00      movq    $0x0, -0x2e0(%rbp)
+    562c: c7 85 28 fd ff ff 08 00 00 00 movl    $0x8, -0x2d8(%rbp)
+    5636: 48 8b 85 10 fd ff ff          movq    -0x2f0(%rbp), %rax
+    563d: 48 89 45 98                   movq    %rax, -0x68(%rbp)
+    5641: 48 8b 85 18 fd ff ff          movq    -0x2e8(%rbp), %rax
+    5648: 48 89 45 a0                   movq    %rax, -0x60(%rbp)
+    564c: 48 8b 85 20 fd ff ff          movq    -0x2e0(%rbp), %rax
+    5653: 48 89 45 a8                   movq    %rax, -0x58(%rbp)
+    5657: 48 8b 85 28 fd ff ff          movq    -0x2d8(%rbp), %rax
+    565e: 48 89 45 b0                   movq    %rax, -0x50(%rbp)
+    ;       link = bpf_program__attach_netkit(skel->progs.tc2, ifindex, &optl);
 
-Jason
+In the above code, a temporary buffer is zeroed and then has proper value assigned.
+Finally, values in temporary buffer are copied to the original variable buffer,
+hence tail padding is guaranteed to be 0.
+
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Tested-by: Martin KaFai Lau <martin.lau@kernel.org>
+Link: https://lore.kernel.org/bpf/20231107201511.2548645-1-yonghong.song@linux.dev
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/lib/bpf/libbpf_common.h | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.h
+index b7060f254486..8fe248e14eb6 100644
+--- a/tools/lib/bpf/libbpf_common.h
++++ b/tools/lib/bpf/libbpf_common.h
+@@ -79,11 +79,14 @@
+  */
+ #define LIBBPF_OPTS_RESET(NAME, ...)					    \
+ 	do {								    \
+-		memset(&NAME, 0, sizeof(NAME));				    \
+-		NAME = (typeof(NAME)) {					    \
+-			.sz = sizeof(NAME),				    \
+-			__VA_ARGS__					    \
+-		};							    \
++		typeof(NAME) ___##NAME = ({ 				    \
++			memset(&___##NAME, 0, sizeof(NAME));		    \
++			(typeof(NAME)) {				    \
++				.sz = sizeof(NAME),			    \
++				__VA_ARGS__				    \
++			};						    \
++		});							    \
++		memcpy(&NAME, &___##NAME, sizeof(NAME));		    \
+ 	} while (0)
+ 
+ #endif /* __LIBBPF_LIBBPF_COMMON_H */
+-- 
+2.43.0
+
