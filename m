@@ -1,49 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC74B2C6AB;
-	Tue, 16 Jan 2024 19:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD2514A4D8;
+	Tue, 16 Jan 2024 19:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434921; cv=none; b=c4ZbicC7GSdEQy+Jos01CPjuOoc9IGLIBm5VtIenSltSjXNAt64OQSQfEnN39YjInPu8u3SjB1PG2U5M6dAXdzbCy9ZXxgHtLC99QWSbAJWQnNJOcUaNSViM6HSnPVRf9CY4iGXEws9SU+eEKeUOVwKsdSL4mkAcAFRerKwDQj0=
+	t=1705435033; cv=none; b=Oc/j26g6Ts5P8IJslfSQtrkwazLKuRh3jtxxjRylFSzeskfXhB3pw0zng3ASNMWThbdh2xf5hrNfQrW3hW3LUIK6VzjhsKQZQoEZvLJhajywdAnennSbeebQYxSYT4C2mu7mvmck36qk+YnHG7DplIDwyfrAB9udmIrHpzjgvlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434921; c=relaxed/simple;
-	bh=hORw/LjtmLslIhMW3hB1p5s4EeH7XhY/u0cxo++nrUU=;
+	s=arc-20240116; t=1705435033; c=relaxed/simple;
+	bh=7CEGRNOMwtdh3DIm4oTvfxawZHmpjrSc1E2kHZCYxZ4=;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=bLUf5WoI8FlpbBUCnvud1xJ3ZmR8qWg03xNjXEHNZn9JW8PgUPTb3jLg/5Czvd0H9jc8Dhq5hFS6h1pc7fmCOvLncbtHeGTvP2YRFXiHF71RtPY2f9O4+swjO73sUyfgaVm4jCphbAm0VTbJTBXicuckeinyQm86L/DBXlZMiQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFSJEZ5Z; arc=none smtp.client-ip=10.30.226.201
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=uFix20gTyO+74OUtCfoYF+d/DVncpZg2DRqug4Q9gOz648Kikpoomrsmd+INAFvXxMzWiTDC+krhPN4k3rdXKnzAyT+uoeYcTJhctZW4F8GpYihSWtHGHr3ZndyBH4ixXHA0dbFwKox5o/fUlDfY8SVGsGwWiiftmNZfMjEe+KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QxmR2Tzm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFSJEZ5Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2215C433C7;
-	Tue, 16 Jan 2024 19:55:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QxmR2Tzm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93247C43390;
+	Tue, 16 Jan 2024 19:57:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705434921;
-	bh=hORw/LjtmLslIhMW3hB1p5s4EeH7XhY/u0cxo++nrUU=;
+	s=k20201202; t=1705435032;
+	bh=7CEGRNOMwtdh3DIm4oTvfxawZHmpjrSc1E2kHZCYxZ4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cFSJEZ5ZzAM3uofM2y9LGVD6DvaesW2VOIsXRg96c8SIr81Hi7zKfHTmzEhpsgGCn
-	 7uYc2i/4nQhUyhzHlZ2zYApQjEk5Ao67BU/0k0nLul4gM2X2VXIVpygOcMtX4kTl3b
-	 HJXcf3+M70GE6g3z+yo21p7wF/A2lTQaRbbAJBVGTG+iM7n5FxcpaA/H4ZBXlUbuGf
-	 LL5kV0cPvXm160a1GA35ltOdBD7bfGcaE90/DULo3ROMnyKNCBOwLk3oR3ws8PZABe
-	 jiEKNYg6QE++UoHeEtZiOAuuBPr1PZ24CvcTpRv4UGsuM6GAIwyXeBV2ILeHpHwamM
-	 bh5dkG/JWzEBQ==
+	b=QxmR2Tzmuut+9TOwM/6B+1nQ5m+2WfDkVvP9or8iwWXYf9pL1dZ5ek05Xhw+ookfd
+	 vRJM1tDSHuNHGXqpDyULQyCiYfnPVJf9IdCi2P98QN1iYdNU9iN+UHulR8yoRwIzqP
+	 wSBfg6fE35gmUFXKyGI2A35UI12U9D3Q2mTLUWdaOf0GBIEHJpLpBE3mqWxwpZNZvX
+	 AITVFZSi9EjXkGkabJuDxJwBFWJIizCwEtigLVrCX2SxNz0KlDqcxbNEFGMkRrNCbx
+	 xsVbM0WwME35ONbfpQfCfwK55G9hxxRXw3rrIj+wyE/frozAuwHDxpGW+0IU+UMbhY
+	 tJO0BCoiIQurw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	samitolvanen@google.com,
+	keescook@chromium.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 03/68] selftests/bpf: Fix pyperf180 compilation failure with clang18
-Date: Tue, 16 Jan 2024 14:53:02 -0500
-Message-ID: <20240116195511.255854-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 51/68] cfi: Add CFI_NOSEAL()
+Date: Tue, 16 Jan 2024 14:53:50 -0500
+Message-ID: <20240116195511.255854-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240116195511.255854-1-sashal@kernel.org>
 References: <20240116195511.255854-1-sashal@kernel.org>
@@ -58,81 +58,56 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.73
 Content-Transfer-Encoding: 8bit
 
-From: Yonghong Song <yonghong.song@linux.dev>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 100888fb6d8a185866b1520031ee7e3182b173de ]
+[ Upstream commit e9d13b9d2f99ccf7afeab490d97eaa5ac9846598 ]
 
-With latest clang18 (main branch of llvm-project repo), when building bpf selftests,
-    [~/work/bpf-next (master)]$ make -C tools/testing/selftests/bpf LLVM=1 -j
+Add a CFI_NOSEAL() helper to mark functions that need to retain their
+CFI information, despite not otherwise leaking their address.
 
-The following compilation error happens:
-    fatal error: error in backend: Branch target out of insn range
-    ...
-    Stack dump:
-    0.      Program arguments: clang -g -Wall -Werror -D__TARGET_ARCH_x86 -mlittle-endian
-      -I/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include
-      -I/home/yhs/work/bpf-next/tools/testing/selftests/bpf -I/home/yhs/work/bpf-next/tools/include/uapi
-      -I/home/yhs/work/bpf-next/tools/testing/selftests/usr/include -idirafter
-      /home/yhs/work/llvm-project/llvm/build.18/install/lib/clang/18/include -idirafter /usr/local/include
-      -idirafter /usr/include -Wno-compare-distinct-pointer-types -DENABLE_ATOMICS_TESTS -O2 --target=bpf
-      -c progs/pyperf180.c -mcpu=v3 -o /home/yhs/work/bpf-next/tools/testing/selftests/bpf/pyperf180.bpf.o
-    1.      <eof> parser at end of file
-    2.      Code generation
-    ...
-
-The compilation failure only happens to cpu=v2 and cpu=v3. cpu=v4 is okay
-since cpu=v4 supports 32-bit branch target offset.
-
-The above failure is due to upstream llvm patch [1] where some inlining behavior
-are changed in clang18.
-
-To workaround the issue, previously all 180 loop iterations are fully unrolled.
-The bpf macro __BPF_CPU_VERSION__ (implemented in clang18 recently) is used to avoid
-unrolling changes if cpu=v4. If __BPF_CPU_VERSION__ is not available and the
-compiler is clang18, the unrollng amount is unconditionally reduced.
-
-  [1] https://github.com/llvm/llvm-project/commit/1a2e77cf9e11dbf56b5720c607313a566eebb16e
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Tested-by: Alan Maguire <alan.maguire@oracle.com>
-Link: https://lore.kernel.org/bpf/20231110193644.3130906-1-yonghong.song@linux.dev
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20231215092707.669401084@infradead.org
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/pyperf180.c | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ arch/x86/include/asm/cfi.h | 5 +++++
+ include/linux/cfi.h        | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/pyperf180.c b/tools/testing/selftests/bpf/progs/pyperf180.c
-index c39f559d3100..42c4a8b62e36 100644
---- a/tools/testing/selftests/bpf/progs/pyperf180.c
-+++ b/tools/testing/selftests/bpf/progs/pyperf180.c
-@@ -1,4 +1,26 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2019 Facebook
- #define STACK_MAX_LEN 180
-+
-+/* llvm upstream commit at clang18
-+ *   https://github.com/llvm/llvm-project/commit/1a2e77cf9e11dbf56b5720c607313a566eebb16e
-+ * changed inlining behavior and caused compilation failure as some branch
-+ * target distance exceeded 16bit representation which is the maximum for
-+ * cpu v1/v2/v3. Macro __BPF_CPU_VERSION__ is later implemented in clang18
-+ * to specify which cpu version is used for compilation. So a smaller
-+ * unroll_count can be set if __BPF_CPU_VERSION__ is less than 4, which
-+ * reduced some branch target distances and resolved the compilation failure.
-+ *
-+ * To capture the case where a developer/ci uses clang18 but the corresponding
-+ * repo checkpoint does not have __BPF_CPU_VERSION__, a smaller unroll_count
-+ * will be set as well to prevent potential compilation failures.
-+ */
-+#ifdef __BPF_CPU_VERSION__
-+#if __BPF_CPU_VERSION__ < 4
-+#define UNROLL_COUNT 90
-+#endif
-+#elif __clang_major__ == 18
-+#define UNROLL_COUNT 90
+diff --git a/arch/x86/include/asm/cfi.h b/arch/x86/include/asm/cfi.h
+index 58dacd90daef..67b010c224e4 100644
+--- a/arch/x86/include/asm/cfi.h
++++ b/arch/x86/include/asm/cfi.h
+@@ -9,6 +9,7 @@
+  */
+ 
+ #include <linux/cfi.h>
++#include <asm/ibt.h>
+ 
+ #ifdef CONFIG_CFI_CLANG
+ enum bug_trap_type handle_cfi_failure(struct pt_regs *regs);
+@@ -19,4 +20,8 @@ static inline enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
+ }
+ #endif /* CONFIG_CFI_CLANG */
+ 
++#if HAS_KERNEL_IBT == 1
++#define CFI_NOSEAL(x)	asm(IBT_NOSEAL(__stringify(x)))
 +#endif
 +
- #include "pyperf.h"
+ #endif /* _ASM_X86_CFI_H */
+diff --git a/include/linux/cfi.h b/include/linux/cfi.h
+index 5e134f4ce8b7..f2f722c5aedd 100644
+--- a/include/linux/cfi.h
++++ b/include/linux/cfi.h
+@@ -36,4 +36,8 @@ static inline void module_cfi_finalize(const Elf_Ehdr *hdr,
+ #endif /* CONFIG_ARCH_USES_CFI_TRAPS */
+ #endif /* CONFIG_MODULES */
+ 
++#ifndef CFI_NOSEAL
++#define CFI_NOSEAL(x)
++#endif
++
+ #endif /* _LINUX_CFI_H */
 -- 
 2.43.0
 
