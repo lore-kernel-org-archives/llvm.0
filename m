@@ -1,181 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8031DA2A;
-	Tue, 16 Jan 2024 23:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F1C1D691
+	for <llvm@lists.linux.dev>; Tue, 16 Jan 2024 23:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705448501; cv=none; b=ZgDfv8FVPBuIcFDYdX4QXbyequwxMB5yaw78zXAoo/1d8GXpJuhX7Iz49GpWHzMOgaNXy3936fCtUmcUTLF5k3KugpacU3WJQhq5XT1arWhJg7WAnkdwM7DZvrKiFw2rsywD0ams6RhlXi3U8w2ZdjZeckcBcuRC5fjguAz6wc8=
+	t=1705448663; cv=none; b=uABfIdZteTTpH+OYo57ZUR0jiPC7gBufyErh7Gy+86wvj+hnI3eazVIGg1H1aubDi3wU08HNt6yWcAxUIRCpA4kB/gn21oecFMABZn/TcyDf8WRLcnbCdjGemkvIsSfDkeFy7TitnFrNHld3tKKvWg0lE0uStwcbp9PesNohFZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705448501; c=relaxed/simple;
-	bh=W72U7S1Jt5TV+GwwBd0uYWUfAkSSUDs+SxFcWOvvgpA=;
-	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
-	 X-IronPort-AV:X-IronPort-AV:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=tpMNEGsy8YjlAF64KX6hZUtYvYgUW5B3pgMKr80rClQWT0GlafwbrB8uR63GeQTebepHfuCsCYOB6iArfbUFIyrxYBL+yyo+GchPmFt1XCfSuP+S3TorJOi+3OUedxKz11DQrn6J6Fn2Ij8yAHc7RvmY4JNawqK2aEglssmz8XY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MxAbaKKF; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1705448663; c=relaxed/simple;
+	bh=9DmDWifX5Z6JOjtDY3idRRSQYZv+kZmuFZPwB+mkrwo=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding; b=VUJ28vxPdpg5BanPL/lpFZV5yF+Y/XGagXgkpS1pyPaJ6O8kt4qfYlYD6isV2bUZR5Tk4rDyrxfpwLmPfVMNpJjnKS9g2UzOhZpG6Fj4HTF4k+W7wr7pdCkNC+5RegYh4dzBL9cwO24HC+KTrdYE7u9JikQN4e4hJ9EiQDLnIa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rg/7r0d1; arc=none smtp.client-ip=209.85.222.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MxAbaKKF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705448499; x=1736984499;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W72U7S1Jt5TV+GwwBd0uYWUfAkSSUDs+SxFcWOvvgpA=;
-  b=MxAbaKKFFz1964iZbk1ZSpLXx/tYzNz9K68PMfmtcqbk60F+hv7IF4dN
-   /jabgaXl+Y5sdLzIX70BY8g78JCHBB+HcdJUhugX4/M8O6i0ZcRkkZnr0
-   9rykhu05KmPJivEVvrSwIM2seq7lhJOvRR+f4I0/aNy7WBN91y/1jPeZB
-   EKcSTichDBwwof/uKzH1fb7Qv+YZGh/idhphBoQUCViy+x8K/Pbl5aadd
-   8pT8/BRVrC+7EgkXXEGtiEZPc+gOWIPV7FQSZrWQQnJgoli8HmRr59lTe
-   M74J1qAz4oZCJ2u+lNcflprtNdr2FnXwWR03eVMs3+AEdbzhHSQWCTz+X
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="6778019"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="6778019"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 15:41:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="874641224"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="874641224"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Jan 2024 15:41:35 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rPt3l-0001MV-1H;
-	Tue, 16 Jan 2024 23:41:33 +0000
-Date: Wed, 17 Jan 2024 07:41:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	ryan.roberts@arm.com, Matthew Wilcox <willy@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH] mm: memory: move mem_cgroup_charge() into
- alloc_anon_folio()
-Message-ID: <202401170708.XjVa9Trj-lkp@intel.com>
-References: <20240116071302.2282230-1-wangkefeng.wang@huawei.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rg/7r0d1"
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-7cc92a83200so2385304241.3
+        for <llvm@lists.linux.dev>; Tue, 16 Jan 2024 15:44:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1705448660; x=1706053460; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PdQ6eiAEP5p2d80q3UGVJcNCex+HtcKgUxVE8iUlFVM=;
+        b=Rg/7r0d1q9LDK8a0E3aQXldJrUOJKSpYoomCkqZeJqIhPn9ts4Ja+V6STJ3ii86tVp
+         FMc1TqcdkdfuIiotIRcd6SuqpfdC68zcQ9orLqSlXcYPwG962857KNKj6cxWhjDqe4on
+         x9iM5SWM/tuh3YskKRB8Vlo+A9aHzTAQvrRQK9BDHNfWGGxZloYfE0iF6mSo4hEOjU4h
+         LrkgwtdR30V3pHnWWwGmI48kp8A8gFE9R786fv/76TiKxq4EpPzcXefcN//TOD2QNYVh
+         EWl/u+Za47Q5dyPH+JGUCTzVRyzzpIfW/4QPu8C6EvyBtPPYhMCrQJVsuOdNXcNMwfve
+         LxpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705448660; x=1706053460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PdQ6eiAEP5p2d80q3UGVJcNCex+HtcKgUxVE8iUlFVM=;
+        b=KnG/UU8wIxoKdnE0rAJY0AA8QYxidxcn6BAVA0/8AUnrloGHIkQmKlqR2zc1Q4i78R
+         e4bhkP0zfsDfMSCAjw7z/YDYwLmZdz+3mASS4b1+FeuP9TGODWR0jcyJPSVsbQrdQlO+
+         BKNaJZoM+5GkuFnP6LQXVCWHm8cqRzR+wrZ0UOSpC4gN5wdlEWFEYBS/so1tH5Ag/PJd
+         M4pssbAVFWZgCBKMbtUrRhpvnimm2OOFaPZ23LzH5H4bBeILgRaRg7REHfzJrwXrKCD5
+         RsbWKLEHVa15/Tgt+++uyJFll8pgN4bkRAoXMCdk7PK4dA6C/yHM7qvWqnwdZWqjA+GU
+         O+ow==
+X-Gm-Message-State: AOJu0YzXkpPRa0z6VQXAL6rmRzlwkKtEeSdRTZbZ9HsPHa4vspMNUwil
+	p+5nd/HDDmWsFHa9/fm6Jdo3Gapex3y921HjG9OTepTvK8C7
+X-Google-Smtp-Source: AGHT+IHyTwjhU9khtcKJv8NUtOGmEIX06trwG04+ik2FnF1wYm8lVJ6tIZBYJhmYaBLWiR0vQf/XBsl+DQARU6XGzSI=
+X-Received: by 2002:a05:6122:3691:b0:4b2:dd80:4db0 with SMTP id
+ ec17-20020a056122369100b004b2dd804db0mr3234536vkb.32.1705448660484; Tue, 16
+ Jan 2024 15:44:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240116071302.2282230-1-wangkefeng.wang@huawei.com>
+References: <ZZ7YuEexYSaZYmLK@tassilo> <20240111223650.3502633-1-kevinloughlin@google.com>
+ <7144c0d5-8fb4-8d83-a854-ed597296c68f@amd.com>
+In-Reply-To: <7144c0d5-8fb4-8d83-a854-ed597296c68f@amd.com>
+From: Kevin Loughlin <kevinloughlin@google.com>
+Date: Tue, 16 Jan 2024 15:44:09 -0800
+Message-ID: <CAGdbjmJih4G=JG_6rLJnSAF8j3bhtLeREqDzuzFp-C7XWOqCCg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+To: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Michael Kelley <mikelley@microsoft.com>, Pankaj Gupta <pankaj.gupta@amd.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>, 
+	Steve Rutherford <srutherford@google.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Hou Wenlong <houwenlong.hwl@antgroup.com>, Vegard Nossum <vegard.nossum@oracle.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Yuntao Wang <ytcoode@gmail.com>, 
+	Wang Jinchao <wangjinchao@xfusion.com>, David Woodhouse <dwmw@amazon.co.uk>, 
+	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Joerg Roedel <jroedel@suse.de>, Randy Dunlap <rdunlap@infradead.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Brijesh Singh <brijesh.singh@amd.com>, Michael Roth <michael.roth@amd.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-coco@lists.linux.dev, 
+	Ashish Kalra <ashish.kalra@amd.com>, Andi Kleen <ak@linux.intel.com>, 
+	Adam Dunlap <acdunlap@google.com>, Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
+	Sidharth Telang <sidtelang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kefeng,
+On Mon, Jan 15, 2024 at 7:53=E2=80=AFAM Tom Lendacky <thomas.lendacky@amd.c=
+om> wrote:
+>
+> On 1/11/24 16:36, Kevin Loughlin wrote:
+> >
+> > @@ -61,33 +66,34 @@ static __maybe_unused __always_inline bool amd_cc_p=
+latform_vtom(enum cc_attr att
+> >   static bool noinstr amd_cc_platform_has(enum cc_attr attr)
+> >   {
+> >   #ifdef CONFIG_AMD_MEM_ENCRYPT
+> > +     const u64 sev_status_fixed_up =3D sev_get_status_fixup();
+>
+> Why not also have a variable for sme_me_mask?
 
-kernel test robot noticed the following build errors:
+`sme_get_me_mask_fixup()` is only used on certain conditional paths in
+the calculation of the return value (therefore, a max of 1 times per
+invocation of `amd_cc_platform_has()`). As such, calling
+`sme_get_me_mask()` unconditionally at the beginning of the function
+would be unnecessary for some invocations of `amd_cc_platform_has()`.
+In contrast, the sev_status is needed on every invocation of
+`amd_cc_platform_has()`. Additionally, the `sev_get_status_fixup()`
+result is potentially used multiple times in the same invocation of
+`amd_cc_platform_has()`, motivating the use of a local variable.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+> > @@ -130,6 +130,7 @@ static unsigned long __head sme_postprocess_startup=
+(struct boot_params *bp, pmdv
+> >   {
+> >       unsigned long vaddr, vaddr_end;
+> >       int i;
+> > +     const u64 sme_me_mask_fixed_up =3D sme_get_me_mask_fixup();
+>
+> Should be the first variable listed given the length of the line.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/mm-memory-move-mem_cgroup_charge-into-alloc_anon_folio/20240116-151640
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240116071302.2282230-1-wangkefeng.wang%40huawei.com
-patch subject: [PATCH] mm: memory: move mem_cgroup_charge() into alloc_anon_folio()
-config: i386-buildonly-randconfig-002-20240116 (https://download.01.org/0day-ci/archive/20240117/202401170708.XjVa9Trj-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240117/202401170708.XjVa9Trj-lkp@intel.com/reproduce)
+I will incorporate this and all other stylistic changes that you
+mentioned in v3.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401170708.XjVa9Trj-lkp@intel.com/
+> > @@ -110,8 +115,9 @@ static void __noreturn sev_es_terminate(unsigned in=
+t set, unsigned int reason)
+> >   static u64 get_hv_features(void)
+> >   {
+> >       u64 val;
+> > +     const u16 *ghcb_version_ptr =3D (const u16 *) GET_RIP_RELATIVE_PT=
+R(ghcb_version);
+>
+> Is this one really needed? The ghcb_version variable isn't referenced
+> before fixup, right? It's referenced in both decompression and early boot=
+,
+> but I didn't think a fixup is needed.
 
-All errors (new ones prefixed by >>):
+You're right; it looks like we do *not* need the fixup for
+ghcb_version in both instances that you identified. I will remove
+these particular fixups in v3.
 
->> mm/memory.c:4223:24: error: use of undeclared identifier 'vma'
-    4223 |         return folio_prealloc(vma->vm_mm, vma, vmf->address, true);
-         |                               ^
-   mm/memory.c:4223:36: error: use of undeclared identifier 'vma'
-    4223 |         return folio_prealloc(vma->vm_mm, vma, vmf->address, true);
-         |                                           ^
-   2 errors generated.
-
-
-vim +/vma +4223 mm/memory.c
-
-  4153	
-  4154	static struct folio *alloc_anon_folio(struct vm_fault *vmf)
-  4155	{
-  4156	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-  4157		struct vm_area_struct *vma = vmf->vma;
-  4158		unsigned long orders;
-  4159		struct folio *folio;
-  4160		unsigned long addr;
-  4161		pte_t *pte;
-  4162		gfp_t gfp;
-  4163		int order;
-  4164	
-  4165		/*
-  4166		 * If uffd is active for the vma we need per-page fault fidelity to
-  4167		 * maintain the uffd semantics.
-  4168		 */
-  4169		if (unlikely(userfaultfd_armed(vma)))
-  4170			goto fallback;
-  4171	
-  4172		/*
-  4173		 * Get a list of all the (large) orders below PMD_ORDER that are enabled
-  4174		 * for this vma. Then filter out the orders that can't be allocated over
-  4175		 * the faulting address and still be fully contained in the vma.
-  4176		 */
-  4177		orders = thp_vma_allowable_orders(vma, vma->vm_flags, false, true, true,
-  4178						  BIT(PMD_ORDER) - 1);
-  4179		orders = thp_vma_suitable_orders(vma, vmf->address, orders);
-  4180	
-  4181		if (!orders)
-  4182			goto fallback;
-  4183	
-  4184		pte = pte_offset_map(vmf->pmd, vmf->address & PMD_MASK);
-  4185		if (!pte)
-  4186			return ERR_PTR(-EAGAIN);
-  4187	
-  4188		/*
-  4189		 * Find the highest order where the aligned range is completely
-  4190		 * pte_none(). Note that all remaining orders will be completely
-  4191		 * pte_none().
-  4192		 */
-  4193		order = highest_order(orders);
-  4194		while (orders) {
-  4195			addr = ALIGN_DOWN(vmf->address, PAGE_SIZE << order);
-  4196			if (pte_range_none(pte + pte_index(addr), 1 << order))
-  4197				break;
-  4198			order = next_order(&orders, order);
-  4199		}
-  4200	
-  4201		pte_unmap(pte);
-  4202	
-  4203		/* Try allocating the highest of the remaining orders. */
-  4204		gfp = vma_thp_gfp_mask(vma);
-  4205		while (orders) {
-  4206			addr = ALIGN_DOWN(vmf->address, PAGE_SIZE << order);
-  4207			folio = vma_alloc_folio(gfp, order, vma, addr, true);
-  4208			if (folio) {
-  4209				if (mem_cgroup_charge(folio, vma->vm_mm, gfp)) {
-  4210					folio_put(folio);
-  4211					goto next;
-  4212				}
-  4213				folio_throttle_swaprate(folio, gfp);
-  4214				clear_huge_page(&folio->page, vmf->address, 1 << order);
-  4215				return folio;
-  4216			}
-  4217	next:
-  4218			order = next_order(&orders, order);
-  4219		}
-  4220	
-  4221	fallback:
-  4222	#endif
-> 4223		return folio_prealloc(vma->vm_mm, vma, vmf->address, true);
-  4224	}
-  4225	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
