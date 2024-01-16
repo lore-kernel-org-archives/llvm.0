@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB22A32197;
-	Tue, 16 Jan 2024 19:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958523C062;
+	Tue, 16 Jan 2024 20:00:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705435124; cv=none; b=smI8v/w2fQo7GtmZsChWtWAXDzpaVcghFkMPWivJDbwNmvW6BPTICwtYTWX7X/wUtI8JzzffIxO1Bup14NOJb2ZVyJxmu0BCL2zwmLJfeagkUAgllFC8wEr3si5n/0g7/WjexqjsZMr067bpqce2qCXVtXU74K7ovxVObHNIp3I=
+	t=1705435254; cv=none; b=pOR1agqolHqBX2sH0M+8GzbnfjtvvHDgFE3jZQFCNKPWXK3x85TE45MDSQErb9kgxao5rrT+mFl7v8z4i1RzLoaTBXXwM4U6EbxdbZOkTaG/efsSYzyz7xDN5s3YFMtWW+/XfwJ4btVyhkgZcMAL1KvkjxKE7NNcVQhKb0O+fP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705435124; c=relaxed/simple;
+	s=arc-20240116; t=1705435254; c=relaxed/simple;
 	bh=hORw/LjtmLslIhMW3hB1p5s4EeH7XhY/u0cxo++nrUU=;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=RiE/+8fWAfXF2EkWafHBWaW/sQqjzC88rX6ZvoGz+aupkDmCcE1ZF33FwF+Q/XgLKEPrYncqjbv9GXipnAsCeXXHjrX5uXZkZoyoqXiVXaMg410u5WAEXo9mMI0xRxTutX9ixS2il0qEA4lEZr/PcmDK7vFYQyrLZf4LcNT5YfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rrQVKOBO; arc=none smtp.client-ip=10.30.226.201
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=nDkc1YovhypdiJ1dXMKUStJNYTMG2m52sqMIo1s/Vm6MV3SHs6F4IXuphY85MI+wqLGPyXmIJOB429RqV4lEcvrGQhvRgyeHpuTl53NcHRa9VViaJzVkaWnsUPgviMkfsRhRhx3mBUYBB664qoHNDL5FMAAxBJC2YmKH6ukxJAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETxu2V85; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rrQVKOBO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D02C433C7;
-	Tue, 16 Jan 2024 19:58:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETxu2V85"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0881DC433C7;
+	Tue, 16 Jan 2024 20:00:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705435124;
+	s=k20201202; t=1705435254;
 	bh=hORw/LjtmLslIhMW3hB1p5s4EeH7XhY/u0cxo++nrUU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rrQVKOBOOpPIp9tRyhFi4T/3uQzRnZEHsiJ45uUWreXBUVggGcX0lQhpYQC1p8gwR
-	 sSeayPnuoNguQfCikNGcOqesWAtdOt6kMwU6dwoIO6bpYEPMzmRDVOoh2xwrPLPGPR
-	 EztsnA9Kl/Oag+EuESxd2kW4fS2InBPREXVEwrHdx6LyD4FYpbNzrbhVIerE0caGHw
-	 gMN+0gtLLkWwLWJotO4p6y6+ZuF8R1d9SpzdBxRa9gHt/hXOE5AOLwjCpk1cHn/ezj
-	 GG/nMn4QOmTVrko9sMVF8MONSJ+b8tIY8p5ZA+mSAQVFO6d5vkdBxlev6hcDnprnIC
-	 zhfDEE/Ts+GYg==
+	b=ETxu2V85gxq2FHHfbakou9AHaRU/Ogkbgxc7Ouaj8jbAHGCGC9JOnh/NM7uQBuAQU
+	 3qh1i0N7vrKENUx0Zdx+DFApUdazUMIf+FjAo7LAKz1LgS5TSIwvxjvreOU1Gkpgyd
+	 4qTWHj8QITawOHIocV0MK91lzlcGfbhxNPofsh75bmSjfRvunId+uLyUJMIx1SDNlz
+	 CXPs2kHgx8oS7kFDiG3T4Fnp91Ryfnmpgg5xuq7tT/nRvYhTKCdKjBsJq/B6iVJG2y
+	 US9W20gEo4qVWfM2huWqHOEkEWlPuU3Ywfqe6bs+34bJ2QDuRN85w/834bsK5vlKk0
+	 yNk6P6oyiSVUA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -41,12 +41,12 @@ Cc: Yonghong Song <yonghong.song@linux.dev>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 03/47] selftests/bpf: Fix pyperf180 compilation failure with clang18
-Date: Tue, 16 Jan 2024 14:57:06 -0500
-Message-ID: <20240116195834.257313-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 03/44] selftests/bpf: Fix pyperf180 compilation failure with clang18
+Date: Tue, 16 Jan 2024 14:59:32 -0500
+Message-ID: <20240116200044.258335-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116195834.257313-1-sashal@kernel.org>
-References: <20240116195834.257313-1-sashal@kernel.org>
+In-Reply-To: <20240116200044.258335-1-sashal@kernel.org>
+References: <20240116200044.258335-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.147
+X-stable-base: Linux 5.10.208
 Content-Transfer-Encoding: 8bit
 
 From: Yonghong Song <yonghong.song@linux.dev>
