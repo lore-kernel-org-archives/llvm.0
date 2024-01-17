@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AAC14270;
-	Wed, 17 Jan 2024 10:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C4C1C688;
+	Wed, 17 Jan 2024 10:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705486325; cv=none; b=Cqop0ZPxytUQc1pl6IpVTw7BwAe7sHfQdGJ+gniu5TG2gQlr7Gwst2ps7M+iEL4l1Lwee0VnFyqUyka7z8sgMgOPUF1wIzNAHvyi3WcwAe6IDxk6eJIkCm+pQURC6IEhbugXN8MhWdn5a8nD0onygxjjpu/omXqnrQVuW7kfwdw=
+	t=1705488904; cv=none; b=D/aDyLQU3aIS/nRDk97ZproYS0dZNyNvznRLNPcOV2oLs6zr1YEhSaUUJGRS+aVJ0KoFTdHF/8r8YbCWYYpl2p/uSTmSJPZksjm6l9jAhsv11UiFHrRDXyRV58+JUC6T2Xe0mhAt9jNvRR4AXVp2myzr6WpzVdqLS7tRgynXkao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705486325; c=relaxed/simple;
-	bh=A8QQxh4Zjk+z67BAbAJ4nXFfTq18Kkr2LN41/MW+/00=;
+	s=arc-20240116; t=1705488904; c=relaxed/simple;
+	bh=IjikLbskxHLd+oZaSmVNiN1Imvk5SrcRdLYyc+5MJXc=;
 	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
 	 X-IronPort-AV:X-IronPort-AV:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=f7mSOUTUPvYqLwm0YghF7FwK4I0+kSWrf+GBalkHnBKQ7yIDyw7lGY+p8faFjkjb0NRe/FOFW2GJxxHR+vrKDlItFg0qkIp6GKseMk4eouz+aLPV/kDZ1uN/7zektRBkb0bvUykHRjyxT0yaqjgVAlqe31i2EIJRH4hvQJRHEGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CUiZiLpF; arc=none smtp.client-ip=198.175.65.11
+	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition;
+	b=FQJvsILE6APMu3c8P356Y1xW0I819ti4JwlL30S4kNWJzMEOOExkI8+nYOW/Jdw9GVSy9tIa7WBXzgFEqj5NGWi93mzfNaKc93TjMejkbAob89aPfUkAv/zGhHlxnH4aq3NaQiwhmZXZw51ST9AgfjzvW8BrnzOMu6WNgtqn3QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+i15ufK; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CUiZiLpF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+i15ufK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705486324; x=1737022324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A8QQxh4Zjk+z67BAbAJ4nXFfTq18Kkr2LN41/MW+/00=;
-  b=CUiZiLpFC31aGt/yyxzKwYnyTXgsJJ1VIwG8yLUBUXI0GSo0GQAPQRQB
-   t4IlGrWsI69/FLtMzXF6WcqCtFHW2MRZrKJzAe37fv2W4FqB5EMOUOWyw
-   ZxnQIG+yAlVwP8w9vhfbLX2hYa6q108rZOEVSbgwkIreLw8A/8t0ieWWd
-   FQigRGfgQM3wkQ1QH/mQyIYwqKbjQROmJo/wsrb+OINKKWVY43SYAIhVD
-   aW6Wie2BGftc/c8tRqvF10q8NdCCnIMjz6/A0AEQAlS7eslC7GNcdSRnU
-   aW4GxWwCGwWb7Wvl8NTaRyiido80qZ8eVMOBUX4YMHvE9/G2xOpmbM/zU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="6835461"
+  t=1705488903; x=1737024903;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IjikLbskxHLd+oZaSmVNiN1Imvk5SrcRdLYyc+5MJXc=;
+  b=C+i15ufKwBhLuLFMrOkFOLks6X7jnhwetTjbZBZl09U7hlQ1gBx9tlfr
+   I0kR5pcP4GGz5/Z3jMb1q/oVclmi+CjId+E27fAZpmKIh33ETiqncFG0O
+   tipSNneFnuoJZBybL3Ng0HuiRDErPgoNbintmRw/qiWDvzed75u8OIT6z
+   xUECs3BFIJdc9szJAMdYqED54+NV4W6Rw+raJMu2yw8vXM7jqNUkXhUAU
+   0xwFRAiSZEsEoEr0ZREG+FgaNha3EpNa2noQp6NtAQSMc4ezgtvv6yIjG
+   w+FgtNY9GLZcZihnbGjgXOJfdnPrRpNRB3oeOwUCi3rnN9EyqBREL3f1V
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="13639934"
 X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="6835461"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 02:12:04 -0800
+   d="scan'208";a="13639934"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 02:55:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="733939431"
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="760540400"
 X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="733939431"
+   d="scan'208";a="760540400"
 Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jan 2024 02:12:01 -0800
+  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2024 02:54:59 -0800
 Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rQ2tn-0001rg-29;
-	Wed, 17 Jan 2024 10:11:55 +0000
-Date: Wed, 17 Jan 2024 18:11:04 +0800
+	id 1rQ3ZQ-0001u8-31;
+	Wed, 17 Jan 2024 10:54:56 +0000
+Date: Wed, 17 Jan 2024 18:54:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Geliang Tang <geliang.tang@linux.dev>, mptcp@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Geliang Tang <tanggeliang@kylinos.cn>
-Subject: Re: [PATCH mptcp-next v9 07/23] mptcp: implement
- mptcp_userspace_pm_dump_addr
-Message-ID: <202401171744.SJN2kTRQ-lkp@intel.com>
-References: <fe0b361ec239de2c02192c729a083c45f301e559.1705375746.git.tanggeliang@kylinos.cn>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 98/105] fs/ceph/crypto.c:608:28: error:
+ incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to
+ parameter of type 'size_t *' (aka 'unsigned long *')
+Message-ID: <202401171830.v1grY7cK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,84 +61,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fe0b361ec239de2c02192c729a083c45f301e559.1705375746.git.tanggeliang@kylinos.cn>
 
-Hi Geliang,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on mptcp/export]
-[also build test WARNING on mptcp/export-net linus/master next-20240117]
-[cannot apply to v6.7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Geliang-Tang/mptcp-add-pm_has_addr_attr_id-helper/20240116-113812
-base:   https://github.com/multipath-tcp/mptcp_net-next.git export
-patch link:    https://lore.kernel.org/r/fe0b361ec239de2c02192c729a083c45f301e559.1705375746.git.tanggeliang%40kylinos.cn
-patch subject: [PATCH mptcp-next v9 07/23] mptcp: implement mptcp_userspace_pm_dump_addr
-config: i386-buildonly-randconfig-002-20240116 (https://download.01.org/0day-ci/archive/20240117/202401171744.SJN2kTRQ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   2cf82c6e7baf6d3a2adc0692707028da395f1553
+commit: da0d419452928c43bddccbfdc3f5636a36ad05cd [98/105] ceph: Make ceph_calc_file_object_mapping() return size as size_t
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240117/202401171830.v1grY7cK-lkp@intel.com/config)
 compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240117/202401171744.SJN2kTRQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240117/202401171830.v1grY7cK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401171744.SJN2kTRQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401171830.v1grY7cK-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/mptcp/pm_userspace.c:602:6: warning: variable 'sk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     602 |         if (!mptcp_pm_is_userspace(msk)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mptcp/pm_userspace.c:634:11: note: uninitialized use occurs here
-     634 |         sock_put(sk);
-         |                  ^~
-   net/mptcp/pm_userspace.c:602:2: note: remove the 'if' if its condition is always false
-     602 |         if (!mptcp_pm_is_userspace(msk)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     603 |                 GENL_SET_ERR_MSG(info, "invalid request; userspace PM not selected");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     604 |                 goto out;
-         |                 ~~~~~~~~~
-     605 |         }
-         |         ~
-   net/mptcp/pm_userspace.c:590:17: note: initialize the variable 'sk' to silence this warning
-     590 |         struct sock *sk;
-         |                        ^
-         |                         = NULL
-   1 warning generated.
+>> fs/ceph/crypto.c:608:28: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'size_t *' (aka 'unsigned long *') [-Werror,-Wincompatible-pointer-types]
+     608 |                                       &objno, &objoff, &xlen);
+         |                                                        ^~~~~
+   include/linux/ceph/striper.h:12:41: note: passing argument to parameter 'xlen' here
+      12 |                                    u64 *objno, u64 *objoff, size_t *xlen);
+         |                                                                     ^
+   1 error generated.
 
 
-vim +602 net/mptcp/pm_userspace.c
+vim +608 fs/ceph/crypto.c
 
-   577	
-   578	int mptcp_userspace_pm_dump_addr(struct sk_buff *msg,
-   579					 struct netlink_callback *cb)
-   580	{
-   581		struct id_bitmap {
-   582			DECLARE_BITMAP(map, MPTCP_PM_MAX_ADDR_ID + 1);
-   583		} *bitmap;
-   584		const struct genl_info *info = genl_info_dump(cb);
-   585		struct net *net = sock_net(msg->sk);
-   586		struct mptcp_pm_addr_entry *entry;
-   587		struct mptcp_sock *msk;
-   588		struct nlattr *token;
-   589		int ret = -EINVAL;
-   590		struct sock *sk;
-   591		void *hdr;
-   592	
-   593		bitmap = (struct id_bitmap *)cb->ctx;
-   594		token = info->attrs[MPTCP_PM_ATTR_TOKEN];
-   595	
-   596		msk = mptcp_token_get_sock(net, nla_get_u32(token));
-   597		if (!msk) {
-   598			NL_SET_ERR_MSG_ATTR(info->extack, token, "invalid token");
-   599			return ret;
-   600		}
-   601	
- > 602		if (!mptcp_pm_is_userspace(msk)) {
+77cdb7e17e39eb Jeff Layton 2022-08-25  577  
+77cdb7e17e39eb Jeff Layton 2022-08-25  578  /**
+77cdb7e17e39eb Jeff Layton 2022-08-25  579   * ceph_fscrypt_decrypt_extents: decrypt received extents in given buffer
+77cdb7e17e39eb Jeff Layton 2022-08-25  580   * @inode: inode associated with pages being decrypted
+77cdb7e17e39eb Jeff Layton 2022-08-25  581   * @page: pointer to page array
+77cdb7e17e39eb Jeff Layton 2022-08-25  582   * @off: offset into the file that the data in page[0] starts
+77cdb7e17e39eb Jeff Layton 2022-08-25  583   * @map: pointer to extent array
+77cdb7e17e39eb Jeff Layton 2022-08-25  584   * @ext_cnt: length of extent array
+77cdb7e17e39eb Jeff Layton 2022-08-25  585   *
+77cdb7e17e39eb Jeff Layton 2022-08-25  586   * Given an extent map and a page array, decrypt the received data in-place,
+77cdb7e17e39eb Jeff Layton 2022-08-25  587   * skipping holes. Returns the offset into buffer of end of last decrypted
+77cdb7e17e39eb Jeff Layton 2022-08-25  588   * block.
+77cdb7e17e39eb Jeff Layton 2022-08-25  589   */
+77cdb7e17e39eb Jeff Layton 2022-08-25  590  int ceph_fscrypt_decrypt_extents(struct inode *inode, struct page **page,
+77cdb7e17e39eb Jeff Layton 2022-08-25  591  				 u64 off, struct ceph_sparse_extent *map,
+77cdb7e17e39eb Jeff Layton 2022-08-25  592  				 u32 ext_cnt)
+77cdb7e17e39eb Jeff Layton 2022-08-25  593  {
+38d46409c4639a Xiubo Li    2023-06-12  594  	struct ceph_client *cl = ceph_inode_to_client(inode);
+77cdb7e17e39eb Jeff Layton 2022-08-25  595  	int i, ret = 0;
+77cdb7e17e39eb Jeff Layton 2022-08-25  596  	struct ceph_inode_info *ci = ceph_inode(inode);
+77cdb7e17e39eb Jeff Layton 2022-08-25  597  	u64 objno, objoff;
+77cdb7e17e39eb Jeff Layton 2022-08-25  598  	u32 xlen;
+77cdb7e17e39eb Jeff Layton 2022-08-25  599  
+77cdb7e17e39eb Jeff Layton 2022-08-25  600  	/* Nothing to do for empty array */
+77cdb7e17e39eb Jeff Layton 2022-08-25  601  	if (ext_cnt == 0) {
+38d46409c4639a Xiubo Li    2023-06-12  602  		doutc(cl, "%p %llx.%llx empty array, ret 0\n", inode,
+38d46409c4639a Xiubo Li    2023-06-12  603  		      ceph_vinop(inode));
+77cdb7e17e39eb Jeff Layton 2022-08-25  604  		return 0;
+77cdb7e17e39eb Jeff Layton 2022-08-25  605  	}
+77cdb7e17e39eb Jeff Layton 2022-08-25  606  
+77cdb7e17e39eb Jeff Layton 2022-08-25  607  	ceph_calc_file_object_mapping(&ci->i_layout, off, map[0].len,
+77cdb7e17e39eb Jeff Layton 2022-08-25 @608  				      &objno, &objoff, &xlen);
+77cdb7e17e39eb Jeff Layton 2022-08-25  609  
+77cdb7e17e39eb Jeff Layton 2022-08-25  610  	for (i = 0; i < ext_cnt; ++i) {
+77cdb7e17e39eb Jeff Layton 2022-08-25  611  		struct ceph_sparse_extent *ext = &map[i];
+77cdb7e17e39eb Jeff Layton 2022-08-25  612  		int pgsoff = ext->off - objoff;
+77cdb7e17e39eb Jeff Layton 2022-08-25  613  		int pgidx = pgsoff >> PAGE_SHIFT;
+77cdb7e17e39eb Jeff Layton 2022-08-25  614  		int fret;
+77cdb7e17e39eb Jeff Layton 2022-08-25  615  
+77cdb7e17e39eb Jeff Layton 2022-08-25  616  		if ((ext->off | ext->len) & ~CEPH_FSCRYPT_BLOCK_MASK) {
+38d46409c4639a Xiubo Li    2023-06-12  617  			pr_warn_client(cl,
+38d46409c4639a Xiubo Li    2023-06-12  618  				"%p %llx.%llx bad encrypted sparse extent "
+38d46409c4639a Xiubo Li    2023-06-12  619  				"idx %d off %llx len %llx\n",
+38d46409c4639a Xiubo Li    2023-06-12  620  				inode, ceph_vinop(inode), i, ext->off,
+38d46409c4639a Xiubo Li    2023-06-12  621  				ext->len);
+77cdb7e17e39eb Jeff Layton 2022-08-25  622  			return -EIO;
+77cdb7e17e39eb Jeff Layton 2022-08-25  623  		}
+77cdb7e17e39eb Jeff Layton 2022-08-25  624  		fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
+77cdb7e17e39eb Jeff Layton 2022-08-25  625  						 off + pgsoff, ext->len);
+38d46409c4639a Xiubo Li    2023-06-12  626  		doutc(cl, "%p %llx.%llx [%d] 0x%llx~0x%llx fret %d\n", inode,
+38d46409c4639a Xiubo Li    2023-06-12  627  		      ceph_vinop(inode), i, ext->off, ext->len, fret);
+77cdb7e17e39eb Jeff Layton 2022-08-25  628  		if (fret < 0) {
+77cdb7e17e39eb Jeff Layton 2022-08-25  629  			if (ret == 0)
+77cdb7e17e39eb Jeff Layton 2022-08-25  630  				ret = fret;
+77cdb7e17e39eb Jeff Layton 2022-08-25  631  			break;
+77cdb7e17e39eb Jeff Layton 2022-08-25  632  		}
+77cdb7e17e39eb Jeff Layton 2022-08-25  633  		ret = pgsoff + fret;
+77cdb7e17e39eb Jeff Layton 2022-08-25  634  	}
+38d46409c4639a Xiubo Li    2023-06-12  635  	doutc(cl, "ret %d\n", ret);
+77cdb7e17e39eb Jeff Layton 2022-08-25  636  	return ret;
+77cdb7e17e39eb Jeff Layton 2022-08-25  637  }
+77cdb7e17e39eb Jeff Layton 2022-08-25  638  
+
+:::::: The code at line 608 was first introduced by commit
+:::::: 77cdb7e17e39ebb986f60bbd3c2b3507687bf475 ceph: add infrastructure for file encryption and decryption
+
+:::::: TO: Jeff Layton <jlayton@kernel.org>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
