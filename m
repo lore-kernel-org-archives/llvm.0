@@ -1,161 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C4C1C688;
-	Wed, 17 Jan 2024 10:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281831CF81;
+	Wed, 17 Jan 2024 10:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705488904; cv=none; b=D/aDyLQU3aIS/nRDk97ZproYS0dZNyNvznRLNPcOV2oLs6zr1YEhSaUUJGRS+aVJ0KoFTdHF/8r8YbCWYYpl2p/uSTmSJPZksjm6l9jAhsv11UiFHrRDXyRV58+JUC6T2Xe0mhAt9jNvRR4AXVp2myzr6WpzVdqLS7tRgynXkao=
+	t=1705489168; cv=none; b=L6zp55bcThp80KWo5b6/vF6ldgpr4T2rEZsDwryhEriKwk6absxdONUzkJmc/uy/E3NwYSI7avlVlvOde9Dx/CNnT4hdh7VQrlfVh7+/J8OtU6vL+Gfm+hUbdAilqp7+ZS0w/bMPRrpov2UdujE8Qb1FxhvORbCToqqQZ9AfvQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705488904; c=relaxed/simple;
-	bh=IjikLbskxHLd+oZaSmVNiN1Imvk5SrcRdLYyc+5MJXc=;
-	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
-	 X-IronPort-AV:X-IronPort-AV:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition;
-	b=FQJvsILE6APMu3c8P356Y1xW0I819ti4JwlL30S4kNWJzMEOOExkI8+nYOW/Jdw9GVSy9tIa7WBXzgFEqj5NGWi93mzfNaKc93TjMejkbAob89aPfUkAv/zGhHlxnH4aq3NaQiwhmZXZw51ST9AgfjzvW8BrnzOMu6WNgtqn3QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+i15ufK; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1705489168; c=relaxed/simple;
+	bh=z++aPhqJYmV8VB4OIKDmSI4vg9WbQB6P+vqni7mLX4M=;
+	h=Received:DKIM-Signature:Received:X-Gm-Message-State:
+	 X-Google-Smtp-Source:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:Message-ID:
+	 Subject:To:Cc:Content-Type; b=tbWfd2bpZlZ/ywDoWW/43GSN9CEoq7iCKNdQzFhKQONWhcBvFeEt1asf2B66K3O/FyjS9OaNmT5guh/45/lG0Np+UNDrDXyhPV2ic9jd5RLdlHQyX1Do3V1DnK/ED3v2RTNSF/222dei5/pJmz1mg3hfX31k5c2goJ7McxUZXfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IUmbAnsI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+i15ufK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705488903; x=1737024903;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IjikLbskxHLd+oZaSmVNiN1Imvk5SrcRdLYyc+5MJXc=;
-  b=C+i15ufKwBhLuLFMrOkFOLks6X7jnhwetTjbZBZl09U7hlQ1gBx9tlfr
-   I0kR5pcP4GGz5/Z3jMb1q/oVclmi+CjId+E27fAZpmKIh33ETiqncFG0O
-   tipSNneFnuoJZBybL3Ng0HuiRDErPgoNbintmRw/qiWDvzed75u8OIT6z
-   xUECs3BFIJdc9szJAMdYqED54+NV4W6Rw+raJMu2yw8vXM7jqNUkXhUAU
-   0xwFRAiSZEsEoEr0ZREG+FgaNha3EpNa2noQp6NtAQSMc4ezgtvv6yIjG
-   w+FgtNY9GLZcZihnbGjgXOJfdnPrRpNRB3oeOwUCi3rnN9EyqBREL3f1V
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="13639934"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="13639934"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 02:55:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="760540400"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="760540400"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2024 02:54:59 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rQ3ZQ-0001u8-31;
-	Wed, 17 Jan 2024 10:54:56 +0000
-Date: Wed, 17 Jan 2024 18:54:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:ceph-iter 98/105] fs/ceph/crypto.c:608:28: error:
- incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to
- parameter of type 'size_t *' (aka 'unsigned long *')
-Message-ID: <202401171830.v1grY7cK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IUmbAnsI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDA8C4166C;
+	Wed, 17 Jan 2024 10:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705489167;
+	bh=z++aPhqJYmV8VB4OIKDmSI4vg9WbQB6P+vqni7mLX4M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IUmbAnsIE5vCKOMG92SfDaJvvsQbn0Gd9j+ni1Xumo7BbhtLTqu7AKam6IsvwF1b+
+	 Jlcr14KUq6L5ESg5D0E49101sji45b+wC4YBgTE4eZ6IYwvdWD/Tj+f4lTk9GgQ83/
+	 QCQ0CYq8jJJ260HIui8AqoqEC6ls7r8Fv5qED3KcDrKf2XQ545aXrNbZsuK5Hs9B8U
+	 b6yjz0yNnHvvq4qxZ+F39BjZFbivVM+DtSH5lMhzp6Zg0RadvC4r283C4gi1YOBl3A
+	 6ljYXjh8ELhx+2NzE/8ermEEzBtTQZx7CgJVxsO4jX/YTAM2MTHGzRi2fOy/OFX9iI
+	 WZ3rdiK6djkbQ==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50e7c6e3c63so11339637e87.3;
+        Wed, 17 Jan 2024 02:59:27 -0800 (PST)
+X-Gm-Message-State: AOJu0YzDyYDWjC5HdWtQP2Syz7LktFirJK9NizoiwcgsLoXvaa5+exyG
+	4ovA1RhE0C5BHCv7qhYJyuP7OaF5GTHcHXWkBbY=
+X-Google-Smtp-Source: AGHT+IFxh5QrJ1gWQCd/4YDEkFNTtChPK1g37tz97wiiKd3o0JeZrjXVzdzGAYAydUm+Cs0LLEXbDoyNQCA1Pd1yKTw=
+X-Received: by 2002:a05:6512:33cf:b0:50e:506c:a2b7 with SMTP id
+ d15-20020a05651233cf00b0050e506ca2b7mr2662609lfg.249.1705489165792; Wed, 17
+ Jan 2024 02:59:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <ZZ7YuEexYSaZYmLK@tassilo> <20240111223650.3502633-1-kevinloughlin@google.com>
+ <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
+In-Reply-To: <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 17 Jan 2024 11:59:14 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
+Message-ID: <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+To: Borislav Petkov <bp@alien8.de>
+Cc: Kevin Loughlin <kevinloughlin@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Michael Kelley <mikelley@microsoft.com>, 
+	Pankaj Gupta <pankaj.gupta@amd.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Arnd Bergmann <arnd@arndb.de>, Steve Rutherford <srutherford@google.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Hou Wenlong <houwenlong.hwl@antgroup.com>, Vegard Nossum <vegard.nossum@oracle.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Yuntao Wang <ytcoode@gmail.com>, 
+	Wang Jinchao <wangjinchao@xfusion.com>, David Woodhouse <dwmw@amazon.co.uk>, 
+	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>, Joerg Roedel <jroedel@suse.de>, 
+	Randy Dunlap <rdunlap@infradead.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Brijesh Singh <brijesh.singh@amd.com>, 
+	Michael Roth <michael.roth@amd.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-coco@lists.linux.dev, 
+	Ashish Kalra <ashish.kalra@amd.com>, Andi Kleen <ak@linux.intel.com>, 
+	Adam Dunlap <acdunlap@google.com>, Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
+	Sidharth Telang <sidtelang@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
-head:   2cf82c6e7baf6d3a2adc0692707028da395f1553
-commit: da0d419452928c43bddccbfdc3f5636a36ad05cd [98/105] ceph: Make ceph_calc_file_object_mapping() return size as size_t
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240117/202401171830.v1grY7cK-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240117/202401171830.v1grY7cK-lkp@intel.com/reproduce)
+On Mon, 15 Jan 2024 at 21:47, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Jan 11, 2024 at 10:36:50PM +0000, Kevin Loughlin wrote:
+> > SEV/SME code can execute prior to page table fixups for kernel
+> > relocation. However, as with global variables accessed in
+> > __startup_64(), the compiler is not required to generate RIP-relative
+> > accesses for SEV/SME global variables, causing certain flavors of SEV
+> > hosts and guests built with clang to crash during boot.
+>
+> So, about that. If I understand my gcc toolchain folks correctly:
+>
+> mcmodel=kernel - everything fits into the high 31 bit of the address
+> space
+>
+> -fPIE/PIC - position independent
+>
+> And supplied both don't make a whole lotta of sense: if you're building
+> position-independent, then mcmodel=kernel would be overridden by the
+> first.
+>
+> I have no clue why clang enabled it...
+>
+> So, *actually* the proper fix here should be not to add this "fixed_up"
+> gunk everywhere but remove mcmodel=kernel from the build and simply do
+> -fPIE/PIC.
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401171830.v1grY7cK-lkp@intel.com/
+Fully agree. All this fiddling with RIP relative references from C
+code is going to be a maintenance burden going forward.
 
-All errors (new ones prefixed by >>):
+The proper way to do this is use PIC codegen for the objects that
+matter. I had a stab [0] at this a while ago (for the purpose of
+increasing the KASLR range, which requires PIE linking) but I didn't
+pursue it in the end.
 
->> fs/ceph/crypto.c:608:28: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'size_t *' (aka 'unsigned long *') [-Werror,-Wincompatible-pointer-types]
-     608 |                                       &objno, &objoff, &xlen);
-         |                                                        ^~~~~
-   include/linux/ceph/striper.h:12:41: note: passing argument to parameter 'xlen' here
-      12 |                                    u64 *objno, u64 *objoff, size_t *xlen);
-         |                                                                     ^
-   1 error generated.
+On arm64, we use a separate pseudo-namespace for code that can run
+safely at any offset, using the __pi_ prefix (for Position
+Independent). Using symbol prefixing at the linker level, we ensure
+that __pi_ code can only call other __pi_ code, or code that has been
+made available to it via an explicit __pi_ prefixed alias. (Happy to
+elaborate more but we should find a smaller audience - your cc list is
+a tad long). Perhaps this is something we should explore on x86 as
+well (note that the EFI stub does something similar for architectures
+that link the EFI stub into the core kernel rather than into the
+decompressor)
 
 
-vim +608 fs/ceph/crypto.c
 
-77cdb7e17e39eb Jeff Layton 2022-08-25  577  
-77cdb7e17e39eb Jeff Layton 2022-08-25  578  /**
-77cdb7e17e39eb Jeff Layton 2022-08-25  579   * ceph_fscrypt_decrypt_extents: decrypt received extents in given buffer
-77cdb7e17e39eb Jeff Layton 2022-08-25  580   * @inode: inode associated with pages being decrypted
-77cdb7e17e39eb Jeff Layton 2022-08-25  581   * @page: pointer to page array
-77cdb7e17e39eb Jeff Layton 2022-08-25  582   * @off: offset into the file that the data in page[0] starts
-77cdb7e17e39eb Jeff Layton 2022-08-25  583   * @map: pointer to extent array
-77cdb7e17e39eb Jeff Layton 2022-08-25  584   * @ext_cnt: length of extent array
-77cdb7e17e39eb Jeff Layton 2022-08-25  585   *
-77cdb7e17e39eb Jeff Layton 2022-08-25  586   * Given an extent map and a page array, decrypt the received data in-place,
-77cdb7e17e39eb Jeff Layton 2022-08-25  587   * skipping holes. Returns the offset into buffer of end of last decrypted
-77cdb7e17e39eb Jeff Layton 2022-08-25  588   * block.
-77cdb7e17e39eb Jeff Layton 2022-08-25  589   */
-77cdb7e17e39eb Jeff Layton 2022-08-25  590  int ceph_fscrypt_decrypt_extents(struct inode *inode, struct page **page,
-77cdb7e17e39eb Jeff Layton 2022-08-25  591  				 u64 off, struct ceph_sparse_extent *map,
-77cdb7e17e39eb Jeff Layton 2022-08-25  592  				 u32 ext_cnt)
-77cdb7e17e39eb Jeff Layton 2022-08-25  593  {
-38d46409c4639a Xiubo Li    2023-06-12  594  	struct ceph_client *cl = ceph_inode_to_client(inode);
-77cdb7e17e39eb Jeff Layton 2022-08-25  595  	int i, ret = 0;
-77cdb7e17e39eb Jeff Layton 2022-08-25  596  	struct ceph_inode_info *ci = ceph_inode(inode);
-77cdb7e17e39eb Jeff Layton 2022-08-25  597  	u64 objno, objoff;
-77cdb7e17e39eb Jeff Layton 2022-08-25  598  	u32 xlen;
-77cdb7e17e39eb Jeff Layton 2022-08-25  599  
-77cdb7e17e39eb Jeff Layton 2022-08-25  600  	/* Nothing to do for empty array */
-77cdb7e17e39eb Jeff Layton 2022-08-25  601  	if (ext_cnt == 0) {
-38d46409c4639a Xiubo Li    2023-06-12  602  		doutc(cl, "%p %llx.%llx empty array, ret 0\n", inode,
-38d46409c4639a Xiubo Li    2023-06-12  603  		      ceph_vinop(inode));
-77cdb7e17e39eb Jeff Layton 2022-08-25  604  		return 0;
-77cdb7e17e39eb Jeff Layton 2022-08-25  605  	}
-77cdb7e17e39eb Jeff Layton 2022-08-25  606  
-77cdb7e17e39eb Jeff Layton 2022-08-25  607  	ceph_calc_file_object_mapping(&ci->i_layout, off, map[0].len,
-77cdb7e17e39eb Jeff Layton 2022-08-25 @608  				      &objno, &objoff, &xlen);
-77cdb7e17e39eb Jeff Layton 2022-08-25  609  
-77cdb7e17e39eb Jeff Layton 2022-08-25  610  	for (i = 0; i < ext_cnt; ++i) {
-77cdb7e17e39eb Jeff Layton 2022-08-25  611  		struct ceph_sparse_extent *ext = &map[i];
-77cdb7e17e39eb Jeff Layton 2022-08-25  612  		int pgsoff = ext->off - objoff;
-77cdb7e17e39eb Jeff Layton 2022-08-25  613  		int pgidx = pgsoff >> PAGE_SHIFT;
-77cdb7e17e39eb Jeff Layton 2022-08-25  614  		int fret;
-77cdb7e17e39eb Jeff Layton 2022-08-25  615  
-77cdb7e17e39eb Jeff Layton 2022-08-25  616  		if ((ext->off | ext->len) & ~CEPH_FSCRYPT_BLOCK_MASK) {
-38d46409c4639a Xiubo Li    2023-06-12  617  			pr_warn_client(cl,
-38d46409c4639a Xiubo Li    2023-06-12  618  				"%p %llx.%llx bad encrypted sparse extent "
-38d46409c4639a Xiubo Li    2023-06-12  619  				"idx %d off %llx len %llx\n",
-38d46409c4639a Xiubo Li    2023-06-12  620  				inode, ceph_vinop(inode), i, ext->off,
-38d46409c4639a Xiubo Li    2023-06-12  621  				ext->len);
-77cdb7e17e39eb Jeff Layton 2022-08-25  622  			return -EIO;
-77cdb7e17e39eb Jeff Layton 2022-08-25  623  		}
-77cdb7e17e39eb Jeff Layton 2022-08-25  624  		fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
-77cdb7e17e39eb Jeff Layton 2022-08-25  625  						 off + pgsoff, ext->len);
-38d46409c4639a Xiubo Li    2023-06-12  626  		doutc(cl, "%p %llx.%llx [%d] 0x%llx~0x%llx fret %d\n", inode,
-38d46409c4639a Xiubo Li    2023-06-12  627  		      ceph_vinop(inode), i, ext->off, ext->len, fret);
-77cdb7e17e39eb Jeff Layton 2022-08-25  628  		if (fret < 0) {
-77cdb7e17e39eb Jeff Layton 2022-08-25  629  			if (ret == 0)
-77cdb7e17e39eb Jeff Layton 2022-08-25  630  				ret = fret;
-77cdb7e17e39eb Jeff Layton 2022-08-25  631  			break;
-77cdb7e17e39eb Jeff Layton 2022-08-25  632  		}
-77cdb7e17e39eb Jeff Layton 2022-08-25  633  		ret = pgsoff + fret;
-77cdb7e17e39eb Jeff Layton 2022-08-25  634  	}
-38d46409c4639a Xiubo Li    2023-06-12  635  	doutc(cl, "ret %d\n", ret);
-77cdb7e17e39eb Jeff Layton 2022-08-25  636  	return ret;
-77cdb7e17e39eb Jeff Layton 2022-08-25  637  }
-77cdb7e17e39eb Jeff Layton 2022-08-25  638  
-
-:::::: The code at line 608 was first introduced by commit
-:::::: 77cdb7e17e39ebb986f60bbd3c2b3507687bf475 ceph: add infrastructure for file encryption and decryption
-
-:::::: TO: Jeff Layton <jlayton@kernel.org>
-:::::: CC: Ilya Dryomov <idryomov@gmail.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=x86-pie&id=4ba81de75d92fafdab2a8a389d1b7791dddf74f3
