@@ -1,126 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281831CF81;
-	Wed, 17 Jan 2024 10:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62805C8DE;
+	Wed, 17 Jan 2024 11:31:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705489168; cv=none; b=L6zp55bcThp80KWo5b6/vF6ldgpr4T2rEZsDwryhEriKwk6absxdONUzkJmc/uy/E3NwYSI7avlVlvOde9Dx/CNnT4hdh7VQrlfVh7+/J8OtU6vL+Gfm+hUbdAilqp7+ZS0w/bMPRrpov2UdujE8Qb1FxhvORbCToqqQZ9AfvQQ=
+	t=1705491062; cv=none; b=Lh1MAbk6ZM7Eq/kfmMVc2b4lF/uX9KP/NvKlSQ850c95wcjE54czu/aFBseDD2c6PWzVmNlxq7s3Wl8T9TNLNtVK3QOJ5kZiwwwfGQCIDlfW5I1tnOs0mg3/njR+X5DwmX0IT1ohqfgVJLnOgrlYpBRukcNtVKit1BgYvG1D1to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705489168; c=relaxed/simple;
-	bh=z++aPhqJYmV8VB4OIKDmSI4vg9WbQB6P+vqni7mLX4M=;
-	h=Received:DKIM-Signature:Received:X-Gm-Message-State:
-	 X-Google-Smtp-Source:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:Message-ID:
-	 Subject:To:Cc:Content-Type; b=tbWfd2bpZlZ/ywDoWW/43GSN9CEoq7iCKNdQzFhKQONWhcBvFeEt1asf2B66K3O/FyjS9OaNmT5guh/45/lG0Np+UNDrDXyhPV2ic9jd5RLdlHQyX1Do3V1DnK/ED3v2RTNSF/222dei5/pJmz1mg3hfX31k5c2goJ7McxUZXfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IUmbAnsI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705491062; c=relaxed/simple;
+	bh=W+4VwuyRcYhhV7162/K5rb8MKqw/7UZiD1PRcLyA8Fk=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To; b=CFz9E5y4ta0rMRMuO9nEyllEZ8m4Q+EDrKIUSwQTkhsqcYsRqMLAkc2dRz4DHlnkDzj8XcBnplrjt1+jjwuMWAa+7xTDjCpsXPCs1t50QOLC0N+ispSV68RL9Wipf09lwB+yd/QJaRkVx5xrrGFPT4W2kox6qxHTXJdjqe15Vwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3Pxe78I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IUmbAnsI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDA8C4166C;
-	Wed, 17 Jan 2024 10:59:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3Pxe78I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F35EC433C7;
+	Wed, 17 Jan 2024 11:30:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705489167;
-	bh=z++aPhqJYmV8VB4OIKDmSI4vg9WbQB6P+vqni7mLX4M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IUmbAnsIE5vCKOMG92SfDaJvvsQbn0Gd9j+ni1Xumo7BbhtLTqu7AKam6IsvwF1b+
-	 Jlcr14KUq6L5ESg5D0E49101sji45b+wC4YBgTE4eZ6IYwvdWD/Tj+f4lTk9GgQ83/
-	 QCQ0CYq8jJJ260HIui8AqoqEC6ls7r8Fv5qED3KcDrKf2XQ545aXrNbZsuK5Hs9B8U
-	 b6yjz0yNnHvvq4qxZ+F39BjZFbivVM+DtSH5lMhzp6Zg0RadvC4r283C4gi1YOBl3A
-	 6ljYXjh8ELhx+2NzE/8ermEEzBtTQZx7CgJVxsO4jX/YTAM2MTHGzRi2fOy/OFX9iI
-	 WZ3rdiK6djkbQ==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50e7c6e3c63so11339637e87.3;
-        Wed, 17 Jan 2024 02:59:27 -0800 (PST)
-X-Gm-Message-State: AOJu0YzDyYDWjC5HdWtQP2Syz7LktFirJK9NizoiwcgsLoXvaa5+exyG
-	4ovA1RhE0C5BHCv7qhYJyuP7OaF5GTHcHXWkBbY=
-X-Google-Smtp-Source: AGHT+IFxh5QrJ1gWQCd/4YDEkFNTtChPK1g37tz97wiiKd3o0JeZrjXVzdzGAYAydUm+Cs0LLEXbDoyNQCA1Pd1yKTw=
-X-Received: by 2002:a05:6512:33cf:b0:50e:506c:a2b7 with SMTP id
- d15-20020a05651233cf00b0050e506ca2b7mr2662609lfg.249.1705489165792; Wed, 17
- Jan 2024 02:59:25 -0800 (PST)
+	s=k20201202; t=1705491061;
+	bh=W+4VwuyRcYhhV7162/K5rb8MKqw/7UZiD1PRcLyA8Fk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X3Pxe78INo0ZCxa0lyRMprtUGrriYUvVYuWXJfV4Oc+VoL0I4bLN36FsDknC7YnGX
+	 +rIH5fU+7Xfk9MdPjHYyIyExjHbZGbrnE7eaGXQdwkKx77v0kRDw8Ghm02gyv/XBJr
+	 KLppLKaA8MUHaFryoz9AAu6hw7Neuu4lkx5NKwdfOhjkMcd24mMNPgAOau0UhFhzYk
+	 kola7qJeQyTTS8bNAsC1n+ODNhmHi0enOkVATQDzN4q92kd2X7VkA1pQ6wog4c0XO5
+	 uBWCf94jaO4uJO3B9VibzFxdnxGV0WbcOWze50rPEraEgYtshEDUerZWOy6Scfs1Zx
+	 8u15hC/eTFf9g==
+Date: Wed, 17 Jan 2024 11:30:56 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+Message-ID: <20240117-swiftly-parasail-618d62972d6e@spud>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+ <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+ <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
+ <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <ZZ7YuEexYSaZYmLK@tassilo> <20240111223650.3502633-1-kevinloughlin@google.com>
- <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
-In-Reply-To: <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 17 Jan 2024 11:59:14 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
-Message-ID: <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
- SEV/SME code
-To: Borislav Petkov <bp@alien8.de>
-Cc: Kevin Loughlin <kevinloughlin@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Michael Kelley <mikelley@microsoft.com>, 
-	Pankaj Gupta <pankaj.gupta@amd.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Arnd Bergmann <arnd@arndb.de>, Steve Rutherford <srutherford@google.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Hou Wenlong <houwenlong.hwl@antgroup.com>, Vegard Nossum <vegard.nossum@oracle.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Yuntao Wang <ytcoode@gmail.com>, 
-	Wang Jinchao <wangjinchao@xfusion.com>, David Woodhouse <dwmw@amazon.co.uk>, 
-	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>, Joerg Roedel <jroedel@suse.de>, 
-	Randy Dunlap <rdunlap@infradead.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Brijesh Singh <brijesh.singh@amd.com>, 
-	Michael Roth <michael.roth@amd.com>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-coco@lists.linux.dev, 
-	Ashish Kalra <ashish.kalra@amd.com>, Andi Kleen <ak@linux.intel.com>, 
-	Adam Dunlap <acdunlap@google.com>, Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
-	Sidharth Telang <sidtelang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-
-On Mon, 15 Jan 2024 at 21:47, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Jan 11, 2024 at 10:36:50PM +0000, Kevin Loughlin wrote:
-> > SEV/SME code can execute prior to page table fixups for kernel
-> > relocation. However, as with global variables accessed in
-> > __startup_64(), the compiler is not required to generate RIP-relative
-> > accesses for SEV/SME global variables, causing certain flavors of SEV
-> > hosts and guests built with clang to crash during boot.
->
-> So, about that. If I understand my gcc toolchain folks correctly:
->
-> mcmodel=kernel - everything fits into the high 31 bit of the address
-> space
->
-> -fPIE/PIC - position independent
->
-> And supplied both don't make a whole lotta of sense: if you're building
-> position-independent, then mcmodel=kernel would be overridden by the
-> first.
->
-> I have no clue why clang enabled it...
->
-> So, *actually* the proper fix here should be not to add this "fixed_up"
-> gunk everywhere but remove mcmodel=kernel from the build and simply do
-> -fPIE/PIC.
->
-
-Fully agree. All this fiddling with RIP relative references from C
-code is going to be a maintenance burden going forward.
-
-The proper way to do this is use PIC codegen for the objects that
-matter. I had a stab [0] at this a while ago (for the purpose of
-increasing the KASLR range, which requires PIE linking) but I didn't
-pursue it in the end.
-
-On arm64, we use a separate pseudo-namespace for code that can run
-safely at any offset, using the __pi_ prefix (for Position
-Independent). Using symbol prefixing at the linker level, we ensure
-that __pi_ code can only call other __pi_ code, or code that has been
-made available to it via an explicit __pi_ prefixed alias. (Happy to
-elaborate more but we should find a smaller audience - your cc list is
-a tad long). Perhaps this is something we should explore on x86 as
-well (note that the EFI stub does something similar for architectures
-that link the EFI stub into the core kernel rather than into the
-decompressor)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="6PVvLnZRvsd/2E7w"
+Content-Disposition: inline
+In-Reply-To: <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
 
 
+--6PVvLnZRvsd/2E7w
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=x86-pie&id=4ba81de75d92fafdab2a8a389d1b7791dddf74f3
+Palmer, Miguel, Nathan, etc
+
+On Thu, Jun 08, 2023 at 01:28:06PM +0100, Conor Dooley wrote:
+> On Thu, Jun 08, 2023 at 01:52:47PM +0200, Miguel Ojeda wrote:
+> > On Thu, Jun 8, 2023 at 9:01=E2=80=AFAM Conor Dooley <conor.dooley@micro=
+chip.com> wrote:
+> > >
+> > > I do intend revisting this, probably after the min. version for rust
+> > > gets bumped, I've just been really busy with other work the last week=
+s.
+> >=20
+> > Thanks Conor! That would be great. We are increasing the minimum
+> > version after the merge window to Rust 1.70.0 (assuming no unexpected
+> > issues).
+>=20
+> Right, so probably I won't resubmit anything until after v6.6 then,
+> as it won't be in the RISC-V tree until then, by the sounds of your
+> timeline.
+> Gives me plenty of time to try and unravel the mess of libclang versions
+> and what extensions are supported by each tool. Not like I am devoid of
+> other things that need to be done!
+
+6.6 came and went, and I have been busy dealing with the other
+responsibilities I mentioned and have not had a chance to look here.
+I rebased this today and things still work as they did when I submitted
+this version, but things have gotten muddier on the LLVM side of things,
+as more recent versions have added yet more extension support.
+
+My inclination at this point is to engage in a bit of LARPing as an
+ostrich, and sorta ignore these concerns initially. Specifically, I'd
+like to drop the idea of having the gcc support, and restrict to LLVM=3D1.
+When it comes to asymmetrical extension support between the C and Rust
+toolchains, I'm think we deal with that as we do for the C toolchains,
+sort issues out as-and-when they arrive rather than punt this again.
+
+Thoughts?
+
+--6PVvLnZRvsd/2E7w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZae6bwAKCRB4tDGHoIJi
+0gSBAQDo38W6PTOrInEpd47uC6oQIYUvHH1KsraF+Ue8d+OddAD/RgFhSo1LMWe7
+a3i/SbsjnIVdYUqCgcwThIIhp9U8bwA=
+=271/
+-----END PGP SIGNATURE-----
+
+--6PVvLnZRvsd/2E7w--
