@@ -1,74 +1,127 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 01CFE17E9;
-	Wed, 17 Jan 2024 01:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
+Received: from out187-20.us.a.mail.aliyun.com (out187-20.us.a.mail.aliyun.com [47.90.187.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DF217E9;
+	Wed, 17 Jan 2024 02:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.187.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705454618; cv=none; b=hBl6Z2W9IiVbyZeDMWihV1jNh6WRK1mA+GjpW7x7q0rGlh86Onjf0nQXNvr2cAwBYSDGtKb+0apPU0bixCdLXcdOEzkjYiNDQvKL0AB6z1fxqFq29yn0ewHKJmcUgE6ttmdK+pAs6Hf9F8+BMGvZx8jPii0aiA4qeuHpSdHjp6E=
+	t=1705459965; cv=none; b=DBejKltHi9fxjetMuNfRUtm9FopKOl70rK5+ARTocUN2hNFZi1oF1PT6BPacMUBncDvM8R20yqfY0QVWJsRrhXqnfMMr/28g3XvZcqj3OXsVtk+SM06DWBRClg25VRBGjQSi80TcfosymaI4dMJgvWKwWXtLEFSVJ0Dlg/R+4Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705454618; c=relaxed/simple;
-	bh=Vmx397rnKN9dTE4JxoTDlJ1QfqShVG2owgUaAVsdmhs=;
-	h=Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 Content-Language:To:Cc:X-MD-Sfrom:X-MD-SrcIP:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding; b=dfhTzbu2ed7Xi2Me9OzS7pLxYLO72Zk6Ljz3G7x6gDVUre9XAffgPrUyVbK2M/6r7SPpAsNKD8BpEM11kw6iAYyGbmg8E13Jo1tRyk4On6QCNYlKUIlzQVLBb0air8jy5lslC9hDpoRWa5GtGzFqdvVDJtrD/orEK4AmPq+v6fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id CA73D607F2347;
-	Wed, 17 Jan 2024 09:23:02 +0800 (CST)
-Message-ID: <1847a959-b8a1-29e9-c87e-036709586d1a@nfschina.com>
-Date: Wed, 17 Jan 2024 09:23:01 +0800
+	s=arc-20240116; t=1705459965; c=relaxed/simple;
+	bh=f2vOvPOp7ODqJoWpEW+g6YZ4ClQrHu8xwoToqzW/ISo=;
+	h=X-Alimail-AntiSpam:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To:User-Agent; b=CxS2EHr6SWlGVx7sOolLTYlAtypf9DmShQ3igtT2SmfmJtCK7VltRhR7QyXDEu0yxam/AJWNMQed7ZFaM0WoQTmrivM4BU4o90t1YCPh55+3HSAdYaowU+XRWA0VgVjLtht2uhAGduh3CAwzbSzKyawufIuaFXQXknu6RsN40IE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com; spf=pass smtp.mailfrom=antgroup.com; arc=none smtp.client-ip=47.90.187.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antgroup.com
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047212;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=44;SR=0;TI=SMTPD_---.W8.S.yY_1705459622;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.W8.S.yY_1705459622)
+          by smtp.aliyun-inc.com;
+          Wed, 17 Jan 2024 10:47:04 +0800
+Date: Wed, 17 Jan 2024 10:47:02 +0800
+From: "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To: Kevin Loughlin <kevinloughlin@google.com>
+Cc: Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Michael Kelley <mikelley@microsoft.com>,
+	Pankaj Gupta <pankaj.gupta@amd.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Steve Rutherford <srutherford@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Wang Jinchao <wangjinchao@xfusion.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Michael Roth <michael.roth@amd.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>,
+	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>,
+	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>,
+	Sidharth Telang <sidtelang@google.com>
+Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+Message-ID: <20240117024702.GA112065@k08j02272.eu95sqa>
+References: <ZZ7YuEexYSaZYmLK@tassilo>
+ <20240111223650.3502633-1-kevinloughlin@google.com>
+ <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
+ <CAGdbjm+fMBnkKDVFpf-fAEbYxTUWR0od2JzTTbEMoPVS3J_Faw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] ocfs2: remove useless code in ocfs2_try_to_merge_extent
-Content-Language: en-US
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, ocfs2-devel@lists.linux.dev,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- kernel-janitors@vger.kernel.org
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-In-Reply-To: <20240116120926.3bfa87253bf5af5090bd78bd@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGdbjm+fMBnkKDVFpf-fAEbYxTUWR0od2JzTTbEMoPVS3J_Faw@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On 2024/1/17 04:09, Andrew Morton wrote:
-> On Fri, 12 Jan 2024 12:26:40 +0800 Su Hui <suhui@nfschina.com> wrote:
->
->> Clang static checker warning: Value stored to 'rec' is never read.
->> Remove this useless code to silent this warning.
->>
->> --- a/fs/ocfs2/alloc.c
->> +++ b/fs/ocfs2/alloc.c
->> @@ -3743,8 +3743,6 @@ static int ocfs2_try_to_merge_extent(handle_t *handle,
->>   			goto out;
->>   		}
->>   
->> -		rec = &el->l_recs[split_index];
->> -
->>   		/*
->>   		 * Note that we don't pass split_rec here on purpose -
->>   		 * we've merged it into the rec already.
-> Then:
->
-> 		ret = ocfs2_merge_rec_left(path, handle, et, rec,
-> 					   dealloc, split_index);
->
-> and ocfs2_merge_rec_left() almost immediately dereferences `rec'.
->
-> So this looks quite wrong to me.
->
-Oh, really sorry for the noise.
-This patch is wrong.
+On Wed, Jan 17, 2024 at 08:07:49AM +0800, Kevin Loughlin wrote:
+> On Mon, Jan 15, 2024 at 12:47 PM Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > On Thu, Jan 11, 2024 at 10:36:50PM +0000, Kevin Loughlin wrote:
+> > > SEV/SME code can execute prior to page table fixups for kernel
+> > > relocation. However, as with global variables accessed in
+> > > __startup_64(), the compiler is not required to generate RIP-relative
+> > > accesses for SEV/SME global variables, causing certain flavors of SEV
+> > > hosts and guests built with clang to crash during boot.
+> >
+> > So, about that. If I understand my gcc toolchain folks correctly:
+> >
+> > mcmodel=kernel - everything fits into the high 31 bit of the address
+> > space
+> >
+> > -fPIE/PIC - position independent
+> >
+> > And supplied both don't make a whole lotta of sense: if you're building
+> > position-independent, then mcmodel=kernel would be overridden by the
+> > first.
+> >
+> > I have no clue why clang enabled it...
+> >
+> > So, *actually* the proper fix here should be not to add this "fixed_up"
+> > gunk everywhere but remove mcmodel=kernel from the build and simply do
+> > -fPIE/PIC.
+> 
+> I believe that the key distinction is that using mcmodel=kernel (upper
+> 2 GB of address space) or the similar mcmodel=small (lower 2 GB) means
+> the compiler *can* use RIP-relative addressing for globals (because
+> everything is within +/- 2GB of RIP) but is not *required* to do so.
+> In contrast, fPIE/fPIC *requires* relative addressing but does not
+> necessarily require a specific 2 GB placement range. Altogether, I do
+> think there are use cases for both options individually. I can't think
+> of a reason why gcc wouldn't be able to support mcmodel=kernel in
+> conjunction with fPIE off the top of my head, but I admittedly haven't
+> looked into it; I simply observed that the combination is not
+> currently supported.
+> 
+> RE: compiling the whole x86-64 kernel with fPIE/fPIC, I believe the
+> required changes would be very extensive (see "[PATCH RFC 00/43]
+> x86/pie: Make kernel image's virtual address flexible" at
+> https://lore.kernel.org/lkml/cover.1682673542.git.houwenlong.hwl@antgroup.com/).
 
-Su Hui
+FYI I have sent a small patchset[0] that attempts to build the head code
+(head64.c and mem_encrypt_identity.c) as PIE. However, there are still a
+few functions that are called by the head code but are not in these two
+files.
 
+[0] https://lore.kernel.org/lkml/cover.1689130310.git.houwenlong.hwl@antgroup.com
