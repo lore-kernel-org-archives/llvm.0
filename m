@@ -1,113 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC7B200A6;
-	Wed, 17 Jan 2024 13:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3206A208A0
+	for <llvm@lists.linux.dev>; Wed, 17 Jan 2024 14:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705498728; cv=none; b=ZjsL8F2umbGxaXN+Vgs3COmApqENZuUDHS28wowBpyh9p2Xf9g+2NyW/jBzeehytjnck55weOIsxJga4bzlibiFzHr7qoV3pKpmpcpEqAmY1SbcmYJKgJril+TyugPZ7q5np80JOM87KoMdbmzlLOZac4U8LFFKw363EDTs6INI=
+	t=1705500448; cv=none; b=k82Y6eIpfx2xQMDyF+D8nMgkRvrhHG1qOvtsromBxR8OmqogYv0jYDUrwX5bJn64SFrNUWpurwYtrwFM3yBK6FHfC5kyssL1WBZ2iEZ6FZHcyb4mly7q6bFXR6YfNptA88yliAvR4ZjZv3hib7U6Y6nlB4z0n5ow/KqhdQH51Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705498728; c=relaxed/simple;
-	bh=voSmOWLAFkYsGKasSFnRn3AzaRkdaEJ5pp5KBG2PYyg=;
-	h=Received:DKIM-Signature:Received:X-Gm-Message-State:
-	 X-Google-Smtp-Source:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:Message-ID:
-	 Subject:To:Cc:Content-Type; b=K25GlfqVr0vF+5fR4e975DkuELr1+d03OJ7kA6IHCdzhK8XIBwrdnnAcUHwhX+UpUWsmrPjaKfEmtBU+sMj39fRP6ab+KFekDQYSMBUN8FtR4/pKrUx5194AVaikUUMqomTj8MVgxdxKoRizvt3Izf528xdI+Inmf50IxpRQ5nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWxT4sLD; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWxT4sLD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1736C41679;
-	Wed, 17 Jan 2024 13:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705498728;
-	bh=voSmOWLAFkYsGKasSFnRn3AzaRkdaEJ5pp5KBG2PYyg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PWxT4sLDnWR5NgoNm8iVkRCmQiVKDViYLD7AkhNHa8c9n8VVgi9bqHYwpVBT76p1V
-	 LsVYkF+Uhh0mZ2oe7tSQ7lhw1y8txg3YMwjhxYQSF+CC4dedy6jc5AguYSbjPY0H49
-	 7JdiHTFjEJ37TgWP2Nf7Ux4FsvSW6ZoFzlKTlT/OTnrXpLgzmgHuJD9WOgBq8f1d5p
-	 T5Hv3EWq+eQToHMnjh7QynOVX107m98JC+WVlGrpzROKGVmfzhUSF3pNcoZL47dAqL
-	 dRoiVdvOaEj62vXtt4z1dpaH6ovphaJljeTuAeVjzj66gRcvvCYxqFeXZdlpqjZEJw
-	 N1Q0UVW9ehNMw==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50ea98440a7so11759244e87.1;
-        Wed, 17 Jan 2024 05:38:47 -0800 (PST)
-X-Gm-Message-State: AOJu0YyjlsWOJJne7kNgmvixRdTD4GjQd/OnByEgwkkeUEWSDoiT55LJ
-	J9TkJn5mkw9C1ygl4f+ORrcQE7YQsaf5EW04SE0=
-X-Google-Smtp-Source: AGHT+IFF5YZotCcYG3bNeBcr2nqGCODiLpBYXlVhXhnBM/nZs2B/jMst7ZeuU5NbjVzQzEqYycnrSCOp66e60p2Tt8s=
-X-Received: by 2002:a05:6512:3298:b0:50e:70b0:6d2f with SMTP id
- p24-20020a056512329800b0050e70b06d2fmr2576145lfe.159.1705498725881; Wed, 17
- Jan 2024 05:38:45 -0800 (PST)
+	s=arc-20240116; t=1705500448; c=relaxed/simple;
+	bh=hzQKlOA37RqNeiwf+rTQ3L7sVhR7KIht5e1fJGRLsO4=;
+	h=Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To; b=nWYxL2ECVmQ7e+gxEuln1TdynfGicIkTKLwLjSSh7fKA1QBsiptTmqctsnnTAGeJA4jY19/Hz+q3IjyUbxqXsKOpfcJevsQm5JKqmbgbPu8jrxhQ51qufRyqEPBq58gMXobjnMzPbt8MCwiOAAVYzT0Skz6tYag4NWyj6PrwRaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B01A11FB;
+	Wed, 17 Jan 2024 06:08:12 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.37.172])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B76FB3F5A1;
+	Wed, 17 Jan 2024 06:07:24 -0800 (PST)
+Date: Wed, 17 Jan 2024 14:07:16 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <ZaffFMJy8cHOvtu8@FVFF77S0Q05N.cambridge.arm.com>
+References: <ZW4NAzI_jvwoq8dL@arm.com>
+ <20231204182330.GK1493156@nvidia.com>
+ <ZW9cF0ALVwgvcQMy@arm.com>
+ <20231205175127.GJ2692119@nvidia.com>
+ <ZW97VdHYH3HYVyd5@arm.com>
+ <20231205195130.GM2692119@nvidia.com>
+ <ZXBWXodu2rxQ7Szz@arm.com>
+ <20231206125919.GP2692119@nvidia.com>
+ <20240116185121.GB980613@nvidia.com>
+ <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <ZZ7YuEexYSaZYmLK@tassilo> <20240111223650.3502633-1-kevinloughlin@google.com>
- <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local> <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
- <20240117130557.GDZafQtfRyeVFbBUXA@fat_crate.local>
-In-Reply-To: <20240117130557.GDZafQtfRyeVFbBUXA@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 17 Jan 2024 14:38:34 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEML99u7a8mZMhiWXXozsJYhVPaaTzYkegiSJcLw2pNJg@mail.gmail.com>
-Message-ID: <CAMj1kXEML99u7a8mZMhiWXXozsJYhVPaaTzYkegiSJcLw2pNJg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
- SEV/SME code
-To: Borislav Petkov <bp@alien8.de>
-Cc: Kevin Loughlin <kevinloughlin@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Michael Kelley <mikelley@microsoft.com>, 
-	Pankaj Gupta <pankaj.gupta@amd.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Arnd Bergmann <arnd@arndb.de>, Steve Rutherford <srutherford@google.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Hou Wenlong <houwenlong.hwl@antgroup.com>, Vegard Nossum <vegard.nossum@oracle.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Yuntao Wang <ytcoode@gmail.com>, 
-	Wang Jinchao <wangjinchao@xfusion.com>, David Woodhouse <dwmw@amazon.co.uk>, 
-	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>, Joerg Roedel <jroedel@suse.de>, 
-	Randy Dunlap <rdunlap@infradead.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Brijesh Singh <brijesh.singh@amd.com>, 
-	Michael Roth <michael.roth@amd.com>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-coco@lists.linux.dev, 
-	Ashish Kalra <ashish.kalra@amd.com>, Andi Kleen <ak@linux.intel.com>, 
-	Adam Dunlap <acdunlap@google.com>, Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
-	Sidharth Telang <sidtelang@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
 
-On Wed, 17 Jan 2024 at 14:06, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, Jan 17, 2024 at 11:59:14AM +0100, Ard Biesheuvel wrote:
-...
-> > On arm64, we use a separate pseudo-namespace for code that can run
-> > safely at any offset, using the __pi_ prefix (for Position
-> > Independent). Using symbol prefixing at the linker level, we ensure
-> > that __pi_ code can only call other __pi_ code, or code that has been
-> > made available to it via an explicit __pi_ prefixed alias. (Happy to
-> > elaborate more but we should find a smaller audience - your cc list is
-> > a tad long). Perhaps this is something we should explore on x86 as
-> > well (note that the EFI stub does something similar for architectures
-> > that link the EFI stub into the core kernel rather than into the
-> > decompressor)
->
-> Grepping through the tree, is __pi_memcpy one example for that?
->
+On Wed, Jan 17, 2024 at 12:30:00PM +0000, Mark Rutland wrote:
+> On Tue, Jan 16, 2024 at 02:51:21PM -0400, Jason Gunthorpe wrote:
+> > Hey Catalin,
+> > 
+> > I'm just revising this and I'm wondering if you know why ARM64 has this:
+> > 
+> > #define __raw_writeq __raw_writeq
+> > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> > {
+> > 	asm volatile("str %x0, [%1]" : : "rZ" (val), "r" (addr));
+> > }
+> > 
+> > Instead of
+> > 
+> > #define __raw_writeq __raw_writeq
+> > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> > {
+> > 	asm volatile("str %x0, %1" : : "rZ" (val), "m" (*(volatile u64 *)addr));
+> > }
+> > 
+> > ?? Like x86 has.
+> 
+> I believe this is for the same reason as doing so in all of our other IO
+> accessors.
+> 
+> We've deliberately ensured that our IO accessors use a single base register
+> with no offset as this is the only form that HW can represent in ESR_ELx.ISS.SRT
+> when reporting a stage-2 abort, which a hypervisor may use for emulating IO.
 
-That is an example of a function that is known to be callable from any
-context, and so it is emitted with an alias that makes it accessible
-to other code that is position independent.
+FWIW, IIUC the immediate-offset forms *without* writeback can still be reported
+usefully in ESR_ELx, so I believe that we could use the "o" constraint for the
+__raw_write*() functions, e.g.
 
-There is some linker foo in arch/arm64/kernel/pi/Makefile that builds
-a couple of objects in PIC mode. The source symbols have ordinary
-names (even the external imports), but will be renamed by the linker
-to have a __pi_ prefix. The result is that those objects can only call
-into each other, or out to ordinary code that has been marked as __pi_
-as well.
+static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+{
+	asm volatile("str %x0, %1" : : "rZ" (val), "o" (*(volatile u64 *)addr));
+}
 
-The entry into this code is
+However, the __raw_read*() functions would still need to use "r" due to
+ARM64_WORKAROUND_DEVICE_LOAD_ACQUIRE.
 
-arch/arm64/kernel/head.S:885:   bl      __pi_kaslr_early_init
-
-which is called before relocations have been applied, as that requires
-knowing how the kernel base address is randomized.
+Mark.
