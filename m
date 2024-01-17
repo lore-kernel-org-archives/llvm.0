@@ -1,127 +1,187 @@
-Received: from out187-20.us.a.mail.aliyun.com (out187-20.us.a.mail.aliyun.com [47.90.187.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DF217E9;
-	Wed, 17 Jan 2024 02:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.187.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C67379C2;
+	Wed, 17 Jan 2024 05:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705459965; cv=none; b=DBejKltHi9fxjetMuNfRUtm9FopKOl70rK5+ARTocUN2hNFZi1oF1PT6BPacMUBncDvM8R20yqfY0QVWJsRrhXqnfMMr/28g3XvZcqj3OXsVtk+SM06DWBRClg25VRBGjQSi80TcfosymaI4dMJgvWKwWXtLEFSVJ0Dlg/R+4Jg=
+	t=1705470832; cv=none; b=hbC9e5AC39i//PVqlZXu9mcSooR7yAcz041wonPyDOHv+DhLhc5VBBwtMRoa009O1046FExb2EyF4wT5zIb4NL6pYhMeFvro0sB7cEWgXNz2tKYg5aV+5nLPrEB8kmCdchOlphPYStJuO/KFBH0LWIcJAm/gBKcMDw6J7aofe0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705459965; c=relaxed/simple;
-	bh=f2vOvPOp7ODqJoWpEW+g6YZ4ClQrHu8xwoToqzW/ISo=;
-	h=X-Alimail-AntiSpam:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To:User-Agent; b=CxS2EHr6SWlGVx7sOolLTYlAtypf9DmShQ3igtT2SmfmJtCK7VltRhR7QyXDEu0yxam/AJWNMQed7ZFaM0WoQTmrivM4BU4o90t1YCPh55+3HSAdYaowU+XRWA0VgVjLtht2uhAGduh3CAwzbSzKyawufIuaFXQXknu6RsN40IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com; spf=pass smtp.mailfrom=antgroup.com; arc=none smtp.client-ip=47.90.187.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antgroup.com
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047212;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=44;SR=0;TI=SMTPD_---.W8.S.yY_1705459622;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.W8.S.yY_1705459622)
-          by smtp.aliyun-inc.com;
-          Wed, 17 Jan 2024 10:47:04 +0800
-Date: Wed, 17 Jan 2024 10:47:02 +0800
-From: "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To: Kevin Loughlin <kevinloughlin@google.com>
-Cc: Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Michael Kelley <mikelley@microsoft.com>,
-	Pankaj Gupta <pankaj.gupta@amd.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Steve Rutherford <srutherford@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Yuntao Wang <ytcoode@gmail.com>,
-	Wang Jinchao <wangjinchao@xfusion.com>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Brijesh Singh <brijesh.singh@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>,
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>,
-	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>,
-	Sidharth Telang <sidtelang@google.com>
-Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
- SEV/SME code
-Message-ID: <20240117024702.GA112065@k08j02272.eu95sqa>
-References: <ZZ7YuEexYSaZYmLK@tassilo>
- <20240111223650.3502633-1-kevinloughlin@google.com>
- <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
- <CAGdbjm+fMBnkKDVFpf-fAEbYxTUWR0od2JzTTbEMoPVS3J_Faw@mail.gmail.com>
+	s=arc-20240116; t=1705470832; c=relaxed/simple;
+	bh=Hef/C5OHoY7etYNnJr/7e70JyX6zW8AYUxSpbF8/b4c=;
+	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
+	 X-IronPort-AV:X-IronPort-AV:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition;
+	b=hk9SPx1SeElFeVfjW6QUR2bq0yHjlyAdJgMNKZei2HQzXTMzatQftNmSrYWuKx+9cfkhGKW7Hw7LnhvRCREmyxPJoCZ50mqZVvxvqwY6jT2eyfJaYf03PMTlZxX7OUzgll/Ld98NQ3cGQIK7AsGIinKj72twFfJAFAXuLrIFPUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S8KUzZTT; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S8KUzZTT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705470830; x=1737006830;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Hef/C5OHoY7etYNnJr/7e70JyX6zW8AYUxSpbF8/b4c=;
+  b=S8KUzZTTkhpft71Tys57oQG7ZDsANw+ACpKVVM+P1/yyIoMRRR9opLpz
+   TDX6pjpOBF500FA82AjiBtozBZXInEkTmmRMQpnDkTOSIQbRQpShlkYz1
+   LyjT5A61pBFndcEfyprHbOuklYKZPH2J2k/CNsyJgxDLRVgGVJj8PulsU
+   qPvcgkkqAcDxZJMANh1cxCUxxXKEmWAXSKoCn6zdeRMExVlEdg5qfKF26
+   ZKgi2ZSDXKjbNCnxjrK2PNXsdCZ7D4l9sIZtEExuZyqNdxI/WGOq5H52s
+   ebu2jxvA1DPcBENKPNGsL3tYW84fgwnTOiatB5NJ6+VEs6Nzz77nOqBeW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="7171113"
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="7171113"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 21:53:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="854595448"
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="854595448"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Jan 2024 21:53:47 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rPyrx-0001f8-0Q;
+	Wed, 17 Jan 2024 05:53:45 +0000
+Date: Wed, 17 Jan 2024 13:53:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 105/105] fs/ceph/addr.c:901:37: error: no
+ member named 'head_snapc' in 'struct ceph_inode_info'; did you mean
+ 'i_head_snapc'?
+Message-ID: <202401171301.BfWU6V0h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGdbjm+fMBnkKDVFpf-fAEbYxTUWR0od2JzTTbEMoPVS3J_Faw@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On Wed, Jan 17, 2024 at 08:07:49AM +0800, Kevin Loughlin wrote:
-> On Mon, Jan 15, 2024 at 12:47 PM Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > On Thu, Jan 11, 2024 at 10:36:50PM +0000, Kevin Loughlin wrote:
-> > > SEV/SME code can execute prior to page table fixups for kernel
-> > > relocation. However, as with global variables accessed in
-> > > __startup_64(), the compiler is not required to generate RIP-relative
-> > > accesses for SEV/SME global variables, causing certain flavors of SEV
-> > > hosts and guests built with clang to crash during boot.
-> >
-> > So, about that. If I understand my gcc toolchain folks correctly:
-> >
-> > mcmodel=kernel - everything fits into the high 31 bit of the address
-> > space
-> >
-> > -fPIE/PIC - position independent
-> >
-> > And supplied both don't make a whole lotta of sense: if you're building
-> > position-independent, then mcmodel=kernel would be overridden by the
-> > first.
-> >
-> > I have no clue why clang enabled it...
-> >
-> > So, *actually* the proper fix here should be not to add this "fixed_up"
-> > gunk everywhere but remove mcmodel=kernel from the build and simply do
-> > -fPIE/PIC.
-> 
-> I believe that the key distinction is that using mcmodel=kernel (upper
-> 2 GB of address space) or the similar mcmodel=small (lower 2 GB) means
-> the compiler *can* use RIP-relative addressing for globals (because
-> everything is within +/- 2GB of RIP) but is not *required* to do so.
-> In contrast, fPIE/fPIC *requires* relative addressing but does not
-> necessarily require a specific 2 GB placement range. Altogether, I do
-> think there are use cases for both options individually. I can't think
-> of a reason why gcc wouldn't be able to support mcmodel=kernel in
-> conjunction with fPIE off the top of my head, but I admittedly haven't
-> looked into it; I simply observed that the combination is not
-> currently supported.
-> 
-> RE: compiling the whole x86-64 kernel with fPIE/fPIC, I believe the
-> required changes would be very extensive (see "[PATCH RFC 00/43]
-> x86/pie: Make kernel image's virtual address flexible" at
-> https://lore.kernel.org/lkml/cover.1682673542.git.houwenlong.hwl@antgroup.com/).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   2cf82c6e7baf6d3a2adc0692707028da395f1553
+commit: 2cf82c6e7baf6d3a2adc0692707028da395f1553 [105/105] ceph: Use netfslib
+config: i386-buildonly-randconfig-002-20240116 (https://download.01.org/0day-ci/archive/20240117/202401171301.BfWU6V0h-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240117/202401171301.BfWU6V0h-lkp@intel.com/reproduce)
 
-FYI I have sent a small patchset[0] that attempts to build the head code
-(head64.c and mem_encrypt_identity.c) as PIE. However, there are still a
-few functions that are called by the head code but are not in these two
-files.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401171301.BfWU6V0h-lkp@intel.com/
 
-[0] https://lore.kernel.org/lkml/cover.1689130310.git.houwenlong.hwl@antgroup.com
+All error/warnings (new ones prefixed by >>):
+
+>> net/ceph/snapshot.c:40:22: warning: cast from 'void (*)(const void *)' to 'void (*)(struct netfs_group *)' converts to incompatible function type [-Wcast-function-type-strict]
+      40 |         snapc->group.free = (void (*)(struct netfs_group *))kfree;
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+--
+>> fs/ceph/addr.c:547:1: warning: unused label 'out' [-Wunused-label]
+     547 | out:
+         | ^~~~
+>> fs/ceph/addr.c:901:37: error: no member named 'head_snapc' in 'struct ceph_inode_info'; did you mean 'i_head_snapc'?
+     901 |         return netfs_page_mkwrite(vmf, ci->head_snapc);
+         |                                            ^~~~~~~~~~
+         |                                            i_head_snapc
+   fs/ceph/super.h:415:28: note: 'i_head_snapc' declared here
+     415 |         struct ceph_snap_context *i_head_snapc;  /* set if wr_buffer_head > 0 or
+         |                                   ^
+   1 warning and 1 error generated.
+--
+   fs/ceph/crypto.c:545:5: warning: no previous prototype for function 'ceph_fscrypt_decrypt_pages' [-Wmissing-prototypes]
+     545 | int ceph_fscrypt_decrypt_pages(struct inode *inode, struct ceph_databuf *dbuf,
+         |     ^
+   fs/ceph/crypto.c:545:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     545 | int ceph_fscrypt_decrypt_pages(struct inode *inode, struct ceph_databuf *dbuf,
+         | ^
+         | static 
+   fs/ceph/crypto.c:591:5: error: conflicting types for 'ceph_fscrypt_decrypt_extents'
+     591 | int ceph_fscrypt_decrypt_extents(struct inode *inode, struct page **page,
+         |     ^
+   fs/ceph/crypto.h:160:5: note: previous declaration is here
+     160 | int ceph_fscrypt_decrypt_extents(struct inode *inode, struct ceph_databuf *dbuf, u64 off,
+         |     ^
+   fs/ceph/crypto.c:625:44: error: incompatible pointer types passing 'struct page **' to parameter of type 'struct ceph_databuf *' [-Werror,-Wincompatible-pointer-types]
+     625 |                 fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
+         |                                                          ^~~~~~~~~~~~
+   fs/ceph/crypto.c:545:74: note: passing argument to parameter 'dbuf' here
+     545 | int ceph_fscrypt_decrypt_pages(struct inode *inode, struct ceph_databuf *dbuf,
+         |                                                                          ^
+>> fs/ceph/crypto.c:644:35: error: use of undeclared identifier 'op'
+     644 |         struct ceph_sparse_extent *map = op->extent.sparse_ext;
+         |                                          ^
+>> fs/ceph/crypto.c:645:42: error: use of undeclared identifier 'inode'
+     645 |         struct ceph_inode_info *ci = ceph_inode(inode);
+         |                                                 ^
+   fs/ceph/crypto.c:647:16: error: use of undeclared identifier 'op'
+     647 |         u32 ext_cnt = op->extent.sparse_ext_cnt;
+         |                       ^
+>> fs/ceph/crypto.c:671:45: error: use of undeclared identifier 'page'
+     671 |                 fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
+         |                                                           ^
+   fs/ceph/crypto.c:671:37: error: use of undeclared identifier 'inode'
+     671 |                 fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
+         |                                                   ^
+>> fs/ceph/crypto.c:672:8: error: use of undeclared identifier 'off'
+     672 |                                                  off + pgsoff, ext->len);
+         |                                                  ^
+>> fs/ceph/crypto.c:640:5: warning: no previous prototype for function 'ceph_decrypt_block' [-Wmissing-prototypes]
+     640 | int ceph_decrypt_block(struct netfs_io_request *rreq, loff_t pos, size_t len,
+         |     ^
+   fs/ceph/crypto.c:640:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     640 | int ceph_decrypt_block(struct netfs_io_request *rreq, loff_t pos, size_t len,
+         | ^
+         | static 
+>> fs/ceph/crypto.c:686:5: warning: no previous prototype for function 'ceph_encrypt_block' [-Wmissing-prototypes]
+     686 | int ceph_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
+         |     ^
+   fs/ceph/crypto.c:686:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     686 | int ceph_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
+         | ^
+         | static 
+   3 warnings and 8 errors generated.
+--
+   fs/ceph/file.c:1129:44: warning: variable 'pages' is uninitialized when used here [-Wuninitialized]
+    1129 |                         ceph_zero_page_vector_range(zoff, zlen, pages);
+         |                                                                 ^~~~~
+   fs/ceph/file.c:1021:22: note: initialize the variable 'pages' to silence this warning
+    1021 |                 struct page **pages;
+         |                                    ^
+         |                                     = NULL
+>> fs/ceph/file.c:1664:34: error: use of undeclared identifier 'len'
+    1664 |         netfs_subreq_terminated(subreq, len, err);
+         |                                         ^
+>> fs/ceph/file.c:1761:25: error: incompatible pointer types passing 'struct ceph_osd_request *' to parameter of type 'struct netfs_io_subrequest *' [-Werror,-Wincompatible-pointer-types]
+    1761 |                 ceph_upload_to_server(req);
+         |                                       ^~~
+   fs/ceph/file.c:1667:63: note: passing argument to parameter 'subreq' here
+    1667 | static void ceph_upload_to_server(struct netfs_io_subrequest *subreq)
+         |                                                               ^
+   1 warning and 2 errors generated.
+
+
+vim +901 fs/ceph/addr.c
+
+   890	
+   891	/*
+   892	 * Notification that a previously read-only page is about to become writable.
+   893	 * Note that the caller indicates a single page of a multipage folio.
+   894	 */
+   895	static vm_fault_t ceph_page_mkwrite(struct vm_fault *vmf)
+   896	{
+   897		struct ceph_snap_context *snapc;
+   898		struct inode *inode = file_inode(vmf->vma->vm_file);
+   899		struct ceph_inode_info *ci = ceph_inode(inode);
+   900	
+ > 901		return netfs_page_mkwrite(vmf, ci->head_snapc);
+   902	}
+   903	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
