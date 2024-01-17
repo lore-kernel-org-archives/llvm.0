@@ -1,114 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A8622305;
-	Wed, 17 Jan 2024 16:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6732231B;
+	Wed, 17 Jan 2024 17:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705507535; cv=none; b=kjJ0xgD/fHfwVzpMCV1Tmw4fROweGT+N2G7Z+1PjD/vuucXe0hPioUBQRNAl/22K9mCIyZpQ75XjPUDevHFh25GOii6YnV34t+V3qhSG00MLXFDoXf3jh5gkDlhvYUGLEHBvOQMCcEe6DTUAloBtniiHSaj+ftX+cgDSYlrcnrM=
+	t=1705514072; cv=none; b=RZYoA40odagEE4fAmSyCZd/t8cn19GWSzqWwmEsen38LIHohSoWSDjvI+LJmDikgIsNaBTKHF+MB8MzYc8j36im2ok4rnwqzSBo80A5v4Ip1Mk6ZAI+GneGawhpE8lhVjKUwZIJSYktANY1+sKORqIHD4Cr/wNHA19oRD55bz9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705507535; c=relaxed/simple;
-	bh=pEiz2tL8u53kCsBHC+wz183dfYKXhv0Zi1IP8ktIazY=;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:User-Agent; b=bTQ4LTKn9Bwi6M/7IRBojxDG2RvWFbI9ROS1OT1HblZHlcsjKoExiep6x8fz32wf3QoJAVFrwdk94JdUj4hBkj7uliZA1BSJTs9JuHVkfE0wgrht3rGjqvHH6RUBG5AjPLMD7C2Mehb5s4v8NuKyMATSRYjuDGo3dh5Uma53QrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WZJPHtWb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705514072; c=relaxed/simple;
+	bh=dbMqLTHCvUQEZgyJdc7aMfKn0UNVtS6MgrTwWOFFDBw=;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key; b=S/OILYGPMA4+IwCph3aRmZwuh8niE90ueL4CadRNHbJWg++45OwnA50aP1Q+A9THCc2ZS8U8muewzaubIdROL5c9muwdN2gJMe5AD7/xX4ZsegCvUar7P96bzGXhv97Q6G18vGBJCDzA8GmfGGu8Rk4Gq4RhzZRRwpAfSdm8qvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsxjIWJv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WZJPHtWb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9608EC433C7;
-	Wed, 17 Jan 2024 16:05:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsxjIWJv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED7DC433C7;
+	Wed, 17 Jan 2024 17:54:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705507535;
-	bh=pEiz2tL8u53kCsBHC+wz183dfYKXhv0Zi1IP8ktIazY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WZJPHtWb0J8SqGwN3gxE0ekHZEfliftxNwuDadO0dx9f+1UakNDC8vEAcJga5RGuS
-	 TvFe0kZRcV2JcBQxWEo6ujo9hd+OmF6X01WdtVQ1jCXy+lOlu51iTSUtmooVyq50/t
-	 8EJ3Q28yzIZHbsHPEplgyQQ8JDix487p4RaWWqCV7QQ6HSBVSBR2OKqWfc5DdzekJm
-	 M0gntltklOG2oQU5xWu1BSSwncOGGNyVpavROuo+kIPYCWEJtIdFx2NOKVg/ZYbe2m
-	 9xJnPGuKMYCzfy8tVrtwRzs6Mt+7DPR8eCG8dxn91OVZLlfWkmasqja3x+fo2uKRkB
-	 7proGVAMDnyKg==
-Date: Wed, 17 Jan 2024 16:05:29 +0000
-From: Will Deacon <will@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <20240117160528.GA3398@willie-the-truck>
-References: <ZW9cF0ALVwgvcQMy@arm.com>
- <20231205175127.GJ2692119@nvidia.com>
- <ZW97VdHYH3HYVyd5@arm.com>
- <20231205195130.GM2692119@nvidia.com>
- <ZXBWXodu2rxQ7Szz@arm.com>
- <20231206125919.GP2692119@nvidia.com>
- <20240116185121.GB980613@nvidia.com>
- <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
- <ZaffFMJy8cHOvtu8@FVFF77S0Q05N.cambridge.arm.com>
- <20240117152822.GI734935@nvidia.com>
+	s=k20201202; t=1705514072;
+	bh=dbMqLTHCvUQEZgyJdc7aMfKn0UNVtS6MgrTwWOFFDBw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=EsxjIWJv9Hb8/SaXztw8GyNCMclrBRYm34rPmI/X2sZwyzJ9NO+QT/S41fB18AYBp
+	 WiY3NSoi8oBGhiw0VCRT3xz6jZnrJhiabPxtlYaYCOpT8Iqs3RyMKUKSkAPiw8bj/C
+	 d70nbdz9JGjbbnW9HXASEjewPA2ZvfTKAdzLVvXMUx7HOUq9jwnvwt38/fRTck8aG7
+	 HwJbX9Upaoim+MYoag0MQPbxCSxH+huIk50h8iVNrPr2TLfWFouoyNasCvZTQhwr0B
+	 Vz5vPtJAqFK90NHULEqZ3DHDCt58KQQO2vF3jpaKU9PweeoQFFIQlP67pVnoGFy+K7
+	 Xvyoq/SPYZnGA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 17 Jan 2024 10:54:16 -0700
+Subject: [PATCH] rtc: max31335: Fix comparison in max31335_volatile_reg()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240117152822.GI734935@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240117-rtc-max3133-fix-comparison-v1-1-91e98b29d564@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAEcUqGUC/x3MQQqAIBBA0avErBvQNIuuEi3EpppFGmNEEN09a
+ fng8x/IJEwZhuoBoYszp1ig6wrC5uNKyHMxNKqxSusO5Qy4+9toY3DhG0PaDy+cU0TXkl186Ml
+ YB2VwCJXin4/T+35h2OEebAAAAA==
+To: antoniu.miclaus@analog.com, alexandre.belloni@bootlin.com
+Cc: linux@roeck-us.net, linux-rtc@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1717; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=dbMqLTHCvUQEZgyJdc7aMfKn0UNVtS6MgrTwWOFFDBw=;
+ b=kA0DAAoWHWsmkXHAGpYByyZiAGWoFFejgYO/Iav26s0knPaZdfUEudYrzOsicnqqtw+lTa1u1
+ Ih1BAAWCgAdFiEEe+MlxzExnM0B2MqSHWsmkXHAGpYFAmWoFFcACgkQHWsmkXHAGpaALQEA8n7L
+ v8RJ/d0dghwUZQhvBYSRhbQSOQWLPSmzZnB/1Y4A/3+ljUg0n27fYqtzC7tdJOmZKD+CMBKT3ke
+ U0tt7JjAG
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, Jan 17, 2024 at 11:28:22AM -0400, Jason Gunthorpe wrote:
-> On Wed, Jan 17, 2024 at 02:07:16PM +0000, Mark Rutland wrote:
-> 
-> > > I believe this is for the same reason as doing so in all of our other IO
-> > > accessors.
-> > > 
-> > > We've deliberately ensured that our IO accessors use a single base register
-> > > with no offset as this is the only form that HW can represent in ESR_ELx.ISS.SRT
-> > > when reporting a stage-2 abort, which a hypervisor may use for emulating IO.
-> > 
-> > FWIW, IIUC the immediate-offset forms *without* writeback can still be reported
-> > usefully in ESR_ELx, so I believe that we could use the "o" constraint for the
-> > __raw_write*() functions, e.g.
-> > 
-> > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
-> > {
-> > 	asm volatile("str %x0, %1" : : "rZ" (val), "o" (*(volatile u64 *)addr));
-> > }
-> 
-> "o" works well in the same simple memcpy loop:
-> 
->         add     x2, x1, w2, uxtw 3
->         cmp     x1, x2
->         bcs     .L1
-> .L3:
->         ldp     x10, x9, [x1]
->         ldp     x8, x7, [x1, 16]
->         ldp     x6, x5, [x1, 32]
->         ldp     x4, x3, [x1, 48]
->         str x10, [x0]
->         str x9, [x0, 8]
->         str x8, [x0, 16]
->         str x7, [x0, 24]
->         str x6, [x0, 32]
->         str x5, [x0, 40]
->         str x4, [x0, 48]
->         str x3, [x0, 56]
->         add     x1, x1, 64
->         add     x0, x0, 64
->         cmp     x2, x1
->         bhi     .L3
-> .L1:
->         ret
-> 
-> Seems intersting to pursue?
+Clang warns (or errors with CONFIG_WERROR=y):
 
-I've seen the compiler struggle with plain "o" in the past ("Impossible
-constraint in asm") so we might want "Qo" if we go down this route.
+    drivers/rtc/rtc-max31335.c:211:36: error: use of logical '||' with constant operand [-Werror,-Wconstant-logical-operand]
+      211 |         if (reg == MAX31335_TEMP_DATA_MSB || MAX31335_TEMP_DATA_LSB)
+          |                                           ^  ~~~~~~~~~~~~~~~~~~~~~~
+    drivers/rtc/rtc-max31335.c:211:36: note: use '|' for a bitwise operation
+      211 |         if (reg == MAX31335_TEMP_DATA_MSB || MAX31335_TEMP_DATA_LSB)
+          |                                           ^~
+          |                                           |
+    1 error generated.
 
-Will
+This clearly should be a comparison against reg. Fix the comparison so
+that max31335_volatile_reg() does not always return true.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1980
+Fixes: dedaf03b99d6 ("rtc: max31335: add driver support")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/rtc/rtc-max31335.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
+index 3ddfe71bbb56..565d4c9ee399 100644
+--- a/drivers/rtc/rtc-max31335.c
++++ b/drivers/rtc/rtc-max31335.c
+@@ -208,7 +208,7 @@ static bool max31335_volatile_reg(struct device *dev, unsigned int reg)
+ 		return true;
+ 
+ 	/* temperature registers */
+-	if (reg == MAX31335_TEMP_DATA_MSB || MAX31335_TEMP_DATA_LSB)
++	if (reg == MAX31335_TEMP_DATA_MSB || reg == MAX31335_TEMP_DATA_LSB)
+ 		return true;
+ 
+ 	return false;
+
+---
+base-commit: dedaf03b99d6561fae06457fd7fc2b0aa154d003
+change-id: 20240117-rtc-max3133-fix-comparison-65e4fac8e346
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
