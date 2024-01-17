@@ -1,118 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62805C8DE;
-	Wed, 17 Jan 2024 11:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F741DFC4;
+	Wed, 17 Jan 2024 11:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705491062; cv=none; b=Lh1MAbk6ZM7Eq/kfmMVc2b4lF/uX9KP/NvKlSQ850c95wcjE54czu/aFBseDD2c6PWzVmNlxq7s3Wl8T9TNLNtVK3QOJ5kZiwwwfGQCIDlfW5I1tnOs0mg3/njR+X5DwmX0IT1ohqfgVJLnOgrlYpBRukcNtVKit1BgYvG1D1to=
+	t=1705491564; cv=none; b=X/rj/nD9fbSZwkm2a+ZsWaHmZKXiY5eurIjTPfmHe0oprn1KEzRK06MXMKAwWDyJGYX/Xe2dStOxjoXFA3R2nA4NXuieO5CKh+mBtg/qp8aUT5wVrLvjw1DuDkrRRSOwiJVoU4ffb50Gcm4QUoDFDQnynjd3GczDTGMLDFnjQQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705491062; c=relaxed/simple;
-	bh=W+4VwuyRcYhhV7162/K5rb8MKqw/7UZiD1PRcLyA8Fk=;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To; b=CFz9E5y4ta0rMRMuO9nEyllEZ8m4Q+EDrKIUSwQTkhsqcYsRqMLAkc2dRz4DHlnkDzj8XcBnplrjt1+jjwuMWAa+7xTDjCpsXPCs1t50QOLC0N+ispSV68RL9Wipf09lwB+yd/QJaRkVx5xrrGFPT4W2kox6qxHTXJdjqe15Vwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3Pxe78I; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705491564; c=relaxed/simple;
+	bh=43UGfCDdEvCVvDsN7X8nURLg41bNrqQt/4NRXB+ssjk=;
+	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
+	 X-IronPort-AV:X-IronPort-AV:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=SydoRg7Yb+fLXU6OeED2jP0N/qjyEKEmvJ7WrJI1b+2uvPt0pcEd6ocHp4KQY/ykJMV/s8g/cmrLe9bPDVldJH1lA6cLkg/YWx6L/Pjs6gDnY9isC+lPe2LEprC5OauviYMSzjRktYtZ4yEZzGQnf/eA7P1EO8hPAdV1anTxI94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CBeu9/3O; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3Pxe78I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F35EC433C7;
-	Wed, 17 Jan 2024 11:30:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705491061;
-	bh=W+4VwuyRcYhhV7162/K5rb8MKqw/7UZiD1PRcLyA8Fk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X3Pxe78INo0ZCxa0lyRMprtUGrriYUvVYuWXJfV4Oc+VoL0I4bLN36FsDknC7YnGX
-	 +rIH5fU+7Xfk9MdPjHYyIyExjHbZGbrnE7eaGXQdwkKx77v0kRDw8Ghm02gyv/XBJr
-	 KLppLKaA8MUHaFryoz9AAu6hw7Neuu4lkx5NKwdfOhjkMcd24mMNPgAOau0UhFhzYk
-	 kola7qJeQyTTS8bNAsC1n+ODNhmHi0enOkVATQDzN4q92kd2X7VkA1pQ6wog4c0XO5
-	 uBWCf94jaO4uJO3B9VibzFxdnxGV0WbcOWze50rPEraEgYtshEDUerZWOy6Scfs1Zx
-	 8u15hC/eTFf9g==
-Date: Wed, 17 Jan 2024 11:30:56 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CBeu9/3O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705491562; x=1737027562;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=43UGfCDdEvCVvDsN7X8nURLg41bNrqQt/4NRXB+ssjk=;
+  b=CBeu9/3OWQHZdTs7/cc6uMR6YrJE31OZscJdZTj6/xrkF1jU3enYfRUQ
+   Qjd+aDjV4T3CGyyjjqElzXd+A/kJoAMF99OR6ImQOV9Vi6HvS0MGiV/96
+   uUh30XqED/UJ/nbGL7AotRUP32akORO5cG1zLAxfMdJYJUcI6e9xamMXr
+   wVwwYlYmeS9q6W1IkZ+HAg575VmQ1sLxH1yiFUdKIl4II/iJABCkxmHsb
+   tROROlhnWEpaDGc01qbZiO1ESAZoUVKhsxeIYxaDu0uVMtSFfVcCh3lFF
+   57IF913uuYI3eo8m1FNpX17kH1ayzEBMhs2E8Ixxg2qwoG81q6nYgGYPJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="13501545"
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="13501545"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 03:39:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="1115654340"
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="1115654340"
+Received: from tassilo.jf.intel.com (HELO tassilo) ([10.54.38.190])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 03:39:18 -0800
+Date: Wed, 17 Jan 2024 03:39:16 -0800
+From: Andi Kleen <ak@linux.intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-Message-ID: <20240117-swiftly-parasail-618d62972d6e@spud>
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
- <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
- <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Michael Kelley <mikelley@microsoft.com>,
+	Pankaj Gupta <pankaj.gupta@amd.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Steve Rutherford <srutherford@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Hou Wenlong <houwenlong.hwl@antgroup.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Wang Jinchao <wangjinchao@xfusion.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>,
+	Joerg Roedel <jroedel@suse.de>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Brijesh Singh <brijesh.singh@amd.com>,
+	Michael Roth <michael.roth@amd.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>,
+	Adam Dunlap <acdunlap@google.com>, Peter Gonda <pgonda@google.com>,
+	Jacob Xu <jacobhxu@google.com>,
+	Sidharth Telang <sidtelang@google.com>
+Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+Message-ID: <Zae8ZKTpcN_BzaqU@tassilo>
+References: <ZZ7YuEexYSaZYmLK@tassilo>
+ <20240111223650.3502633-1-kevinloughlin@google.com>
+ <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
+ <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="6PVvLnZRvsd/2E7w"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
+In-Reply-To: <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
 
+On Wed, Jan 17, 2024 at 11:59:14AM +0100, Ard Biesheuvel wrote:
+> On Mon, 15 Jan 2024 at 21:47, Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > On Thu, Jan 11, 2024 at 10:36:50PM +0000, Kevin Loughlin wrote:
+> > > SEV/SME code can execute prior to page table fixups for kernel
+> > > relocation. However, as with global variables accessed in
+> > > __startup_64(), the compiler is not required to generate RIP-relative
+> > > accesses for SEV/SME global variables, causing certain flavors of SEV
+> > > hosts and guests built with clang to crash during boot.
+> >
+> > So, about that. If I understand my gcc toolchain folks correctly:
+> >
+> > mcmodel=kernel - everything fits into the high 31 bit of the address
+> > space
+> >
+> > -fPIE/PIC - position independent
+> >
+> > And supplied both don't make a whole lotta of sense: if you're building
+> > position-independent, then mcmodel=kernel would be overridden by the
+> > first.
+> >
+> > I have no clue why clang enabled it...
+> >
+> > So, *actually* the proper fix here should be not to add this "fixed_up"
+> > gunk everywhere but remove mcmodel=kernel from the build and simply do
+> > -fPIE/PIC.
 
---6PVvLnZRvsd/2E7w
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For the SEV file this might not work because it also has functions
+that get called later at runtime, and may need to reference real
+globals. I doubt the linker could resolve that.
 
-Palmer, Miguel, Nathan, etc
+For linking the whole kernel, I haven't seen the latest numbers, but
+traditionally -fPIE/PIC cost some performance because globals get loaded
+through the GOT instead of directly as immediates. That's why the original
+x86-64 port went with -mcmodel=kernel.
 
-On Thu, Jun 08, 2023 at 01:28:06PM +0100, Conor Dooley wrote:
-> On Thu, Jun 08, 2023 at 01:52:47PM +0200, Miguel Ojeda wrote:
-> > On Thu, Jun 8, 2023 at 9:01=E2=80=AFAM Conor Dooley <conor.dooley@micro=
-chip.com> wrote:
-> > >
-> > > I do intend revisting this, probably after the min. version for rust
-> > > gets bumped, I've just been really busy with other work the last week=
-s.
-> >=20
-> > Thanks Conor! That would be great. We are increasing the minimum
-> > version after the merge window to Rust 1.70.0 (assuming no unexpected
-> > issues).
->=20
-> Right, so probably I won't resubmit anything until after v6.6 then,
-> as it won't be in the RISC-V tree until then, by the sounds of your
-> timeline.
-> Gives me plenty of time to try and unravel the mess of libclang versions
-> and what extensions are supported by each tool. Not like I am devoid of
-> other things that need to be done!
+Of course for the startup code it doesn't matter, but it might make
+a difference for hot path code.
 
-6.6 came and went, and I have been busy dealing with the other
-responsibilities I mentioned and have not had a chance to look here.
-I rebased this today and things still work as they did when I submitted
-this version, but things have gotten muddier on the LLVM side of things,
-as more recent versions have added yet more extension support.
+> >
+> 
+> Fully agree. All this fiddling with RIP relative references from C
+> code is going to be a maintenance burden going forward.
 
-My inclination at this point is to engage in a bit of LARPing as an
-ostrich, and sorta ignore these concerns initially. Specifically, I'd
-like to drop the idea of having the gcc support, and restrict to LLVM=3D1.
-When it comes to asymmetrical extension support between the C and Rust
-toolchains, I'm think we deal with that as we do for the C toolchains,
-sort issues out as-and-when they arrive rather than punt this again.
+IIC it's only a few functions in this case, so it shouldn't be that bad.
+The early x86 startup code has a few other areas with odd restrictions,
+so it's not unprecedented.
 
-Thoughts?
-
---6PVvLnZRvsd/2E7w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZae6bwAKCRB4tDGHoIJi
-0gSBAQDo38W6PTOrInEpd47uC6oQIYUvHH1KsraF+Ue8d+OddAD/RgFhSo1LMWe7
-a3i/SbsjnIVdYUqCgcwThIIhp9U8bwA=
-=271/
------END PGP SIGNATURE-----
-
---6PVvLnZRvsd/2E7w--
+-Andi
