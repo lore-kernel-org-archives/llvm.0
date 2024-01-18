@@ -1,109 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468AA2E403;
-	Thu, 18 Jan 2024 19:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D542E836
+	for <llvm@lists.linux.dev>; Thu, 18 Jan 2024 20:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705605633; cv=none; b=FCCSa3AT9fn0uaLpohDbEYaHieIo4tc+Rx4dGZUr2Hllz7t1bdMdhbWWhbRV5KtJEhkSURH+2//V53r+zge4kc9JYNWkqh93V+ensBjsb6yjBYOkI4y6UM0UZCSeuvCKovyhWkEhKQXupKHazwSTKrQZtnCMjOVwp4cHW4rxv70=
+	t=1705610604; cv=none; b=M/fHnigLlHD82KS3WzF6heWl0bDZHXFQmx2XwQSl9HkoOB/oihhV5Q7ZEOQski2qBnXcwhzcFfBbW01p9doFnpOCq0yrPXtsTYancktL9LTxI0eNhm8aO+318WRlpZOGfQjjPZxlNnFIKUtG9Q6et0vSKu6sj3n8WgwScmGZJ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705605633; c=relaxed/simple;
-	bh=u+bu6fIJe+t2MgzzScAtPgl/Hj2C0V2CPgxfr6S27Zc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Y+E32mmDwGDM0M2ZRK3EpRYfMLQPmnuQDhlwFbJFWqEWBMAu1UZ6UZFba93aR4kHSfA6tw9gVPGFQBIY5pa4yQQtkLfReR1tsRDFzAYbzBx2R74ETkHJVxOx0FZxloHPr4snHQ4hqllnI+TGXQzbxKeWlBGfrlbtNTqNATUMbdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fh4Vsa62; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1705610604; c=relaxed/simple;
+	bh=si1Ui22ll5G3lFse8vth01kcs8pZT/4Keb7YoTaw4FU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OWEMSducdm4ATY+QAU/43FZ3BwKuHPfJMUg/BFPDnkTG2ustX000XGHJkX2CdROecpYTO70TuKcyjAHQc/pTu3G0W0fTEN/+gmXXOP0VuZ6bIyY/H68gQXUlB+883Z9KRevQQQiBvkePXaeQpOlSGMRP+YT3x+DwKzktWTOLCiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ScCGN2u+; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fh4Vsa62"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705605630; x=1737141630;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u+bu6fIJe+t2MgzzScAtPgl/Hj2C0V2CPgxfr6S27Zc=;
-  b=Fh4Vsa621lkLSPU8A/lfmCTf0H0F2TUhI2hV+qD/3MtZoaqQ75cuk1Sj
-   4fHoRed5644PCYndth+SfcQsRomEed7WNzqrfW85w1u5i18IvSDTSrJXH
-   uM//q8FcGRHkQ1u3TyHPDWmd7nsF44unailHOxThpORlSKgNwM7QHHxcJ
-   nLYIfJErtXVqkfZQQ9r0114NabKF/u0MNwe/ixIpWVBpcZXQhXKqQZW5y
-   M6TetzIMFntzoND7Z32EiJDBYnfYbg4b+5WWtH327P4g8cyfDcmxEWoiA
-   BADXoz50AcUu+KtXPvn+Zf4Ql3CCqZCm1Wr+64I3Aqgw29ddcMPmdim9R
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="13904416"
-X-IronPort-AV: E=Sophos;i="6.05,203,1701158400"; 
-   d="scan'208";a="13904416"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2024 11:20:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="818865239"
-X-IronPort-AV: E=Sophos;i="6.05,203,1701158400"; 
-   d="scan'208";a="818865239"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 18 Jan 2024 11:20:28 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rQXwA-0003GG-14;
-	Thu, 18 Jan 2024 19:20:26 +0000
-Date: Fri, 19 Jan 2024 03:20:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [krzk-github:n/audio-sm8650-on-neil-codelinaro-topic-sm8650-upstream-integ
- 15603/15673] arch/arm/include/asm/memory.h:15:2: error: "Do not include
- <asm/memory.h> directly"
-Message-ID: <202401190310.kzCMliSq-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ScCGN2u+"
+Message-ID: <036fb42d-a104-4f4e-a66d-1bc1fe17835e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1705610600;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7coExLm/dMM5fu/UmGFQt9I4AbmJQqAbogUfxuBo2jk=;
+	b=ScCGN2u+rK/Y6mv0kaKuWfLrMkrwTBACU5/LSob9eyAS5NqcC+g0yx7DiPU+x6vGjKiO+n
+	KEzD4NAjyNtQyeu/LHcsQZ3zeb2lc/D+RFsWPEkJfUDvDSTFcn+qcD6yis077i50XnSyr/
+	Q/wFZHpyNM+sna840DTUppeU38063cU=
+Date: Thu, 18 Jan 2024 12:43:14 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: Re: [bpf-next:master 32/36] net/core/filter.c:11842:13: warning:
+ declaration of 'struct bpf_tcp_req_attrs' will not be visible outside of this
+ function
+Content-Language: en-US
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Martin KaFai Lau <martin.lau@kernel.org>, kernel test robot <lkp@intel.com>
+References: <202401180418.CUVc0hxF-lkp@intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <202401180418.CUVc0hxF-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://github.com/krzk/linux n/audio-sm8650-on-neil-codelinaro-topic-sm8650-upstream-integ
-head:   5cac1bb64a0300d340c5e369489c731b30aa5e79
-commit: e21b73fba00f3539873c978ceaa948061687684f [15603/15673] spmi: pmic-arb: Add support for multi-master
-config: arm-randconfig-002-20240118 (https://download.01.org/0day-ci/archive/20240119/202401190310.kzCMliSq-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d92ce344bf641e6bb025b41b3f1a77dd25e2b3e9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240119/202401190310.kzCMliSq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401190310.kzCMliSq-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/spmi/spmi-pmic-arb.c:5:
->> arch/arm/include/asm/memory.h:15:2: error: "Do not include <asm/memory.h> directly"
-      15 | #error "Do not include <asm/memory.h> directly"
-         |  ^
->> arch/arm/include/asm/memory.h:299:36: error: use of undeclared identifier 'PAGE_SHIFT'
-     299 |         return (((kaddr - PAGE_OFFSET) >> PAGE_SHIFT) +
-         |                                           ^
-   arch/arm/include/asm/memory.h:300:3: error: use of undeclared identifier 'PAGE_SHIFT'
-     300 |                 PHYS_PFN_OFFSET);
-         |                 ^
-   arch/arm/include/asm/memory.h:282:57: note: expanded from macro 'PHYS_PFN_OFFSET'
-     282 | #define PHYS_PFN_OFFSET ((unsigned long)(PHYS_OFFSET >> PAGE_SHIFT))
-         |                                                         ^
-   3 errors generated.
+On 1/17/24 12:10 PM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> head:   be7c19de9ecf4d93a9908003a1a3b8f1e8f8a672
+> commit: b9c3eca5c086eb65f20ad92fe3aa3d556f23103b [32/36] bpf: tcp: Support arbitrary SYN Cookie.
+> config: i386-randconfig-011-20240117 (https://download.01.org/0day-ci/archive/20240118/202401180418.CUVc0hxF-lkp@intel.com/config)
+> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240118/202401180418.CUVc0hxF-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202401180418.CUVc0hxF-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> net/core/filter.c:11842:13: warning: declaration of 'struct bpf_tcp_req_attrs' will not be visible outside of this function [-Wvisibility]
+>      11842 |                                         struct bpf_tcp_req_attrs *attrs, int attrs__sz)
+>            |                                                ^
+>     1 warning generated.
 
 
-vim +15 arch/arm/include/asm/memory.h
+Hi Kuniyuki,
 
-^1da177e4c3f41 include/asm-arm/memory.h      Linus Torvalds 2005-04-16  13  
-a9ff6961601d9a arch/arm/include/asm/memory.h Linus Walleij  2022-06-02  14  #ifndef _ASMARM_PAGE_H
-a9ff6961601d9a arch/arm/include/asm/memory.h Linus Walleij  2022-06-02 @15  #error "Do not include <asm/memory.h> directly"
-a9ff6961601d9a arch/arm/include/asm/memory.h Linus Walleij  2022-06-02  16  #endif
-a9ff6961601d9a arch/arm/include/asm/memory.h Linus Walleij  2022-06-02  17  
+This looks different from the other kfunc compiler warnings. Can you take a look?
 
-:::::: The code at line 15 was first introduced by commit
-:::::: a9ff6961601d9aa0c42b6eb7d850371f31b1f5e6 ARM: mm: Make virt_to_pfn() a static inline
+Thanks,
+Martin
 
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> 
+> vim +11842 net/core/filter.c
+> 
+>   11840	
+>   11841	__bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct sk_buff *skb, struct sock *sk,
+>   11842						struct bpf_tcp_req_attrs *attrs, int attrs__sz)
+>   11843	{
+>   11844	#if IS_ENABLED(CONFIG_SYN_COOKIES)
+>   11845		const struct request_sock_ops *ops;
+>   11846		struct inet_request_sock *ireq;
+>   11847		struct tcp_request_sock *treq;
+>   11848		struct request_sock *req;
+>   11849		struct net *net;
+>   11850		__u16 min_mss;
+>   11851		u32 tsoff = 0;
+>   11852	
+>   11853		if (attrs__sz != sizeof(*attrs) ||
+>   11854		    attrs->reserved[0] || attrs->reserved[1] || attrs->reserved[2])
+>   11855			return -EINVAL;
+>   11856	
+>   11857		if (!skb_at_tc_ingress(skb))
+>   11858			return -EINVAL;
+>   11859	
+>   11860		net = dev_net(skb->dev);
+>   11861		if (net != sock_net(sk))
+>   11862			return -ENETUNREACH;
+>   11863	
+>   11864		switch (skb->protocol) {
+>   11865		case htons(ETH_P_IP):
+>   11866			ops = &tcp_request_sock_ops;
+>   11867			min_mss = 536;
+>   11868			break;
+>   11869	#if IS_BUILTIN(CONFIG_IPV6)
+>   11870		case htons(ETH_P_IPV6):
+>   11871			ops = &tcp6_request_sock_ops;
+>   11872			min_mss = IPV6_MIN_MTU - 60;
+>   11873			break;
+>   11874	#endif
+>   11875		default:
+>   11876			return -EINVAL;
+>   11877		}
+>   11878	
+>   11879		if (sk->sk_type != SOCK_STREAM || sk->sk_state != TCP_LISTEN ||
+>   11880		    sk_is_mptcp(sk))
+>   11881			return -EINVAL;
+>   11882	
+>   11883		if (attrs->mss < min_mss)
+>   11884			return -EINVAL;
+>   11885	
+>   11886		if (attrs->wscale_ok) {
+>   11887			if (!READ_ONCE(net->ipv4.sysctl_tcp_window_scaling))
+>   11888				return -EINVAL;
+>   11889	
+>   11890			if (attrs->snd_wscale > TCP_MAX_WSCALE ||
+>   11891			    attrs->rcv_wscale > TCP_MAX_WSCALE)
+>   11892				return -EINVAL;
+>   11893		}
+>   11894	
+>   11895		if (attrs->sack_ok && !READ_ONCE(net->ipv4.sysctl_tcp_sack))
+>   11896			return -EINVAL;
+>   11897	
+>   11898		if (attrs->tstamp_ok) {
+>   11899			if (!READ_ONCE(net->ipv4.sysctl_tcp_timestamps))
+>   11900				return -EINVAL;
+>   11901	
+>   11902			tsoff = attrs->rcv_tsecr - tcp_ns_to_ts(attrs->usec_ts_ok, tcp_clock_ns());
+>   11903		}
+>   11904	
+>   11905		req = inet_reqsk_alloc(ops, sk, false);
+>   11906		if (!req)
+>   11907			return -ENOMEM;
+>   11908	
+>   11909		ireq = inet_rsk(req);
+>   11910		treq = tcp_rsk(req);
+>   11911	
+>   11912		req->rsk_listener = sk;
+>   11913		req->syncookie = 1;
+>   11914		req->mss = attrs->mss;
+>   11915		req->ts_recent = attrs->rcv_tsval;
+>   11916	
+>   11917		ireq->snd_wscale = attrs->snd_wscale;
+>   11918		ireq->rcv_wscale = attrs->rcv_wscale;
+>   11919		ireq->tstamp_ok	= !!attrs->tstamp_ok;
+>   11920		ireq->sack_ok = !!attrs->sack_ok;
+>   11921		ireq->wscale_ok = !!attrs->wscale_ok;
+>   11922		ireq->ecn_ok = !!attrs->ecn_ok;
+>   11923	
+>   11924		treq->req_usec_ts = !!attrs->usec_ts_ok;
+>   11925		treq->ts_off = tsoff;
+>   11926	
+>   11927		skb_orphan(skb);
+>   11928		skb->sk = req_to_sk(req);
+>   11929		skb->destructor = sock_pfree;
+>   11930	
+>   11931		return 0;
+>   11932	#else
+>   11933		return -EOPNOTSUPP;
+>   11934	#endif
+>   11935	}
+>   11936	
+> 
+
