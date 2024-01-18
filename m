@@ -1,162 +1,157 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610FD24B42
-	for <llvm@lists.linux.dev>; Thu, 18 Jan 2024 13:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD66D24B42;
+	Thu, 18 Jan 2024 13:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705585633; cv=none; b=p8J94ocVuA1VCOPpTyxmpydsViXFJhucl+83CGHYgdSdUxc0L+Zy+DCJC17Evbf7TQDZUAv/GRyd/zj2NTLi2/yRIgnjme3qDvoAj5NewDVbvTcL9rAHxxtwFyD2GqpXPk1wCwu1lrOqAXHiBWqBDvXzeWVST+tBkEuwaUC1ueo=
+	t=1705585701; cv=none; b=iWVzVUcaVZbvgkMXEWDGrAQwdpDvt2mmDLi05dGxcFBr582gMMQwTYXgHUXqO4/mZtPpaNm5FgcrxH7D/+5JMRMVmkunCER6tKX5j4J5V7MmGZp9V8xVgtWaS/sffTSzQIpgZfBe3QD7PM8nifEZVgf6fHMpQR1C5J7Kv4gbCM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705585633; c=relaxed/simple;
-	bh=yhvbzKUibWKVUNxxEsACD0oYV+t4iFRjI1iDuZaqa9Y=;
-	h=Received:DKIM-Signature:Received:Received:Received:Received:
-	 Received:Received:Received:Received:Received:Message-ID:Subject:
-	 From:To:Cc:Date:In-Reply-To:References:Autocrypt:Content-Type:
-	 Content-Transfer-Encoding:User-Agent:MIME-Version:X-TM-AS-GCONF:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details; b=nzwVU+SuWhAhdcXISjeQV2IeRKXopVAbnWhtoMQ8pKbaZoF+MD/ou2imkPgowsTTXP1tACXcbX/G11/fqVp8itGsGUwV/Awd7au5O9f9dwUy00HBb+JWp4372rz5frqxQ/9XUpA4N/+5lw0ODvTSo0It2GhPNnhvlepVOnLnooU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ff0hhbSd; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1705585701; c=relaxed/simple;
+	bh=O/KCkuFCdvv/C/B+O90MD08CFcb8Hpt4zZkI47dp6+o=;
+	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
+	 X-IronPort-AV:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 MIME-Version:Content-Type:Content-Disposition; b=clznJoZc6jIQlnitVkfCL9zxWzoUCW45qZEWD0UTu6WDrN6uhtfWnde8wWxF1lYJqQ5AEWRYlJ7Oac6bI4EkGKv6LNxynHwWQ4JkY/84QDF+j5xDFR08EDECopXhdB5DGf35UNEhsx8Qf2PPwfjtdG/NT/RVc3NVl6206o3sWb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fVXK7Bkq; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ff0hhbSd"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40IDbdqf010257;
-	Thu, 18 Jan 2024 13:46:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=6W9BABLuWCBpGq/Ar0P+moZ8aKpEJ+HMWlgdNtZQdXU=;
- b=Ff0hhbSd7pzbhW6eXQBRXOTNaDAAa54altpGlJmFYHWDDryukfocBjP1zM0JpGO4ynAU
- jhWX8kUH9e88c8bMigwa8f1i0d5pQQRFCDzF6m1cuui7XxiuKhCRtlzGgLoqXnCLeHLg
- Ry7jBW53F9WEorByQj6DXUmnEYdYoNNrT4378us5emyUNlMShUnZFK8WJUWXnz3Jndoy
- EjfPPNIaTRb6Gx013pIhB+PU+3OP2ZKqUuES2wCZZBNU2/u+XXs9ySdWIqzKLxq84HjB
- zVYzozyvpoXmDD7evHZld+WHhYgmyz45EMpvbgU+ixxz+weSN5TqXqgTh4skZAC0RBGB 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vq51cr8ct-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Jan 2024 13:46:44 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40IDdhVE018326;
-	Thu, 18 Jan 2024 13:46:44 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vq51cr8bv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Jan 2024 13:46:44 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40IAYgCu011004;
-	Thu, 18 Jan 2024 13:46:42 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vm57yusxt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Jan 2024 13:46:42 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40IDkeKB43647232
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 18 Jan 2024 13:46:40 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C0CA32004E;
-	Thu, 18 Jan 2024 13:46:40 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 632D820040;
-	Thu, 18 Jan 2024 13:46:40 +0000 (GMT)
-Received: from [9.152.212.236] (unknown [9.152.212.236])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 18 Jan 2024 13:46:40 +0000 (GMT)
-Message-ID: <8e043042f425b4c574d1d3c3ed686253c8cd3517.camel@linux.ibm.com>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-From: Niklas Schnelle <schnelle@linux.ibm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-rdma@vger.kernel.org,
-        llvm@lists.linux.dev, Michael Guralnik <michaelgur@mellanox.com>,
-        Nathan
- Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>, Gerd Bayer <gbayer@linux.ibm.com>
-Date: Thu, 18 Jan 2024 14:46:40 +0100
-In-Reply-To: <20240117175518.GJ734935@nvidia.com>
-References: <14103e31e0c47c0594e7479126ce7fe34f2de467.camel@linux.ibm.com>
-	 <20231124145529.GG436702@nvidia.com>
-	 <b3250b9a9af2f29ee3d06830746fb6e8ac49271d.camel@linux.ibm.com>
-	 <20231124160627.GH436702@nvidia.com>
-	 <637dcc4d69c380bd939dfdd1b14a5c82c2ddfaa4.camel@linux.ibm.com>
-	 <20231127175115.GC1165737@nvidia.com>
-	 <002043477bba726f7dfb38573bf33990e38e3a51.camel@linux.ibm.com>
-	 <20240116173330.GA980613@nvidia.com>
-	 <ddd56db15bd2c87073a2f839e06cdb80d693272c.camel@linux.ibm.com>
-	 <20240117132613.GH734935@nvidia.com> <20240117175518.GJ734935@nvidia.com>
-Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 (3.50.2-1.fc39) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fVXK7Bkq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705585700; x=1737121700;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O/KCkuFCdvv/C/B+O90MD08CFcb8Hpt4zZkI47dp6+o=;
+  b=fVXK7BkqHXfuVcdNDobR2ppFBNj+ZXhIfodMB1lNo64OHiCEEmX4+odp
+   ST8Dxt99JRGNbSaCMMhS7xF/OQGD/K2lkswxH1Np6j4CtkfDYcMNEE+pS
+   9aZH4f5fGYX26FAuMLTNZVgl/Qhhj6tdEqt82FMx/GU5CfGBGAPUxpDbD
+   GIfM6QiDRR604RFr7Uf2Szg49987BT1aO3TGXbhS1Yy94er3jJt4vJTJH
+   UdvXMl4eS0Lu8loAcmbJfu5PptarJnPCOHLI/A0ej1UchVauN074qd7Jd
+   5j0a5LqsuYpO4/eSAslmkuEHBHYM7YjkqaO08L3ZcsqWqQMKljhPQ99ss
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="7826220"
+X-IronPort-AV: E=Sophos;i="6.05,201,1701158400"; 
+   d="scan'208";a="7826220"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2024 05:48:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,201,1701158400"; 
+   d="scan'208";a="26769984"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 18 Jan 2024 05:48:17 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rQSkh-00031I-0p;
+	Thu, 18 Jan 2024 13:48:15 +0000
+Date: Thu, 18 Jan 2024 21:47:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/audio-sm8650-on-neil-codelinaro-topic-sm8650-upstream-integ
+ 15602/15673] drivers/spmi/hisi-spmi-controller.c:308:17: error: incompatible
+ function pointer types assigning to 'int (*)(struct spmi_controller *, u8,
+ u8, u8, u16, u8 *, size_t)' (aka 'int (*)(struct spmi_controller *, unsigned
+ char, unsigned char, unsigned char, uns...
+Message-ID: <202401182149.0tH7wj1O-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mzRX8CkFIGb2A9f9C1tACVFPSIjXuper
-X-Proofpoint-GUID: 9Gz1ArWI3ROM9Gb4C0QgcJzBMT_-m7nY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-18_08,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0
- adultscore=0 clxscore=1015 suspectscore=0 mlxscore=0 mlxlogscore=799
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401180100
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 2024-01-17 at 13:55 -0400, Jason Gunthorpe wrote:
-> On Wed, Jan 17, 2024 at 09:26:13AM -0400, Jason Gunthorpe wrote:
-> > On Wed, Jan 17, 2024 at 02:20:00PM +0100, Niklas Schnelle wrote:
-> > > Sorry I haven't replied. Yes, I have a fix for zpci_memcpy_toio()
-> > > titled "s390/pci: fix max size calculation in zpci_memcpy_toio()" tha=
-t
-> > > I tested with this series plus the following define added to
-> > > arch/s390/include/asm/io.h:
-> > >=20
-> > > #define memcpy_toio_64 zpci_memcpy_toio(dst, src, 64)
-> > >=20
-> > > It's already in the s390 tree's feature branch and linux-next.
-> >=20
-> > Great!
->=20
-> Is this wrong too?
->=20
-> /* combine single writes by using store-block insn */
-> void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
-> {
->        zpci_memcpy_toio(to, from, count);
-> }
->=20
->  * __iowrite64_copy - copy data to MMIO space, in 64-bit or 32-bit units
->  * @to: destination, in MMIO space (must be 64-bit aligned)
->  * @from: source (must be 64-bit aligned)
->  * @count: number of 64-bit quantities to copy
->                 ^^^^^^^^^^^^^^^^^^^^^^^^^
->=20
-> Ie it should be
->=20
->        zpci_memcpy_toio(to, from, count * 8);
->=20
-> Right?
->=20
-> (I'll fix it)
->=20
-> Jason
+tree:   https://github.com/krzk/linux n/audio-sm8650-on-neil-codelinaro-topic-sm8650-upstream-integ
+head:   5cac1bb64a0300d340c5e369489c731b30aa5e79
+commit: ad3c44509074f9f896bcdec6d6b1f051b169dcf6 [15602/15673] spmi: Add support for multi-master
+config: i386-buildonly-randconfig-002-20240118 (https://download.01.org/0day-ci/archive/20240118/202401182149.0tH7wj1O-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240118/202401182149.0tH7wj1O-lkp@intel.com/reproduce)
 
-Yes, we need zpci_memcpy_toio(to, from, count * 8) since our count is
-in bytes like for memcpy_toio().
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401182149.0tH7wj1O-lkp@intel.com/
 
-Thanks,
-Niklas
+All errors (new ones prefixed by >>):
+
+>> drivers/spmi/hisi-spmi-controller.c:308:17: error: incompatible function pointer types assigning to 'int (*)(struct spmi_controller *, u8, u8, u8, u16, u8 *, size_t)' (aka 'int (*)(struct spmi_controller *, unsigned char, unsigned char, unsigned char, unsigned short, unsigned char *, unsigned int)') from 'int (struct spmi_controller *, u8, u8, u16, u8 *, size_t)' (aka 'int (struct spmi_controller *, unsigned char, unsigned char, unsigned short, unsigned char *, unsigned int)') [-Wincompatible-function-pointer-types]
+     308 |         ctrl->read_cmd = spmi_read_cmd;
+         |                        ^ ~~~~~~~~~~~~~
+>> drivers/spmi/hisi-spmi-controller.c:309:18: error: incompatible function pointer types assigning to 'int (*)(struct spmi_controller *, u8, u8, u8, u16, const u8 *, size_t)' (aka 'int (*)(struct spmi_controller *, unsigned char, unsigned char, unsigned char, unsigned short, const unsigned char *, unsigned int)') from 'int (struct spmi_controller *, u8, u8, u16, const u8 *, size_t)' (aka 'int (struct spmi_controller *, unsigned char, unsigned char, unsigned short, const unsigned char *, unsigned int)') [-Wincompatible-function-pointer-types]
+     309 |         ctrl->write_cmd = spmi_write_cmd;
+         |                         ^ ~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +308 drivers/spmi/hisi-spmi-controller.c
+
+2ea3f6a03b155f drivers/staging/hikey9xx/hisi-spmi-controller.c Mauro Carvalho Chehab 2020-08-17  262  
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  263  static int spmi_controller_probe(struct platform_device *pdev)
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  264  {
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  265  	struct spmi_controller_dev *spmi_controller;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  266  	struct spmi_controller *ctrl;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  267  	struct resource *iores;
+7f3ac6c502fd7f drivers/staging/hikey9xx/hisi-spmi-controller.c Mauro Carvalho Chehab 2020-08-17  268  	int ret;
+6af364501949d9 drivers/staging/hikey9xx/hisi-spmi-controller.c Mauro Carvalho Chehab 2020-08-17  269  
+ffdfbafdc4f46a drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  270  	ctrl = devm_spmi_controller_alloc(&pdev->dev, sizeof(*spmi_controller));
+ffdfbafdc4f46a drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  271  	if (IS_ERR(ctrl)) {
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  272  		dev_err(&pdev->dev, "can not allocate spmi_controller data\n");
+ffdfbafdc4f46a drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  273  		return PTR_ERR(ctrl);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  274  	}
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  275  	spmi_controller = spmi_controller_get_drvdata(ctrl);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  276  	spmi_controller->controller = ctrl;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  277  
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  278  	iores = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  279  	if (!iores) {
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  280  		dev_err(&pdev->dev, "can not get resource!\n");
+ffdfbafdc4f46a drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  281  		return -EINVAL;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  282  	}
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  283  
+dbbc8fdf2ad576 drivers/staging/hikey9xx/hisi-spmi-controller.c Dan Carpenter         2020-09-18  284  	spmi_controller->base = devm_ioremap(&pdev->dev, iores->start,
+dbbc8fdf2ad576 drivers/staging/hikey9xx/hisi-spmi-controller.c Dan Carpenter         2020-09-18  285  					     resource_size(iores));
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  286  	if (!spmi_controller->base) {
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  287  		dev_err(&pdev->dev, "can not remap base addr!\n");
+ffdfbafdc4f46a drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  288  		return -EADDRNOTAVAIL;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  289  	}
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  290  
+fcc84fe12fd827 drivers/staging/hikey9xx/hisi-spmi-controller.c Mauro Carvalho Chehab 2021-06-24  291  	ret = of_property_read_u32(pdev->dev.of_node, "hisilicon,spmi-channel",
+2ea3f6a03b155f drivers/staging/hikey9xx/hisi-spmi-controller.c Mauro Carvalho Chehab 2020-08-17  292  				   &spmi_controller->channel);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  293  	if (ret) {
+6196331e79f361 drivers/staging/hikey9xx/hisi-spmi-controller.c Mauro Carvalho Chehab 2020-08-17  294  		dev_err(&pdev->dev, "can not get channel\n");
+ffdfbafdc4f46a drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  295  		return -ENODEV;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  296  	}
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  297  
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  298  	platform_set_drvdata(pdev, spmi_controller);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  299  	dev_set_drvdata(&ctrl->dev, spmi_controller);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  300  
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  301  	spin_lock_init(&spmi_controller->lock);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  302  
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  303  	ctrl->nr = spmi_controller->channel;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  304  	ctrl->dev.parent = pdev->dev.parent;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  305  	ctrl->dev.of_node = of_node_get(pdev->dev.of_node);
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  306  
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  307  	/* Callbacks */
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17 @308  	ctrl->read_cmd = spmi_read_cmd;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17 @309  	ctrl->write_cmd = spmi_write_cmd;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  310  
+490d88ef548d46 drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  311  	ret = devm_spmi_controller_add(&pdev->dev, ctrl);
+12b38ea040b3bb drivers/staging/hikey9xx/hisi-spmi-controller.c Christophe JAILLET    2020-12-13  312  	if (ret) {
+12b38ea040b3bb drivers/staging/hikey9xx/hisi-spmi-controller.c Christophe JAILLET    2020-12-13  313  		dev_err(&pdev->dev, "spmi_controller_add failed with error %d!\n", ret);
+ffdfbafdc4f46a drivers/spmi/hisi-spmi-controller.c             Fei Shao              2023-12-06  314  		return ret;
+12b38ea040b3bb drivers/staging/hikey9xx/hisi-spmi-controller.c Christophe JAILLET    2020-12-13  315  	}
+12b38ea040b3bb drivers/staging/hikey9xx/hisi-spmi-controller.c Christophe JAILLET    2020-12-13  316  
+12b38ea040b3bb drivers/staging/hikey9xx/hisi-spmi-controller.c Christophe JAILLET    2020-12-13  317  	return 0;
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  318  }
+70f59c90c8199e drivers/staging/hikey9xx/hisi-spmi-controller.c Mayulong              2020-08-17  319  
+
+:::::: The code at line 308 was first introduced by commit
+:::::: 70f59c90c8199e888b306edb16e20f651a1fce55 staging: spmi: add Hikey 970 SPMI controller driver
+
+:::::: TO: Mayulong <mayulong1@huawei.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
