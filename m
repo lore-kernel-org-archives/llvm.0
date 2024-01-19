@@ -1,56 +1,59 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E258957333;
-	Fri, 19 Jan 2024 21:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A659158230;
+	Fri, 19 Jan 2024 22:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705698559; cv=none; b=n/6RpHtEQcsJI3pbcTj9TrHq2znyoeYpB0lsVY8wsvUY1XTha2M6+sKi27BYhSoTHCYHjP8yCjtknyyXNqfOfsdhYGgBmfTuqzfhFsiqtap2q0nJFmcsm6NKLKljYOaCvDUp3GFvXsB+rT06zvUlac/iYqCT6A8HYVbPREn8yOc=
+	t=1705701744; cv=none; b=R92jJWEjdOuXkE+iD2fRPK/pK22XP6nHmg6/NEQCo+DQF6sGMBBTnajh5CVXKOJ3imf7fIPx8RwDEchKkLO+dbJiVOVygumcAS5ZIqFa+0Szoe0/ix/DGPb+BbPY22tPskIeDlvU/GyJQfgq+OEbE60SC5BfyOZtIAgcl2yeAxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705698559; c=relaxed/simple;
-	bh=JIeqxWnSPTVGfUWEgZhjqCsH1GMRTzp0QV1UtpXuSrM=;
+	s=arc-20240116; t=1705701744; c=relaxed/simple;
+	bh=6awVfRxtAEE0qZrrYgNTskPSt1swQVGsrDR/RDMf3tc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YZBldNfoYdpZVF2wfggV0uwOUtoftgbpuGl7XtP0RvQnvxIKM/znkE7yDgSO0WQVIC2g6XJIReO8bxhii89rQiBREqB0i7uKK+8O6gBwqpMVYK3dc5Z3odM2EOVPk4fAxQbhqfs6f67I1QBa4W3/cidzSfwafQqd8FthpNdN3XE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XqFK2+Tp; arc=none smtp.client-ip=198.175.65.9
+	 Content-Disposition; b=ATKsG0Pt7G5ZAuT0v1XWrBNrQ50raugWZ25z+43upmV3jFeQ1GKPojfCI5I75uydimNpGzGs9WsC59nwZ1tNRaf+qwXeqRjNK1rq4B0qIjXOtXXybNLsHK2f31lfJa919Xv4ewSjf6pYGFAATt11vFTiilB/3YrXE5ueD6jvrAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=izgzZpF9; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XqFK2+Tp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="izgzZpF9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705698558; x=1737234558;
+  t=1705701742; x=1737237742;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JIeqxWnSPTVGfUWEgZhjqCsH1GMRTzp0QV1UtpXuSrM=;
-  b=XqFK2+Tpa4LJJOMZ+oEMs35DAZZTv6mkoFEgjpU9pd9rM0JFdgVrkHZu
-   zmBd5SEr5F5IglukMCxK+7X+mhQ2xYZ/JkiimKEeVvonedQ5Qecabhr9W
-   ulTIS714l2ypqzdBQg4ya4Pbqkt2DXLvwswmRd7PJHM8hBFipHtxHLarf
-   OoxtMI+j9ii54mpRAo8xUker7S1sZ6HZkMuHQ9j34jNW5Gf/StZEE8UK1
-   l6b/YwhwBccAYFdjXgSkMt1qgnwKA825H3xWPBYlQtX90h0+QZpAvPv2R
-   TmOveA36eth85cNVeWFxkB0r00pHDQkhCYFm69oxC7s2GAR1SWKDJTJtl
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="19413538"
+  bh=6awVfRxtAEE0qZrrYgNTskPSt1swQVGsrDR/RDMf3tc=;
+  b=izgzZpF9f+AmtXfGWlAeV9Q1dZpaAKvCr56ktewhGVNtZ8zfCdmS/9+6
+   coYFkvnSwi1hsAIvWIaa5uh2L8DtKSlAJUPgFIXEfI6ZAJ7HOZbhasSL/
+   QyFBZvzTsdJx4j6NMdVjA7n9YCmJgWVJD6wgoWJwpH5EnBRhY+mq3Om8B
+   xbTYxu+IOlha3Dq8UV5Eo7w1DenbQcU2ZjBzsMlQ0xoJWwMqqqBFlUahK
+   773YN3WbvgGGl8EHVb5D77//7Gn3GtpgrSOyTtJ9dA/t1Eb1u6GlvNGAB
+   wYw5tO6i4fclxmrsbaKqb4zktdM7Lg99bWHn2nyoHVotkm3VJEQnaGFxD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="19427374"
 X-IronPort-AV: E=Sophos;i="6.05,206,1701158400"; 
-   d="scan'208";a="19413538"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 13:09:18 -0800
+   d="scan'208";a="19427374"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 14:02:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="908427237"
+X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="928482752"
 X-IronPort-AV: E=Sophos;i="6.05,206,1701158400"; 
-   d="scan'208";a="908427237"
+   d="scan'208";a="928482752"
 Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2024 13:09:15 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2024 14:02:16 -0800
 Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rQw6z-0004Qc-0a;
-	Fri, 19 Jan 2024 21:09:13 +0000
-Date: Sat, 20 Jan 2024 05:09:05 +0800
+	id 1rQwwI-0004SG-0N;
+	Fri, 19 Jan 2024 22:02:14 +0000
+Date: Sat, 20 Jan 2024 06:01:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [krzk-github:n/audio-sm8650-on-neil-codelinaro-topic-sm8650-upstream-integ
- 15/30] sound/soc/qcom/lpass.h:43:7: error: use of undeclared identifier
- 'LPASS_CDC_DMA_RX0'
-Message-ID: <202401200528.iSlkIgkO-lkp@intel.com>
+To: Chris Morgan <macromorgan@hotmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-input@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [dtor-input:next 134/135]
+ drivers/input/joystick/adc-joystick.c:194:10: error: call to undeclared
+ function 'min_array'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202401200525.sV9c5cWM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,66 +63,105 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/krzk/linux n/audio-sm8650-on-neil-codelinaro-topic-sm8650-upstream-integ
-head:   5cac1bb64a0300d340c5e369489c731b30aa5e79
-commit: 09ac587b4c3759cc859d282118bf963cbdfc17ac [15/30] UPSTREAM: ASoC: qcom: reduce number of binding headers includes
-config: arm-randconfig-001-20240118 (https://download.01.org/0day-ci/archive/20240120/202401200528.iSlkIgkO-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401200528.iSlkIgkO-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+head:   3af6e24a456437d323d1080bd254053f7af05234
+commit: 6380a59c534ecab1462608a1f76490289a45a377 [134/135] Input: adc-joystick - handle inverted axes
+config: i386-randconfig-001-20240120 (https://download.01.org/0day-ci/archive/20240120/202401200525.sV9c5cWM-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401200525.sV9c5cWM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401200528.iSlkIgkO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401200525.sV9c5cWM-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from sound/soc/qcom/lpass-ipq806x.c:21:
->> sound/soc/qcom/lpass.h:43:7: error: use of undeclared identifier 'LPASS_CDC_DMA_RX0'
-           case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-                ^
->> sound/soc/qcom/lpass.h:44:7: error: use of undeclared identifier 'LPASS_CDC_DMA_TX0'
-           case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-                ^
->> sound/soc/qcom/lpass.h:45:7: error: use of undeclared identifier 'LPASS_CDC_DMA_VA_TX0'
-           case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
-                ^
-   sound/soc/qcom/lpass.h:54:7: error: use of undeclared identifier 'LPASS_CDC_DMA_RX0'
-           case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-                ^
-   sound/soc/qcom/lpass.h:55:7: error: use of undeclared identifier 'LPASS_CDC_DMA_TX0'
-           case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-                ^
-   5 errors generated.
+>> drivers/input/joystick/adc-joystick.c:194:10: error: call to undeclared function 'min_array'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     194 |                                      min_array(axes[i].range, 2),
+         |                                      ^
+>> drivers/input/joystick/adc-joystick.c:195:10: error: call to undeclared function 'max_array'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     195 |                                      max_array(axes[i].range, 2),
+         |                                      ^
+   2 errors generated.
 
 
-vim +/LPASS_CDC_DMA_RX0 +43 sound/soc/qcom/lpass.h
+vim +/min_array +194 drivers/input/joystick/adc-joystick.c
 
-7cb37b7bd0d3c93 V Sujith Kumar Reddy    2020-10-08  32  
-7cb37b7bd0d3c93 V Sujith Kumar Reddy    2020-10-08  33  #define QCOM_REGMAP_FIELD_ALLOC(d, m, f, mf)    \
-7cb37b7bd0d3c93 V Sujith Kumar Reddy    2020-10-08  34  	do { \
-7cb37b7bd0d3c93 V Sujith Kumar Reddy    2020-10-08  35  		mf = devm_regmap_field_alloc(d, m, f);     \
-7cb37b7bd0d3c93 V Sujith Kumar Reddy    2020-10-08  36  		if (IS_ERR(mf))                \
-7cb37b7bd0d3c93 V Sujith Kumar Reddy    2020-10-08  37  			return -EINVAL;         \
-7cb37b7bd0d3c93 V Sujith Kumar Reddy    2020-10-08  38  	} while (0)
-cd59f13823ae65a Kenneth Westfield       2015-03-03  39  
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  40  static inline bool is_cdc_dma_port(int dai_id)
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  41  {
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  42  	switch (dai_id) {
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24 @43  	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24 @44  	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24 @45  	case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  46  		return true;
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  47  	}
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  48  	return false;
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  49  }
-dc8d9766bc03efe Srinivasa Rao Mandadapu 2022-02-24  50  
-
-:::::: The code at line 43 was first introduced by commit
-:::::: dc8d9766bc03efee4d1b6dd912659858fdf981de ASoC: qcom: Add register definition for codec rddma and wrdma
-
-:::::: TO: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+   135	
+   136	static int adc_joystick_set_axes(struct device *dev, struct adc_joystick *joy)
+   137	{
+   138		struct adc_joystick_axis *axes;
+   139		struct fwnode_handle *child;
+   140		int num_axes, error, i;
+   141	
+   142		num_axes = device_get_child_node_count(dev);
+   143		if (!num_axes) {
+   144			dev_err(dev, "Unable to find child nodes\n");
+   145			return -EINVAL;
+   146		}
+   147	
+   148		if (num_axes != joy->num_chans) {
+   149			dev_err(dev, "Got %d child nodes for %d channels\n",
+   150				num_axes, joy->num_chans);
+   151			return -EINVAL;
+   152		}
+   153	
+   154		axes = devm_kmalloc_array(dev, num_axes, sizeof(*axes), GFP_KERNEL);
+   155		if (!axes)
+   156			return -ENOMEM;
+   157	
+   158		device_for_each_child_node(dev, child) {
+   159			error = fwnode_property_read_u32(child, "reg", &i);
+   160			if (error) {
+   161				dev_err(dev, "reg invalid or missing\n");
+   162				goto err_fwnode_put;
+   163			}
+   164	
+   165			if (i >= num_axes) {
+   166				error = -EINVAL;
+   167				dev_err(dev, "No matching axis for reg %d\n", i);
+   168				goto err_fwnode_put;
+   169			}
+   170	
+   171			error = fwnode_property_read_u32(child, "linux,code",
+   172							 &axes[i].code);
+   173			if (error) {
+   174				dev_err(dev, "linux,code invalid or missing\n");
+   175				goto err_fwnode_put;
+   176			}
+   177	
+   178			error = fwnode_property_read_u32_array(child, "abs-range",
+   179							       axes[i].range, 2);
+   180			if (error) {
+   181				dev_err(dev, "abs-range invalid or missing\n");
+   182				goto err_fwnode_put;
+   183			}
+   184	
+   185			if (axes[i].range[0] > axes[i].range[1]) {
+   186				dev_dbg(dev, "abs-axis %d inverted\n", i);
+   187				axes[i].inverted = true;
+   188			}
+   189	
+   190			fwnode_property_read_u32(child, "abs-fuzz", &axes[i].fuzz);
+   191			fwnode_property_read_u32(child, "abs-flat", &axes[i].flat);
+   192	
+   193			input_set_abs_params(joy->input, axes[i].code,
+ > 194					     min_array(axes[i].range, 2),
+ > 195					     max_array(axes[i].range, 2),
+   196					     axes[i].fuzz, axes[i].flat);
+   197			input_set_capability(joy->input, EV_ABS, axes[i].code);
+   198		}
+   199	
+   200		joy->axes = axes;
+   201	
+   202		return 0;
+   203	
+   204	err_fwnode_put:
+   205		fwnode_handle_put(child);
+   206		return error;
+   207	}
+   208	
 
 -- 
 0-DAY CI Kernel Test Service
