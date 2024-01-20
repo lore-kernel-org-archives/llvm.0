@@ -1,174 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D01F15C5;
-	Sat, 20 Jan 2024 03:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7E11111
+	for <llvm@lists.linux.dev>; Sat, 20 Jan 2024 04:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705719868; cv=none; b=Fu/HSHRcKAWCxj2wMKCgcgRy4BAWlR0ZE7gGrG+Cp/OpSvPAEBr7amT6h4qPrR5xeLjum5/Vy3tLVxZ6Pxgf3WO34Fr1sGPe5z52UfaVbB5RFv9vtaT3zFQd3ycEMM0uFOwnoZ/hKQBfCiM5II6VE2tAyW5mQsnil4zgmV0JTG4=
+	t=1705726238; cv=none; b=d6x16cekuInsAsNCy9aE9TtkEJjf/IrCw13GaYhJE3ymJt8bTnTZ2HU53l0ffWerStm7qBfNZWH99n+GdxzGaKBE+H2vNLHs+/3DkRmWrKS91LCR5QdInCbKxbLBJ81lVZ1ArkYQudZBwbOqa2oObXe1rarlpgzUzlTkXFABaPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705719868; c=relaxed/simple;
-	bh=2xghqmRSUY67HTCbE1la3y9TSEue/pja+Ah46sIs47Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eQ5BMvjnw4ZwCJ2c6Ud1MbT1YZbaqf+WSqXp6aGKcIdh/VZ3FKS0I7XHWv7ypZLcXZGr2Jka2cihJKzs/oKE3RdutlI3e6+dl/cVORR3VgPIt89EvKKdt7UUd2o/CcR1LXlDBvVjwHMFl1c0/CIm30LaEeUsELXfOWQ3GktFJD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pv04dNrh; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1705726238; c=relaxed/simple;
+	bh=MfxkuVjf6of7lPQB4S3XO8wq7e7pv6G0UCGBqWfOYa4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=pSg8kOFeJ4RVov9N1o1AKjpsrmSJnJ3IVUSeLlEq5OVzu+X6b5oaHdu6Mm93uEQqm8In7gCEup9OijRpvf/AZWzbsYo9/lGYZhDDrAHEbB2KPXZtzedTDj/VsgWwx10pZ7osEfKeZ9+x1py3/Npz9AAET40dgNuxAZa+vAj1El4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IFH3ty+J; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pv04dNrh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705719866; x=1737255866;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2xghqmRSUY67HTCbE1la3y9TSEue/pja+Ah46sIs47Y=;
-  b=Pv04dNrh4YVJ6yLYF8CfsQrr+Z88lxt7gVvuwYjIH/Sg0AFkj/rfG79f
-   kwyH6f5BNq/xfE701XYGkfU8pDLRRHYgOirdHtXbomroTRGTW1/HnS6sW
-   pH+39QFinA+VdZ2QAm70IC2cvShIpc2FU9Z7fhjx+FPCOarZLjG4Sw1TN
-   82rExqJTBDoAdT+7uX1KgeOhG+s+pElFNP/l/pzKnrTO66swOsuL09sC8
-   v+gY3jyTTrBxgxzWT6wcn9WTZGzmmbdNfp6srk6MqZtNtuc5lpyRtS31D
-   6CXxBpv0b7d9nya7jNYCT79PvCm1vLEZVRNC8tCShuXw93lSqDrErXvvG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="801195"
-X-IronPort-AV: E=Sophos;i="6.05,206,1701158400"; 
-   d="scan'208";a="801195"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 19:04:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,206,1701158400"; 
-   d="scan'208";a="27183735"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Jan 2024 19:04:23 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rR1ef-0004fQ-2T;
-	Sat, 20 Jan 2024 03:04:21 +0000
-Date: Sat, 20 Jan 2024 11:04:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:rmap_batching 11/11]
- include/linux/pgtable.h:250:8: error: implicit declaration of function
- 'ptep_get_and_clear_full' is invalid in C99
-Message-ID: <202401201129.CtaytKvQ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IFH3ty+J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705726235;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=97LbjlDgSESlHuK81x0U/vxBh8rUNgKm/kjjwfCmxCA=;
+	b=IFH3ty+J2biAL0akqarq7OhsTCWN1Izcw9CUaUK1vI0HYwre4lsOLM+qZwlW/GJ0Ul++d3
+	gGMkSeXMZE5YTU+qQ5couKvQd45S7wxVwE4t/g/t8appYNSawOWdbiZ228pPudnouTDT96
+	eH0jUS/2vaefUiy+rpmrr4bKOwzH9ys=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-145-JKyJOAoRO9SY9sVIlpM4cg-1; Fri, 19 Jan 2024 23:50:31 -0500
+X-MC-Unique: JKyJOAoRO9SY9sVIlpM4cg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE20683B828
+	for <llvm@lists.linux.dev>; Sat, 20 Jan 2024 04:50:30 +0000 (UTC)
+Received: from [172.64.9.51] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DB3EDC15D7E;
+	Sat, 20 Jan 2024 04:50:30 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 226): Test report for master
+ (6.7.0, mainline.kernel.org-clang, e38f734a)
+Date: Sat, 20 Jan 2024 04:50:30 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <42026.124011923503100143@us-mta-145.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/davidhildenbrand/linux rmap_batching
-head:   c54f3b69b7a799efa06dbf58a60db9b3fac04111
-commit: c54f3b69b7a799efa06dbf58a60db9b3fac04111 [11/11] mm/memory: optimize unmap/zap with PTE-mapped THP
-config: arm64-randconfig-004-20240120 (https://download.01.org/0day-ci/archive/20240120/202401201129.CtaytKvQ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401201129.CtaytKvQ-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401201129.CtaytKvQ-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/arm64/include/asm/io.h:12:
-   include/linux/pgtable.h:218:38: error: use of undeclared identifier 'PFN_PTE_SHIFT'
-           return __pte(pte_val(pte) + (1UL << PFN_PTE_SHIFT));
-                                               ^
->> include/linux/pgtable.h:250:8: error: implicit declaration of function 'ptep_get_and_clear_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-                 ^
-   include/linux/pgtable.h:250:8: note: did you mean 'ptep_get_and_clear'?
-   arch/arm64/include/asm/pgtable.h:951:21: note: 'ptep_get_and_clear' declared here
-   static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-                       ^
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/arm64/include/asm/io.h:12:
-   include/linux/pgtable.h:250:6: error: assigning to 'pte_t' from incompatible type 'int'
-           pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pgtable.h:257:11: error: assigning to 'pte_t' from incompatible type 'int'
-                   tmp_pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-                           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pgtable.h:277:3: error: implicit declaration of function 'ptep_get_and_clear_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   ptep_get_and_clear_full(mm, addr, ptep, full);
-                   ^
-   include/linux/pgtable.h:617:21: error: static declaration of 'ptep_get_and_clear_full' follows non-static declaration
-   static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
-                       ^
-   include/linux/pgtable.h:250:8: note: previous implicit declaration is here
-           pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-                 ^
-   6 errors generated.
-   make[3]: *** [scripts/Makefile.build:116: arch/arm64/kernel/asm-offsets.s] Error 1 shuffle=2382276736
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1191: prepare0] Error 2 shuffle=2382276736
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:234: __sub-make] Error 2 shuffle=2382276736
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:234: __sub-make] Error 2 shuffle=2382276736
-   make: Target 'prepare' not remade because of errors.
+Kernel information:
+    Commit message: Merge tag 'staging-6.8-rc1' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/gregkh/staging
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/124031
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-vim +/ptep_get_and_clear_full +250 include/linux/pgtable.h
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
 
-   235	
-   236	#ifndef get_and_clear_full_ptes
-   237	/*
-   238	 * Will merge accessed/dirty bits from all PTEs and merge them into
-   239	 * the first folio.
-   240	 *
-   241	 * Will not merge writable bits: the returned PTE might be R/O while some
-   242	 * PTE might have been writable.
-   243	 */
-   244	static inline pte_t get_and_clear_full_ptes(struct mm_struct *mm,
-   245			unsigned long addr, pte_t *ptep, unsigned int nr, int full)
-   246	{
-   247		pte_t tmp_pte;
-   248		pte_t pte;
-   249	
- > 250		pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-   251		if (--nr == 0)
-   252			return pte;
-   253		ptep++;
-   254		addr += PAGE_SIZE;
-   255	
-   256		for (;;) {
-   257			tmp_pte = ptep_get_and_clear_full(mm, addr, ptep, full);
-   258			if (pte_dirty(tmp_pte))
-   259				pte = pte_mkdirty(pte);
-   260			if (pte_young(tmp_pte))
-   261				pte = pte_mkyoung(pte);
-   262			if (--nr == 0)
-   263				break;
-   264			ptep++;
-   265			addr += PAGE_SIZE;
-   266		}
-   267	
-   268		return pte;
-   269	}
-   270	#endif
-   271	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
