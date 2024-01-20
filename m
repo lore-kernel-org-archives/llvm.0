@@ -1,82 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5EC15AC4;
-	Sat, 20 Jan 2024 21:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC6823AA;
+	Sat, 20 Jan 2024 22:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705784996; cv=none; b=BPLRTfF7a+5pC11iKrc+xEj8EMNGVgL0ul5ONKIe/5yYiN51yScCMHhWGYJ+qOF16wUt9Gm+U3CwVczPgHT3ktj+HYpS08JbSGB1Y6ajofssTBActW/ugUcbFzj6HX36F7NqSCDzQVCp/6KSyC/7LAL8Pbimw5hEdgF5ctCrF1Q=
+	t=1705791361; cv=none; b=u1WcD0rrU6/VbYwI86P4DiwNMMObVL9sEuWZ9OI5SUoMZF5Hh3fYxDYpkiW40n995FV1hFnu0EvyDcxsewfBSNmlZ91EW0W01NCVKchNxFCO4feli/boKIWsOPHqGBJstU0HiYfjBJj++VYy752i10m/j5sFvkf3VeQ6srd64iQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705784996; c=relaxed/simple;
-	bh=76xbVIXKVqYfEqwY7yDUy2z34YtqsMOfXaiKMr2CblM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GN4i+4nBiqDVERIzx8y+23tdXK6B6xTpII/wSgjO05szB5fEpM1s/LuPyXPG5+Xt3m29AM+CT646EFUDtZaskSIyah244oKN+SQz9t28jgv6UpQFzWa4fiStY7oLMYbZa+Z10AonuDwYNKRCwzzSeSEDrF0eWSzrA3J4QRcJjwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0518Ghq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705791361; c=relaxed/simple;
+	bh=8uE/WQL/QoHuBFDbD4rTA/vZXsTcU7RketlVUulifrQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tNKDgRtlC5v0X12iMxX+u0ymNNlVGW4vSu3U4XD38XMcNlHSk0dBebZWtIWKqm/2YXWMhKqCxqefFmqcz72GTw8YXSEHcbN8vfbwEpVCYd+8oNxtYog8AtN018wMfFAtlFP9C5Jp+B8hpYzuI1zpFLq+sWYpy+DMhbcSVIr7ewM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LluG64hB; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0518Ghq"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3DCEC433C7;
-	Sat, 20 Jan 2024 21:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705784995;
-	bh=76xbVIXKVqYfEqwY7yDUy2z34YtqsMOfXaiKMr2CblM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=C0518Ghq3hLjoNbFjrLBtjIke3NBfUfZ9GLWsgVrTwvKcrFfE9JOb1kRxhaQBwFHI
-	 7SIJNVRICmNlIC9niMIjS8EiEtXKsBXiUwj9K6fkAHyQqJU+JW/jKdlalKpJwA3eRG
-	 8hGSYBxE2/dPybOovOilg0emmnET2Asw8/USQBwFFyfGefjGLedazQrYggDN2/yZds
-	 eQJtYNO8a3tN7CrRnLACwfCKm3gqDtxJlC3Yrwn3ucFSL3ORG82EdtDJ77nEYqj1TB
-	 drqk2H+qc81JJOvTH8zhs4BIFRNu/kr/E2LA1oJyZ9c2NfdTD3PlXwNQ52obzbgPv3
-	 V8i/ldlx8RByg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 91A34D8C96C;
-	Sat, 20 Jan 2024 21:09:55 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LluG64hB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705791359; x=1737327359;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8uE/WQL/QoHuBFDbD4rTA/vZXsTcU7RketlVUulifrQ=;
+  b=LluG64hBDrcm176nQM8QKGJ5IMNId+rS7m2dCttUHwC6fyyjyKK9M9TM
+   Sud5SRvhXbXSuLTIomVUARWasHyNyOriSRBPh39YTQLNe0KvKzk87xBWw
+   SbHtpf3/OIOTtnAUrDM/W6Uo4rEaWEfJDsdZb2T1Nwy6vaMR7lHhnCZia
+   DZXv9owKiNOduB+68SOs7BhK1pQH9lKMO8kVfazKKGyV3mhIQyYVL7UuX
+   W30BLnvMO29tlDsFl9uRgloQ8SW4qyQSTjgYgElM8pAoU96NV/Wql/VIB
+   D65zg8G2LIO7kZTuTuiNBeL41V3BeCWKthScVkHJuPw76e0ZuqBsu4Zy9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10959"; a="8353967"
+X-IronPort-AV: E=Sophos;i="6.05,208,1701158400"; 
+   d="scan'208";a="8353967"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2024 14:55:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10959"; a="788648469"
+X-IronPort-AV: E=Sophos;i="6.05,208,1701158400"; 
+   d="scan'208";a="788648469"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jan 2024 14:55:56 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rRKFl-0005VC-2o;
+	Sat, 20 Jan 2024 22:55:53 +0000
+Date: Sun, 21 Jan 2024 06:55:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kevin Kim <ckkim@hardkernel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dongjin Kim <tobetter@gmail.com>,
+	Olliver Schinagl <oliver@schinagl.nl>
+Subject: [tobetter:odroid-6.1.y 20/91] drivers/pwm/pwm-gpio.c:60:22: warning:
+ no previous prototype for function 'gpio_pwm_timer'
+Message-ID: <202401210628.5lKKsZ7A-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/3] RISC-V: Disable DWARF5 with known broken LLVM
- versions
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <170578499559.24348.17111438888014376412.git-patchwork-notify@kernel.org>
-Date: Sat, 20 Jan 2024 21:09:55 +0000
-References: <20231205-riscv-restrict-dwarf5-llvm-v2-0-aedf00a382ac@kernel.org>
-In-Reply-To: <20231205-riscv-restrict-dwarf5-llvm-v2-0-aedf00a382ac@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
- maskray@google.com, ndesaulniers@google.com, llvm@lists.linux.dev,
- patches@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+tree:   https://github.com/tobetter/linux odroid-6.1.y
+head:   4abe38fb1d55e2c5f10582404c5ff88505060b73
+commit: 459931baf254b27d2ec9a732b41bf2bff9e1c1d2 [20/91] ODROID-COMMON: pwm: gpio: Add a generic gpio based PWM driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240121/202401210628.5lKKsZ7A-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d92ce344bf641e6bb025b41b3f1a77dd25e2b3e9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240121/202401210628.5lKKsZ7A-lkp@intel.com/reproduce)
 
-This series was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401210628.5lKKsZ7A-lkp@intel.com/
 
-On Tue, 05 Dec 2023 16:53:49 -0700 you wrote:
-> Hi all,
-> 
-> This series disables DWARF5 for LLVM versions where it is known to be
-> broken due to linker relaxation:
-> 
-> https://github.com/llvm/llvm-project/commit/bbc0f99f3bc96f1db16f649fc21dd18e5b0918f6
-> 
-> [...]
+All warnings (new ones prefixed by >>):
 
-Here is the summary with links:
-  - [v2,1/3] riscv: Hoist linker relaxation disabling logic into Kconfig
-    https://git.kernel.org/riscv/c/55b71d2ce133
-  - [v2,2/3] riscv: Restrict DWARF5 when building with LLVM to known working versions
-    https://git.kernel.org/riscv/c/ae84ff9a14a5
-  - [v2,3/3] lib/Kconfig.debug: Update AS_HAS_NON_CONST_LEB128 comment and name
-    https://git.kernel.org/riscv/c/a4426641f00c
+>> drivers/pwm/pwm-gpio.c:60:22: warning: no previous prototype for function 'gpio_pwm_timer' [-Wmissing-prototypes]
+      60 | enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
+         |                      ^
+   drivers/pwm/pwm-gpio.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      60 | enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
+         | ^
+         | static 
+   drivers/pwm/pwm-gpio.c:138:3: error: field designator 'config' does not refer to any field in type 'const struct pwm_ops'
+     138 |         .config = gpio_pwm_config,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/pwm-gpio.c:139:3: error: field designator 'set_polarity' does not refer to any field in type 'const struct pwm_ops'
+     139 |         .set_polarity = gpio_pwm_set_polarity,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/pwm-gpio.c:140:3: error: field designator 'enable' does not refer to any field in type 'const struct pwm_ops'
+     140 |         .enable = gpio_pwm_enable,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/pwm-gpio.c:141:3: error: field designator 'disable' does not refer to any field in type 'const struct pwm_ops'
+     141 |         .disable = gpio_pwm_disable,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 4 errors generated.
 
-You are awesome, thank you!
+
+vim +/gpio_pwm_timer +60 drivers/pwm/pwm-gpio.c
+
+    59	
+  > 60	enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
+    61	{
+    62		struct gpio_pwm_data *gpio_data = container_of(timer,
+    63							      struct gpio_pwm_data,
+    64							      timer);
+    65		if (!gpio_data->run) {
+    66			gpio_pwm_off(gpio_data);
+    67			gpio_data->pin_on = false;
+    68			return HRTIMER_NORESTART;
+    69		}
+    70	
+    71		if (!gpio_data->pin_on) {
+    72			hrtimer_forward_now(&gpio_data->timer,
+    73					    ns_to_ktime(gpio_data->on_time));
+    74			gpio_pwm_on(gpio_data);
+    75			gpio_data->pin_on = true;
+    76		} else {
+    77			hrtimer_forward_now(&gpio_data->timer,
+    78					    ns_to_ktime(gpio_data->off_time));
+    79			gpio_pwm_off(gpio_data);
+    80			gpio_data->pin_on = false;
+    81		}
+    82	
+    83		return HRTIMER_RESTART;
+    84	}
+    85	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
