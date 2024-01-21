@@ -1,137 +1,236 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590A338381;
-	Sun, 21 Jan 2024 18:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716AC38385
+	for <llvm@lists.linux.dev>; Sun, 21 Jan 2024 19:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705861306; cv=none; b=TpJDM4NW9LA5BxOl8OLDwXPhWtN+INWffd80Fr9yXuRbxp9UgJKsYP1fhXrWf5EMe7RC3e0XXlTFF8A4arwcuDvKhx1msAer1xsVJRFnvgwalo5hefSVXfjOE7Em8lbsVQY9a6ldgNJj3E4R99Sn5h5vwoB8PSzapCOvytB9/Gs=
+	t=1705863682; cv=none; b=qgGdvNy3qApImYv8ruNTWOiAl1gM2qRCgBEDbi1PQk8lRZ67jmlXDvoAXE/iQQqmyro1ddFaIxcodY16GRt1fhSxiNo6xhABQHixa1RDupxToeOQe7KIr4E4CXwRY3u+KGco6TcaZt+XCO3Lq9wsAq/AGvxyzKh4fC9fiugPMN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705861306; c=relaxed/simple;
-	bh=RQcsOSgWEkebJ4aFw/hm8jeagskSK6NIf06EChLFEFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pLvbj49R0aj5xfDVCXw+4ocWKQSvJDknNKlvV9btSYDsvLE0zWgzNKj/rlRuHQwhUbVzcSFfxQFXN09eRPmnNOktMVL0qRAUzVcBuVpLwKb5wHsrG7D0ZsBCEXJTaEkFCJsraAPzs5Iaj3YDcDb4RBVv/LYaNLEc/CRGykiZ7wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=AUFIZ7Hk; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1705863682; c=relaxed/simple;
+	bh=8Zj0dBKktGZTEmDgKHmeyfQgkQ1r1TS1aSMmJMXRSAk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TcjQ63ckqRM2YfmnY2SOLF2mwefnNe2tANAjDYsMLTxUuwDK2AQuYbZ9aqcwflK2hwJsy6Wrxs/WIHgYF0YKUeUGVVNFEKkH02rHxkbWDNCJ6nModmRIlxk7Yzsfty0t8pbxBNNdSeWs70Hi4NJ3pUE6ukG/45KY8hnzQcx5Uyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DPxjoXYk; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="AUFIZ7Hk"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0BC2C40E0196;
-	Sun, 21 Jan 2024 18:21:41 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id VCM38jTVkex4; Sun, 21 Jan 2024 18:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1705861298; bh=2hNU8iQHcvaHyKkIctC4wY2bSsuo5SQCshNeksB3b9A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AUFIZ7Hk5hJYAryXMjEguN4LPCmbfR1Nng9ffvRWSHC+bsGYm64r6JfARdgqXJlFD
-	 Y/PYUqLriC0c9MrHq/sdO1CWZ7yBH6xyibOXFi1lDlNGzA6a+mB1CNOTL+VWvvKL73
-	 8RtnMSA2MszsvHeBMiMXZZ+Hf7atcfj2+K9S30DuYm9sMvDGmABj+SPLLBLhn35G4t
-	 F6VtYrIjqwQCEliQn3z6mTBXo3PvZ0Xg0a88ROqVayPGTLaoq91BgqmJ/lsR30pwQr
-	 Nu9MMyWiHp6mOz+JsS286w1D31wCvvxolniMU93s7OEOzs1kuaQo9YVH8U531CMvv4
-	 UruUYm6xk/NrFUcqP4mNTJN+6PBuAZpjR4wSDFJTBu4hSGj94vMuWVLkZnMuZc25YX
-	 8jscNfujSdUHFqzD7bMM7gzxUEaJ5aO/3I6if/dfH+zSbpoZH8gtkAXFdAtvCAa39/
-	 xzy327AuL5qiWo7Bvg/5JVj71/9ImNaAwepirfWi7O+IZ9ViEqSo2LL88nW5NZsZwM
-	 mTN7hsgPAPDuDeY/4UP2GKwgUKv+Qxo5ymGNeJFm2x6g7qhSURXocC+JDHSNi57w43
-	 pKX0LkDP3B+aHAcHthXCwl0wtKc4W5yZFjtU84endp4cn6q/bFIUbUEct31LRjZpUF
-	 Hzi1fCAvqvSzE3lnVRanRmXo=
-Received: from zn.tnic (pd953099d.dip0.t-ipconnect.de [217.83.9.157])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DPxjoXYk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705863679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TZKa3vHvgvlUfSB1g30KXD3CXWTzszxIE988J8zR7IU=;
+	b=DPxjoXYkoZiGIjeIWw+IqMLwtMcXsfgHNtXxMgm7l2vXShKTGpwpCGWuWjjQXnTgQ4PNhO
+	npD8PdW7lCz6m9F1xwFnaW1l/M3hApdVclfpmDGCFA7K78YYKr/07sh74IZVwK+Kjr6zaS
+	O2k65fwreKykgYH8eCKiekN/yvWk3fk=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-551-2Oz7SKCvPQSAW_e3QJEPgw-1; Sun,
+ 21 Jan 2024 14:01:16 -0500
+X-MC-Unique: 2Oz7SKCvPQSAW_e3QJEPgw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0F8A840E016C;
-	Sun, 21 Jan 2024 18:20:54 +0000 (UTC)
-Date: Sun, 21 Jan 2024 19:20:40 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>, Peter Gonda <pgonda@google.com>
-Cc: Kevin Loughlin <kevinloughlin@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Michael Kelley <mikelley@microsoft.com>,
-	Pankaj Gupta <pankaj.gupta@amd.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Steve Rutherford <srutherford@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Yuntao Wang <ytcoode@gmail.com>,
-	Wang Jinchao <wangjinchao@xfusion.com>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	Brian Gerst <brgerst@gmail.com>, Hugh Dickins <hughd@google.com>,
-	Joerg Roedel <jroedel@suse.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Brijesh Singh <brijesh.singh@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>,
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>,
-	Jacob Xu <jacobhxu@google.com>,
-	Sidharth Telang <sidtelang@google.com>
-Subject: Re: [RFC PATCH v2] x86/sev: enforce RIP-relative accesses in early
- SEV/SME code
-Message-ID: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
-References: <ZZ7YuEexYSaZYmLK@tassilo>
- <20240111223650.3502633-1-kevinloughlin@google.com>
- <20240115204634.GHZaWZqsVyU_fvn_RW@fat_crate.local>
- <CAMj1kXH=k26nNyB+LQJ7WUJgbD2f3PREyjCzSngMCGc+72XJ6w@mail.gmail.com>
- <20240117130557.GDZafQtfRyeVFbBUXA@fat_crate.local>
- <CAMj1kXEML99u7a8mZMhiWXXozsJYhVPaaTzYkegiSJcLw2pNJg@mail.gmail.com>
- <CAMj1kXGO68zBNXtdxDXbcQ0U7NRFe4m9bF4L_qFmYZ6mkOvmww@mail.gmail.com>
- <20240121153702.GAZa06Hvt8b0hQ4LjR@fat_crate.local>
- <CAMj1kXFMe6WqKXJsK1Lqk++naM8D=MZADhgpO_FjUd0RuFQU2w@mail.gmail.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2D4A3804503
+	for <llvm@lists.linux.dev>; Sun, 21 Jan 2024 19:01:16 +0000 (UTC)
+Received: from [172.64.9.51] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 90661492BE2;
+	Sun, 21 Jan 2024 19:01:16 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 79 of 226): Test report for master
+ (6.7.0, mainline.kernel.org-clang, 65163d16)
+Date: Sun, 21 Jan 2024 19:01:16 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFMe6WqKXJsK1Lqk++naM8D=MZADhgpO_FjUd0RuFQU2w@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <49651.124012114011600607@us-mta-551.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jan 21, 2024 at 05:49:44PM +0100, Ard Biesheuvel wrote:
-> Yeah. I have been trying to find people internally at Google that can
-> help me set up some CI that I can throw kernel builds at and they will
-> be test booted in a SEV guest, but so far progress has been slow.
+Hi, we tested your kernel and here are the results:
 
-Dunno, if you have some internal access to GCE, it does support SEV
-guests so you could test that side at least. Peter Gonda is on Cc, he
-should have an idea what to do, lemme move him to To.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> -fPIE -mcmodel=small should work fine afaik. The only problem i
-> encountered is that it changes the default per-CPU base register to FS
-> but that can be overridden on the command line.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Yeah, there's a gcc switch - I hope clang supports it too.
+Kernel information:
+    Commit message: Merge tag 'dmaengine-fix-6.8-rc1' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/vkoul/dmaengine
 
-> The problem with building the entire kernel -fPIE is that it increases
-> code size: RIP-relative LEA instructions are 1 byte longer than
-> absolute 32-bit MOVs.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/124507
 
-Right, but the folks who started this thread are already doing that
-anyway so...
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
-Thx.
 
--- 
-Regards/Gruss,
-    Boris.
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     aarch64 - Reboot test
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - CKI/restraint
+      x86_64 (debug) - SELinux Custom Module Setup
+      x86_64 (debug) - machineinfo
+      x86_64 (debug) - Boot test
+      x86_64 (debug) - POSIX pjd-fstest suites
+      x86_64 (debug) - Filesystem - Loopdev Sanity
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+      x86_64 (debug) - Networking - Ethernet drivers sanity
+      x86_64 (debug) - Networking cki netfilter test
+      x86_64 (debug) - Libkcapi AF_ALG test
+      x86_64 (debug) - Hardware - pciutils: sanity smoke test
+      x86_64 (debug) - Storage - dm/common
+      x86_64 (debug) - Storage - lvm thinp sanity
+      x86_64 (debug) - Storage - iSCSI parameters
+      x86_64 (debug) - kselftests upstream - net
+      x86_64 (debug) - kselftests upstream - bpf
+      x86_64 (debug) - kselftests upstream - bpf_test_progs
+      x86_64 (debug) - Reboot test
+      x86_64 (debug) - CKI/restraint
+      x86_64 (debug) - SELinux Custom Module Setup
+      x86_64 (debug) - machineinfo
+      x86_64 (debug) - Boot test
+      x86_64 (debug) - xfstests - ext4
+      x86_64 (debug) - xfstests - xfs
+      x86_64 (debug) - xfstests - btrfs
+      x86_64 (debug) - xfstests - nfsv4.2
+      x86_64 (debug) - xfstests - cifsv3.11
+      x86_64 (debug) - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - POSIX pjd-fstest suites
+      x86_64 - Filesystem - Loopdev Sanity
+      x86_64 - Memory function: memfd_create
+      x86_64 - AMTU (Abstract Machine Test Utility)
+      x86_64 - Networking - Ethernet drivers sanity
+      x86_64 - Networking cki netfilter test
+      x86_64 - Networking vnic: ipvlan/basic
+      x86_64 - Libkcapi AF_ALG test
+      x86_64 - Hardware - pciutils: sanity smoke test
+      x86_64 - Storage - multipath mapping test
+      x86_64 - Storage - dm/common
+      x86_64 - Storage - lvm thinp sanity
+      x86_64 - Storage - iSCSI parameters
+      x86_64 - kdump - kexec_boot
+      x86_64 - kdump - kexec-file-load
+      x86_64 - kselftests upstream - net
+      x86_64 - kselftests upstream - bpf
+      x86_64 - kselftests upstream - bpf_test_progs
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - kdump - sysrq-c
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - selinux-policy: serge-testsuite
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - xfstests - ext4
+      x86_64 - xfstests - xfs
+      x86_64 - xfstests - btrfs
+      x86_64 - xfstests - nfsv4.2
+      x86_64 - xfstests - cifsv3.11
+      x86_64 - Reboot test
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
