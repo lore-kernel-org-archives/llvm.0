@@ -1,59 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55ACD38383;
-	Sun, 21 Jan 2024 20:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BFB38DDE;
+	Sun, 21 Jan 2024 21:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705867712; cv=none; b=jBMns+/HpkjAKM3/8ObiY8S6/0FQ5wXuE9hHwUC6E1cgjsnfP/Q1ufLnJWyg7wGecLEOWH4xCRuDt/7H0LObM1h3oWoffEnuRXlXQ9zWo6w9XCcAhTHpc7FaAeB19n8OO3Np+tyVQbp2gaUmtmqgzux2b1rXvCVpq0lT3+gqhrc=
+	t=1705872031; cv=none; b=eZbmy42cGPMLd9jMCWi6S3ahQkgdVdmDHJ38V23ittDsoaPiRNaZpvSoWEKU/r5pDK401YSbP+AwIXf8eXUXztO6rsARGlzYQZBSaRGDz6UFUx3LvxYRWkRMfaElaGflNzamKFfbQVRbQOAGzWFHmIO0g0EdQkWYqATG9pjIzWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705867712; c=relaxed/simple;
-	bh=uv54BDJ2xx83Uk3+58/0LAFby63JWISeODEXR4MCmsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hZvJY5vULRvs5ki66LsfITcSdAyEKATJo9FfAWijjjrGG3y90nsVr8i9C+aRLoOr/PAPAvgOAUr4b+O1au6i+CxyhOCJ5bWwVRcEq7NvX10WnFNSEgbz2kLY5Vwo4d5RE6P1yTaasD8EqQkiV/E6zCQaAWSBX2d2wWImh1UM2Zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aUEzk/h7; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1705872031; c=relaxed/simple;
+	bh=11V1eSr3B4ClOPG8tzFhCImcJPCD0nsuQC8rvCO7hfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=S5ZiJti/e3GrqPpqZhQsaMUzzqgcF6trc7V591Kz+MeKpZ4DkqAYXpKQgHkRnZlvDNOJKL9xpeL54i3CHpggH2jTft1E5Py9s8lxMUkO/VGhPN3C9Gvt3Yj7Ly48PaSvVxqHwtNACIRoCmqLXcQdoq/cQePlAZ6NqdHl7yDp93w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BVJlquF3; arc=none smtp.client-ip=134.134.136.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aUEzk/h7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BVJlquF3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705867709; x=1737403709;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uv54BDJ2xx83Uk3+58/0LAFby63JWISeODEXR4MCmsc=;
-  b=aUEzk/h7lS5orPUOwtFKZIPj5BG16HC9Vj+lewvCR9oUID9K9BlGxy7Y
-   HmQb3zi9oHhyEjhyAodRDWr4Ut2MmWSwAh5HsAXf5Hu8FCxf9WLD4gqWp
-   pjjle7s6daQFjXVfGNCj8wOqfKPW0PHEX0S3Egxbp7qXxfb8In9JiaYyw
-   0VN4GimCZRfDekessgaE174NWIGk6Nn5iJ3fWbguUKKR15upEkI1qgUS5
-   0EpdSj1rttL1fLdI2dDmI54w6S+3gFqaf03c1DdP/lqP+swc9cFZKNxBU
-   w4h+13A/6VsHyl19E7U9nuIc8vdcfL13QlzZuJ9+sDg/+BTwHuFPhvY9x
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="14572432"
-X-IronPort-AV: E=Sophos;i="6.05,210,1701158400"; 
-   d="scan'208";a="14572432"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2024 12:08:28 -0800
+  t=1705872029; x=1737408029;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=11V1eSr3B4ClOPG8tzFhCImcJPCD0nsuQC8rvCO7hfM=;
+  b=BVJlquF31nkf3fd7qd51dSnr9H00J8hiC8DAqnlkoOMX0plQxhA/FBFa
+   rYP7dkslv2mlahASDoUTGmiKLi1uBEyRfJH4guo5tfK/GPMk2BkZDqpt6
+   j2Gg4jmhh6hc93/K7394ozPoC2k5cBaHT7Hlc8KlF3OLqHqj7+9+tzJGY
+   70N97It8+s/vZL0kJR0EFq9QAJD462xzRHE9D44v7symCK1UddIUPTI7b
+   Xl7/+HOXrFpXqU4+vLJqGi0lrgGbCW1bPRxmHcAG9RJOpO6/kLn+syEXS
+   2q5jVdVTp+8kYipjT1Y1iiBwf5TW02n15EZO8VjzGvE+Wsq7Vc0zSh/Gm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="467442139"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="467442139"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2024 13:20:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,210,1701158400"; 
-   d="scan'208";a="33848646"
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="778420761"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="778420761"
 Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 Jan 2024 12:08:25 -0800
+  by orsmga007.jf.intel.com with ESMTP; 21 Jan 2024 13:20:27 -0800
 Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rRe7C-0006AC-2M;
-	Sun, 21 Jan 2024 20:08:22 +0000
-Date: Mon, 22 Jan 2024 04:07:36 +0800
+	id 1rRfEu-0006CC-2Z;
+	Sun, 21 Jan 2024 21:20:24 +0000
+Date: Mon, 22 Jan 2024 05:19:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pranav Prasad <pranavpp@google.com>, tglx@linutronix.de,
-	jstultz@google.com, sboyd@kernel.org
+To: Danielle Ratson <danieller@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Pranav Prasad <pranavpp@google.com>,
-	Kelly Rossmoyer <krossmo@google.com>
-Subject: Re: [PATCH] alarmtimer: Expose information about next alarm to
- userspace via sysfs
-Message-ID: <202401220311.aQMd6KFE-lkp@intel.com>
-References: <20240118181459.1663313-1-pranavpp@google.com>
+	Ido Schimmel <idosch@nvidia.com>
+Subject: [jpirko-mlxsw:combined_queue 8/9]
+ net/ethtool/cmis_fw_update.c:240:23: warning: converting the enum constant
+ to a boolean
+Message-ID: <202401220520.5K1hLmww-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,113 +60,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240118181459.1663313-1-pranavpp@google.com>
 
-Hi Pranav,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on linus/master v6.7 next-20240119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pranav-Prasad/alarmtimer-Expose-information-about-next-alarm-to-userspace-via-sysfs/20240119-021809
-base:   tip/timers/core
-patch link:    https://lore.kernel.org/r/20240118181459.1663313-1-pranavpp%40google.com
-patch subject: [PATCH] alarmtimer: Expose information about next alarm to userspace via sysfs
-config: um-randconfig-001-20240120 (https://download.01.org/0day-ci/archive/20240122/202401220311.aQMd6KFE-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d92ce344bf641e6bb025b41b3f1a77dd25e2b3e9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240122/202401220311.aQMd6KFE-lkp@intel.com/reproduce)
+tree:   https://github.com/jpirko/linux_mlxsw combined_queue
+head:   2d94043682e019700926235499d603818f42460a
+commit: 828c7605e322a6ae571a754298dfe361741bdcf2 [8/9] ethtool: cmis_fw_update: add a layer for supporting firmware update using CDB
+config: i386-randconfig-001-20240122 (https://download.01.org/0day-ci/archive/20240122/202401220520.5K1hLmww-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240122/202401220520.5K1hLmww-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401220311.aQMd6KFE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401220520.5K1hLmww-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/time/alarmtimer.c:18:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> kernel/time/alarmtimer.c:37:19: warning: unused variable 'alarmtimer_group_name' [-Wunused-const-variable]
-      37 | static const char alarmtimer_group_name[] = "alarmtimer";
-         |                   ^~~~~~~~~~~~~~~~~~~~~
-   13 warnings generated.
+>> net/ethtool/cmis_fw_update.c:240:23: warning: converting the enum constant to a boolean [-Wint-in-bool-context]
+     240 |                         (CMIS_MODULE_READY || CMIS_MODULE_LOW_PWR));
+         |                                            ^
+   1 warning generated.
 
 
-vim +/alarmtimer_group_name +37 kernel/time/alarmtimer.c
+vim +240 net/ethtool/cmis_fw_update.c
 
-    36	
-  > 37	static const char alarmtimer_group_name[] = "alarmtimer";
-    38	
+   236	
+   237	static bool module_is_ready(u8 data)
+   238	{
+   239		return (((data >> 1) & 7) ==
+ > 240				(CMIS_MODULE_READY || CMIS_MODULE_LOW_PWR));
+   241	}
+   242	
 
 -- 
 0-DAY CI Kernel Test Service
