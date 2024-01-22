@@ -1,53 +1,53 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727F339AD5
-	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 09:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FD839AF8
+	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 09:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705914769; cv=none; b=Un3aEC32iNV6pywFT5kndLa/vkh3xeCh1NeBIMOw7MJcJApAUovi/ENlz4WmQaCvs2/Aac4tXatinpxlaFibhedVdaEcmFBDmkPINRP0hyQgxBshsEDJyMamxV8R6m6GB2CTXJ2YuU+ledZiNMt9P3bWI7lFdems39T7zIpl3lc=
+	t=1705914772; cv=none; b=rJBZGSCTxQcrZaDVPX0cMuYVIDQp5LjZmq1B8mJRhcd9+drLTdO+CoMoKw58CR813MOA8QbqSwWos/nHJ3j0Fm4VSINyQxMeeRStqPdP0rYAd8TKmN+UZ1qnykDUS6iwZlGpt7acOlaIcLjsaoK7SJOwzhuzys53tZghZqu3kW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705914769; c=relaxed/simple;
-	bh=FI1bdkhRdpG4w1m18XkG1rAosi5jGY3arzDb2dniOFM=;
+	s=arc-20240116; t=1705914772; c=relaxed/simple;
+	bh=7WqvfI2V9xt/Od2Zwwt1owQ25hJdvvX/uuPnR9lgy1Y=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=T2ROFFS7cAKpKHP5XrrF9CJ5YQQAk7ujf1OlbCaOrEB38t6QSXJilUR8pORLQHvl2zVZNzzmDwX18Lc2XRMlTsHGFQSUPOAPt44+MTSBKbGahPsnpGlnAMr0ybMbzI/QmwTSxEfNx3+/fSr3U0PqsXwHCqrs/oI6eupMcNB3Sg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UkKOtNv3; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=AVmzjKWJPlwnOleqBPIKjEG2lD5QBoC0wPKtg21YyaA/yAehLjcunkSTFtjnZZZrBfEwZf+raSaPNy4QYbNVRTYXHXW8XCPlGOwBC0EFMqnVJThLzxO8jky8cqZ4Ppg+wdIHAsCluZ5imlY9Y8QMaOU/HRrYaciZgMPJsNpmrxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KZjl29xx; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UkKOtNv3"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5ffc7ce3343so14576107b3.1
-        for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 01:12:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KZjl29xx"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc2470bc0bdso3796281276.1
+        for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 01:12:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1705914767; x=1706519567; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1705914770; x=1706519570; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6+ATsTLfC/nfRiaNDc88cmvgZOlK0W3C+DyqDLNAS68=;
-        b=UkKOtNv3MVi/UCWhTlfLBZ4HDzPwxOs4rzRiWTAkn54Z+Slf/UNmUPhbqxMNCW27NP
-         THzx+GwRH8Tug96OX4s2F3Hoh0vwxnujnreqWTf9rJAjZCivhfSfESldaCk/33X8Uupx
-         aJSs5wGb28wAJeYTTMuLWr2lWa0bpjWZ9MbqXxMvh7muaoLxd43IvYZXEdNxTxnIsThI
-         vidHF8mmZ19mn19jmHgBYa4k4qLUCVFv7antJ3KNH3m8jNSw46aEg5YGrmZKeuK5TG7l
-         ZCV9HRoIjmJDu1s+V4Wxxn3iDoklA/Czr2j0Ic6aVp9MXe2Mre+4VEBf1QxWDyM8Bohe
-         JHFA==
+        bh=anpwjJFJvKmui4DbRVFl+bq/czyO2Fw5IsMP2KX6EWQ=;
+        b=KZjl29xxXOk8YvD57oTSVZ79vPF+QbtRWlDMqSLkP4FlA51EItHAKYf0Z3ks6uMYzQ
+         6YRmamVslTeZmkaJtJwCoX+uX4IWzxMwjvTXqYGqWyd2EQ6zZ/cEME/koxIqxFUQ0Jpn
+         ORk1D4C27gBXiM0wpePb1yLWupWkc9Mn/zjS4oD4rJA6oYnhW0nB8NloePzDccv46kZV
+         LD0gYWVz+LwknHTzMJbRQFV/t1OCyi0BRM7KCYGAUAt716TwHl+0NxmRyJB/ZLdhsSoS
+         yLMqlaiIliyybxjisx4HYSBj3IgAqbVBtcjJ1QmUnukST1TD5YBJDVcdOhM5YLCIgLvl
+         z95A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705914767; x=1706519567;
+        d=1e100.net; s=20230601; t=1705914770; x=1706519570;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6+ATsTLfC/nfRiaNDc88cmvgZOlK0W3C+DyqDLNAS68=;
-        b=jIeuKsGiinF5uUfhX/3X9oTMfAZxYy3oTV8qg+an2JusqgkKFTKm+YXe/LkoP6KGmO
-         m6nk5Sm588NOB1auuV4c3g77i5MFLGLYZnnAlNyz9QxolA+dcUlTphBRzxoJ+dgVRcP7
-         IqDcXH3E8xRosgku8vMXD1OIua+p9MrgaEFVX9fHVVvLEL52TU/MwxgLZfBpOCVjvOuR
-         d0JyIM8BhO90tSxTT1Vwkg710dFpNdyEvRu5MbVhCCWrbwqqHTHO+y29pdUUzgBikIt9
-         AxnmDwNFE/ECAEiRUkWut4wu4QZZ93bPxNjXN28Eh+s7uEfqamB0PaoSuaqHxl/TTEM/
-         zjSw==
-X-Gm-Message-State: AOJu0YzgiI6s+lI/LMmUVJqovu5buBC5momDGnvU8qMLGhKI42tOJgm5
-	pykuU+wfhZNc1fB/2OFdQoLYSL2VYcLfCE4HQ25l/XGJ1mambKRTZcbAncQN8ENytVUSjw==
-X-Google-Smtp-Source: AGHT+IHj5jP1/bPHn1fKlYTBs3hflLPsW502amseDci9rhfzPpL0hjRqnXR0+7HXx4D0UcvjnLYzNOYw
+        bh=anpwjJFJvKmui4DbRVFl+bq/czyO2Fw5IsMP2KX6EWQ=;
+        b=DVYXr3ClDFXpheM4C5Fv5yWZXaaMctbQDygoE/74Y8Lqf0wLoXsOthyuaFXT3JTBuQ
+         r/skW6+/XCt2vIhNOoVeKDIKQKWFewyShhJrVkVRRYQP0PaMSFFqldsLj6VorELFKuW8
+         OVtA+meTcaePphBQ1BmUgV6YRcw/tdbb1JDL7ZC+mDcbhh0VkTMiMctVv0d0Gk6DGkje
+         ZUpf0C+VmdnpUnIIwiWzDpRT+MJk5GZIr3oRx0aB1EAm5dSl0sHOeRHD+L57aS5iU+6w
+         aCJDruQbTvZdv5qUKbl3oIfoI5AXsk0cdNGKOETMtxni2C/byQ4m6NsN9VN9ZszHKYMl
+         gq+A==
+X-Gm-Message-State: AOJu0YwcbYxhzG/LCel2474NnOc7eASy/VaY7PZZOUd3HO2V5pbKdJmT
+	fU8BmnqyH6qPZPxunweRLAClpQ895BN+VfCIYefoZnnHqbaLbHr8TvU4ZHok7bMRS4Cq7w==
+X-Google-Smtp-Source: AGHT+IFFPnrivenEXAeTge4xUB//ErQJ/nlZj8/EpO9cvDlG7OSkvrz/wCrriJHLaNBS6+w1f6cwmANP
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a81:5753:0:b0:5fb:7e5b:b877 with SMTP id
- l80-20020a815753000000b005fb7e5bb877mr1288192ywb.7.1705914767726; Mon, 22 Jan
- 2024 01:12:47 -0800 (PST)
-Date: Mon, 22 Jan 2024 10:08:54 +0100
+ (user=ardb job=sendgmr) by 2002:a05:6902:1808:b0:dc2:3426:c9ee with SMTP id
+ cf8-20020a056902180800b00dc23426c9eemr240839ybb.11.1705914769920; Mon, 22 Jan
+ 2024 01:12:49 -0800 (PST)
+Date: Mon, 22 Jan 2024 10:08:55 +0100
 In-Reply-To: <20240122090851.851120-7-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,14 +57,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240122090851.851120-7-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1618; i=ardb@kernel.org;
- h=from:subject; bh=A4glY9lFGh3ZCS2BolwbxkiHAY08LMb32QJUAkFZOD4=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWdwbIambt6UbumlW3o3fUnes5Ggxs7A9m5dyfPXsn/d
- JVi3k3njlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjAR7l2MDFurHzxqXGW4W4t3
- ia3/+5v/H5kWi8SUzC64/r7UO4X93XqGX8w7t6fEqAq8Lsi/1jt580dBlTI521k3p5SKLZda6x5 VwAcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1581; i=ardb@kernel.org;
+ h=from:subject; bh=thQkn6eFYWU4rIO38nRY5rSfaRiPUJPmqajniqH14XU=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWdwXL25bMmmm1ZFF9evWDmkTcTIha1sGp3zPaal+6zr
+ 4qB+1xVRykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZjIGztGhtPFZyb/Xb5FN/f7
+ 90CdRWd52mdPLC3t2LdyTaY67xfrJysZ/gpIeM4/a/g0Y3fTyS5Nqasbk9+o34rxme419eRVjen fGRkA
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240122090851.851120-9-ardb+git@google.com>
-Subject: [RFC PATCH 2/5] vmlinux: Avoid weak reference to notes section
+Message-ID: <20240122090851.851120-10-ardb+git@google.com>
+Subject: [RFC PATCH 3/5] btf: Avoid weak external references
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -79,50 +79,48 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Weak references are references that are permitted to remain unsatisfied
-in the final link. This means they cannot be implemented using place
-relative relocations, resulting in GOT entries when using position
-independent code generation.
+If the BTF code is enabled in the build configuration, the start/stop
+BTF markers are guaranteed to exist in the final link but not during the
+first linker pass.
 
-The notes section should always exist, so the weak annotations can be
-omitted.
+Avoid GOT based relocations to these markers in the final executable by
+providing preliminary definitions that will be used by the first linker
+pass, and superseded by the actual definitions in the subsequent ones.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- kernel/ksysfs.c | 4 ++--
- lib/buildid.c   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ include/asm-generic/vmlinux.lds.h | 2 ++
+ kernel/bpf/btf.c                  | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
-index 1d4bc493b2f4..347beb763c59 100644
---- a/kernel/ksysfs.c
-+++ b/kernel/ksysfs.c
-@@ -226,8 +226,8 @@ KERNEL_ATTR_RW(rcu_normal);
- /*
-  * Make /sys/kernel/notes give the raw contents of our kernel .notes section.
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index a39e050416c7..ef45331fb043 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -456,6 +456,8 @@
+  * independent code.
   */
--extern const void __start_notes __weak;
--extern const void __stop_notes __weak;
-+extern const void __start_notes;
-+extern const void __stop_notes;
- #define	notes_size (&__stop_notes - &__start_notes)
+ #define PRELIMINARY_SYMBOL_DEFINITIONS					\
++	PROVIDE(__start_BTF = .);					\
++	PROVIDE(__stop_BTF = .);					\
+ 	PROVIDE(kallsyms_addresses = .);				\
+ 	PROVIDE(kallsyms_offsets = .);					\
+ 	PROVIDE(kallsyms_names = .);					\
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 596471189176..a659fc7045bb 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5581,8 +5581,8 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
+ 	return ERR_PTR(err);
+ }
  
- static ssize_t notes_read(struct file *filp, struct kobject *kobj,
-diff --git a/lib/buildid.c b/lib/buildid.c
-index e3a7acdeef0e..15109fe191ae 100644
---- a/lib/buildid.c
-+++ b/lib/buildid.c
-@@ -182,8 +182,8 @@ unsigned char vmlinux_build_id[BUILD_ID_SIZE_MAX] __ro_after_init;
-  */
- void __init init_vmlinux_build_id(void)
- {
--	extern const void __start_notes __weak;
--	extern const void __stop_notes __weak;
-+	extern const void __start_notes;
-+	extern const void __stop_notes;
- 	unsigned int size = &__stop_notes - &__start_notes;
+-extern char __weak __start_BTF[];
+-extern char __weak __stop_BTF[];
++extern char __start_BTF[];
++extern char __stop_BTF[];
+ extern struct btf *btf_vmlinux;
  
- 	build_id_parse_buf(&__start_notes, vmlinux_build_id, size);
+ #define BPF_MAP_TYPE(_id, _ops)
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
