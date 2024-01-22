@@ -1,235 +1,193 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0C8362
-	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 00:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D49195;
+	Mon, 22 Jan 2024 00:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705881681; cv=none; b=jzPfUDuIaVLyxxsWYCjm/MwFSEUc3OGaXdcZfXaMTKYrAwOZoS58h4FJJE4aAg6lO7z7OYi5rf0eQdCCKRwCvZEuWo21lavjXFXdZuRyloZok3nTBvvZyW1PHzWdyAcvzPB7FqnttSJBdov7Y4qboAq0jEkvxcSQBitRJHE7Kxc=
+	t=1705882534; cv=none; b=OYMy3fPHVy2E07a/bcOHnw9G3NVJMom2wFmHmJgyHRj8KBzGs55LToL78ZPbiqTe46cSAOFmsNu5xKIyNAErex3WA6St6Z3YRI/d+d921uQmJJN9v8xW6RQIuT6FtdGv2OwLMxp6yHcgvf8S6Z4IdAteBOQZ3n9ICLWoWmftEHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705881681; c=relaxed/simple;
-	bh=L1q+AAzeWikNjmD6i8OPxb0TtOZURxbDyxI523Am+T4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=U1LQ99cxeDp08jh5nyupM03Wd4YGmZnGuSn4ncvwZ+KUJ6m1esYSvGNbCXUVD7NMUF8Yvxx9Qs5eJt5X2nV43qDKJx+QASrvfHpyRACwGk6vrUDG2ErC04oP2sS/W1w6OSdPdqL5Wkw+Ix6DEFElLB02/m6c6AdKFwvw92TPExU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C5IzUR69; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1705882534; c=relaxed/simple;
+	bh=2ZHh5G2gm10jhN2LBwO4ycieDx8xJPMJBvh+iN2j0Z8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bYm4CGVkaE5GPJeDqOp7a24FOV+Q5b2DP1Y2Jc6GB9pQ/Oj3UGbAmruYrbvFHD8RxsDGLazAQbQWfeS5Yr0/UNftxka3vJdtxNZC60seT45cTm/sV2EPvWYr1nqUkS0qvxqALtEgmmugPmkQsS04n5F8dbngX6QoFMvTq20FGyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=beEBiRzs; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C5IzUR69"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705881678;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AiGpspyYvq8yDnghMl8VmLgFTmTFYZPCkkjvLJprPcI=;
-	b=C5IzUR697KeuhrAO9PcEypm9+p8MT+zwd8657drWkpbQj4ST/QAteovLeylIvWDvJHiAum
-	K/F7Iw/7jTkaIfp8kweCHi+sT+iFMBHq0HxebTCZvmXy7oVkaBLir4g2mvFwK7DdKA3eVe
-	nnrjT74uOKrhgLFavvLcQp6UT47WQ7g=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-283-0y4OmteVO3OsMd39VlQqjw-1; Sun,
- 21 Jan 2024 19:01:16 -0500
-X-MC-Unique: 0y4OmteVO3OsMd39VlQqjw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DEB021C04B6A
-	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 00:01:15 +0000 (UTC)
-Received: from [172.64.9.51] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C85131C05E0E;
-	Mon, 22 Jan 2024 00:01:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 78 of 226): Test report for master
- (6.7.0, mainline.kernel.org-clang, 556e2d17)
-Date: Mon, 22 Jan 2024 00:01:15 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="beEBiRzs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705882533; x=1737418533;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2ZHh5G2gm10jhN2LBwO4ycieDx8xJPMJBvh+iN2j0Z8=;
+  b=beEBiRzsgCScubMyF5OjMX/VL8J0WMO9UjLlgGTglpP/2xu23GD5dmGD
+   UfFg3I7pKH6hlRihEigPoRQ25q2oEPp/q4qwtUhqoQcUQM/f76Wr4a/y8
+   K6ROdZ9mrJkfD0qRdtL+qH6P6uz/ylwUenLXJXTy4unyE0uM6B0Z4rSS4
+   eCNisuX1W9m9t4cTWUrwaOroJy134eNKPITjg4qosIFjKmUxbbXwVfIu9
+   XwpxerRMlw993RVI+cAtop/SFq+vO1BRGrKba/CRpNMfmzT5YY+kangH6
+   OB49PPtsUOsTiO8hbLkOI2QqvaTJzLRqz5Bq+4LXnEJJ/uBtoG2plcBmK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="7750466"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="7750466"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2024 16:15:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="788810380"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="788810380"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Jan 2024 16:15:30 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rRhyK-0006Gs-0J;
+	Mon, 22 Jan 2024 00:15:28 +0000
+Date: Mon, 22 Jan 2024 08:14:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [qais-yousef:uclamp-max-aggregation 9/13]
+ kernel/sched/core.c:5146:15: error: no member named 'decayed' in 'struct
+ cfs_rq'
+Message-ID: <202401220809.8qXJKKH3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <65695.124012119011600167@us-mta-283.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/qais-yousef/linux uclamp-max-aggregation
+head:   a29c26f9317cede0f3141904d910d3125f8a82ea
+commit: c4beee22462b6901c44432014931880056821b2d [9/13] sched: Consolidate cpufreq updates
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20240122/202401220809.8qXJKKH3-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d92ce344bf641e6bb025b41b3f1a77dd25e2b3e9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240122/202401220809.8qXJKKH3-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401220809.8qXJKKH3-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'ceph-for-6.8-rc1' of https://github.com/ceph=
-/ceph-client
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/124355
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> kernel/sched/core.c:5146:15: error: no member named 'decayed' in 'struct cfs_rq'
+    5146 |                 if (rq->cfs.decayed) {
+         |                     ~~~~~~~ ^
+   kernel/sched/core.c:5147:12: error: no member named 'decayed' in 'struct cfs_rq'
+    5147 |                         rq->cfs.decayed = false;
+         |                         ~~~~~~~ ^
+>> kernel/sched/core.c:5157:21: error: no member named 'avg' in 'struct cfs_rq'
+    5157 |                 rq_util = rq->cfs.avg.util_avg;
+         |                           ~~~~~~~ ^
+   6 warnings and 3 errors generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - POSIX pjd-fstest suites
-      x86_64 (debug) - Filesystem - Loopdev Sanity
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-      x86_64 (debug) - Networking - Ethernet drivers sanity
-      x86_64 (debug) - Networking cki netfilter test
-      x86_64 (debug) - Libkcapi AF_ALG test
-      x86_64 (debug) - Hardware - pciutils: sanity smoke test
-      x86_64 (debug) - Storage - dm/common
-      x86_64 (debug) - Storage - lvm thinp sanity
-      x86_64 (debug) - Storage - iSCSI parameters
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - POSIX pjd-fstest suites
-      x86_64 - Filesystem - Loopdev Sanity
-      x86_64 - Memory function: memfd_create
-      x86_64 - AMTU (Abstract Machine Test Utility)
-      x86_64 - Networking - Ethernet drivers sanity
-      x86_64 - Networking cki netfilter test
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - multipath mapping test
-      x86_64 - Storage - dm/common
-      x86_64 - Storage - lvm thinp sanity
-      x86_64 - Storage - iSCSI parameters
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - kdump - sysrq-c
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - selinux-policy: serge-testsuite
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - xfstests - ext4
-      x86_64 - xfstests - xfs
-      x86_64 - xfstests - btrfs
-      x86_64 - xfstests - nfsv4.2
-      x86_64 - xfstests - cifsv3.11
-      x86_64 - Reboot test
+vim +5146 kernel/sched/core.c
 
+  5127	
+  5128	static inline void update_cpufreq_ctx_switch(struct rq *rq)
+  5129	{
+  5130		if (unlikely(current->sched_class == &stop_sched_class))
+  5131			return;
+  5132	
+  5133		if (unlikely(current->sched_class == &idle_sched_class))
+  5134			return;
+  5135	
+  5136		if (unlikely(task_has_idle_policy(current)))
+  5137			return;
+  5138	
+  5139		if (likely(fair_policy(current->policy))) {
+  5140			unsigned long uclamp_min, uclamp_max;
+  5141			unsigned long rq_util;
+  5142	
+  5143			/*
+  5144			 * Allow cpufreq updates once for every update_load_avg() decay.
+  5145			 */
+> 5146			if (rq->cfs.decayed) {
+  5147				rq->cfs.decayed = false;
+  5148				goto force_update;
+  5149			}
+  5150	
+  5151			if (current->in_iowait)
+  5152				goto force_update;
+  5153	
+  5154			/* Force an update if perf hints are required to be applied */
+  5155			uclamp_min = uclamp_eff_value(current, UCLAMP_MIN);
+  5156			uclamp_max = uclamp_eff_value(current, UCLAMP_MIN);
+> 5157			rq_util = rq->cfs.avg.util_avg;
+  5158	
+  5159			if (uclamp_min > rq_util || uclamp_max < rq_util)
+  5160				goto force_update;
+  5161	
+  5162			return;
+  5163		}
+  5164	
+  5165		/* RT and DL should always send a freq update */
+  5166	
+  5167		/* XXX ignore updates for sugov worker thread */
+  5168	
+  5169	force_update:
+  5170	
+  5171		/*
+  5172		 * Request freq update after __balance_callbacks to take into account
+  5173		 * any changes to rq.
+  5174		 */
+  5175		cpufreq_update_util(rq, current->in_iowait ? SCHED_CPUFREQ_IOWAIT : 0);
+  5176	}
+  5177	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
