@@ -1,253 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1624D117
-	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 16:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAA54EB50;
+	Mon, 22 Jan 2024 17:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705939283; cv=none; b=gPJJio5NCFr4XxImwj41SIMyrDXbvyYVP2NdBc7CV0tNR5A/0g2/YTbRFiYy0k3PjFGJt81KqOwSxUvuAot+FPadYnuXo55lCJ7ah0/xVpDOAyBNi7khfkjYyZRQ0wN6Hxlualm4QE8goczsDuty3bJydbdzqzc4Om3zO12ttEM=
+	t=1705943967; cv=none; b=Wlb6UW5XEwLSQpbXPR390lYkXSUF4exe037E4JHIv7zFwtZ+Q6lfZ/sWJE7ktK9fn3UIFh5toZsTGQJ95LYD1wrtKO2tmyMYakgFCt79ZR74LDPs2EQvzMxgQaAcOn3OdZM04AOgKNLjWjLgmIDp16esA+JtJbUWk6P7RxZKbUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705939283; c=relaxed/simple;
-	bh=laQ8FQ2g8HSPvRZm46WdU0KwnnrH4kMS7tk5Ly09bys=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=GQgfaerEAM6WmUNN8W6N7tibtx/W9tXE6F193VC1a5Q4WXNoOtdS+G+P6J/8VciW5RRu74XGcjSSJApmPW087FslJsid8gk1re7wDBN2skMwqgJnvAgY5wax7N2wC/xdJuU6UroQplwt/mGQtTAbTtdeZn+kw/sKgYvoYG3RuVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jEQhNi42; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jEQhNi42"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705939280;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Cgd0ZPDwgCZ/PFlrmlPU1cxrYvsTy/PvWREuHE7khmg=;
-	b=jEQhNi422cTcqqNlFPIEzWih5zxFKEWzmE/35sRlEDpaVa8YYLYePcp2Da6AjEO7f1iJaH
-	bcqO9beLYlrwjfBg0gsFhKPwd7pM7uA6oWWHip4xMmjbAcnNyFbKDAbt2PK6AUg4+DxxF3
-	WTPnmj1wYWXIhx0ngX055irTAKmFeIs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-43-ag-pcp8JMvuJXwQD735usw-1; Mon, 22 Jan 2024 11:01:18 -0500
-X-MC-Unique: ag-pcp8JMvuJXwQD735usw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 57ECF88F9EB
-	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 16:01:18 +0000 (UTC)
-Received: from [172.64.10.17] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 41B2751D5;
-	Mon, 22 Jan 2024 16:01:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 78 of 226): Test report for master
- (6.7.0, mainline.kernel.org-clang, 4fbbed78)
-Date: Mon, 22 Jan 2024 16:01:18 -0000
-To: llvm@lists.linux.dev
+	s=arc-20240116; t=1705943967; c=relaxed/simple;
+	bh=hzkaavx+ytSFVwWTePja2IBEsyWEPSnTMeQ9EJGh6aI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MPpwc5W/OsQPhMc0mAf+i7umbbz0U6EUcObFO9Cv42OerCQcQ6T8KVh0XQCRwoNGMymlwIy1853tOsVHtmLl93KeHNSw6d3r9J0Vm5py6tntULr5z19cw2cUk+81Pfsv0u1VmmWt+YtaWM0KsxBngLRzXXOd/KYOlxqrVL96sts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 290CD1FB;
+	Mon, 22 Jan 2024 09:20:11 -0800 (PST)
+Received: from [10.1.33.151] (XHFQ2J9959.cambridge.arm.com [10.1.33.151])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB2F93F5A1;
+	Mon, 22 Jan 2024 09:19:23 -0800 (PST)
+Message-ID: <3069ea17-d470-4f02-a411-99638485c430@arm.com>
+Date: Mon, 22 Jan 2024 17:19:22 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <37315.124012211011801433@us-mta-43.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/10] mm: Convert to should_zap_page() to
+ should_zap_folio()
+Content-Language: en-GB
+To: Kefeng Wang <wangkefeng.wang@huawei.com>,
+ kernel test robot <lkp@intel.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Linux Memory Management List <linux-mm@kvack.org>, david@redhat.com,
+ linux-s390@vger.kernel.org
+References: <20240111152429.3374566-9-willy@infradead.org>
+ <202401121250.A221BL2D-lkp@intel.com>
+ <962a7993-fce9-4de8-85cd-25e290f25736@huawei.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <962a7993-fce9-4de8-85cd-25e290f25736@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On 12/01/2024 10:14, Kefeng Wang wrote:
+> 
+> 
+> On 2024/1/12 13:03, kernel test robot wrote:
+>> Hi Matthew,
+>>
+>> kernel test robot noticed the following build warnings:
+>>
+>> [auto build test WARNING on akpm-mm/mm-everything]
+>>
+>> url:   
+>> https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/mm-Add-pfn_swap_entry_folio/20240111-232757
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+>> patch link:   
+>> https://lore.kernel.org/r/20240111152429.3374566-9-willy%40infradead.org
+>> patch subject: [PATCH v3 08/10] mm: Convert to should_zap_page() to
+>> should_zap_folio()
+>> config: arm-milbeaut_m10v_defconfig
+>> (https://download.01.org/0day-ci/archive/20240112/202401121250.A221BL2D-lkp@intel.com/config)
+>> compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git
+>> ae42196bc493ffe877a7e3dff8be32035dea4d07)
+>> reproduce (this is a W=1 build):
+>> (https://download.01.org/0day-ci/archive/20240112/202401121250.A221BL2D-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes:
+>> https://lore.kernel.org/oe-kbuild-all/202401121250.A221BL2D-lkp@intel.com/
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> mm/memory.c:1451:8: warning: variable 'folio' is used uninitialized whenever
+>>>> 'if' condition is false [-Wsometimes-uninitialized]
+>>                             if (page)
+>>                                 ^~~~
+>>     mm/memory.c:1454:44: note: uninitialized use occurs here
+>>                             if (unlikely(!should_zap_folio(details, folio)))
+>>                                                                     ^~~~~
+>>     include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+>>     # define unlikely(x)    __builtin_expect(!!(x), 0)
+>>                                                 ^
+>>     mm/memory.c:1451:4: note: remove the 'if' if its condition is always true
+>>                             if (page)
+>>                             ^~~~~~~~~
+>>     mm/memory.c:1438:22: note: initialize the variable 'folio' to silence this
+>> warning
+>>                     struct folio *folio;
+>>                                        ^
+>>                                         = NULL
+> 
+> Hi Andrew, please help to squash following change, thanks.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I just independently found this issue during coincidental review of the code.
+It's still a problem in mm-unstable, so wondered if you missed the request, Andrew?
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'timers-core-2024-01-21' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/124583
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [rawhide] avc:  denied  { checkpoint_restore } for  pid=3D79=
-3 comm=3D"agetty" capability=3D40  scontext=3Dsystem_u:system_r:getty_t:s0-=
-s0:c0.c1023 tcontext=3Dsystem_u:system_r:getty_t:s0-s0:c0.c1023 tclass=3Dca=
-pability2 permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259622
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - POSIX pjd-fstest suites
-      x86_64 - Filesystem - Loopdev Sanity
-      x86_64 - Memory function: memfd_create
-      x86_64 - AMTU (Abstract Machine Test Utility)
-      x86_64 - Networking - Ethernet drivers sanity
-      x86_64 - Networking cki netfilter test
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - multipath mapping test
-      x86_64 - Storage - dm/common
-      x86_64 - Storage - lvm thinp sanity
-      x86_64 - Storage - iSCSI parameters
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - kdump - sysrq-c
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - selinux-policy: serge-testsuite
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - xfstests - ext4
-      x86_64 - xfstests - xfs
-      x86_64 - xfstests - btrfs
-      x86_64 - xfstests - nfsv4.2
-      x86_64 - xfstests - cifsv3.11
-      x86_64 - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - POSIX pjd-fstest suites
-      x86_64 (debug) - Filesystem - Loopdev Sanity
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-      x86_64 (debug) - Networking - Ethernet drivers sanity
-      x86_64 (debug) - Networking cki netfilter test
-      x86_64 (debug) - Libkcapi AF_ALG test
-      x86_64 (debug) - Hardware - pciutils: sanity smoke test
-      x86_64 (debug) - Storage - dm/common
-      x86_64 (debug) - Storage - lvm thinp sanity
-      x86_64 (debug) - Storage - iSCSI parameters
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 998237b5600f..5e88d5379127 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1435,7 +1435,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>         arch_enter_lazy_mmu_mode();
+>         do {
+>                 pte_t ptent = ptep_get(pte);
+> -               struct folio *folio;
+> +               struct folio *folio = NULL;
+>                 struct page *page;
+> 
+>                 if (pte_none(ptent))
+> 
+> 
+> 
 
