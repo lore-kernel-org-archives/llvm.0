@@ -1,146 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C5263A6;
-	Mon, 22 Jan 2024 19:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFD43EA8B
+	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 19:35:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705950372; cv=none; b=HUztlmCbAlNMR2zBOc3fu+Q5BD8JXhRw5yMVIftesFCThrAYfvSgMrSyr04kdFjcdpIxJHYQQCqH8+a0cUfT6THyh3HxfQ94BZyZ2YTivEG7AIOla2RMeiKU1nxt7TvYrLCiRmxEyr28DIaCj21XJAajWga7DUPRhK3zbZzdiys=
+	t=1705952102; cv=none; b=X6sfiiKj3msflmc3I6Spg5HjRk9EtwFmlIfg+y+65czH884lmpYZJJ03ykyLvAqB3+hFKLAZsDNuPMCQO59dB2eVuWCtlglHjKB1FEtQ1wLZ9vlpnKQWw2gVotGGEwGBMn/j/qZBTUgqwAx2C31T90/Mjb0TLKfjbiN1auJl8WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705950372; c=relaxed/simple;
-	bh=kbE8Q5vqODHAjMyaVxUSnMUE04oYW7Jp6oMvQE471gs=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bLLgOIi+DCeQooh0IEztP2jWalCMJNPwpORL5INE7paoMZH6xuzbUSdr1RVDiFVgDeyhGHmIoWv1X6j/WxkiKYMzc5z9puCu7Zt3mF7N0fP/+NIpIBjHNO1gYpuetqe3vKR662pQuj9zZrcw5vXRTO5/2WT5IhnzwqYfBGfHqmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bjNBVKg/; arc=none smtp.client-ip=192.55.52.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1705952102; c=relaxed/simple;
+	bh=vdvpcTidybzQ1RK072QFzF5p8j2Hvk8YbCbq1G5RlCs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gx8Vxc6IpSUUS9A+HsvOHbWbf0/ltTFuRXHwPyL2SbqixnQD/NWx5q0trPy4HG4FyxGfLmG3Xw8YAl77NVo3e1Mx0gw70cSRBc/MIyVU2fh2qdXF1B8xih6vgKjNwXON1S5jDJ/CQGqUaUs7zkVWdhgDBeSYXgEWhakCuJE3+as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDJAQYsz; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bjNBVKg/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705950368; x=1737486368;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=kbE8Q5vqODHAjMyaVxUSnMUE04oYW7Jp6oMvQE471gs=;
-  b=bjNBVKg/4dcCVBeKO/Xn7Ts0zGw37q8Ba5DythggQUJn4Dn875baUjak
-   ADIlQrC2QyJKhgwFFKCdu+vs9KKoj7uBUrm9rbq6JI+ZrUzLP6poqgtGA
-   LcxZwqrmdampPKfKvgdIBXWTanGnD+ANtUwv+nm+z+HZ1NJm3jCYNbsLy
-   K/7DCuTDel/mf92snUqyxxUIlGbIJaVGk/iTOTnvaEBvs/zw0Kr8qLWFV
-   gccsplGko6b86H7dwNu4eBDUxxckmQbGHdlHJvsO0ZJa5l+FViFR2Vy0c
-   gONWK3dfhyprMW7lMziHbu4fQ++7KVuIOSnp1hsZ6UqBBO5fLj0uwLSom
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="400158886"
-X-IronPort-AV: E=Sophos;i="6.05,212,1701158400"; 
-   d="scan'208";a="400158886"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 11:06:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,212,1701158400"; 
-   d="scan'208";a="1389312"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 22 Jan 2024 11:06:06 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rRzcS-0006oZ-0H;
-	Mon, 22 Jan 2024 19:06:04 +0000
-Date: Tue, 23 Jan 2024 03:05:10 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [jsarha:topic/chromeos-4.19-s0ix 9206/9999]
- kernel/gcov/clang.c:221:9: error: implicit declaration of function
- 'within_module'
-Message-ID: <202401230353.Rzf6chZz-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDJAQYsz"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5100409e31eso190057e87.1
+        for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 11:35:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705952099; x=1706556899; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dsyX6o96ll0tborqmT2tH2D5yYkTiItob646Hhae/V0=;
+        b=UDJAQYsza3DCIxZt5j0vFyW5UDFz7tgwXinEY9i4r01bAzbCukYK90sKpo1Y3FAzjY
+         avaCsuqPY+ob0JVd7ZFGsPtwbV4e1W5yhLIH95F/vOkHUSMu5QS6OpD6NPjk16JNhM/l
+         Tt/Dq2IkT+k8d/UYLkRTu5QbnyJ4huo3P42y1Mvi7ug+CxFbwTR0q/ClVLmRRApH5fq4
+         pWPvqR4e80DXGkwfZvezZnc2EpiTRvpFSRRHMucLTx6IDTDNg5HYw7czo3oxtKipZD+5
+         GR88pjcy1rm7E4pn7MRdh3DHZ7Ul8WRmnhDeyGiY5R4ZlTyIReXb/TPj5L6bpvZwBnKr
+         6VAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705952099; x=1706556899;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dsyX6o96ll0tborqmT2tH2D5yYkTiItob646Hhae/V0=;
+        b=wSrTqlbRJ5IctsmAEnoeAGB1R4GfhDB1ZNnCMRzJAFH2AK1kH3wYHp0nOBiTQl+3D+
+         DuhyzEmnknYkNcQcEK95x+jMVDnNleH+/Yu08JkKW6H/4lFHfKUJ+GwCi6ss3wgM9mLw
+         WbjlHVbgpehRBaJbRG44xOJWCKjkUUUCCQu5FUN8PWZ8uIqGpmv3jxC34iUcE29Kz+CP
+         mRIZn1A8jkhqqxw8UXN4VBmsIDadXHFc4/4yOZ2+YRmSRs2Yjy4tD3kYbbPJRmJgeryo
+         ooxnvqIIMXzosaR+kSyvtBZAbftSnW5PZ3WpGR9gaof+OalGZDyZWVPu0J+obkxKI3iM
+         Ieww==
+X-Gm-Message-State: AOJu0YxAa6KLwZXI4gQf87rAz5dwLlECivMcEWYUVRunQC1GLSOK3FiP
+	Q4GdK1FZpxt+7texdAoTcMLou4+Yq6JO3OBQs8ybFjdztv7EhBYdoReuBNKidf80PwdFV3bOBYR
+	GFq92pUxXRVqMtGsAcqwPbRPXig==
+X-Google-Smtp-Source: AGHT+IFitbZJ/8g2IdDBY826s8oZ0mtT6w1M0vukl8ff9CMkxM1Ayl6tSHcD4WdNXux41i0H/QurAc2g/9qBGoSonow=
+X-Received: by 2002:ac2:5471:0:b0:50e:67c5:9854 with SMTP id
+ e17-20020ac25471000000b0050e67c59854mr1869713lfn.123.1705952098697; Mon, 22
+ Jan 2024 11:34:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240122090851.851120-7-ardb+git@google.com> <20240122090851.851120-11-ardb+git@google.com>
+In-Reply-To: <20240122090851.851120-11-ardb+git@google.com>
+From: Brian Gerst <brgerst@gmail.com>
+Date: Mon, 22 Jan 2024 14:34:46 -0500
+Message-ID: <CAMzpN2jcWxCy=H-1uvS7kN8gVohee2_cMwyC0SbSEwEoedo3WQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/5] x86/head64: Replace pointer fixups with PIE codegen
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Jan 22, 2024 at 4:14=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
+> wrote:
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> Some of the C code in head64.c may be called from a different virtual
+> address than it was linked at. Currently, we deal with this by using
+> ordinary, position dependent codegen, and fixing up all symbol
+> references on the fly. This is fragile and tricky to maintain. It is
+> also unnecessary: we can use position independent codegen (with hidden
+> visibility) to ensure that all compiler generated symbol references are
+> RIP-relative, removing the need for fixups entirely.
+>
+> It does mean we need explicit references to kernel virtual addresses to
+> be generated by hand, so generate those using a movabs instruction in
+> inline asm in the handful places where we actually need this.
+>
+> While at it, move these routines to .inittext where they belong.
+>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/x86/Makefile                 |  11 ++
+>  arch/x86/boot/compressed/Makefile |   2 +-
+>  arch/x86/include/asm/init.h       |   2 -
+>  arch/x86/include/asm/setup.h      |   2 +-
+>  arch/x86/kernel/Makefile          |   4 +
+>  arch/x86/kernel/head64.c          | 117 +++++++-------------
+>  6 files changed, 60 insertions(+), 78 deletions(-)
+>
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 1a068de12a56..bed0850d91b0 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -168,6 +168,17 @@ else
+>          KBUILD_CFLAGS +=3D -mcmodel=3Dkernel
+>          KBUILD_RUSTFLAGS +=3D -Cno-redzone=3Dy
+>          KBUILD_RUSTFLAGS +=3D -Ccode-model=3Dkernel
+> +
+> +       PIE_CFLAGS :=3D -fpie -mcmodel=3Dsmall \
+> +                     -include $(srctree)/include/linux/hidden.h
+> +
+> +       ifeq ($(CONFIG_STACKPROTECTOR),y)
+> +               ifeq ($(CONFIG_SMP),y)
+> +                       PIE_CFLAGS +=3D -mstack-protector-guard-reg=3Dgs
+> +               endif
 
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: 35be48648a6552869bd5d6c9a0d278102d23d46c [9206/9999] UPSTREAM: gcov: clang support
-config: x86_64-buildonly-randconfig-004-20240122 (https://download.01.org/0day-ci/archive/20240123/202401230353.Rzf6chZz-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240123/202401230353.Rzf6chZz-lkp@intel.com/reproduce)
+This compiler flag requires GCC 8.1 or later.  When I posted a patch
+series[1] to convert the stack protector to a normal percpu variable
+instead of the fixed offset, there was pushback over requiring GCC 8.1
+to keep stack protector support.  I added code to objtool to convert
+code from older compilers, but there hasn't been any feedback since.
+Similar conversion code would be needed in objtool for this unless the
+decision is made to require GCC 8.1 for stack protector support going
+forward.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401230353.Rzf6chZz-lkp@intel.com/
+Brian Gerst
 
-All errors (new ones prefixed by >>):
-
-   kernel/gcov/clang.c:85:6: warning: no previous prototype for function 'llvm_gcov_init' [-Wmissing-prototypes]
-      85 | void llvm_gcov_init(llvm_gcov_callback writeout, llvm_gcov_callback flush)
-         |      ^
-   kernel/gcov/clang.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      85 | void llvm_gcov_init(llvm_gcov_callback writeout, llvm_gcov_callback flush)
-         | ^
-         | static 
-   kernel/gcov/clang.c:108:6: warning: no previous prototype for function 'llvm_gcda_start_file' [-Wmissing-prototypes]
-     108 | void llvm_gcda_start_file(const char *orig_filename, const char version[4],
-         |      ^
-   kernel/gcov/clang.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     108 | void llvm_gcda_start_file(const char *orig_filename, const char version[4],
-         | ^
-         | static 
-   kernel/gcov/clang.c:117:6: warning: no previous prototype for function 'llvm_gcda_emit_function' [-Wmissing-prototypes]
-     117 | void llvm_gcda_emit_function(u32 ident, const char *function_name,
-         |      ^
-   kernel/gcov/clang.c:117:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     117 | void llvm_gcda_emit_function(u32 ident, const char *function_name,
-         | ^
-         | static 
-   kernel/gcov/clang.c:137:6: warning: no previous prototype for function 'llvm_gcda_emit_arcs' [-Wmissing-prototypes]
-     137 | void llvm_gcda_emit_arcs(u32 num_counters, u64 *counters)
-         |      ^
-   kernel/gcov/clang.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     137 | void llvm_gcda_emit_arcs(u32 num_counters, u64 *counters)
-         | ^
-         | static 
-   kernel/gcov/clang.c:147:6: warning: no previous prototype for function 'llvm_gcda_summary_info' [-Wmissing-prototypes]
-     147 | void llvm_gcda_summary_info(void)
-         |      ^
-   kernel/gcov/clang.c:147:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     147 | void llvm_gcda_summary_info(void)
-         | ^
-         | static 
-   kernel/gcov/clang.c:152:6: warning: no previous prototype for function 'llvm_gcda_end_file' [-Wmissing-prototypes]
-     152 | void llvm_gcda_end_file(void)
-         |      ^
-   kernel/gcov/clang.c:152:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     152 | void llvm_gcda_end_file(void)
-         | ^
-         | static 
->> kernel/gcov/clang.c:221:9: error: implicit declaration of function 'within_module' [-Werror,-Wimplicit-function-declaration]
-     221 |         return within_module((unsigned long)info->filename, mod);
-         |                ^
-   kernel/gcov/clang.c:221:9: note: did you mean 'init_module'?
-   include/linux/module.h:75:12: note: 'init_module' declared here
-      75 | extern int init_module(void);
-         |            ^
-   6 warnings and 1 error generated.
-
-
-vim +/within_module +221 kernel/gcov/clang.c
-
-   211	
-   212	/**
-   213	 * gcov_info_within_module - check if a profiling data set belongs to a module
-   214	 * @info: profiling data set
-   215	 * @mod: module
-   216	 *
-   217	 * Returns true if profiling data belongs module, false otherwise.
-   218	 */
-   219	bool gcov_info_within_module(struct gcov_info *info, struct module *mod)
-   220	{
- > 221		return within_module((unsigned long)info->filename, mod);
-   222	}
-   223	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1] https://lore.kernel.org/lkml/20231115173708.108316-1-brgerst@gmail.com/
