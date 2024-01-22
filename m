@@ -1,241 +1,171 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9607821350
-	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 08:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1562D39AC0
+	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 09:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705912876; cv=none; b=NSSQZLY9wg1LDmAnrSgEAC+R7XsRd8FpxFllb6IhctPYl0S5aXNC+Rqu8RUywXIyJ3nk7dw5z7tnMwf3m/xCfFHbi1EFqLsJ+9YL6spcKp6hBe4BtUIygFZozR4yKMsHiuXft2kn0OvSCI0qkdgUhiIVF/THo/oRRRlcl8gsBwA=
+	t=1705914765; cv=none; b=qgYEL8IIbc5Xo7JpoH/DVrdKz0MGwxIwXcziF+0E0u7BfVxM1DQvmSxmZwiqVAcovOjqFvhwKYIwVK7v5J1gjFhhJSexrYT+TaVrBwWGcgO9j6+r1QUefAbpv4H6dbcKEXvrYsGB7v99E7KyFp0iXxihOwn9/jcgI/hWKr9qWOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705912876; c=relaxed/simple;
-	bh=fsxVCP2oHLpdsahb+9ZOVV31y7l5ttTH2xR/SNfdzJo=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=rh0XIYQaZhmSwVEvLuxuNtncCyumwwFDL2axcr4QzC03wtLmS7N9AiRsrgYrSyOGN81io4+xsQHAqF1QTfI5dPscFtG6dlpeduDfUtmfIgMXTyzSc8Ou7IyVlHXI1KPRkR66NpEAUkMWuaYyQQT2FmyJ4RJAY7YEPn40QB6xSdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LTVtLaNg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1705914765; c=relaxed/simple;
+	bh=+8NZkVAjHC96vpvuz759JVvziLYGwLvw1KXbIUU1Ifw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=nk7/DP5xIxuw5jD5214cBmcUvVmqAUICYGKYHEcE98tiomCVYq57J7j576jlw1guqLBFPukwVqBcdklh4+3OloMjgXJEvScA+lZLR1kc2m8imfRxP/IkvhR8ZA5xd2f4sXkbU+u0KVQs1PnoqVZVusjdOu/7Eq95CDbgTf85slA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U5rPefO/; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LTVtLaNg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705912873;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YPdYRPA8DQ9WTGoZ8+KS085rQFPfRm92hC/vICLTAuk=;
-	b=LTVtLaNgu8rMduJdmrvDpqRcFdvCYx2a/ZxYpps5I6mSi34jhv+oRJlAF5y/R3Hrf+IPm7
-	sJYF/ywsxBYAN+hluW4bhZ9XwX/LFWwgC/2/OaEM9rbKscVyWmCsWYz6wbJuzxAVfUMxG+
-	dn9/br/AlMHBnF/2HNoFCk/aDfLbTIM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-qe7lN6L6M6q7Sg0LUw9zAw-1; Mon, 22 Jan 2024 03:41:12 -0500
-X-MC-Unique: qe7lN6L6M6q7Sg0LUw9zAw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDEC485A58C
-	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 08:41:11 +0000 (UTC)
-Received: from [172.64.9.51] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C0EA351D5;
-	Mon, 22 Jan 2024 08:41:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 78 of 226): Test report for master
- (6.7.0, mainline.kernel.org-clang, 12551488)
-Date: Mon, 22 Jan 2024 08:41:11 -0000
-To: yiyan@redhat.com, xiawu@redhat.com, bhe@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U5rPefO/"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5ff84361ac3so48985327b3.1
+        for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 01:12:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1705914763; x=1706519563; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ea19sCEL6xgQZE8T1J3CxwQSa9lih2SSx5JLzIENUFI=;
+        b=U5rPefO/E21wi/P4zK2KGCaX9Fh4EImI46MMTkiDMZXTjb9lB0c792IIxtVu/KNvBS
+         QJMz549BVUQsxRa9xmgcvjnzqwol6875BoFV2dqMbiFnOZvlqChKktxXfN1tUmxKv7Mg
+         MjhIsXoT5mcYZJXJV3Ze63OCDujpN777SdbdSAHEwg5zIqfY6OoOzXN9u4j+cYQiP5WF
+         M/EvIhZrbqcAzOglBfdeW4MHYHIDK2OLPTJtNtxk0siArq5wl4l6YuIUsJn1dO8aZv0D
+         dZWJVXav/975M4/AwTWHWJYIW46ZVT1CWv6oTYnAlf2tEWvVlPX5E+BQQXVLTMb51NZ+
+         z1BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705914763; x=1706519563;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ea19sCEL6xgQZE8T1J3CxwQSa9lih2SSx5JLzIENUFI=;
+        b=LNqaB5jbI4tDfIidUhJYwpWaHHVktOoMxXOaVarbG424icYd3kFTkYlY4dIOwbYaeR
+         1CoFET0H+YX8F9ShrbVZirsKaPX2Lyz3nViPbLqeuv0Vo5DlVtG+XuCnOLEgFLtmlHCR
+         DEntKcynlfmZmvUl7cOWrOhn5wjgYxBGiF2ds6womT7ucddkw9rZNbLRaia6WMhb8Z7v
+         Zip7V9G9oD59UTcZ8UY0M0TKCaDrzi8mYwU7Rdvu0uODMC/scpj2xt6LoeE516ll4oE0
+         EWUcb8jqngbIZsxwSoEuZD/t3wiKc5u1+hwVentVmmj4z9MMVcyvMO58MGhcpQyeSUXk
+         3flQ==
+X-Gm-Message-State: AOJu0YwHaTcjGbQ7Inz648BGu2+IAMhZ9BvcNfCZVYcEhsDEzDkvSF7l
+	7tYVaVsECuVM+dFHXr2EysBRFZdhsXAOmQz/QYLIWCHh5o48oLlJH4RLpX/P4McTGxtebA==
+X-Google-Smtp-Source: AGHT+IHHVJRyNmbX+T5omGh+241N4QnApogLAF/dX0Xt/Hc3Ga51fWxEHjLNZeYMHvdJvCh7gpZ+lp/5
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
+ (user=ardb job=sendgmr) by 2002:a0d:d44d:0:b0:5f0:92a1:18b2 with SMTP id
+ w74-20020a0dd44d000000b005f092a118b2mr2271140ywd.2.1705914763174; Mon, 22 Jan
+ 2024 01:12:43 -0800 (PST)
+Date: Mon, 22 Jan 2024 10:08:52 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <09448.124012203411200363@us-mta-639.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3870; i=ardb@kernel.org;
+ h=from:subject; bh=dFHNAEG19z4Lmd37LarwGh98lLslGrVHWSybun0HPdA=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWdwZKzFvHyjLMzXTcxOf9ZUPMychWTzv+M+KSPnP131
+ 7yxvaXXUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACZyvYSR4eYL0zz7x87vfNaw
+ f+w+cXLfliPyEWk/vFnt36oxnVW0N2VkeN4zN+K+/KQCFjtJ6zuLLede4GXmkap2UuxbIjO79n8 SGwA=
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240122090851.851120-7-ardb+git@google.com>
+Subject: [RFC PATCH 0/5] x86: Build the core kernel using PIC codegen
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+From: Ard Biesheuvel <ardb@kernel.org>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Originally, only arch/x86/kernel/head64.c had some code that required
+special care because it executes very early from the 1:1 mapping of the
+kernel rather than the ordinary kernel virtual mapping.
 
+This is no longer the case, and there is a lot of SEV related code that
+is reachable from the primary startup path, with no guarantees that the
+toolchain will produce code that runs correctly. This is especially
+problematic when it comes to things like string literals, which are
+emitted by the compiler as data objects, and subsequently referenced via
+an absolute address that is not mapped yet this early in the boot [0].
 
-Kernel information:
-    Commit message: Merge tag 'sh-for-v6.8-tag1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/glaubitz/sh-linux
+Kevin has been looking into failures resulting from the fact that Clang
+behaves slightly differently from GCC in this regard, by selectively
+applying PIC codegen to the objects in question. However, while this
+fixes the observed issues, it does not offer any guarantees, given that
+the set of reachable code from startup_64() does not appear to be
+bounded when running on SEV hardware.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/124469
+Instead of applying this change piecemeal to objects that happen to have
+caused issues in the past, this series convert the core kernel to PIC
+codegen entirely.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         ppc64le - kdump - sysrq-c
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11005330
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /kdump/crash-sysrq-c
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+Note that this does not entirely solve the problem of the unbounded set
+of reachable code from the early SEV entrypoint: there might be code
+that attempts to access global objects via their kernel virtual address
+(which is not mapped yet). But at least all implicit accesses will be
+made via the same translation that the code is running from.
+ 
+This does result in a slight increase in code size (see below) but it
+also reduces the size of the KASLR relocation table (applied by the
+decompressor) by roughly half.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - POSIX pjd-fstest suites
-      x86_64 (debug) - Filesystem - Loopdev Sanity
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-      x86_64 (debug) - Networking - Ethernet drivers sanity
-      x86_64 (debug) - Networking cki netfilter test
-      x86_64 (debug) - Libkcapi AF_ALG test
-      x86_64 (debug) - Hardware - pciutils: sanity smoke test
-      x86_64 (debug) - Storage - dm/common
-      x86_64 (debug) - Storage - lvm thinp sanity
-      x86_64 (debug) - Storage - iSCSI parameters
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - POSIX pjd-fstest suites
-      x86_64 - Filesystem - Loopdev Sanity
-      x86_64 - Memory function: memfd_create
-      x86_64 - AMTU (Abstract Machine Test Utility)
-      x86_64 - Networking - Ethernet drivers sanity
-      x86_64 - Networking cki netfilter test
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - multipath mapping test
-      x86_64 - Storage - dm/common
-      x86_64 - Storage - lvm thinp sanity
-      x86_64 - Storage - iSCSI parameters
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - kdump - sysrq-c
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - selinux-policy: serge-testsuite
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - xfstests - ext4
-      x86_64 - xfstests - xfs
-      x86_64 - xfstests - btrfs
-      x86_64 - xfstests - nfsv4.2
-      x86_64 - xfstests - cifsv3.11
-      x86_64 - Reboot test
+Before
+
+$ size -x vmlinux
+   text	   data	    bss	    dec	    hex	filename
+0x1b78ec1	0xdde145	0x381000	47022086	2cd8006	vmlinux
+
+After
+
+$ size -x vmlinux
+   text	   data	    bss	    dec	    hex	filename
+0x1b8371b	0xde0d1d	0x370000	47006776	2cd4438	vmlinux
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+[0] arch/x86/mm/mem_encrypt_identity.c has some nice examples of this,
+    where RIP-relative references are emitted using inline asm.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+[1] https://lkml.kernel.org/r/20240111223650.3502633-1-kevinloughlin%40google.com
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Cc: Kevin Loughlin <kevinloughlin@google.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Dionna Glaze <dionnaglaze@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev
 
+Ard Biesheuvel (5):
+  kallsyms: Avoid weak references for kallsyms symbols
+  vmlinux: Avoid weak reference to notes section
+  btf: Avoid weak external references
+  x86/head64: Replace pointer fixups with PIE codegen
+  x86: Build the core kernel with position independent codegen
+
+ arch/x86/Makefile                 |  18 ++-
+ arch/x86/boot/compressed/Makefile |   2 +-
+ arch/x86/entry/vdso/Makefile      |   2 +-
+ arch/x86/include/asm/init.h       |   2 -
+ arch/x86/include/asm/setup.h      |   2 +-
+ arch/x86/kernel/head64.c          | 117 +++++++-------------
+ arch/x86/realmode/rm/Makefile     |   1 +
+ include/asm-generic/vmlinux.lds.h |  23 ++++
+ kernel/bpf/btf.c                  |   4 +-
+ kernel/kallsyms.c                 |   6 -
+ kernel/kallsyms_internal.h        |  30 ++---
+ kernel/ksysfs.c                   |   4 +-
+ lib/buildid.c                     |   4 +-
+ 13 files changed, 104 insertions(+), 111 deletions(-)
+
+-- 
+2.43.0.429.g432eaa2c6b-goog
