@@ -1,150 +1,235 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD3138DF9;
-	Sun, 21 Jan 2024 22:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0C8362
+	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 00:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705875812; cv=none; b=dRONv8Faair+m2S5G8O3hi1h5Z6fwOl1GVQ918K9qqyKmglrpS8XBl2EsywCAbTQWynD8613+jP0qSSHy4Ml/b9xLjAqRDodFFNACVctC5yHx+Aw5HRUU2U28k5C9Ib/3liBvmn2druR4ZXu4/XQVcH/bSc1FDfutzv0+Bg7sMQ=
+	t=1705881681; cv=none; b=jzPfUDuIaVLyxxsWYCjm/MwFSEUc3OGaXdcZfXaMTKYrAwOZoS58h4FJJE4aAg6lO7z7OYi5rf0eQdCCKRwCvZEuWo21lavjXFXdZuRyloZok3nTBvvZyW1PHzWdyAcvzPB7FqnttSJBdov7Y4qboAq0jEkvxcSQBitRJHE7Kxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705875812; c=relaxed/simple;
-	bh=izgEGdMRNIWyWPLmsmJ97SmrEjJr0MCsrIdr4iIil4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OoBQcE81qFgZS7LiIE79zhrwFTPPpcToyH3RBD8zpyldXps+kG++ajzeUBRXjSjbK5KjkzaIINAg3dzTgu/Gi5FwGhg89f2AnfAhxChvS5+RD+XQPAm/G8RljRULP/lI70Vrk9G7WdD3HBRWLDAxaFbCERKvWBbAE+QXavJlA88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fOnPMqme; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1705881681; c=relaxed/simple;
+	bh=L1q+AAzeWikNjmD6i8OPxb0TtOZURxbDyxI523Am+T4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=U1LQ99cxeDp08jh5nyupM03Wd4YGmZnGuSn4ncvwZ+KUJ6m1esYSvGNbCXUVD7NMUF8Yvxx9Qs5eJt5X2nV43qDKJx+QASrvfHpyRACwGk6vrUDG2ErC04oP2sS/W1w6OSdPdqL5Wkw+Ix6DEFElLB02/m6c6AdKFwvw92TPExU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C5IzUR69; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fOnPMqme"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705875810; x=1737411810;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=izgEGdMRNIWyWPLmsmJ97SmrEjJr0MCsrIdr4iIil4o=;
-  b=fOnPMqmejyWMB5QPYukJkgVOmMu1TXZ8Dqge3qQelmQxxrQIu3QHr4dM
-   yMQbZVpetLh+AObnjlNqzcO+UDfqC/j65kaBCeCylu52zwfQnSLjPZ53E
-   GLviUBDUa4bge0xnf+pVTZWlITjEFkc/mbW6UmfJCGKPxacPOBKcgJmZy
-   1gZIrhtcxk60BMyVbvbDomEuqxzZskQDEqjzn5YJCOfLQE6URWW3OxQnN
-   /VXVkANovb2DS9dSdx/wMMQ/x9PXzGwQPj+LhIwzJKMjIs8deLpR67Tti
-   M0gGNcEDOsI81dxDK7lxDbPzevu3hsq9dzw3O/SaK/heDYFek+i3rkBFY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="7826123"
-X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="7826123"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2024 14:23:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="1032415328"
-X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="1032415328"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Jan 2024 14:23:28 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rRgDt-0006DI-24;
-	Sun, 21 Jan 2024 22:23:25 +0000
-Date: Mon, 22 Jan 2024 06:22:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [qais-yousef:uclamp-max-aggregation 13/13]
- kernel/sched/core.c:4904:7: error: call to undeclared function
- '__ignore_task_perf'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202401220601.YvBaICmR-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C5IzUR69"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705881678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AiGpspyYvq8yDnghMl8VmLgFTmTFYZPCkkjvLJprPcI=;
+	b=C5IzUR697KeuhrAO9PcEypm9+p8MT+zwd8657drWkpbQj4ST/QAteovLeylIvWDvJHiAum
+	K/F7Iw/7jTkaIfp8kweCHi+sT+iFMBHq0HxebTCZvmXy7oVkaBLir4g2mvFwK7DdKA3eVe
+	nnrjT74uOKrhgLFavvLcQp6UT47WQ7g=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-283-0y4OmteVO3OsMd39VlQqjw-1; Sun,
+ 21 Jan 2024 19:01:16 -0500
+X-MC-Unique: 0y4OmteVO3OsMd39VlQqjw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DEB021C04B6A
+	for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 00:01:15 +0000 (UTC)
+Received: from [172.64.9.51] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C85131C05E0E;
+	Mon, 22 Jan 2024 00:01:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 78 of 226): Test report for master
+ (6.7.0, mainline.kernel.org-clang, 556e2d17)
+Date: Mon, 22 Jan 2024 00:01:15 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <65695.124012119011600167@us-mta-283.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/qais-yousef/linux uclamp-max-aggregation
-head:   a29c26f9317cede0f3141904d910d3125f8a82ea
-commit: a29c26f9317cede0f3141904d910d3125f8a82ea [13/13] sched: Make iowait boost per task
-config: i386-buildonly-randconfig-004-20240122 (https://download.01.org/0day-ci/archive/20240122/202401220601.YvBaICmR-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240122/202401220601.YvBaICmR-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401220601.YvBaICmR-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> kernel/sched/core.c:4904:7: error: call to undeclared function '__ignore_task_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    4904 |                 if (__ignore_task_perf(current))
-         |                     ^
->> kernel/sched/core.c:4908:16: error: call to undeclared function '__uclamp_eff_value'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    4908 |                 uclamp_min = __uclamp_eff_value(current, UCLAMP_MIN);
-         |                              ^
-   kernel/sched/core.c:4908:16: note: did you mean 'uclamp_eff_value'?
-   kernel/sched/sched.h:3071:29: note: 'uclamp_eff_value' declared here
-    3071 | static inline unsigned long uclamp_eff_value(struct task_struct *p,
-         |                             ^
-   2 errors generated.
+Kernel information:
+    Commit message: Merge tag 'ceph-for-6.8-rc1' of https://github.com/ceph=
+/ceph-client
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/124355
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
 
-vim +/__ignore_task_perf +4904 kernel/sched/core.c
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - CKI/restraint
+      x86_64 (debug) - SELinux Custom Module Setup
+      x86_64 (debug) - machineinfo
+      x86_64 (debug) - Boot test
+      x86_64 (debug) - POSIX pjd-fstest suites
+      x86_64 (debug) - Filesystem - Loopdev Sanity
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+      x86_64 (debug) - Networking - Ethernet drivers sanity
+      x86_64 (debug) - Networking cki netfilter test
+      x86_64 (debug) - Libkcapi AF_ALG test
+      x86_64 (debug) - Hardware - pciutils: sanity smoke test
+      x86_64 (debug) - Storage - dm/common
+      x86_64 (debug) - Storage - lvm thinp sanity
+      x86_64 (debug) - Storage - iSCSI parameters
+      x86_64 (debug) - kselftests upstream - net
+      x86_64 (debug) - kselftests upstream - bpf
+      x86_64 (debug) - kselftests upstream - bpf_test_progs
+      x86_64 (debug) - Reboot test
+      x86_64 (debug) - CKI/restraint
+      x86_64 (debug) - SELinux Custom Module Setup
+      x86_64 (debug) - machineinfo
+      x86_64 (debug) - Boot test
+      x86_64 (debug) - xfstests - ext4
+      x86_64 (debug) - xfstests - xfs
+      x86_64 (debug) - xfstests - btrfs
+      x86_64 (debug) - xfstests - nfsv4.2
+      x86_64 (debug) - xfstests - cifsv3.11
+      x86_64 (debug) - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - POSIX pjd-fstest suites
+      x86_64 - Filesystem - Loopdev Sanity
+      x86_64 - Memory function: memfd_create
+      x86_64 - AMTU (Abstract Machine Test Utility)
+      x86_64 - Networking - Ethernet drivers sanity
+      x86_64 - Networking cki netfilter test
+      x86_64 - Networking vnic: ipvlan/basic
+      x86_64 - Libkcapi AF_ALG test
+      x86_64 - Hardware - pciutils: sanity smoke test
+      x86_64 - Storage - multipath mapping test
+      x86_64 - Storage - dm/common
+      x86_64 - Storage - lvm thinp sanity
+      x86_64 - Storage - iSCSI parameters
+      x86_64 - kdump - kexec_boot
+      x86_64 - kdump - kexec-file-load
+      x86_64 - kselftests upstream - net
+      x86_64 - kselftests upstream - bpf
+      x86_64 - kselftests upstream - bpf_test_progs
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - kdump - sysrq-c
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - selinux-policy: serge-testsuite
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - xfstests - ext4
+      x86_64 - xfstests - xfs
+      x86_64 - xfstests - btrfs
+      x86_64 - xfstests - nfsv4.2
+      x86_64 - xfstests - cifsv3.11
+      x86_64 - Reboot test
 
-  4877	
-  4878	static inline void update_cpufreq_ctx_switch(struct rq *rq)
-  4879	{
-  4880		if (unlikely(current->sched_class == &stop_sched_class))
-  4881			return;
-  4882	
-  4883		if (unlikely(current->sched_class == &idle_sched_class))
-  4884			return;
-  4885	
-  4886		if (unlikely(task_has_idle_policy(current)))
-  4887			return;
-  4888	
-  4889		if (likely(fair_policy(current->policy))) {
-  4890			unsigned long uclamp_min, uclamp_max;
-  4891			unsigned long rq_util;
-  4892	
-  4893			/*
-  4894			 * Allow cpufreq updates once for every update_load_avg() decay.
-  4895			 */
-  4896			if (rq->cfs.decayed) {
-  4897				rq->cfs.decayed = false;
-  4898				goto force_update;
-  4899			}
-  4900	
-  4901			if (current->in_iowait)
-  4902				goto force_update;
-  4903	
-> 4904			if (__ignore_task_perf(current))
-  4905				return;
-  4906	
-  4907			/* Force an update if perf hints are required to be applied */
-> 4908			uclamp_min = __uclamp_eff_value(current, UCLAMP_MIN);
-  4909			uclamp_max = __uclamp_eff_value(current, UCLAMP_MAX);
-  4910			rq_util = rq->cfs.avg.util_avg;
-  4911	
-  4912			if (uclamp_min > rq_util || uclamp_max < rq_util)
-  4913				goto force_update;
-  4914	
-  4915			return;
-  4916		}
-  4917	
-  4918		/* RT and DL should always send a freq update */
-  4919	
-  4920		/* XXX ignore updates for sugov worker thread */
-  4921	
-  4922	force_update:
-  4923	
-  4924		/*
-  4925		 * Request freq update after __balance_callbacks to take into account
-  4926		 * any changes to rq.
-  4927		 */
-  4928		cpufreq_update_util(rq, 0);
-  4929	}
-  4930	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
