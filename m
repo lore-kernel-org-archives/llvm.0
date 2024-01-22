@@ -1,53 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A19918C20;
-	Mon, 22 Jan 2024 22:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D4A381DB;
+	Mon, 22 Jan 2024 23:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705963460; cv=none; b=HdWqdY6acF/pmZG92JZ2QKm6fSv9v74uosjJmkyLDOoeC5OuekXOLh6IYWGowtaFlPXalgnou1LJKSr86sr8dPAnNyqttvb8seNMYxdHMd890nPLbiHmjXO5eFNc9vur21U3TYIJp9Be+DH3AOVcmS44DmluXj7uQ67N/bL5FU0=
+	t=1705964577; cv=none; b=ExAZudXeSDmUAwZxSia9LFTpTXrGatdvq1khddDSwzvBc9GEAX7/SlZ9oJ3pLdMAEm+4Lx6yD+1KYP88Wy/tFIT8AHwg6l/vBw31MqWJv98XpY6Gnh8xOyqRDX+vQIetRMUQ14v3FOw0l9nAzU6ar0Jz06QPw29cYrg2gvYgSXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705963460; c=relaxed/simple;
-	bh=3ZJ7NcHOCt+uRRkFfJmhYkl2OuZDA6RPu5bNjKRanJM=;
+	s=arc-20240116; t=1705964577; c=relaxed/simple;
+	bh=5f0TvwGjdk7WXeg6BeQeByM891O4z1o6LGJ+66Aju6g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AaORUGjWRCn39VXVSRSu3Zi9MdbJDwc2WeJE1t3odn9z+29BX76a1cFhaNu84Gy13v3+IQCQVMvtjAWZUuSL1u+ZzSCEz+vFqL8OjeZHQOcn3GiatDa8h3LPsQJhdzpLphDelLYYIz2ic4iYHQUX2Bc3PApHRWZTXzxg6KbVozo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLHYMEdJ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=NfROFLOPwN9lpPibZHeaVXA/+SJnbPESyh8UA3aRNlzDFvPlbjCoGLNiJOhe2d+33Kxju3vps7IVspouq0KlGWEK4OPkiHObBQ0OtKexa35rKFKwcBPF1u2vEHntOwI67xO12fDPcjymBB4aQUeJPNjs3VahCwBq6Ael/AWG2NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lRX8TthZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLHYMEdJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D254BC433F1;
-	Mon, 22 Jan 2024 22:44:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lRX8TthZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C745BC43390;
+	Mon, 22 Jan 2024 23:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705963459;
-	bh=3ZJ7NcHOCt+uRRkFfJmhYkl2OuZDA6RPu5bNjKRanJM=;
+	s=k20201202; t=1705964577;
+	bh=5f0TvwGjdk7WXeg6BeQeByM891O4z1o6LGJ+66Aju6g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TLHYMEdJOaYU4N2nkXJatHz+9NlQBwCFlgDjalZHBKdLUFrKpYZAwJbyzqLoSa4WO
-	 TGpfchmYGVFGaRUfdzCH4VM4ydKiZs2OJoUUJTgwW9+D3CE8yZsjtE17Z1+54x17XD
-	 /KRqsHzPioAkpcnRMDy8guO9/htmxzlPscrL7IDekXS0bglmUJeoBLb06KgeN5oqA8
-	 eJXu/lYfUPEd0Nr73YgKs4Zzai1dKTKzz6DmLHhjj/ELQ5weYQpAF0HXilz/cObz/1
-	 0ojyCVVOjazDuR7Tzm+scnQFxX2nckEo1m6/c5aa5tXj1lQZ+eirLkjYShoyMZe38z
-	 O4dZTXCYwxk8g==
-Date: Mon, 22 Jan 2024 15:44:17 -0700
+	b=lRX8TthZlj3aDisktVHgkXiP6G7cCfwFBA9MwRx2XwHZpSqwSH5cDgLkmPz3218DI
+	 Iuxx5g4m6n4iVIsdilCBQdsurC1K8fKyDxouEEzrgxUvxZ/4DHhE3TQ2dpx3pUCYXy
+	 lxOl94ziInVJ6XxA9FNDjFlv11vqjPvI9XNzYzq733RlRhsxTWg58W4377ELSVP2Pt
+	 Ie3CPCjYof6TabLmFLr1bTsws8VGDgYbnj8rvmxOVajc2zqcau/sjAcBrfuWLNQAIN
+	 2JyK31XW53Aud8EXdJptKfrPoodlDPEXn+COFCBPLrhr+NpFxlMmfC4FVot90qTF4O
+	 X/NJfKr2PhkqA==
+Date: Mon, 22 Jan 2024 16:02:55 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Brian Gerst <brgerst@gmail.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 4/5] x86/head64: Replace pointer fixups with PIE
- codegen
-Message-ID: <20240122224417.GC141255@dev-fedora.aadp>
-References: <20240122090851.851120-7-ardb+git@google.com>
- <20240122090851.851120-11-ardb+git@google.com>
- <CAMzpN2jcWxCy=H-1uvS7kN8gVohee2_cMwyC0SbSEwEoedo3WQ@mail.gmail.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Aiden Leong <aiden.leong@aibsd.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+	nicolas@fjasle.eu, clang-built-linux <llvm@lists.linux.dev>,
+	=?utf-8?B?Ru+/ve+/ve+/vW5nLXJ177+977+977+9IFPvv73vv73vv71uZw==?= <maskray@google.com>
+Subject: Re: [PATCH v2 2/4] modpost: inform compilers that fatal() never
+ returns
+Message-ID: <20240122230255.GD141255@dev-fedora.aadp>
+References: <d9ac2960-6644-4a87-b5e4-4bfb6e0364a8@aibsd.com>
+ <CAK7LNATDD2gC53T5n7vCUH6O6mdAm801fTWyKi9fji+5Kb+0ng@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,74 +47,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMzpN2jcWxCy=H-1uvS7kN8gVohee2_cMwyC0SbSEwEoedo3WQ@mail.gmail.com>
+In-Reply-To: <CAK7LNATDD2gC53T5n7vCUH6O6mdAm801fTWyKi9fji+5Kb+0ng@mail.gmail.com>
 
-On Mon, Jan 22, 2024 at 02:34:46PM -0500, Brian Gerst wrote:
-> On Mon, Jan 22, 2024 at 4:14 AM Ard Biesheuvel <ardb+git@google.com> wrote:
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Some of the C code in head64.c may be called from a different virtual
-> > address than it was linked at. Currently, we deal with this by using
-> > ordinary, position dependent codegen, and fixing up all symbol
-> > references on the fly. This is fragile and tricky to maintain. It is
-> > also unnecessary: we can use position independent codegen (with hidden
-> > visibility) to ensure that all compiler generated symbol references are
-> > RIP-relative, removing the need for fixups entirely.
-> >
-> > It does mean we need explicit references to kernel virtual addresses to
-> > be generated by hand, so generate those using a movabs instruction in
-> > inline asm in the handful places where we actually need this.
-> >
-> > While at it, move these routines to .inittext where they belong.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/Makefile                 |  11 ++
-> >  arch/x86/boot/compressed/Makefile |   2 +-
-> >  arch/x86/include/asm/init.h       |   2 -
-> >  arch/x86/include/asm/setup.h      |   2 +-
-> >  arch/x86/kernel/Makefile          |   4 +
-> >  arch/x86/kernel/head64.c          | 117 +++++++-------------
-> >  6 files changed, 60 insertions(+), 78 deletions(-)
-> >
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 1a068de12a56..bed0850d91b0 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -168,6 +168,17 @@ else
-> >          KBUILD_CFLAGS += -mcmodel=kernel
-> >          KBUILD_RUSTFLAGS += -Cno-redzone=y
-> >          KBUILD_RUSTFLAGS += -Ccode-model=kernel
-> > +
-> > +       PIE_CFLAGS := -fpie -mcmodel=small \
-> > +                     -include $(srctree)/include/linux/hidden.h
-> > +
-> > +       ifeq ($(CONFIG_STACKPROTECTOR),y)
-> > +               ifeq ($(CONFIG_SMP),y)
-> > +                       PIE_CFLAGS += -mstack-protector-guard-reg=gs
-> > +               endif
+On Mon, Jan 22, 2024 at 10:29:32PM +0900, Masahiro Yamada wrote:
+> +CC: clang-built-linux list, Fangrui
 > 
-> This compiler flag requires GCC 8.1 or later.  When I posted a patch
-> series[1] to convert the stack protector to a normal percpu variable
-> instead of the fixed offset, there was pushback over requiring GCC 8.1
-> to keep stack protector support.  I added code to objtool to convert
-> code from older compilers, but there hasn't been any feedback since.
-> Similar conversion code would be needed in objtool for this unless the
-> decision is made to require GCC 8.1 for stack protector support going
-> forward.
+> On Mon, Jan 22, 2024 at 1:04 PM Aiden Leong <aiden.leong@aibsd.com> wrote:
+> >
+> >
+> >  > The function fatal() never returns because modpost_log() calls exit(1)
+> >
+> >  > when LOG_FATAL is passed.
+> >  >
+> >  > Inform compilers of this fact so that unreachable code flow can be
+> >  > identified at compile time.
+> >  >
+> >  > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> >  > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> >  > ---
+> >  >
+> >  > Changes in v2:
+> >  >   - Use noreturn attribute together with alias
+> >  >
+> >  >  scripts/mod/modpost.c | 3 +++
+> >  >  scripts/mod/modpost.h | 5 ++++-
+> >  >  2 files changed, 7 insertions(+), 1 deletion(-)
+> >  >
+> >  > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> >  > index ca0a90158f85..c13bc9095df3 100644
+> >  > --- a/scripts/mod/modpost.c
+> >  > +++ b/scripts/mod/modpost.c
+> >  > @@ -90,6 +90,9 @@ void modpost_log(enum loglevel loglevel, const char
+> > *fmt, ...)
+> >  >          error_occurred = true;
+> >  >  }
+> >  >
+> >  > +void __attribute__((alias("modpost_log")))
+> >
+> > Hi Masahiro,
+> > I cross-compile kernel on Apple Silicon MacBook Pro
+> > and every thing works well until this patch.
+> >
+> > My build command:
+> > make ARCH=arm CROSS_COMPILE=arm-none-eabi- \
+> > HOSTCFLAGS="-I/opt/homebrew/opt/openssl/include" \
+> > HOSTLDFLAGS="-L/opt/homebrew/opt/openssl/lib"
+> >
+> > Error message:
+> > scripts/mod/modpost.c:93:21: error: aliases are not supported on darwin
 > 
-> Brian Gerst
 > 
-> [1] https://lore.kernel.org/lkml/20231115173708.108316-1-brgerst@gmail.com/
+> It is unfortunate.  Indeed, I see this message in:
+> 
+> clang/include/clang/Basic/DiagnosticSemaKinds.td
+> 
+> 
+> Is this limitation due to macOS executable (PEF),
+> or is it Clang-specific?
 
-I was going to comment on this as well, as that flag was only supported
-in clang 12.0.0 and newer. It should not be too big of a deal for us
-though, as I was already planning on bumping the minimum supported
-version of clang for building the kernel to 13.0.1 (but there may be
-breakage reports if this series lands before that):
+Based on my admittedly brief research, this seems related to the Mach-O
+format. That message was added by [1] in response to [2] but the message
+mentioned weak aliases being supported. A further clarification was made
+in [3] to state that all aliases are unsupported as a result of some
+internal Apple bug it seems but I do see a couple of bug reports stating
+that may not be true [4][5] (although that does not seem relevant for
+this report).
 
-https://lore.kernel.org/20240110165339.GA3105@dev-arch.thelio-3990X/
+[1]: https://github.com/llvm/llvm-project/commit/0017c5fa92ad3b10e15fd34f3865e8e5b850a5ed
+[2]: https://llvm.org/bz8720
+[3]: https://github.com/llvm/llvm-project/commit/4e30b96834cea5682a8e9e024dda06319825000a
+[4]: https://github.com/llvm/llvm-project/issues/11488
+[5]: https://github.com/llvm/llvm-project/issues/71001
 
 Cheers,
 Nathan
