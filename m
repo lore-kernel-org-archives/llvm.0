@@ -1,344 +1,270 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8051468ED
-	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 00:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6986351036;
+	Tue, 23 Jan 2024 07:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705969710; cv=none; b=eN+acN4JHR/ia/HoNLmpYH25DVenNHG/Uh/9v10aixcK0aDougvTA3M+tft0SHtHdItMQ5WTtXk34pVPvJB2cQyFIvwqr1O5G6WU4USL7vHTGFmRMEqrTGCpW4fIpCNzpouZycnLVxIMwuHh2mpIvCkoael57HLBpUFSOkCk720=
+	t=1705993692; cv=none; b=NIlFD+X51SXMq0gsE7M7wyveynC0UA4Cr+rxDayNf2THuOqd2kymSkQT/YpR1CL3GPOVmh6nlo2+LRthvJrfivG/vzF9DmSYXSRS9/itvC7m7biJ2lEJjNh4F0mNQZI8iL8ycZTkvekwCstU9mcTe8bkAR9z1Ez0vWYtp4VKUXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705969710; c=relaxed/simple;
-	bh=GmPAxgHKHubLn9MGZBZdUQq9TsG2fUO2ZtsyyqCrjXQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=K0qPKig+fOCP7AZJ8rEc9L6wHinxhr1LqGYI8N/FG/4rONhlVdo+nYg+ebDcD/bXG8cs/dQpW0UsRaQQwd0XVSCQ4qiptNERWf1uSqNRkzkXxl2Prr7SyimV56p2f2UVH9WFDU8HI2lQ2U3Hg+4p9hlFi0SYQe91X/f/E1u5Qi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XhUm7Uvl; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XhUm7Uvl"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5d24c9b3c8eso231649a12.1
-        for <llvm@lists.linux.dev>; Mon, 22 Jan 2024 16:28:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1705969708; x=1706574508; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lArTqUWjSpk/OeY3+qANt+dZXdElsgEYjM7TfGsNafw=;
-        b=XhUm7UvlBHMVl98PI0HQ8mpOeHv+OTPXBHijGWq5uXliV6FkHYZmT4XlmW+Roibmjb
-         xUUKNLYaUuFq1dJ1Gi3pPK/3U6Qg8HejydVU3dQD+gc4AuU+v/1hVHMUGNPRUVkr06gm
-         P15CNTzz8HMmRzyFd6DoprYoUoviGcP5GLOtY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705969708; x=1706574508;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lArTqUWjSpk/OeY3+qANt+dZXdElsgEYjM7TfGsNafw=;
-        b=C7XLpNrv9OeGqMGg3iu5bRQnWnzD1uHQvxh+h5Pv7kjiCJddPJA/mwgriN5FnD7r5z
-         QjtxN0FEyVK3fVqvkJ6fP2ciqrIXkdiItyM7LGTcs2A3FvQ6H9Mgp4oMuedNtoLBYN1L
-         D5iGzc1eYpYmAoyc/oLz6ESy84uzIr/jZLhXw6FEGnfjkB5b3CafLtoDnO/RtVWVpwpK
-         LIlBVuQDBTriBioam9CWIhEn972nwBrCVhlf71d4wflW/4NWrkEhiph2Au1I2DXL+v8e
-         KQzjEvkcbioeUYtJS4Jd5daz8eDY3Dkst13ONUuuoATQIXjRIcOn+9+lj9yJt+fEu6Bc
-         z3TQ==
-X-Gm-Message-State: AOJu0YzJbo/SdGLw7cMMgcDJFpBsLMEe9Sq1NMO3uOaowb7N3Nd1EWAc
-	zCYtXW6dz7GBOfevPxeAcFdqyPzXd4/+Y0iAlw6AWKpEd73zg/HZcpPdONjxQQ==
-X-Google-Smtp-Source: AGHT+IEL0OAhszuTE+DREqBy8kuie4n5JflXi9iAa/aUSzhFQ8heJUVRu/5klVCwSbJzSq+AVnRchw==
-X-Received: by 2002:a05:6a20:8f09:b0:195:2770:5b7e with SMTP id b9-20020a056a208f0900b0019527705b7emr2683349pzk.119.1705969707738;
-        Mon, 22 Jan 2024 16:28:27 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b001d564115807sm7664893plx.46.2024.01.22.16.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 16:28:23 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: linux-hardening@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 01/82] overflow: Expand check_add_overflow() for pointer addition
-Date: Mon, 22 Jan 2024 16:26:36 -0800
-Message-Id: <20240123002814.1396804-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240122235208.work.748-kees@kernel.org>
-References: <20240122235208.work.748-kees@kernel.org>
+	s=arc-20240116; t=1705993692; c=relaxed/simple;
+	bh=kyGJ4Du+xhxInC3McVwenQuziv9BBd1jG985+1Ehoz0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=T4R76NKBMq/ge15EY1sjXzP6ydAAkXP/e69QH2HZy/GeZIlQcvOYICL9AUvS+hWuqX4mTehIWDAOHy4vo6yffcen8EVndjy+KI9EjZDLU9xlGnztrQei6KeQpR1WPRBug6LXfyfb886FrRKfJs84szq2Uym2hHtHB+oXjIeZpeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4TJypS2QcCz1wnCP;
+	Tue, 23 Jan 2024 15:07:44 +0800 (CST)
+Received: from dggpeml500021.china.huawei.com (unknown [7.185.36.21])
+	by mail.maildlp.com (Postfix) with ESMTPS id E5B7D140669;
+	Tue, 23 Jan 2024 15:07:50 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 23 Jan 2024 15:07:50 +0800
+Message-ID: <59fae3eb-a125-cd5f-224e-b89d122ecb46@huawei.com>
+Date: Tue, 23 Jan 2024 15:07:50 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10628; i=keescook@chromium.org;
- h=from:subject; bh=GmPAxgHKHubLn9MGZBZdUQq9TsG2fUO2ZtsyyqCrjXQ=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlrwgDoUKTmAuWb19BxZjUN7+ddA/jXHTbKdyVN
- EfDFJR+7eOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZa8IAwAKCRCJcvTf3G3A
- JpSCEACQ5mYrM7i5JOmYbVd+Q5AkrUZpJML/LWSTJVslOGTKtFY7pOJ4b5nGs0MuTs4RA6hn1fb
- fwi3JkVl/ohmms70RbzK9zztLs5bUM4HYuL+lomFGyZrxI/fzmKPtla94BdVgpWTXhJRWjWv5Yn
- 2NBYey87p5SzGF/++U1RVuiMq6irTQcHecMhx7h1MYdtta20/en2Dps48cCka58pdT3v+2fASMj
- 459rPl8qXF7VEfxqWA9kdjoCHnV7iLUFsngzMmV4T5bfSiNylZs1Quyc/XV0qHDaBvtZU8ahbmC
- ZE7QtaJmnp303xY4TT1jeblUY/MKFrZ7gxzx9ATtJIsOXEsp/4YbFJPUff3iAc3pLczCXi8qLYL
- extKud6V9k/5mf5uuNS7O3VlrHPELWkn9o4qIlonPGnLzkqT5F+K3Q1TNxI8uucoejBpS2nCXzz
- LpYDCVGx3Cz9e3Etw3mQmvgQbiRvlsE1gbhqAc8KzV0rB2e7LjUrdH1pHfUvW1M5/ED8RNiI0Ni
- evuBn4TAQKwKKykbMCeHS9Z8Nxai3n7wmHR+G1VK7TtLr389KSIRwKVsnEdaP84x07FTHGaaAtL
- qQkir3gVSorK9Sv6pAedjKOW1Azqro0bZpCflFfsyE2QTuP22RUSNSKiKEl23FNt+1FTcexvBU8 Zxt/lP9SN8nyIPA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [brauner-vfs:vfs.misc 12/13] include/linux/fs.h:911:9: error:
+ call to '__compiletime_assert_207' declared with 'error' attribute: Need
+ native word sized stores/loads for atomicity.
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, <sfr@canb.auug.org.au>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Christian Brauner
+	<christianvanbrauner@gmail.com>, Christian Brauner <brauner@kernel.org>,
+	Baokun Li <libaokun1@huawei.com>, yangerkun <yangerkun@huawei.com>, "zhangyi
+ (F)" <yi.zhang@huawei.com>, Linus Torvalds <torvalds@linux-foundation.org>,
+	<linux-next@vger.kernel.org>
+References: <202401230837.TXro0PHi-lkp@intel.com>
+From: Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <202401230837.TXro0PHi-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
 
-The check_add_overflow() helper is mostly a wrapper around
-__builtin_add_overflow(), but GCC and Clang refuse to operate on pointer
-arguments that would normally be allowed if the addition were open-coded.
+On 2024/1/23 8:12, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.misc
+> head:   297983dc9011461cba6278bfe03f4305c4a2caa0
+> commit: 4bbd51d0f0ad709c0f02c100439d6c9ba6811d4b [12/13] fs: make the i_size_read/write helpers be smp_load_acquire/store_release()
+> config: i386-randconfig-015-20240123 (https://download.01.org/0day-ci/archive/20240123/202401230837.TXro0PHi-lkp@intel.com/config)
+> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240123/202401230837.TXro0PHi-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202401230837.TXro0PHi-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>     In file included from fs/netfs/buffered_read.c:10:
+>     In file included from fs/netfs/internal.h:9:
+>     In file included from include/linux/seq_file.h:12:
+>>> include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+>       911 |         return smp_load_acquire(&inode->i_size);
+>           |                ^
+>     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
+>       206 |         compiletime_assert_atomic_type(*p);                             \
+>           |         ^
+>     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
+>       438 |         compiletime_assert(__native_word(t),                            \
+>           |         ^
+>     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
+>       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>           |         ^
+>     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
+>       423 |         __compiletime_assert(condition, msg, prefix, suffix)
+>           |         ^
+>     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
+>       416 |                         prefix ## suffix();                             \
+>           |                         ^
+>     <scratch space>:38:1: note: expanded from here
+>        38 | __compiletime_assert_207
+>           | ^
+>     1 error generated.
+> --
+>     In file included from fs/netfs/buffered_write.c:9:
+>>> include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+>       911 |         return smp_load_acquire(&inode->i_size);
+>           |                ^
+>     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
+>       206 |         compiletime_assert_atomic_type(*p);                             \
+>           |         ^
+>     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
+>       438 |         compiletime_assert(__native_word(t),                            \
+>           |         ^
+>     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
+>       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>           |         ^
+>     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
+>       423 |         __compiletime_assert(condition, msg, prefix, suffix)
+>           |         ^
+>     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
+>       416 |                         prefix ## suffix();                             \
+>           |                         ^
+>     <scratch space>:253:1: note: expanded from here
+>       253 | __compiletime_assert_207
+>           | ^
+>     In file included from fs/netfs/buffered_write.c:9:
+>>> include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+>     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
+>       206 |         compiletime_assert_atomic_type(*p);                             \
+>           |         ^
+>     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
+>       438 |         compiletime_assert(__native_word(t),                            \
+>           |         ^
+>     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
+>       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>           |         ^
+>     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
+>       423 |         __compiletime_assert(condition, msg, prefix, suffix)
+>           |         ^
+>     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
+>       416 |                         prefix ## suffix();                             \
+>           |                         ^
+>     <scratch space>:253:1: note: expanded from here
+>       253 | __compiletime_assert_207
+>           | ^
+>     In file included from fs/netfs/buffered_write.c:9:
+>>> include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+>     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
+>       206 |         compiletime_assert_atomic_type(*p);                             \
+>           |         ^
+>     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
+>       438 |         compiletime_assert(__native_word(t),                            \
+>           |         ^
+>     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
+>       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>           |         ^
+>     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
+>       423 |         __compiletime_assert(condition, msg, prefix, suffix)
+>           |         ^
+>     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
+>       416 |                         prefix ## suffix();                             \
+>           |                         ^
+>     <scratch space>:253:1: note: expanded from here
+>       253 | __compiletime_assert_207
+>           | ^
+>     In file included from fs/netfs/buffered_write.c:9:
+>>> include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+>     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
+>       206 |         compiletime_assert_atomic_type(*p);                             \
+>           |         ^
+>     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
+>       438 |         compiletime_assert(__native_word(t),                            \
+>           |         ^
+>     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
+>       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>           |         ^
+>     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
+>       423 |         __compiletime_assert(condition, msg, prefix, suffix)
+>           |         ^
+>     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
+>       416 |                         prefix ## suffix();                             \
+>           |                         ^
+>     <scratch space>:253:1: note: expanded from here
+>       253 | __compiletime_assert_207
+>           | ^
+>     4 errors generated.
+> --
+>     In file included from fs/netfs/misc.c:8:
+>     In file included from include/linux/swap.h:9:
+>     In file included from include/linux/memcontrol.h:13:
+>     In file included from include/linux/cgroup.h:17:
+>>> include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+>       911 |         return smp_load_acquire(&inode->i_size);
+>           |                ^
+>     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
+>       206 |         compiletime_assert_atomic_type(*p);                             \
+>           |         ^
+>     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
+>       438 |         compiletime_assert(__native_word(t),                            \
+>           |         ^
+>     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
+>       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>           |         ^
+>     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
+>       423 |         __compiletime_assert(condition, msg, prefix, suffix)
+>           |         ^
+>     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
+>       416 |                         prefix ## suffix();                             \
+>           |                         ^
+>     <scratch space>:251:1: note: expanded from here
+>       251 | __compiletime_assert_207
+>           | ^
+>     1 error generated.
+>
+> Kconfig warnings: (for reference only)
+>     WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
+>     Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && DRM_I915_WERROR [=n]
+>     Selected by [y]:
+>     - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && !COMPILE_TEST [=n]
+>
+>
+> vim +911 include/linux/fs.h
+>
+>     874	
+>     875	void filemap_invalidate_lock_two(struct address_space *mapping1,
+>     876					 struct address_space *mapping2);
+>     877	void filemap_invalidate_unlock_two(struct address_space *mapping1,
+>     878					   struct address_space *mapping2);
+>     879	
+>     880	
+>     881	/*
+>     882	 * NOTE: in a 32bit arch with a preemptable kernel and
+>     883	 * an UP compile the i_size_read/write must be atomic
+>     884	 * with respect to the local cpu (unlike with preempt disabled),
+>     885	 * but they don't need to be atomic with respect to other cpus like in
+>     886	 * true SMP (so they need either to either locally disable irq around
+>     887	 * the read or for example on x86 they can be still implemented as a
+>     888	 * cmpxchg8b without the need of the lock prefix). For SMP compiles
+>     889	 * and 64bit archs it makes no difference if preempt is enabled or not.
+>     890	 */
+>     891	static inline loff_t i_size_read(const struct inode *inode)
+>     892	{
+>     893	#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
+>     894		loff_t i_size;
+>     895		unsigned int seq;
+>     896	
+>     897		do {
+>     898			seq = read_seqcount_begin(&inode->i_size_seqcount);
+>     899			i_size = inode->i_size;
+>     900		} while (read_seqcount_retry(&inode->i_size_seqcount, seq));
+>     901		return i_size;
+>     902	#elif BITS_PER_LONG==32 && defined(CONFIG_PREEMPTION)
+>     903		loff_t i_size;
+>     904	
+>     905		preempt_disable();
+>     906		i_size = inode->i_size;
+>     907		preempt_enable();
+>     908		return i_size;
+>     909	#else
+>     910		/* Pairs with smp_store_release() in i_size_write() */
+>   > 911		return smp_load_acquire(&inode->i_size);
+>     912	#endif
+>     913	}
+>     914	
+Sorry to cause this compilation error, I have not encountered this
+before when testing compilation with gcc on x86 and arm64.
+Is there a special config required for this, or is it just clang that
+triggers this compile error?
 
-For example, we have many places where pointer overflow is tested:
+The compile error seems to be that some architectural implementations
+of smp_load_acquire() do not support pointers to long long data
+types. Can't think of a good way to avoid this problem, any ideas
+from linus and christian?
 
-	struct foo *ptr;
-	...
-	/* Check for overflow */
-	if (ptr + count < ptr) ...
-
-And in order to avoid running into the overflow sanitizers in the
-future, we need to rewrite these "intended" overflow checks:
-
-	if (check_add_overflow(ptr, count, &result)) ...
-
-Frustratingly the argument type validation for __builtin_add_overflow()
-is done before evaluating __builtin_choose_expr(), so for arguments to
-be valid simultaneously for sizeof(*p) (when p may not be a pointer),
-and __builtin_add_overflow(a, ...) (when a may be a pointer), we must
-introduce wrappers that always produce a specific type (but they are
-only used in the places where the bogus arguments will be ignored).
-
-To test whether a variable is a pointer or not, introduce the __is_ptr()
-helper, which uses __builtin_classify_type() to find arrays and pointers
-(via the new __is_ptr_or_array() helper), and then decays arrays into
-pointers (via the new __decay() helper), to distinguish pointers from
-arrays.
-
-Additionally update the unit tests to cover pointer addition.
-
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: llvm@lists.linux.dev
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/compiler_types.h | 10 +++++
- include/linux/overflow.h       | 44 ++++++++++++++++++-
- lib/overflow_kunit.c           | 77 ++++++++++++++++++++++++++++++----
- 3 files changed, 121 insertions(+), 10 deletions(-)
-
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 6f1ca49306d2..d27b58fddfaa 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -375,6 +375,16 @@ struct ftrace_likely_data {
- /* Are two types/vars the same type (ignoring qualifiers)? */
- #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
- 
-+/* Is variable addressable? */
-+#define __is_ptr_or_array(p)	(__builtin_classify_type(p) == 5)
-+
-+/* Return an array decayed to a pointer. */
-+#define __decay(p)		\
-+	(&*__builtin_choose_expr(__is_ptr_or_array(p), p, NULL))
-+
-+/* Report if variable is a pointer type. */
-+#define __is_ptr(p)		__same_type(p, __decay(p))
-+
- /*
-  * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, leaving
-  *			       non-scalar types unchanged.
-diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-index 7b5cf4a5cd19..099f2e559aa8 100644
---- a/include/linux/overflow.h
-+++ b/include/linux/overflow.h
-@@ -51,6 +51,45 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- 	return unlikely(overflow);
- }
- 
-+/* Always produce an integral variable expression. */
-+#define __filter_integral(x)		\
-+	__builtin_choose_expr(!__is_ptr(x), (x), 0)
-+
-+/* Always produce a pointer value. */
-+#define __filter_ptr(x)			\
-+	__builtin_choose_expr(__is_ptr(x), (x), NULL)
-+
-+/* Always produce a pointer to an integral value. */
-+#define __filter_ptrint(x)		\
-+	__builtin_choose_expr(!__is_ptr(*(x)), x, &(int){ 0 })
-+
-+/**
-+ * __check_ptr_add_overflow() - Calculate pointer addition with overflow checking
-+ * @a: pointer addend
-+ * @b: numeric addend
-+ * @d: pointer to store sum
-+ *
-+ * Returns 0 on success.
-+ *
-+ * Do not use this function directly, use check_add_overflow() instead.
-+ *
-+ * *@d holds the results of the attempted addition, but is not considered
-+ * "safe for use" on a non-zero return value, which indicates that the
-+ * sum has overflowed or been truncated.
-+ */
-+#define __check_ptr_add_overflow(a, b, d)		\
-+	({						\
-+		typeof(a) __a = (a);			\
-+		typeof(b) __b = (b);			\
-+		size_t __bytes;				\
-+		bool __overflow;			\
-+							\
-+		/* we want to perform the wrap-around, but retain the result */ \
-+		__overflow = __builtin_mul_overflow(sizeof(*(__a)), __b, &__bytes); \
-+		__builtin_add_overflow((unsigned long)(__a), __bytes, (unsigned long *)(d)) || \
-+		__overflow;				\
-+	})
-+
- /**
-  * check_add_overflow() - Calculate addition with overflow checking
-  * @a: first addend
-@@ -64,7 +103,10 @@ static inline bool __must_check __must_check_overflow(bool overflow)
-  * sum has overflowed or been truncated.
-  */
- #define check_add_overflow(a, b, d)	\
--	__must_check_overflow(__builtin_add_overflow(a, b, d))
-+	__must_check_overflow(__builtin_choose_expr(__is_ptr(a),	\
-+		__check_ptr_add_overflow(__filter_ptr(a), b, d),	\
-+		__builtin_add_overflow(__filter_integral(a), b,		\
-+				       __filter_ptrint(d))))
- 
- /**
-  * check_sub_overflow() - Calculate subtraction with overflow checking
-diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-index c527f6b75789..2d106e880956 100644
---- a/lib/overflow_kunit.c
-+++ b/lib/overflow_kunit.c
-@@ -45,13 +45,18 @@
- # define SKIP_64_ON_32(t)	do { } while (0)
- #endif
- 
--#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
--	static const struct test_ ## t1 ## _ ## t2 ## __ ## t {	\
-+#define DEFINE_TEST_ARRAY_NAMED_TYPED(n1, n2, n, t1, t2, t)	\
-+	static const struct test_ ## n1 ## _ ## n2 ## __ ## n {	\
- 		t1 a;						\
- 		t2 b;						\
--		t sum, diff, prod;				\
-+		t sum;						\
-+		t diff;						\
-+		t prod;						\
- 		bool s_of, d_of, p_of;				\
--	} t1 ## _ ## t2 ## __ ## t ## _tests[]
-+	} n1 ## _ ## n2 ## __ ## n ## _tests[]
-+
-+#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
-+	DEFINE_TEST_ARRAY_NAMED_TYPED(t1, t2, t, t1, t2, t)
- 
- #define DEFINE_TEST_ARRAY(t)	DEFINE_TEST_ARRAY_TYPED(t, t, t)
- 
-@@ -251,8 +256,10 @@ DEFINE_TEST_ARRAY(s64) = {
- };
- 
- #define check_one_op(t, fmt, op, sym, a, b, r, of) do {			\
--	int _a_orig = a, _a_bump = a + 1;				\
--	int _b_orig = b, _b_bump = b + 1;				\
-+	typeof(a + 0) _a_orig = a;					\
-+	typeof(a + 0) _a_bump = a + 1;					\
-+	typeof(b + 0) _b_orig = b;					\
-+	typeof(b + 0) _b_bump = b + 1;					\
- 	bool _of;							\
- 	t _r;								\
- 									\
-@@ -260,13 +267,13 @@ DEFINE_TEST_ARRAY(s64) = {
- 	KUNIT_EXPECT_EQ_MSG(test, _of, of,				\
- 		"expected "fmt" "sym" "fmt" to%s overflow (type %s)\n",	\
- 		a, b, of ? "" : " not", #t);				\
--	KUNIT_EXPECT_EQ_MSG(test, _r, r,				\
-+	KUNIT_EXPECT_TRUE_MSG(test, _r == r,				\
- 		"expected "fmt" "sym" "fmt" == "fmt", got "fmt" (type %s)\n", \
- 		a, b, r, _r, #t);					\
- 	/* Check for internal macro side-effects. */			\
- 	_of = check_ ## op ## _overflow(_a_orig++, _b_orig++, &_r);	\
--	KUNIT_EXPECT_EQ_MSG(test, _a_orig, _a_bump, "Unexpected " #op " macro side-effect!\n"); \
--	KUNIT_EXPECT_EQ_MSG(test, _b_orig, _b_bump, "Unexpected " #op " macro side-effect!\n"); \
-+	KUNIT_EXPECT_TRUE_MSG(test, _a_orig == _a_bump, "Unexpected " #op " macro side-effect!\n"); \
-+	KUNIT_EXPECT_TRUE_MSG(test, _b_orig == _b_bump, "Unexpected " #op " macro side-effect!\n"); \
- } while (0)
- 
- #define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
-@@ -333,6 +340,55 @@ DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
- };
- DEFINE_TEST_FUNC_TYPED(int_int__u8, u8, "%d");
- 
-+#define DEFINE_TEST_PTR_FUNC_TYPED(n, t, fmt)				\
-+static void do_ptr_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
-+{									\
-+	/* we're only doing single-direction sums, no product or division */ \
-+	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);\
-+}									\
-+									\
-+static void n ## _overflow_test(struct kunit *test) {			\
-+	unsigned i;							\
-+									\
-+	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
-+		do_ptr_test_ ## n(test, &n ## _tests[i]);		\
-+	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
-+		ARRAY_SIZE(n ## _tests), #n);				\
-+}
-+
-+DEFINE_TEST_ARRAY_NAMED_TYPED(void, int, void, void *, int, void *) = {
-+	{NULL, 0, NULL, NULL, NULL, false, false, false},
-+	{(void *)0x30, 0x10, (void *)0x40, NULL, NULL, false, false, false},
-+	{(void *)ULONG_MAX, 0, (void *)ULONG_MAX, NULL, NULL, false, false, false},
-+	{(void *)ULONG_MAX, 1, NULL, NULL, NULL, true, false, false},
-+	{(void *)ULONG_MAX, INT_MAX, (void *)(INT_MAX - 1), NULL, NULL, true, false, false},
-+};
-+DEFINE_TEST_PTR_FUNC_TYPED(void_int__void, void *, "%lx");
-+
-+struct _sized {
-+	int a;
-+	char b;
-+};
-+
-+DEFINE_TEST_ARRAY_NAMED_TYPED(sized, int, sized, struct _sized *, int, struct _sized *) = {
-+	{NULL, 0, NULL, NULL, NULL, false, false, false},
-+	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
-+	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
-+	{(void *)(ULONG_MAX - sizeof(struct _sized)), 1, (struct _sized *)ULONG_MAX, NULL, NULL, false, false, false},
-+	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 1, NULL, NULL, NULL, true, false, false},
-+	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 2, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, true, false, false},
-+	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 3, (struct _sized *)(sizeof(struct _sized) * 2), NULL, NULL, true, false, false},
-+};
-+DEFINE_TEST_PTR_FUNC_TYPED(sized_int__sized, struct _sized *, "%lx");
-+
-+DEFINE_TEST_ARRAY_NAMED_TYPED(sized, size_t, sized, struct _sized *, size_t, struct _sized *) = {
-+	{NULL, 0, NULL, NULL, NULL, false, false, false},
-+	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
-+	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
-+	{NULL, SIZE_MAX - 10, (struct _sized *)18446744073709551528UL, NULL, NULL, true, false, false},
-+};
-+DEFINE_TEST_PTR_FUNC_TYPED(sized_size_t__sized, struct _sized *, "%zu");
-+
- /* Args are: value, shift, type, expected result, overflow expected */
- #define TEST_ONE_SHIFT(a, s, t, expect, of)	do {			\
- 	typeof(a) __a = (a);						\
-@@ -1122,6 +1178,9 @@ static struct kunit_case overflow_test_cases[] = {
- 	KUNIT_CASE(s32_s32__s32_overflow_test),
- 	KUNIT_CASE(u64_u64__u64_overflow_test),
- 	KUNIT_CASE(s64_s64__s64_overflow_test),
-+	KUNIT_CASE(void_int__void_overflow_test),
-+	KUNIT_CASE(sized_int__sized_overflow_test),
-+	KUNIT_CASE(sized_size_t__sized_overflow_test),
- 	KUNIT_CASE(u32_u32__int_overflow_test),
- 	KUNIT_CASE(u32_u32__u8_overflow_test),
- 	KUNIT_CASE(u8_u8__int_overflow_test),
 -- 
-2.34.1
-
+With Best Regards,
+Baokun Li
+.
