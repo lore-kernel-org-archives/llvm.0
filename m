@@ -1,82 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEB3823A6;
-	Tue, 23 Jan 2024 17:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964C782D6E
+	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 19:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706032231; cv=none; b=ohepEsI3Yg4MLYgYsynllung5VboXhxf1tmlB6dXXpRJ1Csk4ghehg2gMTZYTgk+XRGp72+Gzi8ZhoPWCIk10ItyI8tuyU48k5XDnjSoJ3+eBSoSHTOLwtl4RxKXSzqhYMSTtGk3dlTmtK2EsU2DwWTbmq1ptsva0JhPu6vGY0w=
+	t=1706039917; cv=none; b=snoTWLnzBngqjjI5vzYfIzFgCqYonKmiv7Dnff98a21sA81O8m85MCKYPh5t3JSWY6QkIRk7gtM+aeCnjBDVuI1vJcvhq/xzMtx6LbOpscd2Zdl9kyiR9JPyifZZ+7bFeetvWCq7bjiDujBbGz3/AbDnMMLE+DW81UhZfykJjyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706032231; c=relaxed/simple;
-	bh=x1Ni5BlIAZGl/I/K/Xm762bnUAtUEwlvGnjM0NI6qOY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=t1phqpZnwKvG2PP3KNFRqzNEoDE6h4Rin8XlLeK5DkDM/um+2BpE/nj9MeF8xNrXkScBF656gJtYQzmeR/e0a/vbB7eZpERtc1zdlQLB5v9TI37a20X8V+qGtfn7po64qmxGuOS4ENSSX3xLP3Ammen2zE4Fv9g/JmwJgb2aR4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=prslJmCS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706039917; c=relaxed/simple;
+	bh=nYvo+rfNB69fdGKHBcdMDR6KR35HaCryt3kDT3duWoQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GtmWiOIrORZ+nNgz47JUMTU8+TLMPYxMQP0xLB/q+1/PxVDGcIQ24Uc2i5lJ60DjCWw8RsaTF9YytXs0ENMFwSmcfni2mnmPsn1wQXAsnM7wpYx02+RsQOaXR5bVXxNDHC8iXKa1ChP/Gaf5rN5Vv+9lUvB22fL1ndmz9rzEF54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R++Jdfu4; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="prslJmCS"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18D2DC43330;
-	Tue, 23 Jan 2024 17:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706032230;
-	bh=x1Ni5BlIAZGl/I/K/Xm762bnUAtUEwlvGnjM0NI6qOY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=prslJmCSrnlLTLgLzDJtl7IO1Ao4Ndrq+/cV/Wx3ja0KU0pL41OdzS3P8PqpwKTG/
-	 IKjr3ZVKUNuNDFkglbXEYxgbrTNDTDiBQy6NYIPTywMH474wR1E0oJyi148IeL+CeO
-	 6ODf80y5fGgXK9BMVnzT2/qnD4t11a9BuF7a1eQ7uUp0fZ59bWmyvceBeAPzHAERmz
-	 6pVzjV86Vs6xrAGAx3Rmj5v0h2F7XpetzOZ0UwjjNwwiBzBJ9zZENJDpf3I7tGgSgN
-	 26GakvNB5lm70K2TfF0fGmgOyb2UyuFFW8LEqgwYa4erGZ8w/2GfOxqZw5yinETiG1
-	 CxOcSl6Y22nlw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 010D8DFF763;
-	Tue, 23 Jan 2024 17:50:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R++Jdfu4"
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dc24ead4428so3158119276.1
+        for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 11:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706039915; x=1706644715; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nYvo+rfNB69fdGKHBcdMDR6KR35HaCryt3kDT3duWoQ=;
+        b=R++Jdfu46WQZrBDr9l5Vp2Ec5nKybCK5vdg6CtliOrGpBau6rMTwzHe+J9UTJBeLiT
+         YSoiAZOVKkruNH6Z6jMHrwcvrMSpO3Vm+iDyB9EO3TbB/XFAzZL/xpqlOohvwddtjaYS
+         COfTBXGbULcETkNUEB1DEwWH0VbP675nj0FkHi9bmJktPISpKT59cdbMn/o96jAimG5D
+         YLTdVtcDI0itBOB3fW8vQdQDnCzmT9sJfvgERqaUMi3GSDwDxdKVoHfDFgUc8h/8Oeh/
+         CB0/BzEVVjWRhDrB+gFHC9ldo/llkqTSugkQS9B07Co/vPGeThIFXQ6sjH+TLiCv8788
+         b6HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706039915; x=1706644715;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nYvo+rfNB69fdGKHBcdMDR6KR35HaCryt3kDT3duWoQ=;
+        b=e3SKhreQfrzcsmOR3wCoqAybxwegQL0qiyo/IDaenOgaY96RE2mx05bJ9swe3sIYqm
+         VMdfkxztoFW5tO2mg8WjIw1nnLOBux2hGrS6UiuSLz8wDD54UwzV89XRQV1ERRXoL6Bi
+         5G4n9QI/A2+cZBVGcPaUI4c6jmMfk/MHJSNE8r/o21dj2gzRZbGRCk74SkN4t7LTQLJh
+         J1adonvy/tQoRSj4weOVTV16Gho8UP7jch/B3aEmndF4dcyF1jTKYTno1Xd1gvWAMXSU
+         bjbuLK9vMyezwW/WP17fERB5DNT7dlX3XyMnZWAA79/ZiJ0SZ7bSokL6paSKmxBgfTIf
+         mIGg==
+X-Gm-Message-State: AOJu0YxsbtXVl4OsFylzsxXVpQDwUKWrUhYDOzoS4zK/mPn1PGara2cS
+	Xwufsc/Au9XEA6MuDiDZQXXN9rWUxqCna4X2dEq9zJ9YJk/PWjOycQF9QZfBia6o1mcn6wLUiE/
+	jXDpspJB/EbI0V3QxASVqfPe9niw=
+X-Google-Smtp-Source: AGHT+IHGoSEchkymg5ddhczryrZhgHLXWuEEwXlE6/ePL8YyPjoBb9/I9QQxbPyGzX8/yCnShMQwB4Yciia010VzKCo=
+X-Received: by 2002:a25:2fce:0:b0:db7:dacf:6206 with SMTP id
+ v197-20020a252fce000000b00db7dacf6206mr4150549ybv.88.1706039915535; Tue, 23
+ Jan 2024 11:58:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4] RISC-V: build: Allow LTO to be selected
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <170603222999.30461.9105047550962692358.git-patchwork-notify@kernel.org>
-Date: Tue, 23 Jan 2024 17:50:29 +0000
-References: <20231017-riscv-lto-v4-1-e7810b24e805@kernel.org>
-In-Reply-To: <20231017-riscv-lto-v4-1-e7810b24e805@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
- ndesaulniers@google.com, trix@redhat.com, samitolvanen@google.com,
- twd2.me@gmail.com, llvm@lists.linux.dev, patches@lists.linux.dev
+References: <e1c27b64ae7abe2ebe647be11b71cf1bca84f677.1704855495.git.senozhatsky@chromium.org>
+ <202401101646.B1C4FDA@keescook>
+In-Reply-To: <202401101646.B1C4FDA@keescook>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 23 Jan 2024 20:58:24 +0100
+Message-ID: <CANiq72nQsBvNFnr3Rp9aX17X4=G+jFQBB-7Uv3dXY3uKN+3xcA@mail.gmail.com>
+Subject: Re: [PATCHv2 1/2] Compiler Attributes: counted_by: bump min gcc version
+To: Kees Cook <keescook@chromium.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	"Gustavo A . R . Silva" <gustavo@embeddedor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Thu, Jan 11, 2024 at 1:46=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> Yup, this is good. Miguel, I can take these patches if you want?
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-This patch was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+Thanks Kees -- just applied them on top of v6.8-rc1 so they should be
+in -next soon, but if you need to pick them up for another reason,
+please go ahead.
 
-On Tue, 17 Oct 2023 15:21:04 -0700 you wrote:
-> From: Wende Tan <twd2.me@gmail.com>
-> 
-> Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is
-> an issue [1] in prior LLD versions that prevents LLD to generate proper
-> machine code for RISC-V when writing `nop`s.
-> 
-> To avoid boot failures in QEMU [2], '-mattr=+c' and '-mattr=+relax'
-> need to be passed via '-mllvm' to ld.lld, as there appears to be an
-> issue with LLVM's target-features and LTO [3], which can result in
-> incorrect relocations to branch targets [4]. Once this is fixed in LLVM,
-> it can be made conditional on affected ld.lld versions.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v4] RISC-V: build: Allow LTO to be selected
-    https://git.kernel.org/riscv/c/021d23428bdb
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Cheers,
+Miguel
