@@ -1,266 +1,180 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E412E7F7FF
-	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 17:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CE2811F4
+	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 17:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706029888; cv=none; b=nuk30Y59NhmMOMUCiA6pf0YLYrwWXTZZc4GSLlrRQblGh80UobcDXSnNeQALxO2udwazI/kK3EgoLuOV5wZBioLIT81WIHmbSFKMaLEddzV+yfZI9v9S5Fs7OmBF7EGwZ8WGSRvZAJ3Gv80M2xgTALxlzMB9JOufjsEdgoNNEUs=
+	t=1706031994; cv=none; b=rZBs4HVpfoVVHONiE4Hs8SiM7dlenl8n9HAm3oiIK2DO9t5NX15NRvCInhjresPU6q9u+/EidvWYvJq460AUwoRlJ8AeIqIoQEFv2RzjT29MjaImSnZIXQVrMZNaIo0nSU5S9gqLg2XSUupOcFWc7jxWtNuk5H4iFE01nlqX2Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706029888; c=relaxed/simple;
-	bh=2mOQ/z5zqvPquqRxUW0gdb25tcsS/VkFjP4vleX27eA=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nYohPmwDW21t1u012gcV4jGIX5J/14Ai68JN8skJ558EnBo805glg/L9PTB0kNailHDpzJVw/Q1ufGfB4lrcbr95LYDn46vMz0fd9Cw5YN3de9bM55aPN1sstOMfHdsHbixW5ZXwioL/JS4lCCcvHmca8GhHxrp0efxnzKfS79I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bk5yCGgT; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706031994; c=relaxed/simple;
+	bh=6lPJkqR20CZJ7JDcaUr9pIS1wTvhBq5nmz9ehJDu/E0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UcW8ua2/AGc6S3ElMEL9r9PKVwOf39KIxZwBhskoOB8IDi16PlXniKKvxndrfTCtd6MhX9XAFFP58RIqSLQ6PSJgpmP10bSj1tPA+bt9viWWNiHf/dU6FXqzCmbTsbhOV7UVIC38BfGCx2A1mII62+lDwoIFWvaWYJ54eQi6gwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=H2WtMRYf; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bk5yCGgT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706029879;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/JM5kTCZRQojGgtXf/RYktD4z/idHELqrWd7ndcTlaY=;
-	b=Bk5yCGgTo8d0m9CQqU/CGZU8RR50oNNWZcKgBhEZ7NvwaGLJ2rEh8NQe5F5Ab36diBaEhy
-	uOIHFtjTBh3kKmoqZwy93p6H2jhpBXQ28FFs+6St5m7oN9maDirV3H+7PVTxIrdrNMONZU
-	kbDmDu+O2Ov0qxv6x8oSMoKt3SCbSE0=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-631-29ajl64DMFSYfX56hdsy_g-1; Tue,
- 23 Jan 2024 12:11:17 -0500
-X-MC-Unique: 29ajl64DMFSYfX56hdsy_g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5FD3729AA399
-	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 17:11:17 +0000 (UTC)
-Received: from [172.64.10.17] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4C5205012;
-	Tue, 23 Jan 2024 17:11:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 78 of 226): Test report for master
- (6.8.0-rc1, mainline.kernel.org-clang, 5d9248ee)
-Date: Tue, 23 Jan 2024 17:11:17 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="H2WtMRYf"
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2cf1c8cc870so1880721fa.1
+        for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 09:46:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1706031989; x=1706636789; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9k+udVHCQij9ZyhLL/CP/wWBU5q55R/Zc/OGcMOiAAo=;
+        b=H2WtMRYfzDWnEgkRxndmPVOuDpRIJ/CSCQe80I81uTHnN8RDO+M8uWfVVAsM8u0mYZ
+         bR0pAv/KgzDGaXeTP5jUEcKU5kq4runam3gfE0bvssKkYXX4PzKbfwxujacTS9em/jdw
+         ixtCbhKxeP6Dhh8EjyAgPXzSX4lD3phBIGCdo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706031989; x=1706636789;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9k+udVHCQij9ZyhLL/CP/wWBU5q55R/Zc/OGcMOiAAo=;
+        b=Rbj8Hv+4i4zITtGvlCXrAR3Xm7KVI+Ym2W82uYu8zCJkktjcBWglAPDx9BTZ03O0ne
+         9PsUo/0tRauL75feEb+4p7vybIt6GcfOkg5xX05CXlm9b16gbdd/Odgr0pvfymihTcuQ
+         TiR8dk814FbpFUTWxSQt8g892IamhOJnL6A3vgDQ4alHroLV7bm6l409ORbnM9Zt8U0n
+         fETWq4yxN897e+hAa6dZ8n2kRsNvncrXRBUFQ7fPR9/H/K3/GSfuZmGhx8EIjXXOLl27
+         9YXugURVEzrC997eOL770jU1WCTDXdXoSUjvoOz4R7YN2I+Zfijas7HSeC0XMpFcEUIJ
+         qstA==
+X-Gm-Message-State: AOJu0YzJE5yEPmuNYadJZMdJcZs0U4yG6hhqmlNBNJHm1gRzsobLCaY5
+	WrTs1oXKNqwwKttTbSm+ENeihmtBh6jFXZIcY3KLmz6FrDz5TLAi0HjQ9GVDJKoFiW+HasLMAD7
+	TSHjh0A==
+X-Google-Smtp-Source: AGHT+IGdPfQIyeEjjm83tZGEmKNjfCa611Idk8N0fq5u0fUDGdNMJ21/ji1HGJvNHRAYPQsmJ0fgNQ==
+X-Received: by 2002:a2e:be90:0:b0:2cc:a638:56b1 with SMTP id a16-20020a2ebe90000000b002cca63856b1mr91973ljr.96.1706031988656;
+        Tue, 23 Jan 2024 09:46:28 -0800 (PST)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id i23-20020a2e8657000000b002ccd1b79639sm3794095ljj.43.2024.01.23.09.46.27
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jan 2024 09:46:27 -0800 (PST)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2cf19f65271so6945001fa.2
+        for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 09:46:27 -0800 (PST)
+X-Received: by 2002:a2e:be90:0:b0:2cc:a638:56b1 with SMTP id
+ a16-20020a2ebe90000000b002cca63856b1mr91949ljr.96.1706031986757; Tue, 23 Jan
+ 2024 09:46:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <34533.124012312111702745@us-mta-631.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <202401230837.TXro0PHi-lkp@intel.com> <59fae3eb-a125-cd5f-224e-b89d122ecb46@huawei.com>
+In-Reply-To: <59fae3eb-a125-cd5f-224e-b89d122ecb46@huawei.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 23 Jan 2024 09:46:10 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whoNcNpojRUjg65ixWDOJS-D1kvSHQvtNFtEq7aJw=5Fw@mail.gmail.com>
+Message-ID: <CAHk-=whoNcNpojRUjg65ixWDOJS-D1kvSHQvtNFtEq7aJw=5Fw@mail.gmail.com>
+Subject: Re: [brauner-vfs:vfs.misc 12/13] include/linux/fs.h:911:9: error:
+ call to '__compiletime_assert_207' declared with 'error' attribute: Need
+ native word sized stores/loads for atomicity.
+To: Baokun Li <libaokun1@huawei.com>
+Cc: kernel test robot <lkp@intel.com>, sfr@canb.auug.org.au, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, 
+	Christian Brauner <christianvanbrauner@gmail.com>, Christian Brauner <brauner@kernel.org>, 
+	yangerkun <yangerkun@huawei.com>, "zhangyi (F)" <yi.zhang@huawei.com>, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Mon, 22 Jan 2024 at 23:08, Baokun Li <libaokun1@huawei.com> wrote:
+>
+> >>> include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
+> >       911 |         return smp_load_acquire(&inode->i_size);
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Ahh, yes. We used to allow READ_ONCE() on non-atomic data structures
+(we still do, but we used to too), but with truly atomic cases it's
+wrong, since reading a 64-bit value with two 32-bit instructions is
+clearly ever atomic.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+So your patch is hitting the "these atomic and/or ordered accesses
+need to be able to actually be done as *one* access" sanity check.
 
-Kernel information:
-    Commit message: Merge tag 'for-6.8-rc1-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
+And the reason is that while we have special-cases 32-bit AMP and
+preemption code to avoid this:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/124839
+> >     891       static inline loff_t i_size_read(const struct inode *inode)
+> >     892       {
+> >     893       #if BITS_PER_LONG==32 && defined(CONFIG_SMP)
+> >     894               loff_t i_size;
+> >     895               unsigned int seq;
+> >     896
+> >     897               do {
+> >     898                       seq = read_seqcount_begin(&inode->i_size_seqcount);
+> >     899                       i_size = inode->i_size;
+> >     900               } while (read_seqcount_retry(&inode->i_size_seqcount, seq));
+> >     901               return i_size;
+> >     902       #elif BITS_PER_LONG==32 && defined(CONFIG_PREEMPTION)
+> >     903               loff_t i_size;
+> >     904
+> >     905               preempt_disable();
+> >     906               i_size = inode->i_size;
+> >     907               preempt_enable();
+> >     908               return i_size;
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [rawhide] avc:  denied  { checkpoint_restore } for  pid=3D79=
-3 comm=3D"agetty" capability=3D40  scontext=3Dsystem_u:system_r:getty_t:s0-=
-s0:c0.c1023 tcontext=3Dsystem_u:system_r:getty_t:s0-s0:c0.c1023 tclass=3Dca=
-pability2 permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259622
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Storage - multipath mapping test: FAIL: ls: cannot access '/=
-dev/mapper/mpath*': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1617
-            Affected tests:
-                 ppc64le - Storage - multipath mapping test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+We have *not* special-cased the UP and non-preempt code, because in
+that case doing a 64-bit load with two 32-bit accesses is obviously
+fine (modulo interrupts, which *really* shouldn't be changing i_size.
 
+So this last case:
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - POSIX pjd-fstest suites
-      x86_64 - Filesystem - Loopdev Sanity
-      x86_64 - Memory function: memfd_create
-      x86_64 - AMTU (Abstract Machine Test Utility)
-      x86_64 - Networking - Ethernet drivers sanity
-      x86_64 - Networking cki netfilter test
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - multipath mapping test
-      x86_64 - Storage - dm/common
-      x86_64 - Storage - lvm thinp sanity
-      x86_64 - Storage - iSCSI parameters
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - kdump - sysrq-c
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - selinux-policy: serge-testsuite
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - xfstests - ext4
-      x86_64 - xfstests - xfs
-      x86_64 - xfstests - btrfs
-      x86_64 - xfstests - nfsv4.2
-      x86_64 - xfstests - cifsv3.11
-      x86_64 - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - POSIX pjd-fstest suites
-      x86_64 (debug) - Filesystem - Loopdev Sanity
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-      x86_64 (debug) - Networking - Ethernet drivers sanity
-      x86_64 (debug) - Networking cki netfilter test
-      x86_64 (debug) - Libkcapi AF_ALG test
-      x86_64 (debug) - Hardware - pciutils: sanity smoke test
-      x86_64 (debug) - Storage - dm/common
-      x86_64 (debug) - Storage - lvm thinp sanity
-      x86_64 (debug) - Storage - iSCSI parameters
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
+> >     909       #else
+> >     910               /* Pairs with smp_store_release() in i_size_write() */
+> >   > 911               return smp_load_acquire(&inode->i_size);
+> >     912       #endif
 
+used to be just a simple
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+        return inode->i_size;
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+but now that you changed it to smp_load_acquire(), our "native size"
+sanity checks kick in.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+The solution is either to add a new case here (saying "if we're not
+SMP, the smp_load_acquire() is pointless"), or to just remove the size
+check from the non-SMP version of smp_load_acquire().
 
+Honestly, that sounds like the right thing to do anyway. Our non-SMP
+case looks like this:
+
+#ifndef smp_load_acquire
+#define smp_load_acquire(p)                                             \
+({                                                                      \
+        __unqual_scalar_typeof(*p) ___p1 = READ_ONCE(*p);               \
+        compiletime_assert_atomic_type(*p);                             \
+        barrier();                                                      \
+        (typeof(*p))___p1;                                              \
+})
+#endif
+
+and that compiletime_assert_atomic_type() might as well go away. Yes,
+it removes some type-checking coverage, but honestly, the non-SMP case
+simply isn't relevant. No developer uses a UP build for testing
+anyway, so the "less coverage" is pretty much completely theoretical.
+
+So I *think* the fix is as trivial as something like this:
+
+  --- a/include/asm-generic/barrier.h
+  +++ b/include/asm-generic/barrier.h
+  @@ -193,7 +193,6 @@ do {                                      \
+   #ifndef smp_store_release
+   #define smp_store_release(p, v)                              \
+   do {                                                         \
+  -     compiletime_assert_atomic_type(*p);                     \
+        barrier();                                              \
+        WRITE_ONCE(*p, v);                                      \
+   } while (0)
+  @@ -203,7 +202,6 @@ do {                                      \
+   #define smp_load_acquire(p)                                  \
+   ({                                                           \
+        __unqual_scalar_typeof(*p) ___p1 = READ_ONCE(*p);       \
+  -     compiletime_assert_atomic_type(*p);                     \
+        barrier();                                              \
+        (typeof(*p))___p1;                                      \
+   })
+
+because the extra type checking here only makes for extra work, not
+for extra safety.
+
+Hmm?
+
+                Linus
