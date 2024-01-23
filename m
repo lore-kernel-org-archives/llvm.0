@@ -1,104 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5628220F1;
-	Tue, 23 Jan 2024 20:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36514120C;
+	Tue, 23 Jan 2024 23:00:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706042341; cv=none; b=TMf3+AA+jsblj8M5dTsw965VIb/B56yODi2zEho/3oqPF9A9I3zi77DcEBT3l55uwYstsOm0rqEf62S/HNoeWb1Cp7hoKpyAIdnF0mqh1BZYbsh9TFjDpj3AccnitmBk/8EgZYBNbRZOz6LyulCUTvhXpt4ZoAiunbpC70+lwik=
+	t=1706050809; cv=none; b=QWoxtgYm8vA3rq9n7V0DNMcJC3Ccjk5c1xVrEVhbbiDX6Z+GZePyPrHHDr/ADbHiKqGhBk1X24KfXQaQ5RTLIvBfRWV1R9oitTxhijv+yMdwpx+A7BOGbh//Tj0UKRR+WvESjxZGJAbwAeiQbOjEuysannOAMqNl8RZVSsghr0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706042341; c=relaxed/simple;
-	bh=fq71BbN1ywaZ7F7VI6egXeKgKsL9xoL1DO3pGojEhSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GdH5OACgckD7mxnc+QJ5FKjBvlXfcc9511ELA1a8/og6bVBaL2Pi21fe4PiKKpic/1DsOZULRI6b8gd2KuZy9BL7NScina7l4TQLQjK84PPlM04ENOwi/SDaBc4B7QjeqIhDVk3LCQeFcXh4tWNS809WbkJMQC98ejzJ4iOABJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E0E9C433F1;
-	Tue, 23 Jan 2024 20:38:58 +0000 (UTC)
-Date: Tue, 23 Jan 2024 20:38:55 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <ZbAj34vdVuMrmdFD@arm.com>
-References: <ZW9cF0ALVwgvcQMy@arm.com>
- <20231205175127.GJ2692119@nvidia.com>
- <ZW97VdHYH3HYVyd5@arm.com>
- <20231205195130.GM2692119@nvidia.com>
- <ZXBWXodu2rxQ7Szz@arm.com>
- <20231206125919.GP2692119@nvidia.com>
- <20240116185121.GB980613@nvidia.com>
- <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
- <20240117123618.GD734935@nvidia.com>
- <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
+	s=arc-20240116; t=1706050809; c=relaxed/simple;
+	bh=67FZIBdOOMCQ00N5ExH/7I5y2V442bu28UsHFtb9aa8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hEPS1nMgvsdkkPC9+1b0jLtCig7Eoyi0UDmRf9/nNKxg4pEdpUMd3DgEvHkFXhp6+LTqgVgMPcPj+DZ5ETh90L8tUExk+NpkheD1/86lwWV7vx+BPQ62HCfPgmnXwuAe8ROsJGLhXcLB1lMXyAKTeVyuZwXBRcbBUO/gjR9IwYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JaNthWnX; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JaNthWnX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938A2C433F1;
+	Tue, 23 Jan 2024 23:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706050808;
+	bh=67FZIBdOOMCQ00N5ExH/7I5y2V442bu28UsHFtb9aa8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=JaNthWnXcGwKpArT4gZBJLpz0LIWEXmCpSDD0+/8ZuNXyS2CWAwvKCmYXJq+DYD4U
+	 LnS7oKY33pmSxtlKQoD/rgTNf/egd/gKNvmrpb+Z66FnOzMbrjifw6SKak4nuUgHIK
+	 XeVstqf0j6Twv0YiV5mFl4qmC2qH+65woTdelyT8MRxzyKz556XrVBJ85kQnFCY5UW
+	 fV/y/mU4sbDiC0wyBzP3zlFa0TIMOv509gqAmj4oiSlyrj/8RXiqKhcM7SZQAxXFTv
+	 DXityBgBNutwWEv804J54v8W6jsnhgTJvGQmX/ReSmeF2qhjopSEsZZ3VkhWnkDm9o
+	 Y6WWicXzEF+8Q==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] Fix UML build with clang-18 and newer
+Date: Tue, 23 Jan 2024 15:59:53 -0700
+Message-Id: <20240123-fix-uml-clang-18-v1-0-efc095519cf9@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOlEsGUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDQ0ML3bTMCt3S3Bzd5BygrC5QINXYzDTJwNTAONHIUgmoraAoFagGbGR
+ 0bG0tAKpI5MxiAAAA
+To: richard@nod.at, anton.ivanov@cambridgegreys.com, 
+ johannes@sipsolutions.net, masahiroy@kernel.org
+Cc: nathan@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com, 
+ morbo@google.com, justinstitt@google.com, linux-um@lists.infradead.org, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1383; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=67FZIBdOOMCQ00N5ExH/7I5y2V442bu28UsHFtb9aa8=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKkbXL4LvJZlsGizYPisv8E0OzhMcnZHkoH7u5p9BR9rO
+ BLff/nfUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACai/JmRYab++ijpXc8kine8
+ mrJv8+RIo90Zk+8s836w1e9xjcgR/kMMfwXuGnXtO7tSPqfhUY306w0zZ+X5Pjzf+H7GlX1+Ud7
+ c3UwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-(fixed Marc's email address)
+Hi all,
 
-On Wed, Jan 17, 2024 at 01:29:06PM +0000, Mark Rutland wrote:
-> On Wed, Jan 17, 2024 at 08:36:18AM -0400, Jason Gunthorpe wrote:
-> > On Wed, Jan 17, 2024 at 12:30:00PM +0000, Mark Rutland wrote:
-> > > On Tue, Jan 16, 2024 at 02:51:21PM -0400, Jason Gunthorpe wrote:
-> > > > I'm just revising this and I'm wondering if you know why ARM64 has this:
-> > > > 
-> > > > #define __raw_writeq __raw_writeq
-> > > > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
-> > > > {
-> > > > 	asm volatile("str %x0, [%1]" : : "rZ" (val), "r" (addr));
-> > > > }
-> > > > 
-> > > > Instead of
-> > > > 
-> > > > #define __raw_writeq __raw_writeq
-> > > > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
-> > > > {
-> > > > 	asm volatile("str %x0, %1" : : "rZ" (val), "m" (*(volatile u64 *)addr));
-> > > > }
-> > > > 
-> > > > ?? Like x86 has.
-> > > 
-> > > I believe this is for the same reason as doing so in all of our other IO
-> > > accessors.
-> > > 
-> > > We've deliberately ensured that our IO accessors use a single base register
-> > > with no offset as this is the only form that HW can represent in ESR_ELx.ISS.SRT
-> > > when reporting a stage-2 abort, which a hypervisor may use for
-> > > emulating IO.
-> > 
-> > Wow, harming bare metal performace to accommodate imperfect emulation
-> > sounds like a horrible reason :(
-> 
-> Having working functionality everywhere is a very good reason. :)
-> 
-> > So what happens with this patch where IO is done with STP? Are you
-> > going to tell me I can't do it because of this?
-> 
-> I'm not personally going to make that judgement, but it's certainly something
-> for Catalin and Will to consider (and I've added Marc in case he has any
-> opinion).
+This series resolves two independent but related issues that were
+recently exposed by two LLVM changes.
 
-Good point, I missed this part. We definitely can't use STP in the I/O
-accessors, we'd have a big surprise when running the same code in a
-guest with emulated I/O.
+https://github.com/llvm/llvm-project/commit/ec92d74a0ef89b9dd46aee6ec8aca6bfd3c66a54
+exposes that '-no-pie' is not getting added to the linker flags with
+clang, resulting in building objects with '-fno-PIE' that are linked
+with '-pie', to which the linker rightfully errors with:
 
-If eight STRs without other operations interleaved give us the
-write-combining on most CPUs (with Normal NC), we should go with this
-instead of STP.
+  /usr/sbin/ld: init/main.o: relocation R_X86_64_32 against symbol `saved_command_line' can not be used when making a PIE object; recompile with -fPIE
+  /usr/sbin/ld: failed to set dynamic section sizes: bad value
 
+https://github.com/llvm/llvm-project/commit/4bf8a688956a759b7b6b8d94f42d25c13c7af130
+adds '.ltext' (and '.ltext.*' with '-ffunction-sections') when using
+'-mcmodel=large' (which UML does), which causes a segmentation fault
+with modpost.
+
+I have tested these patches with all supported versions of clang,
+noticing no regressions.
+
+---
+Nathan Chancellor (2):
+      um: Fix adding '-no-pie' for clang
+      modpost: Add '.ltext' and '.ltext.*' to TEXT_SECTIONS
+
+ arch/um/Makefile      | 4 +++-
+ scripts/mod/modpost.c | 3 ++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+---
+base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+change-id: 20240118-fix-uml-clang-18-e365b0503a29
+
+Best regards,
 -- 
-Catalin
+Nathan Chancellor <nathan@kernel.org>
+
