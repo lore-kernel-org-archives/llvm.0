@@ -1,272 +1,266 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B41362A0A;
-	Tue, 23 Jan 2024 16:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E412E7F7FF
+	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 17:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706027050; cv=none; b=f4iIMJOhMucJOkfNkLEFLXWbgLsDkE/GnPsy0UkWJcEUVVEZT1zLcG24DZH8cIilAT/VrHECs4zOEpx52hK72Vnqqs0jk5QqtArFZ/DsAdQ2bxDKq/dp50qcVHJyAv7KISsFcH/W8yyrcwc264XGBCSZgl34fKgsZClgvkRmx0s=
+	t=1706029888; cv=none; b=nuk30Y59NhmMOMUCiA6pf0YLYrwWXTZZc4GSLlrRQblGh80UobcDXSnNeQALxO2udwazI/kK3EgoLuOV5wZBioLIT81WIHmbSFKMaLEddzV+yfZI9v9S5Fs7OmBF7EGwZ8WGSRvZAJ3Gv80M2xgTALxlzMB9JOufjsEdgoNNEUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706027050; c=relaxed/simple;
-	bh=3rcI+JsaKfW8pHZyiiUBixzdpoWKVIRm73VZAoPF6kE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AngcqPELQYhgpxrWU7Ag2+u8jJgL6aYRJtI1KDKJgmssVkOPNUSYJUwrAuqMXgtWDMGzlvOkMQvCdTmWaWylKs0QfYDkzv7AMvIzQlxBz9M7OW+49qYz4oSmH87QG4CFEdi8xsYmiPkDrAKYgL1o1XJ7cd2xDs60keVIXMMBFSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pkQ4DPcW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706029888; c=relaxed/simple;
+	bh=2mOQ/z5zqvPquqRxUW0gdb25tcsS/VkFjP4vleX27eA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nYohPmwDW21t1u012gcV4jGIX5J/14Ai68JN8skJ558EnBo805glg/L9PTB0kNailHDpzJVw/Q1ufGfB4lrcbr95LYDn46vMz0fd9Cw5YN3de9bM55aPN1sstOMfHdsHbixW5ZXwioL/JS4lCCcvHmca8GhHxrp0efxnzKfS79I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bk5yCGgT; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pkQ4DPcW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 085FDC433C7;
-	Tue, 23 Jan 2024 16:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706027049;
-	bh=3rcI+JsaKfW8pHZyiiUBixzdpoWKVIRm73VZAoPF6kE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pkQ4DPcW1K2THOZ/82CdNxWmoDjLdA2dGseXuj1bIgt7q/3su/S8lyyHn+TbypWZn
-	 iMGUFi8XcCuzuYhgPRmzPMn8JXie6W17HS4x6XF05HUOrZBqVlFeCOTEp4Kgf1KPxW
-	 TWnmLWTLWaQLV+VyJWBDul5byav8tRE1KJDS++qerjxE+nA0IwbCaAo/vEtcaj1I+4
-	 8ycyeJQdsn3j64vFFZbI1wgoG1deXYgQTxeKH4ddlAQ2UiSFBaGM4E+PVVsWxVIJkj
-	 NV13YlFG/PIQTqnhAKN/hQA5J0p3zGbmEFcUetIi0Z8CfPj9kgj5kyD4QlFFHaNyJS
-	 bW+Vlwz1jhHWQ==
-Date: Tue, 23 Jan 2024 17:24:03 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Baokun Li <libaokun1@huawei.com>
-Cc: kernel test robot <lkp@intel.com>, sfr@canb.auug.org.au, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Christian Brauner <christianvanbrauner@gmail.com>, yangerkun <yangerkun@huawei.com>, 
-	"zhangyi (F)" <yi.zhang@huawei.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	linux-next@vger.kernel.org
-Subject: Re: [brauner-vfs:vfs.misc 12/13] include/linux/fs.h:911:9: error:
- call to '__compiletime_assert_207' declared with 'error' attribute: Need
- native word sized stores/loads for atomicity.
-Message-ID: <20240123-glatt-langgehegter-a239e588ae2c@brauner>
-References: <202401230837.TXro0PHi-lkp@intel.com>
- <59fae3eb-a125-cd5f-224e-b89d122ecb46@huawei.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bk5yCGgT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706029879;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/JM5kTCZRQojGgtXf/RYktD4z/idHELqrWd7ndcTlaY=;
+	b=Bk5yCGgTo8d0m9CQqU/CGZU8RR50oNNWZcKgBhEZ7NvwaGLJ2rEh8NQe5F5Ab36diBaEhy
+	uOIHFtjTBh3kKmoqZwy93p6H2jhpBXQ28FFs+6St5m7oN9maDirV3H+7PVTxIrdrNMONZU
+	kbDmDu+O2Ov0qxv6x8oSMoKt3SCbSE0=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-631-29ajl64DMFSYfX56hdsy_g-1; Tue,
+ 23 Jan 2024 12:11:17 -0500
+X-MC-Unique: 29ajl64DMFSYfX56hdsy_g-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5FD3729AA399
+	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 17:11:17 +0000 (UTC)
+Received: from [172.64.10.17] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4C5205012;
+	Tue, 23 Jan 2024 17:11:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 78 of 226): Test report for master
+ (6.8.0-rc1, mainline.kernel.org-clang, 5d9248ee)
+Date: Tue, 23 Jan 2024 17:11:17 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <59fae3eb-a125-cd5f-224e-b89d122ecb46@huawei.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <34533.124012312111702745@us-mta-631.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 23, 2024 at 03:07:50PM +0800, Baokun Li wrote:
-> On 2024/1/23 8:12, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.misc
-> > head:   297983dc9011461cba6278bfe03f4305c4a2caa0
-> > commit: 4bbd51d0f0ad709c0f02c100439d6c9ba6811d4b [12/13] fs: make the i_size_read/write helpers be smp_load_acquire/store_release()
-> > config: i386-randconfig-015-20240123 (https://download.01.org/0day-ci/archive/20240123/202401230837.TXro0PHi-lkp@intel.com/config)
-> > compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240123/202401230837.TXro0PHi-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202401230837.TXro0PHi-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >     In file included from fs/netfs/buffered_read.c:10:
-> >     In file included from fs/netfs/internal.h:9:
-> >     In file included from include/linux/seq_file.h:12:
-> > > > include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-> >       911 |         return smp_load_acquire(&inode->i_size);
-> >           |                ^
-> >     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
-> >       206 |         compiletime_assert_atomic_type(*p);                             \
-> >           |         ^
-> >     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
-> >       438 |         compiletime_assert(__native_word(t),                            \
-> >           |         ^
-> >     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
-> >       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >           |         ^
-> >     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
-> >       423 |         __compiletime_assert(condition, msg, prefix, suffix)
-> >           |         ^
-> >     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
-> >       416 |                         prefix ## suffix();                             \
-> >           |                         ^
-> >     <scratch space>:38:1: note: expanded from here
-> >        38 | __compiletime_assert_207
-> >           | ^
-> >     1 error generated.
-> > --
-> >     In file included from fs/netfs/buffered_write.c:9:
-> > > > include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-> >       911 |         return smp_load_acquire(&inode->i_size);
-> >           |                ^
-> >     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
-> >       206 |         compiletime_assert_atomic_type(*p);                             \
-> >           |         ^
-> >     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
-> >       438 |         compiletime_assert(__native_word(t),                            \
-> >           |         ^
-> >     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
-> >       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >           |         ^
-> >     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
-> >       423 |         __compiletime_assert(condition, msg, prefix, suffix)
-> >           |         ^
-> >     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
-> >       416 |                         prefix ## suffix();                             \
-> >           |                         ^
-> >     <scratch space>:253:1: note: expanded from here
-> >       253 | __compiletime_assert_207
-> >           | ^
-> >     In file included from fs/netfs/buffered_write.c:9:
-> > > > include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-> >     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
-> >       206 |         compiletime_assert_atomic_type(*p);                             \
-> >           |         ^
-> >     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
-> >       438 |         compiletime_assert(__native_word(t),                            \
-> >           |         ^
-> >     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
-> >       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >           |         ^
-> >     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
-> >       423 |         __compiletime_assert(condition, msg, prefix, suffix)
-> >           |         ^
-> >     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
-> >       416 |                         prefix ## suffix();                             \
-> >           |                         ^
-> >     <scratch space>:253:1: note: expanded from here
-> >       253 | __compiletime_assert_207
-> >           | ^
-> >     In file included from fs/netfs/buffered_write.c:9:
-> > > > include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-> >     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
-> >       206 |         compiletime_assert_atomic_type(*p);                             \
-> >           |         ^
-> >     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
-> >       438 |         compiletime_assert(__native_word(t),                            \
-> >           |         ^
-> >     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
-> >       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >           |         ^
-> >     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
-> >       423 |         __compiletime_assert(condition, msg, prefix, suffix)
-> >           |         ^
-> >     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
-> >       416 |                         prefix ## suffix();                             \
-> >           |                         ^
-> >     <scratch space>:253:1: note: expanded from here
-> >       253 | __compiletime_assert_207
-> >           | ^
-> >     In file included from fs/netfs/buffered_write.c:9:
-> > > > include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-> >     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
-> >       206 |         compiletime_assert_atomic_type(*p);                             \
-> >           |         ^
-> >     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
-> >       438 |         compiletime_assert(__native_word(t),                            \
-> >           |         ^
-> >     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
-> >       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >           |         ^
-> >     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
-> >       423 |         __compiletime_assert(condition, msg, prefix, suffix)
-> >           |         ^
-> >     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
-> >       416 |                         prefix ## suffix();                             \
-> >           |                         ^
-> >     <scratch space>:253:1: note: expanded from here
-> >       253 | __compiletime_assert_207
-> >           | ^
-> >     4 errors generated.
-> > --
-> >     In file included from fs/netfs/misc.c:8:
-> >     In file included from include/linux/swap.h:9:
-> >     In file included from include/linux/memcontrol.h:13:
-> >     In file included from include/linux/cgroup.h:17:
-> > > > include/linux/fs.h:911:9: error: call to '__compiletime_assert_207' declared with 'error' attribute: Need native word sized stores/loads for atomicity.
-> >       911 |         return smp_load_acquire(&inode->i_size);
-> >           |                ^
-> >     include/asm-generic/barrier.h:206:2: note: expanded from macro 'smp_load_acquire'
-> >       206 |         compiletime_assert_atomic_type(*p);                             \
-> >           |         ^
-> >     include/linux/compiler_types.h:438:2: note: expanded from macro 'compiletime_assert_atomic_type'
-> >       438 |         compiletime_assert(__native_word(t),                            \
-> >           |         ^
-> >     include/linux/compiler_types.h:435:2: note: expanded from macro 'compiletime_assert'
-> >       435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >           |         ^
-> >     include/linux/compiler_types.h:423:2: note: expanded from macro '_compiletime_assert'
-> >       423 |         __compiletime_assert(condition, msg, prefix, suffix)
-> >           |         ^
-> >     include/linux/compiler_types.h:416:4: note: expanded from macro '__compiletime_assert'
-> >       416 |                         prefix ## suffix();                             \
-> >           |                         ^
-> >     <scratch space>:251:1: note: expanded from here
-> >       251 | __compiletime_assert_207
-> >           | ^
-> >     1 error generated.
-> > 
-> > Kconfig warnings: (for reference only)
-> >     WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
-> >     Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && DRM_I915_WERROR [=n]
-> >     Selected by [y]:
-> >     - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && !COMPILE_TEST [=n]
-> > 
-> > 
-> > vim +911 include/linux/fs.h
-> > 
-> >     874	
-> >     875	void filemap_invalidate_lock_two(struct address_space *mapping1,
-> >     876					 struct address_space *mapping2);
-> >     877	void filemap_invalidate_unlock_two(struct address_space *mapping1,
-> >     878					   struct address_space *mapping2);
-> >     879	
-> >     880	
-> >     881	/*
-> >     882	 * NOTE: in a 32bit arch with a preemptable kernel and
-> >     883	 * an UP compile the i_size_read/write must be atomic
-> >     884	 * with respect to the local cpu (unlike with preempt disabled),
-> >     885	 * but they don't need to be atomic with respect to other cpus like in
-> >     886	 * true SMP (so they need either to either locally disable irq around
-> >     887	 * the read or for example on x86 they can be still implemented as a
-> >     888	 * cmpxchg8b without the need of the lock prefix). For SMP compiles
-> >     889	 * and 64bit archs it makes no difference if preempt is enabled or not.
-> >     890	 */
-> >     891	static inline loff_t i_size_read(const struct inode *inode)
-> >     892	{
-> >     893	#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
-> >     894		loff_t i_size;
-> >     895		unsigned int seq;
-> >     896	
-> >     897		do {
-> >     898			seq = read_seqcount_begin(&inode->i_size_seqcount);
-> >     899			i_size = inode->i_size;
-> >     900		} while (read_seqcount_retry(&inode->i_size_seqcount, seq));
-> >     901		return i_size;
-> >     902	#elif BITS_PER_LONG==32 && defined(CONFIG_PREEMPTION)
-> >     903		loff_t i_size;
-> >     904	
-> >     905		preempt_disable();
-> >     906		i_size = inode->i_size;
-> >     907		preempt_enable();
-> >     908		return i_size;
-> >     909	#else
-> >     910		/* Pairs with smp_store_release() in i_size_write() */
-> >   > 911		return smp_load_acquire(&inode->i_size);
-> >     912	#endif
-> >     913	}
-> >     914	
-> Sorry to cause this compilation error, I have not encountered this
-> before when testing compilation with gcc on x86 and arm64.
-> Is there a special config required for this, or is it just clang that
-> triggers this compile error?
-> 
-> The compile error seems to be that some architectural implementations
-> of smp_load_acquire() do not support pointers to long long data
-> types. Can't think of a good way to avoid this problem, any ideas
-> from linus and christian?
+Hi, we tested your kernel and here are the results:
 
-That code in i_size_{read,write}() is terrible to look at.
-Pragmatically, we can probably just do READ_ONCE() + smp_rmb() and
-smp_wmb() + WRITE_ONCE(). This guarantees the ordering and it works
-(compiles) on 32bit as well. I think it's still possible that on 32bit
-the READ_ONCE()/WRITE_ONCE() are compiled as two accesses. But I'm not
-sure that this matters because iiuc that problem would've already been
-there with the barrier in mm/filemap.c instead of here.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'for-6.8-rc1-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/124839
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [rawhide] avc:  denied  { checkpoint_restore } for  pid=3D79=
+3 comm=3D"agetty" capability=3D40  scontext=3Dsystem_u:system_r:getty_t:s0-=
+s0:c0.c1023 tcontext=3Dsystem_u:system_r:getty_t:s0-s0:c0.c1023 tclass=3Dca=
+pability2 permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259622
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Storage - multipath mapping test: FAIL: ls: cannot access '/=
+dev/mapper/mpath*': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1617
+            Affected tests:
+                 ppc64le - Storage - multipath mapping test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - POSIX pjd-fstest suites
+      x86_64 - Filesystem - Loopdev Sanity
+      x86_64 - Memory function: memfd_create
+      x86_64 - AMTU (Abstract Machine Test Utility)
+      x86_64 - Networking - Ethernet drivers sanity
+      x86_64 - Networking cki netfilter test
+      x86_64 - Networking vnic: ipvlan/basic
+      x86_64 - Libkcapi AF_ALG test
+      x86_64 - Hardware - pciutils: sanity smoke test
+      x86_64 - Storage - multipath mapping test
+      x86_64 - Storage - dm/common
+      x86_64 - Storage - lvm thinp sanity
+      x86_64 - Storage - iSCSI parameters
+      x86_64 - kdump - kexec_boot
+      x86_64 - kdump - kexec-file-load
+      x86_64 - kselftests upstream - net
+      x86_64 - kselftests upstream - bpf
+      x86_64 - kselftests upstream - bpf_test_progs
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - kdump - sysrq-c
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - selinux-policy: serge-testsuite
+      x86_64 - Reboot test
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - xfstests - ext4
+      x86_64 - xfstests - xfs
+      x86_64 - xfstests - btrfs
+      x86_64 - xfstests - nfsv4.2
+      x86_64 - xfstests - cifsv3.11
+      x86_64 - Reboot test
+      x86_64 (debug) - CKI/restraint
+      x86_64 (debug) - SELinux Custom Module Setup
+      x86_64 (debug) - machineinfo
+      x86_64 (debug) - Boot test
+      x86_64 (debug) - POSIX pjd-fstest suites
+      x86_64 (debug) - Filesystem - Loopdev Sanity
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
+      x86_64 (debug) - Networking - Ethernet drivers sanity
+      x86_64 (debug) - Networking cki netfilter test
+      x86_64 (debug) - Libkcapi AF_ALG test
+      x86_64 (debug) - Hardware - pciutils: sanity smoke test
+      x86_64 (debug) - Storage - dm/common
+      x86_64 (debug) - Storage - lvm thinp sanity
+      x86_64 (debug) - Storage - iSCSI parameters
+      x86_64 (debug) - kselftests upstream - net
+      x86_64 (debug) - kselftests upstream - bpf
+      x86_64 (debug) - kselftests upstream - bpf_test_progs
+      x86_64 (debug) - Reboot test
+      x86_64 (debug) - CKI/restraint
+      x86_64 (debug) - SELinux Custom Module Setup
+      x86_64 (debug) - machineinfo
+      x86_64 (debug) - Boot test
+      x86_64 (debug) - xfstests - ext4
+      x86_64 (debug) - xfstests - xfs
+      x86_64 (debug) - xfstests - btrfs
+      x86_64 (debug) - xfstests - nfsv4.2
+      x86_64 (debug) - xfstests - cifsv3.11
+      x86_64 (debug) - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
