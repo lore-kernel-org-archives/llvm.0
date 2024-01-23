@@ -1,85 +1,104 @@
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964C782D6E
-	for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 19:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5628220F1;
+	Tue, 23 Jan 2024 20:39:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706039917; cv=none; b=snoTWLnzBngqjjI5vzYfIzFgCqYonKmiv7Dnff98a21sA81O8m85MCKYPh5t3JSWY6QkIRk7gtM+aeCnjBDVuI1vJcvhq/xzMtx6LbOpscd2Zdl9kyiR9JPyifZZ+7bFeetvWCq7bjiDujBbGz3/AbDnMMLE+DW81UhZfykJjyA=
+	t=1706042341; cv=none; b=TMf3+AA+jsblj8M5dTsw965VIb/B56yODi2zEho/3oqPF9A9I3zi77DcEBT3l55uwYstsOm0rqEf62S/HNoeWb1Cp7hoKpyAIdnF0mqh1BZYbsh9TFjDpj3AccnitmBk/8EgZYBNbRZOz6LyulCUTvhXpt4ZoAiunbpC70+lwik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706039917; c=relaxed/simple;
-	bh=nYvo+rfNB69fdGKHBcdMDR6KR35HaCryt3kDT3duWoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GtmWiOIrORZ+nNgz47JUMTU8+TLMPYxMQP0xLB/q+1/PxVDGcIQ24Uc2i5lJ60DjCWw8RsaTF9YytXs0ENMFwSmcfni2mnmPsn1wQXAsnM7wpYx02+RsQOaXR5bVXxNDHC8iXKa1ChP/Gaf5rN5Vv+9lUvB22fL1ndmz9rzEF54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R++Jdfu4; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R++Jdfu4"
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dc24ead4428so3158119276.1
-        for <llvm@lists.linux.dev>; Tue, 23 Jan 2024 11:58:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706039915; x=1706644715; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nYvo+rfNB69fdGKHBcdMDR6KR35HaCryt3kDT3duWoQ=;
-        b=R++Jdfu46WQZrBDr9l5Vp2Ec5nKybCK5vdg6CtliOrGpBau6rMTwzHe+J9UTJBeLiT
-         YSoiAZOVKkruNH6Z6jMHrwcvrMSpO3Vm+iDyB9EO3TbB/XFAzZL/xpqlOohvwddtjaYS
-         COfTBXGbULcETkNUEB1DEwWH0VbP675nj0FkHi9bmJktPISpKT59cdbMn/o96jAimG5D
-         YLTdVtcDI0itBOB3fW8vQdQDnCzmT9sJfvgERqaUMi3GSDwDxdKVoHfDFgUc8h/8Oeh/
-         CB0/BzEVVjWRhDrB+gFHC9ldo/llkqTSugkQS9B07Co/vPGeThIFXQ6sjH+TLiCv8788
-         b6HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706039915; x=1706644715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nYvo+rfNB69fdGKHBcdMDR6KR35HaCryt3kDT3duWoQ=;
-        b=e3SKhreQfrzcsmOR3wCoqAybxwegQL0qiyo/IDaenOgaY96RE2mx05bJ9swe3sIYqm
-         VMdfkxztoFW5tO2mg8WjIw1nnLOBux2hGrS6UiuSLz8wDD54UwzV89XRQV1ERRXoL6Bi
-         5G4n9QI/A2+cZBVGcPaUI4c6jmMfk/MHJSNE8r/o21dj2gzRZbGRCk74SkN4t7LTQLJh
-         J1adonvy/tQoRSj4weOVTV16Gho8UP7jch/B3aEmndF4dcyF1jTKYTno1Xd1gvWAMXSU
-         bjbuLK9vMyezwW/WP17fERB5DNT7dlX3XyMnZWAA79/ZiJ0SZ7bSokL6paSKmxBgfTIf
-         mIGg==
-X-Gm-Message-State: AOJu0YxsbtXVl4OsFylzsxXVpQDwUKWrUhYDOzoS4zK/mPn1PGara2cS
-	Xwufsc/Au9XEA6MuDiDZQXXN9rWUxqCna4X2dEq9zJ9YJk/PWjOycQF9QZfBia6o1mcn6wLUiE/
-	jXDpspJB/EbI0V3QxASVqfPe9niw=
-X-Google-Smtp-Source: AGHT+IHGoSEchkymg5ddhczryrZhgHLXWuEEwXlE6/ePL8YyPjoBb9/I9QQxbPyGzX8/yCnShMQwB4Yciia010VzKCo=
-X-Received: by 2002:a25:2fce:0:b0:db7:dacf:6206 with SMTP id
- v197-20020a252fce000000b00db7dacf6206mr4150549ybv.88.1706039915535; Tue, 23
- Jan 2024 11:58:35 -0800 (PST)
+	s=arc-20240116; t=1706042341; c=relaxed/simple;
+	bh=fq71BbN1ywaZ7F7VI6egXeKgKsL9xoL1DO3pGojEhSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GdH5OACgckD7mxnc+QJ5FKjBvlXfcc9511ELA1a8/og6bVBaL2Pi21fe4PiKKpic/1DsOZULRI6b8gd2KuZy9BL7NScina7l4TQLQjK84PPlM04ENOwi/SDaBc4B7QjeqIhDVk3LCQeFcXh4tWNS809WbkJMQC98ejzJ4iOABJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E0E9C433F1;
+	Tue, 23 Jan 2024 20:38:58 +0000 (UTC)
+Date: Tue, 23 Jan 2024 20:38:55 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <ZbAj34vdVuMrmdFD@arm.com>
+References: <ZW9cF0ALVwgvcQMy@arm.com>
+ <20231205175127.GJ2692119@nvidia.com>
+ <ZW97VdHYH3HYVyd5@arm.com>
+ <20231205195130.GM2692119@nvidia.com>
+ <ZXBWXodu2rxQ7Szz@arm.com>
+ <20231206125919.GP2692119@nvidia.com>
+ <20240116185121.GB980613@nvidia.com>
+ <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
+ <20240117123618.GD734935@nvidia.com>
+ <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <e1c27b64ae7abe2ebe647be11b71cf1bca84f677.1704855495.git.senozhatsky@chromium.org>
- <202401101646.B1C4FDA@keescook>
-In-Reply-To: <202401101646.B1C4FDA@keescook>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 23 Jan 2024 20:58:24 +0100
-Message-ID: <CANiq72nQsBvNFnr3Rp9aX17X4=G+jFQBB-7Uv3dXY3uKN+3xcA@mail.gmail.com>
-Subject: Re: [PATCHv2 1/2] Compiler Attributes: counted_by: bump min gcc version
-To: Kees Cook <keescook@chromium.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	"Gustavo A . R . Silva" <gustavo@embeddedor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
 
-On Thu, Jan 11, 2024 at 1:46=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> Yup, this is good. Miguel, I can take these patches if you want?
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+(fixed Marc's email address)
 
-Thanks Kees -- just applied them on top of v6.8-rc1 so they should be
-in -next soon, but if you need to pick them up for another reason,
-please go ahead.
+On Wed, Jan 17, 2024 at 01:29:06PM +0000, Mark Rutland wrote:
+> On Wed, Jan 17, 2024 at 08:36:18AM -0400, Jason Gunthorpe wrote:
+> > On Wed, Jan 17, 2024 at 12:30:00PM +0000, Mark Rutland wrote:
+> > > On Tue, Jan 16, 2024 at 02:51:21PM -0400, Jason Gunthorpe wrote:
+> > > > I'm just revising this and I'm wondering if you know why ARM64 has this:
+> > > > 
+> > > > #define __raw_writeq __raw_writeq
+> > > > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> > > > {
+> > > > 	asm volatile("str %x0, [%1]" : : "rZ" (val), "r" (addr));
+> > > > }
+> > > > 
+> > > > Instead of
+> > > > 
+> > > > #define __raw_writeq __raw_writeq
+> > > > static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
+> > > > {
+> > > > 	asm volatile("str %x0, %1" : : "rZ" (val), "m" (*(volatile u64 *)addr));
+> > > > }
+> > > > 
+> > > > ?? Like x86 has.
+> > > 
+> > > I believe this is for the same reason as doing so in all of our other IO
+> > > accessors.
+> > > 
+> > > We've deliberately ensured that our IO accessors use a single base register
+> > > with no offset as this is the only form that HW can represent in ESR_ELx.ISS.SRT
+> > > when reporting a stage-2 abort, which a hypervisor may use for
+> > > emulating IO.
+> > 
+> > Wow, harming bare metal performace to accommodate imperfect emulation
+> > sounds like a horrible reason :(
+> 
+> Having working functionality everywhere is a very good reason. :)
+> 
+> > So what happens with this patch where IO is done with STP? Are you
+> > going to tell me I can't do it because of this?
+> 
+> I'm not personally going to make that judgement, but it's certainly something
+> for Catalin and Will to consider (and I've added Marc in case he has any
+> opinion).
 
-Cheers,
-Miguel
+Good point, I missed this part. We definitely can't use STP in the I/O
+accessors, we'd have a big surprise when running the same code in a
+guest with emulated I/O.
+
+If eight STRs without other operations interleaved give us the
+write-combining on most CPUs (with Normal NC), we should go with this
+instead of STP.
+
+-- 
+Catalin
