@@ -1,63 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FFEC2D3;
-	Wed, 24 Jan 2024 05:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E6F101C8;
+	Wed, 24 Jan 2024 06:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706075704; cv=none; b=pqZQ52PdUC+RmTUT0q7sm/prqpDT1VI+tewhlKlZX1h354pC9Q4cxjNXWNi2gdxW+PBIbnhevwlc94fOQfmwwIBhw6jey2aq//ujaI10JJq2evWLDe9h/afSEQMg3DTtlKlgH9FjX1TAAkMYH6wOe/+o3aLHei7dyomE+eH/2yA=
+	t=1706078830; cv=none; b=YflEH4A1NXhb4SQZ9v2ro50jYCoApwilSIoz0C3DEhsk4WWJWOIfTVq7J/ABrewo1vFsbrkB4MTRjfTJFKQ4P5GKSlrd+ATrcOCQ3vqRqWMJEOr4TSRc2pvTxM0IUIuvwDBYl83nOruU+mvc4hraWlVf+HJasN7j8xNejsAZe1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706075704; c=relaxed/simple;
-	bh=npa1m/eGWO2TJ3lJA4sggzZkOD1geiwAWdqHkEt5kO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KfO83Iwk6Orb9NZ3GyydLi/vK+FP/Hv3W1b90UaWi5yLOHwddL+2GeC6qWCIXoz1XkNP8q1G7Veu9mxUyoSdlfOWJFT8RYbTbMav0xVyvmCvuGvP7PCWUMWUQT5Ko/svUDHOxYPRbz0XT2BRYakHvQOcnA0HHpT7BaatmcKCPZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gL0Yh38I; arc=none smtp.client-ip=134.134.136.31
+	s=arc-20240116; t=1706078830; c=relaxed/simple;
+	bh=q6AjqT4kGsOs1zQNcv9Xft9ggAMOF9ly776lLLXfoK4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kT7EInRIzZIExQHc2zHSJje1Bu4kiWbmtK39sjjRJ0K+h4xsb1kjlBMDZqAyb02OX6DST7DJIMWShveFLUwsHLRaMyUKaZNWY98ywgd+Jzu5eff4gcS9v6C8fiGufkFLzmIe89YkutLvPxXHz56r475uosgdPuygapeu3KtIU9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UOCQWeoa; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gL0Yh38I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UOCQWeoa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706075702; x=1737611702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=npa1m/eGWO2TJ3lJA4sggzZkOD1geiwAWdqHkEt5kO0=;
-  b=gL0Yh38I/p4C5vX5/mmPXBRw5QCe9vu+v4hZ08kbAj01+4i12S6CXBeo
-   7TMod8MXkjiRUrVkc8UjpE1frbueUeFFYx1D5rB5lDxgJnzQX+nywB9E/
-   pdpgBotCY+9bt3tr09q1MOhSstwJJXY9Lj9IrHd4M0keCGLVbSEBJsqFB
-   +yLuQjZdveAbPwKp+N4ABCqJlfpioiqwDmvA1bQ2F0JA3q4x96t5fjep/
-   pwofQ8QdglFZjnVnNEUIMpijeihtEKj55y5WFxBBPYz/R2cntRZUWNO2o
-   B2nKo2Ve1ZR4xgninMYyu+hfVzW/tU/3iI4sN6DPFzePpU0mvFggUzien
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="466023632"
+  t=1706078828; x=1737614828;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=q6AjqT4kGsOs1zQNcv9Xft9ggAMOF9ly776lLLXfoK4=;
+  b=UOCQWeoaOSNXkvDuQ0x/mL4WmJcKOuqSkwkqD0GTPRHgZg5d1hlUKEu6
+   drW9ssIuVDg2W4a0mpEaEhb2lwff/9kncSbMMoh8s6FcYTu0d/9+sWCnm
+   kvXIKLWgnxA0vGqz8dW7DVRt2t77H/hZ7jwFRT6VMz1OgQ8nnUU5tlEpK
+   4PLbL2Kx6Tf1PWUuyc6fwWD9q2h07fBTE3IhK5G+om+u4KO5mleXh6WX9
+   FGU5K/uY1h8+83BrH5TlyKCMNhIX0aNgH9H7EsJm5CJNQ4wGrMsMv1Rx8
+   44dMAk+6NDRoh9dhDrSZfDTV7b2VkMf0Ka2fgvDf/636gbG+w+FVx6dFA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="15276900"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="466023632"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 21:55:00 -0800
+   d="scan'208";a="15276900"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 22:46:59 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="905505429"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="20610990"
+   d="scan'208";a="905505429"
 Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 23 Jan 2024 21:54:54 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 23 Jan 2024 22:46:55 -0800
 Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rSWDr-0007ub-37;
-	Wed, 24 Jan 2024 05:54:51 +0000
-Date: Wed, 24 Jan 2024 13:54:41 +0800
+	id 1rSX2D-0007wj-1i;
+	Wed, 24 Jan 2024 06:46:53 +0000
+Date: Wed, 24 Jan 2024 14:46:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ziyang Huang <hzyitc@outlook.com>, mcoquelin.stm32@gmail.com
+To: Vishal Verma <vishal.l.verma@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alexandre.torgue@foss.st.com, richardcochran@gmail.com,
-	p.zabel@pengutronix.de, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	Ziyang Huang <hzyitc@outlook.com>
-Subject: Re: [PATCH 3/8] net: stmmac: Introduce Qualcomm IPQ50xx DWMAC driver
-Message-ID: <202401241342.SL4CiC8m-lkp@intel.com>
-References: <TYZPR01MB5556B8833322A83632709631C9762@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	David Hildenbrand <david@redhat.com>,
+	"Huang, Ying" <ying.huang@intel.com>
+Subject: [vishal:vv/dax_abi 6/6] drivers/dax/bus.c:1372:22: error: call to
+ undeclared function 'mhp_supports_memmap_on_memory'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202401241453.4WP5ruGd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,108 +62,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TYZPR01MB5556B8833322A83632709631C9762@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
 
-Hi Ziyang,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on clk/clk-next pza/reset/next linus/master v6.8-rc1 next-20240123]
-[cannot apply to pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ziyang-Huang/net-phy-Introduce-Qualcomm-IPQ5018-internal-PHY-driver/20240121-204840
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/TYZPR01MB5556B8833322A83632709631C9762%40TYZPR01MB5556.apcprd01.prod.exchangelabs.com
-patch subject: [PATCH 3/8] net: stmmac: Introduce Qualcomm IPQ50xx DWMAC driver
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20240124/202401241342.SL4CiC8m-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240124/202401241342.SL4CiC8m-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vishal/linux.git vv/dax_abi
+head:   6a9c721fafa6903e6a18ace2c5401ad674b1367b
+commit: 6a9c721fafa6903e6a18ace2c5401ad674b1367b [6/6] dax: add a sysfs knob to control memmap_on_memory behavior
+config: i386-buildonly-randconfig-002-20240124 (https://download.01.org/0day-ci/archive/20240124/202401241453.4WP5ruGd-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240124/202401241453.4WP5ruGd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401241342.SL4CiC8m-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401241453.4WP5ruGd-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c:94:13: error: call to undeclared function 'stmmac_probe_config_dt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      94 |         plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
-         |                    ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c:94:13: note: did you mean 'devm_stmmac_probe_config_dt'?
-   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h:15:1: note: 'devm_stmmac_probe_config_dt' declared here
-      15 | devm_stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac);
-         | ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c:94:11: error: incompatible integer to pointer conversion assigning to 'struct plat_stmmacenet_data *' from 'int' [-Wint-conversion]
-      94 |         plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
-         |                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/dax/bus.c:1372:22: error: call to undeclared function 'mhp_supports_memmap_on_memory'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1372 |         if (val == true && !mhp_supports_memmap_on_memory()) {
+         |                             ^
+   1 error generated.
 
 
-vim +/stmmac_probe_config_dt +94 drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c
+vim +/mhp_supports_memmap_on_memory +1372 drivers/dax/bus.c
 
-    80	
-    81	static int ipq50xx_gmac_probe(struct platform_device *pdev)
-    82	{
-    83		struct device *dev = &pdev->dev;
-    84		struct stmmac_resources stmmac_res;
-    85		struct plat_stmmacenet_data *plat_dat;
-    86		struct ipq50xx_gmac *gmac;
-    87		int ret;
-    88	
-    89		ret = stmmac_get_platform_resources(pdev, &stmmac_res);
-    90		if (ret)
-    91			return dev_err_probe(dev, ret,
-    92					     "failed to get stmmac platform resources\n");
-    93	
-  > 94		plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
-    95		if (IS_ERR_OR_NULL(plat_dat))
-    96			return dev_err_probe(dev, PTR_ERR(plat_dat),
-    97					     "failed to parse stmmac dt parameters\n");
-    98	
-    99		gmac = devm_kzalloc(dev, sizeof(*gmac), GFP_KERNEL);
-   100		if (!gmac)
-   101			return dev_err_probe(dev, -ENOMEM,
-   102					     "failed to allocate priv\n");
-   103	
-   104		gmac->dev = dev;
-   105	
-   106		memcpy(gmac->clks, ipq50xx_gmac_clks, sizeof(gmac->clks));
-   107		ret = devm_clk_bulk_get_optional(dev, ARRAY_SIZE(gmac->clks), gmac->clks);
-   108		if (ret)
-   109			return dev_err_probe(dev, ret,
-   110					     "failed to acquire clocks\n");
-   111	
-   112		ret = clk_bulk_prepare_enable(ARRAY_SIZE(gmac->clks), gmac->clks);
-   113		if (ret)
-   114			return dev_err_probe(dev, ret,
-   115					     "failed to enable clocks\n");
-   116	
-   117		gmac->rst = devm_reset_control_array_get_exclusive(dev);
-   118		if (IS_ERR_OR_NULL(gmac->rst))
-   119			return dev_err_probe(dev, PTR_ERR(gmac->rst),
-   120					     "failed to acquire reset\n");
-   121	
-   122		ret = reset_control_reset(gmac->rst);
-   123		if (ret)
-   124			return dev_err_probe(dev, ret,
-   125					     "failed to reset\n");
-   126	
-   127		gmac->uniphy = devm_phy_optional_get(dev, "uniphy");
-   128		if (IS_ERR(gmac->uniphy))
-   129			return dev_err_probe(dev, PTR_ERR(gmac->uniphy),
-   130					     "failed to acquire uniphy\n");
-   131	
-   132		plat_dat->bsp_priv = gmac;
-   133		plat_dat->serdes_powerup = ipq50xx_gmac_powerup;
-   134		plat_dat->fix_mac_speed = ipq50xx_gmac_fix_speed;
-   135	
-   136		return stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
-   137	}
-   138	
+  1359	
+  1360	static ssize_t memmap_on_memory_store(struct device *dev,
+  1361					      struct device_attribute *attr,
+  1362					      const char *buf, size_t len)
+  1363	{
+  1364		struct dev_dax *dev_dax = to_dev_dax(dev);
+  1365		bool val;
+  1366		int rc;
+  1367	
+  1368		rc = kstrtobool(buf, &val);
+  1369		if (rc)
+  1370			return rc;
+  1371	
+> 1372		if (val == true && !mhp_supports_memmap_on_memory()) {
+  1373			dev_dbg(dev, "memmap_on_memory is not available\n");
+  1374			return -EOPNOTSUPP;
+  1375		}
+  1376	
+  1377		rc = down_write_killable(&dax_dev_rwsem);
+  1378		if (rc)
+  1379			return rc;
+  1380	
+  1381		if (dev_dax->memmap_on_memory != val && dev->driver &&
+  1382		    to_dax_drv(dev->driver)->type == DAXDRV_KMEM_TYPE) {
+  1383			up_write(&dax_dev_rwsem);
+  1384			return -EBUSY;
+  1385		}
+  1386	
+  1387		dev_dax->memmap_on_memory = val;
+  1388		up_write(&dax_dev_rwsem);
+  1389	
+  1390		return len;
+  1391	}
+  1392	static DEVICE_ATTR_RW(memmap_on_memory);
+  1393	
 
 -- 
 0-DAY CI Kernel Test Service
