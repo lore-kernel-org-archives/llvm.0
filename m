@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB7D133408;
-	Wed, 24 Jan 2024 14:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717CD1350FB;
+	Wed, 24 Jan 2024 14:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706106670; cv=none; b=YbY9rjJd5kBkEYjM1Q15BNkUYfCVeQVyppaoqycv+oHiTr8M/k7pch/1c9ECAKaV8wZJvK+r6ju5Qhm3YNq94hQbbacwAR9FO7eJztKt8Czxf2GugzuD9ZZOUFFphsVD+JMY/sJ+lYMOecyvbofqKA22KbP43EdAe6f+AYwRhR8=
+	t=1706106697; cv=none; b=b+C0pa1vZYWgpOZnpY9TmgfZ+E5kQSM7T+O0oZwvywe7IIzSCmCWHnicVkoTNZIXVyS6ztmmLkPFrliSvjGce46uejNClIlvkMiTfAOOaFwFrPqrMC8PV+KM6VywvbAI01pMKzdGIrFm+sPZ7yrvve7uokFncGDNAuSgM5iBUxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706106670; c=relaxed/simple;
-	bh=dl/3vhP3zejMllHvmLYvYOw5m5EEgJw9wE42GLwzKw4=;
+	s=arc-20240116; t=1706106697; c=relaxed/simple;
+	bh=WPgTDbwZHBEEvDEi42IR8aSgfy52la3w+9qNgLVPM6U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jkNBGGs4mRw9/Qj5P7o9ddTUujT6cXxbpifFhCSarqIA94sNJpnF0vtuN36OVCpVXcPQUUK+Yq7thqwarxvQGfRgEBYU7a0R9454DUUXjJ3DvZ+uR0OHVFd3YqaAuYXOz3mb8UqhjzIqclX5v/eFbX7zYFgb1VELc+dCa6fbYxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pcrc1w12; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=kJ5XxV901t5vubiHVqmU7Ui2xSprAZsqtZybBkT+HyxZ2/pAt15Qdg1HdqUHtT/Sh0d+JQjnxeJGMMHWXddf8GhSXWr61JTbvrqQrHYaXApRf/+DhP4p3jee6++rSkh3pVIeoD4fsUKf7CobgaVQxhTWlPKwjriMjgJRZ33RWjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tU1uNLvM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pcrc1w12"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4228C433F1;
-	Wed, 24 Jan 2024 14:31:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tU1uNLvM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8C2C433C7;
+	Wed, 24 Jan 2024 14:31:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706106670;
-	bh=dl/3vhP3zejMllHvmLYvYOw5m5EEgJw9wE42GLwzKw4=;
+	s=k20201202; t=1706106697;
+	bh=WPgTDbwZHBEEvDEi42IR8aSgfy52la3w+9qNgLVPM6U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Pcrc1w12VGGRATcUuFM25+8+sFhnzIbxipOPNRW/FM1MUGk7Cx5aq7M4MrBznftu7
-	 wajUwILAtUMpTEIlQg7dWuq/gsQWKZukl2ES8DrwbY1IFZulX/V0vmz9NYAGGS+lnC
-	 fXqDW7VILJcyTjTwAM/YyZDF8Ar3puAnnkeTrkkpapNAOyYBge5jJmpcKZS397Y/Gu
-	 x2SQTyibIv5jNTJXAUD1dQjiUF8N6afN1iJhCDCdkKJTn9PamWz7AjzAQ7D7y9b2sF
-	 0L7im5SYhYxMHlhkk+bgL8Js0oSxszwkzs+9ZonGMTL3jWuIDRm6P1U9IovooX18kQ
-	 re/BQpVGacKbw==
+	b=tU1uNLvMatxyaJUIWvtjFwDYd+xVjDXao0Llb5bryLt2JwP4mWckOFMeEVNNeczLq
+	 bZ3rfs5n8nWxz4jXBXMYYsdS8i5v+1s3MT4M1MWOnoQJH64F1/4zsz+O7IWjEXG1fv
+	 bDvlarA402TGXW+hVO9knaUgWyjeBSTs0qolJqW0Ye3oqf2Hc0DAWXDWEN+p1xceE8
+	 COOgXWzlfGw9dCqbZhU3jMMaKvpJl1Ju9K5Y95laMwf4ES92B7T6/hBv0zf2lAF7hr
+	 rWiZ11A1aVJTdRnlzww9qfkLRp7IqRVvVbThcehG0cQGurUkjGcBEVhmRt2MVzOUJ6
+	 h4i6KDJhe2Jag==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -37,12 +37,12 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	johannes@sipsolutions.net,
 	linux-um@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 4/7] um: net: Fix return type of uml_net_start_xmit()
-Date: Wed, 24 Jan 2024 09:30:45 -0500
-Message-ID: <20240124143057.1284274-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 4/6] um: net: Fix return type of uml_net_start_xmit()
+Date: Wed, 24 Jan 2024 09:31:13 -0500
+Message-ID: <20240124143124.1284462-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240124143057.1284274-1-sashal@kernel.org>
-References: <20240124143057.1284274-1-sashal@kernel.org>
+In-Reply-To: <20240124143124.1284462-1-sashal@kernel.org>
+References: <20240124143124.1284462-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,7 +51,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.208
+X-stable-base: Linux 5.4.267
 Content-Transfer-Encoding: 8bit
 
 From: Nathan Chancellor <nathan@kernel.org>
@@ -87,7 +87,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/um/drivers/net_kern.c b/arch/um/drivers/net_kern.c
-index 1802cf4ef5a5..ee55333255d0 100644
+index 327b728f7244..db15a456482f 100644
 --- a/arch/um/drivers/net_kern.c
 +++ b/arch/um/drivers/net_kern.c
 @@ -204,7 +204,7 @@ static int uml_net_close(struct net_device *dev)
