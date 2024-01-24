@@ -1,54 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EA6F4F3;
-	Wed, 24 Jan 2024 05:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FFEC2D3;
+	Wed, 24 Jan 2024 05:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706075697; cv=none; b=GRzV/hFSxn8Xs8YQtYiqMCF0DmcoXeXebdGgDy9hYCZM0k66bzSgrQpcqljDoDIUoILNwLmA2CbcI8q1E47voj4pdINlrzP+36W1JyAfomeb/u1KkwZGrtwH+j3BMSbLvxFSKrJZMrY/of4jRoVlytuUJzmnUhZsy0nHqNuFclo=
+	t=1706075704; cv=none; b=pqZQ52PdUC+RmTUT0q7sm/prqpDT1VI+tewhlKlZX1h354pC9Q4cxjNXWNi2gdxW+PBIbnhevwlc94fOQfmwwIBhw6jey2aq//ujaI10JJq2evWLDe9h/afSEQMg3DTtlKlgH9FjX1TAAkMYH6wOe/+o3aLHei7dyomE+eH/2yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706075697; c=relaxed/simple;
-	bh=iCQV5u7Bm9rFSHA45cGM20F3yPuPRPF4rPN48lmk0TQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=n93/WEi+N8wA7PNru73rh49xvw59+AHQfduRTY9al6f4PepVwY7j1unc4xmTjRb0AXVIHNdYBFbNq/c0jEbGo9cDJEsrybAk/Nenuukz43TVpnlbRraCuzVIVg1wpMwy1h/upBgIO06ZPtdCE79l9wsGU3SbQb/bcrBvZ8Foe34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WOCQAWB+; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1706075704; c=relaxed/simple;
+	bh=npa1m/eGWO2TJ3lJA4sggzZkOD1geiwAWdqHkEt5kO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KfO83Iwk6Orb9NZ3GyydLi/vK+FP/Hv3W1b90UaWi5yLOHwddL+2GeC6qWCIXoz1XkNP8q1G7Veu9mxUyoSdlfOWJFT8RYbTbMav0xVyvmCvuGvP7PCWUMWUQT5Ko/svUDHOxYPRbz0XT2BRYakHvQOcnA0HHpT7BaatmcKCPZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gL0Yh38I; arc=none smtp.client-ip=134.134.136.31
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WOCQAWB+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gL0Yh38I"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706075696; x=1737611696;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iCQV5u7Bm9rFSHA45cGM20F3yPuPRPF4rPN48lmk0TQ=;
-  b=WOCQAWB+9mj0a2+R6BlNlzppaTfFGh9IFufC4dUWHcvdXXTNb51icT1/
-   BbKI+ae4Gbe7OUBybvZO4Q/cRZGJtLAMpDh2pjw+4n9mGtzPK/qnFPg8P
-   v8YnV48kf5IBX6tC1vGylbqT61HNakAlYDC8jvWmsDjQNntDp6uKvY0aR
-   ztxu7CLhZ7d3GaNH8EV6Ar6NzQavYlp8vrqBnw0KTGmYg2i4UvIqcmqyY
-   FgkN4wbiE9IPVhHpU+puqsgOIEeNZvexwZT7G2wjtuYwy8xQGu0nuGO1l
-   331Huu1Lqq6XA4dmkPYhnWLNHkamIB9seGqAKY3dLsksEi/na5NrY4aZb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="649048"
+  t=1706075702; x=1737611702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=npa1m/eGWO2TJ3lJA4sggzZkOD1geiwAWdqHkEt5kO0=;
+  b=gL0Yh38I/p4C5vX5/mmPXBRw5QCe9vu+v4hZ08kbAj01+4i12S6CXBeo
+   7TMod8MXkjiRUrVkc8UjpE1frbueUeFFYx1D5rB5lDxgJnzQX+nywB9E/
+   pdpgBotCY+9bt3tr09q1MOhSstwJJXY9Lj9IrHd4M0keCGLVbSEBJsqFB
+   +yLuQjZdveAbPwKp+N4ABCqJlfpioiqwDmvA1bQ2F0JA3q4x96t5fjep/
+   pwofQ8QdglFZjnVnNEUIMpijeihtEKj55y5WFxBBPYz/R2cntRZUWNO2o
+   B2nKo2Ve1ZR4xgninMYyu+hfVzW/tU/3iI4sN6DPFzePpU0mvFggUzien
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="466023632"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="649048"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 21:54:55 -0800
+   d="scan'208";a="466023632"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 21:55:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="1866537"
+   d="scan'208";a="20610990"
 Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 23 Jan 2024 21:54:54 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 23 Jan 2024 21:54:54 -0800
 Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rSWDr-0007ud-3B;
+	id 1rSWDr-0007ub-37;
 	Wed, 24 Jan 2024 05:54:51 +0000
 Date: Wed, 24 Jan 2024 13:54:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:kvm-upstream-next 70/252] arch/x86/kvm/vmx/main.c:83:17:
- error: no member named 'flush_remote_tlbs' in 'struct kvm_x86_ops'
-Message-ID: <202401241306.xcL02JqR-lkp@intel.com>
+To: Ziyang Huang <hzyitc@outlook.com>, mcoquelin.stm32@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alexandre.torgue@foss.st.com, richardcochran@gmail.com,
+	p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	Ziyang Huang <hzyitc@outlook.com>
+Subject: Re: [PATCH 3/8] net: stmmac: Introduce Qualcomm IPQ50xx DWMAC driver
+Message-ID: <202401241342.SL4CiC8m-lkp@intel.com>
+References: <TYZPR01MB5556B8833322A83632709631C9762@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,82 +66,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <TYZPR01MB5556B8833322A83632709631C9762@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-next
-head:   cd5f3a9ef935bc249a18a3c6607ae2128c1ced06
-commit: a47c5a9442130f45fc09c1d4ae0e4352054be636 [70/252] KVM: TDX: TDP MMU TDX support
-config: x86_64-buildonly-randconfig-001-20240124 (https://download.01.org/0day-ci/archive/20240124/202401241306.xcL02JqR-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240124/202401241306.xcL02JqR-lkp@intel.com/reproduce)
+Hi Ziyang,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on clk/clk-next pza/reset/next linus/master v6.8-rc1 next-20240123]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ziyang-Huang/net-phy-Introduce-Qualcomm-IPQ5018-internal-PHY-driver/20240121-204840
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/TYZPR01MB5556B8833322A83632709631C9762%40TYZPR01MB5556.apcprd01.prod.exchangelabs.com
+patch subject: [PATCH 3/8] net: stmmac: Introduce Qualcomm IPQ50xx DWMAC driver
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20240124/202401241342.SL4CiC8m-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240124/202401241342.SL4CiC8m-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401241306.xcL02JqR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401241342.SL4CiC8m-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/vmx/main.c:83:17: error: no member named 'flush_remote_tlbs' in 'struct kvm_x86_ops'
-      83 |         if (vt_x86_ops.flush_remote_tlbs ||
-         |             ~~~~~~~~~~ ^
->> arch/x86/kvm/vmx/main.c:84:17: error: no member named 'flush_remote_tlbs_range' in 'struct kvm_x86_ops'
-      84 |             vt_x86_ops.flush_remote_tlbs_range) {
-         |             ~~~~~~~~~~ ^
-   arch/x86/kvm/vmx/main.c:92:14: error: no member named 'flush_remote_tlbs' in 'struct kvm_x86_ops'
-      92 |                 vt_x86_ops.flush_remote_tlbs = vt_flush_remote_tlbs;
-         |                 ~~~~~~~~~~ ^
-   3 errors generated.
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c:94:13: error: call to undeclared function 'stmmac_probe_config_dt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      94 |         plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+         |                    ^
+   drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c:94:13: note: did you mean 'devm_stmmac_probe_config_dt'?
+   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h:15:1: note: 'devm_stmmac_probe_config_dt' declared here
+      15 | devm_stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac);
+         | ^
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c:94:11: error: incompatible integer to pointer conversion assigning to 'struct plat_stmmacenet_data *' from 'int' [-Wint-conversion]
+      94 |         plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+         |                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +83 arch/x86/kvm/vmx/main.c
+vim +/stmmac_probe_config_dt +94 drivers/net/ethernet/stmicro/stmmac/dwmac-ipq50xx.c
 
-    50	
-    51	static __init int vt_hardware_setup(void)
-    52	{
-    53		int ret;
-    54	
-    55		ret = vmx_hardware_setup();
-    56		if (ret)
-    57			return ret;
-    58	
-    59		/*
-    60		 * As kvm_mmu_set_ept_masks() updates enable_mmio_caching, call it
-    61		 * before checking enable_mmio_caching.
-    62		 */
-    63		if (enable_ept)
-    64			kvm_mmu_set_ept_masks(enable_ept_ad_bits,
-    65					      cpu_has_vmx_ept_execute_only());
-    66		/* TDX requires KVM TDP MMU. */
-    67		if (enable_tdx && !tdp_enabled) {
-    68			enable_tdx = false;
-    69			pr_warn_ratelimited("TDX requires TDP MMU.  Please enable TDP MMU for TDX.\n");
-    70		}
-    71	
-    72		/* TDX requires MMIO caching. */
-    73		if (enable_tdx && !enable_mmio_caching) {
-    74			enable_tdx = false;
-    75			pr_warn_ratelimited("TDX requires mmio caching.  Please enable mmio caching for TDX.\n");
-    76		}
-    77	
-    78		/*
-    79		 * TDX KVM overrides flush_remote_tlbs method and assumes
-    80		 * flush_remote_tlbs_range = NULL that falls back to
-    81		 * flush_remote_tlbs.  Disable TDX if there are conflicts.
-    82		 */
-  > 83		if (vt_x86_ops.flush_remote_tlbs ||
-  > 84		    vt_x86_ops.flush_remote_tlbs_range) {
-    85			enable_tdx = false;
-    86			pr_warn_ratelimited("TDX requires baremetal. Not Supported on VMM guest.\n");
-    87		}
+    80	
+    81	static int ipq50xx_gmac_probe(struct platform_device *pdev)
+    82	{
+    83		struct device *dev = &pdev->dev;
+    84		struct stmmac_resources stmmac_res;
+    85		struct plat_stmmacenet_data *plat_dat;
+    86		struct ipq50xx_gmac *gmac;
+    87		int ret;
     88	
-    89		enable_tdx = enable_tdx && !tdx_hardware_setup(&vt_x86_ops);
-    90	
-    91		if (enable_tdx)
-    92			vt_x86_ops.flush_remote_tlbs = vt_flush_remote_tlbs;
+    89		ret = stmmac_get_platform_resources(pdev, &stmmac_res);
+    90		if (ret)
+    91			return dev_err_probe(dev, ret,
+    92					     "failed to get stmmac platform resources\n");
     93	
-    94		return 0;
-    95	}
-    96	
+  > 94		plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+    95		if (IS_ERR_OR_NULL(plat_dat))
+    96			return dev_err_probe(dev, PTR_ERR(plat_dat),
+    97					     "failed to parse stmmac dt parameters\n");
+    98	
+    99		gmac = devm_kzalloc(dev, sizeof(*gmac), GFP_KERNEL);
+   100		if (!gmac)
+   101			return dev_err_probe(dev, -ENOMEM,
+   102					     "failed to allocate priv\n");
+   103	
+   104		gmac->dev = dev;
+   105	
+   106		memcpy(gmac->clks, ipq50xx_gmac_clks, sizeof(gmac->clks));
+   107		ret = devm_clk_bulk_get_optional(dev, ARRAY_SIZE(gmac->clks), gmac->clks);
+   108		if (ret)
+   109			return dev_err_probe(dev, ret,
+   110					     "failed to acquire clocks\n");
+   111	
+   112		ret = clk_bulk_prepare_enable(ARRAY_SIZE(gmac->clks), gmac->clks);
+   113		if (ret)
+   114			return dev_err_probe(dev, ret,
+   115					     "failed to enable clocks\n");
+   116	
+   117		gmac->rst = devm_reset_control_array_get_exclusive(dev);
+   118		if (IS_ERR_OR_NULL(gmac->rst))
+   119			return dev_err_probe(dev, PTR_ERR(gmac->rst),
+   120					     "failed to acquire reset\n");
+   121	
+   122		ret = reset_control_reset(gmac->rst);
+   123		if (ret)
+   124			return dev_err_probe(dev, ret,
+   125					     "failed to reset\n");
+   126	
+   127		gmac->uniphy = devm_phy_optional_get(dev, "uniphy");
+   128		if (IS_ERR(gmac->uniphy))
+   129			return dev_err_probe(dev, PTR_ERR(gmac->uniphy),
+   130					     "failed to acquire uniphy\n");
+   131	
+   132		plat_dat->bsp_priv = gmac;
+   133		plat_dat->serdes_powerup = ipq50xx_gmac_powerup;
+   134		plat_dat->fix_mac_speed = ipq50xx_gmac_fix_speed;
+   135	
+   136		return stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
+   137	}
+   138	
 
 -- 
 0-DAY CI Kernel Test Service
