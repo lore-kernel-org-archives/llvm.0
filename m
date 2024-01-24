@@ -1,95 +1,104 @@
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F489CA69;
-	Wed, 24 Jan 2024 13:38:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C3C7E768;
+	Wed, 24 Jan 2024 14:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706103535; cv=none; b=BpC/lKyDbkix8qIZfJcsU13PdJ+BtRJnVAnxyaBadd+m1uxLNyqirTQSwBngAMibckKNixGgBbi9bTDaQEGwZTeMHwkczJ1ay382m63dBNsTFU6TWQGfD+fP1scm5S3K/GzbWQO05pU21V2fMjrcuQw9p9IxinPJ+uiyeL12Ktg=
+	t=1706106516; cv=none; b=AxmzeOrn6v9x/5IQY37FNcLtC4KkO6JC5JdiZeIzDvbs1GZip7EmwGN8UuDH3D/pwyFCAoVbp7+1Sd5RYxxrAXlLQxFI5qqYh1z6MeSZyTccmZP+JMCaExBIi/ey5wFNY6xA8l4xi3ZWvttsnBQa3eTcom6l2EhEGSNw8SjudyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706103535; c=relaxed/simple;
-	bh=h18dF1XWNpNzYO06Da4D5AMzQ2A4VrPat2l+QQOyc80=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Jcb+/wYRtLjrtprqnVebKY+b4qu4NA7tPJAFVopgm2eYkTOPu9iyIShkJTs5irzAGObzuIctNdStZbKH2l8nlWbec3HOmGaBd241HryzoIzQa2VvKKEhABLnUqutTFppo75u/pZuph8EZL40nT3cSxPCq9JaBvqQVl7ugEMm6CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4TKlQF1npKzNlVc;
-	Wed, 24 Jan 2024 21:37:57 +0800 (CST)
-Received: from dggpeml500021.china.huawei.com (unknown [7.185.36.21])
-	by mail.maildlp.com (Postfix) with ESMTPS id 411B0180073;
-	Wed, 24 Jan 2024 21:38:50 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 24 Jan 2024 21:38:49 +0800
-Message-ID: <098f69f5-524b-9ddd-3d07-5e5c04135fcb@huawei.com>
-Date: Wed, 24 Jan 2024 21:38:49 +0800
+	s=arc-20240116; t=1706106516; c=relaxed/simple;
+	bh=wtfwbC0flSGPe7mDEkJ8Xw4cI7oiAV5gBbx/tJOQfFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KVk0iyvqO6lfE0sCtO2ZtYQ+SrnsgGFkVuW2Rq66LJBGkoyBOt6lTcsW9a91xsHLIdkgz1TAoDOJ2Nlpbj9jz0csg5D4rkYxl62uJoprMv43Wpo6mZ+5dvasZ5WCP+RJpCkppYXEvXTEj0kYdlhAvUlmodzQ5PJfB8/j9sItr88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+JBlSEG; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+JBlSEG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED76C433F1;
+	Wed, 24 Jan 2024 14:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706106516;
+	bh=wtfwbC0flSGPe7mDEkJ8Xw4cI7oiAV5gBbx/tJOQfFs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=I+JBlSEGHxRMB1DZ/n1Ti4HMxyI47dqi0JZ1GgJoL+M8YyUPfb97dGlW6utU9+jT6
+	 8Ayqvln1zy4LRmO6AXtiCecG2XcNsVNqedeQECf22ypiKoArl4OC4drvn71iHk+HXD
+	 2TbaAKs6YAjd7cSFAAVwzTraOBxbdVXarfAs4++9L2g1q4bHg9dc++1mK+bAOSr/eq
+	 1jAMca0X04yFSmYAt9WOT+bx9TKdcVMZDryHLm11TgLD2ZVddyOWdvfcPzrfhEbZ2p
+	 6hqhaRQUptLL/gHiEi6nzd9KF6oD5AUAK+/Y46RF6ovn23MKtUdKajqQaoM3uEuc7u
+	 +DAH1xJYyoJNQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Richard Weinberger <richard@nod.at>,
+	Sasha Levin <sashal@kernel.org>,
+	johannes@sipsolutions.net,
+	linux-um@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.7 05/13] um: net: Fix return type of uml_net_start_xmit()
+Date: Wed, 24 Jan 2024 09:27:58 -0500
+Message-ID: <20240124142820.1283206-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240124142820.1283206-1-sashal@kernel.org>
+References: <20240124142820.1283206-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [brauner-vfs:vfs.misc 12/13] include/linux/fs.h:911:9: error:
- call to '__compiletime_assert_207' declared with 'error' attribute: Need
- native word sized stores/loads for atomicity.
-Content-Language: en-US
-To: Christian Brauner <brauner@kernel.org>
-CC: Linus Torvalds <torvalds@linux-foundation.org>, kernel test robot
-	<lkp@intel.com>, <sfr@canb.auug.org.au>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, Christian Brauner
-	<christianvanbrauner@gmail.com>, yangerkun <yangerkun@huawei.com>, "zhangyi
- (F)" <yi.zhang@huawei.com>, <linux-next@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, Baokun Li <libaokun1@huawei.com>
-References: <202401230837.TXro0PHi-lkp@intel.com>
- <59fae3eb-a125-cd5f-224e-b89d122ecb46@huawei.com>
- <20240123-glatt-langgehegter-a239e588ae2c@brauner>
- <2abc7cc4-72eb-33c9-864a-9f527c0273d3@huawei.com>
- <20240124-abbaggern-oblag-67346f8dee9f@brauner>
- <bf9b8a90-7ace-5f14-e585-8cc467f4d611@huawei.com>
- <20240124-warnhinweis-servolenkung-e482feb8fc43@brauner>
-From: Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20240124-warnhinweis-servolenkung-e482feb8fc43@brauner>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7.1
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500021.china.huawei.com (7.185.36.21)
 
-On 2024/1/24 21:27, Christian Brauner wrote:
->> If CONFIG_SMP is not enabled in include/asm-generic/barrier.h,
->> then smp_load_acquire/smp_store_release is implemented as
->> READ_ONCE/READ_ONCE and barrier() and type checking.
->> READ_ONCE/READ_ONCE already checks the pointer type,
->> but then checks it more stringently outside, but here the
->> more stringent checking seems unnecessary, so it is removed
->> and only the type checking in READ_ONCE/READ_ONCE is kept
->> to avoid compilation errors.
-> Maha, brainfart on my end, I missed the !CONFIG_SMP case.
-> Sorry about that.
-Never mind. 😊
->> When CONFIG_SMP is enabled on 32-bit architectures,
->> smp_load_acquire/smp_store_release is not called in i_size_read/write,
->> so there is no compilation problem. On 64-bit architectures, there
->> is no compilation problem because sizeof(long long) == sizeof(long),
->> regardless of whether CONFIG_SMP is enabled or not.
-> Yes, of course.
->
->> Yes, using smp_rmb()/smp_wmb() would also solve the problem, but
->> the initial purpose of this patch was to replace smp_rmb() in filemap_read()
->> with the clearer smp_load_acquire/smp_store_release, and that's where
->> the community is going with this evolution. Later on, buffer and page/folio
->> will also switch to acquire/release, which is why I think Linus' suggestion
->> is better.
-> Ah ok, thanks for the context. Can you send an updated series then, please?
->
-No problem, I'll send a new version soon!
+From: Nathan Chancellor <nathan@kernel.org>
 
-Cheers!
+[ Upstream commit 7d748f60a4b82b50bf25fad1bd42d33f049f76aa ]
+
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+warning in clang aims to catch these at compile time, which reveals:
+
+  arch/um/drivers/net_kern.c:353:21: warning: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Wincompatible-function-pointer-types-strict]
+    353 |         .ndo_start_xmit         = uml_net_start_xmit,
+        |                                   ^~~~~~~~~~~~~~~~~~
+  1 warning generated.
+
+->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+'netdev_tx_t', not 'int'. Adjust the return type of uml_net_start_xmit()
+to match the prototype's to resolve the warning. While UML does not
+currently implement support for kCFI, it could in the future, which
+means this warning becomes a fatal CFI failure at run time.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202310031340.v1vPh207-lkp@intel.com/
+Acked-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/um/drivers/net_kern.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/um/drivers/net_kern.c b/arch/um/drivers/net_kern.c
+index 3d7836c46507..cabcc501b448 100644
+--- a/arch/um/drivers/net_kern.c
++++ b/arch/um/drivers/net_kern.c
+@@ -204,7 +204,7 @@ static int uml_net_close(struct net_device *dev)
+ 	return 0;
+ }
+ 
+-static int uml_net_start_xmit(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t uml_net_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct uml_net_private *lp = netdev_priv(dev);
+ 	unsigned long flags;
 -- 
-With Best Regards,
-Baokun Li
-.
+2.43.0
+
