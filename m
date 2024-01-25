@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFC160246;
-	Thu, 25 Jan 2024 13:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC0160DF0;
+	Thu, 25 Jan 2024 14:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706191017; cv=none; b=KgVMzoiUJyyFc8C7RrsQpn5U3Scg/u8U6slY+h3OeiLSzqP2WBc0qdUH1fRcvtkw6pXjNtsBGZEhupHbFuhJnSxbgDrJh3U/sLh0OBJLVW6FVevzs08e1seO5dwkIzeskzj8KcGLqVo80ZrHAJffDpr60BUzQQFIN9lTB/4aRn8=
+	t=1706191620; cv=none; b=GqIU5M7PosP4o1KF2rsY10KOSqFukkyFCWxP+LDkNuLGCMhdXKvf0w3NtGlvumpF46NeJVXZLfZUY1pSKJ3AtykO1tJl1B332TluK1ev4zEkBPm37Ipu8ltHYZ32zrtn+q5+kxub7vRlWZErWJzNrOLpL+xFA7JegiQ9eQhEgvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706191017; c=relaxed/simple;
-	bh=U4OzUPun/N8fn0WP6e9y9zJc9JiMcuGtvv6lUI/mDnY=;
+	s=arc-20240116; t=1706191620; c=relaxed/simple;
+	bh=Bnf9zh9MGENs+PV4j2hnfu2O+KyAlO2ynzyKnkhPhuo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GDhAsUs4IcnFCXmbvrdx7EJZRwlRJF6eXHaYoht+KmH9cjEUugiK8dcq0smKETyq38Xp5kVz0HVTpNzo9qfKL5I4hISXDjpWimeLTR5Sj0SCSx1mwwyILBO0Xkw1bFSiO8NoxGycR1fn4RixWPJ/msQJB3lXiizwDDkVAyUhvU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J4nCIozA; arc=none smtp.client-ip=192.55.52.115
+	 Content-Type:Content-Disposition:In-Reply-To; b=qn/T4/CVJ0dOQYdxf+pu/ut+Ov9bxgfcjtT0U9v2TlHEuYx4C48URK0hBbHpwD70i3xaSX8CdpMcHAMbwa4F/TEp+ND6t0eH7Pj4525Va3a1L4w/LOBQzFZNYvdo0ReJ7sQR3vaIBBiAnWUblDNf6kIz1s7TpsuzIX2W7TqXVfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AsxQtRhq; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J4nCIozA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AsxQtRhq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706191015; x=1737727015;
+  t=1706191616; x=1737727616;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=U4OzUPun/N8fn0WP6e9y9zJc9JiMcuGtvv6lUI/mDnY=;
-  b=J4nCIozAqgWpm8XfQY6z3CSygAUI1dfSlb33hOvmALjPWK7mj6KInbqD
-   dWkKSbjbko+sIVK4s5drk1e+jtuEdsPQcU2H86NC1UVofYajb1+gX51Ul
-   IwXA1oJrjK8/E4o2zvxnY1oLVmzNl92WgJVDD1+vkGm5UYjQmBms2+XCW
-   rlubZ8DxUaylgI9RqcGPLkDWY9pTQARclAKkkufHiHJP8Kh+QZ/yQ8nxZ
-   ZO6DNv4xqWynq92ZRf74ksoe0SdJ9nJKyTpyBxf+Njqi5sYcB/jus1fOl
-   39f5BugnzeXh0sLqRIkRn9+gPgQ7GZKJYdS2kqe0gerBtPZEvbW0sEXzN
+  bh=Bnf9zh9MGENs+PV4j2hnfu2O+KyAlO2ynzyKnkhPhuo=;
+  b=AsxQtRhq7l4MUZ7HVKIXCe2B6euJQQffoLyZgqre8AeUosRvp2Pc4jwn
+   xLinco8HP2BGLrnYsB6hGMS0P2wa/VxRIf+pnhF3SXslPymexK1QV71SR
+   USXhk6cOis/lPbXjfiZZAPTdbjnfLvyYsKc1aOk6JHa7RzdT4SiyB8TNc
+   TvEN/+RzjIZxMGrBFa+Z7Aea4GQSHyVoT2F8yPNITCIrNWThEURz7kBWp
+   Mi9iZSKxH/Om5JsZTcQeYQTw8j15EqSlXch7/VNEdw62HGFU7ekU436ky
+   n+Gh9XXRum/sgNXUyG1IJOp5AOENE9rHLWL8DDI14Lay4VmihwBMjvfec
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="401815215"
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="9547437"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="401815215"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 05:56:54 -0800
+   d="scan'208";a="9547437"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 06:06:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2252814"
+   d="scan'208";a="2254523"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 25 Jan 2024 05:56:51 -0800
+  by orviesa005.jf.intel.com with ESMTP; 25 Jan 2024 06:06:51 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rT0Do-00002q-2X;
-	Thu, 25 Jan 2024 13:56:48 +0000
-Date: Thu, 25 Jan 2024 21:56:18 +0800
+	id 1rT0NU-000032-2k;
+	Thu, 25 Jan 2024 14:06:48 +0000
+Date: Thu, 25 Jan 2024 22:06:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: linan666@huaweicloud.com, song@kernel.org, neilb@suse.com, shli@fb.com,
-	mariusz.tkaczyk@linux.intel.com
+To: Gowthami Thiagarajan <gthiagarajan@marvell.com>, will@kernel.org,
+	mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linan666@huaweicloud.com, yukuai3@huawei.com, yi.zhang@huawei.com,
-	houtao1@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH v3 3/4] md: sync blockdev before stopping raid or setting
- readonly
-Message-ID: <202401252146.3yACLRcr-lkp@intel.com>
-References: <20240125062841.1721193-4-linan666@huaweicloud.com>
+	sgoutham@marvell.com, bbhushan2@marvell.com,
+	george.cherian@marvell.com,
+	Gowthami Thiagarajan <gthiagarajan@marvell.com>
+Subject: Re: [PATCH v3 1/2] perf/marvell: Odyssey DDR Performance monitor
+ support
+Message-ID: <202401252104.CFnKSeTe-lkp@intel.com>
+References: <20240122124933.1311925-2-gthiagarajan@marvell.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,82 +64,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240125062841.1721193-4-linan666@huaweicloud.com>
+In-Reply-To: <20240122124933.1311925-2-gthiagarajan@marvell.com>
 
-Hi,
+Hi Gowthami,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.8-rc1 next-20240125]
-[cannot apply to song-md/md-next]
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.8-rc1 next-20240125]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/linan666-huaweicloud-com/md-Don-t-clear-MD_CLOSING-when-the-raid-is-about-to-stop/20240125-144040
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240125062841.1721193-4-linan666%40huaweicloud.com
-patch subject: [PATCH v3 3/4] md: sync blockdev before stopping raid or setting readonly
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240125/202401252146.3yACLRcr-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Gowthami-Thiagarajan/perf-marvell-Odyssey-DDR-Performance-monitor-support/20240122-205209
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20240122124933.1311925-2-gthiagarajan%40marvell.com
+patch subject: [PATCH v3 1/2] perf/marvell: Odyssey DDR Performance monitor support
+config: s390-randconfig-001-20240125 (https://download.01.org/0day-ci/archive/20240125/202401252104.CFnKSeTe-lkp@intel.com/config)
 compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240125/202401252146.3yACLRcr-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240125/202401252104.CFnKSeTe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401252146.3yACLRcr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401252104.CFnKSeTe-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/md/md.c:43:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+   In file included from drivers/perf/marvell_cn10k_ddr_pmu.c:9:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      547 |         val = __raw_readb(PCI_IOBASE + addr);
          |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/md/md.c:43:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/perf/marvell_cn10k_ddr_pmu.c:9:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/md/md.c:43:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/perf/marvell_cn10k_ddr_pmu.c:9:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      584 |         __raw_writeb(value, PCI_IOBASE + addr);
          |                             ~~~~~~~~~~ ^
@@ -148,155 +130,68 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
->> drivers/md/md.c:4521:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    4521 |         default:
-         |         ^
-   drivers/md/md.c:4521:2: note: insert 'break;' to avoid fall-through
-    4521 |         default:
-         |         ^
-         |         break; 
-   7 warnings generated.
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/perf/marvell_cn10k_ddr_pmu.c:179:43: warning: unused variable 'cn10k_ddr_pmu_pdata' [-Wunused-const-variable]
+     179 | static const struct ddr_pmu_platform_data cn10k_ddr_pmu_pdata = {
+         |                                           ^~~~~~~~~~~~~~~~~~~
+>> drivers/perf/marvell_cn10k_ddr_pmu.c:195:43: warning: unused variable 'odyssey_ddr_pmu_pdata' [-Wunused-const-variable]
+     195 | static const struct ddr_pmu_platform_data odyssey_ddr_pmu_pdata = {
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   14 warnings generated.
 
 
-vim +4521 drivers/md/md.c
+vim +/cn10k_ddr_pmu_pdata +179 drivers/perf/marvell_cn10k_ddr_pmu.c
 
-9e653b6342c940 NeilBrown        2006-06-26  4495  
-9e653b6342c940 NeilBrown        2006-06-26  4496  static ssize_t
-fd01b88c75a718 NeilBrown        2011-10-11  4497  array_state_store(struct mddev *mddev, const char *buf, size_t len)
-9e653b6342c940 NeilBrown        2006-06-26  4498  {
-6497709b5d1bcc NeilBrown        2017-03-15  4499  	int err = 0;
-9e653b6342c940 NeilBrown        2006-06-26  4500  	enum array_state st = match_word(buf, array_states);
-242b3580d1a1d0 Li Nan           2024-01-25  4501  	bool clear_md_closing = false;
-6791875e2e5393 NeilBrown        2014-12-15  4502  
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4503  	/* No lock dependent actions */
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4504  	switch (st) {
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4505  	case suspended:		/* not supported yet */
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4506  	case write_pending:	/* cannot be set */
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4507  	case active_idle:	/* cannot be set */
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4508  	case broken:		/* cannot be set */
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4509  	case bad_word:
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4510  		return -EINVAL;
-242b3580d1a1d0 Li Nan           2024-01-25  4511  	case clear:
-242b3580d1a1d0 Li Nan           2024-01-25  4512  	case readonly:
-242b3580d1a1d0 Li Nan           2024-01-25  4513  	case inactive:
-242b3580d1a1d0 Li Nan           2024-01-25  4514  	case read_auto:
-242b3580d1a1d0 Li Nan           2024-01-25  4515  		if (!mddev->pers || !md_is_rdwr(mddev))
-242b3580d1a1d0 Li Nan           2024-01-25  4516  			break;
-242b3580d1a1d0 Li Nan           2024-01-25  4517  		err = mddev_set_closing_and_sync_blockdev(mddev);
-242b3580d1a1d0 Li Nan           2024-01-25  4518  		if (err)
-242b3580d1a1d0 Li Nan           2024-01-25  4519  			return err;
-242b3580d1a1d0 Li Nan           2024-01-25  4520  		clear_md_closing = true;
-09f894affcf2da Mariusz Tkaczyk  2023-09-28 @4521  	default:
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4522  		break;
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4523  	}
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4524  
-f97a5528b21eb1 Ye Bin           2022-09-20  4525  	if (mddev->pers && (st == active || st == clean) &&
-f97a5528b21eb1 Ye Bin           2022-09-20  4526  	    mddev->ro != MD_RDONLY) {
-6791875e2e5393 NeilBrown        2014-12-15  4527  		/* don't take reconfig_mutex when toggling between
-6791875e2e5393 NeilBrown        2014-12-15  4528  		 * clean and active
-6791875e2e5393 NeilBrown        2014-12-15  4529  		 */
-6791875e2e5393 NeilBrown        2014-12-15  4530  		spin_lock(&mddev->lock);
-6791875e2e5393 NeilBrown        2014-12-15  4531  		if (st == active) {
-6791875e2e5393 NeilBrown        2014-12-15  4532  			restart_array(mddev);
-2953079c692da0 Shaohua Li       2016-12-08  4533  			clear_bit(MD_SB_CHANGE_PENDING, &mddev->sb_flags);
-91a6c4aded58cb Tomasz Majchrzak 2016-10-25  4534  			md_wakeup_thread(mddev->thread);
-6791875e2e5393 NeilBrown        2014-12-15  4535  			wake_up(&mddev->sb_wait);
-6791875e2e5393 NeilBrown        2014-12-15  4536  		} else /* st == clean */ {
-6791875e2e5393 NeilBrown        2014-12-15  4537  			restart_array(mddev);
-6497709b5d1bcc NeilBrown        2017-03-15  4538  			if (!set_in_sync(mddev))
-6791875e2e5393 NeilBrown        2014-12-15  4539  				err = -EBUSY;
-6791875e2e5393 NeilBrown        2014-12-15  4540  		}
-573275b58ee9e1 Tomasz Majchrzak 2016-06-30  4541  		if (!err)
-573275b58ee9e1 Tomasz Majchrzak 2016-06-30  4542  			sysfs_notify_dirent_safe(mddev->sysfs_state);
-6791875e2e5393 NeilBrown        2014-12-15  4543  		spin_unlock(&mddev->lock);
-c008f1d356277a NeilBrown        2015-06-12  4544  		return err ?: len;
-6791875e2e5393 NeilBrown        2014-12-15  4545  	}
-242b3580d1a1d0 Li Nan           2024-01-25  4546  
-6791875e2e5393 NeilBrown        2014-12-15  4547  	err = mddev_lock(mddev);
-6791875e2e5393 NeilBrown        2014-12-15  4548  	if (err)
-6791875e2e5393 NeilBrown        2014-12-15  4549  		return err;
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4550  
-9e653b6342c940 NeilBrown        2006-06-26  4551  	switch (st) {
-9e653b6342c940 NeilBrown        2006-06-26  4552  	case inactive:
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4553  		/* stop an active array, return 0 otherwise */
-90cf195d9bcb4b NeilBrown        2012-07-31  4554  		if (mddev->pers)
-a05b7ea03d72f3 NeilBrown        2012-07-19  4555  			err = do_md_stop(mddev, 2, NULL);
-9e653b6342c940 NeilBrown        2006-06-26  4556  		break;
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4557  	case clear:
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4558  		err = do_md_stop(mddev, 0, NULL);
-242b3580d1a1d0 Li Nan           2024-01-25  4559  		if (!err)
-242b3580d1a1d0 Li Nan           2024-01-25  4560  			clear_md_closing = false;
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4561  		break;
-9e653b6342c940 NeilBrown        2006-06-26  4562  	case readonly:
-9e653b6342c940 NeilBrown        2006-06-26  4563  		if (mddev->pers)
-a05b7ea03d72f3 NeilBrown        2012-07-19  4564  			err = md_set_readonly(mddev, NULL);
-9e653b6342c940 NeilBrown        2006-06-26  4565  		else {
-f97a5528b21eb1 Ye Bin           2022-09-20  4566  			mddev->ro = MD_RDONLY;
-648b629ed40623 NeilBrown        2008-04-30  4567  			set_disk_ro(mddev->gendisk, 1);
-9e653b6342c940 NeilBrown        2006-06-26  4568  			err = do_md_run(mddev);
-9e653b6342c940 NeilBrown        2006-06-26  4569  		}
-9e653b6342c940 NeilBrown        2006-06-26  4570  		break;
-9e653b6342c940 NeilBrown        2006-06-26  4571  	case read_auto:
-9e653b6342c940 NeilBrown        2006-06-26  4572  		if (mddev->pers) {
-f97a5528b21eb1 Ye Bin           2022-09-20  4573  			if (md_is_rdwr(mddev))
-a05b7ea03d72f3 NeilBrown        2012-07-19  4574  				err = md_set_readonly(mddev, NULL);
-f97a5528b21eb1 Ye Bin           2022-09-20  4575  			else if (mddev->ro == MD_RDONLY)
-648b629ed40623 NeilBrown        2008-04-30  4576  				err = restart_array(mddev);
-648b629ed40623 NeilBrown        2008-04-30  4577  			if (err == 0) {
-f97a5528b21eb1 Ye Bin           2022-09-20  4578  				mddev->ro = MD_AUTO_READ;
-648b629ed40623 NeilBrown        2008-04-30  4579  				set_disk_ro(mddev->gendisk, 0);
-648b629ed40623 NeilBrown        2008-04-30  4580  			}
-9e653b6342c940 NeilBrown        2006-06-26  4581  		} else {
-f97a5528b21eb1 Ye Bin           2022-09-20  4582  			mddev->ro = MD_AUTO_READ;
-9e653b6342c940 NeilBrown        2006-06-26  4583  			err = do_md_run(mddev);
-9e653b6342c940 NeilBrown        2006-06-26  4584  		}
-9e653b6342c940 NeilBrown        2006-06-26  4585  		break;
-9e653b6342c940 NeilBrown        2006-06-26  4586  	case clean:
-9e653b6342c940 NeilBrown        2006-06-26  4587  		if (mddev->pers) {
-339421def582ab Song Liu         2015-10-08  4588  			err = restart_array(mddev);
-339421def582ab Song Liu         2015-10-08  4589  			if (err)
-339421def582ab Song Liu         2015-10-08  4590  				break;
-85572d7c75fd5b NeilBrown        2014-12-15  4591  			spin_lock(&mddev->lock);
-6497709b5d1bcc NeilBrown        2017-03-15  4592  			if (!set_in_sync(mddev))
-e691063a61f7f7 NeilBrown        2008-02-06  4593  				err = -EBUSY;
-85572d7c75fd5b NeilBrown        2014-12-15  4594  			spin_unlock(&mddev->lock);
-5bf295975416f8 NeilBrown        2009-05-07  4595  		} else
-5bf295975416f8 NeilBrown        2009-05-07  4596  			err = -EINVAL;
-9e653b6342c940 NeilBrown        2006-06-26  4597  		break;
-9e653b6342c940 NeilBrown        2006-06-26  4598  	case active:
-9e653b6342c940 NeilBrown        2006-06-26  4599  		if (mddev->pers) {
-339421def582ab Song Liu         2015-10-08  4600  			err = restart_array(mddev);
-339421def582ab Song Liu         2015-10-08  4601  			if (err)
-339421def582ab Song Liu         2015-10-08  4602  				break;
-2953079c692da0 Shaohua Li       2016-12-08  4603  			clear_bit(MD_SB_CHANGE_PENDING, &mddev->sb_flags);
-9e653b6342c940 NeilBrown        2006-06-26  4604  			wake_up(&mddev->sb_wait);
-9e653b6342c940 NeilBrown        2006-06-26  4605  			err = 0;
-9e653b6342c940 NeilBrown        2006-06-26  4606  		} else {
-f97a5528b21eb1 Ye Bin           2022-09-20  4607  			mddev->ro = MD_RDWR;
-648b629ed40623 NeilBrown        2008-04-30  4608  			set_disk_ro(mddev->gendisk, 0);
-9e653b6342c940 NeilBrown        2006-06-26  4609  			err = do_md_run(mddev);
-9e653b6342c940 NeilBrown        2006-06-26  4610  		}
-9e653b6342c940 NeilBrown        2006-06-26  4611  		break;
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4612  	default:
-09f894affcf2da Mariusz Tkaczyk  2023-09-28  4613  		err = -EINVAL;
-9e653b6342c940 NeilBrown        2006-06-26  4614  		break;
-9e653b6342c940 NeilBrown        2006-06-26  4615  	}
-6791875e2e5393 NeilBrown        2014-12-15  4616  
-6791875e2e5393 NeilBrown        2014-12-15  4617  	if (!err) {
-1d23f178d56ae1 NeilBrown        2011-12-08  4618  		if (mddev->hold_active == UNTIL_IOCTL)
-1d23f178d56ae1 NeilBrown        2011-12-08  4619  			mddev->hold_active = 0;
-00bcb4ac7ee7e5 NeilBrown        2010-06-01  4620  		sysfs_notify_dirent_safe(mddev->sysfs_state);
-9e653b6342c940 NeilBrown        2006-06-26  4621  	}
-6791875e2e5393 NeilBrown        2014-12-15  4622  	mddev_unlock(mddev);
-242b3580d1a1d0 Li Nan           2024-01-25  4623  
-242b3580d1a1d0 Li Nan           2024-01-25  4624  	if (clear_md_closing)
-242b3580d1a1d0 Li Nan           2024-01-25  4625  		clear_bit(MD_CLOSING, &mddev->flags);
-242b3580d1a1d0 Li Nan           2024-01-25  4626  
-6791875e2e5393 NeilBrown        2014-12-15  4627  	return err ?: len;
-0fd62b861eac7d Neil Brown       2008-06-28  4628  }
-80ca3a44f563a7 NeilBrown        2006-07-10  4629  static struct md_sysfs_entry md_array_state =
-750f199ee8b578 NeilBrown        2014-09-30  4630  __ATTR_PREALLOC(array_state, S_IRUGO|S_IWUSR, array_state_show, array_state_store);
-9e653b6342c940 NeilBrown        2006-06-26  4631  
+   178	
+ > 179	static const struct ddr_pmu_platform_data cn10k_ddr_pmu_pdata = {
+   180		.counter_overflow_val =  BIT_ULL(48),
+   181		.counter_max_val = GENMASK_ULL(48, 0),
+   182		.ddrc_perf_cnt_base = CN10K_DDRC_PERF_CNT_VALUE_BASE,
+   183		.ddrc_perf_cfg_base = CN10K_DDRC_PERF_CFG_BASE,
+   184		.ddrc_perf_cnt_op_mode_ctrl = CN10K_DDRC_PERF_CNT_OP_MODE_CTRL,
+   185		.ddrc_perf_cnt_start_op_ctrl = CN10K_DDRC_PERF_CNT_START_OP_CTRL,
+   186		.ddrc_perf_cnt_end_op_ctrl = CN10K_DDRC_PERF_CNT_END_OP_CTRL,
+   187		.ddrc_perf_cnt_end_status = CN10K_DDRC_PERF_CNT_END_STATUS,
+   188		.ddrc_perf_cnt_freerun_en = CN10K_DDRC_PERF_CNT_FREERUN_EN,
+   189		.ddrc_perf_cnt_freerun_ctrl = CN10K_DDRC_PERF_CNT_FREERUN_CTRL,
+   190		.ddrc_perf_cnt_freerun_clr = 0,
+   191		.ddrc_perf_cnt_value_wr_op = CN10K_DDRC_PERF_CNT_VALUE_WR_OP,
+   192		.ddrc_perf_cnt_value_rd_op = CN10K_DDRC_PERF_CNT_VALUE_RD_OP,
+   193	};
+   194	
+ > 195	static const struct ddr_pmu_platform_data odyssey_ddr_pmu_pdata = {
+   196		.counter_overflow_val = 0,
+   197		.counter_max_val = GENMASK_ULL(63, 0),
+   198		.ddrc_perf_cnt_base = ODY_DDRC_PERF_CNT_VALUE_BASE,
+   199		.ddrc_perf_cfg_base = ODY_DDRC_PERF_CFG_BASE,
+   200		.ddrc_perf_cnt_op_mode_ctrl = ODY_DDRC_PERF_CNT_OP_MODE_CTRL,
+   201		.ddrc_perf_cnt_start_op_ctrl = ODY_DDRC_PERF_CNT_START_OP_CTRL,
+   202		.ddrc_perf_cnt_end_op_ctrl = ODY_DDRC_PERF_CNT_END_OP_CTRL,
+   203		.ddrc_perf_cnt_end_status = ODY_DDRC_PERF_CNT_END_STATUS,
+   204		.ddrc_perf_cnt_freerun_en = 0,
+   205		.ddrc_perf_cnt_freerun_ctrl = ODY_DDRC_PERF_CNT_FREERUN_CTRL,
+   206		.ddrc_perf_cnt_freerun_clr = ODY_DDRC_PERF_CNT_FREERUN_CLR,
+   207		.ddrc_perf_cnt_value_wr_op = ODY_DDRC_PERF_CNT_VALUE_WR_OP,
+   208		.ddrc_perf_cnt_value_rd_op = ODY_DDRC_PERF_CNT_VALUE_RD_OP,
+   209	};
+   210	
 
 -- 
 0-DAY CI Kernel Test Service
