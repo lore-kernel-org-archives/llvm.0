@@ -1,135 +1,69 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7AFD4F209
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 12:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2D655C3A;
+	Thu, 25 Jan 2024 13:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706187019; cv=none; b=NX+TawB9u4leBZgnMWUvDQ4DZxYpi3lW3IZJ1YoCwHZ+UAsuOLEIZVA5aG5r7krXPh5N22LEOGDvF4tOh277BshvzhnsS4FHxbZ1au6E787UOQmOsVt5BUHXZUBDhnfCMSKpx8euGM87RsEH5++RJpBcWUGsqWullVwCx8fl+vI=
+	t=1706189938; cv=none; b=utOfNPFOKvTNyX1ttwm7gTwfAg91UQoUfaSfUi10QwPS6GZE0VeA9yv2AG938RFWiNZF7e/+QfhPh1rZrD7SFBB8i99AsXr0nU07c29VRxKYKqFsTJvEnD/L742WQ9k6N5EHA67IVRoIDA02lW5KuozhitcCKCDhU8vaYcNVnYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706187019; c=relaxed/simple;
-	bh=oOzAf62Q5EQWJNHfwm0u23zGJZG4Xz8s5DNGaCHvSkA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qrGaMpfa/mtVXbs0BY+oIKMpeCehnVhUm17mNvolkKqjAzBoY4ZN67fCjp8hpi/0eG1xo11b5hKkB6q9PBkTzyhnBIGB1lNa6uAv3AdOSCsuyh6TUnbR6TTiSwx3Fl1DnycLNVEX5P8JtxsGfog4JOZ9zPXJThe5CLanLxnxE8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QL4wxyk5; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706189938; c=relaxed/simple;
+	bh=X4EhEnTx2yshyJvskE+TkZSnYGz9JoEdM3ONmeCjR6M=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=kdMUsUYvPKnklZ0e6pPy7zzRzINyJNolkWp4d/qm0NU/hMtA7FlQi1YLMTa+Wfniv7G+H5vBoWduAcAdC4gxsx6o6zUSQ24L6Lhj6vanNJyjpjk+07tMPaf2Lo4i49WYlz7iu0+wVkzklNzTOMUVLwXsqGKhZ6Tj8FrSmJBvOwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iRXUQfJW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QL4wxyk5"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6002317a427so34197997b3.2
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 04:50:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706187016; x=1706791816; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oOzAf62Q5EQWJNHfwm0u23zGJZG4Xz8s5DNGaCHvSkA=;
-        b=QL4wxyk5umHhlvdkMyXq1Gl0t9wKXF/8rw6q878Jvni9r6JWDRoUXKIdqjcboZXTmO
-         h0/OllLJW/4Q0QPGF+u3tizLuhpUs+wk1uHygguScYMTmlhrWh8nzL7O7f8/bL1PGL5w
-         yBbTwE3NG0tCJaQWl+Y4PowtWYo8awyyS2yrCLaIgcJm4P/Yh41Nsrc+7gtq+RsJAms7
-         vdEMFd/VsWw8u/tWJ9ZV4eBsr8QIkzz0Gpm0VZhhRjb81bMypfObMQZ6PjZDezeBii4G
-         K4mjUWEVihIhQ9Koxr0utql9nuLzIgKgVSWjr159+/Kj19jBBd+LJ9xJrlmah8kLX0kw
-         28wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706187016; x=1706791816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oOzAf62Q5EQWJNHfwm0u23zGJZG4Xz8s5DNGaCHvSkA=;
-        b=NGcxLsvCZ2TZJDZpsS8HI6AHKs83d4l+IxJC+lqHofaW1V67jDJK9tUswBzkqJV+2h
-         kYl4tPuP4vmbBYg0g/2olLvoYGEgt6MYo3546jMV8qw1bDfP4yKzrZ5EDlmhy4Q2rQoX
-         fLaRp3Ues4iFpgb8fZNgPE/BMS1cEwOOYxjVnIms4c7jTfI68Yr5ySq2EgOdevN6tN9C
-         WTw83Uk8o1EbpE+sFaOAfsozWKOqxlFmbbtuQqFlmk5QTl32n5e7evKJIzRWudAm0dJS
-         6bXDfFXXFem4Ay4MuQ7UsZj1JjdaDZNWTSUBTtk23dGYiLe1rDojDQk0kKTW5FWlEh7b
-         Nrrw==
-X-Gm-Message-State: AOJu0YxHOPtoI+TZbDnH8DI6AVWgkSdPH6jyxQEnIYxl7IIRpDoR7Zlq
-	bex5p2+sDMVLQfOL/iY5WAnRuTku9hMIzCdIhBi2ncNDTIkIZzFxbZXO2MAGMEF3dfBO3Zq9+PP
-	AQgqyGyYOxKY5coS+NSB4hKrQyQw=
-X-Google-Smtp-Source: AGHT+IEAr8OYVcCCv8ykkRFWiLud/ObEU2fmDTsdYvjCgjI7xiAcQS5cp87B+9j60Ce7rUjafSwja9QMdshXEp07rws=
-X-Received: by 2002:a81:4983:0:b0:5ff:638f:441e with SMTP id
- w125-20020a814983000000b005ff638f441emr571223ywa.103.1706187016606; Thu, 25
- Jan 2024 04:50:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iRXUQfJW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690D7C433F1;
+	Thu, 25 Jan 2024 13:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706189938;
+	bh=X4EhEnTx2yshyJvskE+TkZSnYGz9JoEdM3ONmeCjR6M=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=iRXUQfJWBmOMFX3NTxCERxRsdQCI9n9efJjo9hDb/z8XJblrw+eoqZKTzhm5ksWI7
+	 P4dBsRagliJHZpUpuydxjLav9vPb1BFhmXqf2616sfiautODNvuCFat4iH/tw3BKYr
+	 bmhatN0FbUpBjt+cNBTiBMRHtWvUYIpiFwmLj455BjDZWbF/mHsbPvbzQnnIh3kuyt
+	 jqm/odzzwj38wP8hkmpH2YXkkBCc4CTK84drL3anSfkUBAOG0E+1gh/5Fzj0+1Vc4b
+	 mHug3zthaG1YXpXsdZRGlRWBXIR7lW7rFKQq+teCrhQQ9taPdvrlhpoMnEOLLt/B3d
+	 0ilj3SJOgq5XQ==
+From: Lee Jones <lee@kernel.org>
+To: Lee Jones <lee@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <20240123-rave-sp-comma-v1-1-84e9b15ba205@kernel.org>
+References: <20240123-rave-sp-comma-v1-1-84e9b15ba205@kernel.org>
+Subject: Re: (subset) [PATCH] mfd: rave-sp: Avoid unnecessary use of comma
+ operator
+Message-Id: <170618993615.1469954.11714590210797016268.b4-ty@kernel.org>
+Date: Thu, 25 Jan 2024 13:38:56 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <20230608-dispatch-sneer-aa09bd7b2eb8@wendy> <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
- <20230608-spiritism-gonad-5f5aff4c3a24@wendy> <20240117-swiftly-parasail-618d62972d6e@spud>
- <CANiq72mVKCOAuK4Qe+8AHmpkFwyJsVfx8AqB7ccGi3DYpSSWcw@mail.gmail.com>
- <20240118-implode-delirium-eefdd86e170e@spud> <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
- <20240125-bucked-payroll-47f82077b262@wendy>
-In-Reply-To: <20240125-bucked-payroll-47f82077b262@wendy>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 25 Jan 2024 13:50:05 +0100
-Message-ID: <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Matthew Maurer <mmaurer@google.com>, Ramon de C Valle <rcvalle@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.12.3
 
-On Thu, Jan 25, 2024 at 1:31=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> I chatted with the clang built linux folks about this yesterday, Nathan
-> agreed that dealing with incompatibility issues iff they crop up is a
-> reasonable way to go.
->
-> If by "the bindgen found one matches the C compiler" you mean that the
-> version of libclang used by bindgen matches the C compiler, then that
-> sounds great.
+On Tue, 23 Jan 2024 09:59:48 +0000, Simon Horman wrote:
+> Although it does not seem to have any untoward side-effects,
+> the use of ';' to separate to assignments seems more appropriate than ','.
+> 
+> Flagged by clang-17 -Wcomma
+> 
+> No functional change intended.
+> Compile tested only.
+> 
+> [...]
 
-Yeah, exactly. So, unless I am misunderstanding, the incompatibilities
-could only happen if someone ignores the warning. We could make it an
-error too.
+Applied, thanks!
 
-> > For `bindgen` under GCC builds, we will eventually want a "proper" way
-> > to use GCC instead (or possibly other approaches like querying the
-> > information): https://github.com/rust-lang/rust-bindgen/issues/1949.
->
-> > Recently, there has been a thread in our Zulip and a couple people are
-> > experimenting: https://rust-for-linux.zulipchat.com/#narrow/stream/2880=
-89-General/topic/Bindgen.20--.20GCC.20backend.20port
->
-> That link for me goes to a message on 22/01, so later than the email you
-> sent.
+[1/1] mfd: rave-sp: Avoid unnecessary use of comma operator
+      commit: 67421634ade0979dafd3e3f21c9b63bc93ef4760
 
-Zulip seems to scroll to the latest message in the topic -- you should
-be able to scroll a bit up, but if that doesn't work, this link should
-go to the first message:
-https://rust-for-linux.zulipchat.com/#narrow/stream/288089-General/topic/Bi=
-ndgen.20--.20GCC.20backend.20port/near/412609074
+--
+Lee Jones [李琼斯]
 
-> That said, I gave things another spin today, in a different environment,
-> as a final check before sending and found an issue causing kernel
-> panics. RISC-V (and x86/arm64) supports kcfi (CFI_CLANG) but enabling
-> sanitisers seems to be a nightly only option for rustc. The kernel I
-> built today had CFI_CLANG enabled and that caused panics when the rust
-> samples were loaded.
->
-> The CFI_CLANG Kconfig entry has a cc-option test for whether the option
-> is supported, but from a quick check I don't see a comparable test to
-> use for rust. Even if a test was added, the current flag is an unstable
-> one, so I am not sure if testing for it is the right call in the first
-> place, given the stabilised flag would be entirely different?
-
-Yeah, KCFI and other mitigations is WIP -- Cc'ing Ramon and Matthew
-who may be able to tell us the latest status.
-
-Testing for unstable flags is fine, i.e. we only support a single
-compiler, so we can change the name when we do the upgrade.
-
-Cheers,
-Miguel
