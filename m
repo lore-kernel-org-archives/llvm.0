@@ -1,126 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FBB131758
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 18:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3D213666B
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 20:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706207296; cv=none; b=IuU8QUgJyM0MnDvLspwCRMf4q470ZaeC6jD/uQ7lF5aueYWiWhvkRld8FxkW5A50oi02oIwCKuCcIzVHxNVIQuRtR3B1IXWXV5ZIhY6Q9h/iax6IZzA4Gzvepe9B9RlggwvZPNNfMABNVMXqWDWQPS9bArkszM/CVFaCavBEIMk=
+	t=1706214060; cv=none; b=r7KNXRmKyRNYHrh1ddCtRRrPbw0f1HYxJSl3UOXyMyh44OuoixxkmeX7RzQSAyuFluPBsVicB9bBOjl0pPAA6hm9V/dWZwfiW8/FepmzzGp+pjtMZU97fF4ApfJstWo0QlDhBUNllAT9AwH4yZRpAMRbI9ouQL4ew7czLjCmFMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706207296; c=relaxed/simple;
-	bh=N6ZEDuiUthyrFTNfqDI04qaw+c0qqDUfP3nYRGcwyjI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sMTOyYfwPUVlG+YSYDuF6XZ7fqW2Eu6Fu+VA8PSJYI6A6sODFFCq69/rivgruoYa8Hv6MxCPKE9+1+EaJErev2EjAfK/HSMLH4wYFi1wTE0Dk/biUVwSR8MdbFYaO7qjjxyTZvuSyASZ+7xAJikx5lGii4cd0+XmJVmoh2XxzP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BZkHsCxq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706214060; c=relaxed/simple;
+	bh=41pX8WDfT98rbW2PTyuuL9xOxM1qAPDMOLDL63eAFi0=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=LmalDTkfDA8a024r4eLfcHrYRFSTNwKHx6eDbkuXwYB0AxG0d32CVzhVrT+f/N5KBMHvtnh4SsjEym3v2lW/ZpWWa4aiAso/3KimoWT2wX4lo/uzMvhFRFUC2e1tammwiD5b4KXzvYKdEM0ngRDdOMCffc0UJfAujiqyZkdEj50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nQODE8xI; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BZkHsCxq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84088C43394
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 18:28:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706207296;
-	bh=N6ZEDuiUthyrFTNfqDI04qaw+c0qqDUfP3nYRGcwyjI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BZkHsCxqRg4uKfWIIAzrh35ZHF7uOs8Fold3RkOXJ8QpcxrOvoVP6RdBSCMFwzcHf
-	 YFkyhLj8woDGjGb6oHqlimvo0hi5+1LR00Cq0FhMCEoxELdwkjRDf+3Cloebwsmv3Z
-	 7OdYixQINOjG146LOn12MJj1UdZ1v4mRvgzuzHoYt8IfnL0ex0yuWemnlDrw+YJ7C3
-	 ou1rLvom/37mMFfjPK8ziz+IdFlxdbbWXUe43KyhIYT8nIy5OF3magR6ZIwTOjZwEw
-	 wkAfL3cLYULfY9V2bvsJckv0ea0Um/ptsrs7iNBglrnw3UM+hxOyJdEmbgyMZPMe9+
-	 ZhMuAFfPJPhFA==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2cf1c3b23aeso10984321fa.1
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 10:28:16 -0800 (PST)
-X-Gm-Message-State: AOJu0Yw/I3rC/Hbz2Ji32v9au85G/a4zpPCUzyP+ifsr+3PsBp4i/Qv6
-	485vj+sDwa81dc6fXwiCvbLdsyrjLKvB0zPhq6LBmprSIu07wsX7gfbokKMozwd+uwQAp9UFvo2
-	4WTQUT7/e5OblHvgLI0NXO2Qb1DQ=
-X-Google-Smtp-Source: AGHT+IF4A+Ju+VLoXBiDORGvr3AIpO6hZuYmyrpVf8uXLhHDJf4q1S9Z2/98OeaA5FJkEYmlY6Xk9DZVHViKbc6Mtb0=
-X-Received: by 2002:a2e:be20:0:b0:2cf:15be:462e with SMTP id
- z32-20020a2ebe20000000b002cf15be462emr185537ljq.11.1706207294732; Thu, 25 Jan
- 2024 10:28:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nQODE8xI"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3392291b21bso6056389f8f.1
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 12:20:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706214057; x=1706818857; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y9beJv2v4raxYe/GS6279IBEXFR45U3B/2vOfg+otCo=;
+        b=nQODE8xIi4d4t0dMhMAgEMsE6BTV88T30aDnhI4lorJER7RhOxsR53ayPnzAyRU3lc
+         /ycr3gSYhEhOhlwqq3UPWN9Z2xbJlq4VCMx4p6ETFPuXquyDir1D710aUD6orIkcURPr
+         BhQUJbdaLTqvgVNAGrJdD+HDsdasjv7cObkTypcUYEviPbT+KOMV16QHAHygooo3Lj55
+         cEdU21uulXv/Fx4QkwxqtXLAQf7o5XoZlB92ZrV3Ovu6CNZmoREoKroMJLSPk7KGEv1F
+         UJ+zVgYJeASch2YQ7Dq7FCfOshR9JcCdAHsuuZd2VHkw1jMdsPkh/Qq2adDjL1EbfSmO
+         5lfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706214057; x=1706818857;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y9beJv2v4raxYe/GS6279IBEXFR45U3B/2vOfg+otCo=;
+        b=bRpSYQHbs2ahwJTv/BBVn/C8+XNw22B/EAXu4remXCMVlDoL4vr33401PjaHvlG+Bg
+         DCpQgbTMk6HbgmFwgjfoi3Wg09vqCGJogQA4BCN+jlI52Yi6Cul2QncavLA5PQrMPwlG
+         AJrUB4WciuVbGrhyvh2F1296Tqu/6dCW+gU4s27OUQRCyN+/HNDs9eMVxED2Ph74PU02
+         Hn6Af0OiXrNHoLGlqmFdppQda44JeoNybodF7aUE3IUtlQ/TljfQ6r34pCCjkwUMfxXO
+         xtYaOHaBf/ihfg8jrMCbhD281GfeB5OWs4PjW0KY1AmPWYHJAeoSA/N3lj14OiNnaJ6L
+         ZUWg==
+X-Gm-Message-State: AOJu0Yyc9gKu1ZYz9tOkvUnONjIoXT5zQRCE33n6mG5SnLhZ0Zl+zZ0a
+	5rlJkElbHxpm/6VOg8ebv2gsVS8znPx3ly4G02NXDZQl1ClEB/NwesBuSElP3OOZ3fOnOSfn96U
+	c
+X-Google-Smtp-Source: AGHT+IGetiMM3gfcOAaPbzlz7WTbuXWrEERYRd3FaXKTJMmW8weDfxyPN0D6nwAYSav1RUP03AMKvw==
+X-Received: by 2002:adf:ce09:0:b0:339:35e7:ec2b with SMTP id p9-20020adfce09000000b0033935e7ec2bmr189488wrn.58.1706214056827;
+        Thu, 25 Jan 2024 12:20:56 -0800 (PST)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id v4-20020a5d6784000000b0033940bc04fesm7305510wru.16.2024.01.25.12.20.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 12:20:56 -0800 (PST)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Thu, 25 Jan 2024 20:20:54 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1845612181.12064.1706214056026@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-19-init-59-g90ba33099cbb: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240123234731.work.358-kees@kernel.org> <CAMj1kXGcKBPnHOm6PtsrxePdv5a6AokB=qvMrwvGmPh_Uk6vsA@mail.gmail.com>
- <202401250958.11B29BE48@keescook>
-In-Reply-To: <202401250958.11B29BE48@keescook>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 25 Jan 2024 19:28:03 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHKTWy7kyHNYD0+JbbDqEreL7efatDZ9VLKPbXhVVVdqw@mail.gmail.com>
-Message-ID: <CAMj1kXHKTWy7kyHNYD0+JbbDqEreL7efatDZ9VLKPbXhVVVdqw@mail.gmail.com>
-Subject: Re: [PATCH] smb: Work around Clang __bdos() type confusion
-To: Kees Cook <keescook@chromium.org>
-Cc: Steve French <sfrench@samba.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Paulo Alcantara <pc@manguebit.com>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org, 
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_12063_249272126.1706214054894"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
+X-Jenkins-Result: SUCCESS
 
-On Thu, 25 Jan 2024 at 19:00, Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Jan 25, 2024 at 01:19:19PM +0100, Ard Biesheuvel wrote:
-> > On Wed, 24 Jan 2024 at 00:47, Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > Recent versions of Clang gets confused about the possible size of the
-> > > "user" allocation, and CONFIG_FORTIFY_SOURCE ends up emitting a
-> > > warning[1]:
-> > >
-> > > repro.c:126:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-> > >   126 |                         __write_overflow_field(p_size_field, size);
-> > >       |                         ^
-> > >
-> > > for this memset():
-> > >
-> > >         int len;
-> > >         __le16 *user;
-> > >         ...
-> > >         len = ses->user_name ? strlen(ses->user_name) : 0;
-> > >         user = kmalloc(2 + (len * 2), GFP_KERNEL);
-> > >         ...
-> > >         if (len) {
-> > >                 ...
-> > >         } else {
-> > >                 memset(user, '\0', 2);
-> > >         }
-> > >
-> > > While Clang works on this bug[2], switch to using a direct assignment,
-> > > which avoids memset() entirely which both simplifies the code and silences
-> > > the false positive warning. (Making "len" size_t also silences the
-> > > warning, but the direct assignment seems better.)
-> > >
-> > > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > > Closes: https://github.com/ClangBuiltLinux/linux/issues/1966 [1]
-> > > Link: https://github.com/llvm/llvm-project/issues/77813 [2]
-> > > Cc: Steve French <sfrench@samba.org>
-> > > Cc: Paulo Alcantara <pc@manguebit.com>
-> > > Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
-> > > Cc: Shyam Prasad N <sprasad@microsoft.com>
-> > > Cc: Tom Talpey <tom@talpey.com>
-> > > Cc: linux-cifs@vger.kernel.org
-> > > Cc: llvm@lists.linux.dev
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  fs/smb/client/cifsencrypt.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
-> > > index ef4c2e3c9fa6..6322f0f68a17 100644
-> > > --- a/fs/smb/client/cifsencrypt.c
-> > > +++ b/fs/smb/client/cifsencrypt.c
-> > > @@ -572,7 +572,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
-> > >                 len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
-> > >                 UniStrupr(user);
-> > >         } else {
-> > > -               memset(user, '\0', 2);
-> > > +               *(u16 *)user = 0;
-> >
-> > Is 'user' guaranteed to be 16-bit aligned?
->
-> It's the first two bytes of a kmalloced address range, which I'm nearly
-> certain will be sanely aligned, as those allocs are commonly used for
-> holding structs, etc.
->
+------=_Part_12063_249272126.1706214054894
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Ah yes, this kmalloc() was carefully hidden in the commit log :-)
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+
+We appreciate that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
+
+We track this report status in https://linaro.atlassian.net/browse/LLVM-1105 , please let us know if you are looking at the problem and/or when you have a fix.
+
+In CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig after:
+
+  | commit llvmorg-19-init-59-g90ba33099cbb
+  | Author: Nikita Popov <npopov@redhat.com>
+  | Date:   Wed Jan 24 15:25:29 2024 +0100
+  | 
+  |     [InstCombine] Canonicalize constant GEPs to i8 source element type (#68882)
+  |     
+  |     This patch canonicalizes getelementptr instructions with constant
+  |     indices to use the `i8` source element type. This makes it easier for
+  |     optimizations to recognize that two GEPs are identical, because they
+  |     don't need to see past many different ways to express the same offset.
+  |     
+  | ... 14 lines of the commit log omitted.
+
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+22291
+# First few build errors in logs:
+
+# 00:05:24 ./include/linux/fortify-string.h:493:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+# 00:05:25 make[4]: *** [scripts/Makefile.build:243: net/xfrm/xfrm_user.o] Error 1
+# 00:05:32 make[3]: *** [scripts/Makefile.build:480: net/xfrm] Error 2
+# 00:15:32 ./include/linux/fortify-string.h:493:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+# 00:15:32 make[5]: *** [scripts/Makefile.build:243: fs/smb/client/cifsencrypt.o] Error 1
+# 00:17:12 make[4]: *** [scripts/Makefile.build:480: fs/smb/client] Error 2
+# 00:17:12 make[3]: *** [scripts/Makefile.build:480: fs/smb] Error 2
+# 00:19:02 make[2]: *** [scripts/Makefile.build:480: net] Error 2
+# 00:33:54 make[2]: *** [scripts/Makefile.build:480: fs] Error 2
+# 00:41:46 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:1913: .] Error 2
+
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+22292
+
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/128/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/127/artifact/artifacts
+
+Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/90ba33099cbb17e7c159e9ebc5a512037db99d6d/tcwg_kernel/llvm-master-aarch64-stable-allyesconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/90ba33099cbb17e7c159e9ebc5a512037db99d6d
+
+List of configurations that regressed due to this commit :
+* tcwg_kernel
+** llvm-master-aarch64-stable-allyesconfig
+*** Failure
+*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/90ba33099cbb17e7c159e9ebc5a512037db99d6d/tcwg_kernel/llvm-master-aarch64-stable-allyesconfig/details.txt
+*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/128/artifact/artifacts
+------=_Part_12063_249272126.1706214054894--
