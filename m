@@ -1,92 +1,80 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3706213667E
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 20:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEF15B1E8;
+	Thu, 25 Jan 2024 21:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706215611; cv=none; b=mOkxuC8rR3r3/9qDO4K+fNISg7PSD6jBWRQSq/XsQqf878tk9zN8xMt0qsxW36TnMCR5K2Z2tJjcrPwFkVZdd07YfF+3fgwly08iKsx1isqW/0JnBpifGiGxT1TEzhtRFYqmfn5CQC62wgvh7Q1jDAgLEKl+Qga91rxbFR1nyIk=
+	t=1706218229; cv=none; b=B0OQYks+Gti+vrv7Dg5MkgLeEm0y8K4sFQW5mpVmvbfW0FdrNbjtEOonqOpPvEhl5Brr422jYpUjG0AJcnIa31nhVNKKR4gwIv37LtU1sHFO9qGgezYIw3Hkzo4ZqEec4wDEab6k+4VQfnKpGQJ95uJYsCbDz6edj52wVfIJ/vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706215611; c=relaxed/simple;
-	bh=ouunYuQuL5e9JirkoCcY+XKKJDTYYnL7iTYoEB+yr0I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q1YQP67gCtkoAmGJonqLWoSN6FXlLTxEFe1o2pywWV7rI6fP10sBQaW/RUUKnSpIF7HeAgVYIhqtvxm0/e09EP0ZUn0ax5d9sBhsRZ7OfT1wtgUZn8Jr46n0H+PmZ0ivoNPD2TkrTRYn1d2xVNV3obLeGk5+0r+AzPtEN2hkFOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3KgQau1H; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1706218229; c=relaxed/simple;
+	bh=hNYJSDfuV3N344eeLzn2sV0t/R5y/+t3qenvX0+jyEM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=AB5qDbr54JkPbXjqM5JC9hmfUi1YMqoBN3zyvaIur2v0KZocH80gLMplrCdVcB/TcAqNEtoKDNcjGz7IQo88srsRhc4NpmnMsw8jvoTHJXC2imIVqwdTfRa8A0haKWddyi2skhI/5HQOXWfKAdAGQ+v7wCuLcIOcDxDcN3Ja5Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tz3bvmLE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3KgQau1H"
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4bd87fd64c1so362255e0c.1
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 12:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706215609; x=1706820409; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cJCIsrO2o9NvHQxNMc03LGFVf6NoDfQO8EJsLkzfJx0=;
-        b=3KgQau1HmklTEaZr6MZU+wGeBTKStyMdF91fgnFppVBhl4G3F1QvCfdOi5a6bMkC72
-         MWf0iGdNqRAH6EErUomU7nM8VvshwUMMozixh/5gPqKjJjjqBbaGG+omUM9eMLty6MBF
-         lBneDHZkTfRb1EUQ2Vml1XLBE8HMpHCo8gtHQOqLok12IrPBT3/TTRFNs0u1WfNElY8E
-         Qif/2W35rhhYKzNbE0UZ04lZdcfXleZHQUcBMwAUvoYkCp9BGW+3RRVe6VIMqAi0Av9T
-         JRnratsUQ8leIqVoBHp3r/5MnBLooODkPLCP+0Ih4yJ0fyCWyhhX2XxjzWq4fald+SbU
-         pKQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706215609; x=1706820409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cJCIsrO2o9NvHQxNMc03LGFVf6NoDfQO8EJsLkzfJx0=;
-        b=T6s22Wa43yWADLbIE3KFZyJMyx7k+uMX7GvXGHhbXFLN0lNYWjClWC0CBJ8jdWM3rc
-         5LNCFbR8vHNZHpA1PPcd9390L0E7ewXb27VnxMAW1o1wpcYgaVAQPjSSnXVUKSCXIlUt
-         b1F0Im+iB63sigiGIgiwEZcYOW0AUXU00odmnu89EoWqG80HiwLzKWnkeQsuwbScW3w8
-         U8Q+5fB/FsHJxtWDk3+GzNQ9Qjh1TxM+TlsQRZg7n/wd6FsEdpGUu/hw4w7A32Iw4+O9
-         f7k4hpnw8pSyCvY+a505/9SGa5/P8VISqM/1v8V85GDMNpp/fZUg8o+gUkHI5lHQOsEz
-         Rjeg==
-X-Gm-Message-State: AOJu0YySE7NSHlVvXTBOwgKS7wh2x6sIWBXjCf/nvdoXWLj58pJWYA+N
-	UndaeKiFuK0aYOP7i6nSc9EY94RG3Eb74wlU35Y5HY0QsBes32q+9RYLOQe6B9pPzXY95Z4q/Qk
-	/CzIZPCc1wNSwqkyOEdSa2og2dF3brJJnquTH
-X-Google-Smtp-Source: AGHT+IHI8Q8dDZexTdG1oWiuWwKZqI7C18nLfjSkoGLgeVlXiyjEX7qqaULmDSBIhQnv0IiiZWJY1/qCHVluRpNXcEk=
-X-Received: by 2002:a05:6122:58e:b0:4b6:cde4:5217 with SMTP id
- i14-20020a056122058e00b004b6cde45217mr292246vko.29.1706215608955; Thu, 25 Jan
- 2024 12:46:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tz3bvmLE"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E478C43399;
+	Thu, 25 Jan 2024 21:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706218229;
+	bh=hNYJSDfuV3N344eeLzn2sV0t/R5y/+t3qenvX0+jyEM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Tz3bvmLE/rmxmgL8u96UNpX4fNSF3kFV+WFn+GcM5qHSq+1ufb9bbd4244z9/OWH4
+	 T2Br5S5wvOZ3Q4M3LifqmzIwTczMXf2aR/8CjdKBDO6F5oCg9/FSO6bWxUV6rdT685
+	 4/sMPFu4ucEqpVghNR8TLFjtLqWy7SGWn14zAoGGdbbQEZQ2glBqX5W+yDPzKFrtfG
+	 vzdKjyKssqrtSLrHX8PV20HkaCG8WbIjxwLGc1wpsp2jT/o624kj3Q68mpvOp1baFS
+	 ZQ/e8HQU5256jE2KRGV3P/FXcR79a0Io2TaGIll69k6bhGa9KhFQQ1KrqIZMTZ9xgb
+	 J8foOQUjMZa5w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 48EAADC9A05;
+	Thu, 25 Jan 2024 21:30:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240125112818.2016733-19-ardb+git@google.com> <20240125112818.2016733-35-ardb+git@google.com>
-In-Reply-To: <20240125112818.2016733-35-ardb+git@google.com>
-From: Kevin Loughlin <kevinloughlin@google.com>
-Date: Thu, 25 Jan 2024 12:46:38 -0800
-Message-ID: <CAGdbjmLEsj1cSnxoneSrDy2J2SFenjEdoYa_zoDQQhtU1nccMA@mail.gmail.com>
-Subject: Re: [PATCH v2 16/17] x86/sev: Drop inline asm LEA instructions for
- RIP-relative references
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/2] riscv: Increase mmap_rnd_bits_max on Sv48/57
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <170621822929.6239.356777907601716533.git-patchwork-notify@kernel.org>
+Date: Thu, 25 Jan 2024 21:30:29 +0000
+References: <20230929211155.3910949-4-samitolvanen@google.com>
+In-Reply-To: <20230929211155.3910949-4-samitolvanen@google.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, akpm@linux-foundation.org,
+ keescook@chromium.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
 
-On Thu, Jan 25, 2024 at 3:33=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
-> wrote:
->
-> The SEV code that may run early is now built with -fPIC and so there is
-> no longer a need for explicit RIP-relative references in inline asm,
-> given that is what the compiler will emit as well.
->
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/mm/mem_encrypt_identity.c | 37 +++-----------------
->  1 file changed, 5 insertions(+), 32 deletions(-)
+Hello:
 
-snp_cpuid_get_table() in arch/x86/kernel/sev-shared.c (a helper
-function to provide the same inline assembly pattern for RIP-relative
-references) would also no longer be needed, as all calls to it would
-now be made in position-independent code. We can therefore eliminate
-the function as part of this commit.
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Fri, 29 Sep 2023 21:11:56 +0000 you wrote:
+> Hi all,
+> 
+> We noticed that 64-bit RISC-V kernels limit mmap_rnd_bits to 24
+> even if the hardware supports a larger virtual address space size
+> [1]. These two patches allow mmap_rnd_bits_max to be changed during
+> init, and bumps up the maximum randomness if we end up setting up
+> 4/5-level paging at boot.
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/2] mm: Change mmap_rnd_bits_max to __ro_after_init
+    https://git.kernel.org/riscv/c/71a5849aedaa
+  - [2/2] riscv: mm: Update mmap_rnd_bits_max
+    https://git.kernel.org/riscv/c/7df1ff5a5cd6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
