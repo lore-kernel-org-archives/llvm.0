@@ -1,120 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5552B137C48;
-	Thu, 25 Jan 2024 20:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3706213667E
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 20:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706215584; cv=none; b=mQGGjbcnBI3lVgKVgnyKlx5k6j4eK6HcIyH0kVb/w+B8vxAplfUNh9UcQCFXGijL67JMzwC3Ukd6YXZMQUZ4ezH1ZwyXifceBG8YjZz/yRl7XnsaG4GI4wWPhFprBQHAv5390C7dxkhrmXoSXQcqk64nVNuMqMoTv8V5F/WKqsw=
+	t=1706215611; cv=none; b=mOkxuC8rR3r3/9qDO4K+fNISg7PSD6jBWRQSq/XsQqf878tk9zN8xMt0qsxW36TnMCR5K2Z2tJjcrPwFkVZdd07YfF+3fgwly08iKsx1isqW/0JnBpifGiGxT1TEzhtRFYqmfn5CQC62wgvh7Q1jDAgLEKl+Qga91rxbFR1nyIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706215584; c=relaxed/simple;
-	bh=qt3bTu8mk7Mbfsz2GvX1ohHdsnOiP999J8bzxPs5kEQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JgS/0qfsvKPl4SKiCoxVNdKG4Podq0IA1TG6YxHHHUTkjvj+9dmCJQvfqtLR6V50K+2raA8RqFitMeRUTPx3qqIp2qTjCWBjv6dnvs3r3GOq3ItvEU/aydno91CVDIRc7oZIoVepZ82xEwCsiX7E4YuBFB88L1b/RMt1XB2en/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yb/ZqZJ2; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706215611; c=relaxed/simple;
+	bh=ouunYuQuL5e9JirkoCcY+XKKJDTYYnL7iTYoEB+yr0I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q1YQP67gCtkoAmGJonqLWoSN6FXlLTxEFe1o2pywWV7rI6fP10sBQaW/RUUKnSpIF7HeAgVYIhqtvxm0/e09EP0ZUn0ax5d9sBhsRZ7OfT1wtgUZn8Jr46n0H+PmZ0ivoNPD2TkrTRYn1d2xVNV3obLeGk5+0r+AzPtEN2hkFOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3KgQau1H; arc=none smtp.client-ip=209.85.221.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yb/ZqZJ2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706215582; x=1737751582;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qt3bTu8mk7Mbfsz2GvX1ohHdsnOiP999J8bzxPs5kEQ=;
-  b=Yb/ZqZJ2DqW1TniyThTpfGwey5pESWAwWxC2S6qai4EHfm9Fkh9TUA7M
-   mK9WhHjYK3mqvdi7eafK2Ct9pZoDs1iHetR0WXDapB5Vc77GpTHiwKnjV
-   ozJN35d8UuKqJra8lnFZu/xKTkqIkzRbXPlE0HPu0G00wCQgA9bQ5odhn
-   lXXBxh5JvWS5LndNuVOHkHq4/dMfQXXxCTNPPBl6xlZQPgNTy9PbkvKIz
-   TtspDF7BOk9z5a+lYAnNewp4dxKkZDMSUp/3oLgCuL96hf7GgCcPqbBm3
-   9t/TrYnZAu0eNKz/Rb4favnkTCDUdkRdsSM+7fjqMNJnd9sughr9TJFXD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="8974475"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="8974475"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 12:46:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="21180499"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 25 Jan 2024 12:46:19 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rT6c5-0000P2-1L;
-	Thu, 25 Jan 2024 20:46:17 +0000
-Date: Fri, 26 Jan 2024 04:45:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 9/21]
- drivers/hid/spi-hid/spi-hid-apple-core.c:151: warning: Function parameter or
- struct member 'id' not described in 'spihid_msg_hdr'
-Message-ID: <202401260412.qXoWWG7Z-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3KgQau1H"
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4bd87fd64c1so362255e0c.1
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 12:46:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706215609; x=1706820409; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cJCIsrO2o9NvHQxNMc03LGFVf6NoDfQO8EJsLkzfJx0=;
+        b=3KgQau1HmklTEaZr6MZU+wGeBTKStyMdF91fgnFppVBhl4G3F1QvCfdOi5a6bMkC72
+         MWf0iGdNqRAH6EErUomU7nM8VvshwUMMozixh/5gPqKjJjjqBbaGG+omUM9eMLty6MBF
+         lBneDHZkTfRb1EUQ2Vml1XLBE8HMpHCo8gtHQOqLok12IrPBT3/TTRFNs0u1WfNElY8E
+         Qif/2W35rhhYKzNbE0UZ04lZdcfXleZHQUcBMwAUvoYkCp9BGW+3RRVe6VIMqAi0Av9T
+         JRnratsUQ8leIqVoBHp3r/5MnBLooODkPLCP+0Ih4yJ0fyCWyhhX2XxjzWq4fald+SbU
+         pKQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706215609; x=1706820409;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cJCIsrO2o9NvHQxNMc03LGFVf6NoDfQO8EJsLkzfJx0=;
+        b=T6s22Wa43yWADLbIE3KFZyJMyx7k+uMX7GvXGHhbXFLN0lNYWjClWC0CBJ8jdWM3rc
+         5LNCFbR8vHNZHpA1PPcd9390L0E7ewXb27VnxMAW1o1wpcYgaVAQPjSSnXVUKSCXIlUt
+         b1F0Im+iB63sigiGIgiwEZcYOW0AUXU00odmnu89EoWqG80HiwLzKWnkeQsuwbScW3w8
+         U8Q+5fB/FsHJxtWDk3+GzNQ9Qjh1TxM+TlsQRZg7n/wd6FsEdpGUu/hw4w7A32Iw4+O9
+         f7k4hpnw8pSyCvY+a505/9SGa5/P8VISqM/1v8V85GDMNpp/fZUg8o+gUkHI5lHQOsEz
+         Rjeg==
+X-Gm-Message-State: AOJu0YySE7NSHlVvXTBOwgKS7wh2x6sIWBXjCf/nvdoXWLj58pJWYA+N
+	UndaeKiFuK0aYOP7i6nSc9EY94RG3Eb74wlU35Y5HY0QsBes32q+9RYLOQe6B9pPzXY95Z4q/Qk
+	/CzIZPCc1wNSwqkyOEdSa2og2dF3brJJnquTH
+X-Google-Smtp-Source: AGHT+IHI8Q8dDZexTdG1oWiuWwKZqI7C18nLfjSkoGLgeVlXiyjEX7qqaULmDSBIhQnv0IiiZWJY1/qCHVluRpNXcEk=
+X-Received: by 2002:a05:6122:58e:b0:4b6:cde4:5217 with SMTP id
+ i14-20020a056122058e00b004b6cde45217mr292246vko.29.1706215608955; Thu, 25 Jan
+ 2024 12:46:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240125112818.2016733-19-ardb+git@google.com> <20240125112818.2016733-35-ardb+git@google.com>
+In-Reply-To: <20240125112818.2016733-35-ardb+git@google.com>
+From: Kevin Loughlin <kevinloughlin@google.com>
+Date: Thu, 25 Jan 2024 12:46:38 -0800
+Message-ID: <CAGdbjmLEsj1cSnxoneSrDy2J2SFenjEdoYa_zoDQQhtU1nccMA@mail.gmail.com>
+Subject: Re: [PATCH v2 16/17] x86/sev: Drop inline asm LEA instructions for
+ RIP-relative references
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   253645613d55bc9e62bb0b1811d009cd987f301f
-commit: 372d4679f7251105cfe589c326eb5ee9b3d4f8a1 [9/21] WIP: HID: transport: spi: add Apple SPI transport
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240126/202401260412.qXoWWG7Z-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260412.qXoWWG7Z-lkp@intel.com/reproduce)
+On Thu, Jan 25, 2024 at 3:33=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
+> wrote:
+>
+> The SEV code that may run early is now built with -fPIC and so there is
+> no longer a need for explicit RIP-relative references in inline asm,
+> given that is what the compiler will emit as well.
+>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/x86/mm/mem_encrypt_identity.c | 37 +++-----------------
+>  1 file changed, 5 insertions(+), 32 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401260412.qXoWWG7Z-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hid/spi-hid/spi-hid-apple-core.c:151: warning: Function parameter or struct member 'id' not described in 'spihid_msg_hdr'
->> drivers/hid/spi-hid/spi-hid-apple-core.c:151: warning: Excess struct member 'msgid' description in 'spihid_msg_hdr'
-
-
-vim +151 drivers/hid/spi-hid/spi-hid-apple-core.c
-
-   119	
-   120	/**
-   121	 * struct spihid_msg_hdr - common header of protocol messages.
-   122	 *
-   123	 * Each message begins with fixed header, followed by a message-type specific
-   124	 * payload, and ends with a 16-bit crc. Because of the varying lengths of the
-   125	 * payload, the crc is defined at the end of each payload struct, rather than
-   126	 * in this struct.
-   127	 *
-   128	 * @unknown0:	request type? output, input (0x10), feature, protocol
-   129	 * @unknown1:	maybe report id?
-   130	 * @unknown2:	mostly zero, in info request maybe device num
-   131	 * @msgid:	incremented on each message, rolls over after 255; there is a
-   132	 *		separate counter for each message type.
-   133	 * @rsplen:	response length (the exact nature of this field is quite
-   134	 *		speculative). On a request/write this is often the same as
-   135	 *		@length, though in some cases it has been seen to be much larger
-   136	 *		(e.g. 0x400); on a response/read this the same as on the
-   137	 *		request; for reads that are not responses it is 0.
-   138	 * @length:	length of the remainder of the data in the whole message
-   139	 *		structure (after re-assembly in case of being split over
-   140	 *		multiple spi-packets), minus the trailing crc. The total size
-   141	 *		of a message is therefore @length + 10.
-   142	 */
-   143	
-   144	struct spihid_msg_hdr {
-   145		u8 unknown0;
-   146		u8 unknown1;
-   147		u8 unknown2;
-   148		u8 id;
-   149		__le16 rsplen;
-   150		__le16 length;
- > 151	};
-   152	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+snp_cpuid_get_table() in arch/x86/kernel/sev-shared.c (a helper
+function to provide the same inline assembly pattern for RIP-relative
+references) would also no longer be needed, as all calls to it would
+now be made in position-independent code. We can therefore eliminate
+the function as part of this commit.
