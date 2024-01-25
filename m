@@ -1,39 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B9F10A24
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 23:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A16012B8A
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 23:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706223612; cv=none; b=Qm6l00ZXOxkYPEKkSupTuy+2w/XhUC0Tqfy8gNZH/RBAANQ4Fp1bFeuINRObruXV+Z2miW4UD0vFVUL5+3LzJGzD1kiJzqaiSLnAkFCNDpu/wWq34vza0nH/9zzeuBCfrbQgpyRCohbFNXj2n/6/CtmD1VEttjUzW7yM/4f6Dmo=
+	t=1706224176; cv=none; b=FZLxT9FggQGNIlZ0nh2oPC2ngpCGeEfWZRremmoGFq5RbEp2/YATKUN8/tqoWec1g98b6UKKpoVutRO45PX02qLjba3FUjg+/3AeXD5M0groJ0bWrDAAk7qMyBiosoXEwL5Gn2QJz4bqhvNOxEAAc7jOUweVslVSYPBNJlJgmrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706223612; c=relaxed/simple;
-	bh=v9M1CMgjfI/NK6zYm3eL/prf4BGnVttQGvaLpjkwEvQ=;
+	s=arc-20240116; t=1706224176; c=relaxed/simple;
+	bh=ePte//PcvI+POPvm5pOf9eY2yfLLJls6I8UsfkKqq8I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZG1ndSSZo8rl+MpNeIXjc7EeXNma3NwpP6iteSq5Vmk71nEuSFLigQ5RUthJAY6b9raAMoiS53mI4pqib06BIRlbVO/v70H1rEQ9cJhHHBNpWzjheYZme55RxhrwWr5CF6ihmYMMVl3V/dnhEZWZwoKCk3bYefa8PSJTlKePYe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lyl8kJ7R; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=hPytuPU/dVVjB888gdRe3G5BamtY8ZP0cjHO017s96QhoJBrOpc6gMiIWq4WR/IKlNi/jCeCYPbfAG1iiIBnU45I0IlCu6rg5OMZxoviwWlGaJeOyBNgSI0wb/PmY9gkOUpZjmoxKFo69HIhzh7VwVZUFp98rtAyH3Ez4AlhWL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=UoWpm/qZ; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lyl8kJ7R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE92C433C7;
-	Thu, 25 Jan 2024 23:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706223611;
-	bh=v9M1CMgjfI/NK6zYm3eL/prf4BGnVttQGvaLpjkwEvQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lyl8kJ7RZJxL/tlVDCcFvl0Q18Ta87BafQImpdlcmEJNJhnFh2PsL+JSiQybrELrl
-	 DGvEw44zKFrCeEElPy5jGf5Trnv85jxrO5hXGEzuDADu/K3ZzDjvH8xrU8bJ1zJatV
-	 fLfx6GqfSB6iVBoPqLVSYoPniHYzp8QVsi5CdZMzfGWeb8JYmULtU9HG7InUUuCSkM
-	 /cfWFMM2Xwn6Xsq/X6J/Q4EYdeYyJYLVozjE2ZL+LdY58OmgIHBJe7NeMDQcqAb8cg
-	 F1+GkWkBdbtZHdEDK+lwaDCMVJjoze0wy4NcwyPyPf/jbY6bXtXSgj2+2cvfDLewQU
-	 7FQQscOGw376w==
-Date: Thu, 25 Jan 2024 16:00:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: linaro-toolchain@lists.linaro.org
-Cc: llvm@lists.linux.dev
-Subject: Re: [Linaro-TCWG-CI] llvmorg-19-init-59-g90ba33099cbb: Failure on
- aarch64
-Message-ID: <20240125230010.GA2667233@dev-arch.thelio-3990X>
-References: <1845612181.12064.1706214056026@jenkins.jenkins>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UoWpm/qZ"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6ddc1b30458so198246b3a.1
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 15:09:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706224173; x=1706828973; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NNidztSseW3f6ox0VaVwn+MmYmXjLmRwN6RuC1S6ZnI=;
+        b=UoWpm/qZ3kh7N4S7Y9lw6Tj2qBMX4IC3wmKdtdGsY3VxJ9emT4L19c7sg6E+SnESld
+         3aBDAXmsBVsMRfFz1lzr6Gh6tXysKg/JPqHFW4rT++3pLh3CGb6poCzjXqLQq44klsav
+         N3hUVBYDWiwQWTFRjHwHRo/gPqc/4TWeDe8j8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706224173; x=1706828973;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NNidztSseW3f6ox0VaVwn+MmYmXjLmRwN6RuC1S6ZnI=;
+        b=YdEdC/lA3kdMyOJ+mjA4LvqlWOvR3pDp6ehZhguyhhQ/eEo5OGoEgOiu2X2tm+4kB3
+         RXuH+QLkbwwv7rQq6Eo+nPzj+tBIyoUJ/wyrWXOZhr9jsxXcJoV19WdWf2gVF+soFycv
+         we4xZjklRW49AezWgfu3U4kqmksuB8RcfGilgAyARBPK9faZeq5TYECUgYCjnJBsKurl
+         N6ESJi/Na5PVOd0x4glLhI3w/HayFt4VDti2K7+D3CfnCzWOFfdGCrBnAWpj/mE0mbpK
+         ps+lAG/pTNCN7v2//uNvm2pUVYqjzNTusY7KsTPjl/PJCWqxCkhOgAyNzbJ0eb0fgqLQ
+         25qw==
+X-Gm-Message-State: AOJu0YzKF8xrndbO1DUwnV7SDwMehuoFt76lO1Pg3jzYsipDMUo97iCa
+	/EKArL5sZLj1YfP5FVhAJdtLU3DMkakLZmq0lH9vbf6tG4Im+V/S9zxWNzEcRA==
+X-Google-Smtp-Source: AGHT+IH4wMIY5onoDuNtmQW2qW/oiyEguJjb8r1Cdunh6LBtNU0O2EKFQ/LepjR7KIf8EtqHsgZMQA==
+X-Received: by 2002:a05:6a20:1616:b0:19b:5cf9:45ac with SMTP id l22-20020a056a20161600b0019b5cf945acmr452465pzj.81.1706224173278;
+        Thu, 25 Jan 2024 15:09:33 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id m66-20020a633f45000000b005cdfb0a11e1sm27205pga.88.2024.01.25.15.09.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 15:09:32 -0800 (PST)
+Date: Thu, 25 Jan 2024 15:09:20 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, masahiroy@kernel.org, nicolas@fjasle.eu,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 09/11] fortify: Drop Clang version check for 12.0.1 or
+ newer
+Message-ID: <202401251509.70789B5D@keescook>
+References: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
+ <20240125-bump-min-llvm-ver-to-13-0-1-v1-9-f5ff9bda41c5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,55 +67,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1845612181.12064.1706214056026@jenkins.jenkins>
+In-Reply-To: <20240125-bump-min-llvm-ver-to-13-0-1-v1-9-f5ff9bda41c5@kernel.org>
 
-On Thu, Jan 25, 2024 at 08:20:54PM +0000, ci_notify@linaro.org wrote:
-> Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+On Thu, Jan 25, 2024 at 03:55:15PM -0700, Nathan Chancellor wrote:
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 13.0.1, this condition is always true, as the build
+> will fail during the configuration stage for older LLVM versions. Remove
+> it.
 > 
-> We appreciate that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
-> 
-> We track this report status in https://linaro.atlassian.net/browse/LLVM-1105 , please let us know if you are looking at the problem and/or when you have a fix.
-> 
-> In CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig after:
-> 
->   | commit llvmorg-19-init-59-g90ba33099cbb
->   | Author: Nikita Popov <npopov@redhat.com>
->   | Date:   Wed Jan 24 15:25:29 2024 +0100
->   | 
->   |     [InstCombine] Canonicalize constant GEPs to i8 source element type (#68882)
->   |     
->   |     This patch canonicalizes getelementptr instructions with constant
->   |     indices to use the `i8` source element type. This makes it easier for
->   |     optimizations to recognize that two GEPs are identical, because they
->   |     don't need to see past many different ways to express the same offset.
->   |     
->   | ... 14 lines of the commit log omitted.
-> 
-> Results changed to
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 22291
-> # First few build errors in logs:
-> 
-> # 00:05:24 ./include/linux/fortify-string.h:493:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> # 00:05:25 make[4]: *** [scripts/Makefile.build:243: net/xfrm/xfrm_user.o] Error 1
-> # 00:05:32 make[3]: *** [scripts/Makefile.build:480: net/xfrm] Error 2
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-This one is the new warning tied to the above LLVM change, I filed
-https://github.com/ClangBuiltLinux/linux/issues/1985 for that a little
-bit ago.
+Acked-by: Kees Cook <keescook@chromium.org>
 
-> # 00:15:32 ./include/linux/fortify-string.h:493:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> # 00:15:32 make[5]: *** [scripts/Makefile.build:243: fs/smb/client/cifsencrypt.o] Error 1
-
-This one is https://github.com/ClangBuiltLinux/linux/issues/1966.
-
-Cheers,
-Nathan
+-- 
+Kees Cook
