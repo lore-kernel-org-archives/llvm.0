@@ -1,201 +1,162 @@
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2048.outbound.protection.outlook.com [40.107.102.48])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85592EA9
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 01:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706146171; cv=fail; b=dt+qzJPiskd3S9JRD10+Lbwwjw+JXEdM2XbDDlXlPxO/TsifGSvddfSeYUbbhmtxN1IojOuDzsRY5CXCwA32zgWTEivC9Dtj1MoGarqaTrvitvWq7xlOHcESsKaoSyZtm+xm7JYQu5TknczrZl+C/sbdyNqEfDg1pN/BT2n2WVI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706146171; c=relaxed/simple;
-	bh=YZfJr/cvKl+pZP9NQxSS4hOqBvKwkc7eobsl5vDdDOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=oQmvgvFHdjKtOOgKrb0BiMa5h83pqQ23C+nQRuCjTq4z4z2RQttWIxcUbiqS/u5MjsBcgxv+YGTe3aA1dQJpRdSqGLY5Zwsz9Ga3nopUGDqZ66yNx25jQZvT9yB1E2Cc8ziE9JCa6Ckp+1atumdoPH4fpvOrW8u+b56gDU7E3Yc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NW6Jb9KP; arc=fail smtp.client-ip=40.107.102.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C0A1842;
+	Thu, 25 Jan 2024 02:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706150906; cv=none; b=lVBwUdL9funfF6n/l3/pu39XlplglJDQNX0bUy+YIJkjO2IKmPnnKYpOqcQTEI/RDqddK6wQlOtjf3IRWCKlJhIKqySN6Qz6cAtLOM3IXvj+GIUf1CbjFKoqMfzMQqNPqz4MU9KMDPSJMIc7m6niAzUAxBlgK68Qzulsip3gMoQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706150906; c=relaxed/simple;
+	bh=P8tOXuR1MNz93eFimLGqZBU7GD2HIgXxuTweehk6uFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XcVxY4tFlChjadCmnXFgO5h/MzDsMw50RzGWlcAEI9LR6fWiJCqQbysvkHuJ2EWcFyXufPcYD6mrkNwZvHD24fMm+88CS+lrxFa1Lk/+S8LlKjXzKGxtPKghaDaAkjjNEV660KKUV58t9Wz7YeqLXrzDZaBrnwnsj51fFC9lCwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YVzSgTOj; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NW6Jb9KP"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QhbISzMZRLzDNLl/0qe365uejJxqk5EjGBnYTgj9sbz5YcPyHoom1wE51FmAyKP9RABjVlckre88U84v0PSbUG/Xt90JCniy69sLJnwve+uemo22oghgUqcwQ15obCh4qCMmmNuiXQt4cRYgh4UlvZGwg0eGdCXWnUkvkKMNEIDuToBMNV14tbutavhUztuVX8ycWh8qM9RHMrD5nKU6mDEvKg6QyGAncqJfhW/llV8SKM9A3NC5x583nUXTPkqSZu/SkDa3P+SOa1ywKx+P7ZbcGOhXuy59/txl55EVTTSRYMs5aS3b89XT0CvoXAgqruIdDYCpRr4vJy7nMwwEhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cE1YBXPN/7WwvP6tCmRAYtm0vUxqDOIjpQq/znFtt8Y=;
- b=Ip2Ewfb4MROJwNAsV9EnsSoM7+egyreHD17K41l6mIC8jYzmpSnM8D+Ov08SPzO+/vhsyDh2WecPIphqFkRKOx/nzfO6i+9vSBnPOPOOlwp+Up9K4f6BTUO9OwZ1nRfxmvQ+3TGdOWUBreRoDcMq7Qlt6k/pgMz6VpvECMdkFyx/tln19qiDtheHYMBnDBwmxY2TztJeVYqWnqGpsPtk1zOX49aM0M+UbBpQOxu9bJk5q3Gf2DRsnBee1mnlgdfAXEhwVhWS6uXcokVuR/l8p3FbjJyL4t2Fz1ZUDdeZG5Rd5SGdIYTjGFGT9OaNsc0Tn3JjEYkA5vwY4i4SeC6QFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cE1YBXPN/7WwvP6tCmRAYtm0vUxqDOIjpQq/znFtt8Y=;
- b=NW6Jb9KPN8hfGQr+9SFV3lVgmV7faYEzwoXuyqpmFs/RRvJxJVMKSnoZOgVwE4M/GFl3V1yGxm4qwuQJQ7gxKYNiI40VAwMPX4tirM3VLTdvhyfdDTFR8nV/EuMY9sqlZbWo+iPWWX8vIzZG1XhaO9bgzacOBHor9lwOUijdxR2EMozTpEsvv5nEW2BdQO+m/IWLcmGdNELm7iu9b3POVJigjJGf7EGEH22PQpRAzQEAyVFhnU81KoiAN7I2PXcp+UOlpnb3vh/gpq/KShAPrdm8z/U9hGppV/oEFD97TPjJCMN25DtIoxUy/VbD8JmML9IHEj912noTrp4Y67guxg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ1PR12MB6025.namprd12.prod.outlook.com (2603:10b6:a03:48c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.37; Thu, 25 Jan
- 2024 01:29:26 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7228.022; Thu, 25 Jan 2024
- 01:29:26 +0000
-Date: Wed, 24 Jan 2024 21:29:24 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <20240125012924.GL1455070@nvidia.com>
-References: <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
- <20240117123618.GD734935@nvidia.com>
- <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
- <ZbAj34vdVuMrmdFD@arm.com>
- <20240124012723.GD1455070@nvidia.com>
- <86ede787d7.wl-maz@kernel.org>
- <20240124130638.GE1455070@nvidia.com>
- <86bk9a97rt.wl-maz@kernel.org>
- <20240124155225.GG1455070@nvidia.com>
- <ZbFO6ZXq99AWerlQ@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbFO6ZXq99AWerlQ@arm.com>
-X-ClientProxiedBy: DM6PR06CA0049.namprd06.prod.outlook.com
- (2603:10b6:5:54::26) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVzSgTOj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706150904; x=1737686904;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P8tOXuR1MNz93eFimLGqZBU7GD2HIgXxuTweehk6uFk=;
+  b=YVzSgTOjAUvc03fleIbeNp9dTDJd8KMNDnYT8h9Ti+q9CRBTbQASGUFy
+   1cusksWehY+ma+4NWeqV1HID0V/QhkwI3DPZh4m7C3zn2KnHZNWPIcbY8
+   gFGX/z6QV9uGQIgPPNl/aDhY/LPjuMbszCxryQ9ZxoNqBUcbOIW1BEzTM
+   /XdNZo/vg4J211bQKvkk6/La5cQWgvpayS4jdOC71dsUawbtRF/0wEabP
+   k1CUnuvcwpmZc0w0JsqqzNUpxZu+S03SNk9OW/wRf+ahGZMPWDsHzIiRV
+   AzcS+/T8tbmUr6xVXTPTu3xjnE0z0hTB6NcjRy5KGS/Im7LjMQ2v/XEo7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="15570953"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="15570953"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 18:48:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="905822574"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="905822574"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2024 18:48:20 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rSpmt-0008b5-03;
+	Thu, 25 Jan 2024 02:48:19 +0000
+Date: Thu, 25 Jan 2024 10:47:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org
+Subject: [driver-core:debugfs_cleanup 6/7] drivers/nvmem/core.c:480:8: error:
+ call to undeclared function 'devm_device_add_groups'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202401251023.4INLLZvR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ1PR12MB6025:EE_
-X-MS-Office365-Filtering-Correlation-Id: 11724913-3f89-4f4f-e5c0-08dc1d451128
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	h/JSqE1qVj//x9kqJjFvlXXy+PvIRfuX+C1z3M3rEfNPRphG2PdsJKyxpoU0sES71gNllnpy+C9hxb9wR3Ftvbj70Y1yoDAkYFPCszezr5zzHDKH+0aTO/CvJRo8ztbjhUJI9gh5yrNaPFx80xzmF3v/G6KFtTulW/K64/jar01b4ZgEAG3wh6R3V376lKhvCjb+e6SMUwbN8jPfPtHkvQFsk5nxEEHPY6JFdTSR6iojmaei1eaoeAvRBd5YPMMoHuseq2SxBZfpCDndntu+iXaDstp414EMUcQ1aHDQdlRnvb4tUE6lcm7GQKAfVhFL49M9VUF8SgTgm32QJeHki+Vo9H+Jj7Zcfibcr5i2YVBtUJv3jg+htv4BpO51Z2oTkm6OETWjViU3TNo4qrBLfWIRo1gSKru9UuULoUubvf6pVVkANm8U/gZRjANTPSkeRkvGuNEGQAxijwmrits0ELg+DU+EevRduBtPvBWpoYkoXpI9/7qXLlgdqC1wZZGxYts2rxakdRLxBQO310XqcxUuSNSnKVhHFFBiW0ABGmkOkkkCRWAvMgty2G7rhNSV
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(136003)(396003)(376002)(39860400002)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(36756003)(83380400001)(41300700001)(26005)(2616005)(478600001)(6512007)(1076003)(6486002)(6506007)(38100700002)(4326008)(5660300002)(7416002)(8936002)(6916009)(66946007)(66556008)(316002)(2906002)(54906003)(66476007)(33656002)(8676002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?28ombjVa4mGa2c9QXo2kIQf/2/Nnw9jj7Cb2DMdPpEVkwYkWobFJvzVdc639?=
- =?us-ascii?Q?8cSSniU75fABxJU6eXMjR3306CiIO34iX6zmM3FrTNnjR4Leu3COK8dQpiWl?=
- =?us-ascii?Q?UWn3ZW5R9LzNNOI9gnGPubZnlOx5WyF+qDq/x8t3UwXc8XXYiJMhGyV6+prC?=
- =?us-ascii?Q?oxU+Tu46xmyxI6qDDDctIe83t6iRYnwRA2c/tL+Sz1IuYi/7rxH/3oTMxU8d?=
- =?us-ascii?Q?rkgZEWLMWjSoZrijBs4qGMKjC093eKFmJLtqfdyC4dFj74XloHhv3sOaaxqO?=
- =?us-ascii?Q?wHahTfYiolTDcXoLzXojANDNHzLUJAiUwYXJjfphrI8+LDLA2lkX63gVqDvD?=
- =?us-ascii?Q?l7guKZAmByAttgWhUuWWFbKdgTYDiWhWZgN8ZH166gGc4fcy6TkvhKMnLUwc?=
- =?us-ascii?Q?y3rxx/hhcVRi9DW987iARY7rPGvm+oh4uSUdOSCyqE0AjaBZ9ynGL9DVaXxV?=
- =?us-ascii?Q?RTJUp6boDcEP/U1MvCJ566Te+RsgEbeqDWyWuvBr3Vuv5p/1iW3SrKM2mBo4?=
- =?us-ascii?Q?SRmykyhAufE18Nu5+pzUCLor/7uvW77frY1g1AcZCogOq69XortK98e40aUD?=
- =?us-ascii?Q?ePRxEegnGwA3o5brR/0y4Cfrui2Jb22bgGjmnomoRTwtQHW4xj+bab4IN1W4?=
- =?us-ascii?Q?N2SWxVPbd3KxZUN1xfsSZ+pAcEjsx6bLmK2HDsN/9k1GY40la9TTaywY5jEM?=
- =?us-ascii?Q?vZMZvqNKzCMdjhXsKoSY7WgkF0jy8cEqJjGtHzSIlA73VH33aWucoO+QcVph?=
- =?us-ascii?Q?kXPeEXFDkisA+EWB5RCbPYOPITNQ20OjJPmZzK8qNBRpA4s8+wt6pYw7wX+D?=
- =?us-ascii?Q?dBlYnJm1Xqll/Vjq+0zcpZXBLFJWr61w/iMHiC/UEBs3gJEYKEcPsGHCEt61?=
- =?us-ascii?Q?a+NoqqIulOIeHEMW4qqifd2jp0/v8nbrhb8APgQd+ro0K7BxfT7U+8mGqZvc?=
- =?us-ascii?Q?NBhf0crl0ibU83nHV3EoOoaJhdoFjxsQC6O4FOHQuEF49C/WtPml22N1AyPx?=
- =?us-ascii?Q?x+6dd91a9iTUQ78ZdfXsBi0MqGp18/ROhcXZNz8uYHO/cMjlCnUYo2mqYeit?=
- =?us-ascii?Q?BwRCBgvAZWe9MZ0tr1nW42/Mddc8Rw0ojeblrgxIkzgDrcjEDJ5exOJUat0G?=
- =?us-ascii?Q?6Zet0V6OjgiU9a3gk2G4IZQkyXtj6IWfqrefhS7vA9VCHmUzAHakj5q7lQjt?=
- =?us-ascii?Q?lBFT+W0I0W4KFrSSdvRjqbOXUM5hBpABzsyEJKAgjKJL5SQGCQ7GtHRBUWnM?=
- =?us-ascii?Q?ccanI1anScQPf3ijnsM+lE96CJpUWQWUZia2edwyMDG+ISaufEMWeMZnZhAv?=
- =?us-ascii?Q?yp6Pbvvnfeq4Owo8GDAm8x71ROyw9MtIyAxcdfZY7mXEjUBdxVUmbjIXGyTl?=
- =?us-ascii?Q?6QxkAGteA/BTGiTlxcO6ERihevXz+3FDJvKGoioFW4igwgFyCvzhhKaihDJG?=
- =?us-ascii?Q?y4S7irT6YnfdGKlkpYAt5PyTrQUlm2kaXJCcozdUuA5v7r3qlMcQKoSgI5xQ?=
- =?us-ascii?Q?DHMcvpnzK2D4gua42o6DxBAH/sBcV84nsDZeAVXXDC4XRhd/Kx3sFl1fH5fW?=
- =?us-ascii?Q?Mfm0tx/fr9qha1J1s2KWf2btr1Q46CjkQ+VYIjEf?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11724913-3f89-4f4f-e5c0-08dc1d451128
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2024 01:29:25.9340
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qPysawn3Mid+rqBK2jYrxisJQnNKJiKLcMn5IJASQ25mU2cjcAED7iWqFhE9GGGp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6025
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jan 24, 2024 at 05:54:49PM +0000, Catalin Marinas wrote:
-> On Wed, Jan 24, 2024 at 11:52:25AM -0400, Jason Gunthorpe wrote:
-> > On Wed, Jan 24, 2024 at 01:32:22PM +0000, Marc Zyngier wrote:
-> > > What I'm saying is that there are way to make it better without
-> > > breaking your particular toy workload which, as important as it may be
-> > > to *you*, doesn't cover everybody's use case.
-> > 
-> > Please, do we need the "toy" stuff? The industry is spending 10's of
-> > billions of dollars right now to run "my workload". Currently not
-> > widely on ARM servers, but we are all hoping ARM can succeed here,
-> > right?
-> > 
-> > I still don't know what you mean by "better". There are several issues
-> > now
-> > 
-> > 1) This series, where WC doesn't trigger on new cores. Maybe 8x STR
-> >    will fix it, but it is not better performance wise than 4x STP.
-> 
-> It would be good to know. If the performance difference is significant,
-> we can revisit. I'm not keen on using alternatives here without backing
-> it up by numbers (do we even have a way to detect whether Linux is
-> running natively or not? we may have to invent something).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git debugfs_cleanup
+head:   dfca47ec5332bac3ee306ae2ba95a89765a801b7
+commit: 2f0ece8a0f81650915d6252d146d32fe8162f112 [6/7] driver core: remove devm_device_add_groups()
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240125/202401251023.4INLLZvR-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240125/202401251023.4INLLZvR-lkp@intel.com/reproduce)
 
-I don't have a setup to measure performance, mlx5 is not using it in a
-performance path. The other drivers in the tree are. I feel bad about
-hobbling them.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401251023.4INLLZvR-lkp@intel.com/
 
-> > 2) Userspace does ST4 to MMIO memory, and the VMM can't explode
-> >    because of this. Replacing the ST4 with 8x STR is NOT better,
-> >    that would be a big performance downside, especially for the
-> >    quirky hi-silicon hardware.
-> 
-> I was hoping KVM injects an error into the guest rather than killing it
-> but at a quick look I couldn't find it. The kvm_handle_guest_abort() ->
-> io_mem_abort() ends up returning -ENOSYS while handle_trap_exceptions()
-> only understands handled or not (like 1 or 0). Well, maybe I didn't look
-> deep enough.
+All errors (new ones prefixed by >>):
 
-It looks to me like qemu turns on the KVM_CAP_ARM_NISV_TO_USER and
-then when it gets a NISV it always converts it to a data abort to the
-guest. See kvm_arm_handle_dabt_nisv() in qemu. So it is just a
-correctness issue, not a 'VM userspace can crash the VMM' security
-problem.
+>> drivers/nvmem/core.c:480:8: error: call to undeclared function 'devm_device_add_groups'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     480 |         ret = devm_device_add_groups(&nvmem->dev, nvmem_cells_groups);
+         |               ^
+   drivers/nvmem/core.c:480:8: note: did you mean 'devm_device_add_group'?
+   include/linux/device.h:1204:18: note: 'devm_device_add_group' declared here
+    1204 | int __must_check devm_device_add_group(struct device *dev,
+         |                  ^
+   1 error generated.
 
-The reason we've never seen this fault in any of our testing is
-because the whole system is designed to have qemu back vMMIO space
-that is under hot path use by only a VFIO memslot. ie it never drops
-the memslot and forces emulation. (KVM has no issue to handle a S2
-abort if a memslot is present, obviously)
 
-VFIO IO emulation is used to cover corner cases and establish a slow
-technical correctness. It is not fast path. Avoid this if you want any
-sort of performance.
+vim +/devm_device_add_groups +480 drivers/nvmem/core.c
 
-Thus, IMHO, doing IO emulation for VFIO that doesn't support all the
-instructions actual existing SW uses to do IO is hard to justify. We
-are already on a slow path that only exists for technical correctness,
-it should be perfect. It is perfect on x86 because x86 KVM does SW
-instruction decode and emulation. ARM could too, but doesn't.
+84400305271937 Srinivas Kandagatla 2020-03-25  429  
+0331c611949fff Miquel Raynal       2023-12-15  430  static int nvmem_populate_sysfs_cells(struct nvmem_device *nvmem)
+0331c611949fff Miquel Raynal       2023-12-15  431  {
+0331c611949fff Miquel Raynal       2023-12-15  432  	struct bin_attribute **cells_attrs, *attrs;
+0331c611949fff Miquel Raynal       2023-12-15  433  	struct nvmem_cell_entry *entry;
+0331c611949fff Miquel Raynal       2023-12-15  434  	unsigned int ncells = 0, i = 0;
+0331c611949fff Miquel Raynal       2023-12-15  435  	int ret = 0;
+0331c611949fff Miquel Raynal       2023-12-15  436  
+0331c611949fff Miquel Raynal       2023-12-15  437  	mutex_lock(&nvmem_mutex);
+0331c611949fff Miquel Raynal       2023-12-15  438  
+0331c611949fff Miquel Raynal       2023-12-15  439  	if (list_empty(&nvmem->cells) || nvmem->sysfs_cells_populated) {
+0331c611949fff Miquel Raynal       2023-12-15  440  		nvmem_cells_group.bin_attrs = NULL;
+0331c611949fff Miquel Raynal       2023-12-15  441  		goto unlock_mutex;
+0331c611949fff Miquel Raynal       2023-12-15  442  	}
+0331c611949fff Miquel Raynal       2023-12-15  443  
+0331c611949fff Miquel Raynal       2023-12-15  444  	/* Allocate an array of attributes with a sentinel */
+0331c611949fff Miquel Raynal       2023-12-15  445  	ncells = list_count_nodes(&nvmem->cells);
+0331c611949fff Miquel Raynal       2023-12-15  446  	cells_attrs = devm_kcalloc(&nvmem->dev, ncells + 1,
+0331c611949fff Miquel Raynal       2023-12-15  447  				   sizeof(struct bin_attribute *), GFP_KERNEL);
+0331c611949fff Miquel Raynal       2023-12-15  448  	if (!cells_attrs) {
+0331c611949fff Miquel Raynal       2023-12-15  449  		ret = -ENOMEM;
+0331c611949fff Miquel Raynal       2023-12-15  450  		goto unlock_mutex;
+0331c611949fff Miquel Raynal       2023-12-15  451  	}
+0331c611949fff Miquel Raynal       2023-12-15  452  
+0331c611949fff Miquel Raynal       2023-12-15  453  	attrs = devm_kcalloc(&nvmem->dev, ncells, sizeof(struct bin_attribute), GFP_KERNEL);
+0331c611949fff Miquel Raynal       2023-12-15  454  	if (!attrs) {
+0331c611949fff Miquel Raynal       2023-12-15  455  		ret = -ENOMEM;
+0331c611949fff Miquel Raynal       2023-12-15  456  		goto unlock_mutex;
+0331c611949fff Miquel Raynal       2023-12-15  457  	}
+0331c611949fff Miquel Raynal       2023-12-15  458  
+0331c611949fff Miquel Raynal       2023-12-15  459  	/* Initialize each attribute to take the name and size of the cell */
+0331c611949fff Miquel Raynal       2023-12-15  460  	list_for_each_entry(entry, &nvmem->cells, node) {
+0331c611949fff Miquel Raynal       2023-12-15  461  		sysfs_bin_attr_init(&attrs[i]);
+0331c611949fff Miquel Raynal       2023-12-15  462  		attrs[i].attr.name = devm_kasprintf(&nvmem->dev, GFP_KERNEL,
+0331c611949fff Miquel Raynal       2023-12-15  463  						    "%s@%x", entry->name,
+0331c611949fff Miquel Raynal       2023-12-15  464  						    entry->offset);
+0331c611949fff Miquel Raynal       2023-12-15  465  		attrs[i].attr.mode = 0444;
+0331c611949fff Miquel Raynal       2023-12-15  466  		attrs[i].size = entry->bytes;
+0331c611949fff Miquel Raynal       2023-12-15  467  		attrs[i].read = &nvmem_cell_attr_read;
+0331c611949fff Miquel Raynal       2023-12-15  468  		attrs[i].private = entry;
+0331c611949fff Miquel Raynal       2023-12-15  469  		if (!attrs[i].attr.name) {
+0331c611949fff Miquel Raynal       2023-12-15  470  			ret = -ENOMEM;
+0331c611949fff Miquel Raynal       2023-12-15  471  			goto unlock_mutex;
+0331c611949fff Miquel Raynal       2023-12-15  472  		}
+0331c611949fff Miquel Raynal       2023-12-15  473  
+0331c611949fff Miquel Raynal       2023-12-15  474  		cells_attrs[i] = &attrs[i];
+0331c611949fff Miquel Raynal       2023-12-15  475  		i++;
+0331c611949fff Miquel Raynal       2023-12-15  476  	}
+0331c611949fff Miquel Raynal       2023-12-15  477  
+0331c611949fff Miquel Raynal       2023-12-15  478  	nvmem_cells_group.bin_attrs = cells_attrs;
+0331c611949fff Miquel Raynal       2023-12-15  479  
+0331c611949fff Miquel Raynal       2023-12-15 @480  	ret = devm_device_add_groups(&nvmem->dev, nvmem_cells_groups);
+0331c611949fff Miquel Raynal       2023-12-15  481  	if (ret)
+0331c611949fff Miquel Raynal       2023-12-15  482  		goto unlock_mutex;
+0331c611949fff Miquel Raynal       2023-12-15  483  
+0331c611949fff Miquel Raynal       2023-12-15  484  	nvmem->sysfs_cells_populated = true;
+0331c611949fff Miquel Raynal       2023-12-15  485  
+0331c611949fff Miquel Raynal       2023-12-15  486  unlock_mutex:
+0331c611949fff Miquel Raynal       2023-12-15  487  	mutex_unlock(&nvmem_mutex);
+0331c611949fff Miquel Raynal       2023-12-15  488  
+0331c611949fff Miquel Raynal       2023-12-15  489  	return ret;
+0331c611949fff Miquel Raynal       2023-12-15  490  }
+0331c611949fff Miquel Raynal       2023-12-15  491  
 
-To put it in a practical example, I predict that if someone steps
-outside our "engineered" box and runs a 64k page size hypervisor
-kernel with a mlx5 device that is not engineered for 64K page size
-they will get a MMIO BAR layout where the 64k page that covers the MSI
-items will overlap with hot path addresses. The existing user space
-stack could issue ST4's to hot path addresses within that emulated 64k
-of vMMIO and explode. 4k page size hypervisors avoid this because the
-typical mlx5 device has a BAR layout with a 4k granule in mind.
+:::::: The code at line 480 was first introduced by commit
+:::::: 0331c611949fffdf486652450901a4dc52bc5cca nvmem: core: Expose cells through sysfs
 
-Jason
+:::::: TO: Miquel Raynal <miquel.raynal@bootlin.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
