@@ -1,53 +1,53 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6D44F8B7
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF46A2C870
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706182378; cv=none; b=iJU+Qa81iixP9UmfLjHJdEHwESPymskhP/2QPkxekYNEUy7nolRGE8Y1vRe26G/da0ujN3zqd2xEA9ws/yt2Wwnz3OiYwa5vEi7jTH8Ewn8gMSzPNHpBAp7ertoJtzGCOrEafRuoD+fWWQdkjiK1uAX78R/zrOyzFp0NNRkuDPQ=
+	t=1706182381; cv=none; b=mG0HPgNT9vXDs5CZdE8aMyzeDZPHFWPWFtFne0gY4zvrbJWECyXc4rBXv3DZ3qKrJ/fvVpqevBVgIdCXAzWnWoapgj65Gt/YsCs48KW7eLSjlEsAfkTibuBq8spP9ozpXnjym5lhnpyrZkdUx0PUqj7dVoeAg7c4gKl+FHDraJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706182378; c=relaxed/simple;
-	bh=41EXYz3mcc8Vxgzcxev3T2T3Rr4GLVQmC/0jE8NwM34=;
+	s=arc-20240116; t=1706182381; c=relaxed/simple;
+	bh=BHUup4Ao15H5a0x4s+HXfGoWgWU/14gkkZKIK0ZXAdk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PRyfrvPSqZ46dl/jxXFlCl9hQ03dpUFN0pJQWRv7PP9C+iPrLivCOlnHqMhtC0bBEkNUDpqhPbPXoDASPY6K86kZK5kykSfVSD0+ITic+5onsFvZ9EVbfYzTKxlUiAmdRVC0c07eyX9YoNVWCvSvvk6e6N+syOQhjVWHdCY4L7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=miAsxHCR; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=nUsx6l+sjizG0mDqEoNPZHxlAPrimOxm6tM/XbXjM8DkacAfIJpDkieiFy0wcoOvBQe7bc7M90QW6EUadz7Hw3U3TcTOw6KAcC29DlsPYPkkIl6lKkUp6hCRcLQIhIXsOO4OO4pJakYCDQ9EMASHWc1oNAS3HBICxmT72kAl8jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yaxhLAsd; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="miAsxHCR"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc374283d67so5147435276.3
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:32:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yaxhLAsd"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-40e5317c7a5so49447845e9.0
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:32:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706182376; x=1706787176; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706182378; x=1706787178; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSEZZ/0t08iakeLHf9HEgGlamVuM6vmU/omnMXoH+gg=;
-        b=miAsxHCRLdoQHthVYlXgB4IP7Wj9su4bMpirD730N1D2RpMi6wcOl7CuPuk/EzxBKI
-         s7XmNv6PjxcmKAkrDnOJRHmI/YCHol1LWncO7eQTJ+Dcbjd7uiThteCoiSCmyC02zSmW
-         pqvEMD9MgVVYES5m6lpsSOgQxnB5OZEWJpDft0zT0JE0CTwBmmi7Vpm80InwsEdswGkz
-         x66CnLom3bC5gcKOL85oOawMkhUBsmPobSkjTtdPsRIojQCIBQOCTeQcbNPHzB6HDX0o
-         XK4UsicyibJhxTmHPV1831BknIw6gh72dTzvaAuceU4OV0UyhrgQuCC+s7VcZPUm47ns
-         aYOA==
+        bh=usiDcusxejCbluC36Vpk0on80rVNZ7Itzv8e5WwmSQI=;
+        b=yaxhLAsd69g1acz8sgKLf6SaelJ5uFOi20cGeJefPzuWWypMY9Dy2ThgobA4/MMDAR
+         G/w1gBzxlv52ERw94OpmE4ZwDdlTI+u7TDKzjF8ej7hv5uIRNszATqSxoqmAY9ucquSE
+         hW+qnsWFDLUTp7+9Hh4k00LyAtThuoebykm9JD4Ey6wH9YCoz5gV/W23+feiJRAABix4
+         fV1V4rrfwmd8M1UJ4pTyhAIBa4B2Zll1pE5S5oVN+sIq/letCE/HGGqtqNVuPEmztk3V
+         lHcqXyGIVQg2HgLuJnoBvNouUlpJ/vhMaI0sermog/+RIIrqLHLQiwtxQ9BQluoI6nTf
+         TQzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706182376; x=1706787176;
+        d=1e100.net; s=20230601; t=1706182378; x=1706787178;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSEZZ/0t08iakeLHf9HEgGlamVuM6vmU/omnMXoH+gg=;
-        b=OduJfOK7N+cU7APLXqrTel2ol0HtFoPUOrYUZ+y/Oh9IHzh+XH2Z2QRpdzK7E1mwWf
-         OGaj26mqgPSPCZCiTSyqkmX4vc7kh8aXBdK7hQHZpODFVIPOs3gQbS3UbS9cZDH4CHh/
-         OjdPpGfPBUWhkT7SVYcUlwFdUm71IkQodmBNf1sAdrrmraf9izO9Ut/5Xk+nc70dWZZ9
-         puPK4MSPHVVR0Fv4bo8gWtCCmZ2Bs39WdQpFxispl0mH9cfTkIhAVKp7qQdPWo40KXyM
-         UnmMEHAxgySjXjCDExNiMSwj4ZGcjPXAZxxI3wfeKwrrtAR3XPdvuSUG3K2E93rqYh0k
-         8VJQ==
-X-Gm-Message-State: AOJu0YxQI+aSO3OhnxqAKzdmXIf18k0OfRaEs6X0yB9e1YpsJb14wg7Y
-	hHLeilxHQCMh1WbUJXGXIqH/Mp3WufiV7RcA+lCy6f0VU65HSjdta2J/u/rl7X2fP96orw==
-X-Google-Smtp-Source: AGHT+IG6j5stYS4q8sJ3wfMC0gMeDb6MvTSx5RF0yUkFip+ir4SyA6vV6wCd3hBGjIdbMiFtXSaTmTqM
+        bh=usiDcusxejCbluC36Vpk0on80rVNZ7Itzv8e5WwmSQI=;
+        b=R930Pqfd8ULzz0aOKePgVQKatgzEyALepzaGbBb706souruROTY4RErYUy4hk/Oiol
+         hTqyUsW9WDmjvZW/i/UqRrwHrybd+3lsR8buZSldKo2y/ZuleCXpQW2Hwt1Rszq9Y1/8
+         ieH0ausnlbln+8x312wVccPsDpYOhs2A7ybqHrVENymKUYaY/PGs/2Tlvt+AzPOj1NKD
+         FCI79M8AFB4hlbVfFaICFUZ/Gl2cnrMa31B4llejhqPrVHYCAIfCzlFXl+W+SwEhYDQt
+         fFJVu7iq57ulsVy2l8ckiq0gGdk0Q/o3Ry5V5nlcFp625uCMOW3EVmUsSB1Uy5/G/UJC
+         Gjmw==
+X-Gm-Message-State: AOJu0YwX6Y1fc03pXhJFhz6KwZlwYZGG545BdRzFZHHuFSNjDcNug0zp
+	q5uf2TfN7xGYTCFWmOh0bxKUmCQSOvJzLfliEgNBuOK14OSlIVToCZ8FcVb2QcakGA3rwg==
+X-Google-Smtp-Source: AGHT+IGsV107+K7TOxmwkTUoUOuVj5/vzxbnMAjH8LA17Jnnycz0y2KEShse2Cd6EBIE1k2lRzS3OPhs
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a25:8109:0:b0:dc6:2054:fc89 with SMTP id
- o9-20020a258109000000b00dc62054fc89mr414899ybk.0.1706182375798; Thu, 25 Jan
- 2024 03:32:55 -0800 (PST)
-Date: Thu, 25 Jan 2024 12:28:27 +0100
+ (user=ardb job=sendgmr) by 2002:a05:600c:1e1c:b0:40e:d2b5:f9c8 with SMTP id
+ ay28-20020a05600c1e1c00b0040ed2b5f9c8mr10496wmb.2.1706182377907; Thu, 25 Jan
+ 2024 03:32:57 -0800 (PST)
+Date: Thu, 25 Jan 2024 12:28:28 +0100
 In-Reply-To: <20240125112818.2016733-19-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,15 +57,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240125112818.2016733-19-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4814; i=ardb@kernel.org;
- h=from:subject; bh=0AOJ+7yJMsTHEXzL59P9/MB+D3g7SPvsSd6W4QSdt0M=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT67MQxsNb1ovWb7mSqJZ/WSa+7OSkT4dXRPoecD6f1
- L31yWTZjlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRWzsYGb5Hrwr9yGUna5jX
- eeYPq01uI+MhQ/EPm7SE/nF9ucPfbMHIcOqFglAV+8ky/etHlfnvzAu56+T1Qk69aEvZj5WZ+xe vZQYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1335; i=ardb@kernel.org;
+ h=from:subject; bh=+Hn8XwOONyFACfVl0+TV+ToDQrCQwdquUdW+H4YgWKM=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT68tdC0+Wx7q93Op2UuuemL2I66Gngl4O3H+7Ly35/
+ Kpcsku8o5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAExE+z4jwyFGw42c5z81zN/r
+ MM1w9uVn5tMD5VhYn2RUh1t9nJx6ag4jw4GL548zXrGP75w8r+pPiuyaa+HcfdeX9M3nENW5KuM UxwMA
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240125112818.2016733-27-ardb+git@google.com>
-Subject: [PATCH v2 08/17] asm-generic: Add special .pi.text section for
- position independent code
+Message-ID: <20240125112818.2016733-28-ardb+git@google.com>
+Subject: [PATCH v2 09/17] x86: Move return_thunk to __pitext section
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -79,132 +78,43 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Add a special .pi.text section that architectures will use to carry code
-that can be called while the kernel is executing from a different
-virtual address than its link time address. This is typically needed by
-very early boot code that executes from a 1:1 mapping, and may need to
-call into other code to perform preparatory tasks that must be completed
-before switching to the kernel's ordinary virtual mapping.
-
-Note that this implies that the code in question cannot generally be
-instrumented safely, and so the contents are combined with the existing
-.noinstr.text section, making .pi.text a proper subset of the former.
+The x86 return thunk will function correctly even when it is called via
+a different virtual mapping than the one it was linked at, so it can
+safely be moved to .pi.text. This allows other code in that section to
+call it.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- include/asm-generic/vmlinux.lds.h |  3 +++
- include/linux/init.h              | 12 +++++++++
- scripts/mod/modpost.c             |  5 +++-
- tools/objtool/check.c             | 26 ++++++++------------
- 4 files changed, 29 insertions(+), 17 deletions(-)
+ arch/x86/kernel/vmlinux.lds.S | 2 +-
+ arch/x86/lib/retpoline.S      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 5dd3a61d673d..70c9767cac5a 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -553,6 +553,9 @@
- 		__cpuidle_text_start = .;				\
- 		*(.cpuidle.text)					\
- 		__cpuidle_text_end = .;					\
-+		__pi_text_start = .;					\
-+		*(.pi.text)						\
-+		__pi_text_end = .;					\
- 		__noinstr_text_end = .;
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index a349dbfc6d5a..77262e804250 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -134,7 +134,7 @@ SECTIONS
+ 		SOFTIRQENTRY_TEXT
+ #ifdef CONFIG_RETPOLINE
+ 		*(.text..__x86.indirect_thunk)
+-		*(.text..__x86.return_thunk)
++		*(.pi.text..__x86.return_thunk)
+ #endif
+ 		STATIC_CALL_TEXT
  
- /*
-diff --git a/include/linux/init.h b/include/linux/init.h
-index 3fa3f6241350..214f6315aaec 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -55,6 +55,17 @@
- #define __exitdata	__section(".exit.data")
- #define __exit_call	__used __section(".exitcall.exit")
+diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
+index 7b2589877d06..003b35445bbb 100644
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -136,7 +136,7 @@ SYM_CODE_END(__x86_indirect_jump_thunk_array)
+  * relocations for same-section JMPs and that breaks the returns
+  * detection logic in apply_returns() and in objtool.
+  */
+-	.section .text..__x86.return_thunk
++	.section .pi.text..__x86.return_thunk, "ax"
  
-+/*
-+ * __pitext should be used to mark code that can execute correctly from a
-+ * different virtual offset than the kernel was linked at. This is used for
-+ * code that is called extremely early during boot.
-+ *
-+ * Note that this is incompatible with KAsan, which applies an affine
-+ * translation to the virtual address to obtain the shadow address which is
-+ * strictly tied to the kernel's virtual address space.
-+ */
-+#define __pitext	__section(".pi.text") __no_sanitize_address
-+
- /*
-  * modpost check for section mismatches during the kernel build.
-  * A section mismatch happens when there are references from a
-@@ -92,6 +103,7 @@
+ #ifdef CONFIG_CPU_SRSO
  
- /* For assembly routines */
- #define __HEAD		.section	".head.text","ax"
-+#define __PITEXT	.section	".pi.text","ax"
- #define __INIT		.section	".init.text","ax"
- #define __FINIT		.previous
- 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 795b21154446..962d00df47ab 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -813,9 +813,12 @@ static void check_section(const char *modname, struct elf_info *elf,
- 
- #define INIT_SECTIONS      ".init.*"
- 
--#define ALL_TEXT_SECTIONS  ".init.text", ".meminit.text", ".exit.text", \
-+#define ALL_PI_TEXT_SECTIONS  ".pi.text", ".pi.text.*"
-+#define ALL_NON_PI_TEXT_SECTIONS  ".init.text", ".meminit.text", ".exit.text", \
- 		TEXT_SECTIONS, OTHER_TEXT_SECTIONS
- 
-+#define ALL_TEXT_SECTIONS  ALL_NON_PI_TEXT_SECTIONS, ALL_PI_TEXT_SECTIONS
-+
- enum mismatch {
- 	TEXTDATA_TO_ANY_INIT_EXIT,
- 	XXXINIT_TO_SOME_INIT,
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 548ec3cd7c00..af8f23a96037 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -389,6 +389,7 @@ static int decode_instructions(struct objtool_file *file)
- 		if (!strcmp(sec->name, ".noinstr.text") ||
- 		    !strcmp(sec->name, ".entry.text") ||
- 		    !strcmp(sec->name, ".cpuidle.text") ||
-+		    !strncmp(sec->name, ".pi.text", 8) ||
- 		    !strncmp(sec->name, ".text..__x86.", 13))
- 			sec->noinstr = true;
- 
-@@ -4234,23 +4235,16 @@ static int validate_noinstr_sections(struct objtool_file *file)
- {
- 	struct section *sec;
- 	int warnings = 0;
-+	static char const *noinstr_sections[] = {
-+		".noinstr.text", ".entry.text", ".cpuidle.text", ".pi.text",
-+	};
- 
--	sec = find_section_by_name(file->elf, ".noinstr.text");
--	if (sec) {
--		warnings += validate_section(file, sec);
--		warnings += validate_unwind_hints(file, sec);
--	}
--
--	sec = find_section_by_name(file->elf, ".entry.text");
--	if (sec) {
--		warnings += validate_section(file, sec);
--		warnings += validate_unwind_hints(file, sec);
--	}
--
--	sec = find_section_by_name(file->elf, ".cpuidle.text");
--	if (sec) {
--		warnings += validate_section(file, sec);
--		warnings += validate_unwind_hints(file, sec);
-+	for (int i = 0; i < ARRAY_SIZE(noinstr_sections); i++) {
-+		sec = find_section_by_name(file->elf, noinstr_sections[i]);
-+		if (sec) {
-+			warnings += validate_section(file, sec);
-+			warnings += validate_unwind_hints(file, sec);
-+		}
- 	}
- 
- 	return warnings;
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
