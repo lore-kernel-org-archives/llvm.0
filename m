@@ -1,166 +1,303 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9356F57328
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 13:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFC160246;
+	Thu, 25 Jan 2024 13:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706190374; cv=none; b=QruronxoZwnKVfJBGxUqs7Ap5qDstYM4SU1PX9KivyyeBOy5DxIxW/jnL9HO68CuGI3wzTxgC/G6IqTtMbnWE2Ko4xz0a2MpTApp7OBGUZVqdJtY2CcoAperIgcj7SAqtaXVJupSGrSdNDZTlgvOwbrS8APhrRQ26nvH0DM68MI=
+	t=1706191017; cv=none; b=KgVMzoiUJyyFc8C7RrsQpn5U3Scg/u8U6slY+h3OeiLSzqP2WBc0qdUH1fRcvtkw6pXjNtsBGZEhupHbFuhJnSxbgDrJh3U/sLh0OBJLVW6FVevzs08e1seO5dwkIzeskzj8KcGLqVo80ZrHAJffDpr60BUzQQFIN9lTB/4aRn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706190374; c=relaxed/simple;
-	bh=QkGYH2ypWOTDiq5BbVC5hKUniLV64BDsYDuZSL4c+Ek=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rGLisyoPUfamuPJjbJTEwZFFCw5KJpb7jYOe0AA3xpDxstqPAr9PdVLaXvv/X1/tBZd5CkvYJEYLdHohl7jwiuf1i3gxkA/YQ4mmHbt61fgVURTORPhSZgHpJ5ZS7ElnUNY2GFeKfeKh541Dloeuk/6lqR+vQy1nkVeXvFVdx8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=orCz+Hii; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1706191017; c=relaxed/simple;
+	bh=U4OzUPun/N8fn0WP6e9y9zJc9JiMcuGtvv6lUI/mDnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GDhAsUs4IcnFCXmbvrdx7EJZRwlRJF6eXHaYoht+KmH9cjEUugiK8dcq0smKETyq38Xp5kVz0HVTpNzo9qfKL5I4hISXDjpWimeLTR5Sj0SCSx1mwwyILBO0Xkw1bFSiO8NoxGycR1fn4RixWPJ/msQJB3lXiizwDDkVAyUhvU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J4nCIozA; arc=none smtp.client-ip=192.55.52.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="orCz+Hii"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J4nCIozA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1706190372; x=1737726372;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706191015; x=1737727015;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QkGYH2ypWOTDiq5BbVC5hKUniLV64BDsYDuZSL4c+Ek=;
-  b=orCz+HiiQp/tfRwDA4AgKVTsDixe37pm18Tgv+OkbKj4Qjx+P+qRnR6E
-   5IjfilFA1gC+KYrluSL1jfrl+/eGEmB5dUBxVPi8xGkzFMCTbsLSoYZxk
-   0uL4J2sfY5dk9YinvaKvNNSst4HKUcVPgVR4I0cYw3mPLTz77VonnQIIl
-   q/XTfd7UYmHSO//K1mrjW2QGjndEEgaLPsHucwOl10YM7XokQF5qtYEDb
-   kyCdnZZNfskbAWfgc1VrExY5n60fFNym0pmjb+2UfA++5KXHeCCU5p/hI
-   OEecHE8gON0ShOAbHzoYtQreFvSZOEyPZOQCwxTTjpMfNpNXYslPiE2fQ
-   A==;
-X-CSE-ConnectionGUID: m+PhERqEQH65VJ/qKW5gkQ==
-X-CSE-MsgGUID: fy6M6828T9yyNgsJcQ4UyQ==
-X-IronPort-AV: E=Sophos;i="6.05,216,1701154800"; 
-   d="asc'?scan'208";a="15287685"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jan 2024 06:46:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 25 Jan 2024 06:45:46 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 25 Jan 2024 06:45:42 -0700
-Date: Thu, 25 Jan 2024 13:45:05 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC: Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>, Miguel
- Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida
- Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
-	<gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
-	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Matthew Maurer <mmaurer@google.com>, Ramon de C Valle
-	<rcvalle@google.com>, Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-Message-ID: <20240125-lazy-thrower-744aacc6632a@wendy>
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
- <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
- <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
- <20240117-swiftly-parasail-618d62972d6e@spud>
- <CANiq72mVKCOAuK4Qe+8AHmpkFwyJsVfx8AqB7ccGi3DYpSSWcw@mail.gmail.com>
- <20240118-implode-delirium-eefdd86e170e@spud>
- <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
- <20240125-bucked-payroll-47f82077b262@wendy>
- <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
+  bh=U4OzUPun/N8fn0WP6e9y9zJc9JiMcuGtvv6lUI/mDnY=;
+  b=J4nCIozAqgWpm8XfQY6z3CSygAUI1dfSlb33hOvmALjPWK7mj6KInbqD
+   dWkKSbjbko+sIVK4s5drk1e+jtuEdsPQcU2H86NC1UVofYajb1+gX51Ul
+   IwXA1oJrjK8/E4o2zvxnY1oLVmzNl92WgJVDD1+vkGm5UYjQmBms2+XCW
+   rlubZ8DxUaylgI9RqcGPLkDWY9pTQARclAKkkufHiHJP8Kh+QZ/yQ8nxZ
+   ZO6DNv4xqWynq92ZRf74ksoe0SdJ9nJKyTpyBxf+Njqi5sYcB/jus1fOl
+   39f5BugnzeXh0sLqRIkRn9+gPgQ7GZKJYdS2kqe0gerBtPZEvbW0sEXzN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="401815215"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="401815215"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 05:56:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="2252814"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 25 Jan 2024 05:56:51 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rT0Do-00002q-2X;
+	Thu, 25 Jan 2024 13:56:48 +0000
+Date: Thu, 25 Jan 2024 21:56:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: linan666@huaweicloud.com, song@kernel.org, neilb@suse.com, shli@fb.com,
+	mariusz.tkaczyk@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linan666@huaweicloud.com, yukuai3@huawei.com, yi.zhang@huawei.com,
+	houtao1@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH v3 3/4] md: sync blockdev before stopping raid or setting
+ readonly
+Message-ID: <202401252146.3yACLRcr-lkp@intel.com>
+References: <20240125062841.1721193-4-linan666@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="GuHppkpX7NvgOUA9"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
+In-Reply-To: <20240125062841.1721193-4-linan666@huaweicloud.com>
 
---GuHppkpX7NvgOUA9
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Thu, Jan 25, 2024 at 01:50:05PM +0100, Miguel Ojeda wrote:
-> On Thu, Jan 25, 2024 at 1:31=E2=80=AFPM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
+kernel test robot noticed the following build warnings:
 
-> > > Recently, there has been a thread in our Zulip and a couple people are
-> > > experimenting: https://rust-for-linux.zulipchat.com/#narrow/stream/28=
-8089-General/topic/Bindgen.20--.20GCC.20backend.20port
-> >
-> > That link for me goes to a message on 22/01, so later than the email you
-> > sent.
->=20
-> Zulip seems to scroll to the latest message in the topic -- you should
-> be able to scroll a bit up, but if that doesn't work, this link should
-> go to the first message:
-> https://rust-for-linux.zulipchat.com/#narrow/stream/288089-General/topic/=
-Bindgen.20--.20GCC.20backend.20port/near/412609074
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.8-rc1 next-20240125]
+[cannot apply to song-md/md-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Ah, thanks for the direct link :)
+url:    https://github.com/intel-lab-lkp/linux/commits/linan666-huaweicloud-com/md-Don-t-clear-MD_CLOSING-when-the-raid-is-about-to-stop/20240125-144040
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240125062841.1721193-4-linan666%40huaweicloud.com
+patch subject: [PATCH v3 3/4] md: sync blockdev before stopping raid or setting readonly
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240125/202401252146.3yACLRcr-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240125/202401252146.3yACLRcr-lkp@intel.com/reproduce)
 
->=20
-> > That said, I gave things another spin today, in a different environment,
-> > as a final check before sending and found an issue causing kernel
-> > panics. RISC-V (and x86/arm64) supports kcfi (CFI_CLANG) but enabling
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401252146.3yACLRcr-lkp@intel.com/
 
-I mention x86 and arm64 here, because my grepping didn't see the flag
-being set for x86 (in tree) or arm64 (in that series) if CFI_CLANG was
-set or any mutual exclusion. Has noone tried CFI_CLANG + RUST there or
-just not run into any issues?
+All warnings (new ones prefixed by >>):
 
-> > sanitisers seems to be a nightly only option for rustc. The kernel I
-> > built today had CFI_CLANG enabled and that caused panics when the rust
-> > samples were loaded.
-> >
-> > The CFI_CLANG Kconfig entry has a cc-option test for whether the option
-> > is supported, but from a quick check I don't see a comparable test to
-> > use for rust. Even if a test was added, the current flag is an unstable
-> > one, so I am not sure if testing for it is the right call in the first
-> > place, given the stabilised flag would be entirely different?
->=20
-> Yeah, KCFI and other mitigations is WIP -- Cc'ing Ramon and Matthew
-> who may be able to tell us the latest status.
+   In file included from drivers/md/md.c:43:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/md/md.c:43:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/md/md.c:43:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/md/md.c:4521:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    4521 |         default:
+         |         ^
+   drivers/md/md.c:4521:2: note: insert 'break;' to avoid fall-through
+    4521 |         default:
+         |         ^
+         |         break; 
+   7 warnings generated.
 
-Also CC Sami I guess, since he is the one who added the CFI_CLANG bits
-to the kernel, and can probably comment on the suitability of adding a
-check etc.
 
-> Testing for unstable flags is fine, i.e. we only support a single
-> compiler, so we can change the name when we do the upgrade.
+vim +4521 drivers/md/md.c
 
-Actually, thinking about it for a moment - if only a single compiler
-version is supported (the minimum, right?) then you could just add the
--Zsanitizer=3Dkcfi flag whenever CFI_CLANG and RUST are both set.
+9e653b6342c940 NeilBrown        2006-06-26  4495  
+9e653b6342c940 NeilBrown        2006-06-26  4496  static ssize_t
+fd01b88c75a718 NeilBrown        2011-10-11  4497  array_state_store(struct mddev *mddev, const char *buf, size_t len)
+9e653b6342c940 NeilBrown        2006-06-26  4498  {
+6497709b5d1bcc NeilBrown        2017-03-15  4499  	int err = 0;
+9e653b6342c940 NeilBrown        2006-06-26  4500  	enum array_state st = match_word(buf, array_states);
+242b3580d1a1d0 Li Nan           2024-01-25  4501  	bool clear_md_closing = false;
+6791875e2e5393 NeilBrown        2014-12-15  4502  
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4503  	/* No lock dependent actions */
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4504  	switch (st) {
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4505  	case suspended:		/* not supported yet */
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4506  	case write_pending:	/* cannot be set */
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4507  	case active_idle:	/* cannot be set */
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4508  	case broken:		/* cannot be set */
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4509  	case bad_word:
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4510  		return -EINVAL;
+242b3580d1a1d0 Li Nan           2024-01-25  4511  	case clear:
+242b3580d1a1d0 Li Nan           2024-01-25  4512  	case readonly:
+242b3580d1a1d0 Li Nan           2024-01-25  4513  	case inactive:
+242b3580d1a1d0 Li Nan           2024-01-25  4514  	case read_auto:
+242b3580d1a1d0 Li Nan           2024-01-25  4515  		if (!mddev->pers || !md_is_rdwr(mddev))
+242b3580d1a1d0 Li Nan           2024-01-25  4516  			break;
+242b3580d1a1d0 Li Nan           2024-01-25  4517  		err = mddev_set_closing_and_sync_blockdev(mddev);
+242b3580d1a1d0 Li Nan           2024-01-25  4518  		if (err)
+242b3580d1a1d0 Li Nan           2024-01-25  4519  			return err;
+242b3580d1a1d0 Li Nan           2024-01-25  4520  		clear_md_closing = true;
+09f894affcf2da Mariusz Tkaczyk  2023-09-28 @4521  	default:
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4522  		break;
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4523  	}
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4524  
+f97a5528b21eb1 Ye Bin           2022-09-20  4525  	if (mddev->pers && (st == active || st == clean) &&
+f97a5528b21eb1 Ye Bin           2022-09-20  4526  	    mddev->ro != MD_RDONLY) {
+6791875e2e5393 NeilBrown        2014-12-15  4527  		/* don't take reconfig_mutex when toggling between
+6791875e2e5393 NeilBrown        2014-12-15  4528  		 * clean and active
+6791875e2e5393 NeilBrown        2014-12-15  4529  		 */
+6791875e2e5393 NeilBrown        2014-12-15  4530  		spin_lock(&mddev->lock);
+6791875e2e5393 NeilBrown        2014-12-15  4531  		if (st == active) {
+6791875e2e5393 NeilBrown        2014-12-15  4532  			restart_array(mddev);
+2953079c692da0 Shaohua Li       2016-12-08  4533  			clear_bit(MD_SB_CHANGE_PENDING, &mddev->sb_flags);
+91a6c4aded58cb Tomasz Majchrzak 2016-10-25  4534  			md_wakeup_thread(mddev->thread);
+6791875e2e5393 NeilBrown        2014-12-15  4535  			wake_up(&mddev->sb_wait);
+6791875e2e5393 NeilBrown        2014-12-15  4536  		} else /* st == clean */ {
+6791875e2e5393 NeilBrown        2014-12-15  4537  			restart_array(mddev);
+6497709b5d1bcc NeilBrown        2017-03-15  4538  			if (!set_in_sync(mddev))
+6791875e2e5393 NeilBrown        2014-12-15  4539  				err = -EBUSY;
+6791875e2e5393 NeilBrown        2014-12-15  4540  		}
+573275b58ee9e1 Tomasz Majchrzak 2016-06-30  4541  		if (!err)
+573275b58ee9e1 Tomasz Majchrzak 2016-06-30  4542  			sysfs_notify_dirent_safe(mddev->sysfs_state);
+6791875e2e5393 NeilBrown        2014-12-15  4543  		spin_unlock(&mddev->lock);
+c008f1d356277a NeilBrown        2015-06-12  4544  		return err ?: len;
+6791875e2e5393 NeilBrown        2014-12-15  4545  	}
+242b3580d1a1d0 Li Nan           2024-01-25  4546  
+6791875e2e5393 NeilBrown        2014-12-15  4547  	err = mddev_lock(mddev);
+6791875e2e5393 NeilBrown        2014-12-15  4548  	if (err)
+6791875e2e5393 NeilBrown        2014-12-15  4549  		return err;
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4550  
+9e653b6342c940 NeilBrown        2006-06-26  4551  	switch (st) {
+9e653b6342c940 NeilBrown        2006-06-26  4552  	case inactive:
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4553  		/* stop an active array, return 0 otherwise */
+90cf195d9bcb4b NeilBrown        2012-07-31  4554  		if (mddev->pers)
+a05b7ea03d72f3 NeilBrown        2012-07-19  4555  			err = do_md_stop(mddev, 2, NULL);
+9e653b6342c940 NeilBrown        2006-06-26  4556  		break;
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4557  	case clear:
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4558  		err = do_md_stop(mddev, 0, NULL);
+242b3580d1a1d0 Li Nan           2024-01-25  4559  		if (!err)
+242b3580d1a1d0 Li Nan           2024-01-25  4560  			clear_md_closing = false;
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4561  		break;
+9e653b6342c940 NeilBrown        2006-06-26  4562  	case readonly:
+9e653b6342c940 NeilBrown        2006-06-26  4563  		if (mddev->pers)
+a05b7ea03d72f3 NeilBrown        2012-07-19  4564  			err = md_set_readonly(mddev, NULL);
+9e653b6342c940 NeilBrown        2006-06-26  4565  		else {
+f97a5528b21eb1 Ye Bin           2022-09-20  4566  			mddev->ro = MD_RDONLY;
+648b629ed40623 NeilBrown        2008-04-30  4567  			set_disk_ro(mddev->gendisk, 1);
+9e653b6342c940 NeilBrown        2006-06-26  4568  			err = do_md_run(mddev);
+9e653b6342c940 NeilBrown        2006-06-26  4569  		}
+9e653b6342c940 NeilBrown        2006-06-26  4570  		break;
+9e653b6342c940 NeilBrown        2006-06-26  4571  	case read_auto:
+9e653b6342c940 NeilBrown        2006-06-26  4572  		if (mddev->pers) {
+f97a5528b21eb1 Ye Bin           2022-09-20  4573  			if (md_is_rdwr(mddev))
+a05b7ea03d72f3 NeilBrown        2012-07-19  4574  				err = md_set_readonly(mddev, NULL);
+f97a5528b21eb1 Ye Bin           2022-09-20  4575  			else if (mddev->ro == MD_RDONLY)
+648b629ed40623 NeilBrown        2008-04-30  4576  				err = restart_array(mddev);
+648b629ed40623 NeilBrown        2008-04-30  4577  			if (err == 0) {
+f97a5528b21eb1 Ye Bin           2022-09-20  4578  				mddev->ro = MD_AUTO_READ;
+648b629ed40623 NeilBrown        2008-04-30  4579  				set_disk_ro(mddev->gendisk, 0);
+648b629ed40623 NeilBrown        2008-04-30  4580  			}
+9e653b6342c940 NeilBrown        2006-06-26  4581  		} else {
+f97a5528b21eb1 Ye Bin           2022-09-20  4582  			mddev->ro = MD_AUTO_READ;
+9e653b6342c940 NeilBrown        2006-06-26  4583  			err = do_md_run(mddev);
+9e653b6342c940 NeilBrown        2006-06-26  4584  		}
+9e653b6342c940 NeilBrown        2006-06-26  4585  		break;
+9e653b6342c940 NeilBrown        2006-06-26  4586  	case clean:
+9e653b6342c940 NeilBrown        2006-06-26  4587  		if (mddev->pers) {
+339421def582ab Song Liu         2015-10-08  4588  			err = restart_array(mddev);
+339421def582ab Song Liu         2015-10-08  4589  			if (err)
+339421def582ab Song Liu         2015-10-08  4590  				break;
+85572d7c75fd5b NeilBrown        2014-12-15  4591  			spin_lock(&mddev->lock);
+6497709b5d1bcc NeilBrown        2017-03-15  4592  			if (!set_in_sync(mddev))
+e691063a61f7f7 NeilBrown        2008-02-06  4593  				err = -EBUSY;
+85572d7c75fd5b NeilBrown        2014-12-15  4594  			spin_unlock(&mddev->lock);
+5bf295975416f8 NeilBrown        2009-05-07  4595  		} else
+5bf295975416f8 NeilBrown        2009-05-07  4596  			err = -EINVAL;
+9e653b6342c940 NeilBrown        2006-06-26  4597  		break;
+9e653b6342c940 NeilBrown        2006-06-26  4598  	case active:
+9e653b6342c940 NeilBrown        2006-06-26  4599  		if (mddev->pers) {
+339421def582ab Song Liu         2015-10-08  4600  			err = restart_array(mddev);
+339421def582ab Song Liu         2015-10-08  4601  			if (err)
+339421def582ab Song Liu         2015-10-08  4602  				break;
+2953079c692da0 Shaohua Li       2016-12-08  4603  			clear_bit(MD_SB_CHANGE_PENDING, &mddev->sb_flags);
+9e653b6342c940 NeilBrown        2006-06-26  4604  			wake_up(&mddev->sb_wait);
+9e653b6342c940 NeilBrown        2006-06-26  4605  			err = 0;
+9e653b6342c940 NeilBrown        2006-06-26  4606  		} else {
+f97a5528b21eb1 Ye Bin           2022-09-20  4607  			mddev->ro = MD_RDWR;
+648b629ed40623 NeilBrown        2008-04-30  4608  			set_disk_ro(mddev->gendisk, 0);
+9e653b6342c940 NeilBrown        2006-06-26  4609  			err = do_md_run(mddev);
+9e653b6342c940 NeilBrown        2006-06-26  4610  		}
+9e653b6342c940 NeilBrown        2006-06-26  4611  		break;
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4612  	default:
+09f894affcf2da Mariusz Tkaczyk  2023-09-28  4613  		err = -EINVAL;
+9e653b6342c940 NeilBrown        2006-06-26  4614  		break;
+9e653b6342c940 NeilBrown        2006-06-26  4615  	}
+6791875e2e5393 NeilBrown        2014-12-15  4616  
+6791875e2e5393 NeilBrown        2014-12-15  4617  	if (!err) {
+1d23f178d56ae1 NeilBrown        2011-12-08  4618  		if (mddev->hold_active == UNTIL_IOCTL)
+1d23f178d56ae1 NeilBrown        2011-12-08  4619  			mddev->hold_active = 0;
+00bcb4ac7ee7e5 NeilBrown        2010-06-01  4620  		sysfs_notify_dirent_safe(mddev->sysfs_state);
+9e653b6342c940 NeilBrown        2006-06-26  4621  	}
+6791875e2e5393 NeilBrown        2014-12-15  4622  	mddev_unlock(mddev);
+242b3580d1a1d0 Li Nan           2024-01-25  4623  
+242b3580d1a1d0 Li Nan           2024-01-25  4624  	if (clear_md_closing)
+242b3580d1a1d0 Li Nan           2024-01-25  4625  		clear_bit(MD_CLOSING, &mddev->flags);
+242b3580d1a1d0 Li Nan           2024-01-25  4626  
+6791875e2e5393 NeilBrown        2014-12-15  4627  	return err ?: len;
+0fd62b861eac7d Neil Brown       2008-06-28  4628  }
+80ca3a44f563a7 NeilBrown        2006-07-10  4629  static struct md_sysfs_entry md_array_state =
+750f199ee8b578 NeilBrown        2014-09-30  4630  __ATTR_PREALLOC(array_state, S_IRUGO|S_IWUSR, array_state_show, array_state_store);
+9e653b6342c940 NeilBrown        2006-06-26  4631  
 
-I'm not sure if that is a better option though. It's a choice between
-CFI_CLANG being disabled if the check is not updated when the toolchain
-is bumped versus being enabled for C and not for RUST. I think I prefer
-the former though, tracking down the cause of the latter I would rather
-not wish on a user.
-
-I vote for having the check, even if it can only ever be true at the
-moment.
-
-Cheers,
-Conor.
-
---GuHppkpX7NvgOUA9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbJl4QAKCRB4tDGHoIJi
-0r2YAP9Kbj4u//RY0nIROcBBxVP3ucR5cgnfxPjsXpqrdOu6FgD/ef8EVCC207/s
-Jy65DzLCk1V5UGLDXdSuKcxvD/qEngw=
-=6p43
------END PGP SIGNATURE-----
-
---GuHppkpX7NvgOUA9--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
