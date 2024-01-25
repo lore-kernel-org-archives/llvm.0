@@ -1,133 +1,164 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CAF7EC;
-	Thu, 25 Jan 2024 22:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF59B111B5;
+	Thu, 25 Jan 2024 22:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706221827; cv=none; b=RNh9VdbxJpwOekQee3phf3JOfPH2mfQGsjqM0xMIX9LnVDCVBazuZQ0hvboAX9UnQcBbemQEmyAso+rRbZsHP93cPcJaY6SielVfjkg2AuQwMNJY15wTz5is2Ezchh5cerT8NoN/6wMh/8M6ehd4oqUJiL+ZWt7fLAmh0XBQKmc=
+	t=1706223361; cv=none; b=UqO2GpD01VDcP5SP6ZPSLfIBxJJG5BaMqrtYarPYF5xRcu0+kaYTclovkd1vJBcdLhGhZpDWp/Pwdrv2Z81ljxPggKOgYhRyNPiXf+yzeM0vbjy7DwqCPvK+gHkcXHGCmOmuCKPtsVgx7rTbQrPtwA5HGl6zjKKkVa0e009dA6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706221827; c=relaxed/simple;
-	bh=o+K8/I7KsjMILeiYonhcP/n00EIdVaQPmHILADXMNQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WzVdlwGD5n0AGkEt2Zh6H/0Ns4riZmrEHyNa7GrJzRQfEqf5PbQyx9y5ouXdf4S1fIaj8FZALty3QzP9buCya5moCwlYGo74mXQV2KucU4xVzJ68YKSlH6Pt9csoYsSE7XjJGH01g90QaNmTJWpKnLI8kJ+IJQTrWOo4jOaZwsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxDXOHQl; arc=none smtp.client-ip=192.55.52.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706223361; c=relaxed/simple;
+	bh=Bx1oIdTdd86nzue6xvhtwCp4wPQwGjG0ILCqZqgINO8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kSoRrWNmQfWh/h89qFtjQSj8aiImRxfwfyajmwe5wCWMDa1tOuW6DkSAzQrYBwivV9HOoBIsML57mxHToLNm2jZwFych6HuDBorQ1OBKwOeJ418DA9LTuHvcKZfVOAuzxrPUr8iqgKAtXZIjvMwV52Dbe+16MAkBcPtkgPkmvsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u/k5uY+I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxDXOHQl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706221825; x=1737757825;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o+K8/I7KsjMILeiYonhcP/n00EIdVaQPmHILADXMNQo=;
-  b=DxDXOHQl77tLmgYJOyRiXw0szpeGb6+rpNv8x8HhBZDQq3NZSTUZr3zZ
-   wbPu17DJcUxEQUGQAmMi9Rcnoo17Wzwyggn08kjPUGtNnIpvWjHNkzynn
-   3Y/k4//mgUTu1QQDsyjsr8uL36tscJ9hT7MQYZZzxWkytNN9/GKQUz8ZQ
-   +sPG7C2Z2m5uGgOF6oB4IgU6/ch8ItwrXRfZRsr310mFpaY8AvWk2h21N
-   VshNkaKlLZdjSCnThGKJjEWGSageWWIvy64tZPMR+JwKYnaKln0EvEjdQ
-   LSXFoeGnvt+arQvA4ZAT/BVqY/TD6JDGn0hdNzLEBTAJ2Sd3qvGH22x1w
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="401977592"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="401977592"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 14:30:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="820941674"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="820941674"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jan 2024 14:30:21 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rT8El-0000Sa-1D;
-	Thu, 25 Jan 2024 22:30:19 +0000
-Date: Fri, 26 Jan 2024 06:30:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alsa-devel@alsa-project.org
-Subject: [tiwai-sound:topic/pm-ops 7/31] sound/pci/als4000.c:947:2: error:
- call to undeclared function 'snd_sbmixer_suspend'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202401260641.blzmb4QO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u/k5uY+I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DA3C433F1;
+	Thu, 25 Jan 2024 22:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706223360;
+	bh=Bx1oIdTdd86nzue6xvhtwCp4wPQwGjG0ILCqZqgINO8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=u/k5uY+I+ALGKvsZhJOKy+elEEMTuGK4js+9E2aa8C+jdW7zCUmcFB09uzv+3CoZu
+	 FWBWHBaHi7qqt5eN22oRGai4acZwbSD7+wTeYGd4bp/1BTWPKdzypKh5/upZuxCBTI
+	 DwwCb0OmIwH8ErHvyqJ9tF2AwVh/f9Tc6jYY5uvefvVeofbszLGkSgD9Psw/Y/fOqO
+	 4JubQhTEYhKN/h+N4+luvLNiDNT38sywwwjB3NkWClFOXDzTsmqYGb6NEb82khEZvP
+	 LyqTCcJ5Mv1GCoc5ko76xtnLjFlNccOpbLWrEyB9x/zp7+IcLe5lDiJ5iq6cetYBpb
+	 6LFQ6NVeleKSA==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 00/11] Bump the minimum supported version of LLVM to 13.0.1
+Date: Thu, 25 Jan 2024 15:55:06 -0700
+Message-Id: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMrmsmUC/x3MQQqDMBAF0KvIrPshkwSpvUrpojajHTBREhsK4
+ t0bunybd1CRrFLo1h2UpWrRNTXwpaPX+5lmgYZmssZ6w9Zj/MQNUROWpUZUydhXsIMBww3T1Yf
+ g+pEHasOWZdLvf78/zvMHzVeZdG0AAAA=
+To: akpm@linux-foundation.org, masahiroy@kernel.org
+Cc: nicolas@fjasle.eu, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>, tglx@linutronix.de, mingo@redhat.com, 
+ bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
+ linux@armlinux.org.uk, ardb@kernel.org, 
+ linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, 
+ will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au, 
+ npiggin@gmail.com, aneesh.kumar@kernel.org, naveen.n.rao@linux.ibm.com, 
+ linuxppc-dev@lists.ozlabs.org, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+ aou@eecs.berkeley.edu, conor@kernel.org, linux-riscv@lists.infradead.org, 
+ keescook@chromium.org, linux-hardening@vger.kernel.org
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5041; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Bx1oIdTdd86nzue6xvhtwCp4wPQwGjG0ILCqZqgINO8=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKmbnv0VWied95P5q0eXfkzlxrZNofbTU+K5bbiVjef9U
+ LF9Lp/YUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbyoJSRYdfLJeuavmdyeR6u
+ +xn7PM6bZ9E7RT/WZzFKl4VUYs0DHjEyPAwMYX+6+56b/awFIlsKOvdcOn9vr4jAiuMznF5/qmc
+ T5wMA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Takashi,
+Hi all,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+This series bumps the minimum supported version of LLVM for building the
+kernel to 13.0.1. The first patch does the bump and all subsequent
+patches clean up all the various workarounds and checks for earlier
+versions.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git topic/pm-ops
-head:   623b2f6110ff118b84628595d53e4947f2883329
-commit: 6dae83b64fac25af472e718bf086b43a1f209674 [7/31] ALSA: als4000: Replace with DEFINE_SIMPLE_DEV_PM_OPS()
-config: i386-randconfig-012-20240125 (https://download.01.org/0day-ci/archive/20240126/202401260641.blzmb4QO-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260641.blzmb4QO-lkp@intel.com/reproduce)
+Quoting the first patch's commit message for those that were only on CC
+for the clean ups:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401260641.blzmb4QO-lkp@intel.com/
+  When __builtin_mul_overflow() has arguments that differ in terms of
+  signedness and width, LLVM may generate a libcall to __muloti4 because
+  it performs the checks in terms of 65-bit multiplication. This issue
+  becomes harder to hit (but still possible) after LLVM 12.0.0, which
+  includes a special case for matching widths but different signs.
 
-All errors (new ones prefixed by >>):
+  To gain access to this special case, which the kernel can take advantage
+  of when calls to __muloti4 appear, bump the minimum supported version of
+  LLVM for building the kernel to 13.0.1. 13.0.1 was chosen because there
+  is minimal impact to distribution support while allowing a few more
+  workarounds to be dropped in the kernel source than if 12.0.0 were
+  chosen. Looking at container images of up to date distribution versions:
 
->> sound/pci/als4000.c:947:2: error: call to undeclared function 'snd_sbmixer_suspend'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     947 |         snd_sbmixer_suspend(chip);
-         |         ^
-   sound/pci/als4000.c:947:2: note: did you mean 'snd_sbmixer_read'?
-   include/sound/sb.h:288:15: note: 'snd_sbmixer_read' declared here
-     288 | unsigned char snd_sbmixer_read(struct snd_sb *chip, unsigned char reg);
-         |               ^
->> sound/pci/als4000.c:959:2: error: call to undeclared function 'snd_sbmixer_resume'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     959 |         snd_sbmixer_resume(chip);
-         |         ^
-   sound/pci/als4000.c:959:2: note: did you mean 'snd_sbmixer_read'?
-   include/sound/sb.h:288:15: note: 'snd_sbmixer_read' declared here
-     288 | unsigned char snd_sbmixer_read(struct snd_sb *chip, unsigned char reg);
-         |               ^
-   2 errors generated.
+    archlinux:latest              clang version 16.0.6
+    debian:oldoldstable-slim      clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)
+    debian:oldstable-slim         Debian clang version 11.0.1-2
+    debian:stable-slim            Debian clang version 14.0.6
+    debian:testing-slim           Debian clang version 16.0.6 (19)
+    debian:unstable-slim          Debian clang version 16.0.6 (19)
+    fedora:38                     clang version 16.0.6 (Fedora 16.0.6-3.fc38)
+    fedora:latest                 clang version 17.0.6 (Fedora 17.0.6-1.fc39)
+    fedora:rawhide                clang version 17.0.6 (Fedora 17.0.6-1.fc40)
+    opensuse/leap:latest          clang version 15.0.7
+    opensuse/tumbleweed:latest    clang version 17.0.6
+    ubuntu:focal                  clang version 10.0.0-4ubuntu1
+    ubuntu:latest                 Ubuntu clang version 14.0.0-1ubuntu1.1
+    ubuntu:rolling                Ubuntu clang version 16.0.6 (15)
+    ubuntu:devel                  Ubuntu clang version 17.0.6 (3)
 
+  The only distribution that gets left behind is Debian Bullseye, as the
+  default version is 11.0.1; other distributions either have a newer
+  version than 13.0.1 or one older than the current minimum of 11.0.0.
+  Debian has easy access to more recent LLVM versions through
+  apt.llvm.org, so this is not as much of a concern. There are also the
+  kernel.org LLVM toolchains, which should work with distributions with
+  glibc 2.28 and newer.
 
-vim +/snd_sbmixer_suspend +947 sound/pci/als4000.c
+  Another benefit of slimming up the number of supported versions of LLVM
+  for building the kernel is reducing the build capacity needed to support
+  a matrix that builds with each supported version, which allows a matrix
+  to reallocate the freed up build capacity towards something else, such
+  as more configuration combinations.
 
-d616a0246da88d Takashi Iwai 2022-04-12  938  
-68cb2b55927885 Takashi Iwai 2012-07-02  939  static int snd_als4000_suspend(struct device *dev)
-703529140cfb77 Takashi Iwai 2005-11-17  940  {
-68cb2b55927885 Takashi Iwai 2012-07-02  941  	struct snd_card *card = dev_get_drvdata(dev);
-703529140cfb77 Takashi Iwai 2005-11-17  942  	struct snd_card_als4000 *acard = card->private_data;
-703529140cfb77 Takashi Iwai 2005-11-17  943  	struct snd_sb *chip = acard->chip;
-703529140cfb77 Takashi Iwai 2005-11-17  944  
-703529140cfb77 Takashi Iwai 2005-11-17  945  	snd_power_change_state(card, SNDRV_CTL_POWER_D3hot);
-703529140cfb77 Takashi Iwai 2005-11-17  946  	
-703529140cfb77 Takashi Iwai 2005-11-17 @947  	snd_sbmixer_suspend(chip);
-703529140cfb77 Takashi Iwai 2005-11-17  948  	return 0;
-703529140cfb77 Takashi Iwai 2005-11-17  949  }
-703529140cfb77 Takashi Iwai 2005-11-17  950  
-68cb2b55927885 Takashi Iwai 2012-07-02  951  static int snd_als4000_resume(struct device *dev)
-703529140cfb77 Takashi Iwai 2005-11-17  952  {
-68cb2b55927885 Takashi Iwai 2012-07-02  953  	struct snd_card *card = dev_get_drvdata(dev);
-703529140cfb77 Takashi Iwai 2005-11-17  954  	struct snd_card_als4000 *acard = card->private_data;
-703529140cfb77 Takashi Iwai 2005-11-17  955  	struct snd_sb *chip = acard->chip;
-703529140cfb77 Takashi Iwai 2005-11-17  956  
-703529140cfb77 Takashi Iwai 2005-11-17  957  	snd_als4000_configure(chip);
-703529140cfb77 Takashi Iwai 2005-11-17  958  	snd_sbdsp_reset(chip);
-703529140cfb77 Takashi Iwai 2005-11-17 @959  	snd_sbmixer_resume(chip);
-703529140cfb77 Takashi Iwai 2005-11-17  960  
+This passes my build matrix with all supported versions.
 
-:::::: The code at line 947 was first introduced by commit
-:::::: 703529140cfb774366b839f38f027f283cb948b4 [ALSA] als4000 - Add PM support
+This is based on Andrew's mm-nonmm-unstable to avoid trivial conflicts
+with my series to update the LLVM links across the repository [1] but I
+can easily rebase it to linux-kbuild if Masahiro would rather these
+patches go through there (and defer the conflict resolution to the merge
+window).
 
-:::::: TO: Takashi Iwai <tiwai@suse.de>
-:::::: CC: Jaroslav Kysela <perex@suse.cz>
+[1]: https://lore.kernel.org/20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org/
 
+---
+Nathan Chancellor (11):
+      kbuild: Raise the minimum supported version of LLVM to 13.0.1
+      Makefile: Drop warn-stack-size plugin opt
+      x86: Drop stack-alignment plugin opt
+      ARM: Remove Thumb2 __builtin_thread_pointer workaround for Clang
+      arm64: Kconfig: Clean up tautological LLVM version checks
+      powerpc: Kconfig: Remove tautology in CONFIG_COMPAT
+      riscv: Remove MCOUNT_NAME workaround
+      riscv: Kconfig: Remove version dependency from CONFIG_CLANG_SUPPORTS_DYNAMIC_FTRACE
+      fortify: Drop Clang version check for 12.0.1 or newer
+      lib/Kconfig.debug: Update Clang version check in CONFIG_KCOV
+      compiler-clang.h: Update __diag_clang() macros for minimum version bump
+
+ Documentation/process/changes.rst |  2 +-
+ Makefile                          |  8 --------
+ arch/arm/include/asm/current.h    |  8 +-------
+ arch/arm64/Kconfig                |  5 +----
+ arch/powerpc/Kconfig              |  1 -
+ arch/riscv/Kconfig                |  2 --
+ arch/riscv/include/asm/ftrace.h   | 14 ++------------
+ arch/riscv/kernel/mcount.S        | 10 +++++-----
+ arch/x86/Makefile                 |  6 ------
+ include/linux/compiler-clang.h    |  8 ++------
+ lib/Kconfig.debug                 |  2 +-
+ scripts/min-tool-version.sh       |  2 +-
+ scripts/recordmcount.pl           |  2 +-
+ security/Kconfig                  |  2 --
+ 14 files changed, 15 insertions(+), 57 deletions(-)
+---
+base-commit: 979741ebd48f75ed6d101c7290e3325340d361ff
+change-id: 20240124-bump-min-llvm-ver-to-13-0-1-39f84dd36b19
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
