@@ -1,123 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069A63A1B6
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 12:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B2728E3
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 12:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706185173; cv=none; b=Ahz3uEB3UuAdRfz3DIs560CX7W5flh5ItJyyqwjK5CeK9O4gUha5eJEEgIOaiSMtM+AzdXcEUU+1F206Uzx5PMGaviLkuMYHeFrht0MaRXIQ1xHUOPtdqOChezy+92vfYV+h+DRHm8Luwjgb8iT8Y8QvTHBqyCMH3G/EZ18uHkM=
+	t=1706185882; cv=none; b=jr7odw4XpvWl//PIYrO8RN7Y3KLacn7+1QLF4aMwfF+UkmlC/c6sIIxvf4FLcMWiyqRDjNhscQ7jSIISUUUypqI+rm2nQZ4cDu/50RvAhzOzbJy27K0YoA68Ym3Q6B6V/UGY7PvFe1sHXU2W1Sj/hdytdvLOwbPFggx8pbQXVVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706185173; c=relaxed/simple;
-	bh=zfYp4IY/7X/+LaY5xSNFJhQT56Y8mXFU7V7bnUDoJjI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U6Azsf3BEZelTUoW7gUD4PnQs55rDnf8a0sDuuvx4riU+Bmfk1r/1peOdRLcKnvn02LxN4IZXJTTtIhZta2E57D1rhBBy3CyVFLhDbK33Tvvqj2rRrSaZ3wzDN2d1DzZIY6EHcLtb036XRorGsvbJyrYU9l7iXBiE0Ov/8pF5vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEcmHnK8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706185882; c=relaxed/simple;
+	bh=e2Gx71tG+PGiXuCcWrEYqd74AvFTiXta4T5CfVZ20i4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OD2f6KWB9OsutIOpl6EgZPIKqvc8mn2ayUvwNE9XWrdqO2OXZ2lWE4Ad0nXvksIooTZ3t4i2sAwtxnWT9fs5Xh1yUNSZF9uQC5OOp0KYqjt37qhpDLgijOUmmrPpwe5VcV7aNZIYBe8uFDB7ywvTg2g9cmUYs97KR1VV79MY0QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=vYVPfKcT; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oEcmHnK8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5BDC433B1
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 12:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706185172;
-	bh=zfYp4IY/7X/+LaY5xSNFJhQT56Y8mXFU7V7bnUDoJjI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oEcmHnK818I/Jm5CIXPiXFRUVUEYppaXM9myPO1toFGfuJwKcHJFeNfruu/o4VNH7
-	 mG5lnXC/ogO/j3r8AWdOzk1rEjQ6CpXLoTlLn0g4Ghmlg9LxTy7GN7qpl2Rd65wuID
-	 vAIoOp5UL9HsZwrZRVwigOzTPHk5tEv6m0XHjEzTHa+U0oomwBAaS3WwLb1+DyEmI3
-	 5HGyspNEW+lOfq4NzmbgDy/FlFw2lCnTEper9YWLPwq1bpkV2SJ60dGJ6TT0MhdXeV
-	 LD70rg68/nxLe0fH/QlHKshy3vLyCqqPOUWf1UZyUDO94iMSRorQDmDwxCptZySMg8
-	 xFgBo8GhurSjQ==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5101055a16fso2388483e87.2
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 04:19:32 -0800 (PST)
-X-Gm-Message-State: AOJu0Yw6IhH+vxzJHtB4AsJm2FjL84wq263HclOJfL4djqOwY4QD8Z6/
-	jpy/JbJfGN2LxviXCISvWcON7Qw8ebI3GqnrhO5zajjHJtmFhpT0AXr3bJYSXtnv2lhqpbGBL5Y
-	FycoLMskZdhJ3DMti8YM7on+CKDg=
-X-Google-Smtp-Source: AGHT+IE8X5NPhlKrP0UhMcQQq+MZ5eT7JN3M8CYIYwk0DIMhpjZasu6rhPJKWZjXj4l33/9dJOZOjkHZn/BkUxXAkqs=
-X-Received: by 2002:ac2:5f77:0:b0:50f:15fe:f91a with SMTP id
- c23-20020ac25f77000000b0050f15fef91amr417674lfc.88.1706185170550; Thu, 25 Jan
- 2024 04:19:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="vYVPfKcT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1706185881; x=1737721881;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e2Gx71tG+PGiXuCcWrEYqd74AvFTiXta4T5CfVZ20i4=;
+  b=vYVPfKcTjbqNf6fxMdBuEt2Brx8eTxfc/k/sNNZncYBSMyuJmmhaj8mj
+   L79dHltC21R73ictxK1VeqCZRnzI9hItXRrN2wPltmt6tmEIE0QxX7JW9
+   cSiunODrLQoO/IRXWE0ytVYE20DbBlxsoHxg6N1M8DstKPVEwVolFSjZ1
+   xo3OuDIwXd7Vj25EgPiqBYtikDPrDp5GD86Z5u4mWL1TLg3K+3KgKDsm8
+   cSXx8UjusttDS2JSQ0hwbCE5K3GsBQxFYus+6fIfjJZ72fm9PkX2r1qxk
+   EYKgCpK20ZRsCY6A4BFHcr4Cb/fPy0ClRzjbZuiDPSM1Bv/I8UIIdIeJD
+   A==;
+X-CSE-ConnectionGUID: kHKU490MTVa/CUpB0qKI1Q==
+X-CSE-MsgGUID: 04RsdzskT3uNcxxVcLoRZg==
+X-IronPort-AV: E=Sophos;i="6.05,216,1701154800"; 
+   d="asc'?scan'208";a="15284694"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jan 2024 05:31:19 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 25 Jan 2024 05:31:15 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 25 Jan 2024 05:31:12 -0700
+Date: Thu, 25 Jan 2024 12:30:34 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+CC: Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>, Miguel
+ Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida
+ Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
+	<gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
+	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+Message-ID: <20240125-bucked-payroll-47f82077b262@wendy>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+ <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+ <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
+ <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
+ <20240117-swiftly-parasail-618d62972d6e@spud>
+ <CANiq72mVKCOAuK4Qe+8AHmpkFwyJsVfx8AqB7ccGi3DYpSSWcw@mail.gmail.com>
+ <20240118-implode-delirium-eefdd86e170e@spud>
+ <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240123234731.work.358-kees@kernel.org>
-In-Reply-To: <20240123234731.work.358-kees@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 25 Jan 2024 13:19:19 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGcKBPnHOm6PtsrxePdv5a6AokB=qvMrwvGmPh_Uk6vsA@mail.gmail.com>
-Message-ID: <CAMj1kXGcKBPnHOm6PtsrxePdv5a6AokB=qvMrwvGmPh_Uk6vsA@mail.gmail.com>
-Subject: Re: [PATCH] smb: Work around Clang __bdos() type confusion
-To: Kees Cook <keescook@chromium.org>
-Cc: Steve French <sfrench@samba.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Paulo Alcantara <pc@manguebit.com>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org, 
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="mujnSF4ge/jontNh"
+Content-Disposition: inline
+In-Reply-To: <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
 
-On Wed, 24 Jan 2024 at 00:47, Kees Cook <keescook@chromium.org> wrote:
->
-> Recent versions of Clang gets confused about the possible size of the
-> "user" allocation, and CONFIG_FORTIFY_SOURCE ends up emitting a
-> warning[1]:
->
-> repro.c:126:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
->   126 |                         __write_overflow_field(p_size_field, size);
->       |                         ^
->
-> for this memset():
->
->         int len;
->         __le16 *user;
->         ...
->         len = ses->user_name ? strlen(ses->user_name) : 0;
->         user = kmalloc(2 + (len * 2), GFP_KERNEL);
->         ...
->         if (len) {
->                 ...
->         } else {
->                 memset(user, '\0', 2);
->         }
->
-> While Clang works on this bug[2], switch to using a direct assignment,
-> which avoids memset() entirely which both simplifies the code and silences
-> the false positive warning. (Making "len" size_t also silences the
-> warning, but the direct assignment seems better.)
->
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1966 [1]
-> Link: https://github.com/llvm/llvm-project/issues/77813 [2]
-> Cc: Steve French <sfrench@samba.org>
-> Cc: Paulo Alcantara <pc@manguebit.com>
-> Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
-> Cc: Shyam Prasad N <sprasad@microsoft.com>
-> Cc: Tom Talpey <tom@talpey.com>
-> Cc: linux-cifs@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  fs/smb/client/cifsencrypt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
-> index ef4c2e3c9fa6..6322f0f68a17 100644
-> --- a/fs/smb/client/cifsencrypt.c
-> +++ b/fs/smb/client/cifsencrypt.c
-> @@ -572,7 +572,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
->                 len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
->                 UniStrupr(user);
->         } else {
-> -               memset(user, '\0', 2);
-> +               *(u16 *)user = 0;
+--mujnSF4ge/jontNh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Is 'user' guaranteed to be 16-bit aligned?
+On Thu, Jan 18, 2024 at 05:09:40PM +0100, Miguel Ojeda wrote:
+> On Thu, Jan 18, 2024 at 4:49=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
+rote:
+> >
+> > The bit that worries me most is bindgen, and in particular detecting the
+> > version of libclang used. I mentioned to Nathan or Nick about needing a
+> > buildtime test for the version of LIBCLANG being used.
+> > I'm less worried about this for LLVM=3D1 builds, since while I think it=
+ is
+> > possible to provide a LIBCLANG path to the build system, I suspect that
+> > for LLVM=3D1 builds it's almost always going to match the LLVM toolchain
+> > in use.
 
->         }
->
->         rc = crypto_shash_update(ses->server->secmech.hmacmd5,
-> --
-> 2.34.1
->
->
+I chatted with the clang built linux folks about this yesterday, Nathan
+agreed that dealing with incompatibility issues iff they crop up is a
+reasonable way to go.
+
+> `scripts/rust_is_available.sh` tests whether `libclang` is at least
+> the minimum LLVM supported version; and under `LLVM=3D1` builds, it also
+> tests whether the `bindgen` found one matches the C compiler. Do you
+> mean something like that?
+
+If by "the bindgen found one matches the C compiler" you mean that the
+version of libclang used by bindgen matches the C compiler, then that
+sounds great.
+
+> For `bindgen` under GCC builds, we will eventually want a "proper" way
+> to use GCC instead (or possibly other approaches like querying the
+> information): https://github.com/rust-lang/rust-bindgen/issues/1949.
+
+> Recently, there has been a thread in our Zulip and a couple people are
+> experimenting: https://rust-for-linux.zulipchat.com/#narrow/stream/288089=
+-General/topic/Bindgen.20--.20GCC.20backend.20port
+
+That link for me goes to a message on 22/01, so later than the email you
+sent.
+
+> > I'll do another rebase and resend after the merge window closes I
+> > suppose :)
+
+
+That said, I gave things another spin today, in a different environment,
+as a final check before sending and found an issue causing kernel
+panics. RISC-V (and x86/arm64) supports kcfi (CFI_CLANG) but enabling
+sanitisers seems to be a nightly only option for rustc. The kernel I
+built today had CFI_CLANG enabled and that caused panics when the rust
+samples were loaded.
+
+The CFI_CLANG Kconfig entry has a cc-option test for whether the option
+is supported, but from a quick check I don't see a comparable test to
+use for rust. Even if a test was added, the current flag is an unstable
+one, so I am not sure if testing for it is the right call in the first
+place, given the stabilised flag would be entirely different?
+
+The tracking issue seems to be complete:
+https://github.com/rust-lang/rust/issues/89653
+but the tracking issue for sanitisiers themselves is only 3/5:
+https://github.com/rust-lang/rust/issues/39699
+
+The simple thing would be to make them mutually exclusive options in
+Kconfig.
+
+What do you think?
+
+Cheers,
+Conor.
+
+--mujnSF4ge/jontNh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbJUXAAKCRB4tDGHoIJi
+0uVHAQDIljZB931BuYsvFh8CDiXkeXE86yDu7dnEqYO2MErRBwEArNXVKUHQ6zGx
+JQPxBR+Fd23f1rnzfJFcWNiA7BscMA8=
+=IPeL
+-----END PGP SIGNATURE-----
+
+--mujnSF4ge/jontNh--
