@@ -1,57 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C0A1842;
-	Thu, 25 Jan 2024 02:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA74D287;
+	Thu, 25 Jan 2024 05:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706150906; cv=none; b=lVBwUdL9funfF6n/l3/pu39XlplglJDQNX0bUy+YIJkjO2IKmPnnKYpOqcQTEI/RDqddK6wQlOtjf3IRWCKlJhIKqySN6Qz6cAtLOM3IXvj+GIUf1CbjFKoqMfzMQqNPqz4MU9KMDPSJMIc7m6niAzUAxBlgK68Qzulsip3gMoQ=
+	t=1706161772; cv=none; b=V5bQJspCWNPn+djfo6yEXBKF+9qsfjND15HsOjZr9VH6TSc0b91CqMQkQAhO22llGBz1vtaUqGGKSLEN+uK+0vaGaxrBSox0K0x6E3ifZndU9jdFkb1SR0rupCDLDJQrR3l/i8yP1oUb03YExRA93GwcqhvRy9geWffm+jhbqes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706150906; c=relaxed/simple;
-	bh=P8tOXuR1MNz93eFimLGqZBU7GD2HIgXxuTweehk6uFk=;
+	s=arc-20240116; t=1706161772; c=relaxed/simple;
+	bh=9nqP8U2FAvfBDhRxGvzjTT067AHdn1rB9S9ofcZE6KE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XcVxY4tFlChjadCmnXFgO5h/MzDsMw50RzGWlcAEI9LR6fWiJCqQbysvkHuJ2EWcFyXufPcYD6mrkNwZvHD24fMm+88CS+lrxFa1Lk/+S8LlKjXzKGxtPKghaDaAkjjNEV660KKUV58t9Wz7YeqLXrzDZaBrnwnsj51fFC9lCwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YVzSgTOj; arc=none smtp.client-ip=192.198.163.8
+	 Content-Disposition; b=YfO0vSWeaoSTfjulFOaoKynCJmNma6BjtfbmhYKg34BCFZywqhULvDsLtaHg5GXAL3idZTH6UMuJb34WiNWWpF8oxQgL+ntBzImvk/nRRz1No/IZjUthZFI7ec4ifXjaS6V95948+U9/dAzYhNcyI69calU2hdxUlYj9o5CSNCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bPu84B1L; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVzSgTOj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bPu84B1L"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706150904; x=1737686904;
+  t=1706161770; x=1737697770;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P8tOXuR1MNz93eFimLGqZBU7GD2HIgXxuTweehk6uFk=;
-  b=YVzSgTOjAUvc03fleIbeNp9dTDJd8KMNDnYT8h9Ti+q9CRBTbQASGUFy
-   1cusksWehY+ma+4NWeqV1HID0V/QhkwI3DPZh4m7C3zn2KnHZNWPIcbY8
-   gFGX/z6QV9uGQIgPPNl/aDhY/LPjuMbszCxryQ9ZxoNqBUcbOIW1BEzTM
-   /XdNZo/vg4J211bQKvkk6/La5cQWgvpayS4jdOC71dsUawbtRF/0wEabP
-   k1CUnuvcwpmZc0w0JsqqzNUpxZu+S03SNk9OW/wRf+ahGZMPWDsHzIiRV
-   AzcS+/T8tbmUr6xVXTPTu3xjnE0z0hTB6NcjRy5KGS/Im7LjMQ2v/XEo7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="15570953"
+  bh=9nqP8U2FAvfBDhRxGvzjTT067AHdn1rB9S9ofcZE6KE=;
+  b=bPu84B1LUj/7uPCAlgrmaOlnLNwydvg6mtyUXN0A6E/vgeUX2GpUhrXA
+   X8mYbl1FwuoI63aacAWATnZGzbTTLH7ocgeyVaFXD1qcjn5MyTmsBCykQ
+   SNnX8yU5dkdY8Jd8Nc4j08IFL5JuuxSFyuscfBLngfhvSxTP3I806EJs9
+   jiEyw10IkpfANJvvWaQK8Aeyvvfk07BRU22Zd3m4xQ8wXnw6bUms+RxSe
+   mwY/wNBtLh2ZktB1BH2PCAf8N2YgCqQQOmTYclyyDHJvoATPB4t2GfAIE
+   mIMXm2kanlsd9nF+q4jr1fVRYct73UvGgfnsSzwaOFFbf810MDsFr5SIZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="8742314"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="15570953"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 18:48:22 -0800
+   d="scan'208";a="8742314"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 21:49:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="905822574"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="905822574"
+   d="scan'208";a="20949759"
 Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jan 2024 18:48:20 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 24 Jan 2024 21:49:26 -0800
 Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rSpmt-0008b5-03;
-	Thu, 25 Jan 2024 02:48:19 +0000
-Date: Thu, 25 Jan 2024 10:47:44 +0800
+	id 1rSsc8-0008kV-0c;
+	Thu, 25 Jan 2024 05:49:24 +0000
+Date: Thu, 25 Jan 2024 13:48:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devel@driverdev.osuosl.org
-Subject: [driver-core:debugfs_cleanup 6/7] drivers/nvmem/core.c:480:8: error:
- call to undeclared function 'devm_device_add_groups'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202401251023.4INLLZvR-lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:for-kernelci 4/4] error[E0425]: cannot find function `_printk`
+ in crate `bindings`
+Message-ID: <202401251312.nsg1mLWn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,101 +58,103 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git debugfs_cleanup
-head:   dfca47ec5332bac3ee306ae2ba95a89765a801b7
-commit: 2f0ece8a0f81650915d6252d146d32fe8162f112 [6/7] driver core: remove devm_device_add_groups()
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240125/202401251023.4INLLZvR-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240125/202401251023.4INLLZvR-lkp@intel.com/reproduce)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
+head:   1e140a96e8ce220d86926c91c3985f13ac88d816
+commit: 1e140a96e8ce220d86926c91c3985f13ac88d816 [4/4] x86: Build the core kernel with position independent codegen
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240125/202401251312.nsg1mLWn-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240125/202401251312.nsg1mLWn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401251023.4INLLZvR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401251312.nsg1mLWn-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/nvmem/core.c:480:8: error: call to undeclared function 'devm_device_add_groups'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     480 |         ret = devm_device_add_groups(&nvmem->dev, nvmem_cells_groups);
-         |               ^
-   drivers/nvmem/core.c:480:8: note: did you mean 'devm_device_add_group'?
-   include/linux/device.h:1204:18: note: 'devm_device_add_group' declared here
-    1204 | int __must_check devm_device_add_group(struct device *dev,
-         |                  ^
-   1 error generated.
-
-
-vim +/devm_device_add_groups +480 drivers/nvmem/core.c
-
-84400305271937 Srinivas Kandagatla 2020-03-25  429  
-0331c611949fff Miquel Raynal       2023-12-15  430  static int nvmem_populate_sysfs_cells(struct nvmem_device *nvmem)
-0331c611949fff Miquel Raynal       2023-12-15  431  {
-0331c611949fff Miquel Raynal       2023-12-15  432  	struct bin_attribute **cells_attrs, *attrs;
-0331c611949fff Miquel Raynal       2023-12-15  433  	struct nvmem_cell_entry *entry;
-0331c611949fff Miquel Raynal       2023-12-15  434  	unsigned int ncells = 0, i = 0;
-0331c611949fff Miquel Raynal       2023-12-15  435  	int ret = 0;
-0331c611949fff Miquel Raynal       2023-12-15  436  
-0331c611949fff Miquel Raynal       2023-12-15  437  	mutex_lock(&nvmem_mutex);
-0331c611949fff Miquel Raynal       2023-12-15  438  
-0331c611949fff Miquel Raynal       2023-12-15  439  	if (list_empty(&nvmem->cells) || nvmem->sysfs_cells_populated) {
-0331c611949fff Miquel Raynal       2023-12-15  440  		nvmem_cells_group.bin_attrs = NULL;
-0331c611949fff Miquel Raynal       2023-12-15  441  		goto unlock_mutex;
-0331c611949fff Miquel Raynal       2023-12-15  442  	}
-0331c611949fff Miquel Raynal       2023-12-15  443  
-0331c611949fff Miquel Raynal       2023-12-15  444  	/* Allocate an array of attributes with a sentinel */
-0331c611949fff Miquel Raynal       2023-12-15  445  	ncells = list_count_nodes(&nvmem->cells);
-0331c611949fff Miquel Raynal       2023-12-15  446  	cells_attrs = devm_kcalloc(&nvmem->dev, ncells + 1,
-0331c611949fff Miquel Raynal       2023-12-15  447  				   sizeof(struct bin_attribute *), GFP_KERNEL);
-0331c611949fff Miquel Raynal       2023-12-15  448  	if (!cells_attrs) {
-0331c611949fff Miquel Raynal       2023-12-15  449  		ret = -ENOMEM;
-0331c611949fff Miquel Raynal       2023-12-15  450  		goto unlock_mutex;
-0331c611949fff Miquel Raynal       2023-12-15  451  	}
-0331c611949fff Miquel Raynal       2023-12-15  452  
-0331c611949fff Miquel Raynal       2023-12-15  453  	attrs = devm_kcalloc(&nvmem->dev, ncells, sizeof(struct bin_attribute), GFP_KERNEL);
-0331c611949fff Miquel Raynal       2023-12-15  454  	if (!attrs) {
-0331c611949fff Miquel Raynal       2023-12-15  455  		ret = -ENOMEM;
-0331c611949fff Miquel Raynal       2023-12-15  456  		goto unlock_mutex;
-0331c611949fff Miquel Raynal       2023-12-15  457  	}
-0331c611949fff Miquel Raynal       2023-12-15  458  
-0331c611949fff Miquel Raynal       2023-12-15  459  	/* Initialize each attribute to take the name and size of the cell */
-0331c611949fff Miquel Raynal       2023-12-15  460  	list_for_each_entry(entry, &nvmem->cells, node) {
-0331c611949fff Miquel Raynal       2023-12-15  461  		sysfs_bin_attr_init(&attrs[i]);
-0331c611949fff Miquel Raynal       2023-12-15  462  		attrs[i].attr.name = devm_kasprintf(&nvmem->dev, GFP_KERNEL,
-0331c611949fff Miquel Raynal       2023-12-15  463  						    "%s@%x", entry->name,
-0331c611949fff Miquel Raynal       2023-12-15  464  						    entry->offset);
-0331c611949fff Miquel Raynal       2023-12-15  465  		attrs[i].attr.mode = 0444;
-0331c611949fff Miquel Raynal       2023-12-15  466  		attrs[i].size = entry->bytes;
-0331c611949fff Miquel Raynal       2023-12-15  467  		attrs[i].read = &nvmem_cell_attr_read;
-0331c611949fff Miquel Raynal       2023-12-15  468  		attrs[i].private = entry;
-0331c611949fff Miquel Raynal       2023-12-15  469  		if (!attrs[i].attr.name) {
-0331c611949fff Miquel Raynal       2023-12-15  470  			ret = -ENOMEM;
-0331c611949fff Miquel Raynal       2023-12-15  471  			goto unlock_mutex;
-0331c611949fff Miquel Raynal       2023-12-15  472  		}
-0331c611949fff Miquel Raynal       2023-12-15  473  
-0331c611949fff Miquel Raynal       2023-12-15  474  		cells_attrs[i] = &attrs[i];
-0331c611949fff Miquel Raynal       2023-12-15  475  		i++;
-0331c611949fff Miquel Raynal       2023-12-15  476  	}
-0331c611949fff Miquel Raynal       2023-12-15  477  
-0331c611949fff Miquel Raynal       2023-12-15  478  	nvmem_cells_group.bin_attrs = cells_attrs;
-0331c611949fff Miquel Raynal       2023-12-15  479  
-0331c611949fff Miquel Raynal       2023-12-15 @480  	ret = devm_device_add_groups(&nvmem->dev, nvmem_cells_groups);
-0331c611949fff Miquel Raynal       2023-12-15  481  	if (ret)
-0331c611949fff Miquel Raynal       2023-12-15  482  		goto unlock_mutex;
-0331c611949fff Miquel Raynal       2023-12-15  483  
-0331c611949fff Miquel Raynal       2023-12-15  484  	nvmem->sysfs_cells_populated = true;
-0331c611949fff Miquel Raynal       2023-12-15  485  
-0331c611949fff Miquel Raynal       2023-12-15  486  unlock_mutex:
-0331c611949fff Miquel Raynal       2023-12-15  487  	mutex_unlock(&nvmem_mutex);
-0331c611949fff Miquel Raynal       2023-12-15  488  
-0331c611949fff Miquel Raynal       2023-12-15  489  	return ret;
-0331c611949fff Miquel Raynal       2023-12-15  490  }
-0331c611949fff Miquel Raynal       2023-12-15  491  
-
-:::::: The code at line 480 was first introduced by commit
-:::::: 0331c611949fffdf486652450901a4dc52bc5cca nvmem: core: Expose cells through sysfs
-
-:::::: TO: Miquel Raynal <miquel.raynal@bootlin.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> warning: unused import: `super::bindings_raw::*`
+   --> rust/bindings/lib.rs:43:9
+   |
+   43 |     use super::bindings_raw::*;
+   |         ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+--
+>> error[E0425]: cannot find function `_printk` in crate `bindings`
+   --> rust/kernel/print.rs:111:19
+   |
+   111 |         bindings::_printk(
+   |                   ^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `_printk` in crate `bindings`
+   --> rust/kernel/print.rs:132:19
+   |
+   132 |         bindings::_printk(
+   |                   ^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `strlen` in crate `bindings`
+   --> rust/kernel/str.rs:101:38
+   |
+   101 |         let len = unsafe { bindings::strlen(ptr) } + 1;
+   |                                      ^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `memchr` in crate `bindings`
+   --> rust/kernel/str.rs:575:38
+   |
+   575 |         let ptr = unsafe { bindings::memchr(buf.as_ptr().cast(), 0, (f.bytes_written() - 1) as _) };
+   |                                      ^^^^^^ not found in `bindings`
+   |
+   help: consider importing this function
+   |
+   5   + use core::slice::memchr::memchr;
+   |
+   help: if you import `memchr`, refer to it directly
+   |
+   575 -         let ptr = unsafe { bindings::memchr(buf.as_ptr().cast(), 0, (f.bytes_written() - 1) as _) };
+   575 +         let ptr = unsafe { memchr(buf.as_ptr().cast(), 0, (f.bytes_written() - 1) as _) };
+   |
+--
+>> error[E0425]: cannot find function, tuple struct or tuple variant `REFCOUNT_INIT` in crate `bindings`
+   --> rust/kernel/sync/arc.rs:169:54
+   |
+   169 |             refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
+   |                                                      ^^^^^^^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `refcount_inc` in crate `bindings`
+   --> rust/kernel/sync/arc.rs:324:28
+   |
+   324 |         unsafe { bindings::refcount_inc(self.ptr.as_ref().refcount.get()) };
+   |                            ^^^^^^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `refcount_dec_and_test` in crate `bindings`
+   --> rust/kernel/sync/arc.rs:342:42
+   |
+   342 |         let is_zero = unsafe { bindings::refcount_dec_and_test(refcount) };
+   |                                          ^^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function, tuple struct or tuple variant `REFCOUNT_INIT` in crate `bindings`
+   --> rust/kernel/sync/arc.rs:573:54
+   |
+   573 |             refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
+   |                                                      ^^^^^^^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `__init_waitqueue_head` in crate `bindings`
+   --> rust/kernel/sync/condvar.rs:100:27
+   |
+   100 |                 bindings::__init_waitqueue_head(slot, name.as_char_ptr(), key.as_ptr())
+   |                           ^^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `init_wait` in crate `bindings`
+   --> rust/kernel/sync/condvar.rs:109:28
+   |
+   109   |         unsafe { bindings::init_wait(wait.get()) };
+   |                            ^^^^^^^^^ help: a static with a similar name exists: `init_task`
+   |
+   ::: rust/bindings/bindings_generated.rs:24737:5
+   |
+   24737 |     pub static mut init_task: task_struct;
+   |     ------------------------------------- similarly named static `init_task` defined here
+..
 
 -- 
 0-DAY CI Kernel Test Service
