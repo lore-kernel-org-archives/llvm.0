@@ -1,279 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD61C13175A
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 17:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8CF132C04
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 18:00:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706205024; cv=none; b=sndq9Glt3eIU7YrQKd1MAC6wcrVqWoSexLLoEp/Qh0x/i8FvJwhVPOw7XIoiUi/YKBTK9ccGPNIZwPTPkVUVPyu1/z7+8cOLPQdns3WaLyD9+zlBE8UQDe1JyIFXXIUGDRs17C5Ba79GOBaUnYkyCir3DZDAjgr+GqyCIQOBZVE=
+	t=1706205620; cv=none; b=EWmxVbCK60aiteX+Lya5jLuU9l5mu2m73QmpvHfbIi5RhzV3psZHKkfxXGpqGieFLgATHhKOSqsYmOYmC7NS2E+BY8Qke7GwCZ5MwKozc6GZ9MCU/jjj3BolPyNWkwML8xXotGxtwYUemQ0RsT1/CeQsujHtjPPmjbyM9cu1xrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706205024; c=relaxed/simple;
-	bh=+EMf8sdF5lQVsHYTlNN9KQsAYPxDwjK2z3MuHXnahc4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gAVu05g3mjerjy70qr5z7Kbp9oeH9s58pKq3LsHnproC58FPc5EV0xHzsSRagcMX3fmYwJPrbZv31iH1q2VmPqLdpR7PYKysYw5WYqvJORefdSyRUNwLGXUCb/0jcyKFJySYnVBazytRxwZjxzkEDS4WFYUpO3CCWlA/MtGgO48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YSNOexrC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706205620; c=relaxed/simple;
+	bh=mT3YLkbrBaeTvDcmwOHl1CS/WsjvlqLYlUMs+sUIjqo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MoxVc/pa4zdpFzYdtstidrTzJNlUtIC8cFZa8emHnKw4KmiuWcV7lOv6U8z0RsB9s0/5m3qSdQE2/daBL9t78qYTfwDe1O8XM0z7oN3P2b3PBCoyeD1IOH1LdzshCL0PfhzB1dl6DF+hQpPy8cA0cC5/MI18xJ6MNt5lGeSwgXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XhE/jQTu; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YSNOexrC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706205017;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gnpiHgob/KisVwgRfmQH5c/IVT98yVgmjZ8o5pjXWjI=;
-	b=YSNOexrC2iVRRbKY1zGhubwmjWqQqpOv7IAro/BdDSUhM3Pb4bHVkb6s2fvPOtQ9XCxU7t
-	0sJl1+BnN+jfPffr4YiqqcR84P3PSwaQjinJJ8aIr1FdTEypF1m2j8/z8TrHrcTNum4Id5
-	fV4snzBFwParWTOBQ1D4xr2mX3verHQ=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-397-2g5FJxfYPGiu1dMkFT721A-1; Thu,
- 25 Jan 2024 12:50:15 -0500
-X-MC-Unique: 2g5FJxfYPGiu1dMkFT721A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 30A851C05134
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 17:50:15 +0000 (UTC)
-Received: from [172.64.13.10] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1A8CDC0FDCA;
-	Thu, 25 Jan 2024 17:50:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 109 of 226): Test report for master
- (6.8.0-rc1, mainline.kernel.org-clang, cf10015a)
-Date: Thu, 25 Jan 2024 17:50:15 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XhE/jQTu"
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-362a24b13e6so3653595ab.2
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 10:00:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706205618; x=1706810418; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ASf7ytaMtxVk0xSdSw9HpPo51B0EyC7CmU5TJyjG/94=;
+        b=XhE/jQTuPDMrQl3r6qt9dk0jAM3nry0KX/S3wXKPTDr4Y2qBf1yX+GvDeJ0h1Whz8x
+         lTufBDnZUwWba6cJQxJHhzMEIgGm346aN54ztvqAiZtbA1+whLSFcmbzihbsSWo0c6A0
+         HovTe5pW/7BZ+tqzBlL4kkQU8cs0m6GzWsIGE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706205618; x=1706810418;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ASf7ytaMtxVk0xSdSw9HpPo51B0EyC7CmU5TJyjG/94=;
+        b=iZIJmZxo0BFpOXVNzpZaPfHadMSfrhvaouZyCZGIakM/GW8+RyuLVFjPZEOeyrJmzR
+         gTBSC8homT44tsCaeRQE1fXjXRKnEyA3trL02kdA54Dw6PdT6HG/clAVJMkQZ0veJotL
+         oJem6XZTluJpKcsBhnWiyYiCbY24iA9zb4DDxeFdVye3NYTzMELOy0cYm9Dqq+LQJvB1
+         FOn6VrxzC24RmqITEdDuPaxTxzhFJDzXuUQ1rnW/cPT7sq4KpiXD5kipAh5jkj5xXMFc
+         0F4gdcmoEmrziq7McvN1ljJZjFvyesCxr+RrFTFHHIwrtrkSz7/Mm/LWgitaiEFaMZLa
+         J04w==
+X-Gm-Message-State: AOJu0YwXrrzz378y+5p0/fY4uiIAdZRRp4IAk9kFCcZ9Beoe+g1VMhgC
+	lHyac6jNqCYqn/EI83Ug6KyMLEmR/0aRIu3tfWbNvXGpYeEDlZseVgZV5f0WYw==
+X-Google-Smtp-Source: AGHT+IGPddlDJxd6qVGArdVFf9Nrta2FGnNCUo/WGULBp9ke0+atvbxuIdfHfuqucOPAMPk2QtvD5Q==
+X-Received: by 2002:a05:6e02:1a6e:b0:35f:ef30:d665 with SMTP id w14-20020a056e021a6e00b0035fef30d665mr115219ilv.41.1706205617791;
+        Thu, 25 Jan 2024 10:00:17 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 73-20020a63004c000000b005cd835182c5sm13721878pga.79.2024.01.25.10.00.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 10:00:17 -0800 (PST)
+Date: Thu, 25 Jan 2024 10:00:16 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Steve French <sfrench@samba.org>, Nathan Chancellor <nathan@kernel.org>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
+	linux-cifs@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] smb: Work around Clang __bdos() type confusion
+Message-ID: <202401250958.11B29BE48@keescook>
+References: <20240123234731.work.358-kees@kernel.org>
+ <CAMj1kXGcKBPnHOm6PtsrxePdv5a6AokB=qvMrwvGmPh_Uk6vsA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <30138.124012512501501068@us-mta-397.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGcKBPnHOm6PtsrxePdv5a6AokB=qvMrwvGmPh_Uk6vsA@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Jan 25, 2024 at 01:19:19PM +0100, Ard Biesheuvel wrote:
+> On Wed, 24 Jan 2024 at 00:47, Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Recent versions of Clang gets confused about the possible size of the
+> > "user" allocation, and CONFIG_FORTIFY_SOURCE ends up emitting a
+> > warning[1]:
+> >
+> > repro.c:126:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+> >   126 |                         __write_overflow_field(p_size_field, size);
+> >       |                         ^
+> >
+> > for this memset():
+> >
+> >         int len;
+> >         __le16 *user;
+> >         ...
+> >         len = ses->user_name ? strlen(ses->user_name) : 0;
+> >         user = kmalloc(2 + (len * 2), GFP_KERNEL);
+> >         ...
+> >         if (len) {
+> >                 ...
+> >         } else {
+> >                 memset(user, '\0', 2);
+> >         }
+> >
+> > While Clang works on this bug[2], switch to using a direct assignment,
+> > which avoids memset() entirely which both simplifies the code and silences
+> > the false positive warning. (Making "len" size_t also silences the
+> > warning, but the direct assignment seems better.)
+> >
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1966 [1]
+> > Link: https://github.com/llvm/llvm-project/issues/77813 [2]
+> > Cc: Steve French <sfrench@samba.org>
+> > Cc: Paulo Alcantara <pc@manguebit.com>
+> > Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
+> > Cc: Shyam Prasad N <sprasad@microsoft.com>
+> > Cc: Tom Talpey <tom@talpey.com>
+> > Cc: linux-cifs@vger.kernel.org
+> > Cc: llvm@lists.linux.dev
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  fs/smb/client/cifsencrypt.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
+> > index ef4c2e3c9fa6..6322f0f68a17 100644
+> > --- a/fs/smb/client/cifsencrypt.c
+> > +++ b/fs/smb/client/cifsencrypt.c
+> > @@ -572,7 +572,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
+> >                 len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
+> >                 UniStrupr(user);
+> >         } else {
+> > -               memset(user, '\0', 2);
+> > +               *(u16 *)user = 0;
+> 
+> Is 'user' guaranteed to be 16-bit aligned?
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+It's the first two bytes of a kmalloced address range, which I'm nearly
+certain will be sanely aligned, as those allocs are commonly used for
+holding structs, etc.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+-Kees
 
-Kernel information:
-    Commit message: Merge tag 'execve-v6.8-rc2' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kees/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/125583
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Storage - swraid scsi_raid
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [rawhide] avc:  denied  { checkpoint_restore } for  pid=3D79=
-3 comm=3D"agetty" capability=3D40  scontext=3Dsystem_u:system_r:getty_t:s0-=
-s0:c0.c1023 tcontext=3Dsystem_u:system_r:getty_t:s0-s0:c0.c1023 tclass=3Dca=
-pability2 permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259622
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Storage - swraid scsi_raid
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Reboot test
-       s390x - CKI/restraint
-       s390x - SELinux Custom Module Setup
-       s390x - machineinfo
-       s390x - Boot test
-       s390x - POSIX pjd-fstest suites
-       s390x - Filesystem - Loopdev Sanity
-       s390x - Memory function: memfd_create
-       s390x - AMTU (Abstract Machine Test Utility)
-       s390x - Networking - Ethernet drivers sanity
-       s390x - Networking cki netfilter test
-       s390x - Networking vnic: ipvlan/basic
-       s390x - Libkcapi AF_ALG test
-       s390x - Storage - multipath mapping test
-       s390x - Storage - dm/common
-       s390x - Storage - lvm thinp sanity
-       s390x - kdump - kexec_boot
-       s390x - kdump - kexec-file-load
-       s390x - Reboot test
-       s390x - CKI/restraint
-       s390x - SELinux Custom Module Setup
-       s390x - machineinfo
-       s390x - Boot test
-       s390x - kdump - sysrq-c
-       s390x - kdump - file-load
-       s390x - Reboot test
-       s390x - CKI/restraint
-       s390x - SELinux Custom Module Setup
-       s390x - machineinfo
-       s390x - Boot test
-       s390x - selinux-policy: serge-testsuite
-       s390x - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - POSIX pjd-fstest suites
-      x86_64 (debug) - Filesystem - Loopdev Sanity
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-      x86_64 (debug) - Networking - Ethernet drivers sanity
-      x86_64 (debug) - Networking cki netfilter test
-      x86_64 (debug) - Libkcapi AF_ALG test
-      x86_64 (debug) - Hardware - pciutils: sanity smoke test
-      x86_64 (debug) - Storage - dm/common
-      x86_64 (debug) - Storage - lvm thinp sanity
-      x86_64 (debug) - Storage - iSCSI parameters
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - POSIX pjd-fstest suites
-      x86_64 - Filesystem - Loopdev Sanity
-      x86_64 - Memory function: memfd_create
-      x86_64 - AMTU (Abstract Machine Test Utility)
-      x86_64 - Networking - Ethernet drivers sanity
-      x86_64 - Networking cki netfilter test
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - multipath mapping test
-      x86_64 - Storage - dm/common
-      x86_64 - Storage - lvm thinp sanity
-      x86_64 - Storage - iSCSI parameters
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - kdump - sysrq-c
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - selinux-policy: serge-testsuite
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - xfstests - ext4
-      x86_64 - xfstests - xfs
-      x86_64 - xfstests - btrfs
-      x86_64 - xfstests - nfsv4.2
-      x86_64 - xfstests - cifsv3.11
-      x86_64 - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Kees Cook
