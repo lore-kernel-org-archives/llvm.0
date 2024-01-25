@@ -1,129 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E33E135407;
-	Thu, 25 Jan 2024 17:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E1B79C7;
+	Thu, 25 Jan 2024 17:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706202671; cv=none; b=tN/04/G+FeuULzkPQGF6BbnGXUgEHcBZCvOAX9Ei0AXRsOuo/PzVu05U9H1D4BLx/iQgqVeAE3C/Sg2YUJpvQRPsLqfOHJC/es8roynozXsgZDI77BoP28HH/nXV4322rmPRI1Fq59yg9PPcPp6oKYIb8QWpPGmRZoVDCrq5bH4=
+	t=1706203937; cv=none; b=lWxgtmt3EBsiif94lSsNifvJpf+WvJ+b4irwE+DmkOKojFZGm8uqymKtT25yhnKBZ8XOUdiHqU61jc6jcYpgm96axqrS7bUuRFiPi6PAKPQDctfU6ity69zkioety+gsBEhalAlSdoBMGHKfFdwG4of/6vvjdu07TR+Djtap8SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706202671; c=relaxed/simple;
-	bh=U5wQYQ3cu9vysPI5MCfehIzFnStJDNyMSdpVnQjjGK0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Y5q6JzKgY6MPLcPGtVPS401rm5s42BMFx5+OwrY+LqXIDiS3li2aFQAyuYNylLysCGbxxloAKDX7jV2fDjBpz1Y0WTS9ykMaUjBZSUUnOgVO6rFRrW3KU8KCeMXzvrxb8w+HRR4aaIRLAu4WLSh1QIPhsSLNioSUOgCwatmAkYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BJlwguyb; arc=none smtp.client-ip=134.134.136.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706203937; c=relaxed/simple;
+	bh=3PvCiAQrtJD/zuf2t8VwlvCpBAFoHiP16hfmstASs9E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XiTxViLzi1W6dj1wwDMYuoMNwHIEJ1eBXjnk4QTxXWbyrrq+RI/QT6ROZHR5DdQjduDeRM1BR5Y5JNoNnP+NCqX977dSZudheMtXcj87UAVg4GfdpYwUSlC3Bz0+ALUPTq0XnCEkDepaaPGCt/tF1ICe7okwOO9/IkLcLBCff3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CWxf9fgh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BJlwguyb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706202669; x=1737738669;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U5wQYQ3cu9vysPI5MCfehIzFnStJDNyMSdpVnQjjGK0=;
-  b=BJlwguybQHkJsPYEGqoOY8ylSTEjy0wH+ueeccEurWEWuD00VxIQqAQU
-   xZYQXQzTmj0hQTOw6G7ZOii70wo+WEC0TV7OLrI4B+s4m45w/j3Z3HLLM
-   S7fkXbNRYArVUBstfOGdizqFk1XkT6bWG9jqA1hcr7js3U3KM+9ZIzRiV
-   5RC8SrvFEfbR7yVuff7gNbVlPGulbIF4Kjuf5ReZf0UW+SXFCuKjQZbNh
-   VGw24I4ANH9easD8q1OZh/6VGMObCeImTs8P+XI+f10/Gh4tFBoaxMUyS
-   ei+bCDGS6DLbmmL9T0J46vMyrbyFyaJTUIMiJst6NC7SDCkgUZO7wck5t
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="405971914"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="405971914"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 09:11:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2326651"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 25 Jan 2024 09:11:05 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rT3Fn-0000EV-0O;
-	Thu, 25 Jan 2024 17:11:03 +0000
-Date: Fri, 26 Jan 2024 01:10:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 8/21] drivers/hid/hid-magicmouse.c:570:
- warning: Excess struct member 'crc16' description in 'tp_finger'
-Message-ID: <202401260106.VKth8fll-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CWxf9fgh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D85C433F1;
+	Thu, 25 Jan 2024 17:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706203937;
+	bh=3PvCiAQrtJD/zuf2t8VwlvCpBAFoHiP16hfmstASs9E=;
+	h=From:Subject:Date:To:Cc:From;
+	b=CWxf9fgh7SWQbUv+w60Q5mT7c9OYxjTpVll1i2bNNiKg/wlwZujGzhs6cb7vgRveQ
+	 JIbAMjVa0NuS6kCH5gSwTCOSdZJbgSsvyE1jlYQgtc3122EOKqhYbNyq/HUJEAQcCe
+	 AE67+vBF68+wDM0d/uqKkmi7ddKkTU/iGyYZ/iRxhGwICCehWPNvirHw2VprPJJKCp
+	 qt3DoTAajdBm5iVbw6m1bKg0sKzk1cKsHNVCok1/vJFBTxdFBYZG9gcl6D8rgWa5mT
+	 LMMs1euY2mE26V3uO1k002IEp4fjCyZe3l9YU6JaJXjEz9JSshp/uSnlDr86s44SSW
+	 DDLQQNqSgC02A==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] RISC-V: Fix CONFIG_AS_HAS_OPTION_ARCH with tip of tree
+ LLVM
+Date: Thu, 25 Jan 2024 10:32:10 -0700
+Message-Id: <20240125-fix-riscv-option-arch-llvm-18-v1-0-390ac9cc3cd0@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABqbsmUC/x2MSwqFMAwAryJZv0Bbxd9VxEWtUQP+SKUI4t0Nb
+ zkwMw9EEqYIbfaAUOLIx65gfxmExe8zIY/K4IwrjHUFTnyjcAwJj/NSGb2EBdc1bWhrzMNA1WA
+ a72wJ+jiFNPj/u/59P/u0YW9vAAAA
+To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+ masahiroy@kernel.org
+Cc: nicolas@fjasle.eu, andy.chiu@sifive.com, conor.dooley@microchip.com, 
+ linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
+ Eric Biggers <ebiggers@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1526; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=3PvCiAQrtJD/zuf2t8VwlvCpBAFoHiP16hfmstASs9E=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKmbZsszSfLFTrfQc+X5/21XXcmGTcwG/6/tad9ZEOjzz
+ 2TXzOU1HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi8ucZGdY+zVm9yNNafwG3
+ gMmPxYyCm7Y09Pt2flr47PSRXtbDvosY/gd7PHZ1uLt4qpwAw501soe+ZT6qnpr06I+v7vSlXL5
+ SQYwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   253645613d55bc9e62bb0b1811d009cd987f301f
-commit: c09e6b2eb869c1427a5991a82e4357c2ab5271d7 [8/21] HID: magicmouse: add support for Macbook trackpads
-config: i386-buildonly-randconfig-005-20240124 (https://download.01.org/0day-ci/archive/20240126/202401260106.VKth8fll-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260106.VKth8fll-lkp@intel.com/reproduce)
+Hi all,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401260106.VKth8fll-lkp@intel.com/
+Eric reported that builds of LLVM with [1] (close to tip of tree) have
+CONFIG_AS_HAS_OPTION_ARCH=n because the test for expected failure on
+invalid input has started succeeding.
 
-All warnings (new ones prefixed by >>):
+This Kconfig test was added because '.option arch' only causes an
+assembler warning when it is unsupported, rather than a hard error,
+which is what users of as-instr expect when something is unsupported.
 
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'pos' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'hdev' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'work' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'battery_timer' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'input_ops' not described in 'magicmouse_sc'
->> drivers/hid/hid-magicmouse.c:570: warning: Excess struct member 'crc16' description in 'tp_finger'
-   drivers/hid/hid-magicmouse.c:592: warning: expecting prototype for struct trackpad. Prototype was for struct tp_header instead
+This can be resolved by turning assembler warnings into errors with
+'-Wa,--fatal-warnings' like we do with the compiler with '-Werror',
+which is what the first patch does. The second patch removes the invalid
+test, as the valid test is good enough with fatal warnings.
 
+I have diffed several configurations for the different architectures
+that use as-instr and I have found no issues.
 
-vim +570 drivers/hid/hid-magicmouse.c
+I think this could go in through either the kbuild or RISC-V tree with
+sufficient acks but I will let them fight over who takes it :)
 
-   533	
-   534	/**
-   535	 * struct tp_finger - single trackpad finger structure, le16-aligned
-   536	 *
-   537	 * @unknown1:		unknown
-   538	 * @unknown2:		unknown
-   539	 * @abs_x:		absolute x coordinate
-   540	 * @abs_y:		absolute y coordinate
-   541	 * @rel_x:		relative x coordinate
-   542	 * @rel_y:		relative y coordinate
-   543	 * @tool_major:		tool area, major axis
-   544	 * @tool_minor:		tool area, minor axis
-   545	 * @orientation:	16384 when point, else 15 bit angle
-   546	 * @touch_major:	touch area, major axis
-   547	 * @touch_minor:	touch area, minor axis
-   548	 * @unused:		zeros
-   549	 * @pressure:		pressure on forcetouch touchpad
-   550	 * @multi:		one finger: varies, more fingers: constant
-   551	 * @crc16:		on last finger: crc over the whole message struct
-   552	 *			(i.e. message header + this struct) minus the last
-   553	 *			@crc16 field; unknown on all other fingers.
-   554	 */
-   555	struct tp_finger {
-   556		__le16 unknown1;
-   557		__le16 unknown2;
-   558		__le16 abs_x;
-   559		__le16 abs_y;
-   560		__le16 rel_x;
-   561		__le16 rel_y;
-   562		__le16 tool_major;
-   563		__le16 tool_minor;
-   564		__le16 orientation;
-   565		__le16 touch_major;
-   566		__le16 touch_minor;
-   567		__le16 unused[2];
-   568		__le16 pressure;
-   569		__le16 multi;
- > 570	} __attribute__((packed, aligned(2)));
-   571	
+[1]: https://github.com/llvm/llvm-project/commit/3ac9fe69f70a2b3541266daedbaaa7dc9c007a2a
 
+---
+Nathan Chancellor (2):
+      kbuild: Add -Wa,--fatal-warnings to as-instr invocation
+      RISC-V: Drop invalid test from CONFIG_AS_HAS_OPTION_ARCH
+
+ arch/riscv/Kconfig        | 1 -
+ scripts/Kconfig.include   | 2 +-
+ scripts/Makefile.compiler | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20240124-fix-riscv-option-arch-llvm-18-3cbe7b09a216
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
