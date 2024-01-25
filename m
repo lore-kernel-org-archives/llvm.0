@@ -1,53 +1,53 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941B545C0D
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EBE51017
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706182383; cv=none; b=pR79tRm6UhIqqaAlyDqkAnWHyy7i9Hfy8nd88skAR82WChCG6LozZfTn203ZMwC3e8mMgzmAwjww5uivNiAhlWelm2+AqWLOQgliHDEbWRSeWyWMfKQHDDBlfSoImJuEHhRcbpKUB3c0SVTJlqy41hX+dXOTsef56Ge9CG2pTy0=
+	t=1706182386; cv=none; b=etD0wGd+7hnDNhIFvJfo/zb3ptJhzR361pidGtfGmipQ7hQJaysqJAqEqtn6C9zEpt+b87S39+uGLOHK5PRawwyaIMn7aDH9phvtIGvp2tf9FWU9n7wqhfdum233jo2SWEcq0IYREKZG1mqE0Tw7NPwlA3EAD7pXJTQCoPLRV9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706182383; c=relaxed/simple;
-	bh=nW9SmCdlADHOE6Omr4PFRwdaZThbp8qbwCml5fp8EWk=;
+	s=arc-20240116; t=1706182386; c=relaxed/simple;
+	bh=ywQcTtrCDMHJcI+QkXWX2nFyJwoVE8xehI2i+Z3nGsk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=X5Btt5WGZxFmswVVrvxE61A8hZ4/ESSmBN9B24QORpGd9KmAl6c5/o6TuAeNp1pEf8LT0+xlIxUL3HQ9lKzm3d+rSNbqAj8ltNvCfFNWG8h/7S7pA7zRA6Uu2dd3q2e4Qubfyi+LUzLIHqhUwazRdnb4aSF89mevIxXZgIo5EXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V4H+X3Qf; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=m4cLuWE8vnjuNKUo7UOYMX2+P18kQdMi3PHF2NXE8eVJRdQaOF5uqqfDLJEvtLLy8TQfbeChxFBL6RVBqmuM96eS2fLC76CFxmsuYCvYoJEGW7nsZpn8gH2SBngrl/CJ+H8h11RL0okHJNKVsYrAJaBC52AHJZZIknRSXcvGLTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KJl0yM6A; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V4H+X3Qf"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc2470bc0bdso8868659276.1
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:33:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KJl0yM6A"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-40e53200380so56708195e9.3
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:33:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706182380; x=1706787180; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706182383; x=1706787183; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RdRmN5FNC9Qw8qYorfxYqmWorkk70z2Gc350vuxR288=;
-        b=V4H+X3QfS/x72YesRGjOsjiE0XJmMupA2jF0sb7rQK79EN4r8m2uDjhtV8LWMZJmr3
-         2kburqOgUHo5ECyrZX7im/K2BrhZVWFMTmZ3k2LXmlibwRoJWax6qvyujkXCytwoWw68
-         IDo+Gc+49/+5LExBKetHP3m36QhNp3sdqKqdwq/qhrXReowRqTNr7sABaBs5OicjGNfM
-         nqD5q1ZNQf8A2QkGrqeFT3CTrmvyni/b9lknnkH0VnT1mV2rJSV8C8MwbdYwuVFE/gQ5
-         ok5xrLrUUE/E/YNlpAB/FcuwI2Zcj7oQpIVcnFJhditg4IfYCQcNibzthkGMbErFseQM
-         jcIw==
+        bh=fLLl1bcVbRYtnIzLBeH2xJGti8beoepv/z/uSZlJPHo=;
+        b=KJl0yM6AxvWfjapQtl6GzLUzgVtRChNG8pf/LBX5fLRtTlfS8H59YVlXQPZMIg2oD5
+         HE1XlQD2m0w2Bhd7rqPnLvNVU6p2VkSf9clLy7TK92VkuZGGlQCKw/IpkY7Mafz3DPFg
+         wh7nD+k7j0PJCnsgRZ+c30DIu6kkocGqLFxDDYWzjHDZxaaKlhLsZNXWGNAwJHLuoOPM
+         jVeXOp3SuEVJOrLKi8OJJrNJKrNYTW2TEGT0an7kFwTwLG7AUMUpH+/n9Ysh7l+DX1U7
+         NbvE37IWY4raQ09frLp/GYMsTlHJE4Q9UmVNoUZYHGjiHyPmqUYlydD0hOPJVrlBFuqx
+         hnOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706182380; x=1706787180;
+        d=1e100.net; s=20230601; t=1706182383; x=1706787183;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RdRmN5FNC9Qw8qYorfxYqmWorkk70z2Gc350vuxR288=;
-        b=AA0aqU10oBoEkF9/w94sM7tY5B5UrHo59cwYn1lQohQmrM6h775f0qoEeZMfKPXpfA
-         faeSBE3mNXX6yOXSYhHP2YZyIvF0/fYfdCswx3fSYp7p0Dl+ZTdk+tRE2s9JzmcPiUJ7
-         piTj9N7QM5MSoidsnv5U8KDXUKYVy2y9mPcP8XnC3bQCUCIFoylGAiZRGpng9rCUHMJL
-         5oIIZAuNd0ngN6TlymCx08I0LtieDymYMxmC2vY8P5WPiojT7t7awAh7qY1bv4MfsOdf
-         EWwLs5b6vT6zl6oRsecZ4z5zGoZrlO24XnqIlk3jy2yBkMlmVhFcyETuhj9gSd/FtdMZ
-         Jo8A==
-X-Gm-Message-State: AOJu0YwoSnCPjrfxk+qq07nJr6HDVEXvJRbRZ1a94yGeOt4F5tHhayHL
-	lPJJekXUAk8CQWddSmIY+Vavbz+0vSvOiVXIIW1rOMdWgeHA1+lP82RjavW/YyhAoo3wsg==
-X-Google-Smtp-Source: AGHT+IHDc2/5/0E5j8SgTMQ5k2iNKR0mjItM/KC4Qufeqbxsivnk6byCOTNas7euch7jxZEFWYQe7+SR
+        bh=fLLl1bcVbRYtnIzLBeH2xJGti8beoepv/z/uSZlJPHo=;
+        b=hd/Z6CXgWuDCmPNQ9omGPu4jSM2NWpCZ740g60CaCf5+carhhJ3xe6FxKAneE7zvN1
+         ZD6ZrpIEexlztabMlACcAQZdOMd6+o7/lK73HhfGh7Z248nQWCng0+WkKbJCZf6k+lBy
+         S3bz5qu5XN7Y08TYI4ei5Ql+EHoJbkSTabe64o7HKbxDJG/eHrZzs4thUbGbtGgX18oI
+         C/laD+p0VqRrtNXwkAz4M+YVaBJETgQxpkPhjfFP3XT7xuvIWyClk4XjE4qXov0Rlwca
+         bfzn3YDGpXxuRSueEawTuOG0pxus4ibhotlpYdAF3QVcLrdoZ1ASsgc4yBrIZEnqrUZT
+         aJOQ==
+X-Gm-Message-State: AOJu0Yw8pwO7ducerwXF960tBQvEsURo3wYvncyZiGJSKNVvlLa41DJg
+	hb21r7ga3mVdgRfJYxpdj9TkmN3UBkV7lbeQPoEtt7RljD2QRHO4VCYOz7I2/C/jS1J0NA==
+X-Google-Smtp-Source: AGHT+IH+tHtY9FWpEc9qh8w6jVw/qndHIKRZi4Zi4jc1hJlvKLmXv0672PzSqvht8FRd715mL9u57xeg
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:6902:2407:b0:dc2:65e2:58f3 with SMTP id
- dr7-20020a056902240700b00dc265e258f3mr85436ybb.7.1706182380556; Thu, 25 Jan
- 2024 03:33:00 -0800 (PST)
-Date: Thu, 25 Jan 2024 12:28:29 +0100
+ (user=ardb job=sendgmr) by 2002:a05:600c:4e0c:b0:40e:c720:f327 with SMTP id
+ b12-20020a05600c4e0c00b0040ec720f327mr14276wmq.4.1706182383051; Thu, 25 Jan
+ 2024 03:33:03 -0800 (PST)
+Date: Thu, 25 Jan 2024 12:28:30 +0100
 In-Reply-To: <20240125112818.2016733-19-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,14 +57,15 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240125112818.2016733-19-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3942; i=ardb@kernel.org;
- h=from:subject; bh=NDQz8Ub0YeUmHEZHj1/2gw+nBRrbtOLR0AuDt5JEbB0=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT6+tOhnUbZt/4pv7feq263bHT+yJ7HN1ebknYPeV/T
- kbiHuunHaUsDGIcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAifKYMf+Ue7yjove9+NW3v
- qrOrE8WS/Cq02Bf8ZNqfx9ay/nlsqxDDHy67p271b9cX1GyKdPLS1Im3nZDa0XjGtoK/97ZL+Rx VXgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=979; i=ardb@kernel.org;
+ h=from:subject; bh=DDaOUA3J+CFMHhm3e2XXAeDqtyhjkdr8A2J8hJRp8QM=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT6wfmH+v9haLvWOZmMFrJXOT6Yz094E3RseZ9K47vm
+ /XtUvaHjlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRpg5Ghm0sH1ScTbRyzT9y
+ LT5+VOxYRanmRG27Jp4J++av9Zuc7sLIsLeAS7395J5HEZYJvUVbV/Nxt13WjZNdJpJ7wl/vXc1 bLgA=
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240125112818.2016733-29-ardb+git@google.com>
-Subject: [PATCH v2 10/17] x86/head64: Move early startup code into __pitext
+Message-ID: <20240125112818.2016733-30-ardb+git@google.com>
+Subject: [PATCH v2 11/17] modpost: Warn about calls from __pitext into other
+ text sections
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -78,119 +79,38 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-The boot CPU runs some early startup C code using a 1:1 mapping of
-memory, which deviates from the normal kernel virtual mapping that is
-used for calculating statically initialized pointer variables.
-
-This makes it necessary to strictly limit which C code will actually be
-called from that early boot path. Implement this by moving the early
-startup code into __pitext.
+Ensure that code that is marked as being able to safely run from a 1:1
+mapping does not call into other code which might lack that property.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head64.c  |  9 ++++----
- arch/x86/kernel/head_64.S | 24 ++++++++++++--------
- 2 files changed, 20 insertions(+), 13 deletions(-)
+ scripts/mod/modpost.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 993d888a3172..079e1adc6121 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -70,7 +70,8 @@ static struct desc_struct startup_gdt[GDT_ENTRIES] __initconst = {
- 	asm("movq $" __stringify(sym) ", %0":"=r"(__v));		\
- 	__v; })
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 962d00df47ab..33b56d6b4e7b 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -825,6 +825,7 @@ enum mismatch {
+ 	ANY_INIT_TO_ANY_EXIT,
+ 	ANY_EXIT_TO_ANY_INIT,
+ 	EXTABLE_TO_NON_TEXT,
++	PI_TEXT_TO_NON_PI_TEXT,
+ };
  
--static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdval_t *pmd)
-+static unsigned long __pitext sme_postprocess_startup(struct boot_params *bp,
-+						      pmdval_t *pmd)
- {
- 	unsigned long vaddr, vaddr_end;
- 	int i;
-@@ -113,7 +114,7 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
- 	return sme_get_me_mask();
+ /**
+@@ -887,6 +888,11 @@ static const struct sectioncheck sectioncheck[] = {
+ 	.bad_tosec = { ".altinstr_replacement", NULL },
+ 	.good_tosec = {ALL_TEXT_SECTIONS , NULL},
+ 	.mismatch = EXTABLE_TO_NON_TEXT,
++},
++{
++	.fromsec = { ALL_PI_TEXT_SECTIONS, NULL },
++	.bad_tosec = { ALL_NON_PI_TEXT_SECTIONS, NULL },
++	.mismatch = PI_TEXT_TO_NON_PI_TEXT,
  }
+ };
  
--unsigned long __head __startup_64(struct boot_params *bp)
-+unsigned long __pitext __startup_64(struct boot_params *bp)
- {
- 	unsigned long physaddr = (unsigned long)_text;
- 	unsigned long load_delta, *p;
-@@ -508,7 +509,7 @@ void __init __noreturn x86_64_start_reservations(char *real_mode_data)
-  */
- static gate_desc bringup_idt_table[NUM_EXCEPTION_VECTORS] __page_aligned_data;
- 
--static void early_load_idt(void (*handler)(void))
-+static void __pitext early_load_idt(void (*handler)(void))
- {
- 	gate_desc *idt = bringup_idt_table;
- 	struct desc_ptr bringup_idt_descr;
-@@ -539,7 +540,7 @@ void early_setup_idt(void)
- /*
-  * Setup boot CPU state needed before kernel switches to virtual addresses.
-  */
--void __head startup_64_setup_env(void)
-+void __pitext startup_64_setup_env(void)
- {
- 	struct desc_ptr startup_gdt_descr;
- 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index b8704ac1a4da..5defefcc7f50 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -42,6 +42,15 @@ L3_START_KERNEL = pud_index(__START_KERNEL_map)
- 	__HEAD
- 	.code64
- SYM_CODE_START_NOALIGN(startup_64)
-+	UNWIND_HINT_END_OF_STACK
-+	jmp	primary_startup_64
-+SYM_CODE_END(startup_64)
-+
-+	__PITEXT
-+#include "verify_cpu.S"
-+#include "sev_verify_cbit.S"
-+
-+SYM_CODE_START_LOCAL(primary_startup_64)
- 	UNWIND_HINT_END_OF_STACK
- 	/*
- 	 * At this point the CPU runs in 64bit mode CS.L = 1 CS.D = 0,
-@@ -131,10 +140,12 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	movq	%rax, %cr3
- 
- 	/* Branch to the common startup code at its kernel virtual address */
--	movq	$common_startup_64, %rax
- 	ANNOTATE_RETPOLINE_SAFE
--	jmp	*%rax
--SYM_CODE_END(startup_64)
-+	jmp	*.Lcommon_startup_64(%rip)
-+SYM_CODE_END(primary_startup_64)
-+
-+	__INITRODATA
-+SYM_DATA_LOCAL(.Lcommon_startup_64, .quad common_startup_64)
- 
- 	.text
- SYM_CODE_START(secondary_startup_64)
-@@ -410,9 +421,6 @@ SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
- 	int3
- SYM_CODE_END(secondary_startup_64)
- 
--#include "verify_cpu.S"
--#include "sev_verify_cbit.S"
--
- #if defined(CONFIG_HOTPLUG_CPU) && defined(CONFIG_AMD_MEM_ENCRYPT)
- /*
-  * Entry point for soft restart of a CPU. Invoked from xxx_play_dead() for
-@@ -539,10 +547,8 @@ SYM_CODE_END(early_idt_handler_common)
-  * paravirtualized INTERRUPT_RETURN and pv-ops don't work that early.
-  *
-  * XXX it does, fix this.
-- *
-- * This handler will end up in the .init.text section and not be
-- * available to boot secondary CPUs.
-  */
-+	__PITEXT
- SYM_CODE_START_NOALIGN(vc_no_ghcb)
- 	UNWIND_HINT_IRET_REGS offset=8
- 	ENDBR
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
