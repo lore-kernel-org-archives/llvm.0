@@ -1,291 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C87E6313F
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 14:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148E8134740;
+	Thu, 25 Jan 2024 17:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706191876; cv=none; b=FnxihvM8DWq2TrhXJcI7QpnFuFXaNGVuEclqGvGeoSToyZ0pJkheKnDygzYkHb6zCu4nsCZjNGzmNH+OZX/2zhS8elAtFdtet1dNiIqlnhi6Ob0MXoCKy6WbWrsY3nuwryI0svePccikoC//rVf3jF+cTX+bdhVb/M3UrJXV3iA=
+	t=1706202055; cv=none; b=kJuKvlOf2uQ/2UKoXCrw/Ce1eL0xknsHHzWW6XAW7jgQpjIU8VTeVJmCyRMkSnG/2MGHCE2j2LDXFiC2pHKrV8/nnDppN7CVdaJM5FEfQx3xVsJVlzw33KgDsHc/8/iYAX7z+MMsSeb7oqdmt/uMAH97E7YM6dCRmhxoM/C+ITw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706191876; c=relaxed/simple;
-	bh=zbkGEwsSAN8wVRlV/SXkHl6097UHhk/+9zAtscGTOV4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=b0g5rxUvYPHde+ZAUq3HvjL/1df+VrzQv24RqSNMmjEMg4JcUS86PGl+ln+6cMkKeiflGYsWn13N/Ct4P27TSh8Qpdnd+JKzUxBKn5Im67dsycItXxOzsOhSGC84K3mHvEiy3zLgZliBow3zoRsCfWah0TRAjmLkewFCITCWlnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=emo+Sir+; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706202055; c=relaxed/simple;
+	bh=AYW4JbQwBUIj343RXZ0KxuVwkrZaEl3VXTaOpIIB4fk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EeHcLAHrLw5nWVS4cCngwz8iPg1nMEpQzJLY4kKr7PjOcmBTdNnQXocv1k39K/D9G7WYzbUlPDzaD8FT6yJ2jyQoQxBuOXU1Xa7JIsMfw+Ssbn8+gCXXVg/kI6gq/LzRPYOx3CB/8Gi2OohZWoZqmXEO+P3jFIpAlHEuZ/5qCGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cj4esP0a; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="emo+Sir+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706191872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wPM4Z7gI6cRE92Q0QoiMlQ+j0HOCwX9htkeZvFYwmVo=;
-	b=emo+Sir+a2dEQd6zDVCavIOWPstWAkorF6KfFoHvLigUlsUN3+OOA6MsGfHYRBCcBxMEmL
-	fhsuiIEFOcay24ONl2obhGMmL0WjSlYbk94m58cXBEjUfo8xlbMc9djccQfVJCEgy21kP5
-	SNV+423yjpgiP1bUpp4P7SJvTzte+KU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-XfE0nPXyN0mF1k_ViViInA-1; Thu, 25 Jan 2024 09:11:10 -0500
-X-MC-Unique: XfE0nPXyN0mF1k_ViViInA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77F9E1013667
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 14:11:10 +0000 (UTC)
-Received: from [172.64.0.99] (unknown [10.30.33.131])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 62D822028CD4;
-	Thu, 25 Jan 2024 14:11:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 132 of 226): Test report for master
- (6.8.0-rc1, mainline.kernel.org-clang, 443b3490)
-Date: Thu, 25 Jan 2024 14:11:10 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cj4esP0a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706202054; x=1737738054;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AYW4JbQwBUIj343RXZ0KxuVwkrZaEl3VXTaOpIIB4fk=;
+  b=cj4esP0aAA9E08Iw4Lp2SS3jMGv+HWPuk3mz0HY07uCjaRYOcha9B7j2
+   eXQZqoetdd/hFnRN8W/CSjG2HdrTe1VZw3c0OMSAAazzKWh79M4OFAnUH
+   ywFoy0rOlaaddukEbgwFnxaWvlhIB3KOiUOZ3e/WbzCyqm6Mls6FlXvhJ
+   KULg9X8iMCqBO5Is2vck4v3TGagtDl7dnxTeWhsnDP7nuAGIXhqqaegxa
+   0d21uPEm5/10a8zxltIDz1x8PeQgC1zgWmpvOQ+d5yfmIQf9cqco+iKgO
+   iu0V2BaZFCzSFMK+ewSQk0uRm76NcmRVjNCiGyzNFX3cX1Ry/dMgweyeV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="2068915"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="2068915"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 09:00:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="35162431"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 25 Jan 2024 09:00:05 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rT358-0000DZ-1C;
+	Thu, 25 Jan 2024 17:00:02 +0000
+Date: Fri, 26 Jan 2024 00:59:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Shi <alexs@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [alexshi:schedtest2 11/12] kernel/sched/fair.c:9744:6: error:
+ expected '(' after 'if'
+Message-ID: <202401260037.Imdz1say-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <17079.124012509111003059@us-mta-591.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/alexshi/linux.git schedtest2
+head:   326c08b860db40ad088d64cbca38afdccc196410
+commit: 0436efe9a058218c483c6d296083253e871a391e [11/12] sched/fair: pack SD_ASYM_PACKING into sched_use_asym_prio
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240126/202401260037.Imdz1say-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260037.Imdz1say-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401260037.Imdz1say-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: samples/cgroup: add .gitignore file for generated sampl=
-es
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/125573
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [rawhide] avc:  denied  { checkpoint_restore } for  pid=3D79=
-3 comm=3D"agetty" capability=3D40  scontext=3Dsystem_u:system_r:getty_t:s0-=
-s0:c0.c1023 tcontext=3Dsystem_u:system_r:getty_t:s0-s0:c0.c1023 tclass=3Dca=
-pability2 permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259622
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
+   In file included from kernel/sched/fair.c:28:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/sched/fair.c:28:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/sched/fair.c:28:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> kernel/sched/fair.c:9744:6: error: expected '(' after 'if'
+    9744 |         if !(sd->flags & SD_ASYM_PACKING)
+         |             ^
+   6 warnings and 1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - CKI/restraint
-     aarch64 - SELinux Custom Module Setup
-     aarch64 - machineinfo
-     aarch64 - Boot test
-     aarch64 - Hardware - IPMI driver test
-     aarch64 - Hardware - IPMItool loop stress test
-     aarch64 - Storage - blktests - blk
-     aarch64 - Storage - blktests - nvme-tcp
-     aarch64 - Storage - block - filesystem fio test
-     aarch64 - Storage - block - queue scheduler test
-     aarch64 - Storage - swraid scsi_raid
-     aarch64 - stress: stress-ng - cpu-cache
-     aarch64 - stress: stress-ng - memory
-     aarch64 - Reboot test
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - CKI/restraint
-       s390x - SELinux Custom Module Setup
-       s390x - machineinfo
-       s390x - Boot test
-       s390x - Storage - blktests - blk
-       s390x - Storage - blktests - nvme-tcp
-       s390x - Storage - swraid scsi_raid
-       s390x - stress: stress-ng - cpu-cache
-       s390x - stress: stress-ng - memory
-       s390x - Reboot test
-       s390x - CKI/restraint
-       s390x - SELinux Custom Module Setup
-       s390x - machineinfo
-       s390x - Boot test
-       s390x - POSIX pjd-fstest suites
-       s390x - Filesystem - Loopdev Sanity
-       s390x - Memory function: memfd_create
-       s390x - AMTU (Abstract Machine Test Utility)
-       s390x - Networking - Ethernet drivers sanity
-       s390x - Networking cki netfilter test
-       s390x - Networking vnic: ipvlan/basic
-       s390x - Libkcapi AF_ALG test
-       s390x - Storage - multipath mapping test
-       s390x - Storage - dm/common
-       s390x - Storage - lvm thinp sanity
-       s390x - kdump - kexec_boot
-       s390x - kdump - kexec-file-load
-       s390x - Reboot test
-       s390x - CKI/restraint
-       s390x - SELinux Custom Module Setup
-       s390x - machineinfo
-       s390x - Boot test
-       s390x - kdump - sysrq-c
-       s390x - kdump - file-load
-       s390x - Reboot test
-       s390x - CKI/restraint
-       s390x - SELinux Custom Module Setup
-       s390x - machineinfo
-       s390x - Boot test
-       s390x - selinux-policy: serge-testsuite
-       s390x - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - POSIX pjd-fstest suites
-      x86_64 (debug) - Filesystem - Loopdev Sanity
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - AMTU (Abstract Machine Test Utility)
-      x86_64 (debug) - Networking - Ethernet drivers sanity
-      x86_64 (debug) - Networking cki netfilter test
-      x86_64 (debug) - Libkcapi AF_ALG test
-      x86_64 (debug) - Hardware - pciutils: sanity smoke test
-      x86_64 (debug) - Storage - dm/common
-      x86_64 (debug) - Storage - lvm thinp sanity
-      x86_64 (debug) - Storage - iSCSI parameters
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - POSIX pjd-fstest suites
-      x86_64 - Filesystem - Loopdev Sanity
-      x86_64 - Memory function: memfd_create
-      x86_64 - AMTU (Abstract Machine Test Utility)
-      x86_64 - Networking - Ethernet drivers sanity
-      x86_64 - Networking cki netfilter test
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - multipath mapping test
-      x86_64 - Storage - dm/common
-      x86_64 - Storage - lvm thinp sanity
-      x86_64 - Storage - iSCSI parameters
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - kdump - sysrq-c
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - selinux-policy: serge-testsuite
-      x86_64 - Reboot test
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - xfstests - ext4
-      x86_64 - xfstests - xfs
-      x86_64 - xfstests - btrfs
-      x86_64 - xfstests - nfsv4.2
-      x86_64 - xfstests - cifsv3.11
-      x86_64 - Reboot test
+vim +9744 kernel/sched/fair.c
 
+  9730	
+  9731	/**
+  9732	 * sched_use_asym_prio - Check whether asym_packing priority must be used
+  9733	 * @sd:		The scheduling domain of the load balancing
+  9734	 * @cpu:	A CPU
+  9735	 *
+  9736	 * Always use CPU priority when balancing load between SMT siblings. When
+  9737	 * balancing load between cores, it is not sufficient that @cpu is idle. Only
+  9738	 * use CPU priority if the whole core is idle.
+  9739	 *
+  9740	 * Returns: True if the priority of @cpu must be followed. False otherwise.
+  9741	 */
+  9742	static bool sched_use_asym_prio(struct sched_domain *sd, int cpu)
+  9743	{
+> 9744		if !(sd->flags & SD_ASYM_PACKING)
+  9745			return false;
+  9746	
+  9747		return (!sched_smt_active()) ||
+  9748			(sd->flags & SD_SHARE_CPUCAPACITY) || is_core_idle(cpu);
+  9749	}
+  9750	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
