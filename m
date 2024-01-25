@@ -1,53 +1,53 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EBE51017
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA235465E
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706182386; cv=none; b=etD0wGd+7hnDNhIFvJfo/zb3ptJhzR361pidGtfGmipQ7hQJaysqJAqEqtn6C9zEpt+b87S39+uGLOHK5PRawwyaIMn7aDH9phvtIGvp2tf9FWU9n7wqhfdum233jo2SWEcq0IYREKZG1mqE0Tw7NPwlA3EAD7pXJTQCoPLRV9g=
+	t=1706182391; cv=none; b=Y7OC1Pa712Er+ZFi7YLxF+1s0zzs9i6PtRXAnX+x/JsIvv+ke6URGAdCnOb5pkAUsloGLQXiJf1lfzPZSVYNHs5+nP/hqQq7ABsnR9jDQT+B4tkPnKg5Wz4/g+MMiF0PipdrJVCpKIL5SZL7Z/z5vv7xvOwnGX/MScWW69z6S7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706182386; c=relaxed/simple;
-	bh=ywQcTtrCDMHJcI+QkXWX2nFyJwoVE8xehI2i+Z3nGsk=;
+	s=arc-20240116; t=1706182391; c=relaxed/simple;
+	bh=2tkXbI4kkP7Bg5PktzWdMGd8q8tWspLGt7tFV60fDKM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=m4cLuWE8vnjuNKUo7UOYMX2+P18kQdMi3PHF2NXE8eVJRdQaOF5uqqfDLJEvtLLy8TQfbeChxFBL6RVBqmuM96eS2fLC76CFxmsuYCvYoJEGW7nsZpn8gH2SBngrl/CJ+H8h11RL0okHJNKVsYrAJaBC52AHJZZIknRSXcvGLTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KJl0yM6A; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=WzqQqAzyXez8pgSl10DYNpxQtt16mc5MhFfnek2OTj0P/KKroJLLADXgzO8kWXG4S8+xTEm3lG+hdWEDDZUIGCY2X5LUeauTaFBok+80BwD7SyS01RKozSKIWrhNLKYleGP7KzQ7hOMYxNsYBTg5e/ZP2O17Vh5AVSa9hdmOKz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IrixQKFI; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KJl0yM6A"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-40e53200380so56708195e9.3
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:33:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IrixQKFI"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-40e4478a3afso2717455e9.1
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:33:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706182383; x=1706787183; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706182385; x=1706787185; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fLLl1bcVbRYtnIzLBeH2xJGti8beoepv/z/uSZlJPHo=;
-        b=KJl0yM6AxvWfjapQtl6GzLUzgVtRChNG8pf/LBX5fLRtTlfS8H59YVlXQPZMIg2oD5
-         HE1XlQD2m0w2Bhd7rqPnLvNVU6p2VkSf9clLy7TK92VkuZGGlQCKw/IpkY7Mafz3DPFg
-         wh7nD+k7j0PJCnsgRZ+c30DIu6kkocGqLFxDDYWzjHDZxaaKlhLsZNXWGNAwJHLuoOPM
-         jVeXOp3SuEVJOrLKi8OJJrNJKrNYTW2TEGT0an7kFwTwLG7AUMUpH+/n9Ysh7l+DX1U7
-         NbvE37IWY4raQ09frLp/GYMsTlHJE4Q9UmVNoUZYHGjiHyPmqUYlydD0hOPJVrlBFuqx
-         hnOg==
+        bh=6DdM1fA2/BUC7ScxyUb41JZesEtpKP4YlIE0jOqBF4A=;
+        b=IrixQKFInvSomxxAMBV1f3NbcWpoe35WoYacHhdAcuEVx/semmk9Iu/J0XYEUHuebX
+         K9EUpwcfkvi71U5+1BSDgJWf7EdaZvw5k6m7vaIsTVryuwuHqxjSvz98oV1ZrQ//3TGQ
+         l+E2sgCIZG75qoNaTJ30DxnFe5eJ7Hp4qwZk52+TyJSa0LRYBNg7jSCcJVggLZkyt+ar
+         Ot9FG2vsX0Fpl5ce/n7jYygzjup8e4zM4v27twwCLQFtTICQNbEl+uhjMwSYLZ3s9THU
+         AEX4okTsW6WHI4zLSlvwKbhkuPP4zj4VsTOURwgBuykphVmzANqfM6nnUh+9ZthEQM5F
+         00vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706182383; x=1706787183;
+        d=1e100.net; s=20230601; t=1706182385; x=1706787185;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fLLl1bcVbRYtnIzLBeH2xJGti8beoepv/z/uSZlJPHo=;
-        b=hd/Z6CXgWuDCmPNQ9omGPu4jSM2NWpCZ740g60CaCf5+carhhJ3xe6FxKAneE7zvN1
-         ZD6ZrpIEexlztabMlACcAQZdOMd6+o7/lK73HhfGh7Z248nQWCng0+WkKbJCZf6k+lBy
-         S3bz5qu5XN7Y08TYI4ei5Ql+EHoJbkSTabe64o7HKbxDJG/eHrZzs4thUbGbtGgX18oI
-         C/laD+p0VqRrtNXwkAz4M+YVaBJETgQxpkPhjfFP3XT7xuvIWyClk4XjE4qXov0Rlwca
-         bfzn3YDGpXxuRSueEawTuOG0pxus4ibhotlpYdAF3QVcLrdoZ1ASsgc4yBrIZEnqrUZT
-         aJOQ==
-X-Gm-Message-State: AOJu0Yw8pwO7ducerwXF960tBQvEsURo3wYvncyZiGJSKNVvlLa41DJg
-	hb21r7ga3mVdgRfJYxpdj9TkmN3UBkV7lbeQPoEtt7RljD2QRHO4VCYOz7I2/C/jS1J0NA==
-X-Google-Smtp-Source: AGHT+IH+tHtY9FWpEc9qh8w6jVw/qndHIKRZi4Zi4jc1hJlvKLmXv0672PzSqvht8FRd715mL9u57xeg
+        bh=6DdM1fA2/BUC7ScxyUb41JZesEtpKP4YlIE0jOqBF4A=;
+        b=OqCZdIcpTaw+qv6wU5XjdWsLWXtna7FOk3i4F2XOpMepDX1idkXBD6VZss1as2Naq8
+         PSmmLKvpphlXJyQFdyjMsHAiOjL154nrRmd9cOegRGSZXJf6w412DFIQnOCJm8HV30Ur
+         cyzTAnBN+k+GgFNzblnXGhB7g8uLWlp79LOhgA9bwy5nPY6F6oCVhfe+5XmrtTtNurek
+         oV/zcOlCgJFBTLxoKusI41oAmtJFZXzjTOHYn2BuCoJVYVBj/4UGsCQZI6ceWL/q2ke9
+         QLCTJU0rE9T81hCgXPUzV/k/9lns4EsUQo76z+NMmRQKlToHWjYAshAo1VKf2egTpY5Y
+         REqw==
+X-Gm-Message-State: AOJu0Yzl5TVpfGmU5gXndyJXvwlRyGC5bDFgTa0dn7CnIsffA2pagXaV
+	5qipLXOCv8lOAEQm1QV0qY5uFqSxiMke4MR1SvZWfxA7sfU7GNh4vomf6hS5DRYDBfDpKA==
+X-Google-Smtp-Source: AGHT+IHwAYKcaMhJLNwywm/Tve5NxG3vi6LLLb9sVcfy2uySRff3UA3thP9CMDCN1Ce+5DrXbz3/AitZ
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:600c:4e0c:b0:40e:c720:f327 with SMTP id
- b12-20020a05600c4e0c00b0040ec720f327mr14276wmq.4.1706182383051; Thu, 25 Jan
- 2024 03:33:03 -0800 (PST)
-Date: Thu, 25 Jan 2024 12:28:30 +0100
+ (user=ardb job=sendgmr) by 2002:a05:600c:3c8f:b0:40e:541d:dd64 with SMTP id
+ bg15-20020a05600c3c8f00b0040e541ddd64mr40221wmb.4.1706182385129; Thu, 25 Jan
+ 2024 03:33:05 -0800 (PST)
+Date: Thu, 25 Jan 2024 12:28:31 +0100
 In-Reply-To: <20240125112818.2016733-19-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,15 +57,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240125112818.2016733-19-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=979; i=ardb@kernel.org;
- h=from:subject; bh=DDaOUA3J+CFMHhm3e2XXAeDqtyhjkdr8A2J8hJRp8QM=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT6wfmH+v9haLvWOZmMFrJXOT6Yz094E3RseZ9K47vm
- /XtUvaHjlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRpg5Ghm0sH1ScTbRyzT9y
- LT5+VOxYRanmRG27Jp4J++av9Zuc7sLIsLeAS7395J5HEZYJvUVbV/Nxt13WjZNdJpJ7wl/vXc1 bLgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1516; i=ardb@kernel.org;
+ h=from:subject; bh=XIt7BesiIe5Ouf8eLT5Jk6gT3ML8ZNdNuPHWU+248+Y=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT65eLE7uWmk2dq6Kz8dWG4PnqX5YX5X3TUYr0tLFyE
+ m78IB/TUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACZiEczI8LglN+rBwh+LaxmN
+ ne73hRUuFn7LcdbD44WH1g6pXXLRfowMa/fpH3z+e/YjJ4esjoxCpfbczZOmiv4Of7fe3k3Zd6Y dDwA=
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240125112818.2016733-30-ardb+git@google.com>
-Subject: [PATCH v2 11/17] modpost: Warn about calls from __pitext into other
- text sections
+Message-ID: <20240125112818.2016733-31-ardb+git@google.com>
+Subject: [PATCH v2 12/17] x86/coco: Make cc_set_mask() static inline
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -79,38 +78,60 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Ensure that code that is marked as being able to safely run from a 1:1
-mapping does not call into other code which might lack that property.
+Setting the cc_mask global variable may be done early in the boot while
+running fromm a 1:1 translation. This code is built with -fPIC in order
+to support this.
+
+Make cc_set_mask() static inline so it can execute safely in this
+context as well.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- scripts/mod/modpost.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/x86/coco/core.c        | 7 +------
+ arch/x86/include/asm/coco.h | 8 +++++++-
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 962d00df47ab..33b56d6b4e7b 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -825,6 +825,7 @@ enum mismatch {
- 	ANY_INIT_TO_ANY_EXIT,
- 	ANY_EXIT_TO_ANY_INIT,
- 	EXTABLE_TO_NON_TEXT,
-+	PI_TEXT_TO_NON_PI_TEXT,
- };
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index eeec9986570e..d07be9d05cd0 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -14,7 +14,7 @@
+ #include <asm/processor.h>
  
- /**
-@@ -887,6 +888,11 @@ static const struct sectioncheck sectioncheck[] = {
- 	.bad_tosec = { ".altinstr_replacement", NULL },
- 	.good_tosec = {ALL_TEXT_SECTIONS , NULL},
- 	.mismatch = EXTABLE_TO_NON_TEXT,
-+},
-+{
-+	.fromsec = { ALL_PI_TEXT_SECTIONS, NULL },
-+	.bad_tosec = { ALL_NON_PI_TEXT_SECTIONS, NULL },
-+	.mismatch = PI_TEXT_TO_NON_PI_TEXT,
+ enum cc_vendor cc_vendor __ro_after_init = CC_VENDOR_NONE;
+-static u64 cc_mask __ro_after_init;
++u64 cc_mask __ro_after_init;
+ 
+ static bool noinstr intel_cc_platform_has(enum cc_attr attr)
+ {
+@@ -148,8 +148,3 @@ u64 cc_mkdec(u64 val)
+ 	}
  }
- };
+ EXPORT_SYMBOL_GPL(cc_mkdec);
+-
+-__init void cc_set_mask(u64 mask)
+-{
+-	cc_mask = mask;
+-}
+diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+index 6ae2d16a7613..ecc29d6136ad 100644
+--- a/arch/x86/include/asm/coco.h
++++ b/arch/x86/include/asm/coco.h
+@@ -13,7 +13,13 @@ enum cc_vendor {
+ extern enum cc_vendor cc_vendor;
  
+ #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+-void cc_set_mask(u64 mask);
++static inline void cc_set_mask(u64 mask)
++{
++	extern u64 cc_mask;
++
++	cc_mask = mask;
++}
++
+ u64 cc_mkenc(u64 val);
+ u64 cc_mkdec(u64 val);
+ #else
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
