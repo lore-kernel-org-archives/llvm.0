@@ -1,54 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148E8134740;
-	Thu, 25 Jan 2024 17:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E33E135407;
+	Thu, 25 Jan 2024 17:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706202055; cv=none; b=kJuKvlOf2uQ/2UKoXCrw/Ce1eL0xknsHHzWW6XAW7jgQpjIU8VTeVJmCyRMkSnG/2MGHCE2j2LDXFiC2pHKrV8/nnDppN7CVdaJM5FEfQx3xVsJVlzw33KgDsHc/8/iYAX7z+MMsSeb7oqdmt/uMAH97E7YM6dCRmhxoM/C+ITw=
+	t=1706202671; cv=none; b=tN/04/G+FeuULzkPQGF6BbnGXUgEHcBZCvOAX9Ei0AXRsOuo/PzVu05U9H1D4BLx/iQgqVeAE3C/Sg2YUJpvQRPsLqfOHJC/es8roynozXsgZDI77BoP28HH/nXV4322rmPRI1Fq59yg9PPcPp6oKYIb8QWpPGmRZoVDCrq5bH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706202055; c=relaxed/simple;
-	bh=AYW4JbQwBUIj343RXZ0KxuVwkrZaEl3VXTaOpIIB4fk=;
+	s=arc-20240116; t=1706202671; c=relaxed/simple;
+	bh=U5wQYQ3cu9vysPI5MCfehIzFnStJDNyMSdpVnQjjGK0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EeHcLAHrLw5nWVS4cCngwz8iPg1nMEpQzJLY4kKr7PjOcmBTdNnQXocv1k39K/D9G7WYzbUlPDzaD8FT6yJ2jyQoQxBuOXU1Xa7JIsMfw+Ssbn8+gCXXVg/kI6gq/LzRPYOx3CB/8Gi2OohZWoZqmXEO+P3jFIpAlHEuZ/5qCGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cj4esP0a; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=Y5q6JzKgY6MPLcPGtVPS401rm5s42BMFx5+OwrY+LqXIDiS3li2aFQAyuYNylLysCGbxxloAKDX7jV2fDjBpz1Y0WTS9ykMaUjBZSUUnOgVO6rFRrW3KU8KCeMXzvrxb8w+HRR4aaIRLAu4WLSh1QIPhsSLNioSUOgCwatmAkYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BJlwguyb; arc=none smtp.client-ip=134.134.136.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cj4esP0a"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BJlwguyb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706202054; x=1737738054;
+  t=1706202669; x=1737738669;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AYW4JbQwBUIj343RXZ0KxuVwkrZaEl3VXTaOpIIB4fk=;
-  b=cj4esP0aAA9E08Iw4Lp2SS3jMGv+HWPuk3mz0HY07uCjaRYOcha9B7j2
-   eXQZqoetdd/hFnRN8W/CSjG2HdrTe1VZw3c0OMSAAazzKWh79M4OFAnUH
-   ywFoy0rOlaaddukEbgwFnxaWvlhIB3KOiUOZ3e/WbzCyqm6Mls6FlXvhJ
-   KULg9X8iMCqBO5Is2vck4v3TGagtDl7dnxTeWhsnDP7nuAGIXhqqaegxa
-   0d21uPEm5/10a8zxltIDz1x8PeQgC1zgWmpvOQ+d5yfmIQf9cqco+iKgO
-   iu0V2BaZFCzSFMK+ewSQk0uRm76NcmRVjNCiGyzNFX3cX1Ry/dMgweyeV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="2068915"
+  bh=U5wQYQ3cu9vysPI5MCfehIzFnStJDNyMSdpVnQjjGK0=;
+  b=BJlwguybQHkJsPYEGqoOY8ylSTEjy0wH+ueeccEurWEWuD00VxIQqAQU
+   xZYQXQzTmj0hQTOw6G7ZOii70wo+WEC0TV7OLrI4B+s4m45w/j3Z3HLLM
+   S7fkXbNRYArVUBstfOGdizqFk1XkT6bWG9jqA1hcr7js3U3KM+9ZIzRiV
+   5RC8SrvFEfbR7yVuff7gNbVlPGulbIF4Kjuf5ReZf0UW+SXFCuKjQZbNh
+   VGw24I4ANH9easD8q1OZh/6VGMObCeImTs8P+XI+f10/Gh4tFBoaxMUyS
+   ei+bCDGS6DLbmmL9T0J46vMyrbyFyaJTUIMiJst6NC7SDCkgUZO7wck5t
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="405971914"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2068915"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 09:00:07 -0800
+   d="scan'208";a="405971914"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 09:11:06 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="35162431"
+   d="scan'208";a="2326651"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 25 Jan 2024 09:00:05 -0800
+  by orviesa003.jf.intel.com with ESMTP; 25 Jan 2024 09:11:05 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rT358-0000DZ-1C;
-	Thu, 25 Jan 2024 17:00:02 +0000
-Date: Fri, 26 Jan 2024 00:59:20 +0800
+	id 1rT3Fn-0000EV-0O;
+	Thu, 25 Jan 2024 17:11:03 +0000
+Date: Fri, 26 Jan 2024 01:10:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Shi <alexs@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [alexshi:schedtest2 11/12] kernel/sched/fair.c:9744:6: error:
- expected '(' after 'if'
-Message-ID: <202401260037.Imdz1say-lkp@intel.com>
+To: Janne Grunau <j@jannau.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 8/21] drivers/hid/hid-magicmouse.c:570:
+ warning: Excess struct member 'crc16' description in 'tp_finger'
+Message-ID: <202401260106.VKth8fll-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,97 +59,70 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/alexshi/linux.git schedtest2
-head:   326c08b860db40ad088d64cbca38afdccc196410
-commit: 0436efe9a058218c483c6d296083253e871a391e [11/12] sched/fair: pack SD_ASYM_PACKING into sched_use_asym_prio
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240126/202401260037.Imdz1say-lkp@intel.com/config)
-compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260037.Imdz1say-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   253645613d55bc9e62bb0b1811d009cd987f301f
+commit: c09e6b2eb869c1427a5991a82e4357c2ab5271d7 [8/21] HID: magicmouse: add support for Macbook trackpads
+config: i386-buildonly-randconfig-005-20240124 (https://download.01.org/0day-ci/archive/20240126/202401260106.VKth8fll-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260106.VKth8fll-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401260037.Imdz1say-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401260106.VKth8fll-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> kernel/sched/fair.c:9744:6: error: expected '(' after 'if'
-    9744 |         if !(sd->flags & SD_ASYM_PACKING)
-         |             ^
-   6 warnings and 1 error generated.
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'pos' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'hdev' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'work' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'battery_timer' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or struct member 'input_ops' not described in 'magicmouse_sc'
+>> drivers/hid/hid-magicmouse.c:570: warning: Excess struct member 'crc16' description in 'tp_finger'
+   drivers/hid/hid-magicmouse.c:592: warning: expecting prototype for struct trackpad. Prototype was for struct tp_header instead
 
 
-vim +9744 kernel/sched/fair.c
+vim +570 drivers/hid/hid-magicmouse.c
 
-  9730	
-  9731	/**
-  9732	 * sched_use_asym_prio - Check whether asym_packing priority must be used
-  9733	 * @sd:		The scheduling domain of the load balancing
-  9734	 * @cpu:	A CPU
-  9735	 *
-  9736	 * Always use CPU priority when balancing load between SMT siblings. When
-  9737	 * balancing load between cores, it is not sufficient that @cpu is idle. Only
-  9738	 * use CPU priority if the whole core is idle.
-  9739	 *
-  9740	 * Returns: True if the priority of @cpu must be followed. False otherwise.
-  9741	 */
-  9742	static bool sched_use_asym_prio(struct sched_domain *sd, int cpu)
-  9743	{
-> 9744		if !(sd->flags & SD_ASYM_PACKING)
-  9745			return false;
-  9746	
-  9747		return (!sched_smt_active()) ||
-  9748			(sd->flags & SD_SHARE_CPUCAPACITY) || is_core_idle(cpu);
-  9749	}
-  9750	
+   533	
+   534	/**
+   535	 * struct tp_finger - single trackpad finger structure, le16-aligned
+   536	 *
+   537	 * @unknown1:		unknown
+   538	 * @unknown2:		unknown
+   539	 * @abs_x:		absolute x coordinate
+   540	 * @abs_y:		absolute y coordinate
+   541	 * @rel_x:		relative x coordinate
+   542	 * @rel_y:		relative y coordinate
+   543	 * @tool_major:		tool area, major axis
+   544	 * @tool_minor:		tool area, minor axis
+   545	 * @orientation:	16384 when point, else 15 bit angle
+   546	 * @touch_major:	touch area, major axis
+   547	 * @touch_minor:	touch area, minor axis
+   548	 * @unused:		zeros
+   549	 * @pressure:		pressure on forcetouch touchpad
+   550	 * @multi:		one finger: varies, more fingers: constant
+   551	 * @crc16:		on last finger: crc over the whole message struct
+   552	 *			(i.e. message header + this struct) minus the last
+   553	 *			@crc16 field; unknown on all other fingers.
+   554	 */
+   555	struct tp_finger {
+   556		__le16 unknown1;
+   557		__le16 unknown2;
+   558		__le16 abs_x;
+   559		__le16 abs_y;
+   560		__le16 rel_x;
+   561		__le16 rel_y;
+   562		__le16 tool_major;
+   563		__le16 tool_minor;
+   564		__le16 orientation;
+   565		__le16 touch_major;
+   566		__le16 touch_minor;
+   567		__le16 unused[2];
+   568		__le16 pressure;
+   569		__le16 multi;
+ > 570	} __attribute__((packed, aligned(2)));
+   571	
 
 -- 
 0-DAY CI Kernel Test Service
