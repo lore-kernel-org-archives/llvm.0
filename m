@@ -1,49 +1,57 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773A5130E3C;
-	Thu, 25 Jan 2024 22:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CAF7EC;
+	Thu, 25 Jan 2024 22:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706221421; cv=none; b=FWOxMqv6tcZGoyJRYwYJhR9A9lGWqfqzv21XVK4qY/2iA1NDqqMq9C+MwhuH9qApJ+NOlkrFzvsTodfRO/k2+uHbzD5R/3OHGwc8Jh8PQaukbUuEpoFmONrg0zREEoZ6F6wHSNv5OmWBnkoARtiB57BJMCB04HdBeNYu6Lsbudc=
+	t=1706221827; cv=none; b=RNh9VdbxJpwOekQee3phf3JOfPH2mfQGsjqM0xMIX9LnVDCVBazuZQ0hvboAX9UnQcBbemQEmyAso+rRbZsHP93cPcJaY6SielVfjkg2AuQwMNJY15wTz5is2Ezchh5cerT8NoN/6wMh/8M6ehd4oqUJiL+ZWt7fLAmh0XBQKmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706221421; c=relaxed/simple;
-	bh=KfWASBKDRevu5qr6cQGKAvSwJBw6sVXr+1MQuNzLhVE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nLXgvEhuuXy4WPSpw9UHjX7gSCNtj7XVgSzKFq893thmDlarkD02JSlCdDPdBp6gXRdWnlp5Ga+RZJbwHO5wyYPzkPapvfzFKvGWnpkCF8GOgUpZkW+fIsDxbbJexXM8HvsAIzGn8idiCqCQxtcTti0Zp+/sgP1PJfWa2YcxmMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiTWWLkd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706221827; c=relaxed/simple;
+	bh=o+K8/I7KsjMILeiYonhcP/n00EIdVaQPmHILADXMNQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WzVdlwGD5n0AGkEt2Zh6H/0Ns4riZmrEHyNa7GrJzRQfEqf5PbQyx9y5ouXdf4S1fIaj8FZALty3QzP9buCya5moCwlYGo74mXQV2KucU4xVzJ68YKSlH6Pt9csoYsSE7XjJGH01g90QaNmTJWpKnLI8kJ+IJQTrWOo4jOaZwsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxDXOHQl; arc=none smtp.client-ip=192.55.52.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiTWWLkd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9870C433C7;
-	Thu, 25 Jan 2024 22:23:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706221420;
-	bh=KfWASBKDRevu5qr6cQGKAvSwJBw6sVXr+1MQuNzLhVE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aiTWWLkdkQo12gTzQBOX3h+TwC0Ruzgc3ZyfL26QUpfjrM8YESoBKG87eQ9BQ0k1U
-	 toK3R+OF32jGpRzPDcDOOg0iy0GjzvEyiKE633qLanq2ehveV7Uk/nmM3tKARUzq+j
-	 yImY/0ZtWWA6UwfMLcuvKmdFf8NP4NR3KfpcqmwxJh5TTUhnztD9nrFakXMNOtvXuR
-	 3fi+2PYGybO3IG1UohFZnfVCY7xbuNzcZByUklN4yJnRDNhCLp5AEwdg5DFpXQzMV8
-	 hfkA1682Nfk2TESVmvlkbjU7gcyEdk7rHt6jX9joAehJ49UhP7yCXSTwqyugKyPOri
-	 ulUUEbCf9qecw==
-Date: Thu, 25 Jan 2024 15:23:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 00/17] x86: Confine early 1:1 mapped startup code
-Message-ID: <20240125222338.GA2585843@dev-arch.thelio-3990X>
-References: <20240125112818.2016733-19-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxDXOHQl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706221825; x=1737757825;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o+K8/I7KsjMILeiYonhcP/n00EIdVaQPmHILADXMNQo=;
+  b=DxDXOHQl77tLmgYJOyRiXw0szpeGb6+rpNv8x8HhBZDQq3NZSTUZr3zZ
+   wbPu17DJcUxEQUGQAmMi9Rcnoo17Wzwyggn08kjPUGtNnIpvWjHNkzynn
+   3Y/k4//mgUTu1QQDsyjsr8uL36tscJ9hT7MQYZZzxWkytNN9/GKQUz8ZQ
+   +sPG7C2Z2m5uGgOF6oB4IgU6/ch8ItwrXRfZRsr310mFpaY8AvWk2h21N
+   VshNkaKlLZdjSCnThGKJjEWGSageWWIvy64tZPMR+JwKYnaKln0EvEjdQ
+   LSXFoeGnvt+arQvA4ZAT/BVqY/TD6JDGn0hdNzLEBTAJ2Sd3qvGH22x1w
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="401977592"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="401977592"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 14:30:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="820941674"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="820941674"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Jan 2024 14:30:21 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rT8El-0000Sa-1D;
+	Thu, 25 Jan 2024 22:30:19 +0000
+Date: Fri, 26 Jan 2024 06:30:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alsa-devel@alsa-project.org
+Subject: [tiwai-sound:topic/pm-ops 7/31] sound/pci/als4000.c:947:2: error:
+ call to undeclared function 'snd_sbmixer_suspend'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202401260641.blzmb4QO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,200 +60,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240125112818.2016733-19-ardb+git@google.com>
 
-Hi Ard,
+Hi Takashi,
 
-On Thu, Jan 25, 2024 at 12:28:19PM +0100, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
-> 
-> This is a follow-up to my RFC [0] that proposed to build the entire core
-> kernel with -fPIC, to reduce the likelihood that code that runs
-> extremely early from the 1:1 mapping of memory will misbehave.
-> 
-> This is needed to address reports that SEV boot on Clang built kernels
-> is broken, due to the fact that this early code attempts to access
-> virtual kernel address that are not mapped yet. Kevin has suggested some
-> workarounds to this [1] but this is really something that requires a
-> more rigorous approach, rather than addressing a couple of symptoms of
-> the underlying defect.
-> 
-> As it turns out, the use of fPIE for the entire kernel is neither
-> necessary nor sufficient, and has its own set of problems, including the
-> fact that the PIE small C code model uses FS rather than GS for the
-> per-CPU register, and only recent GCC and Clang versions permit this to
-> be overridden on the command line.
-> 
-> But the real problem is that even position independent code is not
-> guaranteed to execute correctly at any offset unless all statically
-> initialized pointer variables use the same translation as the code.
-> 
-> So instead, this v2 proposes another solution, taking the following
-> approach:
-> - clean up and refactor the startup code so that the primary startup
->   code executes from the 1:1 mapping but nothing else;
-> - define a new text section type .pi.text and enforce that it can only
->   call into other .pi.text sections;
-> - (tbd) require that objects containing .pi.text sections are built with
->   -fPIC, and disallow any absolute references from such objects.
-> 
-> The latter point is not implemented yet in this v2, but this could be
-> done rather straight-forwardly. (The EFI stub already does something
-> similar across all architectures)
-> 
-> Patch #13 in particular gives an overview of all the code that gets
-> pulled into the early 1:1 startup code path due to the fact that memory
-> encryption needs to be configured before we can even map the kernel.
-> 
-> 
-> [0] https://lkml.kernel.org/r/20240122090851.851120-7-ardb%2Bgit%40google.com
-> [1] https://lore.kernel.org/all/20240111223650.3502633-1-kevinloughlin@google.com/T/#u
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-I tested both this series as well as the pending updates on
-x86-pie-for-sev-v3 at commit 0574677aacf7 ("x86/efi: Remap kernel code
-read-only before dropping NX attribute") with my LLVM build matrix and I
-noticed two problems.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git topic/pm-ops
+head:   623b2f6110ff118b84628595d53e4947f2883329
+commit: 6dae83b64fac25af472e718bf086b43a1f209674 [7/31] ALSA: als4000: Replace with DEFINE_SIMPLE_DEV_PM_OPS()
+config: i386-randconfig-012-20240125 (https://download.01.org/0day-ci/archive/20240126/202401260641.blzmb4QO-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260641.blzmb4QO-lkp@intel.com/reproduce)
 
-The first issue is a series of errors when building with LTO around
-mismatched code model attributes between functions. Unhelpfully, the
-error message does not actually say what function is conflicting...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401260641.blzmb4QO-lkp@intel.com/
 
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(numa.o at 1191378)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(buffer.o at 1211538)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(nfs4xdr.o at 1222698)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(namei.o at 1209498)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(vmalloc.o at 1207458)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(iommu.o at 1267098)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(ring_buffer.o at 1202478)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(sky2.o at 1299798)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(page_alloc.o at 1207578)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(percpu.o at 1206018)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(slub.o at 1207758)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(xhci.o at 1302858)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(blk-mq.o at 1233858)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(nfs4proc.o at 1222638)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(inode.o at 1218078)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(journal.o at 1219638)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(memory.o at 1206738)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(mballoc.o at 1218198)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(iov_iter.o at 1238058)'
-  ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(head64.o at 1181178)' and 'vmlinux.a(filemap.o at 1204938)'
+All errors (new ones prefixed by >>):
 
-Turning off LTO for the translation units that use PIE_CFLAGS avoids
-that, not sure if that is reasonable or not.
+>> sound/pci/als4000.c:947:2: error: call to undeclared function 'snd_sbmixer_suspend'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     947 |         snd_sbmixer_suspend(chip);
+         |         ^
+   sound/pci/als4000.c:947:2: note: did you mean 'snd_sbmixer_read'?
+   include/sound/sb.h:288:15: note: 'snd_sbmixer_read' declared here
+     288 | unsigned char snd_sbmixer_read(struct snd_sb *chip, unsigned char reg);
+         |               ^
+>> sound/pci/als4000.c:959:2: error: call to undeclared function 'snd_sbmixer_resume'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     959 |         snd_sbmixer_resume(chip);
+         |         ^
+   sound/pci/als4000.c:959:2: note: did you mean 'snd_sbmixer_read'?
+   include/sound/sb.h:288:15: note: 'snd_sbmixer_read' declared here
+     288 | unsigned char snd_sbmixer_read(struct snd_sb *chip, unsigned char reg);
+         |               ^
+   2 errors generated.
 
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 65677b25d803..e4fa57ae3d09 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -24,7 +24,9 @@ endif
- # head64.c contains C code that may execute from a different virtual address
- # than it was linked at, so we always build it using PIE codegen
- CFLAGS_head64.o += $(PIE_CFLAGS)
-+CFLAGS_REMOVE_head64.o += $(CC_FLAGS_LTO)
- CFLAGS_sev.o += $(PIE_CFLAGS)
-+CFLAGS_REMOVE_sev.o += $(CC_FLAGS_LTO)
- 
- KASAN_SANITIZE_head$(BITS).o				:= n
- KASAN_SANITIZE_dumpstack.o				:= n
-diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-index 87c79bb8d386..6bb4bc271441 100644
---- a/arch/x86/lib/Makefile
-+++ b/arch/x86/lib/Makefile
-@@ -25,6 +25,7 @@ CFLAGS_REMOVE_cmdline.o = -pg
- endif
- 
- CFLAGS_cmdline.o := $(PIE_CFLAGS)
-+CFLAGS_REMOVE_cmdline.o := $(CC_FLAGS_LTO)
- endif
- 
- inat_tables_script = $(srctree)/arch/x86/tools/gen-insn-attr-x86.awk
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index b412009ae588..bf8d9d4bc97f 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -31,8 +31,10 @@ obj-y				+= pat/
- 
- # Make sure __phys_addr has no stackprotector
- CFLAGS_physaddr.o		:= -fno-stack-protector
--CFLAGS_mem_encrypt_identity.o	:= $(PIE_CFLAGS)
-+CFLAGS_mem_encrypt_identity.o			:= $(PIE_CFLAGS)
-+CFLAGS_REMOVE_mem_encrypt_identity.o	:= $(CC_FLAGS_LTO)
- CFLAGS_pti.o			:= $(PIE_CFLAGS)
-+CFLAGS_REMOVE_pti.o		:= $(CC_FLAGS_LTO)
- 
- CFLAGS_fault.o := -I $(srctree)/$(src)/../include/asm/trace
- 
 
-The second issue is a bunch of modpost warnings I see with various
-configurations around some UBSAN and tracing functions.
+vim +/snd_sbmixer_suspend +947 sound/pci/als4000.c
 
-Clang allmodconfig:
+d616a0246da88d Takashi Iwai 2022-04-12  938  
+68cb2b55927885 Takashi Iwai 2012-07-02  939  static int snd_als4000_suspend(struct device *dev)
+703529140cfb77 Takashi Iwai 2005-11-17  940  {
+68cb2b55927885 Takashi Iwai 2012-07-02  941  	struct snd_card *card = dev_get_drvdata(dev);
+703529140cfb77 Takashi Iwai 2005-11-17  942  	struct snd_card_als4000 *acard = card->private_data;
+703529140cfb77 Takashi Iwai 2005-11-17  943  	struct snd_sb *chip = acard->chip;
+703529140cfb77 Takashi Iwai 2005-11-17  944  
+703529140cfb77 Takashi Iwai 2005-11-17  945  	snd_power_change_state(card, SNDRV_CTL_POWER_D3hot);
+703529140cfb77 Takashi Iwai 2005-11-17  946  	
+703529140cfb77 Takashi Iwai 2005-11-17 @947  	snd_sbmixer_suspend(chip);
+703529140cfb77 Takashi Iwai 2005-11-17  948  	return 0;
+703529140cfb77 Takashi Iwai 2005-11-17  949  }
+703529140cfb77 Takashi Iwai 2005-11-17  950  
+68cb2b55927885 Takashi Iwai 2012-07-02  951  static int snd_als4000_resume(struct device *dev)
+703529140cfb77 Takashi Iwai 2005-11-17  952  {
+68cb2b55927885 Takashi Iwai 2012-07-02  953  	struct snd_card *card = dev_get_drvdata(dev);
+703529140cfb77 Takashi Iwai 2005-11-17  954  	struct snd_card_als4000 *acard = card->private_data;
+703529140cfb77 Takashi Iwai 2005-11-17  955  	struct snd_sb *chip = acard->chip;
+703529140cfb77 Takashi Iwai 2005-11-17  956  
+703529140cfb77 Takashi Iwai 2005-11-17  957  	snd_als4000_configure(chip);
+703529140cfb77 Takashi Iwai 2005-11-17  958  	snd_sbdsp_reset(chip);
+703529140cfb77 Takashi Iwai 2005-11-17 @959  	snd_sbmixer_resume(chip);
+703529140cfb77 Takashi Iwai 2005-11-17  960  
 
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x353 (section: .pi.text) -> __phys_addr (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x35e (section: .pi.text) -> __phys_addr (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x3f8 (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x41f (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x44a (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: snp_cpuid+0xa6 (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: snp_cpuid+0x316 (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: snp_init+0x12d (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: snp_cpuid_hv+0x10d (section: .pi.text) -> __phys_addr (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x5 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x15 (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x26 (section: .pi.text) -> __sanitizer_cov_trace_const_cmp8 (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x36 (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x54 (section: .pi.text) -> __sanitizer_cov_trace_const_cmp8 (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x6a (section: .pi.text) -> __sanitizer_cov_trace_const_cmp8 (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x8d (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_encrypt_kernel+0x5 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_encrypt_kernel+0x42 (section: .pi.text) -> __phys_addr_symbol (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_encrypt_kernel+0x51 (section: .pi.text) -> __phys_addr_symbol (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_pgtable_calc+0x1 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_enable+0x5 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __strncmp+0x1 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __sme_map_range+0x1 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __sme_map_range_pte+0x1 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_prepare_pgd+0x1 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: cmdline_find_option_bool+0x5 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: cmdline_find_option+0x5 (section: .pi.text) -> __fentry__ (section: .text)
+:::::: The code at line 947 was first introduced by commit
+:::::: 703529140cfb774366b839f38f027f283cb948b4 [ALSA] als4000 - Add PM support
 
-GCC allmodconfig
+:::::: TO: Takashi Iwai <tiwai@suse.de>
+:::::: CC: Jaroslav Kysela <perex@suse.cz>
 
-  WARNING: modpost: vmlinux: section mismatch in reference: early_load_idt+0x53 (section: .pi.text) -> native_write_idt_entry.constprop.0 (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x348 (section: .pi.text) -> __phys_addr (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x353 (section: .pi.text) -> __phys_addr (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x436 (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text.unlikely)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x47b (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text.unlikely)
-  WARNING: modpost: vmlinux: section mismatch in reference: __startup_64+0x4c0 (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text.unlikely)
-  WARNING: modpost: vmlinux: section mismatch in reference: sev_es_ghcb_hv_call+0x58 (section: .pi.text) -> __phys_addr (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: setup_cpuid_table+0xf6 (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text.unlikely)
-  WARNING: modpost: vmlinux: section mismatch in reference: snp_cpuid_hv+0x6 (section: .pi.text) -> __sev_cpuid_hv_ghcb (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: snp_cpuid+0xde (section: .pi.text) -> snp_cpuid_postprocess (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: snp_cpuid+0x16c (section: .pi.text) -> __ubsan_handle_out_of_bounds (section: .text.unlikely)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x6 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x15 (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x29 (section: .pi.text) -> __sanitizer_cov_trace_const_cmp8 (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x33 (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x51 (section: .pi.text) -> __sanitizer_cov_trace_const_cmp8 (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x5c (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x71 (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x82 (section: .pi.text) -> __sanitizer_cov_trace_const_cmp8 (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __pti_set_user_pgtbl+0x8c (section: .pi.text) -> __sanitizer_cov_trace_pc (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_pgtable_calc+0x2 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_clear_pgd+0x2 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_prepare_pgd+0x2 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_populate_pgd+0x2 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: __sme_map_range+0x2 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_encrypt_kernel+0x6 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_encrypt_kernel+0x19 (section: .pi.text) -> stackleak_track_stack (section: .noinstr.text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_encrypt_kernel+0x8f (section: .pi.text) -> __phys_addr_symbol (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_encrypt_kernel+0xa5 (section: .pi.text) -> __phys_addr_symbol (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: sme_enable+0x6 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: cmdline_find_option_bool+0x6 (section: .pi.text) -> __fentry__ (section: .text)
-  WARNING: modpost: vmlinux: section mismatch in reference: cmdline_find_option+0x6 (section: .pi.text) -> __fentry__ (section: .text)
-
-Should functions marked with __pitext have these sanitizers disabled?
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
