@@ -1,53 +1,53 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE0455C36
-	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E945787C
+	for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 11:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706182392; cv=none; b=dXxDCvPaBK1u4A5dGcw0T3d+T/bFm+V9oZozJUyPJBsxnzdL19w0zTourXuIfRb2nT8sGtsfXglLyBL5DbTn2Bg6i93f+nqz2QkK/IN2Eg8m5o0k+Wv1N0Ab71v8418QOTpJIJw80ME93pwz/rWybiOu70rf3JjT21bgPUzPPKo=
+	t=1706182394; cv=none; b=Pn7+ri3h2bWBjNCRkkZIrvicLsNZt9yio/7UpkIr+EvLiwpkPUvOSopSj5y/0ugntnwsO73wfMyLpW2XINl0+MWc88y3V7NVAgAbH1cABjQ3n174lHHYH1MnFCc327Pfft1QQc4uRXz6UZ2K5DltCQmXcs9BfMGWKI3TPSUmWWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706182392; c=relaxed/simple;
-	bh=0byiLPnDWEQfwFYPOageH65AoBGROCIbfIjdgEIOffg=;
+	s=arc-20240116; t=1706182394; c=relaxed/simple;
+	bh=53cr8/bRwWd0m61pZCiciaZiTFFAHiTaLmG9qZPd8js=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qYKfoj+o2vS4KjcNAUuqZA+/qn1CvE3hcEPVMK+B/Vt5HWNIzR7pb66yaHplextg65YCpvycSpTG088PdG9mdA/4jM84NpCvBFiMJqoSPpEL6OUYXasPahCm1PD/ls++jGl1mftf4QxMnuYocCoj450bhxTOBdsXwSnrfRNko/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fNz124cV; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=tdSpCu95tmq2nZFiFfXICyigkK4zFQbfLHrUqqXnucw1f4NdcL99ifjVsJQQVJgbop8n8vEOgSCt/ueCotywld1Ch6YKhelygmaM5rxGh37FLLZtKNXV8AaGecM1iiDp4S3poDlSwOgkU8WP/c2Rhll5zIb9PrrTK5CTG+8KqvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GC3ke1mI; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fNz124cV"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5fffb2798bfso72123617b3.2
-        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:33:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GC3ke1mI"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-db402e6f61dso9519230276.3
+        for <llvm@lists.linux.dev>; Thu, 25 Jan 2024 03:33:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706182389; x=1706787189; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706182392; x=1706787192; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vu5UpmPKB2YLCZqvfGM/x/cMDohVrJdP/wVfbDfAQyQ=;
-        b=fNz124cVWKaeNQ+kkwnvA6ksPnDxzx7Py9yUTnszl2Vt62kgiHHBZFBmWse+HM2VsJ
-         asLPcpbWgYrADutV/10YC5oFGzJaTJXeq6nbkhDu1OCs149PNOFsevIA9mFV/Ak/x9lh
-         v5bVocm0j4DheE6H5H9nZj+Nn6gAI/QjJD4ZGSuEw88jYtB6aIt7k+S4D9mh4fy7Hidr
-         oeE6szfchMfcONTqjlrizNafrTiQamyk2Wb23+l0a6ivy+6fYdg3JJpzrtOz9auMW+8O
-         goDZvWR1/ejvV+QwU3D0dHCUOn2ScXFpyRXWQq1q7gB+9v3tt7IPdTPeaDO0zxcwT01g
-         IZrA==
+        bh=7LDdj00C7C86np8himWDzcjTQoz4YXOOGxPlqG/+mK0=;
+        b=GC3ke1mIm8h5JuvqK6OkpeNGRkJZHTUVezFbC8qCX3LSS+B8a+curV8thaq1iVS8Uz
+         PrMdsO587KsL4x51oAgMU2Zo9k4q3C3hJ0rR+92VOSLk4otQzxr572a+m27yVPm0cGCI
+         KTsaRwDH8lflnqA19UP9WFoQhWn5oqf1SU4UDiILxd9mI0MnFDoXaufyewAS6JMmvBI1
+         mYCmj34c8ngJ7ehvXcrRcv2uFlkD3yFj1lioVUdKyJIkaQrNNBUAway3xPZmA4wATQ5d
+         KVsdkgFllmyGKBlCVG6GNRp+DrRNJgP0iM1V3jFujfThWgjvjjw9Lz/FgNlfy5fDm8s9
+         Qy4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706182389; x=1706787189;
+        d=1e100.net; s=20230601; t=1706182392; x=1706787192;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vu5UpmPKB2YLCZqvfGM/x/cMDohVrJdP/wVfbDfAQyQ=;
-        b=NGBCngS+6StveExi3IrZc4pEqBo6FroSqJy4okUhjRmeoQV4aHnIOvGAbN40db9HQX
-         xWrOr9DfxW245FZfltIIbs7FfYJW6hzr5EBiAGI8MzzKUXFvPILUHwcMSAOTojGB6jJs
-         6R8zXGwlzWzDb55YIm+5czxMQFdZAV/hsWmAQ2OwceqRzVQxsVZkJMC7XXaPw8qvlx/Y
-         gtCuQ/waGWOmwgqdLdeSGKqNJiWusZfynEb6++3HA1rhUFJ9F8ohau0Yhpmvk8Vd63Cp
-         qctkJeYhlEBD9vaB6hxodpUC4ZQnBXw/6vLY5+O/jsUWh4i9BPF9/mU5db/RuKf0zf95
-         2F+g==
-X-Gm-Message-State: AOJu0YyR0y8/iSN0g5SUG3zRyM6U8LpLJG7krpcjjb849gRe0+cEi5Lz
-	JnCMjEyQGC+UkbVDKXpyQYNgk+Fdwh7GZyG/CnnRWKYGgs1OH+opMgJUj1w4IKiJ6GMV0g==
-X-Google-Smtp-Source: AGHT+IH2ZMdK0yFVs9V28oU4JUMZ4C9voPcHonSkBQFa+Qf4lSb0VDC+TkQiCrNKNkecK2pTIjdLakiz
+        bh=7LDdj00C7C86np8himWDzcjTQoz4YXOOGxPlqG/+mK0=;
+        b=NmMKPAP5xhNNEm9BoPsNRdZOaQeAuMRc15phaHAy4ll4eZHgd3nl8Tcs+mCxnFQyLi
+         QHz4nD5BxtRFHOwwocKMxMaQuwpcYQ/9aNNlKbeGRtvbPX49DB31oDA7Snzj8wNdSGFA
+         6opOiIxCCbsHrwzYr1wPxmrt1Jq3RgclfAktbBKPSwCvqyjStMT49PWWjpydNlposjHe
+         cr11SdbZW4zqSScgkruZ63jQwwfNLEcbcYVcEaF8OOlQJb3h6K4XHpHaqUc8UYXKo6+W
+         8D2GXKjV26BZI9Gg8br1rwKXaH7byEKWaC4RfXd20FGAawnhkGwfYqZQ8d+bIRjrmRj6
+         xoiw==
+X-Gm-Message-State: AOJu0YxMmW05lvrSV8gvAcFi7v7ozXqxxwUcLEgU8fWH4/GJPUihyTxL
+	auIsqZRX41UtjduTDdKj0l+IV25UyLic0ys0hJGJXUOh/upoYPweLebVntBh1yi3Ix2u6A==
+X-Google-Smtp-Source: AGHT+IEYrqY9RO1J4T40n/eazYsD++IwJjE+LuPFxgr4ZWZFXwfWm+alacUdiFpJCu8iH87eqkLxcQjD
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:6902:1ac5:b0:dbe:642c:2124 with SMTP id
- db5-20020a0569021ac500b00dbe642c2124mr453115ybb.0.1706182389569; Thu, 25 Jan
- 2024 03:33:09 -0800 (PST)
-Date: Thu, 25 Jan 2024 12:28:33 +0100
+ (user=ardb job=sendgmr) by 2002:a05:6902:108f:b0:dc2:23d8:722d with SMTP id
+ v15-20020a056902108f00b00dc223d8722dmr436585ybu.13.1706182391890; Thu, 25 Jan
+ 2024 03:33:11 -0800 (PST)
+Date: Thu, 25 Jan 2024 12:28:34 +0100
 In-Reply-To: <20240125112818.2016733-19-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,14 +57,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240125112818.2016733-19-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1898; i=ardb@kernel.org;
- h=from:subject; bh=Hd3xYUTi1QV5SlyH4OmfppihXDWH6zHA/zraGYWG1jw=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT6y/2x/MP/uz3CVv7baNn60+dbbIHuA/9mfjj3f1fR
- 1/P6RIq7yhlYRDjYJAVU2QRmP333c7TE6VqnWfJwsxhZQIZwsDFKQATmaTAyPD2+pa2Dxbsd/fN
- jrsvvvyopfMmqYBp+f8FDP72z02YFf2V4X+B2iyJ35HcJiKreLw4Tjw9tO5KjeqymsqthxJdpnt 0O7MAAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2380; i=ardb@kernel.org;
+ h=from:subject; bh=NfyMVMLTwE2gaCOtLA5OAbEVC8C/2zEsck2HEztektc=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXWT678l+dzpjnF+wZfLxO/X9M9rvaB34Fq1rvE771Va/
+ 2WDd+/oKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABOZG8TIcPHCL6dXrmYPXq0u
+ +/nAkX3twjvhvyf4n/khfu+DqbPAJz2Gv5KiT+q1eYp+JNx95BpofMp0+aemWZPF3+8rX3BPpu7 OSnYA
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240125112818.2016733-33-ardb+git@google.com>
-Subject: [PATCH v2 14/17] x86/sev: Avoid WARN() in early code
+Message-ID: <20240125112818.2016733-34-ardb+git@google.com>
+Subject: [PATCH v2 15/17] x86/sev: Use PIC codegen for early SEV startup code
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -78,53 +78,70 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Drop uses of WARN() from code that is reachable from the early primary
-boot path which executes via the initial 1:1 mapping before the kernel
-page tables are populated. This is unsafe and mostly pointless, given
-that printk() does not actually work yet at this point.
+Use PIC codegen for the compilation units containing code that may be
+called very early during the boot, at which point the CPU still runs
+from the 1:1 mapping of memory. This is necessary to prevent the
+compiler from emitting absolute symbol references to addresses that are
+not mapped yet.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/sev.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ arch/x86/kernel/Makefile      | 1 +
+ arch/x86/kernel/vmlinux.lds.S | 1 +
+ arch/x86/lib/Makefile         | 2 +-
+ arch/x86/mm/Makefile          | 3 ++-
+ 4 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index e5793505b307..8eb6454eadd6 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -698,7 +698,7 @@ static void __pitext early_set_pages_state(unsigned long vaddr, unsigned long pa
- 		if (op == SNP_PAGE_STATE_SHARED) {
- 			/* Page validation must be rescinded before changing to shared */
- 			ret = pvalidate(vaddr, RMP_PG_SIZE_4K, false);
--			if (WARN(ret, "Failed to validate address 0x%lx ret %d", paddr, ret))
-+			if (ret)
- 				goto e_term;
- 		}
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 65194ca79b5c..65677b25d803 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -24,6 +24,7 @@ endif
+ # head64.c contains C code that may execute from a different virtual address
+ # than it was linked at, so we always build it using PIE codegen
+ CFLAGS_head64.o += $(PIE_CFLAGS)
++CFLAGS_sev.o += $(PIE_CFLAGS)
  
-@@ -711,21 +711,16 @@ static void __pitext early_set_pages_state(unsigned long vaddr, unsigned long pa
+ KASAN_SANITIZE_head$(BITS).o				:= n
+ KASAN_SANITIZE_dumpstack.o				:= n
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 77262e804250..bbdccb6362a9 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -182,6 +182,7 @@ SECTIONS
  
- 		val = sev_es_rd_ghcb_msr();
+ 		DATA_DATA
+ 		CONSTRUCTORS
++		*(.data.rel .data.rel.*)
  
--		if (WARN(GHCB_RESP_CODE(val) != GHCB_MSR_PSC_RESP,
--			 "Wrong PSC response code: 0x%x\n",
--			 (unsigned int)GHCB_RESP_CODE(val)))
-+		if (GHCB_RESP_CODE(val) != GHCB_MSR_PSC_RESP)
- 			goto e_term;
+ 		/* rarely changed data like cpu maps */
+ 		READ_MOSTLY_DATA(INTERNODE_CACHE_BYTES)
+diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
+index ea3a28e7b613..87c79bb8d386 100644
+--- a/arch/x86/lib/Makefile
++++ b/arch/x86/lib/Makefile
+@@ -24,7 +24,7 @@ ifdef CONFIG_FUNCTION_TRACER
+ CFLAGS_REMOVE_cmdline.o = -pg
+ endif
  
--		if (WARN(GHCB_MSR_PSC_RESP_VAL(val),
--			 "Failed to change page state to '%s' paddr 0x%lx error 0x%llx\n",
--			 op == SNP_PAGE_STATE_PRIVATE ? "private" : "shared",
--			 paddr, GHCB_MSR_PSC_RESP_VAL(val)))
-+		if (GHCB_MSR_PSC_RESP_VAL(val))
- 			goto e_term;
+-CFLAGS_cmdline.o := -fno-stack-protector -fno-jump-tables
++CFLAGS_cmdline.o := $(PIE_CFLAGS)
+ endif
  
- 		if (op == SNP_PAGE_STATE_PRIVATE) {
- 			/* Page validation must be performed after changing to private */
- 			ret = pvalidate(vaddr, RMP_PG_SIZE_4K, true);
--			if (WARN(ret, "Failed to validate address 0x%lx ret %d", paddr, ret))
-+			if (ret)
- 				goto e_term;
- 		}
+ inat_tables_script = $(srctree)/arch/x86/tools/gen-insn-attr-x86.awk
+diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
+index c80febc44cd2..b412009ae588 100644
+--- a/arch/x86/mm/Makefile
++++ b/arch/x86/mm/Makefile
+@@ -31,7 +31,8 @@ obj-y				+= pat/
+ 
+ # Make sure __phys_addr has no stackprotector
+ CFLAGS_physaddr.o		:= -fno-stack-protector
+-CFLAGS_mem_encrypt_identity.o	:= -fno-stack-protector
++CFLAGS_mem_encrypt_identity.o	:= $(PIE_CFLAGS)
++CFLAGS_pti.o			:= $(PIE_CFLAGS)
+ 
+ CFLAGS_fault.o := -I $(srctree)/$(src)/../include/asm/trace
  
 -- 
 2.43.0.429.g432eaa2c6b-goog
