@@ -1,111 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0725520313;
-	Fri, 26 Jan 2024 17:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3DDAD53;
+	Fri, 26 Jan 2024 17:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706290032; cv=none; b=pTEjhHOVG5CqOONNDpBMIfyiXyyryjY34hoCjqGGNPTUV7JYAXV0OleFlvtX4w+D7nVt7MRUqVjUANbmhNUGQJid7bPAfp0cRak3dU2CZhggjZ4ZRGCG3wk/mD9hfYNBzv5CPwo9OmyOuOSl6XiL2zmA9L34hepfCBJJ1vBMfIE=
+	t=1706290601; cv=none; b=HLPETf7AcZYZ68/9Tsuk2qu6ifzU76IBZDhtdaIbjEzY+jrjgDY2W3LzZgAMxSLWBXnOfw5B/VQSW89iTZZ10hd8qqZfJRqRRCxNXdjT+ZAFsWO2nxMxvVA+l0Q3ydVtLsqkIqCcPONtwRPIWaKmFegnAItHN+CzZrlBP+W2LpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706290032; c=relaxed/simple;
-	bh=ExosIx/Tv+HMtpYZXXx/Nr7K+HPt5okvEH3K8cRZO8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KBWMmtrvZcVu2wNkHUbRpMVKGgJxneZ9+cD9nUJayK6+W41j+bMurjURALXx679V1WpVvbm3iHchJKlZJYRlpCc3tk5aEeblT9mFaUHKI/fReVgtAHw7suah522aSBMg0INZPAOId9T57Y/QV4NewVMyD/EJKooYay9AiIX4hSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fgsaCKwE; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706290601; c=relaxed/simple;
+	bh=4iVM9+Je1Wsvrrm8yBmVzSmaL5OSsQ/orDrecbPYen8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JzmTQCkJs5eFvp3lUlJbhiaW2is8Hpj5ujmwmJDTsCWIvMY76Tv3M69qdxkBzwizwCuTf6p4umSw2aj/4vtto2s9kDHhZfyfZLO008CRhfbcu8KOfMhjVcDl1Me00GbAa2JjG9vZuAmsg+I5oxCbv5+d0f55sond4V77s7tO/6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSfQhLxS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fgsaCKwE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706290030; x=1737826030;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ExosIx/Tv+HMtpYZXXx/Nr7K+HPt5okvEH3K8cRZO8M=;
-  b=fgsaCKwEBtdt4hmubdpzvo99h8ndm7j0lT2SER30rNvFK6YN5qWL4HRw
-   CdBIVkXe//2Y9ADbuJe6YMGBuCKBaVPpw/alzLTGNA0LolIK96Maupk2B
-   pbdgsya/v3T08pgiSzs/3BR2JTyfZBfwDdKApK3Jk6uXxGrSgKZ3a8ggi
-   6vMMVXfZZsLPM4h5yOyLV5JB4hXBqo8FWLZXX+euMuz6BrLym7YSMA+yS
-   RVeLhmeceHxV+o5VZkqq4M581Gx6ifhXXgbCPgMj80x4opTCA/grjL44G
-   d95B2e7JpncSM9ymuG27HIDtMYFHOd0I5pI3gk5ZHQwIOopRnQPdTsUzj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="23989053"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="23989053"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 09:27:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="787172240"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="787172240"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2024 09:27:04 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rTPyo-0001Ew-1L;
-	Fri, 26 Jan 2024 17:27:02 +0000
-Date: Sat, 27 Jan 2024 01:26:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	linux@roeck-us.net, wim@linux-watchdog.org, conor+dt@kernel.org,
-	alim.akhtar@samsung.com, jaewon02.kim@samsung.com,
-	chanho61.park@samsung.com, semen.protsenko@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel-team@android.com, peter.griffin@linaro.org,
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-	saravanak@google.com, willmcvicker@google.com, linux-fsd@tesla.com,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 2/9] soc: samsung: exynos-pmu: Add
- exynos_pmu_update/read/write APIs and SoC quirks
-Message-ID: <202401270110.YlAvkNYL-lkp@intel.com>
-References: <20240122225710.1952066-3-peter.griffin@linaro.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSfQhLxS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C985EC43394;
+	Fri, 26 Jan 2024 17:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706290601;
+	bh=4iVM9+Je1Wsvrrm8yBmVzSmaL5OSsQ/orDrecbPYen8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=eSfQhLxSwoBb3Kl5xmdZLqSuNuEh4sZLAQEbkIFuELSIvawi+eWE4VifIzKJCA1xN
+	 ud1K2sDHZNEU+9NvzpLehMGrBwNA4FU/V6dfTCEcGsUFYvYx28DdLpnYMZWeJhtiHt
+	 X+5wCY7lKxz5xbS0snMo2gaEI5jMmOH45EU6PgHKEsH9TXVOYxHjajQ70IUsmNEEYc
+	 pZpno9hTFis1oZzYWC1I57fwnnTLaU1tGIlGe7G2trNV+pdTwa7eZgHkKgPwTE+CvH
+	 bgA9Kf+bcqp1jm0MgmdiwKDSnypDEaJh3yKnN6nvrKvwJajC3jW70LmygRvcReN0VI
+	 iSb3Ln+zquTMA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 26 Jan 2024 10:36:31 -0700
+Subject: [PATCH 4.19] powerpc: Use always instead of always-y in for
+ crtsavres.o
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240122225710.1952066-3-peter.griffin@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240126-4-19-fix-lib-powerpc-backport-v1-1-f0de224db66b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJ7ts2UC/x3M0QqDMAxA0V+RPC9iuiLTXxl7iDWdYWJLKttA/
+ PeVPR643AOKmEqBsTnA5K1F01ZBlwbCwttTUOdqcJ3zHbkePdKAUb+46oQ5fcRywInDKyfbsY+
+ eb+7KcySG+sgmtf3/7+BbGuBxnj+ZDa74dQAAAA==
+To: gregkh@linuxfoundation.org, sashal@kernel.org
+Cc: stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1904; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=4iVM9+Je1Wsvrrm8yBmVzSmaL5OSsQ/orDrecbPYen8=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKmb3664uenfguxwHdbUCL8t+sYm6TnH3/BZ2O1hYW21S
+ LaVEj7RUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbyXYjhnz43z6GLhtYb33a+
+ UVdp3nvb1mS73BMVQzv1rYUH5Jb+s2VkmCcRtPnbAR/3Y2wbl33v/vtp6Sc5ndnrDd86Vqz0nRX
+ swg8A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Peter,
+This commit is for linux-4.19.y only, it has no direct upstream
+equivalent.
 
-kernel test robot noticed the following build errors:
+Prior to commit 5f2fb52fac15 ("kbuild: rename hostprogs-y/always to
+hostprogs/always-y"), always-y did not exist, making the backport of
+mainline commit 1b1e38002648 ("powerpc: add crtsavres.o to always-y
+instead of extra-y") to linux-4.19.y as commit b7b85ec5ec15 ("powerpc:
+add crtsavres.o to always-y instead of extra-y") incorrect, breaking the
+build with linkers that need crtsavres.o:
 
-[auto build test ERROR on krzk/for-next]
-[also build test ERROR on robh/for-next soc/for-next linus/master v6.8-rc1 next-20240125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such file or directory
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-watchdog-samsung-wdt-deprecate-samsung-syscon-phandle/20240123-070052
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240122225710.1952066-3-peter.griffin%40linaro.org
-patch subject: [PATCH 2/9] soc: samsung: exynos-pmu: Add exynos_pmu_update/read/write APIs and SoC quirks
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240127/202401270110.YlAvkNYL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401270110.YlAvkNYL-lkp@intel.com/reproduce)
+Backporting the aforementioned kbuild commit is not suitable for stable
+due to its size and number of conflicts, so transform the always-y usage
+to an equivalent form using always, which resolves the build issues.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401270110.YlAvkNYL-lkp@intel.com/
+Fixes: b7b85ec5ec15 ("powerpc: add crtsavres.o to always-y instead of extra-y")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/powerpc/lib/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
+index 6f1e57182876..f0aa6fc8c6b2 100644
+--- a/arch/powerpc/lib/Makefile
++++ b/arch/powerpc/lib/Makefile
+@@ -21,8 +21,8 @@ obj-$(CONFIG_PPC32)	+= div64.o copy_32.o crtsavres.o strlen_32.o
+ # 64-bit linker creates .sfpr on demand for final link (vmlinux),
+ # so it is only needed for modules, and only for older linkers which
+ # do not support --save-restore-funcs
+-ifeq ($(call ld-ifversion, -lt, 225000000, y),y)
+-always-$(CONFIG_PPC64)	+= crtsavres.o
++ifeq ($(call ld-ifversion, -lt, 225000000, y)$(CONFIG_PPC64),yy)
++always	+= crtsavres.o
+ endif
+ 
+ obj-$(CONFIG_PPC_BOOK3S_64) += copyuser_power7.o copypage_power7.o \
 
->> ld.lld: error: undefined symbol: pmu_base_addr
-   >>> referenced by exynos.c
-   >>>               arch/arm/mach-exynos/exynos.o:(exynos_set_delayed_reset_assertion) in archive vmlinux.a
-   >>> referenced by exynos.c
-   >>>               arch/arm/mach-exynos/exynos.o:(exynos_set_delayed_reset_assertion) in archive vmlinux.a
-   >>> referenced by exynos.c
-   >>>               arch/arm/mach-exynos/exynos.o:(exynos_init_irq) in archive vmlinux.a
-   >>> referenced 75 more times
+---
+base-commit: b060cfd3f707ad3c8ae8322e1b149ba7e2cf33e0
+change-id: 20240126-4-19-fix-lib-powerpc-backport-6f4a823adf1a
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
