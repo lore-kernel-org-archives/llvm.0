@@ -1,60 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E7FBA33;
-	Fri, 26 Jan 2024 05:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218B1290E;
+	Fri, 26 Jan 2024 05:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706246802; cv=none; b=QIy5QUoi32ddLn7PskclHUqqHHNSep0jEx8u3sFYuiBVkWvVjkVHfcSwZfDH/WePg6lhsxXyWTq760E6LLeoH8gsrhg54/qrI+eIp9DlXBmtLOoTqNg1nbDiGDqcSgFQ3PUOiBKwmJ1uHXI/eAKQHWq0AMNsaBuQxGQ0J3LeexE=
+	t=1706247999; cv=none; b=eeJ2fpa8UmCs8+tfZrq922flDRk2kkcpsVSCsxfRGS8/qmzC5h75JkmOTNzbq/G5QxUuPVoBOGXbJ8uB/Rla8gtClySy+FmFxhyq72C7jqzREVNfFA9hu7SvpKL1EkWnHnlGxYDgzuQ9oVMkZHDTXBtt+0GUdpzUPL8+ene9i4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706246802; c=relaxed/simple;
-	bh=T6pFkLTZJz7H/RFcbVN8xkONdim8Rlw6Nh+ztR2exnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=puehjaBBDw2wOtZ2HWm9MJ82dCeR4GKX3cUny78MbYp/t8sKRIqi+04jrz3CPIIoTlq2cOaQElVUYccUWMrnV/Lzk1+mswNYxNP+zecjQUeqxuXs4abNb5WYX9JASUM9WRytPa56uf25Dbo1OyKqhpOjjb2aaeILrVCVU7eoMJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dG71fKTF; arc=none smtp.client-ip=192.55.52.93
+	s=arc-20240116; t=1706247999; c=relaxed/simple;
+	bh=izb6XGWP+V1eZT7Vp571i1YaosXP4HpyWgVbgUkIGOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BdW5oiOmEmZm2lTgGOB0djtvr9zISlWJnjgu7Z0rsR2Jmq0wwDt+vh6I4FyT6NVp1he+00hyz0usuTJNIqHWTDezV3Q7y3ePX5B9//m7VeeeF2X/8u5YEfxCPAYsH5LFIeFMx4BMLdZfwoJ39SeuuI+go1PZXSFHx/AqQ13HZzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MdBux+s/; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dG71fKTF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MdBux+s/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706246800; x=1737782800;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T6pFkLTZJz7H/RFcbVN8xkONdim8Rlw6Nh+ztR2exnM=;
-  b=dG71fKTF0Y9cqBJtz1HV0IIQhLt2tmdY/V/RSTPULJjUFsNUqDOwaTHB
-   3FbHl3DsiHt7EAJ48YOEakupnQ3RNSPH1zJtR/oRJLmor+hKhpB7u67u+
-   XqpW6Atwy43JZsdzg05rMmoPY0L3NpIy1NDuDlwZXoU1N41SpEb1TqXcm
-   edwWYavjmMgEvDKZuXhrsYsK5Xvdv5msGedyQXTuGA/FiHDDVTuCpWXf9
-   8eZbR6q4f4oPU9ai8AxGNDJ+Ep6Cqbn4YWw98DoNhj8hkwdKbYSYl8kuR
-   5+Xm4IAZqpFI6u57HpGtDrHaC+xcb8MN8zFLVcZw1dqPLYIgFuwqu27y6
+  t=1706247997; x=1737783997;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=izb6XGWP+V1eZT7Vp571i1YaosXP4HpyWgVbgUkIGOk=;
+  b=MdBux+s/astpDs1ZrCq411jLH0sXi+IZTIzybOkTRV8yV45qXCLqUY4f
+   XS6Sl537+pEc0ul/Qz0s8pNVyD+YvbsDHBQDsAoaChJa6UvuewD/mLCXS
+   uzPbBPJald68nPVf6c0d/wRW4pJZGdm/KWCZBviTmMI8JjMJw7jjjPclf
+   giPjCF3b0PJBKSUWCV8fiObPSanMy4gBtUnXmxYrHipKTHTx/oaxLl1rg
+   n9iROTAK2a9F23qcTPU+8vwJ6+nrDZQLwmfKCq/1byvBG+rFDvlubz7TC
+   SGQ8opGMj7drePVhRJ/nlFfJi35z8qI12P69axxUaWudS6DaCls9EOD07
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="399556921"
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="1319806"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="399556921"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 21:26:36 -0800
+   d="scan'208";a="1319806"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 21:46:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="960113140"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="960113140"
+   d="scan'208";a="28729580"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2024 21:26:33 -0800
+  by orviesa002.jf.intel.com with ESMTP; 25 Jan 2024 21:46:35 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rTEjX-0000is-0T;
-	Fri, 26 Jan 2024 05:26:31 +0000
-Date: Fri, 26 Jan 2024 13:25:42 +0800
+	id 1rTF2t-0000jw-22;
+	Fri, 26 Jan 2024 05:46:31 +0000
+Date: Fri, 26 Jan 2024 13:46:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bitao Hu <yaoma@linux.alibaba.com>, dianders@chromium.org,
-	akpm@linux-foundation.org, pmladek@suse.com, tglx@linutronix.de,
-	maz@kernel.org, liusong@linux.alibaba.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Bitao Hu <yaoma@linux.alibaba.com>
-Subject: Re: [PATCH 3/3] watchdog/softlockup: add parameter to control the
- reporting of time-consuming hardirq
-Message-ID: <202401261359.eaU4UnjQ-lkp@intel.com>
-References: <20240123121223.22318-4-yaoma@linux.alibaba.com>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ambarus:gs101-spi-vv2 33/46] drivers/spi/spi-s3c64xx.c:200:
+ warning: Excess struct member 'port_id' description in
+ 's3c64xx_spi_driver_data'
+Message-ID: <202401261322.aQB2fPuq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,66 +58,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240123121223.22318-4-yaoma@linux.alibaba.com>
 
-Hi Bitao,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/irq/core]
-[also build test WARNING on akpm-mm/mm-everything linus/master v6.8-rc1 next-20240125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bitao-Hu/watchdog-softlockup-low-overhead-detection-of-interrupt-storm/20240123-201509
-base:   tip/irq/core
-patch link:    https://lore.kernel.org/r/20240123121223.22318-4-yaoma%40linux.alibaba.com
-patch subject: [PATCH 3/3] watchdog/softlockup: add parameter to control the reporting of time-consuming hardirq
-config: i386-buildonly-randconfig-003-20240126 (https://download.01.org/0day-ci/archive/20240126/202401261359.eaU4UnjQ-lkp@intel.com/config)
+tree:   https://github.com/ambarus/linux-0day gs101-spi-vv2
+head:   b148a8ab25375c3d984c42954bdb06e98a91ec8f
+commit: e7936574c738273da7507a1867c878c950e05103 [33/46] spi: s3c64xx: drop dependency on of_alias where possible
+config: i386-buildonly-randconfig-003-20240126 (https://download.01.org/0day-ci/archive/20240126/202401261322.aQB2fPuq-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261359.eaU4UnjQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261322.aQB2fPuq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401261359.eaU4UnjQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401261322.aQB2fPuq-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/watchdog.c:1088:5: warning: no previous prototype for function 'proc_softlockup_irqtrace' [-Wmissing-prototypes]
-    1088 | int proc_softlockup_irqtrace(struct ctl_table *table, int write,
-         |     ^
-   kernel/watchdog.c:1088:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1088 | int proc_softlockup_irqtrace(struct ctl_table *table, int write,
-         | ^
-         | static 
-   1 warning generated.
+>> drivers/spi/spi-s3c64xx.c:200: warning: Excess struct member 'port_id' description in 's3c64xx_spi_driver_data'
 
 
-vim +/proc_softlockup_irqtrace +1088 kernel/watchdog.c
+vim +200 drivers/spi/spi-s3c64xx.c
 
-  1084	
-  1085	/*
-  1086	 * /proc/sys/kernel/softlockup_irqtrace
-  1087	 */
-> 1088	int proc_softlockup_irqtrace(struct ctl_table *table, int write,
-  1089				 void *buffer, size_t *lenp, loff_t *ppos)
-  1090	{
-  1091		int err, old;
-  1092	
-  1093		mutex_lock(&watchdog_mutex);
-  1094	
-  1095		old = READ_ONCE(softlockup_irqtrace);
-  1096		err = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-  1097	
-  1098		if (!err && write && old != READ_ONCE(softlockup_irqtrace))
-  1099			proc_watchdog_update();
-  1100	
-  1101		mutex_unlock(&watchdog_mutex);
-  1102		return err;
-  1103	}
-  1104	
+a5238e360b715e drivers/spi/spi-s3c64xx.c Thomas Abraham      2012-07-13  159  
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  160  /**
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  161   * struct s3c64xx_spi_driver_data - Runtime info holder for SPI driver.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  162   * @clk: Pointer to the spi clock.
+b0d5d6e5534034 drivers/spi/spi_s3c64xx.c Jassi Brar          2010-01-20  163   * @src_clk: Pointer to the clock used to generate SPI signals.
+f4bc49eda254c6 drivers/spi/spi-s3c64xx.c Yang Yingliang      2023-08-18  164   * @ioclk: Pointer to the i/o clock between host and target
+6b8d1e4739f41f drivers/spi/spi-s3c64xx.c Lee Jones           2020-07-17  165   * @pdev: Pointer to device's platform device data
+f4bc49eda254c6 drivers/spi/spi-s3c64xx.c Yang Yingliang      2023-08-18  166   * @host: Pointer to the SPI Protocol host.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  167   * @cntrlr_info: Platform specific data for the controller this driver manages.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  168   * @lock: Controller specific lock.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  169   * @state: Set of FLAGS to indicate status.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  170   * @sfr_start: BUS address of SPI controller regs.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  171   * @regs: Pointer to ioremap'ed controller registers.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  172   * @xfer_completion: To indicate completion of xfer task.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  173   * @cur_mode: Stores the active configuration of the controller.
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  174   * @cur_bpw: Stores the active bits per word settings.
+6b8d1e4739f41f drivers/spi/spi-s3c64xx.c Lee Jones           2020-07-17  175   * @cur_speed: Current clock speed
+6b8d1e4739f41f drivers/spi/spi-s3c64xx.c Lee Jones           2020-07-17  176   * @rx_dma: Local receive DMA data (e.g. chan and direction)
+6b8d1e4739f41f drivers/spi/spi-s3c64xx.c Lee Jones           2020-07-17  177   * @tx_dma: Local transmit DMA data (e.g. chan and direction)
+47cc22182f8dc4 drivers/spi/spi-s3c64xx.c Tudor Ambarus       2024-01-25  178   * @port_conf: Local SPI port configuration data
+6b8d1e4739f41f drivers/spi/spi-s3c64xx.c Lee Jones           2020-07-17  179   * @port_id: Port identification number
+8fea318bddfd93 drivers/spi/spi-s3c64xx.c Tudor Ambarus       2024-01-24  180   * @fifosize: size of the FIFO
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  181   */
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  182  struct s3c64xx_spi_driver_data {
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  183  	void __iomem                    *regs;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  184  	struct clk                      *clk;
+b0d5d6e5534034 drivers/spi/spi_s3c64xx.c Jassi Brar          2010-01-20  185  	struct clk                      *src_clk;
+7990b00819e765 drivers/spi/spi-s3c64xx.c Andi Shyti          2016-07-12  186  	struct clk                      *ioclk;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  187  	struct platform_device          *pdev;
+f4bc49eda254c6 drivers/spi/spi-s3c64xx.c Yang Yingliang      2023-08-18  188  	struct spi_controller           *host;
+ad7de729c60380 drivers/spi/spi_s3c64xx.c Jassi Brar          2010-01-20  189  	struct s3c64xx_spi_info         *cntrlr_info;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  190  	spinlock_t                      lock;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  191  	unsigned long                   sfr_start;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  192  	struct completion               xfer_completion;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  193  	unsigned                        state;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  194  	unsigned                        cur_mode, cur_bpw;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  195  	unsigned                        cur_speed;
+82ab8cd7ec3219 drivers/spi/spi-s3c64xx.c Boojin Kim          2011-09-02  196  	struct s3c64xx_spi_dma_data	rx_dma;
+82ab8cd7ec3219 drivers/spi/spi-s3c64xx.c Boojin Kim          2011-09-02  197  	struct s3c64xx_spi_dma_data	tx_dma;
+d6371415517700 drivers/spi/spi-s3c64xx.c Krzysztof Kozlowski 2021-04-14  198  	const struct s3c64xx_spi_port_config	*port_conf;
+8fea318bddfd93 drivers/spi/spi-s3c64xx.c Tudor Ambarus       2024-01-24  199  	unsigned int			fifosize;
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30 @200  };
+230d42d422e7b6 drivers/spi/spi_s3c64xx.c Jassi Brar          2009-11-30  201  
+
+:::::: The code at line 200 was first introduced by commit
+:::::: 230d42d422e7b69fc9b270f41c69e63b54572e26 spi: Add s3c64xx SPI Controller driver
+
+:::::: TO: Jassi Brar <jassi.brar@samsung.com>
+:::::: CC: Grant Likely <grant.likely@secretlab.ca>
 
 -- 
 0-DAY CI Kernel Test Service
