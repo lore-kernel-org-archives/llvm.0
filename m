@@ -1,108 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C271C2AF;
-	Fri, 26 Jan 2024 08:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC8E1AAD1;
+	Fri, 26 Jan 2024 08:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706258691; cv=none; b=eNYyBp6csFBDU2OSGyXT6UjBMXIBqbMfpLREvOTCYX8Lh7BJ0xGJh1yjxCAA59sWiSegOUa6de2R85pyRnCUTyHAtgJzOXsmA6fbijy/0VJOlwqT0zGRD7u4YXEc8KwpqcN/vb/bg67Mv6DynKkyRMjp7OcsjAt7L4FwL8Pv9fs=
+	t=1706258863; cv=none; b=Uo0oXbF+2N6pLP9uHecAgcJCIWn1RnfLpj1I99UsDE4caNWNMSiaWb0kJhTFIPMnTuMzbXyIy5EJz/7P5Fs6mjBUhmSwiVMJJXCJv0vKihLucJ5bpMnjpRJ1xq0wFZR6PeXg25RcH8tOpHK1dIbx4YaU6VL8RMsYdO3EhA05b2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706258691; c=relaxed/simple;
-	bh=gaO5xq4+iqo/CpWSTXlZvHIwYFC0rTJKMRPwhqMBRbo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dPRevf5e/WOCCNTPlvdDY5B3BhR8QCfgUYzORMWuRdxswXxxqQEQvI8nlEIXA8cNeiDh6mt5nM0yAGM0GTpKcdIdXtvGW34w4JJzpbCqeBuEn3Zo1GWHg3nO1jLhDZMvnMdIbRGx5nRRQ1enx+5LwCOkvdyAd6lEI2UZ/0Y7Aco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJrwKq0Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706258863; c=relaxed/simple;
+	bh=GwRZaaw3NyWFd5uN+V2xFfKA+ax5+ZRg2Cx/yrStlJY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dlg0Ir5ehpJDhX+9XHiHLRiry74M4vb/6Fw6X9YiwKmdRhvk5sxzLhRYRutuknD911hl9EqE2Z/nHRIF90NHNUqoPwh++mblO3v1Bn2fluO2jfEdP6LMB1MPsL6bckvzRMgJ1envGaSgZIwGQnaZYpFEmsAGwG7AKt+2vB3LIZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KCdjqrgs; arc=none smtp.client-ip=134.134.136.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJrwKq0Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA970C43394;
-	Fri, 26 Jan 2024 08:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706258690;
-	bh=gaO5xq4+iqo/CpWSTXlZvHIwYFC0rTJKMRPwhqMBRbo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DJrwKq0YiCYXRsEOAkgnCozSU3DFfNvol2WhYcL+1l7yRpdzxU97/wyN6dC3VvYZi
-	 AVQrz3RS5yS9M7Hi26EsL4tQTmix5gNZ5L0ydLrSsRJfcNqq9PHgR+uVj5mHn1WoZI
-	 w6eKuPT/PK1ycyJoVYkSgq6yOWbT1hVxSy2lEw4XNllrCqh0ZZWQg0Lc1VLQ/IoXf7
-	 OzdDPBQ+w7d3Qu7cq8kqO78yyb64RHjG1yNfiB0cAkxIrPoxGYUrOFuyKV5i8wbpaw
-	 KysOQx0Yb2GKXV3kpzSNrUgl5Gm78WWcQfaMo6z2arb6GFDNu0TQ1ZGHESve7lNNZ9
-	 tcWnTV9YcfvRQ==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-510221ab3ebso172657e87.1;
-        Fri, 26 Jan 2024 00:44:50 -0800 (PST)
-X-Gm-Message-State: AOJu0YyVFaNZXhuCJY6gfGgQQ3YTOG9f08WHCE3qY2nDBQ0jkP3ETS8Q
-	bfl4VBVMLxMkYS13xrMqlZ5sMV1CYAys2A2ESE4HWxkIEHXZhvNDZNijViF1W6g4BCFJ9mfDT7Y
-	oNm+AiV2Jg0exaN1YVJRJVZWfp/o=
-X-Google-Smtp-Source: AGHT+IFjNDG5Tm3UEEPA7ACJkYs/KdrtCbDYforcV54CpZLqF2gkX9FCsY5ZA2v/40T7zrcJxSycn+IRI/2GHFp2hns=
-X-Received: by 2002:a05:6512:2246:b0:50e:7410:d5b0 with SMTP id
- i6-20020a056512224600b0050e7410d5b0mr669457lfu.28.1706258688908; Fri, 26 Jan
- 2024 00:44:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KCdjqrgs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706258861; x=1737794861;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GwRZaaw3NyWFd5uN+V2xFfKA+ax5+ZRg2Cx/yrStlJY=;
+  b=KCdjqrgs/dqY0pIWUlYTT5vtM43q+Zs7vpGE6fboiJ56u0uFeM99QBBQ
+   45wQO5IsIuBR29TMQnuu1y3nDrx+smDXRvlht9upTlsuGVqdkEKcgJEt6
+   fpw1tXiI6ZwEJBCmRbro2p8yhR/lBK12Igt8vPI0VPuxO+ghVsC2WLBBw
+   9W9Io8F8y4x9armwJRl621ufPs6NqZ+GUDs3knqIh8D34ystCCEOc0ITi
+   L+Zox2odM4mVlDwSV82J+i31wH2YtsiDGRdBylWNS5Gfog9qvu05Go1Sl
+   U+gn8yMn4Q9GBpwXrBlGh8v50209a5SSvKoMkrZ9v/83DMMs6RbKL6uXM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="466698486"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="466698486"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 00:47:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="960153671"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="960153671"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2024 00:47:39 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rTHs9-0000rg-0b;
+	Fri, 26 Jan 2024 08:47:37 +0000
+Date: Fri, 26 Jan 2024 16:47:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Chen <jason.z.chen@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [sailus-media-tree:master 18/18]
+ drivers/media/i2c/ov08x40.c:1783:23: error: no member named 'exposure_shift'
+ in 'struct ov08x40_mode'
+Message-ID: <202401261628.dWEtdXLE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
- <20240125-bump-min-llvm-ver-to-13-0-1-v1-4-f5ff9bda41c5@kernel.org>
-In-Reply-To: <20240125-bump-min-llvm-ver-to-13-0-1-v1-4-f5ff9bda41c5@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 26 Jan 2024 09:44:37 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFzi=ijUBU0i3gq4Q9rcCvMw-a1wLc1u7fXRRN8QbN9hw@mail.gmail.com>
-Message-ID: <CAMj1kXFzi=ijUBU0i3gq4Q9rcCvMw-a1wLc1u7fXRRN8QbN9hw@mail.gmail.com>
-Subject: Re: [PATCH 04/11] ARM: Remove Thumb2 __builtin_thread_pointer
- workaround for Clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: akpm@linux-foundation.org, masahiroy@kernel.org, nicolas@fjasle.eu, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux@armlinux.org.uk, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 25 Jan 2024 at 23:56, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Now that the minimum supported version of LLVM for building the kernel
-> has been bumped to 13.0.1, the conditional expression added to
-> get_current() by commit c1e42efacb9b ("ARM: 9151/1: Thumb2: avoid
-> __builtin_thread_pointer() on Clang") is always true, as the build will
-> fail during the configuration stage for older LLVM versions. Remove it,
-> effectively reverting the aforementioned change.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   git://linuxtv.org/sailus/media_tree.git master
+head:   f76be7216c3df5f563353bd7a6aaf5076b118943
+commit: f76be7216c3df5f563353bd7a6aaf5076b118943 [18/18] media: ov08x40: Reduce start streaming time
+config: i386-randconfig-003-20240126 (https://download.01.org/0day-ci/archive/20240126/202401261628.dWEtdXLE-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261628.dWEtdXLE-lkp@intel.com/reproduce)
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401261628.dWEtdXLE-lkp@intel.com/
 
-> ---
-> Cc: linux@armlinux.org.uk
-> Cc: ardb@kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> ---
->  arch/arm/include/asm/current.h | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
->
-> diff --git a/arch/arm/include/asm/current.h b/arch/arm/include/asm/current.h
-> index 1e1178bf176d..5225cb1c803b 100644
-> --- a/arch/arm/include/asm/current.h
-> +++ b/arch/arm/include/asm/current.h
-> @@ -18,18 +18,12 @@ static __always_inline __attribute_const__ struct task_struct *get_current(void)
->  {
->         struct task_struct *cur;
->
-> -#if __has_builtin(__builtin_thread_pointer) && \
-> -    defined(CONFIG_CURRENT_POINTER_IN_TPIDRURO) && \
-> -    !(defined(CONFIG_THUMB2_KERNEL) && \
-> -      defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 130001)
-> +#if __has_builtin(__builtin_thread_pointer) && defined(CONFIG_CURRENT_POINTER_IN_TPIDRURO)
->         /*
->          * Use the __builtin helper when available - this results in better
->          * code, especially when using GCC in combination with the per-task
->          * stack protector, as the compiler will recognize that it needs to
->          * load the TLS register only once in every function.
-> -        *
-> -        * Clang < 13.0.1 gets this wrong for Thumb2 builds:
-> -        * https://github.com/ClangBuiltLinux/linux/issues/1485
->          */
->         cur = __builtin_thread_pointer();
->  #elif defined(CONFIG_CURRENT_POINTER_IN_TPIDRURO) || defined(CONFIG_SMP)
->
-> --
-> 2.43.0
->
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov08x40.c:1783:23: error: no member named 'exposure_shift' in 'struct ov08x40_mode'
+    1783 |         if (ov08x->cur_mode->exposure_shift == 1) {
+         |             ~~~~~~~~~~~~~~~  ^
+   1 error generated.
+
+
+vim +1783 drivers/media/i2c/ov08x40.c
+
+  1749	
+  1750	static int ov08x40_start_streaming(struct ov08x40 *ov08x)
+  1751	{
+  1752		struct i2c_client *client = v4l2_get_subdevdata(&ov08x->sd);
+  1753		const struct ov08x40_reg_list *reg_list;
+  1754		int ret, link_freq_index;
+  1755	
+  1756		/* Get out of from software reset */
+  1757		ret = ov08x40_write_reg(ov08x, OV08X40_REG_SOFTWARE_RST,
+  1758					OV08X40_REG_VALUE_08BIT, OV08X40_SOFTWARE_RST);
+  1759		if (ret) {
+  1760			dev_err(&client->dev, "%s failed to set powerup registers\n",
+  1761				__func__);
+  1762			return ret;
+  1763		}
+  1764	
+  1765		link_freq_index = ov08x->cur_mode->link_freq_index;
+  1766		reg_list = &link_freq_configs[link_freq_index].reg_list;
+  1767	
+  1768		ret = ov08x40_write_reg_list(ov08x, reg_list);
+  1769		if (ret) {
+  1770			dev_err(&client->dev, "%s failed to set plls\n", __func__);
+  1771			return ret;
+  1772		}
+  1773	
+  1774		/* Apply default values of current mode */
+  1775		reg_list = &ov08x->cur_mode->reg_list;
+  1776		ret = ov08x40_write_reg_list(ov08x, reg_list);
+  1777		if (ret) {
+  1778			dev_err(&client->dev, "%s failed to set mode\n", __func__);
+  1779			return ret;
+  1780		}
+  1781	
+  1782		/* Use i2c burst to write register on full size registers */
+> 1783		if (ov08x->cur_mode->exposure_shift == 1) {
+  1784			ret = ov08x40_burst_fill_regs(ov08x, OV08X40_REG_XTALK_FIRST_A,
+  1785						      OV08X40_REG_XTALK_LAST_A, 0x75);
+  1786			if (ret == 0)
+  1787				ret = ov08x40_burst_fill_regs(ov08x,
+  1788							      OV08X40_REG_XTALK_FIRST_B,
+  1789							      OV08X40_REG_XTALK_LAST_B,
+  1790							      0x75);
+  1791		}
+  1792	
+  1793		if (ret) {
+  1794			dev_err(&client->dev, "%s failed to set regs\n", __func__);
+  1795			return ret;
+  1796		}
+  1797	
+  1798		/* Apply customized values from user */
+  1799		ret =  __v4l2_ctrl_handler_setup(ov08x->sd.ctrl_handler);
+  1800		if (ret)
+  1801			return ret;
+  1802	
+  1803		return ov08x40_write_reg(ov08x, OV08X40_REG_MODE_SELECT,
+  1804					 OV08X40_REG_VALUE_08BIT,
+  1805					 OV08X40_MODE_STREAMING);
+  1806	}
+  1807	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
