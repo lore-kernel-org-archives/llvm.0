@@ -1,97 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F4A14285;
-	Fri, 26 Jan 2024 08:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C271C2AF;
+	Fri, 26 Jan 2024 08:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706256942; cv=none; b=NOvuYc0q3JE6Vryu0wL4dKLNUuc/dM0CHlCs6hkWMrVWec+JRtT5c2oRbJe25zGOYHGPuBD5e2LwaE2sVZ47GU/6HpJMoMCn9pG7F8zB82d/UFH7TmuUAFSRZIcQXs3+fg2Jy+yV5HDsfx/GUIjBg4KSDYr6AyVP/ojZ3gpDTSo=
+	t=1706258691; cv=none; b=eNYyBp6csFBDU2OSGyXT6UjBMXIBqbMfpLREvOTCYX8Lh7BJ0xGJh1yjxCAA59sWiSegOUa6de2R85pyRnCUTyHAtgJzOXsmA6fbijy/0VJOlwqT0zGRD7u4YXEc8KwpqcN/vb/bg67Mv6DynKkyRMjp7OcsjAt7L4FwL8Pv9fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706256942; c=relaxed/simple;
-	bh=HGv9MFuipz7qlfRad5Kn9QJpzNtljsHTLz2asR69Sbs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RWPg5kzE2n2CZQ1/rUXinDA+L4R83JQvAdyzW6cZivbQ8vwjzq0aJ4i29UaDe8YaAO+TKgA2adXML6CDkqKDOL37XMYhdECvZOP7YJaF3kYFqi2Mb8dZKA/vYiJNZe/Pu7It8UNzz096/HWILdNqJl+DJw/03i+fItNvT6F6UDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ix9GQ10p; arc=none smtp.client-ip=192.55.52.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706258691; c=relaxed/simple;
+	bh=gaO5xq4+iqo/CpWSTXlZvHIwYFC0rTJKMRPwhqMBRbo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dPRevf5e/WOCCNTPlvdDY5B3BhR8QCfgUYzORMWuRdxswXxxqQEQvI8nlEIXA8cNeiDh6mt5nM0yAGM0GTpKcdIdXtvGW34w4JJzpbCqeBuEn3Zo1GWHg3nO1jLhDZMvnMdIbRGx5nRRQ1enx+5LwCOkvdyAd6lEI2UZ/0Y7Aco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJrwKq0Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ix9GQ10p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706256940; x=1737792940;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HGv9MFuipz7qlfRad5Kn9QJpzNtljsHTLz2asR69Sbs=;
-  b=ix9GQ10pUaz0ATkz2cH9MQcEcmzjV8QNAXFtKKNd6tCJZBJh3xI5yrqM
-   MNsyLWv7lBSO03+HShpBsurDbVeysXb9bGph/WdkYrzXDESY9MsS+QHCO
-   7WJYBUInVMEL0CTQJi4Ai7sAweRDn8IYZgqaKG48tRxpZZjgEu23Fp/0y
-   tObaJh1RemL3pTmu6yxOPrbuLJZrTO5a0BuboC30KM9LxwqsmRmMBR19n
-   Iq9GlM8pia7MyR4apHXn2D9J8k7bkmpaJ4DqX73Ff5FFJIpIzq6KwUOOP
-   9tD7sXiStONnGmNgv2st8f8YZG3mFfDJeLKi2/EfUZVd99lkoM13QcPAX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="401266492"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="401266492"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 00:15:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="910265733"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="910265733"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2024 00:15:37 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rTHN9-0000po-2a;
-	Fri, 26 Jan 2024 08:15:35 +0000
-Date: Fri, 26 Jan 2024 16:14:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nava kishore Manne <nava.manne@xilinx.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
-	Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Subject: drivers/fpga/versal-fpga.c:78:34: warning: unused variable
- 'versal_fpga_of_match'
-Message-ID: <202401261611.Ee3FjLdD-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJrwKq0Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA970C43394;
+	Fri, 26 Jan 2024 08:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706258690;
+	bh=gaO5xq4+iqo/CpWSTXlZvHIwYFC0rTJKMRPwhqMBRbo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DJrwKq0YiCYXRsEOAkgnCozSU3DFfNvol2WhYcL+1l7yRpdzxU97/wyN6dC3VvYZi
+	 AVQrz3RS5yS9M7Hi26EsL4tQTmix5gNZ5L0ydLrSsRJfcNqq9PHgR+uVj5mHn1WoZI
+	 w6eKuPT/PK1ycyJoVYkSgq6yOWbT1hVxSy2lEw4XNllrCqh0ZZWQg0Lc1VLQ/IoXf7
+	 OzdDPBQ+w7d3Qu7cq8kqO78yyb64RHjG1yNfiB0cAkxIrPoxGYUrOFuyKV5i8wbpaw
+	 KysOQx0Yb2GKXV3kpzSNrUgl5Gm78WWcQfaMo6z2arb6GFDNu0TQ1ZGHESve7lNNZ9
+	 tcWnTV9YcfvRQ==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-510221ab3ebso172657e87.1;
+        Fri, 26 Jan 2024 00:44:50 -0800 (PST)
+X-Gm-Message-State: AOJu0YyVFaNZXhuCJY6gfGgQQ3YTOG9f08WHCE3qY2nDBQ0jkP3ETS8Q
+	bfl4VBVMLxMkYS13xrMqlZ5sMV1CYAys2A2ESE4HWxkIEHXZhvNDZNijViF1W6g4BCFJ9mfDT7Y
+	oNm+AiV2Jg0exaN1YVJRJVZWfp/o=
+X-Google-Smtp-Source: AGHT+IFjNDG5Tm3UEEPA7ACJkYs/KdrtCbDYforcV54CpZLqF2gkX9FCsY5ZA2v/40T7zrcJxSycn+IRI/2GHFp2hns=
+X-Received: by 2002:a05:6512:2246:b0:50e:7410:d5b0 with SMTP id
+ i6-20020a056512224600b0050e7410d5b0mr669457lfu.28.1706258688908; Fri, 26 Jan
+ 2024 00:44:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
+ <20240125-bump-min-llvm-ver-to-13-0-1-v1-4-f5ff9bda41c5@kernel.org>
+In-Reply-To: <20240125-bump-min-llvm-ver-to-13-0-1-v1-4-f5ff9bda41c5@kernel.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 26 Jan 2024 09:44:37 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFzi=ijUBU0i3gq4Q9rcCvMw-a1wLc1u7fXRRN8QbN9hw@mail.gmail.com>
+Message-ID: <CAMj1kXFzi=ijUBU0i3gq4Q9rcCvMw-a1wLc1u7fXRRN8QbN9hw@mail.gmail.com>
+Subject: Re: [PATCH 04/11] ARM: Remove Thumb2 __builtin_thread_pointer
+ workaround for Clang
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, masahiroy@kernel.org, nicolas@fjasle.eu, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux@armlinux.org.uk, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ecb1b8288dc7ccbdcb3b9df005fa1c0e0c0388a7
-commit: 01c54e628932c655e4cd2c6ed0cc688ec6e6f96b fpga: versal-fpga: Add versal fpga manager driver
-date:   2 years, 6 months ago
-config: x86_64-buildonly-randconfig-003-20240107 (https://download.01.org/0day-ci/archive/20240126/202401261611.Ee3FjLdD-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261611.Ee3FjLdD-lkp@intel.com/reproduce)
+On Thu, 25 Jan 2024 at 23:56, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 13.0.1, the conditional expression added to
+> get_current() by commit c1e42efacb9b ("ARM: 9151/1: Thumb2: avoid
+> __builtin_thread_pointer() on Clang") is always true, as the build will
+> fail during the configuration stage for older LLVM versions. Remove it,
+> effectively reverting the aforementioned change.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401261611.Ee3FjLdD-lkp@intel.com/
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/fpga/versal-fpga.c:78:34: warning: unused variable 'versal_fpga_of_match' [-Wunused-const-variable]
-      78 | static const struct of_device_id versal_fpga_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/versal_fpga_of_match +78 drivers/fpga/versal-fpga.c
-
-    77	
-  > 78	static const struct of_device_id versal_fpga_of_match[] = {
-    79		{ .compatible = "xlnx,versal-fpga", },
-    80		{},
-    81	};
-    82	MODULE_DEVICE_TABLE(of, versal_fpga_of_match);
-    83	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> Cc: linux@armlinux.org.uk
+> Cc: ardb@kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  arch/arm/include/asm/current.h | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+>
+> diff --git a/arch/arm/include/asm/current.h b/arch/arm/include/asm/current.h
+> index 1e1178bf176d..5225cb1c803b 100644
+> --- a/arch/arm/include/asm/current.h
+> +++ b/arch/arm/include/asm/current.h
+> @@ -18,18 +18,12 @@ static __always_inline __attribute_const__ struct task_struct *get_current(void)
+>  {
+>         struct task_struct *cur;
+>
+> -#if __has_builtin(__builtin_thread_pointer) && \
+> -    defined(CONFIG_CURRENT_POINTER_IN_TPIDRURO) && \
+> -    !(defined(CONFIG_THUMB2_KERNEL) && \
+> -      defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 130001)
+> +#if __has_builtin(__builtin_thread_pointer) && defined(CONFIG_CURRENT_POINTER_IN_TPIDRURO)
+>         /*
+>          * Use the __builtin helper when available - this results in better
+>          * code, especially when using GCC in combination with the per-task
+>          * stack protector, as the compiler will recognize that it needs to
+>          * load the TLS register only once in every function.
+> -        *
+> -        * Clang < 13.0.1 gets this wrong for Thumb2 builds:
+> -        * https://github.com/ClangBuiltLinux/linux/issues/1485
+>          */
+>         cur = __builtin_thread_pointer();
+>  #elif defined(CONFIG_CURRENT_POINTER_IN_TPIDRURO) || defined(CONFIG_SMP)
+>
+> --
+> 2.43.0
+>
