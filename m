@@ -1,221 +1,370 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E107151019;
-	Fri, 26 Jan 2024 22:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CD12557D
+	for <llvm@lists.linux.dev>; Fri, 26 Jan 2024 22:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706308558; cv=none; b=RzxWwi9NHJpoD+z3n8ESq4TT54FRYTbPJUiFTZY0A7/qJuVSFQmBteK6mPpKAsNfhJfVmBOJErl5xoHW04f+P9Az7waP/eSTfmMDikmfdjImOaKSPc8GAbUIPdO4U2NxbYYQn952wNQnHgznPjB63FJo5JS3hrkLMBDgR7D5BTg=
+	t=1706309585; cv=none; b=bZQVpw9r/zh3zwULKtZh+zHmoJqO837/lzDodYqlD+IXdvocgKvpDfQVLBfQ2vMgjYDmqxktYU1a6Cda4Uhv1ny0OTrItBSaNF8CuFfbVp2DAY+fCa2E5B8TMQwvoWCOW8NSjFBlF6J/gWFpCnfIi8pXmRJZKwIVDVp8j0jxHO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706308558; c=relaxed/simple;
-	bh=cpnZy6aqoqEx+3o5SdyKLH4E9s3+M4Sqxz69bryI5vg=;
+	s=arc-20240116; t=1706309585; c=relaxed/simple;
+	bh=44H58IoQpiv+yLvW7vreVRuB+tW5WFPbunVdWDk0Gk8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qc0k77pPCnL89PEdY7rA8dU4gbkAYE8UH//1IulBUYAqI2U34VtNibwimUVLDqtMLalyKLdkO64RvdySvi6aoKkfl78AxTb6yTEbGyQ56uKhxKHxGxFsSeU0zFCqdCzvYOD5K78iRQWJSViKYuqzwRa0sl4H93lTUzYUGJCTgVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gC/B7Nym; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eNfGJ2LDL2g+kEmjgqkVQkv7pGrKPRfnxAnEFtktQyVxMHEoRxl1TdgzRgrWTEwWeuwPeLaTA/JV1Cs5SFEy1VUI7Fp1HLQVboZOXgEeECAjzln+CCw66T/J7TRjxUNN5yhdrfy5Ri7wuSbexSXkI7qU3bBU6ic1AV3qJPR49bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tSLj81wI; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gC/B7Nym"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5F2C433C7;
-	Fri, 26 Jan 2024 22:35:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706308557;
-	bh=cpnZy6aqoqEx+3o5SdyKLH4E9s3+M4Sqxz69bryI5vg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gC/B7NymVhZAQcUX/xq9XUF5O8zxGf7QP+7nrDYuwk0jAlVPPFIDXcPJEzghWaGhg
-	 FHC9PZKWsdwS209m5MSvJy9MgJ83uCDGXmY836wXRp+RvJkfMWUgfmJXs6OpGWpd6M
-	 fLqu9ZxLnvsQ0x6cisl1PI9hyv7AoNyGXtRBFUrMRRZxm/ANQ4lofDTfaWq40a+PyR
-	 YNyamzJNBYDbmYexT2mLV/9u0fFluiy70U2XS/drfQlIEKiixSWXMLDQfdWqn1hXQM
-	 ABYWQ1Pd/9Ca3aW1efd68f1y3RvQu8Gm/NI1yUUAGO6DayXC1rt2lN4E7CFwcfhkYh
-	 12SC2bEj1VGOw==
-Date: Fri, 26 Jan 2024 15:35:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, llvm@lists.linux.dev,
-	keescook@chromium.org, arei.gonglei@huawei.com, mst@redhat.com,
-	jasowang@redhat.com, virtualization@lists.linux.dev,
-	linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
-Message-ID: <20240126223554.GA1320833@dev-arch.thelio-3990X>
-References: <20240122235732.009174833@linuxfoundation.org>
- <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
- <2024012636-clubbed-radial-1997@gregkh>
- <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
- <20240126203436.GA913905@dev-arch.thelio-3990X>
- <0a194a79-e3a3-45e7-be98-83abd3e1cb7e@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tSLj81wI"
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7bc32b04d16so39039239f.0
+        for <llvm@lists.linux.dev>; Fri, 26 Jan 2024 14:53:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706309583; x=1706914383; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hQRFSvbhKcNzR7WD2Hs/Sj9NUJI0s3BltoLyeof5Fi0=;
+        b=tSLj81wIyK5duEnwbQat07w2oFG1pUP9Woqm+peahgv8HisTo+cKsxMHDGwglOI12D
+         p6hrbyZte4U7jZEmrk2kdB33aeNR9FsJsZvlH0y8LQhygLb0BEM8QjLOE99pmFIfhGLq
+         sfaz7gVzvsYeSlUJPrp0WFlyTUIx8uMNLNJWr3s8Ht3akoelOw8B7BCY7WOLaEiI5f6H
+         6U+gHVlfb54eHwLmmUGvXIHAevbtMSBjIZen1jjCsXdNvJoc3zP8e91fYzwm91BY/yG+
+         UaOuNxamwHTiUdFXqrQ3DJihQ+X/7FU3uuGGywQxYN+wOn44CMJ5iu05nXx/O8KISQbp
+         99Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706309583; x=1706914383;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hQRFSvbhKcNzR7WD2Hs/Sj9NUJI0s3BltoLyeof5Fi0=;
+        b=DWpa7I5Xd9t609ScLZL2h4xR6CZGT47uq6KgOaL8l0ihxVcuNOnkQgBrwzmR6V21vP
+         7BSvEPoStIFIh54fEz0MOXvdoaOu37bKclu9EW/eSRYdQYe5cPuxO3CU9ok026vJOrhk
+         x10ehoNHIp9y63YmeyBviyZGxVUbqrwgFUkN+VRxgA7RKKGPefoX8zC4ohOToiEd7uBu
+         +QkkpExfmj41orQtkJX3Z4gjZ7JhpJX0g92S3YW+HKTaTeszGLInM6ubEck56CadDInJ
+         Cgf8QwfLqmVu6Nhbkr3m2w12e4XIRt19EN5ebaQTShcySRsfpKfKZYDCUomz40krXNmG
+         pUow==
+X-Gm-Message-State: AOJu0YxRJa9Ha0tA41uF64TGe5rjDR4OzX+BHEyVJ7w2On357Qc5+X8E
+	8q1oVe9lO46L18nR2rZ2X+Sy5dkfYK6rsLbPGSB3doAY0BTSIcTxKgMuj3x2BQ==
+X-Google-Smtp-Source: AGHT+IHid4fkQI8CL7RCGjgoERAK7pu57eCVx5/+xS2a+6+b54sf/tw9SBbw8NGVYDSEra6l71ZY9w==
+X-Received: by 2002:a05:6e02:5b0:b0:361:ac4c:8c39 with SMTP id k16-20020a056e0205b000b00361ac4c8c39mr616384ils.23.1706309582956;
+        Fri, 26 Jan 2024 14:53:02 -0800 (PST)
+Received: from google.com (20.10.132.34.bc.googleusercontent.com. [34.132.10.20])
+        by smtp.gmail.com with ESMTPSA id bs18-20020a056e02241200b003627dd3822bsm584899ilb.77.2024.01.26.14.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jan 2024 14:53:02 -0800 (PST)
+Date: Fri, 26 Jan 2024 22:52:57 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-hardening@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/82] overflow: Expand check_add_overflow() for pointer
+ addition
+Message-ID: <20240126225257.lfgeom4rhjzx2wrf@google.com>
+References: <20240122235208.work.748-kees@kernel.org>
+ <20240123002814.1396804-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0a194a79-e3a3-45e7-be98-83abd3e1cb7e@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240123002814.1396804-1-keescook@chromium.org>
 
-(slimming up the CC list, I don't think this is too relevant to the
-wider stable community)
+Hi,
 
-On Fri, Jan 26, 2024 at 01:01:15PM -0800, Guenter Roeck wrote:
-> On 1/26/24 12:34, Nathan Chancellor wrote:
-> > On Fri, Jan 26, 2024 at 10:17:23AM -0800, Guenter Roeck wrote:
-> > > On 1/26/24 09:51, Greg Kroah-Hartman wrote:
-> > > > On Fri, Jan 26, 2024 at 08:46:42AM -0800, Guenter Roeck wrote:
-> > > > > On 1/22/24 15:55, Greg Kroah-Hartman wrote:
-> > > > > > This is the start of the stable review cycle for the 5.10.209 release.
-> > > > > > There are 286 patches in this series, all will be posted as a response
-> > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > let me know.
-> > > > > > 
-> > > > > > Responses should be made by Wed, 24 Jan 2024 23:56:49 +0000.
-> > > > > > Anything received after that time might be too late.
-> > > > > > 
-> > > > > [ ... ]
-> > > > > 
-> > > > > > zhenwei pi <pizhenwei@bytedance.com>
-> > > > > >        virtio-crypto: implement RSA algorithm
-> > > > > > 
-> > > > > 
-> > > > > Curious: Why was this (and its subsequent fixes) backported to v5.10.y ?
-> > > > > It is quite beyond a bug fix. Also, unless I am really missing something,
-> > > > > the series (or at least this patch) was not applied to v5.15.y, so we now
-> > > > > have functionality in v5.10.y which is not in v5.15.y.
-> > > > 
-> > > > See the commit text, it was a dependency of a later fix and documented
-> > > > as such.
-> > > > 
-> > > > Having it in 5.10 and not 5.15 is a bit odd, I agree, so patches are
-> > > > gladly accepted :)
-> > > > 
-> > > 
-> > > We reverted the entire series from the merge because it results in a build
-> > > failure for us.
-> > > 
-> > > In file included from /home/groeck/src/linux-chromeos/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:10:
-> > > In file included from /home/groeck/src/linux-chromeos/include/linux/mpi.h:21:
-> > > In file included from /home/groeck/src/linux-chromeos/include/linux/scatterlist.h:5:
-> > > In file included from /home/groeck/src/linux-chromeos/include/linux/string.h:293:
-> > > /home/groeck/src/linux-chromeos/include/linux/fortify-string.h:512:4: error: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> > >                          __read_overflow2_field(q_size_field, size);
-> > 
-> > For what it's worth, this is likely self inflicted for chromeos-5.10,
-> > which carries a revert of commit eaafc590053b ("fortify: Explicitly
-> > disable Clang support") as commit c19861d34c003 ("CHROMIUM: Revert
-> > "fortify: Explicitly disable Clang support""). I don't see the series
-> > that added proper support for clang to fortify in 5.18 that ended with
-> > commit 281d0c962752 ("fortify: Add Clang support") in that ChromeOS
-> > branch, so this seems somewhat expected.
-> > 
-> 
-> That explains that ;-). I don't mind if the patches stay in v5.10.y,
-> we have them reverted anyway.
-> 
-> The revert was a pure process issue, as you may see when looking into
-> commit c19861d34c003, so, yes, I agree that it is self-inflicted damage.
-> Still, that doesn't explain why the problem exists in 5.18+.
-> 
-> > > I also see that upstream (starting with 6.1) when trying to build it with clang,
-> > > so I guess it is one of those bug-for-bug compatibility things. I really have
-> > > no idea what causes it, or why we don't see the problem when building
-> > > chromeos-6.1 or chromeos-6.6, but (so far) only with chromeos-5.10 after
-> > > merging 5.10.209 into it. Making things worse, the problem isn't _always_
-> > > seen. Sometimes I can compile the file in 6.1.y without error, sometimes not.
-> > > I have no idea what triggers the problem.
-> > 
-> > Have a .config that reproduces it on upstream? I have not personally
-> > seen this warning in my build matrix nor has our continuous-integration
-> > matrix (I don't see it in the warning output at the bottom but that
-> > could have missed something for some reason) in 6.1:
-> > 
-> 
-> The following command sequence reproduces the problem for me with all stable
-> branches starting with 5.18.y (plus mainline).
-> 
-> rm -rf /tmp/crypto-build
-> mkdir /tmp/crypto-build
-> make -j CC=clang-15 mrproper >/dev/null 2>&1
-> make -j O=/tmp/crypto-build CC=clang-15 allmodconfig >/dev/null 2>&1
-> make -j O=/tmp/crypto-build W=1 CC=clang-15 drivers/crypto/virtio/virtio_crypto_akcipher_algs.o
-> 
-> I tried clang versions 14, 15, and 16. This is with my home system running
-> Ubuntu 22.04, no ChromeOS or Google specifics/internals involved. For clang-15,
-> the version is
-> 
-> Ubuntu clang version 15.0.7
-> Target: x86_64-pc-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/bin
+On Mon, Jan 22, 2024 at 04:26:36PM -0800, Kees Cook wrote:
+> The check_add_overflow() helper is mostly a wrapper around
+> __builtin_add_overflow(), but GCC and Clang refuse to operate on pointer
+> arguments that would normally be allowed if the addition were open-coded.
+>
+> For example, we have many places where pointer overflow is tested:
+>
+> 	struct foo *ptr;
+> 	...
+> 	/* Check for overflow */
+> 	if (ptr + count < ptr) ...
+>
+> And in order to avoid running into the overflow sanitizers in the
+> future, we need to rewrite these "intended" overflow checks:
+>
+> 	if (check_add_overflow(ptr, count, &result)) ...
+>
+> Frustratingly the argument type validation for __builtin_add_overflow()
+> is done before evaluating __builtin_choose_expr(), so for arguments to
+> be valid simultaneously for sizeof(*p) (when p may not be a pointer),
+> and __builtin_add_overflow(a, ...) (when a may be a pointer), we must
+> introduce wrappers that always produce a specific type (but they are
+> only used in the places where the bogus arguments will be ignored).
+>
+> To test whether a variable is a pointer or not, introduce the __is_ptr()
+> helper, which uses __builtin_classify_type() to find arrays and pointers
+> (via the new __is_ptr_or_array() helper), and then decays arrays into
+> pointers (via the new __decay() helper), to distinguish pointers from
+> arrays.
+>
+> Additionally update the unit tests to cover pointer addition.
+>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: llvm@lists.linux.dev
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/linux/compiler_types.h | 10 +++++
+>  include/linux/overflow.h       | 44 ++++++++++++++++++-
+>  lib/overflow_kunit.c           | 77 ++++++++++++++++++++++++++++++----
+>  3 files changed, 121 insertions(+), 10 deletions(-)
+>
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 6f1ca49306d2..d27b58fddfaa 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -375,6 +375,16 @@ struct ftrace_likely_data {
+>  /* Are two types/vars the same type (ignoring qualifiers)? */
+>  #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+>
+> +/* Is variable addressable? */
+> +#define __is_ptr_or_array(p)	(__builtin_classify_type(p) == 5)
+> +
+> +/* Return an array decayed to a pointer. */
+> +#define __decay(p)		\
+> +	(&*__builtin_choose_expr(__is_ptr_or_array(p), p, NULL))
 
-Okay interesting, this warning is hidden behind W=1, which our CI does
-not test with. Looks like it has been that way since the introduction of
-these checks in f68f2ff91512 ("fortify: Detect struct member overflows
-in memcpy() at compile-time").
+Initially, I thought this __decay could dereference a NULL which would
+be UB.
 
-I think this is a legitimate warning though. It is complaining about the
-second memcpy() in virtio_crypto_alg_akcipher_init_session():
+According to the C std 6.5.3.2 (4):
+| The unary * operator denotes indirection. If the operand points to a
+| function, the result is a function designator; if it points to an
+| object, the result is an lvalue designating the object. If the operand
+| has type ‘‘pointer to type’’, the result has type ‘‘type’’. If an
+| invalid value has been assigned to the pointer, the behavior of the
+| unary * operator is undefined^(84)
 
-  memcpy(&ctrl->u, para, sizeof(ctrl->u));
+With footnote 84 mentioning NULL:
+| Among the invalid values for dereferencing a pointer by the unary *
+| operator are a null pointer, an address inappropriately aligned for the
+| type of object pointed to, and the address of an object after the end of
+| its lifetime.
 
-where ctrl is:
+However, in this very same footnote it mentions:
+| &*E is equivalent to E (even if E is a null pointer)
 
-  struct virtio_crypto_op_ctrl_req {
-          struct virtio_crypto_ctrl_header header;         /*     0    16 */
-          union {
-                  struct virtio_crypto_sym_create_session_req sym_create_session; /*    16    56 */
-                  struct virtio_crypto_hash_create_session_req hash_create_session; /*    16    56 */
-                  struct virtio_crypto_mac_create_session_req mac_create_session; /*    16    56 */
-                  struct virtio_crypto_aead_create_session_req aead_create_session; /*    16    56 */
-                  struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*    16    56 */
-                  struct virtio_crypto_destroy_session_req destroy_session; /*    16    56 */
-                  __u8               padding[56];          /*    16    56 */
-          } u;                                             /*    16    56 */
-          union {
-                  struct virtio_crypto_sym_create_session_req sym_create_session; /*     0    56 */
-                  struct virtio_crypto_hash_create_session_req hash_create_session; /*     0    56 */
-                  struct virtio_crypto_mac_create_session_req mac_create_session; /*     0    56 */
-                  struct virtio_crypto_aead_create_session_req aead_create_session; /*     0    56 */
-                  struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*     0    56 */
-                  struct virtio_crypto_destroy_session_req destroy_session; /*     0    56 */
-                  __u8                       padding[56];          /*     0    56 */
-          };
+So, yeah this is OK ( and new to me :>] )
 
+> +
+> +/* Report if variable is a pointer type. */
+> +#define __is_ptr(p)		__same_type(p, __decay(p))
+> +
+>  /*
+>   * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, leaving
+>   *			       non-scalar types unchanged.
+> diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+> index 7b5cf4a5cd19..099f2e559aa8 100644
+> --- a/include/linux/overflow.h
+> +++ b/include/linux/overflow.h
+> @@ -51,6 +51,45 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+>  	return unlikely(overflow);
+>  }
+>
+> +/* Always produce an integral variable expression. */
+> +#define __filter_integral(x)		\
+> +	__builtin_choose_expr(!__is_ptr(x), (x), 0)
+> +
+> +/* Always produce a pointer value. */
+> +#define __filter_ptr(x)			\
+> +	__builtin_choose_expr(__is_ptr(x), (x), NULL)
+> +
+> +/* Always produce a pointer to an integral value. */
+> +#define __filter_ptrint(x)		\
+> +	__builtin_choose_expr(!__is_ptr(*(x)), x, &(int){ 0 })
+> +
+> +/**
+> + * __check_ptr_add_overflow() - Calculate pointer addition with overflow checking
+> + * @a: pointer addend
+> + * @b: numeric addend
+> + * @d: pointer to store sum
+> + *
+> + * Returns 0 on success.
+> + *
+> + * Do not use this function directly, use check_add_overflow() instead.
+> + *
+> + * *@d holds the results of the attempted addition, but is not considered
+> + * "safe for use" on a non-zero return value, which indicates that the
+> + * sum has overflowed or been truncated.
+> + */
+> +#define __check_ptr_add_overflow(a, b, d)		\
+> +	({						\
+> +		typeof(a) __a = (a);			\
+> +		typeof(b) __b = (b);			\
+> +		size_t __bytes;				\
+> +		bool __overflow;			\
+> +							\
+> +		/* we want to perform the wrap-around, but retain the result */ \
+> +		__overflow = __builtin_mul_overflow(sizeof(*(__a)), __b, &__bytes); \
+> +		__builtin_add_overflow((unsigned long)(__a), __bytes, (unsigned long *)(d)) || \
+> +		__overflow;				\
+> +	})
+> +
+>  /**
+>   * check_add_overflow() - Calculate addition with overflow checking
+>   * @a: first addend
+> @@ -64,7 +103,10 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+>   * sum has overflowed or been truncated.
+>   */
+>  #define check_add_overflow(a, b, d)	\
+> -	__must_check_overflow(__builtin_add_overflow(a, b, d))
+> +	__must_check_overflow(__builtin_choose_expr(__is_ptr(a),	\
+> +		__check_ptr_add_overflow(__filter_ptr(a), b, d),	\
+> +		__builtin_add_overflow(__filter_integral(a), b,		\
+> +				       __filter_ptrint(d))))
+>
+>  /**
+>   * check_sub_overflow() - Calculate subtraction with overflow checking
 
-          /* size: 72, cachelines: 2, members: 2 */
-          /* last cacheline: 8 bytes */
-  };
+Does check_sub_overflow() deserve some more love in the future? I
+imagine "under"-flowing pointers is not at all common, though.
 
-(so size and p_size_field should be 56) and the type of the para
-parameter in virtio_crypto_alg_akcipher_init_session() is 'void *' but
-the para passed by reference to
-virtio_crypto_alg_akcipher_init_session() in virtio_crypto_rsa_set_key()
-has a type of 'struct virtio_crypto_akcipher_session_para':
+Nonetheless, this all looks good to me.
 
-  struct virtio_crypto_akcipher_session_para {
-          __le32                     algo;                 /*     0     4 */
-          __le32                     keytype;              /*     4     4 */
-          __le32                     keylen;               /*     8     4 */
-          union {
-                  struct virtio_crypto_rsa_session_para rsa; /*    12     8 */
-                  struct virtio_crypto_ecdsa_session_para ecdsa; /*    12     8 */
-          } u;                                             /*    12     8 */
-          union {
-                  struct virtio_crypto_rsa_session_para rsa;       /*     0     8 */
-                  struct virtio_crypto_ecdsa_session_para ecdsa;   /*     0     8 */
-          };
+Reviewed-by: Justin Stitt <justinstitt@google.com>
 
-
-          /* size: 20, cachelines: 1, members: 4 */
-          /* last cacheline: 20 bytes */
-  };
-
-(so q_size_field would be 20 if clang were able to do inlining to see
-through the 'void *'...?), which would result in the
-
-  __compiletime_lessthan(q_size_field, size)
-
-check succeeding and triggering the warning because 20 < 56, so it does
-seem like there is an overread of the source buffer here? Adding the
-maintainers of the driver and subsystem in question.
-
-Cheers,
-Nathan
+> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+> index c527f6b75789..2d106e880956 100644
+> --- a/lib/overflow_kunit.c
+> +++ b/lib/overflow_kunit.c
+> @@ -45,13 +45,18 @@
+>  # define SKIP_64_ON_32(t)	do { } while (0)
+>  #endif
+>
+> -#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
+> -	static const struct test_ ## t1 ## _ ## t2 ## __ ## t {	\
+> +#define DEFINE_TEST_ARRAY_NAMED_TYPED(n1, n2, n, t1, t2, t)	\
+> +	static const struct test_ ## n1 ## _ ## n2 ## __ ## n {	\
+>  		t1 a;						\
+>  		t2 b;						\
+> -		t sum, diff, prod;				\
+> +		t sum;						\
+> +		t diff;						\
+> +		t prod;						\
+>  		bool s_of, d_of, p_of;				\
+> -	} t1 ## _ ## t2 ## __ ## t ## _tests[]
+> +	} n1 ## _ ## n2 ## __ ## n ## _tests[]
+> +
+> +#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
+> +	DEFINE_TEST_ARRAY_NAMED_TYPED(t1, t2, t, t1, t2, t)
+>
+>  #define DEFINE_TEST_ARRAY(t)	DEFINE_TEST_ARRAY_TYPED(t, t, t)
+>
+> @@ -251,8 +256,10 @@ DEFINE_TEST_ARRAY(s64) = {
+>  };
+>
+>  #define check_one_op(t, fmt, op, sym, a, b, r, of) do {			\
+> -	int _a_orig = a, _a_bump = a + 1;				\
+> -	int _b_orig = b, _b_bump = b + 1;				\
+> +	typeof(a + 0) _a_orig = a;					\
+> +	typeof(a + 0) _a_bump = a + 1;					\
+> +	typeof(b + 0) _b_orig = b;					\
+> +	typeof(b + 0) _b_bump = b + 1;					\
+>  	bool _of;							\
+>  	t _r;								\
+>  									\
+> @@ -260,13 +267,13 @@ DEFINE_TEST_ARRAY(s64) = {
+>  	KUNIT_EXPECT_EQ_MSG(test, _of, of,				\
+>  		"expected "fmt" "sym" "fmt" to%s overflow (type %s)\n",	\
+>  		a, b, of ? "" : " not", #t);				\
+> -	KUNIT_EXPECT_EQ_MSG(test, _r, r,				\
+> +	KUNIT_EXPECT_TRUE_MSG(test, _r == r,				\
+>  		"expected "fmt" "sym" "fmt" == "fmt", got "fmt" (type %s)\n", \
+>  		a, b, r, _r, #t);					\
+>  	/* Check for internal macro side-effects. */			\
+>  	_of = check_ ## op ## _overflow(_a_orig++, _b_orig++, &_r);	\
+> -	KUNIT_EXPECT_EQ_MSG(test, _a_orig, _a_bump, "Unexpected " #op " macro side-effect!\n"); \
+> -	KUNIT_EXPECT_EQ_MSG(test, _b_orig, _b_bump, "Unexpected " #op " macro side-effect!\n"); \
+> +	KUNIT_EXPECT_TRUE_MSG(test, _a_orig == _a_bump, "Unexpected " #op " macro side-effect!\n"); \
+> +	KUNIT_EXPECT_TRUE_MSG(test, _b_orig == _b_bump, "Unexpected " #op " macro side-effect!\n"); \
+>  } while (0)
+>
+>  #define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
+> @@ -333,6 +340,55 @@ DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
+>  };
+>  DEFINE_TEST_FUNC_TYPED(int_int__u8, u8, "%d");
+>
+> +#define DEFINE_TEST_PTR_FUNC_TYPED(n, t, fmt)				\
+> +static void do_ptr_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
+> +{									\
+> +	/* we're only doing single-direction sums, no product or division */ \
+> +	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);\
+> +}									\
+> +									\
+> +static void n ## _overflow_test(struct kunit *test) {			\
+> +	unsigned i;							\
+> +									\
+> +	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
+> +		do_ptr_test_ ## n(test, &n ## _tests[i]);		\
+> +	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
+> +		ARRAY_SIZE(n ## _tests), #n);				\
+> +}
+> +
+> +DEFINE_TEST_ARRAY_NAMED_TYPED(void, int, void, void *, int, void *) = {
+> +	{NULL, 0, NULL, NULL, NULL, false, false, false},
+> +	{(void *)0x30, 0x10, (void *)0x40, NULL, NULL, false, false, false},
+> +	{(void *)ULONG_MAX, 0, (void *)ULONG_MAX, NULL, NULL, false, false, false},
+> +	{(void *)ULONG_MAX, 1, NULL, NULL, NULL, true, false, false},
+> +	{(void *)ULONG_MAX, INT_MAX, (void *)(INT_MAX - 1), NULL, NULL, true, false, false},
+> +};
+> +DEFINE_TEST_PTR_FUNC_TYPED(void_int__void, void *, "%lx");
+> +
+> +struct _sized {
+> +	int a;
+> +	char b;
+> +};
+> +
+> +DEFINE_TEST_ARRAY_NAMED_TYPED(sized, int, sized, struct _sized *, int, struct _sized *) = {
+> +	{NULL, 0, NULL, NULL, NULL, false, false, false},
+> +	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
+> +	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized)), 1, (struct _sized *)ULONG_MAX, NULL, NULL, false, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 1, NULL, NULL, NULL, true, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 2, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, true, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 3, (struct _sized *)(sizeof(struct _sized) * 2), NULL, NULL, true, false, false},
+> +};
+> +DEFINE_TEST_PTR_FUNC_TYPED(sized_int__sized, struct _sized *, "%lx");
+> +
+> +DEFINE_TEST_ARRAY_NAMED_TYPED(sized, size_t, sized, struct _sized *, size_t, struct _sized *) = {
+> +	{NULL, 0, NULL, NULL, NULL, false, false, false},
+> +	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
+> +	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
+> +	{NULL, SIZE_MAX - 10, (struct _sized *)18446744073709551528UL, NULL, NULL, true, false, false},
+> +};
+> +DEFINE_TEST_PTR_FUNC_TYPED(sized_size_t__sized, struct _sized *, "%zu");
+> +
+>  /* Args are: value, shift, type, expected result, overflow expected */
+>  #define TEST_ONE_SHIFT(a, s, t, expect, of)	do {			\
+>  	typeof(a) __a = (a);						\
+> @@ -1122,6 +1178,9 @@ static struct kunit_case overflow_test_cases[] = {
+>  	KUNIT_CASE(s32_s32__s32_overflow_test),
+>  	KUNIT_CASE(u64_u64__u64_overflow_test),
+>  	KUNIT_CASE(s64_s64__s64_overflow_test),
+> +	KUNIT_CASE(void_int__void_overflow_test),
+> +	KUNIT_CASE(sized_int__sized_overflow_test),
+> +	KUNIT_CASE(sized_size_t__sized_overflow_test),
+>  	KUNIT_CASE(u32_u32__int_overflow_test),
+>  	KUNIT_CASE(u32_u32__u8_overflow_test),
+>  	KUNIT_CASE(u8_u8__int_overflow_test),
+> --
+> 2.34.1
+>
+Thanks
+Justin
