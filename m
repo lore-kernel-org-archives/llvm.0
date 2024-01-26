@@ -1,55 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBC620335;
-	Fri, 26 Jan 2024 17:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C23250EC;
+	Fri, 26 Jan 2024 20:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706291951; cv=none; b=ZnOBhc6st0QmsTpHPijkZAw8ccMAnm4+BS2xKL/DGNysARyhly8w+6XVzh8bwbFEJmr6z44PbEEBRzY0O4KZ5vWB3qTVf6Z6WxE3eqOmQevmGqqnRfc5Vqd+v35ZABP28wu+HeEEMLWWAIvXGW/XrMcTY8fPH6m2UFXuOvcCVhM=
+	t=1706301279; cv=none; b=MvOXiSj+eMCmzZifKWA4wr7bJIdxVbD3ENu1UOo8bEme/XwJfF1vbtrI7YVIwVsB6+tmTSYpwvShkhM2aqLJt+YGQBRx79Y8vmbAKF1c30tHGZo6W8fpU9+lbu5YFFV5yuD8rdZm/fTWNW/mf3Opvgx1PFVeM2VpoQCSpCvxNVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706291951; c=relaxed/simple;
-	bh=4sDsNArP+DbxlQg3IFbkQzmVRN0Zs38ei5gJJdV43Uc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fAOYdXmS4M0wTEwgGsQ6FJvylrf3Kf3TnV6p3ToH8BpTNY9uKTr322gwxfsy+F1wezIIDWSGGvoXPgSkTCb+le4Uf3X9v9ZtRKkt3TNE3LbpBv6jho/4Ushi+s3qShmoPfJqlkGleeBBBn8k6rqoPCUJ2fQlAJeCX5nO0GA695s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RpkoSZIW; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706301279; c=relaxed/simple;
+	bh=fKXandC+5QOPgaaNNK48snxQs+rXCoRJZv+oHcWZwXc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rtzmubQwGuDpppc/WY4xlsJzvpp1BxH3nQXicd8ENIdkUbtbqTfzE+EzDFJhaJU73NiAx3w0xLXZXfB4KltIGWXF6xcdA7u6DBVs8XrPuhGLs3k3scEAzbyIM4dsgCEy5KoNqBEq5k7+iSWmws5qTLBEsORqcf149On+6gPol5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cBHALqoS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RpkoSZIW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706291949; x=1737827949;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4sDsNArP+DbxlQg3IFbkQzmVRN0Zs38ei5gJJdV43Uc=;
-  b=RpkoSZIW1z1asYo8YLAwwb2QTHp0Dtn3wbe9bUTUMdrLrE2iqrWhzT8G
-   d1oD1ka8Hu2Kf4eaK0eSNyVfNlChULgXv8dzdrhNqlHJKkuaLRN05/USs
-   8Sv/YwyyW5pYGAyndZ4orXGNsgayIRxPAtqQWwi9gPugsvW9UdtjNx/RN
-   es3wT33pTyfIjsqooIFHxvWSlaQriNiaCsEyoGnEmms67uAZsNu47M/sv
-   sDsRwFawAJFWm10SUhjf959GuehKuEhUEuoxXYiGY2CTSUeNpzc2IU5aX
-   zsz5S3jab/h+JjSXOmvETgXrWL8EQGOCj5OUOaaRb+nSljiQTDzhfMHXB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="21075845"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="21075845"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 09:59:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2798072"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 26 Jan 2024 09:59:05 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rTQTn-0001Fs-0P;
-	Fri, 26 Jan 2024 17:59:03 +0000
-Date: Sat, 27 Jan 2024 01:58:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:guest-tpm 5/6] drivers/char/tpm/tpm_tdx.c:175: warning:
- Function parameter or struct member 'tdvmcall_status' not described in
- 'tdx_tpm_msg_resp'
-Message-ID: <202401270147.6zANIFto-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cBHALqoS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0674C433C7;
+	Fri, 26 Jan 2024 20:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706301278;
+	bh=fKXandC+5QOPgaaNNK48snxQs+rXCoRJZv+oHcWZwXc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cBHALqoSmF/TAHePeBhX/syG9ctKGwupCxyx8jKndDgbJpbm7EWnsgjvjT7Vrx2DY
+	 2Hj3E2tlWwXS00a+C4+TdFMfIVO3SnoY9yZpS67owsD6d6mZHp1suJb4GVWVRg2R8b
+	 k6XY4XmoYuyiaSlucogkXWHktINh5FIwfXn4i52Po2ZoWMM0rk9H3uDXofwGsPZ8Dg
+	 xij+uHtg0x5OISKjzS24Cl/kW4q1ygl0Ja9uPMFNu0bqZOuRFaNIGARh/Xkz6rFNuz
+	 mQBjnQzkiOfUqwhjDs15QLxiAMAsYCMJbj1LL5UYNyEn/LD6B+42yYsmzGK8KcWYqP
+	 cGu2VWgCtdVyQ==
+Date: Fri, 26 Jan 2024 13:34:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	torvalds@linux-foundation.org, akpm@linux-foundation.org,
+	shuah@kernel.org, patches@kernelci.org,
+	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
+	allen.lkml@gmail.com, llvm@lists.linux.dev, keescook@chromium.org
+Subject: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
+Message-ID: <20240126203436.GA913905@dev-arch.thelio-3990X>
+References: <20240122235732.009174833@linuxfoundation.org>
+ <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
+ <2024012636-clubbed-radial-1997@gregkh>
+ <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,67 +51,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
 
-tree:   https://github.com/intel/tdx.git guest-tpm
-head:   479fce1c3eaa87d98d94d78c485d9a6f0c8dd1fa
-commit: 7c617d6ef79632221c7130359d05912e2405216a [5/6] tpm: Add vTPM TDX support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240127/202401270147.6zANIFto-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401270147.6zANIFto-lkp@intel.com/reproduce)
+On Fri, Jan 26, 2024 at 10:17:23AM -0800, Guenter Roeck wrote:
+> On 1/26/24 09:51, Greg Kroah-Hartman wrote:
+> > On Fri, Jan 26, 2024 at 08:46:42AM -0800, Guenter Roeck wrote:
+> > > On 1/22/24 15:55, Greg Kroah-Hartman wrote:
+> > > > This is the start of the stable review cycle for the 5.10.209 release.
+> > > > There are 286 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > > 
+> > > > Responses should be made by Wed, 24 Jan 2024 23:56:49 +0000.
+> > > > Anything received after that time might be too late.
+> > > > 
+> > > [ ... ]
+> > > 
+> > > > zhenwei pi <pizhenwei@bytedance.com>
+> > > >       virtio-crypto: implement RSA algorithm
+> > > > 
+> > > 
+> > > Curious: Why was this (and its subsequent fixes) backported to v5.10.y ?
+> > > It is quite beyond a bug fix. Also, unless I am really missing something,
+> > > the series (or at least this patch) was not applied to v5.15.y, so we now
+> > > have functionality in v5.10.y which is not in v5.15.y.
+> > 
+> > See the commit text, it was a dependency of a later fix and documented
+> > as such.
+> > 
+> > Having it in 5.10 and not 5.15 is a bit odd, I agree, so patches are
+> > gladly accepted :)
+> > 
+> 
+> We reverted the entire series from the merge because it results in a build
+> failure for us.
+> 
+> In file included from /home/groeck/src/linux-chromeos/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:10:
+> In file included from /home/groeck/src/linux-chromeos/include/linux/mpi.h:21:
+> In file included from /home/groeck/src/linux-chromeos/include/linux/scatterlist.h:5:
+> In file included from /home/groeck/src/linux-chromeos/include/linux/string.h:293:
+> /home/groeck/src/linux-chromeos/include/linux/fortify-string.h:512:4: error: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>                         __read_overflow2_field(q_size_field, size);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401270147.6zANIFto-lkp@intel.com/
+For what it's worth, this is likely self inflicted for chromeos-5.10,
+which carries a revert of commit eaafc590053b ("fortify: Explicitly
+disable Clang support") as commit c19861d34c003 ("CHROMIUM: Revert
+"fortify: Explicitly disable Clang support""). I don't see the series
+that added proper support for clang to fortify in 5.18 that ended with
+commit 281d0c962752 ("fortify: Add Clang support") in that ChromeOS
+branch, so this seems somewhat expected.
 
-All warnings (new ones prefixed by >>):
+> I also see that upstream (starting with 6.1) when trying to build it with clang,
+> so I guess it is one of those bug-for-bug compatibility things. I really have
+> no idea what causes it, or why we don't see the problem when building
+> chromeos-6.1 or chromeos-6.6, but (so far) only with chromeos-5.10 after
+> merging 5.10.209 into it. Making things worse, the problem isn't _always_
+> seen. Sometimes I can compile the file in 6.1.y without error, sometimes not.
+> I have no idea what triggers the problem.
 
->> drivers/char/tpm/tpm_tdx.c:175: warning: Function parameter or struct member 'tdvmcall_status' not described in 'tdx_tpm_msg_resp'
->> drivers/char/tpm/tpm_tdx.c:175: warning: Function parameter or struct member 'service_cmd_status' not described in 'tdx_tpm_msg_resp'
->> drivers/char/tpm/tpm_tdx.c:175: warning: Function parameter or struct member 'rsvd' not described in 'tdx_tpm_msg_resp'
->> drivers/char/tpm/tpm_tdx.c:175: warning: Excess struct member 'rsvd1' description in 'tdx_tpm_msg_resp'
->> drivers/char/tpm/tpm_tdx.c:175: warning: Excess struct member 'rsvd2' description in 'tdx_tpm_msg_resp'
+Have a .config that reproduces it on upstream? I have not personally
+seen this warning in my build matrix nor has our continuous-integration
+matrix (I don't see it in the warning output at the bottom but that
+could have missed something for some reason) in 6.1:
 
+https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/7662499796
+https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/7662534888
 
-vim +175 drivers/char/tpm/tpm_tdx.c
+Reverting this series from 5.10 seems reasonable given your other
+comments but if there is still something to sort out upstream, I
+definitely want to.
 
-   141	
-   142	/**
-   143	 * struct tdx_tpm_msg_resp - TDX TPM message response format.
-   144	 * @guid: A unique GUID to identify the TDVMCALL service.
-   145	 * @buf_len: Length of the response buffer.
-   146	 * @rsvd1: Reserved for future use.
-   147	 * @service_ver: Version of TPM TDVMCALL command.
-   148	 * @service_cmd: TPM TDVMCALL command
-   149	 * 		 TDVMCALL_TPM_SEND_MSG - 0x01
-   150	 * 		 TDVMCALL_TPM_RECV_MSG - 0x02
-   151	 * @rsvd2: Reserved for future use.
-   152	 * @spdm: SPDM Message header.
-   153	 * @aad: SPDM AAD data.
-   154	 * @app_data: SPDM application data.
-   155	 *
-   156	 * For more details, refer to TDX vTPM specification, r1.0, section titled
-   157	 * "SPDM Secure Session Message Format".
-   158	 */
-   159	struct tdx_tpm_msg_resp {
-   160		/* TDVMCALL service response header */
-   161		u8 guid[16];
-   162		u32 buf_len;
-   163		u32 tdvmcall_status;
-   164	
-   165		/* TDVMCALL TPM Command Buffer response */
-   166		u8 service_ver;
-   167		u8 service_cmd;
-   168		u8 service_cmd_status;
-   169		u8 rsvd;
-   170	
-   171		/* SPDM Message */
-   172		struct spdm_msg_hdr spdm;
-   173		struct spdm_aad aad;
-   174		struct spdm_data app_data;
- > 175	} __packed;
-   176	
+> Of course, on top of all that, the error message is completely useless.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Indeed, outstanding papercut unfortunately:
+https://github.com/ClangBuiltLinux/linux/issues/1571
+
+Cheers,
+Nathan
