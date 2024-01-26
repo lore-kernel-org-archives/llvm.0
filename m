@@ -1,168 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD3225565;
-	Fri, 26 Jan 2024 22:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDBA25115;
+	Fri, 26 Jan 2024 22:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706306462; cv=none; b=kK8USXuXYRB5sklUffIEAsciGU77LLlhrDCW4UMwoq+Arld4YtyImrtrxvYi5HweXvx0D0OoYzHWKcf4qZ0bQMK4lwm57S9p4xeyRtdvE+XKADH8Fg8HekQw7PR2w+apaFwNZim0JW8gkMiD9xXfRH1/Avj6sIrUh0QgKD+qbAg=
+	t=1706306681; cv=none; b=iJxhkvn0oBCU9qOuvITUXDWtGENL37qj5pLQkmqxLio1Bz0p07FaWe4uQ3KUcq/91SWEGgdrNsDb0JHywtw80PNtT/yHG7AW579erZuosHqFSRgpMADSq0FmDLC1EuxPKTfCJXuwnu3ozcSv3T5yxzaI7NpPpnaMysYsFTUIKzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706306462; c=relaxed/simple;
-	bh=riut/XdpDrQsrASptwkcJlb0by07DshnWcYF/bs/29E=;
+	s=arc-20240116; t=1706306681; c=relaxed/simple;
+	bh=PgTmG/yzGVqUhuwJ1i6jbTUkm8ADJwrhKbzlIpQ+M9M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L3aRVzdcIlxFobGlhmajK4zM2nPsrIk+k2rr+RQiQPi+hrhJJRMMG21Q/0U6OiNx5fn9oc5y/0jYWc2b2pmG8YJvljvYlrTxdBUHD5y3ARE5OQZfwjiRznUXSsPaOhoSCxa8BICYdqk2aIpPkL6Kk1h24jsYEA339cLIIATEqCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OlPwJWfo; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kaDXUV7rD1hpbzaLvi4LjfxwPOtVdAli57OFvo2BjUa+PQ5WprwWxwWf5nZhnLarewwQueGuAnFgkPBcHW2sCl2SgqY1XQALAaDCJQNSfshv4pPcPTamv6xOe/WEz56HTLbTcpSJ66xYIC78+roU0d0qmzMqgTfNrSrn6YebMe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nPpU/QPk; arc=none smtp.client-ip=134.134.136.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OlPwJWfo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A277C433F1;
-	Fri, 26 Jan 2024 22:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706306461;
-	bh=riut/XdpDrQsrASptwkcJlb0by07DshnWcYF/bs/29E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OlPwJWfoQ84jFCtOj2ECYPqtGlVcOuXS54UDiCUCWepQHkwb5HGmWUV/Ub+2dO/fp
-	 y+jta1jG5WkFNa2JWgNBsRLG5ckfkgjYx2R74XPMNjzICsSq+PFWZa2mdaNXOgFvSU
-	 c85/qaqET/+epqfZKhSqfsmsuJpSThFPdO4cXU+TPvpN5yodPcjGQch8oG9sPS4uK/
-	 ZRyy7ypuVoD4l3gNX87Hif2mtnSOhNm4BTcHDg/2DG1uV/vwTCZMKkTpMSfoNpGYPb
-	 xTYXppk54qRxer6vaAQ2EGumfgjJIJeVpm7H1jkwivnBVY99YBEGid3YrSi65wWgoB
-	 oDvdwrsn3nW6w==
-Date: Fri, 26 Jan 2024 22:00:55 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Matthew Maurer <mmaurer@google.com>,
-	Ramon de C Valle <rcvalle@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-Message-ID: <20240126-eccentric-jaywalker-3560e2151a92@spud>
-References: <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
- <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
- <20240117-swiftly-parasail-618d62972d6e@spud>
- <CANiq72mVKCOAuK4Qe+8AHmpkFwyJsVfx8AqB7ccGi3DYpSSWcw@mail.gmail.com>
- <20240118-implode-delirium-eefdd86e170e@spud>
- <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
- <20240125-bucked-payroll-47f82077b262@wendy>
- <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
- <20240125-lazy-thrower-744aacc6632a@wendy>
- <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nPpU/QPk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706306679; x=1737842679;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PgTmG/yzGVqUhuwJ1i6jbTUkm8ADJwrhKbzlIpQ+M9M=;
+  b=nPpU/QPkyxw/o5eiMsb3YXl6z8u0ciuOUMG0pQu9t3k5rGKg2A2/+4Er
+   VDdOyjGVRbfJZKSaiGGhSYlDsfRI1IM3THnmKdVLIEpEVeZq6F0vD16lN
+   KY8JxjApB1X5uew6BZc2GJOR1tqyYRZNinkgZHjlFydJrwpBgaYHc8Dgz
+   Fa9zwfp7eSfstOqhvGdRCDWjzBr9z1DIbkzrGGJpzVf/CADNbD+bSRIq/
+   7EGFo+MugUuTDMkCtrUXBaEoHW+wG7QgDXOiDdGiZWTlNfkxUzgrrigUJ
+   rNb+coVcUvxXaVlYjaX8/C3D7gHIRo/+msyFFQs2gXMQxoDj1iBcByIVj
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="406317863"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="406317863"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 14:04:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="2716758"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 26 Jan 2024 14:04:33 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rTUJL-0001NK-01;
+	Fri, 26 Jan 2024 22:04:31 +0000
+Date: Sat, 27 Jan 2024 06:03:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Mike Snitzer <snitzer@kernel.org>, dm-devel@lists.linux.dev,
+	Chris Mason <chris.mason@fusionio.com>,
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>,
+	Chao Yu <chao@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+	Chaitanya Kulkarni <kch@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: Re: [PATCH 5/5] block: remove gfp_flags from blkdev_zone_mgmt
+Message-ID: <202401270524.3SWUUYR8-lkp@intel.com>
+References: <20240123-zonefs_nofs-v1-5-cc0b0308ef25@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="VpYZYsPh7ooFZbB5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
+In-Reply-To: <20240123-zonefs_nofs-v1-5-cc0b0308ef25@wdc.com>
+
+Hi Johannes,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 7ed2632ec7d72e926b9e8bcc9ad1bb0cd37274bf]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Thumshirn/zonefs-pass-GFP_KERNEL-to-blkdev_zone_mgmt-call/20240123-174911
+base:   7ed2632ec7d72e926b9e8bcc9ad1bb0cd37274bf
+patch link:    https://lore.kernel.org/r/20240123-zonefs_nofs-v1-5-cc0b0308ef25%40wdc.com
+patch subject: [PATCH 5/5] block: remove gfp_flags from blkdev_zone_mgmt
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240127/202401270524.3SWUUYR8-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401270524.3SWUUYR8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401270524.3SWUUYR8-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/md/dm-zoned-metadata.c:8:
+   In file included from drivers/md/dm-zoned.h:12:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/md/dm-zoned-metadata.c:8:
+   In file included from drivers/md/dm-zoned.h:12:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/md/dm-zoned-metadata.c:8:
+   In file included from drivers/md/dm-zoned.h:12:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/md/dm-zoned-metadata.c:1661:34: error: too many arguments to function call, expected 4, have 5
+    1659 |                 ret = blkdev_zone_mgmt(dev->bdev, REQ_OP_ZONE_RESET,
+         |                       ~~~~~~~~~~~~~~~~
+    1660 |                                        dmz_start_sect(zmd, zone),
+    1661 |                                        zmd->zone_nr_sectors, GFP_KERNEL);
+         |                                                              ^~~~~~~~~~
+   include/linux/gfp_types.h:327:20: note: expanded from macro 'GFP_KERNEL'
+     327 | #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/blkdev.h:327:5: note: 'blkdev_zone_mgmt' declared here
+     327 | int blkdev_zone_mgmt(struct block_device *bdev, enum req_op op,
+         |     ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     328 |                 sector_t sectors, sector_t nr_sectors);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
---VpYZYsPh7ooFZbB5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +1661 drivers/md/dm-zoned-metadata.c
 
-On Fri, Jan 26, 2024 at 10:00:02PM +0100, Miguel Ojeda wrote:
-> On Thu, Jan 25, 2024 at 2:46=E2=80=AFPM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> >
-> > Ah, thanks for the direct link :)
->=20
-> My pleasure!
->=20
-> > Actually, thinking about it for a moment - if only a single compiler
-> > version is supported (the minimum, right?) then you could just add the
->=20
-> Yeah, the minimum listed in `scripts/min-tool-version.sh` and in
-> `Documentation/process/changes.rst`. It also happens to be the maximum
-> too, until we can relax that.
->=20
-> > -Zsanitizer=3Dkcfi flag whenever CFI_CLANG and RUST are both set.
->=20
-> Since the flag goes to the Rust compiler, `RUST` would be always
-> enabled, so the flag would only need to be added when `CFI_CLANG=3Dy`,
-> no?
+3b1a94c88b798d Damien Le Moal     2017-06-07  1639  
+3b1a94c88b798d Damien Le Moal     2017-06-07  1640  /*
+3b1a94c88b798d Damien Le Moal     2017-06-07  1641   * Reset a zone write pointer.
+3b1a94c88b798d Damien Le Moal     2017-06-07  1642   */
+3b1a94c88b798d Damien Le Moal     2017-06-07  1643  static int dmz_reset_zone(struct dmz_metadata *zmd, struct dm_zone *zone)
+3b1a94c88b798d Damien Le Moal     2017-06-07  1644  {
+3b1a94c88b798d Damien Le Moal     2017-06-07  1645  	int ret;
+3b1a94c88b798d Damien Le Moal     2017-06-07  1646  
+3b1a94c88b798d Damien Le Moal     2017-06-07  1647  	/*
+3b1a94c88b798d Damien Le Moal     2017-06-07  1648  	 * Ignore offline zones, read only zones,
+3b1a94c88b798d Damien Le Moal     2017-06-07  1649  	 * and conventional zones.
+3b1a94c88b798d Damien Le Moal     2017-06-07  1650  	 */
+3b1a94c88b798d Damien Le Moal     2017-06-07  1651  	if (dmz_is_offline(zone) ||
+3b1a94c88b798d Damien Le Moal     2017-06-07  1652  	    dmz_is_readonly(zone) ||
+3b1a94c88b798d Damien Le Moal     2017-06-07  1653  	    dmz_is_rnd(zone))
+3b1a94c88b798d Damien Le Moal     2017-06-07  1654  		return 0;
+3b1a94c88b798d Damien Le Moal     2017-06-07  1655  
+3b1a94c88b798d Damien Le Moal     2017-06-07  1656  	if (!dmz_is_empty(zone) || dmz_seq_write_err(zone)) {
+8f22272af7a727 Hannes Reinecke    2020-06-02  1657  		struct dmz_dev *dev = zone->dev;
+3b1a94c88b798d Damien Le Moal     2017-06-07  1658  
+6c1b1da58f8c7a Ajay Joshi         2019-10-27  1659  		ret = blkdev_zone_mgmt(dev->bdev, REQ_OP_ZONE_RESET,
+3b1a94c88b798d Damien Le Moal     2017-06-07  1660  				       dmz_start_sect(zmd, zone),
+c4d4977392621f Johannes Thumshirn 2024-01-23 @1661  				       zmd->zone_nr_sectors, GFP_KERNEL);
+3b1a94c88b798d Damien Le Moal     2017-06-07  1662  		if (ret) {
+3b1a94c88b798d Damien Le Moal     2017-06-07  1663  			dmz_dev_err(dev, "Reset zone %u failed %d",
+b71228739851a9 Hannes Reinecke    2020-05-11  1664  				    zone->id, ret);
+3b1a94c88b798d Damien Le Moal     2017-06-07  1665  			return ret;
+3b1a94c88b798d Damien Le Moal     2017-06-07  1666  		}
+3b1a94c88b798d Damien Le Moal     2017-06-07  1667  	}
+3b1a94c88b798d Damien Le Moal     2017-06-07  1668  
+3b1a94c88b798d Damien Le Moal     2017-06-07  1669  	/* Clear write error bit and rewind write pointer position */
+3b1a94c88b798d Damien Le Moal     2017-06-07  1670  	clear_bit(DMZ_SEQ_WRITE_ERR, &zone->flags);
+3b1a94c88b798d Damien Le Moal     2017-06-07  1671  	zone->wp_block = 0;
+3b1a94c88b798d Damien Le Moal     2017-06-07  1672  
+3b1a94c88b798d Damien Le Moal     2017-06-07  1673  	return 0;
+3b1a94c88b798d Damien Le Moal     2017-06-07  1674  }
+3b1a94c88b798d Damien Le Moal     2017-06-07  1675  
 
-Sure.
-
-> Or what do you mean?
-
-Oh I was probably just getting myself mixed up between what the Kconfig
-and Makefile stuff would look like. dw :)
-
-> > I'm not sure if that is a better option though. It's a choice between
-> > CFI_CLANG being disabled if the check is not updated when the toolchain
-> > is bumped versus being enabled for C and not for RUST. I think I prefer
-> > the former though, tracking down the cause of the latter I would rather
-> > not wish on a user.
-> >
-> > I vote for having the check, even if it can only ever be true at the
-> > moment.
->=20
-> Since we only support a single version, we don't need `rc-option`
-> tests until we start supporting several versions (which is why other
-> tests like that do not exist so far).
->=20
-> In my previous message I thought you meant using the flag to test for
-> arch/target support or similar. That would be fine, but we can also do
-> the usual `ARCH_SUPPORTS_CFI_RUST` here, I would assume.
-
-Is that even needed? We already have ARCH_SUPPORTS_CFI_CLANG and AFAIU
-rust supports it if clang does, so a second option is superfluous?
-
-> Now, during the version bump to a stable flag, if we happen to forget
-> to update the flag name, it would be a build error, so it should be
-> easily spotted and fixed.
-
-I'm reading back what I wrote, and I must have been trying to get out
-the door or something because none of it really makes that much sense.
-Of course an unknown option should be detectable at build time and not
-be a silent breakage. Maybe I should have written the patch for this
-before sending the mail rather than writing the mail based on what was
-in my head.
-
-> What we may want to add, though, to avoid the confusion you mention
-> meanwhile, is just a `depends on !CFI_CLANG` for `RUST`, like for the
-> other requirements we have there (which are things that should
-> eventually go away). Then they can remove that when the `-Z` flag is
-> deemed ready to be used. But perhaps let's see what Ramon et al. say.
-
-I don't really mind either way. Whatever of the two that you guys want
-that prevents broken kernels works for me!
-
-> By the way, concerning the tracking issue, since you mentioned it: it
-> has a list of PRs, but not fixes, there is a "known issues" link
-> there. On top of that, we are "shifted in time" w.r.t. the latest
-> status in the compiler, since we use stable versions of the compiler.
-
-Yah, I was linking it to point out that the stuff is unlikely to be
-usable any time soon, since it is not complete in the most recent
-toolchain.
-
-Cheers,
-Conor.
-
---VpYZYsPh7ooFZbB5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbQrlwAKCRB4tDGHoIJi
-0meeAP9z4Z4UXLa6YN4nCic4/a2cKXvc99l+GFebDHGuZJIHpwD/W1lM4CxjLlBg
-W60C8W8UTeABvw1N16NPnnOeE8KteQI=
-=jaxq
------END PGP SIGNATURE-----
-
---VpYZYsPh7ooFZbB5--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
