@@ -1,45 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D624E1CD1F;
-	Fri, 26 Jan 2024 16:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFF91D545;
+	Fri, 26 Jan 2024 16:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706285428; cv=none; b=qGtGaK3/RwH1EYdVkfMMfYYwNcbHX1nuc+kcZ7Gw3991jr/pb55M465MM33NCSkT2vc7+G3N6zvswOPgKWn9NjZoDUN9JhDm+AmG62X1goibGQgFIjHuWbLz8ui/DOy8fog4faiH807LN0vONNyBKYBVT7451EX5O4ozN9ssCNY=
+	t=1706285722; cv=none; b=hjqqCAkn+UIn7M+QstEUFCnkXnWSjXeAfFPdqRxtwBT34byn37tnKjNQ0nE2fm6jduoYE36kCyI09E3L59GxUJjQg4UCV9H7MrbsV1z/ui+wGnnz5uZDSRGuGnXiqKc3OWoF0xxAv3Ms/2auJ3UBM+kyKAygjecKc4QeOaNrK+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706285428; c=relaxed/simple;
-	bh=dCh3Q7IJrxBpqeaYZ3wZ62jWq+kUi+XKjTJ8+Wu15U4=;
+	s=arc-20240116; t=1706285722; c=relaxed/simple;
+	bh=r9voGzQRoAoyy3ZC7bd7DKTVtyra9oEHLiIH8NCv9Hg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EgbzEvzAXaZ7sbQw+fGUNdQkocZzwV0rKHi2I1VZK27eb/9KTzRG7SR5IMHD1YwI9oh9G408mJjjB3QzCt49sEcAfE86yYjmmwqdBoY8BAjrvk7i3u50MUgkKc9fp3z6iOcLx7/Xil03MZ0iLDHtVB8NN9PyWbo8Z8dj8itSnJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tb6NbSgI; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tb6NbSgI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD07AC43390;
-	Fri, 26 Jan 2024 16:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706285427;
-	bh=dCh3Q7IJrxBpqeaYZ3wZ62jWq+kUi+XKjTJ8+Wu15U4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Tb6NbSgIH5Jh9xM0TXplcprBK9xu5xjIlahezLx9JjLaeV3D++84RBlfi1tb0r+B6
-	 ktXLrOiruZrF5P4D+icn+bveWbxq5S9iaVGmCWyDqHYgdYlor6C12TOGUJXC2fwIup
-	 JiJdoKB8O18h/S6XqG30/QvhL/xLfKuqHzAzq9xoIu9cq4OZnFIl67icBw+brpRL9j
-	 EKs4VLlE39mii6pG12TJ1NjeyCv9vje0I64wtexLpUrozbiZ07z+sDcY8DNuFx0e9H
-	 RKPT/DXqqc9f2IHsymkR/kWJq1L9uriLoVILEXVBRw162F/Sm86OMkHbhe+ruZwnFq
-	 kDB+ARKOuczmg==
-Date: Fri, 26 Jan 2024 09:10:25 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: akpm@linux-foundation.org, masahiroy@kernel.org, nicolas@fjasle.eu,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	catalin.marinas@arm.com, will@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 05/11] arm64: Kconfig: Clean up tautological LLVM version
- checks
-Message-ID: <20240126161025.GA3265550@dev-arch.thelio-3990X>
-References: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
- <20240125-bump-min-llvm-ver-to-13-0-1-v1-5-f5ff9bda41c5@kernel.org>
- <ZbOsvhDB-6LMVACP@FVFF77S0Q05N>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wa0T6VSqTV91fKqZyGUlkJo3yPVpI+tYbxRnWCesIX+5Z+4yXGDYQHfBhYvOf2I+rfyAXGRHW6yE4NbZPNqa4Ek29xNGaPOH2exTvRmjzVCCLM+sHMG75b44XHawmd7hYBLtRVy0i6bNIEpTQm9hsRiGTx3OhXET0yCnK8RdbGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE166C43390;
+	Fri, 26 Jan 2024 16:15:18 +0000 (UTC)
+Date: Fri, 26 Jan 2024 16:15:16 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <ZbPalOaGu4XjMb0R@arm.com>
+References: <20240117123618.GD734935@nvidia.com>
+ <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
+ <ZbAj34vdVuMrmdFD@arm.com>
+ <20240124012723.GD1455070@nvidia.com>
+ <86ede787d7.wl-maz@kernel.org>
+ <20240124130638.GE1455070@nvidia.com>
+ <86bk9a97rt.wl-maz@kernel.org>
+ <20240124155225.GG1455070@nvidia.com>
+ <ZbFO6ZXq99AWerlQ@arm.com>
+ <20240125012924.GL1455070@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,83 +46,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZbOsvhDB-6LMVACP@FVFF77S0Q05N>
+In-Reply-To: <20240125012924.GL1455070@nvidia.com>
 
-On Fri, Jan 26, 2024 at 12:59:55PM +0000, Mark Rutland wrote:
-> On Thu, Jan 25, 2024 at 03:55:11PM -0700, Nathan Chancellor wrote:
-> > Now that the minimum supported version of LLVM for building the kernel
-> > has been bumped to 13.0.1, several conditions become tautologies, as
-> > they will always be true because the build will fail during the
-> > configuration stage for older LLVM versions. Drop them, as they are
-> > unnecessary.
+On Wed, Jan 24, 2024 at 09:29:24PM -0400, Jason Gunthorpe wrote:
+> On Wed, Jan 24, 2024 at 05:54:49PM +0000, Catalin Marinas wrote:
+> > On Wed, Jan 24, 2024 at 11:52:25AM -0400, Jason Gunthorpe wrote:
+> > > 2) Userspace does ST4 to MMIO memory, and the VMM can't explode
+> > >    because of this. Replacing the ST4 with 8x STR is NOT better,
+> > >    that would be a big performance downside, especially for the
+> > >    quirky hi-silicon hardware.
 > > 
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > Cc: catalin.marinas@arm.com
-> > Cc: will@kernel.org
-> > Cc: mark.rutland@arm.com
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > ---
-> >  arch/arm64/Kconfig | 5 +----
-> >  1 file changed, 1 insertion(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > index 5a8acca4dbf4..cb34e7d780c0 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -383,7 +383,7 @@ config BUILTIN_RETURN_ADDRESS_STRIPS_PAC
-> >  	bool
-> >  	# Clang's __builtin_return_adddress() strips the PAC since 12.0.0
-> >  	# https://github.com/llvm/llvm-project/commit/2a96f47c5ffca84cd774ad402cacd137f4bf45e2
-> > -	default y if CC_IS_CLANG && (CLANG_VERSION >= 120000)
-> > +	default y if CC_IS_CLANG
-> >  	# GCC's __builtin_return_address() strips the PAC since 11.1.0,
-> >  	# and this was backported to 10.2.0, 9.4.0, 8.5.0, but not earlier
-> >  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94891
-> > @@ -1387,7 +1387,6 @@ choice
-> >  
-> >  config CPU_BIG_ENDIAN
-> >  	bool "Build big-endian kernel"
-> > -	depends on !LD_IS_LLD || LLD_VERSION >= 130000
-> >  	# https://github.com/llvm/llvm-project/commit/1379b150991f70a5782e9a143c2ba5308da1161c
+> > I was hoping KVM injects an error into the guest rather than killing it
+> > but at a quick look I couldn't find it. The kvm_handle_guest_abort() ->
+> > io_mem_abort() ends up returning -ENOSYS while handle_trap_exceptions()
+> > only understands handled or not (like 1 or 0). Well, maybe I didn't look
+> > deep enough.
 > 
-> We can delete the URL here, since that was just to describe why this depended
-> upon LLVM 13+; it's weird for it to sit here on its own.
+> It looks to me like qemu turns on the KVM_CAP_ARM_NISV_TO_USER and
+> then when it gets a NISV it always converts it to a data abort to the
+> guest. See kvm_arm_handle_dabt_nisv() in qemu. So it is just a
+> correctness issue, not a 'VM userspace can crash the VMM' security
+> problem.
 
-I think this is the URL for the fix for the problem brought up by
-commit 146a15b87335 ("arm64: Restrict CPU_BIG_ENDIAN to GNU as or LLVM
-IAS 15.x or newer"), so I think it should stay? It does not look like I
-ever added a link or context for the LLD line, I definitely should have.
+The VMM wasn't my concern but rather a guest getting killed or not
+functioning correctly (user app killed).
 
-> The URL above for __builtin_return_address() can stay or go; it may as well
-> stay since we have the comment aboout LLvm 12+ above it.
+> Thus, IMHO, doing IO emulation for VFIO that doesn't support all the
+> instructions actual existing SW uses to do IO is hard to justify. We
+> are already on a slow path that only exists for technical correctness,
+> it should be perfect. It is perfect on x86 because x86 KVM does SW
+> instruction decode and emulation. ARM could too, but doesn't.
 
-That's the conclusion I came to as well.
+It could fall back to instruction decode, either in KVM or the VMM
+(strong preference for the latter), but I'd only do this if it's
+justified.
 
-Thanks a lot for taking a look!
+I don't think the issue here is VFIO, I doubt we'd ever see emulation
+for hardware like mlx5. But we are changing generic kernel functions
+like memcpy_toio/__iowrite64_copy() that end up being used in other
+drivers (e.g. USB, UART) for emulated devices. If we can keep these
+functions as generic as possible for both guest and native runs, that's
+great. If the performance difference is significant, we can revisit.
 
-Cheers,
-Nathan
-
-> With that:
-> 
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> 
-> Mark.
-> 
-> >  	depends on AS_IS_GNU || AS_VERSION >= 150000
-> >  	help
-> > @@ -2018,8 +2017,6 @@ config ARM64_BTI_KERNEL
-> >  	depends on !CC_IS_GCC || GCC_VERSION >= 100100
-> >  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
-> >  	depends on !CC_IS_GCC
-> > -	# https://github.com/llvm/llvm-project/commit/a88c722e687e6780dcd6a58718350dc76fcc4cc9
-> > -	depends on !CC_IS_CLANG || CLANG_VERSION >= 120000
-> >  	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_ARGS)
-> >  	help
-> >  	  Build the kernel with Branch Target Identification annotations
-> > 
-> > -- 
-> > 2.43.0
-> > 
-> 
+-- 
+Catalin
