@@ -1,130 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C23250EC;
-	Fri, 26 Jan 2024 20:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77332374C
+	for <llvm@lists.linux.dev>; Fri, 26 Jan 2024 21:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706301279; cv=none; b=MvOXiSj+eMCmzZifKWA4wr7bJIdxVbD3ENu1UOo8bEme/XwJfF1vbtrI7YVIwVsB6+tmTSYpwvShkhM2aqLJt+YGQBRx79Y8vmbAKF1c30tHGZo6W8fpU9+lbu5YFFV5yuD8rdZm/fTWNW/mf3Opvgx1PFVeM2VpoQCSpCvxNVQ=
+	t=1706302816; cv=none; b=j+ZiO+bzwoR8Y1wWITK9h5wP1/WBMEUpdB3FYqfsfgeaRYMZUi2bIZonHxfzCJNhb1bK6eMoLf+qecoMVN14mkIyrVOZOoYJPkUKtfl4yZMIyW38WAlYN6g8HbH0mc5XZok4dBd2vEkvF88o0hCad7Cy9JO7+6wHhdw7uhiEbBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706301279; c=relaxed/simple;
-	bh=fKXandC+5QOPgaaNNK48snxQs+rXCoRJZv+oHcWZwXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rtzmubQwGuDpppc/WY4xlsJzvpp1BxH3nQXicd8ENIdkUbtbqTfzE+EzDFJhaJU73NiAx3w0xLXZXfB4KltIGWXF6xcdA7u6DBVs8XrPuhGLs3k3scEAzbyIM4dsgCEy5KoNqBEq5k7+iSWmws5qTLBEsORqcf149On+6gPol5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cBHALqoS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706302816; c=relaxed/simple;
+	bh=R94U1LlE76uq+NvyE4ngyd9FxAhVaSUa06WGeHuHhIU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LuQEp0ZOt4BuJgOtlTsNvl6LeRXeKMZY2VzKfw35aSFc5C33ri7ImYDCXUMXkO+voeWDgS3/N3y8sva8ilLh/1Qj0L5GQzvn+PH/Qmw7dcoqY+0kwHVF1+V9DVbg7KmLxBTEIPtvSNyCV5ZSD4Uj7v0aDLZUMmdZw0EEhgs1xQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oq48jB7h; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cBHALqoS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0674C433C7;
-	Fri, 26 Jan 2024 20:34:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706301278;
-	bh=fKXandC+5QOPgaaNNK48snxQs+rXCoRJZv+oHcWZwXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cBHALqoSmF/TAHePeBhX/syG9ctKGwupCxyx8jKndDgbJpbm7EWnsgjvjT7Vrx2DY
-	 2Hj3E2tlWwXS00a+C4+TdFMfIVO3SnoY9yZpS67owsD6d6mZHp1suJb4GVWVRg2R8b
-	 k6XY4XmoYuyiaSlucogkXWHktINh5FIwfXn4i52Po2ZoWMM0rk9H3uDXofwGsPZ8Dg
-	 xij+uHtg0x5OISKjzS24Cl/kW4q1ygl0Ja9uPMFNu0bqZOuRFaNIGARh/Xkz6rFNuz
-	 mQBjnQzkiOfUqwhjDs15QLxiAMAsYCMJbj1LL5UYNyEn/LD6B+42yYsmzGK8KcWYqP
-	 cGu2VWgCtdVyQ==
-Date: Fri, 26 Jan 2024 13:34:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-	allen.lkml@gmail.com, llvm@lists.linux.dev, keescook@chromium.org
-Subject: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
-Message-ID: <20240126203436.GA913905@dev-arch.thelio-3990X>
-References: <20240122235732.009174833@linuxfoundation.org>
- <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
- <2024012636-clubbed-radial-1997@gregkh>
- <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oq48jB7h"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5ffe7e7b7b3so7892647b3.3
+        for <llvm@lists.linux.dev>; Fri, 26 Jan 2024 13:00:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706302814; x=1706907614; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R94U1LlE76uq+NvyE4ngyd9FxAhVaSUa06WGeHuHhIU=;
+        b=Oq48jB7hUhDb5KcOuZaEt4PF0DMT/CcHSXXQtKxU7P9PRV2xzjanGMAHfc8j6Iv4d7
+         m/6x6oL3z2l5dmvgIz/uNuTM64zPLwY26KZL0PDfE4Lm+Ej2GXVMh40LZAHnR3y2rQeU
+         ofN6ZgGj3umXGGwppCZWDcGFLRdBBAazDO4v0uAE2YtpSCYO2YmH4mVd9ryr8KqJPBIP
+         l1fhujEYgqn5+oloBgaRMK2kR/qLGfnjgAh6zKxiWa+BWfnmeCYE6spCJOr9ehlhIF7Y
+         bEee5sO4K6Nun2eRSTyDacwIjK+uSx1MRZu8UvoyZYlHY0sVnmhx//1Gu3ecF3tE9N1Y
+         mWKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706302814; x=1706907614;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R94U1LlE76uq+NvyE4ngyd9FxAhVaSUa06WGeHuHhIU=;
+        b=pWEigzbfIzYxLX7HtuIsYHpXjG3qDIo6iiWkQd9dYNnQYipK56dYUSUmNesymp9GAF
+         /ORMB2zwK3lZmzQgSgGzhHOnkUhASXVxOZX1El3zMUN1ZJex0xGve3CvrXHuUdI1WsTq
+         78sKUsb5RUaP7yzbY77CEbEFnawWoxU263hmrp27YRV3uqa1ITQeF5l7lxgVRvuMrA1n
+         01ymb5+I9QnukZWJT8dN50vfrjIzF7E5MrcQEpAYLQhkQA9iw7/Tal8UgfD4ISeWObda
+         lF+1ZULIluNKko0ekUz1h9mK6x1neLuTzj9V9g0btu/cf67C/gtXJ4pcChHfzs3NkKo+
+         gw2g==
+X-Gm-Message-State: AOJu0YwPEW+J0XznmKYOBTru4XiDRJHi6ALfipxVJayalf9390KMkjH0
+	rp/kFLzUfORg1OblbyYgTBZMUG+6zQHTQZrijLCZI812//Gv8VJdwMCQ1TKU3RJ/gtmhnJO6aci
+	00G15qE9jMNuK4zyugfSPG+HySM0=
+X-Google-Smtp-Source: AGHT+IHGZFwCjim0Tth1g39N/v/n0KJf4BjgENizS8dPUFq5HPMaf0iymy6drZ65jUMDqf5c20SiR8drFVpMUdT6duo=
+X-Received: by 2002:a81:de05:0:b0:5d7:1941:2c18 with SMTP id
+ k5-20020a81de05000000b005d719412c18mr410434ywj.69.1706302813724; Fri, 26 Jan
+ 2024 13:00:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+ <20230608-dispatch-sneer-aa09bd7b2eb8@wendy> <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
+ <20230608-spiritism-gonad-5f5aff4c3a24@wendy> <20240117-swiftly-parasail-618d62972d6e@spud>
+ <CANiq72mVKCOAuK4Qe+8AHmpkFwyJsVfx8AqB7ccGi3DYpSSWcw@mail.gmail.com>
+ <20240118-implode-delirium-eefdd86e170e@spud> <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
+ <20240125-bucked-payroll-47f82077b262@wendy> <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
+ <20240125-lazy-thrower-744aacc6632a@wendy>
+In-Reply-To: <20240125-lazy-thrower-744aacc6632a@wendy>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 26 Jan 2024 22:00:02 +0100
+Message-ID: <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>, Ramon de C Valle <rcvalle@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 26, 2024 at 10:17:23AM -0800, Guenter Roeck wrote:
-> On 1/26/24 09:51, Greg Kroah-Hartman wrote:
-> > On Fri, Jan 26, 2024 at 08:46:42AM -0800, Guenter Roeck wrote:
-> > > On 1/22/24 15:55, Greg Kroah-Hartman wrote:
-> > > > This is the start of the stable review cycle for the 5.10.209 release.
-> > > > There are 286 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> > > > 
-> > > > Responses should be made by Wed, 24 Jan 2024 23:56:49 +0000.
-> > > > Anything received after that time might be too late.
-> > > > 
-> > > [ ... ]
-> > > 
-> > > > zhenwei pi <pizhenwei@bytedance.com>
-> > > >       virtio-crypto: implement RSA algorithm
-> > > > 
-> > > 
-> > > Curious: Why was this (and its subsequent fixes) backported to v5.10.y ?
-> > > It is quite beyond a bug fix. Also, unless I am really missing something,
-> > > the series (or at least this patch) was not applied to v5.15.y, so we now
-> > > have functionality in v5.10.y which is not in v5.15.y.
-> > 
-> > See the commit text, it was a dependency of a later fix and documented
-> > as such.
-> > 
-> > Having it in 5.10 and not 5.15 is a bit odd, I agree, so patches are
-> > gladly accepted :)
-> > 
-> 
-> We reverted the entire series from the merge because it results in a build
-> failure for us.
-> 
-> In file included from /home/groeck/src/linux-chromeos/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:10:
-> In file included from /home/groeck/src/linux-chromeos/include/linux/mpi.h:21:
-> In file included from /home/groeck/src/linux-chromeos/include/linux/scatterlist.h:5:
-> In file included from /home/groeck/src/linux-chromeos/include/linux/string.h:293:
-> /home/groeck/src/linux-chromeos/include/linux/fortify-string.h:512:4: error: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
->                         __read_overflow2_field(q_size_field, size);
+On Thu, Jan 25, 2024 at 2:46=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> Ah, thanks for the direct link :)
 
-For what it's worth, this is likely self inflicted for chromeos-5.10,
-which carries a revert of commit eaafc590053b ("fortify: Explicitly
-disable Clang support") as commit c19861d34c003 ("CHROMIUM: Revert
-"fortify: Explicitly disable Clang support""). I don't see the series
-that added proper support for clang to fortify in 5.18 that ended with
-commit 281d0c962752 ("fortify: Add Clang support") in that ChromeOS
-branch, so this seems somewhat expected.
+My pleasure!
 
-> I also see that upstream (starting with 6.1) when trying to build it with clang,
-> so I guess it is one of those bug-for-bug compatibility things. I really have
-> no idea what causes it, or why we don't see the problem when building
-> chromeos-6.1 or chromeos-6.6, but (so far) only with chromeos-5.10 after
-> merging 5.10.209 into it. Making things worse, the problem isn't _always_
-> seen. Sometimes I can compile the file in 6.1.y without error, sometimes not.
-> I have no idea what triggers the problem.
+> Actually, thinking about it for a moment - if only a single compiler
+> version is supported (the minimum, right?) then you could just add the
 
-Have a .config that reproduces it on upstream? I have not personally
-seen this warning in my build matrix nor has our continuous-integration
-matrix (I don't see it in the warning output at the bottom but that
-could have missed something for some reason) in 6.1:
+Yeah, the minimum listed in `scripts/min-tool-version.sh` and in
+`Documentation/process/changes.rst`. It also happens to be the maximum
+too, until we can relax that.
 
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/7662499796
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/7662534888
+> -Zsanitizer=3Dkcfi flag whenever CFI_CLANG and RUST are both set.
 
-Reverting this series from 5.10 seems reasonable given your other
-comments but if there is still something to sort out upstream, I
-definitely want to.
+Since the flag goes to the Rust compiler, `RUST` would be always
+enabled, so the flag would only need to be added when `CFI_CLANG=3Dy`,
+no? Or what do you mean?
 
-> Of course, on top of all that, the error message is completely useless.
+> I'm not sure if that is a better option though. It's a choice between
+> CFI_CLANG being disabled if the check is not updated when the toolchain
+> is bumped versus being enabled for C and not for RUST. I think I prefer
+> the former though, tracking down the cause of the latter I would rather
+> not wish on a user.
+>
+> I vote for having the check, even if it can only ever be true at the
+> moment.
 
-Indeed, outstanding papercut unfortunately:
-https://github.com/ClangBuiltLinux/linux/issues/1571
+Since we only support a single version, we don't need `rc-option`
+tests until we start supporting several versions (which is why other
+tests like that do not exist so far).
+
+In my previous message I thought you meant using the flag to test for
+arch/target support or similar. That would be fine, but we can also do
+the usual `ARCH_SUPPORTS_CFI_RUST` here, I would assume.
+
+Now, during the version bump to a stable flag, if we happen to forget
+to update the flag name, it would be a build error, so it should be
+easily spotted and fixed. And if we did use an `rc-option` for the
+arch/target support idea, it would be the first case you mention, so
+it is all good.
+
+What we may want to add, though, to avoid the confusion you mention
+meanwhile, is just a `depends on !CFI_CLANG` for `RUST`, like for the
+other requirements we have there (which are things that should
+eventually go away). Then they can remove that when the `-Z` flag is
+deemed ready to be used. But perhaps let's see what Ramon et al. say.
+
+In other words, the flag was added back in 1.68.0 to `rustc`, but it
+was not ready, so we need to store the "ready" bit in our side
+meanwhile, i.e. we can't know that just by testing the flag itself.
+
+By the way, concerning the tracking issue, since you mentioned it: it
+has a list of PRs, but not fixes, there is a "known issues" link
+there. On top of that, we are "shifted in time" w.r.t. the latest
+status in the compiler, since we use stable versions of the compiler.
 
 Cheers,
-Nathan
+Miguel
