@@ -1,56 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD861CD36;
-	Fri, 26 Jan 2024 14:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291B11C68F;
+	Fri, 26 Jan 2024 14:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706280989; cv=none; b=qLGAn/weQISvpUl+Go5Nz0driutqdDSA8NUpSVSB3KxCXoFZeWUOVRF6lxFxvGx/diCvK3iFsCPgB2TLviSX70MsVMI/JV1iUDSI+6vM/7y0moNW0i7Xg1PXHUDeeMZ3PUS6N2V0svHRIkR796Krta/9aDhIAmCrv28HhIxU5Ck=
+	t=1706280997; cv=none; b=ThFOMLOIHHhq/hXGpP5nyO952Sapq++tmdm3xQZDAkbdYCZl8crGpnbSqOjxT3J0sbJ47Hcub8RBThLwwBoNQ3z19F4579D6a9VoRjwixv0hVWEjxvOofxO5bvrXhlDG8Gmyw0ULARJ/w5DR9DG/3dWrhZx+Kvdz5FRsbBmQn1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706280989; c=relaxed/simple;
-	bh=I64ObxpqFP05rSwgn1VCw28WF1nFGqRNMIIqcKbAx4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VOKH7kis9Flde8azW/iIIwOKapgS/kyxAgB6bjszbKQc/dIlG5m976LOLZCqKTNVfHjHHvAPYln2pEf/y69dSsz08fBrhatV7nEDgqamI8QqMJxqguoZ39CRsVYIHwiTYP2MKkYe+zbbb8mmisTu/slEF8oCTrOD5RdPP+8Zi1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m8U0AJlK; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m8U0AJlK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706280988; x=1737816988;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I64ObxpqFP05rSwgn1VCw28WF1nFGqRNMIIqcKbAx4o=;
-  b=m8U0AJlKuaaPeNaEnHmkafUqqzYW1WRJzBOBnWzZMfAHhnOXbtsPNSGU
-   Esdbq956oue3MmKUX1/8hXuTFFyAY+EAhszQGvDuSiJi2xdoKq3+OfhTa
-   Ds1QDv4NNkms6LibZdOd+/dgX9Rqz0XsPz1TL1ahx8ufzlOwonzRJ206m
-   NXg6dLVY11cD42F3Jf1LffAzzJOX4eLKv/a6Wnt2VyYt5yn3deK3ZzTfc
-   ySsN0XAG0zeX4kYLfMORfHGPnmZtZJm3JNEVrJgiLHu+ZHA2Bz/toGjF4
-   4YgIQxAmNG8BP781xmSdJU7xMoG6xEQ55fpyDqzDTn4m2jma5b2J5szLt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="2357017"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2357017"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 06:56:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="877415842"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="877415842"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Jan 2024 06:56:22 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rTNcy-00016j-2l;
-	Fri, 26 Jan 2024 14:56:20 +0000
-Date: Fri, 26 Jan 2024 22:55:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:guest-tpm 2/6] arch/x86/coco/tdx/tdx.c:935: warning:
- Function parameter or struct member 'irq' not described in
- 'tdx_free_event_irq'
-Message-ID: <202401262229.8XOFIbqG-lkp@intel.com>
+	s=arc-20240116; t=1706280997; c=relaxed/simple;
+	bh=f8cywfRmvLjKXiTEkbut2MRiriAkYIQcyCBGU0iDCGQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AqDx9nF7SjDIKSRnxqEsoznko6ppTTUxiQFJ4K5CR67pQTSUyoP36KkjpwBDTnCfNfaa0KweZqS3zTINRufP8oglNScgA/FgQpk9eTK8k7aQHINTiq//UHko9/I9xBWUqRIeNFvYDoxy7Q6/1dF55O503mUKefUX5fUiLqTysT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170B2C43601;
+	Fri, 26 Jan 2024 14:56:33 +0000 (UTC)
+Date: Fri, 26 Jan 2024 14:56:31 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
+Message-ID: <ZbPIH7g2Glh-9UWL@arm.com>
+References: <ZafISDVeAA1swx2I@FVFF77S0Q05N.cambridge.arm.com>
+ <20240117123618.GD734935@nvidia.com>
+ <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
+ <ZbAj34vdVuMrmdFD@arm.com>
+ <ZbD2n-BKGbDgMfsB@FVFF77S0Q05N.cambridge.arm.com>
+ <ZbEFPbT7vl6HN4lk@arm.com>
+ <20240124132719.GF1455070@nvidia.com>
+ <ZbFHPTUaBmbHYnwx@arm.com>
+ <20240124192634.GJ1455070@nvidia.com>
+ <20240125174333.GA2192844@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,34 +46,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240125174333.GA2192844@nvidia.com>
 
-tree:   https://github.com/intel/tdx.git guest-tpm
-head:   479fce1c3eaa87d98d94d78c485d9a6f0c8dd1fa
-commit: ffdec3c278a0a9581481aded679ead9ff5308ef1 [2/6] x86/tdx: Add tdx_alloc_event_irq() and tdx_free_event_irq() interfaces
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240126/202401262229.8XOFIbqG-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401262229.8XOFIbqG-lkp@intel.com/reproduce)
+On Thu, Jan 25, 2024 at 01:43:33PM -0400, Jason Gunthorpe wrote:
+> On Wed, Jan 24, 2024 at 03:26:34PM -0400, Jason Gunthorpe wrote:
+> > The suggestion that it should not have any interleaving instructions
+> > and use STP came from our CPU architecture team.
+> 
+> I got some more details here.
+> 
+> They point to the ARM publication about write combining
+> 
+> https://community.arm.com/cfs-file/__key/telligent-evolution-components-attachments/13-150-00-00-00-00-10-12/Understanding_5F00_Write_5F00_Combining_5F00_on_5F00_Arm_5F00_V.1.0.pdf
+> 
+> specifically to the example code using 4x 128 bit NEON stores.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401262229.8XOFIbqG-lkp@intel.com/
+That's an example but this document doesn't make any statements about
+64-bit writes.
 
-All warnings (new ones prefixed by >>):
+> They point at the actual CPU design and say it is optimized for 128
+> bit stores (STP and ST4 included, it seems).
+> 
+> 64 bit stores trigger some different behavior.
 
->> arch/x86/coco/tdx/tdx.c:935: warning: Function parameter or struct member 'irq' not described in 'tdx_free_event_irq'
+This is highly microarchitecture specific. The best bet in the future is
+the ST64B instruction but in the meantime it's pretty much guessing.
 
+> I have no way to know if it will be OK for other drivers that expect
+> this to be a performance path in the kernel.
+> 
+> Are you *sure* you want to do this str version? If it works for mlx5 I
+> will send the patch and the other companies can come later with
+> performance data.
 
-vim +935 arch/x86/coco/tdx/tdx.c
-
-   929	
-   930	/**
-   931	 * tdx_free_event_irq() - Free the event IRQ.
-   932	 *
-   933	 */
-   934	void tdx_free_event_irq(int irq)
- > 935	{
+Yeah, I'd stick to the STR for now, it makes things simpler as we don't
+have to care about what emulation does.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Catalin
