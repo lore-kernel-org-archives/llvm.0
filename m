@@ -1,64 +1,45 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670041D559
-	for <llvm@lists.linux.dev>; Fri, 26 Jan 2024 15:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D624E1CD1F;
+	Fri, 26 Jan 2024 16:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706284042; cv=none; b=uHx0AHeUBsb6kZHWcwIOOkfGgKXOZBoPDrsSFF+Rf532Al9s0cg91Ntbxby3g5EOVyliIH9p/w8reGVz0u3NTSXRyV3CB4suYaigga9JjTdoqHTVBMbPLF4WDPXddK1/KtaXwmGI7qLgcY4EygAXC1BS90nAZnOYHrV5TSFv454=
+	t=1706285428; cv=none; b=qGtGaK3/RwH1EYdVkfMMfYYwNcbHX1nuc+kcZ7Gw3991jr/pb55M465MM33NCSkT2vc7+G3N6zvswOPgKWn9NjZoDUN9JhDm+AmG62X1goibGQgFIjHuWbLz8ui/DOy8fog4faiH807LN0vONNyBKYBVT7451EX5O4ozN9ssCNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706284042; c=relaxed/simple;
-	bh=DAs3V7HyP/XpBmzo6+7opXgyjmtVQeAlOfAKpgpolnQ=;
+	s=arc-20240116; t=1706285428; c=relaxed/simple;
+	bh=dCh3Q7IJrxBpqeaYZ3wZ62jWq+kUi+XKjTJ8+Wu15U4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eLzxLpClBXV0g9ENtP6h96JNlSvUvMxW1OimO7xUaIhnIP1yzZkkaBJNPusJ90npoE5kPy5B350kSEjIm2TGu8M9GMtJtLXYnDToJCSzBEiy988AX3NWjf2TPOFvtJx61ktfE1wEKfn4dwoOArIq1ITvaiZEEkveEbZtbToQHic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lRPeu6UA; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=EgbzEvzAXaZ7sbQw+fGUNdQkocZzwV0rKHi2I1VZK27eb/9KTzRG7SR5IMHD1YwI9oh9G408mJjjB3QzCt49sEcAfE86yYjmmwqdBoY8BAjrvk7i3u50MUgkKc9fp3z6iOcLx7/Xil03MZ0iLDHtVB8NN9PyWbo8Z8dj8itSnJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tb6NbSgI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lRPeu6UA"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6de029f88d8so490537b3a.3
-        for <llvm@lists.linux.dev>; Fri, 26 Jan 2024 07:47:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706284039; x=1706888839; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qc1S48vRk0PGvch6nvXwWAPqcctjRQ+0B+3F6wtfmnc=;
-        b=lRPeu6UAU2ZqyofvivXxir+W/lPkhePzvS5kT96oWB8hDXlZS/QRRWesJP2xaOBGyx
-         KkBeKzGdck9ICl2rD3/Hj+fvQ6WvbddtjFUD2sg3wx8uugwMGrhIBwm9rPww8mwcvPA0
-         cKvJbq6PKc4G/Vz4V89/oFLbKm5d/pMHeRPE8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706284039; x=1706888839;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qc1S48vRk0PGvch6nvXwWAPqcctjRQ+0B+3F6wtfmnc=;
-        b=g8s7SiblfpInCQmYYRLSgF45mR59kd82TBj3brRm/7ZVdmQWs8SsPHZb0hZCT+VHXi
-         RMmvBHaYbVFO8i2aEFAl/mZXayVu4/CoZ+W91tFy75RHVnpcfsUjj5WegISJc1G1deai
-         T96ZgXWjJ6TSYnN6+JnAUh87BMZvHFbD8gMKR3E7iB6ZwiNgRUfT7bhJrvJPhdnP0EU4
-         UIQ+0cRyYM37P7CmDh1thEGSe/z4/K26ouq0RLSMKPhFGVPzGSTqJKZgKSbl0Id/1pPf
-         g6g6fMd3/cfuK2wbKnTOY1NytLLGXvx/4ala4gCWBDZmVxmyN3PoTP27CnEab+6IS334
-         XwWg==
-X-Gm-Message-State: AOJu0YxAsskrfEad7AKHNC8qh1idvI1DKGo7OHNScaR0U9PcWzM2qS0T
-	91FfE3fwOz0Gt6b7EsUKN9mp3guo40J/PYhXgyKy/lHls8c1EeLGCsupe8VMbg==
-X-Google-Smtp-Source: AGHT+IHzsnw5TGHNhM9GaI5lNXsmzH1jBjkNdTyXdBCPgQ7tx5bVGYxMba+mPuyXqYN+9sJJoRpaoA==
-X-Received: by 2002:aa7:9ec8:0:b0:6de:a18:70b with SMTP id r8-20020aa79ec8000000b006de0a18070bmr355100pfq.45.1706284039622;
-        Fri, 26 Jan 2024 07:47:19 -0800 (PST)
-Received: from google.com (KD124209171220.ppp-bb.dion.ne.jp. [124.209.171.220])
-        by smtp.gmail.com with ESMTPSA id j8-20020a056a00234800b006d6b91c6eb6sm1271255pfj.13.2024.01.26.07.47.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jan 2024 07:47:19 -0800 (PST)
-Date: Sat, 27 Jan 2024 00:47:14 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jason Chen <jason.z.chen@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [sailus-media-tree:master 18/18]
- drivers/media/i2c/ov08x40.c:1783:23: error: no member named 'exposure_shift'
- in 'struct ov08x40_mode'
-Message-ID: <20240126154714.GB194356@google.com>
-References: <202401261628.dWEtdXLE-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tb6NbSgI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD07AC43390;
+	Fri, 26 Jan 2024 16:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706285427;
+	bh=dCh3Q7IJrxBpqeaYZ3wZ62jWq+kUi+XKjTJ8+Wu15U4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Tb6NbSgIH5Jh9xM0TXplcprBK9xu5xjIlahezLx9JjLaeV3D++84RBlfi1tb0r+B6
+	 ktXLrOiruZrF5P4D+icn+bveWbxq5S9iaVGmCWyDqHYgdYlor6C12TOGUJXC2fwIup
+	 JiJdoKB8O18h/S6XqG30/QvhL/xLfKuqHzAzq9xoIu9cq4OZnFIl67icBw+brpRL9j
+	 EKs4VLlE39mii6pG12TJ1NjeyCv9vje0I64wtexLpUrozbiZ07z+sDcY8DNuFx0e9H
+	 RKPT/DXqqc9f2IHsymkR/kWJq1L9uriLoVILEXVBRw162F/Sm86OMkHbhe+ruZwnFq
+	 kDB+ARKOuczmg==
+Date: Fri, 26 Jan 2024 09:10:25 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: akpm@linux-foundation.org, masahiroy@kernel.org, nicolas@fjasle.eu,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	catalin.marinas@arm.com, will@kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 05/11] arm64: Kconfig: Clean up tautological LLVM version
+ checks
+Message-ID: <20240126161025.GA3265550@dev-arch.thelio-3990X>
+References: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
+ <20240125-bump-min-llvm-ver-to-13-0-1-v1-5-f5ff9bda41c5@kernel.org>
+ <ZbOsvhDB-6LMVACP@FVFF77S0Q05N>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,26 +48,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202401261628.dWEtdXLE-lkp@intel.com>
+In-Reply-To: <ZbOsvhDB-6LMVACP@FVFF77S0Q05N>
 
-On (24/01/26 16:47), kernel test robot wrote:
-> tree:   git://linuxtv.org/sailus/media_tree.git master
-> head:   f76be7216c3df5f563353bd7a6aaf5076b118943
-> commit: f76be7216c3df5f563353bd7a6aaf5076b118943 [18/18] media: ov08x40: Reduce start streaming time
-> config: i386-randconfig-003-20240126 (https://download.01.org/0day-ci/archive/20240126/202401261628.dWEtdXLE-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261628.dWEtdXLE-lkp@intel.com/reproduce)
+On Fri, Jan 26, 2024 at 12:59:55PM +0000, Mark Rutland wrote:
+> On Thu, Jan 25, 2024 at 03:55:11PM -0700, Nathan Chancellor wrote:
+> > Now that the minimum supported version of LLVM for building the kernel
+> > has been bumped to 13.0.1, several conditions become tautologies, as
+> > they will always be true because the build will fail during the
+> > configuration stage for older LLVM versions. Drop them, as they are
+> > unnecessary.
+> > 
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> > Cc: catalin.marinas@arm.com
+> > Cc: will@kernel.org
+> > Cc: mark.rutland@arm.com
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > ---
+> >  arch/arm64/Kconfig | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 5a8acca4dbf4..cb34e7d780c0 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -383,7 +383,7 @@ config BUILTIN_RETURN_ADDRESS_STRIPS_PAC
+> >  	bool
+> >  	# Clang's __builtin_return_adddress() strips the PAC since 12.0.0
+> >  	# https://github.com/llvm/llvm-project/commit/2a96f47c5ffca84cd774ad402cacd137f4bf45e2
+> > -	default y if CC_IS_CLANG && (CLANG_VERSION >= 120000)
+> > +	default y if CC_IS_CLANG
+> >  	# GCC's __builtin_return_address() strips the PAC since 11.1.0,
+> >  	# and this was backported to 10.2.0, 9.4.0, 8.5.0, but not earlier
+> >  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94891
+> > @@ -1387,7 +1387,6 @@ choice
+> >  
+> >  config CPU_BIG_ENDIAN
+> >  	bool "Build big-endian kernel"
+> > -	depends on !LD_IS_LLD || LLD_VERSION >= 130000
+> >  	# https://github.com/llvm/llvm-project/commit/1379b150991f70a5782e9a143c2ba5308da1161c
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202401261628.dWEtdXLE-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/media/i2c/ov08x40.c:1783:23: error: no member named 'exposure_shift' in 'struct ov08x40_mode'
->     1783 |         if (ov08x->cur_mode->exposure_shift == 1) {
->          |             ~~~~~~~~~~~~~~~  ^
->    1 error generated.
+> We can delete the URL here, since that was just to describe why this depended
+> upon LLVM 13+; it's weird for it to sit here on its own.
 
-This CL depends on https://patchwork.kernel.org/patch/13426393
+I think this is the URL for the fix for the problem brought up by
+commit 146a15b87335 ("arm64: Restrict CPU_BIG_ENDIAN to GNU as or LLVM
+IAS 15.x or newer"), so I think it should stay? It does not look like I
+ever added a link or context for the LLD line, I definitely should have.
+
+> The URL above for __builtin_return_address() can stay or go; it may as well
+> stay since we have the comment aboout LLvm 12+ above it.
+
+That's the conclusion I came to as well.
+
+Thanks a lot for taking a look!
+
+Cheers,
+Nathan
+
+> With that:
+> 
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
+> 
+> Mark.
+> 
+> >  	depends on AS_IS_GNU || AS_VERSION >= 150000
+> >  	help
+> > @@ -2018,8 +2017,6 @@ config ARM64_BTI_KERNEL
+> >  	depends on !CC_IS_GCC || GCC_VERSION >= 100100
+> >  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
+> >  	depends on !CC_IS_GCC
+> > -	# https://github.com/llvm/llvm-project/commit/a88c722e687e6780dcd6a58718350dc76fcc4cc9
+> > -	depends on !CC_IS_CLANG || CLANG_VERSION >= 120000
+> >  	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_ARGS)
+> >  	help
+> >  	  Build the kernel with Branch Target Identification annotations
+> > 
+> > -- 
+> > 2.43.0
+> > 
+> 
