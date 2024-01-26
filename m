@@ -1,99 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1202904;
-	Fri, 26 Jan 2024 10:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E02B134AF;
+	Fri, 26 Jan 2024 11:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706265778; cv=none; b=A2/u5pXZJFyVQy8QY6L3PnG8EJJqw3rQFKJyg8o7Tqcxd1Da8vQd/MPWslj+ImOPzk8CmiGeXM5Iubnq1gBEIa9zpkzAm71A1T5ZEeto4iW3G+kLKHm4N4iRBliUBucuwHEsFFduHvchJMYm2WT9vrLfC253dx/zZykiziobMs4=
+	t=1706270241; cv=none; b=QNl+N+Nr5tDMJfnrUWtpX1BYzzE/Qmx+gLC3kWgPhCF8igh+vKCI72qH8avYAXCqjfBEUuXQzXLRP11ZfGOjp7l/QUlPBZsI/qtxHVfOtlsiZnKhiiQdgztdGTqdQFEutbHO0eQ6qWBM4WlPXWtiRzypsirPOWrw1SxSZzvQ3fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706265778; c=relaxed/simple;
-	bh=iTRmVcaQdapINCCxgbykdtcbm7oTAo3IWNoWd+USyYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=g7cpBAwefGsA43KZ/kq3CN8Gx7TT5muZ8Sh6j1lyQh1iPazC2o/dgpPb7Mn6P0TY2co4YbL3FvhuttKaMVyVAepL7fmzvZ9+Vycem7HBOp/ikg2eioBv7tch2ti3/A2+UzOm7N0ih/Rjg9hOwTwt4v2IA8BbqBtWx2aNbUOvHng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mMMn8Msh; arc=none smtp.client-ip=134.134.136.20
+	s=arc-20240116; t=1706270241; c=relaxed/simple;
+	bh=tN3dkWpIc3gME9QQTNhlZjc9wz+9nnvN5lcfplh8yV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbScXEXx4TE0MGuQH2OeATlrKK9hD+oCGn6+9PUPds+K2bAaARBCUtO8HOVaEiG18BPPwr3I0YxLilEzXnCEGWB/52iUz3VWUiT5sx3n/Vji0LibBuBWxnYhPRUWObYg+YsFcQ1j1hjtR48/3rQhkhoQH2TzfGAGf9uTemYVK1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LFjWPSH5; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mMMn8Msh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LFjWPSH5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706265776; x=1737801776;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iTRmVcaQdapINCCxgbykdtcbm7oTAo3IWNoWd+USyYg=;
-  b=mMMn8MshI99erTGTmZH6T0JkBVNHH3M5oE9mE9aTGN6RM2BzOGr4IjB4
-   jyn3SItDDqx60R5FqTFzHBH5ESYQGythinBR7b96L4zuFhDO8ObOPZYGF
-   QyKPZi6w/kxzeJ/JoVXf3yagB0ZyD84sDkCAUQN+/y74/AVrwY2vF0IvB
-   hVzeNFj9TBcBLIx4Ky2/hvvz6GKf5DcrsjFjWzWVTp6tZB8Rh8c02qliW
-   AGAaxdCjIlpWRHaQl3xUdGz0fpyfth62GDmMbWL3vzAl6udewnL7hETVw
-   XcNh0jfCZfWH/BAPCUCUXEqCraZzmt8of/xPKPXEse6MOi77RnR0sRDZF
+  t=1706270239; x=1737806239;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=tN3dkWpIc3gME9QQTNhlZjc9wz+9nnvN5lcfplh8yV8=;
+  b=LFjWPSH5EnLAJLph/YxhjeTKHLuLsQUt9amaxImTlLxylyUco1/2awkZ
+   OpgoKAiQBeBO67eOpJnXWEqC+24SLqnFEdMT21ijPm14wNiLIltStEgvu
+   auBKz3SkBTtHvH+ljjMbWBqRPue5zbe5cYSFcTKr8lM3nN5j6pnvYRpiy
+   xLZPcdm4dho6IkbzR580Yih1hlFJsycFWkbien29CVFHQiCaqsohSA3Ry
+   540rFnJELVpPs+w/LuGSMQUo65P6BPN+Zisy63ST3e4yN3s9fizFHfLhH
+   AZgHoI3QswtPLDlejnKzW+Jw/fN2kRXrF0uVo9ip6LLEcK7u9pv/MbKHS
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="392871037"
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="9131835"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="392871037"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 02:42:55 -0800
+   d="scan'208";a="9131835"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 03:57:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="787062630"
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="930348517"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="787062630"
+   d="scan'208";a="930348517"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2024 02:42:54 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 26 Jan 2024 03:57:16 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rTJfg-0000w2-0P;
-	Fri, 26 Jan 2024 10:42:52 +0000
-Date: Fri, 26 Jan 2024 18:42:37 +0800
+	id 1rTKpe-0000zs-0c;
+	Fri, 26 Jan 2024 11:57:14 +0000
+Date: Fri, 26 Jan 2024 19:56:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To: Andrew Davis <afd@ti.com>, Sebastian Reichel <sre@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sebastian Reichel <sre@kernel.org>
-Subject: [sre-misc:rk3588 33/46] ld.lld: error: undefined symbol:
- devm_clk_register
-Message-ID: <202401261842.E4ci98Jz-lkp@intel.com>
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH 08/21] power: supply: max77693: Use
+ devm_power_supply_register() helper
+Message-ID: <202401261917.tA05PFDO-lkp@intel.com>
+References: <20240123163653.384385-9-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240123163653.384385-9-afd@ti.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git rk3588
-head:   ccfac401eae6ce8187bbb09d1674c26f51d055f4
-commit: fd161b846e32fb6702d8bea93b39f768aeb6c576 [33/46] [WIP] drm/rockchip: vop2: Improve display modes handling on rk3588
-config: i386-buildonly-randconfig-002-20240126 (https://download.01.org/0day-ci/archive/20240126/202401261842.E4ci98Jz-lkp@intel.com/config)
+Hi Andrew,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on linus/master v6.8-rc1 next-20240125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/power-supply-da9030-Use-devm_power_supply_register-helper/20240124-004253
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20240123163653.384385-9-afd%40ti.com
+patch subject: [PATCH 08/21] power: supply: max77693: Use devm_power_supply_register() helper
+config: i386-buildonly-randconfig-006-20240126 (https://download.01.org/0day-ci/archive/20240126/202401261917.tA05PFDO-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261842.E4ci98Jz-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261917.tA05PFDO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401261842.E4ci98Jz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401261917.tA05PFDO-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: devm_clk_register
-   >>> referenced by rockchip_drm_vop2.c
-   >>>               drivers/gpu/drm/rockchip/rockchip_drm_vop2.o:(vop2_clk_init) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: clk_hw_get_name
-   >>> referenced by rockchip_drm_vop2.c
-   >>>               drivers/gpu/drm/rockchip/rockchip_drm_vop2.o:(vop2_crtc_atomic_enable) in archive vmlinux.a
-   >>> referenced by rockchip_drm_vop2.c
-   >>>               drivers/gpu/drm/rockchip/rockchip_drm_vop2.o:(vop2_crtc_atomic_enable) in archive vmlinux.a
-   >>> referenced by rockchip_drm_vop2.c
-   >>>               drivers/gpu/drm/rockchip/rockchip_drm_vop2.o:(vop2_crtc_atomic_enable) in archive vmlinux.a
-   >>> referenced 5 more times
---
->> ld.lld: error: undefined symbol: clk_hw_get_flags
-   >>> referenced by rockchip_drm_vop2.c
-   >>>               drivers/gpu/drm/rockchip/rockchip_drm_vop2.o:(vop2_clk_div_round_rate) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __clk_mux_determine_rate
-   >>> referenced by rockchip_drm_vop2.c
-   >>>               drivers/gpu/drm/rockchip/rockchip_drm_vop2.o:(vop2_clk_mux_determine_rate) in archive vmlinux.a
+>> drivers/power/supply/max77693_charger.c:733:27: warning: unused variable 'chg' [-Wunused-variable]
+     733 |         struct max77693_charger *chg = platform_get_drvdata(pdev);
+         |                                  ^~~
+   1 warning generated.
+
+
+vim +/chg +733 drivers/power/supply/max77693_charger.c
+
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  730  
+1d138270d2963b drivers/power/supply/max77693_charger.c Uwe Kleine-König    2023-09-18  731  static void max77693_charger_remove(struct platform_device *pdev)
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  732  {
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20 @733  	struct max77693_charger *chg = platform_get_drvdata(pdev);
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  734  
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  735  	device_remove_file(&pdev->dev, &dev_attr_top_off_timer);
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  736  	device_remove_file(&pdev->dev, &dev_attr_top_off_threshold_current);
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  737  	device_remove_file(&pdev->dev, &dev_attr_fast_charge_timer);
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  738  }
+87c2d9067893cd drivers/power/max77693_charger.c        Krzysztof Kozlowski 2015-01-20  739  
 
 -- 
 0-DAY CI Kernel Test Service
