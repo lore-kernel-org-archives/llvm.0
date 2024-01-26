@@ -1,61 +1,36 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF741B7E5;
-	Fri, 26 Jan 2024 12:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BDC71B809;
+	Fri, 26 Jan 2024 13:00:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706272163; cv=none; b=p8ofmWgUN2TLJmBd2CxCo8lYKac1SMgolNxi1WfhIifio5k0LGQVvTThDclRzDSZ0yzypJzjKI/zaDdWOW4JhkPHgjFhSjve55eu+crt4rRQ9uW9HG1Qrw2Bux0Ve0FZKmB10DahY6+xTNE9bwpaKh3dbw4W2HssGGTy6of377k=
+	t=1706274018; cv=none; b=IRb9gbglJAzumlyvuf7DdyxW/+xFCyKUq2haWZ3Lpq85eDd8X2M4VGGMs0UHvfRKXVjJBvDIwrFQDcgUqaSG+3kNUJdr8HRye5NZC2PRTmR63zOM9KRHKV1z/jRjCM0SBeFSj7bWAapxPQSiNPtnKUydAbNVG1rgaD+Z49/7hF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706272163; c=relaxed/simple;
-	bh=m34am/tbomi6cgCuIDffvsmNZlwPxjAWYsFaQ9DxZl8=;
+	s=arc-20240116; t=1706274018; c=relaxed/simple;
+	bh=qP1uFdpRw1c5ef5F7S+gJtgy5/emH1e2Mw5YV7Iv6wE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Al//pIHfv/KgnXdPqNh2Ow/EF3ptMw840Mgdqblw7VfdrHH8FQDxvecIWLyNVXdoDryI6cY0JSMuBimVIzPFOxHxH+RRCgN8YGP31JhRIX2looa4Rkj3HUGoNffkROiIGsPgIqTnkZ8h44H9FTN9mWaR4vJNx5R1T89xhwHUysI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YDMt9w6Z; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YDMt9w6Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706272160; x=1737808160;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m34am/tbomi6cgCuIDffvsmNZlwPxjAWYsFaQ9DxZl8=;
-  b=YDMt9w6ZnqXEic/9gmDNeYYXQQ2iu2C/kuYUns1kESIO+EtzVqz3Qjs4
-   fy8h2zZ3ecDWxdsULDqGUVLZxSqHi8zorjILIzKU4Yzf2E9+szuDIca0T
-   L4J/nNu2KW+xuBnq1zLF9yGCnQe8Uv6FgKbrRplJDToEdCoO5pEaTVuuM
-   ZwNHaUT5dPG5DX2UCNfraCjP+mYuctvSmdmVN5SgguaovBfBknCJ/ytQJ
-   R5RqOf7QkNpTVkeWRRAcSsrv/TUKiYt/Md3tOYV2gw82G/8NLHFXrLZG9
-   3jqWCcxhTxoTVAxo00Kxjb7FT1FnHgA94KoHglN9+dmVZapaNmRRwMd00
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="9207972"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="9207972"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 04:29:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2732248"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 26 Jan 2024 04:29:17 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rTLKc-00011E-2y;
-	Fri, 26 Jan 2024 12:29:14 +0000
-Date: Fri, 26 Jan 2024 20:28:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Davis <afd@ti.com>, Sebastian Reichel <sre@kernel.org>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH 09/21] power: supply: max8925: Use
- devm_power_supply_register() helper
-Message-ID: <202401262006.hqYtlg6E-lkp@intel.com>
-References: <20240123163653.384385-10-afd@ti.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KhwQKWBojMhGzmYOiPPDHxWsk9Wn5RbelhUgqzZk4QsZXT+RlTZHVfwhqndEmvx0nax8oGTleZ27hO6cs9LXv1WtijgUWum+0lExqWVfDwzvZt3ryXZGa7xB2iGc4Sp7BTlBci1vmHDBHxM2Y5bdm2QH3xZvcS83w98VjWjaKAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E86F01FB;
+	Fri, 26 Jan 2024 05:00:59 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.47.163])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D79BF3F73F;
+	Fri, 26 Jan 2024 05:00:13 -0800 (PST)
+Date: Fri, 26 Jan 2024 12:59:55 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, masahiroy@kernel.org, nicolas@fjasle.eu,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	catalin.marinas@arm.com, will@kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 05/11] arm64: Kconfig: Clean up tautological LLVM version
+ checks
+Message-ID: <ZbOsvhDB-6LMVACP@FVFF77S0Q05N>
+References: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
+ <20240125-bump-min-llvm-ver-to-13-0-1-v1-5-f5ff9bda41c5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,96 +39,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240123163653.384385-10-afd@ti.com>
+In-Reply-To: <20240125-bump-min-llvm-ver-to-13-0-1-v1-5-f5ff9bda41c5@kernel.org>
 
-Hi Andrew,
+On Thu, Jan 25, 2024 at 03:55:11PM -0700, Nathan Chancellor wrote:
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 13.0.1, several conditions become tautologies, as
+> they will always be true because the build will fail during the
+> configuration stage for older LLVM versions. Drop them, as they are
+> unnecessary.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Cc: catalin.marinas@arm.com
+> Cc: will@kernel.org
+> Cc: mark.rutland@arm.com
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  arch/arm64/Kconfig | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 5a8acca4dbf4..cb34e7d780c0 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -383,7 +383,7 @@ config BUILTIN_RETURN_ADDRESS_STRIPS_PAC
+>  	bool
+>  	# Clang's __builtin_return_adddress() strips the PAC since 12.0.0
+>  	# https://github.com/llvm/llvm-project/commit/2a96f47c5ffca84cd774ad402cacd137f4bf45e2
+> -	default y if CC_IS_CLANG && (CLANG_VERSION >= 120000)
+> +	default y if CC_IS_CLANG
+>  	# GCC's __builtin_return_address() strips the PAC since 11.1.0,
+>  	# and this was backported to 10.2.0, 9.4.0, 8.5.0, but not earlier
+>  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94891
+> @@ -1387,7 +1387,6 @@ choice
+>  
+>  config CPU_BIG_ENDIAN
+>  	bool "Build big-endian kernel"
+> -	depends on !LD_IS_LLD || LLD_VERSION >= 130000
+>  	# https://github.com/llvm/llvm-project/commit/1379b150991f70a5782e9a143c2ba5308da1161c
 
-kernel test robot noticed the following build warnings:
+We can delete the URL here, since that was just to describe why this depended
+upon LLVM 13+; it's weird for it to sit here on its own.
 
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on linus/master v6.8-rc1 next-20240125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The URL above for __builtin_return_address() can stay or go; it may as well
+stay since we have the comment aboout LLvm 12+ above it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/power-supply-da9030-Use-devm_power_supply_register-helper/20240124-004253
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20240123163653.384385-10-afd%40ti.com
-patch subject: [PATCH 09/21] power: supply: max8925: Use devm_power_supply_register() helper
-config: i386-buildonly-randconfig-001-20240126 (https://download.01.org/0day-ci/archive/20240126/202401262006.hqYtlg6E-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401262006.hqYtlg6E-lkp@intel.com/reproduce)
+With that:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401262006.hqYtlg6E-lkp@intel.com/
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-All warnings (new ones prefixed by >>):
+Mark.
 
->> drivers/power/supply/max8925_power.c:510:6: warning: unused variable 'ret' [-Wunused-variable]
-     510 |         int ret;
-         |             ^~~
-   1 warning generated.
-
-
-vim +/ret +510 drivers/power/supply/max8925_power.c
-
-eba3b670a9166a drivers/power/max8925_power.c        Qing Xu             2012-11-19  503  
-c8afa6406e60ae drivers/power/max8925_power.c        Bill Pemberton      2012-11-19  504  static int max8925_power_probe(struct platform_device *pdev)
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  505  {
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  506  	struct max8925_chip *chip = dev_get_drvdata(pdev->dev.parent);
-2dc9215d7c94f7 drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  507  	struct power_supply_config psy_cfg = {}; /* Only for ac and usb */
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  508  	struct max8925_power_pdata *pdata = NULL;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  509  	struct max8925_power_info *info;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25 @510  	int ret;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  511  
-eba3b670a9166a drivers/power/max8925_power.c        Qing Xu             2012-11-19  512  	pdata = max8925_power_dt_init(pdev);
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  513  	if (!pdata) {
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  514  		dev_err(&pdev->dev, "platform data isn't assigned to "
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  515  			"power supply\n");
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  516  		return -EINVAL;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  517  	}
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  518  
-feeb3a92b1f4e4 drivers/power/max8925_power.c        Jingoo Han          2013-03-11  519  	info = devm_kzalloc(&pdev->dev, sizeof(struct max8925_power_info),
-feeb3a92b1f4e4 drivers/power/max8925_power.c        Jingoo Han          2013-03-11  520  				GFP_KERNEL);
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  521  	if (!info)
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  522  		return -ENOMEM;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  523  	info->chip = chip;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  524  	info->gpm = chip->i2c;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  525  	info->adc = chip->adc;
-2402ca5e300db0 drivers/power/max8925_power.c        Haojian Zhuang      2011-04-18  526  	platform_set_drvdata(pdev, info);
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  527  
-2dc9215d7c94f7 drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  528  	psy_cfg.supplied_to = pdata->supplied_to;
-2dc9215d7c94f7 drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  529  	psy_cfg.num_supplicants = pdata->num_supplicants;
-2dc9215d7c94f7 drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  530  
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  531  	info->ac = devm_power_supply_register(&pdev->dev, &ac_desc, &psy_cfg);
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  532  	if (IS_ERR(info->ac))
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  533  		return PTR_ERR(info->ac);
-297d716f6260cc drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  534  	info->ac->dev.parent = &pdev->dev;
-e7a5f6d55991fb drivers/power/max8925_power.c        Philip Rakity       2011-08-29  535  
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  536  	info->usb = devm_power_supply_register(&pdev->dev, &usb_desc, &psy_cfg);
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  537  	if (IS_ERR(info->usb))
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  538  		return PTR_ERR(info->usb);
-297d716f6260cc drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  539  	info->usb->dev.parent = &pdev->dev;
-297d716f6260cc drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  540  
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  541  	info->battery = devm_power_supply_register(&pdev->dev, &battery_desc, NULL);
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  542  	if (IS_ERR(info->battery))
-fec07f69a3e201 drivers/power/supply/max8925_power.c Andrew Davis        2024-01-23  543  		return PTR_ERR(info->battery);
-297d716f6260cc drivers/power/max8925_power.c        Krzysztof Kozlowski 2015-03-12  544  	info->battery->dev.parent = &pdev->dev;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  545  
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  546  	info->batt_detect = pdata->batt_detect;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  547  	info->topoff_threshold = pdata->topoff_threshold;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  548  	info->fast_charge = pdata->fast_charge;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  549  	info->set_charger = pdata->set_charger;
-92de378b739115 drivers/power/max8925_power.c        Philip Rakity       2011-11-25  550  	info->no_temp_support = pdata->no_temp_support;
-5ba1fa0ae288e9 drivers/power/max8925_power.c        Philip Rakity       2011-11-25  551  	info->no_insert_detect = pdata->no_insert_detect;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  552  
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  553  	max8925_init_charger(chip, info);
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  554  	return 0;
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  555  }
-28db38888b2a53 drivers/power/max8925_power.c        Haojian Zhuang      2010-01-25  556  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  	depends on AS_IS_GNU || AS_VERSION >= 150000
+>  	help
+> @@ -2018,8 +2017,6 @@ config ARM64_BTI_KERNEL
+>  	depends on !CC_IS_GCC || GCC_VERSION >= 100100
+>  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
+>  	depends on !CC_IS_GCC
+> -	# https://github.com/llvm/llvm-project/commit/a88c722e687e6780dcd6a58718350dc76fcc4cc9
+> -	depends on !CC_IS_CLANG || CLANG_VERSION >= 120000
+>  	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_ARGS)
+>  	help
+>  	  Build the kernel with Branch Target Identification annotations
+> 
+> -- 
+> 2.43.0
+> 
