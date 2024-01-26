@@ -1,197 +1,111 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17DE1EA74
-	for <llvm@lists.linux.dev>; Fri, 26 Jan 2024 17:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706289003; cv=fail; b=sP5ekJ594LV278h9J0uMsOow1PAp27LEGTO1XG5M1RtWgJdO6fdraAronD8zhL3HXGShWTTyo+M7F4ulZ2wY61uiDgFBNdW8gjnMXtdgPpwmExMTTL3SHZ00ThPNjWCirlYoKtH5dy6Zg1tM1hs4zIdKUDyByW0v02HrStAKhq8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706289003; c=relaxed/simple;
-	bh=akzzGuyJ2ambuPdIF461qRLgzBIefK6K1klbxI4gCLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=O+FbqF32UtqmTSiXQ0JaJ/Vu1Ws/tGyArWyL0hPzstbp07YhkwT8sdso8DI9Tdv1mIUW3YkCj8swPoRuGz8TibvziAHbFtAIkDhlZxzivS0NwAlP+GUtqVDdfDhe8P5KdmTFcM40J3VN5++rW7u47XQj5DzwLBcjlqD+gakNLeA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YZUgsIQj; arc=fail smtp.client-ip=40.107.244.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0725520313;
+	Fri, 26 Jan 2024 17:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706290032; cv=none; b=pTEjhHOVG5CqOONNDpBMIfyiXyyryjY34hoCjqGGNPTUV7JYAXV0OleFlvtX4w+D7nVt7MRUqVjUANbmhNUGQJid7bPAfp0cRak3dU2CZhggjZ4ZRGCG3wk/mD9hfYNBzv5CPwo9OmyOuOSl6XiL2zmA9L34hepfCBJJ1vBMfIE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706290032; c=relaxed/simple;
+	bh=ExosIx/Tv+HMtpYZXXx/Nr7K+HPt5okvEH3K8cRZO8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KBWMmtrvZcVu2wNkHUbRpMVKGgJxneZ9+cD9nUJayK6+W41j+bMurjURALXx679V1WpVvbm3iHchJKlZJYRlpCc3tk5aEeblT9mFaUHKI/fReVgtAHw7suah522aSBMg0INZPAOId9T57Y/QV4NewVMyD/EJKooYay9AiIX4hSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fgsaCKwE; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YZUgsIQj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nk+khtqUzE7vMKUZCfWQrRCwM6ia8q4DdW2EiB18aw0zc14SBNGPcbS9TWaAJnCB+HEu7wDgnAe/lppvGTWwR43XlTBO42crWB6DQMn6YVuypV7FYCDrn/55OkwXG5ZF8lvVG1SAZJPjLJItktGy6tlUEeYDORX6p8Rkc+oUPh2ucmqjIfV57Lyf2oV/UGqzhZAcoVZc4mdrdBE+2hat0HUpnFiCmFU2CEo9fzONTfL7iBNXXM9s9eYCEQFXC6YMKhwnh5RlfFms9wgbf8SWlr5rDGdWE6FbvpAEzdPDSBdBx5FSuEOUEluR/1Av0qXCIGrXQyla4FEggezK4NNbmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B4TQuGh8mAUa4VzaUM0TVZf5bmjFQqFYYTpbN6KiQwg=;
- b=GeeTW9r5NljfaM3p9ElWh/5oCEAJ8xb4WlXIhmExMMHCCI3PFY4N4rQ17QImYEDNUQo9IdKJ8ERy5tLCuD/HtxNCjy9fb2Vaka8lpXK0QLcQ5JWNshJg25j/UHfc5JeReXy6bxQvz8FH1L6sWfmAsEEjBkBLkkhP47BakgZ9wMWA+jy0A6GjFsLyy392bt9eWyrXHOmb2Ww1HRuG0R/e5JnHud2xI1f50nK9aC2qzhDkEA4HsIQdHQjlSAA+7JDDq/FbZJKqkyFfokjuUsVi8PC/vEOTtHc2dMx+YWItsw/AIWYtmZ+APpuDzXL2TsBxckHb6kXxOqCGyqdDmz/QJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B4TQuGh8mAUa4VzaUM0TVZf5bmjFQqFYYTpbN6KiQwg=;
- b=YZUgsIQjUj72MDnsjjOYpqA8yVS9uuigH/UeIBlUc+KrRXLa8mLwDW+pAI7Cai1OzpmK8HQTHCbiP7pi2oF0/Zk9GBBlBnc7S+LmvGRJYdC8o2X/69aYIrU4P54eEN6NHIziN/aLYlvw4HI+P/k4Ddg/cocL+rqxpKB8IzNt5ag+uvUP/cQGEcJx6aXtxDst/dRPKxVg26i53K2AX3BRdFzVG/o9coNgmDGZZPbpcbiUQYbtGRle3zEU82qzopfduQcKYgrRIRw6nAu7sniFPNT3Ke82y73YDmssEN6Cah8cvWEGrZKYMlU1bb3Q+DrWHixQeA0tNeQttyjC5vQewg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ2PR12MB7991.namprd12.prod.outlook.com (2603:10b6:a03:4d1::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.24; Fri, 26 Jan
- 2024 17:09:58 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7228.022; Fri, 26 Jan 2024
- 17:09:57 +0000
-Date: Fri, 26 Jan 2024 13:09:56 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Leon Romanovsky <leon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH rdma-next 1/2] arm64/io: add memcpy_toio_64
-Message-ID: <20240126170956.GW1455070@nvidia.com>
-References: <ZafWIsrjvk--JdDn@FVFF77S0Q05N.cambridge.arm.com>
- <ZbAj34vdVuMrmdFD@arm.com>
- <20240124012723.GD1455070@nvidia.com>
- <86ede787d7.wl-maz@kernel.org>
- <20240124130638.GE1455070@nvidia.com>
- <86bk9a97rt.wl-maz@kernel.org>
- <20240124155225.GG1455070@nvidia.com>
- <ZbFO6ZXq99AWerlQ@arm.com>
- <20240125012924.GL1455070@nvidia.com>
- <ZbPalOaGu4XjMb0R@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbPalOaGu4XjMb0R@arm.com>
-X-ClientProxiedBy: SN6PR01CA0002.prod.exchangelabs.com (2603:10b6:805:b6::15)
- To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fgsaCKwE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706290030; x=1737826030;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ExosIx/Tv+HMtpYZXXx/Nr7K+HPt5okvEH3K8cRZO8M=;
+  b=fgsaCKwEBtdt4hmubdpzvo99h8ndm7j0lT2SER30rNvFK6YN5qWL4HRw
+   CdBIVkXe//2Y9ADbuJe6YMGBuCKBaVPpw/alzLTGNA0LolIK96Maupk2B
+   pbdgsya/v3T08pgiSzs/3BR2JTyfZBfwDdKApK3Jk6uXxGrSgKZ3a8ggi
+   6vMMVXfZZsLPM4h5yOyLV5JB4hXBqo8FWLZXX+euMuz6BrLym7YSMA+yS
+   RVeLhmeceHxV+o5VZkqq4M581Gx6ifhXXgbCPgMj80x4opTCA/grjL44G
+   d95B2e7JpncSM9ymuG27HIDtMYFHOd0I5pI3gk5ZHQwIOopRnQPdTsUzj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="23989053"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="23989053"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 09:27:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="787172240"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="787172240"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2024 09:27:04 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rTPyo-0001Ew-1L;
+	Fri, 26 Jan 2024 17:27:02 +0000
+Date: Sat, 27 Jan 2024 01:26:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	linux@roeck-us.net, wim@linux-watchdog.org, conor+dt@kernel.org,
+	alim.akhtar@samsung.com, jaewon02.kim@samsung.com,
+	chanho61.park@samsung.com, semen.protsenko@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel-team@android.com, peter.griffin@linaro.org,
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+	saravanak@google.com, willmcvicker@google.com, linux-fsd@tesla.com,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 2/9] soc: samsung: exynos-pmu: Add
+ exynos_pmu_update/read/write APIs and SoC quirks
+Message-ID: <202401270110.YlAvkNYL-lkp@intel.com>
+References: <20240122225710.1952066-3-peter.griffin@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ2PR12MB7991:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f2e6b8c-fc5e-41b6-734c-08dc1e919f9f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	SrnNBRaMehhqnVu7zo2y+fXEImYtnRKaFyvnpKcoUFKmkbSB+PD+cfsXOjWUUEfABxITFZEt3zyevbXOXGLvQk9/rX6lQvPtvlolGOBDkDm5JWn2YL5wI7GqO1EMr3TFfall0eS3RpdyGkj7w2wEPs1XY6DvlCaoq3H1u55umgXRk/3mqU+e2j+gYkkUJ5szCKLFSyl/SDauociItJZ7/48nfbKgQfgxs8+AJ59cdLRzV0zOYwhdZoyLWvij6hrB8ZLGqeKf+ah7ajWiWFjcac/SNcLbLDPeh445tRolEVec94y2yywA03zEZbRDa64fq7oVR7kerGmjGiNo7d/Bfjc/VoZ8AFkQugNYN08/H2ayNdD4du9F7JcISvPWnO0zl1dl+HBzSLqN2c+ntnl5moMIpu2pvdBylOgb9WzUwT6q9NfRDq79RcQ4M6gl/Mbj0WF0uCIcMc1ZWwXXzdePYMkVwSUCGsum5pHWzZ18+CnosMiuEhfyxddkpPU3P6rTQFpnLXDIuX0fCgT8cOZNVP4spHBvd89soFuIXCdzQH+SCXvLESo8MIDSWaaCUhsh
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(366004)(346002)(396003)(376002)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(54906003)(7416002)(5660300002)(6916009)(66476007)(33656002)(36756003)(8936002)(2906002)(66946007)(316002)(4326008)(8676002)(66556008)(86362001)(41300700001)(478600001)(6486002)(1076003)(83380400001)(6512007)(38100700002)(2616005)(6506007)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?I9dLNIlFSz3nslOq8mr2wEHQy4mZoXcPEk3dRVv5FcysUt5eCl+VzBLNlrq+?=
- =?us-ascii?Q?dbU/OdKse2jHX8Ue4uev0eaDGAA5n1FRI9rCjoJNFT0LxDaEYKIHHQjAnYCp?=
- =?us-ascii?Q?hxlrHdVlCM80RoNHpVnKpvFgs735E+AQQ6YzoZigWGTkdLqWmhwQR99YOk3z?=
- =?us-ascii?Q?9b3LH8PKfXAj4R8S2Y6zTxQtn/YBf4Ml8CnUv8XBaseMFr0N3v7iklBF0oZ6?=
- =?us-ascii?Q?AGvSpUq7fGuS24aXGbPStAk55b8Kqo2jOzpQUnpFdfxUia2CLZXQjfMcH/RZ?=
- =?us-ascii?Q?kzMKkiaOpD820+rBm3LqB4R21EcBu+fVcPo4bfCZsi/pxd6a5+S8YO4PTPmE?=
- =?us-ascii?Q?GepW4vYyRS6mSQKhvY0Sob8Am2afB+ci2ePusxxiIdlVmgFsb8g91aVRjops?=
- =?us-ascii?Q?noi5NRCAg9bz8ABCoinYnharYLIV7iWd1zb0go6Te6RJiJ9EsUFq5cmJxdlb?=
- =?us-ascii?Q?gIfUCklsD+WFTEOycm8zoirLPx6kDuvCG0uKt4Z0iiUbOnSK0YGvhxM6h52T?=
- =?us-ascii?Q?sAdVTtVfVi/K4fsKD9Abp9w2C6s8nKMzoeaKSVbBEgCVZ5EXQgFgIWe3xJbd?=
- =?us-ascii?Q?uzgksCn7hgT7HBJLhiK8139EDwwg4yhxdMjJSAMn936RtowWEAVjjkHuU1g5?=
- =?us-ascii?Q?qgyJSDQfpputTQ9ZjKRCBsV/PVUBJnaq4BHn5zT3TcXIh1N6vtYJ7yqP6E8L?=
- =?us-ascii?Q?axnn0bL09i47eQS3Tnj5wtZ4DpDdlmvwrw2xiFlfAeEsDdvVMBUT+xW92mTY?=
- =?us-ascii?Q?ElznDoGqOZFQT0nzNZRuXHq94acMRd0ZtPNom8KExh1yTZNzLYTmP9QEVaas?=
- =?us-ascii?Q?jSYnmddpiR1e/kkSbDOFd5PKnwLXJMBeusRUZP0xX1Ug5ScMGPsen4ui/DR7?=
- =?us-ascii?Q?357IC1OE54jv178x9ZaFDNZKL+EqQ/KeJIAdCPo4Se4bsnk3Oybs+PATezsr?=
- =?us-ascii?Q?A3RlyhDwqFCXw1/hyPGsuyDU/5ZdIiKZq4pDoHVurFsf9g4T5+UqNL9g5Ws3?=
- =?us-ascii?Q?piW5X3v4QwNDTYudzxSa13JnVID2X23cHZ5SFzBHG9Ssc0N3FAMPN7fQP3LQ?=
- =?us-ascii?Q?vFViVaMoTYWhzCvmrBK1cpQWAqlEhSzHBQkgu/v+YocpMukKEPYd6bbDWztl?=
- =?us-ascii?Q?D+C/xvpL9Lze2B0F64I87FVkTfjDXne0byWYfL3ny/S70cJ004uyPd1jJXz9?=
- =?us-ascii?Q?1lFED04q/TXqi3zNgcCRBy7ueEIp9FnJJev0JxvuNNfKPk/vDbBxcL2aHQww?=
- =?us-ascii?Q?uyMX9RJUqs7f5hzaSgeCiMQoK5kvcmMCslS3cnxaelmnxeJnXRv6mPg7p708?=
- =?us-ascii?Q?AP9M2cl3/KLlPvLoDe2r8dO3Me0EmyC0zQaCd+nSeYo9JW39Ao0F4HorWUHw?=
- =?us-ascii?Q?L4/0MeJlAegIUWBq+l9shzoopMGTqpI7VEleJ11zkwpFCFEMjPHC7wvAZh0r?=
- =?us-ascii?Q?VfnUdZpuLZ1clnporxsJQVcxM5x/qqymH0Mnea5Pm3kyWhn1lZ1riMKkQmB3?=
- =?us-ascii?Q?BKj+EUSznldhsKQ3P5dmjsHVJvuf75C/dAh6+aPCw1gcCirc9E6bqZNfGeBH?=
- =?us-ascii?Q?1VIjC2SlB7PmOxqvlBpfY36dvIclZgD9sFsaYVCJ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f2e6b8c-fc5e-41b6-734c-08dc1e919f9f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 17:09:57.8480
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jwP8OqMq51fZdV8g7qfcDBwrPO8ZoaOvsXtYO4jGEIM9iZRE4dnJEksxOH5GKP95
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7991
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240122225710.1952066-3-peter.griffin@linaro.org>
 
-On Fri, Jan 26, 2024 at 04:15:16PM +0000, Catalin Marinas wrote:
-> > It looks to me like qemu turns on the KVM_CAP_ARM_NISV_TO_USER and
-> > then when it gets a NISV it always converts it to a data abort to the
-> > guest. See kvm_arm_handle_dabt_nisv() in qemu. So it is just a
-> > correctness issue, not a 'VM userspace can crash the VMM' security
-> > problem.
-> 
-> The VMM wasn't my concern but rather a guest getting killed or not
-> functioning correctly (user app killed).
+Hi Peter,
 
-Right, hopefully it is the latter.
+kernel test robot noticed the following build errors:
 
-> > Thus, IMHO, doing IO emulation for VFIO that doesn't support all the
-> > instructions actual existing SW uses to do IO is hard to justify. We
-> > are already on a slow path that only exists for technical correctness,
-> > it should be perfect. It is perfect on x86 because x86 KVM does SW
-> > instruction decode and emulation. ARM could too, but doesn't.
-> 
-> It could fall back to instruction decode, either in KVM or the VMM
-> (strong preference for the latter), but I'd only do this if it's
-> justified.
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on robh/for-next soc/for-next linus/master v6.8-rc1 next-20240125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-From a performance perspective, if the VMM is doing pure emulation and
-wants to memcpy lots of data to emulated vMMIO I'd look at it like this:
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-watchdog-samsung-wdt-deprecate-samsung-syscon-phandle/20240123-070052
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240122225710.1952066-3-peter.griffin%40linaro.org
+patch subject: [PATCH 2/9] soc: samsung: exynos-pmu: Add exynos_pmu_update/read/write APIs and SoC quirks
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240127/202401270110.YlAvkNYL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401270110.YlAvkNYL-lkp@intel.com/reproduce)
 
-  1xST4 transfers 512 bits and requires one vmexit and one
-  instruction parse.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401270110.YlAvkNYL-lkp@intel.com/
 
-  4xSTP is four instruction parses and four vmexits
+All errors (new ones prefixed by >>):
 
-  8xSTR is no instruction parses and eight vmexits
+>> ld.lld: error: undefined symbol: pmu_base_addr
+   >>> referenced by exynos.c
+   >>>               arch/arm/mach-exynos/exynos.o:(exynos_set_delayed_reset_assertion) in archive vmlinux.a
+   >>> referenced by exynos.c
+   >>>               arch/arm/mach-exynos/exynos.o:(exynos_set_delayed_reset_assertion) in archive vmlinux.a
+   >>> referenced by exynos.c
+   >>>               arch/arm/mach-exynos/exynos.o:(exynos_init_irq) in archive vmlinux.a
+   >>> referenced 75 more times
 
-The instruction parse is not pure overhead, it saves on vmexit's which
-are expensive things (at least on x86). I don't have a sense how this
-stacks up on arm, but I wouldn't jump to it being horribly
-non-performing.
-
-> I don't think the issue here is VFIO, I doubt we'd ever see emulation
-> for hardware like mlx5.
-
-Sadly no :(
-
-It can happen in non-production corner cases due to the VFIO MSI emulation.
-
-There is a qemu bug prior to 8.something that causes it to happen at
-random, with VFIO, rarely.
-
-There is a non-prodcution debug mode in qemu where all VFIO MMIO is
-trapped. The qemu expectation is that this is functionally identical
-to non-trapping. (The E in qemu is emulation after all, kind of a core
-reason it exists)
-
-Finally, we do actually have an internal simulation tool that does
-software emulate mlx5 HW without VFIO.
-
-> But we are changing generic kernel functions
-> like memcpy_toio/__iowrite64_copy() that end up being used in other
-> drivers (e.g. USB, UART) for emulated devices. 
-
-I didn't touch memcpy_toio, I think given this problem we shouldn't
-touch it. I only touched __iowriteXX_copy() which did not look like it
-is being used in any drivers with emulation.
-
-Even if I got this wrong we can revert any impacted drivers to use
-memcpy_toio() instead.
-
-Jason
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
