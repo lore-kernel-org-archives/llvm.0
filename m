@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39C31C0F;
-	Fri, 26 Jan 2024 02:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E7FBA33;
+	Fri, 26 Jan 2024 05:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706234554; cv=none; b=KXshCThKQk6IY+WGYuo0DBtGpNSHm6cu+dnd2mhG8L0s3gDBcrIkOWhva+O5MIgRWwTG5IHldH3YtN0shOcFB/jTySGKXVADXyakqYhc9iPrdEgyMIKQCVfoJ61kh62yRF276Ldfy4EaeDbHxI/tO0aCGQHDN8rq+fvaHaPV4I4=
+	t=1706246802; cv=none; b=QIy5QUoi32ddLn7PskclHUqqHHNSep0jEx8u3sFYuiBVkWvVjkVHfcSwZfDH/WePg6lhsxXyWTq760E6LLeoH8gsrhg54/qrI+eIp9DlXBmtLOoTqNg1nbDiGDqcSgFQ3PUOiBKwmJ1uHXI/eAKQHWq0AMNsaBuQxGQ0J3LeexE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706234554; c=relaxed/simple;
-	bh=+Zdo0Izf+my/Kvw5W3qSfaE7Aob5TU032RmJ02/Ryes=;
+	s=arc-20240116; t=1706246802; c=relaxed/simple;
+	bh=T6pFkLTZJz7H/RFcbVN8xkONdim8Rlw6Nh+ztR2exnM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IMrBSOnLoPgNy9emRRoP8p+tTXQOU1o9NVEP8kNNxqrN7Mon24BfWcZp84fKsiI+3QHIJPd+5VveNVICMSZ55WCNpQC+36X/iT86IlHJVn3O64EgRdmxhioO9bSVC60GFRSg4ITP06C3rwF3KMXUvGqIEXT/Yku2BijupaEbzI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=madE+Ek9; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=puehjaBBDw2wOtZ2HWm9MJ82dCeR4GKX3cUny78MbYp/t8sKRIqi+04jrz3CPIIoTlq2cOaQElVUYccUWMrnV/Lzk1+mswNYxNP+zecjQUeqxuXs4abNb5WYX9JASUM9WRytPa56uf25Dbo1OyKqhpOjjb2aaeILrVCVU7eoMJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dG71fKTF; arc=none smtp.client-ip=192.55.52.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="madE+Ek9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dG71fKTF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706234552; x=1737770552;
+  t=1706246800; x=1737782800;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+Zdo0Izf+my/Kvw5W3qSfaE7Aob5TU032RmJ02/Ryes=;
-  b=madE+Ek95cTzGWVF9izO7GIGi7H3snlWWHYLi2GnCw1+yacYCS+ibBC5
-   P20URFL+OXVRwyXnncEAjcH1tbcPtiW7J+0NaTiHtRoN9TZOBDK4q9mRj
-   uxZx4UzgWAl0SQ4QrxePgp/x7Mr4PUOxhnZBzvywIc6pjJBJbi2BHi05o
-   lvJdWPXuBU7ZRdvubKB+YT9mvGccDP6ShVaIIxC0getk5p+dZL3/0LGgR
-   qj63FxugoVaboEDsRfiE90oeCwcx5pgdWv4UtR+9vShg8vqUgLcX9mlbg
-   AGgdNJ3COwmbgz2tTn0zTTMRv2MF2Z2sRo6Z9n4G5nsO/e8bTFV4AEcVP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="2204527"
+  bh=T6pFkLTZJz7H/RFcbVN8xkONdim8Rlw6Nh+ztR2exnM=;
+  b=dG71fKTF0Y9cqBJtz1HV0IIQhLt2tmdY/V/RSTPULJjUFsNUqDOwaTHB
+   3FbHl3DsiHt7EAJ48YOEakupnQ3RNSPH1zJtR/oRJLmor+hKhpB7u67u+
+   XqpW6Atwy43JZsdzg05rMmoPY0L3NpIy1NDuDlwZXoU1N41SpEb1TqXcm
+   edwWYavjmMgEvDKZuXhrsYsK5Xvdv5msGedyQXTuGA/FiHDDVTuCpWXf9
+   8eZbR6q4f4oPU9ai8AxGNDJ+Ep6Cqbn4YWw98DoNhj8hkwdKbYSYl8kuR
+   5+Xm4IAZqpFI6u57HpGtDrHaC+xcb8MN8zFLVcZw1dqPLYIgFuwqu27y6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="399556921"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2204527"
+   d="scan'208";a="399556921"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 18:02:31 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 21:26:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="960078317"
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="960113140"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="960078317"
+   d="scan'208";a="960113140"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2024 18:02:28 -0800
+  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2024 21:26:33 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rTBY1-0000aS-2j;
-	Fri, 26 Jan 2024 02:02:25 +0000
-Date: Fri, 26 Jan 2024 10:01:31 +0800
+	id 1rTEjX-0000is-0T;
+	Fri, 26 Jan 2024 05:26:31 +0000
+Date: Fri, 26 Jan 2024 13:25:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vincent Donnefort <vdonnefort@google.com>, rostedt@goodmis.org,
-	mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
+To: Bitao Hu <yaoma@linux.alibaba.com>, dianders@chromium.org,
+	akpm@linux-foundation.org, pmladek@suse.com, tglx@linutronix.de,
+	maz@kernel.org, liusong@linux.alibaba.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	mathieu.desnoyers@efficios.com, kernel-team@android.com,
-	Vincent Donnefort <vdonnefort@google.com>
-Subject: Re: [PATCH v12 3/6] tracing: Add snapshot refcount
-Message-ID: <202401260918.sn23MDek-lkp@intel.com>
-References: <20240123110757.3657908-4-vdonnefort@google.com>
+	linux-kernel@vger.kernel.org, Bitao Hu <yaoma@linux.alibaba.com>
+Subject: Re: [PATCH 3/3] watchdog/softlockup: add parameter to control the
+ reporting of time-consuming hardirq
+Message-ID: <202401261359.eaU4UnjQ-lkp@intel.com>
+References: <20240123121223.22318-4-yaoma@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,63 +63,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240123110757.3657908-4-vdonnefort@google.com>
+In-Reply-To: <20240123121223.22318-4-yaoma@linux.alibaba.com>
 
-Hi Vincent,
+Hi Bitao,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 4f1991a92cfe89096b2d1f5583a2e093bdd55c37]
+[auto build test WARNING on tip/irq/core]
+[also build test WARNING on akpm-mm/mm-everything linus/master v6.8-rc1 next-20240125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Donnefort/ring-buffer-Zero-ring-buffer-sub-buffers/20240123-191131
-base:   4f1991a92cfe89096b2d1f5583a2e093bdd55c37
-patch link:    https://lore.kernel.org/r/20240123110757.3657908-4-vdonnefort%40google.com
-patch subject: [PATCH v12 3/6] tracing: Add snapshot refcount
-config: i386-buildonly-randconfig-005-20240126 (https://download.01.org/0day-ci/archive/20240126/202401260918.sn23MDek-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bitao-Hu/watchdog-softlockup-low-overhead-detection-of-interrupt-storm/20240123-201509
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20240123121223.22318-4-yaoma%40linux.alibaba.com
+patch subject: [PATCH 3/3] watchdog/softlockup: add parameter to control the reporting of time-consuming hardirq
+config: i386-buildonly-randconfig-003-20240126 (https://download.01.org/0day-ci/archive/20240126/202401261359.eaU4UnjQ-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260918.sn23MDek-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401261359.eaU4UnjQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401260918.sn23MDek-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401261359.eaU4UnjQ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/trace/trace.c:6645:11: error: no member named 'use_max_tr' in 'struct tracer'
-    6645 |                         if (t->use_max_tr)
-         |                             ~  ^
->> kernel/trace/trace.c:6646:5: error: call to undeclared function 'tracing_disarm_snapshot_locked'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    6646 |                                 tracing_disarm_snapshot_locked(tr);
-         |                                 ^
-   kernel/trace/trace.c:6646:5: note: did you mean 'tracing_disarm_snapshot'?
-   kernel/trace/trace.h:1986:20: note: 'tracing_disarm_snapshot' declared here
-    1986 | static inline void tracing_disarm_snapshot(struct trace_array *tr) { }
-         |                    ^
-   2 errors generated.
+>> kernel/watchdog.c:1088:5: warning: no previous prototype for function 'proc_softlockup_irqtrace' [-Wmissing-prototypes]
+    1088 | int proc_softlockup_irqtrace(struct ctl_table *table, int write,
+         |     ^
+   kernel/watchdog.c:1088:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1088 | int proc_softlockup_irqtrace(struct ctl_table *table, int write,
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +6645 kernel/trace/trace.c
+vim +/proc_softlockup_irqtrace +1088 kernel/watchdog.c
 
-  6641	
-  6642		if (t->init) {
-  6643			ret = tracer_init(t, tr);
-  6644			if (ret) {
-> 6645				if (t->use_max_tr)
-> 6646					tracing_disarm_snapshot_locked(tr);
-  6647				goto out;
-  6648			}
-  6649		}
-  6650	
-  6651		tr->current_trace = t;
-  6652		tr->current_trace->enabled++;
-  6653		trace_branch_enable(tr);
-  6654	 out:
-  6655		mutex_unlock(&trace_types_lock);
-  6656	
-  6657		return ret;
-  6658	}
-  6659	
+  1084	
+  1085	/*
+  1086	 * /proc/sys/kernel/softlockup_irqtrace
+  1087	 */
+> 1088	int proc_softlockup_irqtrace(struct ctl_table *table, int write,
+  1089				 void *buffer, size_t *lenp, loff_t *ppos)
+  1090	{
+  1091		int err, old;
+  1092	
+  1093		mutex_lock(&watchdog_mutex);
+  1094	
+  1095		old = READ_ONCE(softlockup_irqtrace);
+  1096		err = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+  1097	
+  1098		if (!err && write && old != READ_ONCE(softlockup_irqtrace))
+  1099			proc_watchdog_update();
+  1100	
+  1101		mutex_unlock(&watchdog_mutex);
+  1102		return err;
+  1103	}
+  1104	
 
 -- 
 0-DAY CI Kernel Test Service
