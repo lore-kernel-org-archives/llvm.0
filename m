@@ -1,69 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20ADF199;
-	Sat, 27 Jan 2024 00:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BCD2912;
+	Sat, 27 Jan 2024 00:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706316769; cv=none; b=ZF7gzFgblBGpTekBfANqRiCyBie1WZDi016ck8cCOTEF7HVKid4QY7wHkd8PoD7RS2CYY5slcOFCPLnRd2kc2Cex7sSABUQprUaVIO5fvpCyK3tAxj4E+lNs12IghD/ghbnkw852jc5kvfZrezb27OxyUgjvC8r1IotOtqfzuU8=
+	t=1706316974; cv=none; b=kcYsrWmUleBDwi1BILGdHsdlmnEtM22PfgRYTPA+bAh2W4B+gocDlVSWDsQRSbVwOCCbUmzhIVlprkHXeESz/SQZrKH43bago65pz5HL05OU1AdiHdo6ZYCxRnPZk+XcEKrzjQ7OpzTN+3fMIJb7iEOdnFuj+vP/dTgJJn/pCik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706316769; c=relaxed/simple;
-	bh=RohiRduCZDhu1mva0s61yl4yuysjE3+49ErZTdVjkNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PuFmnjBxZzJFbwPoT0DhsEdIgCLOpGKE5Li6trGFhgmyfzUETzlBnQMIvIfpZj0zUxKW0qeRBb97h0aSFJAzo/mEaRxQPXc2iWKcnPU2X2Qd6Rnz/lxyk3uDbm3+1dN2F47QdQJh0bONcZvYQnxdrc25RZyEVCJtuVpbzRAWnzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZQnSWAFG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706316974; c=relaxed/simple;
+	bh=vVTjlwra7ffKDvKLusXBZk6XeHCyJPCfJKjgSIJdI10=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=BwZ/aPHCM5tYNmFRBVoJdELunsWkWxMAyquT+0HvZ9QNm3i1e35u76CtsD3MKc4R4JOEpXB7mGZ1BWTts69Q7XmvPJexe53SRqOlzsyhKSd8RgkxSVNBNeEIje1+cSS2SRMZYOPIIL9kTwOWDIJawShAdHwdtTGH/5lEsjYxQ9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=egrG2Ed9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZQnSWAFG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EE0C433F1;
-	Sat, 27 Jan 2024 00:52:48 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="egrG2Ed9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2054C433C7;
+	Sat, 27 Jan 2024 00:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706316768;
-	bh=RohiRduCZDhu1mva0s61yl4yuysjE3+49ErZTdVjkNU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZQnSWAFGeGWy7MU0zFIGG/icKSXF0E0aHOFilBQpFfYNfyiR67arTnxzW90DzCbO3
-	 Qs8LZ4R1gf7uuG+X/dXDRZg7Ou5206t6HAKwbjUS+b8Ng5v5NRVeDkOTb9iJaAp8UM
-	 pYylThzRaMV58pM3h625BBc6LxdIubDALLMIydR4=
-Date: Fri, 26 Jan 2024 16:52:47 -0800
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: sashal@kernel.org, stable@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 4.19] powerpc: Use always instead of always-y in for
- crtsavres.o
-Message-ID: <2024012640-macaroni-earlobe-bec5@gregkh>
-References: <20240126-4-19-fix-lib-powerpc-backport-v1-1-f0de224db66b@kernel.org>
+	s=korg; t=1706316974;
+	bh=vVTjlwra7ffKDvKLusXBZk6XeHCyJPCfJKjgSIJdI10=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:From;
+	b=egrG2Ed9YkET4ZZCspyiUL8MKiolNEPH5y2o2FRFswgg85H/GtBAu1WduRMW0jHFb
+	 P3vexsCcxP9aa6I30C6yBWLgCNFoQsqtlB5orCulJFfwhzgbBpzWh97aNsvkx7Vh/P
+	 EU4c3mFj1bhzqwVXp0r+c/l8BkxXqFX621UVKiek=
+Subject: Patch "powerpc: Use always instead of always-y in for crtsavres.o" has been added to the 4.19-stable tree
+To: gregkh@linuxfoundation.org,linuxppc-dev@lists.ozlabs.org,llvm@lists.linux.dev,nathan@kernel.org,sashal@kernel.org
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Fri, 26 Jan 2024 16:56:12 -0800
+In-Reply-To: <20240126-4-19-fix-lib-powerpc-backport-v1-1-f0de224db66b@kernel.org>
+Message-ID: <2024012612-correct-valid-8b57@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240126-4-19-fix-lib-powerpc-backport-v1-1-f0de224db66b@kernel.org>
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore
 
-On Fri, Jan 26, 2024 at 10:36:31AM -0700, Nathan Chancellor wrote:
-> This commit is for linux-4.19.y only, it has no direct upstream
-> equivalent.
-> 
-> Prior to commit 5f2fb52fac15 ("kbuild: rename hostprogs-y/always to
-> hostprogs/always-y"), always-y did not exist, making the backport of
-> mainline commit 1b1e38002648 ("powerpc: add crtsavres.o to always-y
-> instead of extra-y") to linux-4.19.y as commit b7b85ec5ec15 ("powerpc:
-> add crtsavres.o to always-y instead of extra-y") incorrect, breaking the
-> build with linkers that need crtsavres.o:
-> 
->   ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such file or directory
-> 
-> Backporting the aforementioned kbuild commit is not suitable for stable
-> due to its size and number of conflicts, so transform the always-y usage
-> to an equivalent form using always, which resolves the build issues.
-> 
-> Fixes: b7b85ec5ec15 ("powerpc: add crtsavres.o to always-y instead of extra-y")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
 
-Both now queued up, thanks!
+This is a note to let you know that I've just added the patch titled
 
-greg k-h
+    powerpc: Use always instead of always-y in for crtsavres.o
+
+to the 4.19-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+
+The filename of the patch is:
+     powerpc-use-always-instead-of-always-y-in-for-crtsavres.o.patch
+and it can be found in the queue-4.19 subdirectory.
+
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From nathan@kernel.org  Fri Jan 26 16:52:20 2024
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 26 Jan 2024 10:36:31 -0700
+Subject: powerpc: Use always instead of always-y in for crtsavres.o
+To: gregkh@linuxfoundation.org, sashal@kernel.org
+Cc: stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,  linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,  Nathan Chancellor <nathan@kernel.org>
+Message-ID: <20240126-4-19-fix-lib-powerpc-backport-v1-1-f0de224db66b@kernel.org>
+
+From: Nathan Chancellor <nathan@kernel.org>
+
+This commit is for linux-4.19.y only, it has no direct upstream
+equivalent.
+
+Prior to commit 5f2fb52fac15 ("kbuild: rename hostprogs-y/always to
+hostprogs/always-y"), always-y did not exist, making the backport of
+mainline commit 1b1e38002648 ("powerpc: add crtsavres.o to always-y
+instead of extra-y") to linux-4.19.y as commit b7b85ec5ec15 ("powerpc:
+add crtsavres.o to always-y instead of extra-y") incorrect, breaking the
+build with linkers that need crtsavres.o:
+
+  ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such file or directory
+
+Backporting the aforementioned kbuild commit is not suitable for stable
+due to its size and number of conflicts, so transform the always-y usage
+to an equivalent form using always, which resolves the build issues.
+
+Fixes: b7b85ec5ec15 ("powerpc: add crtsavres.o to always-y instead of extra-y")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/powerpc/lib/Makefile |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/arch/powerpc/lib/Makefile
++++ b/arch/powerpc/lib/Makefile
+@@ -21,8 +21,8 @@ obj-$(CONFIG_PPC32)	+= div64.o copy_32.o
+ # 64-bit linker creates .sfpr on demand for final link (vmlinux),
+ # so it is only needed for modules, and only for older linkers which
+ # do not support --save-restore-funcs
+-ifeq ($(call ld-ifversion, -lt, 225000000, y),y)
+-always-$(CONFIG_PPC64)	+= crtsavres.o
++ifeq ($(call ld-ifversion, -lt, 225000000, y)$(CONFIG_PPC64),yy)
++always	+= crtsavres.o
+ endif
+ 
+ obj-$(CONFIG_PPC_BOOK3S_64) += copyuser_power7.o copypage_power7.o \
+
+
+Patches currently in stable-queue which might be from nathan@kernel.org are
+
+queue-4.19/powerpc-use-always-instead-of-always-y-in-for-crtsavres.o.patch
