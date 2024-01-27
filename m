@@ -1,89 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5FA7F;
-	Sat, 27 Jan 2024 09:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4757017FD;
+	Sat, 27 Jan 2024 09:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706346084; cv=none; b=d0hwB7fXPiWNHCVRpklKI3/tICWf+EdBopwaNkYg4DMH9SSbTwgOjEecP02zY++Gn5c1WtMFtWW6WV0OKRGGGf8S92PAedxyDb6ki0obBx/2xL0f/GvpySybYuIGlheG0O505TqslwY4Fbnilz0PYZSyaW9VtQC8Y64/QOrwvH4=
+	t=1706346193; cv=none; b=gzs1FM2Kvayhb7T4fBUfCZcbg/WR2MGjFwGV8T9LKndxiN/VA0HeE5azzRwvUeNqvsF5MSS5XUYM8yWNDFCgy2TDWRzHDZMf8TpNRbXhwQdZLbPPLqqP0oDPrQDiF/Emk9SqP9SJscNdoCfQMz0jg9Yn8of6kHA22tBktNSji4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706346084; c=relaxed/simple;
-	bh=hpNFNF09+4R9C/NT6J2wtQJfi2pvjGg8peeFOWYXxjU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EGMxw4f1VmpcWHIlBTijqgYuQkQW8mp1cudzArBhm6gijuv6Rma5u6Pl3AqNN/C/g7aBa5AaoDDA/GbmOuwKxysEZTyKPgsP1BAnQ4P/cIBANQnomGG7S4N4y7Vr75Q5IxqbxSEvRJuLPdS6aqDALQTSem8YMkhA3/+nnCPP72o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H68dCSkY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706346193; c=relaxed/simple;
+	bh=3CEC9+s/RgV3W453q4JCCo7clahZ+kguMoxyN5D2wY4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UrGfopSfgC+94ZOP82gwnyZxjUay4UG3Vebo/J3BD9p17hjSccKgQYb5dGdCH2Wt9dlnPNKZoZcTWeUKkqpqb+i9UO8BqklcmqxSNaY5qODnHLI89+wUzB4Ke5pXO72M8UukzGuoS7RAq7LNQ71mununreW/Rf95uYyOJLyB2/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVHa/WHN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H68dCSkY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BCAC433F1;
-	Sat, 27 Jan 2024 09:01:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVHa/WHN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51BD3C433C7;
+	Sat, 27 Jan 2024 09:03:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706346083;
-	bh=hpNFNF09+4R9C/NT6J2wtQJfi2pvjGg8peeFOWYXxjU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=H68dCSkYteFymi0Fxr4ZLnTtDfhc3iBgtp7a90RfidyQYu69r1r6CihH13IS38xKA
-	 7Y6lvWBv2gcFEyLZ7+znoLsJ18B01ysbSi7TqxpUNXJDjWLhRejbBDgMlFauFXh4ho
-	 PgX1lKteFbkEBIRK/boTZP8jxy8/KPzdwQ8qfbuK5SkmfjbayN6IDNPQrhOI0VvkMJ
-	 NGevEz43xgBNX1hKceUzic8Bw2t3RuDqq3ZNOQxH75u0u5SfE8UY/gIOE4ozUeGeuB
-	 LszLbDcljUQ2hOZ4ZAmeCkoYlvD5m4F4pw116jSOeoKtfeSDfZIdObP++x9JedU1FS
-	 k2tgGoKo1zjrQ==
+	s=k20201202; t=1706346192;
+	bh=3CEC9+s/RgV3W453q4JCCo7clahZ+kguMoxyN5D2wY4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mVHa/WHNCuTpM+sFtsfuqn5gAIFVBhVSGCWQh0dAYjNRAKKYFiWAck8Phpf1076cx
+	 +FY+5nM+daqdHFi39v9JU6iAKmKKPheUYi/YPOP1NLRGTUJVV1+R25ZYZgOdSeYvly
+	 snfv46B3E69rNby/TgxZNxhcc4w+cC+nCii/gUGB/AReNjw6niP1tU88VU6B2ZUKR/
+	 MI2+XIk4JMWw4Eav7Lct+D+FEEVBMffYhSUmuy7GSiBDcRAfAimiUiWUpUuvMDdzsV
+	 emOLwwqOOa4vcyUbaG2AH5WWp1okWyeSVhqHlSlque+bHV2xLknpNLllSzkUsvwbe3
+	 jixcBqLEcYxfw==
+Date: Sat, 27 Jan 2024 01:03:10 -0800
 From: Eric Biggers <ebiggers@kernel.org>
-To: linux-riscv@lists.infradead.org
-Cc: linux-crypto@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Brandon Wu <brandon.wu@sifive.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] RISC-V: fix check for zvkb with tip-of-tree clang
-Date: Sat, 27 Jan 2024 01:00:54 -0800
-Message-ID: <20240127090055.124336-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.43.0
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	masahiroy@kernel.org, nicolas@fjasle.eu, andy.chiu@sifive.com,
+	conor.dooley@microchip.com, linux-riscv@lists.infradead.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH 0/2] RISC-V: Fix CONFIG_AS_HAS_OPTION_ARCH with tip of
+ tree LLVM
+Message-ID: <20240127090310.GF11935@sol.localdomain>
+References: <20240125-fix-riscv-option-arch-llvm-18-v1-0-390ac9cc3cd0@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240125-fix-riscv-option-arch-llvm-18-v1-0-390ac9cc3cd0@kernel.org>
 
-From: Eric Biggers <ebiggers@google.com>
+On Thu, Jan 25, 2024 at 10:32:10AM -0700, Nathan Chancellor wrote:
+> Hi all,
+> 
+> Eric reported that builds of LLVM with [1] (close to tip of tree) have
+> CONFIG_AS_HAS_OPTION_ARCH=n because the test for expected failure on
+> invalid input has started succeeding.
+> 
+> This Kconfig test was added because '.option arch' only causes an
+> assembler warning when it is unsupported, rather than a hard error,
+> which is what users of as-instr expect when something is unsupported.
+> 
+> This can be resolved by turning assembler warnings into errors with
+> '-Wa,--fatal-warnings' like we do with the compiler with '-Werror',
+> which is what the first patch does. The second patch removes the invalid
+> test, as the valid test is good enough with fatal warnings.
+> 
+> I have diffed several configurations for the different architectures
+> that use as-instr and I have found no issues.
+> 
+> I think this could go in through either the kbuild or RISC-V tree with
+> sufficient acks but I will let them fight over who takes it :)
+> 
+> [1]: https://github.com/llvm/llvm-project/commit/3ac9fe69f70a2b3541266daedbaaa7dc9c007a2a
+> 
+> ---
+> Nathan Chancellor (2):
+>       kbuild: Add -Wa,--fatal-warnings to as-instr invocation
+>       RISC-V: Drop invalid test from CONFIG_AS_HAS_OPTION_ARCH
+> 
+>  arch/riscv/Kconfig        | 1 -
+>  scripts/Kconfig.include   | 2 +-
+>  scripts/Makefile.compiler | 2 +-
+>  3 files changed, 2 insertions(+), 3 deletions(-)
 
-LLVM commit 8e01042da9d3 ("[RISCV] Add missing dependency check for Zvkb
-(#79467)") broke the check used by the TOOLCHAIN_HAS_VECTOR_CRYPTO
-kconfig symbol because it made zvkb start depending on v or zve*.  Fix
-this by specifying both v and zvkb when checking for support for zvkb.
+Looks good,
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- arch/riscv/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested-by: Eric Biggers <ebiggers@google.com>
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index b49016bb5077b..912fff31492b9 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -581,21 +581,21 @@ config TOOLCHAIN_HAS_ZBB
- 	default y
- 	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zbb)
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbb)
- 	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
- 	depends on AS_HAS_OPTION_ARCH
- 
- # This symbol indicates that the toolchain supports all v1.0 vector crypto
- # extensions, including Zvk*, Zvbb, and Zvbc.  LLVM added all of these at once.
- # binutils added all except Zvkb, then added Zvkb.  So we just check for Zvkb.
- config TOOLCHAIN_HAS_VECTOR_CRYPTO
--	def_bool $(as-instr, .option arch$(comma) +zvkb)
-+	def_bool $(as-instr, .option arch$(comma) +v$(comma) +zvkb)
- 	depends on AS_HAS_OPTION_ARCH
- 
- config RISCV_ISA_ZBB
- 	bool "Zbb extension support for bit manipulation instructions"
- 	depends on TOOLCHAIN_HAS_ZBB
- 	depends on MMU
- 	depends on RISCV_ALTERNATIVE
- 	default y
- 	help
- 	   Adds support to dynamically detect the presence of the ZBB
+Unfortunately another LLVM commit just broke TOOLCHAIN_HAS_VECTOR_CRYPTO, so
+I've sent out a patch to fix that too...
 
-base-commit: cb4ede926134a65bc3bf90ed58dace8451d7e759
--- 
-2.43.0
+But with all the fixes applied it works again.
 
+- Eric
