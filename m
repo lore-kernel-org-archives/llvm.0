@@ -1,100 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CA829429;
-	Sat, 27 Jan 2024 18:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3434A2C86A;
+	Sat, 27 Jan 2024 19:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706378869; cv=none; b=nA2ECl+oX2dN91BcZahTSjrS0gqICujIghKy/k0RFoHPzVu8+a890tH56deq8SlHvM1/t/12IP+7mDIH7usDWSkkJxuufqGx3PZWkmEqfq9j4vUmAP9PBQL41Oczztqd4EUPmj9GbaHQDEi4CmOgqOFFS+bRfVJzP5DR+dCHaC8=
+	t=1706385123; cv=none; b=Gtsg7ELq9ckerXVgaOXlahd1HCx9koZM5KhPBG7mOxNpWmL3Rno32LtsPKvBc9zVuXZO8Jkxs5B1OvCMP1h6DgCcjx+Hv4KAvsyds/LQ9LxtF7nz/beIJcjSkTnDbvEOKdQulcA+RFbUhAhTxYRnluNiISbGk+qPS34X5Qln/eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706378869; c=relaxed/simple;
-	bh=qtNyFxcBkmUTCmrI3w7d91OiAWcSyJmp5wFzXkJnfgU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=mzpxmDGDGil08d1aQ7bxVFMj86qKczBWn5ZM13Tymv/sS9qnRlNdL2gB6I/Zyn3xmznQCqU+0cQfq05W674OBcvxpfz8MCGLpKxNR3yw+ZxqmSTjw/d2Jx6CbusTVZB94eB2b1gY4Cn++nE+YLUWJaOP+uHa56/XIlHVf/fSUl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d57GkvdT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706385123; c=relaxed/simple;
+	bh=nNNOg9OGw4VfRgQPR3+oq9lPYHSxhSiGjos34RuwKwg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AJMCdH9aR4uDlHQgXS3IWfeNqH9vdc/EgukYCwGtHPgPquzz0lR1etQJw+fxmbe//W2oE7czNI8eV6hDL2w5kihNmZK5vcUrvoKNlpGsHoQK1udTmjbjAlHYEMU6uCS3IWtHQIQ7lD6WynoBoxUMyyL7sQ5ZRc++x/ctTcND9M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhQ7Z/Wp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d57GkvdT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C74D9C433F1;
-	Sat, 27 Jan 2024 18:07:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhQ7Z/Wp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5234DC433C7;
+	Sat, 27 Jan 2024 19:52:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706378868;
-	bh=qtNyFxcBkmUTCmrI3w7d91OiAWcSyJmp5wFzXkJnfgU=;
-	h=From:Date:Subject:To:Cc:From;
-	b=d57GkvdTT9GzIuvTC7jRsYQ+SvmHJ52/jRZXK/P+rCS43j+eyxu4wVgwp4dgAfxL4
-	 yQmoj/kWH6qed1J5imgzEhN86fwDZhMdEXyRgfHMza9QaH3G7LYzouri7I9v1W2IAr
-	 N2vuE335kezdqO/WNlTsV0QlLf0DMDnLkdjo5p+2EoMBL6Fs7ZxcLRzOOAOM6PKOa9
-	 QlFXE6HQRiopY5Hxn/mnghXRunvudA4dDMgO228A90S9f8S7vmlbiJbW/R/JQyNKHB
-	 W27MLiv508K5dmU5F3Q296hYqMhH5Kmw3UEcvgxCii6W3XILZLnoFYvTkXm+pwlIcc
-	 s/AJQ26MNlG9Q==
+	s=k20201202; t=1706385122;
+	bh=nNNOg9OGw4VfRgQPR3+oq9lPYHSxhSiGjos34RuwKwg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JhQ7Z/WpfC6u+Gt7BEU5AzxNheIqn1BiZynbNIvhZE2FqnHPvbc9p0C0TY0Kt6trZ
+	 uuATYufIzZBJipqarY5MYAgq/cwRUWrbhoqlBKr5ZPGk29orVU74ch4vQPO0j6Spmj
+	 0/EMdTrcqzUM7GvLCFm9aJsC8bsE6qd1klm2rVNQ9zxhbW7V9xFwMflAXU7DspfmBY
+	 9gnD2qDIjkwBKrPNlLNDPFnAENURqVvIY71wyRCnkGbNJvcZIXmHhMdkmndmIPenuI
+	 HjyT+v+N9yioOd4aSR0VPfJ8wtNRmBb833PMPp0eXhsO9PD9lBdD2Cf968NQJ8p6a9
+	 6dgxtErdKbqyA==
+Date: Sat, 27 Jan 2024 12:52:00 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Sat, 27 Jan 2024 11:07:43 -0700
-Subject: [PATCH] powerpc: xor_vmx: Add '-mhard-float' to CFLAGS
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
+	llvm@lists.linux.dev, Brandon Wu <brandon.wu@sifive.com>
+Subject: Re: [PATCH] RISC-V: fix check for zvkb with tip-of-tree clang
+Message-ID: <20240127195200.GA781164@dev-arch.thelio-3990X>
+References: <20240127090055.124336-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240127-ppc-xor_vmx-drop-msoft-float-v1-1-f24140e81376@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAG5GtWUC/x3MUQqDMAwA0KtIvhfQTlS8ioxR23QG1JRUpCDe3
- bLP9/MuSKRMCcbqAqWTE8te0LwqcIvdf4Tsi8HUpq0b02OMDrPo99wyepWIW5JwYFjFHmh9N8z
- tuw9D56AUUSlw/vfT574fW3QHpW4AAAA=
-To: mpe@ellerman.id.au
-Cc: npiggin@gmail.com, christophe.leroy@csgroup.eu, aneesh.kumar@kernel.org, 
- naveen.n.rao@linux.ibm.com, morbo@google.com, justinstitt@google.com, 
- linuxppc-dev@lists.ozlabs.org, patches@lists.linux.dev, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1691; i=nathan@kernel.org;
- h=from:subject:message-id; bh=qtNyFxcBkmUTCmrI3w7d91OiAWcSyJmp5wFzXkJnfgU=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKlb3YqnZ6/+dz2C5YNv4empdqc5Cq5OfGkX+pf7Wc2mB
- NXvbCumdJSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJvGxi+O/i6GD82yvIZuIf
- 1Xu/dq6Y/2SD/bO/f//+s8t7kLfsk3ECI8PKA4zulfevxsQ3h909xy8fuCHzMUPihb7EvVcfb7w
- bNJcHAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240127090055.124336-1-ebiggers@kernel.org>
 
-arch/powerpc/lib/xor_vmx.o is built with '-msoft-float' (from the main
-powerpc Makefile) and '-maltivec' (from its CFLAGS), which causes an
-error when building with clang after a recent change in main:
+On Sat, Jan 27, 2024 at 01:00:54AM -0800, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> LLVM commit 8e01042da9d3 ("[RISCV] Add missing dependency check for Zvkb
+> (#79467)") broke the check used by the TOOLCHAIN_HAS_VECTOR_CRYPTO
+> kconfig symbol because it made zvkb start depending on v or zve*.  Fix
+> this by specifying both v and zvkb when checking for support for zvkb.
+> 
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
 
-  error: option '-msoft-float' cannot be specified with '-maltivec'
-  make[6]: *** [scripts/Makefile.build:243: arch/powerpc/lib/xor_vmx.o] Error 1
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Explicitly add '-mhard-float' before '-maltivec' in xor_vmx.o's CFLAGS
-to override the previous inclusion of '-msoft-float' (as the last option
-wins), which matches how other areas of the kernel use '-maltivec', such
-as AMDGPU.
+I also verified this does not regress GCC.
 
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1986
-Link: https://github.com/llvm/llvm-project/commit/4792f912b232141ecba4cbae538873be3c28556c
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/powerpc/lib/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
-index 6eac63e79a89..0ab65eeb93ee 100644
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -76,7 +76,7 @@ obj-$(CONFIG_PPC_LIB_RHEAP) += rheap.o
- obj-$(CONFIG_FTR_FIXUP_SELFTEST) += feature-fixups-test.o
- 
- obj-$(CONFIG_ALTIVEC)	+= xor_vmx.o xor_vmx_glue.o
--CFLAGS_xor_vmx.o += -maltivec $(call cc-option,-mabi=altivec)
-+CFLAGS_xor_vmx.o += -mhard-float -maltivec $(call cc-option,-mabi=altivec)
- # Enable <altivec.h>
- CFLAGS_xor_vmx.o += -isystem $(shell $(CC) -print-file-name=include)
- 
-
----
-base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
-change-id: 20240127-ppc-xor_vmx-drop-msoft-float-ad68b437f86c
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+> ---
+>  arch/riscv/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index b49016bb5077b..912fff31492b9 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -581,21 +581,21 @@ config TOOLCHAIN_HAS_ZBB
+>  	default y
+>  	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zbb)
+>  	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbb)
+>  	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+>  	depends on AS_HAS_OPTION_ARCH
+>  
+>  # This symbol indicates that the toolchain supports all v1.0 vector crypto
+>  # extensions, including Zvk*, Zvbb, and Zvbc.  LLVM added all of these at once.
+>  # binutils added all except Zvkb, then added Zvkb.  So we just check for Zvkb.
+>  config TOOLCHAIN_HAS_VECTOR_CRYPTO
+> -	def_bool $(as-instr, .option arch$(comma) +zvkb)
+> +	def_bool $(as-instr, .option arch$(comma) +v$(comma) +zvkb)
+>  	depends on AS_HAS_OPTION_ARCH
+>  
+>  config RISCV_ISA_ZBB
+>  	bool "Zbb extension support for bit manipulation instructions"
+>  	depends on TOOLCHAIN_HAS_ZBB
+>  	depends on MMU
+>  	depends on RISCV_ALTERNATIVE
+>  	default y
+>  	help
+>  	   Adds support to dynamically detect the presence of the ZBB
+> 
+> base-commit: cb4ede926134a65bc3bf90ed58dace8451d7e759
+> -- 
+> 2.43.0
+> 
