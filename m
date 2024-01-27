@@ -1,39 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3434A2C86A;
-	Sat, 27 Jan 2024 19:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4A12E62E;
+	Sat, 27 Jan 2024 20:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706385123; cv=none; b=Gtsg7ELq9ckerXVgaOXlahd1HCx9koZM5KhPBG7mOxNpWmL3Rno32LtsPKvBc9zVuXZO8Jkxs5B1OvCMP1h6DgCcjx+Hv4KAvsyds/LQ9LxtF7nz/beIJcjSkTnDbvEOKdQulcA+RFbUhAhTxYRnluNiISbGk+qPS34X5Qln/eY=
+	t=1706386443; cv=none; b=MbBa+ioBWj8JpTQzTj6bMBjiKmFGf7Gt8O827Jc20lVgvocQFJr3CfaG9sIQtKdfBDLCBsQrMmxT/1Vsh/uQD+qyt2YDFL8gxhC6zLG2Pvb1V/sshngXjFVtvYrXd/tsfPdOh5LNSy8mfb4kkJmPB01Q8S4U9PkG2xRJ6TIB+IY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706385123; c=relaxed/simple;
-	bh=nNNOg9OGw4VfRgQPR3+oq9lPYHSxhSiGjos34RuwKwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AJMCdH9aR4uDlHQgXS3IWfeNqH9vdc/EgukYCwGtHPgPquzz0lR1etQJw+fxmbe//W2oE7czNI8eV6hDL2w5kihNmZK5vcUrvoKNlpGsHoQK1udTmjbjAlHYEMU6uCS3IWtHQIQ7lD6WynoBoxUMyyL7sQ5ZRc++x/ctTcND9M4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhQ7Z/Wp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706386443; c=relaxed/simple;
+	bh=fiFLc1EElfSaAtTJgTayQ3vzNHq5YRGbmWAbNYwTowg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=X41DaDkmS+elEYq3H952d43Mb4sosJqwfaQqvneD4X4XZPWswhqS+pwItgkEd4ORbiAk5HK81IM1aQ6Q+Aj823hJ9ZY/pIN25KCDUREGXU8yMoUOEx14WgfB6+7owbK5tXCzn4ateU3FXAnnpungEgARWaD2Clz9kmHkbOMlAjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DzgYE+Rm; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhQ7Z/Wp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5234DC433C7;
-	Sat, 27 Jan 2024 19:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706385122;
-	bh=nNNOg9OGw4VfRgQPR3+oq9lPYHSxhSiGjos34RuwKwg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JhQ7Z/WpfC6u+Gt7BEU5AzxNheIqn1BiZynbNIvhZE2FqnHPvbc9p0C0TY0Kt6trZ
-	 uuATYufIzZBJipqarY5MYAgq/cwRUWrbhoqlBKr5ZPGk29orVU74ch4vQPO0j6Spmj
-	 0/EMdTrcqzUM7GvLCFm9aJsC8bsE6qd1klm2rVNQ9zxhbW7V9xFwMflAXU7DspfmBY
-	 9gnD2qDIjkwBKrPNlLNDPFnAENURqVvIY71wyRCnkGbNJvcZIXmHhMdkmndmIPenuI
-	 HjyT+v+N9yioOd4aSR0VPfJ8wtNRmBb833PMPp0eXhsO9PD9lBdD2Cf968NQJ8p6a9
-	 6dgxtErdKbqyA==
-Date: Sat, 27 Jan 2024 12:52:00 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
-	llvm@lists.linux.dev, Brandon Wu <brandon.wu@sifive.com>
-Subject: Re: [PATCH] RISC-V: fix check for zvkb with tip-of-tree clang
-Message-ID: <20240127195200.GA781164@dev-arch.thelio-3990X>
-References: <20240127090055.124336-1-ebiggers@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DzgYE+Rm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706386441; x=1737922441;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fiFLc1EElfSaAtTJgTayQ3vzNHq5YRGbmWAbNYwTowg=;
+  b=DzgYE+RmfriWORs5Og6sVMu7U9lcoLn3kp9MQmClHNMVv1sNqvKveGvj
+   M4JKt2nIjCDJMrTUrtkZwHZfK9iyyTFKkt0Dwkm2QsRH8RaZPFP7QUFdq
+   LA37Bg5MR3c3okATYBbX+f7AkIBeQUNRgX0pUwnqCy+Ao0sjxu3BFMqWH
+   v4nHKmt+TSYz/nnM6dMtJ+IB4h2c//ZXXTF4SWnYOzylw5Dx6/F3Up0Hr
+   ZHhVUrYQCs2ccgv09hZs4UXlmucQqROh0y28M9W0pSlkFh7RgldGzO7Q4
+   QSNxB9L9XPrIevcTPox9AFm/gL6CN7yGUrCjBmH3EcNWIad5fO09zaLkm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="16236058"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="16236058"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2024 12:14:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="1118558780"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="1118558780"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Jan 2024 12:13:59 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rTp3s-0002gq-35;
+	Sat, 27 Jan 2024 20:13:56 +0000
+Date: Sun, 28 Jan 2024 04:13:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [goldwynr:buffered.46 24/90] block/fops.c:507:46: error: too many
+ arguments to function call, expected 3, have 4
+Message-ID: <202401280414.wu2Y9tAX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,55 +58,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240127090055.124336-1-ebiggers@kernel.org>
 
-On Sat, Jan 27, 2024 at 01:00:54AM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> LLVM commit 8e01042da9d3 ("[RISCV] Add missing dependency check for Zvkb
-> (#79467)") broke the check used by the TOOLCHAIN_HAS_VECTOR_CRYPTO
-> kconfig symbol because it made zvkb start depending on v or zve*.  Fix
-> this by specifying both v and zvkb when checking for support for zvkb.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+tree:   https://github.com/goldwynr/linux buffered.46
+head:   9b93fddebc916105169c8a82d8f3f20fb30ff277
+commit: 8f39bf920bebe813810c1d0d392e77dabb415006 [24/90] iomap: Make writeback_control a part of iomap_writepage_ctx
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20240128/202401280414.wu2Y9tAX-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401280414.wu2Y9tAX-lkp@intel.com/reproduce)
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401280414.wu2Y9tAX-lkp@intel.com/
 
-I also verified this does not regress GCC.
+All errors (new ones prefixed by >>):
 
-> ---
->  arch/riscv/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index b49016bb5077b..912fff31492b9 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -581,21 +581,21 @@ config TOOLCHAIN_HAS_ZBB
->  	default y
->  	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zbb)
->  	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbb)
->  	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
->  	depends on AS_HAS_OPTION_ARCH
->  
->  # This symbol indicates that the toolchain supports all v1.0 vector crypto
->  # extensions, including Zvk*, Zvbb, and Zvbc.  LLVM added all of these at once.
->  # binutils added all except Zvkb, then added Zvkb.  So we just check for Zvkb.
->  config TOOLCHAIN_HAS_VECTOR_CRYPTO
-> -	def_bool $(as-instr, .option arch$(comma) +zvkb)
-> +	def_bool $(as-instr, .option arch$(comma) +v$(comma) +zvkb)
->  	depends on AS_HAS_OPTION_ARCH
->  
->  config RISCV_ISA_ZBB
->  	bool "Zbb extension support for bit manipulation instructions"
->  	depends on TOOLCHAIN_HAS_ZBB
->  	depends on MMU
->  	depends on RISCV_ALTERNATIVE
->  	default y
->  	help
->  	   Adds support to dynamically detect the presence of the ZBB
-> 
-> base-commit: cb4ede926134a65bc3bf90ed58dace8451d7e759
-> -- 
-> 2.43.0
-> 
+   block/fops.c:476:50: error: too few arguments to function call, expected 3, have 2
+     476 |         return iomap_read_folio(folio, &blkdev_iomap_ops);
+         |                ~~~~~~~~~~~~~~~~                         ^
+   include/linux/iomap.h:280:5: note: 'iomap_read_folio' declared here
+     280 | int iomap_read_folio(struct folio *folio, const struct iomap_ops *ops,
+         |     ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     281 |                 const struct iomap_read_folio_ops *);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   block/fops.c:481:40: error: too few arguments to function call, expected 3, have 2
+     481 |         iomap_readahead(rac, &blkdev_iomap_ops);
+         |         ~~~~~~~~~~~~~~~                       ^
+   include/linux/iomap.h:282:6: note: 'iomap_readahead' declared here
+     282 | void iomap_readahead(struct readahead_control *, const struct iomap_ops *ops,
+         |      ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     283 |                 const struct iomap_read_folio_ops *);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> block/fops.c:507:46: error: too many arguments to function call, expected 3, have 4
+     507 |         return iomap_writepages(mapping, wbc, &wpc, &blkdev_writeback_ops);
+         |                ~~~~~~~~~~~~~~~~                     ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/iomap.h:357:5: note: 'iomap_writepages' declared here
+     357 | int iomap_writepages(struct address_space *mapping,
+         |     ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     358 |                 struct iomap_writepage_ctx *wpc,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     359 |                 const struct iomap_writeback_ops *ops);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +507 block/fops.c
+
+925c86a19bacf8 Christoph Hellwig 2023-08-01  501  
+925c86a19bacf8 Christoph Hellwig 2023-08-01  502  static int blkdev_writepages(struct address_space *mapping,
+925c86a19bacf8 Christoph Hellwig 2023-08-01  503  		struct writeback_control *wbc)
+925c86a19bacf8 Christoph Hellwig 2023-08-01  504  {
+925c86a19bacf8 Christoph Hellwig 2023-08-01  505  	struct iomap_writepage_ctx wpc = { };
+925c86a19bacf8 Christoph Hellwig 2023-08-01  506  
+925c86a19bacf8 Christoph Hellwig 2023-08-01 @507  	return iomap_writepages(mapping, wbc, &wpc, &blkdev_writeback_ops);
+925c86a19bacf8 Christoph Hellwig 2023-08-01  508  }
+925c86a19bacf8 Christoph Hellwig 2023-08-01  509  
+
+:::::: The code at line 507 was first introduced by commit
+:::::: 925c86a19bacf8ce10eb666328fb3fa5aff7b951 fs: add CONFIG_BUFFER_HEAD
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
