@@ -1,83 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE84E2576D;
-	Sat, 27 Jan 2024 14:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E993F200A8;
+	Sat, 27 Jan 2024 15:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706365206; cv=none; b=Vv3jd0eidQLVRFqlAP4aUH0RbkZL13598vWrFBd0FNxrZPuRYJKdtCfz545Sn5bas0dqkPYSBvaV782lGQ5dJCh5n8MfEQ/kdlaFOTWUQQu1AazDR26XgLchJepXPbb4n4gnjKYDkUmQCSNSW3iW3XIsmFTw4ZkJcMA2qliG4cU=
+	t=1706370277; cv=none; b=ifQ2VfcozPfhhqPEpqwobLIvy+YsoULe7Tz+wKBcKNkOYoOkZVp2w2BIDOJRYsK4aXu9K9V3NspCRSfheRCju8Iiu9hVV65LoPOUmL3nK2Bl0xtpZmbmOn86Dx8s8xyyYwjfdXyTV9qFjEDGq2SN5OP26ZZ8/C8Gy330qnbgzA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706365206; c=relaxed/simple;
-	bh=/Uw3gz3X0ldWVWdDZOiL2YXnDE7bm16AZyr+WOtkBz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=awMHI9N2pf4bzDy6WiqactO7XSXZLqnFG9SZOsbF0wxejzuDxgPHJRU05QCk/aiunKwn7YJIJWc6ovzhPX/1zYguUTgn3Jfrireh9+I/JD8WL83/zJYtZso4axvQcSPIVtcXrH+gBLVO7fV5YtzHjtdcaQQZ18/T0E9fXXG1Aic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=epuXmfEi; arc=none smtp.client-ip=192.55.52.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706370277; c=relaxed/simple;
+	bh=EELGZfz9lAK1loDeD8w+xVM+cCGtcqj7CLX+2eCWnjA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RiuEdf7b+iGuvFujrOe4xRS21OIZ9ps2IChVHr/70RmmVIySKMIumKyENs7FDm2CYzLS+9jb05D2PM5ZBCG7kthmUVajG9Go3N1G4V/STt+dKdsGu1TPT2C21HgeRGitk7D7jg9sZruo/nnlE/RjdFYT7dlTDjhNDcTmFEH1vv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LeEO5kZ9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="epuXmfEi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706365204; x=1737901204;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/Uw3gz3X0ldWVWdDZOiL2YXnDE7bm16AZyr+WOtkBz4=;
-  b=epuXmfEivZRf2e/74J2u5UfEQZ3+bcQpNsdsMgQGUUU9ZvYpYc0erqGn
-   4+/5Tg/7As0kSscAJSlAWrGc3nxXgPNbVGJ5wqpk5df6+S7wmb8N5qnwQ
-   QgqENhinZxt7EpCjfXgZPzSawNQW+a1EKZW2UcKrabCdRG0ELFTJtgXJB
-   L/mSwgK3jfrTqiIsuT/ccssOQ+DMEJuxhimTDiNylXpLXfODxrN7Hdoc5
-   k/4YWk5oDRrqfwi2MGdS2uxM0XpgrCrHoyywFRe2qPSlxYWchOPNI/Mos
-   Jgpx9I/TnepjSzh463OdhRHXJjUqoH5SO0+pAjRKQFjcWf7jBivSvTKyc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="399842566"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="399842566"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2024 06:20:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="2983733"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 27 Jan 2024 06:20:03 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rTjXM-0002P0-2j;
-	Sat, 27 Jan 2024 14:20:00 +0000
-Date: Sat, 27 Jan 2024 22:19:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tj-wq:wq-atomic-draft 9/20] error[E0425]: cannot find value
- `WORK_CPU_UNBOUND` in crate `bindings`
-Message-ID: <202401272236.hXsUy4sm-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LeEO5kZ9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F48C43601;
+	Sat, 27 Jan 2024 15:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706370276;
+	bh=EELGZfz9lAK1loDeD8w+xVM+cCGtcqj7CLX+2eCWnjA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LeEO5kZ96OPVbvsuqrFBY5t8/3El+/M6PFnfIKMwYu3QQubqPuJck1PyNFQ+mDkLn
+	 cXuT+OAiMpWPc2E6BmL0PoKc4Wop1BgdwWd1PAu7XdHsS2cnYb5b6AT0ieUC5YMreg
+	 Yb/B0XWNT2Uc0gwv+K3ZdNs+mpYbYob+VoYLH7X5KsTEjTjNpQL3VKWZDDsOBueIiZ
+	 v6JgTgQS9Eiiq60v7QeL2Fd3vuyWC2/Anrc0LCZwV95zSIeuhBpU0u/CO9U1zQ0ow3
+	 vUrglhgVu0IkPrZ3v5lz5jvfyGuFC87O5FP11tNPgP2JsTU5FCIPz6wjOagpSpIZPR
+	 W+DbkHjXFT7Rg==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2142ef4a7feso1045289fac.0;
+        Sat, 27 Jan 2024 07:44:36 -0800 (PST)
+X-Gm-Message-State: AOJu0YwwE2nkDXNdHYbSLQXbTQclMwBhNCaI4kws1YYwBv9sgEmPa/ED
+	YtRniI00sXmOr24XkNhRgeJk/k6Y86dBesX3haJRnHCH//kXsmBZ852JamDFg4wnf3MgA+zCjFT
+	pergmQ9rJw8kaV2Y9MnObei2l0E4=
+X-Google-Smtp-Source: AGHT+IHKu7J4sPa55OVECUcHBRCyx9ZzSiCi17gfOvi7AHAWXZs8rsCFKBZguK0vE3/J1lnVbJu5h3QeBTUduqR8Jpo=
+X-Received: by 2002:a05:6871:5287:b0:214:7ef2:e8c with SMTP id
+ hu7-20020a056871528700b002147ef20e8cmr1060638oac.0.1706370275802; Sat, 27 Jan
+ 2024 07:44:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240123-fix-uml-clang-18-v1-0-efc095519cf9@kernel.org>
+In-Reply-To: <20240123-fix-uml-clang-18-v1-0-efc095519cf9@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 28 Jan 2024 00:43:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ7VauHgJK+939QjtOLtOPDOyGsYfwj+9f+1-jkFdtWnQ@mail.gmail.com>
+Message-ID: <CAK7LNAQ7VauHgJK+939QjtOLtOPDOyGsYfwj+9f+1-jkFdtWnQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix UML build with clang-18 and newer
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: richard@nod.at, anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, 
+	nicolas@fjasle.eu, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, linux-um@lists.infradead.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git wq-atomic-draft
-head:   8224d2602ef454ca164f4added765dc4dddd5e16
-commit: e563d0a7cdc1890ff36bb177b5c8c2854d881e4d [9/20] workqueue: Break up enum definitions and give names to the types
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240127/202401272236.hXsUy4sm-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401272236.hXsUy4sm-lkp@intel.com/reproduce)
+On Wed, Jan 24, 2024 at 8:00=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Hi all,
+>
+> This series resolves two independent but related issues that were
+> recently exposed by two LLVM changes.
+>
+> https://github.com/llvm/llvm-project/commit/ec92d74a0ef89b9dd46aee6ec8aca=
+6bfd3c66a54
+> exposes that '-no-pie' is not getting added to the linker flags with
+> clang, resulting in building objects with '-fno-PIE' that are linked
+> with '-pie', to which the linker rightfully errors with:
+>
+>   /usr/sbin/ld: init/main.o: relocation R_X86_64_32 against symbol `saved=
+_command_line' can not be used when making a PIE object; recompile with -fP=
+IE
+>   /usr/sbin/ld: failed to set dynamic section sizes: bad value
+>
+> https://github.com/llvm/llvm-project/commit/4bf8a688956a759b7b6b8d94f42d2=
+5c13c7af130
+> adds '.ltext' (and '.ltext.*' with '-ffunction-sections') when using
+> '-mcmodel=3Dlarge' (which UML does), which causes a segmentation fault
+> with modpost.
+>
+> I have tested these patches with all supported versions of clang,
+> noticing no regressions.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401272236.hXsUy4sm-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+Both applied to linux-kbuild/fixes.
 
->> error[E0425]: cannot find value `WORK_CPU_UNBOUND` in crate `bindings`
-   --> rust/kernel/workqueue.rs:202:51
-   |
-   202 |                 bindings::queue_work_on(bindings::WORK_CPU_UNBOUND as _, queue_ptr, work_ptr)
-   |                                                   ^^^^^^^^^^^^^^^^ not found in `bindings`
+Thanks.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+
+> ---
+> Nathan Chancellor (2):
+>       um: Fix adding '-no-pie' for clang
+>       modpost: Add '.ltext' and '.ltext.*' to TEXT_SECTIONS
+>
+>  arch/um/Makefile      | 4 +++-
+>  scripts/mod/modpost.c | 3 ++-
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+> ---
+> base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+> change-id: 20240118-fix-uml-clang-18-e365b0503a29
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
