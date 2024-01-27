@@ -1,50 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F84633D1;
-	Sat, 27 Jan 2024 00:03:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20ADF199;
+	Sat, 27 Jan 2024 00:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706313801; cv=none; b=lXqsYP9EI4Ttwpta5cTT2ZfXfitpvzNZYDyoOYiPlHCL2hj7dH6FGgcWRRHAs9QNkusg9CHkHih3sdUe+xKV729Y9E8EvbBZtLFpQDH2ojfBZqrnY/p8URvCxZ5wf3ZEWaDhguySM1I3sno05QyztzOvw92n8AApud999jZ6FKE=
+	t=1706316769; cv=none; b=ZF7gzFgblBGpTekBfANqRiCyBie1WZDi016ck8cCOTEF7HVKid4QY7wHkd8PoD7RS2CYY5slcOFCPLnRd2kc2Cex7sSABUQprUaVIO5fvpCyK3tAxj4E+lNs12IghD/ghbnkw852jc5kvfZrezb27OxyUgjvC8r1IotOtqfzuU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706313801; c=relaxed/simple;
-	bh=yXzHV+To+Bf35AcBbLv/hgMCRQ8f9/i5+DnGHKeqink=;
+	s=arc-20240116; t=1706316769; c=relaxed/simple;
+	bh=RohiRduCZDhu1mva0s61yl4yuysjE3+49ErZTdVjkNU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GgphklnfQqWVI7060gwLb3GNGi6zbA2mCG+bpwovjZr78o6zzqNfWXzz9ka+HN4wB3Y+hYc3tYn7Pf0a8C+MZ/ecRxYigNcr86zFqmIEW1RL/FUIh//4jMS3MaOgQE3CUD0ZWwefKVN+g5lbOYqUSEDvSvQYdoE5sTMw/qE3524=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QO3GLItS; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=PuFmnjBxZzJFbwPoT0DhsEdIgCLOpGKE5Li6trGFhgmyfzUETzlBnQMIvIfpZj0zUxKW0qeRBb97h0aSFJAzo/mEaRxQPXc2iWKcnPU2X2Qd6Rnz/lxyk3uDbm3+1dN2F47QdQJh0bONcZvYQnxdrc25RZyEVCJtuVpbzRAWnzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZQnSWAFG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QO3GLItS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55ADEC433C7;
-	Sat, 27 Jan 2024 00:03:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706313801;
-	bh=yXzHV+To+Bf35AcBbLv/hgMCRQ8f9/i5+DnGHKeqink=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZQnSWAFG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EE0C433F1;
+	Sat, 27 Jan 2024 00:52:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706316768;
+	bh=RohiRduCZDhu1mva0s61yl4yuysjE3+49ErZTdVjkNU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QO3GLItS8D9pjuHnVAH0T9crdlP/3wzsDJKrClqNlJuPSVk4pmR9GMdk6f4KP6b3r
-	 CjNxlg+lqg0PgY7unlhP03t7DRa5bj2IPE9oF18bU9Y+0EeYZIs5fnMiwyfgvKbwLg
-	 mw23j3qTjHPItBJ9ztwBMaIzKjEvB8fHXq5mLlkl8eyHHqD0LRsbWXq/j9F88j2SkR
-	 Uw4qrU+O04PHzfFqMtyMJhmHs/vsdGedyjAuO/g4MJfuLhns4q7BnsOJaSk4jwx3Rf
-	 vV1seWz5FaqkswJjBpNJoT3hQPW7UvzVUlZoR+dHfU0sBt+wAQDJCvokYx5m7t6Dkd
-	 5pjzDOYa7713A==
-Date: Fri, 26 Jan 2024 17:03:18 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, llvm@lists.linux.dev,
-	keescook@chromium.org, arei.gonglei@huawei.com, mst@redhat.com,
-	jasowang@redhat.com, virtualization@lists.linux.dev,
-	linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
-Message-ID: <20240127000318.GA1561706@dev-arch.thelio-3990X>
-References: <20240122235732.009174833@linuxfoundation.org>
- <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
- <2024012636-clubbed-radial-1997@gregkh>
- <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
- <20240126203436.GA913905@dev-arch.thelio-3990X>
- <0a194a79-e3a3-45e7-be98-83abd3e1cb7e@roeck-us.net>
- <20240126223554.GA1320833@dev-arch.thelio-3990X>
- <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
+	b=ZQnSWAFGeGWy7MU0zFIGG/icKSXF0E0aHOFilBQpFfYNfyiR67arTnxzW90DzCbO3
+	 Qs8LZ4R1gf7uuG+X/dXDRZg7Ou5206t6HAKwbjUS+b8Ng5v5NRVeDkOTb9iJaAp8UM
+	 pYylThzRaMV58pM3h625BBc6LxdIubDALLMIydR4=
+Date: Fri, 26 Jan 2024 16:52:47 -0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: sashal@kernel.org, stable@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 4.19] powerpc: Use always instead of always-y in for
+ crtsavres.o
+Message-ID: <2024012640-macaroni-earlobe-bec5@gregkh>
+References: <20240126-4-19-fix-lib-powerpc-backport-v1-1-f0de224db66b@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,23 +41,29 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
+In-Reply-To: <20240126-4-19-fix-lib-powerpc-backport-v1-1-f0de224db66b@kernel.org>
 
-On Fri, Jan 26, 2024 at 03:55:02PM -0800, Guenter Roeck wrote:
-> Anyway, how did you find that ? Is there a magic trick to find the
-> actual code causing the warning ? I am asking because we had seen
-> similar warnings before, and it would help to know how to find the
-> problematic code.
+On Fri, Jan 26, 2024 at 10:36:31AM -0700, Nathan Chancellor wrote:
+> This commit is for linux-4.19.y only, it has no direct upstream
+> equivalent.
+> 
+> Prior to commit 5f2fb52fac15 ("kbuild: rename hostprogs-y/always to
+> hostprogs/always-y"), always-y did not exist, making the backport of
+> mainline commit 1b1e38002648 ("powerpc: add crtsavres.o to always-y
+> instead of extra-y") to linux-4.19.y as commit b7b85ec5ec15 ("powerpc:
+> add crtsavres.o to always-y instead of extra-y") incorrect, breaking the
+> build with linkers that need crtsavres.o:
+> 
+>   ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such file or directory
+> 
+> Backporting the aforementioned kbuild commit is not suitable for stable
+> due to its size and number of conflicts, so transform the always-y usage
+> to an equivalent form using always, which resolves the build issues.
+> 
+> Fixes: b7b85ec5ec15 ("powerpc: add crtsavres.o to always-y instead of extra-y")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-The easiest way I have found is figuring out what primitive is causing
-the warning (memset, memcpy) then just commenting out the uses in the
-particular file until the warning goes away. Sometimes it is quick like
-in this case since there were only two instances of memcpy() in that
-file but other cases it can definitely take time. There could be
-potential issues with that approach if the problematic use is in a
-header, at which point you could generate a preprocessed ('.i') file and
-see where fortify_memcpy_chk() or fortify_memset_chk() come from in that
-file.
+Both now queued up, thanks!
 
-Cheers,
-Nathan
+greg k-h
