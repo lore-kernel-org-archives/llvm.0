@@ -1,285 +1,172 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF58D1EB2F
-	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 11:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EED208AD;
+	Sun, 28 Jan 2024 12:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706440391; cv=none; b=uIyN2FOgfCU6YYn+OR1M3/YEpKE7fuF8FDSnKWqm+JYhlG4BMAeJccokgPw1vXmUAma0BVz3Y9kFqf/k33P2ddpZrY+C6rw2FyncUB2nkVz7jplpJZSipbcylPngf6+t1SBOOm1PMao1yIGXFeB2sOQWXDjhdjVYD4Lew+w+JXE=
+	t=1706446112; cv=none; b=X3KjUIvoBovP+iTz2E6gaemtioyVN6gJQRKXmiZb+WWKrevv9Dn7tExSzq2GH7jhtjdDkNJmXY/KomP0gCv5w4LDYttMpruXBz7AiwcUw2GFsEhvXnpSri1k+K1T42JNe7c+L7g88DRpneH5FwvccnWnB6g1/oTAub2yS1GF+tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706440391; c=relaxed/simple;
-	bh=YjsxHOt4tWyCdJTuimtgU/jG1rOZovQCMQl3k6T1wpw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=a4jEt69igHstFa2cOB+p8z1h2chgixCgr28v0D0whIKbY9VBQdz3F6fpxA2lyJbNC8Ns8SNjcekp3dQkk6im6jFQ1/5UtocwtwNnTKAKl4GWiPGKIvE7swIdGq8yOeKPEehF4F8X3B4kYmWaPK939gP038oj72Tvr64c3EObtC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X6wYcDyk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706446112; c=relaxed/simple;
+	bh=vfS0G4Q+/CnUVu1/XpiamJkmzbGp1G91B9RQB+T0DWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VgnpuoFxj+S/PbyTnapFn9a9NK6edZkxs2TFjGyXm0EYhZPI/64UyQe4qQcgRdeAar0EG6+iKFvRdWI9324DRyab7gTFjDKvvz6E40RDXI+Gqqo9PU9zZWBg4/eM/iRq2uvwDRc/8ePqlcD6Wjca51WogRjm+t1HodcTBjcjGX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JiOYs81F; arc=none smtp.client-ip=134.134.136.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X6wYcDyk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706440388;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CSNy3hGfgBOZXh5HJ7aSuvkcMf5sEzqK7aR6BtJy+rs=;
-	b=X6wYcDykcdAcifsXf3iX/4i81C0GmWEljO9pnKuRjHQZmWEyMNyx7xKV7EqnO5MMdXQD3F
-	vqMgRNTqjkW3WkxZ0uvPctPriUtAV8TERd62HK85kSrnzuBkHSDHCYNyG63mBOKoYyHiCp
-	WyZ0yePWxVMjdotXOdJAkYmIet27Xwg=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-317-Njt9k68MP363FcZ_7OSNQg-1; Sun, 28 Jan 2024 06:13:07 -0500
-X-MC-Unique: Njt9k68MP363FcZ_7OSNQg-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-54554ea191bso823190a12.2
-        for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 03:13:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706440386; x=1707045186;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CSNy3hGfgBOZXh5HJ7aSuvkcMf5sEzqK7aR6BtJy+rs=;
-        b=XWdDuggKk6oRTstVq8Bkp3y7ArAPkIFND3/fE7E5bbI8LqieZp/874xzfg0eQI2/p2
-         MsOZlCezFJkPc9bMxz7SFlJvdNjf1Mr7nUhv53RLc/GLzNnVcDSmsopRCDh1hXtclJaa
-         yRX27NWD6mR273v8kXU8TGFvPg+5/KCyQqFMbh7R79ZXvGJjbAlMpymcfz7wtyZZBJF5
-         Ey0BDQhPqWJWY5LR5gzUOe3uVAdn0jeyT4UA9+FuTpWvnoccp92WyNaFgsJTHsWhxx0i
-         lFjIj/7KZ4tp3HNenVCHcq6knKHzyUT46UJSbiHKLZYn3Qf7wshCJZ31CpeBAvI6N/0Z
-         i3zQ==
-X-Gm-Message-State: AOJu0YxLDklJIQUxbhr5bbikMrZwrN+D9VS3yN65ngitgr1HoCCd3joF
-	CEglq1ph91npv2KPTmj6HI3LB2HK5LJzkhr6J8xaTB8O98Vcyj11zBb/HLm+U4w9iLm+jeaYgFj
-	qUFeGVvu3+8pvj1I742ZLBOIYPqUuv3GJM2Hcy+VPuDFJfQmUxDU=
-X-Received: by 2002:a05:6402:35c4:b0:559:3583:bb6d with SMTP id z4-20020a05640235c400b005593583bb6dmr2513820edc.32.1706440386133;
-        Sun, 28 Jan 2024 03:13:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHO4+zS2ikKQXpXzKl7d9R8QWe1EjS5JACKDAyMhVe/Pnh4ZYWUTbIpgJtOc0lzL8TXZByeUw==
-X-Received: by 2002:a05:6402:35c4:b0:559:3583:bb6d with SMTP id z4-20020a05640235c400b005593583bb6dmr2513797edc.32.1706440385706;
-        Sun, 28 Jan 2024 03:13:05 -0800 (PST)
-Received: from redhat.com ([2a02:14f:17b:70ae:658f:adde:5091:c5dd])
-        by smtp.gmail.com with ESMTPSA id x6-20020a056402414600b0055d36e6f1a7sm2393638eda.82.2024.01.28.03.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jan 2024 03:13:04 -0800 (PST)
-Date: Sun, 28 Jan 2024 06:13:00 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	llvm@lists.linux.dev, keescook@chromium.org,
-	arei.gonglei@huawei.com, jasowang@redhat.com,
-	virtualization@lists.linux.dev, linux-crypto@vger.kernel.org,
-	Wei Yongjun <weiyongjun1@huawei.com>
-Subject: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
-Message-ID: <20240128055533-mutt-send-email-mst@kernel.org>
-References: <20240122235732.009174833@linuxfoundation.org>
- <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
- <2024012636-clubbed-radial-1997@gregkh>
- <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
- <20240126203436.GA913905@dev-arch.thelio-3990X>
- <0a194a79-e3a3-45e7-be98-83abd3e1cb7e@roeck-us.net>
- <20240126223554.GA1320833@dev-arch.thelio-3990X>
- <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JiOYs81F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706446109; x=1737982109;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vfS0G4Q+/CnUVu1/XpiamJkmzbGp1G91B9RQB+T0DWU=;
+  b=JiOYs81Fe+XYjIjm0OXh3QKtZXefwGDi1eXp6af9L44iJEN1vbwRs4zc
+   HwWD04bUA/nYQ6rvCGL9I71k9eBYFzhbSIMGHB+65v461ZwSyLiJaMyjy
+   yvQKgtDaicOnXwLau7GvyFgcGJtx0yTI4+VDQLtk/rdUty9L5zclE49tH
+   1KgmngpD6c6vZkDwT7x5hdSIvSpzXqM2zvpXmBo95OI0ZE8F0/jgxFq1I
+   uB0nVrbbNv15y4YJ0TH2mmqxFCNsNcinGeZLYJhhYvLroQie5J8l3mK+i
+   K41CrcsNzuzvzjj7F9LspaotT8Sk1aTtHSudxBERvSZIAW5MKk7yU903w
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="406494867"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="406494867"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 04:48:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="21837490"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 28 Jan 2024 04:48:27 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rU4aH-0003Oq-0A;
+	Sun, 28 Jan 2024 12:48:25 +0000
+Date: Sun, 28 Jan 2024 20:48:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:flsplit2 11/42] fs/fuse/file.c:2512:7: error: no member
+ named 'fl_pid' in 'struct file_lock'; did you mean 'fl_end'?
+Message-ID: <202401282011.odbgKcIu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Jan 26, 2024 at 03:55:02PM -0800, Guenter Roeck wrote:
-> On 1/26/24 14:35, Nathan Chancellor wrote:
-> > (slimming up the CC list, I don't think this is too relevant to the
-> > wider stable community)
-> > 
-> > On Fri, Jan 26, 2024 at 01:01:15PM -0800, Guenter Roeck wrote:
-> > > On 1/26/24 12:34, Nathan Chancellor wrote:
-> > > > On Fri, Jan 26, 2024 at 10:17:23AM -0800, Guenter Roeck wrote:
-> > > > > On 1/26/24 09:51, Greg Kroah-Hartman wrote:
-> > > > > > On Fri, Jan 26, 2024 at 08:46:42AM -0800, Guenter Roeck wrote:
-> > > > > > > On 1/22/24 15:55, Greg Kroah-Hartman wrote:
-> > > > > > > > This is the start of the stable review cycle for the 5.10.209 release.
-> > > > > > > > There are 286 patches in this series, all will be posted as a response
-> > > > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > > > let me know.
-> > > > > > > > 
-> > > > > > > > Responses should be made by Wed, 24 Jan 2024 23:56:49 +0000.
-> > > > > > > > Anything received after that time might be too late.
-> > > > > > > > 
-> > > > > > > [ ... ]
-> > > > > > > 
-> > > > > > > > zhenwei pi <pizhenwei@bytedance.com>
-> > > > > > > >         virtio-crypto: implement RSA algorithm
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Curious: Why was this (and its subsequent fixes) backported to v5.10.y ?
-> > > > > > > It is quite beyond a bug fix. Also, unless I am really missing something,
-> > > > > > > the series (or at least this patch) was not applied to v5.15.y, so we now
-> > > > > > > have functionality in v5.10.y which is not in v5.15.y.
-> > > > > > 
-> > > > > > See the commit text, it was a dependency of a later fix and documented
-> > > > > > as such.
-> > > > > > 
-> > > > > > Having it in 5.10 and not 5.15 is a bit odd, I agree, so patches are
-> > > > > > gladly accepted :)
-> > > > > > 
-> > > > > 
-> > > > > We reverted the entire series from the merge because it results in a build
-> > > > > failure for us.
-> > > > > 
-> > > > > In file included from /home/groeck/src/linux-chromeos/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:10:
-> > > > > In file included from /home/groeck/src/linux-chromeos/include/linux/mpi.h:21:
-> > > > > In file included from /home/groeck/src/linux-chromeos/include/linux/scatterlist.h:5:
-> > > > > In file included from /home/groeck/src/linux-chromeos/include/linux/string.h:293:
-> > > > > /home/groeck/src/linux-chromeos/include/linux/fortify-string.h:512:4: error: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> > > > >                           __read_overflow2_field(q_size_field, size);
-> > > > 
-> > > > For what it's worth, this is likely self inflicted for chromeos-5.10,
-> > > > which carries a revert of commit eaafc590053b ("fortify: Explicitly
-> > > > disable Clang support") as commit c19861d34c003 ("CHROMIUM: Revert
-> > > > "fortify: Explicitly disable Clang support""). I don't see the series
-> > > > that added proper support for clang to fortify in 5.18 that ended with
-> > > > commit 281d0c962752 ("fortify: Add Clang support") in that ChromeOS
-> > > > branch, so this seems somewhat expected.
-> > > > 
-> > > 
-> > > That explains that ;-). I don't mind if the patches stay in v5.10.y,
-> > > we have them reverted anyway.
-> > > 
-> > > The revert was a pure process issue, as you may see when looking into
-> > > commit c19861d34c003, so, yes, I agree that it is self-inflicted damage.
-> > > Still, that doesn't explain why the problem exists in 5.18+.
-> > > 
-> > > > > I also see that upstream (starting with 6.1) when trying to build it with clang,
-> > > > > so I guess it is one of those bug-for-bug compatibility things. I really have
-> > > > > no idea what causes it, or why we don't see the problem when building
-> > > > > chromeos-6.1 or chromeos-6.6, but (so far) only with chromeos-5.10 after
-> > > > > merging 5.10.209 into it. Making things worse, the problem isn't _always_
-> > > > > seen. Sometimes I can compile the file in 6.1.y without error, sometimes not.
-> > > > > I have no idea what triggers the problem.
-> > > > 
-> > > > Have a .config that reproduces it on upstream? I have not personally
-> > > > seen this warning in my build matrix nor has our continuous-integration
-> > > > matrix (I don't see it in the warning output at the bottom but that
-> > > > could have missed something for some reason) in 6.1:
-> > > > 
-> > > 
-> > > The following command sequence reproduces the problem for me with all stable
-> > > branches starting with 5.18.y (plus mainline).
-> > > 
-> > > rm -rf /tmp/crypto-build
-> > > mkdir /tmp/crypto-build
-> > > make -j CC=clang-15 mrproper >/dev/null 2>&1
-> > > make -j O=/tmp/crypto-build CC=clang-15 allmodconfig >/dev/null 2>&1
-> > > make -j O=/tmp/crypto-build W=1 CC=clang-15 drivers/crypto/virtio/virtio_crypto_akcipher_algs.o
-> > > 
-> > > I tried clang versions 14, 15, and 16. This is with my home system running
-> > > Ubuntu 22.04, no ChromeOS or Google specifics/internals involved. For clang-15,
-> > > the version is
-> > > 
-> > > Ubuntu clang version 15.0.7
-> > > Target: x86_64-pc-linux-gnu
-> > > Thread model: posix
-> > > InstalledDir: /usr/bin
-> > 
-> > Okay interesting, this warning is hidden behind W=1, which our CI does
-> > not test with. Looks like it has been that way since the introduction of
-> > these checks in f68f2ff91512 ("fortify: Detect struct member overflows
-> > in memcpy() at compile-time").
-> > 
-> 
-> Interestingly the warning is seen in chromeos-5.10, without this patch,
-> and without W=1. I guess that must have to do with the revert which is
-> finally biting us.
-> 
-> > I think this is a legitimate warning though. It is complaining about the
-> > second memcpy() in virtio_crypto_alg_akcipher_init_session():
-> > 
-> >    memcpy(&ctrl->u, para, sizeof(ctrl->u));
-> > 
-> > where ctrl is:
-> > 
-> >    struct virtio_crypto_op_ctrl_req {
-> >            struct virtio_crypto_ctrl_header header;         /*     0    16 */
-> >            union {
-> >                    struct virtio_crypto_sym_create_session_req sym_create_session; /*    16    56 */
-> >                    struct virtio_crypto_hash_create_session_req hash_create_session; /*    16    56 */
-> >                    struct virtio_crypto_mac_create_session_req mac_create_session; /*    16    56 */
-> >                    struct virtio_crypto_aead_create_session_req aead_create_session; /*    16    56 */
-> >                    struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*    16    56 */
-> >                    struct virtio_crypto_destroy_session_req destroy_session; /*    16    56 */
-> >                    __u8               padding[56];          /*    16    56 */
-> >            } u;                                             /*    16    56 */
-> >            union {
-> >                    struct virtio_crypto_sym_create_session_req sym_create_session; /*     0    56 */
-> >                    struct virtio_crypto_hash_create_session_req hash_create_session; /*     0    56 */
-> >                    struct virtio_crypto_mac_create_session_req mac_create_session; /*     0    56 */
-> >                    struct virtio_crypto_aead_create_session_req aead_create_session; /*     0    56 */
-> >                    struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*     0    56 */
-> >                    struct virtio_crypto_destroy_session_req destroy_session; /*     0    56 */
-> >                    __u8                       padding[56];          /*     0    56 */
-> >            };
-> > 
-> > 
-> >            /* size: 72, cachelines: 2, members: 2 */
-> >            /* last cacheline: 8 bytes */
-> >    };
-> > 
-> > (so size and p_size_field should be 56) and the type of the para
-> > parameter in virtio_crypto_alg_akcipher_init_session() is 'void *' but
-> > the para passed by reference to
-> > virtio_crypto_alg_akcipher_init_session() in virtio_crypto_rsa_set_key()
-> > has a type of 'struct virtio_crypto_akcipher_session_para':
-> > 
-> >    struct virtio_crypto_akcipher_session_para {
-> >            __le32                     algo;                 /*     0     4 */
-> >            __le32                     keytype;              /*     4     4 */
-> >            __le32                     keylen;               /*     8     4 */
-> >            union {
-> >                    struct virtio_crypto_rsa_session_para rsa; /*    12     8 */
-> >                    struct virtio_crypto_ecdsa_session_para ecdsa; /*    12     8 */
-> >            } u;                                             /*    12     8 */
-> >            union {
-> >                    struct virtio_crypto_rsa_session_para rsa;       /*     0     8 */
-> >                    struct virtio_crypto_ecdsa_session_para ecdsa;   /*     0     8 */
-> >            };
-> > 
-> > 
-> >            /* size: 20, cachelines: 1, members: 4 */
-> >            /* last cacheline: 20 bytes */
-> >    };
-> > 
-> > (so q_size_field would be 20 if clang were able to do inlining to see
-> > through the 'void *'...?), which would result in the
-> > 
-> >    __compiletime_lessthan(q_size_field, size)
-> > 
-> > check succeeding and triggering the warning because 20 < 56, so it does
-> > seem like there is an overread of the source buffer here? Adding the
-> 
-> Looks like it; I think either the passed 'para' should be of type
-> virtio_crypto_akcipher_create_session_req() or it should only copy
-> sizeof(struct virtio_crypto_akcipher_session_para) bytes.
-> 
-> Anyway, how did you find that ? Is there a magic trick to find the
-> actual code causing the warning ? I am asking because we had seen
-> similar warnings before, and it would help to know how to find the
-> problematic code.
-> 
-> Thanks,
-> Guenter
-> 
-> > maintainers of the driver and subsystem in question.
-> > 
-> > Cheers,
-> > Nathan
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git flsplit2
+head:   43c094289e51b0d2e1b3a8b7a6cda14ddcaec4ba
+commit: 48df0dcdbded452c1d8cc84652f8705a574bb1fc [11/42] filelock: split common fields into struct file_lock_core
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240128/202401282011.odbgKcIu-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401282011.odbgKcIu-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401282011.odbgKcIu-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/fuse/file.c:2512:7: error: no member named 'fl_pid' in 'struct file_lock'; did you mean 'fl_end'?
+    2512 |                 fl->fl_pid = pid_nr_ns(find_pid_ns(ffl->pid, fc->pid_ns), &init_pid_ns);
+         |                     ^~~~~~
+         |                     fl_end
+   include/linux/filelock.h:127:9: note: 'fl_end' declared here
+     127 |         loff_t fl_end;
+         |                ^
+>> fs/fuse/file.c:2519:6: error: no member named 'fl_type' in 'struct file_lock'
+    2519 |         fl->fl_type = ffl->type;
+         |         ~~  ^
+>> fs/fuse/file.c:2533:44: error: no member named 'fl_owner' in 'struct file_lock'
+    2533 |         inarg->owner = fuse_lock_owner_id(fc, fl->fl_owner);
+         |                                               ~~  ^
+   fs/fuse/file.c:2536:23: error: no member named 'fl_type' in 'struct file_lock'
+    2536 |         inarg->lk.type = fl->fl_type;
+         |                          ~~  ^
+   fs/fuse/file.c:2573:20: error: no member named 'fl_flags' in 'struct file_lock'
+    2573 |         int opcode = (fl->fl_flags & FL_SLEEP) ? FUSE_SETLKW : FUSE_SETLK;
+         |                       ~~  ^
+   fs/fuse/file.c:2574:24: error: no member named 'fl_type' in 'struct file_lock'
+    2574 |         struct pid *pid = fl->fl_type != F_UNLCK ? task_tgid(current) : NULL;
+         |                           ~~  ^
+   fs/fuse/file.c:2584:11: error: no member named 'fl_flags' in 'struct file_lock'
+    2584 |         if ((fl->fl_flags & FL_CLOSE_POSIX) == FL_CLOSE_POSIX)
+         |              ~~  ^
+   7 errors generated.
 
 
-CC patch contributor before I revert the whole thing.
+vim +2512 fs/fuse/file.c
 
+55752a3aba1387 Miklos Szeredi      2019-01-24  2489  
+0b6e9ea041e6c9 Seth Forshee        2014-07-02  2490  static int convert_fuse_file_lock(struct fuse_conn *fc,
+0b6e9ea041e6c9 Seth Forshee        2014-07-02  2491  				  const struct fuse_file_lock *ffl,
+7142125937e148 Miklos Szeredi      2006-06-25  2492  				  struct file_lock *fl)
+7142125937e148 Miklos Szeredi      2006-06-25  2493  {
+7142125937e148 Miklos Szeredi      2006-06-25  2494  	switch (ffl->type) {
+7142125937e148 Miklos Szeredi      2006-06-25  2495  	case F_UNLCK:
+7142125937e148 Miklos Szeredi      2006-06-25  2496  		break;
+7142125937e148 Miklos Szeredi      2006-06-25  2497  
+7142125937e148 Miklos Szeredi      2006-06-25  2498  	case F_RDLCK:
+7142125937e148 Miklos Szeredi      2006-06-25  2499  	case F_WRLCK:
+7142125937e148 Miklos Szeredi      2006-06-25  2500  		if (ffl->start > OFFSET_MAX || ffl->end > OFFSET_MAX ||
+7142125937e148 Miklos Szeredi      2006-06-25  2501  		    ffl->end < ffl->start)
+7142125937e148 Miklos Szeredi      2006-06-25  2502  			return -EIO;
+7142125937e148 Miklos Szeredi      2006-06-25  2503  
+7142125937e148 Miklos Szeredi      2006-06-25  2504  		fl->fl_start = ffl->start;
+7142125937e148 Miklos Szeredi      2006-06-25  2505  		fl->fl_end = ffl->end;
+0b6e9ea041e6c9 Seth Forshee        2014-07-02  2506  
+0b6e9ea041e6c9 Seth Forshee        2014-07-02  2507  		/*
+9d5b86ac13c573 Benjamin Coddington 2017-07-16  2508  		 * Convert pid into init's pid namespace.  The locks API will
+9d5b86ac13c573 Benjamin Coddington 2017-07-16  2509  		 * translate it into the caller's pid namespace.
+0b6e9ea041e6c9 Seth Forshee        2014-07-02  2510  		 */
+0b6e9ea041e6c9 Seth Forshee        2014-07-02  2511  		rcu_read_lock();
+9d5b86ac13c573 Benjamin Coddington 2017-07-16 @2512  		fl->fl_pid = pid_nr_ns(find_pid_ns(ffl->pid, fc->pid_ns), &init_pid_ns);
+0b6e9ea041e6c9 Seth Forshee        2014-07-02  2513  		rcu_read_unlock();
+7142125937e148 Miklos Szeredi      2006-06-25  2514  		break;
+7142125937e148 Miklos Szeredi      2006-06-25  2515  
+7142125937e148 Miklos Szeredi      2006-06-25  2516  	default:
+7142125937e148 Miklos Szeredi      2006-06-25  2517  		return -EIO;
+7142125937e148 Miklos Szeredi      2006-06-25  2518  	}
+7142125937e148 Miklos Szeredi      2006-06-25 @2519  	fl->fl_type = ffl->type;
+7142125937e148 Miklos Szeredi      2006-06-25  2520  	return 0;
+7142125937e148 Miklos Szeredi      2006-06-25  2521  }
+7142125937e148 Miklos Szeredi      2006-06-25  2522  
+7078187a795f86 Miklos Szeredi      2014-12-12  2523  static void fuse_lk_fill(struct fuse_args *args, struct file *file,
+a9ff4f87056cd3 Miklos Szeredi      2007-10-18  2524  			 const struct file_lock *fl, int opcode, pid_t pid,
+7078187a795f86 Miklos Szeredi      2014-12-12  2525  			 int flock, struct fuse_lk_in *inarg)
+7142125937e148 Miklos Szeredi      2006-06-25  2526  {
+6131ffaa1f0914 Al Viro             2013-02-27  2527  	struct inode *inode = file_inode(file);
+9c8ef5614da226 Miklos Szeredi      2006-06-25  2528  	struct fuse_conn *fc = get_fuse_conn(inode);
+7142125937e148 Miklos Szeredi      2006-06-25  2529  	struct fuse_file *ff = file->private_data;
+7078187a795f86 Miklos Szeredi      2014-12-12  2530  
+7078187a795f86 Miklos Szeredi      2014-12-12  2531  	memset(inarg, 0, sizeof(*inarg));
+7078187a795f86 Miklos Szeredi      2014-12-12  2532  	inarg->fh = ff->fh;
+7078187a795f86 Miklos Szeredi      2014-12-12 @2533  	inarg->owner = fuse_lock_owner_id(fc, fl->fl_owner);
+7078187a795f86 Miklos Szeredi      2014-12-12  2534  	inarg->lk.start = fl->fl_start;
+7078187a795f86 Miklos Szeredi      2014-12-12  2535  	inarg->lk.end = fl->fl_end;
+7078187a795f86 Miklos Szeredi      2014-12-12  2536  	inarg->lk.type = fl->fl_type;
+7078187a795f86 Miklos Szeredi      2014-12-12  2537  	inarg->lk.pid = pid;
+a9ff4f87056cd3 Miklos Szeredi      2007-10-18  2538  	if (flock)
+7078187a795f86 Miklos Szeredi      2014-12-12  2539  		inarg->lk_flags |= FUSE_LK_FLOCK;
+d5b4854357f478 Miklos Szeredi      2019-09-10  2540  	args->opcode = opcode;
+d5b4854357f478 Miklos Szeredi      2019-09-10  2541  	args->nodeid = get_node_id(inode);
+d5b4854357f478 Miklos Szeredi      2019-09-10  2542  	args->in_numargs = 1;
+d5b4854357f478 Miklos Szeredi      2019-09-10  2543  	args->in_args[0].size = sizeof(*inarg);
+d5b4854357f478 Miklos Szeredi      2019-09-10  2544  	args->in_args[0].value = inarg;
+7142125937e148 Miklos Szeredi      2006-06-25  2545  }
+7142125937e148 Miklos Szeredi      2006-06-25  2546  
+
+:::::: The code at line 2512 was first introduced by commit
+:::::: 9d5b86ac13c573795525ecac6ed2db39ab23e2a8 fs/locks: Remove fl_nspid and use fs-specific l_pid for remote locks
+
+:::::: TO: Benjamin Coddington <bcodding@redhat.com>
+:::::: CC: Jeff Layton <jlayton@redhat.com>
 
 -- 
-MST
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
