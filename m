@@ -1,207 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E25D50F
-	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 08:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D166FDDD8;
+	Sun, 28 Jan 2024 09:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706429496; cv=none; b=I6lyJ9e5FhOLTEK89wwH45LSvQThX0C8ca9w0A+5EfPe9UAp19wMTyTCGWfuQOGIbiCk0+6MfDhxP4oZ3tHhnmubis5LNorNkibTRDFamMVYAcL8gPseXmIexR9VPPngbfaKg+M8Wp5yEMwgG9LL/kE5pq1dm9jYdzY6XDAVNTc=
+	t=1706432788; cv=none; b=nsU/9yLNXKmbr3OR0A1IAxwutraNo6XfhR30QZx7sQGUHZv+NSGti0aWoZdMaDA984Kle636hrLHaX2uAtD2L7TwYbAyx6BgCTm0qD0aWYSyjiLYZFCjcdxE8qIfglcL9j1p9L21LmROcs3LPW7y1qIwVPdrQTYi+AuMSRH3qmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706429496; c=relaxed/simple;
-	bh=k2Hi78yi7HSnQ6jD77MZCEcGlOIfo0AcickKNN6o30I=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Ze4qZZd92MOfZVlBEI6VkaM+x0JJLykGab6UrBS6pOe2d1nHUg43JUXSPmUs/7uFhXTLrxIMymmhJwMgb/VYPw+ggzIVBI/d5SmVO5ZtnmcLIBguMxEKHTWNYb7olGC60c6c2L1kmW5Kk4PDhRFBOFRZYsVElTbwaWUFnMHAKbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NcsujkA/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706432788; c=relaxed/simple;
+	bh=fECoJNI36xhLs+WlNCdEmmGpaXzg+LhNnyvIYrjamVI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eMUkOfdI8mNF2oX0xhkFy+Ej3iQ3FsAzZMQwS3AVSLrcYE0X3BCkrCQv6+DtTaypoStnhZqnYGmnAuenSi0Ht4K7OeDC/jj8OK4bm36R38Q/ThYym/OONScj+APgjWyD1tdS5j/7tYOQ3hSfD5YltM4Ze5N+4mHs/VBV2wWv/V0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gdnAYuK7; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NcsujkA/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706429493;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nhXXYqpie7+8rgZYM6ViI4Ts2PEzfzmSXyElv+rJtwQ=;
-	b=NcsujkA/KAa3u/nUqMlkbj4zeCOzt1G+9nursWAcc9YrvWj/GxiIcLwuD01N8i6eMQU/8y
-	lmk2gIA0DGPCX4bQ6YL4sitW52C6ydK8I2bSj8O8+scNFsDzKcoUC3sRBjR50FrXLPtY+f
-	vz+b1JM2vhOEeEeNy4EybFGAHlZMpI4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-74-bX1Df_MZMBSVZpBthPosYg-1; Sun, 28 Jan 2024 03:11:31 -0500
-X-MC-Unique: bX1Df_MZMBSVZpBthPosYg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2265F185A782
-	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 08:11:31 +0000 (UTC)
-Received: from [172.64.10.18] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0A2D7C15E61;
-	Sun, 28 Jan 2024 08:11:31 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 12 of 226): Test report for master
- (6.8.0-rc1, mainline.kernel.org-clang, 3a5879d4)
-Date: Sun, 28 Jan 2024 08:11:30 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gdnAYuK7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706432787; x=1737968787;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fECoJNI36xhLs+WlNCdEmmGpaXzg+LhNnyvIYrjamVI=;
+  b=gdnAYuK7U2ZW3Gckk/LJR4k+ICIVTDIYYBH57NuLF8+k5zE2+jCRLGcS
+   hOXl9uKd2EP7U7CHsLrSxOCMV3MNe+v90RCzeGvSTaoAf95cg1jNLAjxw
+   u0w/ZJPpyNuirXJ/HKU0E1RcQ+43k5NJui3/P13zRpiav6fjOdodLOBan
+   QBCSqX4hjo+J5MaAC70Liozw5AxjgDiF8WVVdwcbwRvk4FtWnp0i3u1BH
+   MJuMYMbEtD+vtftGlMF9viob0IxQUE1EojSVs5J84byehkbtzUCC4k3uy
+   dvJjId2EAm7dZYKSMCrfdezFpkMywb/9FH+QPeubRHbbDREA8iAzVDXAT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="9868497"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="9868497"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 01:06:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="787533230"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="787533230"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2024 01:06:21 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rU17L-0003GQ-1N;
+	Sun, 28 Jan 2024 09:06:19 +0000
+Date: Sun, 28 Jan 2024 17:05:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v2 3/8] power: reset: Introduce PSCR Recording Framework
+ for Non-Volatile Storage
+Message-ID: <202401281628.Z3E5872D-lkp@intel.com>
+References: <20240124122204.730370-4-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <95666.124012803113102875@us-mta-74.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240124122204.730370-4-o.rempel@pengutronix.de>
 
-Hi, we tested your kernel and here are the results:
+Hi Oleksij,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on broonie-regulator/for-next rafael-pm/thermal linus/master v6.8-rc1 next-20240125]
+[cannot apply to sre-power-supply/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'ata-6.8-rc2' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/libata/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20240124-202833
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240124122204.730370-4-o.rempel%40pengutronix.de
+patch subject: [PATCH v2 3/8] power: reset: Introduce PSCR Recording Framework for Non-Volatile Storage
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240128/202401281628.Z3E5872D-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401281628.Z3E5872D-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/126072
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401281628.Z3E5872D-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Storage - swraid scsi_raid
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [rawhide] avc:  denied  { checkpoint_restore } for  pid=3D79=
-3 comm=3D"agetty" capability=3D40  scontext=3Dsystem_u:system_r:getty_t:s0-=
-s0:c0.c1023 tcontext=3Dsystem_u:system_r:getty_t:s0-s0:c0.c1023 tclass=3Dca=
-pability2 permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259622
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Storage - swraid scsi_raid
-                   s390x - Reboot test
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+All warnings (new ones prefixed by >>):
+
+>> drivers/power/reset/pscrr.c:132:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
+     132 |         }
+         |         ^
+   1 warning generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - Hardware - CPU: Die Test
-      x86_64 (debug) - Storage - swraid scsi_raid
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - Memory function: memfd_create
+vim +132 drivers/power/reset/pscrr.c
 
+   119	
+   120	static const char *pscr_to_por_string(enum pscr pscr)
+   121	{
+   122		switch (pscr) {
+   123		case PSCR_UNDER_VOLTAGE:
+   124			return POWER_ON_REASON_BROWN_OUT;
+   125		case PSCR_OVER_CURRENT:
+   126			return POWER_ON_REASON_OVER_CURRENT;
+   127		case PSCR_REGULATOR_FAILURE:
+   128			return POWER_ON_REASON_REGULATOR_FAILURE;
+   129		case PSCR_OVERTEMPERATURE:
+   130			return POWER_ON_REASON_OVERTEMPERATURE;
+   131		default:
+ > 132		}
+   133	
+   134		return POWER_ON_REASON_UNKNOWN;
+   135	}
+   136	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
