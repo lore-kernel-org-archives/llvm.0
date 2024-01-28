@@ -1,55 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9CB23772;
-	Sun, 28 Jan 2024 14:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738C42D60A;
+	Sun, 28 Jan 2024 15:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706451215; cv=none; b=f5JQACMqVZBEdaDF2bmTtUzuLSX17i3K9efhZwiQzhnMCbf/YZtt7BPHvXL5JLFLoAmrP2HBGiDNA9rgXgijgYmjA3bN+bfpFKjAtZvQ547MxAbt3xrJlB3F+wTzJIf7eVw7rEOA7kVTm/5zxbL3msFy+CJpq37smXKnT3bPeMg=
+	t=1706457575; cv=none; b=dnsBfulbFcEpZxJzqYlcOPfzlGwn7dfzpGUkwKp0G29UbO8SI+JubXgcVoKXoKZQ7ygO9NouCneZUFEFqr50OYERtyvEysZaCFMS+TqS6CqBZ07/UECh13YC52HEN7B7TX5M0DjdN+1KGNB9Z7BV6x4tuQoOOxwHXUTJnq+mWYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706451215; c=relaxed/simple;
-	bh=cVuSjDYxKdCFnNX3BN84vJCgod9VLNtOwmaCxQcY6ks=;
+	s=arc-20240116; t=1706457575; c=relaxed/simple;
+	bh=jgxK5bxKkmEkuPP2q4pZVhdhe9oPQw4K/R0cQ3sYWPw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rNLJywgwCO5nOo9gYUWig3OjVfxmj6drw1Dl619h3yTwENloj+Nqx5q8iCNl4A/lkcO/MkebApIzEIBk7BVAtTvf5aD+A+RD3Gc6dWUqYqPtYzokcyspnjdNiC50r6Z4mTWQhacP+4fVrAmQOlnK/TGk7k+kIQmHm4f23qHsAaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cl+nd2Qm; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=nmurjEZ63WWig5/r1wGy+XGU70ZJPgxmMrO3G86c03k6Yt2d4u9g6QF+pFG7EYm39Uuz1IamAUPaM3fssBl+1/uRygtT42dJtGhF2E8JuDz02vwqQ/Rr4/IA20PIa8mC5T1B1mbwJvRHcM9+cH/EeExp2c06hJM6afKLeJzwAL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g9Q/oMQW; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cl+nd2Qm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g9Q/oMQW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706451213; x=1737987213;
+  t=1706457574; x=1737993574;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cVuSjDYxKdCFnNX3BN84vJCgod9VLNtOwmaCxQcY6ks=;
-  b=Cl+nd2Qmt3nS2cYyJMbnBnK6jIjw5IV9elVuC8J3+aO49rdNEalPsNGF
-   6/phfO01BdSeXrkUb3muUae4veA9DGWX/V49qrqyncq4GnydFvBsnfG90
-   7IGJU76o6X6KM8NGYNCKJNyOjSIAsvuYCJWKZ3x1WhpvPGbTuNuGk+d4q
-   4lob2An2xramKbiTtN5ZoCluDsMrPoD5fub9olky0bK7XKy6bAJA9nM/3
-   iDI2eO14P5rZ8IPHNzxfzibVgDfsa6kvIFzEq4eGAYcPuzTAGNwp7CYWq
-   BY2eHUS0+2Zq8q2GSv+RvtgnDr26YN1m+NAcUO7D5P1qlgWKDpSAb2g3S
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="2605361"
+  bh=jgxK5bxKkmEkuPP2q4pZVhdhe9oPQw4K/R0cQ3sYWPw=;
+  b=g9Q/oMQWm+5xuPtS0MVlIYDm63eEVy59luazjrzpd6C1xCRLEnwYNRGF
+   qCPyHP0/r2yaRACkUClNi+YU76hnV6vHFoC0/6dQafkK56PMfZtPXb1rq
+   loJoNp8o+8XfihqzJ0YypsWkigi3oiuSz3drVh5SO2jV67uELt4RajuYf
+   bu6nFdnsQ8NRTsmCVh++NPleeZXWsasWp73ZBxGctpOTp9MDOMLqnwlmE
+   V43pF7AfLXDfAKLPOriDIyJG7Ir1lFEiVLsFMeBJpFZolPGiVF8Zey7wc
+   MGm7gskD63TmNB01eO7LkVYJakN50vX64tBmYo1rQqTmNMU2oL48ehOPz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="1719077"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="2605361"
+   d="scan'208";a="1719077"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 06:13:30 -0800
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 07:59:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="857854986"
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="857867604"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="857854986"
+   d="scan'208";a="857867604"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jan 2024 06:13:29 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jan 2024 07:59:30 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rU5uY-0003S9-30;
-	Sun, 28 Jan 2024 14:13:26 +0000
-Date: Sun, 28 Jan 2024 22:12:50 +0800
+	id 1rU7ZB-0003W6-0H;
+	Sun, 28 Jan 2024 15:59:29 +0000
+Date: Sun, 28 Jan 2024 23:58:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ast-bpf:uptr_v3 6/10] ld.lld: error: undefined symbol:
- bpf_arena_get_user_vm_start
-Message-ID: <202401282230.sznzjkkK-lkp@intel.com>
+Subject: [jmondi:pispbe/media-staging/be-upstream 7/7]
+ ./usr/include/linux/pisp_common.h:142:34: warning: // comments are not
+ allowed in this language
+Message-ID: <202401282315.Tmjnw5Qr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,23 +60,36 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git uptr_v3
-head:   7ec22ac2adbc15f8ea20c1189b2dd95558ae3bcf
-commit: f46bfe6061c3fb76aabd27fb9dec3deb98d0fc75 [6/10] bpf: Recognize cast_kern/user instructions in the verifier.
-config: i386-buildonly-randconfig-003-20240128 (https://download.01.org/0day-ci/archive/20240128/202401282230.sznzjkkK-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jmondi/linux.git pispbe/media-staging/be-upstream
+head:   e1ae55c1c7105b10788c4b50c4185e82c309fdda
+commit: e1ae55c1c7105b10788c4b50c4185e82c309fdda [7/7] media: raspberrypi: Add support for PiSP BE
+config: i386-buildonly-randconfig-002-20240128 (https://download.01.org/0day-ci/archive/20240128/202401282315.Tmjnw5Qr-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401282230.sznzjkkK-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401282315.Tmjnw5Qr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401282230.sznzjkkK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401282315.Tmjnw5Qr-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: bpf_arena_get_user_vm_start
-   >>> referenced by verifier.c
-   >>>               kernel/bpf/verifier.o:(bpf_check) in archive vmlinux.a
+   In file included from <built-in>:1:
+>> ./usr/include/linux/pisp_common.h:142:34: warning: // comments are not allowed in this language [-Wcomment]
+     142 | #define PISP_WALLPAPER_WIDTH 128 // in bytes
+         |                                  ^
+   1 warning generated.
+--
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/pisp_be_config.h:13:
+>> ./usr/include/linux/pisp_common.h:142:34: warning: // comments are not allowed in this language [-Wcomment]
+     142 | #define PISP_WALLPAPER_WIDTH 128 // in bytes
+         |                                  ^
+   In file included from <built-in>:1:
+>> ./usr/include/linux/pisp_be_config.h:476:13: warning: // comments are not allowed in this language [-Wcomment]
+     476 |         __u8 edge; // enum pisp_tile_edge
+         |                    ^
+   2 warnings generated.
 
 -- 
 0-DAY CI Kernel Test Service
