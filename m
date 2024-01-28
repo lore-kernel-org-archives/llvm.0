@@ -1,56 +1,56 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C7B23CE
-	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 02:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9264A15A7
+	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 02:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706407946; cv=none; b=ZDxNK/QsvZxQvGX9weSadJ4nFdi9oqKFUXqm3O+gnxJzR4afPJctN97mxFQjFf6t5zMttPaDs0rLYR8J0AizfJylkiDr5ID2vaGhH6A0nlKfC3guaB0+w+Ga5FQjkAQAnEPBEfdc3oEDYUOwm0fhpsx5sDZdSECO0HFdulDywys=
+	t=1706407946; cv=none; b=NFi1DOzeOIKEqejJxEOC1hepbZ5L1V8kvJE/pbnNmKvtvojkNyyq41qKSpP6Bex6LuVX08thSzKXjz6sVuvFQto+BFuaYe0yE/PwfqzjcH2abCjbVz0BMa96CoLS/WUTRAggYH9grZRT5wIN0hU0N4iXtfoxGbgIrKOnGhSzpjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706407946; c=relaxed/simple;
-	bh=xPQ0PXiX5n2Y4YbHy5UWYmPUAytuGPVlH6TYVkRD8Jk=;
+	bh=Nh29uFhKJi602G3prs8tELRuSaiBp8xa7lI2rXd2Wvk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZxLOJIWmYny4zJsin41K7ScGw7Yf0iSJf79dvXklJGhZic7kdHCgO/cY/oE77xIvSSeN56ICtL5SBmvj4AC5Krmwn4GOS10ALbH8Uc9568n+S47grqNoasUdafqBmxHyyxOM2srO5TN38yhb8fdZeHz0GpzDSyatAimx4zNmrwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EmQEpL/m; arc=none smtp.client-ip=209.85.222.169
+	 In-Reply-To:To:Cc; b=SB2V1KGm8kV6QpIJsOdWNEme8+N9m/1GUgIWCKMWu8uXOMz+EeVG+qUUfq3Vu0d7IgRcm8jkcYfN1Pip0GUF4fUYVGs+L6wZ9SfBea8ebzoTdhlbHRCAQp7S6JRTu4CXlYr4WoV4ORwSHpmUEFhMqjCdQD9hSd0hzjWMhD6X5+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FbN1NO42; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EmQEpL/m"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-783d916d039so131442485a.2
-        for <llvm@lists.linux.dev>; Sat, 27 Jan 2024 18:12:24 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FbN1NO42"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-42a4516ec5dso16597501cf.3
+        for <llvm@lists.linux.dev>; Sat, 27 Jan 2024 18:12:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706407943; x=1707012743; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1706407942; x=1707012742; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hOgHCV5E3Be30rwf2RnaiPl5JJ07/Dl6Wk4WLvGCkYA=;
-        b=EmQEpL/mE2S0PD4lhiQWikmNxDoirt6ucagKIOpYbAqeTJF2+ekgNTB9oAerhc2sA7
-         7CCKOn6FOOPDUap7X287ZCEwiMBCbsGG3einNuKQVvUoDr4plt4AKmlKuyRb8zjCSHMc
-         zE02shp5383H2DmYw14rVSMEt0niAYHhTT6CY=
+        bh=JJ/tXyO7amkyPth0LbHgT/YZ0y8KfOoM1IDJtLvky2Q=;
+        b=FbN1NO42N0XMwnUTlZC4YXIoKwLOKaOCAIHm0RcqT5qaoGFgBH3WgZjrApFveE7zek
+         WjIDOs7yt3CqpTEg89u8zsT0NaFPAsct5v4Cxa0M66L8i7ICicS0hJpN/ZpFG+TFacBi
+         oQf2/6A4ONlqXApuftBKb+93j6RU/E8EocrpE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706407943; x=1707012743;
+        d=1e100.net; s=20230601; t=1706407942; x=1707012742;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hOgHCV5E3Be30rwf2RnaiPl5JJ07/Dl6Wk4WLvGCkYA=;
-        b=PYXVNENTBERiFKBNOOInpDGs7xVT8A99OiD/skf0g97aTtOAOPQZH29tWUCJ5KqKVW
-         haaHtZC9BA0C7ngW6OV4++sXMiVGobP7hOZ6G3YYvUVkuViKfZrFc4YlvDVVu5xWrJle
-         zWDu1VO3imV+MnLg3aqwVy3dZ4fL2zFxuabvew4WCUp30SaiTdJ2uMsMipoQAcnDM5eI
-         CQgncCjFoK4+H9t6CLKUY6RRoeSXCDdWaMToo2qNWLQ9fph5xNZHE526a8hv3mALhLle
-         plWqm4q/9zlzl2iivzzq4220h4As32Ib1jcTJg1YWfZUrjnD2dJrxxJH8QVbtGy6fovr
-         9jlw==
-X-Gm-Message-State: AOJu0Yw6BzzY+y9L84b0Oxrub/waSxf8EffSb1c6gNMWJX4D6RD/otaH
-	xYEIDcok3SH0Tv2h3eViRPFAR7S5A5ETEBQkCFZZ+aulvh5FLqU3PJxjbBNb+w==
-X-Google-Smtp-Source: AGHT+IH+hk6gNAofiPiYjbeJjVjSll9nP6JGaxAuvO6ry6PkFSYfUZKlxlGVvj4dQrSmFMmS8hX13Q==
-X-Received: by 2002:ac8:5b84:0:b0:42a:9aa8:776d with SMTP id a4-20020ac85b84000000b0042a9aa8776dmr1203101qta.130.1706407943512;
-        Sat, 27 Jan 2024 18:12:23 -0800 (PST)
-Received: from denia.c.googlers.com (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id ka23-20020a05622a441700b0042a98bf0117sm568061qtb.78.2024.01.27.18.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=JJ/tXyO7amkyPth0LbHgT/YZ0y8KfOoM1IDJtLvky2Q=;
+        b=Xt4DEG+tCNzVifHu2fVuMbJC8NyN8UBXysv84CGjRMBpQna9zi/U6Jmu/XhI8JCNBL
+         CKRSL0byMYWTiSzcdc1w+yO3xKTT256P9tVJtEuEhIITji71yEhisfhxUj2CbFavf9n1
+         uKaEk6NZa3iQz8E4IeDzoJwLDLDZ5Nb9pHm4roV5/AIyi31J/fLdqXvsPR083kf2uLgG
+         zFW2MxKo+lfdw7fXjbUPkUdkLAQQK7CVa37uSccsvKaH+rASHbNCMq0wa0P6gFqYaTar
+         rcBtAgFXGQox3oy86VsKToqyIRbQ0gZqOXC74uJ26JpkzvYYG09bX3JnNruWJ3ZZPkya
+         pIFg==
+X-Gm-Message-State: AOJu0Yzehk8KULHcudufcHUtx0I38Evft+TZFk954nZThWaV6ox5HNUd
+	Zsc99wtApDnLpxz9WLlu3WxyOt/1eTpozHqMUP3YpRqBnbrmRtxZNcQsZLvfHQ==
+X-Google-Smtp-Source: AGHT+IEEZr/G/RgBFCi06b4c43fIXB0Odt7evUICu34JTHlyZ3GvGTVQDDbpNKHMg99SUGIH+6qSbA==
+X-Received: by 2002:a05:622a:49:b0:42a:8630:3dfd with SMTP id y9-20020a05622a004900b0042a86303dfdmr2871708qtw.87.1706407942502;
         Sat, 27 Jan 2024 18:12:22 -0800 (PST)
+Received: from denia.c.googlers.com (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id ka23-20020a05622a441700b0042a98bf0117sm568061qtb.78.2024.01.27.18.12.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Jan 2024 18:12:21 -0800 (PST)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Sun, 28 Jan 2024 02:12:21 +0000
-Subject: [PATCH 2/3] media: usb: pvrusb2: Fix Wcast-function-type-strict
+Date: Sun, 28 Jan 2024 02:12:20 +0000
+Subject: [PATCH 1/3] media: pci: sta2x11: Fix Wcast-function-type-strict
  warnings
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240128-fix-clang-warnings-v1-2-1d946013a421@chromium.org>
+Message-Id: <20240128-fix-clang-warnings-v1-1-1d946013a421@chromium.org>
 References: <20240128-fix-clang-warnings-v1-0-1d946013a421@chromium.org>
 In-Reply-To: <20240128-fix-clang-warnings-v1-0-1d946013a421@chromium.org>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -78,92 +78,38 @@ Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.12.3
 
 Building with LLVM=1 throws the following warning:
-drivers/media/usb/pvrusb2/pvrusb2-context.c:110:6: warning: cast from 'void (*)(struct pvr2_context *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-drivers/media/usb/pvrusb2/pvrusb2-v4l2.c:1070:30: warning: cast from 'void (*)(struct pvr2_v4l2_fh *)' to 'pvr2_stream_callback' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict] drivers/media/usb/pvrusb2/pvrusb2-dvb.c:152:6: warning: cast from 'void (*)(struct pvr2_dvb_adapter *)' to 'pvr2_stream_callback' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+drivers/media/pci/sta2x11/sta2x11_vip.c:1057:6: warning: cast from 'irqreturn_t (*)(int, struct sta2x11_vip *)' (aka 'enum irqreturn (*)(int, struct sta2x11_vip *)') to 'irq_handler_t' (aka 'enum irqreturn (*)(int, void *)') converts to incompatible function type [-Wcast-function-type-strict]
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-context.c | 5 +++--
- drivers/media/usb/pvrusb2/pvrusb2-dvb.c     | 7 ++++---
- drivers/media/usb/pvrusb2/pvrusb2-v4l2.c    | 7 ++++---
- 3 files changed, 11 insertions(+), 8 deletions(-)
+ drivers/media/pci/sta2x11/sta2x11_vip.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-context.c b/drivers/media/usb/pvrusb2/pvrusb2-context.c
-index 1764674de98b..16edabda191c 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-context.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-context.c
-@@ -90,8 +90,9 @@ static void pvr2_context_destroy(struct pvr2_context *mp)
- }
- 
- 
--static void pvr2_context_notify(struct pvr2_context *mp)
-+static void pvr2_context_notify(void *data)
+diff --git a/drivers/media/pci/sta2x11/sta2x11_vip.c b/drivers/media/pci/sta2x11/sta2x11_vip.c
+index e4cf9d63e926..0a3827575753 100644
+--- a/drivers/media/pci/sta2x11/sta2x11_vip.c
++++ b/drivers/media/pci/sta2x11/sta2x11_vip.c
+@@ -757,7 +757,7 @@ static const struct video_device video_dev_template = {
+ /**
+  * vip_irq - interrupt routine
+  * @irq: Number of interrupt ( not used, correct number is assumed )
+- * @vip: local data structure containing all information
++ * @data: local data structure containing all information
+  *
+  * check for both frame interrupts set ( top and bottom ).
+  * check FIFO overflow, but limit number of log messages after open.
+@@ -767,9 +767,10 @@ static const struct video_device video_dev_template = {
+  *
+  * IRQ_HANDLED, interrupt done.
+  */
+-static irqreturn_t vip_irq(int irq, struct sta2x11_vip *vip)
++static irqreturn_t vip_irq(int irq, void *data)
  {
-+	struct pvr2_context *mp = data;
- 	pvr2_context_set_notify(mp,!0);
- }
+ 	unsigned int status;
++	struct sta2x11_vip *vip = data;
  
-@@ -107,7 +108,7 @@ static void pvr2_context_check(struct pvr2_context *mp)
- 			   "pvr2_context %p (initialize)", mp);
- 		/* Finish hardware initialization */
- 		if (pvr2_hdw_initialize(mp->hdw,
--					(void (*)(void *))pvr2_context_notify,
-+					pvr2_context_notify,
- 					mp)) {
- 			mp->video_stream.stream =
- 				pvr2_hdw_get_video_stream(mp->hdw);
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-index 26811efe0fb5..8b9f1a09bd53 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-@@ -88,8 +88,9 @@ static int pvr2_dvb_feed_thread(void *data)
- 	return stat;
- }
+ 	status = reg_read(vip, DVP_ITS);
  
--static void pvr2_dvb_notify(struct pvr2_dvb_adapter *adap)
-+static void pvr2_dvb_notify(void *data)
- {
-+	struct pvr2_dvb_adapter *adap = data;
- 	wake_up(&adap->buffer_wait_data);
- }
- 
-@@ -148,8 +149,8 @@ static int pvr2_dvb_stream_do_start(struct pvr2_dvb_adapter *adap)
- 		if (!(adap->buffer_storage[idx])) return -ENOMEM;
- 	}
- 
--	pvr2_stream_set_callback(pvr->video_stream.stream,
--				 (pvr2_stream_callback) pvr2_dvb_notify, adap);
-+	pvr2_stream_set_callback(pvr->video_stream.stream, pvr2_dvb_notify,
-+				 adap);
- 
- 	ret = pvr2_stream_set_buffer_count(stream, PVR2_DVB_BUFFER_COUNT);
- 	if (ret < 0) return ret;
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-index c04ab7258d64..590f80949bbf 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-@@ -1032,9 +1032,10 @@ static int pvr2_v4l2_open(struct file *file)
- 	return 0;
- }
- 
--
--static void pvr2_v4l2_notify(struct pvr2_v4l2_fh *fhp)
-+static void pvr2_v4l2_notify(void *data)
- {
-+	struct pvr2_v4l2_fh *fhp = data;
-+
- 	wake_up(&fhp->wait_data);
- }
- 
-@@ -1067,7 +1068,7 @@ static int pvr2_v4l2_iosetup(struct pvr2_v4l2_fh *fh)
- 
- 	hdw = fh->channel.mc_head->hdw;
- 	sp = fh->pdi->stream->stream;
--	pvr2_stream_set_callback(sp,(pvr2_stream_callback)pvr2_v4l2_notify,fh);
-+	pvr2_stream_set_callback(sp, pvr2_v4l2_notify, fh);
- 	pvr2_hdw_set_stream_type(hdw,fh->pdi->config);
- 	if ((ret = pvr2_hdw_set_streaming(hdw,!0)) < 0) return ret;
- 	return pvr2_ioread_set_enabled(fh->rhp,!0);
 
 -- 
 2.43.0.429.g432eaa2c6b-goog
