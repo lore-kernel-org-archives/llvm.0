@@ -1,56 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A93D3C082;
-	Sun, 28 Jan 2024 16:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025982C6AA;
+	Sun, 28 Jan 2024 16:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706460099; cv=none; b=TWP8+lw/xZ68E68uGV7m5KM1yLYZCzTeOzTqNCH3Tk/xdNGwWONDiAL6gdEToCw7pGLk7n6W6VAvkUivOKeRtj7c2XfM1wemzgjcn1FZs1dGR06/E5F+00NWz140F79VC/paXSy3Gf/K2mOaipkEy1Vv4V8pL7MYM/HGVBkRqgk=
+	t=1706460758; cv=none; b=Ng19pJgKRbwgpFqPbIGDMEMkUywnwFbhKyB+UV/E26ZBGAPp9+soTPhYLVGTLMcbkEvfQjPY4eH051V7P+Mg3cExvwIz9QQdHTcin+1xhHUU5pcr80fPu3V5xzJ6A3NeL/kkVZ4gEolfvuEvMBERVJ4TiOJL8mOtoL+P6kywD9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706460099; c=relaxed/simple;
-	bh=qvWFWgNJaf07mKO/LaFiF3KOpagW29MNcQSa9aJSciI=;
+	s=arc-20240116; t=1706460758; c=relaxed/simple;
+	bh=rqiN7WutWbK5ymMl1qTBn2MlnbhUIc4/u+NN2fkjLnk=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=D+JcgUhL/oRG2EnvW7v8ZBYoxjNEUzbqFjNCe5a6CIlKy8V+ue2xoa+qanA2wKdeSLyugnQFuhD5Tw1Wk9YDlEurd/2cT8ksZt732PxBJK2iKCDBd+Byf04Do2vWCwRQhVkUkcDyKrdz7PphRcesKwaByQkAgZs+e8twK2/bZwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VFVwZCLM; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=AwO2h9fhslcl1sJzWBoHPrpAJOGgmVVgC32DqvQ3djSCZZ0AgjFDXSMQNXWyU4u7cD4QFkolW8DCVewWpYwa2cQ17oV51J2U6AQIiz7Ttzbxmod2uFiN5VpNGElLBgC91Z190mvvHtAz3hwLit1KY765hdRgCDl+n6tT9ptOO00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pf5q1maU; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VFVwZCLM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pf5q1maU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706460097; x=1737996097;
+  t=1706460756; x=1737996756;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qvWFWgNJaf07mKO/LaFiF3KOpagW29MNcQSa9aJSciI=;
-  b=VFVwZCLM8WkQhVSWUnvvH+31Is2Okxtlj5/AWFRUORwb1a6OwVyw9bCY
-   YnGc3MkPzlnp+tqeMCxkAB0mVBlUSe7cz7a/kCPNzzAHiC5qsEbkP1J7x
-   S2XMgxJe3uoqtmvWkAXCbEI7IZrgFA3PbCwV65BoFu2CdDZlmn6+X++4M
-   YkvBMp45cnE/wacwaF+h9fUKMtRVKyFlSSfeEkd5KwUuNnVkStaKem/AG
-   7TWuzoY0rJRkHSAPcFDhwuKEWE1/1H4m6VbS+P4nIxdmGg1LOSJAREtmr
-   /Reb1fDf9i2sRP6zdxdxPbItZi2J2W4QACb3I+Z1RpIoN0Fk01F5YxotM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="2617663"
+  bh=rqiN7WutWbK5ymMl1qTBn2MlnbhUIc4/u+NN2fkjLnk=;
+  b=Pf5q1maUXaVb8dIG8WMse5xnS5qwFWZxHS43BvAjMDwv2XhXJKolX4TQ
+   grSVYON89GrD2yTAbDVzakHDjdjCJLGNIou/Mi5jy+PW0xenbBIYGsinY
+   o6ZZ9L26rXJ9SrfJ0Rm4ZSZPTchiVsCwLw3lGlSF2bc7OjLdVa/5HKHPb
+   XFKLGNMe7FVni9WzSJxaCIogTYFNtcmd1zaUKTs5cPI/oZluZTq1UWcOo
+   T1ColCK44cFaxx2loEK68bt9CdeI7WHwNPQr6/hYtZrMW/o3q2PZcFrPE
+   X8/KKDiLkEqjOp/ujZ6hUjAdsQK0+CyH60w9pGYlL8OU2FyVywmIDLPJ3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="10175112"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="2617663"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 08:41:36 -0800
+   d="scan'208";a="10175112"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 08:52:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="787604882"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="787604882"
+   d="scan'208";a="3162821"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2024 08:41:34 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 28 Jan 2024 08:52:34 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rU8Dr-0003Zi-2e;
-	Sun, 28 Jan 2024 16:41:31 +0000
-Date: Mon, 29 Jan 2024 00:40:39 +0800
+	id 1rU8OW-0003a0-0G;
+	Sun, 28 Jan 2024 16:52:32 +0000
+Date: Mon, 29 Jan 2024 00:52:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: David Hildenbrand <david@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kees:devel/overflow/enable-unsigned-sanitizer 26/100]
- fs/bcachefs/btree_locking.c:374:9: error: use of undeclared identifier
- 'sub_wrap'
-Message-ID: <202401290037.HTRCJohQ-lkp@intel.com>
+Subject: [davidhildenbrand:rmap_batching 135/136]
+ include/asm-generic/tlb.h:631:3: error: call to undeclared function
+ '__tlb_remove_tlb_entry'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202401290041.ATnzeEJA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,193 +60,94 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git devel/overflow/enable-unsigned-sanitizer
-head:   a7e79409b1cc59a7f181e2b04e0cb4835b620b81
-commit: 41236ed2b6bd8c9f9fdd235e7a44b7729c36e38a [26/100] [WIP] include/linux/jiffies.h: wrapping jiffies: use sub_wrap()
-config: i386-buildonly-randconfig-003-20240128 (https://download.01.org/0day-ci/archive/20240129/202401290037.HTRCJohQ-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401290037.HTRCJohQ-lkp@intel.com/reproduce)
+tree:   https://github.com/davidhildenbrand/linux rmap_batching
+head:   865e6d6a176a1f50bcbb7dd1d6a57b803e398039
+commit: 4779a2a486fbf2d3850b6256cd4c51f2d617c714 [135/136] mm/mmu_gather: add tlb_remove_tlb_entries()
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240129/202401290041.ATnzeEJA-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project a31a60074717fc40887cfe132b77eec93bedd307)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401290041.ATnzeEJA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401290037.HTRCJohQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401290041.ATnzeEJA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/bcachefs/btree_locking.c:374:9: error: too few arguments provided to function-like macro invocation
-     374 |                                     time_after_eq64(top->lock_start_time, trans->locking_wait.start_time))
-         |                                     ^
-   include/linux/jiffies.h:225:42: note: expanded from macro 'time_after_eq64'
-     225 |          ((__s64)sub_wrap(__u64, ((a), (b)) >= 0))
-         |                                                 ^
-   include/linux/overflow.h:177:9: note: macro 'sub_wrap' defined here
-     177 | #define sub_wrap(type, a, b)                            \
-         |         ^
->> fs/bcachefs/btree_locking.c:374:9: error: use of undeclared identifier 'sub_wrap'
-     374 |                                     time_after_eq64(top->lock_start_time, trans->locking_wait.start_time))
-         |                                     ^
-   include/linux/jiffies.h:225:11: note: expanded from macro 'time_after_eq64'
-     225 |          ((__s64)sub_wrap(__u64, ((a), (b)) >= 0))
-         |                  ^
-   2 errors generated.
---
->> fs/bcachefs/six.c:439:8: error: too few arguments provided to function-like macro invocation
-     439 |                         if (time_before_eq64(wait->start_time, last->start_time))
-         |                             ^
-   include/linux/jiffies.h:236:31: note: expanded from macro 'time_before_eq64'
-     236 | #define time_before_eq64(a,b)   time_after_eq64(b,a)
+   In file included from fs/proc/task_mmu.c:27:
+   In file included from arch/powerpc/include/asm/tlb.h:39:
+>> include/asm-generic/tlb.h:631:3: error: call to undeclared function '__tlb_remove_tlb_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     631 |                 __tlb_remove_tlb_entry(tlb, ptep, address);
+         |                 ^
+   arch/powerpc/include/asm/tlb.h:22:32: note: expanded from macro '__tlb_remove_tlb_entry'
+      22 | #define __tlb_remove_tlb_entry  __tlb_remove_tlb_entry
          |                                 ^
-   include/linux/jiffies.h:225:42: note: expanded from macro 'time_after_eq64'
-     225 |          ((__s64)sub_wrap(__u64, ((a), (b)) >= 0))
-         |                                                 ^
-   include/linux/overflow.h:177:9: note: macro 'sub_wrap' defined here
-     177 | #define sub_wrap(type, a, b)                            \
-         |         ^
->> fs/bcachefs/six.c:439:8: error: use of undeclared identifier 'sub_wrap'
-     439 |                         if (time_before_eq64(wait->start_time, last->start_time))
-         |                             ^
-   include/linux/jiffies.h:236:31: note: expanded from macro 'time_before_eq64'
-     236 | #define time_before_eq64(a,b)   time_after_eq64(b,a)
+   include/asm-generic/tlb.h:631:3: note: did you mean 'tlb_remove_tlb_entries'?
+   arch/powerpc/include/asm/tlb.h:22:32: note: expanded from macro '__tlb_remove_tlb_entry'
+      22 | #define __tlb_remove_tlb_entry  __tlb_remove_tlb_entry
          |                                 ^
-   include/linux/jiffies.h:225:11: note: expanded from macro 'time_after_eq64'
-     225 |          ((__s64)sub_wrap(__u64, ((a), (b)) >= 0))
-         |                  ^
+   include/asm-generic/tlb.h:626:20: note: 'tlb_remove_tlb_entries' declared here
+     626 | static inline void tlb_remove_tlb_entries(struct mmu_gather *tlb,
+         |                    ^
+     627 |                 pte_t *ptep, unsigned int nr, unsigned long address)
+     628 | {
+     629 |         tlb_flush_pte_range(tlb, address, PAGE_SIZE * nr);
+     630 |         for (;;) {
+     631 |                 __tlb_remove_tlb_entry(tlb, ptep, address);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~
+         |                 tlb_remove_tlb_entries
+   In file included from fs/proc/task_mmu.c:27:
+   arch/powerpc/include/asm/tlb.h:41:20: error: static declaration of '__tlb_remove_tlb_entry' follows non-static declaration
+      41 | static inline void __tlb_remove_tlb_entry(struct mmu_gather *tlb, pte_t *ptep,
+         |                    ^
+   arch/powerpc/include/asm/tlb.h:22:32: note: expanded from macro '__tlb_remove_tlb_entry'
+      22 | #define __tlb_remove_tlb_entry  __tlb_remove_tlb_entry
+         |                                 ^
+   include/asm-generic/tlb.h:631:3: note: previous implicit declaration is here
+     631 |                 __tlb_remove_tlb_entry(tlb, ptep, address);
+         |                 ^
+   arch/powerpc/include/asm/tlb.h:22:32: note: expanded from macro '__tlb_remove_tlb_entry'
+      22 | #define __tlb_remove_tlb_entry  __tlb_remove_tlb_entry
+         |                                 ^
    2 errors generated.
 
 
-vim +/sub_wrap +374 fs/bcachefs/btree_locking.c
+vim +/__tlb_remove_tlb_entry +631 include/asm-generic/tlb.h
 
-33bd5d068603f9 Kent Overstreet 2022-08-22  284  
-96d994b37cfcf4 Kent Overstreet 2022-08-22  285  int bch2_check_for_deadlock(struct btree_trans *trans, struct printbuf *cycle)
-33bd5d068603f9 Kent Overstreet 2022-08-22  286  {
-33bd5d068603f9 Kent Overstreet 2022-08-22  287  	struct lock_graph g;
-33bd5d068603f9 Kent Overstreet 2022-08-22  288  	struct trans_waiting_for_lock *top;
-33bd5d068603f9 Kent Overstreet 2022-08-22  289  	struct btree_bkey_cached_common *b;
-fea153a84557c9 Kent Overstreet 2023-12-12  290  	btree_path_idx_t path_idx;
-fea153a84557c9 Kent Overstreet 2023-12-12  291  	int ret = 0;
-33bd5d068603f9 Kent Overstreet 2022-08-22  292  
-3398124444b900 Kent Overstreet 2023-05-26  293  	g.nr = 0;
-3398124444b900 Kent Overstreet 2023-05-26  294  
-0d7009d7ca99ad Kent Overstreet 2022-08-22  295  	if (trans->lock_must_abort) {
-40405557b92dfe Kent Overstreet 2023-01-20  296  		if (cycle)
-40405557b92dfe Kent Overstreet 2023-01-20  297  			return -1;
-40405557b92dfe Kent Overstreet 2023-01-20  298  
-c13fbb7de2fc4f Kent Overstreet 2024-01-04  299  		trace_would_deadlock(&g, trans);
-33bd5d068603f9 Kent Overstreet 2022-08-22  300  		return btree_trans_restart(trans, BCH_ERR_transaction_restart_would_deadlock);
-0d7009d7ca99ad Kent Overstreet 2022-08-22  301  	}
-33bd5d068603f9 Kent Overstreet 2022-08-22  302  
-896f1b316f8e8f Kent Overstreet 2022-10-12  303  	lock_graph_down(&g, trans);
-fea153a84557c9 Kent Overstreet 2023-12-12  304  
-fea153a84557c9 Kent Overstreet 2023-12-12  305  	/* trans->paths is rcu protected vs. freeing */
-fea153a84557c9 Kent Overstreet 2023-12-12  306  	rcu_read_lock();
-fea153a84557c9 Kent Overstreet 2023-12-12  307  	if (cycle)
-fea153a84557c9 Kent Overstreet 2023-12-12  308  		cycle->atomic++;
-33bd5d068603f9 Kent Overstreet 2022-08-22  309  next:
-33bd5d068603f9 Kent Overstreet 2022-08-22  310  	if (!g.nr)
-fea153a84557c9 Kent Overstreet 2023-12-12  311  		goto out;
-33bd5d068603f9 Kent Overstreet 2022-08-22  312  
-33bd5d068603f9 Kent Overstreet 2022-08-22  313  	top = &g.g[g.nr - 1];
-33bd5d068603f9 Kent Overstreet 2022-08-22  314  
-fea153a84557c9 Kent Overstreet 2023-12-12  315  	struct btree_path *paths = rcu_dereference(top->trans->paths);
-fea153a84557c9 Kent Overstreet 2023-12-12  316  	if (!paths)
-fea153a84557c9 Kent Overstreet 2023-12-12  317  		goto up;
-fea153a84557c9 Kent Overstreet 2023-12-12  318  
-fea153a84557c9 Kent Overstreet 2023-12-12  319  	unsigned long *paths_allocated = trans_paths_allocated(paths);
-fea153a84557c9 Kent Overstreet 2023-12-12  320  
-fea153a84557c9 Kent Overstreet 2023-12-12  321  	trans_for_each_path_idx_from(paths_allocated, *trans_paths_nr(paths),
-fea153a84557c9 Kent Overstreet 2023-12-12  322  				     path_idx, top->path_idx) {
-fea153a84557c9 Kent Overstreet 2023-12-12  323  		struct btree_path *path = paths + path_idx;
-33bd5d068603f9 Kent Overstreet 2022-08-22  324  		if (!path->nodes_locked)
-33bd5d068603f9 Kent Overstreet 2022-08-22  325  			continue;
-33bd5d068603f9 Kent Overstreet 2022-08-22  326  
-f154c3eb429a34 Kent Overstreet 2023-05-27  327  		if (path_idx != top->path_idx) {
-f154c3eb429a34 Kent Overstreet 2023-05-27  328  			top->path_idx		= path_idx;
-33bd5d068603f9 Kent Overstreet 2022-08-22  329  			top->level		= 0;
-33bd5d068603f9 Kent Overstreet 2022-08-22  330  			top->lock_start_time	= 0;
-33bd5d068603f9 Kent Overstreet 2022-08-22  331  		}
-33bd5d068603f9 Kent Overstreet 2022-08-22  332  
-33bd5d068603f9 Kent Overstreet 2022-08-22  333  		for (;
-33bd5d068603f9 Kent Overstreet 2022-08-22  334  		     top->level < BTREE_MAX_DEPTH;
-33bd5d068603f9 Kent Overstreet 2022-08-22  335  		     top->level++, top->lock_start_time = 0) {
-33bd5d068603f9 Kent Overstreet 2022-08-22  336  			int lock_held = btree_node_locked_type(path, top->level);
-33bd5d068603f9 Kent Overstreet 2022-08-22  337  
-33bd5d068603f9 Kent Overstreet 2022-08-22  338  			if (lock_held == BTREE_NODE_UNLOCKED)
-33bd5d068603f9 Kent Overstreet 2022-08-22  339  				continue;
-33bd5d068603f9 Kent Overstreet 2022-08-22  340  
-33bd5d068603f9 Kent Overstreet 2022-08-22  341  			b = &READ_ONCE(path->l[top->level].b)->c;
-33bd5d068603f9 Kent Overstreet 2022-08-22  342  
-80df5b8cacceb2 Kent Overstreet 2023-01-20  343  			if (IS_ERR_OR_NULL(b)) {
-80df5b8cacceb2 Kent Overstreet 2023-01-20  344  				/*
-80df5b8cacceb2 Kent Overstreet 2023-01-20  345  				 * If we get here, it means we raced with the
-80df5b8cacceb2 Kent Overstreet 2023-01-20  346  				 * other thread updating its btree_path
-80df5b8cacceb2 Kent Overstreet 2023-01-20  347  				 * structures - which means it can't be blocked
-80df5b8cacceb2 Kent Overstreet 2023-01-20  348  				 * waiting on a lock:
-80df5b8cacceb2 Kent Overstreet 2023-01-20  349  				 */
-80df5b8cacceb2 Kent Overstreet 2023-01-20  350  				if (!lock_graph_remove_non_waiters(&g)) {
-80df5b8cacceb2 Kent Overstreet 2023-01-20  351  					/*
-80df5b8cacceb2 Kent Overstreet 2023-01-20  352  					 * If lock_graph_remove_non_waiters()
-80df5b8cacceb2 Kent Overstreet 2023-01-20  353  					 * didn't do anything, it must be
-80df5b8cacceb2 Kent Overstreet 2023-01-20  354  					 * because we're being called by debugfs
-80df5b8cacceb2 Kent Overstreet 2023-01-20  355  					 * checking for lock cycles, which
-80df5b8cacceb2 Kent Overstreet 2023-01-20  356  					 * invokes us on btree_transactions that
-80df5b8cacceb2 Kent Overstreet 2023-01-20  357  					 * aren't actually waiting on anything.
-80df5b8cacceb2 Kent Overstreet 2023-01-20  358  					 * Just bail out:
-80df5b8cacceb2 Kent Overstreet 2023-01-20  359  					 */
-80df5b8cacceb2 Kent Overstreet 2023-01-20  360  					lock_graph_pop_all(&g);
-80df5b8cacceb2 Kent Overstreet 2023-01-20  361  				}
-80df5b8cacceb2 Kent Overstreet 2023-01-20  362  
-33bd5d068603f9 Kent Overstreet 2022-08-22  363  				goto next;
-33bd5d068603f9 Kent Overstreet 2022-08-22  364  			}
-33bd5d068603f9 Kent Overstreet 2022-08-22  365  
-33bd5d068603f9 Kent Overstreet 2022-08-22  366  			if (list_empty_careful(&b->lock.wait_list))
-33bd5d068603f9 Kent Overstreet 2022-08-22  367  				continue;
-33bd5d068603f9 Kent Overstreet 2022-08-22  368  
-33bd5d068603f9 Kent Overstreet 2022-08-22  369  			raw_spin_lock(&b->lock.wait_lock);
-33bd5d068603f9 Kent Overstreet 2022-08-22  370  			list_for_each_entry(trans, &b->lock.wait_list, locking_wait.list) {
-33bd5d068603f9 Kent Overstreet 2022-08-22  371  				BUG_ON(b != trans->locking);
-33bd5d068603f9 Kent Overstreet 2022-08-22  372  
-33bd5d068603f9 Kent Overstreet 2022-08-22  373  				if (top->lock_start_time &&
-33bd5d068603f9 Kent Overstreet 2022-08-22 @374  				    time_after_eq64(top->lock_start_time, trans->locking_wait.start_time))
-33bd5d068603f9 Kent Overstreet 2022-08-22  375  					continue;
-33bd5d068603f9 Kent Overstreet 2022-08-22  376  
-33bd5d068603f9 Kent Overstreet 2022-08-22  377  				top->lock_start_time = trans->locking_wait.start_time;
-33bd5d068603f9 Kent Overstreet 2022-08-22  378  
-33bd5d068603f9 Kent Overstreet 2022-08-22  379  				/* Don't check for self deadlock: */
-33bd5d068603f9 Kent Overstreet 2022-08-22  380  				if (trans == top->trans ||
-33bd5d068603f9 Kent Overstreet 2022-08-22  381  				    !lock_type_conflicts(lock_held, trans->locking_wait.lock_want))
-33bd5d068603f9 Kent Overstreet 2022-08-22  382  					continue;
-33bd5d068603f9 Kent Overstreet 2022-08-22  383  
-6547ebabdaac44 Kent Overstreet 2023-06-19  384  				closure_get(&trans->ref);
-33bd5d068603f9 Kent Overstreet 2022-08-22  385  				raw_spin_unlock(&b->lock.wait_lock);
-33bd5d068603f9 Kent Overstreet 2022-08-22  386  
-6547ebabdaac44 Kent Overstreet 2023-06-19  387  				ret = lock_graph_descend(&g, trans, cycle);
-33bd5d068603f9 Kent Overstreet 2022-08-22  388  				if (ret)
-fea153a84557c9 Kent Overstreet 2023-12-12  389  					goto out;
-33bd5d068603f9 Kent Overstreet 2022-08-22  390  				goto next;
-33bd5d068603f9 Kent Overstreet 2022-08-22  391  
-33bd5d068603f9 Kent Overstreet 2022-08-22  392  			}
-33bd5d068603f9 Kent Overstreet 2022-08-22  393  			raw_spin_unlock(&b->lock.wait_lock);
-33bd5d068603f9 Kent Overstreet 2022-08-22  394  		}
-33bd5d068603f9 Kent Overstreet 2022-08-22  395  	}
-fea153a84557c9 Kent Overstreet 2023-12-12  396  up:
-40a44873a5ca98 Kent Overstreet 2022-10-02  397  	if (g.nr > 1 && cycle)
-40a44873a5ca98 Kent Overstreet 2022-10-02  398  		print_chain(cycle, &g);
-896f1b316f8e8f Kent Overstreet 2022-10-12  399  	lock_graph_up(&g);
-33bd5d068603f9 Kent Overstreet 2022-08-22  400  	goto next;
-fea153a84557c9 Kent Overstreet 2023-12-12  401  out:
-fea153a84557c9 Kent Overstreet 2023-12-12  402  	if (cycle)
-fea153a84557c9 Kent Overstreet 2023-12-12  403  		--cycle->atomic;
-fea153a84557c9 Kent Overstreet 2023-12-12  404  	rcu_read_unlock();
-fea153a84557c9 Kent Overstreet 2023-12-12  405  	return ret;
-33bd5d068603f9 Kent Overstreet 2022-08-22  406  }
-33bd5d068603f9 Kent Overstreet 2022-08-22  407  
-
-:::::: The code at line 374 was first introduced by commit
-:::::: 33bd5d068603f9e81e0b73dbe50e9b88b2e56d0d bcachefs: Deadlock cycle detector
-
-:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+   605	
+   606	/**
+   607	 * tlb_remove_tlb_entry - remember a pte unmapping for later tlb invalidation.
+   608	 *
+   609	 * Record the fact that pte's were really unmapped by updating the range,
+   610	 * so we can later optimise away the tlb invalidate.   This helps when
+   611	 * userspace is unmapping already-unmapped pages, which happens quite a lot.
+   612	 */
+   613	#define tlb_remove_tlb_entry(tlb, ptep, address)		\
+   614		do {							\
+   615			tlb_flush_pte_range(tlb, address, PAGE_SIZE);	\
+   616			__tlb_remove_tlb_entry(tlb, ptep, address);	\
+   617		} while (0)
+   618	
+   619	/**
+   620	 * tlb_remove_tlb_entries - remember unmapping of multiple consecutive ptes for
+   621	 *			    later tlb invalidation.
+   622	 *
+   623	 * Similar to tlb_remove_tlb_entry(), but remember unmapping of multiple
+   624	 * consecutive ptes instead of only a single one.
+   625	 */
+   626	static inline void tlb_remove_tlb_entries(struct mmu_gather *tlb,
+   627			pte_t *ptep, unsigned int nr, unsigned long address)
+   628	{
+   629		tlb_flush_pte_range(tlb, address, PAGE_SIZE * nr);
+   630		for (;;) {
+ > 631			__tlb_remove_tlb_entry(tlb, ptep, address);
+   632			if (--nr == 0)
+   633				break;
+   634			ptep++;
+   635			address += PAGE_SIZE;
+   636		}
+   637	}
+   638	
 
 -- 
 0-DAY CI Kernel Test Service
