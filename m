@@ -1,131 +1,135 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545133C38
-	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 02:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3704F3D71;
+	Sun, 28 Jan 2024 04:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706410660; cv=none; b=nPoycnog6tllhNLQZEgWkb1r+WKnQgT98uHj3CRLZwZgbUSMBRxGZN6YG2QZ+djCDBKS7lEDfrC2/4wejgaEEflmO6/ovMDa5XS07kn1YO+7b+szJ4edCEZcLvz5qZ159ovhYafy+5tLz2ao0X8ZMP75I+fJk/Xt4B2ShVvSSfE=
+	t=1706417419; cv=none; b=aeQGGhetwtdSkjAbvSVWXN6S1XPYu8Hol4gcQVWZuqT7C3TSm7u32WR6ctNIi+msbM39Qs1R0m8eXSHKdaqILy4arFI8rwtUWyk8M/dYNbEE5jVviUxe+su9vpkmEB8ZUl/gnMx6WQ/vtixODIxiC0s+nSZaITAepUXLlUOsPDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706410660; c=relaxed/simple;
-	bh=0Ljyz9aN5fI8hdU4LP4IKaxXlOnZcbkEh0t788GhUf8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cfRxWVu+mWDsLxM34sCRkY4YANZipXmWTyhlzr5kHmgVoUDjKgODlclEtzgQC0GoM0v9h331FKWXk6H/LUemHTdz33ZgwQDnDIf5/s060jY6GNl1GUq7JiSYgTjuef1a3iMCTLF9lyHOrX+yFY6izLxTzosV0QhItNbtpRc9+bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=ChbLGzS2; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1706417419; c=relaxed/simple;
+	bh=WWMTdDCo/ZFyxKJbvW5goSUgmmbNlhQXiF8IA36CLT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=e1Js2H4LEgP2bwQucyf1owNuGJRk1qq5vjJd+FMc6bvfx+4eaEDCHcqfXt8HHpgMKXwE+fqtdSsNcfvi4OMqULzEk03yAIqvgoEACZx7NUdarrKE4e+dPZEIqGShKdoEqBORjg33ghvnHTOzdFGAxDJQ6yVNs/sSyjSLnv9dRnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z4r7M/aX; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="ChbLGzS2"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51030ce36fbso877494e87.3
-        for <llvm@lists.linux.dev>; Sat, 27 Jan 2024 18:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1706410656; x=1707015456; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tUPe8kS/dYQxcvPbyImR2zb7xWJbztZ0Yj4HdTeCp4I=;
-        b=ChbLGzS26oj6YQWUpD3i8vvYHcguVvN/nupldtFF8Gfhh5FdzwHdW3wTImcpCRtYE5
-         kTKwKmSS2hxP1Zts+EhsjvkvXnqjSRDKyjoDeYVUVn1ecQj6e1J874Lk6wGbphMDfgjK
-         HqoxCrNnbdteptLAMXYcXEIpSz27498Td4rfinV1z9WuGu5PcnHL7K4orD5ng6bhN41+
-         BqLGWWAI9pD3WvoX0Q6Nzf0VxJOw33yP0Yn4k2edKF44D/SbOmuJ76ed3yrKBzQydHkj
-         0zVD33t6crGa5ntuq90ulwLeqdien1GsjPPjzANwYPcyWcKghGcy5kh6DPofM16c3eKR
-         Ew+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706410656; x=1707015456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tUPe8kS/dYQxcvPbyImR2zb7xWJbztZ0Yj4HdTeCp4I=;
-        b=wjFEXBAYsadS/lNyK6rmywAqiE9yxnJxU+ApmnA9lAXNWKTpnZ8RFXfz2Fzi0Qcc6O
-         xV9hoJP5Tl6wid2/8GOgAuYqDHQJI5GpkgQ3CUrw+THC4LJZll36a+8D0xE+LJWU+eJA
-         K8/gKYk6/DVcKQMV0wfvHdgW/t6Pxr9PO8xBuZWmDM1tttR7AvY59/13VL3P2pRGViR1
-         LGpgj1OKcbinbGv3CwHghVPZRAkYPCAhgHir26x5XS8LNTgg07SwtsMsXNxiE4nP42v+
-         xATWrvbbXx63g0Yhtv3ChoXpd99pph+mfF5x57USoTK9BTW9xhzSLaq7OLOiHSLVveDc
-         51ZA==
-X-Gm-Message-State: AOJu0YypNx1cHVo/EaasPzhIafITOF/ib+JwJUpZF4hy0mFi7Oo+vIBm
-	nyKcNA/ZVDKKUwvBv9W9P/xZTm1XKb+7YtGi6q7qotkKvise+Z/B3dB/LcksncQ5ddN9S+zIqjU
-	usEN1Z5Dk/Nsm9ZiDxxY9I9AzkZ7hwxho70B+Dg==
-X-Google-Smtp-Source: AGHT+IH9hs8nV3EIySrlhWIGxmnGMq22449h+fsNcRpbxaYZsJKDaLHJx2IgCnzvK9tg/L1sdXMDyhVz1NejyYUort8=
-X-Received: by 2002:ac2:4893:0:b0:50e:630d:7364 with SMTP id
- x19-20020ac24893000000b0050e630d7364mr1500830lfc.28.1706410655622; Sat, 27
- Jan 2024 18:57:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z4r7M/aX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706417417; x=1737953417;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WWMTdDCo/ZFyxKJbvW5goSUgmmbNlhQXiF8IA36CLT4=;
+  b=Z4r7M/aXz3oolzg+G6WEpSchmrD1VFopb6MdLxjP0gDEk5SfdKKGQTeB
+   ewCWWrt/6A/P/gTMsME2M0XCAfZ36u1XNiu93KmH/s4v/1wttKTS8xF3G
+   fOR/EQSzlDWJJ37R8orAJsO6EYSPLmh+thE4xZakIGEu9Qw2F8B9ym6MG
+   I5toSc7PtFK/DynCFDyUZQ2hDIjl5azHEpv7gePanAa06xs3RTP4y74VK
+   oghfFDNKE7CAA3yV41ccurUKk8927WIJ5ldFpCr+T6xPAWYg9b0aUy2jD
+   w/DJDQ5Wf4MFpVTczEnmELC9KRUBVciNDQYl27DkrJp2JHO2u5Q5OxAq6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="2606032"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="2606032"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2024 20:50:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="29196988"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 27 Jan 2024 20:50:15 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rTx7T-00035O-2f;
+	Sun, 28 Jan 2024 04:50:11 +0000
+Date: Sun, 28 Jan 2024 12:50:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:irq/core 9/9] kernel/irq/irq_sim.c:173:12: error: expected
+ expression
+Message-ID: <202401281222.T75XK3kV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240125-fix-riscv-option-arch-llvm-18-v1-0-390ac9cc3cd0@kernel.org>
- <20240127090310.GF11935@sol.localdomain>
-In-Reply-To: <20240127090310.GF11935@sol.localdomain>
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Sun, 28 Jan 2024 10:57:24 +0800
-Message-ID: <CABgGipVMv-+AJkGMPzFhimaPCUVATk3gjUDG0P4btRJWtXcMxw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] RISC-V: Fix CONFIG_AS_HAS_OPTION_ARCH with tip of
- tree LLVM
-To: Eric Biggers <ebiggers@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	masahiroy@kernel.org, nicolas@fjasle.eu, conor.dooley@microchip.com, 
-	linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Jan 27, 2024 at 5:03=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
-wrote:
->
-> On Thu, Jan 25, 2024 at 10:32:10AM -0700, Nathan Chancellor wrote:
-> > Hi all,
-> >
-> > Eric reported that builds of LLVM with [1] (close to tip of tree) have
-> > CONFIG_AS_HAS_OPTION_ARCH=3Dn because the test for expected failure on
-> > invalid input has started succeeding.
-> >
-> > This Kconfig test was added because '.option arch' only causes an
-> > assembler warning when it is unsupported, rather than a hard error,
-> > which is what users of as-instr expect when something is unsupported.
-> >
-> > This can be resolved by turning assembler warnings into errors with
-> > '-Wa,--fatal-warnings' like we do with the compiler with '-Werror',
-> > which is what the first patch does. The second patch removes the invali=
-d
-> > test, as the valid test is good enough with fatal warnings.
-> >
-> > I have diffed several configurations for the different architectures
-> > that use as-instr and I have found no issues.
-> >
-> > I think this could go in through either the kbuild or RISC-V tree with
-> > sufficient acks but I will let them fight over who takes it :)
-> >
-> > [1]: https://github.com/llvm/llvm-project/commit/3ac9fe69f70a2b3541266d=
-aedbaaa7dc9c007a2a
-> >
-> > ---
-> > Nathan Chancellor (2):
-> >       kbuild: Add -Wa,--fatal-warnings to as-instr invocation
-> >       RISC-V: Drop invalid test from CONFIG_AS_HAS_OPTION_ARCH
-> >
-> >  arch/riscv/Kconfig        | 1 -
-> >  scripts/Kconfig.include   | 2 +-
-> >  scripts/Makefile.compiler | 2 +-
-> >  3 files changed, 2 insertions(+), 3 deletions(-)
->
-> Looks good,
->
-> Tested-by: Eric Biggers <ebiggers@google.com>
->
-> Unfortunately another LLVM commit just broke TOOLCHAIN_HAS_VECTOR_CRYPTO,=
- so
-> I've sent out a patch to fix that too...
->
-> But with all the fixes applied it works again.
->
-> - Eric
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+head:   590610d72a790458431cbbebc71ee24521533b5e
+commit: 590610d72a790458431cbbebc71ee24521533b5e [9/9] genirq/irq_sim: Shrink code by using cleanup helpers
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240128/202401281222.T75XK3kV-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401281222.T75XK3kV-lkp@intel.com/reproduce)
 
-For this series
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401281222.T75XK3kV-lkp@intel.com/
 
-Tested-by: Andy Chiu <andybnac@gmail.com>
-Reviewed-by: Andy Chiu <andybnac@gmail.com>
+All errors (new ones prefixed by >>):
 
-Thanks,
-Andy
+>> kernel/irq/irq_sim.c:173:12: error: expected expression
+     173 |         pending = __free(bitmap) = bitmap_zalloc(num_irqs, GFP_KERNEL);
+         |                   ^
+   include/linux/cleanup.h:64:23: note: expanded from macro '__free'
+      64 | #define __free(_name)   __cleanup(__free_##_name)
+         |                         ^
+   include/linux/compiler-clang.h:15:25: note: expanded from macro '__cleanup'
+      15 | #define __cleanup(func) __maybe_unused __attribute__((__cleanup__(func)))
+         |                         ^
+   include/linux/compiler_attributes.h:344:41: note: expanded from macro '__maybe_unused'
+     344 | #define __maybe_unused                  __attribute__((__unused__))
+         |                                         ^
+   1 error generated.
+
+
+vim +173 kernel/irq/irq_sim.c
+
+   153	
+   154	/**
+   155	 * irq_domain_create_sim - Create a new interrupt simulator irq_domain and
+   156	 *                         allocate a range of dummy interrupts.
+   157	 *
+   158	 * @fwnode:     struct fwnode_handle to be associated with this domain.
+   159	 * @num_irqs:   Number of interrupts to allocate.
+   160	 *
+   161	 * On success: return a new irq_domain object.
+   162	 * On failure: a negative errno wrapped with ERR_PTR().
+   163	 */
+   164	struct irq_domain *irq_domain_create_sim(struct fwnode_handle *fwnode,
+   165						 unsigned int num_irqs)
+   166	{
+   167		struct irq_sim_work_ctx *work_ctx __free(kfree) = kmalloc(sizeof(*work_ctx), GFP_KERNEL);
+   168		unsigned long *pending;
+   169	
+   170		if (!work_ctx)
+   171			return ERR_PTR(-ENOMEM);
+   172	
+ > 173		pending = __free(bitmap) = bitmap_zalloc(num_irqs, GFP_KERNEL);
+   174		if (!pending)
+   175			return ERR_PTR(-ENOMEM);
+   176	
+   177		work_ctx->domain = irq_domain_create_linear(fwnode, num_irqs,
+   178							    &irq_sim_domain_ops,
+   179							    work_ctx);
+   180		if (!work_ctx->domain)
+   181			return ERR_PTR(-ENOMEM);
+   182	
+   183		work_ctx->irq_count = num_irqs;
+   184		work_ctx->work = IRQ_WORK_INIT_HARD(irq_sim_handle_irq);
+   185		work_ctx->pending = no_free_ptr(pending);
+   186	
+   187		return no_free_ptr(work_ctx)->domain;
+   188	}
+   189	EXPORT_SYMBOL_GPL(irq_domain_create_sim);
+   190	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
