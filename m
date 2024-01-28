@@ -1,205 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94776FB8
-	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 05:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6441BDF44;
+	Sun, 28 Jan 2024 06:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706420496; cv=none; b=LctFK7414599YHzTZd2MomnDXZR50ZZsArb/nLc8FXBFeUYoYreIZpgXeL02Z2GfooAEZMb0sln3szn1WyH82UhvdBlEabaiRpnUIXVYKzy+mRWmdIXvTmdKLpZxRhvNFx8b00SZo/9sLySu/4U+T8HNDmYR+WfiIT/eatTh4lE=
+	t=1706423242; cv=none; b=YX5kdc+yWYP8EyGxaSBLok23KMzXcU0TS+rr9vhz8WE/AQGgisBgWv78x0u5g/TQBnLU+O4NV8ktIne0BuT98FoK/8CJMq4Qr6h/jpBugOSpbRmmU240DEAiagZhZeLVJ5dKLIXw+9yJfyiOtqscWZrKVM70F9phsaK2W+HCLsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706420496; c=relaxed/simple;
-	bh=a/J3lIg4NMz4kQAJVt9mryM8kCXiJa6eqYHcytaKWpQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QqxfMwuHxyvzZ77s5K8GvJBfgUweHk4iMZN3V7feryLljrat5F9Niuq+2wsv4wPQ6R8X61HwjrLdrnQ+T3jv5LtWdnfrKpXasKOWN6UtHwlQQYj/OlvMr+NnrzOCzcUVO0He4x4LK3Est9fGZIJVUMeVam89DBw52k/VenD1XnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RF0vnRz/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706423242; c=relaxed/simple;
+	bh=/4cBnVToVLQ8927Gyogc9jU9/eVrtAK9hYpYQq21uAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=h8B07ZqzmsT8Haa/rfBn7FjpowRKLi/UbaaVDJViMXOHgRq802U1u5Q0UYq2eMjbb4NgxRj90uvG9Xj9kSt6fpQlo9ZioTHGm4B2NmqEkQaqXnS5Ndwmahk8Qht2704huD85kTbjcpSAAKvcOPZjti38ufr2gOVAKEjl18aG53s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JuB0P9YU; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RF0vnRz/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706420493;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OYJ4S5NGsP/+t8xiYtUEo/y9g/HFd9qquKcZeJ1DW8Y=;
-	b=RF0vnRz/emzD4xMnWkAZYFeTpdUKFq6uoEVW4DvMu50OBVUOnolfOs8Lu6eFO/ppHrKJc9
-	0C43cBmd9DVlJYyuha/0lhraDqjS+sHw+lMfzAm3xBEY6Gnoum0RrnN3CZSLOPdlng6epd
-	CUb6OIsWK5L52s0sRP1wXcrFXrLpN/U=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-557-L1kq0OrHPjyDT4fS6H7aVQ-1; Sun,
- 28 Jan 2024 00:41:32 -0500
-X-MC-Unique: L1kq0OrHPjyDT4fS6H7aVQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1F831C04B73
-	for <llvm@lists.linux.dev>; Sun, 28 Jan 2024 05:41:31 +0000 (UTC)
-Received: from [172.64.10.18] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B023251D5;
-	Sun, 28 Jan 2024 05:41:31 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 12 of 226): Test report for master
- (6.8.0-rc1, mainline.kernel.org-clang, 168174d7)
-Date: Sun, 28 Jan 2024 05:41:31 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JuB0P9YU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706423239; x=1737959239;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/4cBnVToVLQ8927Gyogc9jU9/eVrtAK9hYpYQq21uAM=;
+  b=JuB0P9YUegCseWTUpUSnTktsOs38dQFMGy+xAsnBg4Lvk4pyxLb7d1PU
+   N27fjoVZLHNHR86RtquSpNqlI31PvZ015TlhBiyxsZ9az+h9RJZOQHdCk
+   iK5nrYlmC3u+2Ij73jLaQvglJ8Cn16NfTni3F04xG+VYmc3BEy4Vwrg6R
+   GFQokAqUdrO0iTxJhG0R4odDjnmUajJYAzbOe8VnhQRkzDlWLuDIQEGq7
+   vEu9NzMMIbsLGSLqfRrSOEjR/ihnKlr9IhzXF78CpCvv5Dc+lZgpO9ZtD
+   vkBuSE9nhyDIjXKk316JZhwyvWoB/7eG9JygxzYYWQBwUZ1vB9hcOodSc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="9398459"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="9398459"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2024 22:27:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="737071251"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="737071251"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 27 Jan 2024 22:27:16 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rTydO-00039y-0t;
+	Sun, 28 Jan 2024 06:27:14 +0000
+Date: Sun, 28 Jan 2024 14:26:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suma Hegde <suma.hegde@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: [pdx86-platform-drivers-x86:review-ilpo 13/17]
+ drivers/platform/x86/amd/hsmp.c:405:8: error: call to undeclared function
+ 'acpi_device_uid'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202401281437.aus91srb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <21702.124012800413200118@us-mta-557.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-ilpo
+head:   d04e52b47ab62cf36fddaa0feb1c5508e420e48d
+commit: d6200c4e95eecd59fedb7c64a4ad7a201191b0b6 [13/17] platform/x86/amd/hsmp: Add support for ACPI based probing
+config: x86_64-buildonly-randconfig-003-20240128 (https://download.01.org/0day-ci/archive/20240128/202401281437.aus91srb-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401281437.aus91srb-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401281437.aus91srb-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2024-01-27' of git://anongit.freed=
-esktop.org/drm/drm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/126049
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Storage - swraid scsi_raid
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [rawhide] avc:  denied  { checkpoint_restore } for  pid=3D79=
-3 comm=3D"agetty" capability=3D40  scontext=3Dsystem_u:system_r:getty_t:s0-=
-s0:c0.c1023 tcontext=3Dsystem_u:system_r:getty_t:s0-s0:c0.c1023 tclass=3Dca=
-pability2 permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2259622
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Storage - swraid scsi_raid
-                   s390x - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                   s390x - stress: stress-ng - memory
+>> drivers/platform/x86/amd/hsmp.c:405:8: error: call to undeclared function 'acpi_device_uid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     405 |         uid = acpi_device_uid(ACPI_COMPANION(dev));
+         |               ^
+   drivers/platform/x86/amd/hsmp.c:405:8: note: did you mean 'pci_device_add'?
+   include/linux/pci.h:1163:6: note: 'pci_device_add' declared here
+    1163 | void pci_device_add(struct pci_dev *dev, struct pci_bus *bus);
+         |      ^
+>> drivers/platform/x86/amd/hsmp.c:405:6: error: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+     405 |         uid = acpi_device_uid(ACPI_COMPANION(dev));
+         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/x86/amd/hsmp.c:417:8: error: call to undeclared function 'acpi_dev_resource_memory'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     417 |                 if (!acpi_dev_resource_memory(res, &r))
+         |                      ^
+>> drivers/platform/x86/amd/hsmp.c:797:15: error: call to undeclared function 'acpi_match_device_ids'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     797 |         if (adev && !acpi_match_device_ids(adev, amd_hsmp_acpi_ids)) {
+         |                      ^
+   drivers/platform/x86/amd/hsmp.c:797:15: note: did you mean 'acpi_match_device'?
+   include/linux/acpi.h:933:44: note: 'acpi_match_device' declared here
+     933 | static inline const struct acpi_device_id *acpi_match_device(
+         |                                            ^
+   4 errors generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - Hardware - CPU: Die Test
-      x86_64 (debug) - Storage - swraid scsi_raid
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - Memory function: memfd_create
+vim +/acpi_device_uid +405 drivers/platform/x86/amd/hsmp.c
 
+   395	
+   396	static inline int hsmp_get_uid(struct device *dev, u16 *sock_ind)
+   397	{
+   398		char *uid;
+   399	
+   400		/*
+   401		 * UID (ID00, ID01..IDXX) is used for differentiating sockets,
+   402		 * read it and strip the "ID" part of it and convert the remaining
+   403		 * bytes to integer.
+   404		 */
+ > 405		uid = acpi_device_uid(ACPI_COMPANION(dev));
+   406	
+   407		return kstrtou16(uid + 2, 10, sock_ind);
+   408	}
+   409	
+   410	static acpi_status hsmp_resource(struct acpi_resource *res, void *data)
+   411	{
+   412		struct hsmp_socket *sock = data;
+   413		struct resource r;
+   414	
+   415		switch (res->type) {
+   416		case ACPI_RESOURCE_TYPE_FIXED_MEMORY32:
+ > 417			if (!acpi_dev_resource_memory(res, &r))
+   418				return AE_ERROR;
+   419			if (!r.start || r.end < r.start || !(r.flags & IORESOURCE_MEM_WRITEABLE))
+   420				return AE_ERROR;
+   421			sock->mbinfo.base_addr = r.start;
+   422			sock->mbinfo.size = resource_size(&r);
+   423			break;
+   424		case ACPI_RESOURCE_TYPE_END_TAG:
+   425			break;
+   426		default:
+   427			return AE_ERROR;
+   428		}
+   429	
+   430		return AE_OK;
+   431	}
+   432	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
