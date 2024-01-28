@@ -1,69 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478242D044;
-	Sun, 28 Jan 2024 17:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7A12E3E5;
+	Sun, 28 Jan 2024 18:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706464726; cv=none; b=oNKSONHvq+6J4zEc46Ks/Wg9JRf7s6nUm24hg4HJPUWs4ORg3o7Yq2O4CmVZ6jdMHqYpQyQWeSyf9s7Slmsg/xL5Zn1SZ6SKiy2dMxvy0PJz/2LQrNXDYY9uZWbM5MJ2oFLbw5VPpZZgT3SYkF6DX4VJLgDmeQWKQFSZxNhfboI=
+	t=1706465440; cv=none; b=sG0iczHW0tDelKptNcfiIzvTiAvxOkARG85G0LZPpLlQcH2S5TfOoFmPZRrLhsFTNbmROzweavSoU+iAEpCReCwgeZA/bBGx32EApoD5lsVvnNCEeLgjR9tCM88SMGbQLWJpM52i5f6ntW0HKJpRnHra8CNDF70Gd8MtPpT5lE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706464726; c=relaxed/simple;
-	bh=5cEP+zWFr/nlAcAv00WyKAUSHk9AI618LLTjG1LtvxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M2inkDcAc/ai1DezCaAJbXk218TnMR+YoTbcRvKwuV3WHcX6cBuze9OIL74tRqOr4xpCUviIZhkMo1BamSbA9qxDgwudRGQpUelIBkpp1UrGV6m7JJL1y7YES2fkNo7Fjz3NuaFt0OcHzEqHzG0bD/byppUQB/AeO7ZxngIX5Io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kl2MAWFR; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1706465440; c=relaxed/simple;
+	bh=LN7fpdkZ1lk37qgwIc5IA8ziLyCd56ezJq1ynlj3RX0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ro0D30jlrrnNYPBvKAzIztA02IiYE1ukjlgQ4PCfgjOfBWPBXGXoxWVU6/hUjL3MHu4bYFEqjsYQNpIyTAbqzMH0bZRFCmKvjaOhzRA93TJjdiNT3HerWQM05gnTXilZttAjbsMfEjyjM25dHktTnh0TQ27xh5MjiOGUG6AEkuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lmU/TiCx; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kl2MAWFR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lmU/TiCx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706464724; x=1738000724;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5cEP+zWFr/nlAcAv00WyKAUSHk9AI618LLTjG1LtvxI=;
-  b=kl2MAWFRcEP+9g2FXrI0B4KEeey1BHPMFtE9pJqK/B5RjvIjvcp/xjKo
-   erB1XTM1Lj3TlFZ8nouujNC9H6ZfTL9OmISJjuLDErl6FuEpi9WN9Stvo
-   hONGcKKQOSWjcgIV/XebD1mIgwk+J1aoJYdh7XaPdlPsxeNGoVKweHh6g
-   Zprc97OTZ5mAAKgAcvaDa7HOy0pcx/dA+nkG1BaB9QLKjSRbDxS1mET0S
-   8ToZMmmgtu1t054MHE3iWo+johaMk1zz3s23Dv2Mg+2QMgKeC153S/2LB
-   BVTR+WFDVqbR/VE3pLR+JmiceC8Vs2yvPfwGNgqVePO0ZECpgT0nXxZLU
+  t=1706465439; x=1738001439;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LN7fpdkZ1lk37qgwIc5IA8ziLyCd56ezJq1ynlj3RX0=;
+  b=lmU/TiCxrEe1aH6E1fh+qObpw836HtkEe6Cj7o8wONp7DyM93unTqyR2
+   pcIyRW8M0Z56gP8rVjPQWaFTsIv6ldNAPRarBOKyc/rC5JLH0KPEYQIPP
+   OuzCoJFt8pV3RLus87/4TBnVVxfb1DXcpUNK3JRgeB4DkOGD0GaBznbjQ
+   G8uxkDINC083sS/flqWkCVaoCB2hiuhQ+fTV3pHPrKBjzznkqi5/9wf5G
+   saaeHTtty1858OfdC+4nE06zgsWkB56kOsYSQhNxKRRqxGwjsR9L0Ec8A
+   EOoO8obP6OF62V1lfQECm51Yo1+97F8rOZexIS4G8Y9+R/ZHsp2w4BCjm
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="2683754"
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="9468414"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="2683754"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 09:58:44 -0800
+   d="scan'208";a="9468414"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 10:10:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="737165941"
 X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="737165941"
+   d="scan'208";a="3243835"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2024 09:58:35 -0800
+  by orviesa004.jf.intel.com with ESMTP; 28 Jan 2024 10:10:37 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rU9QP-0003cs-1f;
-	Sun, 28 Jan 2024 17:58:33 +0000
-Date: Mon, 29 Jan 2024 01:58:09 +0800
+	id 1rU9c2-0003dd-0O;
+	Sun, 28 Jan 2024 18:10:34 +0000
+Date: Mon, 29 Jan 2024 02:09:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Huang Shijie <shijie@os.amperecomputing.com>,
-	gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	patches@amperecomputing.com, rafael@kernel.org,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	yury.norov@gmail.com, kuba@kernel.org, vschneid@redhat.com,
-	mingo@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
-	rppt@kernel.org, tglx@linutronix.de, jpoimboe@kernel.org,
-	ndesaulniers@google.com, mikelley@microsoft.com,
-	mhiramat@kernel.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
-	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
-	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] init: refactor the generic cpu_to_node for NUMA
-Message-ID: <202401290116.GpUOCzGd-lkp@intel.com>
-References: <20240118031412.3300-1-shijie@os.amperecomputing.com>
+To: Alexei Starovoitov <ast@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ast-bpf:uptr_v3 2/11] kernel/bpf/core.c:2975:12: warning: no
+ previous prototype for function 'bpf_arena_get_user_vm_start'
+Message-ID: <202401290217.5t5Cmgp3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,45 +57,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240118031412.3300-1-shijie@os.amperecomputing.com>
 
-Hi Huang,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.8-rc1 next-20240125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Huang-Shijie/init-refactor-the-generic-cpu_to_node-for-NUMA/20240118-111802
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20240118031412.3300-1-shijie%40os.amperecomputing.com
-patch subject: [PATCH] init: refactor the generic cpu_to_node for NUMA
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240129/202401290116.GpUOCzGd-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401290116.GpUOCzGd-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git uptr_v3
+head:   545ce904000a1f553bc985000a0eee057b6c4847
+commit: 35e094065b98d2f1e23592f3e65d4f8c6bc1863e [2/11] bpf: Introduce bpf arena.
+config: arm-randconfig-003-20240128 (https://download.01.org/0day-ci/archive/20240129/202401290217.5t5Cmgp3-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401290217.5t5Cmgp3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401290116.GpUOCzGd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401290217.5t5Cmgp3-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: cpu_to_node
-   >>> referenced by main.c:880 (init/main.c:880)
-   >>>               init/main.o:(start_kernel) in archive vmlinux.a
-   >>> referenced by main.c:1542 (init/main.c:1542)
-   >>>               init/main.o:(kernel_init_freeable) in archive vmlinux.a
-   >>> referenced by core.c:550 (arch/x86/events/amd/core.c:550)
-   >>>               arch/x86/events/amd/core.o:(amd_pmu_cpu_prepare) in archive vmlinux.a
-   >>> referenced 179 more times
---
->> ld.lld: error: undefined symbol: _cpu_to_node
-   >>> referenced by main.c:1542 (init/main.c:1542)
-   >>>               init/main.o:(kernel_init_freeable) in archive vmlinux.a
+>> kernel/bpf/core.c:2975:12: warning: no previous prototype for function 'bpf_arena_get_user_vm_start' [-Wmissing-prototypes]
+   __weak u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena)
+              ^
+   kernel/bpf/core.c:2975:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena)
+          ^
+          static 
+>> kernel/bpf/core.c:2979:12: warning: no previous prototype for function 'bpf_arena_get_kern_vm_start' [-Wmissing-prototypes]
+   __weak u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena)
+              ^
+   kernel/bpf/core.c:2979:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena)
+          ^
+          static 
+   2 warnings generated.
+
+
+vim +/bpf_arena_get_user_vm_start +2975 kernel/bpf/core.c
+
+  2972	
+  2973	#ifndef CONFIG_MMU
+  2974	__weak const struct bpf_map_ops arena_map_ops;
+> 2975	__weak u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena)
+  2976	{
+  2977		return 0;
+  2978	}
+> 2979	__weak u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena)
+  2980	{
+  2981		return 0;
+  2982	}
+  2983	#endif
+  2984	
 
 -- 
 0-DAY CI Kernel Test Service
