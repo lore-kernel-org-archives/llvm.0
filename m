@@ -1,53 +1,53 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8B77603D
-	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063F76F097
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706551541; cv=none; b=ATsYhvJ2ov4v0kqKtteP8Lm7EN1Pc/TGefoEs9DYaX88tHrHrJqKWlVOtd9Bs0TW1Zp/xewW/9hQN9DbagEQSvKr242cLMOU/cYw3Y3K2E42RfObDPGmzwRp43WBKIXWFTA4l0AhbWRKdT+U3DiAyyoXUjXIk4WH8YVafFPlQGc=
+	t=1706551543; cv=none; b=CgKpRd6+YwwGuBnkCMldib9mTu4YtyTdeONneawvSHuqd7TFPaTa3AupV36SoIICFRLpaHxMkfaIVUN/xk3UGlSmlRvvpS8eRv30Hg3jUMVJ6w5/zQm/e3ka3JUbnEJ+aAlL/dGARapl5ygXpMYkmAhpPQViMulXcrOFeJzmsfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706551541; c=relaxed/simple;
-	bh=NfXCrvSrRHu5/o/a38jIuQQEOM5CDJx3GD3fZgnkl0s=;
+	s=arc-20240116; t=1706551543; c=relaxed/simple;
+	bh=eEloesx5WYIVvdIkhwITl3KfZCfyKY4osgEzAPlzJuE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=S7elWN3q9JG90DNhaU04iQC46g9MC0O9bWFbX+K1vYNP9kGVK1JLv5pD2G7ScL3zgtvIy6S0hzBbVuZLWIvv6O1nx/1N36f59fMIuDZ1mXoehrigM7llZ3BlTj5EMJAMwuS5ML2Mr7RQDe9mFjoaSLx8JLd+O/UqRwTLd41z2mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M8dL5nBA; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=pf1L5TqjXJyqI9qX+H5VDqAoZWYvHVa4zFEcNKEJivHwst5/Ng7c166Irie91/g/pAMWLvhpuO5bxEJxX9dOp3JciqEwKe6/SZK5+FF8Mwcp2cyS2Zz+fKYo9jQDHwPGWtbA+meoDj3Kzj0OlxyY5AJ9MUqporVY6JBQz3EquAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KCoUNx/y; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M8dL5nBA"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5ff84361ac3so54173397b3.1
-        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:05:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KCoUNx/y"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc604c99e95so3278454276.1
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:05:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706551538; x=1707156338; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706551541; x=1707156341; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iHVLq9Wa6m8PRjV68aukFNmIoFWxPV4eVUMjwp/oWNk=;
-        b=M8dL5nBAaElIULZZ6y718K5RqqqOWNZtn18LetUvY9vExZAvSQvOtjSbbSC2rWpHNO
-         lGdwiWqhm8U6MXjm13TskN112dYTRmsCLHBU78dUnig5aY+z3V03IKcufKiSfnTwD9vu
-         i/ttXHtXabXI6rfOo6Hl5TJgNqswmRqWGmZ3KPDqmOAlY5/7sCdWuHfkNP7ndIjC8k2m
-         1ogwL330u1AHqVK+VE1c2zJEhysbdFtIcrv6QKYI3sDcamkj164rDzgwJYQ3l84sRnvf
-         xgCUs0iK5Mxdkpc2HFTCMEhb0geUoccSYEYHs2jBSvnMgTNVybaDDmn39U1+UCaZFFW0
-         dzCg==
+        bh=zW2Nb503VpTEmBC1IeOy5LYeXYJ6a1J8kf+z75WkqKU=;
+        b=KCoUNx/yIKSs9AlcIb3mvCVr0kyBk70/PVkhML5M95LuxzHv2cqFFBxWrdKn/Wec58
+         4/kv8CTC9u8Umh4vtXPCyE9ydaRg/zOoWWGezH0NT1slcfnV9jBBP/4n6Ap4L/5FAUgv
+         786/2G5fFTRPC6kernyaaU4CvHZ5vEikAD5s63xPsMNQLUj0SBSFoTyG0wzrT2LOtPHg
+         3NJtyK7+i+Dn3W8VACjisoqRll1d9CbDepDBSGc9I18PB7Tqd+bnV4LjQBplNf+PQPHd
+         8+vKXCFsCZNKqew806XvPNPjE3eFz/LJpl+DPLEuhCjbnZrF/xTJsKzu+cPBWDohKTx5
+         4gyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706551538; x=1707156338;
+        d=1e100.net; s=20230601; t=1706551541; x=1707156341;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iHVLq9Wa6m8PRjV68aukFNmIoFWxPV4eVUMjwp/oWNk=;
-        b=m+P0X9Umyfy5X71loO3QB2ANpoXQEYHY6EG6pYLq8dVow/Pw+NddEmvWQc/f1GZhBg
-         tj9hN25Oix2RS8xE0p04THrKEmc2s1KtdS/f/+TwFjRfOYqP1kJBdggJt2kyrGwXzJ48
-         88/TbBeURL9FP9R3fvu9mxBoqoFr5lI4ZEEtkuCylxNK61W1tRum40oB0VShQY1BxOrS
-         mdJkV2YZ89B7cpTM88ghdtn7R382TVC+hqoHQ2/bNeWf2G/eM/SUkQoEz29K5B9D99jX
-         pmDv+oHX8K7E3wB4e78ZO/cwcOFps62kQ1FZ1p24K7P+1Szn1TniTDkSTeH5OE17eJbW
-         SSJg==
-X-Gm-Message-State: AOJu0YyJb2WrT8Otmcpjqx4vAtRv2q5ZbtEc1rE/wcQuRwWMRIf0s3cX
-	YrpogeovJmefFExtRPVAGbBuoeP3hkDVcEE24QF7R3liRm1UUe6Hi43ZwU2pBhuiqj1ePQ==
-X-Google-Smtp-Source: AGHT+IHxjP1IrVdmFk3AwDM0KDLSJNYxWIU38kLAEN4S3NCDdU+0TDUv7tiHgHfqnBU0X6ZiOaX62S1y
+        bh=zW2Nb503VpTEmBC1IeOy5LYeXYJ6a1J8kf+z75WkqKU=;
+        b=FLuFqH4AOqm6hPVY5IZpaXEPz9obYfI9hdL8EHLYoBb7LQRtwwg2UaSPAPKljIXpU/
+         33WYki8RanCAoGf35/EP0Xhyw6kIm0DwVNLMQKr9/Ku/ML0/YpMvoSOys5VxfmSQmtsl
+         7cxLIwLyOkcdLmEgP/77FJYKMaTh3Zdz5R5aLTFR44BA0mQBf6AH0qrXpz+rvdkzDjQQ
+         dd+cnLmCVB+ub9RKF/Wwk5RZM27XHETmELIBItYRrNowrx560xZkPuAtDuEokuprBuVC
+         wjB6xY5u+VD9klwr7YN2Flpsl0SuLECIp687aqmqlKTjcy1ZzmUdwwPD6LabzKcKU6Mb
+         IUjA==
+X-Gm-Message-State: AOJu0YwS4/pnzsElWtbqGbBRg92a1QIbxg9/bLwIyr1fq4UHT2jHXTT6
+	IkAkK2++HU994kkflmb19ose0PaPLbwNVpulGdqHib1pB+7BfW0eQBSvwZSmmYkvZnqchg==
+X-Google-Smtp-Source: AGHT+IHoG1nlT9xH7OrNUFwSwleSuhPvAk+iQSlpUq4EhaCK8UijteKSY+nXx9/XbYd43g38b4ws0dig
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a81:9991:0:b0:5ff:6ec3:b8da with SMTP id
- q139-20020a819991000000b005ff6ec3b8damr1836537ywg.1.1706551538650; Mon, 29
- Jan 2024 10:05:38 -0800 (PST)
-Date: Mon, 29 Jan 2024 19:05:07 +0100
+ (user=ardb job=sendgmr) by 2002:a05:6902:2503:b0:dc2:661d:11fc with SMTP id
+ dt3-20020a056902250300b00dc2661d11fcmr358172ybb.8.1706551541086; Mon, 29 Jan
+ 2024 10:05:41 -0800 (PST)
+Date: Mon, 29 Jan 2024 19:05:08 +0100
 In-Reply-To: <20240129180502.4069817-21-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,15 +57,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240129180502.4069817-21-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2687; i=ardb@kernel.org;
- h=from:subject; bh=XmOltJN4+bmiY4MWHeNLYuJPJ6TOu7DKSx2rFcdng6s=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7i8s8r3v1rr9Z/GV7jFFs1hRBhh+bbvyp+1p6tmPOX
- ONr6Zvfd5SyMIhxMMiKKbIIzP77bufpiVK1zrNkYeawMoEMYeDiFICJfDjF8Feyh+FfQIWc0h5F
- mWnGdoteLW5T478Teqbpf/okTp82pz5GhoaqDJOa37f3eH7suSHndEf1SL5VeaCY8gMVjT/qvzf rcQAA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2468; i=ardb@kernel.org;
+ h=from:subject; bh=N1gJDIfI4P+Gstfr/XNIaKJ5tEagJPCWb57TREbNgFg=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7iytN/vLW339JiJ8PO9e3Z/3ET1Pub2Zt2uCvYNRvv
+ M//oB1XRykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZhIbwgjw//8s5OSP57Rn9Hh
+ f71rV/YhgY/1/IprLy4+HWhSn3qj6wHDP+1tetd/u38wCl61S0asJVPs5xlJU6n+D+77zl9u8m6 LYwUA
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240129180502.4069817-25-ardb+git@google.com>
-Subject: [PATCH v3 04/19] x86/startup_64: Simplify calculation of initial page
- table address
+Message-ID: <20240129180502.4069817-26-ardb+git@google.com>
+Subject: [PATCH v3 05/19] x86/startup_64: Simplify CR4 handling in startup code
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -80,94 +79,82 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Determining the address of the initial page table to program into CR3
-involves:
-- taking the physical address
-- adding the SME encryption mask
+When executing in long mode, the CR4.PAE and CR4.LA57 control bits
+cannot be updated, and so they can simply be preserved rather than
+reason about whether or not they need to be set. CR4.PSE has no effect
+in long mode so it can be omitted.
 
-On the primary entry path, the code is mapped using a 1:1 virtual to
-physical translation, so the physical address can be taken directly
-using a RIP-relative LEA instruction.
+CR4.PGE is used to flush the TLBs, by clearing it if it was set, and
+subsequently re-enabling it. So there is no need to set it just to
+disable and re-enable it later.
 
-On the secondary entry path, the address can be obtained by taking the
-offset from the virtual kernel base (__START_kernel_map) and adding the
-physical kernel base.
+CR4.MCE must be preserved unless the kernel was built without
+CONFIG_X86_MCE, in which case it must be cleared.
 
-This is all very straight-forward, but the current code makes a mess of
-this. Clean this up.
+Reimplement the above logic in a more straight-forward way, by defining
+a mask of CR4 bits to preserve, and applying that to CR4 at the point
+where it needs to be updated anyway.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head_64.S | 25 ++++++--------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ arch/x86/kernel/head_64.S | 27 ++++++++------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 4017a49d7b76..6d24c2014759 100644
+index 6d24c2014759..ca46995205d4 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -113,13 +113,11 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	call	__startup_64
+@@ -179,6 +179,12 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
  
- 	/* Form the CR3 value being sure to include the CR3 modifier */
--	addq	$(early_top_pgt - __START_KERNEL_map), %rax
-+	leaq	early_top_pgt(%rip), %rcx
-+	addq	%rcx, %rax
- 
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 	mov	%rax, %rdi
--	mov	%rax, %r14
--
--	addq	phys_base(%rip), %rdi
- 
- 	/*
- 	 * For SEV guests: Verify that the C-bit is correct. A malicious
-@@ -128,12 +126,6 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	 * the next RET instruction.
- 	 */
- 	call	sev_verify_cbit
--
--	/*
--	 * Restore CR3 value without the phys_base which will be added
--	 * below, before writing %cr3.
--	 */
--	 mov	%r14, %rax
- #endif
- 
- 	jmp 1f
-@@ -173,18 +165,18 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	/* Clear %R15 which holds the boot_params pointer on the boot CPU */
- 	xorq	%r15, %r15
- 
-+	/* Derive the runtime physical address of init_top_pgt[] */
-+	movq	phys_base(%rip), %rax
-+	addq	$(init_top_pgt - __START_KERNEL_map), %rax
-+
- 	/*
- 	 * Retrieve the modifier (SME encryption mask if SME is active) to be
- 	 * added to the initial pgdir entry that will be programmed into CR3.
- 	 */
- #ifdef CONFIG_AMD_MEM_ENCRYPT
--	movq	sme_me_mask, %rax
--#else
--	xorq	%rax, %rax
-+	addq	sme_me_mask(%rip), %rax
- #endif
- 
--	/* Form the CR3 value being sure to include the CR3 modifier */
--	addq	$(init_top_pgt - __START_KERNEL_map), %rax
  1:
  
++	/*
++	 * Define a mask of CR4 bits to preserve. PAE and LA57 cannot be
++	 * modified while paging remains enabled. PGE will be toggled below if
++	 * it is already set.
++	 */
++	movl	$(X86_CR4_PAE | X86_CR4_PGE | X86_CR4_LA57), %edx
  #ifdef CONFIG_X86_MCE
-@@ -211,9 +203,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	/*
+ 	 * Preserve CR4.MCE if the kernel will enable #MC support.
+@@ -187,22 +193,9 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	 * configured will crash the system regardless of the CR4.MCE value set
+ 	 * here.
+ 	 */
+-	movq	%cr4, %rcx
+-	andl	$X86_CR4_MCE, %ecx
+-#else
+-	movl	$0, %ecx
++	orl	$X86_CR4_MCE, %edx
  #endif
- 	movq	%rcx, %cr4
  
--	/* Setup early boot stage 4-/5-level pagetables. */
--	addq	phys_base(%rip), %rax
+-	/* Enable PAE mode, PSE, PGE and LA57 */
+-	orl	$(X86_CR4_PAE | X86_CR4_PSE | X86_CR4_PGE), %ecx
+-#ifdef CONFIG_X86_5LEVEL
+-	testb	$1, __pgtable_l5_enabled(%rip)
+-	jz	1f
+-	orl	$X86_CR4_LA57, %ecx
+-1:
+-#endif
+-	movq	%rcx, %cr4
 -
  	/*
  	 * Switch to new page-table
  	 *
+@@ -218,10 +211,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	 * entries from the identity mapping are flushed.
+ 	 */
+ 	movq	%cr4, %rcx
+-	movq	%rcx, %rax
+-	xorq	$X86_CR4_PGE, %rcx
++	andl	%edx, %ecx
++0:	btcl	$X86_CR4_PGE_BIT, %ecx
+ 	movq	%rcx, %cr4
+-	movq	%rax, %cr4
++	jc	0b
+ 
+ 	/* Ensure I am executing from virtual addresses */
+ 	movq	$1f, %rax
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
