@@ -1,154 +1,206 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0402157056
-	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4441276C9C
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706551256; cv=none; b=E7AuJIpUeNyPRyOi7Aa9WLb7T+eeqX1TRJPOhJZbjnNzl6C8QtQm68Bc/3buo0qRCRc7yEmnuKCunqCwgF92y690vvDqDeKHqECgKlUi0V+Qp5IWiZWCjIi5K4z+SfTyTXcvpNswa7zNiCLltuDwG16ctvMRos/p6nZWfsYNUQY=
+	t=1706551531; cv=none; b=muNtAMop8LzKR+jo4pj4PtEL28OyGq4ch3cfq/Sf4RBxJbbEdfxSrNN4hiADHASu29RFlmTWvnqA0WFrH92tbgjhG8/WpnBoqoq8+w6UZhZZZgGdKkIa1dC7s9FkTj/tcj5Dhn8+BwYytkxy9v3j42DDYbr8w4JP/bs3fN/f8uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706551256; c=relaxed/simple;
-	bh=jK+D77ByRXO1IX7WwU8qUvR5ixL79v+nVqcsnlmg2d4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=t6tN4qD+LBeV++1/M3qgnR/iEao76IKv+umVhIHfmsmnZq8QW03+nQ99TxFuU4rTlOHO0KUZ7OviFO7OomFHIEwlg51e6tiD8OnsOj1PUjwF8W072skBplE3dGqiKyCLqk+gojV6Yek7iea14hH01qQ9+gIaJhHYEtuft4fFHeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=c+zaQb7c; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1706551531; c=relaxed/simple;
+	bh=YdhZ66KOErP/puxhjIeE2xj8p2TmW0k7m++j4/SciGY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tqNmDIKEoT4EYK3wxnpsfaVPbp+IHsoQGICQPkLZ/iwoKjcscAqwnUM/9EIkRbUEcPbGgfAR4OPJx2h5b/wElDur+7ULrwkW9tVjAgXMHHhdTo7O3p4vlPTkId2Z1mYaLFNWMvz2mdDRficafba7eYuQ056j/1dcCDxxNsGkMbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KP6vvuwe; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="c+zaQb7c"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2906b859560so1271656a91.1
-        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:00:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KP6vvuwe"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5f38d676cecso46718657b3.0
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:05:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706551253; x=1707156053; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q2i1VCkuXMuVXp4gDavRJYrrSt5NKbgy/NVoBDThh0M=;
-        b=c+zaQb7c4axyD3VRCfgRyKcdrzYwraVqRxpqqklQub5jKL4S6PiR3aTLGP0rcD8Nlr
-         k4hyn98fupNHOJycBarsHLiPqC/IlzJLvo7Qa/SPevprrvs/hB01qiFISjJmu2DNKxBl
-         iD9K+9fNukz/FtrJtixAv/NxYGc8AmtKfoqaM=
+        d=google.com; s=20230601; t=1706551528; x=1707156328; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0dgHDmyiuf24yKbMsV5rC/PIHquqMJzNMfIw3GnnTIc=;
+        b=KP6vvuweVgUIuSh+UJNaE8SVtNIzDOoYcFJJ5KEP9D3iSd24vvsIS0TE0bIbXH1lZi
+         iEn0FSOP9sU56MG+WhnqOm3c9fUdcf621+UBWLtmJQRlDYp2NEWO0yE7H6CLzo2s7A09
+         GstPBCdDhKEzhM7BtOCv+m/4EzWh/xO99CCzGa+lDgv027G+thzLcu/mEY0HmrqQ3oa0
+         zqNTYr9zm5ezEeUl/oV2PMuPsVLEdqzrjeek+7E4NGrxT+x7KDuERhbZABVaTLKhS0YD
+         SQ6jPYHri9SOTIp58AUpZIA7fpxxuL8Z7Jfby3kUhJCgEnn+GaPkZCelrx3ukIElcyZW
+         1cNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706551253; x=1707156053;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q2i1VCkuXMuVXp4gDavRJYrrSt5NKbgy/NVoBDThh0M=;
-        b=F7RC60GpfnHMop/YWkxb68ividBG/V8uHFK+nP7jLYepRPOANVVFZfOG3XYhcAyCEM
-         XNpteiSffVXyrRigbWhZJU/dAHLLd4fysSUMIZrES4dkpZE34ImHsMW8n7QpYqY4cV8i
-         42kqhk0pdpgW0RS05jk+CmwqMi1FlCl3jZ4SES4lyVTb21gsJRA4EOZi9CvvBUgx+g/P
-         2DpbfNjUfGwl5lOtHdvijjfwoElSfAUMSWurEEUMeFjvU9RtRVTT2Pezi+4J+zVkBf8p
-         nTJ4YTuj0cQgWy0UrzOgGuXX/cuWwq2VpUS8LOWFgj2BqFsnn5SiOI8pStPR+6DsU2uU
-         L9HA==
-X-Gm-Message-State: AOJu0YxEV5tj8BV8X1o+j19BmkpDzdWJedtSD0gKuAfVN3miIy947DvJ
-	Alo57h7V8lYVRFAGWk6vAVPhhBk/V/kGm5Zq0yZZzewnHMuQZwHD7W+sgJ4KXA==
-X-Google-Smtp-Source: AGHT+IEFMuGN+nazKIGePnCBK93B/dcIkGpPVgGGjhO3ldJhS97s0IuMoBP3m6PSrC3bqjW/AXrG7Q==
-X-Received: by 2002:a17:90a:6303:b0:290:664f:b52e with SMTP id e3-20020a17090a630300b00290664fb52emr2540818pjj.38.1706551252969;
-        Mon, 29 Jan 2024 10:00:52 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170902680d00b001d8fec31348sm325955plk.294.2024.01.29.10.00.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jan 2024 10:00:51 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	linux-kbuild@vger.kernel.org,
-	Justin Stitt <justinstitt@google.com>,
-	Fangrui Song <maskray@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH 5/6] ubsan: Split wrapping sanitizer Makefile rules
-Date: Mon, 29 Jan 2024 10:00:42 -0800
-Message-Id: <20240129180046.3774731-5-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240129175033.work.813-kees@kernel.org>
-References: <20240129175033.work.813-kees@kernel.org>
+        d=1e100.net; s=20230601; t=1706551528; x=1707156328;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0dgHDmyiuf24yKbMsV5rC/PIHquqMJzNMfIw3GnnTIc=;
+        b=NrecDoo4R+6+q7AOD1J9Rqf6YhEmCjO/rVRydffzCeODFvckcnXtXvYXihyhtAWi6E
+         Ku0SFnqRKJpX0YExQq2rswjMncCFCS+xWDSh6+nKAfmOasXn0MJE7ZNX63rqSrmpSzwY
+         J6PWxPkemHe1IGe0sFjp2oVzHzcJ5zI9XQW5/jsTk+dnQ1GVD945kP8yKAgpF8L76BjX
+         f54X6D8aQMKFekkfp3Qahsp06+MEX5DsvddLcqLeY1MAKUAEbiJjNxDiLFtE1iTqHAwU
+         XlXuqOg2R9DbW9ikT0lvF2aeeVFgCUdU0jud7LFFVtOvcLQliVl3SldeSaqf0Q9Gljbb
+         VkBw==
+X-Gm-Message-State: AOJu0YyPsZFNtkVmuFXIPFfgkuZd68FJ+GLZI31aItHjdnVOot1gmhhA
+	4w1uWPUG3+vqKc+oTb/o/WIU98FLLl4Qav+xcsWFf/NZ22zEW9OX3OSSJeRhb30VJ0h0Kw==
+X-Google-Smtp-Source: AGHT+IGaATphYw3isIigM+VeGOYOeH4enRg6wjibBlkhiC3PQiWztkmu11zGrZOwDGivx7JkOKdoPSL7
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
+ (user=ardb job=sendgmr) by 2002:a25:8908:0:b0:dc3:696e:ffae with SMTP id
+ e8-20020a258908000000b00dc3696effaemr1936135ybl.3.1706551528335; Mon, 29 Jan
+ 2024 10:05:28 -0800 (PST)
+Date: Mon, 29 Jan 2024 19:05:03 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2922; i=keescook@chromium.org;
- h=from:subject; bh=jK+D77ByRXO1IX7WwU8qUvR5ixL79v+nVqcsnlmg2d4=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlt+fLcstMJILdukRJsh4gmujuHAUYtz++GFAVQ
- hi5nayK60OJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZbfnywAKCRCJcvTf3G3A
- JvEwD/9mLJX/yCioxqHFplE6Sfs88ZUCvIWUegUYyLYqmW8FZNkwvz2hvrM6bY0we9ehQA+GsLY
- DWrfIOOKPYfNhb3K8UFSxHoHG4yQLg3j34ztkhnJt4ft+Toj2Uvn+GK5P349nQUrYAVgyGnmUcy
- pkpCS7FvQQfbQNXWxaWwl94ncIAKRzcYcgCKpxbORR6xqyIUjawjtceNK4N3/uku97s221SyhOD
- mkfjRRfg4DjBr+h+SZMa74boc3Yn5CYHKeNm9YZVAf/MzYCKODkSG0ZvLJTkladg6gDRxCxl6Wf
- YXhx7Tn63ADsL9fYyZNMHLuefXcanHemLC8v8rPqn3niih4BzNKq+8VNdjqhYOmd/RQfkNDe+8+
- AZ/xcu2uIO03enV0eEUuYaO3aMHYHb2k2/MWLh3N99fpivvtStuiIsfJam+PAnkrz+8s/ejwQi6
- CbvYokDbBsnn7Lh859fSJlZ5TbxsZgHHXZ8lhY49nkY4X9eakeAutkx7zmROnu8glrY+8hlrTPZ
- x8k/60vawNSEUHGFVIFaoCYDJ3IfCMkKcfwf1J6qEG3F4Vp9O9AxrBbRbAVHx+Idngc5hzhCw+7
- vQhslezHOkCFdtjb19sRFaAJItaXno6VtYCq3pR3es0iijSSI6E69Lj9FgzQmyuFVbdUF2JdyR+ gg7Rk56aU/LzPPw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6464; i=ardb@kernel.org;
+ h=from:subject; bh=3TIgd8JH8leGyvCOvibsMg9R6VNfjDFus1JZk+AZ7Zs=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7i/N3XHfs68hwrlq/xO1Tou0aE1lPb6fL/mVP5vzJ8
+ VrOzTy/o5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAEwk/jgjw78vwX51p59YF/JM
+ 799+tWSLWe/KJNc+hdU6mQxtRa+70hj+R0w3TQm7uXryiQkLjjyfIio1Y/+lf93qm3/8mDH76nd eZz4A
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240129180502.4069817-21-ardb+git@google.com>
+Subject: [PATCH v3 00/19] x86: Confine early 1:1 mapped startup code
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-To allow for fine-grained control of where the wrapping sanitizers can
-be disabled, split them from the main UBSAN CFLAGS into their own set of
-rules.
+From: Ard Biesheuvel <ardb@kernel.org>
 
-Cc: Masahiro Yamada <masahiroy@kernel.org>
+This is a follow-up to my RFC [0] that proposed to build the entire core
+kernel with -fPIC, to reduce the likelihood that code that runs
+extremely early from the 1:1 mapping of memory will misbehave.
+
+This is needed to address reports that SEV boot on Clang built kernels
+is broken, due to the fact that this early code attempts to access
+virtual kernel address that are not mapped yet. Kevin has suggested some
+workarounds to this [1] but this is really something that requires a
+more rigorous approach, rather than addressing a couple of symptoms of
+the underlying defect.
+
+As it turns out, the use of fPIE for the entire kernel is neither
+necessary nor sufficient, and has its own set of problems, including the
+fact that the PIE small C code model uses FS rather than GS for the
+per-CPU register, and only recent GCC and Clang versions permit this to
+be overridden on the command line.
+
+But the real problem is that even position independent code is not
+guaranteed to execute correctly at any offset unless all statically
+initialized pointer variables use the same translation as the code.
+
+So instead, this v2 and later proposes another solution, taking the
+following approach:
+- clean up and refactor the startup code so that the primary startup
+  code executes from the 1:1 mapping but nothing else;
+- define a new text section type .pi.text and enforce that it can only
+  call into other .pi.text sections;
+- (tbd) require that objects containing .pi.text sections are built with
+  -fPIC, and disallow any absolute references from such objects.
+
+The latter point is not implemented yet in this v3, but this could be
+done rather straight-forwardly. (The EFI stub already does something
+similar across all architectures)
+
+Changes since v2: [2]
+- move command line parsing out of early startup code entirely
+- fix LTO and instrumentation related build warnings reported by Nathan
+- omit PTI related PGD/P4D setters when creating the early page tables,
+  instead of pulling that code into the 'early' set
+
+[0] https://lkml.kernel.org/r/20240122090851.851120-7-ardb%2Bgit%40google.com
+[1] https://lore.kernel.org/all/20240111223650.3502633-1-kevinloughlin@google.com/T/#u
+[2] https://lkml.kernel.org/r/20240125112818.2016733-19-ardb%2Bgit%40google.com
+
+Cc: Kevin Loughlin <kevinloughlin@google.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Dionna Glaze <dionnaglaze@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: linux-kbuild@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- scripts/Makefile.lib   |  9 +++++++++
- scripts/Makefile.ubsan | 12 +++++++++---
- 2 files changed, 18 insertions(+), 3 deletions(-)
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Brian Gerst <brgerst@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: llvm@lists.linux.dev
 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 52efc520ae4f..5ce4f4e0bc61 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -177,6 +177,15 @@ ifeq ($(CONFIG_UBSAN),y)
- _c_flags += $(if $(patsubst n%,, \
- 		$(UBSAN_SANITIZE_$(basetarget).o)$(UBSAN_SANITIZE)y), \
- 		$(CFLAGS_UBSAN))
-+_c_flags += $(if $(patsubst n%,, \
-+		$(UBSAN_WRAP_SIGNED_$(basetarget).o)$(UBSAN_SANITIZE_$(basetarget).o)$(UBSAN_WRAP_SIGNED)$(UBSAN_SANITIZE)y), \
-+		$(CFLAGS_UBSAN_WRAP_SIGNED))
-+_c_flags += $(if $(patsubst n%,, \
-+		$(UBSAN_WRAP_UNSIGNED_$(basetarget).o)$(UBSAN_SANITIZE_$(basetarget).o)$(UBSAN_WRAP_UNSIGNED)$(UBSAN_SANITIZE)y), \
-+		$(CFLAGS_UBSAN_WRAP_UNSIGNED))
-+_c_flags += $(if $(patsubst n%,, \
-+		$(UBSAN_WRAP_POINTER_$(basetarget).o)$(UBSAN_SANITIZE_$(basetarget).o)$(UBSAN_WRAP_POINTER)$(UBSAN_SANITIZE)y), \
-+		$(CFLAGS_UBSAN_WRAP_POINTER))
- endif
- 
- ifeq ($(CONFIG_KCOV),y)
-diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-index df4ccf063f67..6b1e65583d6f 100644
---- a/scripts/Makefile.ubsan
-+++ b/scripts/Makefile.ubsan
-@@ -8,11 +8,17 @@ ubsan-cflags-$(CONFIG_UBSAN_LOCAL_BOUNDS)	+= -fsanitize=local-bounds
- ubsan-cflags-$(CONFIG_UBSAN_SHIFT)		+= -fsanitize=shift
- ubsan-cflags-$(CONFIG_UBSAN_DIV_ZERO)		+= -fsanitize=integer-divide-by-zero
- ubsan-cflags-$(CONFIG_UBSAN_UNREACHABLE)	+= -fsanitize=unreachable
--ubsan-cflags-$(CONFIG_UBSAN_SIGNED_WRAP)	+= -fsanitize=signed-integer-overflow
--ubsan-cflags-$(CONFIG_UBSAN_UNSIGNED_WRAP)	+= -fsanitize=unsigned-integer-overflow
--ubsan-cflags-$(CONFIG_UBSAN_POINTER_WRAP)	+= -fsanitize=pointer-overflow
- ubsan-cflags-$(CONFIG_UBSAN_BOOL)		+= -fsanitize=bool
- ubsan-cflags-$(CONFIG_UBSAN_ENUM)		+= -fsanitize=enum
- ubsan-cflags-$(CONFIG_UBSAN_TRAP)		+= $(call cc-option,-fsanitize-trap=undefined,-fsanitize-undefined-trap-on-error)
- 
- export CFLAGS_UBSAN := $(ubsan-cflags-y)
-+
-+ubsan-wrap-signed-cflags-$(CONFIG_UBSAN_SIGNED_WRAP)     += -fsanitize=signed-integer-overflow
-+export CFLAGS_UBSAN_WRAP_SIGNED := $(ubsan-wrap-signed-cflags-y)
-+
-+ubsan-wrap-unsigned-cflags-$(CONFIG_UBSAN_UNSIGNED_WRAP) += -fsanitize=unsigned-integer-overflow
-+export CFLAGS_UBSAN_WRAP_UNSIGNED := $(ubsan-wrap-unsigned-cflags-y)
-+
-+ubsan-wrap-pointer-cflags-$(CONFIG_UBSAN_POINTER_WRAP)   += -fsanitize=pointer-overflow
-+export CFLAGS_UBSAN_WRAP_POINTER := $(ubsan-wrap-pointer-cflags-y)
+Ard Biesheuvel (19):
+  efi/libstub: Add generic support for parsing mem_encrypt=
+  x86/boot: Move mem_encrypt= parsing to the decompressor
+  x86/startup_64: Drop long return to initial_code pointer
+  x86/startup_64: Simplify calculation of initial page table address
+  x86/startup_64: Simplify CR4 handling in startup code
+  x86/startup_64: Drop global variables keeping track of LA57 state
+  x86/startup_64: Simplify virtual switch on primary boot
+  x86/head64: Replace pointer fixups with PIE codegen
+  x86/head64: Simplify GDT/IDT initialization code
+  asm-generic: Add special .pi.text section for position independent
+    code
+  x86: Move return_thunk to __pitext section
+  x86/head64: Move early startup code into __pitext
+  modpost: Warn about calls from __pitext into other text sections
+  x86/coco: Make cc_set_mask() static inline
+  x86/sev: Make all code reachable from 1:1 mapping __pitext
+  x86/sev: Avoid WARN() in early code
+  x86/sev: Use PIC codegen for early SEV startup code
+  x86/sev: Drop inline asm LEA instructions for RIP-relative references
+  x86/startup_64: Don't bother setting up GS before the kernel is mapped
+
+ arch/x86/Makefile                              |   8 +
+ arch/x86/boot/compressed/Makefile              |   2 +-
+ arch/x86/boot/compressed/misc.c                |  22 +++
+ arch/x86/boot/compressed/pgtable_64.c          |   2 -
+ arch/x86/boot/compressed/sev.c                 |   6 +
+ arch/x86/coco/core.c                           |   7 +-
+ arch/x86/include/asm/coco.h                    |   8 +-
+ arch/x86/include/asm/desc.h                    |   3 +-
+ arch/x86/include/asm/init.h                    |   2 -
+ arch/x86/include/asm/mem_encrypt.h             |   8 +-
+ arch/x86/include/asm/pgtable_64.h              |  12 +-
+ arch/x86/include/asm/pgtable_64_types.h        |  15 +-
+ arch/x86/include/asm/setup.h                   |   4 +-
+ arch/x86/include/asm/sev.h                     |   6 +-
+ arch/x86/include/uapi/asm/bootparam.h          |   2 +
+ arch/x86/kernel/Makefile                       |   7 +
+ arch/x86/kernel/cpu/common.c                   |   2 -
+ arch/x86/kernel/head64.c                       | 206 +++++++-------------
+ arch/x86/kernel/head_64.S                      | 156 +++++----------
+ arch/x86/kernel/sev-shared.c                   |  54 +++--
+ arch/x86/kernel/sev.c                          |  27 ++-
+ arch/x86/kernel/vmlinux.lds.S                  |   3 +-
+ arch/x86/lib/Makefile                          |  13 --
+ arch/x86/lib/memcpy_64.S                       |   3 +-
+ arch/x86/lib/memset_64.S                       |   3 +-
+ arch/x86/lib/retpoline.S                       |   2 +-
+ arch/x86/mm/Makefile                           |   2 +-
+ arch/x86/mm/kasan_init_64.c                    |   3 -
+ arch/x86/mm/mem_encrypt_boot.S                 |   3 +-
+ arch/x86/mm/mem_encrypt_identity.c             |  98 +++-------
+ drivers/firmware/efi/libstub/efi-stub-helper.c |   8 +
+ drivers/firmware/efi/libstub/efistub.h         |   2 +-
+ drivers/firmware/efi/libstub/x86-stub.c        |   6 +
+ include/asm-generic/vmlinux.lds.h              |   3 +
+ include/linux/init.h                           |  12 ++
+ scripts/mod/modpost.c                          |  11 +-
+ tools/objtool/check.c                          |  26 +--
+ 37 files changed, 319 insertions(+), 438 deletions(-)
+
+
+base-commit: aa8eff72842021f52600392b245fb82d113afa8a
 -- 
-2.34.1
+2.43.0.429.g432eaa2c6b-goog
 
