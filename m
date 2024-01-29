@@ -1,53 +1,53 @@
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B607A3F9D6
-	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8066F6F06E
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706551534; cv=none; b=qUWcJA2kx1EYt9pMKP9M44fRRUgiIO5eAa+UB4T1wvp4IqCvvtDFYLlWx/x/3V38biyPOdeeOmsk5b1Km3vtPxh7JBusjWq7Fw4OLDhUnUE6ALHNZICtdmp4KepnZ5ltfY0Mq6yYNCYsDDiNfAJuUyBqQmScjUX/t3vomskq0Bk=
+	t=1706551536; cv=none; b=WKVJGzROhgyQFQQ2WFYQghHU6sDLPW1WC+H4G0CpVG/5ieH7QzHrVdNm+0NZe1zmCwdcwuTMurs+LtdRGJn4STIR031ipZmDSEk9rMQsWCB/hao4aHu6r1gNbNfpvi0Ast1OaMAiKRGVjgFBteEJ2DmesLnYlK4Yt5z9GtaIE7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706551534; c=relaxed/simple;
-	bh=8EngcPiV4/gVfKgvYtooxy7CfkplaV+JIi8nleL+nv8=;
+	s=arc-20240116; t=1706551536; c=relaxed/simple;
+	bh=HFn1spOv4KPR4R1zHjTL4BDpzlPynxVt+ZjcueLDXCo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=r5QMmG7waGinbozTBrIz9/mlIkBapWQ7BDylBiaY+gpe8lmPhKpF5tkskOyg6BImw3Bbeh/Y+xJocq4jk/aT1Ox3LDaAxelRioL+GFgoBJoX8UVy/S+xigFMXLyjlCDNecy3bBR6KcaXxW2bISA3hhQBoGxh+2fttcvXaxYoMAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bWmuXBLQ; arc=none smtp.client-ip=209.85.221.73
+	 To:Cc:Content-Type; b=LvX+iqANvo0n7w6xXzGkd7LxTuRxRCEzVghiUiofv49OdpYucet7ckt0n9fyJFvP70mu6b0C0yfiMxD+e2kD4iKnRT8CJcuSX7qjqVRww1yiRAQjEU0wh/l6DTGkf6KMSm/W2ymF+MsXE+1HwzIzHHrlTCO5Rwh/EFOkEoB7z4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uPMDxjWA; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bWmuXBLQ"
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-33af10efa37so439289f8f.1
-        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:05:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uPMDxjWA"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-602990c3b65so56257457b3.1
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:05:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706551531; x=1707156331; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706551533; x=1707156333; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZKxz5I1lJ14YrwiTICZR28lgBpbE1gmuL2Ys4svPQiQ=;
-        b=bWmuXBLQE+2n93CO+kPS4PE7XyvhDKyZSztlUA54OfwoQUOt3x65sZyzgl6trRIXl2
-         IEmd5aYcXWsYM5i+OZ/jO5psJriP1QVUCWM6/pWMU44UIUJ4sbyVwZKsRpNz+8+d1YHv
-         9MP41reImfOoDgtQiNnIVnRMgApL2BbxV6OqjQqXHQd/J9V/yZUzYxML3uVB0UydNmUX
-         tnQ5KyqPbktTUpSFT+25CVfpejSVHo7N+0aCYF+M9QtoX5Jld9vStpoyLmvrgfd/vrLV
-         dq8icTjj76D8Ow0y3cyjXE42bd++SfsxBhNn8HyWNeiTSs2Pyy0cM/GUSuMMuOKJnJz8
-         KF8w==
+        bh=p3FWGTV10qie8rRiz9nelg+HW9vFOvPrRVG9vffZcTs=;
+        b=uPMDxjWAy1boVx2ycWCZcALiVNwIEx+XeXFWm+2RhvJdMungO05de+pt6dO2sUWGbS
+         tmoFuRF+qTMN1lqrpkDUsKeYoso+r3C6YgnAp5w2bv+mEGryysIn9LEnn7uU2Kfo0CJ7
+         LkOTHSNxvSa2QJ3lYQ7oftGEZ9udR4V4UlMz+DBJ5ZCMkJZb1OQs1xPiyBE2lQzqPwlI
+         elBqvXwCMJcEoRj92x76V6oC4p7R4zns3OWYZ8xSxYOZmcE45F4yWWGHqoAxIxqW1oqR
+         Y8MFV/c1mQLcJVC+Ilwz9tNiC7c55cyO0P9+PZk4HcCYdqGwUhSaQmckOSihLoVmcQh6
+         Wyyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706551531; x=1707156331;
+        d=1e100.net; s=20230601; t=1706551533; x=1707156333;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZKxz5I1lJ14YrwiTICZR28lgBpbE1gmuL2Ys4svPQiQ=;
-        b=oOSsSZsNBdbfBxRw7uK18VLt6KaJZj7HyzYEseWfmOMnYMKnSondVWjCzMOX6U2PdQ
-         w25oEUdnd0wErOA54dAZHOnNaUZpU4aC0AOzFLW6VeoS15yqp6rua2qOa1rTYggSmhiR
-         Of32ndr1r22GbiBOPeLYzarXrenlCD9VjT9LmAUGGPpt3KYe58eW1vkvbU7DwYxVO8a9
-         LLqsgdg2NE4VeOiGRuGolURBWOpe1d+buhrgUFzHABArRhUbfjTgNPLCkY7LRqtdZCt+
-         m9sImOUOBUhWBDke2s8Tl8DX6k8mr4qkIwPw8TWczJ9m46mjzbOUruRGvUlv14oRNZOW
-         0gCA==
-X-Gm-Message-State: AOJu0YwIlbgaHirJJZbl9OZRt7EaLpZnEwJRKcgY6TR9RCuhfQomfdql
-	UhZMJFwvraV8rV13k8FJbeORl0jPfFNNubMazAZ4mq8Ngp1YOCTa1kndHHpv9kPKwtU/0w==
-X-Google-Smtp-Source: AGHT+IHqXoqSxlnq+tXgVV8MITvhCNMHm/mI4bOyTcP8eXKfAYEXj2pInMqp+zkM42KE9U02vk3dc98V
+        bh=p3FWGTV10qie8rRiz9nelg+HW9vFOvPrRVG9vffZcTs=;
+        b=qK51IE2Cuo4mylL6Tz3Um9isUx9DGMJfX1AEqdbm7GIoDc6KfnD98a2V/z/i2U+m6y
+         kocWWNaUVtqN4r+xchiHQ0ZGSjY55dmPMXOluIq1ndGFb7A/0P+78o6svQ4UVodB0GwV
+         enHxVDN7xoarIQwPtONhurvkKB2ykaQz2fjtntkI6LmA/4Y4GU9FbolCZEwfstdhwKSO
+         giY2S0d04SZFccVruNNWrljk2eSnQZQ10/wGisvAx6mTdWqONfpAhxo4DCPU3h0rYKm8
+         +gKQQ0NLhyQOrWcROF3LIe2InBOmp3heLU0UT/W2CxHQOoyHM0hoJMNK/oxTTRKsy1OM
+         VHRg==
+X-Gm-Message-State: AOJu0YzB85ik+bB+SMbuPYXfRNFpypMXSiI5G8UD7thUPlEK5i4qgA1v
+	u6HTFLzhDjYmvpbxzzRdaN0z0mhGqf/6etQ7HDUaIEnDoCMaFZOX+CyVJEQX6mkPh0Vm9w==
+X-Google-Smtp-Source: AGHT+IGVcq2pXpU6LfBnSbe3eFllbMwA7mlv7HhvFLN60TO62ZHJfEf419ADavLY79oFrfTS/Z1//fuD
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a5d:5a97:0:b0:33a:f355:7f2a with SMTP id
- bp23-20020a5d5a97000000b0033af3557f2amr3448wrb.8.1706551531045; Mon, 29 Jan
- 2024 10:05:31 -0800 (PST)
-Date: Mon, 29 Jan 2024 19:05:04 +0100
+ (user=ardb job=sendgmr) by 2002:a05:690c:ed4:b0:5d8:4274:bae2 with SMTP id
+ cs20-20020a05690c0ed400b005d84274bae2mr2074182ywb.6.1706551533566; Mon, 29
+ Jan 2024 10:05:33 -0800 (PST)
+Date: Mon, 29 Jan 2024 19:05:05 +0100
 In-Reply-To: <20240129180502.4069817-21-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,14 +57,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240129180502.4069817-21-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2179; i=ardb@kernel.org;
- h=from:subject; bh=cYtM8PUyOXvYlw4FeyoL0t7P65MWzmFujl4gVlusCbs=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7iwvJHgmKYd5qZlpNAZqZUfs+Xyudf+rqhncfljw00
- JxmfF26o5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAExk9nNGhiUtf/QfJmu4l6R7
- +lzQmanC+t38+7/fDQ2K2fFPtm50XcDIcNKRZbZu+RGrc37Gq9csORj73Tspw+TyQoeoVU5WT8O W8gMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7925; i=ardb@kernel.org;
+ h=from:subject; bh=M0vxsf0gTqIKMZpFhFJ2BBWB91v5R63xIeoeRQ3uSVE=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7i4vMAZebr19uPjtNTGWy4aWMzFNMrYUL3pafZBPbu
+ /6AHf+KjlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRHYUM/0zmcif/jDiQ3vfl
+ ukmjmedu7Q9+7mufCvEZl7/vklXvs2D4Z7mhl60oe8btsotvDwd9qtTNC7TYFrvMi1F2Z/gmS/V oNgA=
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240129180502.4069817-22-ardb+git@google.com>
-Subject: [PATCH v3 01/19] efi/libstub: Add generic support for parsing mem_encrypt=
+Message-ID: <20240129180502.4069817-23-ardb+git@google.com>
+Subject: [PATCH v3 02/19] x86/boot: Move mem_encrypt= parsing to the decompressor
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -79,59 +79,220 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Parse the mem_encrypt= command line parameter from the EFI stub if
-CONFIG_ARCH_HAS_MEM_ENCRYPT=y, so that it can be passed to the early
-boot code by the arch code in the stub.
+The early SME/SEV code parses the command line very early, in order to
+decide whether or not memory encryption should be enabled, which needs
+to occur even before the initial page tables are created.
 
-This avoids the need for the core kernel to do any string parsing very
-early in the boot.
+This is problematic for a number of reasons:
+- this early code runs from the 1:1 mapping provided by the decompressor
+  or firmware, which uses a different translation than the one assumed by
+  the linker, and so the code needs to be built in a special way;
+- parsing external input while the entire kernel image is still mapped
+  writable is a bad idea in general, and really does not belong in
+  security minded code;
+- the current code ignores the built-in command line entirely (although
+  this appears to be the case for the entire decompressor)
+
+Given that the decompressor/EFI stub is an intrinsic part of the x86
+bootable kernel image, move the command line parsing there and out of
+the core kernel. This removes the need to build lib/cmdline.o in a
+special way, or to use RIP-relative LEA instructions in inline asm
+blocks.
+
+This involves a pair of new xloadflags in the setup header to indicate
+that a) mem_encrypt= was provided, and b) whether it was set to on or
+off. What this actually means in terms of default behavior when the
+command line parameter is omitted is left up to the existing logic -
+this permits the same flags to be reused if the need arises.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- drivers/firmware/efi/libstub/efi-stub-helper.c | 8 ++++++++
- drivers/firmware/efi/libstub/efistub.h         | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ arch/x86/boot/compressed/misc.c         | 22 ++++++++++
+ arch/x86/include/uapi/asm/bootparam.h   |  2 +
+ arch/x86/lib/Makefile                   | 13 ------
+ arch/x86/mm/mem_encrypt_identity.c      | 45 +++-----------------
+ drivers/firmware/efi/libstub/x86-stub.c |  6 +++
+ 5 files changed, 37 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
-index bfa30625f5d0..3dc2f9aaf08d 100644
---- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-+++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-@@ -24,6 +24,8 @@ static bool efi_noinitrd;
- static bool efi_nosoftreserve;
- static bool efi_disable_pci_dma = IS_ENABLED(CONFIG_EFI_DISABLE_PCI_DMA);
+diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+index b99e08e6815b..d63a2dc7d0b1 100644
+--- a/arch/x86/boot/compressed/misc.c
++++ b/arch/x86/boot/compressed/misc.c
+@@ -357,6 +357,26 @@ unsigned long decompress_kernel(unsigned char *outbuf, unsigned long virt_addr,
+ 	return entry;
+ }
  
-+int efi_mem_encrypt;
++/*
++ * Set the memory encryption xloadflag based on the mem_encrypt= command line
++ * parameter, if provided. If not, the consumer of the flag decides what the
++ * default behavior should be.
++ */
++static void set_mem_encrypt_flag(struct setup_header *hdr)
++{
++	hdr->xloadflags &= ~(XLF_MEM_ENCRYPTION | XLF_MEM_ENCRYPTION_ENABLED);
 +
- bool __pure __efi_soft_reserve_enabled(void)
- {
- 	return !efi_nosoftreserve;
-@@ -75,6 +77,12 @@ efi_status_t efi_parse_options(char const *cmdline)
- 			efi_noinitrd = true;
- 		} else if (IS_ENABLED(CONFIG_X86_64) && !strcmp(param, "no5lvl")) {
- 			efi_no5lvl = true;
-+		} else if (IS_ENABLED(CONFIG_ARCH_HAS_MEM_ENCRYPT) &&
-+			   !strcmp(param, "mem_encrypt") && val) {
-+			if (parse_option_str(val, "on"))
-+				efi_mem_encrypt = 1;
-+			else if (parse_option_str(val, "off"))
-+				efi_mem_encrypt = -1;
- 		} else if (!strcmp(param, "efi") && val) {
- 			efi_nochunk = parse_option_str(val, "nochunk");
- 			efi_novamap |= parse_option_str(val, "novamap");
-diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-index 212687c30d79..a1c6ab24cd99 100644
---- a/drivers/firmware/efi/libstub/efistub.h
-+++ b/drivers/firmware/efi/libstub/efistub.h
-@@ -37,8 +37,8 @@ extern bool efi_no5lvl;
- extern bool efi_nochunk;
- extern bool efi_nokaslr;
- extern int efi_loglevel;
-+extern int efi_mem_encrypt;
- extern bool efi_novamap;
--
- extern const efi_system_table_t *efi_system_table;
++	if (IS_ENABLED(CONFIG_ARCH_HAS_MEM_ENCRYPT)) {
++		int on = cmdline_find_option_bool("mem_encrypt=on");
++		int off = cmdline_find_option_bool("mem_encrypt=off");
++
++		if (on || off)
++			hdr->xloadflags |= XLF_MEM_ENCRYPTION;
++		if (on > off)
++			hdr->xloadflags |= XLF_MEM_ENCRYPTION_ENABLED;
++	}
++}
++
+ /*
+  * The compressed kernel image (ZO), has been moved so that its position
+  * is against the end of the buffer used to hold the uncompressed kernel
+@@ -387,6 +407,8 @@ asmlinkage __visible void *extract_kernel(void *rmode, unsigned char *output)
+ 	/* Clear flags intended for solely in-kernel use. */
+ 	boot_params_ptr->hdr.loadflags &= ~KASLR_FLAG;
  
- typedef union efi_dxe_services_table efi_dxe_services_table_t;
++	set_mem_encrypt_flag(&boot_params_ptr->hdr);
++
+ 	sanitize_boot_params(boot_params_ptr);
+ 
+ 	if (boot_params_ptr->screen_info.orig_video_mode == 7) {
+diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+index 01d19fc22346..316784e17d38 100644
+--- a/arch/x86/include/uapi/asm/bootparam.h
++++ b/arch/x86/include/uapi/asm/bootparam.h
+@@ -38,6 +38,8 @@
+ #define XLF_EFI_KEXEC			(1<<4)
+ #define XLF_5LEVEL			(1<<5)
+ #define XLF_5LEVEL_ENABLED		(1<<6)
++#define XLF_MEM_ENCRYPTION		(1<<7)
++#define XLF_MEM_ENCRYPTION_ENABLED	(1<<8)
+ 
+ #ifndef __ASSEMBLY__
+ 
+diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
+index ea3a28e7b613..f0dae4fb6d07 100644
+--- a/arch/x86/lib/Makefile
++++ b/arch/x86/lib/Makefile
+@@ -14,19 +14,6 @@ ifdef CONFIG_KCSAN
+ CFLAGS_REMOVE_delay.o = $(CC_FLAGS_FTRACE)
+ endif
+ 
+-# Early boot use of cmdline; don't instrument it
+-ifdef CONFIG_AMD_MEM_ENCRYPT
+-KCOV_INSTRUMENT_cmdline.o := n
+-KASAN_SANITIZE_cmdline.o  := n
+-KCSAN_SANITIZE_cmdline.o  := n
+-
+-ifdef CONFIG_FUNCTION_TRACER
+-CFLAGS_REMOVE_cmdline.o = -pg
+-endif
+-
+-CFLAGS_cmdline.o := -fno-stack-protector -fno-jump-tables
+-endif
+-
+ inat_tables_script = $(srctree)/arch/x86/tools/gen-insn-attr-x86.awk
+ inat_tables_maps = $(srctree)/arch/x86/lib/x86-opcode-map.txt
+ quiet_cmd_inat_tables = GEN     $@
+diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+index 7f72472a34d6..06466f6d5966 100644
+--- a/arch/x86/mm/mem_encrypt_identity.c
++++ b/arch/x86/mm/mem_encrypt_identity.c
+@@ -43,7 +43,6 @@
+ 
+ #include <asm/setup.h>
+ #include <asm/sections.h>
+-#include <asm/cmdline.h>
+ #include <asm/coco.h>
+ #include <asm/sev.h>
+ 
+@@ -95,10 +94,6 @@ struct sme_populate_pgd_data {
+  */
+ static char sme_workarea[2 * PMD_SIZE] __section(".init.scratch");
+ 
+-static char sme_cmdline_arg[] __initdata = "mem_encrypt";
+-static char sme_cmdline_on[]  __initdata = "on";
+-static char sme_cmdline_off[] __initdata = "off";
+-
+ static void __init sme_clear_pgd(struct sme_populate_pgd_data *ppd)
+ {
+ 	unsigned long pgd_start, pgd_end, pgd_size;
+@@ -504,11 +499,9 @@ void __init sme_encrypt_kernel(struct boot_params *bp)
+ 
+ void __init sme_enable(struct boot_params *bp)
+ {
+-	const char *cmdline_ptr, *cmdline_arg, *cmdline_on, *cmdline_off;
+ 	unsigned int eax, ebx, ecx, edx;
+ 	unsigned long feature_mask;
+ 	unsigned long me_mask;
+-	char buffer[16];
+ 	bool snp;
+ 	u64 msr;
+ 
+@@ -570,42 +563,18 @@ void __init sme_enable(struct boot_params *bp)
+ 		msr = __rdmsr(MSR_AMD64_SYSCFG);
+ 		if (!(msr & MSR_AMD64_SYSCFG_MEM_ENCRYPT))
+ 			return;
++
++		if (bp->hdr.xloadflags & XLF_MEM_ENCRYPTION) {
++			if (bp->hdr.xloadflags & XLF_MEM_ENCRYPTION_ENABLED)
++				sme_me_mask = me_mask;
++		} else if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT)) {
++			sme_me_mask = me_mask;
++		}
+ 	} else {
+ 		/* SEV state cannot be controlled by a command line option */
+ 		sme_me_mask = me_mask;
+-		goto out;
+ 	}
+ 
+-	/*
+-	 * Fixups have not been applied to phys_base yet and we're running
+-	 * identity mapped, so we must obtain the address to the SME command
+-	 * line argument data using rip-relative addressing.
+-	 */
+-	asm ("lea sme_cmdline_arg(%%rip), %0"
+-	     : "=r" (cmdline_arg)
+-	     : "p" (sme_cmdline_arg));
+-	asm ("lea sme_cmdline_on(%%rip), %0"
+-	     : "=r" (cmdline_on)
+-	     : "p" (sme_cmdline_on));
+-	asm ("lea sme_cmdline_off(%%rip), %0"
+-	     : "=r" (cmdline_off)
+-	     : "p" (sme_cmdline_off));
+-
+-	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT))
+-		sme_me_mask = me_mask;
+-
+-	cmdline_ptr = (const char *)((u64)bp->hdr.cmd_line_ptr |
+-				     ((u64)bp->ext_cmd_line_ptr << 32));
+-
+-	if (cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer)) < 0)
+-		goto out;
+-
+-	if (!strncmp(buffer, cmdline_on, sizeof(buffer)))
+-		sme_me_mask = me_mask;
+-	else if (!strncmp(buffer, cmdline_off, sizeof(buffer)))
+-		sme_me_mask = 0;
+-
+-out:
+ 	if (sme_me_mask) {
+ 		physical_mask &= ~sme_me_mask;
+ 		cc_vendor = CC_VENDOR_AMD;
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+index 0d510c9a06a4..66e336cca0cc 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -879,6 +879,12 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
+ 		}
+ 	}
+ 
++	if (IS_ENABLED(CONFIG_ARCH_HAS_MEM_ENCRYPT) && efi_mem_encrypt) {
++		hdr->xloadflags |= XLF_MEM_ENCRYPTION;
++		if (efi_mem_encrypt > 0)
++			hdr->xloadflags |= XLF_MEM_ENCRYPTION_ENABLED;
++	}
++
+ 	status = efi_decompress_kernel(&kernel_entry);
+ 	if (status != EFI_SUCCESS) {
+ 		efi_err("Failed to decompress kernel\n");
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
