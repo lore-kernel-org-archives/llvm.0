@@ -1,134 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CDD13ADA;
-	Mon, 29 Jan 2024 18:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892012E3F2
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 19:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706553492; cv=none; b=UFQL6M7yO3OZ4/ok5tSJJuDZw40XQwriI/EIM1yRsiVjh/atHnNQFk3OCLeGoDETbC4Gq5KDlPVvX0tmUoZyboBJTxC7uK0coA3LzHIU2ICz++lh7L2m68xaNcbBndXU9/tVw1JrKOO3oXnFjZYzfbZ3RRPHiIeuEOYvbJLnPKc=
+	t=1706554828; cv=none; b=EYO+jSTluSCy4XjAZBK2IV9WlKJX9YLbaBSbt2RS7Jnp8PpLmyq3GKgJhtOjsq32D5OKsoQg+4zCrVTzt/p07Wuydbe5zyAIIbsJcBGZlV0K5H349CFB+nG+qHdcF9pu3WNP2ug/9sT/ygStkWChqBQu4tmnzeCS8FEgSY0Z0iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706553492; c=relaxed/simple;
-	bh=Vfzv3YHxyCeTpsteeAbwarRDOufw5XD1lhynvMGUqeU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ghsBtMhIwz/MSy4YsOos7X9Mt/0I07ws2w7/K80VVKLPF+ayQuMO+X0ovjQEnJLopv7iahy0NjqNwzXLM9cvmonEMbtP2lYnULYWALbby2DcG8ekaS2//YAj71ZEviYEBmbPt3pTGsxbQoxJs9zLgLL8fbpMizEfF4uzLFfJ2/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZRLXJBZY; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706554828; c=relaxed/simple;
+	bh=ssMtgarRnRs+LWFQuEr18d3XaNBa10XeJKStTgVMzZw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m+fLIXc1qU3tgaBEWgdCU5ck5KTMii6bZepikXHGS4QBwZa6H3b7XB4ENuy3tHDC5qLMEnEINEVCkofrHAbuNl8AZusrUe/58AT0dzVohy85VB02lPUlswUgD7HoHLnlZe5pdAIuivFLbDz5LPRJB7jC8UEyEqrh1qsgvH0rVU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=owEOMGjM; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZRLXJBZY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706553490; x=1738089490;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vfzv3YHxyCeTpsteeAbwarRDOufw5XD1lhynvMGUqeU=;
-  b=ZRLXJBZYbNWA2Og46r3XE6nav3jc+wF02h4iQ7R3FUHtENiAyT4/q7hA
-   yd4POrzdz+GAO9SvfyNdR0xzlTrBloKegxltazVjNfM1Enz8iPr5DNdEF
-   9vWnrhMYEl3rVGMGaP/ehy+HoK0CbVHUyciNVFuWrn7gfWz1FlC2j9sAz
-   P6M5gunbGjXeygoxZzTLvfvxYhHuO8WqPjYA9jnIaUpaSqhFaCgW6PHq4
-   ioLr722+vbJaZaoiSEhTWxoRnEcvrDJpMixOfhSOkXb8veBPN7RGj5eqS
-   yG1vFWGckR2+E2bGmoNKPIF96uWmnl19vxyMpfIWHee3aOt2BuWdyoVVc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="10156213"
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="10156213"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 10:38:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="29622679"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 29 Jan 2024 10:38:08 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rUWWD-0004Yu-1k;
-	Mon, 29 Jan 2024 18:38:05 +0000
-Date: Tue, 30 Jan 2024 02:37:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:b4/vfs-bdev-file-bd_inode 35/37]
- fs/jbd2/journal.c:1649: warning: Function parameter or struct member
- 'bdev_file' not described in 'jbd2_journal_init_dev'
-Message-ID: <202401300233.HpFwSXl6-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="owEOMGjM"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40ef9382752so7825e9.0
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 11:00:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706554810; x=1707159610; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YYJPquRBqD9Q7jzpQNCrCFu5Gx3v6qV+tI8wEy5zyow=;
+        b=owEOMGjMZPVWoFwbsA3vcQruukiE49K64HgVuDYqsnOY5tdFCfzkYv0pAiM9NQBD1D
+         bsw5n1nUcju7m2mxZ2gRvFGelxXLY1RJUa1ApWr9QjyzLY/rgCpXPUte6QbbrOheHRv2
+         fzv8xwVAyHKU+Yr43BqzG0xdjPef7uBENa4KAkQTTurFgHdC0cFZobjUYqcv4dS/fKTx
+         iJpViAKZgKiZB4B9/Q0gn7UABayS0A/kugFVFXYavbeIRM6DL4dm7XRgSL82z23V21+X
+         BbvpJm5GJgjLsMZNZeRFeQn3S97ytWdr82FUq7QF86MIu7M8gcW+6VIOOkXVS6lHrRiZ
+         S4dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706554810; x=1707159610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YYJPquRBqD9Q7jzpQNCrCFu5Gx3v6qV+tI8wEy5zyow=;
+        b=WvPKon/9/38p/hpjImEeuO4jTM7Y9hXHIV2I0wNTUYs0vpSC/hV1CRlqAuJKwLdUWU
+         ENJVQVuXRkYvq1t54ANFyAwS0hb3JTQ2fqEy6FVqx+7elv13Cn2GgxO3klpGd3/kTl60
+         TLyDbhvnW3+QFh6+rc8uKgDw3RF57n+ih890Iltu3zlIJmULrOBX0tEdikJdD2DnuDhh
+         MeSGh+jrlcNfBb8OBopedO30DWrxVEr9y41JzbrI8mF3geUdLk9oVjRz+mmQmfYdXD+i
+         hg+xDgLNBDpTNZqKVIICMsldcUzoqBl7uX67rfhMKOFq0D6MDyLeKzMb5p99yFFCbnRH
+         uHlg==
+X-Gm-Message-State: AOJu0YxD+iY2hdrLOmiJSMNtlPNYWZBKmWVGGdf9oyFJBgUIS8vnjEpE
+	f6fuk/B/kdGeNprOSHjtmNzMgZDyAa7cdZYu60ZFf5rO+zk/D/Gt3RV2RjbiDuMPlHOrW3e/1sc
+	KXTUTq9520dPZUPAivEuIqHE2mhg+ajt7tWJy
+X-Google-Smtp-Source: AGHT+IEFMiDR4T+Az5QhHWjBGq7ivQjiq8VZP7xtdBES4S/LvDRFYd/o733yPgW6mWJ0oHxcB5Iolmk0/4LYRKcEnzI=
+X-Received: by 2002:a05:600c:c12:b0:40d:839b:7844 with SMTP id
+ fm18-20020a05600c0c1200b0040d839b7844mr14670wmb.6.1706554809639; Mon, 29 Jan
+ 2024 11:00:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240129175033.work.813-kees@kernel.org> <20240129180046.3774731-1-keescook@chromium.org>
+In-Reply-To: <20240129180046.3774731-1-keescook@chromium.org>
+From: Fangrui Song <maskray@google.com>
+Date: Mon, 29 Jan 2024 10:59:55 -0800
+Message-ID: <CAFP8O3LhmXqqKKf1fOw1_0zGYOyN7ivm2yYSQJqSQr_megOq8Q@mail.gmail.com>
+Subject: Re: [PATCH 1/6] ubsan: Use Clang's -fsanitize-trap=undefined option
+To: Kees Cook <keescook@chromium.org>
+Cc: Marco Elver <elver@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	Andrey Konovalov <andreyknvl@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git b4/vfs-bdev-file-bd_inode
-head:   92279a7f8c418cb71e6fb335e4af2c7565944a11
-commit: d8db7fccf2cac31fb2021ddc1dc989d2c878099d [35/37] fs & block: remove bdev->bd_inode
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240130/202401300233.HpFwSXl6-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240130/202401300233.HpFwSXl6-lkp@intel.com/reproduce)
+On Mon, Jan 29, 2024 at 10:00=E2=80=AFAM Kees Cook <keescook@chromium.org> =
+wrote:
+>
+> Clang changed the way it enables UBSan trapping mode. Update the Makefile
+> logic to discover it.
+>
+> Suggested-by: Fangrui Song <maskray@google.com>
+> Link: https://lore.kernel.org/lkml/CAFP8O3JivZh+AAV7N90Nk7U2BHRNST6MRP0zH=
+tfQ-Vj0m4+pDA@mail.gmail.com/
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nicolas Schier <nicolas@fjasle.eu>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  scripts/Makefile.ubsan | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+> index 4749865c1b2c..7cf42231042b 100644
+> --- a/scripts/Makefile.ubsan
+> +++ b/scripts/Makefile.ubsan
+> @@ -10,6 +10,6 @@ ubsan-cflags-$(CONFIG_UBSAN_DIV_ZERO)         +=3D -fsa=
+nitize=3Dinteger-divide-by-zero
+>  ubsan-cflags-$(CONFIG_UBSAN_UNREACHABLE)       +=3D -fsanitize=3Dunreach=
+able
+>  ubsan-cflags-$(CONFIG_UBSAN_BOOL)              +=3D -fsanitize=3Dbool
+>  ubsan-cflags-$(CONFIG_UBSAN_ENUM)              +=3D -fsanitize=3Denum
+> -ubsan-cflags-$(CONFIG_UBSAN_TRAP)              +=3D -fsanitize-undefined=
+-trap-on-error
+> +ubsan-cflags-$(CONFIG_UBSAN_TRAP)              +=3D $(call cc-option,-fs=
+anitize-trap=3Dundefined,-fsanitize-undefined-trap-on-error)
+>
+>  export CFLAGS_UBSAN :=3D $(ubsan-cflags-y)
+> --
+> 2.34.1
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401300233.HpFwSXl6-lkp@intel.com/
+Thanks for the patch. Clang has had -fsanitize-trap=3D since 2015.
+GCC added -fsanitize-trap=3Dundefined in 2022
+(https://gcc.gnu.org/git/gitweb.cgi?p=3Dgcc.git;h=3D2c7cfc7b418564 ;
+milestone: 13.1), so we cannot use -fsanitize-trap=3Dundefined
+unconditionally.
 
-All warnings (new ones prefixed by >>):
-
->> fs/jbd2/journal.c:1649: warning: Function parameter or struct member 'bdev_file' not described in 'jbd2_journal_init_dev'
-   fs/jbd2/journal.c:1649: warning: Excess function parameter 'bdev' description in 'jbd2_journal_init_dev'
+Reviewed-by: Fangrui Song <maskray@google.com>
 
 
-vim +1649 fs/jbd2/journal.c
 
-470decc613ab20 Dave Kleikamp     2006-10-11  1622  
-f7f4bccb729844 Mingming Cao      2006-10-11  1623  /* jbd2_journal_init_dev and jbd2_journal_init_inode:
-470decc613ab20 Dave Kleikamp     2006-10-11  1624   *
-470decc613ab20 Dave Kleikamp     2006-10-11  1625   * Create a journal structure assigned some fixed set of disk blocks to
-470decc613ab20 Dave Kleikamp     2006-10-11  1626   * the journal.  We don't actually touch those disk blocks yet, but we
-470decc613ab20 Dave Kleikamp     2006-10-11  1627   * need to set up all of the mapping information to tell the journaling
-470decc613ab20 Dave Kleikamp     2006-10-11  1628   * system where the journal blocks are.
-470decc613ab20 Dave Kleikamp     2006-10-11  1629   *
-470decc613ab20 Dave Kleikamp     2006-10-11  1630   */
-470decc613ab20 Dave Kleikamp     2006-10-11  1631  
-470decc613ab20 Dave Kleikamp     2006-10-11  1632  /**
-5648ba5b2dc0d0 Randy Dunlap      2008-04-17  1633   *  journal_t * jbd2_journal_init_dev() - creates and initialises a journal structure
-470decc613ab20 Dave Kleikamp     2006-10-11  1634   *  @bdev: Block device on which to create the journal
-470decc613ab20 Dave Kleikamp     2006-10-11  1635   *  @fs_dev: Device which hold journalled filesystem for this journal.
-470decc613ab20 Dave Kleikamp     2006-10-11  1636   *  @start: Block nr Start of journal.
-470decc613ab20 Dave Kleikamp     2006-10-11  1637   *  @len:  Length of the journal in blocks.
-470decc613ab20 Dave Kleikamp     2006-10-11  1638   *  @blocksize: blocksize of journalling device
-5648ba5b2dc0d0 Randy Dunlap      2008-04-17  1639   *
-5648ba5b2dc0d0 Randy Dunlap      2008-04-17  1640   *  Returns: a newly created journal_t *
-470decc613ab20 Dave Kleikamp     2006-10-11  1641   *
-f7f4bccb729844 Mingming Cao      2006-10-11  1642   *  jbd2_journal_init_dev creates a journal which maps a fixed contiguous
-470decc613ab20 Dave Kleikamp     2006-10-11  1643   *  range of blocks on an arbitrary block device.
-470decc613ab20 Dave Kleikamp     2006-10-11  1644   *
-470decc613ab20 Dave Kleikamp     2006-10-11  1645   */
-d8db7fccf2cac3 Christian Brauner 2024-01-28  1646  journal_t *jbd2_journal_init_dev(struct file *bdev_file,
-d8db7fccf2cac3 Christian Brauner 2024-01-28  1647  			struct file *fs_dev,
-18eba7aae080d4 Mingming Cao      2006-10-11  1648  			unsigned long long start, int len, int blocksize)
-470decc613ab20 Dave Kleikamp     2006-10-11 @1649  {
-f0c9fd5458bacf Geliang Tang      2016-09-15  1650  	journal_t *journal;
-470decc613ab20 Dave Kleikamp     2006-10-11  1651  
-d8db7fccf2cac3 Christian Brauner 2024-01-28  1652  	journal = journal_init_common(bdev_file, fs_dev, start, len, blocksize);
-8e6cf5fbb7b47d Zhang Yi          2023-08-11  1653  	if (IS_ERR(journal))
-8e6cf5fbb7b47d Zhang Yi          2023-08-11  1654  		return ERR_CAST(journal);
-470decc613ab20 Dave Kleikamp     2006-10-11  1655  
-900d156bac2bc4 Christoph Hellwig 2022-07-13  1656  	snprintf(journal->j_devname, sizeof(journal->j_devname),
-900d156bac2bc4 Christoph Hellwig 2022-07-13  1657  		 "%pg", journal->j_dev);
-81ae394bdc473c Rasmus Villemoes  2015-06-25  1658  	strreplace(journal->j_devname, '/', '!');
-4b905671d2ea09 Jan Kara          2009-01-06  1659  	jbd2_stats_proc_init(journal);
-4b905671d2ea09 Jan Kara          2009-01-06  1660  
-470decc613ab20 Dave Kleikamp     2006-10-11  1661  	return journal;
-470decc613ab20 Dave Kleikamp     2006-10-11  1662  }
-470decc613ab20 Dave Kleikamp     2006-10-11  1663  
 
-:::::: The code at line 1649 was first introduced by commit
-:::::: 470decc613ab2048b619a01028072d932d9086ee [PATCH] jbd2: initial copy of files from jbd
-
-:::::: TO: Dave Kleikamp <shaggy@austin.ibm.com>
-:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+=E5=AE=8B=E6=96=B9=E7=9D=BF
