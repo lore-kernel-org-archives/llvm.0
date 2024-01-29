@@ -1,261 +1,296 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B7D54FBD;
-	Mon, 29 Jan 2024 09:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC8A55E7E
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 09:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706522131; cv=none; b=uG3ZYk8y4TM78LbVa17swm8FCI9TemPel6GaWROYyogq1oEY/oqiFIHGb4DljTyg+BhJjKVRYHbPtOz3vwBHs+XDNMzQq9WolyAVL19BEqE5cu3eWZL5nRbf+Wr7tD797gyvhbAXEZcHQIJadFq2buhuRwSONgv2MZzY/jA27qk=
+	t=1706522296; cv=none; b=LtqDI8VF3CFYqPLLaPrhB3BxdthaGa9sio0/qG60jqmMNiVwqJXzaZLaXDjGZa4Q71L5o6cJAch2TKDPBz41eQsyMcLjey4Bd1IKk8+Lp/nHlg1faYa7QTOSlXBlZNosJRXD05asXK0HliTyfaPQ+fRTdU7rMN6E8gvT1E4/0Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706522131; c=relaxed/simple;
-	bh=gXwKlEO+xUBbTmc4b7AohfdeQ3LQ9vIuDRkPFZMXU1U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sXwopMg7oKCesBqyZmVA53MzYuXdgB85rUFdJRPIdTJTcZ0QFGdyf8ECxMHK+4wVFvFFWTT3lk/Ji5FFfHC4wmUn3IvbP/uAfrTXnrO0KgZyfwqr/ahfIt7mqUKVMcaV+8LDBT8f526FqX22a+cjzm/NtBcZNyQ6ymUil454pvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zf14mLxs; arc=none smtp.client-ip=192.55.52.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706522296; c=relaxed/simple;
+	bh=0nRlWJibNBWrP/2+ulbYIt6Yw5St4sDPPbMGqESeuNc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aERLLInfLypFKOacq3qz3vkbFW8sWPI5dwcLcoY+jVdy8uFA330QQT2QmFX4WHHTs5DJKmS4WWCbGtYGZ6FsdUFJKofqQS9iVPgJaIj3dzGJv/SrLppZghS4QuuMzB9HLAppu4wB0EPk8HmIgYocv0iJJjA5r7kTlfDSdCsDNUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=E+FBiU2E; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zf14mLxs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706522128; x=1738058128;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gXwKlEO+xUBbTmc4b7AohfdeQ3LQ9vIuDRkPFZMXU1U=;
-  b=Zf14mLxsdO6X55odd8Y0l6ktBIVdTIVjUmm93qMwcuz4h4yv/rwPlXeI
-   P8JzfgTEF+i0oeGMERIcGyjupF63CP7/qejrvCoNCFTUKlcPW4psn6M75
-   9kX4S+Nfq90wrtyKHr+5w5pXVWepp5EiRBXeOOWCiG3lV9U2Ea982AkwK
-   t4zWzJFwy6piyGflfkMWwkp3H8/QrLUNp9FzNMDIPCSVNxFwxQFLN2aNn
-   8b3iTGPJMhApZg/pN/uQcrlywhC6w/yNDD1MpUNY6z4ph8ABLHlWyYMXI
-   YRdKtT324PsXB0Ir8+/96gg1ybqJ2sqaBC4a6Id2ZFAj83A2zbfCLl1zf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="434071897"
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="434071897"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 01:55:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="36079071"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 29 Jan 2024 01:55:15 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rUOMD-0004D9-1P;
-	Mon, 29 Jan 2024 09:55:13 +0000
-Date: Mon, 29 Jan 2024 17:54:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Melissa Wen <mwen@igalia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/2] drm/amd/display: switch amdgpu_dm_connector to
- use struct drm_edid
-Message-ID: <202401291732.o3PWNUUx-lkp@intel.com>
-References: <20240126163429.56714-3-mwen@igalia.com>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="E+FBiU2E"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so2319522a12.0
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 01:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1706522293; x=1707127093; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y/yj2cF4QFPTINMOJ5Odb3ijjKjStQFfbkPQ+E8TM9k=;
+        b=E+FBiU2E8ZV6t/KAPMwqUsbwaHNYTk/gYiI4yTHLftrGEHrlDHjRP6KpQ5M0d1xlMU
+         BzvIlyLtqkF0DXslUV8t3NBV/2AmfKP0we88j5pza0qk9t8MEsnQhSQ09+zJlD1L/ywI
+         j6xnEL3xvJUg4tdVSDuKgzxOQ9gy+naGN8sX+JskcV5sFE3S/q7PTCzN2pYc+4z/Vncs
+         Z2YEn7eX/QHpIelWKxH63/lSqUG2Zw/f5GAiSr8AHVcFEffRB+AbMxL28HwdYm3O6GgW
+         B91s/PuO2I7lH41fxGkWhMM1cPxpCtqMCMwtRgB2D0uyUi0krCSSEdawc+pjG9q8BD7G
+         34Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706522293; x=1707127093;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y/yj2cF4QFPTINMOJ5Odb3ijjKjStQFfbkPQ+E8TM9k=;
+        b=rYCJvN3bzuDChX69X+7wsHBXgn5aPNvbeK6I5fgRTJ1Eg5cBrQpVJLUQGCWHevvcTJ
+         b3eHAAdjToao9Bj2iOUAByraTFuhXBEI8iILGAuHYaMPKg0s/esxjM/9W3+5eeB19r/b
+         hIHg6+qRuDJ80jEkRZQjXJru54qpCsq4g9QfI+Fyk2f70eLcBJ0/JRmHBnLt/TvZkXqu
+         YAUEVgkaDC7Kn5IlXNn6iQtWrcmtzbpnvp1P83JxhhvMBRMNECWECxa1zgHzDiKtdeNq
+         i+9SscLUNIj5hNVP6ouE7aQRoz3OllKRaj7jUjEKvLBEliR1mrXTsGEiBaEQpoOiVj73
+         KZIA==
+X-Gm-Message-State: AOJu0YzTf/7V5YbLR4wzeeBj6R4A/T/rHcuqKsIwOd8JVOl514NdfOZx
+	5bmpScVW0RAPTZ53E8MuiGqZoiZ1g2dt2CYTud0ShoEa1Hr2pwXDw65ZIf6BZnk=
+X-Google-Smtp-Source: AGHT+IGLLoxO4r2cecG2riTmnlc0oiwaiM2/Qa304+OOrXxvULSm26H9zFdDAUUlmZA6ogAFjHFqxA==
+X-Received: by 2002:a05:6a20:9591:b0:19c:b4ef:3fa5 with SMTP id iu17-20020a056a20959100b0019cb4ef3fa5mr241147pzb.29.1706522293506;
+        Mon, 29 Jan 2024 01:58:13 -0800 (PST)
+Received: from [10.255.192.107] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id ju11-20020a170903428b00b001d8ead3d805sm1027576plb.58.2024.01.29.01.58.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jan 2024 01:58:12 -0800 (PST)
+Message-ID: <d900f0fd-a586-404d-8568-0d2511908067@bytedance.com>
+Date: Mon, 29 Jan 2024 17:58:05 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240126163429.56714-3-mwen@igalia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
+To: "Michael S. Tsirkin" <mst@redhat.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
+ patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+ torvalds@linux-foundation.org, llvm@lists.linux.dev, keescook@chromium.org,
+ arei.gonglei@huawei.com, jasowang@redhat.com,
+ virtualization@lists.linux.dev, linux-crypto@vger.kernel.org
+References: <20240122235732.009174833@linuxfoundation.org>
+ <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
+ <2024012636-clubbed-radial-1997@gregkh>
+ <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
+ <20240126203436.GA913905@dev-arch.thelio-3990X>
+ <0a194a79-e3a3-45e7-be98-83abd3e1cb7e@roeck-us.net>
+ <20240126223554.GA1320833@dev-arch.thelio-3990X>
+ <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
+ <20240129034304-mutt-send-email-mst@kernel.org>
+Content-Language: en-US
+From: zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20240129034304-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Melissa,
+On 1/29/24 16:46, Michael S. Tsirkin wrote:
+> On Fri, Jan 26, 2024 at 03:55:02PM -0800, Guenter Roeck wrote:
+>> On 1/26/24 14:35, Nathan Chancellor wrote:
+>>> (slimming up the CC list, I don't think this is too relevant to the
+>>> wider stable community)
+>>>
+>>> On Fri, Jan 26, 2024 at 01:01:15PM -0800, Guenter Roeck wrote:
+>>>> On 1/26/24 12:34, Nathan Chancellor wrote:
+>>>>> On Fri, Jan 26, 2024 at 10:17:23AM -0800, Guenter Roeck wrote:
+>>>>>> On 1/26/24 09:51, Greg Kroah-Hartman wrote:
+>>>>>>> On Fri, Jan 26, 2024 at 08:46:42AM -0800, Guenter Roeck wrote:
+>>>>>>>> On 1/22/24 15:55, Greg Kroah-Hartman wrote:
+>>>>>>>>> This is the start of the stable review cycle for the 5.10.209 release.
+>>>>>>>>> There are 286 patches in this series, all will be posted as a response
+>>>>>>>>> to this one.  If anyone has any issues with these being applied, please
+>>>>>>>>> let me know.
+>>>>>>>>>
+>>>>>>>>> Responses should be made by Wed, 24 Jan 2024 23:56:49 +0000.
+>>>>>>>>> Anything received after that time might be too late.
+>>>>>>>>>
+>>>>>>>> [ ... ]
+>>>>>>>>
+>>>>>>>>> zhenwei pi <pizhenwei@bytedance.com>
+>>>>>>>>>          virtio-crypto: implement RSA algorithm
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> Curious: Why was this (and its subsequent fixes) backported to v5.10.y ?
+>>>>>>>> It is quite beyond a bug fix. Also, unless I am really missing something,
+>>>>>>>> the series (or at least this patch) was not applied to v5.15.y, so we now
+>>>>>>>> have functionality in v5.10.y which is not in v5.15.y.
+>>>>>>>
+>>>>>>> See the commit text, it was a dependency of a later fix and documented
+>>>>>>> as such.
+>>>>>>>
+>>>>>>> Having it in 5.10 and not 5.15 is a bit odd, I agree, so patches are
+>>>>>>> gladly accepted :)
+>>>>>>>
+>>>>>>
+>>>>>> We reverted the entire series from the merge because it results in a build
+>>>>>> failure for us.
+>>>>>>
+>>>>>> In file included from /home/groeck/src/linux-chromeos/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:10:
+>>>>>> In file included from /home/groeck/src/linux-chromeos/include/linux/mpi.h:21:
+>>>>>> In file included from /home/groeck/src/linux-chromeos/include/linux/scatterlist.h:5:
+>>>>>> In file included from /home/groeck/src/linux-chromeos/include/linux/string.h:293:
+>>>>>> /home/groeck/src/linux-chromeos/include/linux/fortify-string.h:512:4: error: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>>>>>>                            __read_overflow2_field(q_size_field, size);
+>>>>>
+>>>>> For what it's worth, this is likely self inflicted for chromeos-5.10,
+>>>>> which carries a revert of commit eaafc590053b ("fortify: Explicitly
+>>>>> disable Clang support") as commit c19861d34c003 ("CHROMIUM: Revert
+>>>>> "fortify: Explicitly disable Clang support""). I don't see the series
+>>>>> that added proper support for clang to fortify in 5.18 that ended with
+>>>>> commit 281d0c962752 ("fortify: Add Clang support") in that ChromeOS
+>>>>> branch, so this seems somewhat expected.
+>>>>>
+>>>>
+>>>> That explains that ;-). I don't mind if the patches stay in v5.10.y,
+>>>> we have them reverted anyway.
+>>>>
+>>>> The revert was a pure process issue, as you may see when looking into
+>>>> commit c19861d34c003, so, yes, I agree that it is self-inflicted damage.
+>>>> Still, that doesn't explain why the problem exists in 5.18+.
+>>>>
+>>>>>> I also see that upstream (starting with 6.1) when trying to build it with clang,
+>>>>>> so I guess it is one of those bug-for-bug compatibility things. I really have
+>>>>>> no idea what causes it, or why we don't see the problem when building
+>>>>>> chromeos-6.1 or chromeos-6.6, but (so far) only with chromeos-5.10 after
+>>>>>> merging 5.10.209 into it. Making things worse, the problem isn't _always_
+>>>>>> seen. Sometimes I can compile the file in 6.1.y without error, sometimes not.
+>>>>>> I have no idea what triggers the problem.
+>>>>>
+>>>>> Have a .config that reproduces it on upstream? I have not personally
+>>>>> seen this warning in my build matrix nor has our continuous-integration
+>>>>> matrix (I don't see it in the warning output at the bottom but that
+>>>>> could have missed something for some reason) in 6.1:
+>>>>>
+>>>>
+>>>> The following command sequence reproduces the problem for me with all stable
+>>>> branches starting with 5.18.y (plus mainline).
+>>>>
+>>>> rm -rf /tmp/crypto-build
+>>>> mkdir /tmp/crypto-build
+>>>> make -j CC=clang-15 mrproper >/dev/null 2>&1
+>>>> make -j O=/tmp/crypto-build CC=clang-15 allmodconfig >/dev/null 2>&1
+>>>> make -j O=/tmp/crypto-build W=1 CC=clang-15 drivers/crypto/virtio/virtio_crypto_akcipher_algs.o
+>>>>
+>>>> I tried clang versions 14, 15, and 16. This is with my home system running
+>>>> Ubuntu 22.04, no ChromeOS or Google specifics/internals involved. For clang-15,
+>>>> the version is
+>>>>
+>>>> Ubuntu clang version 15.0.7
+>>>> Target: x86_64-pc-linux-gnu
+>>>> Thread model: posix
+>>>> InstalledDir: /usr/bin
+>>>
+>>> Okay interesting, this warning is hidden behind W=1, which our CI does
+>>> not test with. Looks like it has been that way since the introduction of
+>>> these checks in f68f2ff91512 ("fortify: Detect struct member overflows
+>>> in memcpy() at compile-time").
+>>>
+>>
+>> Interestingly the warning is seen in chromeos-5.10, without this patch,
+>> and without W=1. I guess that must have to do with the revert which is
+>> finally biting us.
+>>
+>>> I think this is a legitimate warning though. It is complaining about the
+>>> second memcpy() in virtio_crypto_alg_akcipher_init_session():
+>>>
+>>>     memcpy(&ctrl->u, para, sizeof(ctrl->u));
+>>>
+>>> where ctrl is:
+>>>
+>>>     struct virtio_crypto_op_ctrl_req {
+>>>             struct virtio_crypto_ctrl_header header;         /*     0    16 */
+>>>             union {
+>>>                     struct virtio_crypto_sym_create_session_req sym_create_session; /*    16    56 */
+>>>                     struct virtio_crypto_hash_create_session_req hash_create_session; /*    16    56 */
+>>>                     struct virtio_crypto_mac_create_session_req mac_create_session; /*    16    56 */
+>>>                     struct virtio_crypto_aead_create_session_req aead_create_session; /*    16    56 */
+>>>                     struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*    16    56 */
+>>>                     struct virtio_crypto_destroy_session_req destroy_session; /*    16    56 */
+>>>                     __u8               padding[56];          /*    16    56 */
+>>>             } u;                                             /*    16    56 */
+>>>             union {
+>>>                     struct virtio_crypto_sym_create_session_req sym_create_session; /*     0    56 */
+>>>                     struct virtio_crypto_hash_create_session_req hash_create_session; /*     0    56 */
+>>>                     struct virtio_crypto_mac_create_session_req mac_create_session; /*     0    56 */
+>>>                     struct virtio_crypto_aead_create_session_req aead_create_session; /*     0    56 */
+>>>                     struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*     0    56 */
+>>>                     struct virtio_crypto_destroy_session_req destroy_session; /*     0    56 */
+>>>                     __u8                       padding[56];          /*     0    56 */
+>>>             };
+>>>
+>>>
+>>>             /* size: 72, cachelines: 2, members: 2 */
+>>>             /* last cacheline: 8 bytes */
+>>>     };
+>>>
+>>> (so size and p_size_field should be 56) and the type of the para
+>>> parameter in virtio_crypto_alg_akcipher_init_session() is 'void *' but
+>>> the para passed by reference to
+>>> virtio_crypto_alg_akcipher_init_session() in virtio_crypto_rsa_set_key()
+>>> has a type of 'struct virtio_crypto_akcipher_session_para':
+>>>
+>>>     struct virtio_crypto_akcipher_session_para {
+>>>             __le32                     algo;                 /*     0     4 */
+>>>             __le32                     keytype;              /*     4     4 */
+>>>             __le32                     keylen;               /*     8     4 */
+>>>             union {
+>>>                     struct virtio_crypto_rsa_session_para rsa; /*    12     8 */
+>>>                     struct virtio_crypto_ecdsa_session_para ecdsa; /*    12     8 */
+>>>             } u;                                             /*    12     8 */
+>>>             union {
+>>>                     struct virtio_crypto_rsa_session_para rsa;       /*     0     8 */
+>>>                     struct virtio_crypto_ecdsa_session_para ecdsa;   /*     0     8 */
+>>>             };
+>>>
+>>>
+>>>             /* size: 20, cachelines: 1, members: 4 */
+>>>             /* last cacheline: 20 bytes */
+>>>     };
+>>>
+>>> (so q_size_field would be 20 if clang were able to do inlining to see
+>>> through the 'void *'...?), which would result in the
+>>>
+>>>     __compiletime_lessthan(q_size_field, size)
+>>>
+>>> check succeeding and triggering the warning because 20 < 56, so it does
+>>> seem like there is an overread of the source buffer here? Adding the
+>>
+>> Looks like it; I think either the passed 'para' should be of type
+>> virtio_crypto_akcipher_create_session_req() or it should only copy
+>> sizeof(struct virtio_crypto_akcipher_session_para) bytes.
+>>
+>> Anyway, how did you find that ? Is there a magic trick to find the
+>> actual code causing the warning ? I am asking because we had seen
+>> similar warnings before, and it would help to know how to find the
+>> problematic code.
+>>
+>> Thanks,
+>> Guenter
+> 
+> 
+> 
+> Cc: zhenwei pi <pizhenwei@bytedance.com>
+> 
+> Zhenwei I think you wrote most of the code here.
+> Can you take a look please?
+> Stack overflows are plus plus ungood.
+> 
+> 
+> 
+> 
+>>> maintainers of the driver and subsystem in question.
+>>>
+>>> Cheers,
+>>> Nathan
+> 
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+I can also reproduce this warning by commands on ubuntu-2204:
+make -j CC=clang-14 mrproper >/dev/null 2>&1
+make -j O=/tmp/crypto-build CC=clang-14 allmodconfig >/dev/null 2>&1
+make -j O=/tmp/crypto-build W=1 CC=clang-14 
+drivers/crypto/virtio/virtio_crypto_akcipher_algs.o
 
-[auto build test ERROR on v6.8-rc1]
-[also build test ERROR on linus/master next-20240129]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Melissa-Wen/drm-amd-display-fix-null-pointer-dereference-on-edid-reading/20240127-010342
-base:   v6.8-rc1
-patch link:    https://lore.kernel.org/r/20240126163429.56714-3-mwen%40igalia.com
-patch subject: [RFC PATCH 2/2] drm/amd/display: switch amdgpu_dm_connector to use struct drm_edid
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240129/202401291732.o3PWNUUx-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401291732.o3PWNUUx-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401291732.o3PWNUUx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:11134:12: error: assigning to 'struct detailed_timing *' from 'const struct detailed_timing *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    11134 |                                 timing  = &edid->detailed_timings[i];
-          |                                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:11179:12: error: assigning to 'struct detailed_timing *' from 'const struct detailed_timing *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    11179 |                         timing  = &edid->detailed_timings[i];
-          |                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +11134 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
-
-f9b4f20c4777bd Stylon Wang          2020-12-04  11064  
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11065  /**
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11066   * amdgpu_dm_update_freesync_caps - Update Freesync capabilities
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11067   *
-41ee1f18ef5239 Alex Deucher         2022-08-30  11068   * @connector: Connector to query.
-41ee1f18ef5239 Alex Deucher         2022-08-30  11069   * @edid: EDID from monitor
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11070   *
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11071   * Amdgpu supports Freesync in DP and HDMI displays, and it is required to keep
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11072   * track of some of the display information in the internal data struct used by
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11073   * amdgpu_dm. This function checks which type of connector we need to set the
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11074   * FreeSync parameters.
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11075   */
-98e6436d3af5fe Anthony Koo          2018-08-21  11076  void amdgpu_dm_update_freesync_caps(struct drm_connector *connector,
-e5d89dbba370d6 Melissa Wen          2024-01-26  11077  				    const struct drm_edid *drm_edid)
-e7b07ceef2a650 Harry Wentland       2017-08-10  11078  {
-eb0709ba077a21 Souptick Joarder     2021-02-23  11079  	int i = 0;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11080  	struct detailed_timing *timing;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11081  	struct detailed_non_pixel *data;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11082  	struct detailed_data_monitor_range *range;
-c84dec2fe8837f Harry Wentland       2017-09-05  11083  	struct amdgpu_dm_connector *amdgpu_dm_connector =
-c84dec2fe8837f Harry Wentland       2017-09-05  11084  			to_amdgpu_dm_connector(connector);
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11085  	struct dm_connector_state *dm_con_state = NULL;
-9ad544670514e2 Colin Ian King       2021-08-29  11086  	struct dc_sink *sink;
-534eee82356c22 Srinivasan Shanmugam 2023-11-12  11087  	struct amdgpu_device *adev = drm_to_adev(connector->dev);
-f9b4f20c4777bd Stylon Wang          2020-12-04  11088  	struct amdgpu_hdmi_vsdb_info vsdb_info = {0};
-e5d89dbba370d6 Melissa Wen          2024-01-26  11089  	const struct edid *edid = drm_edid_raw(drm_edid);
-c620e79bb695b8 Rodrigo Siqueira     2022-02-21  11090  	bool freesync_capable = false;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11091  	enum adaptive_sync_type as_type = ADAPTIVE_SYNC_TYPE_NONE;
-b830ebc910f641 Harry Wentland       2017-07-26  11092  
-8218d7f1f70179 Harry Wentland       2017-10-17  11093  	if (!connector->state) {
-8218d7f1f70179 Harry Wentland       2017-10-17  11094  		DRM_ERROR("%s - Connector has no state", __func__);
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11095  		goto update;
-8218d7f1f70179 Harry Wentland       2017-10-17  11096  	}
-8218d7f1f70179 Harry Wentland       2017-10-17  11097  
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11098  	sink = amdgpu_dm_connector->dc_sink ?
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11099  		amdgpu_dm_connector->dc_sink :
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11100  		amdgpu_dm_connector->dc_em_sink;
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11101  
-e5d89dbba370d6 Melissa Wen          2024-01-26  11102  	if (!drm_edid || !sink) {
-98e6436d3af5fe Anthony Koo          2018-08-21  11103  		dm_con_state = to_dm_connector_state(connector->state);
-98e6436d3af5fe Anthony Koo          2018-08-21  11104  
-98e6436d3af5fe Anthony Koo          2018-08-21  11105  		amdgpu_dm_connector->min_vfreq = 0;
-98e6436d3af5fe Anthony Koo          2018-08-21  11106  		amdgpu_dm_connector->max_vfreq = 0;
-98e6436d3af5fe Anthony Koo          2018-08-21  11107  		amdgpu_dm_connector->pixel_clock_mhz = 0;
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11108  		connector->display_info.monitor_range.min_vfreq = 0;
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11109  		connector->display_info.monitor_range.max_vfreq = 0;
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11110  		freesync_capable = false;
-98e6436d3af5fe Anthony Koo          2018-08-21  11111  
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11112  		goto update;
-98e6436d3af5fe Anthony Koo          2018-08-21  11113  	}
-98e6436d3af5fe Anthony Koo          2018-08-21  11114  
-8218d7f1f70179 Harry Wentland       2017-10-17  11115  	dm_con_state = to_dm_connector_state(connector->state);
-8218d7f1f70179 Harry Wentland       2017-10-17  11116  
-e7b07ceef2a650 Harry Wentland       2017-08-10  11117  	if (!adev->dm.freesync_module)
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11118  		goto update;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11119  
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11120  	if (sink->sink_signal == SIGNAL_TYPE_DISPLAY_PORT
-9b2fdc33218933 Aurabindo Pillai     2021-08-11  11121  		|| sink->sink_signal == SIGNAL_TYPE_EDP) {
-f9b4f20c4777bd Stylon Wang          2020-12-04  11122  		bool edid_check_required = false;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11123  
-e5d89dbba370d6 Melissa Wen          2024-01-26  11124  		if (drm_edid) {
-e7b07ceef2a650 Harry Wentland       2017-08-10  11125  			edid_check_required = is_dp_capable_without_timing_msa(
-e7b07ceef2a650 Harry Wentland       2017-08-10  11126  						adev->dm.dc,
-c84dec2fe8837f Harry Wentland       2017-09-05  11127  						amdgpu_dm_connector);
-e7b07ceef2a650 Harry Wentland       2017-08-10  11128  		}
-f9b4f20c4777bd Stylon Wang          2020-12-04  11129  
-e7b07ceef2a650 Harry Wentland       2017-08-10  11130  		if (edid_check_required == true && (edid->version > 1 ||
-e7b07ceef2a650 Harry Wentland       2017-08-10  11131  		   (edid->version == 1 && edid->revision > 1))) {
-e7b07ceef2a650 Harry Wentland       2017-08-10  11132  			for (i = 0; i < 4; i++) {
-e7b07ceef2a650 Harry Wentland       2017-08-10  11133  
-e7b07ceef2a650 Harry Wentland       2017-08-10 @11134  				timing	= &edid->detailed_timings[i];
-e7b07ceef2a650 Harry Wentland       2017-08-10  11135  				data	= &timing->data.other_data;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11136  				range	= &data->data.range;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11137  				/*
-e7b07ceef2a650 Harry Wentland       2017-08-10  11138  				 * Check if monitor has continuous frequency mode
-e7b07ceef2a650 Harry Wentland       2017-08-10  11139  				 */
-e7b07ceef2a650 Harry Wentland       2017-08-10  11140  				if (data->type != EDID_DETAIL_MONITOR_RANGE)
-e7b07ceef2a650 Harry Wentland       2017-08-10  11141  					continue;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11142  				/*
-e7b07ceef2a650 Harry Wentland       2017-08-10  11143  				 * Check for flag range limits only. If flag == 1 then
-e7b07ceef2a650 Harry Wentland       2017-08-10  11144  				 * no additional timing information provided.
-e7b07ceef2a650 Harry Wentland       2017-08-10  11145  				 * Default GTF, GTF Secondary curve and CVT are not
-e7b07ceef2a650 Harry Wentland       2017-08-10  11146  				 * supported
-e7b07ceef2a650 Harry Wentland       2017-08-10  11147  				 */
-e7b07ceef2a650 Harry Wentland       2017-08-10  11148  				if (range->flags != 1)
-e7b07ceef2a650 Harry Wentland       2017-08-10  11149  					continue;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11150  
-c84dec2fe8837f Harry Wentland       2017-09-05  11151  				amdgpu_dm_connector->min_vfreq = range->min_vfreq;
-c84dec2fe8837f Harry Wentland       2017-09-05  11152  				amdgpu_dm_connector->max_vfreq = range->max_vfreq;
-c84dec2fe8837f Harry Wentland       2017-09-05  11153  				amdgpu_dm_connector->pixel_clock_mhz =
-e7b07ceef2a650 Harry Wentland       2017-08-10  11154  					range->pixel_clock_mhz * 10;
-a0ffc3fd67e72b Stylon Wang          2021-01-05  11155  
-a0ffc3fd67e72b Stylon Wang          2021-01-05  11156  				connector->display_info.monitor_range.min_vfreq = range->min_vfreq;
-a0ffc3fd67e72b Stylon Wang          2021-01-05  11157  				connector->display_info.monitor_range.max_vfreq = range->max_vfreq;
-a0ffc3fd67e72b Stylon Wang          2021-01-05  11158  
-e7b07ceef2a650 Harry Wentland       2017-08-10  11159  				break;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11160  			}
-e7b07ceef2a650 Harry Wentland       2017-08-10  11161  
-c84dec2fe8837f Harry Wentland       2017-09-05  11162  			if (amdgpu_dm_connector->max_vfreq -
-c84dec2fe8837f Harry Wentland       2017-09-05  11163  			    amdgpu_dm_connector->min_vfreq > 10) {
-98e6436d3af5fe Anthony Koo          2018-08-21  11164  
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11165  				freesync_capable = true;
-e7b07ceef2a650 Harry Wentland       2017-08-10  11166  			}
-e7b07ceef2a650 Harry Wentland       2017-08-10  11167  		}
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11168  		parse_amd_vsdb(amdgpu_dm_connector, edid, &vsdb_info);
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11169  
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11170  		if (vsdb_info.replay_mode) {
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11171  			amdgpu_dm_connector->vsdb_info.replay_mode = vsdb_info.replay_mode;
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11172  			amdgpu_dm_connector->vsdb_info.amd_vsdb_version = vsdb_info.amd_vsdb_version;
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11173  			amdgpu_dm_connector->as_type = ADAPTIVE_SYNC_TYPE_EDP;
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11174  		}
-ec8e59cb4e0c1a Bhawanpreet Lakha    2023-06-12  11175  
-e5d89dbba370d6 Melissa Wen          2024-01-26  11176  	} else if (drm_edid && sink->sink_signal == SIGNAL_TYPE_HDMI_TYPE_A) {
-7c7dd77489540d Arnd Bergmann        2021-02-25  11177  		i = parse_hdmi_amd_vsdb(amdgpu_dm_connector, edid, &vsdb_info);
-7c7dd77489540d Arnd Bergmann        2021-02-25  11178  		if (i >= 0 && vsdb_info.freesync_supported) {
-f9b4f20c4777bd Stylon Wang          2020-12-04  11179  			timing  = &edid->detailed_timings[i];
-f9b4f20c4777bd Stylon Wang          2020-12-04  11180  			data    = &timing->data.other_data;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11181  
-f9b4f20c4777bd Stylon Wang          2020-12-04  11182  			amdgpu_dm_connector->min_vfreq = vsdb_info.min_refresh_rate_hz;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11183  			amdgpu_dm_connector->max_vfreq = vsdb_info.max_refresh_rate_hz;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11184  			if (amdgpu_dm_connector->max_vfreq - amdgpu_dm_connector->min_vfreq > 10)
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11185  				freesync_capable = true;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11186  
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11187  			connector->display_info.monitor_range.min_vfreq = vsdb_info.min_refresh_rate_hz;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11188  			connector->display_info.monitor_range.max_vfreq = vsdb_info.max_refresh_rate_hz;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11189  		}
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11190  	}
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11191  
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11192  	as_type = dm_get_adaptive_sync_support_type(amdgpu_dm_connector->dc_link);
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11193  
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11194  	if (as_type == FREESYNC_TYPE_PCON_IN_WHITELIST) {
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11195  		i = parse_hdmi_amd_vsdb(amdgpu_dm_connector, edid, &vsdb_info);
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11196  		if (i >= 0 && vsdb_info.freesync_supported && vsdb_info.amd_vsdb_version > 0) {
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11197  
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11198  			amdgpu_dm_connector->pack_sdp_v1_3 = true;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11199  			amdgpu_dm_connector->as_type = as_type;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11200  			amdgpu_dm_connector->vsdb_info = vsdb_info;
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11201  
-5b49da02ddbe1b Sung Joon Kim        2023-01-12  11202  			amdgpu_dm_connector->min_vfreq = vsdb_info.min_refresh_rate_hz;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11203  			amdgpu_dm_connector->max_vfreq = vsdb_info.max_refresh_rate_hz;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11204  			if (amdgpu_dm_connector->max_vfreq - amdgpu_dm_connector->min_vfreq > 10)
-f9b4f20c4777bd Stylon Wang          2020-12-04  11205  				freesync_capable = true;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11206  
-f9b4f20c4777bd Stylon Wang          2020-12-04  11207  			connector->display_info.monitor_range.min_vfreq = vsdb_info.min_refresh_rate_hz;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11208  			connector->display_info.monitor_range.max_vfreq = vsdb_info.max_refresh_rate_hz;
-f9b4f20c4777bd Stylon Wang          2020-12-04  11209  		}
-f9b4f20c4777bd Stylon Wang          2020-12-04  11210  	}
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11211  
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11212  update:
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11213  	if (dm_con_state)
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11214  		dm_con_state->freesync_capable = freesync_capable;
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11215  
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11216  	if (connector->vrr_capable_property)
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11217  		drm_connector_set_vrr_capable_property(connector,
-bb47de73666188 Nicholas Kazlauskas  2018-10-04  11218  						       freesync_capable);
-e7b07ceef2a650 Harry Wentland       2017-08-10  11219  }
-e7b07ceef2a650 Harry Wentland       2017-08-10  11220  
+so sorry on this issue, I think Guenter's suggestion is right(also test 
+by these commands), I'll send a fix later.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+zhenwei pi
