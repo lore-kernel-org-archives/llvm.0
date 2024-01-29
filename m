@@ -1,71 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BD36F071;
-	Mon, 29 Jan 2024 19:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5161B15AACC
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 19:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706557942; cv=none; b=jgwzX42w5s6sQSfcWMw8x4lAZcVX+swYFgqZlYT8dGrRR82BmF2oXnuyG0UOvwVS3q8/hYHY1Uvo9D8FlOvggg/qydrfOeWJ8+V5/4nvWpxjY5xUWqeJNeB1zh5CIl4TcTVJR4VRRPIt0CiQqqGPUcrBcr1VLNzTqe827sA0IAo=
+	t=1706558067; cv=none; b=Rj20EpWOlKePyIi/rZSmDhc17cvr93wMGXuA7HCZKHgL5pJSeqn0sqaPO0uMmg5tEHYIzjyrTjWw3SH0iaGcDLxL9c3a8PTqP5vCdTBul9o/CCJjGpkwDA1uF8SGOaFh+xAPuxTEdryGjnTVznTUimQSAn8FWKJtR0GwZa77Occ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706557942; c=relaxed/simple;
-	bh=AkBpWCt8Yn5W3lR5XfqNrLHf+HDLn89jCMBMA0LnBBE=;
+	s=arc-20240116; t=1706558067; c=relaxed/simple;
+	bh=BmB9HD/0oImUWK+FJoOIjIqHiWYHgFrIwZ31s6gU7dE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nldz0aw/Yz4wxClCYNDD5V8GpfLUF6cP5h5TfODfahDeMIcJvRye2JXhjk41FaEBn3Rmey0eWPRtAcpfgHcfpNCrYo9J9wl5SGoMx1p5HyWhE6VpMNxvHT0SCNx7TMqu+4R7t9j3V8ObuOohzFR+/BKVN1J/aYU2Q/RSmdqGZSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FXli1qFn; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ir3gGstZasHKl2NT+ycj6u7a/Tg1xdVYFW6I/JaN+bt2Va0C1cJyS9wXIeOVGnQ6W3To+SuYRYsjFuT040JoKgvA4nqmo0prsOsyJzyvZIE2Mlz1oEhZpRr479jKQMy8qHlZJxgcsnnpG551qLVQkTXVUVrueveB1JAf5DS5+Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HorzKcrA; arc=none smtp.client-ip=209.85.166.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FXli1qFn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706557940; x=1738093940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AkBpWCt8Yn5W3lR5XfqNrLHf+HDLn89jCMBMA0LnBBE=;
-  b=FXli1qFn5rtHdMiLjYOTCvTrdNQppYdukJ5O2ALII639G2tMVhbKFIM2
-   NMxd0CGnV9FJKkc59YpdYPblGrJ491KUlGou95OEDY8y9s+TYyGOhCA40
-   SkYw34jg4dLUhbu98ghBcSJjLxFYTc2IMfQFdOWhpIXlCdnwsdobOZhC9
-   m49px8Cb5VQq6Zg2P/brZcaFtvXPjuySu6FqUl9McwtjZhTJrYhJiGv0a
-   xr8Wq5Xmm9TnsXMxiq0q+2L3ICkZWQ6Pwt6HOJtdOXSDvDOr6KAW9ipvG
-   bITidKIwMweqOhiCLo+FcRR3G3JF2cKlBZ7VFAjIW1ujM1eOM2kpXxB2q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="16450396"
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="16450396"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 11:52:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
-   d="scan'208";a="29905599"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Jan 2024 11:52:13 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rUXfv-0004bQ-0f;
-	Mon, 29 Jan 2024 19:52:11 +0000
-Date: Tue, 30 Jan 2024 03:51:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: William Qiu <william.qiu@starfivetech.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-can@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Rob Herring <robh+dt@kernel.org>,
-	Wolfgang Grandegger <wg@grandegger.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	William Qiu <william.qiu@starfivetech.com>
-Subject: Re: [PATCH v1 3/4] can: cast: add driver for CAST CAN controller
-Message-ID: <202401300313.9DPa2nuW-lkp@intel.com>
-References: <20240129031239.17037-4-william.qiu@starfivetech.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HorzKcrA"
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3637f958e9dso2364205ab.1
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 11:54:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706558063; x=1707162863; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IcVAcQ9OJEQmpN6kmfYHE7jDRpZRaq/hjpCR1i+9f+E=;
+        b=HorzKcrAddZaNStUFtc5vvswN+WBrxMQ2BQcgXAiDiF0ZQI6GOCpa8AY5GaXLc60ZB
+         hxjoXQIGxMn/KOiTQYWAvy6rA7v3sQLfxi0D/Kc0OtNvJwng+x5AxP1HRKiTKV2MbuYE
+         sJx9lwD30vZo63jlaU27b4drWVxn+Ly6WpMAo8VYyhEJHy3ZE03PXpmx1IKWbYz7PJup
+         QKT3En0jRMPdyaBDUgKHpyaIDA+xeg8HbBP4Q9sJbvCGvqv86v89D0+c43MiyppCxlDv
+         405rTUDit1pviZSwJ3T9oUqZ54be0wIxhMGuLq6tXKApmhrucxoz337xcoDXnxWERfSH
+         M3/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706558063; x=1707162863;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IcVAcQ9OJEQmpN6kmfYHE7jDRpZRaq/hjpCR1i+9f+E=;
+        b=uVkudzk2AIAn34wwRcEiuzbdsiX2nWhDlWhkxGALli2P/iSW4/gfIJTRZxWh7CgYSu
+         LvWOZbr9u5sAT1W0EhyUz/11EowFgYvc+g/2thWCLy/GPeD94++i9yWIRW88G0c5mLHF
+         8avxL7sBBsTscAo2w0aFKm0sms/1cjh1oHENtKRImGeEpQ8p9/rP703JbtGjUwi0sDh/
+         Uu6WUO2zYDFPteR9tnrs0tkhLl7wThvNbfcTBmN4lMQOmRBja5XQ/T7Jz4VvWzopKH9Y
+         TmU6nzJjHt/EwT6k5gp7GqUBXY1/rCLbXdaM1ntEJDfn3aDjGpWvrFRmnMfikqPobC+2
+         QJfw==
+X-Gm-Message-State: AOJu0YzCIhju3yXSgijZXNcBNoBwhFss2gl/x4ULbVzb47fwgJV6GP4O
+	qNvWeQA1raJGAN8545/BxRW0gz+82M19Z1O3WzP61BVxWVZNpdbOGyEfnjnKKg==
+X-Google-Smtp-Source: AGHT+IHOT+jrnyXxabnuVwgSk+ZeYFjT4UJk6UQVj4fGy1DYzC2Q/uxEWRfqsv8HGecsM0cphHHXKQ==
+X-Received: by 2002:a92:dd0d:0:b0:363:7ed8:f12c with SMTP id n13-20020a92dd0d000000b003637ed8f12cmr2725452ilm.11.1706558063352;
+        Mon, 29 Jan 2024 11:54:23 -0800 (PST)
+Received: from google.com (20.10.132.34.bc.googleusercontent.com. [34.132.10.20])
+        by smtp.gmail.com with ESMTPSA id y9-20020a92d209000000b00363797f6b00sm1379580ily.8.2024.01.29.11.54.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jan 2024 11:54:22 -0800 (PST)
+Date: Mon, 29 Jan 2024 19:54:18 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>, Hao Luo <haoluo@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Fangrui Song <maskray@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/6] ubsan: Reintroduce signed and unsigned overflow
+ sanitizers
+Message-ID: <20240129195418.hftkcdksptmpfv3i@google.com>
+References: <20240129175033.work.813-kees@kernel.org>
+ <20240129180046.3774731-2-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,58 +78,316 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240129031239.17037-4-william.qiu@starfivetech.com>
+In-Reply-To: <20240129180046.3774731-2-keescook@chromium.org>
 
-Hi William,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Mon, Jan 29, 2024 at 10:00:39AM -0800, Kees Cook wrote:
+> Effectively revert commit 6aaa31aeb9cf ("ubsan: remove overflow
+> checks"), to allow the kernel to be built with the "overflow"
+> sanitizers again. This gives developers a chance to experiment[1][2][3]
+> with the instrumentation again, while compilers adjust their sanitizers
+> to deal with the impact of -fno-strict-oveflow (i.e. moving from
+> "overflow" checking to "wrap-around" checking).
+>
+> Notably, the naming of the options is adjusted to use the name "WRAP"
+> instead of "OVERFLOW". In the strictest sense, arithmetic "overflow"
+> happens when a result exceeds the storage of the type, and is considered
+> by the C standard and compilers to be undefined behavior for signed
+> and pointer types (without -fno-strict-overflow). Unsigned arithmetic
+> overflow is defined as always wrapping around.
+>
+> Because the kernel is built with -fno-strict-overflow, signed and pointer
+> arithmetic is defined to always wrap around instead of "overflowing"
+> (which could either be elided due to being undefined behavior or would
+> wrap around, which led to very weird bugs in the kernel).
+>
+> So, the config options are added back as CONFIG_UBSAN_SIGNED_WRAP and
+> CONFIG_UBSAN_UNSIGNED_WRAP. Since the kernel has several places that
+> explicitly depend on wrap-around behavior (e.g. counters, atomics, crypto,
+> etc), also introduce the __signed_wrap and __unsigned_wrap function
+> attributes for annotating functions where wrapping is expected and should
+> not be instrumented. This will allow us to distinguish in the kernel
+> between intentional and unintentional cases of arithmetic wrap-around.
+>
+> Additionally keep these disabled under CONFIG_COMPILE_TEST for now.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master mkl-can-next/testing v6.8-rc2 next-20240129]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is present in the patch but perhaps its worth noting here that x86
+has trouble booting with the unsigned-integer-overflow sanitizer on.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/William-Qiu/dt-bindings-vendor-prefixes-Add-cast-vendor-prefix/20240129-114752
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240129031239.17037-4-william.qiu%40starfivetech.com
-patch subject: [PATCH v1 3/4] can: cast: add driver for CAST CAN controller
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240130/202401300313.9DPa2nuW-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 4a39d08908942b2d415db405844cbe4af73e75d4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240130/202401300313.9DPa2nuW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401300313.9DPa2nuW-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/can/cast_can.c:352:5: warning: no previous prototype for function 'ccan_get_freebuffer' [-Wmissing-prototypes]
-     352 | int ccan_get_freebuffer(struct ccan_priv *priv)
-         |     ^
-   drivers/net/can/cast_can.c:352:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     352 | int ccan_get_freebuffer(struct ccan_priv *priv)
-         | ^
-         | static 
-   1 warning generated.
+>
+> Link: https://github.com/KSPP/linux/issues/26 [1]
+> Link: https://github.com/KSPP/linux/issues/27 [2]
+> Link: https://github.com/KSPP/linux/issues/344 [3]
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
 
-vim +/ccan_get_freebuffer +352 drivers/net/can/cast_can.c
+This patch adheres to the language semantics as I understand them.
+Moreover, we would've had to send a patch similar to this once we land
+some better sanitizer + -fno-strict-oveflow support in the compilers.
 
-   351	
- > 352	int ccan_get_freebuffer(struct ccan_priv *priv)
-   353	{
-   354		/* Get next transmit buffer */
-   355		ccan_reigister_set_bit(priv, CCAN_TCTRL_OFFSET, CCAN_SET_TENEXT_MASK);
-   356	
-   357		if (ccan_ioread8(priv->reg_base + CCAN_TCTRL_OFFSET) & CCAN_SET_TENEXT_MASK)
-   358			return -EPERM;
-   359	
-   360		return 0;
-   361	}
-   362	
+Currently, though, -fsanitize=signed-integer-overflow instruments very
+little (if anything at all) due to compiler optimizations in conjunction
+with -fno-strict-oveflow. I am working on a new
+-fsanitize=signed-integer-wrap in Clang which will instrument more
+arithmetic even under -fno-strict-oveflow.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+
+> ---
+>  include/linux/compiler_types.h | 14 ++++++-
+>  lib/Kconfig.ubsan              | 19 ++++++++++
+>  lib/test_ubsan.c               | 49 ++++++++++++++++++++++++
+>  lib/ubsan.c                    | 68 ++++++++++++++++++++++++++++++++++
+>  lib/ubsan.h                    |  4 ++
+>  scripts/Makefile.ubsan         |  2 +
+>  6 files changed, 155 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 6f1ca49306d2..e585614f3152 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -282,11 +282,23 @@ struct ftrace_likely_data {
+>  #define __no_sanitize_or_inline __always_inline
+>  #endif
+>
+> +/* Allow wrapping arithmetic within an annotated function. */
+> +#ifdef CONFIG_UBSAN_SIGNED_WRAP
+> +# define __signed_wrap __attribute__((no_sanitize("signed-integer-overflow")))
+> +#else
+> +# define __signed_wrap
+> +#endif
+> +#ifdef CONFIG_UBSAN_UNSIGNED_WRAP
+> +# define __unsigned_wrap __attribute__((no_sanitize("unsigned-integer-overflow")))
+> +#else
+> +# define __unsigned_wrap
+> +#endif
+> +
+>  /* Section for code which can't be instrumented at all */
+>  #define __noinstr_section(section)					\
+>  	noinline notrace __attribute((__section__(section)))		\
+>  	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
+> -	__no_sanitize_memory
+> +	__no_sanitize_memory __signed_wrap __unsigned_wrap
+>
+>  #define noinstr __noinstr_section(".noinstr.text")
+>
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index 59e21bfec188..a7003e5bd2a1 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -116,6 +116,25 @@ config UBSAN_UNREACHABLE
+>  	  This option enables -fsanitize=unreachable which checks for control
+>  	  flow reaching an expected-to-be-unreachable position.
+>
+> +config UBSAN_SIGNED_WRAP
+> +	bool "Perform checking for signed arithmetic wrap-around"
+> +	default UBSAN
+> +	depends on !COMPILE_TEST
+> +	depends on $(cc-option,-fsanitize=signed-integer-overflow)
+> +	help
+> +	  This option enables -fsanitize=signed-integer-overflow which checks
+> +	  for wrap-around of any arithmetic operations with signed integers.
+> +
+> +config UBSAN_UNSIGNED_WRAP
+> +	bool "Perform checking for unsigned arithmetic wrap-around"
+> +	depends on $(cc-option,-fsanitize=unsigned-integer-overflow)
+> +	depends on !X86_32 # avoid excessive stack usage on x86-32/clang
+> +	depends on !COMPILE_TEST
+> +	help
+> +	  This option enables -fsanitize=unsigned-integer-overflow which checks
+> +	  for wrap-around of any arithmetic operations with unsigned integers. This
+> +	  currently causes x86 to fail to boot.
+> +
+>  config UBSAN_BOOL
+>  	bool "Perform checking for non-boolean values used as boolean"
+>  	default UBSAN
+> diff --git a/lib/test_ubsan.c b/lib/test_ubsan.c
+> index 2062be1f2e80..84d8092d6c32 100644
+> --- a/lib/test_ubsan.c
+> +++ b/lib/test_ubsan.c
+> @@ -11,6 +11,51 @@ typedef void(*test_ubsan_fp)(void);
+>  			#config, IS_ENABLED(config) ? "y" : "n");	\
+>  	} while (0)
+>
+> +static void test_ubsan_add_overflow(void)
+> +{
+> +	volatile int val = INT_MAX;
+> +	volatile unsigned int uval = UINT_MAX;
+> +
+> +	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
+> +	val += 2;
+> +
+> +	UBSAN_TEST(CONFIG_UBSAN_UNSIGNED_WRAP);
+> +	uval += 2;
+> +}
+> +
+> +static void test_ubsan_sub_overflow(void)
+> +{
+> +	volatile int val = INT_MIN;
+> +	volatile unsigned int uval = 0;
+> +	volatile int val2 = 2;
+> +
+> +	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
+> +	val -= val2;
+> +
+> +	UBSAN_TEST(CONFIG_UBSAN_UNSIGNED_WRAP);
+> +	uval -= val2;
+> +}
+> +
+> +static void test_ubsan_mul_overflow(void)
+> +{
+> +	volatile int val = INT_MAX / 2;
+> +	volatile unsigned int uval = UINT_MAX / 2;
+> +
+> +	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
+> +	val *= 3;
+> +
+> +	UBSAN_TEST(CONFIG_UBSAN_UNSIGNED_WRAP);
+> +	uval *= 3;
+> +}
+> +
+> +static void test_ubsan_negate_overflow(void)
+> +{
+> +	volatile int val = INT_MIN;
+> +
+> +	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
+> +	val = -val;
+> +}
+> +
+>  static void test_ubsan_divrem_overflow(void)
+>  {
+>  	volatile int val = 16;
+> @@ -90,6 +135,10 @@ static void test_ubsan_misaligned_access(void)
+>  }
+>
+>  static const test_ubsan_fp test_ubsan_array[] = {
+> +	test_ubsan_add_overflow,
+> +	test_ubsan_sub_overflow,
+> +	test_ubsan_mul_overflow,
+> +	test_ubsan_negate_overflow,
+>  	test_ubsan_shift_out_of_bounds,
+>  	test_ubsan_out_of_bounds,
+>  	test_ubsan_load_invalid_value,
+> diff --git a/lib/ubsan.c b/lib/ubsan.c
+> index df4f8d1354bb..5fc107f61934 100644
+> --- a/lib/ubsan.c
+> +++ b/lib/ubsan.c
+> @@ -222,6 +222,74 @@ static void ubsan_epilogue(void)
+>  	check_panic_on_warn("UBSAN");
+>  }
+>
+> +static void handle_overflow(struct overflow_data *data, void *lhs,
+> +			void *rhs, char op)
+> +{
+> +
+> +	struct type_descriptor *type = data->type;
+> +	char lhs_val_str[VALUE_LENGTH];
+> +	char rhs_val_str[VALUE_LENGTH];
+> +
+> +	if (suppress_report(&data->location))
+> +		return;
+> +
+> +	ubsan_prologue(&data->location, type_is_signed(type) ?
+> +			"signed-integer-overflow" :
+> +			"unsigned-integer-overflow");
+> +
+> +	val_to_string(lhs_val_str, sizeof(lhs_val_str), type, lhs);
+> +	val_to_string(rhs_val_str, sizeof(rhs_val_str), type, rhs);
+> +	pr_err("%s %c %s cannot be represented in type %s\n",
+> +		lhs_val_str,
+> +		op,
+> +		rhs_val_str,
+> +		type->type_name);
+> +
+> +	ubsan_epilogue();
+> +}
+> +
+> +void __ubsan_handle_add_overflow(void *data,
+> +				void *lhs, void *rhs)
+> +{
+> +
+> +	handle_overflow(data, lhs, rhs, '+');
+> +}
+> +EXPORT_SYMBOL(__ubsan_handle_add_overflow);
+> +
+> +void __ubsan_handle_sub_overflow(void *data,
+> +				void *lhs, void *rhs)
+> +{
+> +	handle_overflow(data, lhs, rhs, '-');
+> +}
+> +EXPORT_SYMBOL(__ubsan_handle_sub_overflow);
+> +
+> +void __ubsan_handle_mul_overflow(void *data,
+> +				void *lhs, void *rhs)
+> +{
+> +	handle_overflow(data, lhs, rhs, '*');
+> +}
+> +EXPORT_SYMBOL(__ubsan_handle_mul_overflow);
+> +
+> +void __ubsan_handle_negate_overflow(void *_data, void *old_val)
+> +{
+> +	struct overflow_data *data = _data;
+> +	char old_val_str[VALUE_LENGTH];
+> +
+> +	if (suppress_report(&data->location))
+> +		return;
+> +
+> +	ubsan_prologue(&data->location, "negation-overflow");
+> +
+> +	val_to_string(old_val_str, sizeof(old_val_str), data->type, old_val);
+> +
+> +	pr_err("negation of %s cannot be represented in type %s:\n",
+> +		old_val_str, data->type->type_name);
+> +
+> +	ubsan_epilogue();
+> +}
+> +EXPORT_SYMBOL(__ubsan_handle_negate_overflow);
+> +
+> +
+>  void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs)
+>  {
+>  	struct overflow_data *data = _data;
+> diff --git a/lib/ubsan.h b/lib/ubsan.h
+> index 5d99ab81913b..0abbbac8700d 100644
+> --- a/lib/ubsan.h
+> +++ b/lib/ubsan.h
+> @@ -124,6 +124,10 @@ typedef s64 s_max;
+>  typedef u64 u_max;
+>  #endif
+>
+> +void __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
+> +void __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
+> +void __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
+> +void __ubsan_handle_negate_overflow(void *_data, void *old_val);
+>  void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
+>  void __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
+>  void __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
+> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+> index 7cf42231042b..7b2f3d554c59 100644
+> --- a/scripts/Makefile.ubsan
+> +++ b/scripts/Makefile.ubsan
+> @@ -8,6 +8,8 @@ ubsan-cflags-$(CONFIG_UBSAN_LOCAL_BOUNDS)	+= -fsanitize=local-bounds
+>  ubsan-cflags-$(CONFIG_UBSAN_SHIFT)		+= -fsanitize=shift
+>  ubsan-cflags-$(CONFIG_UBSAN_DIV_ZERO)		+= -fsanitize=integer-divide-by-zero
+>  ubsan-cflags-$(CONFIG_UBSAN_UNREACHABLE)	+= -fsanitize=unreachable
+> +ubsan-cflags-$(CONFIG_UBSAN_SIGNED_WRAP)	+= -fsanitize=signed-integer-overflow
+> +ubsan-cflags-$(CONFIG_UBSAN_UNSIGNED_WRAP)	+= -fsanitize=unsigned-integer-overflow
+>  ubsan-cflags-$(CONFIG_UBSAN_BOOL)		+= -fsanitize=bool
+>  ubsan-cflags-$(CONFIG_UBSAN_ENUM)		+= -fsanitize=enum
+>  ubsan-cflags-$(CONFIG_UBSAN_TRAP)		+= $(call cc-option,-fsanitize-trap=undefined,-fsanitize-undefined-trap-on-error)
+> --
+> 2.34.1
+>
+
+Thanks
+Justin
