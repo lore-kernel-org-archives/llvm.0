@@ -1,127 +1,131 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892012E3F2
-	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 19:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BD36F071;
+	Mon, 29 Jan 2024 19:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706554828; cv=none; b=EYO+jSTluSCy4XjAZBK2IV9WlKJX9YLbaBSbt2RS7Jnp8PpLmyq3GKgJhtOjsq32D5OKsoQg+4zCrVTzt/p07Wuydbe5zyAIIbsJcBGZlV0K5H349CFB+nG+qHdcF9pu3WNP2ug/9sT/ygStkWChqBQu4tmnzeCS8FEgSY0Z0iA=
+	t=1706557942; cv=none; b=jgwzX42w5s6sQSfcWMw8x4lAZcVX+swYFgqZlYT8dGrRR82BmF2oXnuyG0UOvwVS3q8/hYHY1Uvo9D8FlOvggg/qydrfOeWJ8+V5/4nvWpxjY5xUWqeJNeB1zh5CIl4TcTVJR4VRRPIt0CiQqqGPUcrBcr1VLNzTqe827sA0IAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706554828; c=relaxed/simple;
-	bh=ssMtgarRnRs+LWFQuEr18d3XaNBa10XeJKStTgVMzZw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m+fLIXc1qU3tgaBEWgdCU5ck5KTMii6bZepikXHGS4QBwZa6H3b7XB4ENuy3tHDC5qLMEnEINEVCkofrHAbuNl8AZusrUe/58AT0dzVohy85VB02lPUlswUgD7HoHLnlZe5pdAIuivFLbDz5LPRJB7jC8UEyEqrh1qsgvH0rVU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=owEOMGjM; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1706557942; c=relaxed/simple;
+	bh=AkBpWCt8Yn5W3lR5XfqNrLHf+HDLn89jCMBMA0LnBBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nldz0aw/Yz4wxClCYNDD5V8GpfLUF6cP5h5TfODfahDeMIcJvRye2JXhjk41FaEBn3Rmey0eWPRtAcpfgHcfpNCrYo9J9wl5SGoMx1p5HyWhE6VpMNxvHT0SCNx7TMqu+4R7t9j3V8ObuOohzFR+/BKVN1J/aYU2Q/RSmdqGZSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FXli1qFn; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="owEOMGjM"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40ef9382752so7825e9.0
-        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 11:00:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706554810; x=1707159610; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YYJPquRBqD9Q7jzpQNCrCFu5Gx3v6qV+tI8wEy5zyow=;
-        b=owEOMGjMZPVWoFwbsA3vcQruukiE49K64HgVuDYqsnOY5tdFCfzkYv0pAiM9NQBD1D
-         bsw5n1nUcju7m2mxZ2gRvFGelxXLY1RJUa1ApWr9QjyzLY/rgCpXPUte6QbbrOheHRv2
-         fzv8xwVAyHKU+Yr43BqzG0xdjPef7uBENa4KAkQTTurFgHdC0cFZobjUYqcv4dS/fKTx
-         iJpViAKZgKiZB4B9/Q0gn7UABayS0A/kugFVFXYavbeIRM6DL4dm7XRgSL82z23V21+X
-         BbvpJm5GJgjLsMZNZeRFeQn3S97ytWdr82FUq7QF86MIu7M8gcW+6VIOOkXVS6lHrRiZ
-         S4dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706554810; x=1707159610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YYJPquRBqD9Q7jzpQNCrCFu5Gx3v6qV+tI8wEy5zyow=;
-        b=WvPKon/9/38p/hpjImEeuO4jTM7Y9hXHIV2I0wNTUYs0vpSC/hV1CRlqAuJKwLdUWU
-         ENJVQVuXRkYvq1t54ANFyAwS0hb3JTQ2fqEy6FVqx+7elv13Cn2GgxO3klpGd3/kTl60
-         TLyDbhvnW3+QFh6+rc8uKgDw3RF57n+ih890Iltu3zlIJmULrOBX0tEdikJdD2DnuDhh
-         MeSGh+jrlcNfBb8OBopedO30DWrxVEr9y41JzbrI8mF3geUdLk9oVjRz+mmQmfYdXD+i
-         hg+xDgLNBDpTNZqKVIICMsldcUzoqBl7uX67rfhMKOFq0D6MDyLeKzMb5p99yFFCbnRH
-         uHlg==
-X-Gm-Message-State: AOJu0YxD+iY2hdrLOmiJSMNtlPNYWZBKmWVGGdf9oyFJBgUIS8vnjEpE
-	f6fuk/B/kdGeNprOSHjtmNzMgZDyAa7cdZYu60ZFf5rO+zk/D/Gt3RV2RjbiDuMPlHOrW3e/1sc
-	KXTUTq9520dPZUPAivEuIqHE2mhg+ajt7tWJy
-X-Google-Smtp-Source: AGHT+IEFMiDR4T+Az5QhHWjBGq7ivQjiq8VZP7xtdBES4S/LvDRFYd/o733yPgW6mWJ0oHxcB5Iolmk0/4LYRKcEnzI=
-X-Received: by 2002:a05:600c:c12:b0:40d:839b:7844 with SMTP id
- fm18-20020a05600c0c1200b0040d839b7844mr14670wmb.6.1706554809639; Mon, 29 Jan
- 2024 11:00:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FXli1qFn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706557940; x=1738093940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AkBpWCt8Yn5W3lR5XfqNrLHf+HDLn89jCMBMA0LnBBE=;
+  b=FXli1qFn5rtHdMiLjYOTCvTrdNQppYdukJ5O2ALII639G2tMVhbKFIM2
+   NMxd0CGnV9FJKkc59YpdYPblGrJ491KUlGou95OEDY8y9s+TYyGOhCA40
+   SkYw34jg4dLUhbu98ghBcSJjLxFYTc2IMfQFdOWhpIXlCdnwsdobOZhC9
+   m49px8Cb5VQq6Zg2P/brZcaFtvXPjuySu6FqUl9McwtjZhTJrYhJiGv0a
+   xr8Wq5Xmm9TnsXMxiq0q+2L3ICkZWQ6Pwt6HOJtdOXSDvDOr6KAW9ipvG
+   bITidKIwMweqOhiCLo+FcRR3G3JF2cKlBZ7VFAjIW1ujM1eOM2kpXxB2q
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="16450396"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="16450396"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 11:52:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="29905599"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 29 Jan 2024 11:52:13 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rUXfv-0004bQ-0f;
+	Mon, 29 Jan 2024 19:52:11 +0000
+Date: Tue, 30 Jan 2024 03:51:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: William Qiu <william.qiu@starfivetech.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-can@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	William Qiu <william.qiu@starfivetech.com>
+Subject: Re: [PATCH v1 3/4] can: cast: add driver for CAST CAN controller
+Message-ID: <202401300313.9DPa2nuW-lkp@intel.com>
+References: <20240129031239.17037-4-william.qiu@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240129175033.work.813-kees@kernel.org> <20240129180046.3774731-1-keescook@chromium.org>
-In-Reply-To: <20240129180046.3774731-1-keescook@chromium.org>
-From: Fangrui Song <maskray@google.com>
-Date: Mon, 29 Jan 2024 10:59:55 -0800
-Message-ID: <CAFP8O3LhmXqqKKf1fOw1_0zGYOyN7ivm2yYSQJqSQr_megOq8Q@mail.gmail.com>
-Subject: Re: [PATCH 1/6] ubsan: Use Clang's -fsanitize-trap=undefined option
-To: Kees Cook <keescook@chromium.org>
-Cc: Marco Elver <elver@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	Andrey Konovalov <andreyknvl@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240129031239.17037-4-william.qiu@starfivetech.com>
 
-On Mon, Jan 29, 2024 at 10:00=E2=80=AFAM Kees Cook <keescook@chromium.org> =
-wrote:
->
-> Clang changed the way it enables UBSan trapping mode. Update the Makefile
-> logic to discover it.
->
-> Suggested-by: Fangrui Song <maskray@google.com>
-> Link: https://lore.kernel.org/lkml/CAFP8O3JivZh+AAV7N90Nk7U2BHRNST6MRP0zH=
-tfQ-Vj0m4+pDA@mail.gmail.com/
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nicolas Schier <nicolas@fjasle.eu>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Bill Wendling <morbo@google.com>
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  scripts/Makefile.ubsan | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-> index 4749865c1b2c..7cf42231042b 100644
-> --- a/scripts/Makefile.ubsan
-> +++ b/scripts/Makefile.ubsan
-> @@ -10,6 +10,6 @@ ubsan-cflags-$(CONFIG_UBSAN_DIV_ZERO)         +=3D -fsa=
-nitize=3Dinteger-divide-by-zero
->  ubsan-cflags-$(CONFIG_UBSAN_UNREACHABLE)       +=3D -fsanitize=3Dunreach=
-able
->  ubsan-cflags-$(CONFIG_UBSAN_BOOL)              +=3D -fsanitize=3Dbool
->  ubsan-cflags-$(CONFIG_UBSAN_ENUM)              +=3D -fsanitize=3Denum
-> -ubsan-cflags-$(CONFIG_UBSAN_TRAP)              +=3D -fsanitize-undefined=
--trap-on-error
-> +ubsan-cflags-$(CONFIG_UBSAN_TRAP)              +=3D $(call cc-option,-fs=
-anitize-trap=3Dundefined,-fsanitize-undefined-trap-on-error)
->
->  export CFLAGS_UBSAN :=3D $(ubsan-cflags-y)
-> --
-> 2.34.1
+Hi William,
 
-Thanks for the patch. Clang has had -fsanitize-trap=3D since 2015.
-GCC added -fsanitize-trap=3Dundefined in 2022
-(https://gcc.gnu.org/git/gitweb.cgi?p=3Dgcc.git;h=3D2c7cfc7b418564 ;
-milestone: 13.1), so we cannot use -fsanitize-trap=3Dundefined
-unconditionally.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Fangrui Song <maskray@google.com>
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master mkl-can-next/testing v6.8-rc2 next-20240129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/William-Qiu/dt-bindings-vendor-prefixes-Add-cast-vendor-prefix/20240129-114752
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240129031239.17037-4-william.qiu%40starfivetech.com
+patch subject: [PATCH v1 3/4] can: cast: add driver for CAST CAN controller
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240130/202401300313.9DPa2nuW-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 4a39d08908942b2d415db405844cbe4af73e75d4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240130/202401300313.9DPa2nuW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401300313.9DPa2nuW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/can/cast_can.c:352:5: warning: no previous prototype for function 'ccan_get_freebuffer' [-Wmissing-prototypes]
+     352 | int ccan_get_freebuffer(struct ccan_priv *priv)
+         |     ^
+   drivers/net/can/cast_can.c:352:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     352 | int ccan_get_freebuffer(struct ccan_priv *priv)
+         | ^
+         | static 
+   1 warning generated.
 
 
+vim +/ccan_get_freebuffer +352 drivers/net/can/cast_can.c
 
+   351	
+ > 352	int ccan_get_freebuffer(struct ccan_priv *priv)
+   353	{
+   354		/* Get next transmit buffer */
+   355		ccan_reigister_set_bit(priv, CCAN_TCTRL_OFFSET, CCAN_SET_TENEXT_MASK);
+   356	
+   357		if (ccan_ioread8(priv->reg_base + CCAN_TCTRL_OFFSET) & CCAN_SET_TENEXT_MASK)
+   358			return -EPERM;
+   359	
+   360		return 0;
+   361	}
+   362	
 
---
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
