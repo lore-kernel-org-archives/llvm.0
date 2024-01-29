@@ -1,53 +1,53 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7764E158D9F
-	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DE16F07A
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 18:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706551554; cv=none; b=o8BqrTYPFMZkkQRg3whJiiRK7TYmxRG3x5l/H7IfpfC5aikIPZYZXOykOGsoJfc+YJaI4aLSKRvsnWo6a8elAuIaIFFGA/q+CIwsRBuQocC4LnuaRxoy8o59VfB7iojQvm7PuFyfD3a34+FXeUKDMBXXiyAwF4kLjmQ8Ov20QgQ=
+	t=1706551555; cv=none; b=WxD6l6gt9+PAIr6p8J1NR1LhHj1I70jZpz43AEw50aW001bOTNq9L9K50eAxM/4OKJoKzfZUGhGcxeQDx0Bc4ZDs55qpk+eP2VWFWGeK0LM1UKy99V7Fw6Y3p51D7luZupZs3Pn5hDshdqk80wfq49/XDIYfETvMVGlSBfhtgec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706551554; c=relaxed/simple;
-	bh=vnJpTtkwXP8em8CZ9TF/csF2frUk4VGX3QPQ5IolY7Q=;
+	s=arc-20240116; t=1706551555; c=relaxed/simple;
+	bh=UonHlMqjgEJH+56iHsla4J1Fp0ovIjuTCcCNqIOSjk0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qxEvvrcui4KphuRLrcOVUW8Kt6boTPKZa0YP13kHgw0NKobJyE/h0QzkBe+d+eJaqj+SDtpo5kpcFoOpWVbaaKtGp4N1fgX2E5fsAFJg10P59oWlgfs+rbuENWyaykoCZbFcDEAKlCF7ysdOp1kMfZJhN3OIDUzfhskwvRcsUJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R35gwqj+; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=Qltc/y02OhKu3H9nKGjvMZo/UPVrj4+r7xnuow8XyGq5mWTKl0jLQjd23Z017LhqZ5xGGw9Fosj+rMQbDAjV2Y0WwDQq3NC4Oqq/owZjPOrAflyTgSCSKaz7p4ZzsXvmBCFVddZM9InWe3ZsbRhSqWNfi+opSThyETfDJypb17Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RgbJed7E; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R35gwqj+"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc64b659a9cso5293075276.3
-        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:05:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RgbJed7E"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc64e0fc7c8so4071013276.2
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 10:05:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706551550; x=1707156350; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706551552; x=1707156352; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f5x1F22voMMyYv1Zr6tqhVy0DTOzfkx0XvX+Zrp+ZGY=;
-        b=R35gwqj+RlIOv0zO+GeyNu5sZjRJOTZBObHRLAn0LhEQLpuH18iz0HbpbvlXIx1aYi
-         OLWk2IuKbSOIOV6xO3LEqH6K86HDK9y+VB7tAeAF4Dvq9l+lFRuFvpa9WT9iTGol9BAx
-         gAzp8edtk3Po55wGAUCKlB/E09a/0Mn7rCCdD2sDcCeZCGSQWEkaBih/nmD2+5miq0iq
-         0SqOZMhSkhJGLbwZdPxh8m2AfEgg6LGSegWF3sEAiuLAmc8fKNOSbIdu77B8a04cZVMe
-         4Pw6MH7IJZDkTkQiDvgooNzPfbeFFSS5TvwUUqsX7e4dMMieJrxZ33+NT1hvqcy3yIKa
-         irNw==
+        bh=Ap19tN/uXJaW7OWqMmvQ4dnQyY/I7jMfOfg7BtI2vyw=;
+        b=RgbJed7EPcya36ZdHfKfRidylwnDL3Bc1hmZ9UOSeLSQofphajSHbjbb17Ivd5IaZl
+         kMAtVwcUGS6fd9nYrpBiAqjHfEJ2IKQ4lSmi24hjIi3DC2lN9NE21V28CFoFFiQy793O
+         3aaCddBQqxtwdB3lOlg39qIqLJZVKxRwezXdnYs5/NNd8TSImu/LTJV60torbnEU7QuJ
+         jMox3VkNvHzb/G0xWPgdpp9p8VrsgE6wH+VSSiCjMg5xXaRRf5Asf0OaaSs+GoVsoeWg
+         1UbiZJzgIByyTPIHzr1d408FRlMsg6bYhy7ERs3T8593Ceh3LvZjYFGcaYKOks35LlDO
+         Wt9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706551550; x=1707156350;
+        d=1e100.net; s=20230601; t=1706551552; x=1707156352;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f5x1F22voMMyYv1Zr6tqhVy0DTOzfkx0XvX+Zrp+ZGY=;
-        b=lLxBoLngWTpT9REuUAjzergdJR4WvuwWHoJUKJ3KqRlKndFkzaWvaWeANdroRYVm/s
-         gTtaD833kinJ2GQCjJYw8wTrBdFh4qXomqBQonG9CLlhbPp/GieQPvt/fXhGH4zwoyrn
-         mSL4n48V2JCwG+5jKcmN0sn74ylKsEjoo4YdoVUbPZcBjpeJ74o1TSvV8o/e9ZtvDxxh
-         /+tJCOmdGRuHWRyEWNv/2nUJ3Aj8HLW5Xe8BpeBFqttH+PhBNSp2/sbM+E7FL/USYe5d
-         X9POWqSrN7/eZXqMnlb9+u9Q/pSCLokynnDLDbAOebbuzLgJQTwJHm5b7n0AW2JX+La/
-         KoIQ==
-X-Gm-Message-State: AOJu0YxFTBV7r1jGe+5fSmsmPZDpNp5N34egYwEeO89y1wcdtQGy0Fy1
-	Kl0qpZnka1L/cFFNqBODD5uMX0McVzFvfKV4Tg3jVxhmtd5sGuZiZ9BB4dAvpBQUD+z9ig==
-X-Google-Smtp-Source: AGHT+IGgNqs4arPCH5rAGfnn6yAEx3ibS3mxOByBiz/gXz1ea0MTq5J9nfV4BBbOTaOTO6X7O+L/ylT4
+        bh=Ap19tN/uXJaW7OWqMmvQ4dnQyY/I7jMfOfg7BtI2vyw=;
+        b=oKi2J9kGakfPQvEuHXVyufkbvN23jgXMKMs7p5971ZsmEre3Vmd98FzSug+k7qFn53
+         dM3Hjb2iCJB6PcvUeTQVBLSHw0ajSgsEcjQF8cvfQqyJlfaTtDKejNlUonMJhyRXgdt4
+         uKDIMQunwMEzM4YHTfX7pcjJO+kcEpvbBtKe3/bbkci5pFmhy/q1LiQigAAFyy2YFsc6
+         n1+Mb+/jyEGmX2yTgBZ+yrHEW/iq1KDe9+XP+p11nUEIxyYH91yQAVREFtYz0kI0E9h1
+         IU35N6NQCue02qupWIr4UZF3X9Im1OMb7ou8JWelk0sbLF4I9hZlwbdeYyz59+YRLiB5
+         IzMw==
+X-Gm-Message-State: AOJu0YyLSho69zTG1rc+8liX2f17+JezUeY1/Dn2YBZyeqcOyR+PNQ+u
+	o0NtiPJ8qa/p8oykp7YaDSP5encf2Z5LL5p7z95DkG62fp1MUPhbdlYlymgYNhqZzqf/dw==
+X-Google-Smtp-Source: AGHT+IFdlkgRmOLuPYQ4HYGJOcfOyvmrF8pJsjH+7Ju2xNGTWiYFEILGYxiFeCWVd7IhoWiApQSqZNZJ
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:6902:108f:b0:dc2:23d8:722d with SMTP id
- v15-20020a056902108f00b00dc223d8722dmr2386953ybu.13.1706551550415; Mon, 29
- Jan 2024 10:05:50 -0800 (PST)
-Date: Mon, 29 Jan 2024 19:05:12 +0100
+ (user=ardb job=sendgmr) by 2002:a05:6902:1b01:b0:dc2:3619:e94e with SMTP id
+ eh1-20020a0569021b0100b00dc23619e94emr414348ybb.6.1706551552670; Mon, 29 Jan
+ 2024 10:05:52 -0800 (PST)
+Date: Mon, 29 Jan 2024 19:05:13 +0100
 In-Reply-To: <20240129180502.4069817-21-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,14 +57,15 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240129180502.4069817-21-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4031; i=ardb@kernel.org;
- h=from:subject; bh=GRGmQn1xgXFPK1qedgfyRwvXHekb7bPD6uUy2cYh0y8=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7i5vrWbMWbRB/pTXhQYTroe6r825LXbbdoZi54/syE
- faa5cFLOkpZGMQ4GGTFFFkEZv99t/P0RKla51myMHNYmUCGMHBxCsBEGP4y/OFJ1fCZvC+r871W
- QXDCwtItz6p5Qo1+Beg0rJB627tLQ5mR4Wub4nvV5lBLhY6ik+UvEn+ZrPQ889P7+dUNae+vLHl 0ixcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4822; i=ardb@kernel.org;
+ h=from:subject; bh=Kb1Zn5CHQVUPzxgeHo6uRlzKgwc2NWlyfd+RzWsJs24=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIXX7i1tSpVekMhqlzlrlfb/JMsl/O//tz/rfnvtxfTN9K
+ xfxQaivo5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAEwkX5Lhv5OomU7pjraIyH/7
+ ztt9/Of40YFDqmqzV+W3Fp85b/RspRj+yorzxqrcmK60VSHRPl6b5eeETAbXibMsFrfufP7hcKI IBwA=
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240129180502.4069817-30-ardb+git@google.com>
-Subject: [PATCH v3 09/19] x86/head64: Simplify GDT/IDT initialization code
+Message-ID: <20240129180502.4069817-31-ardb+git@google.com>
+Subject: [PATCH v3 10/19] asm-generic: Add special .pi.text section for
+ position independent code
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -79,126 +80,132 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-There used to be two separate code paths for programming the IDT early:
-one that was called via the 1:1 mapping, and one via the kernel virtual
-mapping, where the former used explicit pointer fixups to obtain 1:1
-mapped addresses.
+Add a special .pi.text section that architectures will use to carry code
+that can be called while the kernel is executing from a different
+virtual address than its link time address. This is typically needed by
+very early boot code that executes from a 1:1 mapping, and may need to
+call into other code to perform preparatory tasks that must be completed
+before switching to the kernel's ordinary virtual mapping.
 
-That distinction is now gone so the GDT/IDT init code can be unified and
-simplified accordingly.
+Note that this implies that the code in question cannot generally be
+instrumented safely, and so the contents are combined with the existing
+.noinstr.text section, making .pi.text a proper subset of the former.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/head64.c | 57 +++++++-------------
- 1 file changed, 18 insertions(+), 39 deletions(-)
+ include/asm-generic/vmlinux.lds.h |  3 +++
+ include/linux/init.h              | 12 +++++++++
+ scripts/mod/modpost.c             |  5 +++-
+ tools/objtool/check.c             | 26 ++++++++------------
+ 4 files changed, 29 insertions(+), 17 deletions(-)
 
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index a4a380494703..58c58c66dec9 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -59,21 +59,12 @@ EXPORT_SYMBOL(vmemmap_base);
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 5dd3a61d673d..70c9767cac5a 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -553,6 +553,9 @@
+ 		__cpuidle_text_start = .;				\
+ 		*(.cpuidle.text)					\
+ 		__cpuidle_text_end = .;					\
++		__pi_text_start = .;					\
++		*(.pi.text)						\
++		__pi_text_end = .;					\
+ 		__noinstr_text_end = .;
+ 
  /*
-  * GDT used on the boot CPU before switching to virtual addresses.
-  */
--static struct desc_struct startup_gdt[GDT_ENTRIES] __initdata = {
-+static struct desc_struct startup_gdt[GDT_ENTRIES] __initconst = {
- 	[GDT_ENTRY_KERNEL32_CS]         = GDT_ENTRY_INIT(DESC_CODE32, 0, 0xfffff),
- 	[GDT_ENTRY_KERNEL_CS]           = GDT_ENTRY_INIT(DESC_CODE64, 0, 0xfffff),
- 	[GDT_ENTRY_KERNEL_DS]           = GDT_ENTRY_INIT(DESC_DATA64, 0, 0xfffff),
- };
+diff --git a/include/linux/init.h b/include/linux/init.h
+index 3fa3f6241350..85bb701b664c 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -55,6 +55,17 @@
+ #define __exitdata	__section(".exit.data")
+ #define __exit_call	__used __section(".exitcall.exit")
  
--/*
-- * Address needs to be set at runtime because it references the startup_gdt
-- * while the kernel still uses a direct mapping.
-- */
--static struct desc_ptr startup_gdt_descr __initdata = {
--	.size = sizeof(startup_gdt)-1,
--	.address = 0,
--};
--
- #define __va_symbol(sym) ({						\
- 	unsigned long __v;						\
- 	asm("movq $" __stringify(sym) ", %0":"=r"(__v));		\
-@@ -517,47 +508,32 @@ void __init __noreturn x86_64_start_reservations(char *real_mode_data)
-  */
- static gate_desc bringup_idt_table[NUM_EXCEPTION_VECTORS] __page_aligned_data;
- 
--static struct desc_ptr bringup_idt_descr = {
--	.size		= (NUM_EXCEPTION_VECTORS * sizeof(gate_desc)) - 1,
--	.address	= 0, /* Set at runtime */
--};
--
--static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
--{
--#ifdef CONFIG_AMD_MEM_ENCRYPT
--	struct idt_data data;
--	gate_desc desc;
--
--	init_idt_data(&data, n, handler);
--	idt_init_desc(&desc, &data);
--	native_write_idt_entry(idt, n, &desc);
--#endif
--}
--
--/* This runs while still in the direct mapping */
--static void __head startup_64_load_idt(void)
-+static void early_load_idt(void (*handler)(void))
- {
- 	gate_desc *idt = bringup_idt_table;
-+	struct desc_ptr bringup_idt_descr;
++/*
++ * __pitext should be used to mark code that can execute correctly from a
++ * different virtual offset than the kernel was linked at. This is used for
++ * code that is called extremely early during boot.
++ *
++ * Note that this is incompatible with KAsan, which applies an affine
++ * translation to the virtual address to obtain the shadow address which is
++ * strictly tied to the kernel's virtual address space.
++ */
++#define __pitext	__section(".pi.text") __no_sanitize_address notrace
 +
-+	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
-+		struct idt_data data;
-+		gate_desc desc;
+ /*
+  * modpost check for section mismatches during the kernel build.
+  * A section mismatch happens when there are references from a
+@@ -92,6 +103,7 @@
  
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
- 		/* VMM Communication Exception */
--		set_bringup_idt_handler(idt, X86_TRAP_VC, vc_no_ghcb);
-+		init_idt_data(&data, X86_TRAP_VC, handler);
-+		idt_init_desc(&desc, &data);
-+		native_write_idt_entry(idt, X86_TRAP_VC, &desc);
-+	}
+ /* For assembly routines */
+ #define __HEAD		.section	".head.text","ax"
++#define __PITEXT	.section	".pi.text","ax"
+ #define __INIT		.section	".init.text","ax"
+ #define __FINIT		.previous
  
- 	bringup_idt_descr.address = (unsigned long)idt;
-+	bringup_idt_descr.size = sizeof(bringup_idt_table);
- 	native_load_idt(&bringup_idt_descr);
- }
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 795b21154446..962d00df47ab 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -813,9 +813,12 @@ static void check_section(const char *modname, struct elf_info *elf,
  
--/* This is used when running on kernel addresses */
- void early_setup_idt(void)
+ #define INIT_SECTIONS      ".init.*"
+ 
+-#define ALL_TEXT_SECTIONS  ".init.text", ".meminit.text", ".exit.text", \
++#define ALL_PI_TEXT_SECTIONS  ".pi.text", ".pi.text.*"
++#define ALL_NON_PI_TEXT_SECTIONS  ".init.text", ".meminit.text", ".exit.text", \
+ 		TEXT_SECTIONS, OTHER_TEXT_SECTIONS
+ 
++#define ALL_TEXT_SECTIONS  ALL_NON_PI_TEXT_SECTIONS, ALL_PI_TEXT_SECTIONS
++
+ enum mismatch {
+ 	TEXTDATA_TO_ANY_INIT_EXIT,
+ 	XXXINIT_TO_SOME_INIT,
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 548ec3cd7c00..af8f23a96037 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -389,6 +389,7 @@ static int decode_instructions(struct objtool_file *file)
+ 		if (!strcmp(sec->name, ".noinstr.text") ||
+ 		    !strcmp(sec->name, ".entry.text") ||
+ 		    !strcmp(sec->name, ".cpuidle.text") ||
++		    !strncmp(sec->name, ".pi.text", 8) ||
+ 		    !strncmp(sec->name, ".text..__x86.", 13))
+ 			sec->noinstr = true;
+ 
+@@ -4234,23 +4235,16 @@ static int validate_noinstr_sections(struct objtool_file *file)
  {
--	/* VMM Communication Exception */
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
-+	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
- 		setup_ghcb();
--		set_bringup_idt_handler(bringup_idt_table, X86_TRAP_VC, vc_boot_ghcb);
+ 	struct section *sec;
+ 	int warnings = 0;
++	static char const *noinstr_sections[] = {
++		".noinstr.text", ".entry.text", ".cpuidle.text", ".pi.text",
++	};
+ 
+-	sec = find_section_by_name(file->elf, ".noinstr.text");
+-	if (sec) {
+-		warnings += validate_section(file, sec);
+-		warnings += validate_unwind_hints(file, sec);
 -	}
+-
+-	sec = find_section_by_name(file->elf, ".entry.text");
+-	if (sec) {
+-		warnings += validate_section(file, sec);
+-		warnings += validate_unwind_hints(file, sec);
+-	}
+-
+-	sec = find_section_by_name(file->elf, ".cpuidle.text");
+-	if (sec) {
+-		warnings += validate_section(file, sec);
+-		warnings += validate_unwind_hints(file, sec);
++	for (int i = 0; i < ARRAY_SIZE(noinstr_sections); i++) {
++		sec = find_section_by_name(file->elf, noinstr_sections[i]);
++		if (sec) {
++			warnings += validate_section(file, sec);
++			warnings += validate_unwind_hints(file, sec);
++		}
+ 	}
  
--	bringup_idt_descr.address = (unsigned long)bringup_idt_table;
--	native_load_idt(&bringup_idt_descr);
-+	early_load_idt(vc_boot_ghcb);
- }
- 
- /*
-@@ -565,8 +541,11 @@ void early_setup_idt(void)
-  */
- void __head startup_64_setup_env(void)
- {
-+	struct desc_ptr startup_gdt_descr;
-+
- 	/* Load GDT */
- 	startup_gdt_descr.address = (unsigned long)startup_gdt;
-+	startup_gdt_descr.size = sizeof(startup_gdt) - 1;
- 	native_load_gdt(&startup_gdt_descr);
- 
- 	/* New GDT is live - reload data segment registers */
-@@ -574,5 +553,5 @@ void __head startup_64_setup_env(void)
- 		     "movl %%eax, %%ss\n"
- 		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
- 
--	startup_64_load_idt();
-+	early_load_idt(vc_no_ghcb);
- }
+ 	return warnings;
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
