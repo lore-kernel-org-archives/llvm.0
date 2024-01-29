@@ -1,296 +1,222 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC8A55E7E
-	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 09:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B675B5A5;
+	Mon, 29 Jan 2024 11:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706522296; cv=none; b=LtqDI8VF3CFYqPLLaPrhB3BxdthaGa9sio0/qG60jqmMNiVwqJXzaZLaXDjGZa4Q71L5o6cJAch2TKDPBz41eQsyMcLjey4Bd1IKk8+Lp/nHlg1faYa7QTOSlXBlZNosJRXD05asXK0HliTyfaPQ+fRTdU7rMN6E8gvT1E4/0Fc=
+	t=1706526749; cv=none; b=dGau75lW5UwnW9lsbtRxRZFfRoBSGWj2kdxX9ZQpHEChv31K893PWoQehti6c/R/UGpNqQLKTs8d3pytyXi5NztDL4RPGQmuUD2oyT7uwtbgBGaWtKkRqBbjA0+TQP0Q9HNr8CQL5WtYmmUEIbGcKi0XMIm9NitLg+TyAXAgk60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706522296; c=relaxed/simple;
-	bh=0nRlWJibNBWrP/2+ulbYIt6Yw5St4sDPPbMGqESeuNc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aERLLInfLypFKOacq3qz3vkbFW8sWPI5dwcLcoY+jVdy8uFA330QQT2QmFX4WHHTs5DJKmS4WWCbGtYGZ6FsdUFJKofqQS9iVPgJaIj3dzGJv/SrLppZghS4QuuMzB9HLAppu4wB0EPk8HmIgYocv0iJJjA5r7kTlfDSdCsDNUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=E+FBiU2E; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	s=arc-20240116; t=1706526749; c=relaxed/simple;
+	bh=sWb5iW/Zc4rMtuvDgiy2XEeNVN53cyP6uPMuU6C2c4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=IEZq6Loo6OyvrsR7QUK/4/sW0KyN1+6ukIG8CoWrasElBP8UdTvYNtXq4no018NcCwxKx8x6/OUMhJYkH/jjp/XYwX8s6R5T4GD42adPvgBhGnS7ooaTlqITIbYMRRvy+qK439AEtB8tpteRBd+124QCtynzGnczADiq0tgcEsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dPON0QTL; arc=none smtp.client-ip=134.134.136.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="E+FBiU2E"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5d81b08d6f2so2319522a12.0
-        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 01:58:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1706522293; x=1707127093; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y/yj2cF4QFPTINMOJ5Odb3ijjKjStQFfbkPQ+E8TM9k=;
-        b=E+FBiU2E8ZV6t/KAPMwqUsbwaHNYTk/gYiI4yTHLftrGEHrlDHjRP6KpQ5M0d1xlMU
-         BzvIlyLtqkF0DXslUV8t3NBV/2AmfKP0we88j5pza0qk9t8MEsnQhSQ09+zJlD1L/ywI
-         j6xnEL3xvJUg4tdVSDuKgzxOQ9gy+naGN8sX+JskcV5sFE3S/q7PTCzN2pYc+4z/Vncs
-         Z2YEn7eX/QHpIelWKxH63/lSqUG2Zw/f5GAiSr8AHVcFEffRB+AbMxL28HwdYm3O6GgW
-         B91s/PuO2I7lH41fxGkWhMM1cPxpCtqMCMwtRgB2D0uyUi0krCSSEdawc+pjG9q8BD7G
-         34Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706522293; x=1707127093;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y/yj2cF4QFPTINMOJ5Odb3ijjKjStQFfbkPQ+E8TM9k=;
-        b=rYCJvN3bzuDChX69X+7wsHBXgn5aPNvbeK6I5fgRTJ1Eg5cBrQpVJLUQGCWHevvcTJ
-         b3eHAAdjToao9Bj2iOUAByraTFuhXBEI8iILGAuHYaMPKg0s/esxjM/9W3+5eeB19r/b
-         hIHg6+qRuDJ80jEkRZQjXJru54qpCsq4g9QfI+Fyk2f70eLcBJ0/JRmHBnLt/TvZkXqu
-         YAUEVgkaDC7Kn5IlXNn6iQtWrcmtzbpnvp1P83JxhhvMBRMNECWECxa1zgHzDiKtdeNq
-         i+9SscLUNIj5hNVP6ouE7aQRoz3OllKRaj7jUjEKvLBEliR1mrXTsGEiBaEQpoOiVj73
-         KZIA==
-X-Gm-Message-State: AOJu0YzTf/7V5YbLR4wzeeBj6R4A/T/rHcuqKsIwOd8JVOl514NdfOZx
-	5bmpScVW0RAPTZ53E8MuiGqZoiZ1g2dt2CYTud0ShoEa1Hr2pwXDw65ZIf6BZnk=
-X-Google-Smtp-Source: AGHT+IGLLoxO4r2cecG2riTmnlc0oiwaiM2/Qa304+OOrXxvULSm26H9zFdDAUUlmZA6ogAFjHFqxA==
-X-Received: by 2002:a05:6a20:9591:b0:19c:b4ef:3fa5 with SMTP id iu17-20020a056a20959100b0019cb4ef3fa5mr241147pzb.29.1706522293506;
-        Mon, 29 Jan 2024 01:58:13 -0800 (PST)
-Received: from [10.255.192.107] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id ju11-20020a170903428b00b001d8ead3d805sm1027576plb.58.2024.01.29.01.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jan 2024 01:58:12 -0800 (PST)
-Message-ID: <d900f0fd-a586-404d-8568-0d2511908067@bytedance.com>
-Date: Mon, 29 Jan 2024 17:58:05 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dPON0QTL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706526747; x=1738062747;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sWb5iW/Zc4rMtuvDgiy2XEeNVN53cyP6uPMuU6C2c4w=;
+  b=dPON0QTLgrtg2SvUdRp1IIa3S48bK1m41KeJ5e/4VZP3VEkaQawD6nP9
+   6bdLrEybGQVxYNK3Mj9FlLUmSUam2+t9wXMheCaJfxstyNTHLysqAro3D
+   o3ah98jbGngpGaJ7jbdp+8bK7qTlLMx9UwA1LhHkiVrEc+QEq6av4uRn+
+   SNc0G1r8JygbdhT49AeT1QmHeyGphcuIS4f/8aEnzPG7tyu/VLNe3dX5Z
+   azXcKqRM7wG45sBo2R/iHIbsypjnd55VkiiASzyGB9u/LJFk6cfpljxon
+   dvVkOWM4hRCdpsfFqgyXRvRHv5tYnTBQp/Kl+v931xXzfRccmB9U0RgH4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="393355830"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="393355830"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 03:12:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="737363763"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="737363763"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 29 Jan 2024 03:12:24 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rUPYs-0004F2-26;
+	Mon, 29 Jan 2024 11:12:22 +0000
+Date: Mon, 29 Jan 2024 19:11:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:for-6.9/io_uring 7/8] io_uring/net.c:657:34: error: too
+ many arguments to function call, expected single argument 'req', have 2
+ arguments
+Message-ID: <202401291912.0MoiJI2y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
-To: "Michael S. Tsirkin" <mst@redhat.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
- patches@lists.linux.dev, linux-kernel@vger.kernel.org,
- torvalds@linux-foundation.org, llvm@lists.linux.dev, keescook@chromium.org,
- arei.gonglei@huawei.com, jasowang@redhat.com,
- virtualization@lists.linux.dev, linux-crypto@vger.kernel.org
-References: <20240122235732.009174833@linuxfoundation.org>
- <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
- <2024012636-clubbed-radial-1997@gregkh>
- <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
- <20240126203436.GA913905@dev-arch.thelio-3990X>
- <0a194a79-e3a3-45e7-be98-83abd3e1cb7e@roeck-us.net>
- <20240126223554.GA1320833@dev-arch.thelio-3990X>
- <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
- <20240129034304-mutt-send-email-mst@kernel.org>
-Content-Language: en-US
-From: zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20240129034304-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 1/29/24 16:46, Michael S. Tsirkin wrote:
-> On Fri, Jan 26, 2024 at 03:55:02PM -0800, Guenter Roeck wrote:
->> On 1/26/24 14:35, Nathan Chancellor wrote:
->>> (slimming up the CC list, I don't think this is too relevant to the
->>> wider stable community)
->>>
->>> On Fri, Jan 26, 2024 at 01:01:15PM -0800, Guenter Roeck wrote:
->>>> On 1/26/24 12:34, Nathan Chancellor wrote:
->>>>> On Fri, Jan 26, 2024 at 10:17:23AM -0800, Guenter Roeck wrote:
->>>>>> On 1/26/24 09:51, Greg Kroah-Hartman wrote:
->>>>>>> On Fri, Jan 26, 2024 at 08:46:42AM -0800, Guenter Roeck wrote:
->>>>>>>> On 1/22/24 15:55, Greg Kroah-Hartman wrote:
->>>>>>>>> This is the start of the stable review cycle for the 5.10.209 release.
->>>>>>>>> There are 286 patches in this series, all will be posted as a response
->>>>>>>>> to this one.  If anyone has any issues with these being applied, please
->>>>>>>>> let me know.
->>>>>>>>>
->>>>>>>>> Responses should be made by Wed, 24 Jan 2024 23:56:49 +0000.
->>>>>>>>> Anything received after that time might be too late.
->>>>>>>>>
->>>>>>>> [ ... ]
->>>>>>>>
->>>>>>>>> zhenwei pi <pizhenwei@bytedance.com>
->>>>>>>>>          virtio-crypto: implement RSA algorithm
->>>>>>>>>
->>>>>>>>
->>>>>>>> Curious: Why was this (and its subsequent fixes) backported to v5.10.y ?
->>>>>>>> It is quite beyond a bug fix. Also, unless I am really missing something,
->>>>>>>> the series (or at least this patch) was not applied to v5.15.y, so we now
->>>>>>>> have functionality in v5.10.y which is not in v5.15.y.
->>>>>>>
->>>>>>> See the commit text, it was a dependency of a later fix and documented
->>>>>>> as such.
->>>>>>>
->>>>>>> Having it in 5.10 and not 5.15 is a bit odd, I agree, so patches are
->>>>>>> gladly accepted :)
->>>>>>>
->>>>>>
->>>>>> We reverted the entire series from the merge because it results in a build
->>>>>> failure for us.
->>>>>>
->>>>>> In file included from /home/groeck/src/linux-chromeos/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:10:
->>>>>> In file included from /home/groeck/src/linux-chromeos/include/linux/mpi.h:21:
->>>>>> In file included from /home/groeck/src/linux-chromeos/include/linux/scatterlist.h:5:
->>>>>> In file included from /home/groeck/src/linux-chromeos/include/linux/string.h:293:
->>>>>> /home/groeck/src/linux-chromeos/include/linux/fortify-string.h:512:4: error: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
->>>>>>                            __read_overflow2_field(q_size_field, size);
->>>>>
->>>>> For what it's worth, this is likely self inflicted for chromeos-5.10,
->>>>> which carries a revert of commit eaafc590053b ("fortify: Explicitly
->>>>> disable Clang support") as commit c19861d34c003 ("CHROMIUM: Revert
->>>>> "fortify: Explicitly disable Clang support""). I don't see the series
->>>>> that added proper support for clang to fortify in 5.18 that ended with
->>>>> commit 281d0c962752 ("fortify: Add Clang support") in that ChromeOS
->>>>> branch, so this seems somewhat expected.
->>>>>
->>>>
->>>> That explains that ;-). I don't mind if the patches stay in v5.10.y,
->>>> we have them reverted anyway.
->>>>
->>>> The revert was a pure process issue, as you may see when looking into
->>>> commit c19861d34c003, so, yes, I agree that it is self-inflicted damage.
->>>> Still, that doesn't explain why the problem exists in 5.18+.
->>>>
->>>>>> I also see that upstream (starting with 6.1) when trying to build it with clang,
->>>>>> so I guess it is one of those bug-for-bug compatibility things. I really have
->>>>>> no idea what causes it, or why we don't see the problem when building
->>>>>> chromeos-6.1 or chromeos-6.6, but (so far) only with chromeos-5.10 after
->>>>>> merging 5.10.209 into it. Making things worse, the problem isn't _always_
->>>>>> seen. Sometimes I can compile the file in 6.1.y without error, sometimes not.
->>>>>> I have no idea what triggers the problem.
->>>>>
->>>>> Have a .config that reproduces it on upstream? I have not personally
->>>>> seen this warning in my build matrix nor has our continuous-integration
->>>>> matrix (I don't see it in the warning output at the bottom but that
->>>>> could have missed something for some reason) in 6.1:
->>>>>
->>>>
->>>> The following command sequence reproduces the problem for me with all stable
->>>> branches starting with 5.18.y (plus mainline).
->>>>
->>>> rm -rf /tmp/crypto-build
->>>> mkdir /tmp/crypto-build
->>>> make -j CC=clang-15 mrproper >/dev/null 2>&1
->>>> make -j O=/tmp/crypto-build CC=clang-15 allmodconfig >/dev/null 2>&1
->>>> make -j O=/tmp/crypto-build W=1 CC=clang-15 drivers/crypto/virtio/virtio_crypto_akcipher_algs.o
->>>>
->>>> I tried clang versions 14, 15, and 16. This is with my home system running
->>>> Ubuntu 22.04, no ChromeOS or Google specifics/internals involved. For clang-15,
->>>> the version is
->>>>
->>>> Ubuntu clang version 15.0.7
->>>> Target: x86_64-pc-linux-gnu
->>>> Thread model: posix
->>>> InstalledDir: /usr/bin
->>>
->>> Okay interesting, this warning is hidden behind W=1, which our CI does
->>> not test with. Looks like it has been that way since the introduction of
->>> these checks in f68f2ff91512 ("fortify: Detect struct member overflows
->>> in memcpy() at compile-time").
->>>
->>
->> Interestingly the warning is seen in chromeos-5.10, without this patch,
->> and without W=1. I guess that must have to do with the revert which is
->> finally biting us.
->>
->>> I think this is a legitimate warning though. It is complaining about the
->>> second memcpy() in virtio_crypto_alg_akcipher_init_session():
->>>
->>>     memcpy(&ctrl->u, para, sizeof(ctrl->u));
->>>
->>> where ctrl is:
->>>
->>>     struct virtio_crypto_op_ctrl_req {
->>>             struct virtio_crypto_ctrl_header header;         /*     0    16 */
->>>             union {
->>>                     struct virtio_crypto_sym_create_session_req sym_create_session; /*    16    56 */
->>>                     struct virtio_crypto_hash_create_session_req hash_create_session; /*    16    56 */
->>>                     struct virtio_crypto_mac_create_session_req mac_create_session; /*    16    56 */
->>>                     struct virtio_crypto_aead_create_session_req aead_create_session; /*    16    56 */
->>>                     struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*    16    56 */
->>>                     struct virtio_crypto_destroy_session_req destroy_session; /*    16    56 */
->>>                     __u8               padding[56];          /*    16    56 */
->>>             } u;                                             /*    16    56 */
->>>             union {
->>>                     struct virtio_crypto_sym_create_session_req sym_create_session; /*     0    56 */
->>>                     struct virtio_crypto_hash_create_session_req hash_create_session; /*     0    56 */
->>>                     struct virtio_crypto_mac_create_session_req mac_create_session; /*     0    56 */
->>>                     struct virtio_crypto_aead_create_session_req aead_create_session; /*     0    56 */
->>>                     struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*     0    56 */
->>>                     struct virtio_crypto_destroy_session_req destroy_session; /*     0    56 */
->>>                     __u8                       padding[56];          /*     0    56 */
->>>             };
->>>
->>>
->>>             /* size: 72, cachelines: 2, members: 2 */
->>>             /* last cacheline: 8 bytes */
->>>     };
->>>
->>> (so size and p_size_field should be 56) and the type of the para
->>> parameter in virtio_crypto_alg_akcipher_init_session() is 'void *' but
->>> the para passed by reference to
->>> virtio_crypto_alg_akcipher_init_session() in virtio_crypto_rsa_set_key()
->>> has a type of 'struct virtio_crypto_akcipher_session_para':
->>>
->>>     struct virtio_crypto_akcipher_session_para {
->>>             __le32                     algo;                 /*     0     4 */
->>>             __le32                     keytype;              /*     4     4 */
->>>             __le32                     keylen;               /*     8     4 */
->>>             union {
->>>                     struct virtio_crypto_rsa_session_para rsa; /*    12     8 */
->>>                     struct virtio_crypto_ecdsa_session_para ecdsa; /*    12     8 */
->>>             } u;                                             /*    12     8 */
->>>             union {
->>>                     struct virtio_crypto_rsa_session_para rsa;       /*     0     8 */
->>>                     struct virtio_crypto_ecdsa_session_para ecdsa;   /*     0     8 */
->>>             };
->>>
->>>
->>>             /* size: 20, cachelines: 1, members: 4 */
->>>             /* last cacheline: 20 bytes */
->>>     };
->>>
->>> (so q_size_field would be 20 if clang were able to do inlining to see
->>> through the 'void *'...?), which would result in the
->>>
->>>     __compiletime_lessthan(q_size_field, size)
->>>
->>> check succeeding and triggering the warning because 20 < 56, so it does
->>> seem like there is an overread of the source buffer here? Adding the
->>
->> Looks like it; I think either the passed 'para' should be of type
->> virtio_crypto_akcipher_create_session_req() or it should only copy
->> sizeof(struct virtio_crypto_akcipher_session_para) bytes.
->>
->> Anyway, how did you find that ? Is there a magic trick to find the
->> actual code causing the warning ? I am asking because we had seen
->> similar warnings before, and it would help to know how to find the
->> problematic code.
->>
->> Thanks,
->> Guenter
-> 
-> 
-> 
-> Cc: zhenwei pi <pizhenwei@bytedance.com>
-> 
-> Zhenwei I think you wrote most of the code here.
-> Can you take a look please?
-> Stack overflows are plus plus ungood.
-> 
-> 
-> 
-> 
->>> maintainers of the driver and subsystem in question.
->>>
->>> Cheers,
->>> Nathan
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.9/io_uring
+head:   57c7dda62e7e44cc6e3d89488dcaf9a0f491339c
+commit: bc525bf2233d3f5c1f6845686a318d5d4086b229 [7/8] io_uring/net: use io_poll_multishot_retry() to avoid extra receive
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240129/202401291912.0MoiJI2y-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401291912.0MoiJI2y-lkp@intel.com/reproduce)
 
-I can also reproduce this warning by commands on ubuntu-2204:
-make -j CC=clang-14 mrproper >/dev/null 2>&1
-make -j O=/tmp/crypto-build CC=clang-14 allmodconfig >/dev/null 2>&1
-make -j O=/tmp/crypto-build W=1 CC=clang-14 
-drivers/crypto/virtio/virtio_crypto_akcipher_algs.o
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401291912.0MoiJI2y-lkp@intel.com/
 
-so sorry on this issue, I think Guenter's suggestion is right(also test 
-by these commands), I'll send a fix later.
+All errors (new ones prefixed by >>):
+
+   In file included from io_uring/net.c:13:
+   In file included from io_uring/io_uring.h:6:
+   In file included from include/linux/resume_user_mode.h:8:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from io_uring/net.c:13:
+   In file included from io_uring/io_uring.h:6:
+   In file included from include/linux/resume_user_mode.h:8:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from io_uring/net.c:13:
+   In file included from io_uring/io_uring.h:6:
+   In file included from include/linux/resume_user_mode.h:8:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> io_uring/net.c:657:34: error: too many arguments to function call, expected single argument 'req', have 2 arguments
+     657 |                                 io_poll_multishot_retry(req, issue_flags);
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~      ^~~~~~~~~~~
+   io_uring/poll.h:31:20: note: 'io_poll_multishot_retry' declared here
+      31 | static inline void io_poll_multishot_retry(struct io_kiocb *req)
+         |                    ^                       ~~~~~~~~~~~~~~~~~~~~
+   12 warnings and 1 error generated.
+
+
+vim +/req +657 io_uring/net.c
+
+   626	
+   627	/*
+   628	 * Finishes io_recv and io_recvmsg.
+   629	 *
+   630	 * Returns true if it is actually finished, or false if it should run
+   631	 * again (for multishot).
+   632	 */
+   633	static inline bool io_recv_finish(struct io_kiocb *req, int *ret,
+   634					  struct msghdr *msg, bool mshot_finished,
+   635					  unsigned issue_flags)
+   636	{
+   637		unsigned int cflags;
+   638	
+   639		cflags = io_put_kbuf(req, issue_flags);
+   640		if (msg->msg_inq && msg->msg_inq != -1)
+   641			cflags |= IORING_CQE_F_SOCK_NONEMPTY;
+   642	
+   643		if (!(req->flags & REQ_F_APOLL_MULTISHOT)) {
+   644			io_req_set_res(req, *ret, cflags);
+   645			*ret = IOU_OK;
+   646			return true;
+   647		}
+   648	
+   649		if (!mshot_finished) {
+   650			if (io_fill_cqe_req_aux(req, issue_flags & IO_URING_F_COMPLETE_DEFER,
+   651						*ret, cflags | IORING_CQE_F_MORE)) {
+   652				io_recv_prep_retry(req);
+   653				/* Known not-empty, loop again */
+   654				if (cflags & IORING_CQE_F_SOCK_NONEMPTY)
+   655					return false;
+   656				if (issue_flags & IO_URING_F_MULTISHOT) {
+ > 657					io_poll_multishot_retry(req, issue_flags);
+   658					*ret = IOU_ISSUE_SKIP_COMPLETE;
+   659				} else {
+   660					*ret = -EAGAIN;
+   661				}
+   662				return true;
+   663			}
+   664			/* Otherwise stop multishot but use the current result. */
+   665		}
+   666	
+   667		io_req_set_res(req, *ret, cflags);
+   668	
+   669		if (issue_flags & IO_URING_F_MULTISHOT)
+   670			*ret = IOU_STOP_MULTISHOT;
+   671		else
+   672			*ret = IOU_OK;
+   673		return true;
+   674	}
+   675	
 
 -- 
-zhenwei pi
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
