@@ -1,231 +1,289 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A8E4F1EC;
-	Mon, 29 Jan 2024 07:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF9554BCF
+	for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 08:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706515123; cv=none; b=hvxv6IZCK3zAAgh+NGzSPbnyCb9ZjnSAuc/sqroLCqcrIFmGqGvaBw7jmXUmY0vm135yyLl04jW2BeHUsG+J2nVYWqzSVbtCUibtCcC9D+HwikJ1wvFWesFHkq/R+diIJJvqkvd6wgMrFm64hmtaw1JteKYsm7uPCrFWi/PcUXM=
+	t=1706518025; cv=none; b=tVWR+XjowkvFWVADcLQvxvjDNyrp5DXUkt1ZX2YdjjMVk0sB+S1D4qTn3dx7u4lyqmv2kNs97mRGlA25u/ikr8vglfbaUAowYkjsXnoiv5bR5ObTMh8RBTjnBwD7W7JZ6Ud79Z9ZkhnPLxpDy6+yGT2kQzSVOrI27k1UO/SS5p4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706515123; c=relaxed/simple;
-	bh=Tk8KUnKV9lRuWunUNEWeTKjr5NmSgZeYfQJVYtCqCFc=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=J7AJpRnPyhBuxsQ2A+bOiuHfxcCTt6ukH9DoyUoPTu6QpuN1a9zPANRMTUVjt+unanYLMI6rYjuhzXE7Cz2wgsP6SRAAG4yOS+ZS63PvNvdKTMbQY2ne6GTo29jxYB7JV7pBOE8AbhO6t6CCdrBsqjSmZyyS5TvKIxM7H2OCIL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fSowee5n; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706518025; c=relaxed/simple;
+	bh=wan+/40Gb1SyAcbTJJKFngUv3lxpedgrk4APeSN8y8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=ORD2Ah7i9CmfglBSrfm+0Vn4nJKCWDr54QmzHW0fPAsbqUeFn5hxyggtHKC8T/LrWLhJHrE39mnf/REihS+QR9G7xg6ZdUcCaLhbj2w/jGlo8U+8DPfqinqps0+vwFzT4FD73TUXHCf28oubJh+u5E2ALfEbY+nSikCHA4rvQzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gXhNJaws; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fSowee5n"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706515122; x=1738051122;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Tk8KUnKV9lRuWunUNEWeTKjr5NmSgZeYfQJVYtCqCFc=;
-  b=fSowee5nuNAp4qsRvG18ymAI7/37B7FFJMYrbw0J9AKBtdihUpJqJ9Fg
-   aE6qR/+2bPFZOWZke/ZBaGBwgLOA4Nq8Y0Pz0DgfrjvD1n90azIAk0jNK
-   kmtwtIew92BtGD6I5+aAnn9vEoehb+tUOB2HAfrUm3GSMfq0gVE2gK1rY
-   y9W+qCCBgTLf02psLAf+RZHndI4NhMF8iiMOM0DPiz9VPdYFxE+C4QhBS
-   kxqW7/PJTDHfy02wc2FvEkWuHFu8Rdff2ZeFOJ+S6zWYYpYjl3ZqVAzjE
-   QBsrWAMZv3c88f/sPPNzsvSwesy9UgeLRvuweQ/7udsFLyuJtp5t2tZAC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="21408676"
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="21408676"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 23:58:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="877982461"
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="877982461"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2024 23:58:37 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rUMXL-00049I-10;
-	Mon, 29 Jan 2024 07:58:35 +0000
-Date: Mon, 29 Jan 2024 15:58:31 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [ardb:x86-pie-for-sev-v2 14/15] arch/x86/lib/cmdline.o: warning:
- objtool: __cmdline_find_option+0x8a: can't find switch jump table
-Message-ID: <202401291515.ikHJD5qH-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gXhNJaws"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706518023;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mHx98I53Z/x+UcJL2CQPXiS0oxn65PZb6tI9zRyZW1E=;
+	b=gXhNJawsOJ+eIei3mAZpxm9yxL3RCo2IoBJc47iQSQ6PUtS7fUo8dr6ZKjc7EyQQcz1Ayp
+	0xDryY6fK4UcZmQU1JEHvuR1sLU2n7X4tIUTzitveMaHUBqo2o34s09QmTMPGTyDW0HhG3
+	3AdYTYoDITdZaaMoeucn+0+nESdC9ok=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-613-wXH0LqnKPWuX26YNzXf5AQ-1; Mon, 29 Jan 2024 03:47:01 -0500
+X-MC-Unique: wXH0LqnKPWuX26YNzXf5AQ-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-33ae7482b2dso531369f8f.0
+        for <llvm@lists.linux.dev>; Mon, 29 Jan 2024 00:47:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706518020; x=1707122820;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mHx98I53Z/x+UcJL2CQPXiS0oxn65PZb6tI9zRyZW1E=;
+        b=smuO3wiRTQgSa4sHB6ItA8WFPh5V+XEgws/Q04b50KfQDiQhgDLrayv/dKW3SRaMmv
+         Kmc8pj/D8bt1KuC6EsnpX8tmrNlizwPf8vKmLd1KBc7EEkOciu5zhjsry+mZVFuNgB55
+         DWU9jgovs8giD3NoXmhvLNSNLlc3sxI/rL2YGVjEBZyDsXfgltJLhw1+UfKJbib/1Hb5
+         +IDgr2IwwuxmkmikqsqeI4QVDO69ZMVY2D4Q8/zr0MZr0f9eg03r7A9qZMEq2QhqcL7v
+         W/+p7JreUZfQdDPiG2dLo1aAyHLbj1ljBCSu5P4U2GXZHeeyh6+ANY+GHsqrprCIGCUC
+         A3Kw==
+X-Gm-Message-State: AOJu0YyninYfPyhfHbocGTh+U6mEikCi8HFF2iL7PV6VpkQskErIXea3
+	YtNhIlrnyBanB3NYvg30ECbZh+Q+mcs7LvAXd/27879IAkE1zMgyXw7uqEjX8TvFLHUgszBHk6g
+	mt/vpKiYMRXf5qyuZZBqSD343MnznfFiRr6L4Kyb0vgv8qV9aFxw=
+X-Received: by 2002:a05:6000:710:b0:33a:f399:5de3 with SMTP id bs16-20020a056000071000b0033af3995de3mr576162wrb.39.1706518020229;
+        Mon, 29 Jan 2024 00:47:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEwh3LLMODSTkeFeUAQPUxU73Kw1Df+2FZWQ7IIt52Rgmjhp3f7mup1S9zJyIE8dHYQ33LIqQ==
+X-Received: by 2002:a05:6000:710:b0:33a:f399:5de3 with SMTP id bs16-20020a056000071000b0033af3995de3mr576145wrb.39.1706518019789;
+        Mon, 29 Jan 2024 00:46:59 -0800 (PST)
+Received: from redhat.com ([2.52.129.159])
+        by smtp.gmail.com with ESMTPSA id bp19-20020a5d5a93000000b003394495566dsm7571525wrb.22.2024.01.29.00.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jan 2024 00:46:59 -0800 (PST)
+Date: Mon, 29 Jan 2024 03:46:55 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable@vger.kernel.org, patches@lists.linux.dev,
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+	llvm@lists.linux.dev, keescook@chromium.org,
+	arei.gonglei@huawei.com, jasowang@redhat.com,
+	virtualization@lists.linux.dev, linux-crypto@vger.kernel.org,
+	zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 5.10 000/286] 5.10.209-rc1 review
+Message-ID: <20240129034304-mutt-send-email-mst@kernel.org>
+References: <20240122235732.009174833@linuxfoundation.org>
+ <6b563537-b62f-428e-96d1-2a228da99077@roeck-us.net>
+ <2024012636-clubbed-radial-1997@gregkh>
+ <2f342268-8517-4c06-8785-96a588d20c63@roeck-us.net>
+ <20240126203436.GA913905@dev-arch.thelio-3990X>
+ <0a194a79-e3a3-45e7-be98-83abd3e1cb7e@roeck-us.net>
+ <20240126223554.GA1320833@dev-arch.thelio-3990X>
+ <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <bef7737e-4b8e-4a89-b538-cd8e75874fd2@roeck-us.net>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Ard Biesheuvel <ardb@kernel.org>
+On Fri, Jan 26, 2024 at 03:55:02PM -0800, Guenter Roeck wrote:
+> On 1/26/24 14:35, Nathan Chancellor wrote:
+> > (slimming up the CC list, I don't think this is too relevant to the
+> > wider stable community)
+> > 
+> > On Fri, Jan 26, 2024 at 01:01:15PM -0800, Guenter Roeck wrote:
+> > > On 1/26/24 12:34, Nathan Chancellor wrote:
+> > > > On Fri, Jan 26, 2024 at 10:17:23AM -0800, Guenter Roeck wrote:
+> > > > > On 1/26/24 09:51, Greg Kroah-Hartman wrote:
+> > > > > > On Fri, Jan 26, 2024 at 08:46:42AM -0800, Guenter Roeck wrote:
+> > > > > > > On 1/22/24 15:55, Greg Kroah-Hartman wrote:
+> > > > > > > > This is the start of the stable review cycle for the 5.10.209 release.
+> > > > > > > > There are 286 patches in this series, all will be posted as a response
+> > > > > > > > to this one.  If anyone has any issues with these being applied, please
+> > > > > > > > let me know.
+> > > > > > > > 
+> > > > > > > > Responses should be made by Wed, 24 Jan 2024 23:56:49 +0000.
+> > > > > > > > Anything received after that time might be too late.
+> > > > > > > > 
+> > > > > > > [ ... ]
+> > > > > > > 
+> > > > > > > > zhenwei pi <pizhenwei@bytedance.com>
+> > > > > > > >         virtio-crypto: implement RSA algorithm
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > Curious: Why was this (and its subsequent fixes) backported to v5.10.y ?
+> > > > > > > It is quite beyond a bug fix. Also, unless I am really missing something,
+> > > > > > > the series (or at least this patch) was not applied to v5.15.y, so we now
+> > > > > > > have functionality in v5.10.y which is not in v5.15.y.
+> > > > > > 
+> > > > > > See the commit text, it was a dependency of a later fix and documented
+> > > > > > as such.
+> > > > > > 
+> > > > > > Having it in 5.10 and not 5.15 is a bit odd, I agree, so patches are
+> > > > > > gladly accepted :)
+> > > > > > 
+> > > > > 
+> > > > > We reverted the entire series from the merge because it results in a build
+> > > > > failure for us.
+> > > > > 
+> > > > > In file included from /home/groeck/src/linux-chromeos/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c:10:
+> > > > > In file included from /home/groeck/src/linux-chromeos/include/linux/mpi.h:21:
+> > > > > In file included from /home/groeck/src/linux-chromeos/include/linux/scatterlist.h:5:
+> > > > > In file included from /home/groeck/src/linux-chromeos/include/linux/string.h:293:
+> > > > > /home/groeck/src/linux-chromeos/include/linux/fortify-string.h:512:4: error: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> > > > >                           __read_overflow2_field(q_size_field, size);
+> > > > 
+> > > > For what it's worth, this is likely self inflicted for chromeos-5.10,
+> > > > which carries a revert of commit eaafc590053b ("fortify: Explicitly
+> > > > disable Clang support") as commit c19861d34c003 ("CHROMIUM: Revert
+> > > > "fortify: Explicitly disable Clang support""). I don't see the series
+> > > > that added proper support for clang to fortify in 5.18 that ended with
+> > > > commit 281d0c962752 ("fortify: Add Clang support") in that ChromeOS
+> > > > branch, so this seems somewhat expected.
+> > > > 
+> > > 
+> > > That explains that ;-). I don't mind if the patches stay in v5.10.y,
+> > > we have them reverted anyway.
+> > > 
+> > > The revert was a pure process issue, as you may see when looking into
+> > > commit c19861d34c003, so, yes, I agree that it is self-inflicted damage.
+> > > Still, that doesn't explain why the problem exists in 5.18+.
+> > > 
+> > > > > I also see that upstream (starting with 6.1) when trying to build it with clang,
+> > > > > so I guess it is one of those bug-for-bug compatibility things. I really have
+> > > > > no idea what causes it, or why we don't see the problem when building
+> > > > > chromeos-6.1 or chromeos-6.6, but (so far) only with chromeos-5.10 after
+> > > > > merging 5.10.209 into it. Making things worse, the problem isn't _always_
+> > > > > seen. Sometimes I can compile the file in 6.1.y without error, sometimes not.
+> > > > > I have no idea what triggers the problem.
+> > > > 
+> > > > Have a .config that reproduces it on upstream? I have not personally
+> > > > seen this warning in my build matrix nor has our continuous-integration
+> > > > matrix (I don't see it in the warning output at the bottom but that
+> > > > could have missed something for some reason) in 6.1:
+> > > > 
+> > > 
+> > > The following command sequence reproduces the problem for me with all stable
+> > > branches starting with 5.18.y (plus mainline).
+> > > 
+> > > rm -rf /tmp/crypto-build
+> > > mkdir /tmp/crypto-build
+> > > make -j CC=clang-15 mrproper >/dev/null 2>&1
+> > > make -j O=/tmp/crypto-build CC=clang-15 allmodconfig >/dev/null 2>&1
+> > > make -j O=/tmp/crypto-build W=1 CC=clang-15 drivers/crypto/virtio/virtio_crypto_akcipher_algs.o
+> > > 
+> > > I tried clang versions 14, 15, and 16. This is with my home system running
+> > > Ubuntu 22.04, no ChromeOS or Google specifics/internals involved. For clang-15,
+> > > the version is
+> > > 
+> > > Ubuntu clang version 15.0.7
+> > > Target: x86_64-pc-linux-gnu
+> > > Thread model: posix
+> > > InstalledDir: /usr/bin
+> > 
+> > Okay interesting, this warning is hidden behind W=1, which our CI does
+> > not test with. Looks like it has been that way since the introduction of
+> > these checks in f68f2ff91512 ("fortify: Detect struct member overflows
+> > in memcpy() at compile-time").
+> > 
+> 
+> Interestingly the warning is seen in chromeos-5.10, without this patch,
+> and without W=1. I guess that must have to do with the revert which is
+> finally biting us.
+> 
+> > I think this is a legitimate warning though. It is complaining about the
+> > second memcpy() in virtio_crypto_alg_akcipher_init_session():
+> > 
+> >    memcpy(&ctrl->u, para, sizeof(ctrl->u));
+> > 
+> > where ctrl is:
+> > 
+> >    struct virtio_crypto_op_ctrl_req {
+> >            struct virtio_crypto_ctrl_header header;         /*     0    16 */
+> >            union {
+> >                    struct virtio_crypto_sym_create_session_req sym_create_session; /*    16    56 */
+> >                    struct virtio_crypto_hash_create_session_req hash_create_session; /*    16    56 */
+> >                    struct virtio_crypto_mac_create_session_req mac_create_session; /*    16    56 */
+> >                    struct virtio_crypto_aead_create_session_req aead_create_session; /*    16    56 */
+> >                    struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*    16    56 */
+> >                    struct virtio_crypto_destroy_session_req destroy_session; /*    16    56 */
+> >                    __u8               padding[56];          /*    16    56 */
+> >            } u;                                             /*    16    56 */
+> >            union {
+> >                    struct virtio_crypto_sym_create_session_req sym_create_session; /*     0    56 */
+> >                    struct virtio_crypto_hash_create_session_req hash_create_session; /*     0    56 */
+> >                    struct virtio_crypto_mac_create_session_req mac_create_session; /*     0    56 */
+> >                    struct virtio_crypto_aead_create_session_req aead_create_session; /*     0    56 */
+> >                    struct virtio_crypto_akcipher_create_session_req akcipher_create_session; /*     0    56 */
+> >                    struct virtio_crypto_destroy_session_req destroy_session; /*     0    56 */
+> >                    __u8                       padding[56];          /*     0    56 */
+> >            };
+> > 
+> > 
+> >            /* size: 72, cachelines: 2, members: 2 */
+> >            /* last cacheline: 8 bytes */
+> >    };
+> > 
+> > (so size and p_size_field should be 56) and the type of the para
+> > parameter in virtio_crypto_alg_akcipher_init_session() is 'void *' but
+> > the para passed by reference to
+> > virtio_crypto_alg_akcipher_init_session() in virtio_crypto_rsa_set_key()
+> > has a type of 'struct virtio_crypto_akcipher_session_para':
+> > 
+> >    struct virtio_crypto_akcipher_session_para {
+> >            __le32                     algo;                 /*     0     4 */
+> >            __le32                     keytype;              /*     4     4 */
+> >            __le32                     keylen;               /*     8     4 */
+> >            union {
+> >                    struct virtio_crypto_rsa_session_para rsa; /*    12     8 */
+> >                    struct virtio_crypto_ecdsa_session_para ecdsa; /*    12     8 */
+> >            } u;                                             /*    12     8 */
+> >            union {
+> >                    struct virtio_crypto_rsa_session_para rsa;       /*     0     8 */
+> >                    struct virtio_crypto_ecdsa_session_para ecdsa;   /*     0     8 */
+> >            };
+> > 
+> > 
+> >            /* size: 20, cachelines: 1, members: 4 */
+> >            /* last cacheline: 20 bytes */
+> >    };
+> > 
+> > (so q_size_field would be 20 if clang were able to do inlining to see
+> > through the 'void *'...?), which would result in the
+> > 
+> >    __compiletime_lessthan(q_size_field, size)
+> > 
+> > check succeeding and triggering the warning because 20 < 56, so it does
+> > seem like there is an overread of the source buffer here? Adding the
+> 
+> Looks like it; I think either the passed 'para' should be of type
+> virtio_crypto_akcipher_create_session_req() or it should only copy
+> sizeof(struct virtio_crypto_akcipher_session_para) bytes.
+> 
+> Anyway, how did you find that ? Is there a magic trick to find the
+> actual code causing the warning ? I am asking because we had seen
+> similar warnings before, and it would help to know how to find the
+> problematic code.
+> 
+> Thanks,
+> Guenter
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-for-sev-v2
-head:   b8b16573b6d0090db2f530fb9c5f049650806e61
-commit: 5f61b62f512b52edc3d489a5b335ad2aee489484 [14/15] x86/sev: Use PIC codegen for early SEV startup code
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240129/202401291515.ikHJD5qH-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401291515.ikHJD5qH-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401291515.ikHJD5qH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/lib/cmdline.o: warning: objtool: __cmdline_find_option+0x8a: can't find switch jump table
---
->> arch/x86/kernel/sev.o: warning: objtool: vc_raw_handle_exception+0xab: can't find switch jump table
 
 
-objdump-func vmlinux.o __cmdline_find_option:
-0000 0000000000e1b960 <__cmdline_find_option_bool>:
-0000   e1b960:	48 85 ff             	test   %rdi,%rdi
-0003   e1b963:	74 7a                	je     e1b9df <__cmdline_find_option_bool+0x7f>
-0005   e1b965:	31 c9                	xor    %ecx,%ecx
-0007   e1b967:	45 31 c9             	xor    %r9d,%r9d
-000a   e1b96a:	31 d2                	xor    %edx,%edx
-000c   e1b96c:	31 c0                	xor    %eax,%eax
-000e   e1b96e:	eb 1b                	jmp    e1b98b <__cmdline_find_option_bool+0x2b>
-0010   e1b970:	45 84 c0             	test   %r8b,%r8b
-0013   e1b973:	74 67                	je     e1b9dc <__cmdline_find_option_bool+0x7c>
-0015   e1b975:	45 31 c9             	xor    %r9d,%r9d
-0018   e1b978:	41 80 f8 21          	cmp    $0x21,%r8b
-001c   e1b97c:	41 0f 93 c1          	setae  %r9b
-0020   e1b980:	45 01 c9             	add    %r9d,%r9d
-0023   e1b983:	81 f9 00 08 00 00    	cmp    $0x800,%ecx
-0029   e1b989:	74 51                	je     e1b9dc <__cmdline_find_option_bool+0x7c>
-002b   e1b98b:	44 0f b6 04 0f       	movzbl (%rdi,%rcx,1),%r8d
-0030   e1b990:	48 ff c1             	inc    %rcx
-0033   e1b993:	41 83 f9 02          	cmp    $0x2,%r9d
-0037   e1b997:	74 d7                	je     e1b970 <__cmdline_find_option_bool+0x10>
-0039   e1b999:	41 83 f9 01          	cmp    $0x1,%r9d
-003d   e1b99d:	74 18                	je     e1b9b7 <__cmdline_find_option_bool+0x57>
-003f   e1b99f:	45 85 c9             	test   %r9d,%r9d
-0042   e1b9a2:	75 df                	jne    e1b983 <__cmdline_find_option_bool+0x23>
-0044   e1b9a4:	45 84 c0             	test   %r8b,%r8b
-0047   e1b9a7:	74 33                	je     e1b9dc <__cmdline_find_option_bool+0x7c>
-0049   e1b9a9:	45 31 c9             	xor    %r9d,%r9d
-004c   e1b9ac:	41 80 f8 21          	cmp    $0x21,%r8b
-0050   e1b9b0:	72 d1                	jb     e1b983 <__cmdline_find_option_bool+0x23>
-0052   e1b9b2:	89 c8                	mov    %ecx,%eax
-0054   e1b9b4:	48 89 f2             	mov    %rsi,%rdx
-0057   e1b9b7:	44 0f b6 12          	movzbl (%rdx),%r10d
-005b   e1b9bb:	45 84 d2             	test   %r10b,%r10b
-005e   e1b9be:	74 15                	je     e1b9d5 <__cmdline_find_option_bool+0x75>
-0060   e1b9c0:	45 84 c0             	test   %r8b,%r8b
-0063   e1b9c3:	74 17                	je     e1b9dc <__cmdline_find_option_bool+0x7c>
-0065   e1b9c5:	48 ff c2             	inc    %rdx
-0068   e1b9c8:	41 b9 01 00 00 00    	mov    $0x1,%r9d
-006e   e1b9ce:	45 38 d0             	cmp    %r10b,%r8b
-0071   e1b9d1:	75 a2                	jne    e1b975 <__cmdline_find_option_bool+0x15>
-0073   e1b9d3:	eb ae                	jmp    e1b983 <__cmdline_find_option_bool+0x23>
-0075   e1b9d5:	41 80 f8 20          	cmp    $0x20,%r8b
-0079   e1b9d9:	77 9a                	ja     e1b975 <__cmdline_find_option_bool+0x15>
-007b   e1b9db:	c3                   	ret
-007c   e1b9dc:	31 c0                	xor    %eax,%eax
-007e   e1b9de:	c3                   	ret
-007f   e1b9df:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-0084   e1b9e4:	c3                   	ret
-0085   e1b9e5:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
-0000 0000000000001970 <__cmdline_find_option>:
-0000     1970:	55                   	push   %rbp
-0001     1971:	41 57                	push   %r15
-0003     1973:	41 56                	push   %r14
-0005     1975:	41 55                	push   %r13
-0007     1977:	41 54                	push   %r12
-0009     1979:	53                   	push   %rbx
-000a     197a:	48 83 ec 20          	sub    $0x20,%rsp
-000e     197e:	89 4c 24 04          	mov    %ecx,0x4(%rsp)
-0012     1982:	48 89 74 24 18       	mov    %rsi,0x18(%rsp)
-0017     1987:	48 85 ff             	test   %rdi,%rdi
-001a     198a:	0f 84 0c 01 00 00    	je     1a9c <__cmdline_find_option+0x12c>
-0020     1990:	49 89 fc             	mov    %rdi,%r12
-0023     1993:	c7 04 24 ff ff ff ff 	movl   $0xffffffff,(%rsp)
-002a     199a:	45 31 ed             	xor    %r13d,%r13d
-002d     199d:	48 8d 2d 00 00 00 00 	lea    0x0(%rip),%rbp        # 19a4 <__cmdline_find_option+0x34>	19a0: R_X86_64_PC32	.rodata+0x183e9c
-0034     19a4:	31 c9                	xor    %ecx,%ecx
-0036     19a6:	48 89 54 24 10       	mov    %rdx,0x10(%rsp)
-003b     19ab:	48 89 54 24 08       	mov    %rdx,0x8(%rsp)
-0040     19b0:	45 31 ff             	xor    %r15d,%r15d
-0043     19b3:	eb 29                	jmp    19de <__cmdline_find_option+0x6e>
-0045     19b5:	0f b6 fb             	movzbl %bl,%edi
-0048     19b8:	e8 00 00 00 00       	call   19bd <__cmdline_find_option+0x4d>	19b9: R_X86_64_PLT32	.text+0xe1b9ec
-004d     19bd:	31 c9                	xor    %ecx,%ecx
-004f     19bf:	4c 8b 74 24 18       	mov    0x18(%rsp),%r14
-0054     19c4:	85 c0                	test   %eax,%eax
-0056     19c6:	74 37                	je     19ff <__cmdline_find_option+0x8f>
-0058     19c8:	4d 89 fe             	mov    %r15,%r14
-005b     19cb:	49 ff c5             	inc    %r13
-005e     19ce:	4d 89 f7             	mov    %r14,%r15
-0061     19d1:	41 81 fd 00 08 00 00 	cmp    $0x800,%r13d
-0068     19d8:	0f 84 aa 00 00 00    	je     1a88 <__cmdline_find_option+0x118>
-006e     19de:	43 0f b6 1c 2c       	movzbl (%r12,%r13,1),%ebx
-0073     19e3:	84 db                	test   %bl,%bl
-0075     19e5:	0f 84 9d 00 00 00    	je     1a88 <__cmdline_find_option+0x118>
-007b     19eb:	83 f9 03             	cmp    $0x3,%ecx
-007e     19ee:	77 d8                	ja     19c8 <__cmdline_find_option+0x58>
-0080     19f0:	89 c8                	mov    %ecx,%eax
-0082     19f2:	48 63 44 85 00       	movslq 0x0(%rbp,%rax,4),%rax
-0087     19f7:	48 01 e8             	add    %rbp,%rax
-008a     19fa:	ff e0                	jmp    *%rax
-008c     19fc:	4d 89 fe             	mov    %r15,%r14
-008f     19ff:	41 0f b6 06          	movzbl (%r14),%eax
-0093     1a03:	80 fb 3d             	cmp    $0x3d,%bl
-0096     1a06:	75 5a                	jne    1a62 <__cmdline_find_option+0xf2>
-0098     1a08:	84 c0                	test   %al,%al
-009a     1a0a:	75 56                	jne    1a62 <__cmdline_find_option+0xf2>
-009c     1a0c:	c7 04 24 00 00 00 00 	movl   $0x0,(%rsp)
-00a3     1a13:	b9 03 00 00 00       	mov    $0x3,%ecx
-00a8     1a18:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
-00ad     1a1d:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-00b2     1a22:	eb a7                	jmp    19cb <__cmdline_find_option+0x5b>
-00b4     1a24:	4d 89 fe             	mov    %r15,%r14
-00b7     1a27:	eb 49                	jmp    1a72 <__cmdline_find_option+0x102>
-00b9     1a29:	0f b6 fb             	movzbl %bl,%edi
-00bc     1a2c:	e8 00 00 00 00       	call   1a31 <__cmdline_find_option+0xc1>	1a2d: R_X86_64_PLT32	.text+0xe1b9ec
-00c1     1a31:	31 c9                	xor    %ecx,%ecx
-00c3     1a33:	85 c0                	test   %eax,%eax
-00c5     1a35:	75 91                	jne    19c8 <__cmdline_find_option+0x58>
-00c7     1a37:	8b 04 24             	mov    (%rsp),%eax
-00ca     1a3a:	ff c0                	inc    %eax
-00cc     1a3c:	b9 03 00 00 00       	mov    $0x3,%ecx
-00d1     1a41:	89 04 24             	mov    %eax,(%rsp)
-00d4     1a44:	3b 44 24 04          	cmp    0x4(%rsp),%eax
-00d8     1a48:	0f 8d 7a ff ff ff    	jge    19c8 <__cmdline_find_option+0x58>
-00de     1a4e:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
-00e3     1a53:	88 18                	mov    %bl,(%rax)
-00e5     1a55:	48 ff c0             	inc    %rax
-00e8     1a58:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-00ed     1a5d:	e9 66 ff ff ff       	jmp    19c8 <__cmdline_find_option+0x58>
-00f2     1a62:	49 ff c6             	inc    %r14
-00f5     1a65:	b9 01 00 00 00       	mov    $0x1,%ecx
-00fa     1a6a:	38 c3                	cmp    %al,%bl
-00fc     1a6c:	0f 84 59 ff ff ff    	je     19cb <__cmdline_find_option+0x5b>
-0102     1a72:	0f b6 fb             	movzbl %bl,%edi
-0105     1a75:	e8 00 00 00 00       	call   1a7a <__cmdline_find_option+0x10a>	1a76: R_X86_64_PLT32	.text+0xe1b9ec
-010a     1a7a:	31 c9                	xor    %ecx,%ecx
-010c     1a7c:	85 c0                	test   %eax,%eax
-010e     1a7e:	0f 94 c1             	sete   %cl
-0111     1a81:	01 c9                	add    %ecx,%ecx
-0113     1a83:	e9 43 ff ff ff       	jmp    19cb <__cmdline_find_option+0x5b>
-0118     1a88:	83 7c 24 04 00       	cmpl   $0x0,0x4(%rsp)
-011d     1a8d:	74 08                	je     1a97 <__cmdline_find_option+0x127>
-011f     1a8f:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
-0124     1a94:	c6 00 00             	movb   $0x0,(%rax)
-0127     1a97:	8b 04 24             	mov    (%rsp),%eax
-012a     1a9a:	eb 05                	jmp    1aa1 <__cmdline_find_option+0x131>
-012c     1a9c:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-0131     1aa1:	48 83 c4 20          	add    $0x20,%rsp
-0135     1aa5:	5b                   	pop    %rbx
-0136     1aa6:	41 5c                	pop    %r12
-0138     1aa8:	41 5d                	pop    %r13
-013a     1aaa:	41 5e                	pop    %r14
-013c     1aac:	41 5f                	pop    %r15
-013e     1aae:	5d                   	pop    %rbp
-013f     1aaf:	c3                   	ret
+Cc: zhenwei pi <pizhenwei@bytedance.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Zhenwei I think you wrote most of the code here.
+Can you take a look please?
+Stack overflows are plus plus ungood.
+
+
+
+
+> > maintainers of the driver and subsystem in question.
+> > 
+> > Cheers,
+> > Nathan
+
