@@ -1,138 +1,352 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9D371B3A;
-	Tue, 30 Jan 2024 20:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D222F7D3F9
+	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 22:06:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706646878; cv=none; b=KSR4+jJwCiQ8Peu0iypZjFSrp7mFUpEVNHHskfRLP3f5K1wcPKFAJc8a5Rsdj50vwuugRIdDQqChQy7rXElkb73V1ofJ+LaoJj9UHanjPVetnDF7SUtGP+NqWWUOsjWvRy4drejWIe7OKqXgwzouAxPpfO49xKvZaKxI7Ekcto0=
+	t=1706652377; cv=none; b=V4aqedGGVdgilr/3yDAcf+cWAgJNXhB3KiG1fJrG6E4WeHj0HYs3bD6CEPINSdhVOyNIwrEHWbduLfWhP+Xn+EbvA0nmcQGnPCARJpWXI/jtAfX3AkFBwFpw0l30Lx8n4R/PNrCp3/8aN2HJL+dtutyZljrMfV93P0EfNvorujI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706646878; c=relaxed/simple;
-	bh=2FgM1Oh7yRSt0mhRVWHo+HrhiQcikH+bVgK4NpSlRdI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ic8ocpKWMLqpfh8/DXXvlA3nynGEObyO+5onIyqFdbP9Rl1MzO6vRCmoFBoskL76+igAhd+xeA5hoOsaupLvfF1V+xPT+KLpbk7kUDGOOIigsLZcnkQtcRaokqM7Acta9csIvDs0NuHtQbbktfXMtcZZBRe8dfen/S8yCWXhNyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RCEBhFmZ; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706652377; c=relaxed/simple;
+	bh=wU5wiWooVyd2eqSdpoTBHd90qKwM9wZ/F9mLDiaQmqs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=raE3R28UVkQHsQ6V0JIcgjWeWfRyeM7p0I7Wd0mj9bBHWpwDjNq/Qez+5BchrbvvVUD1oqyTL71wVTLDfDogIfRP5m24h+B/b7GDd92KQ731HRVq8F2ha6WpYf4AmBNfEfpCOzFMo5Pi8Ncs1FoFrxsv0DUoeWjGPNi2d/wOaKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CIlDH0X9; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RCEBhFmZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706646877; x=1738182877;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2FgM1Oh7yRSt0mhRVWHo+HrhiQcikH+bVgK4NpSlRdI=;
-  b=RCEBhFmZRciLEh30IytickgON3rqbS5HXT78uF65mKjGGiM3DRcftRGR
-   bGs41UJQ5+P9Xlmp/zPa5tw2lw9kpOipXau8EGwBcSW4reYX1DttEXcQ8
-   mo+WBthW1U9NLuAuxkhSU/ft33wRIZq4LAlehOm8axfBqXZwwRmNn8A7v
-   iXW3XMjNerc97WXHMUaHCdudnLAuigtCT2LMKq4n/+Hcy2Tqx0doKfwe/
-   o8NpodtHp2AwWe3K3DJ/OOvwSEk00U+WgfmBxuolYiEHFU/ibwSOoWdiC
-   rpXo6+Od6GzFyMU8aELtLI/ld5UgKuD6su0KKfuFtZUJtgAa10WJAvfbP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="2332293"
-X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
-   d="scan'208";a="2332293"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 12:34:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
-   d="scan'208";a="3821862"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 30 Jan 2024 12:34:34 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rUuoR-0000o0-2C;
-	Tue, 30 Jan 2024 20:34:31 +0000
-Date: Wed, 31 Jan 2024 04:33:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kees:devel/overflow/ubsan-only 3/6] lib/test_ubsan.c:61:17:
- warning: variable 'top' set but not used
-Message-ID: <202401310423.XpCIk6KO-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CIlDH0X9"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5d8b519e438so2282981a12.1
+        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 14:06:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706652375; x=1707257175; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kLoyWv8OtbHjtjHwspyJBOM+KJjmRvPEg1tZQlUAAzg=;
+        b=CIlDH0X9eu+ZAPod/x8qpHTw5ws2DzRTUlPNHOkEaWm3JDCn6vjlfwYbbSE4IUjXVq
+         pxLa98BBem9H4/IBEe6QhuRgCgFmLnjNQaHGE76v8inRQgeSIdkwE8yh6A9/AVievh0P
+         xOlOJWRgE2DXe5LZjxwTDlEebmAhxpa4SvCPo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706652375; x=1707257175;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kLoyWv8OtbHjtjHwspyJBOM+KJjmRvPEg1tZQlUAAzg=;
+        b=uhAt9CV133UFuGBs87+0zzarnEhb6tnmbSOXOw05GhyXZ9+dFgnaktHuP2UCdrjEij
+         mwgy334DLjlKMPUY3qXneDJRaL6hPs5KCGL5T0cDgEQVsy7e0gVVeoQWVSmtLvaOaqMH
+         RpxE+TmXoMU9XBczFrnX7nLLkcNk4MppqOI5tw2feez/wcssnvv9bZtJrlRBxrYbzfD8
+         8F/3cSH0BXdomOfNAxVNrnL7SQFNSIZfvrPiUL14NKsng0AaBSfluWJSbHRl3nQW9BVh
+         EG1srbUslFU4lE1HNRIqILQ767rGi6KYaVV0uRMnLqZTXkKlNwW+VcvtYBqMGybU7pBH
+         U6EA==
+X-Gm-Message-State: AOJu0YwEHIz+IOLf6/VXqgWMge8wNEXMQmocKV6C6ceVXJOlpX13RKzo
+	3RMuntEOY4sY9mlBr15grhYYDuDubsajnMYHSmqSjeyJUcShQ04Sdc+hUgw5Pg==
+X-Google-Smtp-Source: AGHT+IEhkW9fawB+RfxZA8/LTl4ybX0trJVe7R6hgeVDy2kpvJ5enfZuKr5R42usSZ3qcav99HXhKQ==
+X-Received: by 2002:a05:6a20:b9a7:b0:19c:7bc4:6b0 with SMTP id ff39-20020a056a20b9a700b0019c7bc406b0mr4716562pzb.42.1706652375177;
+        Tue, 30 Jan 2024 14:06:15 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902eacc00b001d72f6ba383sm3691421pld.224.2024.01.30.14.06.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jan 2024 14:06:14 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc: Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/5] overflow: Expand check_add_overflow() for pointer addition
+Date: Tue, 30 Jan 2024 14:06:07 -0800
+Message-Id: <20240130220614.1154497-2-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240130220218.it.154-kees@kernel.org>
+References: <20240130220218.it.154-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10664; i=keescook@chromium.org;
+ h=from:subject; bh=wU5wiWooVyd2eqSdpoTBHd90qKwM9wZ/F9mLDiaQmqs=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBluXLROmJWNChP5gjc4TpxLGURO5jKzEEgWMbHO
+ GpeBzggvUWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZbly0QAKCRCJcvTf3G3A
+ JldrD/9TuUJyp3YsW0TEykPmrvgH9vU+VjqFQEapybkawwEcPT72Aav3rQMCiud+MIQNu6QDnza
+ CziIeADD0D81cGp5ZDuEDQY/HMptU+dssftL2CzDrVhdYspifI9JTq7EzqvgPqZeSo4t9US+kdE
+ VtNO3CQVdcCYyUkHY3/CaLNUTJXMbMIK8swjlCViq1GtWE6lINsWzXLvW73bdzXOIB87YTivK4h
+ hUGpD80CMy+07kiguOKKqrZ1ZPg2Y3XRx4vKNyzho0Kg4J2FcPZ7Oz79L97PUwcvaFTavvGrxHd
+ fiKI1LEhE6WcBZqugHyqNgTpWPGDxJzpNanmeVmDy9E0hoL4A1svI5VEmHAI+Ut4JVqCxfkM7iS
+ sDmgJPatT0uJuTcqofzQ+awJUUlzRRUgE3GTHAcwKUJzC882pEk2y6JXA60mef01JINAyLuHV2f
+ /dNrGRT5kg9DEak+3v3pvUdtF8p99GKUDb4fZDzhvPBPYfU0gWyNNpCYY3LruDTcwSzcFa/MeRH
+ TwoZ3TqKgHYYg2sC1FrZNgYWC8oAtVXxLOXBHDPkmxvrwLggAs3Qu4Erms4l20o00Wbyk7G6MLO
+ BqxhPRQG0RZHMXBZ2LriEnaX1mA6uS6p5PRqI6v/hLMX5bYBFzkkCBGwbO+VCZF/vAyQuQ4bnUT 3lM/omqZkKwDXgg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git devel/overflow/ubsan-only
-head:   ec27d9baa678ce3b875e5784ba6ebbf759daabd6
-commit: f6f0addd75d22b67b88a390c6f900e83f138ba3e [3/6] ubsan: Introduce CONFIG_UBSAN_POINTER_WRAP
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240131/202401310423.XpCIk6KO-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240131/202401310423.XpCIk6KO-lkp@intel.com/reproduce)
+The check_add_overflow() helper is mostly a wrapper around
+__builtin_add_overflow(), but GCC and Clang refuse to operate on pointer
+arguments that would normally be allowed if the addition were open-coded.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401310423.XpCIk6KO-lkp@intel.com/
+For example, we have many places where pointer overflow is tested:
 
-All warnings (new ones prefixed by >>):
+	struct foo *ptr;
+	...
+	/* Check for overflow */
+	if (ptr + count < ptr) ...
 
->> lib/test_ubsan.c:61:17: warning: variable 'top' set but not used [-Wunused-but-set-variable]
-      61 |         volatile void *top = (void *)ULONG_MAX;
-         |                        ^
->> lib/test_ubsan.c:69:17: warning: variable 'bottom' set but not used [-Wunused-but-set-variable]
-      69 |         volatile void *bottom = (void *)1;
-         |                        ^
->> lib/test_ubsan.c:82:28: warning: variable 'half' set but not used [-Wunused-but-set-variable]
-      82 |         volatile struct ptr_wrap *half = (void *)(ULONG_MAX - 128);
-         |                                   ^
-   lib/test_ubsan.c:101:6: warning: variable 'val1' set but not used [-Wunused-but-set-variable]
-     101 |         int val1 = 10;
-         |             ^
-   lib/test_ubsan.c:102:6: warning: variable 'val2' set but not used [-Wunused-but-set-variable]
-     102 |         int val2 = INT_MAX;
-         |             ^
-   lib/test_ubsan.c:136:19: warning: variable 'ptr' set but not used [-Wunused-but-set-variable]
-     136 |         bool val, val2, *ptr;
-         |                          ^
-   lib/test_ubsan.c:137:37: warning: variable 'eptr' set but not used [-Wunused-but-set-variable]
-     137 |         enum ubsan_test_enum eval, eval2, *eptr;
-         |                                            ^
-   lib/test_ubsan.c:182:28: warning: unused variable 'skip_ubsan_array' [-Wunused-const-variable]
-     182 | static const test_ubsan_fp skip_ubsan_array[] = {
-         |                            ^~~~~~~~~~~~~~~~
-   8 warnings generated.
+And in order to avoid running into the overflow sanitizers in the
+future, we need to rewrite these "intended" overflow checks:
 
+	if (check_add_overflow(ptr, count, &result)) ...
 
-vim +/top +61 lib/test_ubsan.c
+Frustratingly the argument type validation for __builtin_add_overflow()
+is done before evaluating __builtin_choose_expr(), so for arguments to
+be valid simultaneously for sizeof(*p) (when p may not be a pointer),
+and __builtin_add_overflow(a, ...) (when a may be a pointer), we must
+introduce wrappers that always produce a specific type (but they are
+only used in the places where the bogus arguments will be ignored).
 
-    58	
-    59	static void test_ubsan_pointer_overflow_add(void)
-    60	{
-  > 61		volatile void *top = (void *)ULONG_MAX;
-    62	
-    63		UBSAN_TEST(CONFIG_UBSAN_POINTER_WRAP);
-    64		top += 2;
-    65	}
-    66	
-    67	static void test_ubsan_pointer_overflow_sub(void)
-    68	{
-  > 69		volatile void *bottom = (void *)1;
-    70	
-    71		UBSAN_TEST(CONFIG_UBSAN_POINTER_WRAP);
-    72		bottom -= 3;
-    73	}
-    74	
-    75	struct ptr_wrap {
-    76		int a;
-    77		int b;
-    78	};
-    79	
-    80	static void test_ubsan_pointer_overflow_mul(void)
-    81	{
-  > 82		volatile struct ptr_wrap *half = (void *)(ULONG_MAX - 128);
-    83		volatile int bump = 128;
-    84	
-    85		UBSAN_TEST(CONFIG_UBSAN_POINTER_WRAP);
-    86		half += bump;
-    87	}
-    88	
+To test whether a variable is a pointer or not, introduce the __is_ptr()
+helper, which uses __builtin_classify_type() to find arrays and pointers
+(via the new __is_ptr_or_array() helper), and then decays arrays into
+pointers (via the new __decay() helper), to distinguish pointers from
+arrays.
 
+Additionally update the unit tests to cover pointer addition.
+
+Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: llvm@lists.linux.dev
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/compiler_types.h | 10 +++++
+ include/linux/overflow.h       | 44 ++++++++++++++++++-
+ lib/overflow_kunit.c           | 77 ++++++++++++++++++++++++++++++----
+ 3 files changed, 120 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 6f1ca49306d2..d27b58fddfaa 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -375,6 +375,16 @@ struct ftrace_likely_data {
+ /* Are two types/vars the same type (ignoring qualifiers)? */
+ #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+ 
++/* Is variable addressable? */
++#define __is_ptr_or_array(p)	(__builtin_classify_type(p) == 5)
++
++/* Return an array decayed to a pointer. */
++#define __decay(p)		\
++	(&*__builtin_choose_expr(__is_ptr_or_array(p), p, NULL))
++
++/* Report if variable is a pointer type. */
++#define __is_ptr(p)		__same_type(p, __decay(p))
++
+ /*
+  * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, leaving
+  *			       non-scalar types unchanged.
+diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+index 4e741ebb8005..210e5602e89b 100644
+--- a/include/linux/overflow.h
++++ b/include/linux/overflow.h
+@@ -51,6 +51,43 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+ 	return unlikely(overflow);
+ }
+ 
++/* Always produce an integral variable expression. */
++#define __filter_integral(x)		\
++	__builtin_choose_expr(!__is_ptr(x), (x), 0)
++
++/* Always produce a pointer value. */
++#define __filter_ptr(x)			\
++	__builtin_choose_expr(__is_ptr(x), (x), NULL)
++
++/* Always produce a pointer to an integral value. */
++#define __filter_ptrint(x)		\
++	__builtin_choose_expr(!__is_ptr(*(x)), x, &(int){ 0 })
++
++/**
++ * __check_ptr_add_overflow() - Calculate pointer addition with overflow checking
++ * @a: pointer addend
++ * @b: numeric addend
++ * @d: pointer to store sum
++ *
++ * Returns 0 on success, 1 on wrap-around.
++ *
++ * Do not use this function directly, use check_add_overflow() instead.
++ *
++ * *@d holds the results of the attempted addition, which may wrap-around.
++ */
++#define __check_ptr_add_overflow(a, b, d)		\
++	({						\
++		typeof(a) __a = (a);			\
++		typeof(b) __b = (b);			\
++		size_t __bytes;				\
++		bool __overflow;			\
++							\
++		/* we want to perform the wrap-around, but retain the result */ \
++		__overflow = __builtin_mul_overflow(sizeof(*(__a)), __b, &__bytes); \
++		__builtin_add_overflow((unsigned long)(__a), __bytes, (unsigned long *)(d)) || \
++		__overflow;				\
++	})
++
+ /**
+  * check_add_overflow() - Calculate addition with overflow checking
+  * @a: first addend
+@@ -61,8 +98,11 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+  *
+  * *@d holds the results of the attempted addition, which may wrap-around.
+  */
+-#define check_add_overflow(a, b, d)	\
+-	__must_check_overflow(__builtin_add_overflow(a, b, d))
++#define check_add_overflow(a, b, d)					\
++	__must_check_overflow(__builtin_choose_expr(__is_ptr(a),	\
++		__check_ptr_add_overflow(__filter_ptr(a), b, d),	\
++		__builtin_add_overflow(__filter_integral(a), b,		\
++				       __filter_ptrint(d))))
+ 
+ /**
+  * check_sub_overflow() - Calculate subtraction with overflow checking
+diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+index c527f6b75789..2d106e880956 100644
+--- a/lib/overflow_kunit.c
++++ b/lib/overflow_kunit.c
+@@ -45,13 +45,18 @@
+ # define SKIP_64_ON_32(t)	do { } while (0)
+ #endif
+ 
+-#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
+-	static const struct test_ ## t1 ## _ ## t2 ## __ ## t {	\
++#define DEFINE_TEST_ARRAY_NAMED_TYPED(n1, n2, n, t1, t2, t)	\
++	static const struct test_ ## n1 ## _ ## n2 ## __ ## n {	\
+ 		t1 a;						\
+ 		t2 b;						\
+-		t sum, diff, prod;				\
++		t sum;						\
++		t diff;						\
++		t prod;						\
+ 		bool s_of, d_of, p_of;				\
+-	} t1 ## _ ## t2 ## __ ## t ## _tests[]
++	} n1 ## _ ## n2 ## __ ## n ## _tests[]
++
++#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
++	DEFINE_TEST_ARRAY_NAMED_TYPED(t1, t2, t, t1, t2, t)
+ 
+ #define DEFINE_TEST_ARRAY(t)	DEFINE_TEST_ARRAY_TYPED(t, t, t)
+ 
+@@ -251,8 +256,10 @@ DEFINE_TEST_ARRAY(s64) = {
+ };
+ 
+ #define check_one_op(t, fmt, op, sym, a, b, r, of) do {			\
+-	int _a_orig = a, _a_bump = a + 1;				\
+-	int _b_orig = b, _b_bump = b + 1;				\
++	typeof(a + 0) _a_orig = a;					\
++	typeof(a + 0) _a_bump = a + 1;					\
++	typeof(b + 0) _b_orig = b;					\
++	typeof(b + 0) _b_bump = b + 1;					\
+ 	bool _of;							\
+ 	t _r;								\
+ 									\
+@@ -260,13 +267,13 @@ DEFINE_TEST_ARRAY(s64) = {
+ 	KUNIT_EXPECT_EQ_MSG(test, _of, of,				\
+ 		"expected "fmt" "sym" "fmt" to%s overflow (type %s)\n",	\
+ 		a, b, of ? "" : " not", #t);				\
+-	KUNIT_EXPECT_EQ_MSG(test, _r, r,				\
++	KUNIT_EXPECT_TRUE_MSG(test, _r == r,				\
+ 		"expected "fmt" "sym" "fmt" == "fmt", got "fmt" (type %s)\n", \
+ 		a, b, r, _r, #t);					\
+ 	/* Check for internal macro side-effects. */			\
+ 	_of = check_ ## op ## _overflow(_a_orig++, _b_orig++, &_r);	\
+-	KUNIT_EXPECT_EQ_MSG(test, _a_orig, _a_bump, "Unexpected " #op " macro side-effect!\n"); \
+-	KUNIT_EXPECT_EQ_MSG(test, _b_orig, _b_bump, "Unexpected " #op " macro side-effect!\n"); \
++	KUNIT_EXPECT_TRUE_MSG(test, _a_orig == _a_bump, "Unexpected " #op " macro side-effect!\n"); \
++	KUNIT_EXPECT_TRUE_MSG(test, _b_orig == _b_bump, "Unexpected " #op " macro side-effect!\n"); \
+ } while (0)
+ 
+ #define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
+@@ -333,6 +340,55 @@ DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
+ };
+ DEFINE_TEST_FUNC_TYPED(int_int__u8, u8, "%d");
+ 
++#define DEFINE_TEST_PTR_FUNC_TYPED(n, t, fmt)				\
++static void do_ptr_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
++{									\
++	/* we're only doing single-direction sums, no product or division */ \
++	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);\
++}									\
++									\
++static void n ## _overflow_test(struct kunit *test) {			\
++	unsigned i;							\
++									\
++	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
++		do_ptr_test_ ## n(test, &n ## _tests[i]);		\
++	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
++		ARRAY_SIZE(n ## _tests), #n);				\
++}
++
++DEFINE_TEST_ARRAY_NAMED_TYPED(void, int, void, void *, int, void *) = {
++	{NULL, 0, NULL, NULL, NULL, false, false, false},
++	{(void *)0x30, 0x10, (void *)0x40, NULL, NULL, false, false, false},
++	{(void *)ULONG_MAX, 0, (void *)ULONG_MAX, NULL, NULL, false, false, false},
++	{(void *)ULONG_MAX, 1, NULL, NULL, NULL, true, false, false},
++	{(void *)ULONG_MAX, INT_MAX, (void *)(INT_MAX - 1), NULL, NULL, true, false, false},
++};
++DEFINE_TEST_PTR_FUNC_TYPED(void_int__void, void *, "%lx");
++
++struct _sized {
++	int a;
++	char b;
++};
++
++DEFINE_TEST_ARRAY_NAMED_TYPED(sized, int, sized, struct _sized *, int, struct _sized *) = {
++	{NULL, 0, NULL, NULL, NULL, false, false, false},
++	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
++	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
++	{(void *)(ULONG_MAX - sizeof(struct _sized)), 1, (struct _sized *)ULONG_MAX, NULL, NULL, false, false, false},
++	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 1, NULL, NULL, NULL, true, false, false},
++	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 2, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, true, false, false},
++	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 3, (struct _sized *)(sizeof(struct _sized) * 2), NULL, NULL, true, false, false},
++};
++DEFINE_TEST_PTR_FUNC_TYPED(sized_int__sized, struct _sized *, "%lx");
++
++DEFINE_TEST_ARRAY_NAMED_TYPED(sized, size_t, sized, struct _sized *, size_t, struct _sized *) = {
++	{NULL, 0, NULL, NULL, NULL, false, false, false},
++	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
++	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
++	{NULL, SIZE_MAX - 10, (struct _sized *)18446744073709551528UL, NULL, NULL, true, false, false},
++};
++DEFINE_TEST_PTR_FUNC_TYPED(sized_size_t__sized, struct _sized *, "%zu");
++
+ /* Args are: value, shift, type, expected result, overflow expected */
+ #define TEST_ONE_SHIFT(a, s, t, expect, of)	do {			\
+ 	typeof(a) __a = (a);						\
+@@ -1122,6 +1178,9 @@ static struct kunit_case overflow_test_cases[] = {
+ 	KUNIT_CASE(s32_s32__s32_overflow_test),
+ 	KUNIT_CASE(u64_u64__u64_overflow_test),
+ 	KUNIT_CASE(s64_s64__s64_overflow_test),
++	KUNIT_CASE(void_int__void_overflow_test),
++	KUNIT_CASE(sized_int__sized_overflow_test),
++	KUNIT_CASE(sized_size_t__sized_overflow_test),
+ 	KUNIT_CASE(u32_u32__int_overflow_test),
+ 	KUNIT_CASE(u32_u32__u8_overflow_test),
+ 	KUNIT_CASE(u8_u8__int_overflow_test),
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
