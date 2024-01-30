@@ -1,97 +1,118 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A659367E6D
-	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 10:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5802D67E87;
+	Tue, 30 Jan 2024 12:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706611776; cv=none; b=iBAnib6nhaybJFEIabuZSDS5VB3NrTWsRZBqpVPvaWtJVVo3XulhfhBHaCDGD8QzjTYb0fz8QQRgrhVC+LHpmAndJDlAG27rIKQ9dSpvmmoQsyt93WZaOTNVc2zmksrVWmc5ttGnN7jzj9wqWkV5YQyXbfkNIrZSqofuezwlcYw=
+	t=1706617190; cv=none; b=FjaFtF61ft6+vmyhWMrjuvmPTTpA08orjY3xGjeCCCcRj+Cctq7q/ZGQvfocEgZGq5P9o0rS0llv6PdhEiF2He+0wrntl9B6evqZcL1VvhJ2q2NZofNGaIzZOMHpLff9gztGrGyJfLFkaplawotujmOrwhpgi9oN1gfVuHLAX6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706611776; c=relaxed/simple;
-	bh=vbFKDC0D+QXAEVrlJwZgowqdMTDh+yh17HAwRs3/hso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pi7/s4iYM5pp7nK1e9en4uRaiugFSL0LZ2j/dN6kfy4a8JQcheX8SujciZD+nnnBefvOPxVVWGtWDcJaqoS3Fi5z9njt7RuyPg6WD3JGYJEEo2saXvjsyT9cky6XuF7Ra2aHfmeFLDLbI2DHbbpfn9GPRkpVe3WwWWxFwx9WUCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcRAc2a/; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706617190; c=relaxed/simple;
+	bh=wnnc1MoYAWTohIs9cnxGpZz9NjvKEKjRjp5YLuQWQMo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HoFQYRj/ajTHTWT8rqiNLVa9BjBvCd4gKJGmiMeCpODVZzDt6jLXcKxLSg7rZ0VDEFxKlaH7Gbh8U2LC2nE5PH7g0d8pBdbwd6EmZHzl9ENrVxKCs3nmNS6DO3+hiLjJPo08S7xj1S3NgsgZaCS00mtUDwdtgwTAtx7cOZ8c6bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZOBa35ml; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcRAc2a/"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2cf591d22dfso27091551fa.0
-        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 02:49:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706611773; x=1707216573; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vbFKDC0D+QXAEVrlJwZgowqdMTDh+yh17HAwRs3/hso=;
-        b=XcRAc2a/99aPDu7u7jaqVhsUwEwkmskQ+OfPWcHxhTL+0JNDu8tUmOPhtq8IAfUfxE
-         XiJvFIxDEAjIbjXeMToMLuDI4QgqmWiv2x/r8ixqKapDtxOacUvl9gQRGpwA+cpFhmG/
-         tLwt/q8gYyuPW8+l6lLErhK6Y0gZBCLFpwDin/cIk9XAcYhFhziytVnJP+A3huT64Eds
-         uH5e5n7X6OONFgEzOimFp/PivvyV3+DrpEHyWMgXWQl0FQbTXo8vfkk5Ct4jA9ZfA1Gi
-         TXbUprd/giHBXYYW+A3xadDZAQhHzLGPXs5Ysjl1OKq5uY9b7YhToPSOVjvxZBAvG5k6
-         aR5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706611773; x=1707216573;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vbFKDC0D+QXAEVrlJwZgowqdMTDh+yh17HAwRs3/hso=;
-        b=s0npePWdA7t1fEheBcnTc+H9p9XbBFwN929Hb+iFU2CgnbNoDwgjqPByvdAKXzSqWQ
-         EiZCXCVhzDmyglHeN2KhjVzR9t0aK/YUk3Fj0oWlw4cSqzZ+zWObte4nmWpP4daOVOLK
-         xyc21sjLXtOM+PjPCOFYD/HRglbVnNDvcHzo6OxCoY224y4h8EsbOChgfvMvSH2TMXmI
-         pi5YPjmR8ct53jjKFdl5LSH6VnwwAKsviiwi3U+JnQ2OMA7TKXrQlcZZ6RTDjsz8Pr1k
-         urkLkL5XhVaxxHssjDJF3Md3H9gnM4uiRV68MHXydnGgd6un3WAzSSAFhEATDBiS5zy/
-         aBvA==
-X-Gm-Message-State: AOJu0Yy0ewj3mvsseqp/zX95ZVB6BOKj/Fg6fehob4PPU12rwNI7izKB
-	jO2ol76jr+/55h8bM1BEPDVntD8rnWY5e/ElovY6zGv7GwPKvWg7Z2iZknHMcGUPdEoL78bx6/v
-	DOkJlib2g3E5ISrERXJ0gO059yhQ=
-X-Google-Smtp-Source: AGHT+IE9amhBbFX1P0c31Oaco2uh8AYrthPbebZ8QRQVeeYeFl2rpWrJju3O9v0GM+Nxqtsb2aqTYAittrgK6BIvJes=
-X-Received: by 2002:a05:651c:b29:b0:2d0:54ef:1dc1 with SMTP id
- b41-20020a05651c0b2900b002d054ef1dc1mr2169264ljr.25.1706611772436; Tue, 30
- Jan 2024 02:49:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZOBa35ml"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706617190; x=1738153190;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wnnc1MoYAWTohIs9cnxGpZz9NjvKEKjRjp5YLuQWQMo=;
+  b=ZOBa35mlJRSJBVlNiw7CLiRIvK56yfmhZiz4qiezsr42Y9xhusqkd/vA
+   pI6I7meSkjXSXTKBEacN1HHjsb8w3up/Ik/36USaaKZl3uMIiNOcX0YtE
+   XmF+C8yGfgDCGwtyJNYQWqIQpfWc/FMFy9ZZl/35F9mpHeVZ3ZMjYsGbc
+   Rf5J0xP8S+YkL/3AQqGR3CJaY61U4eF4hkNXXGL/SXRuwlGvF50kJ6Yb6
+   /3WAH4/0O3WX0p8RagYiMVLn0yL5mdvGk2mkMHeVxCkVYEnPlgkpluwqe
+   bekT5eNXCdDKg1DxC0b2fvCAuQkvUrS471Cveu9kKdYoE6Mgll2+w5Mi0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="10366046"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="10366046"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 04:19:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="907475401"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="907475401"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jan 2024 04:19:47 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rUn54-0000Gq-0N;
+	Tue, 30 Jan 2024 12:19:11 +0000
+Date: Tue, 30 Jan 2024 20:18:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mnyman-xhci:feature_interrupters 4/4]
+ drivers/usb/host/xhci-sideband.c:244:66: error: too few arguments to
+ function call, expected 2, have 1
+Message-ID: <202401302024.R12VFof5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUW0GvM1+A3NKDYRrWhW+eXZj7s0uksR75FMCChkAqp_2A@mail.gmail.com>
- <20240129203518.GA1851901@dev-arch.thelio-3990X> <CA+icZUUWOLA7YU823tuuTVCkWh7dBVF8zOMCREuLVEXFnT2izg@mail.gmail.com>
-In-Reply-To: <CA+icZUUWOLA7YU823tuuTVCkWh7dBVF8zOMCREuLVEXFnT2izg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Tue, 30 Jan 2024 11:48:55 +0100
-Message-ID: <CA+icZUVmuP4MNyvd1Q3XijFwGRcuhUzbTghnQdk-ax1EXF4dPA@mail.gmail.com>
-Subject: Re: CBL issue 1984 - AMD64 segfault during LTO building linux-6.7.0
- with clang-17.0.6
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
-	Michael Larabel <Michael@michaellarabel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Jan 30, 2024 at 10:14=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.com=
-> wrote:
->
-> On Mon, Jan 29, 2024 at 9:35=E2=80=AFPM Nathan Chancellor <nathan@kernel.=
-org> wrote:
-> [...]
-> > LLVM 18.0.0-rc1 should be coming out very soon
->
-> Released!
->
-> https://github.com/llvm/llvm-project/releases/tag/llvmorg-18.1.0-rc1
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git feature_interrupters
+head:   a7f098b5bba5fe24fe938751ed128c6dd9b967f9
+commit: a7f098b5bba5fe24fe938751ed128c6dd9b967f9 [4/4] xhci: sideband: add initial api to register a sideband entity
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240130/202401302024.R12VFof5-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240130/202401302024.R12VFof5-lkp@intel.com/reproduce)
 
-OK, Nathan uploaded a new optimized LLVM toolchain v18.1.0-rc1.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401302024.R12VFof5-lkp@intel.com/
 
-@Michael: maybe worth to point to the link(s) in your article
+All errors (new ones prefixed by >>):
 
--Sedat-
+>> drivers/usb/host/xhci-sideband.c:244:66: error: too few arguments to function call, expected 2, have 1
+     244 |         sb->ir = xhci_create_secondary_interrupter(xhci_to_hcd(sb->xhci));
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                      ^
+   drivers/usb/host/xhci.h:2093:1: note: 'xhci_create_secondary_interrupter' declared here
+    2093 | xhci_create_secondary_interrupter(struct usb_hcd *hcd, int num_seg);
+         | ^                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-https://mirrors.edge.kernel.org/pub/tools/llvm/
-https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-18.1.0-rc1-x86_64=
-.tar.xz
-https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-18.1.0-rc1-aarch6=
-4.tar.xz
-https://mirrors.edge.kernel.org/pub/tools/llvm/files/sha256sums.asc
-https://www.phoronix.com/news/LLVM-18.1-rc1-Released
+
+vim +244 drivers/usb/host/xhci-sideband.c
+
+   224	
+   225	/**
+   226	 * xhci_sideband_create_interrupter - creates a new interrupter for this sideband
+   227	 * @sb: sideband instance for this usb device
+   228	 *
+   229	 * Sets up a xhci interrupter that can be used for this sideband accessed usb
+   230	 * device. Transfer events for this device can be routed to this interrupters
+   231	 * event ring by setting the 'Interrupter Target' field correctly when queueing
+   232	 * the transfer TRBs.
+   233	 * Once this interrupter is created the interrupter target ID can be obtained
+   234	 * by calling xhci_sideband_interrupter_id()
+   235	 *
+   236	 * Returns 0 on success, negative error otherwise
+   237	 */
+   238	int
+   239	xhci_sideband_create_interrupter(struct xhci_sideband *sb)
+   240	{
+   241		if (sb->ir)
+   242			return -EBUSY;
+   243	
+ > 244		sb->ir = xhci_create_secondary_interrupter(xhci_to_hcd(sb->xhci));
+   245		if (!sb->ir)
+   246			return -ENOMEM;
+   247	
+   248		return 0;
+   249	}
+   250	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
