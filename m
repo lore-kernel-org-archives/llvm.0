@@ -1,133 +1,134 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229E578B67
-	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 23:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A292278B71;
+	Tue, 30 Jan 2024 23:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706656585; cv=none; b=q2QwvYg2aqk5vbh+UDIx/T5xsR/thjokguSh0KMmYwEjVgFqYw1KJV0VWv3/Ptj9O5DHDiON2ogGtUfnP9Cz/z7TUBq8MpS08SdoyBFWLxiIv0GeqgioCoOpJcwMR+BBYgemiIZFfk0Khyo/CBlp0uFuF2fAMXJyWhbhuli0QPQ=
+	t=1706656604; cv=none; b=RJ/GSMsDhft6lc9Eq7fVVha1AhTyf2zSRd2IRAnjtsjlqhpt3lnHwpVu26HUYI9Wp/NvvZAc2tpRgbOoYLZ8x/2T80cRvYTVjqKbGcz2qSIW1hqiCmBV3N7l1FPghT+a39nHlf4hbtGDYqShkDRXDDtIEBf4jhH8py29l6X9h9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706656585; c=relaxed/simple;
-	bh=8HUiHdc+ibKN+Ur+tXnhLRORbN73eAOd7u4PFL/scZQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eu3s1Wx3/MwNB87RZpz9TmYsGJVAgqJVQMNvm8PqYoGawlTpf2A5y7MsZVUQBt76U+MryotOYx8FgRtm1w3iWHv4MXC2iSuMGxGkqF+7nz2DGokcGXAsi5qN55iEVPMAZ+nCjA2ZrSgJ6TOe7ogbSpRLB84r9xyO6xGOZ2A7hao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WcR1bHXB; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1706656604; c=relaxed/simple;
+	bh=1X0HrQt6EpwaTegUwK9T+Rbbn8dS2jupjrnSD2jmzJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JcrF/LDcJ4q0/xX/DqTd+ARiSQ90v+Jzb1SwDf7T0ZzKFDDyQztMPcrtC9DD78sqEqE453fO365ZKm72l/BdGAV7b+Yq9NGRe1FzwlOOJqqlV2ZYsCijN0AbvgvPYA4/wp7ToDHcNqR1mvlNPRQNyMXL7r1vAK7wkF7ALHJUkig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GjKBs5Ab; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WcR1bHXB"
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-7d5bddb0f4cso1301807241.2
-        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 15:16:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706656581; x=1707261381; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X5dtCbU1Q3SdQupNf6FgVTBSHBjEi2YVyb9X02Fgq+c=;
-        b=WcR1bHXBX+8JZq03/PxChpiZhoGDbVn5B74kE1ZRZN+v1+lJ0RH+Ozbm9/5Yk/pLzD
-         UcehAaaofEZ8emcm56NNyn9ezl/x8ii+AblYv1UnVfwT5Qa1Hf/eIiWByf2Pp6EtcLkH
-         9pxwJVSOZvMoH5itF/A9ioNoBuj/1Q70RN/huMUTrI0kcGYVJFqK4nITpjzFxHsjubcU
-         atALPqIP1fYQ1gUKqz77kvZEtes70Z8l0XhlFbT8yb1tCiSeulTGKV944WrTx43JAWKR
-         Sbi3dLyc+hMGEAXCVcY10jdVschRBJfpegdEkDnAhbETKKQ7DAwNChwqkA8MaLr4irnF
-         pK9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706656581; x=1707261381;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X5dtCbU1Q3SdQupNf6FgVTBSHBjEi2YVyb9X02Fgq+c=;
-        b=wYkjLVoPBSCZtndLzNhyX0XukvJoAn52KMnGHDbpWrEs19GtwyIsbt2AtYorn+aTlf
-         rUHzPNVZdQp/dxMZH/sBK/MjY249SsbL7MJOq92yMFBKYPAM4KOGUAZNogy6rnZN1XiF
-         20Y14L/zhCtU9hKYIxRjsOlXoi0Uhcje6V5IpPes/FFo+4G56Rz2Vd3vHtLPL1cMUHDM
-         49ThGMZOpDapW/z7xOfE2I+fkpcJSoMHE0LugzHi7OxxWiFxJY7c5wqcG/9Ergc0VxJj
-         smmoOJRV+EnwJpabEsgtUAfryw62LeNNZKXn1SH3Sd60o2lNh6ac+61zGOvk2iH+1iXu
-         N04w==
-X-Gm-Message-State: AOJu0YyqrphsLfXlNXaFQlKZo46Uz+V0FOZyfJwGPMdggAL5gTAQ/ejE
-	mx3ahprV2CI/9bsxhAFwLePdXgxtHxlprfGBT8aO/NwunhaRdLWZasQEQBLWHc1stVW1fm9Tl3k
-	nBLLnttn1EcBrXUP8azv608bVXoP5NmYFTytC
-X-Google-Smtp-Source: AGHT+IHVeZnWZzX9x8MwziS5Z9VLveTfJkLYZmbBNObwr2EDXGgzT2Yz8dfelIQ/4Pz45SqzPUgDy83l9kcP8lU4+j0=
-X-Received: by 2002:a05:6102:3bf0:b0:46b:3e99:7813 with SMTP id
- be16-20020a0561023bf000b0046b3e997813mr5251130vsb.9.1706656580881; Tue, 30
- Jan 2024 15:16:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GjKBs5Ab"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706656603; x=1738192603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1X0HrQt6EpwaTegUwK9T+Rbbn8dS2jupjrnSD2jmzJs=;
+  b=GjKBs5AbIGyy5+lOotMrWxnuDxjUWF1kkDznIBX1E7xU9vuLFKzOOgJU
+   RmVlCNkDBpl5thm0PDoxQwLS+9/NvWkAZitUMwiz5GfRKtN3LC5T4yQMJ
+   Y/997UyTrgZjauj1w0S5/sUs76sfQwxEi4xUtVRXOWfcM+khqs0lnrBL4
+   wlC2iT2r79iIhrgZ/g6RbtMtyj2iS3PSjqz+/mwiK5V/tx6POqtxFvwke
+   w81E3OaHKgS2A4HmFu4GpAqmMDFJPsTdj6/0Q67/5PFjDZleoVUcuRnoj
+   mpZGNrU6GxsS0Cly7zrBPlT+5SkdjRoUeFsgXgyJVgDdog9dGMcOE6Ko3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10807117"
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="10807117"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 15:16:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="3880849"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Jan 2024 15:16:40 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rUxLK-0000vU-0N;
+	Tue, 30 Jan 2024 23:16:38 +0000
+Date: Wed, 31 Jan 2024 07:16:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org
+Subject: [linusw-gpio:b4/descriptors-wireless 2/7]
+ drivers/net/wireless/ath/ath9k/hw.c:2731:2: error: must use 'struct' tag to
+ refer to type 'gpio_desc'
+Message-ID: <202401310721.pDBU6qLV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240129180502.4069817-21-ardb+git@google.com> <20240129180502.4069817-35-ardb+git@google.com>
-In-Reply-To: <20240129180502.4069817-35-ardb+git@google.com>
-From: Kevin Loughlin <kevinloughlin@google.com>
-Date: Tue, 30 Jan 2024 15:16:09 -0800
-Message-ID: <CAGdbjmKDZ8R+EjR-u09r9c4Y8Y0HjWaXPARSKsW0R5zVBSLPPA@mail.gmail.com>
-Subject: Re: [PATCH v3 14/19] x86/coco: Make cc_set_mask() static inline
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jan 29, 2024 at 10:06=E2=80=AFAM Ard Biesheuvel <ardb+git@google.co=
-m> wrote:
->
-> From: Ard Biesheuvel <ardb@kernel.org>
->
-> Setting the cc_mask global variable may be done early in the boot while
-> running fromm a 1:1 translation. This code is built with -fPIC in order
-> to support this.
->
-> Make cc_set_mask() static inline so it can execute safely in this
-> context as well.
->
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/coco/core.c        | 7 +------
->  arch/x86/include/asm/coco.h | 8 +++++++-
->  2 files changed, 8 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> index eeec9986570e..d07be9d05cd0 100644
-> --- a/arch/x86/coco/core.c
-> +++ b/arch/x86/coco/core.c
-> @@ -14,7 +14,7 @@
->  #include <asm/processor.h>
->
->  enum cc_vendor cc_vendor __ro_after_init =3D CC_VENDOR_NONE;
-> -static u64 cc_mask __ro_after_init;
-> +u64 cc_mask __ro_after_init;
->
->  static bool noinstr intel_cc_platform_has(enum cc_attr attr)
->  {
-> @@ -148,8 +148,3 @@ u64 cc_mkdec(u64 val)
->         }
->  }
->  EXPORT_SYMBOL_GPL(cc_mkdec);
-> -
-> -__init void cc_set_mask(u64 mask)
-> -{
-> -       cc_mask =3D mask;
-> -}
-> diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
-> index 6ae2d16a7613..ecc29d6136ad 100644
-> --- a/arch/x86/include/asm/coco.h
-> +++ b/arch/x86/include/asm/coco.h
-> @@ -13,7 +13,13 @@ enum cc_vendor {
->  extern enum cc_vendor cc_vendor;
->
->  #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-> -void cc_set_mask(u64 mask);
-> +static inline void cc_set_mask(u64 mask)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git b4/descriptors-wireless
+head:   99b6016595e9254167434ef82f4c2ed88d986452
+commit: 0dd7ce9e2be9a81dc04549e8e604931c19547531 [2/7] wifi: ath9k: Obtain system GPIOS from descriptors
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20240131/202401310721.pDBU6qLV-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fdac7d0b6f74f919d319b31a0680c77f66732586)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240131/202401310721.pDBU6qLV-lkp@intel.com/reproduce)
 
-In the inline functions I changed/added to core.c in [0], I saw an
-objtool warning on clang builds when using inline instead of
-__always_inline; I did not see the same warning for gcc . Should we
-similarly use __always_inline to strictly-enforce here?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401310721.pDBU6qLV-lkp@intel.com/
 
-[0] https://lore.kernel.org/lkml/20240130220845.1978329-2-kevinloughlin@goo=
-gle.com/#Z31arch:x86:coco:core.c
+All errors (new ones prefixed by >>):
+
+>> drivers/net/wireless/ath/ath9k/hw.c:2731:2: error: must use 'struct' tag to refer to type 'gpio_desc'
+    2731 |         gpio_desc *gpiod;
+         |         ^
+         |         struct 
+>> drivers/net/wireless/ath/ath9k/hw.c:2734:10: error: no member named 'gpiods' in 'struct ath_hw'
+    2734 |         if (ah->gpiods[gpio])
+         |             ~~  ^
+   drivers/net/wireless/ath/ath9k/hw.c:2748:6: error: no member named 'gpiods' in 'struct ath_hw'
+    2748 |         ah->gpiods[gpio] = gpiod;
+         |         ~~  ^
+   drivers/net/wireless/ath/ath9k/hw.c:2836:17: error: no member named 'gpiods' in 'struct ath_hw'
+    2836 |         } else if (ah->gpiods[gpio]) {
+         |                    ~~  ^
+   drivers/net/wireless/ath/ath9k/hw.c:2837:29: error: no member named 'gpiods' in 'struct ath_hw'
+    2837 |                 val = gpiod_get_value(ah->gpiods[gpio]);
+         |                                       ~~  ^
+   drivers/net/wireless/ath/ath9k/hw.c:2860:17: error: no member named 'gpiods' in 'struct ath_hw'
+    2860 |         } else if (ah->gpiods[gpio]) {
+         |                    ~~  ^
+   drivers/net/wireless/ath/ath9k/hw.c:2861:23: error: no member named 'gpiods' in 'struct ath_hw'
+    2861 |                 gpiod_set_value(ah->gpiods[gpio], val);
+         |                                 ~~  ^
+   7 errors generated.
+
+
+vim +2731 drivers/net/wireless/ath/ath9k/hw.c
+
+  2724	
+  2725	/* BSP should set the corresponding MUX register correctly.
+  2726	 */
+  2727	static void ath9k_hw_gpio_cfg_soc(struct ath_hw *ah, u32 gpio, bool out,
+  2728					  const char *label)
+  2729	{
+  2730		enum gpiod_flags flags = out ? GPIOD_OUT_LOW : GPIOD_IN;
+> 2731		gpio_desc *gpiod;
+  2732		int err;
+  2733	
+> 2734		if (ah->gpiods[gpio])
+  2735			return;
+  2736	
+  2737		/* Obtains a system specific GPIO descriptor from another GPIO controller */
+  2738		gpiod = devm_gpiod_get_index(ah->dev, NULL, gpio, flags);
+  2739	
+  2740		if (IS_ERR(gpiod)) {
+  2741			err = PTR_ERR(gpiod);
+  2742			ath_err(ath9k_hw_common(ah), "request GPIO%d failed:%d\n",
+  2743				gpio, err);
+  2744			return;
+  2745		}
+  2746	
+  2747		gpiod_set_consumer_name(gpiod, label);
+  2748		ah->gpiods[gpio] = gpiod;
+  2749	}
+  2750	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
