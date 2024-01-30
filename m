@@ -1,78 +1,145 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00F853E05;
-	Tue, 30 Jan 2024 07:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB165821A
+	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 08:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706598827; cv=none; b=befWVA4IwjUPbZ9GxWFQMELJUq7KHaFQpUzrBXychtjd/9EVMnN2okK7YAGsROWoRUqlO+yJRyi10chbF2z0mMRikdVRmrfGSWYZj7tX1v5AdNMo1XfxDRSkmFaocdQk5R+R7dBrj3B4mX9QZaIetyzNitFlEIiDocycorjhaRA=
+	t=1706602905; cv=none; b=pt9n2pO+EI+zpQzCO6hHL/wstUBu3BFxc/pXgbv+GH/Uk9UunaLdNjqsYGjg5cw/rscWkZl0ihCrtynzVaTBB39fGDxkAcqdCSG1qOWDUlcceiW5KpVXVHQlv1uu9gZvW177QYqpiKZn25s9q3t21Osl9f2NRGfmGGTCBa+BAdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706598827; c=relaxed/simple;
-	bh=16lxKNqIr7pmqD88HsCEfd8ADT6yVniQoxBbtMWESYU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hM0I1f0cQkSlec4+sc4OFt6QeRLHP4BsjAEBSeOvrofdHvLKtxXEmsv+sU5DgAmvaB6jABOXUHuTlteImIk0EaMtMvqpMTdwvkNYAIbovG2ver/etdr+qUZo8CK/eyZEYkZMaPXsrgFmgDEz8Ygywouu5L9NLIes3gtJg6sNI94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=qCrmUfDj; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+	s=arc-20240116; t=1706602905; c=relaxed/simple;
+	bh=vzOJ7MIfgYgyfL/hKUylv9hySWYji+tiF7KWajMwhy8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jF9n0O2xXxn1FdpyYTxITvWxsIhsa4A+r0EHm4LqoOoNMNVf4LJ3/aPqGuJHj1nnvBPEDQj+WBDbZMCGCp8nCLfAJRZzzA7EP8HbAn8+KH78JMQtwsvJvozuC+oTNFcMLmAz3CkIAjc+2i2kSC+XKzI+BZE3P/uLVHnY6U59jyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HDE7Oc0e; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="qCrmUfDj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=QxOKgSrQIwaxWzl51HsbjSfzRpY/WG0SpR5AK2CGItU=;
-	t=1706598823; x=1707808423; b=qCrmUfDj8IRBNZpN0jKU6OuwsAtC7rDLVj/1r1s4xUSOQxD
-	/fgxLWfnXjzGgKJovFsoPqNeiaQF1FmujfjUTn3eoWhBVQfYphkUVBotSDsok+VT1zesaxYSgL2qC
-	RDKmHAUFiFNuXFjjPeY+wOk/L1bZpgc9QDrb9bc+6SoItEZHwwlCv5TVSDHebLHI1EOEAn6TPXqTJ
-	8sSVxiVfeGEK0AGmosxfWPsX5ZeuBopQQMydenzWTU5uEJOlpFk3GBVNzNV8C4kAwbHmr3iRDb5HS
-	1IG3pwDyAQklLPZ3s/AIecgKFHDQ7dZNZfahN/i+sdJjkGurhE/9sVnHSD9UNe7g==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1rUiJO-00000005uED-0Vr5;
-	Tue, 30 Jan 2024 08:13:38 +0100
-Message-ID: <933555b38708daa673a88953a196914424de611a.camel@sipsolutions.net>
-Subject: Re: [PATCH 15/15] wifi: cfg80211/mac80211: move puncturing into
- chandef
-From: Johannes Berg <johannes@sipsolutions.net>
-To: kernel test robot <lkp@intel.com>, linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Date: Tue, 30 Jan 2024 08:13:37 +0100
-In-Reply-To: <202401301417.rknKsCyo-lkp@intel.com>
-References: 
-	<20240129194108.307183a5d2e5.I4d7fe2f126b2366c1312010e2900dfb2abffa0f6@changeid>
-	 <202401301417.rknKsCyo-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HDE7Oc0e"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-510221ab3ebso4961116e87.1
+        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 00:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706602901; x=1707207701; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yIcyGkfqTHtjGeoL2bnZkgPZOS4MhX2Z5R4RqAWzaTs=;
+        b=HDE7Oc0eN0tTwmqYFXUZRpGWCGj3mIrq9yPD8xhV1qJxNspMXfWdkHGHxawB+GwECK
+         u/Y5FDQtN7n5tDkdNq1773Q+s1/JdnmtRQXPXakM07yg+FN8VCrqzsJzDzn9xXXaKrht
+         p7rk0A1awnNi8WHCwzS6deZsfHuMluoFPuBIxuy2VSbVWbgfxM3kHqaGLHRovtvIQBOQ
+         mDwktA+eWGKWIg5e8LvMHq7LNwFagDUfQKfZl7TBfhTlvNBjKaoumpSsOeD76ujZD668
+         bz4UGceRveF5rzleKFP0KYnkx3WiOsJyJtJB0eLrSp3sCSJDDoBRmZ4rWzfWCQTLw3k2
+         RJOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706602901; x=1707207701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yIcyGkfqTHtjGeoL2bnZkgPZOS4MhX2Z5R4RqAWzaTs=;
+        b=ibmXEuMtsjuAue5bGzoEZmetpC9tPr8rSS+tALjP8KJS6qpphwo0jj8fPNHdybVl5w
+         uAm4eJXXovWG3qjav2eiAS18nwdf9+rbBQnZK+ok+3iMVM6C/1lrM4gLM8GQ+t1Mns2s
+         VJZcs5HkPFGhYsEKo00Jb0eSELuRem1LQVA45at0F7TMvM9Rc0c9lwAfL9xpyMjnpb1p
+         sDEAhWVB6f2aSMfP8RLXvfyOWUvazZHPrwozzoYiIPvzD+FxsXWstgzAJTVlvU7vMwzH
+         ipVc3D6YP/A7A3Gq3h8OKrWqhrfJSLu51C1tI3CH1u8qlLpCj2CdykKXOvg+vbhD/JFb
+         HN4g==
+X-Gm-Message-State: AOJu0Yz+iQGnRJTGvrHRAce6H1LYIOy7UqLEDANLfh1UUM5G8y/WlvhZ
+	AyX00QRK94nzVdNhXt0/AdQ5Kuqr2UrfY3BZym/jxlciD19/XqxMtbtg0SO80cb0sj8x8/Ic1o5
+	xluH4WEc/mSR0jq094K724bVcG44=
+X-Google-Smtp-Source: AGHT+IESE0+cClNiN9sibpBZjAzjxFo4QedFjB7438iUR3qWMvYX7ftM/c/O9YFhZ5fh0WLN0I48JtzZYiyoO/EFsHw=
+X-Received: by 2002:a2e:2a46:0:b0:2cf:4f98:b45e with SMTP id
+ q67-20020a2e2a46000000b002cf4f98b45emr5449003ljq.12.1706602900980; Tue, 30
+ Jan 2024 00:21:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+References: <CA+icZUW0GvM1+A3NKDYRrWhW+eXZj7s0uksR75FMCChkAqp_2A@mail.gmail.com>
+ <20240129203518.GA1851901@dev-arch.thelio-3990X>
+In-Reply-To: <20240129203518.GA1851901@dev-arch.thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Tue, 30 Jan 2024 09:21:03 +0100
+Message-ID: <CA+icZUUfmTKegzJhJmxUv_GtUB_cT1x0f04Xvaj=Ym=5ys1XBA@mail.gmail.com>
+Subject: Re: CBL issue 1984 - AMD64 segfault during LTO building linux-6.7.0
+ with clang-17.0.6
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-01-30 at 14:45 +0800, kernel test robot wrote:
->=20
-> All errors (new ones prefixed by >>):
->=20
-> > > drivers/net/wireless/ath/ath12k/mac.c:2771:16: error: use of undeclar=
-ed identifier 'BSS_CHANGED_EHT_PUNCTURING'
->     2771 |         if (changed & BSS_CHANGED_EHT_PUNCTURING)
->          |                       ^
-> > > drivers/net/wireless/ath/ath12k/mac.c:2772:31: error: no member named=
- 'eht_puncturing' in 'struct ieee80211_bss_conf'
->     2772 |                 arvif->punct_bitmap =3D info->eht_puncturing;
->          |                                       ~~~~  ^
->    drivers/net/wireless/ath/ath12k/mac.c:6374:35: error: no member named =
-'eht_puncturing' in 'struct ieee80211_bss_conf'
->     6374 |         arvif->punct_bitmap =3D link_conf->eht_puncturing;
->          |                               ~~~~~~~~~  ^
->    3 errors generated.
->=20
+On Mon, Jan 29, 2024 at 9:35=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Hi Sedat,
+>
+> Good to hear from you as always!
+>
+> On Mon, Jan 29, 2024 at 12:43:36PM +0100, Sedat Dilek wrote:
+> > With upcoming Linux v6.7.3 I wanted to jump into building
+> > clang-thinlto / clang-kcfi kernels again.
+> >
+> > How severe is the bug in #1984?
+> > Only hitable with special kbuild settings?
+>
+> I believe that issue is only hittable with CONFIG_ZERO_CALL_USED_REGS=3Dy=
+,
+> so without that selected, you should be fine.
+>
 
-Not sure why my build test didn't catch that (probably .config issues),
-but yes ... I clearly forgot that. Will fix.
+Hi Nathan,
 
-johannes
+Hope you will have a FUNtastic 2024!
+
+OK, that is the workaround:
+CONFIG_ZERO_CALL_USED_REGS=3Dn
+
+> > Nathan, can you provide a 17.0.x LLVM toolchain with [3] applied?
+> > Maybe in [4] - in an unofficial sub-folder?
+> > AFAICS, there will be no v17.0.7.
+>
+> My build framework for the kernel.org toolchains does not currently have
+> support for applying patches, it only has support for checking out
+> specific upstream revisions of LLVM (for both simplicity and ideological
+> reasons). I have considered supporting patching bugs in unsupported LLVM
+> versions but I don't really think that is a direction that I want to go,
+> at least at the present time.  LLVM 18.0.0-rc1 should be coming out very
+> soon, at which point I will build and upload that for testing. If you
+> want to stick with LLVM 17.x, the workaround for avoiding that issue is
+> pretty simple.
+>
+
+Yes, I can understand that.
+
+Applying the patch against v17.0.6 to have
+CONFIG_ZERO_CALL_USED_REGS=3Dy buildable means for me a marathon of
+approx. 20 hours of building a selfmade LLVM toolchain ThinLTO+PGO
+optimized.
+AFAICS Debian kernel team has CONFIG_ZERO_CALL_USED_REGS=3Dy.
+
+From <https://llvm.org>:
+
+LLVM Release Schedule:
+
+18.1.x
+
+Jan 23rd: release/18.x branch created
+Jan 30th: 18.1.0-rc1
+Feb  6th: 18.1.0-rc2
+Feb 20th: 18.1.0-rc3
+Mar  5th: 18.1.0
+Mar 19th: 18.1.1
+Apr  2nd: 18.1.2
+Apr 16th: 18.1.3
+Apr 30th: 18.1.4
+May 14th: 18.1.5
+May 28th: 18.1.6 (if necessary)
+
+Hooray, hooray - today v18.1.0-rc1.
+18.1 - not 18.0 - I think it is according to gcc version nomenclature?
+
+Thanks, have a good (working) day.
+
+Best regards,
+-Sedat-
