@@ -1,53 +1,53 @@
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B837D412
-	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 22:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162AA78664
+	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 22:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706652379; cv=none; b=J1/Bub5eSersXUuunqqtwX/JV57PLb5pk9YfMOjg1Tu7TIBhavHBU9AjbRXc7GcaQDmtLY1SLQGGEHmIhBFITNZPRzSN4H0SgYCCCZMGOs6EJhL1n+FkmN8/IbZnhEJvk6/vgnhtZpSGjRar4MozY22XVrz4hGK9tiveZl+pxkc=
+	t=1706652380; cv=none; b=awhzrWfRyOhzHlDQwZxi4MLGEoRq8eUIFtM6KPouChvAtxpB+NBk5WGvkbcy+D0xQICBx0RcYijslYohqVz2dRv+iefZtlK7WDO1KjObWjDsdV+P4n27AJfJ5EGzCFqdv28M7RM4htTq8z2kzsJRoWkaDuPSb8e7q9UPMAYO1hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706652379; c=relaxed/simple;
-	bh=WUwqmJoFZQeyqmuC4k6x7kK2L9hMV5zmyghrfRiNqjc=;
+	s=arc-20240116; t=1706652380; c=relaxed/simple;
+	bh=mjbhQQsJHZNHQElAJyka1am+OsaRRifuj4xn9QRfLGM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=j2WNKwMYoP/NnQSqvL+HZiH7ai+4jrwHY3yPKYFqnxNtaE+BlXDPhIj9aOWWbN3tI5jAEu/FDChXRWK5iAfuiYkMFG9OaeSEkU6eTw1MzAWRf5qVFKFHrZ8DGzbSVuEA6gokPVKyKxkyzspbUkkZoBsxWy8lXvSZSXBKhVRjuH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ixa1nXFg; arc=none smtp.client-ip=209.85.161.45
+	 MIME-Version; b=l8NEfrPsLCYQ03ewSKnsw0SBjao/+ylHCXhcrw93ahnBCA6hDitEWPwI7FVkagnW5FJW9hlWyFjiNnb3MZgFDGz+FxsO0PPDvZXARN740AhDL4dExYWdBmIdJVbijb9K/+U9SPWiQyEVNDhCsYxLymw0kgDm5eACOD5dmFT20/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=l/WhxOKO; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ixa1nXFg"
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-595aa5b1fe0so2777552eaf.2
-        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 14:06:17 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="l/WhxOKO"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6da9c834646so3366044b3a.3
+        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 14:06:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706652377; x=1707257177; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1706652378; x=1707257178; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0NouAp6ATROls5AjgSHn6FMH+dDN0Afdv78yAag0W0U=;
-        b=ixa1nXFgadGpeU1B0bykhCEY26UEwDJX0hvnneMY7aJfPb+GxrC6xvDp6QVEv9Z1+K
-         ueIiEIXkIHZVyeW2oWBCxTYZX/YBtpJbypeKFUCBUKcdwU4ee4sq83SRntG38pLj2M4X
-         gIQWV5J2iT3aLPgFTrLNMD7gNl6TLQ5AGC4fg=
+        bh=TXEWZ+ijn2Mktyo3GgFFo1opylml2uwjVnLpw+L5S/k=;
+        b=l/WhxOKObAfiU4xzrbNfkFP6dnoqy6ykDWqg2U7+w+lHN8BAJ9w4wkiVkPgzCqcRfJ
+         Bv/wIfLHKFcroZr6rnoDooQdko0xmhGBRjAiOkZrktsAaZaEGYwGYB70Rn0PvTzbRLtv
+         vEAI+75Z2RSTbvnwJpMvoY5UhevtoRv3muukI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706652377; x=1707257177;
+        d=1e100.net; s=20230601; t=1706652378; x=1707257178;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0NouAp6ATROls5AjgSHn6FMH+dDN0Afdv78yAag0W0U=;
-        b=Y/51HT/pe3XFYk2j8NzAm9w19j1bf1JJcACftz7oeWTqP46i7btoYKxueFy8Y/2iqh
-         P0IreepwRCt6xgdJZTrLdxbiPXaedyF9XthQW42POAmNVic8B7r+U/Xn/uT9j9z+NhYw
-         EJWOqvRS/VXIFcn4GvjUdxjpkqW+zhn8ZxkRTrjaVHTcgwEIdourW3QNnRAOYG0JckU3
-         ZgEykcyJmoHbKPXyg3p2OUBp52dQINUoaTF1lIsztz10c0H03C5dd9qdcRKIdpJt9mwx
-         nxojYl9PR+0pD71pBtxWHBcWabOOS9rLWfyUqwWKjGRJoxvDZ/eS+htT30vgo6+hFnBF
-         JRzQ==
-X-Gm-Message-State: AOJu0YzzkA7SJgcIPIy4QU1exFOe7L0P9PJKB7kw7oxL6iAIQfwV/nkR
-	KiBIc52ljSP3onR53G5mxWF4Zdz9EK7AN+YSiLqQ4gEU/OMbRfoDQYlb37sk6g==
-X-Google-Smtp-Source: AGHT+IHM5CIjGnaWPVQJbefnPzKTqkXb953lJjgYmVucTvoMoZOsWJbs69yFvunQXf+9oTJH3ef9LQ==
-X-Received: by 2002:a05:6358:4318:b0:178:8ab7:e338 with SMTP id r24-20020a056358431800b001788ab7e338mr3080332rwc.22.1706652376816;
-        Tue, 30 Jan 2024 14:06:16 -0800 (PST)
+        bh=TXEWZ+ijn2Mktyo3GgFFo1opylml2uwjVnLpw+L5S/k=;
+        b=cNITmTdOFIp+GqsIyNP3JnJvPsaHXEh/N5XjauON7cMuNmwKwLm+6zBF8zP2OEtghb
+         RoR1wVrLcX2csrKZWmm3mwCmRpQgc2dh/3i/KDcCzUlZWWETZppRWd+GGiiMfs5aDU8m
+         70qR5XB4Ir8EK4qorZLfWKNTFBpmNl7DrfZsWZHzit+C7BokphBnwHYOde0l64SFnLII
+         tUHrCrQMDEsz1XDU8XeFg5IP7wlPYrOoGMhIs+l0hbtCJojuceDGvZP17ja7JAxtXbjg
+         voDN6UCrlIBwDAU5tVeBI8d4OdoEb5O0bddJis0Y/1oVt//R8YvJ3a/xTSYF6BJZgz7x
+         zA8A==
+X-Gm-Message-State: AOJu0Yw/yPzjdZa2C6iMPBQmI66hy7sZCPzlsg517qxUkEaOh6p7H7OA
+	K8l/DbadTQG+zNVnz73YhELQsoS+UKtEtTFHjgeX/NjfXEKo4Qbouc0lXSpOCg==
+X-Google-Smtp-Source: AGHT+IEd3zXlvSGgZ0mXCE1XjkvID5hcRbGGUrHAh6e87yThPodvIALQNu/8HwwxXls7VIkIq6gj+w==
+X-Received: by 2002:a05:6a20:c411:b0:19a:360c:75d8 with SMTP id en17-20020a056a20c41100b0019a360c75d8mr8249397pzb.14.1706652378406;
+        Tue, 30 Jan 2024 14:06:18 -0800 (PST)
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e20-20020a633714000000b005d8e280c879sm2373723pga.84.2024.01.30.14.06.14
+        by smtp.gmail.com with ESMTPSA id r11-20020a170903014b00b001d8dedeb0casm4331642plc.180.2024.01.30.14.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 14:06:14 -0800 (PST)
+        Tue, 30 Jan 2024 14:06:17 -0800 (PST)
 From: Kees Cook <keescook@chromium.org>
 To: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 Cc: Kees Cook <keescook@chromium.org>,
@@ -66,9 +66,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Masahiro Yamada <masahiroy@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 3/5] overflow: Introduce add_would_overflow()
-Date: Tue, 30 Jan 2024 14:06:08 -0800
-Message-Id: <20240130220614.1154497-3-keescook@chromium.org>
+Subject: [PATCH v2 1/5] overflow: Adjust check_*_overflow() kern-doc to reflect results
+Date: Tue, 30 Jan 2024 14:06:06 -0800
+Message-Id: <20240130220614.1154497-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240130220218.it.154-kees@kernel.org>
 References: <20240130220218.it.154-kees@kernel.org>
@@ -78,62 +78,83 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1484; i=keescook@chromium.org;
- h=from:subject; bh=WUwqmJoFZQeyqmuC4k6x7kK2L9hMV5zmyghrfRiNqjc=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBluXLSKrOGOdtE6GxGZsc08FzWIhOaMnOeNq/p8
- lHKmLHU8x2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZbly0gAKCRCJcvTf3G3A
- JsybD/9hil900CeIkSDVu7dEhGUU7Eh3jgkpN4uvXxQKhpz1xxwIYnxerdxt4kUhSZ3PU7Wn+a8
- y2tMl38HSeHfTMijx0VTRIz766tSzidw/km095DK7xlLqc1C7p0bOe1fXmjDJjZMo/h+B4iYAUP
- 786UqO4ZLOPpSWWjbEoirC1DSpvbcZbf9v7z1W8wRV1v25gyUBQOvYrUMm1YCOaMm0RQGLfuLPC
- 9VVUdvY4jETXBTpUlKQ7apR4LH+2R5ioDpI9ZaCEuIoZfny7BG9mJBkmXZuvWSrXUzwoqvhEQOi
- d/JwwmkQ97OSBCj3vYl/eYqvSADKpwdPKlHA1/LuyVDmqtbvEF5Zpvy/BxkFgcPvwProrebcWtj
- 4Kc0aWfaId1UDIVNhDIbt2cGolemw66t7obWCVe59lXAAxjT5g1SQpAbVmnvDU0Pq88Ty4chzEN
- a5B1zUIWzfXejwU/U02FFfpn6jzIxuavta2dAkaqF57YIfzdaiKfCqE6G78qg7/EIUwJ1qsKJlD
- NtnqoqDMkGYOdmKSvMerFSc6HJuJAPskCMyoatyDAXt3Lors/XN0qMiAFiPxyW1JE7Q/EvtUcer
- 2tuf3HJSurwaeE4R4tAEbTLHd0N57a495U5UbSpkLEwag6gPdKC/6sH5j119nzxFUVW0AxTv/+S YGphMUzZKOqjzuw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2716; i=keescook@chromium.org;
+ h=from:subject; bh=mjbhQQsJHZNHQElAJyka1am+OsaRRifuj4xn9QRfLGM=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBluXLRXPWpxbxWBABUSnq7LV3ZR63LVVosG/CRP
+ 5ZzpJGG3mKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZbly0QAKCRCJcvTf3G3A
+ JsZ3D/47FGhmdQqxJrZ9wW+IfjOj5Z+/JJdT4A88xjMViD8m2y+sZ66ET8cpz0UxvZb8wc5ydbm
+ kKGJkwmx2MxOImy/n06QpmWo+Jj6Hcb2x4MhjJrvG7QbIC8no338Da90doAljPBJQardE1fF7BX
+ TAwaqrSw+31TcmCP/J6CJ3Zy1M7SMmYp0HdBNg7mIDikbW2FYa3oKBphdZXiLt38fjJJQf2jUFd
+ CBKnBPtpk2Q42oSJwkvv0+WZj3zuvoFhIgRyLYf0i9QuXdQFK8IfVBZQi3UUcyJRTHJDYshhaTS
+ yfLfrJ6F0nr8PdL9h2/IqewAUyNk+YiE0J1j+Ds70hYy9YypS/JaeNCvKq9n42FWNRatqLbtMEs
+ HweyCRNsTPMccrf/ZSHVhW83m0QZP3tZ00lVm3rgNhL2Q/oa/pqerx8fp8YgQ/JgLeRgJt1eK2R
+ ino8gJHkQp7HkP+owrvPQZBSFUjFFBc+7ZHhkOiOYDQ/1v7RZHuIH1CYRNyhzUdlSU+QrcgUX9F
+ XfRFoAkuBd8qYpVccYsV+1/zKrZDgEW72okrPtTNzp1Rjo+eXk5QFw9bDTl/qo/CClNbY1F0PxT
+ LKPYm7R9P1tk0jtAkCFen/ejWNEp8jvYos5ar8T5/53t/xYMN7kEw1Cj4gw2iJwJ5U7ELiklaKW B5/Vgg5InWPF4Aw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-For instances where only the overflow needs to be checked (and the sum
-isn't used), provide the new helper add_would_overflow(), which is
-a wrapper for check_add_overflow().
+The check_*_overflow() helpers will return results with potentially
+wrapped-around values. These values have always been checked by the
+selftests, so avoid the confusing language in the kern-doc. The idea of
+"safe for use" was relative to the expectation of whether or not the
+caller wants a wrapped value -- the calculation itself will always follow
+arithmetic wrapping rules.
 
-Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: Justin Stitt <justinstitt@google.com>
 Cc: linux-hardening@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/overflow.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ include/linux/overflow.h | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-index 210e5602e89b..3c46c648d2e8 100644
+index 7b5cf4a5cd19..4e741ebb8005 100644
 --- a/include/linux/overflow.h
 +++ b/include/linux/overflow.h
-@@ -104,6 +104,22 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- 		__builtin_add_overflow(__filter_integral(a), b,		\
- 				       __filter_ptrint(d))))
- 
-+/**
-+ * add_would_overflow() - Check if an addition would overflow
-+ * @var: variable to add to that is checked for overflow
-+ * @offset: value to add
-+ *
-+ * Returns true if the sum would overflow.
-+ *
-+ * To keep a copy of the sum when the addition doesn't overflow, use
-+ * check_add_overflow() instead.
-+ */
-+#define add_would_overflow(var, offset)				\
-+	__must_check_overflow(({				\
-+		typeof(var) __result;				\
-+		check_add_overflow(var, offset, &__result);	\
-+	}))
-+
- /**
-  * check_sub_overflow() - Calculate subtraction with overflow checking
-  * @a: minuend; value to subtract from
+@@ -57,11 +57,9 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+  * @b: second addend
+  * @d: pointer to store sum
+  *
+- * Returns 0 on success.
++ * Returns 0 on success, 1 on wrap-around.
+  *
+- * *@d holds the results of the attempted addition, but is not considered
+- * "safe for use" on a non-zero return value, which indicates that the
+- * sum has overflowed or been truncated.
++ * *@d holds the results of the attempted addition, which may wrap-around.
+  */
+ #define check_add_overflow(a, b, d)	\
+ 	__must_check_overflow(__builtin_add_overflow(a, b, d))
+@@ -72,11 +70,9 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+  * @b: subtrahend; value to subtract from @a
+  * @d: pointer to store difference
+  *
+- * Returns 0 on success.
++ * Returns 0 on success, 1 on wrap-around.
+  *
+- * *@d holds the results of the attempted subtraction, but is not considered
+- * "safe for use" on a non-zero return value, which indicates that the
+- * difference has underflowed or been truncated.
++ * *@d holds the results of the attempted subtraction, which may wrap-around.
+  */
+ #define check_sub_overflow(a, b, d)	\
+ 	__must_check_overflow(__builtin_sub_overflow(a, b, d))
+@@ -87,11 +83,9 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+  * @b: second factor
+  * @d: pointer to store product
+  *
+- * Returns 0 on success.
++ * Returns 0 on success, 1 on wrap-around.
+  *
+- * *@d holds the results of the attempted multiplication, but is not
+- * considered "safe for use" on a non-zero return value, which indicates
+- * that the product has overflowed or been truncated.
++ * *@d holds the results of the attempted multiplication, which may wrap-around.
+  */
+ #define check_mul_overflow(a, b, d)	\
+ 	__must_check_overflow(__builtin_mul_overflow(a, b, d))
 -- 
 2.34.1
 
