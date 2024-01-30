@@ -1,147 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6219F6A331
-	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 10:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A659367E6D
+	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 10:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706608822; cv=none; b=niaQf4u9jCrgd09q/bIiI6fmphFc5UpSLyXQC/p965vch+8+/lILIxV4Gm/WjTv9QOqKNsRcVATEtmeYlMseQOyC2wTtftm7tzfkB/1qDYazcORrvnf75Qh648uEuj8ZkReL30I+1a2pRMdZNyDdefSRRBiYK+oFI6+8FcXz9Lw=
+	t=1706611776; cv=none; b=iBAnib6nhaybJFEIabuZSDS5VB3NrTWsRZBqpVPvaWtJVVo3XulhfhBHaCDGD8QzjTYb0fz8QQRgrhVC+LHpmAndJDlAG27rIKQ9dSpvmmoQsyt93WZaOTNVc2zmksrVWmc5ttGnN7jzj9wqWkV5YQyXbfkNIrZSqofuezwlcYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706608822; c=relaxed/simple;
-	bh=hl3aWWcDKcj6n80V7MgjKRZSLee3oVCAam4GiDvNx9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=XnYuByiwUZHABgrPrHNJS0NJkYdqUKIGt/TpGXrrvdPcs/DS543KIJIhFSpeokGEuLH3DWP/Tv6UMaYlEOS/mcKk1nAc5sms2NU7J6/Yc+XPUgL5oDdevrvaTuoeXwc36ytExynBj1ngZ03F1LywjU6brks8wTq169kGKS9mXAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dShA7CDH; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706611776; c=relaxed/simple;
+	bh=vbFKDC0D+QXAEVrlJwZgowqdMTDh+yh17HAwRs3/hso=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pi7/s4iYM5pp7nK1e9en4uRaiugFSL0LZ2j/dN6kfy4a8JQcheX8SujciZD+nnnBefvOPxVVWGtWDcJaqoS3Fi5z9njt7RuyPg6WD3JGYJEEo2saXvjsyT9cky6XuF7Ra2aHfmeFLDLbI2DHbbpfn9GPRkpVe3WwWWxFwx9WUCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcRAc2a/; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dShA7CDH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706608819;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Lvd79EwJ/EeeRbQUvV7D8alEJPVcC5AuHB/N6mbkr5Q=;
-	b=dShA7CDHqo7nkGNy44jA4nN+FQ0AATCq6wDSNRu3iORsbO9j6rEWcB4vSthI1j1Z6ujsQv
-	sDeaE8GMwdO3kW+Qq0GJH63l/NxyS5eepJOHHXe34uRjakjWJqnwJlxxQPSpCx5W/MaM++
-	C8D3GwDxqQGipvnZ1nnWFTQDkSaMNmI=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-395-lbfKSKgVPsOOvEbUCH_ixQ-1; Tue, 30 Jan 2024 05:00:17 -0500
-X-MC-Unique: lbfKSKgVPsOOvEbUCH_ixQ-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-33aeb5a9275so1010902f8f.3
-        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 02:00:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcRAc2a/"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2cf591d22dfso27091551fa.0
+        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 02:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706611773; x=1707216573; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vbFKDC0D+QXAEVrlJwZgowqdMTDh+yh17HAwRs3/hso=;
+        b=XcRAc2a/99aPDu7u7jaqVhsUwEwkmskQ+OfPWcHxhTL+0JNDu8tUmOPhtq8IAfUfxE
+         XiJvFIxDEAjIbjXeMToMLuDI4QgqmWiv2x/r8ixqKapDtxOacUvl9gQRGpwA+cpFhmG/
+         tLwt/q8gYyuPW8+l6lLErhK6Y0gZBCLFpwDin/cIk9XAcYhFhziytVnJP+A3huT64Eds
+         uH5e5n7X6OONFgEzOimFp/PivvyV3+DrpEHyWMgXWQl0FQbTXo8vfkk5Ct4jA9ZfA1Gi
+         TXbUprd/giHBXYYW+A3xadDZAQhHzLGPXs5Ysjl1OKq5uY9b7YhToPSOVjvxZBAvG5k6
+         aR5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706608816; x=1707213616;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lvd79EwJ/EeeRbQUvV7D8alEJPVcC5AuHB/N6mbkr5Q=;
-        b=P7VlwNmbX3jQuQoniMvcxBJlxEjd8WIuwi/vnSW/e6aoqGAWEM59ogoGsI+WJOA4vl
-         q84b3baJVGIrFcGYXR+9o7aSiGANWnZbfzWOhzh+WREOdKEVtEleahIU9b27BaOGDjoc
-         QA7NDKFRI/MH+u4ZuajC6V1UO9rCRBiJqVZH3X+BcRb71YTtOpkF4jJ/eu1rH2BxShj/
-         qin11bsq6kBXsofGdSaqpdu0idP11p6LQsvEwQYo6qPhbHwRrPoghODQo4hf1yryMEmJ
-         1NAW1xM3CTy12ivB2OBqCRV7RLdU/CwnpqCxVPyAW8njijPjh1BjjXoXElzNtcvK2C3o
-         MQqA==
-X-Gm-Message-State: AOJu0YxMN+hcGUAXR866NwIIfdLvuh5S/hYK1OqaKbpn/pliuSSG8X5Q
-	eQ3zbGvXSOhuUi6oMWKye7kX8y6uN0hbitdW6uqwpReFktSnFXPCD+QmaCS2D4lHOjVij89+aRl
-	sMKgFeO0QC+XNHwl31bUJE5uq2AJnt9VGWfieBs52am/xyIPbdf0=
-X-Received: by 2002:a05:6000:2ac:b0:33a:f521:5815 with SMTP id l12-20020a05600002ac00b0033af5215815mr2795198wry.26.1706608816486;
-        Tue, 30 Jan 2024 02:00:16 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEwb92jelVdRIonuHD9AAXhHL37860vpbI9s5dqUN+CbIom/XaWO3f0Bq1fr41DoHF1tZ3ZDA==
-X-Received: by 2002:a05:6000:2ac:b0:33a:f521:5815 with SMTP id l12-20020a05600002ac00b0033af5215815mr2795173wry.26.1706608816134;
-        Tue, 30 Jan 2024 02:00:16 -0800 (PST)
-Received: from t14s (109-81-83-173.rct.o2.cz. [109.81.83.173])
-        by smtp.gmail.com with ESMTPSA id az28-20020adfe19c000000b0033afcf8925asm678165wrb.24.2024.01.30.02.00.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 02:00:15 -0800 (PST)
-Date: Tue, 30 Jan 2024 10:54:20 +0100
-From: Jan Stancek <jstancek@redhat.com>
-To: Nicholas Piggin <npiggin@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linuxppc-dev@lists.ozlabs.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, jstancek@redhat.com
-Subject: Re: [PATCH] powerpc: add crtsavres.o to always-y instead of extra-y
-Message-ID: <ZbjHTMhQ4Z9lRR6L@t14s>
-References: <20231120232332.4100288-1-masahiroy@kernel.org>
- <CX42TU4QHS1Z.A0UUHMDAMZOL@wheely>
+        d=1e100.net; s=20230601; t=1706611773; x=1707216573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vbFKDC0D+QXAEVrlJwZgowqdMTDh+yh17HAwRs3/hso=;
+        b=s0npePWdA7t1fEheBcnTc+H9p9XbBFwN929Hb+iFU2CgnbNoDwgjqPByvdAKXzSqWQ
+         EiZCXCVhzDmyglHeN2KhjVzR9t0aK/YUk3Fj0oWlw4cSqzZ+zWObte4nmWpP4daOVOLK
+         xyc21sjLXtOM+PjPCOFYD/HRglbVnNDvcHzo6OxCoY224y4h8EsbOChgfvMvSH2TMXmI
+         pi5YPjmR8ct53jjKFdl5LSH6VnwwAKsviiwi3U+JnQ2OMA7TKXrQlcZZ6RTDjsz8Pr1k
+         urkLkL5XhVaxxHssjDJF3Md3H9gnM4uiRV68MHXydnGgd6un3WAzSSAFhEATDBiS5zy/
+         aBvA==
+X-Gm-Message-State: AOJu0Yy0ewj3mvsseqp/zX95ZVB6BOKj/Fg6fehob4PPU12rwNI7izKB
+	jO2ol76jr+/55h8bM1BEPDVntD8rnWY5e/ElovY6zGv7GwPKvWg7Z2iZknHMcGUPdEoL78bx6/v
+	DOkJlib2g3E5ISrERXJ0gO059yhQ=
+X-Google-Smtp-Source: AGHT+IE9amhBbFX1P0c31Oaco2uh8AYrthPbebZ8QRQVeeYeFl2rpWrJju3O9v0GM+Nxqtsb2aqTYAittrgK6BIvJes=
+X-Received: by 2002:a05:651c:b29:b0:2d0:54ef:1dc1 with SMTP id
+ b41-20020a05651c0b2900b002d054ef1dc1mr2169264ljr.25.1706611772436; Tue, 30
+ Jan 2024 02:49:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CX42TU4QHS1Z.A0UUHMDAMZOL@wheely>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
+References: <CA+icZUW0GvM1+A3NKDYRrWhW+eXZj7s0uksR75FMCChkAqp_2A@mail.gmail.com>
+ <20240129203518.GA1851901@dev-arch.thelio-3990X> <CA+icZUUWOLA7YU823tuuTVCkWh7dBVF8zOMCREuLVEXFnT2izg@mail.gmail.com>
+In-Reply-To: <CA+icZUUWOLA7YU823tuuTVCkWh7dBVF8zOMCREuLVEXFnT2izg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Tue, 30 Jan 2024 11:48:55 +0100
+Message-ID: <CA+icZUVmuP4MNyvd1Q3XijFwGRcuhUzbTghnQdk-ax1EXF4dPA@mail.gmail.com>
+Subject: Re: CBL issue 1984 - AMD64 segfault during LTO building linux-6.7.0
+ with clang-17.0.6
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	Michael Larabel <Michael@michaellarabel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 21, 2023 at 10:51:34AM +1000, Nicholas Piggin wrote:
->On Tue Nov 21, 2023 at 9:23 AM AEST, Masahiro Yamada wrote:
->> crtsavres.o is linked to modules. However, as explained in commit
->> d0e628cd817f ("kbuild: doc: clarify the difference between extra-y
->> and always-y"), 'make modules' does not build extra-y.
->>
->> For example, the following command fails:
->>
->>   $ make ARCH=powerpc LLVM=1 KBUILD_MODPOST_WARN=1 mrproper ps3_defconfig modules
->>     [snip]
->>     LD [M]  arch/powerpc/platforms/cell/spufs/spufs.ko
->>   ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such file or directory
->>   make[3]: *** [scripts/Makefile.modfinal:56: arch/powerpc/platforms/cell/spufs/spufs.ko] Error 1
->>   make[2]: *** [Makefile:1844: modules] Error 2
->>   make[1]: *** [/home/masahiro/workspace/linux-kbuild/Makefile:350: __build_one_by_one] Error 2
->>   make: *** [Makefile:234: __sub-make] Error 2
->>
+On Tue, Jan 30, 2024 at 10:14=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.com=
+> wrote:
 >
->Thanks. Is this the correct Fixes tag?
+> On Mon, Jan 29, 2024 at 9:35=E2=80=AFPM Nathan Chancellor <nathan@kernel.=
+org> wrote:
+> [...]
+> > LLVM 18.0.0-rc1 should be coming out very soon
 >
->Fixes: d0e628cd817f ("powerpc/64: Do not link crtsavres.o in vmlinux")
+> Released!
 >
->Hmm, looks like LLD might just do this now automatically for us
->too without --save-restore-funcs (https://reviews.llvm.org/D79977).
->But we probably still need it for older versions, so we still need
->your patch.
+> https://github.com/llvm/llvm-project/releases/tag/llvmorg-18.1.0-rc1
 
-Hi,
+OK, Nathan uploaded a new optimized LLVM toolchain v18.1.0-rc1.
 
-I'm still seeing the error of crtsavres.o missing when building external modules
-after "make LLVM=1 modules_prepare". Should it be built also in archprepare?
+@Michael: maybe worth to point to the link(s) in your article
 
-Thanks,
-Jan
+-Sedat-
 
-
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index 051247027..a62334194 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -57,8 +57,11 @@ ifeq ($(CONFIG_PPC64)$(CONFIG_LD_IS_BFD),yy)
-  # Have the linker provide sfpr if possible.
-  # There is a corresponding test in arch/powerpc/lib/Makefile
-  KBUILD_LDFLAGS_MODULE += --save-restore-funcs
-+crtsavres_prepare:
-  else
-  KBUILD_LDFLAGS_MODULE += arch/powerpc/lib/crtsavres.o
-+crtsavres_prepare:
-+       $(MAKE) $(build)=arch/powerpc/lib arch/powerpc/lib/crtsavres.o
-  endif
-
-  ifdef CONFIG_CPU_LITTLE_ENDIAN
-@@ -389,7 +392,7 @@ vdso_prepare: prepare0
-                 $(build)=arch/powerpc/kernel/vdso include/generated/vdso64-offsets.h)
-  endif
-
--archprepare: checkbin
-+archprepare: checkbin crtsavres_prepare
-
-  archheaders:
-         $(Q)$(MAKE) $(build)=arch/powerpc/kernel/syscalls all
-
+https://mirrors.edge.kernel.org/pub/tools/llvm/
+https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-18.1.0-rc1-x86_64=
+.tar.xz
+https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-18.1.0-rc1-aarch6=
+4.tar.xz
+https://mirrors.edge.kernel.org/pub/tools/llvm/files/sha256sums.asc
+https://www.phoronix.com/news/LLVM-18.1-rc1-Released
