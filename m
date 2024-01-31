@@ -1,136 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401477993B
-	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 23:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EAC367;
+	Wed, 31 Jan 2024 00:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706657789; cv=none; b=loG3Dug4XWSRgyHbWkhBYloH/yBi0vxnIqgIptQeX8wN3/JnUDkTpprx0B38IpKqBAPXfsVqX/dTPdYb8/6c0rfDXEjUb717a6IFbgu8Iurr2v2YP6X992k6QdBFo0ItxvScCmjbmEuewFsPtVvRISNS8MxCCEcn/hQ5n6jKYAo=
+	t=1706660388; cv=none; b=oXI9DSHrv46d67n491W7FxbQAO2wmO7KYATJOKFOEv+aP5QScIcqySYckHQgmtA6RnrVJldPU3T6d1/vvRB8AE2+4XXTFLirSsNW1gagL+Z7SMl2j80yeGFHfRw6fsf40txU0tmq0FPP7pGhiRojb+4tYL+DNb+qx7VmnXPN/Rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706657789; c=relaxed/simple;
-	bh=sLwv6+dGl8oHWbDEHeRaajMfbIGR/+C6zSrAA66CSOU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uB2CsMFNPH6ffMcz2UFQD7e27Wg1VgO62KH9V2zi3btCYZcHifBnBGOq+VCe/bAKPhW1VeDxX7MWSt9shEE+YHteUMgvsNfIsDK8lCJhMmx9sOjQfkjMj4dJbpCLOtF6FsVxLBz6Yj1rspqcJi51gFhh8EbKSk1EtT3X5BXEVMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQBTpCVV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706660388; c=relaxed/simple;
+	bh=pCSiFFktmNDuxYaiTeF/tFNNXNQXYVQVvjJ5PKZnNGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RSCmpq3SH2AGnyFwJzzzq0r2OspiQ5T4wyj/YOxqt8RcW1MmR9CxNI7ZSGN3XGp+JBSl35IknWtwM2fb9Iu7jkLLBYPaAK/LQR0ZKVGiocCPcr3UpGIIf2A7nZkVvafNfYgO1tx96KFRtNHuZ4r2LVRQFPj3MhwUCBOGDYsZ8Pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KLb10bWr; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQBTpCVV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6094C43330
-	for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 23:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706657788;
-	bh=sLwv6+dGl8oHWbDEHeRaajMfbIGR/+C6zSrAA66CSOU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UQBTpCVVO1vP7QYDHfbZW4bRc3cwWDKU9QY6qudNNcBhelR5M3FDpXwKpx2p+S9h2
-	 R5PSM+p/KMJjDpolr/N2wZG0m302QXEUeAlETB6f49O1lqpNgUMUAx36MxbyjShXB6
-	 90bnJK3XhGdoeoja2Mzm0VWicbiCumPsaFTO5anj6JPfv6KoGyPMdgKRgScy6RohUZ
-	 y+CSu9X5Edg1U+iKEx9OAOwnwzttaj/Nn0Q1fsYrSwZESPL3prHmOwL2wsxIgc08Tz
-	 CcqbtUl0lPdZq1x7fuoKPJ58jBXpMyqEjlUHn1Pr8qjixTmi+Bmc1Zrs66KgUEG3Rs
-	 5prOaj2i12DNA==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-51124d43943so184295e87.2
-        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 15:36:28 -0800 (PST)
-X-Gm-Message-State: AOJu0YyhY783iFnmWsRM5dUi972iRZRXir6vjc9PsUGKMFZHLdprXRgZ
-	3d60y4TVB2WItK96TtMsb/WCsZTtPZDtxkgPXwrs0zo7QhokvfuukElNa1DTV8UhFeARE+HA92x
-	hN8/CK3DP+0BDS24oXZQROPJZa7o=
-X-Google-Smtp-Source: AGHT+IEiHNjigsuZQ7CdEKsrXuS85Ldf2QtzveLMFD6chDrnkNvw/yJzorFrzdlZEIRvNTh/mIXvWsXjUnfNWmq0mqY=
-X-Received: by 2002:a19:6518:0:b0:511:18f5:9480 with SMTP id
- z24-20020a196518000000b0051118f59480mr75132lfb.60.1706657786812; Tue, 30 Jan
- 2024 15:36:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KLb10bWr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706660386; x=1738196386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pCSiFFktmNDuxYaiTeF/tFNNXNQXYVQVvjJ5PKZnNGA=;
+  b=KLb10bWr6/ijhBJE1wCiNPLRXH1EoI06yzDlfu/uLKERVYLrTMLrwKXJ
+   pLtXir5ARslzVxjv+GRC0f/u4DjQ7nLVcbqMsYP9oYC/7aJouJBHEcnzw
+   J3BW+PkMUtWQjG5nFHaqT+pvX6j7LWH19S0RMxLr9V7o8e7YfuzgghU8Z
+   T9JPpwklG8DuHPyDEgN43im73Kf3qia0/Di4qIDeE58HBzdA0wjSkhcu1
+   3/SS0XfhTuXGdBtMw6H0xTaDEZXiIcBgLB24ywOKG6pEj/ZAzg+kuluFM
+   UGGNJJTDnh7Qo9Y0hk7GtCFZs7UEL9PR229XaM79LLxsdqsejN3fhIzl2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="2381070"
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="2381070"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 16:19:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="878621129"
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="878621129"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Jan 2024 16:19:42 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rUyKK-0000yO-0r;
+	Wed, 31 Jan 2024 00:19:40 +0000
+Date: Wed, 31 Jan 2024 08:19:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jisheng Zhang <jszhang@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 1/3] riscv: optimized memcpy
+Message-ID: <202401310851.6mjEraHQ-lkp@intel.com>
+References: <20240128111013.2450-2-jszhang@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-35-ardb+git@google.com> <CAGdbjmKDZ8R+EjR-u09r9c4Y8Y0HjWaXPARSKsW0R5zVBSLPPA@mail.gmail.com>
-In-Reply-To: <CAGdbjmKDZ8R+EjR-u09r9c4Y8Y0HjWaXPARSKsW0R5zVBSLPPA@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 31 Jan 2024 00:36:15 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXECr7SDTynefURwGYVYnAY+i+TDjW-i9hqf_5EFV2Qeqw@mail.gmail.com>
-Message-ID: <CAMj1kXECr7SDTynefURwGYVYnAY+i+TDjW-i9hqf_5EFV2Qeqw@mail.gmail.com>
-Subject: Re: [PATCH v3 14/19] x86/coco: Make cc_set_mask() static inline
-To: Kevin Loughlin <kevinloughlin@google.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240128111013.2450-2-jszhang@kernel.org>
 
-On Wed, 31 Jan 2024 at 00:16, Kevin Loughlin <kevinloughlin@google.com> wro=
-te:
->
-> On Mon, Jan 29, 2024 at 10:06=E2=80=AFAM Ard Biesheuvel <ardb+git@google.=
-com> wrote:
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Setting the cc_mask global variable may be done early in the boot while
-> > running fromm a 1:1 translation. This code is built with -fPIC in order
-> > to support this.
-> >
-> > Make cc_set_mask() static inline so it can execute safely in this
-> > context as well.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/coco/core.c        | 7 +------
-> >  arch/x86/include/asm/coco.h | 8 +++++++-
-> >  2 files changed, 8 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> > index eeec9986570e..d07be9d05cd0 100644
-> > --- a/arch/x86/coco/core.c
-> > +++ b/arch/x86/coco/core.c
-> > @@ -14,7 +14,7 @@
-> >  #include <asm/processor.h>
-> >
-> >  enum cc_vendor cc_vendor __ro_after_init =3D CC_VENDOR_NONE;
-> > -static u64 cc_mask __ro_after_init;
-> > +u64 cc_mask __ro_after_init;
-> >
-> >  static bool noinstr intel_cc_platform_has(enum cc_attr attr)
-> >  {
-> > @@ -148,8 +148,3 @@ u64 cc_mkdec(u64 val)
-> >         }
-> >  }
-> >  EXPORT_SYMBOL_GPL(cc_mkdec);
-> > -
-> > -__init void cc_set_mask(u64 mask)
-> > -{
-> > -       cc_mask =3D mask;
-> > -}
-> > diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
-> > index 6ae2d16a7613..ecc29d6136ad 100644
-> > --- a/arch/x86/include/asm/coco.h
-> > +++ b/arch/x86/include/asm/coco.h
-> > @@ -13,7 +13,13 @@ enum cc_vendor {
-> >  extern enum cc_vendor cc_vendor;
-> >
-> >  #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-> > -void cc_set_mask(u64 mask);
-> > +static inline void cc_set_mask(u64 mask)
->
-> In the inline functions I changed/added to core.c in [0], I saw an
-> objtool warning on clang builds when using inline instead of
-> __always_inline; I did not see the same warning for gcc . Should we
-> similarly use __always_inline to strictly-enforce here?
->
-> [0] https://lore.kernel.org/lkml/20240130220845.1978329-2-kevinloughlin@g=
-oogle.com/#Z31arch:x86:coco:core.c
+Hi Jisheng,
 
-This assembles to a single instruction
+kernel test robot noticed the following build warnings:
 
-movq %rsi, cc_mask(%rip)
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.8-rc2 next-20240130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-and the definition is in a header file, so I'm not convinced it makes
-a different.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/riscv-optimized-memcpy/20240128-232523
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240128111013.2450-2-jszhang%40kernel.org
+patch subject: [PATCH 1/3] riscv: optimized memcpy
+config: riscv-randconfig-001-20240131 (https://download.01.org/0day-ci/archive/20240131/202401310851.6mjEraHQ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fdac7d0b6f74f919d319b31a0680c77f66732586)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240131/202401310851.6mjEraHQ-lkp@intel.com/reproduce)
 
-And looking at your series, I think there is no need to modify coco.c
-at all if you just take this patch instead: the other code in that
-file should not be called early at all (unless our downstream has
-substantial changes there)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401310851.6mjEraHQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/riscv/lib/string.c:118:57: warning: attribute declaration must precede definition [-Wignored-attributes]
+     118 | void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+         |                                                         ^
+   include/linux/compiler_attributes.h:391:56: note: expanded from macro '__weak'
+     391 | #define __weak                          __attribute__((__weak__))
+         |                                                        ^
+   arch/riscv/lib/string.c:55:7: note: previous definition is here
+      55 | void *__memcpy(void *dest, const void *src, size_t count)
+         |       ^
+   arch/riscv/lib/string.c:118:7: error: redefinition of '__memcpy'
+     118 | void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+         |       ^
+   arch/riscv/include/asm/string.h:35:31: note: expanded from macro 'memcpy'
+      35 | #define memcpy(dst, src, len) __memcpy(dst, src, len)
+         |                               ^
+   arch/riscv/lib/string.c:55:7: note: previous definition is here
+      55 | void *__memcpy(void *dest, const void *src, size_t count)
+         |       ^
+   1 warning and 1 error generated.
+
+
+vim +118 arch/riscv/lib/string.c
+
+   117	
+ > 118	void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
