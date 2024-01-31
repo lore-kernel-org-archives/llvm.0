@@ -1,112 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8833A57895;
-	Wed, 31 Jan 2024 08:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE6E3D97D
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 08:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706689463; cv=none; b=UqNVvV1aZ91agXW89nGuRwc1AipzGSfiHv3kvwrcEiHojvDKsdsRci7jyPieaVScvt7gysWU13DjFVjIRzHEMjAG3UktqcSRHEbwfG5gPU2F2uM3x8V3zJM7plddkzz7SYnT35+rJccAsXoKwiAYHeYkNos0GBM8zrAwe7U4og8=
+	t=1706690143; cv=none; b=J6AtOLzfvZGwbfuv4/1dMFE1ImrdH9OTCsfhBCZs8pUNOMuDe243i17JUJXPIetKSLf86xkccfBsUYmg9Y0RRZtzXB/dK5XFzx+hbnPDFjKa/FKVa7Cavt8pGjb38AazFBUhu+jAgSgqUDGiHu+XkSMu+eMuHg+LUEanMl71A1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706689463; c=relaxed/simple;
-	bh=p2eNGaNPy/qRkXoqrBMs9FtoycBXq4Fa+3HgEddDlkA=;
+	s=arc-20240116; t=1706690143; c=relaxed/simple;
+	bh=NxDDW81zyrs7kxVhirPfAM74ZB+GArrAzsWzsR1+ixE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AeNNBcupzCmLB2qOzZE58EeQV7eSGCS0EM8Zk9P7rEzqqHUmwaMhE/IpyQx/MdGYwL0fs7rcT3FK3wgGWlFQoAElCQSdq5LZUnxS/2oiwNo8fti0jwl35CJQbN5IzUDnvfwX2h5n1HYRvdVfUlQtktJsd7b+y3PRluHqH0cAx4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FZfkbxbO; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BUpK7uIXMZ/QfebutzFrdosrwLxPFM914MJS0eYny1a2JI+ZB3kGat9zlW/kh006bQa71DKlviqhIfC7oMsQqhNXS26IdYHb0qof0C76LvRd/X9vomwun9FsyIF3kWNYi6f48WZD3LuEL+xU2o8eFFeJPLEPiUInInSM4lXwgM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Zwrvtkcc; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FZfkbxbO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706689462; x=1738225462;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p2eNGaNPy/qRkXoqrBMs9FtoycBXq4Fa+3HgEddDlkA=;
-  b=FZfkbxbOavkUx128m/D5r0K+l/rO3y21VAcS4rNE/X0i7aFp3N6GZccn
-   hg9J8bkS75rPBg8DTgYX9fClcB0CcO3988dmUM8rtqCWHLrvzYc987O/Z
-   DbI2Ax2RWajn3PwsgVuKyAQS3pKuZp/8r/sZ02hWXhjFfMGJxstx4Q+Fk
-   XkRzZOJALflxxbGXZ6p0b863Hn4syY+HrciqqyCjmgka2d5Br6uzHtS9M
-   tqwaJFjF0UV794G3//ejVzW2XRb/lxDfsgvs3xJ57/XLdhV0IFqyDcWK0
-   aetcUvub3zIV6GRa200T73AQ/6tZkig0lT+1wWXkCO1UDeaLX3De1G0LB
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="3399900"
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="3399900"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 00:24:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="911715756"
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="911715756"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 31 Jan 2024 00:24:15 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-	id 6D2A42D5; Wed, 31 Jan 2024 10:22:52 +0200 (EET)
-Date: Wed, 31 Jan 2024 10:22:52 +0200
-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To: Kevin Loughlin <kevinloughlin@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Pankaj Gupta <pankaj.gupta@amd.com>, 
-	Hou Wenlong <houwenlong.hwl@antgroup.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Dionna Glaze <dionnaglaze@google.com>, Brijesh Singh <brijesh.singh@amd.com>, 
-	Michael Roth <michael.roth@amd.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>, 
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
-	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
-	Sidharth Telang <sidtelang@google.com>
-Subject: Re: [PATCH v3 2/2] x86/head64: Replace pointer fixups with
- RIP_RELATIVE_ADDR()
-Message-ID: <sx3i6e6rgggh6wxtqt6odvwubg5vqotfleyjditiicjvjgpf6r@bswwhdt6zzti>
-References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
- <20240130220845.1978329-3-kevinloughlin@google.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Zwrvtkcc"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9450740E01A2;
+	Wed, 31 Jan 2024 08:35:37 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id D5H5JuvwD2rP; Wed, 31 Jan 2024 08:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706690135; bh=xURQLsUGYaQ4/5XRPeN2ACN4Xrra60hRGTkIk7Y7YVU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZwrvtkccKRg8bZ4jDh5jU+s8+WM4ifbbsjg+wXsL2donJtWAqneLDVYfm08FM62Ra
+	 YPLh191VjLFBI7rRLM6CEp1/ktGJlxM0IqwLUxDSdmwENcwn5igyTeiNC7+rS0QPyZ
+	 XRHo9AermmOti0ktm7qZoxExEgowg0+lKv+2otVwACXWH6wHRMlpJzrUhprR50DDbl
+	 zsrYKhO1EUgfIR7s9BElmeW8krpFJ8mvkwdh+f/bp3YNOFPvycYCdRez7qfhOllRHq
+	 xpiTcYQeroQSLbIPucbC3bnOej1Dujs+Lj2Fy90s9Z3+FURoXePGM6WXPdLev/ARYv
+	 6SGNY3znons6uz74ShM+Ny7fpDPthIsEWEsBfIH3mi+cdo7nDlFxdVnP8igtE0YNMC
+	 /wruhQizA/JXLI5vBXHWklIugIKP6mRFVidy2jENyI7cQzCWcuUpHjEy/HDksvBZ++
+	 4+U2FACoZwKIEYvuSjHWKfVfvkyJ/tapIMRU3CXVNTORUBUycxhSWP9QILGVJFIYGM
+	 8kgHS3WxhnRn6IisC5Se0f3zJMyitRRZSSmmz7pcc6CJMn0HJ+F07+YhzboVHsp6h/
+	 FZaQZNEjLmAWXALLxZhI4G+9H8gQ/yZOfq5PU2qxyaX/o2hA0YKAARjjKqortoq4Zx
+	 Y+YPK5O+MowySqghsgYgENrY=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 580E340E016C;
+	Wed, 31 Jan 2024 08:35:17 +0000 (UTC)
+Date: Wed, 31 Jan 2024 09:35:11 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 02/19] x86/boot: Move mem_encrypt= parsing to the
+ decompressor
+Message-ID: <20240131083511.GIZboGP8jPIrUZA8DF@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-23-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240130220845.1978329-3-kevinloughlin@google.com>
+In-Reply-To: <20240129180502.4069817-23-ardb+git@google.com>
 
-On Tue, Jan 30, 2024 at 10:08:45PM +0000, Kevin Loughlin wrote:
-> @@ -594,15 +579,15 @@ static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
->  /* This runs while still in the direct mapping */
->  static void __head startup_64_load_idt(unsigned long physbase)
->  {
-> -	struct desc_ptr *desc = fixup_pointer(&bringup_idt_descr, physbase);
-> -	gate_desc *idt = fixup_pointer(bringup_idt_table, physbase);
-> +	struct desc_ptr *desc = RIP_RELATIVE_ADDR(bringup_idt_descr);
-> +	gate_desc *idt = RIP_RELATIVE_ADDR(bringup_idt_table);
->  
->  
->  	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
->  		void *handler;
->  
->  		/* VMM Communication Exception */
-> -		handler = fixup_pointer(vc_no_ghcb, physbase);
-> +		handler = RIP_RELATIVE_ADDR(vc_no_ghcb);
->  		set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
->  	}
->  
+On Mon, Jan 29, 2024 at 07:05:05PM +0100, Ard Biesheuvel wrote:
+> +/*
+> + * Set the memory encryption xloadflag based on the mem_encrypt= command line
+> + * parameter, if provided. If not, the consumer of the flag decides what the
+> + * default behavior should be.
+> + */
+> +static void set_mem_encrypt_flag(struct setup_header *hdr)
 
-Looks like you removed all physbase users in the function. No need to pass
-it to it.
+parse_mem_encrypt
 
-> @@ -629,7 +614,7 @@ void early_setup_idt(void)
->  void __head startup_64_setup_env(unsigned long physbase)
->  {
->  	/* Load GDT */
-> -	startup_gdt_descr.address = (unsigned long)fixup_pointer(startup_gdt, physbase);
-> +	startup_gdt_descr.address = (unsigned long)RIP_RELATIVE_ADDR(startup_gdt);
->  	native_load_gdt(&startup_gdt_descr);
->  
->  	/* New GDT is live - reload data segment registers */
+> +{
+> +	hdr->xloadflags &= ~(XLF_MEM_ENCRYPTION | XLF_MEM_ENCRYPTION_ENABLED);
+> +
+> +	if (IS_ENABLED(CONFIG_ARCH_HAS_MEM_ENCRYPT)) {
 
-With startup_64_load_idt() fixed, no users for physbase in this function
-either.
+That's unconditionally enabled on x86:
+
+	select ARCH_HAS_MEM_ENCRYPT
+
+in x86/Kconfig.
+
+Which sounds like you need a single XLF_MEM_ENCRYPT and simplify this
+more.
+
+> +		int on = cmdline_find_option_bool("mem_encrypt=on");
+> +		int off = cmdline_find_option_bool("mem_encrypt=off");
+> +
+> +		if (on || off)
+> +			hdr->xloadflags |= XLF_MEM_ENCRYPTION;
+> +		if (on > off)
+> +			hdr->xloadflags |= XLF_MEM_ENCRYPTION_ENABLED;
+> +	}
+> +}
+
+Otherwise, I like the simplification.
+
+Thx.
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
