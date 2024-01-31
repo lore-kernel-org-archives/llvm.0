@@ -1,109 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468A53E462;
-	Wed, 31 Jan 2024 05:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6B941773
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 06:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706680594; cv=none; b=DY4r8qezOoZWi5lAOvBMhQzAR4edVb9NS/18DugdqR5OZqKFPAABOQ97y1lZrYbDZeq81/EenLSLxzFgF5dMNJyFE+Gil9e6LRjOuaOp5RIKPADGTe0fiiIRWKUD+5C5zCpIHdG2XIemAfo+X7/b+XgfjvSxpRaYr4uYNMnCGCs=
+	t=1706682626; cv=none; b=JoNfWSNC9LksY4KEyJSey9DzX1SDxGvlTHV2mS1hnxNdoe4PyxMwL0GXHbDZ2oF3k3pEuDCzGfOPcazJfonzxgJCHNYsqR06INgz6hqOuCgAe+9mNEguvIcwE7/sMmG8vINan3rCinYOoENhFHMkDgxPqq9UtWAxJYZlYQHyAs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706680594; c=relaxed/simple;
-	bh=qzK+W5ued4GkYlUR2+PbevEDWRqqnMQcy/ynxvyls4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=h7BdHKVlOvR6gKiNb66Yqc/rT7vkQIR8FhwDWDohkYUpgmMEJb6RGtH1CX0XUd9aal/ZNB0FOcb8HAHZRF0s1FcfM0c93mvnAWjyBi/sH0nV/hXR4Sjj5U0q+blDAD1qj4xqc0RdRwC23KB621MkkzFngXQdQl8vN25QC9haw04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c7kBdRHL; arc=none smtp.client-ip=134.134.136.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706682626; c=relaxed/simple;
+	bh=nxlnhpTP2ZY02f0uY5iRFtCEWLbVgQJy/f7OhUQYcng=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mi+w36MeSFtIeT3tQ7TjbQPgRWb/KOzeKqZsmyYswjkRvWuM57+SGODy/ehF2aE5uz2rYjIIEc+Gn7hhgt3vefLJ1DYzJ/TancnQl6IUJpHdbyQBQ9KgsEmJdw/rQhm0jYl86YBmj14p8hwRuf9yZv2Qa8NxZ1P+lLSmcUJh6MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TBajV19a; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c7kBdRHL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706680592; x=1738216592;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qzK+W5ued4GkYlUR2+PbevEDWRqqnMQcy/ynxvyls4g=;
-  b=c7kBdRHL9nKu9NV/mIqMi+my9xmoMzI9l/fYWFulqfBJg+evVg4QBE93
-   pifbnYfuPiqZ5kplTWEhVrTFA9SW6v0wFywyAwnkHRrGwr6fKSDqXakop
-   +oo1mYUd3xvqJuU7Lx1wGAO6gBcZRg33HG3TRf1kitTeMo8i7rUG5Vx9S
-   DkWrmEhNrbEryTMDdPM0msXBeI928b5FO82DKiCV5g7FSc2GmC8loqPCe
-   OTd89VLDA5Gdm8BczqjEcl4OOaLQBVXSrQEOyCsPjbg5iJ5YHqTRwRO2O
-   hxEcqXZZ6qM41hMiJTmqZdS99Y+veUHCMkpaEpqNx/8xBqHW1F4X2ksYu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="407216651"
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="407216651"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 21:56:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="858704575"
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="858704575"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jan 2024 21:56:29 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rV3ZF-0001BI-19;
-	Wed, 31 Jan 2024 05:55:50 +0000
-Date: Wed, 31 Jan 2024 13:54:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Shi <alexs@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [alexshi:schedtest 12/12] kernel/sched/fair.c:9748:34: error: call
- to undeclared function 'cpu_core_flags'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202401311339.WH2KXCdH-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TBajV19a"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-603fd31f5c2so5040257b3.0
+        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 22:30:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706682621; x=1707287421; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XuBpfFrt6LIRFxGJEZUBYvlJzyC2OSdPPTTcyZFlpqs=;
+        b=TBajV19amW54oVB/etT21slnhmxZ9UY1S9zIdWd4A2dmSPyfVIQ5hFlnMcvvwTX0D3
+         mUxzZ2rMsWR/+7tJlybhsFw7KI+KNbV+Tpm7g9Wq0qGIICEZxQm3u4N6FUM6Kd67vxkv
+         bAzyoonzYhKYnj+0kDw41luz6X4CwLQ4wnFUMYJ0pyam0Okh4Jc4EPJdI5h3izBs0LUe
+         pljkl3RZ4pdyxXUkCcU4i0gyZIHy+jJXcqlGMDKkmrIPzg6So/kHmgfvURA1iPTZzHy1
+         sCm8yhPhBsjpDQeWqz+aQPASX8JuS+PnOJ0XIWhdL8MmSPe6Pa/uvLDeB9lBimHkGmRn
+         +G8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706682621; x=1707287421;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XuBpfFrt6LIRFxGJEZUBYvlJzyC2OSdPPTTcyZFlpqs=;
+        b=P3GSCEsPpAeet/agG1rxoYYHrf7iSqSR3am54rORyM9cL0HWc/CvypV/v9LGYzI3gV
+         ylQNEc/KqoNm93Rj8vwuIg6ZvBJ8uwMT3YPl7lf2WuHCsIKY9ND8QTmVvNlgsq72qsWZ
+         P6gTAd/dutCoZytN2FEhdvjgo/RlaW96F4iMu4NjK2BiA8ZYO16J7YBLlitYR9isvHPj
+         oausxI3OAwV1YnRTrFo2b0ysibUlzGHvhSJgTeJpQaLk9wLANaAHD1pdLHlk8evXnbox
+         dNvpIkvLBd5DbE4JKA+SnItmYo0RvQowPU+0o4E9xn0nDhmHzJqvfaCLnpqs3kuwmZmL
+         wSSw==
+X-Gm-Message-State: AOJu0YyNP64yeWxHvvjWxwCiRA04ZGebi+pIDhYCdQ7IEFsmXpHlydWX
+	auYZ/WEqDWJ+7kxBisSKlxa5B1AXA8L7ZvSeCyUA/Pb0fKBS5S9NhoKGJxwaRLqsw/u06YccTpt
+	xb5fCmAws0qjvmaOrngZNMfXWIlxwUXQ3ekDSXQ==
+X-Google-Smtp-Source: AGHT+IFCSuHGBgOcgNRm+Jyx9Rk92WC70s7Qe1r45Ekea56q3x+YWZYnfOl+X2xsR2ea9MpX12ltkU9QLuvg4lUUs5g=
+X-Received: by 2002:a81:6d16:0:b0:5ff:8152:64b with SMTP id
+ i22-20020a816d16000000b005ff8152064bmr311187ywc.15.1706682621572; Tue, 30 Jan
+ 2024 22:30:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <87o7d26qla.wl-kuninori.morimoto.gx@renesas.com> <87le866qke.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <87le866qke.wl-kuninori.morimoto.gx@renesas.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Wed, 31 Jan 2024 08:30:10 +0200
+Message-ID: <CAA8EJpoRhS_yvJJUuC3YkWRAKT7e03k+-K=6QKfL_6TkB1XoxA@mail.gmail.com>
+Subject: Re: [PATCH v3 02/24] of: property: use unsigned int return on of_graph_get_endpoint_count()
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
+	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, 
+	=?UTF-8?Q?Niklas_S=C3=83=C2=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
+	=?UTF-8?B?VXdlIEtsZWluZS1Lw4PCtm5pZw==?= <u.kleine-koenig@pengutronix.de>, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Alexander Stein <alexander.stein@ew.tq-group.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Alexey Brodkin <abrodkin@synopsys.com>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Andy Gross <agross@kernel.org>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Daniel Vetter <daniel@ffwll.ch>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, David Airlie <airlied@gmail.com>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Emma Anholt <emma@anholt.net>, 
+	Eugen Hristev <eugen.hristev@collabora.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Frank Rowand <frowand.list@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans Verkuil <hverkuil-cisco@xs4all.nl>, 
+	Helge Deller <deller@gmx.de>, Hugues Fruchet <hugues.fruchet@foss.st.com>, 
+	Jacopo Mondi <jacopo+renesas@jmondi.org>, Jacopo Mondi <jacopo@jmondi.org>, 
+	James Clark <james.clark@arm.com>, Jaroslav Kysela <perex@perex.cz>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Kevin Hilman <khilman@baylibre.com>, 
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
+	Kieran Bingham <kieran.bingham@ideasonboard.com>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Liu Ying <victor.liu@nxp.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Marek Vasut <marex@denx.de>, 
+	Mark Brown <broonie@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
+	Michael Tretter <m.tretter@pengutronix.de>, Michal Simek <michal.simek@amd.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Philippe Cornu <philippe.cornu@foss.st.com>, 
+	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>, Rob Clark <robdclark@gmail.com>, 
+	Rob Herring <robh+dt@kernel.org>, Robert Foss <rfoss@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Saravana Kannan <saravanak@google.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Shawn Guo <shawnguo@kernel.org>, Sowjanya Komatineni <skomatineni@nvidia.com>, 
+	Stefan Agner <stefan@agner.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, Takashi Iwai <tiwai@suse.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Tim Harvey <tharvey@gateworks.com>, Todor Tomov <todor.too@gmail.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+	Yannick Fertre <yannick.fertre@foss.st.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Fabio Estevam <festevam@gmail.com>, Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Jessica Zhang <quic_jesszhan@quicinc.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Leo Yan <leo.yan@linaro.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Mike Leach <mike.leach@linaro.org>, 
+	Sam Ravnborg <sam@ravnborg.org>, Sean Paul <sean@poorly.run>, Tom Rix <trix@redhat.com>, 
+	coresight@lists.linaro.org, devicetree@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-staging@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-tegra@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/alexshi/linux.git schedtest
-head:   b92ab0e6c7d969d7c8b42f8a5ff7e1e73f63599b
-commit: b92ab0e6c7d969d7c8b42f8a5ff7e1e73f63599b [12/12] sched/fair: change sched asym checking condition
-config: x86_64-buildonly-randconfig-001-20240131 (https://download.01.org/0day-ci/archive/20240131/202401311339.WH2KXCdH-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240131/202401311339.WH2KXCdH-lkp@intel.com/reproduce)
+On Wed, 31 Jan 2024 at 07:05, Kuninori Morimoto
+<kuninori.morimoto.gx@renesas.com> wrote:
+>
+> The return type and the variable of of_graph_get_endpoint_count()
+> should be unsigned. Tidyup it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401311339.WH2KXCdH-lkp@intel.com/
+'the variable'?
 
-All errors (new ones prefixed by >>):
+I'd have added a few words telling that return type can be unsigned
+because there is no error reporting for this function.
 
->> kernel/sched/fair.c:9748:34: error: call to undeclared function 'cpu_core_flags'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    9748 |                 (is_core_idle(cpu) && test_bit(cpu_core_flags(), (void*)&sd->flags));
-         |                                                ^
-   1 error generated.
+>
+> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> ---
+>  drivers/of/property.c    | 2 +-
+>  include/linux/of_graph.h | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 4e879faa1710..25d73409aeee 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -817,7 +817,7 @@ EXPORT_SYMBOL(of_graph_get_remote_port);
+>   *
+>   * Return: count of endpoint of this device node
+>   */
+> -int of_graph_get_endpoint_count(const struct device_node *np)
+> +unsigned int of_graph_get_endpoint_count(const struct device_node *np)
+>  {
+>         struct device_node *endpoint;
+>         int num = 0;
+> diff --git a/include/linux/of_graph.h b/include/linux/of_graph.h
+> index 4d7756087b6b..a4bea62bfa29 100644
+> --- a/include/linux/of_graph.h
+> +++ b/include/linux/of_graph.h
+> @@ -41,7 +41,7 @@ struct of_endpoint {
+>  bool of_graph_is_present(const struct device_node *node);
+>  int of_graph_parse_endpoint(const struct device_node *node,
+>                                 struct of_endpoint *endpoint);
+> -int of_graph_get_endpoint_count(const struct device_node *np);
+> +unsigned int of_graph_get_endpoint_count(const struct device_node *np);
+>  struct device_node *of_graph_get_port_by_id(struct device_node *node, u32 id);
+>  struct device_node *of_graph_get_next_endpoint(const struct device_node *parent,
+>                                         struct device_node *previous);
+> @@ -68,7 +68,7 @@ static inline int of_graph_parse_endpoint(const struct device_node *node,
+>         return -ENOSYS;
+>  }
+>
+> -static inline int of_graph_get_endpoint_count(const struct device_node *np)
+> +static inline unsigned int of_graph_get_endpoint_count(const struct device_node *np)
+>  {
+>         return 0;
+>  }
+> --
+> 2.25.1
+>
 
 
-vim +/cpu_core_flags +9748 kernel/sched/fair.c
-
-  9730	
-  9731	/**
-  9732	 * sched_use_asym_prio - Check whether asym_packing priority must be used
-  9733	 * @sd:		The scheduling domain of the load balancing
-  9734	 * @cpu:	A CPU
-  9735	 *
-  9736	 * Always use CPU priority when balancing load between SMT siblings. When
-  9737	 * balancing load between cores, it is not sufficient that @cpu is idle. Only
-  9738	 * use CPU priority if the whole core is idle.
-  9739	 *
-  9740	 * Returns: True if the priority of @cpu must be followed. False otherwise.
-  9741	 */
-  9742	static bool sched_use_asym_prio(struct sched_domain *sd, int cpu)
-  9743	{
-  9744		if (!(sd->flags & SD_ASYM_PACKING))
-  9745			return false;
-  9746	
-  9747		return (sd->flags & SD_SHARE_CPUCAPACITY) ||
-> 9748			(is_core_idle(cpu) && test_bit(cpu_core_flags(), (void*)&sd->flags));
-  9749	}
-  9750	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+With best wishes
+Dmitry
