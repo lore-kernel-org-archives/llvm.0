@@ -1,93 +1,169 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF30050A91
-	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 07:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FF15DF14
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 07:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706686348; cv=none; b=ingBTlWgyo/sb66AKYXTjhh5xqkNvMdvF/d7WqrOyZqkjEX+FcFdY96bbn4Nsbsc+tNo8PRrJ1O77ojuXhStIIr6TpPZDFHDK/F/iaQSKuJnG/PRi81FpZli2EP3HiWhHhEkRCEmzutYxKrVg9yigjKPH3Vc7GwA/trhSrpGVNk=
+	t=1706686893; cv=none; b=RbgT98kYqe0bmzw9m4Kaif6PHqcSxlP+oCDwFs9pl8YmCRPzc7NEpizeTOFUfYVHopPCFvDOhVcfOEY56Rn9E+SzS15LyDdImQQUcfXLahHUkeMBrETKVxEXWXSaTXD7iEjslUoB4RLI6Ljgvs80I88U/kGM9KJxYw8h3/ysMzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706686348; c=relaxed/simple;
-	bh=pgyAw8iVHEbKDoIUzik08bQYOc4UhRc4AOUSm9mIbiw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W5ruAqrZbRVTNNCpugsJkNXPzTVGkKILOkeu2qtLujZUCmm2tM09Nd9uF5/nd/UpyGrnjJtC2N3hennHLeWi42FDQDm9g/tDnM0EjO/N0YO27UzVzML0ZFR4ryKh0bq3Gi+6Mmn6YXAqCbWwS3rAGuq3YjiQ4HA9wfEthfv3448=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=f1siF1NH; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1706686893; c=relaxed/simple;
+	bh=4SiQSw02Ruzb3NBpKNMSa//EBKrJiDmDRGTm5WssxEE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=g7UoS17V+w1V7VAN9qGbqaxLGnTmM4JF7jFDQ80gqHwTpSwByKtwkzeo4dB5SPtnp5wtfsv/Aqc4KFQjbqvKGYznStdBr1DFKfnQdslYkkhTSZzQfV+0ieGHF8okdgkWcYkeJ7oNl13hgXv0dP76IP/b6aG1wGQC4X8qpZONkG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AX2rGJrW; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="f1siF1NH"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 76C9E40E0177;
-	Wed, 31 Jan 2024 07:32:23 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id uu-ek8orGlLV; Wed, 31 Jan 2024 07:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706686341; bh=4Kjl9jkNKfQ+jTyuemj6gc3E9MJ5mD2Pes6z9Kzttk0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f1siF1NHDuVwULjFf7dcR0YIrzh5ESly6O2pk1RpPg3mexdymmqb8WkleMy5AaCaT
-	 +LEa3/Ti+zdJR3cC7wwZIi7P6SLMOcGxbP7MRa480cs4PvoW7JTgX7hcr7fi829Aaf
-	 pqAdmdjfb2TN1FnRC42B6LhbES3mtXZxd+odQUxlHtj2gSf54Euri06mBpcVjKoni3
-	 RoxSxQnDUmol1J0Qf8S8NTaU8PEBVGYOUV99PcezuZefCXEurUBqk+N00mVUofE0M8
-	 QaAfb5XWyK4oVeFUrbE2u94H4NA6OEVaGk9aQCFJARNhth9gSvYrh5yj9yZ1VyYuI/
-	 f5Wue99ErQqCF+oWV0ABrd4JYS2DeHoQZh/FpEdV/5dROw63OQwU84xDTqFqZnfpa7
-	 y+AAeT9taj42oV3yscn4nN/tUUz6Ah/k4hW6Mp4I+s9JH0D0ZrHXNAsexOsC2jddZU
-	 bWenXqv3+PHkdAucidcGxxXuNg0N08J0Llhem3yYg7cHFfls+reYf3kXexehYVNCqU
-	 Vrupnzqig0BngwQOccnoorA2pYAz775lVG9ZxgJH5oNEpezw7knquviR6WK37ARAGH
-	 kjJOJmvVvvRY+bWXL5w+rfpgCxl9yMJINny7camU96eoz3Ex61PVTWWj97uOs+I1Jc
-	 4nSLQq1KG7NtPwXpA/yq977w=
-Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AX2rGJrW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706686889;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VrVZdFL8a70c0s0JSl6IlzMGdLXYCzmD8cThFp/YiYs=;
+	b=AX2rGJrWa0BKbZmUUF2oZsjY+YunLjW0F0lJ1tw2Mwi3JwfflaRFad1t/VtTTpGIJ14pjB
+	XYzcjUrjYJyr8U3yCXUrAu2rzd9zeKjuZji/YMNj3xSiWjts4g+uiEkhxg+IAu66NpBE5u
+	bE8IJ38V+SqGm6SI3pwsqiCd2rk7zTg=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-346-Lfi8_0_fM8GDDCF2ut0GdQ-1; Wed,
+ 31 Jan 2024 02:41:26 -0500
+X-MC-Unique: Lfi8_0_fM8GDDCF2ut0GdQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1C05240E01FA;
-	Wed, 31 Jan 2024 07:32:03 +0000 (UTC)
-Date: Wed, 31 Jan 2024 08:31:56 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 01/19] efi/libstub: Add generic support for parsing
- mem_encrypt=
-Message-ID: <20240131073156.GHZbn3bILaWLEluzp-@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-22-ardb+git@google.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1EAAB386A0AB
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 07:41:26 +0000 (UTC)
+Received: from [172.64.10.24] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0BEB4492BE2;
+	Wed, 31 Jan 2024 07:41:26 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 226): Test report for master
+ (6.8.0-rc2, mainline.kernel.org-clang, 2a6526c4)
+Date: Wed, 31 Jan 2024 07:41:26 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240129180502.4069817-22-ardb+git@google.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <56014.124013102412600173@us-mta-346.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 29, 2024 at 07:05:04PM +0100, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
-> 
-> Parse the mem_encrypt= command line parameter from the EFI stub if
-> CONFIG_ARCH_HAS_MEM_ENCRYPT=y, so that it can be passed to the early
-> boot code by the arch code in the stub.
+Hi, we tested your kernel and here are the results:
 
-I guess all systems which do memory encryption are EFI systems anyway so
-we should not worry about the old ones...
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
--- 
-Regards/Gruss,
-    Boris.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Kernel information:
+    Commit message: Merge tag 'linux_kselftest-kunit-fixes-6.8-rc3' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/126610
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
