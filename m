@@ -1,101 +1,141 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47A980BFD;
-	Wed, 31 Jan 2024 14:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A2D82875
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 14:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706709675; cv=none; b=ezX3/5TVOG0e8Y3ah54nQPlnlGefEg4xcvR9VRRLnpx2C01s3pmeMwNdig2fw5JuORGQh8y6y4e/IBlAshErEO+uv1N1JOzU68lB7Wj454oU4yRKMx3rVayBQyG+d44+3lo81ZHkzVm7ge3osMAGPz8S2rIi0GGYPQGJgb7G388=
+	t=1706710084; cv=none; b=CKKEvXcFQ1MyEcOdk5IEiC9ipnmqxA2e35iy2DwSnyVaxJKzMiX7Y7KxWLFTOGnlfa1u0mGkQR/zGp668kDnkUdy/PIZRPsu3+pbAOu2Zk1O2AnDjXYASUU/QavJAPg5KMVxSLT3jC2nU8PWyUGZiyID1nxg1JvU3K8IStUb8HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706709675; c=relaxed/simple;
-	bh=VKftZjYTPFttrAWy4mQSvI4tODip6EMij2iomGHSEiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pQUq/BAwdreFd8e227XeHf3XU2ExijPXpcd053HNL5/EJKEqhvxRfb9U98r4svZWl2ocE49Rl1aNl4HQSp3E7dVvHJDJ7+ZVXM52Olh2n+0SjvHSd8wWuELs44dCQQ8ph/TENKBI0YiAhfwFgE1ZFw+/jH04mwOqAmpuz7d/ANA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cJ5/ZaFs; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1706710084; c=relaxed/simple;
+	bh=5nR7Ertacn9PuZp1Bn/nWb7jPB+VBrlLCjXLDoq7d5k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iL+/gKFNu/tf2/gzRRuF3oqe5nX9sldUGyvIv1r2zy1EBP0wjxfqDwDkgRncpZav8HqrQsvRACiCxkUQMVvHdgbUeCTkNaxU19hkWw4580/B1hMeEwvHvETKFxxv6c13TZ+5isaLf5rqj8Wj5/DAbCFfxGl6rXLWzHAOqH45Joc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYQ1foks; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cJ5/ZaFs"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 78C7440E00C5;
-	Wed, 31 Jan 2024 14:01:11 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 7-49zGRkOdZG; Wed, 31 Jan 2024 14:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706709668; bh=s1sCZOaViMd/RO2i16hNLSl0mKH2iujGzYJ4LY2cvoM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cJ5/ZaFsbMWoYYcHishCz3dIIdEdYYVKBTfA8et8o/ldP2dtie5NWD0J4C0hr1viM
-	 x6rZvYgUejuftFvp5w5jxwfl8ZydabTzVU8l2JsRrsi0cNS53JhXSoClIpDC+W0Rdk
-	 RJWjDhxzSkOCm3melsW8S5SksY2CCOGVjC7A465xuiCYvU7k7Y/5KTSGaMtW7IL5n4
-	 /dJQT7H2o2K2lm0pGgq64nmdu+o88PkeWb9QTGxhUdWEM3n/xlXfA2TiNAqL8vfnAE
-	 yaQ2rsriZQDIia57V970O1VgJ8zrZ3rdJSYJYFnmgxvKY7xHZujVwmYpeLAknnZtNo
-	 7v6pljTk9tEVsZtaTb3XKXVP2ygW2mzoykW6PDcbAbJFTH6lKuhOvq5+8n7hG1CC0p
-	 DdyZgJwpIxpY/kEtKwZc0gTMd3d4LoJNsbLuY7If0paKzjNUlH5QEHA/Y0TJIBnCsR
-	 2SXXHBKMHPg2peo48EFoE//y50vzT7mbxPz09k/YFsI4nSfKgRbGSu8TnfDPPlVQ9M
-	 LVkBUcSJJKaRHM/mkYSm9w25gspQIEqLmo4JSI4psMgfLy15yriKtFBUT+PsdRU5MY
-	 ZJDydytR0vFmpiA5Y6wQuIWZaMgW3RxMVzxVl7RDf+rCOXsJ60fWXygyZaODBrYlaB
-	 QEfPNJnuAVQvKDT7pMD3aqd8=
-Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B373B40E00B2;
-	Wed, 31 Jan 2024 14:00:43 +0000 (UTC)
-Date: Wed, 31 Jan 2024 15:00:37 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Kevin Loughlin <kevinloughlin@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Pankaj Gupta <pankaj.gupta@amd.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Brijesh Singh <brijesh.singh@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>,
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>,
-	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>,
-	Sidharth Telang <sidtelang@google.com>
-Subject: Re: [PATCH v3 0/2] x86: enforce and cleanup RIP-relative accesses in
- early boot code
-Message-ID: <20240131140037.GDZbpShX2b0elXlqDA@fat_crate.local>
-References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
- <20240130220845.1978329-1-kevinloughlin@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYQ1foks"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C54C43394
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 14:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706710083;
+	bh=5nR7Ertacn9PuZp1Bn/nWb7jPB+VBrlLCjXLDoq7d5k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iYQ1foksziyUWYW8tRQV+ff4NIPx+pD2QLp+msKwoB4/FOncHJiUe52cbJxGW58pZ
+	 68GXvryC227ayGT6fc5gJ4pwcggz7j1B53SnHc6AQZsw9aDT87svSQDKuqN7GcIPhm
+	 LwFIsszth8jeuDwoCP0AelpQi4yrHXtQMLGpxdx9H38b9rya03pygUvtOM23wpCK7R
+	 lACMem1wB+vEOK2igAPErOGXMTlIhdSGettMAy/TI7DUn9VyKqwPegQ0n/kG6nEOGM
+	 XL+L4/SmUjBFxNeUMyjvhUCBo6kGUD6NuXgan/80gs6rRn1oK67xRQ328YnLIKfqcB
+	 z1BXYU07RZS8g==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51109060d6aso5294377e87.2
+        for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 06:08:03 -0800 (PST)
+X-Gm-Message-State: AOJu0YxmjTk7k3bwdIJ631xJxn46sWXolXGUhLL+hSlr28/SYgpsZATg
+	6SO1xsOgs6ZcpjDruFbtNp8uXG0wf75U4k/HUtkiKbiO5Qhv4SY0ziI+OHK0gGkSgpzSmPA5HmF
+	SXRjr6JhCT+HYSV8zb/r2+QAY+/E=
+X-Google-Smtp-Source: AGHT+IEWOX5OhqEdfMQM4e2B9NE+FH+r8iCudVcs4e/r9DjBBtoSKBUY5Wgyaf1OXbZRbRm3omEFOmJJTybR5NzVdxo=
+X-Received: by 2002:a19:8c4e:0:b0:511:18e4:89bb with SMTP id
+ i14-20020a198c4e000000b0051118e489bbmr1384753lfj.39.1706710081908; Wed, 31
+ Jan 2024 06:08:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240130220845.1978329-1-kevinloughlin@google.com>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-24-ardb+git@google.com> <20240131134431.GJZbpOvz3Ibhg4VhCl@fat_crate.local>
+ <CAMj1kXF7T4morB+Z3BDy-UaeHoeU6fHtnaa-7HJY_NR3RVC5sg@mail.gmail.com>
+In-Reply-To: <CAMj1kXF7T4morB+Z3BDy-UaeHoeU6fHtnaa-7HJY_NR3RVC5sg@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 31 Jan 2024 15:07:50 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
+Message-ID: <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
+Subject: Re: [PATCH v3 03/19] x86/startup_64: Drop long return to initial_code pointer
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 30, 2024 at 10:08:43PM +0000, Kevin Loughlin wrote:
-> Instead, this patchset continues the approach of fixing the immediate
-> problem of SEV-SNP boots crashing when built by clang, providing a
-> backport-friendly set of changes needed to successfully boot SEV-SNP
-> hosts and guests.
+On Wed, 31 Jan 2024 at 14:57, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Wed, 31 Jan 2024 at 14:45, Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > On Mon, Jan 29, 2024 at 07:05:06PM +0100, Ard Biesheuvel wrote:
+> > > From: Ard Biesheuvel <ardb@kernel.org>
+> > >
+> > > Since commit 866b556efa12 ("x86/head/64: Install startup GDT"), the
+> > > primary startup sequence sets the code segment register (CS) to __KERNEL_CS
+> > > before calling into the startup code shared between primary and
+> > > secondary boot.
+> > >
+> > > This means a simple indirect call is sufficient here.
+> > >
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > > ---
+> > >  arch/x86/kernel/head_64.S | 35 ++------------------
+> > >  1 file changed, 3 insertions(+), 32 deletions(-)
+> > >
+> > > diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+> > > index d4918d03efb4..4017a49d7b76 100644
+> > > --- a/arch/x86/kernel/head_64.S
+> > > +++ b/arch/x86/kernel/head_64.S
+> > > @@ -428,39 +428,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+> > >       movq    %r15, %rdi
+> > >
+> > >  .Ljump_to_C_code:
+> > > -     /*
+> > > -      * Jump to run C code and to be on a real kernel address.
+> > > -      * Since we are running on identity-mapped space we have to jump
+> > > -      * to the full 64bit address, this is only possible as indirect
+> > > -      * jump.  In addition we need to ensure %cs is set so we make this
+> > > -      * a far return.
+> > > -      *
+> > > -      * Note: do not change to far jump indirect with 64bit offset.
+> > > -      *
+> > > -      * AMD does not support far jump indirect with 64bit offset.
+> > > -      * AMD64 Architecture Programmer's Manual, Volume 3: states only
+> > > -      *      JMP FAR mem16:16 FF /5 Far jump indirect,
+> > > -      *              with the target specified by a far pointer in memory.
+> > > -      *      JMP FAR mem16:32 FF /5 Far jump indirect,
+> > > -      *              with the target specified by a far pointer in memory.
+> > > -      *
+> > > -      * Intel64 does support 64bit offset.
+> > > -      * Software Developer Manual Vol 2: states:
+> > > -      *      FF /5 JMP m16:16 Jump far, absolute indirect,
+> > > -      *              address given in m16:16
+> > > -      *      FF /5 JMP m16:32 Jump far, absolute indirect,
+> > > -      *              address given in m16:32.
+> > > -      *      REX.W + FF /5 JMP m16:64 Jump far, absolute indirect,
+> > > -      *              address given in m16:64.
+> > > -      */
+> > > -     pushq   $.Lafter_lret   # put return address on stack for unwinder
+> > >       xorl    %ebp, %ebp      # clear frame pointer
+> > > -     movq    initial_code(%rip), %rax
+> > > -     pushq   $__KERNEL_CS    # set correct cs
+> > > -     pushq   %rax            # target address in negative space
+> > > -     lretq
+> > > -.Lafter_lret:
+> > > -     ANNOTATE_NOENDBR
+> > > +     ANNOTATE_RETPOLINE_SAFE
+> > > +     callq   *initial_code(%rip)
+> > > +     int3
+> > >  SYM_CODE_END(secondary_startup_64)
+> > >
+> > >  #include "verify_cpu.S"
+> >
+> > objtool doesn't like it yet:
+> >
+> > vmlinux.o: warning: objtool: verify_cpu+0x0: stack state mismatch: cfa1=4+8 cfa2=-1+0
+> >
+> > Once we've solved this, I'll take this one even now - very nice cleanup!
+> >
+>
+> s/int3/RET seems to do the trick.
+>
 
-What use cases are those exactly? How do I reproduce them here?
-
-SNP is not upstream yet and the SEV* code has been out there for a while
-now without a single such report so this must be something new happening
-due to <raisins>...?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+or ud2, even better,
