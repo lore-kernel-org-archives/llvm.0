@@ -1,86 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BB01272C2;
-	Wed, 31 Jan 2024 15:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52DC12BEB0
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 16:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706716005; cv=none; b=oqDNjB+wIHXPlfIWJmMm58rxbXPs40jhlsVPqSh+db41m88P2Sd/lC3tp8017D6pA3Tk+wmkfZbsmV3qK9Iyd7g6/utE3fElLGFj8/QkWWMEr1NOFvSQeg1VlG96tkhqkcWxT5mQsYlv+gKxfmk3EjeDOT240mlb40AkcKjxVfY=
+	t=1706718617; cv=none; b=mKzsT6QyZZtVmQFiqG9LJWRWjYDIMCpvbYTPV6Op1mtTmddzXQPrhj7sNZO9GnMZT8B3D5gBC4CSS1rg8GLVIoixhYSmIAALBTeg+tjIHT0J5GHDq3nfRaTLVfHZT/HTPVo+ajMEjgWiJh5TO9HH7oQv6pivLRFGeovoybAk8cM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706716005; c=relaxed/simple;
-	bh=TIYEjhEm+Q9THJNQ+RQRVyVZX4DEQNHZSWYzF0LI+Ak=;
+	s=arc-20240116; t=1706718617; c=relaxed/simple;
+	bh=7V1fSgM4dCw5mlPpFTAU48pNl+7Y50/umf6DNk56DA0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RVZdnW2HV76+o6FtCNR6+pDcv8zRDx0c+LXN3MzUHSTGepN13RVFZF2POutdwvHfLNjJI0IzhOTG7lBmaVtBB8wss9GxWAD18XtZPD/rXoYcJJaz/fK03EBtWhoXZwb0pbQRsyctH7Bfs0m51W1cM62FmX/dT3QvU0t12SSQroM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W7wBb8Bp; arc=none smtp.client-ip=134.134.136.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=sHMdwxjSi0DAd594tgdjm9JZGu3asSkLrXSl+1+QGA5I39orG7tZUCImTjeniTHI+LXgS3oXaBkoUtZGTYW4R3vfsCS39FIV5Ftkb4DCdcftTQNVEKqSXH9kuL2NlWadlv1O8yZ8XlqAlcq8MO0ps5Izw30Xo7E7NJIUGGX+NRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FT0Fzc15; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W7wBb8Bp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706716004; x=1738252004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TIYEjhEm+Q9THJNQ+RQRVyVZX4DEQNHZSWYzF0LI+Ak=;
-  b=W7wBb8BpLgksjmomzAQbMj4AcgGJt323qmhJ5qkIM9pfKqvJTlcvZ0Qp
-   4hiZza0i+0Gs53xmEu+VZInkAbENJpCmDuq8Y0iH+PzWBTvf0NtpG5lwN
-   rf/nJjohEJRCNYN2z5PU6NRxW7X/XRrzAAXd5vvpDP/AvZa75EUis+cZg
-   0qGlJ+t8wVqxbJ4bpyQks6Dcns0xG9tGrYaBYMv6LoGpjsk7Mv3m2fFGi
-   aAgcYkThpoaspUw7NVG1N8zX9pODhDRAAukDQ9XDALjAbUCqxAB17XnCz
-   IUNui7OFCUaFiYVBbF43wQJyXGRoFRCCMSsDiR7XIl555J6QMAnpec/Wk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="394068817"
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="394068817"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 07:46:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="822605488"
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="822605488"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2024 07:46:31 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-	id 07C7B772; Wed, 31 Jan 2024 17:36:46 +0200 (EET)
-Date: Wed, 31 Jan 2024 17:36:46 +0200
-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Kevin Loughlin <kevinloughlin@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Pankaj Gupta <pankaj.gupta@amd.com>, 
-	Hou Wenlong <houwenlong.hwl@antgroup.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Dionna Glaze <dionnaglaze@google.com>, Brijesh Singh <brijesh.singh@amd.com>, 
-	Michael Roth <michael.roth@amd.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>, 
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
-	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
-	Sidharth Telang <sidtelang@google.com>
-Subject: Re: [PATCH v3 2/2] x86/head64: Replace pointer fixups with
- RIP_RELATIVE_ADDR()
-Message-ID: <yie3eza6ak7eqlsvb2fjj6t7k43qtupscmv6cvu2eoqv5ikaoz@h5drniall723>
-References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
- <20240130220845.1978329-3-kevinloughlin@google.com>
- <733302e0-e8c2-458e-a4b2-dfd10e065036@amd.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FT0Fzc15"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6290E40E0177;
+	Wed, 31 Jan 2024 16:30:13 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 7GQ7zRmXTudR; Wed, 31 Jan 2024 16:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706718611; bh=CwEErEB3kf4RV79ZYL4VTQTVVr1r+pmwOOZjB2GqHX8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FT0Fzc15Ik8qxsIJb/DkO7GGIGwKyf5+d/2niv86eGi9vZs09M+9SRHZ0CaxTAkew
+	 qQX/Hc0GsOcQDyshkSAOGiYxmlWV79/k8hs22cMauUhYQI3hfQ4DnCg3sC9ZYyLrGM
+	 ot4jMX0I7B2caZfGD+YRNt6C3gDweittOAm1YTBM9fYGznDfpbyX4vKXd8AByNK3E8
+	 ne8iXgwIhTDXWV7uyMN2ozEA+uoLzz6oXQtFyOlhjz7XTiCdbM5d/r2+Drq6gdjPsw
+	 yak8/RlmQKstxU3LjZrjIG7aN6Hb7ENIsHb+Oaa5rOFq0P3wNnTQ7NxF3mVCcqEeWL
+	 1N2yJ6/9axAyvjKOGeJORYRPMYrHxGKgTGgDID+IwbW9/RRDfY6Zjo6C+JNrE7eTP4
+	 DJyST6GQnuc/DVlJlNSmM4yf++toYjZ0BxgbqQ3Vt1htYp81aA4wWm0X4vKMjpD2Oh
+	 fGLKEvRC4hYYdUpIOGQ1xZCw/T8PcjY8Clue4YWYr6YAGwpl3iag6KLy4vQGZIDhhC
+	 PMajdU1cEQI2GKS4LAN1OzKGjTisOLQlXeSSQNf5fS2sLGgLtMLUGaTU2MEu+bC8rv
+	 sPTFWWpxh8qzdcTIUe55IWH3RxALfhpJwe/HewWL4t7b5komTAU5tKAoY6QHBYMe2s
+	 rjlBaZ71WYEFlOQNT+aA6+fQ=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 256DC40E00C5;
+	Wed, 31 Jan 2024 16:29:53 +0000 (UTC)
+Date: Wed, 31 Jan 2024 17:29:52 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 03/19] x86/startup_64: Drop long return to
+ initial_code pointer
+Message-ID: <20240131162952.GHZbp1gH7C7lNMRUru@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-24-ardb+git@google.com>
+ <20240131134431.GJZbpOvz3Ibhg4VhCl@fat_crate.local>
+ <CAMj1kXF7T4morB+Z3BDy-UaeHoeU6fHtnaa-7HJY_NR3RVC5sg@mail.gmail.com>
+ <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <733302e0-e8c2-458e-a4b2-dfd10e065036@amd.com>
+In-Reply-To: <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
 
-On Wed, Jan 31, 2024 at 09:30:10AM -0600, Tom Lendacky wrote:
-> On 1/30/24 16:08, Kevin Loughlin wrote:
-> > Now that we have RIP_RELATIVE_ADDR(), we can replace the "fixup_*()"
-> > family of functions in head64.c with the new macro for cleaner code.
-> 
-> If this series is purely for backporting, this specific patch isn't needed,
-> right? Since this all works today with clang?
+On Wed, Jan 31, 2024 at 03:07:50PM +0100, Ard Biesheuvel wrote:
+> > s/int3/RET seems to do the trick.
+> >
+> or ud2, even better,
 
-That's true. However, temporary things often end up becoming permanent :/
+Yap, that does it. And yes, we don't return here. I guess objtool
+complains because
+
+"7. file: warning: objtool: func()+0x5c: stack state mismatch
+
+   The instruction's frame pointer state is inconsistent, depending on
+   which execution path was taken to reach the instruction.
+
+   ...
+
+   Another possibility is that the code has some asm or inline asm which
+   does some unusual things to the stack or the frame pointer.  In such
+   cases it's probably appropriate to use the unwind hint macros in
+   asm/unwind_hints.h.
+"
+
+Lemme test this one a bit on my machines and queue it.
+
+Thx.
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
