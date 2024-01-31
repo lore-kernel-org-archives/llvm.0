@@ -1,153 +1,110 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16C828E17
-	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 06:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F008E51027
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 06:53:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706682789; cv=none; b=rkplUroo8AYgsL54DxvaTyfU7/CoaZRHw30wm2hlXUcT/HIBqprAzzFXfKb4H3yJV+NBXSqvHQaP09xlVor1WYYzKse3RxIEbHSiQ2DtDWr8BtRccnSBxOG/f8SSUUPBv0CRGYLU/en7IuT9cZO3ikXb8kVJtDr/DnfmcHlYAy8=
+	t=1706684023; cv=none; b=AQ3nqN6CzErq9lbOwjpYLBX6h+T56K5D7NsOlEFq1fNo7/SgQUShIxGt21OW2msKY8htsaKEx4J3zZ0nJ9ntQTX/osYlHvvPrg/RwudqPg/orbCO/BCfBkgT9Wqbclgp1Yg3Rxw4fuXJ15OnW0TiO1nUOnpRrFZMvIspgVjdV/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706682789; c=relaxed/simple;
-	bh=jbKkH1WtEeXYWeMRfLbDO0YH0JxpQQDvSBpAn5Ed0P4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rAZEuGUFrU4R931rLshNvms5Dd4wAwTQtkiBOpwMB4lNvskCVqRSU58aszrfFINUx0hxyjQG5PwHc8oKu5BUK2Mv3Kzv/FpQD6OU29fdoxXylTkIx2fzR6LWFRlUy8xBOcxm9FQRPcYrMvMjr2De/iQyHZBU94tXyunGFbKYi60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SKUOMXW2; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1706684023; c=relaxed/simple;
+	bh=/V9Rglm98djqCs8KSL/PzgVQzNmWOOniqe3fv5n82uk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=fNchqlgBg0frmsd7yh7zF4k5bYa+zkHBpkd3M88ZvPAWjYvMtjEFbiT+X4mfvBBGpu+0flbca2zKWcS/ogOi0PWQwR8Eh8qH/KGhHj5DRpt27Xt23Ztvy5wbhJ1ldpa8Wlb1vNbn/32u6lwn4Koc18g0W4m4uyAAasOfnUWQWik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--maskray.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rkzNcdA4; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--maskray.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SKUOMXW2"
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc6bae46ec2so341912276.3
-        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 22:33:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rkzNcdA4"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc604c99e95so5588903276.1
+        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 22:53:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706682787; x=1707287587; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W+0UrfFLZxByUhAQTRyALxC5TYXU+3QlMDreZkniP6Y=;
-        b=SKUOMXW2uR3jzDoBVeRaPzW7CaXW5BoDGR3P0us6zltoCSWwus8PQAMkjJqNMxMcL1
-         JyOVR6aqQXMZKELDaWrGh/hHemZmaE5UQV87q6ErbdmdvZdL/3je6hNg5yCca/aX3RZg
-         GAfarbACPExt7V3LUyLe70yQLgRqjuyNRn3pSHnZYJvrugo/eAyTHX9Crzg0bp+F0cOQ
-         R+rHU6ne6k2Vc9EN+qUek33TC/plMNkup88Dlt3eqA90hldgFIdCYjltqTfdkHtckfMo
-         QdQ9N/GjClBsbBF0Wl4a7AvEEFrMe1xBg9eKE/quT/2x7p76NhfVD96jEF59WStWhGHN
-         vqNQ==
+        d=google.com; s=20230601; t=1706684021; x=1707288821; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8dMZ3OwOckg/8nEeQlzzg6EqDAiFIDc7gYYU0A2bM1c=;
+        b=rkzNcdA4MbkjF5NCcUqHIAV/s9GQ1RxiIA7AJvHPXKppcMCx+c2xEhUmZAR8vWS2+W
+         z6GeK+nJ05AIcS3W187nU7UaXcVfRn+6txtGAABrEq06AEqywGHvBih7vdlGIEtkkqJM
+         oJhwgvbmdbaghVPbPuXkLIX7LvRTGAdRKlkT4eX0pfFu/synabfMT9xz3I88UyOQ8it5
+         y7J4oPLOw75qCAHyf58R1CV6+1ToEniRsC5xcvojMf2Y0SxnHBTbLRHXugs+7iGiDKFH
+         exKxVXxdbOHgz1DmR+iKXZMQOX7vQbQQPMS1gH/8OMmnIC5QRXZyMz8r9u0+S4m3hog4
+         Mtyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706682787; x=1707287587;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W+0UrfFLZxByUhAQTRyALxC5TYXU+3QlMDreZkniP6Y=;
-        b=DY6J5CHANFVjpIbBQXK+v0TGf3HlB4U6JomXhLekNn8xE+6QhZlGCFdaY/Awt9onl0
-         DmbXN+zcmcu2jfrPERVvwqM5D3XWApkPhQiDDM/LDHq+xSM7agqPE3XuS8CdiJFODmi5
-         p+ZXEkHVHTKnbE6HHA6iMBL/vq0ow3TUBjhhpMMfLCAkoh7zj2ND83yD4FT/7ll4zcKH
-         tZaLOxWnQiBOzz5xUuV1LrfGvouDOm6Fx4vpH8QBZFHjVja23IIIpZRgeufzyjGUdFVP
-         nd3VNuF9+Wda4E0BFADAXiWaa+x56C+4/XncHyYt0fl+ddoutoWxqc8gsI5a+fT/kn9d
-         2mzQ==
-X-Gm-Message-State: AOJu0YwVr7NLcjtWFLB5E7Dquha8Y/cbrurS36oTufrpTa9SiAVmgjU4
-	M7j7wDKZbgB8sxLVSqzWmsarRh58Zkrs+WROnJo833eXeZ+fZk61h0W+xFiVgXXffPFQtC3usaZ
-	8l6reOA1SeEuNmPfpofk6/AFbeI+ILFMpFLRpwg==
-X-Google-Smtp-Source: AGHT+IFxRXwNP5PRj+1YvzHjYbCYITU/P5nsMmG4/Z+5FnhpEGiUV21GZeIbWwZE5W49t+z2Do1jj0wx+tXggTPULI4=
-X-Received: by 2002:a5b:582:0:b0:dc2:1c77:ca7 with SMTP id l2-20020a5b0582000000b00dc21c770ca7mr757962ybp.36.1706682786826;
- Tue, 30 Jan 2024 22:33:06 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706684021; x=1707288821;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8dMZ3OwOckg/8nEeQlzzg6EqDAiFIDc7gYYU0A2bM1c=;
+        b=cDIxUJNeUmzNj4ttOpHqm9rZUjIdGTgdzwgOU6qdJgvXQ32dCahXPCnCIHv7rUBmB7
+         GfuW76AenrgfqDJ8OAUzL0C6qHwcrfDvjuXyuSNnyffh3NTmhzY1MZhrcYTgFxvxj9nO
+         JY4gJN1vhCMV4QqS0ODZJ5tFKRG4r82EpUKjFajIXaleWjUUzd+ztbbl9a29cfuFWWjZ
+         B+aYyG5SLYsAZzobJhgx3w/Trfd4Xry+lIQKZMIpQxxaoImHCLwCNNu+KG3WDEMCc0ss
+         QxtEW/tzCknbzVwbroG/R0Y5T9Lgs3LPvCzPgVb5JfI2bKb29KQs6tMmIMtOkMAbiXcp
+         IFgQ==
+X-Gm-Message-State: AOJu0YxSCxJrYyqKa+wWoGQPIAx+fyexho66esKIVGYgUfNJHP+/zMES
+	18m44xVLTWbASAeO9sWiVVhpfIthd4zvDA1kouJNwJrOmUYjdDk/AlXZHm13UqHr7m7DoCmM0qo
+	HnBIwwA==
+X-Google-Smtp-Source: AGHT+IHYBZ61Hkmf065FzDbmISs1w+H1s+kPtfBvIanyUT0Z/nhLrWER1j7n3G0iOTAUij8aXk2uZrIboMe4
+X-Received: from maskray.svl.corp.google.com ([2620:15c:2d3:205:bc85:d604:bdab:a3ed])
+ (user=maskray job=sendgmr) by 2002:a05:6902:1188:b0:dbe:30cd:8fcb with SMTP
+ id m8-20020a056902118800b00dbe30cd8fcbmr35684ybu.0.1706684020985; Tue, 30 Jan
+ 2024 22:53:40 -0800 (PST)
+Date: Tue, 30 Jan 2024 22:53:22 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <87o7d26qla.wl-kuninori.morimoto.gx@renesas.com> <87eddy6qjf.wl-kuninori.morimoto.gx@renesas.com>
-In-Reply-To: <87eddy6qjf.wl-kuninori.morimoto.gx@renesas.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 31 Jan 2024 08:32:56 +0200
-Message-ID: <CAA8EJpq79tOCH3vK+Hh_XD4mtj1GVgVvwehQF4BfxTjwPi_fHQ@mail.gmail.com>
-Subject: Re: [PATCH v3 07/24] gpu: drm: switch to use of_graph_get_next_device_endpoint()
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, 
-	=?UTF-8?Q?Niklas_S=C3=83=C2=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
-	=?UTF-8?B?VXdlIEtsZWluZS1Lw4PCtm5pZw==?= <u.kleine-koenig@pengutronix.de>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Alexey Brodkin <abrodkin@synopsys.com>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Andy Gross <agross@kernel.org>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Daniel Vetter <daniel@ffwll.ch>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, David Airlie <airlied@gmail.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Emma Anholt <emma@anholt.net>, 
-	Eugen Hristev <eugen.hristev@collabora.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Frank Rowand <frowand.list@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans Verkuil <hverkuil-cisco@xs4all.nl>, 
-	Helge Deller <deller@gmx.de>, Hugues Fruchet <hugues.fruchet@foss.st.com>, 
-	Jacopo Mondi <jacopo+renesas@jmondi.org>, Jacopo Mondi <jacopo@jmondi.org>, 
-	James Clark <james.clark@arm.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Kevin Hilman <khilman@baylibre.com>, 
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Liu Ying <victor.liu@nxp.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Marek Vasut <marex@denx.de>, 
-	Mark Brown <broonie@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
-	Michael Tretter <m.tretter@pengutronix.de>, Michal Simek <michal.simek@amd.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Philippe Cornu <philippe.cornu@foss.st.com>, 
-	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>, Rob Clark <robdclark@gmail.com>, 
-	Rob Herring <robh+dt@kernel.org>, Robert Foss <rfoss@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Saravana Kannan <saravanak@google.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Shawn Guo <shawnguo@kernel.org>, Sowjanya Komatineni <skomatineni@nvidia.com>, 
-	Stefan Agner <stefan@agner.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Takashi Iwai <tiwai@suse.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Tim Harvey <tharvey@gateworks.com>, Todor Tomov <todor.too@gmail.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
-	Yannick Fertre <yannick.fertre@foss.st.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Fabio Estevam <festevam@gmail.com>, Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Jessica Zhang <quic_jesszhan@quicinc.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Leo Yan <leo.yan@linaro.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Mike Leach <mike.leach@linaro.org>, 
-	Sam Ravnborg <sam@ravnborg.org>, Sean Paul <sean@poorly.run>, Tom Rix <trix@redhat.com>, 
-	coresight@lists.linaro.org, devicetree@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
-	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-staging@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-tegra@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+Message-ID: <20240131065322.1126831-1-maskray@google.com>
+Subject: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
+From: Fangrui Song <maskray@google.com>
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org
+Cc: Jisheng Zhang <jszhang@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 31 Jan 2024 at 07:05, Kuninori Morimoto
-<kuninori.morimoto.gx@renesas.com> wrote:
->
-> of_graph_get_next_endpoint() is now renamed to
-> of_graph_get_next_device_endpoint(). Switch to it.
->
-> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> ---
->  drivers/gpu/drm/armada/armada_drv.c                   | 2 +-
->  drivers/gpu/drm/bridge/tc358767.c                     | 2 +-
->  drivers/gpu/drm/drm_of.c                              | 6 +++---
->  drivers/gpu/drm/meson/meson_drv.c                     | 4 ++--
->  drivers/gpu/drm/msm/msm_drv.c                         | 2 +-
->  drivers/gpu/drm/mxsfb/lcdif_drv.c                     | 2 +-
->  drivers/gpu/drm/omapdrm/dss/base.c                    | 2 +-
->  drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 2 +-
->  drivers/gpu/drm/pl111/pl111_drv.c                     | 2 +-
->  drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c         | 2 +-
->  drivers/gpu/drm/stm/ltdc.c                            | 4 ++--
->  drivers/gpu/drm/tiny/arcpgu.c                         | 2 +-
->  12 files changed, 16 insertions(+), 16 deletions(-)
->
+The constraint "i" seems to be copied from x86 (and with a redundant
+modifier "c"). It works with -fno-PIE but not with -fPIE/-fPIC in GCC's
+aarch64 port.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The constraint "S", which denotes a symbol reference (e.g. function,
+global variable) or label reference, is more appropriate, and has been
+available in GCC since 2012 and in Clang since 7.0.
 
+Signed-off-by: Fangrui Song <maskray@google.com>
+Link: https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
+---
+ arch/arm64/include/asm/jump_label.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+index 48ddc0f45d22..31862b3bb33d 100644
+--- a/arch/arm64/include/asm/jump_label.h
++++ b/arch/arm64/include/asm/jump_label.h
+@@ -23,9 +23,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+ 		 "	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		 "	.align		3			\n\t"
+ 		 "	.long		1b - ., %l[l_yes] - .	\n\t"
+-		 "	.quad		%c0 - .			\n\t"
++		 "	.quad		%0 - .			\n\t"
+ 		 "	.popsection				\n\t"
+-		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
++		 :  :  "S"(&((char *)key)[branch]) :  : l_yes);
+ 
+ 	return false;
+ l_yes:
+@@ -40,9 +40,9 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
+ 		 "	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		 "	.align		3			\n\t"
+ 		 "	.long		1b - ., %l[l_yes] - .	\n\t"
+-		 "	.quad		%c0 - .			\n\t"
++		 "	.quad		%0 - .			\n\t"
+ 		 "	.popsection				\n\t"
+-		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
++		 :  :  "S"(&((char *)key)[branch]) :  : l_yes);
+ 
+ 	return false;
+ l_yes:
 -- 
-With best wishes
-Dmitry
+2.43.0.429.g432eaa2c6b-goog
+
