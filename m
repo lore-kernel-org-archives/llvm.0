@@ -1,118 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E83255C16
-	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 07:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF30050A91
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 07:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706685378; cv=none; b=TIOGF+F8b4luC372lEaD+Yes9dSrvJea6HzHnLEKC42md/LOAzbsJ6ZEtS1YekL90BhowYya/9XQiq4eu1Bys8KF+QOkEEY/hvbN0i5vfh8b3B8M46dD6e5jt56FfHJjDzH1LU9iBDXuWe9NosoNLncFFD0zH8kruOAJAPOzJto=
+	t=1706686348; cv=none; b=ingBTlWgyo/sb66AKYXTjhh5xqkNvMdvF/d7WqrOyZqkjEX+FcFdY96bbn4Nsbsc+tNo8PRrJ1O77ojuXhStIIr6TpPZDFHDK/F/iaQSKuJnG/PRi81FpZli2EP3HiWhHhEkRCEmzutYxKrVg9yigjKPH3Vc7GwA/trhSrpGVNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706685378; c=relaxed/simple;
-	bh=bxaTZPOIsT8/v/Vj4KDp4NSxc016wqx9zKxXiJMGM60=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DEQk/H8uvjX2RNvBON09RAFnRcOYFLjrK6iqTdUOuJMalpZnAqjZf2fKemPiaWoXKaOWFfiGKAH5A5IZeOw2+v4hRAV1u3rIQTv1tuIkdk1qUtW6OpFoNhBBXOTfMN+e1JbznJ2ArcP1vnugOtTSYT4W1k4RjMfUkfkPcWx1t7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WRMVNJB6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706686348; c=relaxed/simple;
+	bh=pgyAw8iVHEbKDoIUzik08bQYOc4UhRc4AOUSm9mIbiw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W5ruAqrZbRVTNNCpugsJkNXPzTVGkKILOkeu2qtLujZUCmm2tM09Nd9uF5/nd/UpyGrnjJtC2N3hennHLeWi42FDQDm9g/tDnM0EjO/N0YO27UzVzML0ZFR4ryKh0bq3Gi+6Mmn6YXAqCbWwS3rAGuq3YjiQ4HA9wfEthfv3448=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=f1siF1NH; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WRMVNJB6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD6A7C433A6
-	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 07:16:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706685377;
-	bh=bxaTZPOIsT8/v/Vj4KDp4NSxc016wqx9zKxXiJMGM60=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WRMVNJB6gIbwUFbPJsGgU4P0PIVAuXr1sk6RkyldhhlOyx+IJe8tMO8drzB06KIMJ
-	 cyUEVpZNeezdTCYRpVO+L1mO3vL6TEEkA29zNQO+bbpXalQ5JFFX1qp84hTIZNxwBB
-	 LWMVL0Yorq6OQNG3XE3UoF14X8yF7rxzhDS0hlL89ep5d6xHkD0ZTwK2xsSQf/Nh4x
-	 GKn7rByogCFMDR99zsMwkRvgomcibqE77Xe3RUY12K2cy+T36H5bel/++kf6DGiOoi
-	 KVpcfAwehQp3DBV7ltJm5csGvpfD5mGkt0zsX0pzOUN2oCxtnuytu4W82xlHG2Mwtp
-	 I0SF8HFzBrF9g==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-51124d43943so537735e87.2
-        for <llvm@lists.linux.dev>; Tue, 30 Jan 2024 23:16:17 -0800 (PST)
-X-Gm-Message-State: AOJu0YzQ0gS39AHH40iXp9ebsWk93NIviwZXMUHI15u4DkauVAziQ973
-	N2LPmXiX/wTqDSswVU7+ju0rv8P2V673gzMm5ekY2B+9MB+ceT0tU9nF4/YmCrJfT5DZ1eACjbs
-	ft8aqSWQQqZS1CoqtEQ4FB8L5kHY=
-X-Google-Smtp-Source: AGHT+IHycALSdp58lauizjvlFTDf1HG4M++w1hgV9fGKdapW6+rKH86r7BfPv9mEAudb0KxSAZ4XSk5Y6G2ou6JVXQk=
-X-Received: by 2002:a05:6512:449:b0:511:150f:6363 with SMTP id
- y9-20020a056512044900b00511150f6363mr560083lfk.32.1706685375813; Tue, 30 Jan
- 2024 23:16:15 -0800 (PST)
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="f1siF1NH"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 76C9E40E0177;
+	Wed, 31 Jan 2024 07:32:23 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id uu-ek8orGlLV; Wed, 31 Jan 2024 07:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706686341; bh=4Kjl9jkNKfQ+jTyuemj6gc3E9MJ5mD2Pes6z9Kzttk0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f1siF1NHDuVwULjFf7dcR0YIrzh5ESly6O2pk1RpPg3mexdymmqb8WkleMy5AaCaT
+	 +LEa3/Ti+zdJR3cC7wwZIi7P6SLMOcGxbP7MRa480cs4PvoW7JTgX7hcr7fi829Aaf
+	 pqAdmdjfb2TN1FnRC42B6LhbES3mtXZxd+odQUxlHtj2gSf54Euri06mBpcVjKoni3
+	 RoxSxQnDUmol1J0Qf8S8NTaU8PEBVGYOUV99PcezuZefCXEurUBqk+N00mVUofE0M8
+	 QaAfb5XWyK4oVeFUrbE2u94H4NA6OEVaGk9aQCFJARNhth9gSvYrh5yj9yZ1VyYuI/
+	 f5Wue99ErQqCF+oWV0ABrd4JYS2DeHoQZh/FpEdV/5dROw63OQwU84xDTqFqZnfpa7
+	 y+AAeT9taj42oV3yscn4nN/tUUz6Ah/k4hW6Mp4I+s9JH0D0ZrHXNAsexOsC2jddZU
+	 bWenXqv3+PHkdAucidcGxxXuNg0N08J0Llhem3yYg7cHFfls+reYf3kXexehYVNCqU
+	 Vrupnzqig0BngwQOccnoorA2pYAz775lVG9ZxgJH5oNEpezw7knquviR6WK37ARAGH
+	 kjJOJmvVvvRY+bWXL5w+rfpgCxl9yMJINny7camU96eoz3Ex61PVTWWj97uOs+I1Jc
+	 4nSLQq1KG7NtPwXpA/yq977w=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1C05240E01FA;
+	Wed, 31 Jan 2024 07:32:03 +0000 (UTC)
+Date: Wed, 31 Jan 2024 08:31:56 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 01/19] efi/libstub: Add generic support for parsing
+ mem_encrypt=
+Message-ID: <20240131073156.GHZbn3bILaWLEluzp-@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-22-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240131065322.1126831-1-maskray@google.com>
-In-Reply-To: <20240131065322.1126831-1-maskray@google.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 31 Jan 2024 08:16:04 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
-Message-ID: <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
-To: Fangrui Song <maskray@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, Jisheng Zhang <jszhang@kernel.org>, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240129180502.4069817-22-ardb+git@google.com>
 
-Hello Fangrui,
+On Mon, Jan 29, 2024 at 07:05:04PM +0100, Ard Biesheuvel wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
+> 
+> Parse the mem_encrypt= command line parameter from the EFI stub if
+> CONFIG_ARCH_HAS_MEM_ENCRYPT=y, so that it can be passed to the early
+> boot code by the arch code in the stub.
 
-On Wed, 31 Jan 2024 at 07:53, Fangrui Song <maskray@google.com> wrote:
->
-> The constraint "i" seems to be copied from x86 (and with a redundant
-> modifier "c"). It works with -fno-PIE but not with -fPIE/-fPIC in GCC's
-> aarch64 port.
->
-> The constraint "S", which denotes a symbol reference (e.g. function,
-> global variable) or label reference, is more appropriate, and has been
-> available in GCC since 2012 and in Clang since 7.0.
->
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> Link: https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
-> ---
->  arch/arm64/include/asm/jump_label.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
-> index 48ddc0f45d22..31862b3bb33d 100644
-> --- a/arch/arm64/include/asm/jump_label.h
-> +++ b/arch/arm64/include/asm/jump_label.h
-> @@ -23,9 +23,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
->                  "      .pushsection    __jump_table, \"aw\"    \n\t"
->                  "      .align          3                       \n\t"
->                  "      .long           1b - ., %l[l_yes] - .   \n\t"
-> -                "      .quad           %c0 - .                 \n\t"
-> +                "      .quad           %0 - .                  \n\t"
->                  "      .popsection                             \n\t"
-> -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-> +                :  :  "S"(&((char *)key)[branch]) :  : l_yes);
+I guess all systems which do memory encryption are EFI systems anyway so
+we should not worry about the old ones...
 
-'key' is not used as a raw symbol name. We should make this
+-- 
+Regards/Gruss,
+    Boris.
 
-"    .quad   %0 + %1 - ."
-
-and
-
-::  "S"(key), "i"(branch) :: l_yes);
-
-if we want to really clean this up.
-
-
-
->
->         return false;
->  l_yes:
-> @@ -40,9 +40,9 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
->                  "      .pushsection    __jump_table, \"aw\"    \n\t"
->                  "      .align          3                       \n\t"
->                  "      .long           1b - ., %l[l_yes] - .   \n\t"
-> -                "      .quad           %c0 - .                 \n\t"
-> +                "      .quad           %0 - .                  \n\t"
->                  "      .popsection                             \n\t"
-> -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-> +                :  :  "S"(&((char *)key)[branch]) :  : l_yes);
->
->         return false;
->  l_yes:
-> --
-> 2.43.0.429.g432eaa2c6b-goog
->
+https://people.kernel.org/tglx/notes-about-netiquette
