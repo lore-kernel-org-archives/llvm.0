@@ -1,111 +1,146 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52DC12BEB0
-	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 16:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA117BAEC;
+	Wed, 31 Jan 2024 16:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706718617; cv=none; b=mKzsT6QyZZtVmQFiqG9LJWRWjYDIMCpvbYTPV6Op1mtTmddzXQPrhj7sNZO9GnMZT8B3D5gBC4CSS1rg8GLVIoixhYSmIAALBTeg+tjIHT0J5GHDq3nfRaTLVfHZT/HTPVo+ajMEjgWiJh5TO9HH7oQv6pivLRFGeovoybAk8cM=
+	t=1706719708; cv=none; b=MEyEW5RzzUSNt3cS/pnUxbgdD/oL90k1YUKKYtjNkpxJrNv9eaQG7nLx4loGf/EV1dXRUDTbUhseNL+GjCUbrDh2LzU71WExl64mxq6rGxrtFfx29Drl4x5/uTgUMvxsaP41S9iUVjJc7VqRS1NopMZD2grZ4vpndgMlOiatF+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706718617; c=relaxed/simple;
-	bh=7V1fSgM4dCw5mlPpFTAU48pNl+7Y50/umf6DNk56DA0=;
+	s=arc-20240116; t=1706719708; c=relaxed/simple;
+	bh=O+Ckqld21NseZzB5lCAj+EQ7OHd0wXrB13RwGOqBfic=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sHMdwxjSi0DAd594tgdjm9JZGu3asSkLrXSl+1+QGA5I39orG7tZUCImTjeniTHI+LXgS3oXaBkoUtZGTYW4R3vfsCS39FIV5Ftkb4DCdcftTQNVEKqSXH9kuL2NlWadlv1O8yZ8XlqAlcq8MO0ps5Izw30Xo7E7NJIUGGX+NRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FT0Fzc15; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ycu0Tm1JuV6Qf8vAZ/C9Mpj2AKWGBlTN0jIj/rTD9WgFF1Qh3H0HK+mjc/wd/vGHLVvroCoqy/PUHfPiiXj01Ej4j8TtkGKKjRgeefw47aJUX2mIuLwasSW/8J7ZzdhnrZXE7O2jm69XbpXsh4WPoWTvTN8yksgnJhAh2b2vSBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dem+Ob8S; arc=none smtp.client-ip=192.55.52.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FT0Fzc15"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6290E40E0177;
-	Wed, 31 Jan 2024 16:30:13 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 7GQ7zRmXTudR; Wed, 31 Jan 2024 16:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706718611; bh=CwEErEB3kf4RV79ZYL4VTQTVVr1r+pmwOOZjB2GqHX8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FT0Fzc15Ik8qxsIJb/DkO7GGIGwKyf5+d/2niv86eGi9vZs09M+9SRHZ0CaxTAkew
-	 qQX/Hc0GsOcQDyshkSAOGiYxmlWV79/k8hs22cMauUhYQI3hfQ4DnCg3sC9ZYyLrGM
-	 ot4jMX0I7B2caZfGD+YRNt6C3gDweittOAm1YTBM9fYGznDfpbyX4vKXd8AByNK3E8
-	 ne8iXgwIhTDXWV7uyMN2ozEA+uoLzz6oXQtFyOlhjz7XTiCdbM5d/r2+Drq6gdjPsw
-	 yak8/RlmQKstxU3LjZrjIG7aN6Hb7ENIsHb+Oaa5rOFq0P3wNnTQ7NxF3mVCcqEeWL
-	 1N2yJ6/9axAyvjKOGeJORYRPMYrHxGKgTGgDID+IwbW9/RRDfY6Zjo6C+JNrE7eTP4
-	 DJyST6GQnuc/DVlJlNSmM4yf++toYjZ0BxgbqQ3Vt1htYp81aA4wWm0X4vKMjpD2Oh
-	 fGLKEvRC4hYYdUpIOGQ1xZCw/T8PcjY8Clue4YWYr6YAGwpl3iag6KLy4vQGZIDhhC
-	 PMajdU1cEQI2GKS4LAN1OzKGjTisOLQlXeSSQNf5fS2sLGgLtMLUGaTU2MEu+bC8rv
-	 sPTFWWpxh8qzdcTIUe55IWH3RxALfhpJwe/HewWL4t7b5komTAU5tKAoY6QHBYMe2s
-	 rjlBaZ71WYEFlOQNT+aA6+fQ=
-Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 256DC40E00C5;
-	Wed, 31 Jan 2024 16:29:53 +0000 (UTC)
-Date: Wed, 31 Jan 2024 17:29:52 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 03/19] x86/startup_64: Drop long return to
- initial_code pointer
-Message-ID: <20240131162952.GHZbp1gH7C7lNMRUru@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-24-ardb+git@google.com>
- <20240131134431.GJZbpOvz3Ibhg4VhCl@fat_crate.local>
- <CAMj1kXF7T4morB+Z3BDy-UaeHoeU6fHtnaa-7HJY_NR3RVC5sg@mail.gmail.com>
- <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dem+Ob8S"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706719706; x=1738255706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O+Ckqld21NseZzB5lCAj+EQ7OHd0wXrB13RwGOqBfic=;
+  b=dem+Ob8SxoCZs9nxa764/1aU9lSlw21ry8yb7Xf+cAXYtAgqB8gwrk9L
+   FPDktsiihAGsoirO2gmnk24DHLGte9g0yZGeW4rFjhFzyAqU5xz/yLlWU
+   rwkeItK9dyMAopb5Z98R/PpGEb02Nz6n8LIk0+jawne8QdaWD8EbSS+SD
+   YD7DxtRLhXqci2pJDWjKr/Sge7AeHKoKnAWWlbVnXRwP7+FNJrAbZHKr/
+   Bjr2Ca6o0nNgyRE4yrzMU1GG2kiD9ih5mkJeDi2o1fxMlqOrJ7I5kXdDM
+   0NOa4fC1W3pAqtkL77dktN8jxGmrcRoL24rEfWnOOoJm7cncyxZcQ/wIy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="403275511"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="403275511"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 08:48:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="788635713"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="788635713"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2024 08:48:21 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rVDl5-0001mG-0n;
+	Wed, 31 Jan 2024 16:48:19 +0000
+Date: Thu, 1 Feb 2024 00:47:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-unionfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, paul@paul-moore.com,
+	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+	roberto.sassu@huawei.com, amir73il@gmail.com, miklos@szeredi.hu,
+	Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH 1/5] security: allow finer granularity in permitting
+ copy-up of security xattrs
+Message-ID: <202402010014.MArAf4UB-lkp@intel.com>
+References: <20240130214620.3155380-2-stefanb@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXGk1QivyoK4H5CVp7p-tfYoQSTuethpkm8bWBcTO_UMGw@mail.gmail.com>
+In-Reply-To: <20240130214620.3155380-2-stefanb@linux.ibm.com>
 
-On Wed, Jan 31, 2024 at 03:07:50PM +0100, Ard Biesheuvel wrote:
-> > s/int3/RET seems to do the trick.
-> >
-> or ud2, even better,
+Hi Stefan,
 
-Yap, that does it. And yes, we don't return here. I guess objtool
-complains because
+kernel test robot noticed the following build errors:
 
-"7. file: warning: objtool: func()+0x5c: stack state mismatch
+[auto build test ERROR on zohar-integrity/next-integrity]
+[also build test ERROR on pcmoore-selinux/next linus/master v6.8-rc2 next-20240131]
+[cannot apply to mszeredi-vfs/overlayfs-next mszeredi-vfs/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-   The instruction's frame pointer state is inconsistent, depending on
-   which execution path was taken to reach the instruction.
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/security-allow-finer-granularity-in-permitting-copy-up-of-security-xattrs/20240131-054854
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+patch link:    https://lore.kernel.org/r/20240130214620.3155380-2-stefanb%40linux.ibm.com
+patch subject: [PATCH 1/5] security: allow finer granularity in permitting copy-up of security xattrs
+config: i386-buildonly-randconfig-002-20240131 (https://download.01.org/0day-ci/archive/20240201/202402010014.MArAf4UB-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240201/202402010014.MArAf4UB-lkp@intel.com/reproduce)
 
-   ...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402010014.MArAf4UB-lkp@intel.com/
 
-   Another possibility is that the code has some asm or inline asm which
-   does some unusual things to the stack or the frame pointer.  In such
-   cases it's probably appropriate to use the unwind hint macros in
-   asm/unwind_hints.h.
-"
+All errors (new ones prefixed by >>):
 
-Lemme test this one a bit on my machines and queue it.
+>> security/security.c:2627:38: error: too many arguments to function call, expected single argument 'name', have 2 arguments
+    2627 |         return evm_inode_copy_up_xattr(src, name);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~      ^~~~
+   include/linux/evm.h:121:20: note: 'evm_inode_copy_up_xattr' declared here
+     121 | static inline int  evm_inode_copy_up_xattr(const char *name)
+         |                    ^                       ~~~~~~~~~~~~~~~~
+   1 error generated.
 
-Thx.
+
+vim +/name +2627 security/security.c
+
+  2596	
+  2597	/**
+  2598	 * security_inode_copy_up_xattr() - Filter xattrs in an overlayfs copy-up op
+  2599	 * @src: union dentry of copy-up file
+  2600	 * @name: xattr name
+  2601	 *
+  2602	 * Filter the xattrs being copied up when a unioned file is copied up from a
+  2603	 * lower layer to the union/overlay layer.   The caller is responsible for
+  2604	 * reading and writing the xattrs, this hook is merely a filter.
+  2605	 *
+  2606	 * Return: Returns 0 to accept the xattr, 1 to discard the xattr, -EOPNOTSUPP
+  2607	 *         if the security module does not know about attribute, or a negative
+  2608	 *         error code to abort the copy up.
+  2609	 */
+  2610	int security_inode_copy_up_xattr(struct dentry *src, const char *name)
+  2611	{
+  2612		struct security_hook_list *hp;
+  2613		int rc;
+  2614	
+  2615		/*
+  2616		 * The implementation can return 0 (accept the xattr), 1 (discard the
+  2617		 * xattr), -EOPNOTSUPP if it does not know anything about the xattr or
+  2618		 * any other error code in case of an error.
+  2619		 */
+  2620		hlist_for_each_entry(hp,
+  2621				     &security_hook_heads.inode_copy_up_xattr, list) {
+  2622			rc = hp->hook.inode_copy_up_xattr(src, name);
+  2623			if (rc != LSM_RET_DEFAULT(inode_copy_up_xattr))
+  2624				return rc;
+  2625		}
+  2626	
+> 2627		return evm_inode_copy_up_xattr(src, name);
+  2628	}
+  2629	EXPORT_SYMBOL(security_inode_copy_up_xattr);
+  2630	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
