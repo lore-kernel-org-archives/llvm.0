@@ -1,203 +1,116 @@
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872545DF14
-	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 08:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F1D5810E;
+	Wed, 31 Jan 2024 08:20:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706688953; cv=none; b=Sj9OnW1Hrfnkiq1C5CVawCWap577PCePfoGaPTuy3mX3n2yz3roKX4cpkQ27BFNMXBKRHV7tLPI8DrtiWaXLz37UEHzCTNHvUYHwFiu0KzoV5jS0DHyL9yPgzxulhtB7IRw3WTJmnCFwVsi/KLfC2tFEDCJ3KSRHNisugummX+c=
+	t=1706689239; cv=none; b=Q4aZbGR/sUYZdD308GhRU8d5R4oUrLAfsytNuJLir6Nli+FMeA29Dt+pAMt3HZOGQ/NZgvjWnIKNzvH4qd7b50Mw5mNbcmKesLDhefgs3ix4fHDINVnbp3wnrXiw5ty1hPzG6NVIrVSt69z+/53p2h5MyHiU14rmm0rZmCzr9Gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706688953; c=relaxed/simple;
-	bh=J1Eh87exaeIqhSJ2xckKK13Ql6copBnHSNLxq/anaEY=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vBNbwd+h8V/9Kq9peSiLyptO05d9qT8kTbZkd5qqK4VJNABtAB5zdoYeAVWt05FhT2k3i0HIYgXeRtCP2/xuTa5UGuSMY43ydhhlqXOFciQDqfp7TGfu9Alkembeh/0gbVY0Q02KjjqcAPu6SGcp1jbSCCflxGdkqLO1U6EwMBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=nPJ7MbWj; arc=none smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+	s=arc-20240116; t=1706689239; c=relaxed/simple;
+	bh=SGzk9JA5A4WdBx6j64XS/jDdmN0WOY6psDzBiqQDpNc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rz9Uo6Ft93nUQyhVuGiNFARssK90/dzKcRSe3mIVb5LWXT1Z0Su0q6Y0vIqsBzinzX/+xrC+kmLbtdiTlR+HJEO+ERpVE7INgaF68E6JqRKB1NE1tY0fWfyb6aflJHGpS/6dHF2QCck9yXWVQtG9YPpY/e10SlmhJ21jyti2Z1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iRxQFIrn; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="nPJ7MbWj"
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-7d5bbbe57b9so1354770241.3
-        for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 00:15:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1706688950; x=1707293750; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BJuQVGRQgRfQiaBbW4EPCfZyZEN2R21Dmrhs2oCHDQY=;
-        b=nPJ7MbWjjduR91bCAYErSHp1xeEc1f1vRDCNmGDf6URqqJYIYtfDHQszANU5YrEZXp
-         yRU3iw1XOL4vE3fiTRRU6XjclWGl1e20eJHd9M7kk9JE9PWk/Ujfe2KSo1kPW01AU9f/
-         t591GQ2m09r08QUjokHQjHtdPZowfKqDUM7LqmhVQOpKzqsKXB96EynfO2RQxvrq+j2s
-         YF9RjERQsOlxOTMAH8UIzPfkOMXvVgeyu2FNlyqXClczIHQ/JqIkUxGLSiDeldDDKWHw
-         dKmpDrwkC5A6leGNIvJJdYPm1vcMCsf1HPCw5akdxbBhjt7CHkw/pPPA8xp9n4Z6L8vx
-         PGVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706688950; x=1707293750;
-        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BJuQVGRQgRfQiaBbW4EPCfZyZEN2R21Dmrhs2oCHDQY=;
-        b=LsAK5I+h80BBzIOarWccv3GQDmcCqelzawsZA/jvL5LIgqrcvBM7Efmo7LNdPX8ZKE
-         YPrlFvGQCcnWnbg1od7ww4TsDC6loeC9DW2INmNk12HpMJQnwOLrqEs18euVrhePx2HB
-         TL/OD+5hauJHoPMlpo+UB9X1TkcX3VC/tXAnrEAJJ3e++fi9sC71S+hqE2YNTogc2b3L
-         l8gp2F9HufmEtuN3TIqtFCthsiFDkIbb12BKTJ7DRXzxNRbV4EhLqwXZSPRqdEaJCx8C
-         xholcBIBMuI6WT4NToZNO8gs8FzVg0p0HVW1c/a7KBrAY+CZrhc3blRJtK06tCr0sxiA
-         6t5A==
-X-Gm-Message-State: AOJu0YyOfWxTIzWqtaIZo7oK1p9nUKmdkrnCB2shMGsmHH0BFF3F78FH
-	XkfUOtfY23Icgu6PCh7eKZ2MZXQ4+tURgJ/Z0/KT+XvOtS3JZQE5TmkydB0bnjZeBA0kJ/fMhla
-	LVfKoeDo13QyujM/M/lUzBmwh4DHEWVi1mfurzw==
-X-Google-Smtp-Source: AGHT+IHmH+EcUVvbDOhbGLOKPjWQwf2roORx1o7B063JUtriItFaM5RD1XHVGWJ3oUTkmxz2fozm6H+WuPvsPTItnuw=
-X-Received: by 2002:a05:6102:e11:b0:467:c665:f567 with SMTP id
- o17-20020a0561020e1100b00467c665f567mr559840vst.35.1706688950233; Wed, 31 Jan
- 2024 00:15:50 -0800 (PST)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 31 Jan 2024 00:15:49 -0800
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-In-Reply-To: <202401310855.aA6wzlm2-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iRxQFIrn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706689238; x=1738225238;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SGzk9JA5A4WdBx6j64XS/jDdmN0WOY6psDzBiqQDpNc=;
+  b=iRxQFIrnH4IFoaWsM9BdI1qOQ2RvYKorE0hGBsYDw97EnJe9tTJuDoDF
+   yldgXjW08t7JXK/trzvnWqfy9dyOm984wHmVKRZ95jVuSdGH+bPgjSJ43
+   2d7CEWzIgHOQiNDzQwVxbco/NlyXhy2pf7Agf4QMfgxrtqHIGJw+Gf6+U
+   QtPlflGrTeWOVoB82azGDykvqBKBQdI9p0HS3uIdhLwwuBTNnzglmne7w
+   TzOpkxOs8HvYQZNP07TN4EGvc9A4xMPnAukPIOao/ojQ/6gCxpgp02cxq
+   a163HC+WsbMq7rO09i2+Zpmtaz9XQ2AIq79rbGLhMYuWSg3sSyMQvMfAA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="22041368"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="22041368"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 00:20:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="738021278"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="738021278"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 31 Jan 2024 00:20:30 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+	id 146D22D5; Wed, 31 Jan 2024 10:20:29 +0200 (EET)
+Date: Wed, 31 Jan 2024 10:20:28 +0200
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: Kevin Loughlin <kevinloughlin@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Pankaj Gupta <pankaj.gupta@amd.com>, 
+	Hou Wenlong <houwenlong.hwl@antgroup.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Dionna Glaze <dionnaglaze@google.com>, Brijesh Singh <brijesh.singh@amd.com>, 
+	Michael Roth <michael.roth@amd.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>, 
+	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
+	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
+	Sidharth Telang <sidtelang@google.com>
+Subject: Re: [PATCH v3 1/2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+Message-ID: <4ljfvg7c23g2wx4hcqz6x6tx7uvp6fffayqvu4ptsmfqajlujr@zngokbd2awma>
+References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
+ <20240130220845.1978329-2-kevinloughlin@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240130124828.14678-21-brgl@bgdev.pl> <202401310855.aA6wzlm2-lkp@intel.com>
-Date: Wed, 31 Jan 2024 00:15:49 -0800
-Message-ID: <CAMRc=McDJK61czn-yDdHAN6e5YWVb9UVG5pFJx=NynFaxSTB4g@mail.gmail.com>
-Subject: Re: [PATCH 20/22] gpio: protect the pointer to gpio_chip in
- gpio_device with SRCU
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Linus Walleij <linus.walleij@linaro.org>, Kent Gibson <warthog618@gmail.com>, 
-	Alex Elder <elder@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	"Paul E . McKenney" <paulmck@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240130220845.1978329-2-kevinloughlin@google.com>
 
-On Wed, 31 Jan 2024 01:41:11 +0100, kernel test robot <lkp@intel.com> said:
-> Hi Bartosz,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on brgl/gpio/for-next]
-> [also build test ERROR on linus/master v6.8-rc2 next-20240130]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/gpio-protect-the-list-of-GPIO-devices-with-SRCU/20240130-205537
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-> patch link:    https://lore.kernel.org/r/20240130124828.14678-21-brgl%40bgdev.pl
-> patch subject: [PATCH 20/22] gpio: protect the pointer to gpio_chip in gpio_device with SRCU
-> config: x86_64-buildonly-randconfig-004-20240131 (https://download.01.org/0day-ci/archive/20240131/202401310855.aA6wzlm2-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240131/202401310855.aA6wzlm2-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202401310855.aA6wzlm2-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->>> drivers/gpio/gpiolib-sysfs.c:481:3: error: cannot jump from this goto statement to its label
->      481 |                 goto done;
->          |                 ^
->    drivers/gpio/gpiolib-sysfs.c:490:25: note: jump bypasses initialization of variable with __attribute__((cleanup))
->      490 |         CLASS(gpio_chip_guard, guard)(desc);
->          |                                ^
->    1 error generated.
->
+On Tue, Jan 30, 2024 at 10:08:44PM +0000, Kevin Loughlin wrote:
+> diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
+> index 359ada486fa9..b65e66ee79c4 100644
+> --- a/arch/x86/include/asm/mem_encrypt.h
+> +++ b/arch/x86/include/asm/mem_encrypt.h
+> @@ -17,6 +17,20 @@
+>  
+>  #include <asm/bootparam.h>
+>  
+> +/*
+> + * Like the address operator "&", evaluates to the address of a LHS variable
+> + * "var", but also enforces the use of RIP-relative logic. This macro can be
+> + * used to safely access global data variables prior to kernel relocation.
+> + */
+> +#define RIP_RELATIVE_ADDR(var)		\
+> +({					\
+> +	void *rip_rel_ptr;		\
+> +	asm ("lea "#var"(%%rip), %0"	\
+> +		: "=r" (rip_rel_ptr)	\
+> +		: "p" (&var));		\
+> +	rip_rel_ptr;			\
+> +})
+> +
 
-I fixed it up like this:
+I don't think it is the right place for the macro. The next patch uses for
+things unrelated to memory encryption.
 
-diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
-index c45b71adff2c..6a421309319e 100644
---- a/drivers/gpio/gpiolib-sysfs.c
-+++ b/drivers/gpio/gpiolib-sysfs.c
-@@ -477,8 +477,8 @@ static ssize_t export_store(const struct class *class,
- 	long gpio;
+> @@ -239,14 +244,14 @@ unsigned long __head __startup_64(unsigned long physaddr,
+>  	 */
+>  
+>  	next_pgt_ptr = fixup_pointer(&next_early_pgt, physaddr);
+> -	pud = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
+> -	pmd = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
+> +	early_dynamic_pgts_ptr = fixup_pointer(early_dynamic_pgts, physaddr);
+> +	pud = (pudval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++];
+> +	pmd = (pmdval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++];
+>  
 
- 	status = kstrtol(buf, 0, &gpio);
--	if (status < 0)
--		goto done;
-+	if (status)
-+		return status;
+This change doesn't belong to this patch. Maybe move it into the next
+patch and combine with removing fixup_pointer().
 
- 	desc = gpio_to_desc(gpio);
- 	/* reject invalid GPIOs */
-
-There's no reason to jump to done here only to print the error code.
-
-Bart
-
->
-> vim +481 drivers/gpio/gpiolib-sysfs.c
->
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  464
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  465  /*
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  466   * /sys/class/gpio/export ... write-only
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  467   *	integer N ... number of GPIO to export (full access)
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  468   * /sys/class/gpio/unexport ... write-only
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  469   *	integer N ... number of GPIO to unexport
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  470   */
-> 75a2d4226b5371 Greg Kroah-Hartman  2023-03-25  471  static ssize_t export_store(const struct class *class,
-> 75a2d4226b5371 Greg Kroah-Hartman  2023-03-25  472  				const struct class_attribute *attr,
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  473  				const char *buf, size_t len)
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  474  {
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  475  	struct gpio_desc *desc;
-> 513246a34b8dc5 Bartosz Golaszewski 2023-12-21  476  	int status, offset;
-> 513246a34b8dc5 Bartosz Golaszewski 2023-12-21  477  	long gpio;
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  478
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  479  	status = kstrtol(buf, 0, &gpio);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  480  	if (status < 0)
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01 @481  		goto done;
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  482
-> f13a0b0bb46f07 Linus Walleij       2018-09-13  483  	desc = gpio_to_desc(gpio);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  484  	/* reject invalid GPIOs */
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  485  	if (!desc) {
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  486  		pr_warn("%s: invalid GPIO %ld\n", __func__, gpio);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  487  		return -EINVAL;
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  488  	}
-> 2796d5332f8ac8 Bartosz Golaszewski 2024-01-30  489
-> 2796d5332f8ac8 Bartosz Golaszewski 2024-01-30  490  	CLASS(gpio_chip_guard, guard)(desc);
-> 2796d5332f8ac8 Bartosz Golaszewski 2024-01-30  491  	if (!guard.gc)
-> 2796d5332f8ac8 Bartosz Golaszewski 2024-01-30  492  		return -ENODEV;
-> 2796d5332f8ac8 Bartosz Golaszewski 2024-01-30  493
-> 23cf00ddd2e1aa Matti Vaittinen     2021-03-29  494  	offset = gpio_chip_hwgpio(desc);
-> 2796d5332f8ac8 Bartosz Golaszewski 2024-01-30  495  	if (!gpiochip_line_is_valid(guard.gc, offset)) {
-> 23cf00ddd2e1aa Matti Vaittinen     2021-03-29  496  		pr_warn("%s: GPIO %ld masked\n", __func__, gpio);
-> 23cf00ddd2e1aa Matti Vaittinen     2021-03-29  497  		return -EINVAL;
-> 23cf00ddd2e1aa Matti Vaittinen     2021-03-29  498  	}
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  499
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  500  	/* No extra locking here; FLAG_SYSFS just signifies that the
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  501  	 * request and export were done by on behalf of userspace, so
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  502  	 * they may be undone on its behalf too.
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  503  	 */
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  504
-> 95a4eed7dd5b7c Andy Shevchenko     2022-02-01  505  	status = gpiod_request_user(desc, "sysfs");
-> 95a4eed7dd5b7c Andy Shevchenko     2022-02-01  506  	if (status)
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  507  		goto done;
-> e10f72bf4b3e88 Andrew Jeffery      2017-11-30  508
-> e10f72bf4b3e88 Andrew Jeffery      2017-11-30  509  	status = gpiod_set_transitory(desc, false);
-> 95dd1e34ff5bbe Boerge Struempfel   2023-11-29  510  	if (status) {
-> 95dd1e34ff5bbe Boerge Struempfel   2023-11-29  511  		gpiod_free(desc);
-> 95dd1e34ff5bbe Boerge Struempfel   2023-11-29  512  		goto done;
-> 95dd1e34ff5bbe Boerge Struempfel   2023-11-29  513  	}
-> 95dd1e34ff5bbe Boerge Struempfel   2023-11-29  514
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  515  	status = gpiod_export(desc, true);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  516  	if (status < 0)
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  517  		gpiod_free(desc);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  518  	else
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  519  		set_bit(FLAG_SYSFS, &desc->flags);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  520
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  521  done:
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  522  	if (status)
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  523  		pr_debug("%s: status %d\n", __func__, status);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  524  	return status ? : len;
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  525  }
-> d83bb159f4c6af Greg Kroah-Hartman  2017-06-08  526  static CLASS_ATTR_WO(export);
-> 0eb4c6c2671ca0 Alexandre Courbot   2014-07-01  527
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
->
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
