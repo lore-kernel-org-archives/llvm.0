@@ -1,102 +1,168 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6E862A09
-	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 09:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B3867E6C;
+	Wed, 31 Jan 2024 09:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706693423; cv=none; b=DUGZK0bGR9ACpZyjpFr5dI5kV4aFKoKyuP4EV6DuNBQDHHLQzKlaVOo9es3f0kEWaaZQKUIpANLSF7gUf/Yy9xp/0Rwjkpgb2i7EfEPuzgYAkY7gkIwq6ibCWYs1mp9sPSftBAcZsHP6Juav7z6ffV3Kb1nxXR/CXtQjtuxzvrM=
+	t=1706693847; cv=none; b=e9U4fTNcyjH/Gbzy7Bj5BSw6fmLRDAC32No5266M1sXL5TdxLpznZN7ylMsCP15CYv/NaV6FZJyVXqXlnmkEWuEz+FQjcuK6rX9zEzcPhGR58MbF46dyETHwEUoNDB1GRo5ahMPX5O8c06g/mX64Os/XW7YIQcReWjqEFpMe1/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706693423; c=relaxed/simple;
-	bh=Gez7VbeF659gZEkC8FCMwPC1tU8GUsrN0yYCZ4bjcxA=;
+	s=arc-20240116; t=1706693847; c=relaxed/simple;
+	bh=NoQuHti6IiS7+y8Ci1LusmcVVUnkd5kTdFqj+tyu7T0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iMZBC/bjujBI8weztxN/LFT3NOqnOH6EO/8pmmfmfLnqYrEIgWGbOtrj7pWAvaZmbH1EUyL11zmluAn0q/yZdnd+56d4ju62KkzMkHvDoOCyUdERICz7sG425PofPHxiyviHyf750fj7CrWCn4WKEjPXIqW8MeRjEC5RBZMfyGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=BI+GR4Bj; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=irr8VU4jS2kWDkRNMn5KUGHWkeNDID2nHsQXIbTRusqEAad3LCdcpVypsN3GzhfTUGWwYlPVxpwZSGvX2mZWPnAObeTWb+ut0UMwVoZgRCiaGpswRb9K6ovkkDdCXGrag2USgygG1pXoz4QkbP5Wg8qumsUxjRDRuc41Wdguz5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UQG0XsPB; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BI+GR4Bj"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0327840E00C5;
-	Wed, 31 Jan 2024 09:30:18 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id s-UgUl8KYLm8; Wed, 31 Jan 2024 09:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706693415; bh=r2DcM4ro+qsysihnxyBJGhyOPymf2yk6oBbpEdllaa0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BI+GR4Bj7fdTu0/S9ol+YgYAt0RK7PFx2iM963t17eHrJTwzJQCfzG7UXy9CXuZf1
-	 PwldErDu3oKQaLUtO82oAVq6+jOBblBG7D5fjcDzInWveqnSzcIo1xAkANVGeGS1ki
-	 +JxvVZZuxZ4RF+ltMamgsePeF+bgrJmYCY4gUc2iCxSGiXLjLN7RaTmMEZSfuXijB9
-	 BV/6lHgclTJQ6cNbBD8uBOcp+bzY4QCnxvQGLOSntcb481/NKa4Mmh90zw7foaokgd
-	 lcdeOr/Beo8y77zxhNKhnwGsZFt/hVOZuiomjBnxWnBuwU2XfxC/Fa/dmFFTahXmGH
-	 M+0WvEQYfX8zlt+/XT298P3pulbY6es94YHCRqxUO+6qvYHVvn6pxJhfuBjhsnnVyS
-	 +VlY+fauYYaORevg6fv6VjF0zBaKEzToTiiSNQW13FBfKFrUXaxOmgOHLEiY/tPmMY
-	 /rAtd030CkTitXwLmqQ99EbVESF4JHRDlKbEaIkCy7msta5Kn9gwcoXrI7MFiX/tnz
-	 r0BCazYpItueZWMsw/KdjrpNgjl/4MSWq+aLktLSvbOV8S1jKEFyWXVnAC68fH6vnA
-	 fIdjt9v5ntQoWKUphjQ6qzOuSUgEtrX4d2iWt0NxiTZnzUmtMgFGdYnRf0x5NN1EjY
-	 M+MBm8Sb2v4q5KVIonf7FVO4=
-Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AA30140E0177;
-	Wed, 31 Jan 2024 09:29:57 +0000 (UTC)
-Date: Wed, 31 Jan 2024 10:29:52 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 02/19] x86/boot: Move mem_encrypt= parsing to the
- decompressor
-Message-ID: <20240131092952.GCZboTECip8DbWtYtz@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-23-ardb+git@google.com>
- <20240131083511.GIZboGP8jPIrUZA8DF@fat_crate.local>
- <CAMj1kXG9W0XeEVR4tXDDg0Ai9XPsZGrTJaSRYUqgTV-xtFxjdQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UQG0XsPB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706693845; x=1738229845;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NoQuHti6IiS7+y8Ci1LusmcVVUnkd5kTdFqj+tyu7T0=;
+  b=UQG0XsPBffKIfahohbarDYkA2tZMEOeBbATXWnzsXBzHxE4cAfscRsVl
+   8UwbK+KrxnxYuTaX2bjRowjSXFp6esu/9vKKZ8UUJSJAHeObhYuZve3Az
+   4Wfz/FoL1O4OFn87vdSVXfuekR+X9hziczrovcI9paRGNg/yApu9+g8t7
+   Fc0Gfwdv3h5TEYr6svLC0ofgMGc7U6a2mHqICkhOAV7gmT2Pe4Sc1J5XZ
+   KKtszaFqlyYwHKnHGfF8Olgy6qSxMmdyOvRgrKf9KwfUqBfkOOMGlXc0+
+   GQ2OdeWQz28yrdKRQ2CfOti6C0f+Y7fzvlQPEf6Y9hr5teJNYARIKXYHK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="2488842"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="2488842"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 01:37:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="36805531"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 31 Jan 2024 01:37:22 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rV71w-0001Ov-2b;
+	Wed, 31 Jan 2024 09:37:17 +0000
+Date: Wed, 31 Jan 2024 17:34:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	amd-gfx@lists.freedesktop.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+	Melissa Wen <mwen@igalia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v2 2/4] drm: Add drm_get_acpi_edid() helper
+Message-ID: <202401311759.htfj4nbl-lkp@intel.com>
+References: <20240130192608.11666-3-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXG9W0XeEVR4tXDDg0Ai9XPsZGrTJaSRYUqgTV-xtFxjdQ@mail.gmail.com>
+In-Reply-To: <20240130192608.11666-3-mario.limonciello@amd.com>
 
-On Wed, Jan 31, 2024 at 10:12:13AM +0100, Ard Biesheuvel wrote:
-> The reason we need two flags is because there is no default value to
-> use when the command line param is absent.
+Hi Mario,
 
-I think absent means memory encryption disabled like with every other
-option which is not present...
+kernel test robot noticed the following build warnings:
 
-> There is CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT but that one is AMD
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/acpi-bus linus/master v6.8-rc2 next-20240131]
+[cannot apply to drm-misc/drm-misc-next rafael-pm/devprop]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-... yes, and I'm thinking that it is time we kill this. I don't think
-anything uses it. It was meant well at the time.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-video-Handle-fetching-EDID-that-is-longer-than-256-bytes/20240131-032909
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20240130192608.11666-3-mario.limonciello%40amd.com
+patch subject: [PATCH v2 2/4] drm: Add drm_get_acpi_edid() helper
+config: i386-buildonly-randconfig-001-20240131 (https://download.01.org/0day-ci/archive/20240131/202401311759.htfj4nbl-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240131/202401311759.htfj4nbl-lkp@intel.com/reproduce)
 
-Let's wait for Tom to wake up first, though, as he might have some
-objections...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401311759.htfj4nbl-lkp@intel.com/
 
-Thx.
+All warnings (new ones prefixed by >>):
+
+>> drivers/acpi/acpi_video.c:642:44: warning: format specifies type 'long' but the argument has type 'ssize_t' (aka 'int') [-Wformat]
+     642 |                                  "Invalid _DDC data for length %ld\n", length);
+         |                                                                ~~~     ^~~~~~
+         |                                                                %zd
+   include/linux/acpi.h:1219:30: note: expanded from macro 'acpi_handle_debug'
+    1219 |                            handle, pr_fmt(fmt), ##__VA_ARGS__)
+         |                                           ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ACPI_WMI
+   Depends on [n]: X86_PLATFORM_DEVICES [=n] && ACPI [=y]
+   Selected by [y]:
+   - DRM [=y] && HAS_IOMEM [=y] && (AGP [=n] || AGP [=n]=n) && !EMULATED_CMPXCHG && HAS_DMA [=y] && X86 [=y]
+
+
+vim +642 drivers/acpi/acpi_video.c
+
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  612  
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  613  static int
+4be44fcd3bf648 drivers/acpi/video.c      Len Brown         2005-08-05  614  acpi_video_device_EDID(struct acpi_video_device *device,
+4be44fcd3bf648 drivers/acpi/video.c      Len Brown         2005-08-05  615  		       union acpi_object **edid, ssize_t length)
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  616  {
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  617  	int status;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  618  	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  619  	union acpi_object *obj;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  620  	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  621  	struct acpi_object_list args = { 1, &arg0 };
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  622  
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  623  
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  624  	*edid = NULL;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  625  
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  626  	if (!device)
+d550d98d331737 drivers/acpi/video.c      Patrick Mochel    2006-06-27  627  		return -ENODEV;
+25f97b27045655 drivers/acpi/acpi_video.c Mario Limonciello 2024-01-30  628  	if (!length || (length % 128))
+d550d98d331737 drivers/acpi/video.c      Patrick Mochel    2006-06-27  629  		return -EINVAL;
+25f97b27045655 drivers/acpi/acpi_video.c Mario Limonciello 2024-01-30  630  	arg0.integer.value = length / 128;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  631  
+901302688cb85b drivers/acpi/video.c      Patrick Mochel    2006-05-19  632  	status = acpi_evaluate_object(device->dev->handle, "_DDC", &args, &buffer);
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  633  	if (ACPI_FAILURE(status))
+d550d98d331737 drivers/acpi/video.c      Patrick Mochel    2006-06-27  634  		return -ENODEV;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  635  
+50dd096973f1d9 drivers/acpi/video.c      Jan Engelhardt    2006-10-01  636  	obj = buffer.pointer;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  637  
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  638  	if (obj && obj->type == ACPI_TYPE_BUFFER)
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  639  		*edid = obj;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  640  	else {
+25f97b27045655 drivers/acpi/acpi_video.c Mario Limonciello 2024-01-30  641  		acpi_handle_debug(device->dev->handle,
+25f97b27045655 drivers/acpi/acpi_video.c Mario Limonciello 2024-01-30 @642  				 "Invalid _DDC data for length %ld\n", length);
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  643  		status = -EFAULT;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  644  		kfree(obj);
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  645  	}
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  646  
+d550d98d331737 drivers/acpi/video.c      Patrick Mochel    2006-06-27  647  	return status;
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  648  }
+^1da177e4c3f41 drivers/acpi/video.c      Linus Torvalds    2005-04-16  649  
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
