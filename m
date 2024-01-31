@@ -1,151 +1,121 @@
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFC2664AE;
-	Wed, 31 Jan 2024 09:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4F16994C
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 09:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706692042; cv=none; b=DIfzFYVGjAMNNsnvbIXtvv5eadT7hjdkiV1245Vb+EGiAKJq5WvC7FA73jt58PZFb+nTSZzqX135W7bORclC33na+07eErwfPIfirx5+SOHFUcJ42NdjjJnPNppyHxd44zm5eCkqSsQjKimk0UGdcVDneXZg4geENQsc9S+rHWw=
+	t=1706692346; cv=none; b=GtoH7n9dVlYWspOQ2ioyPuqRHGi3oA/+mZOkeBvwXvhca/ujleKLTszCBhESqFvWqnbJUxsy6561fB3C/ZHwYrjle6bCw6Q2KDTB6NcSzATSLbZzayYbJMD+QS8WeDLBia91GmWXoEdz7Dt6nj7hh50sHgWNU5bLfhAdcjFBFho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706692042; c=relaxed/simple;
-	bh=0RuTS+kPwr4+e0G8exQO+9NVYj16oJYi6dt0lNc9JzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f2B0IfCEP/gFWqrYQBqrs0g3CQY8iGTJYzTunEa+irDw5maZ2bXqJgJQNsNSYmB3gJ85sKyWNgl20SgBIQcGoJ20iDYZeDGM7WPHN5l2uCZesruwCOjl1O8/fHVdT4TuH3yyLR4wyb5wqRmPY2LkMM69N82xHq1KPUBVA1XfL/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IpopKANJ; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1706692346; c=relaxed/simple;
+	bh=zx+jBP2L20Ye5mfDOJ7pzJPOr2fj4xiBpmo5wgEoBg8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j2dsW5Ife4gBicHAvgbRjUj+I26Rp/eNrfeCk0lmsQoLZ4nV0kf6p8JssckY4DpwW4ufWlyH15AbUfNkVnBb6JvWxFO6TV43oYntdllt6totwkU9oA6VF4KIkDb2xP7DGBr1At+gRABy4cobIpKZXOEtkUCdJm2KVhXxT3da6ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=odasfKXG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IpopKANJ"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 94A901C0003;
-	Wed, 31 Jan 2024 09:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706692038;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=txVeyDCwCa0PTblW/GH4Mt4FMs2okstRsQIFGpgZpIA=;
-	b=IpopKANJvPwzP+cqcm/nV8tIJeOl95Z+pm5ZBFxwXGnXRcK3j8Pw+g5PpTHYdFLZ+S68Mp
-	Zsj2PczR2iFjVt4JmxgdVtBXXEmZpd6iYEY+KPRCxNu2fQPiuG18FsmsoFfZfWkaW1KPbB
-	G1MSsTLhcCIWapF7QsFR2x2AIjii8HyIxhHt1myJcrQtSSLsH8641MOW1xBoMgS5kgngcd
-	HpasEnyJS3TgeESvACXjoa9KiuEvYQs3iCmPPe7m0RCMy1Q343Sq2P0VW3xur3FbmOGHKH
-	v498LDl6jvgqLJTyZWKLJSC9wenFYUOzH2yWAnMS8h04WN1KqPaw/M4Qidd9Fw==
-Date: Wed, 31 Jan 2024 10:07:01 +0100
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, "Lad,  Prabhakar"
- <prabhakar.csengg@gmail.com>, "Niklas =?UTF-8?Q?S=C3=83=C2=B6derlund?="
- <niklas.soderlund+renesas@ragnatech.se>, "Uwe =?UTF-8?Q?Kleine-K=C3=83?=
- =?UTF-8?Q?=C2=B6nig?=" <u.kleine-koenig@pengutronix.de>, Abhinav Kumar
- <quic_abhinavk@quicinc.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Alexander Stein
- <alexander.stein@ew.tq-group.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Alexandre Torgue
- <alexandre.torgue@foss.st.com>, Alexey Brodkin <abrodkin@synopsys.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Andy Gross <agross@kernel.org>,
- Biju Das <biju.das.jz@bp.renesas.com>, Bjorn Andersson
- <andersson@kernel.org>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Daniel
- Vetter <daniel@ffwll.ch>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- David Airlie <airlied@gmail.com>, Dmitry Baryshkov
- <dmitry.baryshkov@linaro.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Emma Anholt <emma@anholt.net>, Eugen Hristev <eugen.hristev@collabora.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Frank Rowand
- <frowand.list@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, Helge Deller <deller@gmx.de>,
- Hugues Fruchet <hugues.fruchet@foss.st.com>, Jacopo Mondi
- <jacopo+renesas@jmondi.org>, Jacopo Mondi <jacopo@jmondi.org>, James Clark
- <james.clark@arm.com>, Jaroslav Kysela <perex@perex.cz>, Jonathan Hunter
- <jonathanh@nvidia.com>, Kevin Hilman <khilman@baylibre.com>, Kieran Bingham
- <kieran.bingham+renesas@ideasonboard.com>, Kieran Bingham
- <kieran.bingham@ideasonboard.com>, Konrad Dybcio
- <konrad.dybcio@linaro.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Laurent Pinchart
- <laurent.pinchart+renesas@ideasonboard.com>, Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Liam Girdwood <lgirdwood@gmail.com>,
- Liu Ying <victor.liu@nxp.com>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Marek Vasut <marex@denx.de>, Mark
- Brown <broonie@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard
- <mripard@kernel.org>, Michael Tretter <m.tretter@pengutronix.de>, Michal
- Simek <michal.simek@amd.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Philipp Zabel <p.zabel@pengutronix.de>,
- Philippe Cornu <philippe.cornu@foss.st.com>, Raphael Gallais-Pou
- <raphael.gallais-pou@foss.st.com>, Rob Clark <robdclark@gmail.com>, Rob
- Herring <robh+dt@kernel.org>, Robert Foss <rfoss@kernel.org>, Russell King
- <linux@armlinux.org.uk>, Sakari Ailus <sakari.ailus@linux.intel.com>,
- Saravana Kannan <saravanak@google.com>, Sascha Hauer
- <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, Sowjanya
- Komatineni <skomatineni@nvidia.com>, Stefan Agner <stefan@agner.ch>, Suzuki
- K Poulose <suzuki.poulose@arm.com>, Sylwester Nawrocki
- <s.nawrocki@samsung.com>, Takashi Iwai <tiwai@suse.com>, Thierry Reding
- <thierry.reding@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, Tim
- Harvey <tharvey@gateworks.com>, Todor Tomov <todor.too@gmail.com>, Tomi
- Valkeinen <tomi.valkeinen@ideasonboard.com>, Yannick Fertre
- <yannick.fertre@foss.st.com>, Alim Akhtar <alim.akhtar@samsung.com>, Fabio
- Estevam <festevam@gmail.com>, Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
- Jernej Skrabec <jernej.skrabec@gmail.com>, Jerome Brunet
- <jbrunet@baylibre.com>, Jessica Zhang <quic_jesszhan@quicinc.com>, Jonas
- Karlman <jonas@kwiboo.se>, Leo Yan <leo.yan@linaro.org>, Marijn Suijten
- <marijn.suijten@somainline.org>, Martin Blumenstingl
- <martin.blumenstingl@googlemail.com>, Mike Leach <mike.leach@linaro.org>,
- Sam Ravnborg <sam@ravnborg.org>, Sean Paul <sean@poorly.run>, Tom Rix
- <trix@redhat.com>, coresight@lists.linaro.org, devicetree@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-fbdev@vger.kernel.org,
- linux-media@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-staging@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
- linux-tegra@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 14/24] of: property: add of_graph_get_next_endpoint()
-Message-ID: <20240131100701.754a95ee@booty>
-In-Reply-To: <874jeu6qhv.wl-kuninori.morimoto.gx@renesas.com>
-References: <87o7d26qla.wl-kuninori.morimoto.gx@renesas.com>
-	<874jeu6qhv.wl-kuninori.morimoto.gx@renesas.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="odasfKXG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CCF0C43399
+	for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 09:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706692346;
+	bh=zx+jBP2L20Ye5mfDOJ7pzJPOr2fj4xiBpmo5wgEoBg8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=odasfKXGCEVWm+n+kzir6Xm6EZVzZRzDoL+45cD11BJ5v4Bcn1p9ww19eFIrT5sCV
+	 VBsY4m3GukB8tUBQ2/eJhpVI50um67vRRMyce5hvaFXHexmJjAzPl7FUt7GeCBcZfM
+	 uHaqAEKQ54yPf04XYNnACdN8SenbL6eoL7w814xY/I2g70IT2ZNuoSZpOcIF9yv5Px
+	 8CzPZv2l96IfL9chWZg+T1HFkIlzR/K6TRGVkETET5eRDvqjKOzaZ513oq9kMQFLw1
+	 x8ssT76wND+CIkvH39Nw1hKRD+ACm5jSCFs5rj2OHPE0t33nQk2K+Ln4z4TXKWRUiR
+	 WzxDq5/sEYASA==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5111f40b8beso1736839e87.2
+        for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 01:12:26 -0800 (PST)
+X-Gm-Message-State: AOJu0YzZJRqCRM3LrOoYG30SAv5mg+PedaWJ7VKbWHy7bSCBEAugJQmm
+	+2W0lItdsGHp2sjiivoLyrDVMCcDVEISLCx1j7p56wvNU2wo06pc2f2bbXt4NbrNgySGq8uZwSj
+	167mFZ2zBAopsg/YWZLkQ7oZaDyw=
+X-Google-Smtp-Source: AGHT+IGKJh4aTcDvm3ZTQdt05N8TV7ie7Jl38Yz55BFxqWqqzCELKVQ/rFcFhsPxqCN+qciTi1uZSp0ntuHJtUQxzNg=
+X-Received: by 2002:a05:6512:616:b0:510:a0b:52e3 with SMTP id
+ b22-20020a056512061600b005100a0b52e3mr809444lfe.68.1706692344331; Wed, 31 Jan
+ 2024 01:12:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-23-ardb+git@google.com> <20240131083511.GIZboGP8jPIrUZA8DF@fat_crate.local>
+In-Reply-To: <20240131083511.GIZboGP8jPIrUZA8DF@fat_crate.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 31 Jan 2024 10:12:13 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG9W0XeEVR4tXDDg0Ai9XPsZGrTJaSRYUqgTV-xtFxjdQ@mail.gmail.com>
+Message-ID: <CAMj1kXG9W0XeEVR4tXDDg0Ai9XPsZGrTJaSRYUqgTV-xtFxjdQ@mail.gmail.com>
+Subject: Re: [PATCH v3 02/19] x86/boot: Move mem_encrypt= parsing to the decompressor
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Kuninori Morimoto,
+On Wed, Jan 31, 2024 at 9:35=E2=80=AFAM Borislav Petkov <bp@alien8.de> wrot=
+e:
+>
+> On Mon, Jan 29, 2024 at 07:05:05PM +0100, Ard Biesheuvel wrote:
+> > +/*
+> > + * Set the memory encryption xloadflag based on the mem_encrypt=3D com=
+mand line
+> > + * parameter, if provided. If not, the consumer of the flag decides wh=
+at the
+> > + * default behavior should be.
+> > + */
+> > +static void set_mem_encrypt_flag(struct setup_header *hdr)
+>
+> parse_mem_encrypt
+>
 
-On Wed, 31 Jan 2024 05:06:36 +0000
-Kuninori Morimoto <kuninori.morimoto.gx@renesas.com> wrote:
+OK
 
-> To handle endpoint more intuitive, create of_graph_get_next_endpoint()
-> 
-> 	of_graph_get_next_endpoint(port1, NULL); // A1
-> 	of_graph_get_next_endpoint(port1, A1);   // A2
-> 	of_graph_get_next_endpoint(port1, A2);   // NULL
+> > +{
+> > +     hdr->xloadflags &=3D ~(XLF_MEM_ENCRYPTION | XLF_MEM_ENCRYPTION_EN=
+ABLED);
+> > +
+> > +     if (IS_ENABLED(CONFIG_ARCH_HAS_MEM_ENCRYPT)) {
+>
+> That's unconditionally enabled on x86:
+>
+>         select ARCH_HAS_MEM_ENCRYPT
+>
+> in x86/Kconfig.
+>
+> Which sounds like you need a single XLF_MEM_ENCRYPT and simplify this
+> more.
+>
 
-The idea looks good. My only concern is about reusing the
-of_graph_get_next_endpoint() name after having removed the old, different
-function having the same name. This can be confusing in the first
-place to who is used to the old function, and also to anybody rebasing
-their patches on top of a new kernel to find their code behaving
-differently.
+OK, but that only means I can drop the if().
 
-Also, as now we'd have two similar variants of this function, it would
-be good if each of them were having a name that clearly identifies in
-which way they differ from the other.
+The reason we need two flags is because there is no default value to
+use when the command line param is absent.
 
-So a better name for this function would probably be
-of_graph_get_next_port_endpoint() I guess, to clearly differentiate from
-of_graph_get_next_device_endpoint().
+There is CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT but that one is AMD
+specific. There is CONFIG_X86_MEM_ENCRYPT which is shared between
+SME/SEV and TDX, which has no default setting.
 
-Luca
+> > +             int on =3D cmdline_find_option_bool("mem_encrypt=3Don");
+> > +             int off =3D cmdline_find_option_bool("mem_encrypt=3Doff")=
+;
+> > +
+> > +             if (on || off)
+> > +                     hdr->xloadflags |=3D XLF_MEM_ENCRYPTION;
+> > +             if (on > off)
+> > +                     hdr->xloadflags |=3D XLF_MEM_ENCRYPTION_ENABLED;
+> > +     }
+> > +}
+>
+> Otherwise, I like the simplification.
+>
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cheers.
