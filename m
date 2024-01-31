@@ -1,48 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F1D5810E;
-	Wed, 31 Jan 2024 08:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8833A57895;
+	Wed, 31 Jan 2024 08:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706689239; cv=none; b=Q4aZbGR/sUYZdD308GhRU8d5R4oUrLAfsytNuJLir6Nli+FMeA29Dt+pAMt3HZOGQ/NZgvjWnIKNzvH4qd7b50Mw5mNbcmKesLDhefgs3ix4fHDINVnbp3wnrXiw5ty1hPzG6NVIrVSt69z+/53p2h5MyHiU14rmm0rZmCzr9Gg=
+	t=1706689463; cv=none; b=UqNVvV1aZ91agXW89nGuRwc1AipzGSfiHv3kvwrcEiHojvDKsdsRci7jyPieaVScvt7gysWU13DjFVjIRzHEMjAG3UktqcSRHEbwfG5gPU2F2uM3x8V3zJM7plddkzz7SYnT35+rJccAsXoKwiAYHeYkNos0GBM8zrAwe7U4og8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706689239; c=relaxed/simple;
-	bh=SGzk9JA5A4WdBx6j64XS/jDdmN0WOY6psDzBiqQDpNc=;
+	s=arc-20240116; t=1706689463; c=relaxed/simple;
+	bh=p2eNGaNPy/qRkXoqrBMs9FtoycBXq4Fa+3HgEddDlkA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rz9Uo6Ft93nUQyhVuGiNFARssK90/dzKcRSe3mIVb5LWXT1Z0Su0q6Y0vIqsBzinzX/+xrC+kmLbtdiTlR+HJEO+ERpVE7INgaF68E6JqRKB1NE1tY0fWfyb6aflJHGpS/6dHF2QCck9yXWVQtG9YPpY/e10SlmhJ21jyti2Z1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iRxQFIrn; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=AeNNBcupzCmLB2qOzZE58EeQV7eSGCS0EM8Zk9P7rEzqqHUmwaMhE/IpyQx/MdGYwL0fs7rcT3FK3wgGWlFQoAElCQSdq5LZUnxS/2oiwNo8fti0jwl35CJQbN5IzUDnvfwX2h5n1HYRvdVfUlQtktJsd7b+y3PRluHqH0cAx4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FZfkbxbO; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iRxQFIrn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FZfkbxbO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706689238; x=1738225238;
+  t=1706689462; x=1738225462;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=SGzk9JA5A4WdBx6j64XS/jDdmN0WOY6psDzBiqQDpNc=;
-  b=iRxQFIrnH4IFoaWsM9BdI1qOQ2RvYKorE0hGBsYDw97EnJe9tTJuDoDF
-   yldgXjW08t7JXK/trzvnWqfy9dyOm984wHmVKRZ95jVuSdGH+bPgjSJ43
-   2d7CEWzIgHOQiNDzQwVxbco/NlyXhy2pf7Agf4QMfgxrtqHIGJw+Gf6+U
-   QtPlflGrTeWOVoB82azGDykvqBKBQdI9p0HS3uIdhLwwuBTNnzglmne7w
-   TzOpkxOs8HvYQZNP07TN4EGvc9A4xMPnAukPIOao/ojQ/6gCxpgp02cxq
-   a163HC+WsbMq7rO09i2+Zpmtaz9XQ2AIq79rbGLhMYuWSg3sSyMQvMfAA
+  bh=p2eNGaNPy/qRkXoqrBMs9FtoycBXq4Fa+3HgEddDlkA=;
+  b=FZfkbxbOavkUx128m/D5r0K+l/rO3y21VAcS4rNE/X0i7aFp3N6GZccn
+   hg9J8bkS75rPBg8DTgYX9fClcB0CcO3988dmUM8rtqCWHLrvzYc987O/Z
+   DbI2Ax2RWajn3PwsgVuKyAQS3pKuZp/8r/sZ02hWXhjFfMGJxstx4Q+Fk
+   XkRzZOJALflxxbGXZ6p0b863Hn4syY+HrciqqyCjmgka2d5Br6uzHtS9M
+   tqwaJFjF0UV794G3//ejVzW2XRb/lxDfsgvs3xJ57/XLdhV0IFqyDcWK0
+   aetcUvub3zIV6GRa200T73AQ/6tZkig0lT+1wWXkCO1UDeaLX3De1G0LB
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="22041368"
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="3399900"
 X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="22041368"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 00:20:37 -0800
+   d="scan'208";a="3399900"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 00:24:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="738021278"
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="911715756"
 X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="738021278"
+   d="scan'208";a="911715756"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 31 Jan 2024 00:20:30 -0800
+  by orsmga004.jf.intel.com with ESMTP; 31 Jan 2024 00:24:15 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-	id 146D22D5; Wed, 31 Jan 2024 10:20:29 +0200 (EET)
-Date: Wed, 31 Jan 2024 10:20:28 +0200
+	id 6D2A42D5; Wed, 31 Jan 2024 10:22:52 +0200 (EET)
+Date: Wed, 31 Jan 2024 10:22:52 +0200
 From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To: Kevin Loughlin <kevinloughlin@google.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
@@ -56,11 +56,11 @@ Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
 	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
 	Sidharth Telang <sidtelang@google.com>
-Subject: Re: [PATCH v3 1/2] x86/sev: enforce RIP-relative accesses in early
- SEV/SME code
-Message-ID: <4ljfvg7c23g2wx4hcqz6x6tx7uvp6fffayqvu4ptsmfqajlujr@zngokbd2awma>
+Subject: Re: [PATCH v3 2/2] x86/head64: Replace pointer fixups with
+ RIP_RELATIVE_ADDR()
+Message-ID: <sx3i6e6rgggh6wxtqt6odvwubg5vqotfleyjditiicjvjgpf6r@bswwhdt6zzti>
 References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
- <20240130220845.1978329-2-kevinloughlin@google.com>
+ <20240130220845.1978329-3-kevinloughlin@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,48 +69,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240130220845.1978329-2-kevinloughlin@google.com>
+In-Reply-To: <20240130220845.1978329-3-kevinloughlin@google.com>
 
-On Tue, Jan 30, 2024 at 10:08:44PM +0000, Kevin Loughlin wrote:
-> diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-> index 359ada486fa9..b65e66ee79c4 100644
-> --- a/arch/x86/include/asm/mem_encrypt.h
-> +++ b/arch/x86/include/asm/mem_encrypt.h
-> @@ -17,6 +17,20 @@
+On Tue, Jan 30, 2024 at 10:08:45PM +0000, Kevin Loughlin wrote:
+> @@ -594,15 +579,15 @@ static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
+>  /* This runs while still in the direct mapping */
+>  static void __head startup_64_load_idt(unsigned long physbase)
+>  {
+> -	struct desc_ptr *desc = fixup_pointer(&bringup_idt_descr, physbase);
+> -	gate_desc *idt = fixup_pointer(bringup_idt_table, physbase);
+> +	struct desc_ptr *desc = RIP_RELATIVE_ADDR(bringup_idt_descr);
+> +	gate_desc *idt = RIP_RELATIVE_ADDR(bringup_idt_table);
 >  
->  #include <asm/bootparam.h>
 >  
-> +/*
-> + * Like the address operator "&", evaluates to the address of a LHS variable
-> + * "var", but also enforces the use of RIP-relative logic. This macro can be
-> + * used to safely access global data variables prior to kernel relocation.
-> + */
-> +#define RIP_RELATIVE_ADDR(var)		\
-> +({					\
-> +	void *rip_rel_ptr;		\
-> +	asm ("lea "#var"(%%rip), %0"	\
-> +		: "=r" (rip_rel_ptr)	\
-> +		: "p" (&var));		\
-> +	rip_rel_ptr;			\
-> +})
-> +
-
-I don't think it is the right place for the macro. The next patch uses for
-things unrelated to memory encryption.
-
-> @@ -239,14 +244,14 @@ unsigned long __head __startup_64(unsigned long physaddr,
->  	 */
+>  	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
+>  		void *handler;
 >  
->  	next_pgt_ptr = fixup_pointer(&next_early_pgt, physaddr);
-> -	pud = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
-> -	pmd = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
-> +	early_dynamic_pgts_ptr = fixup_pointer(early_dynamic_pgts, physaddr);
-> +	pud = (pudval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++];
-> +	pmd = (pmdval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++];
+>  		/* VMM Communication Exception */
+> -		handler = fixup_pointer(vc_no_ghcb, physbase);
+> +		handler = RIP_RELATIVE_ADDR(vc_no_ghcb);
+>  		set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
+>  	}
 >  
 
-This change doesn't belong to this patch. Maybe move it into the next
-patch and combine with removing fixup_pointer().
+Looks like you removed all physbase users in the function. No need to pass
+it to it.
+
+> @@ -629,7 +614,7 @@ void early_setup_idt(void)
+>  void __head startup_64_setup_env(unsigned long physbase)
+>  {
+>  	/* Load GDT */
+> -	startup_gdt_descr.address = (unsigned long)fixup_pointer(startup_gdt, physbase);
+> +	startup_gdt_descr.address = (unsigned long)RIP_RELATIVE_ADDR(startup_gdt);
+>  	native_load_gdt(&startup_gdt_descr);
+>  
+>  	/* New GDT is live - reload data segment registers */
+
+With startup_64_load_idt() fixed, no users for physbase in this function
+either.
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
