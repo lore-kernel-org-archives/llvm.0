@@ -1,98 +1,163 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770897C6CA
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 17:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779B06D39;
+	Thu,  1 Feb 2024 19:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706809968; cv=none; b=FR6JzWXQBZ96zDq8bTDaDlSIQJ8N7STAV7eaSK0zQQqASL8OvOgyotKt/Gl84g6sM5rA/Sk0f0v2iLm+L0UaKWNp0pUZNSABRoKV5ve9ugThVi+hRplHhKqR8lRp6Z7jxHp/VxjbMMDjaxpPfoedhozTPKD80F4+NbJa+2tR+vI=
+	t=1706816292; cv=none; b=uXIR/gB+kYzb5pvGsnEya57hG6ofeYBKrP1LfzPIUt8p7CrvuX3eM/IOKodLH8R5DVERESAWxLZXb20Y6vAvK+7dCudzwi0xtDpTtrJEH1/jpK5yMW/UV7j2dEz6IUyvKcerafIOmNMM1uX0ACkv7LCDI2ITw0sOdwmlK7SM3Fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706809968; c=relaxed/simple;
-	bh=lIJSSJQHgI6dPqglJX+BpS/xv1aEFSMZz/COulwXiUY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hkYLdya8EZbCiHBjgrdMsxNCRf58AEiyhuXEamlRU5hD7eqS+gOI9Oh6Z1UaSYnZjHQBcdrEzAItr4lc2KgL+VGcZrja2ikpLjmeaBzAXw7zFDJTh3LUQ2FUn0h0/AKCBU2dab1+jkVHQCQAH+uXSaHOTqiIty/ZfXuCo8f8IxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=duz6oj9f; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1706816292; c=relaxed/simple;
+	bh=Pc8RJJh2G6jJWkbbYSZ2kbzKYJeZHz+HBeINvqtqkOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vBe25lWU1xOw8SwOYXYQccQS8iHBHe3WN/moXCqEq7vDECxtxA7VHYrXGtoFQJvcaGtoFCTIOzu6e8eeZLZkoYSr6zoI/eeyHFQIPxhEakiDjz+pVxb8bC8y/BwHPjYHBckjH2tMZtbsI+3fU6NmPKrcBU3+5F3VSJ08Hkz+5JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KuIuNajf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="duz6oj9f"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ddb807e23bso843608b3a.0
-        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 09:52:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706809967; x=1707414767; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oeB/5jBcZmtDcrKzl0YysnvyegKxpdljcraOQkK2rDw=;
-        b=duz6oj9fF5ltWwQKu3WWetMZ8K1f5mz+wjMhaxLwu7+og4ioScW62mwmHtmy9VYoH9
-         JGPX5ECWr9193YCHIbaecdcIrvevDZ8syA6lnYoxOYmlpNxaHjBvGz9z46NklWZncwGm
-         CkYAj0kdoPrErcu7NEAdWDBwEvsOiFbw1e4q0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706809967; x=1707414767;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oeB/5jBcZmtDcrKzl0YysnvyegKxpdljcraOQkK2rDw=;
-        b=Uv9BRoh89IjU46yV17oVD7cbAloWPH1H94YJKBb0uaqJv5LhdfzA0Y0qUmw8uSrIF6
-         wPAT2hw/at0PjLwagoMwbtSQf7VYXTLJoezhNWY6wOURwD0CBm80ODBMroKeyXr63ipF
-         ephWztxiIMlSA2aljsXWxh5EIXwkd70zDbbu50tulakRkEj87YHY1Qwdj95sOHETzl53
-         fOrEdVaZzH3kprGLolaSIjBm1uyO6HFs6eUrs6oK3vi9/Pr3Dpye58PoHyQhnVBiWnM+
-         yi54VyXTfezrNkLTJ73ImHLjYxg+ek8A/xUDzL5KeywZN1KKU5qJlQWom3x/4eKsiv16
-         5qEg==
-X-Gm-Message-State: AOJu0YxfVSCA5bFcoDVEjBGh0yg9E1ZTuoPDXHz6acQrt9d4ADZQbpY5
-	GNIL5mckF4kpuW6AIBBWMtfak1dIzaZu4HdrojbA4g6iXi0Wg60YBw6gMfDcHQ==
-X-Google-Smtp-Source: AGHT+IFywQN1VuW1cJxTCfwWkXxphyAozHQiCzAAuSTqK+KpTMUrHhQklPCAnJl9YxQODGS8sDGZEg==
-X-Received: by 2002:a62:f242:0:b0:6df:eb95:f50b with SMTP id y2-20020a62f242000000b006dfeb95f50bmr1998531pfl.11.1706809966859;
-        Thu, 01 Feb 2024 09:52:46 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCX+hPHocTN3Krdrwx2BAO45nqlHKtddyMcZedxVYNqfzp1g5llrSQ77t/t9540v3ksZVJyxQHtPp7krFRWB79cagtGUcq8AeS2fk18vBwQA2d1Wxj5V+bsCqzxwezYa7X+BNRsEjRuA/DD5VtS1iXq9O6G7yNUp/ZLFgvOLS+nnsn7Imahnj2Zf0LcZ/e/RxzPcoteP0ppMFjLjaYdlU9LM+9f19epNvqqjUk279j7/+ZLgKsnTnB5zzxGMAcwvNfd/ZARI6PYz8PTcHSfYa8MANfTeAB443UY+Kl+gFLoC1VvSo7sXPQZvKjZIP5CDlrpicY1s/1vQEd5uHQJEK1Lzz0LMiP+z8Qlgw31NG5qePmuYhJasxqV5
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i1-20020aa787c1000000b006ddc133f1d3sm12700pfo.194.2024.02.01.09.52.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 09:52:46 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <nnn@google.com>,
-	Tanzir Hasan <tanzhasanwork@gmail.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	llvm@lists.linux.dev,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v6 0/2] shrink lib/string.i via IWYU
-Date: Thu,  1 Feb 2024 09:52:00 -0800
-Message-Id: <170680986503.3370813.7406880929037173095.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
-References: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KuIuNajf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A5D0C433F1;
+	Thu,  1 Feb 2024 19:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706816291;
+	bh=Pc8RJJh2G6jJWkbbYSZ2kbzKYJeZHz+HBeINvqtqkOM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KuIuNajfDKG7/E3ZIeBHtV8/CFSrNKOmaY0nx8dkI1GH6VMIRsyZxDrqaI/vwG0vB
+	 KDp9YxOgUAVfuq2bbtqh+KGA3/3/Wrkf4MSI36WHQXy6daeHlgWKK4eA1nyoq3hGQY
+	 pESBJ3BX6KstsHRVP3NdvYGcHpJBrKEs8HBPZdKEnzoUJmcUFF8qPjBkmVWLkIIA/V
+	 VFIbbNlj2joyAFFwNC8nQA7KLn21Aa/uh5ldgZArRkj++y0xY6WfVk/0i0fmEi6I+D
+	 9iqe/X1HD/ZPIk9XpcRu3O85JYIraeMKU/sMwCQK1rXpbxWQSEcLA3VRgzAdPDFvHK
+	 OuvcYIYaquUNA==
+Date: Thu, 1 Feb 2024 12:38:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Wanpeng Li <wanpengli@tencent.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	David Rientjes <rientjes@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH, RESEND] x86/sev: Fix SEV check in sev_map_percpu_data()
+Message-ID: <20240201193809.GA2710596@dev-arch.thelio-3990X>
+References: <20240124130317.495519-1-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240124130317.495519-1-kirill.shutemov@linux.intel.com>
 
-On Tue, 26 Dec 2023 17:59:59 +0000, Tanzir Hasan wrote:
-> This patch series changes the include list of string.c to minimize
-> the preprocessing size. The patch series intends to remove REPEAT_BYE
-> from kernel.h and move it into its own header file because
-> word-at-a-time.h has an implicit dependancy on it but it is declared
-> in kernel.h which is bloated.
+On Wed, Jan 24, 2024 at 03:03:17PM +0200, Kirill A. Shutemov wrote:
+> The function sev_map_percpu_data() checks if it is running on an SEV
+> platform by checking the CC_ATTR_GUEST_MEM_ENCRYPT attribute. However,
+> this attribute is also defined for TDX.
+> 
+> To avoid false positives, add a cc_vendor check.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Fixes: 4d96f9109109 ("x86/sev: Replace occurrences of sev_active() with cc_platform_has()")
+> Suggested-by: Borislav Petkov (AMD) <bp@alien8.de>
+> Acked-by: David Rientjes <rientjes@google.com>
+> ---
+>  arch/x86/kernel/kvm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+> index dfe9945b9bec..428ee74002e1 100644
+> --- a/arch/x86/kernel/kvm.c
+> +++ b/arch/x86/kernel/kvm.c
+> @@ -434,7 +434,8 @@ static void __init sev_map_percpu_data(void)
+>  {
+>  	int cpu;
+>  
+> -	if (!cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
+> +	if (cc_vendor != CC_VENDOR_AMD ||
+> +	    !cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
+>  		return;
+>  
+>  	for_each_possible_cpu(cpu) {
+> -- 
+> 2.43.0
 > 
 
-Applied to for-next/hardening, thanks!
+Our CI has started seeing a build failure as a result of this patch when
+using LLVM to build x86_64_defconfig + CONFIG_GCOV_KERNEL=y +
+CONFIG_GCOV_PROFILE_ALL=y:
 
-[1/2] kernel.h: removed REPEAT_BYTE from kernel.h
-      https://git.kernel.org/kees/c/66a5c40f60f5
-[2/2] lib/string: shrink lib/string.i via IWYU
-      https://git.kernel.org/kees/c/38b9baf19469
+  $ echo 'CONFIG_GCOV_KERNEL=y
+  CONFIG_GCOV_PROFILE_ALL=y' >kernel/configs/gcov.config
 
-Take care,
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper defconfig gcov.config vmlinux
+  ...
+  ld.lld: error: undefined symbol: cc_vendor
+  >>> referenced by kvm.c
+  >>>               arch/x86/kernel/kvm.o:(kvm_smp_prepare_boot_cpu) in archive vmlinux.a
+  ...
 
--- 
-Kees Cook
+I was somewhat confused at first why this build error only shows up with
+GCOV until I looked at the optimized IR. This configuration has
+CONFIG_ARCH_HAS_CC_PLATFORM=n, which means that cc_vendor is declared
+but not defined anywhere, so I was expecting an unconditional error.
+Looking closer, I realized that cc_platform_has() evaluates to
+false in that configuration, so the compiler can always turn
+
+  if (cond || !false)
+      action();
+
+into
+
+  action();
+
+but it seems like with the GCOV instrumentation, it keeps both branches
+(since GCOV is about code coverage, it makes sense that you would want
+to see if each branch is ever taken). I can eliminate the error with the
+following diff, I am not sure if that is too much though.
+
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index 428ee74002e1..4432ee09cbcb 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -434,7 +434,7 @@ static void __init sev_map_percpu_data(void)
+ {
+ 	int cpu;
+ 
+-	if (cc_vendor != CC_VENDOR_AMD ||
++	if ((IS_ENABLED(CONFIG_ARCH_HAS_CC_PLATFORM) && cc_vendor != CC_VENDOR_AMD) ||
+ 	    !cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
+ 		return;
+ 
+Perhaps another solution would be to just
+
+  #define cc_vendor (CC_VENDOR_NONE)
+
+if CONFIG_ARCH_HAS_CC_PLATFORM is not set, since it can never be changed
+from the default in arch/x86/coco/core.c.
+
+diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+index 6ae2d16a7613..f3909894f82f 100644
+--- a/arch/x86/include/asm/coco.h
++++ b/arch/x86/include/asm/coco.h
+@@ -10,13 +10,13 @@ enum cc_vendor {
+ 	CC_VENDOR_INTEL,
+ };
+ 
+-extern enum cc_vendor cc_vendor;
+-
+ #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
++extern enum cc_vendor cc_vendor;
+ void cc_set_mask(u64 mask);
+ u64 cc_mkenc(u64 val);
+ u64 cc_mkdec(u64 val);
+ #else
++#define cc_vendor (CC_VENDOR_NONE)
+ static inline u64 cc_mkenc(u64 val)
+ {
+ 	return val;
+
+Cheers,
+Nathan
 
