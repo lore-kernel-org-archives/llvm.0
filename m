@@ -1,236 +1,98 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2824663C97
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 17:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770897C6CA
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 17:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706808585; cv=none; b=Nst5YFw01YXwHnEDqbIcb2AuzzBcH0kyyt9WcFSb5cc2NhTH2xHYtkGtvX6Nvqj3sK5eR5ucTbJkd1HveekFQlEROkzzvH8v3Hy1LXU/X/jVz4DP9dgyMSn4vLNUeBrdmbp8ECmSL7xinUc4FZ+h/YKT6svNhpmsNbRvHL15j5E=
+	t=1706809968; cv=none; b=FR6JzWXQBZ96zDq8bTDaDlSIQJ8N7STAV7eaSK0zQQqASL8OvOgyotKt/Gl84g6sM5rA/Sk0f0v2iLm+L0UaKWNp0pUZNSABRoKV5ve9ugThVi+hRplHhKqR8lRp6Z7jxHp/VxjbMMDjaxpPfoedhozTPKD80F4+NbJa+2tR+vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706808585; c=relaxed/simple;
-	bh=jiqimdF8tfIp0DYa4JWLmSbNouWv248ghCExbt4VYTw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cp3hl85V0EwKCVMKCiaz6pBmyTx17OQ4dtz0P3wzVdMtE+I1op0di/dm/cOAYxvlpz9nrshDFG67ndGbZ8G7V39+Jgtyf7D0J3cOCankZ1AKq39nqXZQe6R6HpNzOuV0Q+1SM3Mx46rNChgLzxRb3GQoOgPxWDOQGd9E7k7SWTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2EEF9DA7;
-	Thu,  1 Feb 2024 09:30:25 -0800 (PST)
-Received: from e133380.arm.com (e133380.arm.com [10.1.197.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59CB73F738;
-	Thu,  1 Feb 2024 09:29:41 -0800 (PST)
-Date: Thu, 1 Feb 2024 17:29:38 +0000
-From: Dave Martin <Dave.Martin@arm.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Fangrui Song <maskray@google.com>, Peter Smith <peter.smith@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	Jisheng Zhang <jszhang@kernel.org>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
-Message-ID: <ZbvVApJ2/+yca0u6@e133380.arm.com>
-References: <20240131065322.1126831-1-maskray@google.com>
- <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
- <ZbpEnDK3U/O24ng0@e133380.arm.com>
- <20240201045551.ajg4iqcajyowl2rh@google.com>
- <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
- <20240201091120.pbgr7ng6t2c36fut@google.com>
- <ZbuFWSRBntgm2ukJ@e133380.arm.com>
- <CAMj1kXGu76WHY8=Y-KhCxBq3xeHeCYQ9syqViSr9VRkjgWQ3BQ@mail.gmail.com>
+	s=arc-20240116; t=1706809968; c=relaxed/simple;
+	bh=lIJSSJQHgI6dPqglJX+BpS/xv1aEFSMZz/COulwXiUY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hkYLdya8EZbCiHBjgrdMsxNCRf58AEiyhuXEamlRU5hD7eqS+gOI9Oh6Z1UaSYnZjHQBcdrEzAItr4lc2KgL+VGcZrja2ikpLjmeaBzAXw7zFDJTh3LUQ2FUn0h0/AKCBU2dab1+jkVHQCQAH+uXSaHOTqiIty/ZfXuCo8f8IxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=duz6oj9f; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="duz6oj9f"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ddb807e23bso843608b3a.0
+        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 09:52:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706809967; x=1707414767; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oeB/5jBcZmtDcrKzl0YysnvyegKxpdljcraOQkK2rDw=;
+        b=duz6oj9fF5ltWwQKu3WWetMZ8K1f5mz+wjMhaxLwu7+og4ioScW62mwmHtmy9VYoH9
+         JGPX5ECWr9193YCHIbaecdcIrvevDZ8syA6lnYoxOYmlpNxaHjBvGz9z46NklWZncwGm
+         CkYAj0kdoPrErcu7NEAdWDBwEvsOiFbw1e4q0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706809967; x=1707414767;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oeB/5jBcZmtDcrKzl0YysnvyegKxpdljcraOQkK2rDw=;
+        b=Uv9BRoh89IjU46yV17oVD7cbAloWPH1H94YJKBb0uaqJv5LhdfzA0Y0qUmw8uSrIF6
+         wPAT2hw/at0PjLwagoMwbtSQf7VYXTLJoezhNWY6wOURwD0CBm80ODBMroKeyXr63ipF
+         ephWztxiIMlSA2aljsXWxh5EIXwkd70zDbbu50tulakRkEj87YHY1Qwdj95sOHETzl53
+         fOrEdVaZzH3kprGLolaSIjBm1uyO6HFs6eUrs6oK3vi9/Pr3Dpye58PoHyQhnVBiWnM+
+         yi54VyXTfezrNkLTJ73ImHLjYxg+ek8A/xUDzL5KeywZN1KKU5qJlQWom3x/4eKsiv16
+         5qEg==
+X-Gm-Message-State: AOJu0YxfVSCA5bFcoDVEjBGh0yg9E1ZTuoPDXHz6acQrt9d4ADZQbpY5
+	GNIL5mckF4kpuW6AIBBWMtfak1dIzaZu4HdrojbA4g6iXi0Wg60YBw6gMfDcHQ==
+X-Google-Smtp-Source: AGHT+IFywQN1VuW1cJxTCfwWkXxphyAozHQiCzAAuSTqK+KpTMUrHhQklPCAnJl9YxQODGS8sDGZEg==
+X-Received: by 2002:a62:f242:0:b0:6df:eb95:f50b with SMTP id y2-20020a62f242000000b006dfeb95f50bmr1998531pfl.11.1706809966859;
+        Thu, 01 Feb 2024 09:52:46 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCX+hPHocTN3Krdrwx2BAO45nqlHKtddyMcZedxVYNqfzp1g5llrSQ77t/t9540v3ksZVJyxQHtPp7krFRWB79cagtGUcq8AeS2fk18vBwQA2d1Wxj5V+bsCqzxwezYa7X+BNRsEjRuA/DD5VtS1iXq9O6G7yNUp/ZLFgvOLS+nnsn7Imahnj2Zf0LcZ/e/RxzPcoteP0ppMFjLjaYdlU9LM+9f19epNvqqjUk279j7/+ZLgKsnTnB5zzxGMAcwvNfd/ZARI6PYz8PTcHSfYa8MANfTeAB443UY+Kl+gFLoC1VvSo7sXPQZvKjZIP5CDlrpicY1s/1vQEd5uHQJEK1Lzz0LMiP+z8Qlgw31NG5qePmuYhJasxqV5
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i1-20020aa787c1000000b006ddc133f1d3sm12700pfo.194.2024.02.01.09.52.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Feb 2024 09:52:46 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <nnn@google.com>,
+	Tanzir Hasan <tanzhasanwork@gmail.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	llvm@lists.linux.dev,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v6 0/2] shrink lib/string.i via IWYU
+Date: Thu,  1 Feb 2024 09:52:00 -0800
+Message-Id: <170680986503.3370813.7406880929037173095.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
+References: <20231226-libstringheader-v6-0-80aa08c7652c@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGu76WHY8=Y-KhCxBq3xeHeCYQ9syqViSr9VRkjgWQ3BQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 01, 2024 at 05:07:59PM +0100, Ard Biesheuvel wrote:
-> On Thu, 1 Feb 2024 at 12:50, Dave Martin <Dave.Martin@arm.com> wrote:
-> >
-> > On Thu, Feb 01, 2024 at 01:11:20AM -0800, Fangrui Song wrote:
-> ...
-> > >
-> > > Hmm. Clang's constraint "S" implementation doesn't support a constant
-> > > offset, so
-> > > `static_key_false(&nf_hooks_needed[pf][hook])` in include/linux/netfilter.h:nf_hook
-> > > would not compile with Clang <= 18.
-> > >
-> > > I have a patch https://github.com/llvm/llvm-project/pull/80255 , but
-> > > even if it is accepted and cherry-picked into the 18.x release branch,
-> > > if we still support older Clang, we cannot use "S" unconditionally.
-> > >
-> > >
-> > > So we probably need the following to prepare for -fPIE support in the
-> > > future:
-> > >
-> > > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
-> > > index 48ddc0f45d22..b8af2f8b0c99 100644
-> > > --- a/arch/arm64/include/asm/jump_label.h
-> > > +++ b/arch/arm64/include/asm/jump_label.h
-> > > @@ -15,6 +15,16 @@
-> > >  #define JUMP_LABEL_NOP_SIZE          AARCH64_INSN_SIZE
-> > > +/*
-> > > + * Prefer "S" to support PIC. However, use "i" for Clang 18 and earlier as "S"
-> > > + * on a symbol with a constant offset is not supported.
-> > > + */
-> > > +#if defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 18
-> >
-> > Is a GCC version check needed?  Or is the minimum GCC version specified
-> > for building the kernel new enough?
-> >
-> > > +#define JUMP_LABEL_STATIC_KEY_CONSTRAINT "i"
-> > > +#else
-> > > +#define JUMP_LABEL_STATIC_KEY_CONSTRAINT "S"
-> > > +#endif
-> > > +
+On Tue, 26 Dec 2023 17:59:59 +0000, Tanzir Hasan wrote:
+> This patch series changes the include list of string.c to minimize
+> the preprocessing size. The patch series intends to remove REPEAT_BYE
+> from kernel.h and move it into its own header file because
+> word-at-a-time.h has an implicit dependancy on it but it is declared
+> in kernel.h which is bloated.
 > 
-> Can we use "Si" instead?
 
-I thought the point was to avoid "S" on compilers that would choke on
-it?  If so, those compilers would surely choke on "Si" too, no?
+Applied to for-next/hardening, thanks!
 
+[1/2] kernel.h: removed REPEAT_BYTE from kernel.h
+      https://git.kernel.org/kees/c/66a5c40f60f5
+[2/2] lib/string: shrink lib/string.i via IWYU
+      https://git.kernel.org/kees/c/38b9baf19469
 
-> > >  static __always_inline bool arch_static_branch(struct static_key * const key,
-> > >                                              const bool branch)
-> > >  {
-> > > @@ -23,9 +33,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
-> > >                "      .pushsection    __jump_table, \"aw\"    \n\t"
-> > >                "      .align          3                       \n\t"
-> > >                "      .long           1b - ., %l[l_yes] - .   \n\t"
-> > > -              "      .quad           %c0 - .                 \n\t"
-> > > +              "      .quad           %0 + %1 - .             \n\t"
-> > >                "      .popsection                             \n\t"
-> > > -              :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-> > > +              :  :  JUMP_LABEL_STATIC_KEY_CONSTRAINT(key), "i"(branch) :  : l_yes);
-> >
-> > While this looks reasonable, I'm still not clear now why the asm must do
-> > the addition.
-> >
-> > Can we roll the branch argument into the macro?
-> >
-> > "S"(symbol + constant) seems to do the right thing for AArch64, at least
-> > in GCC.
-> >
-> 
-> 'symbol' is a struct static_key pointer, so adding '1' to it will not
-> produce the needed result.
+Take care,
 
-I mean loosely things that resolve to something of the form
-"symbol + constant" in the compiler output.
+-- 
+Kees Cook
 
-"S"(&((char *)key)[branch]) does indeed seem to do the right thing,
-at least with GCC.
-
-I probably didn't help by bikeshedding the way that expression was
-written, apologies for that.  It's orthogonal to what this patch is
-doing.
-
-> 
-> ...
-> > > > > >If there's another reason why "S" is advantageous though, I'm happy to
-> > > > > >be corrected.
-> > > > >
-> > > > > I remember that Ard has an RFC
-> > > > > https://lore.kernel.org/linux-arm-kernel/20220427171241.2426592-1-ardb@kernel.org/
-> > > > > "[RFC PATCH 0/2] arm64: use PIE code generation for KASLR kernel"
-> > > > > and see some recent PIE codegen patches.
-> > > > >
-> > > > > > Building the KASLR kernel without -fpie but linking it with -pie works
-> > > > > > in practice, but it is not something that is explicitly supported by the
-> > > > > > toolchains - it happens to work because the default 'small' code model
-> > > > > > used by both GCC and Clang relies mostly on ADRP+ADD/LDR to generate
-> > > > > > symbol references.
-> >
-> > Does this mean that doing boot-time relocation on a fully statically
-> > linked kernel doesn't bring much benefit?
-> 
-> Not sure I follow you here. The boot-time relocation is necessary in
-> any case, to fix up statically initialized pointer variables all over
-> the kernel.
-> 
-> > It would tend to be more
-> > painful to do the relocation work, and mean that the kernel text has to
-> > be temporarily writeable, but static linking should have the best
-> > runtime performance.
-> >
-> 
-> Not sure what you mean by 'static linking' here.
-> 
-> The only thing PIE linking does in the case of the kernel is
-> a) complain if static relocations are used that cannot be fixed up at
-> runtime (e.g., movk/movz sequences)
-> b) emit dynamic relocations that the early startup code can use to fix
-> up all statically initialized pointers
-> 
-> From a codegen point-of-view, there is no difference because we don't
-> use -fpic code. The problem with -fpic codegen is that it makes some
-> assumptions that only hold for shared ELF objects, e.g., avoiding
-> dynamic relocations in .text, using GOT entries even for variables
-> defined in the same compilation so that they can be preempted, keeping
-> all runtime relocatable quantities together so the CoW footprint of
-> the shared library is minimized.
-> 
-> None of this matters for the kernel, and as it turns out, the non-PIC
-> small C model produces code that the PIE linker is happy with.
-> 
-> TL;DR our code (including inline and out-of-line asm) is already PIC,
-> and this property is relied upon by KASLR.
-> 
-> > Maybe it doesn't make as much difference as I thought (certainly ADRP
-> > based addressing should make a fair amount of the PIC/PIE overhead go
-> > away).
-> >
-> 
-> The PIC/PIE overhead is in the indirections via the GOT. However,
-> recent linkers will actually perform some relaxations too: if a symbol
-> is defined in the same executable and is not preemptible, a GOT load
-> 
-> ADRP
-> LDR
-> 
-> can be transparently converted to
-> 
-> ADRP
-> ADD
-> 
-> referring to the symbol directly. This is also where hidden.h comes
-> in: making all symbol declarations and definitions 'hidden' will allow
-> the compiler to assume that a GOT entry is never needed.
-
-Is there a reason why we don't just build the whole kernel with
--fvisibility=hidden today?
-
-> So building with -fPIC is currently not need in practice, and creates
-> some complications, which is why we have been avoiding it. But PIE
-> linking non-PIC objects is not guaranteed to remain supported going
-> forward, so it would be better to have a plan B, i.e., being able to
-> turn on -fpic without massive regressions due to GOT overhead, or
-> codegen problems with our asm hacks.
-
-Summarising all of this is it right that:
-
-1) ld -pie is how we get the reloc info into the kernel for KASLR
-today.
-
-2) We use gcc -fno-pic today, but this might break with ld -pie in the
-future, although it works for now.
-
-3) gcc -fno-pic and gcc -fPIC (or -fPIE) generate almost the same code,
-assuming we tweak symbol visibility and use a memory model that
-ADR+ADD/LDR can span.  So, moving to -fPIE is likely to be do-able.
-
-
-My point is that an alternative option would be to move to ld -no-pie.
-We would need another way to get relocs into the kernel, such as an
-intermediate step with ld --emit-relocs.  I have definitely seen this
-done before somewhere, but it would be extra work and not necessarily
-worth it, based on what you say about code gen.
-
-This may all have been discussed to death already -- I didn't mean to
-hijack this patch, so I'll stop digging here, but if I've misunderstood,
-please shout!
-
-Cheers
----Dave
