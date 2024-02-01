@@ -1,96 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A995A4DC
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 16:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64991FDB
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 16:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706804917; cv=none; b=jvHp2umBnhsqFyC94U6SO4Za9Zfkwkz9LkDGe13VnYSXgetjc4fCBrtTrvhQ1HRl+KzfcaYPZ+YlCtD9VlRxKx9DNba+4ZEm2klL3p7U/bzMmYwl9pi1hQGBcHVxwuixSmGsf1EIz6SDjdJU5R+7Tu+y3SAYYMqZvhIJxVyQ92g=
+	t=1706805517; cv=none; b=eHaM1/8bDEDvQF33CkgCJLHDo9UOxbaS+wjri9GYmzK/SBKumG/1ny0C1LMjcvwlHLDjSE7EGjemSbICJmWW4EH8IGo2YamrrWYDmuLapyS1oMBkJqdTsrjLkQc8ysO3JTF/oLKYO3bJxY+mIgWHre2URDB+hFVHhd2DqC+HY2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706804917; c=relaxed/simple;
-	bh=AYoNkt7FBERipsA6+gWOzsLUUlJSiRlytP9Ua8kgOO8=;
+	s=arc-20240116; t=1706805517; c=relaxed/simple;
+	bh=EKKfK1jLKXIPEoqnvWWsPVTEbHgmCxR3CtVMQy6TP7g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RhGXn9ih1dgx0ELG1iZvxEwu/zlE3XOwbSNtb1W8bicjJWNozF6m/3Ba+UPno/xfITsu6M9LpeEKx/SmehBpecE9glhqA3zPb/HsF8hsF8L2D1RbDwxYGOAhrUMdCepXHlXAUS05SOY+Z8/pZ4WS4q3b8S3+hdqrLMP8BNVPjDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CV3Coqwd; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=iPobg1A/f5DdLjpjKt/cg1yV8Tnzl3GKW8erUHfSwZekNLD1HAscsCic7gU4dV6PGgX09Iv8sXB8PLYu8lKwSgahP4AQbAUTMld3r0Sph5rebtaqNbF9xxV7BQEPiisnOCw0ySRGjNsO48aHNf4uhk1C0MHg5azQ14X1A7FlELY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OTiNBapQ; arc=none smtp.client-ip=209.85.222.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CV3Coqwd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15210C43399
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 16:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706804917;
-	bh=AYoNkt7FBERipsA6+gWOzsLUUlJSiRlytP9Ua8kgOO8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CV3CoqwdSSmMD8zmP5QrTCOkRJLjaGMSF95A7VIPYV/EV/MMM2FJvyXgwlcafjaaN
-	 iLHNQ+FqZ2otMTGTqfGpgMw+M1aeoyprZmM1x+9u4Y4iN3tD0MelYB9aPlwPY39i/Y
-	 F/1wxlcobf6un6EIHMNNol4Fw7XvihnSkfpNipuuLF8b4uCsK86xil3OIpTuilWQd5
-	 i/+B6BE/GV1VkRi2ua9Ffc7cPyMUq9fJb+Sn77q0o/JudVwFZKKWpA3uIXndgKsBGv
-	 Da9hHc0npRpi8zXPY7U3rdff78VEehn/Wh+PKlWTFu93U9l9aDDh1n9Bpq2bAH7NW4
-	 0keUfCRnAKREQ==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5111ef545bfso1806451e87.1
-        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 08:28:36 -0800 (PST)
-X-Gm-Message-State: AOJu0YyGlD43+uL5oQHbfVWtk0DhuCxdY81gVXQ/KBMvDGtsmDVtCIli
-	+SHyYvxFkUsEvAF/iWu/aV9pW4cJ7jyTJEm6/W1cprD/pr03qJQPHOercCrS+MXVb+uFtisJJ0x
-	L25Qb9apUi+MI73KixCwOExjvy8U=
-X-Google-Smtp-Source: AGHT+IGyHtwSRcTL6/4uhQhAfoq9TneyyfKnj3SLIV6x5awNwiaKP9QM4hpCSbY07j7uj5hnjq0UJldlmz8GcShfIOU=
-X-Received: by 2002:a05:6512:70:b0:511:b86:35b5 with SMTP id
- i16-20020a056512007000b005110b8635b5mr2032216lfo.9.1706804915280; Thu, 01 Feb
- 2024 08:28:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OTiNBapQ"
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-7d2940ad0e1so556682241.1
+        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 08:38:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706805515; x=1707410315; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LxydBSYt78Q3tDYYvbfwJIQv5drJs2GhS3kKeICFZ4k=;
+        b=OTiNBapQ4gAb5Q/ZiTco7H/HQEXZ707QBtcbkWEmeMxHbCCmjpzSAGQoNHcAJq/uu+
+         yHh/VfVMcbuBrtMJqd7/ic1pKn69e95T13o/2lgIj/0pDb82JanZ5uAauBVRnXNErEhA
+         g8Qz9AvULfOzAyJRfT94eRMZs1J/Yvwt8JA2lMdSRJoGTyPkufWH6OcSnSppwCAI0+20
+         L6zgE15ooyuqox1dQIxajO0LsKc5adxon4aoZ/UdjiztKw5ii14dscW10QNfPn/VV05U
+         m7catyN8qI52swzu9aCI1Z61+pLMDTayPXt8DK7mJ1GAmLQezCKqU4B4q9te+oEIhQ4C
+         XCWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706805515; x=1707410315;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LxydBSYt78Q3tDYYvbfwJIQv5drJs2GhS3kKeICFZ4k=;
+        b=kvUyiu+DtT/KwZ/52f+ItU/sSz9K02ylteHHJXkV4yITtJOc5FHDKIQ67s3eo2UXCj
+         rcZDXryX3NaasGOzHOcd0duqz7IOdpSTasVzACmnlZRJT5M6MZptMwrSkqtjwtn3m+CW
+         VhQMBl3/mzxRWTZV/ukE6JDMatZjqAtgoLAt/h4DHMwoMaHfK1E1cklXu+bXtPRT+paU
+         gH2L01IbkVzR3L6v35uHrqB7e6N/GHaAFhZat/ogWL6Qz5PlxyV9i+kWNLHi3QtlRnp3
+         VjRl504YDKK5UxaywTU6ash+3oSRWwyqMyAp4wTPETaV1iCUN5w35K0egkzYvmMSAU0M
+         hG9A==
+X-Gm-Message-State: AOJu0YzPIPUt8q9wWtf3QD4vYwwkk5ca8DUZjlW+xyvvoxd3hSSfWKY1
+	BVHyR6QSMLCQqpmlQgG/PgQ9oBSVRY1aXOY5BuCb5Xljp0Q8EyC3i9E3KrKqj0E3TA7dnS9FOGR
+	23hgWOkeGOSMNAuLELt8RFRLNd87BU1T3Km+a
+X-Google-Smtp-Source: AGHT+IFvLBp7+wMbKBKxwjYgXGrG962W6VY58iu9bhsBfRyOqGFPu3+P1yJI2ZKLHaKwekY3Mc56N8uf1sMgdb+Cosg=
+X-Received: by 2002:ac5:cb6b:0:b0:4b6:c3ae:97f6 with SMTP id
+ l11-20020ac5cb6b000000b004b6c3ae97f6mr4498112vkn.0.1706805514702; Thu, 01 Feb
+ 2024 08:38:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-22-ardb+git@google.com> <20240131073156.GHZbn3bILaWLEluzp-@fat_crate.local>
- <CAGdbjmJi_b0jt4-noJEdVFvQ80BOBULmHic8D-uGsNn4m9rTyg@mail.gmail.com>
-In-Reply-To: <CAGdbjmJi_b0jt4-noJEdVFvQ80BOBULmHic8D-uGsNn4m9rTyg@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 1 Feb 2024 17:28:22 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFZKM5wU8djcVBxDmnCJwV4Xpest6u1EbE=7wyLUUeUUQ@mail.gmail.com>
-Message-ID: <CAMj1kXFZKM5wU8djcVBxDmnCJwV4Xpest6u1EbE=7wyLUUeUUQ@mail.gmail.com>
-Subject: Re: [PATCH v3 01/19] efi/libstub: Add generic support for parsing mem_encrypt=
-To: Kevin Loughlin <kevinloughlin@google.com>
-Cc: Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
+ <20240130220845.1978329-3-kevinloughlin@google.com> <sx3i6e6rgggh6wxtqt6odvwubg5vqotfleyjditiicjvjgpf6r@bswwhdt6zzti>
+In-Reply-To: <sx3i6e6rgggh6wxtqt6odvwubg5vqotfleyjditiicjvjgpf6r@bswwhdt6zzti>
+From: Kevin Loughlin <kevinloughlin@google.com>
+Date: Thu, 1 Feb 2024 08:38:23 -0800
+Message-ID: <CAGdbjmKOwRbWa9w3M6NH-gTnTOt-ZaM0UA700TMhFzrX8z5MVw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] x86/head64: Replace pointer fixups with RIP_RELATIVE_ADDR()
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
 	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev, Conrad Grobler <grobler@google.com>, 
-	Andri Saar <andrisaar@google.com>, Sidharth Telang <sidtelang@google.com>
+	Tom Lendacky <thomas.lendacky@amd.com>, Pankaj Gupta <pankaj.gupta@amd.com>, 
+	Hou Wenlong <houwenlong.hwl@antgroup.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Dionna Glaze <dionnaglaze@google.com>, Brijesh Singh <brijesh.singh@amd.com>, 
+	Michael Roth <michael.roth@amd.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>, 
+	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
+	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
+	Sidharth Telang <sidtelang@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 1 Feb 2024 at 17:23, Kevin Loughlin <kevinloughlin@google.com> wrot=
-e:
+On Wed, Jan 31, 2024 at 12:24=E2=80=AFAM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
 >
-> On Tue, Jan 30, 2024 at 11:32=E2=80=AFPM Borislav Petkov <bp@alien8.de> w=
-rote:
+> On Tue, Jan 30, 2024 at 10:08:45PM +0000, Kevin Loughlin wrote:
+> > @@ -594,15 +579,15 @@ static void set_bringup_idt_handler(gate_desc *id=
+t, int n, void *handler)
+> >  /* This runs while still in the direct mapping */
+> >  static void __head startup_64_load_idt(unsigned long physbase)
+> >  {
+> > -     struct desc_ptr *desc =3D fixup_pointer(&bringup_idt_descr, physb=
+ase);
+> > -     gate_desc *idt =3D fixup_pointer(bringup_idt_table, physbase);
+> > +     struct desc_ptr *desc =3D RIP_RELATIVE_ADDR(bringup_idt_descr);
+> > +     gate_desc *idt =3D RIP_RELATIVE_ADDR(bringup_idt_table);
 > >
-> > On Mon, Jan 29, 2024 at 07:05:04PM +0100, Ard Biesheuvel wrote:
-> > > From: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > Parse the mem_encrypt=3D command line parameter from the EFI stub if
-> > > CONFIG_ARCH_HAS_MEM_ENCRYPT=3Dy, so that it can be passed to the earl=
-y
-> > > boot code by the arch code in the stub.
 > >
-> > I guess all systems which do memory encryption are EFI systems anyway s=
-o
-> > we should not worry about the old ones...
+> >       if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
+> >               void *handler;
+> >
+> >               /* VMM Communication Exception */
+> > -             handler =3D fixup_pointer(vc_no_ghcb, physbase);
+> > +             handler =3D RIP_RELATIVE_ADDR(vc_no_ghcb);
+> >               set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
+> >       }
+> >
 >
-> There is at least one non-EFI firmware supporting memory encryption:
-> Oak stage0 firmware [0]. However, I think Ard's patch seems simple
-> enough to adopt in non-EFI firmware(s) if needed. I merely wanted to
-> point out the existence of non-EFI memory encryption systems for
-> potential future cases (ex: reviewing more complex patches at the
-> firmware interface).
->
-> [0] https://github.com/project-oak/oak/tree/main/stage0_bin
->
+> Looks like you removed all physbase users in the function. No need to pas=
+s
+> it to it.
 
-The second patch in this series actually implements the mem_encrypt=3D
-parsing for both EFI and non-EFI boot. I just broke this out in a
-separate patch because it affects architectures other than x86.
+Thanks, will fix.
+
+>
+> > @@ -629,7 +614,7 @@ void early_setup_idt(void)
+> >  void __head startup_64_setup_env(unsigned long physbase)
+> >  {
+> >       /* Load GDT */
+> > -     startup_gdt_descr.address =3D (unsigned long)fixup_pointer(startu=
+p_gdt, physbase);
+> > +     startup_gdt_descr.address =3D (unsigned long)RIP_RELATIVE_ADDR(st=
+artup_gdt);
+> >       native_load_gdt(&startup_gdt_descr);
+> >
+> >       /* New GDT is live - reload data segment registers */
+>
+> With startup_64_load_idt() fixed, no users for physbase in this function
+> either.
+
+Ditto.
