@@ -1,56 +1,56 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B06C3C24
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 00:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C8F3D64
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 00:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706746530; cv=none; b=pL6vxb+0oAE/3NqShNjc/zOHkqyE57rHMmY6WdS2ExJyxsIl+ZxB0pyBwQ/AOxkmwvaUBINTWM9afE73s3XSojQlOgEBe3WaDrlwURwlrqG0qIGp5xA3bTEkieOqTFTn6UMaZkaOIdmehxiqDkM7jzraUBGApEJ/ORs2f1nBtfY=
+	t=1706746532; cv=none; b=c97UEVTd0hi7CKShUWqBlf/UKjYnuaSaYnf8a8Blzb+h+g+v07QxR66i/WhhpcWja64L6eKFFCsjKNJeHgh/C4l6uliogiC04Z6o66mhqbqWh7WwWrp6jxgWaMuXW0F8sMi8xhFHo9/BngloHjhjM1TBPdKo3sof+wmjed+X+Js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706746530; c=relaxed/simple;
-	bh=P0dE4SZC6JMGyd4Zz6ysHena7Iqo04wzT6xeGII9Szk=;
+	s=arc-20240116; t=1706746532; c=relaxed/simple;
+	bh=/UHPRm7mz7k1D9UD2yWSxqPsNm91brhJvaJyQa92m4A=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=qkguyNvgGIYCets3FBXhHtP+MiP/akTBrYp7KrTvJ3DXJP1R/TpMp/WQIU1l/+JGCVPA9+DsnncG1ynF7tdufByuSlcjQ6AloKgsUluwoV1oJuH+IRpIidD8D0HPXBOh2aJzZoXJqui6M2dwMihYxrOHxe/pdZCjWwmVd98wKoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wxCKmZwt; arc=none smtp.client-ip=209.85.219.201
+	 To:Content-Type; b=fRRMa1dD/gi1SPxzK2F9rzVFbrGC8JF1aroKsOAdAK8FWEuxcuDfn7ULDMyrDR44YArmsjw1KRBvrZfRtK1SAxuCbphjpa+uAZ7ceiyJ8AlR5KYU1ortsty27j87b/buNBKloMmK/p2dtjV3UqgCnEEoMZTRU2QCtApL6vuUgmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rMzb6KCm; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wxCKmZwt"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc657e9bdc4so521737276.0
-        for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 16:15:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rMzb6KCm"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6041c45ce1cso2180447b3.1
+        for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 16:15:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706746528; x=1707351328; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1706746530; x=1707351330; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=iap9AX1ulrmbLUTYu3qyDksm4nz07RhuxN54fV9TeXc=;
-        b=wxCKmZwtr+t5xDFa1i4ENyC/1o8ilq6iHHn6Apb3gerFNE6nVxxb4os0mT6N6X0IeP
-         WQwnLWKFXtvsikXrOumoW5+5LP255Hd58SDcEKesHODMk5wt3jOMiMl+TbGIl/f9puc+
-         BwCauJBnraE7vlKA9NNBQfm2CANJLxTBbcukIOV2xVQGJip1yADWUWw/OM/KIedqLg10
-         FzLWhgD2711dibLEV3mjJJvegfMePUHepZHMn2iKlyTYLSwrI+bAY0sUZvuMsMMY+ir7
-         CnICP2vAVNsQ15UTVJf8RtllpXJWrq1H8m7zeu0s5SKz5J63vIRgYhVP7TEMW0lN59V1
-         hrew==
+        bh=SPL0gfUU+cYNOZ1QSf8+FwFjGRGXN1yT4zzxi+30UPg=;
+        b=rMzb6KCmNavIDX4E4JwECwf2eRzW0py2jWa25s3DuwXVY3JH0ddr0J0FgYINWbuEg1
+         NhsUT08xoNBiUCMkkiGcpb9D3TpDCRRFDUcsFiQsakiXBgEIHuqEZ8hSd0fR4YAJ6Vpn
+         TUJsOUJyyz6f6dhpXjWDft4IigDWwWBY+T6hlJ33SPs03K2/UcR9wkpBpOqqVuTZuM/6
+         imUcLeYViVHn+lt6vT4fh2wxBRqWfZ7M3PtEZGopjyPN+Raa7xi495TtXDgKVlfpHjd5
+         K2+CAc+x1RE1T+NLgNUXCl0CjUZbbXJQzqWCwPjfjU4b+AEgmHqfT/JTppJZ674S955k
+         DC+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706746528; x=1707351328;
+        d=1e100.net; s=20230601; t=1706746530; x=1707351330;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iap9AX1ulrmbLUTYu3qyDksm4nz07RhuxN54fV9TeXc=;
-        b=oCcb55mAa5fBHgxguuXEj31E1FHV5oUbB8HDs6zw2nqJ9XeZEaBCHcJYHrhkpsC0KZ
-         eDKDjKVwP7wq38HXb/Tm6YmBw1U0u1l1PBOSLr9Bw8vEROICqgAub2goBqiQAqq7w7cd
-         gsKJ1FycYEJBTgt6VYMkP1bhv/1uPQbii85fDks76BVpG0521Msu57MChbm3GAIgZypY
-         FWGrTeYZx3tcxXGgbsZnyAJZO6xKxHeBrTfSVSucGHdJX6E8/VwCpu40GCVvw1W4lKKr
-         MYDihA9WrZwP2zzPyfazDziQYpTlLA5izYqEH6wze1xDJSu6oB9TCYOcn0YDGR85ye9r
-         5iYA==
-X-Gm-Message-State: AOJu0Yw4zkucq3oDf5sNNrH7F4hTskJdpDVnKrpVOcXuXVO7Pw8fUu+E
-	9bOsdkgkf0WYJoSoeiI45NETOcP3jRkUeQuErmLZKPJCbj5y5JVB7s05m0Gb/iMv6dHzji70oYV
-	r/yP5QQ==
-X-Google-Smtp-Source: AGHT+IHxRSD0hjkzmEn1KU/PefzyPoGeVucSTS9v+lxpdrWfgHxnXREFi5iodt++/FgSyJgjDSNWNxNG8mLR
+        bh=SPL0gfUU+cYNOZ1QSf8+FwFjGRGXN1yT4zzxi+30UPg=;
+        b=PmDIDOA7NziyyzTihTShx1/uTfmkCKBABwcmZeJDstfx16oP4cJ+rWqrIiKvTjbjwM
+         NCcR4C7wwtiGcb/5tBvaXSITYiUkBlV4+a7WaJMfiFz7kfTpfft/EVLFjLwcc0StKGOZ
+         qGS+ohY2yQX0IqO41bq9Y7uYkYe986NRUtAWBXo7Go/CjY9tgDnDTtT/r+7jfGl9TDc5
+         VYt2NUSy+yJq/NEeWDi2hUjJiQPS2Kvdfx60jRZpbdheOIJEkqmrotvpb8bGBr9oxU/Y
+         gRDjZeFsZ6tEVcL5xNCSovxhjCwDITW3sMNGGHeG/QtDKq/XXzcM65EAeSUH1Ujygcsg
+         XPmg==
+X-Gm-Message-State: AOJu0YxfwDrpH1Pvc4/neaXFPrHIsHF+hVwcGpCqLGQtElkBoxITldtg
+	shVX9R1IBcgwQAVf7HOvTtVIChq5yQQRL3TeTC10TsQpUe+Cig5OBZVy5qd+D7TMC+/Eu958A6J
+	s/s0qMw==
+X-Google-Smtp-Source: AGHT+IFdnxl6xFtWaY//CsRFyPaMrHSaNSu0OxyeCsszx+51OzrDiSM4n2atYHRJV3ofjk3HEqDK22OpWko9
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:16c5:1feb:bf99:a5d1])
- (user=irogers job=sendgmr) by 2002:a25:db82:0:b0:dc6:d890:1a97 with SMTP id
- g124-20020a25db82000000b00dc6d8901a97mr9830ybf.9.1706746528067; Wed, 31 Jan
- 2024 16:15:28 -0800 (PST)
-Date: Wed, 31 Jan 2024 16:14:58 -0800
+ (user=irogers job=sendgmr) by 2002:a05:690c:108:b0:602:cb41:99ad with SMTP id
+ bd8-20020a05690c010800b00602cb4199admr114151ywb.7.1706746530194; Wed, 31 Jan
+ 2024 16:15:30 -0800 (PST)
+Date: Wed, 31 Jan 2024 16:14:59 -0800
 In-Reply-To: <20240201001504.1348511-1-irogers@google.com>
-Message-Id: <20240201001504.1348511-4-irogers@google.com>
+Message-Id: <20240201001504.1348511-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,7 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240201001504.1348511-1-irogers@google.com>
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Subject: [PATCH v2 4/9] tools subcmd: Add a no exec function call option
+Subject: [PATCH v2 5/9] perf test: Rename builtin-test-list and add missed
+ header guard
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -73,45 +74,82 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Tools like perf fork tests in case they crash, but they don't want to
-exec a full binary. Add an option to call a function rather than do an
-exec. The child process exits with the result of the function call and
-is passed the struct of the run_command, things like container_of can
-then allow the child process function to determine additional
-arguments.
+builtin-test-list is primarily concerned with shell script
+tests. Rename the file to better reflect this and add a missed header
+guard.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/subcmd/run-command.c | 2 ++
- tools/lib/subcmd/run-command.h | 2 ++
- 2 files changed, 4 insertions(+)
+ tools/perf/tests/Build                                    | 2 +-
+ tools/perf/tests/builtin-test.c                           | 2 +-
+ tools/perf/tests/{builtin-test-list.c => tests-scripts.c} | 2 +-
+ tools/perf/tests/{builtin-test-list.h => tests-scripts.h} | 4 ++++
+ 4 files changed, 7 insertions(+), 3 deletions(-)
+ rename tools/perf/tests/{builtin-test-list.c => tests-scripts.c} (99%)
+ rename tools/perf/tests/{builtin-test-list.h => tests-scripts.h} (79%)
 
-diff --git a/tools/lib/subcmd/run-command.c b/tools/lib/subcmd/run-command.c
-index 5cdac2162532..d435eb42354b 100644
---- a/tools/lib/subcmd/run-command.c
-+++ b/tools/lib/subcmd/run-command.c
-@@ -122,6 +122,8 @@ int start_command(struct child_process *cmd)
- 		}
- 		if (cmd->preexec_cb)
- 			cmd->preexec_cb();
-+		if (cmd->no_exec_cmd)
-+			exit(cmd->no_exec_cmd(cmd));
- 		if (cmd->exec_cmd) {
- 			execv_cmd(cmd->argv);
- 		} else {
-diff --git a/tools/lib/subcmd/run-command.h b/tools/lib/subcmd/run-command.h
-index 17d969c6add3..d794138a797f 100644
---- a/tools/lib/subcmd/run-command.h
-+++ b/tools/lib/subcmd/run-command.h
-@@ -47,6 +47,8 @@ struct child_process {
- 	unsigned exec_cmd:1; /* if this is to be external sub-command */
- 	unsigned stdout_to_stderr:1;
- 	void (*preexec_cb)(void);
-+	 /* If set, call function in child rather than doing an exec. */
-+	int (*no_exec_cmd)(struct child_process *process);
- };
+diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
+index 53ba9c3e20e0..c7f9d9676095 100644
+--- a/tools/perf/tests/Build
++++ b/tools/perf/tests/Build
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- int start_command(struct child_process *);
+ perf-y += builtin-test.o
+-perf-y += builtin-test-list.o
++perf-y += tests-scripts.o
+ perf-y += parse-events.o
+ perf-y += dso-data.o
+ perf-y += attr.o
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index 4a5973f9bb9b..eff3c62e9b47 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -29,7 +29,7 @@
+ #include <subcmd/exec-cmd.h>
+ #include <linux/zalloc.h>
+ 
+-#include "builtin-test-list.h"
++#include "tests-scripts.h"
+ 
+ static bool dont_fork;
+ const char *dso_to_test;
+diff --git a/tools/perf/tests/builtin-test-list.c b/tools/perf/tests/tests-scripts.c
+similarity index 99%
+rename from tools/perf/tests/builtin-test-list.c
+rename to tools/perf/tests/tests-scripts.c
+index a65b9e547d82..4ebd841da05b 100644
+--- a/tools/perf/tests/builtin-test-list.c
++++ b/tools/perf/tests/tests-scripts.c
+@@ -15,7 +15,7 @@
+ #include <sys/wait.h>
+ #include <sys/stat.h>
+ #include "builtin.h"
+-#include "builtin-test-list.h"
++#include "tests-scripts.h"
+ #include "color.h"
+ #include "debug.h"
+ #include "hist.h"
+diff --git a/tools/perf/tests/builtin-test-list.h b/tools/perf/tests/tests-scripts.h
+similarity index 79%
+rename from tools/perf/tests/builtin-test-list.h
+rename to tools/perf/tests/tests-scripts.h
+index eb81f3aa6683..3a3ec6191848 100644
+--- a/tools/perf/tests/builtin-test-list.h
++++ b/tools/perf/tests/tests-scripts.h
+@@ -1,4 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
++#ifndef TESTS_SCRIPTS_H
++#define TESTS_SCRIPTS_H
+ 
+ struct script_file {
+ 	char *dir;
+@@ -10,3 +12,5 @@ struct script_file {
+ const struct script_file *list_script_files(void);
+ /* Get maximum width of description string */
+ int list_script_max_width(void);
++
++#endif /* TESTS_SCRIPTS_H */
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
