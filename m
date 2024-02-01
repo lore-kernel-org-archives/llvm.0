@@ -1,193 +1,193 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4183BB3A
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 04:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416BC3A8D2
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 06:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706763358; cv=none; b=jkhS5dVlKfCJhjx9CsiDPMyg+5/7qhhxsxwytWS/3ZCgFdc2jz6iqM81DNrPBHhmtpsvGEektq71cF/dd0KTQIhX7k6tAz3QDA7hJQK3wUiSiRc0GFlc+QtK5ImrnGnf4QHJh9g7BulJ1RoK5SJLg+UPeJnocMUZRgWz1+6EHwU=
+	t=1706768493; cv=none; b=Iqq/wV+UhYpfAvjgOUv440JK8bhzH4oLhEKQzan8wlA2b5vXUW8IAsgtFxjLOVX8TsnwdtRhekXvze9QDgUa6PaUgsqFmm8p/hQrfjEBR8EN2HLNkDfrM3d8wVNgirpxmksPrFPE7FBr/4MmQRDDUal5Oh3p6LMTyVqtgc63aqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706763358; c=relaxed/simple;
-	bh=L0yoXvq/d6omUMi6xtzN6TigsEZjzXC09EqfFo90GtI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TwDTZwurQ/R43ICV+rKZt4lvCrOvzKlaMaZbEnXps/DpOmeTrL7ZOErS38Jo37uEsxjWIjkM7LXY1+xAUs6U209hnVMgj9IoE8iaOVnLCq5GkYyywVIfSIECIYVHzNRgRBasfzZ5wXXD9ASYEJuQLpbDxfRUUYTVVswMWaWtYno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FpUKVhwR; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1706768493; c=relaxed/simple;
+	bh=Fuz7I20EJElsS6mw6u6r5lzN6xW5LtcC4jtbbAj0+iQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=vCJkSPtftw8E80jpPp+fUnF3V1is9Ij/jMKCtDAgz0VvtcF9nxbqYBENmXqGVZhCrDcmEkZsibEgnl/uOU833IyJ8cb9nfMryXmu9F/w3Id2Rn1OGsiLjPkRa6pZr+J95CTQC/3792Qhi+fKZGy1GXhWjIYnR8TiTJOA/XtCkmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z8UyaofQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FpUKVhwR"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d94691de1eso54485ad.1
-        for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 20:55:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706763356; x=1707368156; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YsqrP80NBPWxBx78FsktitHzUN/DGz3kT5ZrnUUMNWc=;
-        b=FpUKVhwRA2B3gPRbeS0Acxao7On11nKvAN+7V9+1qJJtHnwLOOPqU6h0gjNsMoqKcd
-         7ZM5lWX43pZti16xdzGxPGQWVsm3S4hCIAkg32QdpOhDmX24CQQC4f1S+cBalWL7HaFD
-         IGM5xDpH81BobayxaXGSLGNUOEMpz8hTGJCljm5JYnW+K0PNxry6uk+S/tnW2TuOugxw
-         km063sP+sV6oXP9tww2jcsH0fIdoUwZSqJ5N+mNAZwgzWS07mqzKlordiBIPyg9YyVZo
-         rm1I0Q73u8eQ7LakVyM/Mp1pL30bO65R1hRGMJbUa3LRUM/lb09364TKHp3dFyd+clxX
-         tyng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706763356; x=1707368156;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YsqrP80NBPWxBx78FsktitHzUN/DGz3kT5ZrnUUMNWc=;
-        b=cY85cJP1VwxRS2agYKyrJQ/2Rcgy1Wq7g1lfQh0WfTHAMIG22ZGrm4FkmX126c/ZUD
-         W8RMcWBgnR6kd0maczQJ349KE8Ig0qo9g1KCsxBQHPZyLrPQuOBPJUwdEQ1qOtg39A3c
-         0qi74GWRxNSorfOTFfbDbRFInJvh7GqjIX3hLYI+57KpEh5nyFRLzePV21ORXztgmJIC
-         GT8a/lc3aKbqVBLOglX7hG87ExDCtA0uS9RKomVyskWShDcVSo5NXf5xPEPTT6/lsYOP
-         aVyT5uLEttLAykgzNkVEuyDrG2ys1XZVFxT1I7g1B4bto2AZIBA8DCZcQpvQ1EwC5Sah
-         Uo7Q==
-X-Gm-Message-State: AOJu0YyOZdIdVIOC3okZzy0F07ZAN5XzRAApSLWAZYBbrzSyTu4ipEvO
-	Yw2jUQD/lYqYV8vIknHmwCLaPMiP5aKjO0fEM38ogB26DFF2m3MD17k1m4oktA==
-X-Google-Smtp-Source: AGHT+IHK1/WgkjIKx0flbjpFflqU9a56/6fl9CXpl7gOvyu5gmDaW1mxugbmgLgncwtMdAWnWaNzZg==
-X-Received: by 2002:a17:902:d58f:b0:1d8:f3c7:fb83 with SMTP id k15-20020a170902d58f00b001d8f3c7fb83mr106370plh.9.1706763356049;
-        Wed, 31 Jan 2024 20:55:56 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCV4Q548nt1ArvLGL2wR2E8vSlBntuR737WWtXt371mCiALATgckvigQx4dwtoGKhCMAatv2D8bgdgK02B+fOCaMn4Bf4YU8F27jYiuApzRhepfS+rHhUyzbSLKP8LIRnPbZFUD1yS1BWQL8Ewyk6oZDXFNulca7j+6S4Gs6tejvqqNk3CHRnFK3eJwLrkzePpZcAvG5g6PVOUh4lIGl5HItVTfnNu63wYd+qACW2eiF+PqyotQ8L71W+jKKENG7//L4f9hcdxI=
-Received: from google.com ([2620:15c:2d3:205:ce95:ce9d:3dd2:5053])
-        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b001d8a5c08277sm9616689plg.260.2024.01.31.20.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 20:55:55 -0800 (PST)
-Date: Wed, 31 Jan 2024 20:55:51 -0800
-From: Fangrui Song <maskray@google.com>
-To: Dave Martin <Dave.Martin@arm.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	Jisheng Zhang <jszhang@kernel.org>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
-Message-ID: <20240201045551.ajg4iqcajyowl2rh@google.com>
-References: <20240131065322.1126831-1-maskray@google.com>
- <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
- <ZbpEnDK3U/O24ng0@e133380.arm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z8UyaofQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706768489;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HCWRJtKfmkhcFrFBPWs4yOpPjIwT3ov5q6mms0pUS4o=;
+	b=Z8UyaofQSkIKZqU1q7mO72vZk/BTbB//jwIpPzwTM+AYPWhc89ffe2k3BYeByXQffj9Mnh
+	MmTYDDRADUu/0o5ZxEgc2L1hQy32pOzKpqV/TNsXsnONScR1OUFwz9fHCSfq7FNl9+mwol
+	o/R1fXIyTGDxLAsxhrzUcBSt9HYQ3FI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-149-_5NOEDEJPUOaUmQ-RDmmyQ-1; Thu, 01 Feb 2024 01:21:25 -0500
+X-MC-Unique: _5NOEDEJPUOaUmQ-RDmmyQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 36ECC8493E5
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 06:21:25 +0000 (UTC)
+Received: from [172.64.10.24] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2095FC259DD;
+	Thu,  1 Feb 2024 06:21:25 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 20 of 226): Test report for master
+ (6.8.0-rc2, mainline.kernel.org-clang, 6764c317)
+Date: Thu, 01 Feb 2024 06:21:25 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZbpEnDK3U/O24ng0@e133380.arm.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <72019.124020101212500383@us-mta-149.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-01-31, Dave Martin wrote:
->On Wed, Jan 31, 2024 at 08:16:04AM +0100, Ard Biesheuvel wrote:
->> Hello Fangrui,
->>
->> On Wed, 31 Jan 2024 at 07:53, Fangrui Song <maskray@google.com> wrote:
->> >
->> > The constraint "i" seems to be copied from x86 (and with a redundant
->> > modifier "c"). It works with -fno-PIE but not with -fPIE/-fPIC in GCC's
->> > aarch64 port.
->
->(I'm not sure of the exact history, but the "c" may be inherited from
->arm, where an output modifier was needed to suppress the "#" that
->prefixes immediates in the traditional asm syntax.  This does not
->actually seem to be required for AArch64: rather while a # is allowed
->and still considered good style in handwritten asm code, the syntax
->doesn't require it, and the compiler doesn't emit it for "i" arguments,
->AFAICT.)
+Hi, we tested your kernel and here are the results:
 
-The aarch64 one could be inherited from
-arch/arm/include/asm/jump_label.h (2012), which could in turn be
-inherited from x86 (2010).
-Both the constraint "i" and the modifier "c" are generic..
-For -fno-pic this combination can be used for every arch.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
->> > The constraint "S", which denotes a symbol reference (e.g. function,
->> > global variable) or label reference, is more appropriate, and has been
->> > available in GCC since 2012 and in Clang since 7.0.
->> >
->> > Signed-off-by: Fangrui Song <maskray@google.com>
->> > Link: https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
->> > ---
->> >  arch/arm64/include/asm/jump_label.h | 8 ++++----
->> >  1 file changed, 4 insertions(+), 4 deletions(-)
->> >
->> > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
->> > index 48ddc0f45d22..31862b3bb33d 100644
->> > --- a/arch/arm64/include/asm/jump_label.h
->> > +++ b/arch/arm64/include/asm/jump_label.h
->> > @@ -23,9 +23,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
->> >                  "      .pushsection    __jump_table, \"aw\"    \n\t"
->> >                  "      .align          3                       \n\t"
->> >                  "      .long           1b - ., %l[l_yes] - .   \n\t"
->> > -                "      .quad           %c0 - .                 \n\t"
->> > +                "      .quad           %0 - .                  \n\t"
->> >                  "      .popsection                             \n\t"
->> > -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
->> > +                :  :  "S"(&((char *)key)[branch]) :  : l_yes);
->>
->> 'key' is not used as a raw symbol name. We should make this
->>
->> "    .quad   %0 + %1 - ."
->>
->> and
->>
->> ::  "S"(key), "i"(branch) :: l_yes);
->>
->> if we want to really clean this up.
->
->This hides more logic in the asm so it's arguably more cryptic
->(although the code is fairly cryptic to begin with -- I don't really
->see why the argument wasn't written as the equivalent
->(char *)key + branch...)
+Tested-by: CKI Project <cki-project@redhat.com>
 
-I agree that using "S" and "i" would introduce complexity.
-Using just "S" as this patch does should be clear.
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-All of "i" "s" "S" support a symbol or label reference and a constant offset (can be zero),
-(in object file, a symbol and an addend; in GCC's term, the sum of a SYMBOL_REF and a CONST_INT).
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/126736
 
->Anyway, I don't think the "i" versys "S" distinction makes any
->difference without -fpic or equivalent, so it is not really relevant
->for the kernel (except that "S" breaks compatibility with older
->compilers...)
->
->
->I think the main advantage of "S" is that it stops you accidentally
->emitting undesirable relocations from asm code that is not written for
->the -fpic case.
->
->But just changing "i" to "S" is not sufficient to port asms to -fpic:
->the asms still need to be reviewed.
->
->
->So unless the asm has been reviewed for position-independence, it may
->anyway be better to stick with "i" so that the compiler actually chokes
->if someone tries to build the code with -fpic.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+        Issue: [Rawhide] nvme-cli: hostid/hostnqn warnings to verbose level
+            URL: https://github.com/linux-nvme/nvme-cli/commit/252929069d6c=
+9042e9c95f41788006cb3eb2f452
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Libkcapi AF_ALG test: hit test timeout, aborting it...
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1637
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
 
-The asm is position-independent.
-This `.long sym - .` is a common metadata section pattern to support PIC:)
 
-Regarding the constraints, I've updated
-https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
-to include more details.
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - CKI/restraint
+      x86_64 - SELinux Custom Module Setup
+      x86_64 - machineinfo
+      x86_64 - Boot test
+      x86_64 - Hardware - CPU: Die Test
+      x86_64 - Hardware - IPMI driver test
+      x86_64 - Hardware - IPMItool loop stress test
+      x86_64 - Storage - blktests - blk
+      x86_64 - Storage - blktests - nvme-tcp
+      x86_64 - Storage - block - filesystem fio test
+      x86_64 - Storage - block - queue scheduler test
+      x86_64 - Storage - swraid scsi_raid
+      x86_64 - stress: stress-ng - cpu-cache
+      x86_64 - stress: stress-ng - memory
+      x86_64 - Reboot test
+      x86_64 - Memory function: memfd_create
 
->Since we are not trying to run arbitraily many running kernels in a
->common address space (and not likely to do that), I'm not sure that we
->would ever build the kernel with -fpic except for a few special-case
->bits like the EFI stub and vDSO... unless I've missed something?
->
->If there's another reason why "S" is advantageous though, I'm happy to
->be corrected.
 
-I remember that Ard has an RFC
-https://lore.kernel.org/linux-arm-kernel/20220427171241.2426592-1-ardb@kernel.org/
-"[RFC PATCH 0/2] arm64: use PIE code generation for KASLR kernel"
-and see some recent PIE codegen patches.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-> Building the KASLR kernel without -fpie but linking it with -pie works
-> in practice, but it is not something that is explicitly supported by the
-> toolchains - it happens to work because the default 'small' code model
-> used by both GCC and Clang relies mostly on ADRP+ADD/LDR to generate
-> symbol references.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-I agree that current -fno-PIE with -shared -Bsymbolic linking is a hack
-that works as a conincidence, not guaranteed by the toolchain.
-This jump_label improvement (with no object file difference) fixes an
-obstacle. 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
