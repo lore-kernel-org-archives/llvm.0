@@ -1,282 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60DD3CF65
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 21:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C893FB04;
+	Thu,  1 Feb 2024 22:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706822609; cv=none; b=atxifLChwmwKP6Bl1hu7/4zTkcKegH9BkFGZKFYPt52N2LudJGZJG4Q622KMxniU6aUisJoEXfNbD4+5Otc8DtMdH7cwuYo8nuBNDWPCpoLhCIV6YKCiij6KayEzKKZh7+r6t7fB1+HEzt5p5VvC40WrgjTCbA6erdZpVmXa+K8=
+	t=1706825337; cv=none; b=sGJv/a3YHo5o+8ji0zCq3c/9gQl3yNGzLbNRiqBzqrAFnp/xg6+zg6/2zdc0ZjP1xjg7R2JZ2Zo5AGjkc41roM3oOHYlaj7GrMH8p9DJiqXwuhcogA1bpv3Fq6QdFXsF+yuMJUTZbxqnK5gcewhkwPwaNIjXuuA6gd9uup8IBqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706822609; c=relaxed/simple;
-	bh=ZcunaL1yoCmt48J39Ha/xPDrAiNz5+cKs3Rnm90zY7M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ccow6RT4Cy9N3yyTKbQ2/pKdky4Dzi3rihmX/x/dTOBf83hJPKOcvsDnZGN2Pkl87pi+ZHHsEJQNicb6/szbcGBwzkS+yyRlvygiNRG//qd2P+iv+1mvxby3MwXcK4VSvwUCEr6NDBXUngvtlBpDrR8P4S6QwTZtngD2ki420cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S/BpHNqb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706825337; c=relaxed/simple;
+	bh=iV3KjpkcbMu1j2TsrqeOlRj9zSxIctyG0myc+z6mDpM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A0MJ7QWj7yRUBor8lH1/SrWQ2R9ZzK8duUk6zXU6DNsIY0+N4NZ793F8Tg7Ldd/K7QuAUQaAt6R2r2ht0rE/HKZrE1eAKpqhxzh5Q/2mMWJKrmeDFuLfzHv84URm3ad+j2p0k0TsLJxQdohRqmJ99dDi2602j0XJEZbXiW8gtCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t5A+sGbn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S/BpHNqb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C67EC43390
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 21:23:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t5A+sGbn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE09C433C7;
+	Thu,  1 Feb 2024 22:08:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706822609;
-	bh=ZcunaL1yoCmt48J39Ha/xPDrAiNz5+cKs3Rnm90zY7M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S/BpHNqblWaRhx90KNyeNFlVGLa0cj4kXx/bjWYOrygfg+XZSZBgZ+TQled3DDN8k
-	 5fBqZLnZ3AByYtwzsZa6KAi97cjrKJgi7+DekFMY1M0Pz3+VQcsWoM8BgBE2gc/ThY
-	 idbZjwMIsHj1KjFg3Z0BWL4zYkkMd9yx0rrdpmcndNfL70pjXoeRQ7VhIrn+In3LKt
-	 N+xTr8naofzYHxD499dd5kZYf7tEcjkrVyJjq9fibJCESfjHyFENPJYD95VV9C2mRJ
-	 GN4bFIoLafqPeuwHhQrGAhlGiVKEsRLCj4ilaWJySHm+7h1wE75N3ZpeCQo+waiw6q
-	 Pd5tYHu7XUeTA==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-510218c4a0eso2442795e87.1
-        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 13:23:29 -0800 (PST)
-X-Gm-Message-State: AOJu0YwP3K+GmK+xtVP6dPFIcGWR8lwT0T9tUzhUsvAF2RWlhuScCoVh
-	joaj16DHfVgOHTTfSyX/YV3Bt19o/5M14mBv9PYOeVRW5PRCxBbfN+gx2KyMH+stOL2ifkukehz
-	NLDcr2xtOFbiGV7YJXatTw0O99yA=
-X-Google-Smtp-Source: AGHT+IFEPB62VOueL7vrfx4d/oxqX5tilU6CTrJ/QRspYE4N8rZrwDP6B1r2Dl8/FMy5zuaK52Yy/Gnioy8b4HAr/io=
-X-Received: by 2002:a19:4342:0:b0:510:1590:a193 with SMTP id
- m2-20020a194342000000b005101590a193mr73223lfj.30.1706822607616; Thu, 01 Feb
- 2024 13:23:27 -0800 (PST)
+	s=k20201202; t=1706825336;
+	bh=iV3KjpkcbMu1j2TsrqeOlRj9zSxIctyG0myc+z6mDpM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t5A+sGbn3gCifVerFEU+iZKak4tSKAUnolMChaJ0RkBrOUD/4KXiyjQhavKJFabnp
+	 OXbGNcWyOJDB0oQOUl7jpXdPrWICHR9CU0qQdLs/QEHoXIS/lPm215viqn1O2kdKQV
+	 vA3968AM4loaEeu4wgqesQ6TRs2LcqOO33Eixu2y4VlqtKQ7oohXTkHSeO3nJvahtU
+	 5gHMUdzwCvgq7Gy+gO9EPZ+5/8IIR6wg6tqUBLsfOO1ki4xVYXhpH560ywJTITzzSQ
+	 84UlHknB4RmvXAzgJjrRT48hYFO4zvgA78Ovsxc2rCD5QiXKwI7q5u5xQ/j/xu9YTY
+	 7gxjvMB5Hpq7Q==
+Date: Thu, 1 Feb 2024 15:08:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Mike Isely <isely@pobox.com>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/3] media: pci: sta2x11: Fix Wcast-function-type-strict
+ warnings
+Message-ID: <20240201220853.GA2240065@dev-arch.thelio-3990X>
+References: <20240128-fix-clang-warnings-v1-0-1d946013a421@chromium.org>
+ <20240128-fix-clang-warnings-v1-1-1d946013a421@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240131065322.1126831-1-maskray@google.com> <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
- <ZbpEnDK3U/O24ng0@e133380.arm.com> <20240201045551.ajg4iqcajyowl2rh@google.com>
- <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
- <20240201091120.pbgr7ng6t2c36fut@google.com> <ZbuFWSRBntgm2ukJ@e133380.arm.com>
- <CAMj1kXGu76WHY8=Y-KhCxBq3xeHeCYQ9syqViSr9VRkjgWQ3BQ@mail.gmail.com>
- <ZbvVApJ2/+yca0u6@e133380.arm.com> <20240201205614.w3gcz6urfxtydr77@google.com>
-In-Reply-To: <20240201205614.w3gcz6urfxtydr77@google.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 1 Feb 2024 22:23:16 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGAi94DuCYRPWQujGz7YVTS=53h_+FretCsYFbxznJVHw@mail.gmail.com>
-Message-ID: <CAMj1kXGAi94DuCYRPWQujGz7YVTS=53h_+FretCsYFbxznJVHw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
-To: Fangrui Song <maskray@google.com>
-Cc: Dave Martin <Dave.Martin@arm.com>, Peter Smith <peter.smith@arm.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, Jisheng Zhang <jszhang@kernel.org>, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240128-fix-clang-warnings-v1-1-1d946013a421@chromium.org>
 
-On Thu, 1 Feb 2024 at 21:56, Fangrui Song <maskray@google.com> wrote:
->
-> On 2024-02-01, Dave Martin wrote:
-> >On Thu, Feb 01, 2024 at 05:07:59PM +0100, Ard Biesheuvel wrote:
-> >> On Thu, 1 Feb 2024 at 12:50, Dave Martin <Dave.Martin@arm.com> wrote:
-> >> >
-> >> > On Thu, Feb 01, 2024 at 01:11:20AM -0800, Fangrui Song wrote:
-> >> ...
-> >> > >
-> >> > > Hmm. Clang's constraint "S" implementation doesn't support a constant
-> >> > > offset, so
-> >> > > `static_key_false(&nf_hooks_needed[pf][hook])` in include/linux/netfilter.h:nf_hook
-> >> > > would not compile with Clang <= 18.
-> >> > >
-> >> > > I have a patch https://github.com/llvm/llvm-project/pull/80255 , but
-> >> > > even if it is accepted and cherry-picked into the 18.x release branch,
-> >> > > if we still support older Clang, we cannot use "S" unconditionally.
-> >> > >
-> >> > >
-> >> > > So we probably need the following to prepare for -fPIE support in the
-> >> > > future:
-> >> > >
-> >> > > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
-> >> > > index 48ddc0f45d22..b8af2f8b0c99 100644
-> >> > > --- a/arch/arm64/include/asm/jump_label.h
-> >> > > +++ b/arch/arm64/include/asm/jump_label.h
-> >> > > @@ -15,6 +15,16 @@
-> >> > >  #define JUMP_LABEL_NOP_SIZE          AARCH64_INSN_SIZE
-> >> > > +/*
-> >> > > + * Prefer "S" to support PIC. However, use "i" for Clang 18 and earlier as "S"
-> >> > > + * on a symbol with a constant offset is not supported.
-> >> > > + */
-> >> > > +#if defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 18
-> >> >
-> >> > Is a GCC version check needed?  Or is the minimum GCC version specified
-> >> > for building the kernel new enough?
-> >> >
-> >> > > +#define JUMP_LABEL_STATIC_KEY_CONSTRAINT "i"
-> >> > > +#else
-> >> > > +#define JUMP_LABEL_STATIC_KEY_CONSTRAINT "S"
-> >> > > +#endif
-> >> > > +
-> >>
-> >> Can we use "Si" instead?
-> >
-> >I thought the point was to avoid "S" on compilers that would choke on
-> >it?  If so, those compilers would surely choke on "Si" too, no?
->
-> "Si" is an invalid constraint. Unfortunately, GCC recognizes "S" as a
-> valid constraint and ignores trailing characters (asm_operand_ok). That
-> is, GCC would accept "Siiiii" as well...
->
-> The GCC support for "S" is great. The initial aarch64 port in 2012 supports "S".
->
+On Sun, Jan 28, 2024 at 02:12:20AM +0000, Ricardo Ribalda wrote:
+> Building with LLVM=1 throws the following warning:
+> drivers/media/pci/sta2x11/sta2x11_vip.c:1057:6: warning: cast from 'irqreturn_t (*)(int, struct sta2x11_vip *)' (aka 'enum irqreturn (*)(int, struct sta2x11_vip *)') to 'irq_handler_t' (aka 'enum irqreturn (*)(int, void *)') converts to incompatible function type [-Wcast-function-type-strict]
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-So it is not possible to combine the S and i constraint, and let the
-compiler figure out whether it meets either? We rely on this elsewhere
-by combining r and Z into rZ. x86 uses "rm" for inline asm parameters
-that could be either register or memory operands.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+I wonder if the media tree cares about reverse Christmas tree order for
+variables?
 
-> >> > >  static __always_inline bool arch_static_branch(struct static_key * const key,
-> >> > >                                              const bool branch)
-> >> > >  {
-> >> > > @@ -23,9 +33,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
-> >> > >                "      .pushsection    __jump_table, \"aw\"    \n\t"
-> >> > >                "      .align          3                       \n\t"
-> >> > >                "      .long           1b - ., %l[l_yes] - .   \n\t"
-> >> > > -              "      .quad           %c0 - .                 \n\t"
-> >> > > +              "      .quad           %0 + %1 - .             \n\t"
-> >> > >                "      .popsection                             \n\t"
-> >> > > -              :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-> >> > > +              :  :  JUMP_LABEL_STATIC_KEY_CONSTRAINT(key), "i"(branch) :  : l_yes);
-> >> >
-> >> > While this looks reasonable, I'm still not clear now why the asm must do
-> >> > the addition.
-> >> >
-> >> > Can we roll the branch argument into the macro?
-> >> >
-> >> > "S"(symbol + constant) seems to do the right thing for AArch64, at least
-> >> > in GCC.
-> >> >
-> >>
-> >> 'symbol' is a struct static_key pointer, so adding '1' to it will not
-> >> produce the needed result.
-> >
-> >I mean loosely things that resolve to something of the form
-> >"symbol + constant" in the compiler output.
-> >
-> >"S"(&((char *)key)[branch]) does indeed seem to do the right thing,
-> >at least with GCC.
-> >
-> >I probably didn't help by bikeshedding the way that expression was
-> >written, apologies for that.  It's orthogonal to what this patch is
-> >doing.
->
-> Yes, "S"(&((char *)key)[branch])  would do the right thing.
-> I have compared assembly output. It's a matter of "s" vs "s + 0" and "s+1" vs "s + 1".
->
-
-But if S does not work with constant offsets with older Clang, what is
-the harm in splitting it into "S" for the symbol and "i" for the
-branch?
-...
-> >>
-> >> The only thing PIE linking does in the case of the kernel is
-> >> a) complain if static relocations are used that cannot be fixed up at
-> >> runtime (e.g., movk/movz sequences)
-> >> b) emit dynamic relocations that the early startup code can use to fix
-> >> up all statically initialized pointers
-> >>
-> >> From a codegen point-of-view, there is no difference because we don't
-> >> use -fpic code. The problem with -fpic codegen is that it makes some
-> >> assumptions that only hold for shared ELF objects, e.g., avoiding
-> >> dynamic relocations in .text, using GOT entries even for variables
-> >> defined in the same compilation so that they can be preempted, keeping
-> >> all runtime relocatable quantities together so the CoW footprint of
-> >> the shared library is minimized.
-> >>
-> >> None of this matters for the kernel, and as it turns out, the non-PIC
-> >> small C model produces code that the PIE linker is happy with.
-> >>
-> >> TL;DR our code (including inline and out-of-line asm) is already PIC,
-> >> and this property is relied upon by KASLR.
-> >>
-> >> > Maybe it doesn't make as much difference as I thought (certainly ADRP
-> >> > based addressing should make a fair amount of the PIC/PIE overhead go
-> >> > away).
-> >> >
-> >>
-> >> The PIC/PIE overhead is in the indirections via the GOT. However,
-> >> recent linkers will actually perform some relaxations too: if a symbol
-> >> is defined in the same executable and is not preemptible, a GOT load
-> >>
-> >> ADRP
-> >> LDR
-> >>
-> >> can be transparently converted to
-> >>
-> >> ADRP
-> >> ADD
-> >>
-> >> referring to the symbol directly. This is also where hidden.h comes
-> >> in: making all symbol declarations and definitions 'hidden' will allow
-> >> the compiler to assume that a GOT entry is never needed.
-> >
-> >Is there a reason why we don't just build the whole kernel with
-> >-fvisibility=hidden today?
->
-> This topic, loosely related to this patch, is about switching to PIC
-> compiles. I am not familiar with the Linux kernel, so I'll mostly leave
-> the discussion to you and Ard :)
->
-> That said, I have done a lot of Clang work in visibility/symbol
-> preemptibility and linkers, so I am happy to add what I know.
->
-> -fvisibility=hidden only applies to definitions, not non-definition
-> declarations.
->
-> I've mentioned this at
-> https://lore.kernel.org/all/20220429070318.iwj3j5lpfkw4t7g2@google.com/
->
->      `#pragma GCC visibility push(hidden)` is very similar to -fvisibility=hidden -fdirect-access-external-data with Clang.
->      ...
->      The kernel uses neither TLS nor -fno-plt, so -fvisibility=hidden
->      -fdirect-access-external-data can replace `#pragma GCC visibility
->      push(hidden)`.
->
-> >> So building with -fPIC is currently not need in practice, and creates
-> >> some complications, which is why we have been avoiding it. But PIE
-> >> linking non-PIC objects is not guaranteed to remain supported going
-> >> forward, so it would be better to have a plan B, i.e., being able to
-> >> turn on -fpic without massive regressions due to GOT overhead, or
-> >> codegen problems with our asm hacks.
-> >
-> >Summarising all of this is it right that:
-> >
-> >1) ld -pie is how we get the reloc info into the kernel for KASLR
-> >today.
-> >
-> >2) We use gcc -fno-pic today, but this might break with ld -pie in the
-> >future, although it works for now.
-> >
-> >3) gcc -fno-pic and gcc -fPIC (or -fPIE) generate almost the same code,
-> >assuming we tweak symbol visibility and use a memory model that
-> >ADR+ADD/LDR can span.  So, moving to -fPIE is likely to be do-able.
-> >
-> >
-> >My point is that an alternative option would be to move to ld -no-pie.
-
-Why? What would that achieve?
-
-> >We would need another way to get relocs into the kernel, such as an
-> >intermediate step with ld --emit-relocs.  I have definitely seen this
-> >done before somewhere, but it would be extra work and not necessarily
-> >worth it, based on what you say about code gen.
-
-Relying on --emit-relocs is a terrible hack. It contains mostly
-relocations that we don't need at runtime, so we need to postprocess
-them. And linkers may not update these relocations in some cases after
-relaxation or other transformations (and sometimes, it is not even
-possible to do so, if the post-transformation situation cannot be
-described by a relocation).
-
-And with Fangrui's RELR optimization, the PIE relocation data is
-extremely dense.
-
-There is nothing to fix here, really.
-
-> >
-> >This may all have been discussed to death already -- I didn't mean to
-> >hijack this patch, so I'll stop digging here, but if I've misunderstood,
-> >please shout!
-
-No worries. Ramana and I spent some time 5+ years ago to document how
-PIC codegen for the kernel (or any freestanding executable, really)
-deviates from the typical PIC codegen for shared libraries and PIE
-executables, with the intention of adding a GCC compiler switch for
-it, but that never really materialized, mostly because things just
-work fine today.
+> ---
+>  drivers/media/pci/sta2x11/sta2x11_vip.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/pci/sta2x11/sta2x11_vip.c b/drivers/media/pci/sta2x11/sta2x11_vip.c
+> index e4cf9d63e926..0a3827575753 100644
+> --- a/drivers/media/pci/sta2x11/sta2x11_vip.c
+> +++ b/drivers/media/pci/sta2x11/sta2x11_vip.c
+> @@ -757,7 +757,7 @@ static const struct video_device video_dev_template = {
+>  /**
+>   * vip_irq - interrupt routine
+>   * @irq: Number of interrupt ( not used, correct number is assumed )
+> - * @vip: local data structure containing all information
+> + * @data: local data structure containing all information
+>   *
+>   * check for both frame interrupts set ( top and bottom ).
+>   * check FIFO overflow, but limit number of log messages after open.
+> @@ -767,9 +767,10 @@ static const struct video_device video_dev_template = {
+>   *
+>   * IRQ_HANDLED, interrupt done.
+>   */
+> -static irqreturn_t vip_irq(int irq, struct sta2x11_vip *vip)
+> +static irqreturn_t vip_irq(int irq, void *data)
+>  {
+>  	unsigned int status;
+> +	struct sta2x11_vip *vip = data;
+>  
+>  	status = reg_read(vip, DVP_ITS);
+>  
+> 
+> -- 
+> 2.43.0.429.g432eaa2c6b-goog
+> 
