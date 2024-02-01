@@ -1,280 +1,423 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDD015AAB5
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 09:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706778687; cv=none; b=ofHWZHwl8kutT8Ec55Wf7ruGq4ummmRDMtxpktYPxppZGYHeOQurNjRwawdbOKtOfB4NfjOH3RvrrteQved3gfs1+wFV2GeTtko8Vf/m0cLUlmT+fqruf+bWdUjwXH3jdyxVG2MXOQz5nrY/OcJYa7meiU/uxDarR+kq6akiiWo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706778687; c=relaxed/simple;
-	bh=z5l8pCabst69rv4xapMz3C1Qz+VTsygJd1zMO6dlE20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BRgr30jAGMar339Q5+oz1rKtRE132qM2RE33+bOVbI7dzalyanM3M/91Cl/Di+thUujpQOjV70vRp+tYdjcYR0i9XKEqSNlMS8baGAhfqAWZx4WEWFLcLthhwQBJugiuP7cTAJLZu0ad4nzx9+RXU8sWDxUuTPeC4Frt693bISs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lbDejUcq; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2AC15AAAA
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 09:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706779171; cv=fail; b=mgGC4JTbkgt0ChHtNZM7CBwmYNVIdcfRJtE7jt1sU+3Fv4ykTnCI1OOxtZ21vbWtmrdLKN1vE+to9cgttH5gvIpJLXJzRSVeoAbRBKiurwlF8ELmraq5HPFIbg1swJm+rw/nSkXrqQaDJI91VsKJeLVmQ7CJeIY2aUEVCnFdYEo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706779171; c=relaxed/simple;
+	bh=zyKZPhTNKWuAR1Wa5IzF3z9g/yBZ2OQHm7JiL81rGT0=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=TGTbR627fFkVCMNWNRcFn07anPyLPBf1d/hPhW7aB+6p0qgLguDKkHmNqYrbEVU2cz2lwOUmV+xC9Ewfn8pYIKa/gLMeFbCu7hmIz4Vw3eBB/n56i2p9NeLol4q+DKWWlwqbtRlRJClrdghFxvp91bASDJ9/z82G19m+hmqy8fI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G7gDVbQc; arc=fail smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lbDejUcq"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d89f0ab02bso70995ad.1
-        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 01:11:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706778685; x=1707383485; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zpmw7XD3NRYPmylcKUZIs1amCALm5ceYEkOK13mCobY=;
-        b=lbDejUcqtmYpCSlYQKX9kxlW63ITYI1sVHJJhXTVCaTbFFewbH0oMa5P0LvemtbbSx
-         Cyodd7lM2iWUyq9WfwrnGq+zW0cP/hqAdFsfVFg4UI/9svg1e7ZeM4KnSY1QHl3Um5Jl
-         WjqcXwfNhrDuzoSubmPD7bjUJQd7p9kL4KDRSEW33Ky2j20Ieq1RHj18vbg8RQDGcug2
-         ZnXpVTUIOD/5fy1VvtCMmL3gQ56ekyaVn52ufWocOlS5xuFiHngWXZY58rILeWYarGAb
-         qAJl45BbGFc1XqszHkNW4gkkRDn6o/IWbPSE+Q53BkUN2L/iHQGyp5h4Ps57vR8D41wo
-         Rf9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706778685; x=1707383485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zpmw7XD3NRYPmylcKUZIs1amCALm5ceYEkOK13mCobY=;
-        b=w7oC/GSvrzFgT6uZIPhSAhtKA8oN/SRTB8iDOKUYZOI+BKmhdxlgO0eNW88PX6rBha
-         sChAT5bztypp08byYFnja3ElIdtwrC3o2cdDI/tvjC0B2KnsWjHXv0q8eojgQgQGdMML
-         wFU5gqanQ0SZp8SoDhiPab+jneO5HWNW2rQQH7JnungRKbKXVtFfplAstcvIKjd8tger
-         wgY0RNv14OezJwAxA5LDkJruMQY+Q8ueP6Md06Yt/OkxD1utoxuoTWg/PhkEfxyayWCg
-         LCndA24APsyI7sMYz734CTqgF8N0Br/O/b/4xL9uoxrIOYtTmgGcdJWdhoQJza6neasc
-         KwRA==
-X-Gm-Message-State: AOJu0YwSdQp37436tRf+u8jekHLWEOJjDMwiD6rgCAPS9FJtDMxBVrgo
-	xSAPyh/t6C3G1lauKB0KGIoOTOK5VxLUd//7DzuX6e0o87TtMWfEskSg7Mzetg==
-X-Google-Smtp-Source: AGHT+IG06fzWWaeYjUr/vX4M7gLOO+61jy4fE2PhBPJ64FlHm7t/jb+OVF/nW0ijhlWnHwthdyMMFA==
-X-Received: by 2002:a17:902:ced1:b0:1d6:fb94:10d5 with SMTP id d17-20020a170902ced100b001d6fb9410d5mr139335plg.27.1706778685070;
-        Thu, 01 Feb 2024 01:11:25 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUrBRGPWguQv+hECDS45pjyaIr8WcoLrgzXUAgcAytmPpZrNB491a1QBS8h6aAZtuUn0nByGer8flJ9jGXMckawcVjlKBMKWkP/CQpCfPU9xE5+qGj1oxLnTwf3K9wBlb5C6+D0K4nlMvIduKOvkPEjfmy/qA0REshrupZR5iibOO+gT0i33Gy/1yGXoCHXhv3UXQFLpzG7gsZP0Y+8ikQ+P/9gGmfcQXi/Xjd7Ui8FQ6YEpJH1sSHbuUj3x1lssAJEKVcRw4pLQS07A0zf805ludaBv+JjRJxZvpY=
-Received: from google.com ([2620:15c:2d3:205:ce95:ce9d:3dd2:5053])
-        by smtp.gmail.com with ESMTPSA id l20-20020a170902e2d400b001d8d04a4fa8sm7699490plc.300.2024.02.01.01.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 01:11:24 -0800 (PST)
-Date: Thu, 1 Feb 2024 01:11:20 -0800
-From: Fangrui Song <maskray@google.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Dave Martin <Dave.Martin@arm.com>, Peter Smith <peter.smith@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	Jisheng Zhang <jszhang@kernel.org>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
-Message-ID: <20240201091120.pbgr7ng6t2c36fut@google.com>
-References: <20240131065322.1126831-1-maskray@google.com>
- <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
- <ZbpEnDK3U/O24ng0@e133380.arm.com>
- <20240201045551.ajg4iqcajyowl2rh@google.com>
- <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G7gDVbQc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706779170; x=1738315170;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zyKZPhTNKWuAR1Wa5IzF3z9g/yBZ2OQHm7JiL81rGT0=;
+  b=G7gDVbQclPO24Nr518oJumFct6Vz6Llxf1242z650x+eZjMOKXkuUPK7
+   Fvjxwxmxs7h7vq1vDhJZYdHOoZiOjrMLl5nY3qAQWzVQhHCjjMbXUCjqn
+   v5qO/6jck1R/eJF0MdWAbGKftAxFSo2gAGxrslt226tyB9hH6LKamqmxN
+   RdNrmyhiwXBiGDhXb4SiB+DfJy7tER2BhkMkffUxTr1AuajszwXGWXS0+
+   T7c+HN0plaYsHgjWQTE0Nm1LTro13FFrFmWr188TDLN3zhfUnGMwhTC1b
+   rKI+36veTZN4Phs6BJiIYVCfIlCxxS3INxv7VlSgvgozJxc0/Z+e+SAAZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10483781"
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="10483781"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 01:19:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="37251"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa008.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 01 Feb 2024 01:19:29 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 1 Feb 2024 01:19:28 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Thu, 1 Feb 2024 01:19:28 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 1 Feb 2024 01:19:28 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mQNHz67nEQ+O4JI8tq19YW8+1sXbsxSHfDvaSx7cg+cCiaRsvDY+UZDTxcRfzX3GjB9h0LAerxjRUeYKFdUlHRH24+9QfYZInavu6yzlkRQgDm+O5N3UASeUnPmAVyjW30A/8uRx8MGSxYwc1HpMNTmzX0jIgKq2hbF/LhihcBOkWEpL28M8345KZ34zsxwDZDpQXD7AOTflikTilJoFeTp08kKviTqb54n6UBwd0Ps1vukPlxmdyrn8su/hGxSi8R89Fht67hrW+F1QNuatd/YLniIFRfqMajT8taoKfqbUoSayg9IR9VMFu0Cax5+vTeujPNxJYjaLFuXsIwtcZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J6AF4SIzsfr2sjQMbXD39oOGUuHstV8AAu8BQ95FoeI=;
+ b=Z4MS5AC1rK/gmu/s8lLDtdFDcH43uRCGNCBZt0mlbhdvYD/L7YeLyAxSQD6CDteUQf24uUxAUAulmSQ7bCxyhYYNVRM+ninfFe7XdOrX9/H8XHrvjpgoGEXkbfzvUoi2g+5RqRZ1fpt8dhGLqCexCS8yufY4Cs8NZd5v94EoDWlD3y7gxcQ42NR3CShsM0Ftj8VQ2Zjv/lzgUBLbBVFdhy8AgYHXj9Z3Ry4+I5CnJ3SokpO0EKv1e/2AoWH59j1Dz5BvMhKwPtnVogiUda29vsy2+3yzp38p/Lhq9s3TTdb9tvZclYAhXGAvqDf+nhc/uVMirKOwY7lsYrzqGb7eaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN6PR11MB8102.namprd11.prod.outlook.com (2603:10b6:208:46d::9)
+ by CY8PR11MB7242.namprd11.prod.outlook.com (2603:10b6:930:95::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.27; Thu, 1 Feb
+ 2024 09:19:25 +0000
+Received: from MN6PR11MB8102.namprd11.prod.outlook.com
+ ([fe80::b1b8:dbaa:aa04:a6bf]) by MN6PR11MB8102.namprd11.prod.outlook.com
+ ([fe80::b1b8:dbaa:aa04:a6bf%7]) with mapi id 15.20.7249.024; Thu, 1 Feb 2024
+ 09:19:25 +0000
+Message-ID: <ac88504b-1edc-46c5-ae61-7a634b156275@intel.com>
+Date: Thu, 1 Feb 2024 10:19:15 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/5] overflow: Expand check_add_overflow() for pointer
+ addition
+To: Kees Cook <keescook@chromium.org>, Rasmus Villemoes
+	<rasmus.villemoes@prevas.dk>
+CC: "Gustavo A. R. Silva" <gustavoars@kernel.org>, Andrew Morton
+	<akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, <llvm@lists.linux.dev>,
+	<linux-hardening@vger.kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Marco Elver <elver@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
+	<linux-kernel@vger.kernel.org>
+References: <20240130220218.it.154-kees@kernel.org>
+ <20240130220614.1154497-2-keescook@chromium.org>
+Content-Language: en-US
+From: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+In-Reply-To: <20240130220614.1154497-2-keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0209.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a5::8) To MN6PR11MB8102.namprd11.prod.outlook.com
+ (2603:10b6:208:46d::9)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN6PR11MB8102:EE_|CY8PR11MB7242:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f19db9c-8150-4fb6-90cd-08dc2306e205
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fKOi2b8DbQ4JRCM45Z4oi5zCJFj8t5B94TlZRMKsogKUYcHq9jWPRPhgZpBfLwrsqpKUEECRnf/hn7G+ik74r+TcpELjyodDLDEUfhhdUmH4TJzH+Cf8HX+BTLcU5Y7l5AncKWM6tI3vIw6hUahDz/axvdYl5zhrNcQGsehCiUmQvKRdcNKbf/BzttNgoG0zlFUtCGBD/h4pXY9lFGqZplScoct/M252b+AogS8gzNoVQxTN/DJk5pSJwZMHka2dZgrJk0GG4gyygdeLA7Pxw9wdYIEgd6O5V0f+Nqpdk2yox7bzuNP++AN0jzNmEESK/oPzSHTMrZai+YQxCRGnNMQDbceP4K+YrSsJSKQ3D7vmbKdiPu0LprKwJbOPgLgRzjiUkQH+lDbSRGzu4SqFd23qSuQiava8vK2goZfHHNxC8O23goBfY+AghmHrBQCzok/3YNjY3/Roz0fdekJ4c8iIp6lZ2YH0QGRgFQ4A1FzAXTdyIKjgLjJyHjeOcSCh01Wa6jU9OdF8S/jiTN0cs9DHCQV4FC3pPI4dG+bPF6mtT9b2zycoRg0J4fgYm9cFgEBpK52hBykRGAhtGmO1hc3+rwiuecHUUMQISOYiW8S8L/L/wi/eC9rZMyK176AT5DkC3YN/hlxldbtbCCWIUA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN6PR11MB8102.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(39860400002)(376002)(346002)(366004)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(66476007)(36756003)(8676002)(4326008)(8936002)(316002)(31696002)(7416002)(2906002)(30864003)(5660300002)(66946007)(6486002)(66556008)(86362001)(54906003)(82960400001)(110136005)(38100700002)(53546011)(478600001)(6506007)(6666004)(26005)(2616005)(6512007)(83380400001)(41300700001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHdmZTdzb0ZJSUtZMFJyUXU1Q3V3TmlpZi9uc21QTjBtZHViRCtna3hUVUhn?=
+ =?utf-8?B?ZmNUWHJMRENsYnVPR2JqMFl4SzlNSVdydkZRalJVWkQrdVluZlFOUEo0aGh3?=
+ =?utf-8?B?NS9xMk1ScjBnUUlrV21JMDl1bUtWQncvSklnQWd4ZC82RVpZVE5NU3FJeGlP?=
+ =?utf-8?B?aG9FTHBjMG1ycVNpWWF5ZUYzaHVkaUxUR09JVklJWTJyUEJzU3VIemR3WEs2?=
+ =?utf-8?B?THpOSkgra0RhanVIb0NDZVo0cXUrVGFkRWlwbVAxOElFa1NsckdRTElZdHph?=
+ =?utf-8?B?QVFYcDVNZ1NiZEpOY0VQc21VRzRlenZRVHhMeUt0M2tneCtzT29BSVQrQTlZ?=
+ =?utf-8?B?cG5vZ1RUU3Z4cjJOdmFLRi9NVThYVlFkamNlMkJ4TzNyL2wvbXVmbHJhOVlS?=
+ =?utf-8?B?eHNaR01RRncxaHcxMXBXaUtNRTd1a3F5KzJIMUZZdEtDNzdUSGxJWUdnL0tV?=
+ =?utf-8?B?bkg4SERxcnpjS2I0Q2JudzFLaWdPdDUyZWhITTVOY0FZUFhUQitRSGZaQjFo?=
+ =?utf-8?B?Y0VJOE1EdHBXcTJUUm4zcWlreVpxc0RHdUUrOVpiS013ZFJQTEloYis1RCt5?=
+ =?utf-8?B?QW5TVFZDbkoydGtybXdvaXNQTkJDOVFIOHBVaHNzUEdzQzlTZ2VzVUV3UmE4?=
+ =?utf-8?B?TUFoNEd5eFV5UHJxdFpKM2RSaGFzUDFoZmYreFYwQklwMDNETmx6VTNZSmh2?=
+ =?utf-8?B?cUhuU1hvN3B1NnhYaTcwWEcrY3hIc3FmNWZHWnB6QUE1RjRJUHcwRVBQQmtO?=
+ =?utf-8?B?UDFWSEE3bi9IQnpDR1V0cHh1SDJ6QzZiWXBIbzBQckZ4R3BLYlBVdlRDRU9Q?=
+ =?utf-8?B?dDVwblA0UU5VbFBpcG9oRjAwcGNTRTFwclk4MTg1V2NpNG9Tb3hWcDhoblpj?=
+ =?utf-8?B?bEh5VUNSeWdOdzZvaVQwejhCSC9ZUm9DQzFaQzBRdzBqcWtyeFRXNXRneWpy?=
+ =?utf-8?B?SklndFNjZE9iSCt1ZjdGUEJsMkRiM2dlaUNWdDN6OGZUSmVyMldUY2dyV0hh?=
+ =?utf-8?B?UVY3dmRtT09lbTIvK3M1OHE2T1FqeGROTGRaK2pZVG51emN4WnVuZUZsT1ho?=
+ =?utf-8?B?MGpadXl2dVg0bUZNS2VBRlhrOU5qTnY5SU4wWXl0Z2RZQWh6eGxDTy9tUXFV?=
+ =?utf-8?B?RXZZellGRFJpNXBwcWIzUkI5TFpSV3ZqblVwSmtmU0NWdkFZL3RBL1gyL2VM?=
+ =?utf-8?B?cnU2NXJOQi9qeHhRYjUxUnF5UC8zUmZvVFZhd2JKUUg1MjZnS2IwWk5sdk5i?=
+ =?utf-8?B?ZTVydjZVWmQ2M3MzcTVNYzJKRWlzM1FvaEtwd2JEMllLcHNRbWtRc2krYnlH?=
+ =?utf-8?B?aGdpUTFVeWNENFRZZ0ZNQkpyMlJ4SDhzSE5ERjdGTVNrcmV6Q2Z6OGgrdzFR?=
+ =?utf-8?B?YXVHaC9YNkhoZ1hGY2d6S1F4TCtHcjlBci93aldyU3hFQjNHUWk2dmtXVEhi?=
+ =?utf-8?B?Ym53Y0hNWFpscXVWR0YzcXM3aGNvNFZGRlJBQ3EyWVhMNkFvWjRVanc3ZUZj?=
+ =?utf-8?B?ZVNpa3ltRG9URFU3dW9lVlhsSU9seEF6MTRnb3M4N3Q4L29jZ2xuamtZQ3pV?=
+ =?utf-8?B?L2VlQjNPcVdvL2taLy92OFJ4WkM1WnFRbWVZdFNUV2UzVWR5U3BIMmdDYksr?=
+ =?utf-8?B?bUlhTjBBdURpY2hlM0ZHS0RwN085M08xV1JJQTRjVGFBOTgyWHFtbFhRODg2?=
+ =?utf-8?B?MXZkU2haaDl3UEFjZ2Q0UExTTnNIcUtkdmdpU3B6UHI4Q2gyRm5NaUxPWHZU?=
+ =?utf-8?B?SC92RlRZeWNINFBBTlRBdmNLSGhZLyt5ZHNpeFZTMFBoMThQMXhVTFlVKzVJ?=
+ =?utf-8?B?RFk0UWg0TkNaYnFlalNKRiszZVFZeExwdzVaRys2aEp5aFB1TmcrWUpUcFJZ?=
+ =?utf-8?B?L1BWU3d5Zkc5clVSRHFVYXF3U2Rzcm93YWJrL1JWTUtqWFlXcm1ESlRoV1c2?=
+ =?utf-8?B?OFB6NFJFZEhBbUpKNXlNekdYb2Y1NWx4L3RVTGRibm9wUjZTRE5lb0htdktx?=
+ =?utf-8?B?eEJoeFVVZSs1bnloSHJlc1Y1MXF0dmQyNVlkemN0VXhLdUJoZk9KVnpXZTB5?=
+ =?utf-8?B?UHZEN0FOanRURThKQ2h6cVR6dm9HR3JhKzRROVh3eDRCMXR4YmdpZE80WFE1?=
+ =?utf-8?B?cVlmMXdNNjh0NlpNOGVHdGkzRlNxenBMK2FNc2tVNnluSXFpK0ROVVFNSHF1?=
+ =?utf-8?B?TVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f19db9c-8150-4fb6-90cd-08dc2306e205
+X-MS-Exchange-CrossTenant-AuthSource: MN6PR11MB8102.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2024 09:19:24.9572
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GAN/3j16IKPgoDCap21Zebhl6nDZSTgePzI397ESFP0Px5T8cxIFUC9XefT1Gbs970W7LgJIXzqUeeDdquOzFx2ZTZOe4h7JcBpqLsIu3YE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7242
+X-OriginatorOrg: intel.com
 
-On 2024-02-01, Ard Biesheuvel wrote:
->On Thu, 1 Feb 2024 at 05:55, Fangrui Song <maskray@google.com> wrote:
->>
->> On 2024-01-31, Dave Martin wrote:
->> >On Wed, Jan 31, 2024 at 08:16:04AM +0100, Ard Biesheuvel wrote:
->> >> Hello Fangrui,
->> >>
->> >> On Wed, 31 Jan 2024 at 07:53, Fangrui Song <maskray@google.com> wrote:
->> >> >
->> >> > The constraint "i" seems to be copied from x86 (and with a redundant
->> >> > modifier "c"). It works with -fno-PIE but not with -fPIE/-fPIC in GCC's
->> >> > aarch64 port.
->> >
->> >(I'm not sure of the exact history, but the "c" may be inherited from
->> >arm, where an output modifier was needed to suppress the "#" that
->> >prefixes immediates in the traditional asm syntax.  This does not
->> >actually seem to be required for AArch64: rather while a # is allowed
->> >and still considered good style in handwritten asm code, the syntax
->> >doesn't require it, and the compiler doesn't emit it for "i" arguments,
->> >AFAICT.)
->>
->> The aarch64 one could be inherited from
->> arch/arm/include/asm/jump_label.h (2012), which could in turn be
->> inherited from x86 (2010).
->> Both the constraint "i" and the modifier "c" are generic..
->> For -fno-pic this combination can be used for every arch.
->>
->> >> > The constraint "S", which denotes a symbol reference (e.g. function,
->> >> > global variable) or label reference, is more appropriate, and has been
->> >> > available in GCC since 2012 and in Clang since 7.0.
->> >> >
->> >> > Signed-off-by: Fangrui Song <maskray@google.com>
->> >> > Link: https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
->> >> > ---
->> >> >  arch/arm64/include/asm/jump_label.h | 8 ++++----
->> >> >  1 file changed, 4 insertions(+), 4 deletions(-)
->> >> >
->> >> > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
->> >> > index 48ddc0f45d22..31862b3bb33d 100644
->> >> > --- a/arch/arm64/include/asm/jump_label.h
->> >> > +++ b/arch/arm64/include/asm/jump_label.h
->> >> > @@ -23,9 +23,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
->> >> >                  "      .pushsection    __jump_table, \"aw\"    \n\t"
->> >> >                  "      .align          3                       \n\t"
->> >> >                  "      .long           1b - ., %l[l_yes] - .   \n\t"
->> >> > -                "      .quad           %c0 - .                 \n\t"
->> >> > +                "      .quad           %0 - .                  \n\t"
->> >> >                  "      .popsection                             \n\t"
->> >> > -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
->> >> > +                :  :  "S"(&((char *)key)[branch]) :  : l_yes);
->> >>
->> >> 'key' is not used as a raw symbol name. We should make this
->> >>
->> >> "    .quad   %0 + %1 - ."
->> >>
->> >> and
->> >>
->> >> ::  "S"(key), "i"(branch) :: l_yes);
->> >>
->> >> if we want to really clean this up.
->> >
->> >This hides more logic in the asm so it's arguably more cryptic
->> >(although the code is fairly cryptic to begin with -- I don't really
->> >see why the argument wasn't written as the equivalent
->> >(char *)key + branch...)
->>
->> I agree that using "S" and "i" would introduce complexity.
->> Using just "S" as this patch does should be clear.
->>
->> All of "i" "s" "S" support a symbol or label reference and a constant offset (can be zero),
->> (in object file, a symbol and an addend; in GCC's term, the sum of a SYMBOL_REF and a CONST_INT).
->>
->
->Taken the address of a struct, cast it to char[] and then index it
->using a boolean is rather disgusting, no?
+On 1/30/24 23:06, Kees Cook wrote:
+> The check_add_overflow() helper is mostly a wrapper around
+> __builtin_add_overflow(), but GCC and Clang refuse to operate on pointer
+> arguments that would normally be allowed if the addition were open-coded.
+> 
+> For example, we have many places where pointer overflow is tested:
+> 
+> 	struct foo *ptr;
+> 	...
+> 	/* Check for overflow */
+> 	if (ptr + count < ptr) ...
+> 
+> And in order to avoid running into the overflow sanitizers in the
+> future, we need to rewrite these "intended" overflow checks:
+> 
+> 	if (check_add_overflow(ptr, count, &result)) ...
+> 
+> Frustratingly the argument type validation for __builtin_add_overflow()
+> is done before evaluating __builtin_choose_expr(), so for arguments to
+> be valid simultaneously for sizeof(*p) (when p may not be a pointer),
+> and __builtin_add_overflow(a, ...) (when a may be a pointer), we must
+> introduce wrappers that always produce a specific type (but they are
+> only used in the places where the bogus arguments will be ignored).
+> 
+> To test whether a variable is a pointer or not, introduce the __is_ptr()
+> helper, which uses __builtin_classify_type() to find arrays and pointers
+> (via the new __is_ptr_or_array() helper), and then decays arrays into
+> pointers (via the new __decay() helper), to distinguish pointers from
+> arrays.
 
-I agree with you.
+This is (not just commit msg but together with impl), at first glance, 
+too complicated for regular developers to grasp (that is perhaps fine),
+but could we make it simpler by, say _Generic() or other trick?
 
-Hmm. Clang's constraint "S" implementation doesn't support a constant
-offset, so
-`static_key_false(&nf_hooks_needed[pf][hook])` in include/linux/netfilter.h:nf_hook
-would not compile with Clang <= 18.
+> 
+> Additionally update the unit tests to cover pointer addition.
+> 
+> Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: llvm@lists.linux.dev
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   include/linux/compiler_types.h | 10 +++++
+>   include/linux/overflow.h       | 44 ++++++++++++++++++-
+>   lib/overflow_kunit.c           | 77 ++++++++++++++++++++++++++++++----
+>   3 files changed, 120 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 6f1ca49306d2..d27b58fddfaa 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -375,6 +375,16 @@ struct ftrace_likely_data {
+>   /* Are two types/vars the same type (ignoring qualifiers)? */
+>   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+>   
+> +/* Is variable addressable? */
+> +#define __is_ptr_or_array(p)	(__builtin_classify_type(p) == 5)
+> +
+> +/* Return an array decayed to a pointer. */
+> +#define __decay(p)		\
+> +	(&*__builtin_choose_expr(__is_ptr_or_array(p), p, NULL))
+> +
+> +/* Report if variable is a pointer type. */
+> +#define __is_ptr(p)		__same_type(p, __decay(p))
+> +
+>   /*
+>    * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, leaving
+>    *			       non-scalar types unchanged.
+> diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+> index 4e741ebb8005..210e5602e89b 100644
+> --- a/include/linux/overflow.h
+> +++ b/include/linux/overflow.h
+> @@ -51,6 +51,43 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+>   	return unlikely(overflow);
+>   }
+>   
+> +/* Always produce an integral variable expression. */
+> +#define __filter_integral(x)		\
+> +	__builtin_choose_expr(!__is_ptr(x), (x), 0)
+> +
+> +/* Always produce a pointer value. */
+> +#define __filter_ptr(x)			\
+> +	__builtin_choose_expr(__is_ptr(x), (x), NULL)
+> +
+> +/* Always produce a pointer to an integral value. */
+> +#define __filter_ptrint(x)		\
+> +	__builtin_choose_expr(!__is_ptr(*(x)), x, &(int){ 0 })
+> +
+> +/**
+> + * __check_ptr_add_overflow() - Calculate pointer addition with overflow checking
+> + * @a: pointer addend
+> + * @b: numeric addend
+> + * @d: pointer to store sum
+> + *
+> + * Returns 0 on success, 1 on wrap-around.
+> + *
+> + * Do not use this function directly, use check_add_overflow() instead.
+> + *
+> + * *@d holds the results of the attempted addition, which may wrap-around.
+> + */
+> +#define __check_ptr_add_overflow(a, b, d)		\
+> +	({						\
+> +		typeof(a) __a = (a);			\
+> +		typeof(b) __b = (b);			\
+> +		size_t __bytes;				\
+> +		bool __overflow;			\
+> +							\
+> +		/* we want to perform the wrap-around, but retain the result */ \
+> +		__overflow = __builtin_mul_overflow(sizeof(*(__a)), __b, &__bytes); \
+> +		__builtin_add_overflow((unsigned long)(__a), __bytes, (unsigned long *)(d)) || \
+> +		__overflow;				\
+> +	})
+> +
+>   /**
+>    * check_add_overflow() - Calculate addition with overflow checking
+>    * @a: first addend
+> @@ -61,8 +98,11 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+>    *
+>    * *@d holds the results of the attempted addition, which may wrap-around.
+>    */
+> -#define check_add_overflow(a, b, d)	\
+> -	__must_check_overflow(__builtin_add_overflow(a, b, d))
+> +#define check_add_overflow(a, b, d)					\
+> +	__must_check_overflow(__builtin_choose_expr(__is_ptr(a),	\
+> +		__check_ptr_add_overflow(__filter_ptr(a), b, d),	\
+> +		__builtin_add_overflow(__filter_integral(a), b,		\
+> +				       __filter_ptrint(d))))
+>   
+>   /**
+>    * check_sub_overflow() - Calculate subtraction with overflow checking
+> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+> index c527f6b75789..2d106e880956 100644
+> --- a/lib/overflow_kunit.c
+> +++ b/lib/overflow_kunit.c
+> @@ -45,13 +45,18 @@
+>   # define SKIP_64_ON_32(t)	do { } while (0)
+>   #endif
+>   
+> -#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
+> -	static const struct test_ ## t1 ## _ ## t2 ## __ ## t {	\
+> +#define DEFINE_TEST_ARRAY_NAMED_TYPED(n1, n2, n, t1, t2, t)	\
+> +	static const struct test_ ## n1 ## _ ## n2 ## __ ## n {	\
+>   		t1 a;						\
+>   		t2 b;						\
+> -		t sum, diff, prod;				\
+> +		t sum;						\
+> +		t diff;						\
+> +		t prod;						\
+>   		bool s_of, d_of, p_of;				\
+> -	} t1 ## _ ## t2 ## __ ## t ## _tests[]
+> +	} n1 ## _ ## n2 ## __ ## n ## _tests[]
+> +
+> +#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
+> +	DEFINE_TEST_ARRAY_NAMED_TYPED(t1, t2, t, t1, t2, t)
+>   
+>   #define DEFINE_TEST_ARRAY(t)	DEFINE_TEST_ARRAY_TYPED(t, t, t)
+>   
+> @@ -251,8 +256,10 @@ DEFINE_TEST_ARRAY(s64) = {
+>   };
+>   
+>   #define check_one_op(t, fmt, op, sym, a, b, r, of) do {			\
+> -	int _a_orig = a, _a_bump = a + 1;				\
+> -	int _b_orig = b, _b_bump = b + 1;				\
+> +	typeof(a + 0) _a_orig = a;					\
+> +	typeof(a + 0) _a_bump = a + 1;					\
+> +	typeof(b + 0) _b_orig = b;					\
+> +	typeof(b + 0) _b_bump = b + 1;					\
+>   	bool _of;							\
+>   	t _r;								\
+>   									\
+> @@ -260,13 +267,13 @@ DEFINE_TEST_ARRAY(s64) = {
+>   	KUNIT_EXPECT_EQ_MSG(test, _of, of,				\
+>   		"expected "fmt" "sym" "fmt" to%s overflow (type %s)\n",	\
+>   		a, b, of ? "" : " not", #t);				\
+> -	KUNIT_EXPECT_EQ_MSG(test, _r, r,				\
+> +	KUNIT_EXPECT_TRUE_MSG(test, _r == r,				\
+>   		"expected "fmt" "sym" "fmt" == "fmt", got "fmt" (type %s)\n", \
+>   		a, b, r, _r, #t);					\
+>   	/* Check for internal macro side-effects. */			\
+>   	_of = check_ ## op ## _overflow(_a_orig++, _b_orig++, &_r);	\
+> -	KUNIT_EXPECT_EQ_MSG(test, _a_orig, _a_bump, "Unexpected " #op " macro side-effect!\n"); \
+> -	KUNIT_EXPECT_EQ_MSG(test, _b_orig, _b_bump, "Unexpected " #op " macro side-effect!\n"); \
+> +	KUNIT_EXPECT_TRUE_MSG(test, _a_orig == _a_bump, "Unexpected " #op " macro side-effect!\n"); \
+> +	KUNIT_EXPECT_TRUE_MSG(test, _b_orig == _b_bump, "Unexpected " #op " macro side-effect!\n"); \
+>   } while (0)
+>   
+>   #define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
+> @@ -333,6 +340,55 @@ DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
+>   };
+>   DEFINE_TEST_FUNC_TYPED(int_int__u8, u8, "%d");
+>   
+> +#define DEFINE_TEST_PTR_FUNC_TYPED(n, t, fmt)				\
+> +static void do_ptr_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
+> +{									\
+> +	/* we're only doing single-direction sums, no product or division */ \
+> +	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);\
+> +}									\
+> +									\
+> +static void n ## _overflow_test(struct kunit *test) {			\
+> +	unsigned i;							\
+> +									\
+> +	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
+> +		do_ptr_test_ ## n(test, &n ## _tests[i]);		\
+> +	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
+> +		ARRAY_SIZE(n ## _tests), #n);				\
+> +}
+> +
+> +DEFINE_TEST_ARRAY_NAMED_TYPED(void, int, void, void *, int, void *) = {
+> +	{NULL, 0, NULL, NULL, NULL, false, false, false},
+> +	{(void *)0x30, 0x10, (void *)0x40, NULL, NULL, false, false, false},
+> +	{(void *)ULONG_MAX, 0, (void *)ULONG_MAX, NULL, NULL, false, false, false},
+> +	{(void *)ULONG_MAX, 1, NULL, NULL, NULL, true, false, false},
+> +	{(void *)ULONG_MAX, INT_MAX, (void *)(INT_MAX - 1), NULL, NULL, true, false, false},
+> +};
+> +DEFINE_TEST_PTR_FUNC_TYPED(void_int__void, void *, "%lx");
+> +
+> +struct _sized {
+> +	int a;
+> +	char b;
+> +};
+> +
+> +DEFINE_TEST_ARRAY_NAMED_TYPED(sized, int, sized, struct _sized *, int, struct _sized *) = {
+> +	{NULL, 0, NULL, NULL, NULL, false, false, false},
+> +	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
+> +	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized)), 1, (struct _sized *)ULONG_MAX, NULL, NULL, false, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 1, NULL, NULL, NULL, true, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 2, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, true, false, false},
+> +	{(void *)(ULONG_MAX - sizeof(struct _sized) + 1), 3, (struct _sized *)(sizeof(struct _sized) * 2), NULL, NULL, true, false, false},
+> +};
+> +DEFINE_TEST_PTR_FUNC_TYPED(sized_int__sized, struct _sized *, "%lx");
+> +
+> +DEFINE_TEST_ARRAY_NAMED_TYPED(sized, size_t, sized, struct _sized *, size_t, struct _sized *) = {
+> +	{NULL, 0, NULL, NULL, NULL, false, false, false},
+> +	{NULL, 1, (struct _sized *)(sizeof(struct _sized)), NULL, NULL, false, false, false},
+> +	{NULL, 0x10, (struct _sized *)(sizeof(struct _sized) * 0x10), NULL, NULL, false, false, false},
+> +	{NULL, SIZE_MAX - 10, (struct _sized *)18446744073709551528UL, NULL, NULL, true, false, false},
+> +};
+> +DEFINE_TEST_PTR_FUNC_TYPED(sized_size_t__sized, struct _sized *, "%zu");
+> +
+>   /* Args are: value, shift, type, expected result, overflow expected */
+>   #define TEST_ONE_SHIFT(a, s, t, expect, of)	do {			\
+>   	typeof(a) __a = (a);						\
+> @@ -1122,6 +1178,9 @@ static struct kunit_case overflow_test_cases[] = {
+>   	KUNIT_CASE(s32_s32__s32_overflow_test),
+>   	KUNIT_CASE(u64_u64__u64_overflow_test),
+>   	KUNIT_CASE(s64_s64__s64_overflow_test),
+> +	KUNIT_CASE(void_int__void_overflow_test),
+> +	KUNIT_CASE(sized_int__sized_overflow_test),
+> +	KUNIT_CASE(sized_size_t__sized_overflow_test),
+>   	KUNIT_CASE(u32_u32__int_overflow_test),
+>   	KUNIT_CASE(u32_u32__u8_overflow_test),
+>   	KUNIT_CASE(u8_u8__int_overflow_test),
 
-I have a patch https://github.com/llvm/llvm-project/pull/80255 , but
-even if it is accepted and cherry-picked into the 18.x release branch,
-if we still support older Clang, we cannot use "S" unconditionally.
-
-
-So we probably need the following to prepare for -fPIE support in the
-future:
-
-diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
-index 48ddc0f45d22..b8af2f8b0c99 100644
---- a/arch/arm64/include/asm/jump_label.h
-+++ b/arch/arm64/include/asm/jump_label.h
-@@ -15,6 +15,16 @@
-  
-  #define JUMP_LABEL_NOP_SIZE		AARCH64_INSN_SIZE
-  
-+/*
-+ * Prefer "S" to support PIC. However, use "i" for Clang 18 and earlier as "S"
-+ * on a symbol with a constant offset is not supported.
-+ */
-+#if defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 18
-+#define JUMP_LABEL_STATIC_KEY_CONSTRAINT "i"
-+#else
-+#define JUMP_LABEL_STATIC_KEY_CONSTRAINT "S"
-+#endif
-+
-  static __always_inline bool arch_static_branch(struct static_key * const key,
-  					       const bool branch)
-  {
-@@ -23,9 +33,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
-  		 "	.pushsection	__jump_table, \"aw\"	\n\t"
-  		 "	.align		3			\n\t"
-  		 "	.long		1b - ., %l[l_yes] - .	\n\t"
--		 "	.quad		%c0 - .			\n\t"
-+		 "	.quad		%0 + %1 - .		\n\t"
-  		 "	.popsection				\n\t"
--		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-+		 :  :  JUMP_LABEL_STATIC_KEY_CONSTRAINT(key), "i"(branch) :  : l_yes);
-  
-  	return false;
-  l_yes:
-@@ -40,9 +50,9 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
-  		 "	.pushsection	__jump_table, \"aw\"	\n\t"
-  		 "	.align		3			\n\t"
-  		 "	.long		1b - ., %l[l_yes] - .	\n\t"
--		 "	.quad		%c0 - .			\n\t"
-+		 "	.quad		%0 + %1 - .		\n\t"
-  		 "	.popsection				\n\t"
--		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-+		 :  :  JUMP_LABEL_STATIC_KEY_CONSTRAINT(key), "i"(branch) :  : l_yes);
-  
-  	return false;
-  l_yes:
-
-
->> >Anyway, I don't think the "i" versys "S" distinction makes any
->> >difference without -fpic or equivalent, so it is not really relevant
->> >for the kernel (except that "S" breaks compatibility with older
->> >compilers...)
->> >
->> >
->> >I think the main advantage of "S" is that it stops you accidentally
->> >emitting undesirable relocations from asm code that is not written for
->> >the -fpic case.
->> >
->> >But just changing "i" to "S" is not sufficient to port asms to -fpic:
->> >the asms still need to be reviewed.
->> >
->> >
->> >So unless the asm has been reviewed for position-independence, it may
->> >anyway be better to stick with "i" so that the compiler actually chokes
->> >if someone tries to build the code with -fpic.
->>
->
->The virtual address of the kernel is randomized by KASLR, which relies
->on PIE linking, and this puts constraints on the permitted types of
->relocations.
->
->IOW, we basically already build the kernel as PIC code, but without
->relying on -fPIC, because that triggers some behaviors that only make
->sense for shared objects in user space.
->
->> >Since we are not trying to run arbitraily many running kernels in a
->> >common address space (and not likely to do that), I'm not sure that we
->> >would ever build the kernel with -fpic except for a few special-case
->> >bits like the EFI stub and vDSO... unless I've missed something?
->> >
->
->Yes, KASLR. The number of kernels is not the point, the point is that
->the virtual load address of the kernel is usually decided at boot, and
->so the code needs to be generated to accommodate that.
->
->> >If there's another reason why "S" is advantageous though, I'm happy to
->> >be corrected.
->>
->> I remember that Ard has an RFC
->> https://lore.kernel.org/linux-arm-kernel/20220427171241.2426592-1-ardb@kernel.org/
->> "[RFC PATCH 0/2] arm64: use PIE code generation for KASLR kernel"
->> and see some recent PIE codegen patches.
->>
->> > Building the KASLR kernel without -fpie but linking it with -pie works
->> > in practice, but it is not something that is explicitly supported by the
->> > toolchains - it happens to work because the default 'small' code model
->> > used by both GCC and Clang relies mostly on ADRP+ADD/LDR to generate
->> > symbol references.
->>
->> I agree that current -fno-PIE with -shared -Bsymbolic linking is a hack
->> that works as a conincidence, not guaranteed by the toolchain.
->> This jump_label improvement (with no object file difference) fixes an
->> obstacle.
->
->If we can get the guaranteed behavior of #pragma GCC visibility
->push(hidden) from a command line option, we should build the core
->kernel with -fpie instead. (Modules are partially linked objects, so
->they can be built non-PIC as before)
->
-
-I believe we don't have such a GCC option, but the effect can be
-simulated by -include hidden.h ...
