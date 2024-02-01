@@ -1,105 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8D5CA42;
-	Thu,  1 Feb 2024 01:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4183BB3A
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 04:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706752548; cv=none; b=CFUwzfNBv+SI8bCM28zY1/zKOBnqpZ1YZsoqZwz5eV2lGMTooTdCNIXfBSSygjTxAYza6ve/ANqR30tsx//O0FQieGvkoXLeCDLPt5JEz/OnmAUc7E2T1bhq9xYzFC5ragwrMQs+4steuZ3P4dSdIIIQbtd2nxyoJiYJlFS2wXA=
+	t=1706763358; cv=none; b=jkhS5dVlKfCJhjx9CsiDPMyg+5/7qhhxsxwytWS/3ZCgFdc2jz6iqM81DNrPBHhmtpsvGEektq71cF/dd0KTQIhX7k6tAz3QDA7hJQK3wUiSiRc0GFlc+QtK5ImrnGnf4QHJh9g7BulJ1RoK5SJLg+UPeJnocMUZRgWz1+6EHwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706752548; c=relaxed/simple;
-	bh=A0uCMKpiKNtmbFdzwyqw0VC5v0VskYSCcbSSLZj+FQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SU9m+a+VvjRk2xrCxu0//VNfXQT38Y8GaMNbxA2d3aXllsT6Zd2DxyZ1MM43YA6QCCSHI7CKjIadHXCNIliLzyObH+Pvxut0yIx6IXEKIWA39IQbCvZ2TC635nHYPpAN5rdfnq79k9Ohl4W1YiKp9AYaBe2faTVpPJWqxoMSG1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VumrhoX7; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706763358; c=relaxed/simple;
+	bh=L0yoXvq/d6omUMi6xtzN6TigsEZjzXC09EqfFo90GtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TwDTZwurQ/R43ICV+rKZt4lvCrOvzKlaMaZbEnXps/DpOmeTrL7ZOErS38Jo37uEsxjWIjkM7LXY1+xAUs6U209hnVMgj9IoE8iaOVnLCq5GkYyywVIfSIECIYVHzNRgRBasfzZ5wXXD9ASYEJuQLpbDxfRUUYTVVswMWaWtYno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FpUKVhwR; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VumrhoX7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706752547; x=1738288547;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=A0uCMKpiKNtmbFdzwyqw0VC5v0VskYSCcbSSLZj+FQU=;
-  b=VumrhoX7u3KGq3BmGKk2f+rSfilTZP6+KIoIlMdBOL32tH8EZp8l6Iz5
-   NmUnbVXrAuaFconL0JYcAAxv62BTyxB1ixGxWhD+Hogp9WlTfEobREoVB
-   1C6t9RaMzoL0wmsP05TgFjm44/CIrJgHmKONO6Lti1s44g5lv50e9fs5c
-   JnlqyBo1rc56eHUrNh6psH+rEdr4dacdA+OiC1dGK4KW0adlenv7X7oQb
-   i6FMGdYEnYC6oGQl41T1/8jKq/zzn6l8fBOBzEUQhVa0Yu+p6qFon9Agt
-   9X13LT/Jnmuq0j8iD/YS5KDQzRGrSJ5ETinWLD6spP3W95rReWJvl/GBh
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10435478"
-X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="10435478"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 17:55:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="908093182"
-X-IronPort-AV: E=Sophos;i="6.05,233,1701158400"; 
-   d="scan'208";a="908093182"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 31 Jan 2024 17:55:45 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rVMIn-0002Ge-2v;
-	Thu, 01 Feb 2024 01:55:42 +0000
-Date: Thu, 1 Feb 2024 09:54:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nuno Sa <nuno.sa@analog.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nuno Sa <noname.nuno@gmail.com>
-Subject: [nsa:dev/iio-backend-axi-dds-test 20/20]
- drivers/iio/dac/adi-axi-dac.c:65:1: warning: non-void function does not
- return a value
-Message-ID: <202402010942.619gPo9U-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FpUKVhwR"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d94691de1eso54485ad.1
+        for <llvm@lists.linux.dev>; Wed, 31 Jan 2024 20:55:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706763356; x=1707368156; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YsqrP80NBPWxBx78FsktitHzUN/DGz3kT5ZrnUUMNWc=;
+        b=FpUKVhwRA2B3gPRbeS0Acxao7On11nKvAN+7V9+1qJJtHnwLOOPqU6h0gjNsMoqKcd
+         7ZM5lWX43pZti16xdzGxPGQWVsm3S4hCIAkg32QdpOhDmX24CQQC4f1S+cBalWL7HaFD
+         IGM5xDpH81BobayxaXGSLGNUOEMpz8hTGJCljm5JYnW+K0PNxry6uk+S/tnW2TuOugxw
+         km063sP+sV6oXP9tww2jcsH0fIdoUwZSqJ5N+mNAZwgzWS07mqzKlordiBIPyg9YyVZo
+         rm1I0Q73u8eQ7LakVyM/Mp1pL30bO65R1hRGMJbUa3LRUM/lb09364TKHp3dFyd+clxX
+         tyng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706763356; x=1707368156;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YsqrP80NBPWxBx78FsktitHzUN/DGz3kT5ZrnUUMNWc=;
+        b=cY85cJP1VwxRS2agYKyrJQ/2Rcgy1Wq7g1lfQh0WfTHAMIG22ZGrm4FkmX126c/ZUD
+         W8RMcWBgnR6kd0maczQJ349KE8Ig0qo9g1KCsxBQHPZyLrPQuOBPJUwdEQ1qOtg39A3c
+         0qi74GWRxNSorfOTFfbDbRFInJvh7GqjIX3hLYI+57KpEh5nyFRLzePV21ORXztgmJIC
+         GT8a/lc3aKbqVBLOglX7hG87ExDCtA0uS9RKomVyskWShDcVSo5NXf5xPEPTT6/lsYOP
+         aVyT5uLEttLAykgzNkVEuyDrG2ys1XZVFxT1I7g1B4bto2AZIBA8DCZcQpvQ1EwC5Sah
+         Uo7Q==
+X-Gm-Message-State: AOJu0YyOZdIdVIOC3okZzy0F07ZAN5XzRAApSLWAZYBbrzSyTu4ipEvO
+	Yw2jUQD/lYqYV8vIknHmwCLaPMiP5aKjO0fEM38ogB26DFF2m3MD17k1m4oktA==
+X-Google-Smtp-Source: AGHT+IHK1/WgkjIKx0flbjpFflqU9a56/6fl9CXpl7gOvyu5gmDaW1mxugbmgLgncwtMdAWnWaNzZg==
+X-Received: by 2002:a17:902:d58f:b0:1d8:f3c7:fb83 with SMTP id k15-20020a170902d58f00b001d8f3c7fb83mr106370plh.9.1706763356049;
+        Wed, 31 Jan 2024 20:55:56 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCV4Q548nt1ArvLGL2wR2E8vSlBntuR737WWtXt371mCiALATgckvigQx4dwtoGKhCMAatv2D8bgdgK02B+fOCaMn4Bf4YU8F27jYiuApzRhepfS+rHhUyzbSLKP8LIRnPbZFUD1yS1BWQL8Ewyk6oZDXFNulca7j+6S4Gs6tejvqqNk3CHRnFK3eJwLrkzePpZcAvG5g6PVOUh4lIGl5HItVTfnNu63wYd+qACW2eiF+PqyotQ8L71W+jKKENG7//L4f9hcdxI=
+Received: from google.com ([2620:15c:2d3:205:ce95:ce9d:3dd2:5053])
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b001d8a5c08277sm9616689plg.260.2024.01.31.20.55.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 20:55:55 -0800 (PST)
+Date: Wed, 31 Jan 2024 20:55:51 -0800
+From: Fangrui Song <maskray@google.com>
+To: Dave Martin <Dave.Martin@arm.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	Jisheng Zhang <jszhang@kernel.org>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
+Message-ID: <20240201045551.ajg4iqcajyowl2rh@google.com>
+References: <20240131065322.1126831-1-maskray@google.com>
+ <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
+ <ZbpEnDK3U/O24ng0@e133380.arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
+In-Reply-To: <ZbpEnDK3U/O24ng0@e133380.arm.com>
 
-tree:   https://github.com/nunojsa/linux dev/iio-backend-axi-dds-test
-head:   56a0faf5df7548936623a26c728ff3f0e970ef6a
-commit: 56a0faf5df7548936623a26c728ff3f0e970ef6a [20/20] more stuff
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20240201/202402010942.619gPo9U-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fdac7d0b6f74f919d319b31a0680c77f66732586)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240201/202402010942.619gPo9U-lkp@intel.com/reproduce)
+On 2024-01-31, Dave Martin wrote:
+>On Wed, Jan 31, 2024 at 08:16:04AM +0100, Ard Biesheuvel wrote:
+>> Hello Fangrui,
+>>
+>> On Wed, 31 Jan 2024 at 07:53, Fangrui Song <maskray@google.com> wrote:
+>> >
+>> > The constraint "i" seems to be copied from x86 (and with a redundant
+>> > modifier "c"). It works with -fno-PIE but not with -fPIE/-fPIC in GCC's
+>> > aarch64 port.
+>
+>(I'm not sure of the exact history, but the "c" may be inherited from
+>arm, where an output modifier was needed to suppress the "#" that
+>prefixes immediates in the traditional asm syntax.  This does not
+>actually seem to be required for AArch64: rather while a # is allowed
+>and still considered good style in handwritten asm code, the syntax
+>doesn't require it, and the compiler doesn't emit it for "i" arguments,
+>AFAICT.)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402010942.619gPo9U-lkp@intel.com/
+The aarch64 one could be inherited from
+arch/arm/include/asm/jump_label.h (2012), which could in turn be
+inherited from x86 (2010).
+Both the constraint "i" and the modifier "c" are generic..
+For -fno-pic this combination can be used for every arch.
 
-All warnings (new ones prefixed by >>):
+>> > The constraint "S", which denotes a symbol reference (e.g. function,
+>> > global variable) or label reference, is more appropriate, and has been
+>> > available in GCC since 2012 and in Clang since 7.0.
+>> >
+>> > Signed-off-by: Fangrui Song <maskray@google.com>
+>> > Link: https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
+>> > ---
+>> >  arch/arm64/include/asm/jump_label.h | 8 ++++----
+>> >  1 file changed, 4 insertions(+), 4 deletions(-)
+>> >
+>> > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+>> > index 48ddc0f45d22..31862b3bb33d 100644
+>> > --- a/arch/arm64/include/asm/jump_label.h
+>> > +++ b/arch/arm64/include/asm/jump_label.h
+>> > @@ -23,9 +23,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+>> >                  "      .pushsection    __jump_table, \"aw\"    \n\t"
+>> >                  "      .align          3                       \n\t"
+>> >                  "      .long           1b - ., %l[l_yes] - .   \n\t"
+>> > -                "      .quad           %c0 - .                 \n\t"
+>> > +                "      .quad           %0 - .                  \n\t"
+>> >                  "      .popsection                             \n\t"
+>> > -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+>> > +                :  :  "S"(&((char *)key)[branch]) :  : l_yes);
+>>
+>> 'key' is not used as a raw symbol name. We should make this
+>>
+>> "    .quad   %0 + %1 - ."
+>>
+>> and
+>>
+>> ::  "S"(key), "i"(branch) :: l_yes);
+>>
+>> if we want to really clean this up.
+>
+>This hides more logic in the asm so it's arguably more cryptic
+>(although the code is fairly cryptic to begin with -- I don't really
+>see why the argument wasn't written as the equivalent
+>(char *)key + branch...)
 
-   drivers/iio/dac/adi-axi-dac.c:63:24: warning: unused variable 'st' [-Wunused-variable]
-      63 |         struct axi_dac_state *st = iio_backend_get_priv(back);
-         |                               ^~
->> drivers/iio/dac/adi-axi-dac.c:65:1: warning: non-void function does not return a value [-Wreturn-type]
-      65 | }
-         | ^
-   drivers/iio/dac/adi-axi-dac.c:69:24: warning: unused variable 'st' [-Wunused-variable]
-      69 |         struct axi_dac_state *st = iio_backend_get_priv(back);
-         |                               ^~
-   drivers/iio/dac/adi-axi-dac.c:70:1: warning: non-void function does not return a value [-Wreturn-type]
-      70 | }
-         | ^
-   4 warnings generated.
+I agree that using "S" and "i" would introduce complexity.
+Using just "S" as this patch does should be clear.
 
+All of "i" "s" "S" support a symbol or label reference and a constant offset (can be zero),
+(in object file, a symbol and an addend; in GCC's term, the sum of a SYMBOL_REF and a CONST_INT).
 
-vim +65 drivers/iio/dac/adi-axi-dac.c
+>Anyway, I don't think the "i" versys "S" distinction makes any
+>difference without -fpic or equivalent, so it is not really relevant
+>for the kernel (except that "S" breaks compatibility with older
+>compilers...)
+>
+>
+>I think the main advantage of "S" is that it stops you accidentally
+>emitting undesirable relocations from asm code that is not written for
+>the -fpic case.
+>
+>But just changing "i" to "S" is not sufficient to port asms to -fpic:
+>the asms still need to be reviewed.
+>
+>
+>So unless the asm has been reviewed for position-independence, it may
+>anyway be better to stick with "i" so that the compiler actually chokes
+>if someone tries to build the code with -fpic.
 
-    60	
-    61	static int axi_dac_buffer_preenable(struct iio_backend *back)
-    62	{
-    63		struct axi_dac_state *st = iio_backend_get_priv(back);
-    64	
-  > 65	}
-    66	
+The asm is position-independent.
+This `.long sym - .` is a common metadata section pattern to support PIC:)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regarding the constraints, I've updated
+https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
+to include more details.
+
+>Since we are not trying to run arbitraily many running kernels in a
+>common address space (and not likely to do that), I'm not sure that we
+>would ever build the kernel with -fpic except for a few special-case
+>bits like the EFI stub and vDSO... unless I've missed something?
+>
+>If there's another reason why "S" is advantageous though, I'm happy to
+>be corrected.
+
+I remember that Ard has an RFC
+https://lore.kernel.org/linux-arm-kernel/20220427171241.2426592-1-ardb@kernel.org/
+"[RFC PATCH 0/2] arm64: use PIE code generation for KASLR kernel"
+and see some recent PIE codegen patches.
+
+> Building the KASLR kernel without -fpie but linking it with -pie works
+> in practice, but it is not something that is explicitly supported by the
+> toolchains - it happens to work because the default 'small' code model
+> used by both GCC and Clang relies mostly on ADRP+ADD/LDR to generate
+> symbol references.
+
+I agree that current -fno-PIE with -shared -Bsymbolic linking is a hack
+that works as a conincidence, not guaranteed by the toolchain.
+This jump_label improvement (with no object file difference) fixes an
+obstacle. 
