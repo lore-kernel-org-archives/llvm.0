@@ -1,192 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA3115A4AC
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 08:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5982E842
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 08:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706774916; cv=none; b=S6BituEdn1IP2sgAA7Q6nZnMsvJQY/np7ayPQaPRwaP1lilTAUeRa5toVggsjWHHwxR2gmA6VJH5LxRZdDDk5PGFSZ26Z1zxa5/Im+uDd5Ei7A0Q0qqUwWGfeGXtDaRrDB5ugcFF3jojidX6SJsaqqc6cTnQY5ri3jHdEoo0Qt0=
+	t=1706777316; cv=none; b=nW/AI1dAnkylIAvZmBRXwcAPe8cK1ap79wFMwfmBb/Cf8+GBhMvlIDciexw5S+yDZOY3obIdznWp7uSYY8UYLo3TQDRGmUC5htCmEgOGB/J9kMLwoU4mHtnyqQE7Gg+UZtap3H1OKcnKk6nn1pcjCBzSjVDe/KmMwX2jwvPinu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706774916; c=relaxed/simple;
-	bh=80iEY38zsgd9OCT3t544kEkSOZkE0dD85Ix/M+1O2BU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dho0+R5HuZh5nyh4TOTX/FWlKIW0aapHPgTeDU3wDUOpfPwliuxGLc8HHt9ydb6r4kwVbBDjRCkcEAptA1XmZbT/FDuqEfzurJSe/idHtx5CH19v4GfLroWXqAr1WHTN6bXswsjVRkshZ6PsK9uforLtJicV/G6L4SYD6iA7Ihk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZeJcmdHo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706777316; c=relaxed/simple;
+	bh=y3o2aJ7TkFI5uijbm2l3WgkFD3IdAC+L0GGGsjcnqh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=rgreci1oDhfVsijpUFIkDj7TOEMwCbrCITuI6o6EMph6Dwatptg3Y6faw2B4F0MBFsQrypY/LkWJrdvUP3DNYxLHy413Yb9KJEpfAg36jvz+5NXObOezH8DrqPEPpgxV6s4ROgpesrwLV8sGD/Y4s8l1BJe1QYqpVzxt+4IUCk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M54+wFEq; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZeJcmdHo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622F6C433A6
-	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 08:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706774916;
-	bh=80iEY38zsgd9OCT3t544kEkSOZkE0dD85Ix/M+1O2BU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZeJcmdHo9o6FpHFw4iLCXq4+J1qdCA/SlP97RJcgVHtkrMRGoloeByjo9vJsM445B
-	 uFCMtVYgiKI0WZtBQFLgHV/qEd6OrzbfYfjv6att+5yiiCXTOTAFn7OSJsLeshYlxO
-	 /mOYEs5LMLMAn9wozoIDIAJalV6rMUdkge+IzZDNDeA0x2TdKunilZ4YTS7OkbDkxh
-	 lmL74u1lPTX1esKFUCqxJkHJKELhdNgwZArMIxMTPuLqcEWK0rLQT1ftcPQEcfbf8x
-	 uie+q7X9bDJJdVdqp7VhUE4sNVHKE4j7dqekD9xkWjrY9keHUXt++Mxgg+udB7u2ZU
-	 UeTJ8UOKQv+XA==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5111c7d40deso982559e87.1
-        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 00:08:36 -0800 (PST)
-X-Gm-Message-State: AOJu0YwX6SezcaprIndEi1iJxesL66a2CsfdaJRnTsUPDqyp21VZxVAC
-	seGAlONVBPTDlnv1vidM6yMX+1U5ukdEmGsPMkX9xIfxfrAb9uqXmAGMoLn0ACvM2Jobm8SEqBt
-	+OLrp1wZ/bbxJvxBdLmNuIWS6hH0=
-X-Google-Smtp-Source: AGHT+IGhBUKmljKJfZeXj+8Ve9fOqnJzpejDeg1q9FFFeW5EZLsJSwz6ISHgy2V308b0s7VoY/xxGjq3mZIH0xASGJ0=
-X-Received: by 2002:ac2:5329:0:b0:511:f4c:8aa3 with SMTP id
- f9-20020ac25329000000b005110f4c8aa3mr1219549lfh.7.1706774914479; Thu, 01 Feb
- 2024 00:08:34 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M54+wFEq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706777313;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GB8LeYYi9G/0q87kdvcUpfpS5LmGE5Wri5W6FmlAN9k=;
+	b=M54+wFEqOPEbNjOzCVRbIeRiV5PzDN7bGEFXi5qAe0+yhe02rvlPGA6ms3JAh0ssCSCdWt
+	jtV7a5kzesujZmDOjDkQGzwiUO4opOhJyePBfgZrs4YXeTBDwyicDPkRaurLUdmIabpMUA
+	CYe2GQiMvUFgb3ucKLsUhv+qE7qXR9U=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-551-XdD1BYryMTOnIeAGJjG64g-1; Thu,
+ 01 Feb 2024 03:48:30 -0500
+X-MC-Unique: XdD1BYryMTOnIeAGJjG64g-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D73883C12CA2;
+	Thu,  1 Feb 2024 08:48:29 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.96])
+	by smtp.corp.redhat.com (Postfix) with SMTP id CC3351BDB1;
+	Thu,  1 Feb 2024 08:48:28 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Thu,  1 Feb 2024 09:47:15 +0100 (CET)
+Date: Thu, 1 Feb 2024 09:47:09 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 1/1] pidfd: implement PIDFD_THREAD flag for
+ pidfd_open()
+Message-ID: <20240201084709.GA27850@redhat.com>
+References: <20240131132602.GA23641@redhat.com>
+ <202402011558.BUpYBZyG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240131065322.1126831-1-maskray@google.com> <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
- <ZbpEnDK3U/O24ng0@e133380.arm.com> <20240201045551.ajg4iqcajyowl2rh@google.com>
-In-Reply-To: <20240201045551.ajg4iqcajyowl2rh@google.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 1 Feb 2024 09:08:22 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
-Message-ID: <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
-To: Fangrui Song <maskray@google.com>
-Cc: Dave Martin <Dave.Martin@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	Jisheng Zhang <jszhang@kernel.org>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <202402011558.BUpYBZyG-lkp@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 1 Feb 2024 at 05:55, Fangrui Song <maskray@google.com> wrote:
->
-> On 2024-01-31, Dave Martin wrote:
-> >On Wed, Jan 31, 2024 at 08:16:04AM +0100, Ard Biesheuvel wrote:
-> >> Hello Fangrui,
-> >>
-> >> On Wed, 31 Jan 2024 at 07:53, Fangrui Song <maskray@google.com> wrote:
-> >> >
-> >> > The constraint "i" seems to be copied from x86 (and with a redundant
-> >> > modifier "c"). It works with -fno-PIE but not with -fPIE/-fPIC in GCC's
-> >> > aarch64 port.
-> >
-> >(I'm not sure of the exact history, but the "c" may be inherited from
-> >arm, where an output modifier was needed to suppress the "#" that
-> >prefixes immediates in the traditional asm syntax.  This does not
-> >actually seem to be required for AArch64: rather while a # is allowed
-> >and still considered good style in handwritten asm code, the syntax
-> >doesn't require it, and the compiler doesn't emit it for "i" arguments,
-> >AFAICT.)
->
-> The aarch64 one could be inherited from
-> arch/arm/include/asm/jump_label.h (2012), which could in turn be
-> inherited from x86 (2010).
-> Both the constraint "i" and the modifier "c" are generic..
-> For -fno-pic this combination can be used for every arch.
->
-> >> > The constraint "S", which denotes a symbol reference (e.g. function,
-> >> > global variable) or label reference, is more appropriate, and has been
-> >> > available in GCC since 2012 and in Clang since 7.0.
-> >> >
-> >> > Signed-off-by: Fangrui Song <maskray@google.com>
-> >> > Link: https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
-> >> > ---
-> >> >  arch/arm64/include/asm/jump_label.h | 8 ++++----
-> >> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >> >
-> >> > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
-> >> > index 48ddc0f45d22..31862b3bb33d 100644
-> >> > --- a/arch/arm64/include/asm/jump_label.h
-> >> > +++ b/arch/arm64/include/asm/jump_label.h
-> >> > @@ -23,9 +23,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
-> >> >                  "      .pushsection    __jump_table, \"aw\"    \n\t"
-> >> >                  "      .align          3                       \n\t"
-> >> >                  "      .long           1b - ., %l[l_yes] - .   \n\t"
-> >> > -                "      .quad           %c0 - .                 \n\t"
-> >> > +                "      .quad           %0 - .                  \n\t"
-> >> >                  "      .popsection                             \n\t"
-> >> > -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-> >> > +                :  :  "S"(&((char *)key)[branch]) :  : l_yes);
-> >>
-> >> 'key' is not used as a raw symbol name. We should make this
-> >>
-> >> "    .quad   %0 + %1 - ."
-> >>
-> >> and
-> >>
-> >> ::  "S"(key), "i"(branch) :: l_yes);
-> >>
-> >> if we want to really clean this up.
-> >
-> >This hides more logic in the asm so it's arguably more cryptic
-> >(although the code is fairly cryptic to begin with -- I don't really
-> >see why the argument wasn't written as the equivalent
-> >(char *)key + branch...)
->
-> I agree that using "S" and "i" would introduce complexity.
-> Using just "S" as this patch does should be clear.
->
-> All of "i" "s" "S" support a symbol or label reference and a constant offset (can be zero),
-> (in object file, a symbol and an addend; in GCC's term, the sum of a SYMBOL_REF and a CONST_INT).
->
+I guess I do not really need to reply, but just in case...
 
-Taken the address of a struct, cast it to char[] and then index it
-using a boolean is rather disgusting, no?
-
-> >Anyway, I don't think the "i" versys "S" distinction makes any
-> >difference without -fpic or equivalent, so it is not really relevant
-> >for the kernel (except that "S" breaks compatibility with older
-> >compilers...)
-> >
-> >
-> >I think the main advantage of "S" is that it stops you accidentally
-> >emitting undesirable relocations from asm code that is not written for
-> >the -fpic case.
-> >
-> >But just changing "i" to "S" is not sufficient to port asms to -fpic:
-> >the asms still need to be reviewed.
-> >
-> >
-> >So unless the asm has been reviewed for position-independence, it may
-> >anyway be better to stick with "i" so that the compiler actually chokes
-> >if someone tries to build the code with -fpic.
+On 02/01, kernel test robot wrote:
 >
+> >> kernel/fork.c:2201:70: warning: if statement has empty body [-Wempty-body]
+>     2201 |         if (!pid || !pid_has_task(pid, thread ? PIDTYPE_PID : PIDTYPE_TGID));
+>          |                                                                             ^
+>    kernel/fork.c:2201:70: note: put the semicolon on a separate line to silence this warning
+>    1 warning generated.
 
-The virtual address of the kernel is randomized by KASLR, which relies
-on PIE linking, and this puts constraints on the permitted types of
-relocations.
+Yes, thank you dear Kernel Test Robot, this was already fixed
+by Tycho.
 
-IOW, we basically already build the kernel as PIC code, but without
-relying on -fPIC, because that triggers some behaviors that only make
-sense for shared objects in user space.
+Oleg.
 
-> >Since we are not trying to run arbitraily many running kernels in a
-> >common address space (and not likely to do that), I'm not sure that we
-> >would ever build the kernel with -fpic except for a few special-case
-> >bits like the EFI stub and vDSO... unless I've missed something?
-> >
-
-Yes, KASLR. The number of kernels is not the point, the point is that
-the virtual load address of the kernel is usually decided at boot, and
-so the code needs to be generated to accommodate that.
-
-> >If there's another reason why "S" is advantageous though, I'm happy to
-> >be corrected.
->
-> I remember that Ard has an RFC
-> https://lore.kernel.org/linux-arm-kernel/20220427171241.2426592-1-ardb@kernel.org/
-> "[RFC PATCH 0/2] arm64: use PIE code generation for KASLR kernel"
-> and see some recent PIE codegen patches.
->
-> > Building the KASLR kernel without -fpie but linking it with -pie works
-> > in practice, but it is not something that is explicitly supported by the
-> > toolchains - it happens to work because the default 'small' code model
-> > used by both GCC and Clang relies mostly on ADRP+ADD/LDR to generate
-> > symbol references.
->
-> I agree that current -fno-PIE with -shared -Bsymbolic linking is a hack
-> that works as a conincidence, not guaranteed by the toolchain.
-> This jump_label improvement (with no object file difference) fixes an
-> obstacle.
-
-If we can get the guaranteed behavior of #pragma GCC visibility
-push(hidden) from a command line option, we should build the core
-kernel with -fpie instead. (Modules are partially linked objects, so
-they can be built non-PIC as before)
