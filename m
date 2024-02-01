@@ -1,139 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571D3157E9E;
-	Thu,  1 Feb 2024 07:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA3115A4AC
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 08:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706772255; cv=none; b=b3/86/zecphkAAr5I8hqOVkjxXXGeG14lj288goFhhAIJEbk/bCGqZMPdnMCN8eePMXHu+D5bBiyFHpd7LDtAx+p2Le0Qbr68Y+gT0vjlE2TiTPoqOXZn/Pqa70YIJ730u5OFQKLAdMTbLpL7plARFPu5oCz3T5U41XB9RZ5IfQ=
+	t=1706774916; cv=none; b=S6BituEdn1IP2sgAA7Q6nZnMsvJQY/np7ayPQaPRwaP1lilTAUeRa5toVggsjWHHwxR2gmA6VJH5LxRZdDDk5PGFSZ26Z1zxa5/Im+uDd5Ei7A0Q0qqUwWGfeGXtDaRrDB5ugcFF3jojidX6SJsaqqc6cTnQY5ri3jHdEoo0Qt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706772255; c=relaxed/simple;
-	bh=4MYSNxlWjGVCdX3cX5Nt41TGbFxjWVCbR3U/g9kBrDo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cSlr9fOkZ0Z0z0d5kk/P8VaF6nXovJb8vx5OWs/QRC3JMquQ8OQfz0y2WhPjCUuRkGgn88hKFpOfzoBUA47IPfqdjrv065QvfzEN+zcr29l9QRTilWvMCylp1VDcCgiLvPhysuJo/+FxiDe5u1ciV3wq6dCW1roW+2l2PVW3dTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DJOsA+TP; arc=none smtp.client-ip=134.134.136.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706774916; c=relaxed/simple;
+	bh=80iEY38zsgd9OCT3t544kEkSOZkE0dD85Ix/M+1O2BU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dho0+R5HuZh5nyh4TOTX/FWlKIW0aapHPgTeDU3wDUOpfPwliuxGLc8HHt9ydb6r4kwVbBDjRCkcEAptA1XmZbT/FDuqEfzurJSe/idHtx5CH19v4GfLroWXqAr1WHTN6bXswsjVRkshZ6PsK9uforLtJicV/G6L4SYD6iA7Ihk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZeJcmdHo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DJOsA+TP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706772253; x=1738308253;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4MYSNxlWjGVCdX3cX5Nt41TGbFxjWVCbR3U/g9kBrDo=;
-  b=DJOsA+TPX9LFduO+jnivuJQNdSXDJoIq2ceRVQ7xIBrtcHAsQzcYvVez
-   Y26f7aeHcG/EshblQS5Je0fT388YfzjbXItO6ZQSkgdwfctxjuloow/05
-   gHBMEhege86ngJZJT6Bf/ckUYhZCEw1lFyF6Gs3eB9CE4MmHgaDHvPKsk
-   pxBlGZYjlRCU0cppX3z0CsDXBQmvvCuEqeayOpISS5Dcac6sEKSKU7/zs
-   DokoSswy/hZNsg0T5oVgMGAAj6HM/PVFreldEBKd1EkqbxM2sSfmmt5VN
-   kzGPZiXJPGd93Lh1xAjdBXFYpEbh333WVHznWaQkjM8wHAUUDddmJQskO
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="468065271"
-X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
-   d="scan'208";a="468065271"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 23:24:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
-   d="scan'208";a="4333852"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 31 Jan 2024 23:24:10 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rVRQc-0002WK-1J;
-	Thu, 01 Feb 2024 07:24:06 +0000
-Date: Thu, 1 Feb 2024 15:23:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 1/1] pidfd: implement PIDFD_THREAD flag for
- pidfd_open()
-Message-ID: <202402011558.BUpYBZyG-lkp@intel.com>
-References: <20240131132602.GA23641@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZeJcmdHo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622F6C433A6
+	for <llvm@lists.linux.dev>; Thu,  1 Feb 2024 08:08:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706774916;
+	bh=80iEY38zsgd9OCT3t544kEkSOZkE0dD85Ix/M+1O2BU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZeJcmdHo9o6FpHFw4iLCXq4+J1qdCA/SlP97RJcgVHtkrMRGoloeByjo9vJsM445B
+	 uFCMtVYgiKI0WZtBQFLgHV/qEd6OrzbfYfjv6att+5yiiCXTOTAFn7OSJsLeshYlxO
+	 /mOYEs5LMLMAn9wozoIDIAJalV6rMUdkge+IzZDNDeA0x2TdKunilZ4YTS7OkbDkxh
+	 lmL74u1lPTX1esKFUCqxJkHJKELhdNgwZArMIxMTPuLqcEWK0rLQT1ftcPQEcfbf8x
+	 uie+q7X9bDJJdVdqp7VhUE4sNVHKE4j7dqekD9xkWjrY9keHUXt++Mxgg+udB7u2ZU
+	 UeTJ8UOKQv+XA==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5111c7d40deso982559e87.1
+        for <llvm@lists.linux.dev>; Thu, 01 Feb 2024 00:08:36 -0800 (PST)
+X-Gm-Message-State: AOJu0YwX6SezcaprIndEi1iJxesL66a2CsfdaJRnTsUPDqyp21VZxVAC
+	seGAlONVBPTDlnv1vidM6yMX+1U5ukdEmGsPMkX9xIfxfrAb9uqXmAGMoLn0ACvM2Jobm8SEqBt
+	+OLrp1wZ/bbxJvxBdLmNuIWS6hH0=
+X-Google-Smtp-Source: AGHT+IGhBUKmljKJfZeXj+8Ve9fOqnJzpejDeg1q9FFFeW5EZLsJSwz6ISHgy2V308b0s7VoY/xxGjq3mZIH0xASGJ0=
+X-Received: by 2002:ac2:5329:0:b0:511:f4c:8aa3 with SMTP id
+ f9-20020ac25329000000b005110f4c8aa3mr1219549lfh.7.1706774914479; Thu, 01 Feb
+ 2024 00:08:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240131132602.GA23641@redhat.com>
+References: <20240131065322.1126831-1-maskray@google.com> <CAMj1kXGzADFWa7RmXyjWpCnQ=9hhz6i-XkN4PS1CboZ-kFL8dQ@mail.gmail.com>
+ <ZbpEnDK3U/O24ng0@e133380.arm.com> <20240201045551.ajg4iqcajyowl2rh@google.com>
+In-Reply-To: <20240201045551.ajg4iqcajyowl2rh@google.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 1 Feb 2024 09:08:22 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
+Message-ID: <CAMj1kXEBjumu3VUySg1cQ+SYm4MugJ5f6pd1f7C0XrLyOWAoOw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: jump_label: use constraint "S" instead of "i"
+To: Fangrui Song <maskray@google.com>
+Cc: Dave Martin <Dave.Martin@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	Jisheng Zhang <jszhang@kernel.org>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Oleg,
+On Thu, 1 Feb 2024 at 05:55, Fangrui Song <maskray@google.com> wrote:
+>
+> On 2024-01-31, Dave Martin wrote:
+> >On Wed, Jan 31, 2024 at 08:16:04AM +0100, Ard Biesheuvel wrote:
+> >> Hello Fangrui,
+> >>
+> >> On Wed, 31 Jan 2024 at 07:53, Fangrui Song <maskray@google.com> wrote:
+> >> >
+> >> > The constraint "i" seems to be copied from x86 (and with a redundant
+> >> > modifier "c"). It works with -fno-PIE but not with -fPIE/-fPIC in GCC's
+> >> > aarch64 port.
+> >
+> >(I'm not sure of the exact history, but the "c" may be inherited from
+> >arm, where an output modifier was needed to suppress the "#" that
+> >prefixes immediates in the traditional asm syntax.  This does not
+> >actually seem to be required for AArch64: rather while a # is allowed
+> >and still considered good style in handwritten asm code, the syntax
+> >doesn't require it, and the compiler doesn't emit it for "i" arguments,
+> >AFAICT.)
+>
+> The aarch64 one could be inherited from
+> arch/arm/include/asm/jump_label.h (2012), which could in turn be
+> inherited from x86 (2010).
+> Both the constraint "i" and the modifier "c" are generic..
+> For -fno-pic this combination can be used for every arch.
+>
+> >> > The constraint "S", which denotes a symbol reference (e.g. function,
+> >> > global variable) or label reference, is more appropriate, and has been
+> >> > available in GCC since 2012 and in Clang since 7.0.
+> >> >
+> >> > Signed-off-by: Fangrui Song <maskray@google.com>
+> >> > Link: https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly
+> >> > ---
+> >> >  arch/arm64/include/asm/jump_label.h | 8 ++++----
+> >> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> >> >
+> >> > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+> >> > index 48ddc0f45d22..31862b3bb33d 100644
+> >> > --- a/arch/arm64/include/asm/jump_label.h
+> >> > +++ b/arch/arm64/include/asm/jump_label.h
+> >> > @@ -23,9 +23,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+> >> >                  "      .pushsection    __jump_table, \"aw\"    \n\t"
+> >> >                  "      .align          3                       \n\t"
+> >> >                  "      .long           1b - ., %l[l_yes] - .   \n\t"
+> >> > -                "      .quad           %c0 - .                 \n\t"
+> >> > +                "      .quad           %0 - .                  \n\t"
+> >> >                  "      .popsection                             \n\t"
+> >> > -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> >> > +                :  :  "S"(&((char *)key)[branch]) :  : l_yes);
+> >>
+> >> 'key' is not used as a raw symbol name. We should make this
+> >>
+> >> "    .quad   %0 + %1 - ."
+> >>
+> >> and
+> >>
+> >> ::  "S"(key), "i"(branch) :: l_yes);
+> >>
+> >> if we want to really clean this up.
+> >
+> >This hides more logic in the asm so it's arguably more cryptic
+> >(although the code is fairly cryptic to begin with -- I don't really
+> >see why the argument wasn't written as the equivalent
+> >(char *)key + branch...)
+>
+> I agree that using "S" and "i" would introduce complexity.
+> Using just "S" as this patch does should be clear.
+>
+> All of "i" "s" "S" support a symbol or label reference and a constant offset (can be zero),
+> (in object file, a symbol and an addend; in GCC's term, the sum of a SYMBOL_REF and a CONST_INT).
+>
 
-kernel test robot noticed the following build warnings:
+Taken the address of a struct, cast it to char[] and then index it
+using a boolean is rather disgusting, no?
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[cannot apply to kees/for-next/execve linus/master v6.8-rc2 next-20240201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >Anyway, I don't think the "i" versys "S" distinction makes any
+> >difference without -fpic or equivalent, so it is not really relevant
+> >for the kernel (except that "S" breaks compatibility with older
+> >compilers...)
+> >
+> >
+> >I think the main advantage of "S" is that it stops you accidentally
+> >emitting undesirable relocations from asm code that is not written for
+> >the -fpic case.
+> >
+> >But just changing "i" to "S" is not sufficient to port asms to -fpic:
+> >the asms still need to be reviewed.
+> >
+> >
+> >So unless the asm has been reviewed for position-independence, it may
+> >anyway be better to stick with "i" so that the compiler actually chokes
+> >if someone tries to build the code with -fpic.
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleg-Nesterov/pidfd-implement-PIDFD_THREAD-flag-for-pidfd_open/20240131-213408
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20240131132602.GA23641%40redhat.com
-patch subject: [PATCH v3 1/1] pidfd: implement PIDFD_THREAD flag for pidfd_open()
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240201/202402011558.BUpYBZyG-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240201/202402011558.BUpYBZyG-lkp@intel.com/reproduce)
+The virtual address of the kernel is randomized by KASLR, which relies
+on PIE linking, and this puts constraints on the permitted types of
+relocations.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402011558.BUpYBZyG-lkp@intel.com/
+IOW, we basically already build the kernel as PIC code, but without
+relying on -fPIC, because that triggers some behaviors that only make
+sense for shared objects in user space.
 
-All warnings (new ones prefixed by >>):
+> >Since we are not trying to run arbitraily many running kernels in a
+> >common address space (and not likely to do that), I'm not sure that we
+> >would ever build the kernel with -fpic except for a few special-case
+> >bits like the EFI stub and vDSO... unless I've missed something?
+> >
 
->> kernel/fork.c:2201:70: warning: if statement has empty body [-Wempty-body]
-    2201 |         if (!pid || !pid_has_task(pid, thread ? PIDTYPE_PID : PIDTYPE_TGID));
-         |                                                                             ^
-   kernel/fork.c:2201:70: note: put the semicolon on a separate line to silence this warning
-   1 warning generated.
+Yes, KASLR. The number of kernels is not the point, the point is that
+the virtual load address of the kernel is usually decided at boot, and
+so the code needs to be generated to accommodate that.
 
+> >If there's another reason why "S" is advantageous though, I'm happy to
+> >be corrected.
+>
+> I remember that Ard has an RFC
+> https://lore.kernel.org/linux-arm-kernel/20220427171241.2426592-1-ardb@kernel.org/
+> "[RFC PATCH 0/2] arm64: use PIE code generation for KASLR kernel"
+> and see some recent PIE codegen patches.
+>
+> > Building the KASLR kernel without -fpie but linking it with -pie works
+> > in practice, but it is not something that is explicitly supported by the
+> > toolchains - it happens to work because the default 'small' code model
+> > used by both GCC and Clang relies mostly on ADRP+ADD/LDR to generate
+> > symbol references.
+>
+> I agree that current -fno-PIE with -shared -Bsymbolic linking is a hack
+> that works as a conincidence, not guaranteed by the toolchain.
+> This jump_label improvement (with no object file difference) fixes an
+> obstacle.
 
-vim +2201 kernel/fork.c
-
-  2169	
-  2170	/**
-  2171	 * pidfd_prepare - allocate a new pidfd_file and reserve a pidfd
-  2172	 * @pid:   the struct pid for which to create a pidfd
-  2173	 * @flags: flags of the new @pidfd
-  2174	 * @ret: Where to return the pidfd.
-  2175	 *
-  2176	 * Allocate a new file that stashes @pid and reserve a new pidfd number in the
-  2177	 * caller's file descriptor table. The pidfd is reserved but not installed yet.
-  2178	 *
-  2179	 * The helper verifies that @pid is still in use, without PIDFD_THREAD the
-  2180	 * task identified by @pid must be a thread-group leader.
-  2181	 *
-  2182	 * If this function returns successfully the caller is responsible to either
-  2183	 * call fd_install() passing the returned pidfd and pidfd file as arguments in
-  2184	 * order to install the pidfd into its file descriptor table or they must use
-  2185	 * put_unused_fd() and fput() on the returned pidfd and pidfd file
-  2186	 * respectively.
-  2187	 *
-  2188	 * This function is useful when a pidfd must already be reserved but there
-  2189	 * might still be points of failure afterwards and the caller wants to ensure
-  2190	 * that no pidfd is leaked into its file descriptor table.
-  2191	 *
-  2192	 * Return: On success, a reserved pidfd is returned from the function and a new
-  2193	 *         pidfd file is returned in the last argument to the function. On
-  2194	 *         error, a negative error code is returned from the function and the
-  2195	 *         last argument remains unchanged.
-  2196	 */
-  2197	int pidfd_prepare(struct pid *pid, unsigned int flags, struct file **ret)
-  2198	{
-  2199		bool thread = flags & PIDFD_THREAD;
-  2200	
-> 2201		if (!pid || !pid_has_task(pid, thread ? PIDTYPE_PID : PIDTYPE_TGID));
-  2202			return -EINVAL;
-  2203	
-  2204		return __pidfd_prepare(pid, flags, ret);
-  2205	}
-  2206	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If we can get the guaranteed behavior of #pragma GCC visibility
+push(hidden) from a command line option, we should build the core
+kernel with -fpie instead. (Modules are partially linked objects, so
+they can be built non-PIC as before)
