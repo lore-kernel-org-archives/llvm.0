@@ -1,143 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9691474D1;
-	Fri,  2 Feb 2024 18:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2727214C59A
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 18:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706896956; cv=none; b=Iv0gPqVvt4u+Nki8ohDtp3yDKXpOKAihc+ZXtKoKw2x7OlLdrcRO5mKr+tSTAtl9MpoZeUOHAC5JWAVBewImcdD+vJuNFQklrPbJ0lL4GUrk+JF0y6mI+SvBENP0y9+jeIZi3/WHnDaW3T0wHIjKlW+GjOZwAnNh88Exf55EiWE=
+	t=1706897454; cv=none; b=RWU5SaVN5Zd+Vo0qaciIy/e5nJbiDPGbH7tool59orgDXZbDaVHcKjq6AJvvLnZNmrOVilc+a6FcTrSNfYr/QYKiAxu3wChJeFm7Nu/OEaC/Dny9o4lSV6dvy7N5YY4XMnbAVZGC+GmOxpO85uz72ugiDxeYojMWcP1McpfmAZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706896956; c=relaxed/simple;
-	bh=AObZK8lt0kI8yyuwv9Pg9H4m9ru+FQwHPMzYJIqRXqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N+eI9RSgXZ6IDJ48YN2aGSueOoaeB+jbEFptcvSERmRFrLoQQAFPyMQg2YVVSn9WPKY9zwB1d71MCDMqpdw3DQS3iwUOZHUOZbg/wlG7kwdC1Au8dIRfCexuEEr673xAh/86kCS+9AUmoxNqtQHzYVzsNePBEaV0yZvVkbYofh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nw+0bw6t; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706897454; c=relaxed/simple;
+	bh=Bz5RLrDSI2lz3eGrZ1BaBArmjYUlb+b6xEsdTMAn6jo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OzkjeNTo0OtgFrmcUm/L4B97s3C/Yxzp8GNnbBuKAJrbbZpXfId0aFVXtTNyKaOoxR5X9vNH9yN8d+UBEnNZjw9ItdZ+J8wQ7upquYKkOOQiOtASlRRebpZ5yHomW6WIu8nl7QLWl5rTpeQAd1K/ev0a+wL1wCGVqzmX9uDLXtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dN3di2NV; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nw+0bw6t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706896955; x=1738432955;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AObZK8lt0kI8yyuwv9Pg9H4m9ru+FQwHPMzYJIqRXqk=;
-  b=nw+0bw6tgqqQ3FEpkmwBt7Bm8TC0of0iNxxnT5Ecf99jGe1y4UL3gcp0
-   iXeHhoW528XOBpvBAKpvfO8eEHn2tol3P6jwOW7ZRVZcHojlSut1xGuUM
-   37fpTLp1NNZ97JosC/rnApLTpItzMIaOWTKahhnhRV+05YBff94SzqU8C
-   7sYnUm/QO1WHikQiLvXwq6awdIOceVe4YMFpbbfmXQyI9PiEmmH7GrR7O
-   Pw7Uo4t17JVG3TJ3iKG1h3h2bz7+ug5XbEOxn+Zr+4CX1X6IrJBF21GuI
-   p7/OBK9by8CP+QUT6PpOnNh/IGIxoqmwRPZRERf1jWh1Tx3Bew5lVytz4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="434428"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="434428"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 10:02:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="23410586"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Feb 2024 10:02:29 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rVxru-00048M-2Q;
-	Fri, 02 Feb 2024 18:02:26 +0000
-Date: Sat, 3 Feb 2024 02:02:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Guru Das Srinagesh <quic_gurus@quicinc.com>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Alex Elder <elder@linaro.org>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kernel@quicinc.com,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Deepti Jaggi <quic_djaggi@quicinc.com>
-Subject: Re: [RESEND PATCH v6 02/12] firmware: qcom: scm: enable the TZ mem
- allocator
-Message-ID: <202402030101.nxmgLcAB-lkp@intel.com>
-References: <20240122102157.22761-3-brgl@bgdev.pl>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dN3di2NV"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6041012c81fso24713347b3.0
+        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 10:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706897451; x=1707502251; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9UGts6nGQS3RkEfXeXcR2v8wnlBQKwVVYdgj9qNjJg=;
+        b=dN3di2NVGHyAoqnHmqb7hX0a23gbO9uMIS40iMe/s6FMjnPn93fCXN2tAumE5IUjsc
+         Tc4IYPiymqYGaAVONVdzjQxIGhp9phL2n1Wy/0/B1SmWvPyYK3apvKJlg1BtWb9k++6a
+         FMInjwmyzqy2nme0bsYFM8rvhZ0y1JnQVbDBzLDwy/yYXbZm4gq2G8FO+fyE9fq71ST5
+         gruHAbk3SDJCoOc13X/FdSJaZTMnEgCNScc0l3WuK9K9rm+8WF1bL4m/2ZZqygYn840z
+         nrVc65H8Yg0A0K3tye7YC/YjG0CxF6V4NsciEWeQDh46NGgEmFLQ0JhrsBWTuO11/8ub
+         pTAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706897451; x=1707502251;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T9UGts6nGQS3RkEfXeXcR2v8wnlBQKwVVYdgj9qNjJg=;
+        b=vOARX2a1UjAfzfZ4eTb3pQMZI5hzG2hVckWW8UvubQpeOjgXcM11ZWkBUQ6sKBYayv
+         z13gjnPFHCdMI8onZzpjMx9W5FK7AzggvZjfZDMV81Oky9vYzqPLHygGckvs172uHDqv
+         kkEWN/SwBEWmSIGVn5RQduD+hkse9b+8bug5bO+u1L/0bPWHhtuFCMLilFoNeDBp2JnY
+         gAJurXQSqA3ONoPL7bQTV4HOyYIHcLzIXXMz8+FAUgsLtJN99pxnpF5+vJHI/VbOe0mg
+         ozmoUo3RdGeDkZmqcSSos6+T2afaqgjev0FJjTGYxmJePPxD3OQgVCjTXnC7KyW5kRZB
+         GnSA==
+X-Gm-Message-State: AOJu0YzBKz37bcltXTsFcBIbcvfx72urqTxW8t4Ssd1/hL7Iyc7YUJRD
+	Ylv89QxlD22oHGdAsGmG12MyrdIRxoVRK6PVh1cRzpcHJK/Bc2TKIJjbC4RvQdboI/XvCUNfZNT
+	ELQ2GSEAdbXjxXH+HhTPmC0bJMordzPZ9u6Kv3g==
+X-Google-Smtp-Source: AGHT+IEaGvHddmuizMRHJVxE6vTh6Fz0RMNu2HTzUn5QTT2/OptTAJOP+s9PzIaIo7n/qn5MsZwbga2DCIchY7JwDtA=
+X-Received: by 2002:a81:b613:0:b0:604:ea3:6525 with SMTP id
+ u19-20020a81b613000000b006040ea36525mr6745858ywh.0.1706897449670; Fri, 02 Feb
+ 2024 10:10:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240122102157.22761-3-brgl@bgdev.pl>
+References: <20240122102157.22761-3-brgl@bgdev.pl> <202402030101.nxmgLcAB-lkp@intel.com>
+In-Reply-To: <202402030101.nxmgLcAB-lkp@intel.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date: Fri, 2 Feb 2024 19:10:38 +0100
+Message-ID: <CACMJSetk29BXrb2ywuWPCsvkDn9k6+0gTbcxmZBUyJteJG2=hA@mail.gmail.com>
+Subject: Re: [RESEND PATCH v6 02/12] firmware: qcom: scm: enable the TZ mem allocator
+To: kernel test robot <lkp@intel.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Andy Gross <agross@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Elliot Berman <quic_eberman@quicinc.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Guru Das Srinagesh <quic_gurus@quicinc.com>, Andrew Halaney <ahalaney@redhat.com>, 
+	Maximilian Luz <luzmaximilian@gmail.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kernel@quicinc.com, Deepti Jaggi <quic_djaggi@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Bartosz,
+On Fri, 2 Feb 2024 at 19:02, kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Bartosz,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on krzk-dt/for-next v6.8-rc2 next-20240202]
+> [cannot apply to arm64/for-next/core]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/firmware-qcom-add-a-dedicated-TrustZone-buffer-allocator/20240122-182633
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20240122102157.22761-3-brgl%40bgdev.pl
+> patch subject: [RESEND PATCH v6 02/12] firmware: qcom: scm: enable the TZ mem allocator
+> config: i386-buildonly-randconfig-004-20240202 (https://download.01.org/0day-ci/archive/20240203/202402030101.nxmgLcAB-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402030101.nxmgLcAB-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202402030101.nxmgLcAB-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: undefined symbol: gen_pool_create
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: gen_pool_best_fit
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: gen_pool_set_algo
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: gen_pool_add_owner
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: gen_pool_destroy
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_free) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: gen_pool_alloc_algo_owner
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_alloc) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: gen_pool_virt_to_phys
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_alloc) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: gen_pool_free_owner
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_alloc) in archive vmlinux.a
+>    >>> referenced by qcom_tzmem.c
+>    >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_free) in archive vmlinux.a
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-kernel test robot noticed the following build errors:
+Huh, strange that it took so long to report it. Seems like QCOM_TZMEM
+needs to select GENERIC_ALLOCATOR in Kconfig.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on krzk-dt/for-next v6.8-rc2 next-20240202]
-[cannot apply to arm64/for-next/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/firmware-qcom-add-a-dedicated-TrustZone-buffer-allocator/20240122-182633
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240122102157.22761-3-brgl%40bgdev.pl
-patch subject: [RESEND PATCH v6 02/12] firmware: qcom: scm: enable the TZ mem allocator
-config: i386-buildonly-randconfig-004-20240202 (https://download.01.org/0day-ci/archive/20240203/202402030101.nxmgLcAB-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402030101.nxmgLcAB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402030101.nxmgLcAB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: gen_pool_create
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: gen_pool_best_fit
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: gen_pool_set_algo
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: gen_pool_add_owner
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: gen_pool_destroy
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_new) in archive vmlinux.a
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_pool_free) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: gen_pool_alloc_algo_owner
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_alloc) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: gen_pool_virt_to_phys
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_alloc) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: gen_pool_free_owner
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_alloc) in archive vmlinux.a
-   >>> referenced by qcom_tzmem.c
-   >>>               drivers/firmware/qcom/qcom_tzmem.o:(qcom_tzmem_free) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bart
