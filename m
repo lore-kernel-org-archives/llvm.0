@@ -1,223 +1,179 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526091487DB
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4D11487E1
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706891742; cv=none; b=V2FtPteNM0Ai10jRzC3HfKcXUHhhgMxBVPoJXAOYqjM+ePhBA/VEco0EZS8OCaqxnLHFrKpdxMCXFILqlfNZ5GV2lNacBuQEsQlsfK+vGNhCVCAdlwmgMbgliPElCe1FCnVVmWyyQY1Z9iC2ZBB+ZXKg34NgKvLsUdYawrM+K0U=
+	t=1706892049; cv=none; b=Lf0Sb7Fr2H2YIdFb7v1gHDcgL4cpy0dhdBJyFqNNgEWwA3OLOHrx1hHBFXDNP/byJaSNDeUAPbXEgPvb/7meWmRS1rBAbLfnbXINx5Twbf11M7aZ1hkpcdP2XcAbH3Tuq7ZtJrvNuMVcvYy6lTa1Sioo+MKS+0xP/E36327OY48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706891742; c=relaxed/simple;
-	bh=jfP5FzF2iADTs+nsumSsf+1ytpdI2PwVjp67EKLfiAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O/Lp5i/fXROm7a+L2+R5qXrT1U6MhaQpnQfjH+qHRTIwOPOTrNoN8mpHGKsHL8shRIfoiHVp1urCfX3PGMB/huvwsXP9kA6CJr6U1dx3JRosWS3rzKVR583OfpGf2AQOD3lE3r16RmG1JdJbBtVlemDPYnkMRe+DhOvVDZZDsKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DjWjJhKY; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1706892049; c=relaxed/simple;
+	bh=DHsmlNxgzOJNFe5pYYVBHiQpl2ilF64dvkPLh47B5x4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RB4UMfI1hIo9AxpPUs7D6ToQHQ8qj1favfxQfUYONjYQY55YQp6XoWqfx5F2kWZp/kxQLtw/QoRHjGKg7BqNipviQ5avkg87QUUpZ1bXDnr9yTVCL2z0Dtkt4zhm6Y/6jcZTEsM0Nci85PZP0DZcSSSW/koa4fWiLChwSyHGIeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IRYn6AXN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DjWjJhKY"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D347240E01A2;
-	Fri,  2 Feb 2024 16:35:37 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id BDgLq2vi6VrF; Fri,  2 Feb 2024 16:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706891735; bh=owu4C5rP9Sd62pQo+ZZmYYXOi0xhUhCRq+QLaeQVQpk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DjWjJhKYuKNK0B335q79y2JbDvwkbghSEGXDReaL7Cg1RJtRKkXofVtq1nTBVZYFi
-	 NowRJnt6AZzjVGdQXfyoK3lTxR79KCU89p043iQp2G6OSDb5f1nfaTLW3z2H4RgZq2
-	 y9lrlWDxtzk8HVUP2YJ9wG0mhbKPb+0G0s0Mefn2qTxGLwkmbmyJYZfu0PoqABvXpt
-	 /8GfEiQDhzYMT695rw8G95eurTWucDepUJF1M6nIOMR4W4qp9eeZEj7Va1k5/hCl0b
-	 8Aq8IR9bgZjtCvxYrvcNFiUklU/dLr8+1+R48++a/I9ah0Ias/yQ3L5qKvu4CM28jG
-	 182l15VndVVs5pW2EmKozZh9+FWxpmJDtqdlidMwHmvrV+z19zjgp0aVcmqvsLjlQj
-	 EO1sEM9Ows2Mhs8BSraRTv6JfSrcqrtdn8mJDXFMY+vGq4ItmzIZhahm4T03KYvvgK
-	 tqoXR4Mxzz7of/FQGvXn3zaUDaPYWQQYkOReLU9tzWhw+0mIL1lbncx7JXbH0sXmay
-	 xwFfgNHMV0dBmFIWezmZLwFZNyhbY0XfGmjIhvbeyIl0H65UvzF8a+B6ElLl4M74yN
-	 Ee25ps5Kn2cvhQB2MRfVMeC9wlh9tvPRDKSGSZtUexgk9Vr8SgQd6whdz5pyTzBBBc
-	 jg42PO4t4LFSICDfcWKeKE14=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IRYn6AXN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706892035;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hqZ+d5jXLWzVGcw8rrbt8pIzXFFlMo3njkOvU5fa3r4=;
+	b=IRYn6AXNtai0Qq0iUwRT270TH9cKGIxiyNNb0Vc+LyIlT3N992TICVU4rHP9lhCpqnXFVD
+	7E+NU1bU4tIpyEZwLkEuMQdQ6c9hG0t+hTbMFKYSJJMwz2O5x9ydtJoZe8yiOGhUccnpsa
+	5CcwDuuxoq5LcXIJTjOrO9ce+tnkVZY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-356-M5hng8Z5MiWvUo5grkPCmw-1; Fri, 02 Feb 2024 11:40:34 -0500
+X-MC-Unique: M5hng8Z5MiWvUo5grkPCmw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D894040E016C;
-	Fri,  2 Feb 2024 16:35:16 +0000 (UTC)
-Date: Fri, 2 Feb 2024 17:35:10 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>,
-	Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] x86/Kconfig: Remove CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
-Message-ID: <20240202163510.GDZb0Zvj8qOndvFOiZ@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-23-ardb+git@google.com>
- <20240131083511.GIZboGP8jPIrUZA8DF@fat_crate.local>
- <CAMj1kXG9W0XeEVR4tXDDg0Ai9XPsZGrTJaSRYUqgTV-xtFxjdQ@mail.gmail.com>
- <20240131092952.GCZboTECip8DbWtYtz@fat_crate.local>
- <8b38ef82-ec2b-4845-9732-15713a0e2a85@amd.com>
- <CAMj1kXH4U7X3_xgwhYUgbWqVfnzL5Dx0QaUhb_5TpZGQEh=_8g@mail.gmail.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC13E85A58B
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:40:33 +0000 (UTC)
+Received: from [172.64.10.24] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CAA7A2166B31;
+	Fri,  2 Feb 2024 16:40:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 226): Test report for master
+ (6.8.0-rc2, mainline.kernel.org-clang, 5c24e4e9)
+Date: Fri, 02 Feb 2024 16:40:33 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXH4U7X3_xgwhYUgbWqVfnzL5Dx0QaUhb_5TpZGQEh=_8g@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Message-Id: <41478.124020211403400611@us-mta-356.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 01, 2024 at 05:15:51PM +0100, Ard Biesheuvel wrote:
-> OK, I'll remove it in the next rev.
+Hi, we tested your kernel and here are the results:
 
-Considering how it simplifies sme_enable() even more, I'd like to
-expedite this one.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Thx.
+Tested-by: CKI Project <cki-project@redhat.com>
 
----
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
-Date: Fri, 2 Feb 2024 17:29:32 +0100
-Subject: [PATCH] x86/Kconfig: Remove CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
+Kernel information:
+    Commit message: Merge tag 'hid-for-linus-2024020101' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/hid/hid
 
-It was meant well at the time but nothing's using it so get rid of it.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/126996
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- Documentation/admin-guide/kernel-parameters.txt  |  4 +---
- Documentation/arch/x86/amd-memory-encryption.rst | 16 ++++++++--------
- arch/x86/Kconfig                                 | 13 -------------
- arch/x86/mm/mem_encrypt_identity.c               | 11 +----------
- 4 files changed, 10 insertions(+), 34 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 31b3a25680d0..2cb70a384af8 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3320,9 +3320,7 @@
- 
- 	mem_encrypt=	[X86-64] AMD Secure Memory Encryption (SME) control
- 			Valid arguments: on, off
--			Default (depends on kernel configuration option):
--			  on  (CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT=y)
--			  off (CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT=n)
-+			Default: off
- 			mem_encrypt=on:		Activate SME
- 			mem_encrypt=off:	Do not activate SME
- 
-diff --git a/Documentation/arch/x86/amd-memory-encryption.rst b/Documentation/arch/x86/amd-memory-encryption.rst
-index 07caa8fff852..414bc7402ae7 100644
---- a/Documentation/arch/x86/amd-memory-encryption.rst
-+++ b/Documentation/arch/x86/amd-memory-encryption.rst
-@@ -87,14 +87,14 @@ The state of SME in the Linux kernel can be documented as follows:
- 	  kernel is non-zero).
- 
- SME can also be enabled and activated in the BIOS. If SME is enabled and
--activated in the BIOS, then all memory accesses will be encrypted and it will
--not be necessary to activate the Linux memory encryption support.  If the BIOS
--merely enables SME (sets bit 23 of the MSR_AMD64_SYSCFG), then Linux can activate
--memory encryption by default (CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT=y) or
--by supplying mem_encrypt=on on the kernel command line.  However, if BIOS does
--not enable SME, then Linux will not be able to activate memory encryption, even
--if configured to do so by default or the mem_encrypt=on command line parameter
--is specified.
-+activated in the BIOS, then all memory accesses will be encrypted and it
-+will not be necessary to activate the Linux memory encryption support.
-+
-+If the BIOS merely enables SME (sets bit 23 of the MSR_AMD64_SYSCFG),
-+then memory encryption can be enabled by supplying mem_encrypt=on on the
-+kernel command line.  However, if BIOS does not enable SME, then Linux
-+will not be able to activate memory encryption, even if configured to do
-+so by default or the mem_encrypt=on command line parameter is specified.
- 
- Secure Nested Paging (SNP)
- ==========================
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 5edec175b9bf..58d3593bc4f2 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1539,19 +1539,6 @@ config AMD_MEM_ENCRYPT
- 	  This requires an AMD processor that supports Secure Memory
- 	  Encryption (SME).
- 
--config AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
--	bool "Activate AMD Secure Memory Encryption (SME) by default"
--	depends on AMD_MEM_ENCRYPT
--	help
--	  Say yes to have system memory encrypted by default if running on
--	  an AMD processor that supports Secure Memory Encryption (SME).
--
--	  If set to Y, then the encryption of system memory can be
--	  deactivated with the mem_encrypt=off command line option.
--
--	  If set to N, then the encryption of system memory can be
--	  activated with the mem_encrypt=on command line option.
--
- # Common NUMA Features
- config NUMA
- 	bool "NUMA Memory Allocation and Scheduler Support"
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index 7f72472a34d6..efe9f217fcf9 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -97,7 +97,6 @@ static char sme_workarea[2 * PMD_SIZE] __section(".init.scratch");
- 
- static char sme_cmdline_arg[] __initdata = "mem_encrypt";
- static char sme_cmdline_on[]  __initdata = "on";
--static char sme_cmdline_off[] __initdata = "off";
- 
- static void __init sme_clear_pgd(struct sme_populate_pgd_data *ppd)
- {
-@@ -504,7 +503,7 @@ void __init sme_encrypt_kernel(struct boot_params *bp)
- 
- void __init sme_enable(struct boot_params *bp)
- {
--	const char *cmdline_ptr, *cmdline_arg, *cmdline_on, *cmdline_off;
-+	const char *cmdline_ptr, *cmdline_arg, *cmdline_on;
- 	unsigned int eax, ebx, ecx, edx;
- 	unsigned long feature_mask;
- 	unsigned long me_mask;
-@@ -587,12 +586,6 @@ void __init sme_enable(struct boot_params *bp)
- 	asm ("lea sme_cmdline_on(%%rip), %0"
- 	     : "=r" (cmdline_on)
- 	     : "p" (sme_cmdline_on));
--	asm ("lea sme_cmdline_off(%%rip), %0"
--	     : "=r" (cmdline_off)
--	     : "p" (sme_cmdline_off));
--
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT))
--		sme_me_mask = me_mask;
- 
- 	cmdline_ptr = (const char *)((u64)bp->hdr.cmd_line_ptr |
- 				     ((u64)bp->ext_cmd_line_ptr << 32));
-@@ -602,8 +595,6 @@ void __init sme_enable(struct boot_params *bp)
- 
- 	if (!strncmp(buffer, cmdline_on, sizeof(buffer)))
- 		sme_me_mask = me_mask;
--	else if (!strncmp(buffer, cmdline_off, sizeof(buffer)))
--		sme_me_mask = 0;
- 
- out:
- 	if (sme_me_mask) {
--- 
-2.43.0
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [Rawhide] nvme-cli: hostid/hostnqn warnings to verbose level
+            URL: https://github.com/linux-nvme/nvme-cli/commit/252929069d6c=
+9042e9c95f41788006cb3eb2f452
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
--- 
-Regards/Gruss,
-    Boris.
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 - xfstests - cifsv3.11
+      x86_64 - Reboot test
+      x86_64 (debug) - Memory function: memfd_create
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
