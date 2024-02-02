@@ -1,163 +1,391 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F007C09A
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 09:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D017A70F
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 10:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706865972; cv=none; b=GYfqpcYCfOEFZoPj75Fm9bQhwN4yJ9yjRZoT2FOGL5uyMVzXPhkPA+uo5737/UGzUy1it+bs3AOrWiMquFk1v2+PSjueL/9L4pET2muMO8jc+yqUojEWg+EeEeIpLtIb6BnT1cxFwJCvzJ6gvHRHj989gD+83Pvh9UJWz5d/4qE=
+	t=1706869006; cv=none; b=OT9eYR/Rh9uBcgCLCc/B5oHOxU0gOnQKle0cy/JgrLSZnOlr5cb/s15WMKZZ/qlWqEbKzizOHmE4WvKlI0xQ6yRGzhQ1MUjG3lV8Wk8YLYj2+MgffpxxcGN6P9bBOZqJ4DZqr06SFmwaza1S3ZDXFywbuwApk8Fdb+va45naPaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706865972; c=relaxed/simple;
-	bh=r1KSDdshTOdl1eD90GEdgP1GIyuWH5dotuZGtVETZPw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d0WReLOkjfRuTzeAerrgLK8ZgK4z80JFZ8uZ3vh/GprO+pkmG4WuJzX1rcHNL565s6HIEjQYfyeaDKq8iAT4Rxg94+zJfLTL1NNzZhgB0dB1PkExT9ZJil5xs4odsciBkY8UFiDDknQ5Lw3tiGtmqC5mUTNh2TC14wUYC2nyKmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hnZL0d3v; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1706869006; c=relaxed/simple;
+	bh=81LcZge0w4D9Z3eA6B+rApaqgdau7DNMJpUzowyrc8U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hncJlWiLSDbPVAiww/Ue+jXhAmybOU3KdicMWXxR7owui96Z467mJpEYwhECRI946hREjS7nNB1xokTuPyhdqrltfayzZNvypfxuGhUiNBZmpoghZKgl9ng6/RvopSThCe8JGk45UE6HYIrY0yas/RpTfIeo6AobUdh7Sutol4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EiVWxVfj; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hnZL0d3v"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d7354ba334so15979875ad.1
-        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 01:26:10 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EiVWxVfj"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso1729832a12.3
+        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 02:16:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706865970; x=1707470770; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lv2NKH9WWB74jvhBNElogS2Uwp+4e3LBP2aAu2jyOBc=;
-        b=hnZL0d3vjfKTpzrwi0veKG/nUFf4KgRJjRkTqti2nsb5wZkKLzl0xoVGKCnPxiQn2E
-         l3KPXg+cYCzKHckYoIw9/5dT6vM3TluelchTbhCViMHJHE2xt5Ur0BtHub92Og9xS71y
-         ZzfqiU6eeWqfYyoMjftD+gy5vjXtV9YZJQGKA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706865970; x=1707470770;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1706869003; x=1707473803; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Lv2NKH9WWB74jvhBNElogS2Uwp+4e3LBP2aAu2jyOBc=;
-        b=mYBa97SwOTx0JUnHNZCVagTf7FSXMzovazXzZoLpRqo7oog0mm3pvVuq4p2w7BJfjX
-         y8HbaYV4AWJYp6cNtWqdCDK3sueHRP6B5TJCchFG8EHMj4xbNA3pjJoZAn+dO1C399vS
-         WCF8t3S8rybqcX6nZ3+l+4/NkmhbjebmdguEaYFgcdHbsf8qv8RAr/8OZPXMDZ7QgIN3
-         J9qhARb5gIXSLF3ZJSC3UsBGP2RdAAQxDG+RlEfCxr/NMh8wicJu004cPQKFMZ1Np2OG
-         pKWn4lycn7k9/QgMvdEob4wE8OX7c6/x4b5BF7PRGloSdtEqHZcQPWi8La7UMQowFRBX
-         sy/Q==
-X-Gm-Message-State: AOJu0YzNH2qz4Mw8HSn+aKxP2SNTo0HiKb9n6u1HEWaD3KoD2n0qggOq
-	r1eHqYbsJUTJx+bZvxK6mH2mrMAqe+Wsvk9zWQsgqDF7S3YhwAAR+nCQ2eW2Ow==
-X-Google-Smtp-Source: AGHT+IFVXwt3ZODto1D6uO78oFjr3U556S4oIO8F6WGJXjqUqMx9HKzgXSKcznjwitA2R8bviSg61Q==
-X-Received: by 2002:a05:6a21:2c82:b0:19c:9d4d:7d7 with SMTP id ua2-20020a056a212c8200b0019c9d4d07d7mr6590870pzb.41.1706865970497;
-        Fri, 02 Feb 2024 01:26:10 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUlcw3+jmJncLOKzKlDlKSkf2ZjgJtgJGOC6FlRhNPhCDEe66sr6BxngOa4HC33wqxuh7mE+IJLP3MzYEsY30WoPHLK+jYHPtb15IcNR79Mk8UQnW/N4kc9DVrfxHSxMKktDwocU9ZBml81w4EFV3Wf1zFWnVclBXHDqDogvyS6Qcdt27Yf+IEZ27WTYj2nPUjEbBCVzE2+y6TpV32SvGjcakPZQVKZSxISv7zZTSQVIWXKx8SNFabr9j5ye+/i95QcRGRpWjENb/zMVJBBIY7fCGQA5xisKvcb7THROKTn6PuAj68u0E0bftE3cv9SUnOpuNABN3SB8QAXy6RWhwugPDsqK1OfFKI9r/oKPicqE2qibeM6AafHPmB5XaqwOKzq/hbKaIYBhsoXlM8yScllZ525aboabholHCbQXPxiq5CU/NYCc0g3rXNlxMNWsKHUUKY1zeG/UU1q0mBq/iFMuI3ghFwadThzaI8jzHkVwg+oPA==
+        bh=U/S6R7/9nVoHmk9zF9Fu8HvJ6G5Gizsl3DGB5UcgoVw=;
+        b=EiVWxVfjTuLqBsUgso5Oiv9znZza5MHIR5skgZVkFh/WnftbQ5urwARKYPzwQ1vzja
+         XVHjbEaR/CCWYcrUiVgLDa9AFpVq/D0GsrSBLaN4cmIIukWw4oQ6vR3VqJ6sKjX3DMKs
+         7acLXoXniGq7sM2UA15f3wQdbjsgKAVWfbXU8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706869003; x=1707473803;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U/S6R7/9nVoHmk9zF9Fu8HvJ6G5Gizsl3DGB5UcgoVw=;
+        b=PNZB5zjl+5DDI2tYT5Ax1zkQ7nJLVV6NbSX/h7FXVLkwWlKCh8aI4u9HPRtb6ilRV0
+         jN0mq1fdO7SjzPUQnI2IXIPn6p48Tmi3S5ji2CqOCCD63AixOpepQrK0u7kd1QBRSd0r
+         8DzmUocAFmXnmjKQK3WqYz7oFTBAoQoSmcykXLJ7bVhJY1bzw/JCc+e6Chf1WKx+QIPx
+         6MzsvBsZj5FGVfJs25JHvleWd1InohFmgJ9WH4KC6GGml8uxBaTJIqhZ1ySh+FQug2Xl
+         wyCAhHtEadTPU3CKUxLTYaBE0AiLM1yVTCwpT7O5KCw+Hxq842hWMQFxOVi/FS/RVlpa
+         o3Gw==
+X-Gm-Message-State: AOJu0YwLzD/YjWtOXvQ2fwftjF/WoJu2HziVSiQvFlM1pwg5Qt3VVgBK
+	9eZOGsGiLsvpDtcDwyZuVIEqntpLtm3H+rsszflpdbNYmSzIfG8fvookKUNaYA==
+X-Google-Smtp-Source: AGHT+IHGVoXnALk3e0KTnUW+XJTOeoAchvqfVfnhBeIvjgWfKsbk+scsS2uNvD0mrKl6RkxK9v0AEQ==
+X-Received: by 2002:a05:6a20:d80a:b0:19e:3172:b8ac with SMTP id iv10-20020a056a20d80a00b0019e3172b8acmr8509849pzb.22.1706869003182;
+        Fri, 02 Feb 2024 02:16:43 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWoz46bwT+tJO8xy56NbLr1KS+igx2daYsByMo02TKngsVRwUuFg7rM8d2fC9gniw/eE1Q+M8gYLGV0R77HWl5kkLuEJZYFcd3ZpZKGRtahgInsMSopUwFERg7zuZHYNtJ5cJY9S2MraM2AOdZTTsl6P817jdn3+0hoVV2s43CNN5/nYeQK3ywIAd7TM2tMMv736L+PU5oEIuAwAF6QxY7hk6ZUYTxy0dptEOM02zqUvp11bDVVbi6S3n6ojbgp4xa9zL5Pl1AK7tfwa9hB2HWWUqQJAG1beGvKFdo7Mom3kiQCGh3TESzslYvSA98vnLsC4EJqMD9Uz8azrFX1Ex75q3xcLnhW2kZqdFqM+4BashtXkOJBquFxMijWLtVQMr4ZE2M1tUiRNGANdexlJ96uetelZ97X/PY/9FFiBdNHkgVQSScQTlNDriahUrbVN3f1x2A5SrEDHUYfRek4LjMjYi3p5UMVzy3MM2AYFHjg6ci4bdjFS8hPv4iQCGoeEYZuQp88sa54C908gCbMdO7a77djfDP9t5GC659+wIXuW5inYCBGQotSrYlfFNKhSKwT7bfBvkZuJCPGJTWGXk0+KPs/zoTpSkJ430g2C9DO1V/7d3r5Q6mZ8bhuHeko5NNBwMH5NODDFj2P6245q/GN+6UxZLLmpRUazUMVySJWK+qZCmIgUtRAeYTjxOxNK6dirVDW6ImDqWqJGDVldIDW+I7jV/5M5VWcgIUx4uDclV4lMY6o/UR8yI1NO/c=
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p20-20020a056a0026d400b006dfedc6a43dsm1140656pfw.208.2024.02.02.01.26.09
+        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b006dd850bbd21sm1236764pff.36.2024.02.02.02.16.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 01:26:09 -0800 (PST)
-Date: Fri, 2 Feb 2024 01:26:09 -0800
+        Fri, 02 Feb 2024 02:16:42 -0800 (PST)
 From: Kees Cook <keescook@chromium.org>
-To: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
+To: linux-hardening@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Marco Elver <elver@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Marco Elver <elver@google.com>,
+	Hao Luo <haoluo@google.com>,
 	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Fangrui Song <maskray@google.com>,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] overflow: Expand check_add_overflow() for pointer
- addition
-Message-ID: <202402020105.0759D4CD@keescook>
-References: <20240130220218.it.154-kees@kernel.org>
- <20240130220614.1154497-2-keescook@chromium.org>
- <6d66deda-e09d-4899-b3a3-5137eeee449c@prevas.dk>
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Bill Wendling <morbo@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-acpi@vger.kernel.org
+Subject: [PATCH v2 2/6] ubsan: Reintroduce signed and unsigned overflow sanitizers
+Date: Fri,  2 Feb 2024 02:16:35 -0800
+Message-Id: <20240202101642.156588-2-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240202101311.it.893-kees@kernel.org>
+References: <20240202101311.it.893-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6d66deda-e09d-4899-b3a3-5137eeee449c@prevas.dk>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10079; i=keescook@chromium.org;
+ h=from:subject; bh=81LcZge0w4D9Z3eA6B+rApaqgdau7DNMJpUzowyrc8U=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlvMEHIaVk0RDXV5BS8oDSW+Q7mjUG3v2lN2MSh
+ eQs8Xe4ZXyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZbzBBwAKCRCJcvTf3G3A
+ JlV3EACFj6qzRW/Dmz2j427eAnNRW/hFiqg76oZtLKt19NBhwQSxqIEDMXQp9hgoLImHy3cIsTz
+ /3Rn02fPcHAlgbHbphdnoxIxF9d3JIMOflSJOWUtksgIa2hMlnS7dKbdvmr6YMMT9DzhneaK/ah
+ m8bVM9Mgc+Fzxr+ruzOV0BX8GlCxuFOL12H1D3nZvF82gmkuNPMCYslbh8l0P1WdKLSV4yEaD08
+ RWG3VMBfMNhEMTzybJOFwIVklb0tu91BdUOI2awvdIBY0hXH+0T8ZI/JIgN0J39lmVCxQ2TuCZo
+ JXBXbL0GsukvIx/3oo5JDt9pGOql4COz2gyh82QHnis0ssIlLtiNNgL23O0EDJOU00/BF81oVyA
+ d58a5k99+BTYT48jsn1iwhsoIQaNvM2SQJcoE8FF6JeOqbElxHIUlp7L7ptRp6hNg2DFKQye4TZ
+ DnJ1KTK0D9Se94Y/mmh2I1UBV/V6e+gaUPjzlq0ZVxwnNKlRtycg3Mjhv/0lTzGBlp+Bl+eE7g/
+ 7brRWwsZKFQ5Qgqu9kddHySyRFw4vwh55F6AqwHkg1EtoQWExp32wuEYmFa1j3Ap2p8TTTTlwVK
+ dban4NYVGvUX/JjOynleWT2vjJ1Sz7/q5MFDcRNYcOuyP9b+jZPKfdD9BJHpPVkdE/OfPQV27r1 FhYPbS9aNfwli2Q==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 31, 2024 at 09:35:35AM +0100, Rasmus Villemoes wrote:
-> On 30/01/2024 23.06, Kees Cook wrote:
-> > [...]
-> > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> > index 6f1ca49306d2..d27b58fddfaa 100644
-> > --- a/include/linux/compiler_types.h
-> > +++ b/include/linux/compiler_types.h
-> > @@ -375,6 +375,16 @@ struct ftrace_likely_data {
-> >  /* Are two types/vars the same type (ignoring qualifiers)? */
-> >  #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-> >  
-> > +/* Is variable addressable? */
-> > +#define __is_ptr_or_array(p)	(__builtin_classify_type(p) == 5)
-> 
-> That magic constant is a bit ugly, but I don't think there's a better
-> way. However, a comment saying "pointer_type_class in gcc/typeclass.h in
-> gcc source code" or something like that might help. Do we know for sure
-> that clang uses the same value? I can't find it documented anywhere.
+Effectively revert commit 6aaa31aeb9cf ("ubsan: remove overflow
+checks"), to allow the kernel to be built with the "overflow"
+sanitizers again. This gives developers a chance to experiment[1][2][3]
+with the instrumentation again, while compilers adjust their sanitizers
+to deal with the impact of -fno-strict-oveflow (i.e. moving from
+"overflow" checking to "wrap-around" checking).
 
-Very true. Offlist, Keith Packard suggested I switch to this, so we can
-avoid the constant:
+Notably, the naming of the options is adjusted to use the name "WRAP"
+instead of "OVERFLOW". In the strictest sense, arithmetic "overflow"
+happens when a result exceeds the storage of the type, and is considered
+by the C standard and compilers to be undefined behavior for signed
+and pointer types (without -fno-strict-overflow). Unsigned arithmetic
+overflow is defined as always wrapping around.
 
-+#define __is_ptr_or_array(p)	(__builtin_classify_type(p) == \
-				 __builtin_classify_type(NULL))
+Because the kernel is built with -fno-strict-overflow, signed and pointer
+arithmetic is defined to always wrap around instead of "overflowing"
+(which could either be elided due to being undefined behavior or would
+wrap around, which led to very weird bugs in the kernel).
 
-> 
-> __check_ptr_add_overflow() - Calculate pointer addition with overflow
-> checking
-> > + * @a: pointer addend
-> > + * @b: numeric addend
-> > + * @d: pointer to store sum
-> > + *
-> > + * Returns 0 on success, 1 on wrap-around.
-> > + *
-> > + * Do not use this function directly, use check_add_overflow() instead.
-> > + *
-> > + * *@d holds the results of the attempted addition, which may wrap-around.
-> > + */
-> > +#define __check_ptr_add_overflow(a, b, d)		\
-> > +	({						\
-> > +		typeof(a) __a = (a);			\
-> > +		typeof(b) __b = (b);			\
-> > +		size_t __bytes;				\
-> > +		bool __overflow;			\
-> > +							\
-> > +		/* we want to perform the wrap-around, but retain the result */ \
-> > +		__overflow = __builtin_mul_overflow(sizeof(*(__a)), __b, &__bytes); \
-> > +		__builtin_add_overflow((unsigned long)(__a), __bytes, (unsigned long *)(d)) || \
-> > +		__overflow;				\
-> > +	})
-> 
-> So I've tried to wrap my head around all these layers of macros, and it
-> seems ok. However, here I'm a bit worried that there's no type checking
-> of the destination. In particular, the user could perhaps end up doing
-> 
->   check_add_overflow(p, x, p)
+So, the config options are added back as CONFIG_UBSAN_SIGNED_WRAP and
+CONFIG_UBSAN_UNSIGNED_WRAP. Since the kernel has several places that
+explicitly depend on wrap-around behavior (e.g. counters, atomics, crypto,
+etc), also introduce the __signed_wrap and __unsigned_wrap function
+attributes for annotating functions where wrapping is expected and should
+not be instrumented. This will allow us to distinguish in the kernel
+between intentional and unintentional cases of arithmetic wrap-around.
 
-I tried to make sure the top-level filtering would require a pointer to
-an integral type. I'm sure there is a way to foot-gun it, if one tries
-hard enough. :)
+Additionally keep these disabled under CONFIG_COMPILE_TEST for now.
 
-> 
-> which will go horribly wrong. Do we have any infrastructure for testing
-> "this should fail to compile"? It would be good to have, not just for
-> this, but in general for checking our sanity checks.
-> 
-> Another thing is that this will always fail with negative offsets (if b
-> has signed type and a negative value, the multiplication won't fit in an
-> unsigned type). I think __bytes should be ptrdiff_t.
+Link: https://github.com/KSPP/linux/issues/26 [1]
+Link: https://github.com/KSPP/linux/issues/27 [2]
+Link: https://github.com/KSPP/linux/issues/344 [3]
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/compiler_types.h | 14 ++++++-
+ lib/Kconfig.ubsan              | 19 ++++++++++
+ lib/test_ubsan.c               | 49 ++++++++++++++++++++++++
+ lib/ubsan.c                    | 68 ++++++++++++++++++++++++++++++++++
+ lib/ubsan.h                    |  4 ++
+ scripts/Makefile.ubsan         |  2 +
+ 6 files changed, 155 insertions(+), 1 deletion(-)
 
-Ew. A negative "add"... yes. I'll take a closer look.
-
-Thanks for the review!
-
-As it turns out, I may not need this patch at all yet, so I may hold off
-on it until I can prove that we really will need it.
-
--Kees
-
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 6f1ca49306d2..e585614f3152 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -282,11 +282,23 @@ struct ftrace_likely_data {
+ #define __no_sanitize_or_inline __always_inline
+ #endif
+ 
++/* Allow wrapping arithmetic within an annotated function. */
++#ifdef CONFIG_UBSAN_SIGNED_WRAP
++# define __signed_wrap __attribute__((no_sanitize("signed-integer-overflow")))
++#else
++# define __signed_wrap
++#endif
++#ifdef CONFIG_UBSAN_UNSIGNED_WRAP
++# define __unsigned_wrap __attribute__((no_sanitize("unsigned-integer-overflow")))
++#else
++# define __unsigned_wrap
++#endif
++
+ /* Section for code which can't be instrumented at all */
+ #define __noinstr_section(section)					\
+ 	noinline notrace __attribute((__section__(section)))		\
+ 	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
+-	__no_sanitize_memory
++	__no_sanitize_memory __signed_wrap __unsigned_wrap
+ 
+ #define noinstr __noinstr_section(".noinstr.text")
+ 
+diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+index 59e21bfec188..a7003e5bd2a1 100644
+--- a/lib/Kconfig.ubsan
++++ b/lib/Kconfig.ubsan
+@@ -116,6 +116,25 @@ config UBSAN_UNREACHABLE
+ 	  This option enables -fsanitize=unreachable which checks for control
+ 	  flow reaching an expected-to-be-unreachable position.
+ 
++config UBSAN_SIGNED_WRAP
++	bool "Perform checking for signed arithmetic wrap-around"
++	default UBSAN
++	depends on !COMPILE_TEST
++	depends on $(cc-option,-fsanitize=signed-integer-overflow)
++	help
++	  This option enables -fsanitize=signed-integer-overflow which checks
++	  for wrap-around of any arithmetic operations with signed integers.
++
++config UBSAN_UNSIGNED_WRAP
++	bool "Perform checking for unsigned arithmetic wrap-around"
++	depends on $(cc-option,-fsanitize=unsigned-integer-overflow)
++	depends on !X86_32 # avoid excessive stack usage on x86-32/clang
++	depends on !COMPILE_TEST
++	help
++	  This option enables -fsanitize=unsigned-integer-overflow which checks
++	  for wrap-around of any arithmetic operations with unsigned integers. This
++	  currently causes x86 to fail to boot.
++
+ config UBSAN_BOOL
+ 	bool "Perform checking for non-boolean values used as boolean"
+ 	default UBSAN
+diff --git a/lib/test_ubsan.c b/lib/test_ubsan.c
+index 2062be1f2e80..84d8092d6c32 100644
+--- a/lib/test_ubsan.c
++++ b/lib/test_ubsan.c
+@@ -11,6 +11,51 @@ typedef void(*test_ubsan_fp)(void);
+ 			#config, IS_ENABLED(config) ? "y" : "n");	\
+ 	} while (0)
+ 
++static void test_ubsan_add_overflow(void)
++{
++	volatile int val = INT_MAX;
++	volatile unsigned int uval = UINT_MAX;
++
++	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
++	val += 2;
++
++	UBSAN_TEST(CONFIG_UBSAN_UNSIGNED_WRAP);
++	uval += 2;
++}
++
++static void test_ubsan_sub_overflow(void)
++{
++	volatile int val = INT_MIN;
++	volatile unsigned int uval = 0;
++	volatile int val2 = 2;
++
++	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
++	val -= val2;
++
++	UBSAN_TEST(CONFIG_UBSAN_UNSIGNED_WRAP);
++	uval -= val2;
++}
++
++static void test_ubsan_mul_overflow(void)
++{
++	volatile int val = INT_MAX / 2;
++	volatile unsigned int uval = UINT_MAX / 2;
++
++	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
++	val *= 3;
++
++	UBSAN_TEST(CONFIG_UBSAN_UNSIGNED_WRAP);
++	uval *= 3;
++}
++
++static void test_ubsan_negate_overflow(void)
++{
++	volatile int val = INT_MIN;
++
++	UBSAN_TEST(CONFIG_UBSAN_SIGNED_WRAP);
++	val = -val;
++}
++
+ static void test_ubsan_divrem_overflow(void)
+ {
+ 	volatile int val = 16;
+@@ -90,6 +135,10 @@ static void test_ubsan_misaligned_access(void)
+ }
+ 
+ static const test_ubsan_fp test_ubsan_array[] = {
++	test_ubsan_add_overflow,
++	test_ubsan_sub_overflow,
++	test_ubsan_mul_overflow,
++	test_ubsan_negate_overflow,
+ 	test_ubsan_shift_out_of_bounds,
+ 	test_ubsan_out_of_bounds,
+ 	test_ubsan_load_invalid_value,
+diff --git a/lib/ubsan.c b/lib/ubsan.c
+index df4f8d1354bb..5fc107f61934 100644
+--- a/lib/ubsan.c
++++ b/lib/ubsan.c
+@@ -222,6 +222,74 @@ static void ubsan_epilogue(void)
+ 	check_panic_on_warn("UBSAN");
+ }
+ 
++static void handle_overflow(struct overflow_data *data, void *lhs,
++			void *rhs, char op)
++{
++
++	struct type_descriptor *type = data->type;
++	char lhs_val_str[VALUE_LENGTH];
++	char rhs_val_str[VALUE_LENGTH];
++
++	if (suppress_report(&data->location))
++		return;
++
++	ubsan_prologue(&data->location, type_is_signed(type) ?
++			"signed-integer-overflow" :
++			"unsigned-integer-overflow");
++
++	val_to_string(lhs_val_str, sizeof(lhs_val_str), type, lhs);
++	val_to_string(rhs_val_str, sizeof(rhs_val_str), type, rhs);
++	pr_err("%s %c %s cannot be represented in type %s\n",
++		lhs_val_str,
++		op,
++		rhs_val_str,
++		type->type_name);
++
++	ubsan_epilogue();
++}
++
++void __ubsan_handle_add_overflow(void *data,
++				void *lhs, void *rhs)
++{
++
++	handle_overflow(data, lhs, rhs, '+');
++}
++EXPORT_SYMBOL(__ubsan_handle_add_overflow);
++
++void __ubsan_handle_sub_overflow(void *data,
++				void *lhs, void *rhs)
++{
++	handle_overflow(data, lhs, rhs, '-');
++}
++EXPORT_SYMBOL(__ubsan_handle_sub_overflow);
++
++void __ubsan_handle_mul_overflow(void *data,
++				void *lhs, void *rhs)
++{
++	handle_overflow(data, lhs, rhs, '*');
++}
++EXPORT_SYMBOL(__ubsan_handle_mul_overflow);
++
++void __ubsan_handle_negate_overflow(void *_data, void *old_val)
++{
++	struct overflow_data *data = _data;
++	char old_val_str[VALUE_LENGTH];
++
++	if (suppress_report(&data->location))
++		return;
++
++	ubsan_prologue(&data->location, "negation-overflow");
++
++	val_to_string(old_val_str, sizeof(old_val_str), data->type, old_val);
++
++	pr_err("negation of %s cannot be represented in type %s:\n",
++		old_val_str, data->type->type_name);
++
++	ubsan_epilogue();
++}
++EXPORT_SYMBOL(__ubsan_handle_negate_overflow);
++
++
+ void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs)
+ {
+ 	struct overflow_data *data = _data;
+diff --git a/lib/ubsan.h b/lib/ubsan.h
+index 5d99ab81913b..0abbbac8700d 100644
+--- a/lib/ubsan.h
++++ b/lib/ubsan.h
+@@ -124,6 +124,10 @@ typedef s64 s_max;
+ typedef u64 u_max;
+ #endif
+ 
++void __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
++void __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
++void __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
++void __ubsan_handle_negate_overflow(void *_data, void *old_val);
+ void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
+ void __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
+ void __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
+diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+index 7cf42231042b..7b2f3d554c59 100644
+--- a/scripts/Makefile.ubsan
++++ b/scripts/Makefile.ubsan
+@@ -8,6 +8,8 @@ ubsan-cflags-$(CONFIG_UBSAN_LOCAL_BOUNDS)	+= -fsanitize=local-bounds
+ ubsan-cflags-$(CONFIG_UBSAN_SHIFT)		+= -fsanitize=shift
+ ubsan-cflags-$(CONFIG_UBSAN_DIV_ZERO)		+= -fsanitize=integer-divide-by-zero
+ ubsan-cflags-$(CONFIG_UBSAN_UNREACHABLE)	+= -fsanitize=unreachable
++ubsan-cflags-$(CONFIG_UBSAN_SIGNED_WRAP)	+= -fsanitize=signed-integer-overflow
++ubsan-cflags-$(CONFIG_UBSAN_UNSIGNED_WRAP)	+= -fsanitize=unsigned-integer-overflow
+ ubsan-cflags-$(CONFIG_UBSAN_BOOL)		+= -fsanitize=bool
+ ubsan-cflags-$(CONFIG_UBSAN_ENUM)		+= -fsanitize=enum
+ ubsan-cflags-$(CONFIG_UBSAN_TRAP)		+= $(call cc-option,-fsanitize-trap=undefined,-fsanitize-undefined-trap-on-error)
 -- 
-Kees Cook
+2.34.1
+
