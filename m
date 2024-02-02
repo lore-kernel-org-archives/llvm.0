@@ -1,169 +1,124 @@
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B66F151CCF
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 18:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9156780624;
+	Fri,  2 Feb 2024 18:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706898141; cv=none; b=d4wgiQTn7TPTS5meaU9f1/gOiIEexE08rhLgV7Q+jZHGdvJCtktpZxocXC2BlWMD6c/QyPbujFBk8VwW82t03NH0YnMZiTZQWg9w9sHcduTWckT3HJ0WJo7JQ6nqIejobNQamTTq0qtW7jiOZvy7QvDdvkrXWndY/9kw2dX0yZ4=
+	t=1706899184; cv=none; b=REWheEnoQ1hab6JrHSj95C7wAdnmHHdDhWtjAwNfI2ahp5M44iGiUQ9IGBLVRSii8rWkgcDhfQ5NpHs+Tb3MmVz9lLVSMgTWGtrzhliLsz3UNIsVbuNXgC1XTA54qPPZooHud3kNf95SkLaRg27Yb4l3QNemHRlPSCA+q1MmrhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706898141; c=relaxed/simple;
-	bh=K9jVRbvoC4pJRRadOkCl26uHM4IaJfzZZjnpU9UIQlI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E00locpeGTXvbJKuk1bld3utHsB20Z23Y+k7CQ7xaWpyBJkH3p/Nt5e0lB7JtoX13z0iLj7fGjWZR/tttUS3x2AFJh1BjHamc1QkHIUjHN/aluesUnQktIdqG0NRRvybukQXadegbumhKpe6UsUHP2zOCIYLV1GysFjfCLLC6TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=cm7td9MG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iYYrscqS; arc=none smtp.client-ip=64.147.123.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+	s=arc-20240116; t=1706899184; c=relaxed/simple;
+	bh=J6bA4o8fW0UxqsXB3iPmtz3AJS29SvbfvIeBU08bDl0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XIBXvJrduslLk/3o4keCq7I4nrdrazf8KDej87nUNopHsGolYvjIODcBOokKtmPxC2MeuqaMknAzVrmqOKl0E96WC/IcuXA/zKXqyxjv/cGbYstwottXprE6pmqKMo+zmKKgFc+rWw4sp4bIWdNqbcMoU1FpMc10xGtk30hoTj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A2bMl2pJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="cm7td9MG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iYYrscqS"
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id E4FD83200B13;
-	Fri,  2 Feb 2024 13:22:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Fri, 02 Feb 2024 13:22:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1706898138;
-	 x=1706984538; bh=uKviyZxmRZlj3pVPOpppzhplKj0Xg++k94Zg3QVf1wI=; b=
-	cm7td9MG9Y0Ih5bS8N1IdVzpxEnNuBFXWN4k4kQMXLTOt3kn2TDPR2w83+A2SwJs
-	i/Bu3IQJN8V1sFnygjrWDc0V1qcwDG7Eq2yWDyG5KH9MMRgXLHuWtzHK0O3OXMJ2
-	AJIPJ2j9nt67+PL42GA2R9YZAlF4jpD/AYJUMV1BTnkZlK3bLT6Ziq0+h9BwCmyy
-	fHL4Wr4yROgmXsqJyUAlAfKfqThocYySejOwmx/nGRq0tUAICFOz1BMsyX4v53oL
-	McRiYKXO7bz8aPeCqopQ8llkIOSnm5z4ZKsQBukbxQQ3N8zAWqYTBgvEl3PNZ0RC
-	DJ+88OmYQIa0bTnszXPxmg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706898138; x=
-	1706984538; bh=uKviyZxmRZlj3pVPOpppzhplKj0Xg++k94Zg3QVf1wI=; b=i
-	YYrscqSSFgaGXnSReDw9COKFJ2bE0PA6VgUdnYCSqj8jO61kv9APmJxILqP1kJ/P
-	mxoegijWoBnoZMWdTG8v+Xbuv4qbhTDYdYCJvOoF9Uz3dNktBKNGLPkQEVVtsJqy
-	NIxF9V1S244Xv7kLUROOXVzSxfgmU3ymvFQ05GdVHwp5sT+3QQm2p/A2oNE2bwV7
-	vR/Q0VNsIIjh37DusIs5aS83o6fct3iWhOrodXPkQQnB3oWyce4H7qeuvDw8k5ui
-	D0HF0yc/HEeP1Hf4lBMNHRdl+W40KpCw5bQLGDUAZxTfTYEUtbdHCx+tL44vShiF
-	9jXiqEPeUDrIi9NAJpHRA==
-X-ME-Sender: <xms:2jK9ZQgaHN5ntsm-dtXQELbUV2fDId--7V3Tqr2uKFYR3Whw3gzuMw>
-    <xme:2jK9ZZBhsAhaw1OIme1UsDbQld4-ifwUDjRxRflRXSkdevfdoremH-J5HHbeVsHcg
-    VKEp5Nb642MqmG0yjg>
-X-ME-Received: <xmr:2jK9ZYFC4fKnYka8JsRVbsFiLxPq5dUYstXzSAlyh69pes4vn2tvTv9-E7Bqd1zjoQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedugedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefh
-    ueevgeffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:2jK9ZRSjeD2lEOUWs2Uy-nwOquRqt-WrywiX4UoixXxeXVFPvFUhZw>
-    <xmx:2jK9ZdwrlXkJ6PnKx-gPopX4rr-WkFyjLPRiWgakEm7uWI8MGkB9UA>
-    <xmx:2jK9Zf7woYHyHVUd0NTlkAkbiZv53Krwf7H71xPgkgvt4puF7zTMDQ>
-    <xmx:2jK9ZcxvNb2eO-kSu3ddobH0FpLr77wm7h8uw7EWRDmLlqM9pIAK2Q>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Feb 2024 13:22:16 -0500 (EST)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Fri, 02 Feb 2024 18:21:47 +0000
-Subject: [PATCH 8/8] MIPS: mipsregs: Set proper ISA level for virt
- extensions
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A2bMl2pJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E991AC433F1;
+	Fri,  2 Feb 2024 18:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706899184;
+	bh=J6bA4o8fW0UxqsXB3iPmtz3AJS29SvbfvIeBU08bDl0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=A2bMl2pJK9r63jCBUnsFZR9DQs68EMe40IeTQ0SClx2dLnuvXgrNmexk1jCa+a4ak
+	 MaYLJs4rYAUch5yxsEIzE7TY8zAIKihgFJzUiIiCsR9OHfIrP58s2fPtClwpEf40aU
+	 BHhzCWpMhHZbIpe7/vWESnSyZNIDmF13r6uzjvquFUuxH+KHBsNRLybNjBoJBHZob7
+	 lMi+6EDAmEkUy1CpEUEHucDUL+E69oRR2dSi+ko04NUSdgTWIYzp3ZABQLeASXQ3V4
+	 IJZcwFY7ATSDtvB4U7BdgNBuqeoqebKV1hf7Gu/xe7pq9m9p//XhOWbidUzZIZOAWU
+	 znoqe5HLee85w==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Steve French <sfrench@samba.org>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>,
+	Tom Talpey <tom@talpey.com>,
+	linux-cifs@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>,
+	samba-technical@lists.samba.org
+Subject: [PATCH AUTOSEL 6.7 11/23] smb: Work around Clang __bdos() type confusion
+Date: Fri,  2 Feb 2024 13:39:07 -0500
+Message-ID: <20240202183926.540467-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240202183926.540467-1-sashal@kernel.org>
+References: <20240202183926.540467-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240202-llvm-msym32-v1-8-52f0631057d6@flygoat.com>
-References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
-In-Reply-To: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2256;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=K9jVRbvoC4pJRRadOkCl26uHM4IaJfzZZjnpU9UIQlI=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhtS9Rnu2nixsmCM6O+rPS4duvg/WzatLZL9zHnsst0Ne4
- 87kaUW7O0pZGMS4GGTFFFlCBJT6NjReXHD9QdYfmDmsTCBDGLg4BWAiH2IYGW4+uxO2UihTf96V
- q4adJ4scPk6f23Z618q+KHvBQ2eKNasZGe6IH1jJb1rA7McmvyxwUcykieyV8squk3UdpL7sXB+
- pzAAA
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7.3
+Content-Transfer-Encoding: 8bit
 
-c994a3ec7ecc ("MIPS: set mips32r5 for virt extensions") setted
-some instructions in virt extensions to ISA level mips32r5.
+From: Kees Cook <keescook@chromium.org>
 
-However TLB related vz instructions was leftover, also this
-shouldn't be done to a R5 or R6 kernel buid.
+[ Upstream commit 8deb05c84b63b4fdb8549e08942867a68924a5b8 ]
 
-Reorg macros to set ISA level as needed when _ASM_SET_VIRT
-is called.
+Recent versions of Clang gets confused about the possible size of the
+"user" allocation, and CONFIG_FORTIFY_SOURCE ends up emitting a
+warning[1]:
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+repro.c:126:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+  126 |                         __write_overflow_field(p_size_field, size);
+      |                         ^
+
+for this memset():
+
+        int len;
+        __le16 *user;
+	...
+        len = ses->user_name ? strlen(ses->user_name) : 0;
+        user = kmalloc(2 + (len * 2), GFP_KERNEL);
+	...
+	if (len) {
+		...
+	} else {
+		memset(user, '\0', 2);
+	}
+
+While Clang works on this bug[2], switch to using a direct assignment,
+which avoids memset() entirely which both simplifies the code and silences
+the false positive warning. (Making "len" size_t also silences the
+warning, but the direct assignment seems better.)
+
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1966 [1]
+Link: https://github.com/llvm/llvm-project/issues/77813 [2]
+Cc: Steve French <sfrench@samba.org>
+Cc: Paulo Alcantara <pc@manguebit.com>
+Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
+Cc: Shyam Prasad N <sprasad@microsoft.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: linux-cifs@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/mipsregs.h | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ fs/smb/client/cifsencrypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index dfb268f8aef8..6e97811fa936 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -2087,7 +2087,14 @@ do {									\
- 		_ASM_INSN_IF_MIPS(0x4200000c)				\
- 		_ASM_INSN32_IF_MM(0x0000517c)
- #else	/* !TOOLCHAIN_SUPPORTS_VIRT */
--#define _ASM_SET_VIRT ".set\tvirt\n\t"
-+#if MIPS_ISA_REV >= 5
-+#define _ASM_SET_VIRT_ISA
-+#elif defined(CONFIG_64BIT)
-+#define _ASM_SET_VIRT_ISA ".set\tmips64r5\n\t"
-+#else
-+#define _ASM_SET_VIRT_ISA ".set\tmips32r5\n\t"
-+#endif
-+#define _ASM_SET_VIRT _ASM_SET_VIRT_ISA ".set\tvirt\n\t"
- #define _ASM_SET_MFGC0	_ASM_SET_VIRT
- #define _ASM_SET_DMFGC0	_ASM_SET_VIRT
- #define _ASM_SET_MTGC0	_ASM_SET_VIRT
-@@ -2108,7 +2115,6 @@ do {									\
- ({ int __res;								\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips32r5\n\t"					\
- 		_ASM_SET_MFGC0						\
- 		"mfgc0\t%0, " #source ", %1\n\t"			\
- 		_ASM_UNSET_MFGC0					\
-@@ -2122,7 +2128,6 @@ do {									\
- ({ unsigned long long __res;						\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips64r5\n\t"					\
- 		_ASM_SET_DMFGC0						\
- 		"dmfgc0\t%0, " #source ", %1\n\t"			\
- 		_ASM_UNSET_DMFGC0					\
-@@ -2136,7 +2141,6 @@ do {									\
- do {									\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips32r5\n\t"					\
- 		_ASM_SET_MTGC0						\
- 		"mtgc0\t%z0, " #register ", %1\n\t"			\
- 		_ASM_UNSET_MTGC0					\
-@@ -2149,7 +2153,6 @@ do {									\
- do {									\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips64r5\n\t"					\
- 		_ASM_SET_DMTGC0						\
- 		"dmtgc0\t%z0, " #register ", %1\n\t"			\
- 		_ASM_UNSET_DMTGC0					\
-
+diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
+index ef4c2e3c9fa6..6322f0f68a17 100644
+--- a/fs/smb/client/cifsencrypt.c
++++ b/fs/smb/client/cifsencrypt.c
+@@ -572,7 +572,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
+ 		len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
+ 		UniStrupr(user);
+ 	} else {
+-		memset(user, '\0', 2);
++		*(u16 *)user = 0;
+ 	}
+ 
+ 	rc = crypto_shash_update(ses->server->secmech.hmacmd5,
 -- 
 2.43.0
 
