@@ -1,150 +1,201 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1E03D3A7;
-	Fri,  2 Feb 2024 22:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3503B83A19
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 22:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706914058; cv=none; b=tHrdk6rb5MxSEDXjSr8PSx/UG13GTYCW6Y5+g5I06abXh9EZPRHRaEx7Pp/uAiuE764mODid3mMOgV3rT/kYukel84lTrE02a3MAcrVbNDqV1fzi7HNyzDpuvEQEZQQBWVrzHxEtRUzXDajFvTG4dAlVRn92R7c98WtaukZMcBY=
+	t=1706914271; cv=none; b=jlbP9roD5WPsVZjI9LlBMLRXlYLKQoBxgR+NofueMVA4mUUeLQzZn+GeKOlnfKlgKw+YzfMgd+nAZxjGJogAnHGSf+YW0ILI0G5buJ4LD46gAS2eoFFeaRVG+E+fvP8yHgt4oArIJqeSf7/KraB/D7ZTRlgvhe5i2R661EYPGd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706914058; c=relaxed/simple;
-	bh=FRA7NClfGuH+mvD0ef76LKG3VhCS7wCAZ28qMHUqieI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YvvPsi2bQ4Go6Yjsb/ExIcDDE1D+izUMNqrwsd8i/vmN2FwiVQS8MfTwtv+5ivlTb3bkmoyXO3GSfsInoVZcuf2XnQ5jR4x8uSkvuUKRSpKi9zkotTcwIsfHwZIbpYK830fMqj8Hy5L+XPfJ7aybQ2KCmLABWCK6ISxmCpjp9OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n0DPef5g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706914271; c=relaxed/simple;
+	bh=q5AtBea6xhHLz465Ofgp0wGnE1Yg8+UADk4YyBy5GHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DDConwOCVh5yoAykyIrlWahoyemYJndZFLgnMeJNbBqRfxzFxVAU7LnXEEFP3AKqtcmw5peF4Hlp24sIdpa9L56qmoGQ/Yf2kPRzuGiqgFf75ELnyphZqX+EUb3pSK4LajfiCplLTr3rITEoNMMYjomZ0qFTAO0mO7OwcSZYN0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hM5FWRV2; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n0DPef5g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E960C433F1;
-	Fri,  2 Feb 2024 22:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706914058;
-	bh=FRA7NClfGuH+mvD0ef76LKG3VhCS7wCAZ28qMHUqieI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=n0DPef5gSNxToXTohsSeZcihSpMaSpUKBj1kmxQ8Ovo7ep11yIBePTRjz5D+Lwryz
-	 a0vbIvbGQGl8DzLy4D7sA9GTwhVxhN7fxbEVxyJtmR18bQF5zWJOUPO7ylgibJRtAM
-	 bOtiZIJJBs34wQGc0i+FUULk+gksBFUAUOwmrNfxCWX7rHeYYXOqyyp3ZAS+mA9apz
-	 oXFAh7ANei2JCeeujyMqZdbkMUjmSkVysc3OrQ7AMRUI1H2hj7pAcHhex2qHptN+WB
-	 h2+zOnv4OsTzsGTmZ5llFqSWL4MrFD4611phCPcz2wUtUuY8R3vYqHw38nG7O9fhIx
-	 rW+caqU/Yuc/g==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5111c7d40deso4203057e87.1;
-        Fri, 02 Feb 2024 14:47:38 -0800 (PST)
-X-Gm-Message-State: AOJu0YwByfKe789r8obYZUSmoHCmOtZg9Um/vZF/L8YwB7nLAf76vGjS
-	OtGyDiBcbay+aCCZ3VXQKJxQc9VVrF69gpo7NyR1kwSZColJTRFHWEOvchCBlBYTL/oiqMClgBW
-	QeYFi0CZhbbyrq1ZylHp0VI/1uMQ=
-X-Google-Smtp-Source: AGHT+IGAzmBgx5AlqOdWC/vDn6AUUi/qQxt6yaKcueUyhjFL6OzyVjxU3IlOHtv5MDQph0qKWSywZKeI5DIYd67c5jM=
-X-Received: by 2002:a05:6512:62:b0:511:1ed7:61bd with SMTP id
- i2-20020a056512006200b005111ed761bdmr2339301lfo.54.1706914056299; Fri, 02 Feb
- 2024 14:47:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hM5FWRV2"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d94691de1eso16245ad.1
+        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 14:51:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706914269; x=1707519069; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqcJnfRzgDSbBBe/WvP/tbuGz6ND0myieOWZsXq2pmo=;
+        b=hM5FWRV2AJNwQ513y27JDo6LustAwHIffvlERQ/F4DB9P5DVgtkpYk8iE+F/lA7FZx
+         ViW8Zio1NAljStbtlfoFnuqeJPwDCeuh1oK/2rbzRx7E6dhYM1B6nM/8LsWXvozps/Ae
+         a9x7LooZaM6mQa16E8bEKxu47Ba/CJy3uxkCCQPDvL+fxC0CQE4dBWINVdoQKe4NNrx2
+         1USUbJqvgd13qUo16+Oud8lIKxGvb0Tv1vyOAfc5QXK/W+FQKAIDObuGTMpq+gI/TUPk
+         k3/6wyt7UwQpwW85AGXEZeDUtSE0W8eapsSGNnyGFY7npN6GBL4128aKwZejGJBH4IHw
+         8m7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706914269; x=1707519069;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YqcJnfRzgDSbBBe/WvP/tbuGz6ND0myieOWZsXq2pmo=;
+        b=dhzzY+3d8x3yqs+0QGPxOWorfIAIDmQTnBjOrx8F3m2tqtP6gKn2l+GzEOt8mHRo42
+         HUaJaR9/CMt5RX/RkkdIR1H8zfL3EVln1qMiMX4iZgQP+h5rutSTFHyHQD9EouY3kQnM
+         xBGAg9eXOhU4Ps5amC/D/N5IHmiR50dSv2JuBL0Utb0yiz5+cG9kX2ubfpz2Ea+A3dpV
+         e8JvPiBm/u4aQZFb1iTDIBtvmhj4WmWejYOyDFGtCk4zNwI8m9c0ebJr4xaCv6Qz1kzH
+         wHYfeKsIHfxTdO/SZIER5j/p3b/U6MTyofptHnwR0ZdlbhCbMmfOxC+1r3n9tmwU4jzB
+         g2Xw==
+X-Gm-Message-State: AOJu0Yxjr5Zk59rmOPSemccXj8Yu9IFAcS/OhsFzAcf2IqBCelHzrUSi
+	w+2aifl9nTuE5rowGjP9ShZmrOcV2E2fEDzyIhiWp8fogwn2GA6pYkAcKiAVABWhg7cVguVsIL+
+	WeA==
+X-Google-Smtp-Source: AGHT+IGVWMBG/8R/mcT1xzeSAovhC1BYWddmMDiTFgZ2PCdc0N+nk0ZwPvdIjerAJYq/NQ6a+ztOYA==
+X-Received: by 2002:a17:903:41c6:b0:1d8:d225:699d with SMTP id u6-20020a17090341c600b001d8d225699dmr43383ple.16.1706914268482;
+        Fri, 02 Feb 2024 14:51:08 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWROBV9WCdSrFk2QIYXgRwLyzJC9hOOU0tOnfJzgdb6oYdieh5AE8I54bOvoR6Psby88v+3G0Fvby4ld5P/GTm4lOsdSi/K0hExIWkIsWmV08mYdKBMtpN9B4psTsqwiuYXSEp7vQTQcptJV2wh/VdTJabUmz+SvdeE5kd9UTZaPXVxJuD6JVKQwlmAMBg1L5LiG9o/pgaL8WY3qp4fs2jR35w7K2XOuXnht4tTe48B+N5CGAH0nnNTGNVkGXFQ2owjy+LuRBs9uU7IZcjj53+BBDFfShaAbcfGq5k=
+Received: from google.com ([2620:15c:2d3:205:f745:d0b:94d5:8e9a])
+        by smtp.gmail.com with ESMTPSA id jx2-20020a170903138200b001d95ec93929sm2097279plb.290.2024.02.02.14.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Feb 2024 14:51:07 -0800 (PST)
+Date: Fri, 2 Feb 2024 14:51:04 -0800
+From: Fangrui Song <maskray@google.com>
+To: Dave Martin <Dave.Martin@arm.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: jump_label: use constraints "Si" instead of "i"
+Message-ID: <20240202225104.f4dsagfwf6gcnddy@google.com>
+References: <20240201223545.728028-1-maskray@google.com>
+ <Zb0Qu5lR0iZUqImb@e133380.arm.com>
+ <CAMj1kXGSQ4Xq68Cmq6BH37FPJ+R+N5cOfrdC+aVML4sGaNDopg@mail.gmail.com>
+ <Zb0eRogn3rjkeDAs@e133380.arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
- <20240130220845.1978329-2-kevinloughlin@google.com> <4ljfvg7c23g2wx4hcqz6x6tx7uvp6fffayqvu4ptsmfqajlujr@zngokbd2awma>
- <CAGdbjm+dt2LMqsWkzME-Gya9F=pZMubTuW3Ad3dStj=L+MW+ng@mail.gmail.com>
-In-Reply-To: <CAGdbjm+dt2LMqsWkzME-Gya9F=pZMubTuW3Ad3dStj=L+MW+ng@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 2 Feb 2024 23:47:24 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGSZkJ-1opx9mrpfhzyreCM+P616xM+MhPOaR+EgP5NNg@mail.gmail.com>
-Message-ID: <CAMj1kXGSZkJ-1opx9mrpfhzyreCM+P616xM+MhPOaR+EgP5NNg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] x86/sev: enforce RIP-relative accesses in early
- SEV/SME code
-To: Kevin Loughlin <kevinloughlin@google.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Pankaj Gupta <pankaj.gupta@amd.com>, 
-	Hou Wenlong <houwenlong.hwl@antgroup.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Brijesh Singh <brijesh.singh@amd.com>, Michael Roth <michael.roth@amd.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>, 
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
-	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
-	Sidharth Telang <sidtelang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Zb0eRogn3rjkeDAs@e133380.arm.com>
 
-On Fri, 2 Feb 2024 at 23:00, Kevin Loughlin <kevinloughlin@google.com> wrot=
-e:
+On 2024-02-02, Dave Martin wrote:
+>On Fri, Feb 02, 2024 at 05:32:33PM +0100, Ard Biesheuvel wrote:
+>> On Fri, 2 Feb 2024 at 16:56, Dave Martin <Dave.Martin@arm.com> wrote:
+>> >
+>> > On Thu, Feb 01, 2024 at 02:35:45PM -0800, Fangrui Song wrote:
+>> > > The generic constraint "i" seems to be copied from x86 or arm (and with
+>> > > a redundant generic operand modifier "c"). It works with -fno-PIE but
+>> > > not with -fPIE/-fPIC in GCC's aarch64 port.
+>> > >
+>> > > The machine constraint "S", which denotes a symbol or label reference
+>> > > with a constant offset, supports PIC and has been available in GCC since
+>> > > 2012 and in Clang since 7.0. However, Clang before 19 does not support
+>> > > "S" on a symbol with a constant offset [1] (e.g.
+>> > > `static_key_false(&nf_hooks_needed[pf][hook])` in
+>> > > include/linux/netfilter.h), so we use "i" as a fallback.
+>> > >
+>> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+>> > > Signed-off-by: Fangrui Song <maskray@google.com>
+>> > > Link: https://github.com/llvm/llvm-project/pull/80255 [1]
+>> > >
+>> > > ---
+>> > > Changes from
+>> > > arm64: jump_label: use constraint "S" instead of "i" (https://lore.kernel.org/all/20240131065322.1126831-1-maskray@google.com/)
+>> > >
+>> > > * Use "Si" as Ard suggested to support Clang<19
+>> > > * Make branch a separate operand
+>> > > ---
+>> > >  arch/arm64/include/asm/jump_label.h | 12 ++++++++----
+>> > >  1 file changed, 8 insertions(+), 4 deletions(-)
+>> > >
+>> > > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+>> > > index 48ddc0f45d22..1f7d529be608 100644
+>> > > --- a/arch/arm64/include/asm/jump_label.h
+>> > > +++ b/arch/arm64/include/asm/jump_label.h
+>> > > @@ -15,6 +15,10 @@
+>> > >
+>> > >  #define JUMP_LABEL_NOP_SIZE          AARCH64_INSN_SIZE
+>> > >
+>> > > +/*
+>> > > + * Prefer the constraint "S" to support PIC with GCC. Clang before 19 does not
+>> > > + * support "S" on a symbol with a constant offset, so we use "i" as a fallback.
+>> > > + */
+>> > >  static __always_inline bool arch_static_branch(struct static_key * const key,
+>> > >                                              const bool branch)
+>> > >  {
+>> > > @@ -23,9 +27,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+>> > >                "      .pushsection    __jump_table, \"aw\"    \n\t"
+>> > >                "      .align          3                       \n\t"
+>> > >                "      .long           1b - ., %l[l_yes] - .   \n\t"
+>> > > -              "      .quad           %c0 - .                 \n\t"
+>> > > +              "      .quad           %0 + %1 - .             \n\t"
+>> > >                "      .popsection                             \n\t"
+>> > > -              :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+>> > > +              :  :  "Si"(key), "i"(branch) :  : l_yes);
+>> >
+>> > Is the meaning of multi-alternatives well defined if different arguments
+>> > specify different numbers of alternatives?  The GCC documentation says:
+>> >
+>> > https://gcc.gnu.org/onlinedocs/gcc/Multi-Alternative.html:
+>> >
+>> > -8<-
+>> >
+>> > [...] All operands for a single instruction must have the same number of
+>> > alternatives.
+>> >
+>> > ->8-
+>> >
+>>
+>> AIUI that does not apply here. That reasons about multiple arguments
+>> having more than one constraint, where not all combinations of those
+>> constraints are supported by the instruction.
 >
-> On Wed, Jan 31, 2024 at 12:20=E2=80=AFAM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > On Tue, Jan 30, 2024 at 10:08:44PM +0000, Kevin Loughlin wrote:
-> > > diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/as=
-m/mem_encrypt.h
-> > > index 359ada486fa9..b65e66ee79c4 100644
-> > > --- a/arch/x86/include/asm/mem_encrypt.h
-> > > +++ b/arch/x86/include/asm/mem_encrypt.h
-> > > @@ -17,6 +17,20 @@
-> > >
-> > >  #include <asm/bootparam.h>
-> > >
-> > > +/*
-> > > + * Like the address operator "&", evaluates to the address of a LHS =
-variable
-> > > + * "var", but also enforces the use of RIP-relative logic. This macr=
-o can be
-> > > + * used to safely access global data variables prior to kernel reloc=
-ation.
-> > > + */
-> > > +#define RIP_RELATIVE_ADDR(var)               \
-> > > +({                                   \
-> > > +     void *rip_rel_ptr;              \
-> > > +     asm ("lea "#var"(%%rip), %0"    \
-> > > +             : "=3Dr" (rip_rel_ptr)    \
-> > > +             : "p" (&var));          \
-> > > +     rip_rel_ptr;                    \
-> > > +})
-> > > +
-> >
-> > I don't think it is the right place for the macro. The next patch uses =
-for
-> > things unrelated to memory encryption.
+>Ah, scratch that: I'm confusing multi-alternatives with simple
+>constraints: all arguments must have the same number of comma-separated
+>lists of constraint letters, but each list can contain as many or as few
+>letters as are needed to match the operand.
 >
-> You're right; with the cleanup, I agree it becomes more general. We
-> can move it to arch/x86/include/asm/asm.h.
+>So "Si"(), "i"() is fine.
+
+"Si" is fine for GCC and Clang.
+"i" is fine for Clang but not for GCC PIC.
+
+     https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly#aarch64
+
+     In gcc/config/aarch64, LEGITIMATE_PIC_OPERAND_P(X) disallows any symbol
+     reference, which means that "i" and "s" cannot be used for PIC. Instead,
+     the constraint "S" has been supported since the initial port (2012) to
+     reference a symbol or label.
+
+I am also not familiar with
+https://gcc.gnu.org/onlinedocs/gcc/Multi-Alternative.html (comma in a
+constraint string). Thankfully we don't need this powerful construct:)
+
+>> > Also, I still think it may be redundant to move the addition inside the
+>> > asm, so long as Clang is happy with the symbol having an offset.
+>> >
+>>
+>> Older Clang is not happy with the symbol having an offset.
+>>
+>> And given that the key pointer and the 'branch' boolean are two
+>> distinct inputs to this function, I struggle to understand why you
+>> feel it is better to combine them in the argument. 'branch' is used to
+>> decide whether or not to set bit 0, independently of the value of key.
+>> Using array indexing to combine those values together to avoid an
+>> addition in the asm obfuscates the code.
 >
-> >
-> > > @@ -239,14 +244,14 @@ unsigned long __head __startup_64(unsigned long=
- physaddr,
-> > >        */
-> > >
-> > >       next_pgt_ptr =3D fixup_pointer(&next_early_pgt, physaddr);
-> > > -     pud =3D fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], ph=
-ysaddr);
-> > > -     pmd =3D fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], ph=
-ysaddr);
-> > > +     early_dynamic_pgts_ptr =3D fixup_pointer(early_dynamic_pgts, ph=
-ysaddr);
-> > > +     pud =3D (pudval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++];
-> > > +     pmd =3D (pmdval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++];
-> > >
-> >
-> > This change doesn't belong to this patch. Maybe move it into the next
-> > patch and combine with removing fixup_pointer().
+>This was more about not making changes that don't need to be made,
+>unless it clearly makes the code better.
 >
-> I'll put it in a separate commit even preceding this one, as it's
-> actually a bug in the existing fixup pointer logic that I noticed when
-> transitioning to the use of the RIP-relative macro. Specifically,
-> early_dynamic_pgts is a global variable just like next_early_pgt and
-> thus also needs to be fixed up to guarantee the correct address is
-> used across toolchains.
+>But if some verions of Clang accept "S" but choke if there's an offset,
+>then moving the addition into the asm seems the way to go.
+>
+>(I may have misread the commit message on this point.)
+>
+>[...]
+>
+>Cheers
+>---Dave
 
-No, this is not a bug.
-
-early_dynamic_pgts is a two dimensional array
-
-extern pmd_t early_dynamic_pgts[EARLY_DYNAMIC_PAGE_TABLES][PTRS_PER_PMD];
-
-and so this expression
-
-early_dynamic_pgts[(*next_pgt_ptr)++]
-
-produces the kernel virtual address of one of the top level elements,
-which itself is an array, and so this can be fixed up as usual.
-IOW, the [] operation does not result in pointer dereference here,
-only in pointer arithmetic.
+I am convinced by Ard' argument that two inputs (key, branch) deserve
+two operands.
+The existing "i"(&((char *)key)[branch]) is kinda ugly and also longer:)
