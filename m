@@ -1,213 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F311487D0
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8806C2D7
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706892482; cv=none; b=l8l25wJ26JQLsW86D12G/IyY5ecfl6PNDHDkimBYQzfecXi+MEjZT3nOwBgNWelq44KlezKu/at82B024KU+3qtnKIi+YizeTjrSSal4KTjF05PLvtsoakqH9J5pYb5zSTq8HhP4wyb5C6IaTsL0KCglkCckrLFUalp+8UC2GmI=
+	t=1706892876; cv=none; b=o3im8ciBSujqVsE/XEcpwXPIGGBfgW7DY5GxzOGlNmrgM+ej1sjZeh3uZKoRXc/AkTy+q18XZqI/c0doNeOmA57m6gTFxEZ0BY4Y5pC74N44x7yph6JjGAMcH8CCIN4dNRbtKx8Viu9Pl4B/fvl4hJI4TwP9HgjywpH7hCuir3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706892482; c=relaxed/simple;
-	bh=JgopPRZDkeJ504qLn52YYKQiMJtnK8wjFyuPtWnOKXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sc1dXvJoRy2Lxql6Pd2nT68Vh9QiIxgoFBpiJhoDwgVRmU8itH/+E5DvKQhcmw5ctW/K3iwY3zQjmYY4DMOPo12nDQfgUz+OxWaHuqpLiTEvYOj8clx9P14XQisj+gFnBB0kEAgaiVO2BN1btmTBNM3VdJjaL+zKeYyIN+mmlEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PG3aw7tl; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PG3aw7tl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C29C43390
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706892482;
-	bh=JgopPRZDkeJ504qLn52YYKQiMJtnK8wjFyuPtWnOKXg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PG3aw7tlJMXVaQLCoRJvFQ0dpWlFwC+WdreweqFU8VlB6NboUZYW9T+Ra0qe/uXxw
-	 5E03RwldmMVSY1dFX+Lmi7b5uBW7xTr/pGHJpSvKSIj96nYg6JSj2WSRxJRJuS1+R/
-	 YfX+zke7lP8UbQN6Qz2FX1eGzuMR36BBmaEre5E8JZCUkcjYDs48y0VWMNQGxQVse1
-	 MMXuTYOkg7aSvHf2Z40+6tBaSgghK7Yj+R86rBpwpGseUxbM6846BNb+wLASaHZKQw
-	 0vMwBYYBgCBPCN1WGZqNDvrDe7VOh1Ajco8Aa0421lBrGUSFCCXBUPKf0iNaV/2O3q
-	 /BhQE7oeOPF1w==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2cf42ca9bb2so25283231fa.1
-        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 08:48:01 -0800 (PST)
-X-Gm-Message-State: AOJu0Yy14cdXd+4e51+sDg4ih+dLJVyTiFNCkzNqZkkMZejvOwHyGjgD
-	A5hDWa1uVa8gbq6y3chPnwYoUPPw/y9oKXceQ8LQVLwpt78kdKg8M0YKGLF0PERh8W3Gz3Ftcoq
-	wqxYPsDfW62QIFBe+Tq14s7Pu8Co=
-X-Google-Smtp-Source: AGHT+IFugakFdvGMphcNYRZ2YJWc4YeX7dLyfpL3BRPOlCx/iVvhVhVDVo9CIK8HF9iqX/xcv1hh0SMS9nPQH88SNfo=
-X-Received: by 2002:a2e:99cc:0:b0:2cc:811f:f9ae with SMTP id
- l12-20020a2e99cc000000b002cc811ff9aemr1561250ljj.47.1706892480294; Fri, 02
- Feb 2024 08:48:00 -0800 (PST)
+	s=arc-20240116; t=1706892876; c=relaxed/simple;
+	bh=spmM1QubFGEZoJZh8hihiLNYHhNUX0gbSoAYY3JQT9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qu5RxKp2plEm/esPrwmXmvYQicvvZHl7X9Lkj4+Yzi6UQQ7G7UmYL/cmBffmWjCmLIKQyt7LJkLTDZrr4pYznVOw0oJCt0TxEBGc+ikYbnx6j7EQpPKvHfAcyRRtBQcN4SYpKS0jqO/4kL7MVOp1vHpH+E/gieYQLOOjVN9i4WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6188DA7;
+	Fri,  2 Feb 2024 08:55:16 -0800 (PST)
+Received: from e133380.arm.com (e133380.arm.com [10.1.197.58])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CB093F762;
+	Fri,  2 Feb 2024 08:54:33 -0800 (PST)
+Date: Fri, 2 Feb 2024 16:54:30 +0000
+From: Dave Martin <Dave.Martin@arm.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Fangrui Song <maskray@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: jump_label: use constraints "Si" instead of "i"
+Message-ID: <Zb0eRogn3rjkeDAs@e133380.arm.com>
+References: <20240201223545.728028-1-maskray@google.com>
+ <Zb0Qu5lR0iZUqImb@e133380.arm.com>
+ <CAMj1kXGSQ4Xq68Cmq6BH37FPJ+R+N5cOfrdC+aVML4sGaNDopg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-23-ardb+git@google.com> <20240131083511.GIZboGP8jPIrUZA8DF@fat_crate.local>
- <CAMj1kXG9W0XeEVR4tXDDg0Ai9XPsZGrTJaSRYUqgTV-xtFxjdQ@mail.gmail.com>
- <20240131092952.GCZboTECip8DbWtYtz@fat_crate.local> <8b38ef82-ec2b-4845-9732-15713a0e2a85@amd.com>
- <CAMj1kXH4U7X3_xgwhYUgbWqVfnzL5Dx0QaUhb_5TpZGQEh=_8g@mail.gmail.com> <20240202163510.GDZb0Zvj8qOndvFOiZ@fat_crate.local>
-In-Reply-To: <20240202163510.GDZb0Zvj8qOndvFOiZ@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 2 Feb 2024 17:47:49 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFziPbzQt=eC2kg+7uW9vS_32YHq+37S_zdycNkY04UCg@mail.gmail.com>
-Message-ID: <CAMj1kXFziPbzQt=eC2kg+7uW9vS_32YHq+37S_zdycNkY04UCg@mail.gmail.com>
-Subject: Re: [PATCH] x86/Kconfig: Remove CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
-To: Borislav Petkov <bp@alien8.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>, Ard Biesheuvel <ardb+git@google.com>, 
-	linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGSQ4Xq68Cmq6BH37FPJ+R+N5cOfrdC+aVML4sGaNDopg@mail.gmail.com>
 
-On Fri, 2 Feb 2024 at 17:35, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Feb 01, 2024 at 05:15:51PM +0100, Ard Biesheuvel wrote:
-> > OK, I'll remove it in the next rev.
->
-> Considering how it simplifies sme_enable() even more, I'd like to
-> expedite this one.
->
-> Thx.
->
-> ---
-> From: "Borislav Petkov (AMD)" <bp@alien8.de>
-> Date: Fri, 2 Feb 2024 17:29:32 +0100
-> Subject: [PATCH] x86/Kconfig: Remove CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
->
-> It was meant well at the time but nothing's using it so get rid of it.
->
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt  |  4 +---
->  Documentation/arch/x86/amd-memory-encryption.rst | 16 ++++++++--------
->  arch/x86/Kconfig                                 | 13 -------------
->  arch/x86/mm/mem_encrypt_identity.c               | 11 +----------
->  4 files changed, 10 insertions(+), 34 deletions(-)
->
+On Fri, Feb 02, 2024 at 05:32:33PM +0100, Ard Biesheuvel wrote:
+> On Fri, 2 Feb 2024 at 16:56, Dave Martin <Dave.Martin@arm.com> wrote:
+> >
+> > On Thu, Feb 01, 2024 at 02:35:45PM -0800, Fangrui Song wrote:
+> > > The generic constraint "i" seems to be copied from x86 or arm (and with
+> > > a redundant generic operand modifier "c"). It works with -fno-PIE but
+> > > not with -fPIE/-fPIC in GCC's aarch64 port.
+> > >
+> > > The machine constraint "S", which denotes a symbol or label reference
+> > > with a constant offset, supports PIC and has been available in GCC since
+> > > 2012 and in Clang since 7.0. However, Clang before 19 does not support
+> > > "S" on a symbol with a constant offset [1] (e.g.
+> > > `static_key_false(&nf_hooks_needed[pf][hook])` in
+> > > include/linux/netfilter.h), so we use "i" as a fallback.
+> > >
+> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > > Signed-off-by: Fangrui Song <maskray@google.com>
+> > > Link: https://github.com/llvm/llvm-project/pull/80255 [1]
+> > >
+> > > ---
+> > > Changes from
+> > > arm64: jump_label: use constraint "S" instead of "i" (https://lore.kernel.org/all/20240131065322.1126831-1-maskray@google.com/)
+> > >
+> > > * Use "Si" as Ard suggested to support Clang<19
+> > > * Make branch a separate operand
+> > > ---
+> > >  arch/arm64/include/asm/jump_label.h | 12 ++++++++----
+> > >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+> > > index 48ddc0f45d22..1f7d529be608 100644
+> > > --- a/arch/arm64/include/asm/jump_label.h
+> > > +++ b/arch/arm64/include/asm/jump_label.h
+> > > @@ -15,6 +15,10 @@
+> > >
+> > >  #define JUMP_LABEL_NOP_SIZE          AARCH64_INSN_SIZE
+> > >
+> > > +/*
+> > > + * Prefer the constraint "S" to support PIC with GCC. Clang before 19 does not
+> > > + * support "S" on a symbol with a constant offset, so we use "i" as a fallback.
+> > > + */
+> > >  static __always_inline bool arch_static_branch(struct static_key * const key,
+> > >                                              const bool branch)
+> > >  {
+> > > @@ -23,9 +27,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+> > >                "      .pushsection    __jump_table, \"aw\"    \n\t"
+> > >                "      .align          3                       \n\t"
+> > >                "      .long           1b - ., %l[l_yes] - .   \n\t"
+> > > -              "      .quad           %c0 - .                 \n\t"
+> > > +              "      .quad           %0 + %1 - .             \n\t"
+> > >                "      .popsection                             \n\t"
+> > > -              :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> > > +              :  :  "Si"(key), "i"(branch) :  : l_yes);
+> >
+> > Is the meaning of multi-alternatives well defined if different arguments
+> > specify different numbers of alternatives?  The GCC documentation says:
+> >
+> > https://gcc.gnu.org/onlinedocs/gcc/Multi-Alternative.html:
+> >
+> > -8<-
+> >
+> > [...] All operands for a single instruction must have the same number of
+> > alternatives.
+> >
+> > ->8-
+> >
+> 
+> AIUI that does not apply here. That reasons about multiple arguments
+> having more than one constraint, where not all combinations of those
+> constraints are supported by the instruction.
 
-Works for me.
+Ah, scratch that: I'm confusing multi-alternatives with simple
+constraints: all arguments must have the same number of comma-separated
+lists of constraint letters, but each list can contain as many or as few
+letters as are needed to match the operand.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+So "Si"(), "i"() is fine.
 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 31b3a25680d0..2cb70a384af8 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3320,9 +3320,7 @@
->
->         mem_encrypt=    [X86-64] AMD Secure Memory Encryption (SME) control
->                         Valid arguments: on, off
-> -                       Default (depends on kernel configuration option):
-> -                         on  (CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT=y)
-> -                         off (CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT=n)
-> +                       Default: off
->                         mem_encrypt=on:         Activate SME
->                         mem_encrypt=off:        Do not activate SME
->
-> diff --git a/Documentation/arch/x86/amd-memory-encryption.rst b/Documentation/arch/x86/amd-memory-encryption.rst
-> index 07caa8fff852..414bc7402ae7 100644
-> --- a/Documentation/arch/x86/amd-memory-encryption.rst
-> +++ b/Documentation/arch/x86/amd-memory-encryption.rst
-> @@ -87,14 +87,14 @@ The state of SME in the Linux kernel can be documented as follows:
->           kernel is non-zero).
->
->  SME can also be enabled and activated in the BIOS. If SME is enabled and
-> -activated in the BIOS, then all memory accesses will be encrypted and it will
-> -not be necessary to activate the Linux memory encryption support.  If the BIOS
-> -merely enables SME (sets bit 23 of the MSR_AMD64_SYSCFG), then Linux can activate
-> -memory encryption by default (CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT=y) or
-> -by supplying mem_encrypt=on on the kernel command line.  However, if BIOS does
-> -not enable SME, then Linux will not be able to activate memory encryption, even
-> -if configured to do so by default or the mem_encrypt=on command line parameter
-> -is specified.
-> +activated in the BIOS, then all memory accesses will be encrypted and it
-> +will not be necessary to activate the Linux memory encryption support.
-> +
-> +If the BIOS merely enables SME (sets bit 23 of the MSR_AMD64_SYSCFG),
-> +then memory encryption can be enabled by supplying mem_encrypt=on on the
-> +kernel command line.  However, if BIOS does not enable SME, then Linux
-> +will not be able to activate memory encryption, even if configured to do
-> +so by default or the mem_encrypt=on command line parameter is specified.
->
->  Secure Nested Paging (SNP)
->  ==========================
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 5edec175b9bf..58d3593bc4f2 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1539,19 +1539,6 @@ config AMD_MEM_ENCRYPT
->           This requires an AMD processor that supports Secure Memory
->           Encryption (SME).
->
-> -config AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
-> -       bool "Activate AMD Secure Memory Encryption (SME) by default"
-> -       depends on AMD_MEM_ENCRYPT
-> -       help
-> -         Say yes to have system memory encrypted by default if running on
-> -         an AMD processor that supports Secure Memory Encryption (SME).
-> -
-> -         If set to Y, then the encryption of system memory can be
-> -         deactivated with the mem_encrypt=off command line option.
-> -
-> -         If set to N, then the encryption of system memory can be
-> -         activated with the mem_encrypt=on command line option.
-> -
->  # Common NUMA Features
->  config NUMA
->         bool "NUMA Memory Allocation and Scheduler Support"
-> diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-> index 7f72472a34d6..efe9f217fcf9 100644
-> --- a/arch/x86/mm/mem_encrypt_identity.c
-> +++ b/arch/x86/mm/mem_encrypt_identity.c
-> @@ -97,7 +97,6 @@ static char sme_workarea[2 * PMD_SIZE] __section(".init.scratch");
->
->  static char sme_cmdline_arg[] __initdata = "mem_encrypt";
->  static char sme_cmdline_on[]  __initdata = "on";
-> -static char sme_cmdline_off[] __initdata = "off";
->
->  static void __init sme_clear_pgd(struct sme_populate_pgd_data *ppd)
->  {
-> @@ -504,7 +503,7 @@ void __init sme_encrypt_kernel(struct boot_params *bp)
->
->  void __init sme_enable(struct boot_params *bp)
->  {
-> -       const char *cmdline_ptr, *cmdline_arg, *cmdline_on, *cmdline_off;
-> +       const char *cmdline_ptr, *cmdline_arg, *cmdline_on;
->         unsigned int eax, ebx, ecx, edx;
->         unsigned long feature_mask;
->         unsigned long me_mask;
-> @@ -587,12 +586,6 @@ void __init sme_enable(struct boot_params *bp)
->         asm ("lea sme_cmdline_on(%%rip), %0"
->              : "=r" (cmdline_on)
->              : "p" (sme_cmdline_on));
-> -       asm ("lea sme_cmdline_off(%%rip), %0"
-> -            : "=r" (cmdline_off)
-> -            : "p" (sme_cmdline_off));
-> -
-> -       if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT))
-> -               sme_me_mask = me_mask;
->
->         cmdline_ptr = (const char *)((u64)bp->hdr.cmd_line_ptr |
->                                      ((u64)bp->ext_cmd_line_ptr << 32));
-> @@ -602,8 +595,6 @@ void __init sme_enable(struct boot_params *bp)
->
->         if (!strncmp(buffer, cmdline_on, sizeof(buffer)))
->                 sme_me_mask = me_mask;
-> -       else if (!strncmp(buffer, cmdline_off, sizeof(buffer)))
-> -               sme_me_mask = 0;
->
->  out:
->         if (sme_me_mask) {
-> --
-> 2.43.0
->
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+> > Also, I still think it may be redundant to move the addition inside the
+> > asm, so long as Clang is happy with the symbol having an offset.
+> >
+> 
+> Older Clang is not happy with the symbol having an offset.
+> 
+> And given that the key pointer and the 'branch' boolean are two
+> distinct inputs to this function, I struggle to understand why you
+> feel it is better to combine them in the argument. 'branch' is used to
+> decide whether or not to set bit 0, independently of the value of key.
+> Using array indexing to combine those values together to avoid an
+> addition in the asm obfuscates the code.
+
+This was more about not making changes that don't need to be made,
+unless it clearly makes the code better.
+
+But if some verions of Clang accept "S" but choke if there's an offset,
+then moving the addition into the asm seems the way to go.
+
+(I may have misread the commit message on this point.)
+
+[...]
+
+Cheers
+---Dave
