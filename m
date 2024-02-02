@@ -1,214 +1,108 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3341A7A729
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 11:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8FED2B9C5
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 11:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706871757; cv=none; b=g5x9CTn5ZPirsOlfeRw4LU/KbtxdOlyfPeRLEQO260vY8m6dXXgxqjOiSDQlvTxHzNor3scJr4KirgXIdsLzZWwnwDpMMn18CI2GvJAwZln2ju8a0PzmQ7A0EbFPqscQ+MQvIAFudNnlaPfmjMiKg6YOcARebOHnucYEd+hZRNs=
+	t=1706872012; cv=none; b=IOqoersodQbFqoYwmeQV2rcgOBC4iGt/YYUoTXfnp7CLUT5maTW6Q53JPd1UajdXqJcLD9J4AaW4IsHM68SJWltsbrMMpzUTKrB1RlGl7lxIZXfxvbzEUvpEk3xV5/y7wQY+5OqRjxBWWpV2AGwQlCnQQ2Nbw/s4ykyEEKFpOGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706871757; c=relaxed/simple;
-	bh=D74xUy1ymoMyy6G89fvtRm0D45tUlhGfHmdtylAdP74=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kwIeo4y/6Iu6wag5/MggeUTNFrZyJhpaHxgzmN6uBKnY/IAtdsZW/hCithNCZdVRDpeFozrg7rhPLVximcjFAQCxCLvtbOVyQqcx5wM7u4kW4ptYNeqjgfyEUDvWzvF3Ex7om8pWjC/VI9qsMP0cHsuNNJK8uT/I+fMbxZps5mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xoxIf9BG; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1706872012; c=relaxed/simple;
+	bh=BVUwIZJrucltWjChM5sdx0WIRPV1ARt3HSFLPgQ09cY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N17Eqxwb7fWOom6HdLhodXPggJZq8gdpzHwsg++IN3rEqM6uZGhiJLVnvMuH2JpF4NhJq8JmgLLVgenvekpFPlMQ59D/M0RLBUBXiELKP5EYSQXubUQuPizH0+dXMrK4l+qTm0WDEMZWiXF5QitINgMaI1XauPAjRtxRgJ1Re3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HYK3dxWF; arc=none smtp.client-ip=192.55.52.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xoxIf9BG"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3bfbccd5e89so358419b6e.1
-        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 03:02:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706871754; x=1707476554; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AKvTOkMfs92gzE0M+TFiSJEhkCKRpJTzmpH7agAwUHE=;
-        b=xoxIf9BG3pu9kO8IRv5tGBT09kkNSAih9D9HS6/xx8fZh8H8oRJumARsI2gcHG97+S
-         qRtiTGpxGd0U9UGxaycS6cbni3HFRiXphB8MkKSQDqSmQKslzHogPLZQj2SP95ysVjXL
-         Q5N9amf4tcA+JouGreIPxu//SXIot093cV/gQooe4d5PxVrLuVne+40Oh14hjZ2Wb6Zq
-         jqbSduijYO/5BEuY1FJcpwXAcLNRoxA2LbuzEhmx5Bfyx6L8niav24+1zx13M7vt6jDj
-         0DdlT9ZT361KnlZvNNhbzGFSVqnRDnW1q+beII2tq/AEJ930UU/rR4G6RsAwKZXpWusw
-         XKLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706871754; x=1707476554;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AKvTOkMfs92gzE0M+TFiSJEhkCKRpJTzmpH7agAwUHE=;
-        b=GvgBDvf5bpJV7fJdeDHdGygVYF9OjZqrmrZU2aXiGoQXO8J2zIlOC79jPi/cYBwXtY
-         NzkFgfhkygS3oqtOTcnnNhNIZWlnZnBPGuYZrVyUrG0BDiloMAcVQuPsB2+60qpMgCmI
-         DjE9IXv4+b6LXnG7t2h54eb5/9B6Pp/VZjK2jclURIfyjcgltECEThQY8k4sFoXWQqjL
-         DdNQvf/iFrF5Vsh1pd1onsC57p5MSfWp3iVimveGxJOObMdISdsKbAFiGCcs0/d7sUMN
-         HOcTMQ6pS+H9R7J0wTGUgpKiUxq+azVDLAjoqEBK2+RXgxaPHKnfenFumTBGAVYOm5ld
-         +q0g==
-X-Gm-Message-State: AOJu0YwcpG7Y7RMYmmqiPqTUB4BmXQpzktadkS+qq3pDwAI/1ALh+4Am
-	AtsPFxXc57b/GFxuuzg45WZBVdSYd+EYbC1ZnddN/Y9grOdPIupMQNUw3v1Y4rGaHUhwINTrtKe
-	KkIVF7DjxfArp1ZgqWrtn5cmpSZTivYVTyBsd
-X-Google-Smtp-Source: AGHT+IFRpqtiZKVAmnfyGxbOhfn+Xv95kz9Cj0dh1dh0pmbX0ph2z2DTZnuR3soBcYzNT173zBRShjkf603kulKsELQ=
-X-Received: by 2002:a05:6808:10c3:b0:3bf:80de:9831 with SMTP id
- s3-20020a05680810c300b003bf80de9831mr1988318ois.10.1706871754161; Fri, 02 Feb
- 2024 03:02:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HYK3dxWF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706872010; x=1738408010;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BVUwIZJrucltWjChM5sdx0WIRPV1ARt3HSFLPgQ09cY=;
+  b=HYK3dxWFuXXxiwJN2ZbKiDsaeuWkA86Fwwz7V/QMAfV8+gONPB4D+4h6
+   X94H8zDXbGOMuJ0GHlgLuDbOhCx6DSrNVncMveMyfYjX3BSjRLSi+K26M
+   Ja3yRCDahNPzlMVxKDRSsXa3XikArZmHyItD7ppqGijzmtUiyPPao9KL/
+   mG/35gGksc1APUi47+/egXtnlaZODKdg/igQzQg0AbTWuQdtUZNfUzpQE
+   /YN8/DfhOprUbDDmb0JGKh4MbATlpuk9uFGsEc6Dkwsll8S8qOcvNZnVp
+   bD3DB7mfXUu81Ci4pAWdznvRQMvse4EA8bl/qFZ1vYniu01KZo4uqhIr6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="435276216"
+X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
+   d="scan'208";a="435276216"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 03:06:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="908542663"
+X-IronPort-AV: E=Sophos;i="6.05,237,1701158400"; 
+   d="scan'208";a="908542663"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 02 Feb 2024 03:06:46 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+	id 40191128; Fri,  2 Feb 2024 12:30:29 +0200 (EET)
+Date: Fri, 2 Feb 2024 12:30:29 +0200
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, 
+	Wanpeng Li <wanpengli@tencent.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	David Rientjes <rientjes@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH, RESEND] x86/sev: Fix SEV check in sev_map_percpu_data()
+Message-ID: <lbs5nwm2teoc3ihnht3kt5xdgwjktufjybdpx2cvzmovxtkp26@5txa5ye7mzpa>
+References: <20240124130317.495519-1-kirill.shutemov@linux.intel.com>
+ <20240201193809.GA2710596@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240202101311.it.893-kees@kernel.org> <20240202101642.156588-2-keescook@chromium.org>
-In-Reply-To: <20240202101642.156588-2-keescook@chromium.org>
-From: Marco Elver <elver@google.com>
-Date: Fri, 2 Feb 2024 12:01:55 +0100
-Message-ID: <CANpmjNPPbTNPJfM5MNE6tW-jCse+u_RB8bqGLT3cTxgCsL+x-A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] ubsan: Reintroduce signed and unsigned overflow sanitizers
-To: Kees Cook <keescook@chromium.org>
-Cc: linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Hao Luo <haoluo@google.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Fangrui Song <maskray@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Bill Wendling <morbo@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Jonathan Corbet <corbet@lwn.net>, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, kasan-dev@googlegroups.com, 
-	linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240201193809.GA2710596@dev-arch.thelio-3990X>
 
-On Fri, 2 Feb 2024 at 11:16, Kees Cook <keescook@chromium.org> wrote:
->
-> Effectively revert commit 6aaa31aeb9cf ("ubsan: remove overflow
-> checks"), to allow the kernel to be built with the "overflow"
-> sanitizers again. This gives developers a chance to experiment[1][2][3]
-> with the instrumentation again, while compilers adjust their sanitizers
-> to deal with the impact of -fno-strict-oveflow (i.e. moving from
-> "overflow" checking to "wrap-around" checking).
->
-> Notably, the naming of the options is adjusted to use the name "WRAP"
-> instead of "OVERFLOW". In the strictest sense, arithmetic "overflow"
-> happens when a result exceeds the storage of the type, and is considered
-> by the C standard and compilers to be undefined behavior for signed
-> and pointer types (without -fno-strict-overflow). Unsigned arithmetic
-> overflow is defined as always wrapping around.
->
-> Because the kernel is built with -fno-strict-overflow, signed and pointer
-> arithmetic is defined to always wrap around instead of "overflowing"
-> (which could either be elided due to being undefined behavior or would
-> wrap around, which led to very weird bugs in the kernel).
->
-> So, the config options are added back as CONFIG_UBSAN_SIGNED_WRAP and
-> CONFIG_UBSAN_UNSIGNED_WRAP. Since the kernel has several places that
-> explicitly depend on wrap-around behavior (e.g. counters, atomics, crypto,
-> etc), also introduce the __signed_wrap and __unsigned_wrap function
-> attributes for annotating functions where wrapping is expected and should
-> not be instrumented. This will allow us to distinguish in the kernel
-> between intentional and unintentional cases of arithmetic wrap-around.
->
-> Additionally keep these disabled under CONFIG_COMPILE_TEST for now.
->
-> Link: https://github.com/KSPP/linux/issues/26 [1]
-> Link: https://github.com/KSPP/linux/issues/27 [2]
-> Link: https://github.com/KSPP/linux/issues/344 [3]
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/compiler_types.h | 14 ++++++-
->  lib/Kconfig.ubsan              | 19 ++++++++++
->  lib/test_ubsan.c               | 49 ++++++++++++++++++++++++
->  lib/ubsan.c                    | 68 ++++++++++++++++++++++++++++++++++
->  lib/ubsan.h                    |  4 ++
->  scripts/Makefile.ubsan         |  2 +
->  6 files changed, 155 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 6f1ca49306d2..e585614f3152 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -282,11 +282,23 @@ struct ftrace_likely_data {
->  #define __no_sanitize_or_inline __always_inline
->  #endif
->
-> +/* Allow wrapping arithmetic within an annotated function. */
-> +#ifdef CONFIG_UBSAN_SIGNED_WRAP
-> +# define __signed_wrap __attribute__((no_sanitize("signed-integer-overflow")))
-> +#else
-> +# define __signed_wrap
-> +#endif
-> +#ifdef CONFIG_UBSAN_UNSIGNED_WRAP
-> +# define __unsigned_wrap __attribute__((no_sanitize("unsigned-integer-overflow")))
-> +#else
-> +# define __unsigned_wrap
-> +#endif
-> +
->  /* Section for code which can't be instrumented at all */
->  #define __noinstr_section(section)                                     \
->         noinline notrace __attribute((__section__(section)))            \
->         __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
-> -       __no_sanitize_memory
-> +       __no_sanitize_memory __signed_wrap __unsigned_wrap
->
->  #define noinstr __noinstr_section(".noinstr.text")
->
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index 59e21bfec188..a7003e5bd2a1 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -116,6 +116,25 @@ config UBSAN_UNREACHABLE
->           This option enables -fsanitize=unreachable which checks for control
->           flow reaching an expected-to-be-unreachable position.
->
-> +config UBSAN_SIGNED_WRAP
-> +       bool "Perform checking for signed arithmetic wrap-around"
-> +       default UBSAN
-> +       depends on !COMPILE_TEST
-> +       depends on $(cc-option,-fsanitize=signed-integer-overflow)
-> +       help
-> +         This option enables -fsanitize=signed-integer-overflow which checks
-> +         for wrap-around of any arithmetic operations with signed integers.
-> +
-> +config UBSAN_UNSIGNED_WRAP
-> +       bool "Perform checking for unsigned arithmetic wrap-around"
-> +       depends on $(cc-option,-fsanitize=unsigned-integer-overflow)
-> +       depends on !X86_32 # avoid excessive stack usage on x86-32/clang
-> +       depends on !COMPILE_TEST
-> +       help
-> +         This option enables -fsanitize=unsigned-integer-overflow which checks
-> +         for wrap-around of any arithmetic operations with unsigned integers. This
-> +         currently causes x86 to fail to boot.
+On Thu, Feb 01, 2024 at 12:38:09PM -0700, Nathan Chancellor wrote:
+> Perhaps another solution would be to just
+> 
+>   #define cc_vendor (CC_VENDOR_NONE)
+> 
+> if CONFIG_ARCH_HAS_CC_PLATFORM is not set, since it can never be changed
+> from the default in arch/x86/coco/core.c.
 
-My hypothesis is that these options will quickly be enabled by various
-test and fuzzing setups, to the detriment of kernel developers. While
-the commit message states that these are for experimentation, I do not
-think it is at all clear from the Kconfig options.
+I think this approach is cleaner.
 
-Unsigned integer wrap-around is relatively common (it is _not_ UB
-after all). While I can appreciate that in some cases wrap around is a
-genuine semantic bug, and that's what we want to find with these
-changes, ultimately marking all semantically valid wrap arounds to
-catch the unmarked ones. Given these patterns are so common, and C
-programmers are used to them, it will take a lot of effort to mark all
-the intentional cases. But I fear that even if we get to that place,
-_unmarked_  but semantically valid unsigned wrap around will keep
-popping up again and again.
+Could you post a proper patch?
 
-What is the long-term vision to minimize the additional churn this may
-introduce?
+> 
+> diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
+> index 6ae2d16a7613..f3909894f82f 100644
+> --- a/arch/x86/include/asm/coco.h
+> +++ b/arch/x86/include/asm/coco.h
+> @@ -10,13 +10,13 @@ enum cc_vendor {
+>  	CC_VENDOR_INTEL,
+>  };
+>  
+> -extern enum cc_vendor cc_vendor;
+> -
+>  #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+> +extern enum cc_vendor cc_vendor;
+>  void cc_set_mask(u64 mask);
+>  u64 cc_mkenc(u64 val);
+>  u64 cc_mkdec(u64 val);
+>  #else
+> +#define cc_vendor (CC_VENDOR_NONE)
+>  static inline u64 cc_mkenc(u64 val)
+>  {
+>  	return val;
+> 
+> Cheers,
+> Nathan
+> 
 
-I think the problem reminds me a little of the data race problem,
-although I suspect unsigned integer wraparound is much more common
-than data races (which unlike unsigned wrap around is actually UB) -
-so chasing all intentional unsigned integer wrap arounds and marking
-will take even more effort than marking all intentional data races
-(which we're still slowly, but steadily, making progress towards).
-
-At the very least, these options should 'depends on EXPERT' or even
-'depends on BROKEN' while the story is still being worked out.
-
-Thanks,
--- Marco
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
