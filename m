@@ -1,79 +1,78 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C6E7C0A7
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 10:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EB67CF02
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 10:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706869009; cv=none; b=euAbBMWT1uHHZfwWUbRgzg/AYMFbrXm7wu2vk6BL0yDWAk5Ygy1M4am7uFNb6ex84hePA3SxHt8142RNIkXtA+yAoZjpJ3WwvTHRX8DQW/DwrcEyVM/0Z1sKk21KRoUUdaghyRo91oJal7VPb3xfTJC/VeFx8yj3g78DHChI4Co=
+	t=1706869010; cv=none; b=Yh29nkA4nc7E1ayVZD4C7iG5F2+ZWovhaz+weUtEKiBXXDWsJ/aBXI2s00u1Ikfd0mPa5LXXHfZWmDE4s1LGc4WFafpcfd1grfkrUf02eZQmSapIYtapeVO833enivtpTojoVuwxwL9sLkt2EgUhfEj+mFGZayopcmrw60i+5dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706869009; c=relaxed/simple;
-	bh=NkiEcsGlCZJdDWvQkJb/8yMO5oe0d2E5DUKWEGSWQdQ=;
+	s=arc-20240116; t=1706869010; c=relaxed/simple;
+	bh=ChqR4pwLOMRrvI2mwMAhvrmBk7bFBrYJU+84/NDgMjc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gC+KQTIEQBVj30jgmgO4DnxgrT5wuD9wXr8JJ/CNr0i2dfAGs/tZWHNvIG5b525h3ouqHzuS9SLeK5/L8ZCrSeVfHctKN2QWlF7cdpHagZcfbIieFnzEBM6MaCOHGbzlF89/XZV6jrT51ZccJNmzcRAEyTZ75ZMSAR6Jl9rLbro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cN1hsXk3; arc=none smtp.client-ip=209.85.215.170
+	 MIME-Version; b=boE/GT56XG/dMvgSJ+erIO01ZpWWPdbbO/A6AmTmNLU3SCViP9kAABVHckF4MK2WURDoA6UuXtHxcUo5QRZ6ePaoRt4eHxZUmlNXwPXA4Z7/Z5NUqPXMyM3dpn9nGj/450dxtceBbPlZFZkEtDu4nKEjANVuZMHPvROa0RJeg9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ARhWBcTE; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cN1hsXk3"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8b276979aso1467557a12.2
-        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 02:16:46 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ARhWBcTE"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d953fa3286so11490295ad.2
+        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 02:16:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google; t=1706869006; x=1707473806; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VqHYD682nla/ZHS426F2Ic30I1reUytKpu6/CiCUuio=;
-        b=cN1hsXk3ESlzmm8UU+m2AMP8B59nf9RHuG7UGdXGZgCMIgHi1YzymPWroubj7jsRLQ
-         LqKaj44kKUpX8AjZOiZEUk0oiBcd0OJsrHViGWc1VHYYoRwnvTFtOc+zJqCBPW0hc6v2
-         S+hYwlHlZbH7+mt+sSCTeOl9VVQMnX/b/SaWA=
+        bh=MZoPcgm2ExbWiklFnpgC7jG0zZ989QvpgVdI0GYP0N0=;
+        b=ARhWBcTEVCJHypnmUMSwOYu5RWEDSHQA0DYHKA2Vu29WPgimqv8FBRvBQTTzagLG4b
+         ijkM8CuzcoXte1uaA4q/kgnGjB0lvEnRzIr8gdrUf9qp/YJC02av61DaVI18KeblCV6E
+         9+FApYouhmYRMFRALnF/i0SCL18tgwCzndWFs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1706869006; x=1707473806;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VqHYD682nla/ZHS426F2Ic30I1reUytKpu6/CiCUuio=;
-        b=XuPh4oMCb82uhQ8WIIf4Ae+SRnBeJpXOkTfIyrYugw/QYM5IKzD55v86sX6/LSw7Il
-         47qpYuZyOSl8ByHO6lKfFtJg2Z6EeqNainW/kpM9P0UwQ+bDWDnJvRYgGQ8zD3yHBKRL
-         yritvhl00lpzjKG8I/LCu6c8t2fjcxeutb2CV4RVgI8Li2844fB5RX+AXecydhLPu8o/
-         MCYeHTVD44JPs61z2H4Z8klTPaDm/rFFPADazHfMX9XcgSivCr2OeuXefn6v4JPaOcau
-         qHI6qj+/IiSiBwmt6K8vqzKMfIkh6Ws/VSKZgVs2bon40v30L8UK2GzniSEZpUPOu84o
-         dwjA==
-X-Gm-Message-State: AOJu0Yxoy1pL8SjnO0JDBNcF/Tv0lqaonhUTEmKOK3On0o7oezk4O165
-	bxPwLQ8wmR4SPmLL17wYyD80jykIeKRMMc67BokPUtPq7DUHYu0KAWtP7vwUyg==
-X-Google-Smtp-Source: AGHT+IE7ogykgf3CPrTOSXlSel4NEbU94GfRuJmB0+7OM5pNDVN34K6iuL7kVwgRSVwhmcApqEEY9Q==
-X-Received: by 2002:a05:6a20:c70e:b0:19e:4eb9:ef71 with SMTP id hi14-20020a056a20c70e00b0019e4eb9ef71mr1120171pzb.30.1706869005816;
-        Fri, 02 Feb 2024 02:16:45 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUCIEC55517ryfx43oBGCFPd8+5dFYouZiV+CV5D+1pxdT6zQmvhdO5M7/v+v/0+oZ2ZKP7VrQbUgL/+VtcBvzZ9rochjM8ars8Ug9esO0kT5v54cAWR0SHeW4ire1WrcpFdFbQ7SfADox8Xxuh1jWS9wKjvP1bnnGlurfrPhqFs9QRBElWuWefb3AEu1hNKBjI2XxtHG4piQidM2SA6fjrWTt7uKR80kZSYBnGt/pWqyBNpyMmyOT/5d2v62lhhMyJrS7pUdeoQynMwhnOc8nOrPbqdyl4MRtTlrrtDCTufoYgPLWVMS0QmnBG2k+X/GobQNKpih7jbb/I55VHYapZPs3oS7wqBoFtthOQggR6Wr+lxoN4x8xKKwIGyfs3JdsCis24f9SYLTTCP9azwT4ogrQdvnFzfa8+iy3SPzY4RDWbCAFghuVydn2Y33c4hZl+THJ9JDrTaEd4ANQWc6gqumPJ3fQKU/fSJH9aykK/aQ+AenQA63NHiGImFoI9oWyPnzAjr7y7kXVTN7aDJ0nQMth/WEFtVDO7RMZUzMoA982f8aJ0qXSavU4KPEQx75+c+RK1oy3Z8IF94lIN9ED1UJszMvSRYvzaryIPixZ9wmONfyzrZVVHYE39Ac8Zq5CfYfgk8Pg=
+        bh=MZoPcgm2ExbWiklFnpgC7jG0zZ989QvpgVdI0GYP0N0=;
+        b=tiFI2AlhqXZsIxhtEo/aV8LbAdKSaJvPuqNn4K0vV0786MMyKUBdWMHLrbq4NryGQZ
+         v5LewVQl5MEqpEGLNzSD2bLEqD/rGmdbbObwwXGp/ZKKurDzfsA34kbiqeVWaYDGjQvI
+         VyzB1DjEAyUTDtWM4ZSxZUNIZ0lf1PzTdtzE2rjC2KxLOVNg5k6fgOhsV5rGqMX6p/b/
+         3S6FpTp6HJ8TWGphHMaDBg69pWOz9VtsKZpe1lJMAq7PQgWwULRmbjTBE0uBnKY0kE9I
+         KqmN/bnsZjYAZqK1iEf4l43giR8Eor3VzX1v8yjHrq79iY9PvaS+9Jd4ZygnBUWFBfVL
+         cSbA==
+X-Gm-Message-State: AOJu0YwGhSvdD13Ir4Y/G14pksTvM6PAu13bRuVoDiG6l+O2fJPblle3
+	2B2gHc2emRnITIGZBnLHu+8FuJrigXRu0+Y+0SNgWhwyXeQ1OJ/8gd/kSHWTuA==
+X-Google-Smtp-Source: AGHT+IFZZqecz2ffApEaxT7TLPhrkOmpZ7zCVX8hS1RbsMmyYzML6u2pv85e0w91QeAZXTSJ34nwvA==
+X-Received: by 2002:a17:903:11cc:b0:1d9:4c1c:1982 with SMTP id q12-20020a17090311cc00b001d94c1c1982mr5628058plh.50.1706869006293;
+        Fri, 02 Feb 2024 02:16:46 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXOeMEwTCrwVTk9AQndfLYbmDNRylcw0o2ibKbDnMznrN7x11BigeKNplTpQlrOOpph7WEjjuxpE37XcuRQfl/0SHfol6HMQr+MqIRtGDONtHO6dAl1jMs/Tl6W9r24YET09T7hCL/DO0FDFGjcrC72rvm4mB/vmqOvh1vxDsJyuLRWvJWw3/w4z5rtvEuZRPkMbGoipZgtg8rcJ41sXsdo3angUjuj0G8ec7QYPFYuwWy+m68cyEe81OcaIe8sLbj/3O4jmRH3AzegBGuGr90yL+ibNtmBIeC/OVpGpHJm2gVK0NWlmoly6bhTYXr6L9BOCB0Kg0OH0RhAQsjB8f7xNDxL3As4UhLZ0YCWsC0g+VHBc9hDuym9JMTH9yaR/XOKFsvfd43CsTc7PwSMu3sdUPXjMz+pCj9jczZeX5BQcIdGiFX5YT8STUPN3jjkdQkl2FR2og8L8USVcSWVqrGvoZz86uYU6tZqLZFUyIvexgzNZUgHwgBhfGx3SWl2sTnvtJiFkQqwa+BsspRXuZQwFGIPxhj3qP6TvyotG6foKdxoC+FcQSYbhRLIL6CX/nulbU7pIr8Ch9Utkr2d3zpj+PXBtF8WdCCWg1Y=
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g18-20020aa78192000000b006d9a7a48bbesm1233974pfi.116.2024.02.02.02.16.42
+        by smtp.gmail.com with ESMTPSA id ks14-20020a170903084e00b001d963d963aasm1247928plb.308.2024.02.02.02.16.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 02 Feb 2024 02:16:42 -0800 (PST)
 From: Kees Cook <keescook@chromium.org>
 To: linux-hardening@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Marco Elver <elver@google.com>,
+	linux-doc@vger.kernel.org,
 	linux-kbuild@vger.kernel.org,
 	Fangrui Song <maskray@google.com>,
 	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
 	Bill Wendling <morbo@google.com>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	x86@kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-crypto@vger.kernel.org,
 	kasan-dev@googlegroups.com,
 	linux-acpi@vger.kernel.org
-Subject: [PATCH v2 3/6] ubsan: Introduce CONFIG_UBSAN_POINTER_WRAP
-Date: Fri,  2 Feb 2024 02:16:36 -0800
-Message-Id: <20240202101642.156588-3-keescook@chromium.org>
+Subject: [PATCH v2 4/6] ubsan: Remove CONFIG_UBSAN_SANITIZE_ALL
+Date: Fri,  2 Feb 2024 02:16:37 -0800
+Message-Id: <20240202101642.156588-4-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240202101311.it.893-kees@kernel.org>
 References: <20240202101311.it.893-kees@kernel.org>
@@ -83,191 +82,239 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6190; i=keescook@chromium.org;
- h=from:subject; bh=NkiEcsGlCZJdDWvQkJb/8yMO5oe0d2E5DUKWEGSWQdQ=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlvMEH83ic3PPh75cmRopeu/CT8AfoDx9L/zyas
- Z3T4rMEfOyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZbzBBwAKCRCJcvTf3G3A
- JoHiD/wK4/yqji7UFxhFl81jgo6lzacdRREgM+v/EzDzSlWEk4v/ikFRWbpa91WiN0Qak9XbAnz
- t+Iy1CRNEXFaG0DC2B+fN12n5kGnacf0wuU3362+aaDsSeb7D31lpNZevbRP23nPQs7nce8hyuT
- YNNkhojvoHIcOgH7cK/PtEch2tgM/Rc9uzc/DqE+gcTJY3DgLHfU+T+0O1fh2/Y5t3ZKd10kNZi
- 8RfnqVuqRo9MCZ+F0lz/AksQ4rZ0O6GunQ3g1dVnvurEwqGqbhEpH1xL/kfrpQdXcSkB6bWeQ4d
- kaFqttOn7Yxorvdm9nGSsCJTfzsxpS7t0eIxnYmgGyNkTN/pqqGTGM8+1IRjOaDJ1669sBKPq9W
- /VqiRbRr40Yx0b31xtNjMMrbyEL8VjOBBHFwN+gV3PV1uKwk2HBthmmRfpXCn2FU2xjlPWF0+xb
- MP9Rrv3tHCr1rv7aAeUao8KooIiVoWkxUgQC0616IP7k9Hm3LUDvdS5VTxzyXoymxcT9xrkNp8D
- kADO5HIwv09ScgEvVsI++iIGf3x4n/QQO9sY85utNvEGE9KAb5yta4SHxnYjcmYE/7c+YbOp3q3
- nl+gU8NALxVPOeuFNxZeCdqRg2Hc/0QGVjbuQCXLG3yWgDVonUKve5mSxOsioydG3jiIsFLRJFi uVGyAk/WJ7pksww==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7713; i=keescook@chromium.org;
+ h=from:subject; bh=ChqR4pwLOMRrvI2mwMAhvrmBk7bFBrYJU+84/NDgMjc=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlvMEHFqznRoc47f8x3QBqsx9X6BtCiDiZKmRIR
+ 0EaK8ZbstmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZbzBBwAKCRCJcvTf3G3A
+ JongD/4vXj5YeywVHimPvNTkjtoy7sRY1cQ7zCQ+0Hictm2B0DGz5Xk+fYxqkuRfc151mQ9m4RW
+ hP/Nu0vNsr27XyXjaTp9nQ6ahzuF10bljtgK2IkLDZcNMmOIIyYoeEiQP77LDx8eSdT8g4BAsMh
+ RWVq9uL+azlAB7GshQN1aC48YvnG3+ilmBoUryzPZq44ElHQ3imdRFx0QIB9uvCOHalfj0OEFzm
+ LFFkPuCcG03ZQliO3kdl1J1rKlnJ2NScx4Rv6golBOfRozWCYjp1R5BTLDAotn+wLbFOshsHTir
+ VSRCVP+LlRDHI0x7gdG8KFNrj8lcD4TLoTjz7pAlDq1AYVyQ1d2Nrob2lnKfNA8uzLgs8SoP8yo
+ YkCJj1Gt9TvyIZZKqnqd6JgPANTPlc/uyAdyafJYYew8mAa2ts04DSpqWxna1uiTLUj3PCd8u5k
+ RO2KY6Z2qcIsyanyIH3xHV5ivXuf1VL6vd2O568ewYuMOrPgrY0dGATL9aKYAHsVDlr0Y1iWh60
+ WzYRH7kF4CJmKRh3Jmz19lehP4zo61sK83NIUBMxauh91KIEpurKTn9z8sRc82twKvcKOPv2IRD
+ DMVj718hh+eiK507UGiwiIBqJY8/lm3ljxl+5UzgkmZhmTAPeq4I1i056gYcFjcE4J5ij4SVemG geww1McF0NisgJA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Gain coverage for pointer wrap-around checking. Adds support for
--fsanitize=pointer-overflow, and introduces the __pointer_wrap function
-attribute to match the signed and unsigned attributes. Also like the
-others, it is currently disabled under CONFIG_COMPILE_TEST.
+For simplicity in splitting out UBSan options into separate rules,
+remove CONFIG_UBSAN_SANITIZE_ALL, effectively defaulting to "y", which
+is how it is generally used anyway. (There are no ":= y" cases beyond
+where a specific file is enabled when a top-level ":= n" is in effect.)
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Marco Elver <elver@google.com>
+Cc: linux-doc@vger.kernel.org
 Cc: linux-kbuild@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/compiler_types.h |  7 ++++++-
- lib/Kconfig.ubsan              |  8 ++++++++
- lib/test_ubsan.c               | 33 +++++++++++++++++++++++++++++++++
- lib/ubsan.c                    | 21 +++++++++++++++++++++
- lib/ubsan.h                    |  1 +
- scripts/Makefile.ubsan         |  1 +
- 6 files changed, 70 insertions(+), 1 deletion(-)
+ Documentation/dev-tools/ubsan.rst | 28 ++++++++--------------------
+ arch/arm/Kconfig                  |  2 +-
+ arch/arm64/Kconfig                |  2 +-
+ arch/mips/Kconfig                 |  2 +-
+ arch/parisc/Kconfig               |  2 +-
+ arch/powerpc/Kconfig              |  2 +-
+ arch/riscv/Kconfig                |  2 +-
+ arch/s390/Kconfig                 |  2 +-
+ arch/x86/Kconfig                  |  2 +-
+ lib/Kconfig.ubsan                 | 13 +------------
+ scripts/Makefile.lib              |  2 +-
+ 11 files changed, 18 insertions(+), 41 deletions(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index e585614f3152..e65ce55046fd 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -293,12 +293,17 @@ struct ftrace_likely_data {
- #else
- # define __unsigned_wrap
- #endif
-+#ifdef CONFIG_UBSAN_POINTER_WRAP
-+# define __pointer_wrap __attribute__((no_sanitize("pointer-overflow")))
-+#else
-+# define __pointer_wrap
-+#endif
+diff --git a/Documentation/dev-tools/ubsan.rst b/Documentation/dev-tools/ubsan.rst
+index 2de7c63415da..e3591f8e9d5b 100644
+--- a/Documentation/dev-tools/ubsan.rst
++++ b/Documentation/dev-tools/ubsan.rst
+@@ -49,34 +49,22 @@ Report example
+ Usage
+ -----
  
- /* Section for code which can't be instrumented at all */
- #define __noinstr_section(section)					\
- 	noinline notrace __attribute((__section__(section)))		\
- 	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
--	__no_sanitize_memory __signed_wrap __unsigned_wrap
-+	__no_sanitize_memory __signed_wrap __unsigned_wrap __pointer_wrap
+-To enable UBSAN configure kernel with::
++To enable UBSAN, configure the kernel with::
  
- #define noinstr __noinstr_section(".noinstr.text")
+-	CONFIG_UBSAN=y
++  CONFIG_UBSAN=y
  
+-and to check the entire kernel::
+-
+-        CONFIG_UBSAN_SANITIZE_ALL=y
+-
+-To enable instrumentation for specific files or directories, add a line
+-similar to the following to the respective kernel Makefile:
+-
+-- For a single file (e.g. main.o)::
+-
+-    UBSAN_SANITIZE_main.o := y
+-
+-- For all files in one directory::
+-
+-    UBSAN_SANITIZE := y
+-
+-To exclude files from being instrumented even if
+-``CONFIG_UBSAN_SANITIZE_ALL=y``, use::
++To exclude files from being instrumented use::
+ 
+   UBSAN_SANITIZE_main.o := n
+ 
+-and::
++and to exclude all targets in one directory use::
+ 
+   UBSAN_SANITIZE := n
+ 
++When disabled for all targets, specific files can be enabled using::
++
++  UBSAN_SANITIZE_main.o := y
++
+ Detection of unaligned accesses controlled through the separate option -
+ CONFIG_UBSAN_ALIGNMENT. It's off by default on architectures that support
+ unaligned accesses (CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y). One could
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 0af6709570d1..287e62522064 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -29,7 +29,7 @@ config ARM
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if CPU_V7 || CPU_V7M || CPU_V6K
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_KEEP_MEMBLOCK
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index aa7c1d435139..78533d1b7f35 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -107,7 +107,7 @@ config ARM64
+ 	select ARCH_WANT_LD_ORPHAN_WARN
+ 	select ARCH_WANTS_NO_INSTR
+ 	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARM_AMBA
+ 	select ARM_ARCH_TIMER
+ 	select ARM_GIC
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 797ae590ebdb..9750ce3e40d5 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -14,7 +14,7 @@ config MIPS
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_KEEP_MEMBLOCK
+ 	select ARCH_USE_BUILTIN_BSWAP
+diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+index d14ccc948a29..dbc9027ea2f4 100644
+--- a/arch/parisc/Kconfig
++++ b/arch/parisc/Kconfig
+@@ -12,7 +12,7 @@ config PARISC
+ 	select ARCH_HAS_ELF_RANDOMIZE
+ 	select ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_HAS_STRICT_MODULE_RWX
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select ARCH_NO_SG_CHAIN
+ 	select ARCH_SUPPORTS_HUGETLBFS if PA20
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index b9fc064d38d2..2065973e09d2 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -154,7 +154,7 @@ config PPC
+ 	select ARCH_HAS_SYSCALL_WRAPPER		if !SPU_BASE && !COMPAT
+ 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_HAS_UACCESS_FLUSHCACHE
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+ 	select ARCH_KEEP_MEMBLOCK
+ 	select ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE	if PPC_RADIX_MMU
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index bffbd869a068..d824d113a02d 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -37,7 +37,7 @@ config RISCV
+ 	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARCH_HAS_VDSO_DATA
+ 	select ARCH_KEEP_MEMBLOCK if ACPI
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index fe565f3a3a91..97dd25521617 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -82,7 +82,7 @@ config S390
+ 	select ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_HAS_STRICT_MODULE_RWX
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARCH_HAS_VDSO_DATA
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+ 	select ARCH_INLINE_READ_LOCK
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 5edec175b9bf..1c4c326a3640 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -100,7 +100,7 @@ config X86
+ 	select ARCH_HAS_STRICT_MODULE_RWX
+ 	select ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+-	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UBSAN
+ 	select ARCH_HAS_DEBUG_WX
+ 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
 diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-index a7003e5bd2a1..04222a6d7fd9 100644
+index 04222a6d7fd9..0611120036eb 100644
 --- a/lib/Kconfig.ubsan
 +++ b/lib/Kconfig.ubsan
-@@ -135,6 +135,14 @@ config UBSAN_UNSIGNED_WRAP
- 	  for wrap-around of any arithmetic operations with unsigned integers. This
- 	  currently causes x86 to fail to boot.
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-config ARCH_HAS_UBSAN_SANITIZE_ALL
++config ARCH_HAS_UBSAN
+ 	bool
  
-+config UBSAN_POINTER_WRAP
-+	bool "Perform checking for pointer arithmetic wrap-around"
-+	depends on !COMPILE_TEST
-+	depends on $(cc-option,-fsanitize=pointer-overflow)
-+	help
-+	  This option enables -fsanitize=pointer-overflow which checks
-+	  for wrap-around of any arithmetic operations with pointers.
-+
- config UBSAN_BOOL
- 	bool "Perform checking for non-boolean values used as boolean"
- 	default UBSAN
-diff --git a/lib/test_ubsan.c b/lib/test_ubsan.c
-index 84d8092d6c32..1cc049b3ef34 100644
---- a/lib/test_ubsan.c
-+++ b/lib/test_ubsan.c
-@@ -56,6 +56,36 @@ static void test_ubsan_negate_overflow(void)
- 	val = -val;
- }
+ menuconfig UBSAN
+@@ -169,17 +169,6 @@ config UBSAN_ALIGNMENT
+ 	  Enabling this option on architectures that support unaligned
+ 	  accesses may produce a lot of false positives.
  
-+static void test_ubsan_pointer_overflow_add(void)
-+{
-+	volatile void *top = (void *)ULONG_MAX;
-+
-+	UBSAN_TEST(CONFIG_UBSAN_POINTER_WRAP);
-+	top += 2;
-+}
-+
-+static void test_ubsan_pointer_overflow_sub(void)
-+{
-+	volatile void *bottom = (void *)1;
-+
-+	UBSAN_TEST(CONFIG_UBSAN_POINTER_WRAP);
-+	bottom -= 3;
-+}
-+
-+struct ptr_wrap {
-+	int a;
-+	int b;
-+};
-+
-+static void test_ubsan_pointer_overflow_mul(void)
-+{
-+	volatile struct ptr_wrap *half = (void *)(ULONG_MAX - 128);
-+	volatile int bump = 128;
-+
-+	UBSAN_TEST(CONFIG_UBSAN_POINTER_WRAP);
-+	half += bump;
-+}
-+
- static void test_ubsan_divrem_overflow(void)
- {
- 	volatile int val = 16;
-@@ -139,6 +169,9 @@ static const test_ubsan_fp test_ubsan_array[] = {
- 	test_ubsan_sub_overflow,
- 	test_ubsan_mul_overflow,
- 	test_ubsan_negate_overflow,
-+	test_ubsan_pointer_overflow_add,
-+	test_ubsan_pointer_overflow_sub,
-+	test_ubsan_pointer_overflow_mul,
- 	test_ubsan_shift_out_of_bounds,
- 	test_ubsan_out_of_bounds,
- 	test_ubsan_load_invalid_value,
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index 5fc107f61934..d49580ff6aea 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -289,6 +289,27 @@ void __ubsan_handle_negate_overflow(void *_data, void *old_val)
- }
- EXPORT_SYMBOL(__ubsan_handle_negate_overflow);
+-config UBSAN_SANITIZE_ALL
+-	bool "Enable instrumentation for the entire kernel"
+-	depends on ARCH_HAS_UBSAN_SANITIZE_ALL
+-	default y
+-	help
+-	  This option activates instrumentation for the entire kernel.
+-	  If you don't enable this option, you have to explicitly specify
+-	  UBSAN_SANITIZE := y for the files/directories you want to check for UB.
+-	  Enabling this option will get kernel image size increased
+-	  significantly.
+-
+ config TEST_UBSAN
+ 	tristate "Module for testing for undefined behavior detection"
+ 	depends on m
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index cd5b181060f1..52efc520ae4f 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -175,7 +175,7 @@ endif
  
-+void __ubsan_handle_pointer_overflow(void *_data, void *lhs, void *rhs)
-+{
-+	struct overflow_data *data = _data;
-+	unsigned long before = (unsigned long)lhs;
-+	unsigned long after  = (unsigned long)rhs;
-+
-+	if (suppress_report(&data->location))
-+		return;
-+
-+	ubsan_prologue(&data->location, "pointer-overflow");
-+
-+	if (after == 0)
-+		pr_err("overflow wrapped to NULL\n");
-+	else if (after < before)
-+		pr_err("overflow wrap-around\n");
-+	else
-+		pr_err("underflow wrap-around\n");
-+
-+	ubsan_epilogue();
-+}
-+EXPORT_SYMBOL(__ubsan_handle_pointer_overflow);
+ ifeq ($(CONFIG_UBSAN),y)
+ _c_flags += $(if $(patsubst n%,, \
+-		$(UBSAN_SANITIZE_$(basetarget).o)$(UBSAN_SANITIZE)$(CONFIG_UBSAN_SANITIZE_ALL)), \
++		$(UBSAN_SANITIZE_$(basetarget).o)$(UBSAN_SANITIZE)y), \
+ 		$(CFLAGS_UBSAN))
+ endif
  
- void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs)
- {
-diff --git a/lib/ubsan.h b/lib/ubsan.h
-index 0abbbac8700d..5dd27923b78b 100644
---- a/lib/ubsan.h
-+++ b/lib/ubsan.h
-@@ -128,6 +128,7 @@ void __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
- void __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
- void __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
- void __ubsan_handle_negate_overflow(void *_data, void *old_val);
-+void __ubsan_handle_pointer_overflow(void *_data, void *lhs, void *rhs);
- void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
- void __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
- void __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
-diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-index 7b2f3d554c59..df4ccf063f67 100644
---- a/scripts/Makefile.ubsan
-+++ b/scripts/Makefile.ubsan
-@@ -10,6 +10,7 @@ ubsan-cflags-$(CONFIG_UBSAN_DIV_ZERO)		+= -fsanitize=integer-divide-by-zero
- ubsan-cflags-$(CONFIG_UBSAN_UNREACHABLE)	+= -fsanitize=unreachable
- ubsan-cflags-$(CONFIG_UBSAN_SIGNED_WRAP)	+= -fsanitize=signed-integer-overflow
- ubsan-cflags-$(CONFIG_UBSAN_UNSIGNED_WRAP)	+= -fsanitize=unsigned-integer-overflow
-+ubsan-cflags-$(CONFIG_UBSAN_POINTER_WRAP)	+= -fsanitize=pointer-overflow
- ubsan-cflags-$(CONFIG_UBSAN_BOOL)		+= -fsanitize=bool
- ubsan-cflags-$(CONFIG_UBSAN_ENUM)		+= -fsanitize=enum
- ubsan-cflags-$(CONFIG_UBSAN_TRAP)		+= $(call cc-option,-fsanitize-trap=undefined,-fsanitize-undefined-trap-on-error)
 -- 
 2.34.1
 
