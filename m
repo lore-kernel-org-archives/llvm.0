@@ -1,163 +1,103 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEB314076F
-	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 12:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4E246439
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 12:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706876226; cv=none; b=jj/4B1UGn0MmygHuHfKrndnGX03U4zJ2Dyw/i3cioQWh78Ic7rjFwOP7xW5InayIFjibq893M9lIEnlagtWj9BBxFX/RAoRU9BRYsbyycNPYEp4Dw1PMU/93cbOqZ1GoyfSIFMwumXuQuX+S/JmvGrfUUethFTAO7UIvfEXqkmc=
+	t=1706878693; cv=none; b=eKDC7fFktnymz31T8ml1fh0NM9/TQI6QkeSGfSbdg8svisa1LieWLzTJBQijac/L5B6ajp1CCevjcsd6u2oCgpRdGMc2WKfLw3IOIlgD6M3UYn54p8VC4FzZL7l/Wtv6EhW93TQivKpOcxiaOgr14lUtpyriNPBpBWnGdoz+z1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706876226; c=relaxed/simple;
-	bh=6WMlixFsMD3YXZFA7X0TiodSA2ARpqznFCPL+NJ64J0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tI2sahJu98sKqdUWUXcSbmQGMCrGjFdlyEL/0trwl4/LWGCLF0PbTuVfk90bw7GVHOyegp/rC3FIVY2NFDsAeuvVs45gHm2Ba2s2YAgLcrPb0A3U2D2zazpk8Hvh74OjYb3igiwiVGnq/KJEsphivyV73LrJoXfrtVENTTCgwKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CK1fXj8e; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1706878693; c=relaxed/simple;
+	bh=eZxOtydVn75KlLDsjhljk2E/9by5DLKsxQBgEm9BoA4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a50T8p47PWlP564ZUSv9idCBVGpxSFCrAfGrHtdHPJtdaC6Y7cd9fOODI+caRu3chzEwF5wE6aoAfwCi6TmBy06n7KhM8NHNXhQU9WYy3jkMNe3361u4SvDRD7hOi7UZjPpfZomoTc1HPW0vaREQ8u5wt0Uz8YKlpaFVWrL2AQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XxK6AL0R; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CK1fXj8e"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2963cc5e8acso497547a91.2
-        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 04:17:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706876224; x=1707481024; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UQ0esveh//cg9XCkiI/7xWePudzmiIjItwxrOruHVwk=;
-        b=CK1fXj8eESbxdExHMWBdMvQZKDOMDKZiyRDNd+FckxoWhtluS71CHNaw9reNM6a24A
-         MPlu/f3dL9j8PZysVsySu5mg+X6ojrP/eKMxRfCk0PcPMfXUqJV8IWC9KSr8UZsNO8fx
-         lRVLj6KwlArQV5qf9ToGMZCecwiE9v16YJu0g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706876224; x=1707481024;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UQ0esveh//cg9XCkiI/7xWePudzmiIjItwxrOruHVwk=;
-        b=jtffoDuPS+SE+Z1QgsNiCP4XA4fVQfm1sd0xiRHYKSTKKyRAn6GKIXtgTm9pdTpxvL
-         rZ36vEYf5diBMlzRspr0k4nEG2Mlr4Fh3/RqYzaYVuA+iikddc9bcyIcSXp6kVuK7l+a
-         JlT1J/ibgxXHwmZ1nwxcnVA4LGrMDAJryzgKNOqNUWTz8t/R9yaN8EHCkKCBnP3Gpc1V
-         aUdiNFdNRb4uq0CZXLwybpYPxCSknNabVzJ6di95YGVeYWIbLZrtRpIxGYKj++33pBWO
-         WHKcFj+Vafa2yhTriprx7Fb8l85zy8O5dQvHlLnEBnCRWCXPUyunhw0Q7dkgCTZNz8xj
-         Nevw==
-X-Gm-Message-State: AOJu0YygcRGw3TIVPtDW5tfa9Gf4/dOL07avl5Q4HurIpLoAyl82wM/r
-	fjX+fvIUCH2k1px/zqjTx9lcxj5F5xcZl2BX3B4Vj5lnKKPfr0v5lvEsCoclGEFB21glM9+uGYI
-	=
-X-Google-Smtp-Source: AGHT+IGg88zNLC34obB5/fOW4+rC0GoCG14stcT3rLU6L9HZrzANdbP1B4KMEzwmTO1dY9t5epZ2BQ==
-X-Received: by 2002:a17:90b:1298:b0:296:1dcf:c296 with SMTP id fw24-20020a17090b129800b002961dcfc296mr1876188pjb.18.1706876223734;
-        Fri, 02 Feb 2024 04:17:03 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUGVn+0c2h4HxapCQwK+CBO5gK3KOvlzIatkL3Eg+0hshg2pC4xRmXdAPGwrPO866Nj9YF+U6s6nJkm+zEO0B/JBsHbpfqLIrHUgGxhmDm7PR7dJOIlSKekZQeCfpS4kk6gdUCRy8AKy1koQcYXJUoBqPtoXthgUI8I+/eaEfrPbo4kflZwbchOOzcwU5swL0S6WdMTIJa+mw55to+6uV3nDPQwGmi8fzDIZ1/ceDsJxByCfPOeO0l/S81b9BgnbLDHSPgD7FlGPHvtp8Z/FomG1NkHrVilLrlukHP1pAw9wYKJnI22iJxJmSjYHmQniMGlZYsc/cdM58fBdkhFMawZoGvAvkTYiXvNll9VJlnJ8j/FX+IAuDXHo43itnq+OGQQdsBiGyQPYcczK3z4vcpWYVXqya3O7moVN8gWmQjkhvZgr8SZOqWDhbrhJgPiVmYM7CkU25sPa9I0PqKXD5aa7cvoHKmNkLXZ4/epetFyeC0sd5jBRU3IEcz8/3lo1E3SteGrn+6+Y/KEkJjGEjE/TlV+t7ZzrhslvL+T17oohFYN0g54YBk1TJzsBIkJwnqakFKkOfMS15bofbWnqaCKkx+rJlTObTtkF5AePTEEUWmqLLwa3jLiNLz4lnivpuzOGcGhWnPJl5a421rYycnirgqxJHh/cGTKPA8EmcYWycgZa67VxpoBN5oGlmkdby+KZtTF2BuWlV1VWF5HfxIzOVdG8qZz4Q257WM=
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id su13-20020a17090b534d00b002927a36b7a0sm1671429pjb.23.2024.02.02.04.17.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 04:17:03 -0800 (PST)
-Date: Fri, 2 Feb 2024 04:17:02 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Marco Elver <elver@google.com>
-Cc: linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Zijlstra <peterz@infradead.org>, Hao Luo <haoluo@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Fangrui Song <maskray@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Bill Wendling <morbo@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
-	netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] ubsan: Reintroduce signed and unsigned overflow
- sanitizers
-Message-ID: <202402020405.7E0B5B3784@keescook>
-References: <20240202101311.it.893-kees@kernel.org>
- <20240202101642.156588-2-keescook@chromium.org>
- <CANpmjNPPbTNPJfM5MNE6tW-jCse+u_RB8bqGLT3cTxgCsL+x-A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XxK6AL0R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706878687;
+	bh=eZxOtydVn75KlLDsjhljk2E/9by5DLKsxQBgEm9BoA4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=XxK6AL0RPCUwDZCkOln4QsiMSxSV+V+FsoLeSFodim/VeGCBa1gRurxBCEurJn9H1
+	 M2eGLmZ+8wJVHWBjjDGOkpEOaya0UT3PXQi1F27UH0gXzNGRVlOL4c/Cez0pazK5Rr
+	 d9cB1gGLUlMHG3kODLG+Gi6kn012YCsOX8O9kqZ/jGxnF3UgCGRr0Vn76qmqgatdU6
+	 5JZ+kROqn3LJvFe9To2ze9qVVshRt8ZPYqZQBDdxr4afC+bq5B5knr2nVetBzsmkTA
+	 /28LyP/bnxgLvhI5Kx9TFGvU4P2UVolG0oliYpt3Pt/ApMa4UW5btQsmVeYAJpdc/k
+	 QYH8MpJArwguA==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 79E863781183;
+	Fri,  2 Feb 2024 12:58:06 +0000 (UTC)
+Message-ID: <5658ec37-868f-454d-a149-467e6de139cd@collabora.com>
+Date: Fri, 2 Feb 2024 13:58:05 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNPPbTNPJfM5MNE6tW-jCse+u_RB8bqGLT3cTxgCsL+x-A@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] media: mediatek: vcodedc: Fix
+ Wcast-function-type-strict warnings
+Content-Language: en-US
+To: Sami Tolvanen <samitolvanen@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Ricardo Ribalda
+ <ribalda@chromium.org>, =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?=
+ <nfraprado@collabora.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Mike Isely <isely@pobox.com>, Tiffany Lin <tiffany.lin@mediatek.com>,
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+ Yunfei Dong <yunfei.dong@mediatek.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20240128-fix-clang-warnings-v1-0-1d946013a421@chromium.org>
+ <20240128-fix-clang-warnings-v1-3-1d946013a421@chromium.org>
+ <20240201221654.GC2240065@dev-arch.thelio-3990X>
+ <CABCJKudd3SUy3Qor7Tc0zyJsSAWy0PavbbBFALuWEpBa32pBCQ@mail.gmail.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CABCJKudd3SUy3Qor7Tc0zyJsSAWy0PavbbBFALuWEpBa32pBCQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 02, 2024 at 12:01:55PM +0100, Marco Elver wrote:
-> On Fri, 2 Feb 2024 at 11:16, Kees Cook <keescook@chromium.org> wrote:
-> > [...]
-> > +config UBSAN_UNSIGNED_WRAP
-> > +       bool "Perform checking for unsigned arithmetic wrap-around"
-> > +       depends on $(cc-option,-fsanitize=unsigned-integer-overflow)
-> > +       depends on !X86_32 # avoid excessive stack usage on x86-32/clang
-> > +       depends on !COMPILE_TEST
-> > +       help
-> > +         This option enables -fsanitize=unsigned-integer-overflow which checks
-> > +         for wrap-around of any arithmetic operations with unsigned integers. This
-> > +         currently causes x86 to fail to boot.
+Il 01/02/24 23:25, Sami Tolvanen ha scritto:
+> On Thu, Feb 1, 2024 at 10:17 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> On Sun, Jan 28, 2024 at 02:12:22AM +0000, Ricardo Ribalda wrote:
+>>> Building with LLVM=1 throws the following warning:
+>>> drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c:38:32: warning: cast from 'mtk_vcodec_ipi_handler' (aka 'void (*)(void *, unsigned int, void *)') to 'ipi_handler_t' (aka 'void (*)(const void *, unsigned int, void *)') converts to incompatible function type [-Wcast-function-type-strict]
+>>>
+>>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+>>
+>> I am not positive because I don't have any hardware to test this driver
+>> but I suspect this patch is just hiding the warning without actually
+>> addressing the issue that it is pointing out.
 > 
-> My hypothesis is that these options will quickly be enabled by various
-> test and fuzzing setups, to the detriment of kernel developers. While
-> the commit message states that these are for experimentation, I do not
-> think it is at all clear from the Kconfig options.
-
-I can certainly rephrase it more strongly. I would hope that anyone
-enabling the unsigned sanitizer would quickly realize how extremely
-noisy it is.
-
-> Unsigned integer wrap-around is relatively common (it is _not_ UB
-> after all). While I can appreciate that in some cases wrap around is a
-> genuine semantic bug, and that's what we want to find with these
-> changes, ultimately marking all semantically valid wrap arounds to
-> catch the unmarked ones. Given these patterns are so common, and C
-> programmers are used to them, it will take a lot of effort to mark all
-> the intentional cases. But I fear that even if we get to that place,
-> _unmarked_  but semantically valid unsigned wrap around will keep
-> popping up again and again.
-
-I agree -- it's going to be quite a challenge. My short-term goal is to
-see how far the sanitizer itself can get with identifying intentional
-uses. For example, I found two more extremely common code patterns that
-trip it now:
-
-	unsigned int i = ...;
-	...
-	while (i--) { ... }
-
-This trips the sanitizer at loop exit. :P It seems like churn to
-refactor all of these into "for (; i; i--)". The compiler should be able
-to identify this by looking for later uses of "i", etc.
-
-The other is negative constants: -1UL, -3ULL, etc. These are all over
-the place and very very obviously intentional and should be ignored by
-the compiler.
-
-> What is the long-term vision to minimize the additional churn this may
-> introduce?
-
-My hope is that we can evolve the coverage over time. Solving it all at
-once won't be possible, but I think we can get pretty far with the
-signed overflow sanitizer, which runs relatively cleanly already.
-
-If we can't make meaningful progress in unsigned annotations, I think
-we'll have to work on gaining type-based operator overloading so we can
-grow type-aware arithmetic. That will serve as a much cleaner
-annotation. E.g. introduce jiffie_t, which wraps.
-
-> I think the problem reminds me a little of the data race problem,
-> although I suspect unsigned integer wraparound is much more common
-> than data races (which unlike unsigned wrap around is actually UB) -
-> so chasing all intentional unsigned integer wrap arounds and marking
-> will take even more effort than marking all intentional data races
-> (which we're still slowly, but steadily, making progress towards).
+> Agreed, this won't fix the issue. The correct solution is to drop the
+> cast and change the handler type to match the pointer type (i.e. use
+> const void* for the first argument).
 > 
-> At the very least, these options should 'depends on EXPERT' or even
-> 'depends on BROKEN' while the story is still being worked out.
 
-Perhaps I should hold off on bringing the unsigned sanitizer back? I was
-hoping to work in parallel with the signed sanitizer, but maybe this
-isn't the right approach?
+Even though I agree that the correct solution is to change the handler's type,
+I think that having a test on the actual hardware done is still valuable.
 
--- 
-Kees Cook
+We scheduled a job on KernelCI to test this commit on our integration kernel,
+you'll get results for ChromeOS' tast decoders (MT8195 only) and Fluster tests
+on MT8183/8186/8192/8195.
+
+
+The results should be available in a couple of hours here, relative to commit 
+`49955a84129dbe1f94fedf729690efcf28513828` on our tree:
+https://chromeos.kernelci.org/job/collabora-chromeos-kernel/branch/for-kernelci/
+
+P.S.: If they don't, feel free to ping me or Nicolas (added to the loop) about it.
+
+Cheers,
+Angelo
