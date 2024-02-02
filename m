@@ -1,210 +1,170 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123191474A2;
-	Fri,  2 Feb 2024 16:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36945F4F8
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706891211; cv=none; b=em7SwsSMR9L1Bva6/dIf75mMoDksVNarUoqoVL83rmDUvgPPfj0YEKM3TKWYGGMY1NAHcmRHFxEm6QDwyD7h5/rr11x4Z5YQz0I5HmcD0S8m5KQfQ9D9E7EOmXzMLdl/gQ6qrKH75bjyVYPyZ1omjPC+aWfmnRWaFBgLvIOTCjc=
+	t=1706891570; cv=none; b=aIRtf2qk4Jx3pw/L9w73QFWIcC1u7wlDNzzqF/nCZ6AY7Ii2z+k7ebIJpbfVACmG6RknNXUVXU7a5wKIVnIKbBwLp/vRW3/137Eegc8UW+QHESgCIhvzoq51IoUoAt5GiWhb4hMbzGUszfmgT37gjTgqjDygwHpaHQj2SfeeRkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706891211; c=relaxed/simple;
-	bh=cDQNl6dio3miO8x43Gzue7oMsq01lzBNrqh05PEzriE=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TQW16fIrLzA0Y+lh8OqpFhHC1f1asjCnuZWWZfguWOpYmJULNMx/92OXTVTMn+/kBvZQNQVsbgBjruSFBWjQHIKe+szsi/cwUkeiHnN5EXT03qcY1Re3OSa/QRZY2vMyf7eIyZKW4fFfEFmMTRE21xkxjPsiYgY8hjqU1QYhwQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jQL11Zp4; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706891570; c=relaxed/simple;
+	bh=Qpb5LUigig6Dqx7YeBJx99fFSoRjufIv2sfY5c54TcA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C4S+K/pUZ6CgGUGdwuwROB8CHW2H3r6lMzgFjQm4OQddine7aMJuDe4sFhHOtjPLHFA9M48QF8ksxhVlSGKI/SY9HucFpUuQD5DGWDit1xBVxdMGznTlOvWb7nmJJc+zRweZbzbuGTl4lE766yvv0yr6HSoX7jA+VKqiI4DMAuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mem3Tp58; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jQL11Zp4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706891209; x=1738427209;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=cDQNl6dio3miO8x43Gzue7oMsq01lzBNrqh05PEzriE=;
-  b=jQL11Zp4W5i0dXSHmjAyMlxfrgtITXJve26G4gjAiIa8VUO3spZK94yg
-   o0nbKcLB0taMTXNxs9vSFckH4dyR1SXoALdGqrR2rgBMvx00YdUk1pPPQ
-   6Z/rlp5QPglEjua6lWw535HIAt4Z/TgqBnsJnk3yZ8rIrvW/skyNwGwwR
-   VKOW76RHp2b+CcM+vmDvYFmVl+UipKWke85wKlfOLf+pA7sY6TbCHz6lY
-   n6MwjwpPjTxQSKcxes/28H4UyWi8psD/bImTE1PzkvYqi3szGXdawzhqG
-   hZ6sGOivixEk2Rq8WtAMb95pmyG+iL9Z7/r9qYdbNSSqzlITGfaLgPPKd
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="17714702"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="17714702"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 08:26:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="118582"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 02 Feb 2024 08:26:46 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rVwNI-00042q-0D;
-	Fri, 02 Feb 2024 16:26:44 +0000
-Date: Sat, 3 Feb 2024 00:26:15 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>
-Subject: [drm-misc:drm-misc-next 1/1] drivers/gpu/drm/xe/xe_bo.c:41:24:
- error: initializer overrides prior initialization of this subobject
-Message-ID: <202402030003.rFCIAJNF-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mem3Tp58"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30BBC433C7
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 16:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706891569;
+	bh=Qpb5LUigig6Dqx7YeBJx99fFSoRjufIv2sfY5c54TcA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=mem3Tp58NpcFQ0LCjVi+qHZmEofguxdqViS+xfa/O9TwPCT+YavztC0VYGRrJAo2F
+	 MOc4qWjz2JC2DYwY4cH8MBG0yoNCij/SBrBepnca+zMQvzhEX/eUxDNS2qx4okTMg4
+	 9KY8Mz3rpuB4avwGc8SaUB25A4WkYLB09AFQpPFEE9aEmRqeJ08o8wCq25UE7cyN2Y
+	 RPs06vgZQqBEiTtUL3kcP3xIudaTx4nbZSuF3Fwtc6chrERB6ipRMNHiwEKmRaG3vO
+	 xF7VoBi9F0t55NqFnezyNuev930Ybgdf61MsoF5kEdUEp/RoLXdjX4MeqbOxC6puDI
+	 LaU472fwvFfTA==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5113a8c01acso567168e87.2
+        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 08:32:49 -0800 (PST)
+X-Gm-Message-State: AOJu0YzItvGLDhYa5IQsyuP7CL2yDyebP0eWuypTG8fc9AvxDjfgP34f
+	N8USSUeOXh6yXR4SFPu4j6muTcOTt45ldzT1BrK/VSgUxoufx9LFe1by0I9f1MmOI90Lh8la7t6
+	+Q8Sdmrxen6FRE3O2lECkPhYDTL0=
+X-Google-Smtp-Source: AGHT+IEWLhbVs8xPM5ZHqYIC3bGqYr/Na6IRl5mzGprwFRjkIBF/d+yOPoevyQzFUG+e5PJjazHjN3gdlwnY4DyiqJY=
+X-Received: by 2002:a19:644a:0:b0:50e:95cf:e7b1 with SMTP id
+ b10-20020a19644a000000b0050e95cfe7b1mr1968484lfj.9.1706891567985; Fri, 02 Feb
+ 2024 08:32:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240201223545.728028-1-maskray@google.com> <Zb0Qu5lR0iZUqImb@e133380.arm.com>
+In-Reply-To: <Zb0Qu5lR0iZUqImb@e133380.arm.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 2 Feb 2024 17:32:33 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGSQ4Xq68Cmq6BH37FPJ+R+N5cOfrdC+aVML4sGaNDopg@mail.gmail.com>
+Message-ID: <CAMj1kXGSQ4Xq68Cmq6BH37FPJ+R+N5cOfrdC+aVML4sGaNDopg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: jump_label: use constraints "Si" instead of "i"
+To: Dave Martin <Dave.Martin@arm.com>
+Cc: Fangrui Song <maskray@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	Jisheng Zhang <jszhang@kernel.org>, Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   2bb98fc1d4a7715da3cb429d77731b0d1d2d3903
-commit: 4db102dcb0396a4ccf89b1eac0f4eb3fd167a080 [1/1] Merge drm/drm-next into drm-misc-next
-config: x86_64-randconfig-076-20240202 (https://download.01.org/0day-ci/archive/20240203/202402030003.rFCIAJNF-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402030003.rFCIAJNF-lkp@intel.com/reproduce)
+On Fri, 2 Feb 2024 at 16:56, Dave Martin <Dave.Martin@arm.com> wrote:
+>
+> On Thu, Feb 01, 2024 at 02:35:45PM -0800, Fangrui Song wrote:
+> > The generic constraint "i" seems to be copied from x86 or arm (and with
+> > a redundant generic operand modifier "c"). It works with -fno-PIE but
+> > not with -fPIE/-fPIC in GCC's aarch64 port.
+> >
+> > The machine constraint "S", which denotes a symbol or label reference
+> > with a constant offset, supports PIC and has been available in GCC since
+> > 2012 and in Clang since 7.0. However, Clang before 19 does not support
+> > "S" on a symbol with a constant offset [1] (e.g.
+> > `static_key_false(&nf_hooks_needed[pf][hook])` in
+> > include/linux/netfilter.h), so we use "i" as a fallback.
+> >
+> > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+> > Link: https://github.com/llvm/llvm-project/pull/80255 [1]
+> >
+> > ---
+> > Changes from
+> > arm64: jump_label: use constraint "S" instead of "i" (https://lore.kernel.org/all/20240131065322.1126831-1-maskray@google.com/)
+> >
+> > * Use "Si" as Ard suggested to support Clang<19
+> > * Make branch a separate operand
+> > ---
+> >  arch/arm64/include/asm/jump_label.h | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+> > index 48ddc0f45d22..1f7d529be608 100644
+> > --- a/arch/arm64/include/asm/jump_label.h
+> > +++ b/arch/arm64/include/asm/jump_label.h
+> > @@ -15,6 +15,10 @@
+> >
+> >  #define JUMP_LABEL_NOP_SIZE          AARCH64_INSN_SIZE
+> >
+> > +/*
+> > + * Prefer the constraint "S" to support PIC with GCC. Clang before 19 does not
+> > + * support "S" on a symbol with a constant offset, so we use "i" as a fallback.
+> > + */
+> >  static __always_inline bool arch_static_branch(struct static_key * const key,
+> >                                              const bool branch)
+> >  {
+> > @@ -23,9 +27,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+> >                "      .pushsection    __jump_table, \"aw\"    \n\t"
+> >                "      .align          3                       \n\t"
+> >                "      .long           1b - ., %l[l_yes] - .   \n\t"
+> > -              "      .quad           %c0 - .                 \n\t"
+> > +              "      .quad           %0 + %1 - .             \n\t"
+> >                "      .popsection                             \n\t"
+> > -              :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> > +              :  :  "Si"(key), "i"(branch) :  : l_yes);
+>
+> Is the meaning of multi-alternatives well defined if different arguments
+> specify different numbers of alternatives?  The GCC documentation says:
+>
+> https://gcc.gnu.org/onlinedocs/gcc/Multi-Alternative.html:
+>
+> -8<-
+>
+> [...] All operands for a single instruction must have the same number of
+> alternatives.
+>
+> ->8-
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402030003.rFCIAJNF-lkp@intel.com/
+AIUI that does not apply here. That reasons about multiple arguments
+having more than one constraint, where not all combinations of those
+constraints are supported by the instruction.
 
-All errors (new ones prefixed by >>):
+> Also, I still think it may be redundant to move the addition inside the
+> asm, so long as Clang is happy with the symbol having an offset.
+>
 
-   drivers/gpu/drm/xe/xe_bo.c:41:3: error: field designator 'num_busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
-      41 |         .num_busy_placement = 1,
-         |          ^~~~~~~~~~~~~~~~~~
-         |          num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
->> drivers/gpu/drm/xe/xe_bo.c:41:24: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-      41 |         .num_busy_placement = 1,
-         |                               ^
-   drivers/gpu/drm/xe/xe_bo.c:39:19: note: previous initialization is here
-      39 |         .num_placement = 1,
-         |                          ^
-   drivers/gpu/drm/xe/xe_bo.c:42:3: error: field designator 'busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
-      42 |         .busy_placement = &sys_placement_flags,
-         |          ^~~~~~~~~~~~~~
-         |          num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
-   drivers/gpu/drm/xe/xe_bo.c:42:20: error: incompatible pointer to integer conversion initializing 'unsigned int' with an expression of type 'const struct ttm_place *' [-Wint-conversion]
-      42 |         .busy_placement = &sys_placement_flags,
-         |                           ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo.c:42:20: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-      42 |         .busy_placement = &sys_placement_flags,
-         |                           ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo.c:41:24: note: previous initialization is here
-      41 |         .num_busy_placement = 1,
-         |                               ^
-   drivers/gpu/drm/xe/xe_bo.c:55:3: error: field designator 'num_busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
-      55 |         .num_busy_placement = 1,
-         |          ^~~~~~~~~~~~~~~~~~
-         |          num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
-   drivers/gpu/drm/xe/xe_bo.c:55:24: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-      55 |         .num_busy_placement = 1,
-         |                               ^
-   drivers/gpu/drm/xe/xe_bo.c:53:19: note: previous initialization is here
-      53 |         .num_placement = 1,
-         |                          ^
-   drivers/gpu/drm/xe/xe_bo.c:56:3: error: field designator 'busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
-      56 |         .busy_placement = &sys_placement_flags,
-         |          ^~~~~~~~~~~~~~
-         |          num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
-   drivers/gpu/drm/xe/xe_bo.c:56:20: error: incompatible pointer to integer conversion initializing 'unsigned int' with an expression of type 'const struct ttm_place *' [-Wint-conversion]
-      56 |         .busy_placement = &sys_placement_flags,
-         |                           ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo.c:56:20: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-      56 |         .busy_placement = &sys_placement_flags,
-         |                           ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo.c:55:24: note: previous initialization is here
-      55 |         .num_busy_placement = 1,
-         |                               ^
-   drivers/gpu/drm/xe/xe_bo.c:233:4: error: field designator 'num_busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
-     233 |                 .num_busy_placement = c,
-         |                  ^~~~~~~~~~~~~~~~~~
-         |                  num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
-   drivers/gpu/drm/xe/xe_bo.c:233:25: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-     233 |                 .num_busy_placement = c,
-         |                                       ^
-   drivers/gpu/drm/xe/xe_bo.c:231:20: note: previous initialization is here
-     231 |                 .num_placement = c,
-         |                                  ^
-   drivers/gpu/drm/xe/xe_bo.c:234:4: error: field designator 'busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
-     234 |                 .busy_placement = bo->placements,
-         |                  ^~~~~~~~~~~~~~
-         |                  num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
-   drivers/gpu/drm/xe/xe_bo.c:234:21: error: incompatible pointer to integer conversion initializing 'unsigned int' with an expression of type 'struct ttm_place[3]' [-Wint-conversion]
-     234 |                 .busy_placement = bo->placements,
-         |                                   ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo.c:234:21: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-     234 |                 .busy_placement = bo->placements,
-         |                                   ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo.c:233:25: note: previous initialization is here
-     233 |                 .num_busy_placement = c,
-         |                                       ^
-   drivers/gpu/drm/xe/xe_bo.c:254:15: error: no member named 'num_busy_placement' in 'struct ttm_placement'; did you mean 'num_placement'?
-     254 |                         placement->num_busy_placement = 0;
-         |                                    ^~~~~~~~~~~~~~~~~~
-         |                                    num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
-   drivers/gpu/drm/xe/xe_bo.c:1356:4: error: field designator 'num_busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
-    1356 |                 .num_busy_placement = 1,
-         |                  ^~~~~~~~~~~~~~~~~~
-         |                  num_placement
-   include/drm/ttm/ttm_placement.h:99:12: note: 'num_placement' declared here
-      99 |         unsigned                num_placement;
-         |                                 ^
-   drivers/gpu/drm/xe/xe_bo.c:1356:25: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-    1356 |                 .num_busy_placement = 1,
-         |                                       ^
-   drivers/gpu/drm/xe/xe_bo.c:1354:20: note: previous initialization is here
-    1354 |                 .num_placement = 1,
-         |                                  ^
-   drivers/gpu/drm/xe/xe_bo.c:1357:4: error: field designator 'busy_placement' does not refer to any field in type 'struct ttm_placement'; did you mean 'num_placement'?
+Older Clang is not happy with the symbol having an offset.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
-   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && DRM_I915_WERROR [=n]
-   Selected by [m]:
-   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && !COMPILE_TEST [=n]
+And given that the key pointer and the 'branch' boolean are two
+distinct inputs to this function, I struggle to understand why you
+feel it is better to combine them in the argument. 'branch' is used to
+decide whether or not to set bit 0, independently of the value of key.
+Using array indexing to combine those values together to avoid an
+addition in the asm obfuscates the code.
 
 
-vim +41 drivers/gpu/drm/xe/xe_bo.c
-
-dd08ebf6c3525a Matthew Brost 2023-03-30  37  
-dd08ebf6c3525a Matthew Brost 2023-03-30  38  static struct ttm_placement sys_placement = {
-dd08ebf6c3525a Matthew Brost 2023-03-30  39  	.num_placement = 1,
-dd08ebf6c3525a Matthew Brost 2023-03-30  40  	.placement = &sys_placement_flags,
-dd08ebf6c3525a Matthew Brost 2023-03-30 @41  	.num_busy_placement = 1,
-dd08ebf6c3525a Matthew Brost 2023-03-30  42  	.busy_placement = &sys_placement_flags,
-dd08ebf6c3525a Matthew Brost 2023-03-30  43  };
-dd08ebf6c3525a Matthew Brost 2023-03-30  44  
-
-:::::: The code at line 41 was first introduced by commit
-:::::: dd08ebf6c3525a7ea2186e636df064ea47281987 drm/xe: Introduce a new DRM driver for Intel GPUs
-
-:::::: TO: Matthew Brost <matthew.brost@intel.com>
-:::::: CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> I.e., leave the .quad the same and revert to the one-liner
+>
+> -                :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> +                :  :  "Si"(&((char *)key)[branch]) :  : l_yes);
+>
+> This remains a bit nasty, but splitting the arguments and adding them
+> inside the asm is not really any cleaner.  Changing the way this works
+> doesn't seem relevant to what this patch is fixing (and apologies if I
+> created confusion here...)
+>
+> >
+> >       return false;
+> >  l_yes:
+> > @@ -40,9 +44,9 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
+> >                "      .pushsection    __jump_table, \"aw\"    \n\t"
+> >                "      .align          3                       \n\t"
+> >                "      .long           1b - ., %l[l_yes] - .   \n\t"
+> > -              "      .quad           %c0 - .                 \n\t"
+> > +              "      .quad           %0 + %1 - .             \n\t"
+> >                "      .popsection                             \n\t"
+> > -              :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> > +              :  :  "Si"(key), "i"(branch) :  : l_yes);
+>
+> Ditto.
+>
+> [...]
+>
+> Cheers
+> ---Dave
