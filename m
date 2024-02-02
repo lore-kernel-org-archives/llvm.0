@@ -1,124 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA5013CE9B;
-	Fri,  2 Feb 2024 18:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EF480634
+	for <llvm@lists.linux.dev>; Fri,  2 Feb 2024 20:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706899273; cv=none; b=eXP4sFZ+ltFcUM4FtlCTrBh2r4IEp0IvFDk/sRGhOpLF56yLTsv71LipaztefRjI02lGNIJQAdAsMUs+sq1w+98PApW85/fw1/4sYsLlbslWoqIOkAWs3mnpXp1aSBNPLsHd0v3GXdCUz4jxbdU2N50F6iO+FjZO3Z7Mmk0ZOz0=
+	t=1706904956; cv=none; b=nlYA4NsRMoD7zVVOsKG2CU9YxVDfiF88TXmKWIiKfoRmN4HZRCgY8mqgh+sQnrrzcCJ8ZHLRS/5P8Uza1EA4JsJZ3WJjIouyTHsCayAzN4VMT/Vq15BxtDjGqODfHdKhwFlHi37A529lnp6yu4eWsGh9bRVcyN64+wygCJi/40A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706899273; c=relaxed/simple;
-	bh=gqHXrMkDHlKxmoYDuWfVtLdvPEZ9IDVXLemBL1p9mvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AdTCimNTE5c7v6Pu0E5iE8qOv9JEzfa3TsjLlbde44F7/+AZ+IwUznAnYq7uc3CN2Inip33MDatN8MVh2WujT5LK6Dnu5b+BBoRKYhfnZhWDSFrnAhLCpImL8gT5Ub0z68tgYTC5swSPZEow/9/+PQ1Ym64NUJgxHABF6Eo6ppc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rkreZhq0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1706904956; c=relaxed/simple;
+	bh=8Eb6CVHvUmhvVTdSdy4hQhQ0gw+ENbyLq6EVTtPrF6M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VmCMwij4kmweLkDtpz9fVfKxW9g+47/g6qBXsF+1WH2S4ofDT/bN1Th6B/jzmcwn1AsTp+dITBZyeMzqIyVUcQ9vKjcVSc8GfMg7J7hm5xhO/pLaZ3JxjWXUWTdQ6tB/rf6XR9nEH2dOXv3gl5zq/6VLoVQaede3ydiVLx3IKus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KkX+zAQg; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rkreZhq0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018A3C433C7;
-	Fri,  2 Feb 2024 18:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706899272;
-	bh=gqHXrMkDHlKxmoYDuWfVtLdvPEZ9IDVXLemBL1p9mvA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rkreZhq0U0CjZapbftVpnR51E0G1+XOBcGuaR+UvCNX1Bc4eBwU1XDTs7apCBZx24
-	 A3UEtUQadau5Hb7VFmAu5QRDUdTpnwtb/541o4fZ5OdL+TZ98XbC+vY6eZArTZhnpQ
-	 eb+U6jPJKD4AVHjujBpOkWkqtWxMwK3KIxNfvdXWxShVzPVU8k4m4ec8MrRMsd4TSG
-	 yTvNnIZIQU4tWft1uQDjpHosZTVmJLymR41UyDuF+bAq3MelFSt4wP4zKIRWwPVfSU
-	 B+ldC0UGVm9kM1GMl/8PMHJ4yRZ9pf6Ls/TynjfPOzb7a6ZqN8QFtPB1yB9dmJ6qKy
-	 O2qH5qLUAFl7w==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KkX+zAQg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706904952;
+	bh=8Eb6CVHvUmhvVTdSdy4hQhQ0gw+ENbyLq6EVTtPrF6M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KkX+zAQg4u9JHou4hpFsyJsuIDcEANiaR6FAwe35n3VMT6eVe1/MIDXqyfhTT2amZ
+	 MX+22V8TjVaTtpClvaVdJe2woQReq6niv/Y90ZJPYrayU0wjcZBkFtNiYC/2gzHb+Y
+	 yM6MPs695fy5HK73hFkBAl39e+5E2KwqNGLaXToYi6lQ96Lg0OeGCw3sqx2Jj0G5pT
+	 13+NmiSKIKcDJIEtZA6E6t7X/g5IK6SK2emqULcluGJMALPVCq6gMiQ2To1JnOnkT/
+	 yW6m1aimWyrCmokUHMJChEfXmqT4fTni6TQQm4NP0a98uk47zDex8iXOCXAJ1XqTlP
+	 JsIpiaTiVtKzw==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0B5703782098;
+	Fri,  2 Feb 2024 20:15:48 +0000 (UTC)
+Date: Fri, 2 Feb 2024 15:15:46 -0500
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	Tom Talpey <tom@talpey.com>,
-	linux-cifs@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Steve French <stfrench@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>,
-	samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 6.1 08/15] smb: Work around Clang __bdos() type confusion
-Date: Fri,  2 Feb 2024 13:40:45 -0500
-Message-ID: <20240202184057.541411-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240202184057.541411-1-sashal@kernel.org>
-References: <20240202184057.541411-1-sashal@kernel.org>
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Mike Isely <isely@pobox.com>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 3/3] media: mediatek: vcodedc: Fix
+ Wcast-function-type-strict warnings
+Message-ID: <12d0c580-788d-4466-af8a-feb5ab3c6677@notapiano>
+References: <20240128-fix-clang-warnings-v1-0-1d946013a421@chromium.org>
+ <20240128-fix-clang-warnings-v1-3-1d946013a421@chromium.org>
+ <20240201221654.GC2240065@dev-arch.thelio-3990X>
+ <CABCJKudd3SUy3Qor7Tc0zyJsSAWy0PavbbBFALuWEpBa32pBCQ@mail.gmail.com>
+ <5658ec37-868f-454d-a149-467e6de139cd@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.76
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <5658ec37-868f-454d-a149-467e6de139cd@collabora.com>
 
-From: Kees Cook <keescook@chromium.org>
+On Fri, Feb 02, 2024 at 01:58:05PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 01/02/24 23:25, Sami Tolvanen ha scritto:
+> > On Thu, Feb 1, 2024 at 10:17 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > 
+> > > On Sun, Jan 28, 2024 at 02:12:22AM +0000, Ricardo Ribalda wrote:
+> > > > Building with LLVM=1 throws the following warning:
+> > > > drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c:38:32: warning: cast from 'mtk_vcodec_ipi_handler' (aka 'void (*)(void *, unsigned int, void *)') to 'ipi_handler_t' (aka 'void (*)(const void *, unsigned int, void *)') converts to incompatible function type [-Wcast-function-type-strict]
+> > > > 
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > 
+> > > I am not positive because I don't have any hardware to test this driver
+> > > but I suspect this patch is just hiding the warning without actually
+> > > addressing the issue that it is pointing out.
+> > 
+> > Agreed, this won't fix the issue. The correct solution is to drop the
+> > cast and change the handler type to match the pointer type (i.e. use
+> > const void* for the first argument).
+> > 
+> 
+> Even though I agree that the correct solution is to change the handler's type,
+> I think that having a test on the actual hardware done is still valuable.
+> 
+> We scheduled a job on KernelCI to test this commit on our integration kernel,
+> you'll get results for ChromeOS' tast decoders (MT8195 only) and Fluster tests
+> on MT8183/8186/8192/8195.
+> 
+> 
+> The results should be available in a couple of hours here, relative to
+> commit `49955a84129dbe1f94fedf729690efcf28513828` on our tree:
+> https://chromeos.kernelci.org/job/collabora-chromeos-kernel/branch/for-kernelci/
+> 
+> P.S.: If they don't, feel free to ping me or Nicolas (added to the loop) about it.
 
-[ Upstream commit 8deb05c84b63b4fdb8549e08942867a68924a5b8 ]
+Hi,
 
-Recent versions of Clang gets confused about the possible size of the
-"user" allocation, and CONFIG_FORTIFY_SOURCE ends up emitting a
-warning[1]:
+the results are available at 
 
-repro.c:126:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-  126 |                         __write_overflow_field(p_size_field, size);
-      |                         ^
+https://chromeos.kernelci.org/test/job/collabora-chromeos-kernel/branch/for-kernelci/kernel/v6.8-rc2-3109-g49955a84129d/
 
-for this memset():
+(You need to type "decoder" into the search bar to limit the results to only the
+decoder tests)
 
-        int len;
-        __le16 *user;
-	...
-        len = ses->user_name ? strlen(ses->user_name) : 0;
-        user = kmalloc(2 + (len * 2), GFP_KERNEL);
-	...
-	if (len) {
-		...
-	} else {
-		memset(user, '\0', 2);
-	}
+The only regressions I see are due to infrastructure error or broken test
+unrelated to this change (v4l2-decoder-conformance-h264-frext test on
+MT8195-Tomato, and cros-tast-decoder-v4l2-sl-h264 test on MT8183-Juniper)
 
-While Clang works on this bug[2], switch to using a direct assignment,
-which avoids memset() entirely which both simplifies the code and silences
-the false positive warning. (Making "len" size_t also silences the
-warning, but the direct assignment seems better.)
+Otherwise, all platforms (MT8183/8186/8192/8195) and video codecs
+(VP8/VP9/H264/H265/AV1) seem unaffected.
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1966 [1]
-Link: https://github.com/llvm/llvm-project/issues/77813 [2]
-Cc: Steve French <sfrench@samba.org>
-Cc: Paulo Alcantara <pc@manguebit.com>
-Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
-Cc: Shyam Prasad N <sprasad@microsoft.com>
-Cc: Tom Talpey <tom@talpey.com>
-Cc: linux-cifs@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/smb/client/cifsencrypt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note that these are GCC builds.
 
-diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
-index d0ac2648c0d6..d3d4cf6321fd 100644
---- a/fs/smb/client/cifsencrypt.c
-+++ b/fs/smb/client/cifsencrypt.c
-@@ -444,7 +444,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
- 		len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
- 		UniStrupr(user);
- 	} else {
--		memset(user, '\0', 2);
-+		*(u16 *)user = 0;
- 	}
- 
- 	rc = crypto_shash_update(ses->server->secmech.hmacmd5,
--- 
-2.43.0
-
+Thanks,
+Nícolas
