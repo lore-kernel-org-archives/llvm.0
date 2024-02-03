@@ -1,115 +1,170 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E37F12D744;
-	Fri,  2 Feb 2024 23:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C006FB6
+	for <llvm@lists.linux.dev>; Sat,  3 Feb 2024 00:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706918325; cv=none; b=oP5vyACNfVsdFAyafkavQztvXX9PFvJmUrJq6PmgyryV/sZW2klKOwIwQiYMCrtAQcYcgybG4ovlJpw4uK6ofWxtQBc3OKeXm3yBoG1PjxR7d7z63UAdTrCYH50CEIzaicFMAtwaOinXjNKwN6mLNcw99nwDSEPznvG3lZJwJOg=
+	t=1706919111; cv=none; b=V4mzp24jrNwc5m9+utiZfetQL8YJI9zTtLXD9URrWfCMZrZ+Rj42FMldRaW6NgWpTVUdUocq1QXIFjfhNbw0PJIwU4AiCiUG4mRa9XPWNWfIjPYTCg6VpgHLUmaJQ59bMQ2d+sJK7DoOVTOxx7hSuVvO/IFYcEnvCHBgpNYG7CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706918325; c=relaxed/simple;
-	bh=MVRIQWNEhJ6IvF2kCPeZP4p5KUrthvTq7J4fcJBUdHI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EbbBAO9zpMH6zzrWTdTfTLT7hBI0B7yfL7xGJv4vkTSd2CCnRjpCSVyHvDQTxxFLcsMf/nOyZM6FJUJ8xjHbAWPHCA/wReEo1OXLR6JzbrtJbN4AoQxvrtJ3FjenqXzn3d7UEh/mngZmSXqi1bnsjdMszKYGGkBz+MjRzotYtdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dR5QtlrS; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706919111; c=relaxed/simple;
+	bh=Fw5yc3KwqIkUpRbUG5IvtK1nJa179n0/6LQurRMjCCM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R1tiXbqy1xNYYASJuRaAdZPMpZ1zcHHBWOfojDHQpCyaDt1W3O2gnm8+4MRfjtMCLW8qb5hpbuHPZmx7ejU+xUe92qArlrgx2sMdqSEMIFO7nQKkMOVUJGQ7XP42fGGSjXzG+Hpp5gwqWJNWENE5KhQ+BgbgVKWMksVurUmNWSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=huFzBb/p; arc=none smtp.client-ip=209.85.222.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dR5QtlrS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706918324; x=1738454324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MVRIQWNEhJ6IvF2kCPeZP4p5KUrthvTq7J4fcJBUdHI=;
-  b=dR5QtlrSm2eG07JVDeA5uz8qkUgn4CCusNsizC/171rKoi7ZI3L6Vina
-   3wnfBcXAdcFN1l29Z4oAvVRq1BVJm/nx4z0o8PepJoWPr42l9jQUUPcD/
-   OKOHx/O0+yR/6HYpVJOV5pev6w7H4feyiN1OPvevyxysFDZ+nnZ3QnwMi
-   hUmNn9uKunl7tSZtRMDvD6RrCZmuK5biGt3XPfOHL3A0cwJmcRS7Flkfe
-   c4OLWKkqjz9seDdwh8CVAEo0EAx6qlw5LNqHaFXO/pN72BQ18CW9hiPrE
-   L7VNQhsiIIrDMNebu/q07sZz9PKDSuM3mjG9vBBUf++L93WP4x/2QitYR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="172882"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="172882"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 15:58:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="932625978"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="932625978"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Feb 2024 15:58:38 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rW3QZ-0004Q0-2Z;
-	Fri, 02 Feb 2024 23:58:35 +0000
-Date: Sat, 3 Feb 2024 07:58:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ville Syrjala <ville.syrjala@linux.intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrzej Hajda <andrzej.hajda@intel.com>
-Subject: Re: [PATCH v3 12/16] drm/i915: Simplify intel_initial_plane_config()
- calling convention
-Message-ID: <202402030704.nGzOFDCt-lkp@intel.com>
-References: <20240116075636.6121-13-ville.syrjala@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="huFzBb/p"
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-7ce3c7566e0so1255793241.1
+        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 16:11:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706919109; x=1707523909; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BPxmyRdExJEvcPRl0CWuqoDDXvPz9lLHrgamSw5zf9Y=;
+        b=huFzBb/pJICDtetMoxfX0o6OFT+Zd/fKDIhndoKmAeyr5upRroAOmXFkPZ/5z32TK+
+         I39Kv/CRL4yFdZe/MK5QLIHA0WIx25JnpPwlKLgaGfp9HfKCAT2P8x0lZvUaJ9/e0MRy
+         eA3gJbVGU5bz2OlwzmfVpBaOGhRkNAripzueWRqHCpWRG9EnGWbR6jEYI27nYckP0RDf
+         56GqP630ye7cvKJhPGxvCGqMMVv5QnaLKE1MjPSPZKaBgGjgaZVbTiatfojz7aG064xY
+         tD6gIBxsseBl1GTR8SE0osABPnbwp1YwAODwHiu1Q0S/U43Qlmq0HvF+ZyZtJXaRRZlT
+         iaGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706919109; x=1707523909;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BPxmyRdExJEvcPRl0CWuqoDDXvPz9lLHrgamSw5zf9Y=;
+        b=RUrYwjuM/zYWIEnYmZS2DXLpgPQg3+uXFxp5v896EwPAjsAFS48PhW9WIcF1+/zW4n
+         UsRHoAbjbk6RZiqCypfdNzotlqCrK4835v6GEsCfaB9xZkEPLnrEunKlsDNJ/o3qZ6RP
+         CAWV+9FrsU7k3noZPlEzwJu7GOj1g+oq6Y2xGni1nGPJW2YG72emU7zF/0aE5rKrsU27
+         ingt41Uso0GyQX1nyAgbs3V6QhThPCk7iRL2Zf0JjoUF8qODFIAA+7So8i/UsrBoHw5G
+         9UAlga2mTMAm31QZmGNF49HPu/e/5S2DGWRFCiZcsG1Y0gu7sQLzgdlpdnR/3RN2qo0x
+         zleg==
+X-Gm-Message-State: AOJu0YyalLBX9XSB03KKM0ruW0sKVj//GCT6kOhxGi8I/XLNm0BYfpvw
+	rhzTNUZHfvpTU0qXYBmgtHGje1y4vNUcxrQpojhXrzsy9kmZaxT9kqx0cZvDAzyYVCQXVh/Aukr
+	HGJTp2STbqwZcEL5mvni8t+sQ6qCLzOBvmKSd
+X-Google-Smtp-Source: AGHT+IG5YGYD/SvWKixRXTjsDK5srI/exvF5e/PZdXyguzPkATWPAwx4LtVWEHkt5wEgNBmX7AEbMCjq7BycjpF5Hzg=
+X-Received: by 2002:a67:fb52:0:b0:46d:5b7:f618 with SMTP id
+ e18-20020a67fb52000000b0046d05b7f618mr2584782vsr.24.1706919108610; Fri, 02
+ Feb 2024 16:11:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240116075636.6121-13-ville.syrjala@linux.intel.com>
+References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
+ <20240130220845.1978329-2-kevinloughlin@google.com> <4ljfvg7c23g2wx4hcqz6x6tx7uvp6fffayqvu4ptsmfqajlujr@zngokbd2awma>
+ <CAGdbjm+dt2LMqsWkzME-Gya9F=pZMubTuW3Ad3dStj=L+MW+ng@mail.gmail.com> <CAMj1kXGSZkJ-1opx9mrpfhzyreCM+P616xM+MhPOaR+EgP5NNg@mail.gmail.com>
+In-Reply-To: <CAMj1kXGSZkJ-1opx9mrpfhzyreCM+P616xM+MhPOaR+EgP5NNg@mail.gmail.com>
+From: Kevin Loughlin <kevinloughlin@google.com>
+Date: Fri, 2 Feb 2024 16:11:37 -0800
+Message-ID: <CAGdbjmKO-XDmm-0kw0xm=58TFYdK8t6Yp8OfXCrXVAwWEh3m-A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] x86/sev: enforce RIP-relative accesses in early
+ SEV/SME code
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Pankaj Gupta <pankaj.gupta@amd.com>, 
+	Hou Wenlong <houwenlong.hwl@antgroup.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	Brijesh Singh <brijesh.singh@amd.com>, Michael Roth <michael.roth@amd.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>, 
+	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>, 
+	Peter Gonda <pgonda@google.com>, Jacob Xu <jacobhxu@google.com>, 
+	Sidharth Telang <sidtelang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ville,
+On Fri, Feb 2, 2024 at 2:47=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wro=
+te:
+>
+> On Fri, 2 Feb 2024 at 23:00, Kevin Loughlin <kevinloughlin@google.com> wr=
+ote:
+> >
+> > On Wed, Jan 31, 2024 at 12:20=E2=80=AFAM Kirill A. Shutemov
+> > <kirill.shutemov@linux.intel.com> wrote:
+> > >
+> > > On Tue, Jan 30, 2024 at 10:08:44PM +0000, Kevin Loughlin wrote:
+> > > > diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/=
+asm/mem_encrypt.h
+> > > > index 359ada486fa9..b65e66ee79c4 100644
+> > > > --- a/arch/x86/include/asm/mem_encrypt.h
+> > > > +++ b/arch/x86/include/asm/mem_encrypt.h
+> > > > @@ -17,6 +17,20 @@
+> > > >
+> > > >  #include <asm/bootparam.h>
+> > > >
+> > > > +/*
+> > > > + * Like the address operator "&", evaluates to the address of a LH=
+S variable
+> > > > + * "var", but also enforces the use of RIP-relative logic. This ma=
+cro can be
+> > > > + * used to safely access global data variables prior to kernel rel=
+ocation.
+> > > > + */
+> > > > +#define RIP_RELATIVE_ADDR(var)               \
+> > > > +({                                   \
+> > > > +     void *rip_rel_ptr;              \
+> > > > +     asm ("lea "#var"(%%rip), %0"    \
+> > > > +             : "=3Dr" (rip_rel_ptr)    \
+> > > > +             : "p" (&var));          \
+> > > > +     rip_rel_ptr;                    \
+> > > > +})
+> > > > +
+> > >
+> > > I don't think it is the right place for the macro. The next patch use=
+s for
+> > > things unrelated to memory encryption.
+> >
+> > You're right; with the cleanup, I agree it becomes more general. We
+> > can move it to arch/x86/include/asm/asm.h.
+> >
+> > >
+> > > > @@ -239,14 +244,14 @@ unsigned long __head __startup_64(unsigned lo=
+ng physaddr,
+> > > >        */
+> > > >
+> > > >       next_pgt_ptr =3D fixup_pointer(&next_early_pgt, physaddr);
+> > > > -     pud =3D fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], =
+physaddr);
+> > > > -     pmd =3D fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], =
+physaddr);
+> > > > +     early_dynamic_pgts_ptr =3D fixup_pointer(early_dynamic_pgts, =
+physaddr);
+> > > > +     pud =3D (pudval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++=
+];
+> > > > +     pmd =3D (pmdval_t *) early_dynamic_pgts_ptr[(*next_pgt_ptr)++=
+];
+> > > >
+> > >
+> > > This change doesn't belong to this patch. Maybe move it into the next
+> > > patch and combine with removing fixup_pointer().
+> >
+> > I'll put it in a separate commit even preceding this one, as it's
+> > actually a bug in the existing fixup pointer logic that I noticed when
+> > transitioning to the use of the RIP-relative macro. Specifically,
+> > early_dynamic_pgts is a global variable just like next_early_pgt and
+> > thus also needs to be fixed up to guarantee the correct address is
+> > used across toolchains.
+>
+> No, this is not a bug.
+>
+> early_dynamic_pgts is a two dimensional array
+>
+> extern pmd_t early_dynamic_pgts[EARLY_DYNAMIC_PAGE_TABLES][PTRS_PER_PMD];
+>
+> and so this expression
+>
+> early_dynamic_pgts[(*next_pgt_ptr)++]
+>
+> produces the kernel virtual address of one of the top level elements,
+> which itself is an array, and so this can be fixed up as usual.
+> IOW, the [] operation does not result in pointer dereference here,
+> only in pointer arithmetic.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.8-rc2 next-20240202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-i915-Use-struct-resource-for-memory-region-IO-as-well/20240125-222947
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20240116075636.6121-13-ville.syrjala%40linux.intel.com
-patch subject: [PATCH v3 12/16] drm/i915: Simplify intel_initial_plane_config() calling convention
-config: x86_64-randconfig-076-20240202 (https://download.01.org/0day-ci/archive/20240203/202402030704.nGzOFDCt-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402030704.nGzOFDCt-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402030704.nGzOFDCt-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/xe/display/xe_plane_initial.c:270:6: error: no previous prototype for function 'intel_crtc_initial_plane_config' [-Werror,-Wmissing-prototypes]
-     270 | void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
-         |      ^
-   drivers/gpu/drm/xe/display/xe_plane_initial.c:270:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     270 | void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
-         | ^
-         | static 
-   1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
-   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && DRM_I915_WERROR [=n]
-   Selected by [m]:
-   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && !COMPILE_TEST [=n]
-
-
-vim +/intel_crtc_initial_plane_config +270 drivers/gpu/drm/xe/display/xe_plane_initial.c
-
-44e694958b9539 Maarten Lankhorst 2023-08-17  269  
-44e694958b9539 Maarten Lankhorst 2023-08-17 @270  void intel_crtc_initial_plane_config(struct intel_crtc *crtc)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ah, yes, you're right. Thanks for the correction! I will just drop it then.
