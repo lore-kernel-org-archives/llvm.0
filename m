@@ -1,60 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8C95FDC0;
-	Sat,  3 Feb 2024 20:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B5511C8B;
+	Sat,  3 Feb 2024 21:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706991693; cv=none; b=YUMtILf1l8JXEJu9iOZWL0ADcV8l+U44xoaihOC0S3GyebicEWDEwxZIKvzffjhtrrI2YgjATaxF3U1Oehz8EGFVEr/Gu0JZ1NBJSdhuD5lFPqmnC5r9kRiPlFY7fgaLFGC4OGarWq4e4rky5JeQwaDsb/rAGeV8oZbkL3v6Hfs=
+	t=1706996202; cv=none; b=ERLZu7eTgDjHRgJJwax8Gbv9d2yLJvQyKa8vLYUwKAkNSOb7nmndRVyfqmfYYZRIwx/CiaVm/Pco83d4mkUG/FZGqSiCY28ri+AP/EXWb5uQA5ZVvxtVKN1PIM63YTwMsNFn0OU+PAARpUQ+6xdL2GaqDBOcS2QJoshr1fO9QwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706991693; c=relaxed/simple;
-	bh=qKd01ALOyqbsunjpDJoT21lcqvlrrXO1HM+cWnjbXm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EKX8JgSt2tgyB4+7E1etqYX9GVkRXwubpA0CvsPT7avetWgtqirz/gyM6RsuMzBiTEEVbA4fIe/kmBgsrEvnoqROIc+4FRphAXK2qJSF5YwQs+eDEbebnZx/g452ipojdDQnublbrbz2KExzpXFxjqVSyN4UEIRXoit1KOh/3+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=loCvL83k; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1706996202; c=relaxed/simple;
+	bh=mMvsbHXkwbNG1h3c9nGCIyzvcy08Tz+nkS5oZhREnIs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DnkbejRg+oSEHJttmf1HWbmfYdBIdkEbOxh9lDqZvaPlyYfX+/q/hjzR08N4AdJy6XSwQdJ3PffLooYSZ+UgnkqJ3p6fp8dKZH+U4BSrKJ/MKTjbJRfAnW0PYb19HnacL9ptz9SIYhqhDkt0fTxvQFFi28y+a+3eGbXg+ZhLbxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X9QBii8h; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="loCvL83k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X9QBii8h"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706991691; x=1738527691;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qKd01ALOyqbsunjpDJoT21lcqvlrrXO1HM+cWnjbXm0=;
-  b=loCvL83kFLfz6LrUnRDS/tpbydQaBPHowh2++qaKTiHt3rJLtb49QDO7
-   FVVT9bZTzS3aecUl4SE4wi3+St/6fdVF77noE+jB2wGHXk+9uAF8KQfzz
-   P+KLN9EfGnPBoDCoubuMcNfCRdclMBcLRNg6D50hXshK7NlDuKj5U83ND
-   ICC3GpnnH78V232HY74iXWQSG8A4pXVzUskxUYpdgHMQMG8Uac/sfCCon
-   Df/1NC/2vjEGEO4x71one3tVw3dC4gnP8hjgS71Fs00eVd13qj7Cixsmx
-   GfomoGYJcdMim9PbLmWHQL/lOeBvmxe0YDrylMqRwMnIkulk0t+3b67Ec
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="17860115"
+  t=1706996200; x=1738532200;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mMvsbHXkwbNG1h3c9nGCIyzvcy08Tz+nkS5oZhREnIs=;
+  b=X9QBii8hHK6xXJZqvuyw+4uhqc4tUaXrHbYf+aYpn/7pEBBk9j1FlVwl
+   bVYAPh4kLomlB89WSu0Ii2uEgyhoio6iQe/haz5Qm2q8SB3dpWOcVmKTF
+   +1pAyfSe43jikDJM1SFuCxi0aNmSvRAA8YfB3pFDHYVSduf8ZzqNesQ9I
+   df+vI5Zdptgy17rK4qXEoQPWV+qCOk8e/2E1rtO33b2GV9TZebwycdeY8
+   2roTe1AqLqxTvtl0OdF8KunVHmrr9QdMT2SaZVh2E5klzmfsNEvhROsb3
+   5eongagoLOPLteMbd+2Qt/8fBlWEKL1uJaEt13+pxjxM8OB0Px6vA4Ah4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="17755511"
 X-IronPort-AV: E=Sophos;i="6.05,241,1701158400"; 
-   d="scan'208";a="17860115"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 12:21:30 -0800
+   d="scan'208";a="17755511"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 13:36:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,241,1701158400"; 
-   d="scan'208";a="4979777"
+   d="scan'208";a="5128204"
 Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 03 Feb 2024 12:21:28 -0800
+  by orviesa004.jf.intel.com with ESMTP; 03 Feb 2024 13:36:38 -0800
 Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rWMVw-0005Ys-2U;
-	Sat, 03 Feb 2024 20:21:24 +0000
-Date: Sun, 4 Feb 2024 04:20:46 +0800
+	id 1rWNgg-0005dS-2q;
+	Sat, 03 Feb 2024 21:36:34 +0000
+Date: Sun, 4 Feb 2024 05:36:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+To: Benjamin Berg <benjamin.berg@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: Re: [PATCH v1 net-next 02/16] af_unix: Allocate struct unix_edge for
- each inflight AF_UNIX fd.
-Message-ID: <202402040416.3h4bSPKV-lkp@intel.com>
-References: <20240203030058.60750-3-kuniyu@amazon.com>
+	Johannes Berg <johannes@sipsolutions.net>,
+	Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+	Johannes Berg <johannes.berg@intel.com>
+Subject: [wireless-next:main 29/68] ERROR: modpost: net/wireless/cfg80211:
+ local symbol 'cfg80211_free_coloc_ap_list' was exported
+Message-ID: <202402040534.6AEKtZ7Y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,102 +60,127 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240203030058.60750-3-kuniyu@amazon.com>
 
-Hi Kuniyuki,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/af_unix-Add-struct-unix_vertex-in-struct-unix_sock/20240203-110847
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240203030058.60750-3-kuniyu%40amazon.com
-patch subject: [PATCH v1 net-next 02/16] af_unix: Allocate struct unix_edge for each inflight AF_UNIX fd.
-config: i386-buildonly-randconfig-004-20240203 (https://download.01.org/0day-ci/archive/20240204/202402040416.3h4bSPKV-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+head:   5932ad87828b267649d750869c89c0f1a3873477
+commit: 45d43937a44c806b8649323b8f5d9f42ae838b0e [29/68] wifi: cfg80211: add a kunit test for 6 GHz colocated AP parsing
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240204/202402040534.6AEKtZ7Y-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240204/202402040416.3h4bSPKV-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240204/202402040534.6AEKtZ7Y-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402040416.3h4bSPKV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402040534.6AEKtZ7Y-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> net/core/scm.c:90:8: error: no member named 'edges' in 'struct scm_fp_list'
-      90 |                 fpl->edges = NULL;
-         |                 ~~~  ^
-   net/core/scm.c:381:12: error: no member named 'edges' in 'struct scm_fp_list'
-     381 |                 new_fpl->edges = NULL;
-         |                 ~~~~~~~  ^
-   2 errors generated.
-
-
-vim +90 net/core/scm.c
-
-    66	
-    67	static int scm_fp_copy(struct cmsghdr *cmsg, struct scm_fp_list **fplp)
-    68	{
-    69		int *fdp = (int*)CMSG_DATA(cmsg);
-    70		struct scm_fp_list *fpl = *fplp;
-    71		struct file **fpp;
-    72		int i, num;
-    73	
-    74		num = (cmsg->cmsg_len - sizeof(struct cmsghdr))/sizeof(int);
-    75	
-    76		if (num <= 0)
-    77			return 0;
-    78	
-    79		if (num > SCM_MAX_FD)
-    80			return -EINVAL;
-    81	
-    82		if (!fpl)
-    83		{
-    84			fpl = kmalloc(sizeof(struct scm_fp_list), GFP_KERNEL_ACCOUNT);
-    85			if (!fpl)
-    86				return -ENOMEM;
-    87			*fplp = fpl;
-    88			fpl->count = 0;
-    89			fpl->count_unix = 0;
-  > 90			fpl->edges = NULL;
-    91			fpl->max = SCM_MAX_FD;
-    92			fpl->user = NULL;
-    93		}
-    94		fpp = &fpl->fp[fpl->count];
-    95	
-    96		if (fpl->count + num > fpl->max)
-    97			return -EINVAL;
-    98	
-    99		/*
-   100		 *	Verify the descriptors and increment the usage count.
-   101		 */
-   102	
-   103		for (i=0; i< num; i++)
-   104		{
-   105			int fd = fdp[i];
-   106			struct file *file;
-   107	
-   108			if (fd < 0 || !(file = fget_raw(fd)))
-   109				return -EBADF;
-   110			/* don't allow io_uring files */
-   111			if (io_is_uring_fops(file)) {
-   112				fput(file);
-   113				return -EINVAL;
-   114			}
-   115			if (unix_get_socket(file))
-   116				fpl->count_unix++;
-   117	
-   118			*fpp++ = file;
-   119			fpl->count++;
-   120		}
-   121	
-   122		if (!fpl->user)
-   123			fpl->user = get_uid(current_user());
-   124	
-   125		return num;
-   126	}
-   127	
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-loop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet-fc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-fcloop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb_debug.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/tuners/tda9887.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/dvb-frontends/au8522_decoder.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/dvb-frontends/mb86a16.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/asus_atk0110.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/intel_soc_dts_iosf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-a4tech.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-aureal.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cherry.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-chicony.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cypress.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-dr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ezkey.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gyration.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-keytouch.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kye.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lcpower.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lenovo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lg-g15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-dj.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-hidpp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-microsoft.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-monterey.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ortek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-pl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-primax.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-samsung.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sjoy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steelseries.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gaff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tmff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tivo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-topseed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-xinmo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zydacron.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-waltop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/intel-ish-hid/intel-ishtp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-hid.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-vbtn.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-rst.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/amilo-rfkill.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/classmate-laptop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/libnvdimm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_pmem.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_btt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_e820.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dca/dca.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_cmp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_nbyte.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_u32.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_meta.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_text.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ipip.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/esp4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/xfrm4_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tunnel4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ah6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/xfrm6_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/sit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ip6_udp_tunnel.o
+>> ERROR: modpost: net/wireless/cfg80211: local symbol 'cfg80211_free_coloc_ap_list' was exported
+>> ERROR: modpost: net/wireless/cfg80211: local symbol 'cfg80211_parse_colocated_ap' was exported
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/key/af_key.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/6lowpan/6lowpan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/6lowpan/ieee802154_6lowpan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/ieee802154_socket.o
 
 -- 
 0-DAY CI Kernel Test Service
