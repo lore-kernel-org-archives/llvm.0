@@ -1,105 +1,220 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A6910A3A;
-	Sat,  3 Feb 2024 11:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997695D905;
+	Sat,  3 Feb 2024 13:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706959563; cv=none; b=A1MEZslBCwisEzNMHbl3GGO/ZKar/+JSTAVsaFQwAMYr+3DeajWF7IgMZgzT6T1TiEXZCL+0ZoldFJgnUFyyYnxRuoV2Of7Vru7zwdBua7P1ECFkzmexKnxNBVqqlj7KJpSIAoy9dxme2CZEl+UptfWCs4Y8eeegLe3kdPpf/Kc=
+	t=1706965488; cv=none; b=js3Maue+EgvFwFaQjHl00Gokab4P6Lz5QIWf/q9l7euhDaPecziRdtNHCD2XsFgiC9HGpEoY3fpOvCPYlMm9JigCjlhnrMOp6XN+M7l0kGWlViWm05cQ9BC/ptUbp8rAYMkVii+bf7Hg2mP++dubIiR4S0XqfFhppOFa3KQrGgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706959563; c=relaxed/simple;
-	bh=3AnlwDJY1PiOq3jo238nrekVn4FA6LanT3SjuGnUNFY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FB+AZ2Oan3+hxAWvWmu5ao369ogJOBiTwBJQMGRcBKMcZ93ZzTVb7FO8lBX4XS8qJ6CvOJeHl/VsYqxHNe519d7O0NDUUluaFuwX6U8VdkTjnOQ03/4XlKfAiEMOrEo4pb+TKqzQTGED42F52bAYkPiVfkVJPBHuRLM4QGrCFPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=k7SLT0z1; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1706965488; c=relaxed/simple;
+	bh=rXezbFoIoVPvOb5xFsvLuYCgvv61ODqgpCMWzHAJBCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QKt4tyvnKesyLEE6183eXKw6/DEhRyBkLGWhtvDxLwRFamKNfuQ7biSCNGyk/m27S6esGnMhej7UTd/T7AbdvQ8GAZZb82YqkXXwlwlxQHDGIhiHh6PqP/j0lfTfyDTtcORS6aWObd8x1KHIkiZWnCkohTC/pusIy9q49aXMJP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RqVdioP7; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="k7SLT0z1"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A7C0E40E016C;
-	Sat,  3 Feb 2024 11:25:58 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ZZdsozVbr2fC; Sat,  3 Feb 2024 11:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706959556; bh=GuG1PrL37XWGzIIK0mw2Gt1HAsW61W8Mi9u163lCSVc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k7SLT0z1a6VwwSd1j6S+NY5WVLAG6pKXTHAfSLkGHYdDXtvi4ZN68CwMjjJT7v41Y
-	 QBl0nQasVgluTRQ9OC12wu8bpJl+fpBzQOS7upk59vFyqDBtBhy0JxGDjJZGqCed7t
-	 Q1W21BKWILSodbmMtbFfgojNIr3nqGaUP7dq+Chr0Dh4lNfRgNonqj5bE8xl2WKkMN
-	 xC9W0h1g4t7DpKlrtY1d6NCLwh4OPIfriSkZko03vHUtAKTOwB2FqxzcCMVoDSvHeL
-	 FRd0NhWcqUxz5ikbinA0rEb3vgTrH1mXNa7SkDQA1VoeQQuzRmOo60F4TVm7U9jr5M
-	 4OTbjFc4+XquvVGXrTwQZITf8rp0O/ykfu2o3KxoA19HLkeKuFD28MevrFK7ssd9H9
-	 vH1tRO628mjwcnFV3owV1PLOJJw7xO238IY1EhdexfTAf0myJeDIECqlL+Iq/wF/Em
-	 /LHXj0FDLZMhNqlf9cHUhoGqYYztpsIQ5vfCbd1pRq1vPO9gm+Fntebevp/LBVKgcg
-	 xeH+8AN1IiJsTDccYdQH874BmcwgCG7Mvbmnt2P4iTYeYTlRV57x4ThyNMc/nBRr+6
-	 ZvmNPwZERyrObnv3IxSQtSbayNUwTjfOnPzm0NGIwFEVPNge1Ihi5PKLByux7DGVlV
-	 /tkluTSi9W/JstENo+WUjV3s=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E6D4B40E00C5;
-	Sat,  3 Feb 2024 11:25:31 +0000 (UTC)
-Date: Sat, 3 Feb 2024 12:25:26 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Kevin Loughlin <kevinloughlin@google.com>,
-	Jacob Xu <jacobhxu@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Pankaj Gupta <pankaj.gupta@amd.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Brijesh Singh <brijesh.singh@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-coco@lists.linux.dev, Ashish Kalra <ashish.kalra@amd.com>,
-	Andi Kleen <ak@linux.intel.com>, Adam Dunlap <acdunlap@google.com>,
-	Peter Gonda <pgonda@google.com>,
-	Sidharth Telang <sidtelang@google.com>
-Subject: Re: [PATCH v3 0/2] x86: enforce and cleanup RIP-relative accesses in
- early boot code
-Message-ID: <20240203112526.GGZb4iphr6YR5f5QNf@fat_crate.local>
-References: <20240121182040.GBZa1geI5NxWSslvt0@fat_crate.local>
- <20240130220845.1978329-1-kevinloughlin@google.com>
- <20240131140037.GDZbpShX2b0elXlqDA@fat_crate.local>
- <CAJ5mJ6j-Vw2P=QLK-J_J79S35UggvZPtm5sia74=enR1qq9X9A@mail.gmail.com>
- <20240131182944.GJZbqRmBN_KDgK_nmB@fat_crate.local>
- <CAGdbjmJgu4euOTEzns4-7pqUWo8n-gNJiAfARoZWxw8T252zJQ@mail.gmail.com>
- <20240203101927.GEZb4TL2H3XTqCSo5d@fat_crate.local>
- <CAMj1kXGh9pw0U=+-Pg8Uh4xzNhyDZBDvGC7jcnCYvmTQxaUZTQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RqVdioP7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706965487; x=1738501487;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rXezbFoIoVPvOb5xFsvLuYCgvv61ODqgpCMWzHAJBCU=;
+  b=RqVdioP7jnpZyQrdbOrOkk4A3zWrNX5AsHO0Ht2Gw6gArUVpGjiPH9JW
+   uIZ7X31JpIvAxVnfEjV7A4kJfr1dYTRxlp7An5sOIVdW95R2BSX7SJGmx
+   zmrJ1PprP8iKNr1n+zLJkBpaoZBVvK97iSQ6Gg2Kf+IBpi6XWBy2hINbR
+   +kfb60HXNbFvtXR1o8gI7vUyAyYHQ9ackzsEiQJUj2xxxu83F/LjkK5of
+   8KbuI39O4zJzvT6I3PaC9YgrlkC5R6D/hqiX5W7FxF0p0a/GHDNpF/3GS
+   JzKtcTwjHTah6WkmcNX4IA/aJ7a96qpttVdCcWHtUSSbWucUAmu70TuXk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="470373"
+X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
+   d="scan'208";a="470373"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 05:04:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="908848512"
+X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
+   d="scan'208";a="908848512"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 03 Feb 2024 05:04:44 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rWFhK-00054I-1b;
+	Sat, 03 Feb 2024 13:04:42 +0000
+Date: Sat, 3 Feb 2024 21:04:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vbabka:slub-percpu-caches-v4r1-BROKEN 2/6] mm/slub.c:4878:10:
+ warning: expression which evaluates to zero treated as a null pointer
+ constant of type 'void *'
+Message-ID: <202402032112.HhHYWQUZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXGh9pw0U=+-Pg8Uh4xzNhyDZBDvGC7jcnCYvmTQxaUZTQ@mail.gmail.com>
 
-On Sat, Feb 03, 2024 at 11:27:19AM +0100, Ard Biesheuvel wrote:
-> The minimal fix doesn't look that bad IMHO. Note that this version is
-> based on your patch that removes
-> CONFIG_AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT, and we'd need to see whether
-> or not to backport that as well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-percpu-caches-v4r1-BROKEN
+head:   769a361e3d36bf4b006b69c6adbdcd24fe2e470a
+commit: 8f3b3550b6d09f88b11b9d89eb1d6a215c48bf98 [2/6] mm/slub: add opt-in percpu array cache of objects
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240203/202402032112.HhHYWQUZ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402032112.HhHYWQUZ-lkp@intel.com/reproduce)
 
-Ok, please send it formally so that I can take a look.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402032112.HhHYWQUZ-lkp@intel.com/
 
-Thx.
+All warnings (new ones prefixed by >>):
+
+   mm/slub.c:2595:15: warning: variable 'partial_slabs' set but not used [-Wunused-but-set-variable]
+    2595 |         unsigned int partial_slabs = 0;
+         |                      ^
+>> mm/slub.c:4878:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'void *' [-Wnon-literal-null-conversion]
+    4878 |                 return false;
+         |                        ^~~~~
+>> mm/slub.c:4953:6: warning: variable 'pca' is uninitialized when used here [-Wuninitialized]
+    4953 |         if (pca->count < count)
+         |             ^~~
+   mm/slub.c:4943:31: note: initialize the variable 'pca' to silence this warning
+    4943 |         struct slub_percpu_array *pca;
+         |                                      ^
+         |                                       = NULL
+   mm/slub.c:2045:34: warning: unused function 'memcg_from_slab_obj' [-Wunused-function]
+    2045 | static inline struct mem_cgroup *memcg_from_slab_obj(void *ptr)
+         |                                  ^~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +4878 mm/slub.c
+
+  4863	
+  4864	static void *refill_pca(struct kmem_cache *s, unsigned int count, gfp_t gfp,
+  4865				bool want_obj)
+  4866	{
+  4867		unsigned int batch, allocated;
+  4868		struct slub_percpu_array *pca;
+  4869		void *objects[PCA_BATCH_MAX];
+  4870		unsigned long flags;
+  4871		void *obj = NULL;
+  4872	
+  4873		if (count > PCA_BATCH_MAX)
+  4874			return ERR_PTR(-EINVAL);
+  4875	
+  4876		allocated = __kmem_cache_alloc_bulk(s, gfp, count, &objects[0]);
+  4877		if (!allocated)
+> 4878			return false;
+  4879	
+  4880		if (want_obj)
+  4881			obj = objects[--allocated];
+  4882	
+  4883		local_lock_irqsave(&s->cpu_array->lock, flags);
+  4884		pca = this_cpu_read(s->cpu_array);
+  4885	
+  4886		batch = min(allocated, pca->count - pca->used);
+  4887	
+  4888		for (unsigned int i = 0; i < batch; i++)
+  4889			pca->objects[pca->used++] = objects[i];
+  4890	
+  4891		local_unlock_irqrestore(&s->cpu_array->lock, flags);
+  4892	
+  4893		stat_add(s, PCA_REFILL, batch);
+  4894	
+  4895		/*
+  4896		 * We could have migrated to a different cpu or somebody else freed to the
+  4897		 * pca while we were bulk allocating, and now we have too many objects
+  4898		 */
+  4899		if (batch < allocated)
+  4900			__kmem_cache_free_bulk(s, allocated - batch, &objects[batch]);
+  4901	
+  4902		return obj;
+  4903	}
+  4904	
+  4905	static void flush_pca(struct kmem_cache *s, unsigned int count)
+  4906	{
+  4907		struct slub_percpu_array *pca;
+  4908		unsigned int batch, remaining;
+  4909		void *objects[PCA_BATCH_MAX];
+  4910		unsigned long flags;
+  4911	
+  4912		local_lock_irqsave(&s->cpu_array->lock, flags);
+  4913		pca = this_cpu_read(s->cpu_array);
+  4914	
+  4915	next_batch:
+  4916		batch = min(count, PCA_BATCH_MAX);
+  4917	
+  4918		batch = min(batch, pca->used);
+  4919	
+  4920		for (unsigned int i = 0; i < batch; i++) {
+  4921			objects[i] = pca->objects[--pca->used];
+  4922		}
+  4923	
+  4924		remaining = pca->used;
+  4925	
+  4926		local_unlock_irqrestore(&s->cpu_array->lock, flags);
+  4927	
+  4928		__kmem_cache_free_bulk(s, batch, &objects[0]);
+  4929	
+  4930		stat_add(s, PCA_FLUSH, batch);
+  4931	
+  4932		if (batch < count && remaining > 0) {
+  4933			count -= batch;
+  4934			local_lock_irqsave(&s->cpu_array->lock, flags);
+  4935			pca = this_cpu_read(s->cpu_array);
+  4936			goto next_batch;
+  4937		}
+  4938	}
+  4939	
+  4940	int kmem_cache_prefill_percpu_array(struct kmem_cache *s, unsigned int count,
+  4941					    gfp_t gfp)
+  4942	{
+  4943		struct slub_percpu_array *pca;
+  4944		unsigned int used, batch;
+  4945		void *refill;
+  4946	
+  4947		if (!gfpflags_allow_blocking(gfp))
+  4948			return -EINVAL;
+  4949	
+  4950		if (!s->cpu_array)
+  4951			return -EINVAL;
+  4952	
+> 4953		if (pca->count < count)
+  4954			return -EINVAL;
+  4955	
+  4956		/* racy but we don't care */
+  4957		pca = raw_cpu_ptr(s->cpu_array);
+  4958	
+  4959		used = READ_ONCE(pca->used);
+  4960		if (used >= count)
+  4961			return 0;
+  4962	
+  4963		count -= used;
+  4964	
+  4965	refill:
+  4966		batch = min(count, PCA_BATCH_MAX);
+  4967	
+  4968		refill = refill_pca(s, batch, gfp, false);
+  4969		if (IS_ERR(refill))
+  4970			return PTR_ERR(refill);
+  4971	
+  4972		count -= batch;
+  4973		if (count) {
+  4974			pca = raw_cpu_ptr(s->cpu_array);
+  4975			if (pca->used < pca->count)
+  4976				goto refill;
+  4977		}
+  4978	
+  4979		return 0;
+  4980	}
+  4981	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
