@@ -1,57 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B5511C8B;
-	Sat,  3 Feb 2024 21:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A72712E6C;
+	Sat,  3 Feb 2024 21:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706996202; cv=none; b=ERLZu7eTgDjHRgJJwax8Gbv9d2yLJvQyKa8vLYUwKAkNSOb7nmndRVyfqmfYYZRIwx/CiaVm/Pco83d4mkUG/FZGqSiCY28ri+AP/EXWb5uQA5ZVvxtVKN1PIM63YTwMsNFn0OU+PAARpUQ+6xdL2GaqDBOcS2QJoshr1fO9QwU=
+	t=1706996205; cv=none; b=N7UAiqFMYZDX72JYT9vWenAxgiB2Mcj9gNvg2b2zf3u31tvmFrBIU/ZqJk5Ca7FvxFBrf9TvdJzNNpvVkHXhuC+EuWz23AvOEeE9sTm3AVi7M/o2VYvnkCM0WQ2sCkETV9Kep7kFoXtp1f1Zy7nBRgVhmYAbRukuuhKelKKG8OM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706996202; c=relaxed/simple;
-	bh=mMvsbHXkwbNG1h3c9nGCIyzvcy08Tz+nkS5oZhREnIs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DnkbejRg+oSEHJttmf1HWbmfYdBIdkEbOxh9lDqZvaPlyYfX+/q/hjzR08N4AdJy6XSwQdJ3PffLooYSZ+UgnkqJ3p6fp8dKZH+U4BSrKJ/MKTjbJRfAnW0PYb19HnacL9ptz9SIYhqhDkt0fTxvQFFi28y+a+3eGbXg+ZhLbxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X9QBii8h; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1706996205; c=relaxed/simple;
+	bh=ObK6GFFC+UvoR9g11nygtQo+SWtL356OmJ0KUMDy8S8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQfDpO6lcfipEcUnPjVBJrdgs0bFwwPUDbNzZpf4wksGwjt0JRCyU+JTlSv2NfpzH8UZ/2jgcRjRvmBgKgXg2PPsPIh8efB8pQ5pb47angHHDjJDmBm2Pw1RuwhA8R1TxjlrLg39zkV1NyqG+JtGirtT1OrvXHRtNb8To1ib5MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ArBU46ZB; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X9QBii8h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ArBU46ZB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706996200; x=1738532200;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mMvsbHXkwbNG1h3c9nGCIyzvcy08Tz+nkS5oZhREnIs=;
-  b=X9QBii8hHK6xXJZqvuyw+4uhqc4tUaXrHbYf+aYpn/7pEBBk9j1FlVwl
-   bVYAPh4kLomlB89WSu0Ii2uEgyhoio6iQe/haz5Qm2q8SB3dpWOcVmKTF
-   +1pAyfSe43jikDJM1SFuCxi0aNmSvRAA8YfB3pFDHYVSduf8ZzqNesQ9I
-   df+vI5Zdptgy17rK4qXEoQPWV+qCOk8e/2E1rtO33b2GV9TZebwycdeY8
-   2roTe1AqLqxTvtl0OdF8KunVHmrr9QdMT2SaZVh2E5klzmfsNEvhROsb3
-   5eongagoLOPLteMbd+2Qt/8fBlWEKL1uJaEt13+pxjxM8OB0Px6vA4Ah4
+  t=1706996202; x=1738532202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ObK6GFFC+UvoR9g11nygtQo+SWtL356OmJ0KUMDy8S8=;
+  b=ArBU46ZB/AO7clJJg8p4QfZYepeMOjgs1lCtdqxMxlOlLB3quxRijtln
+   C5TclJcgZpU2U4eB/2S3BXqrR89F1wzs5u+aMYIq/IpnOdIhtjDN/sAh1
+   LivCH39ziwuojvBmZNq/v0sf5lRltfB5Nm65dbioOEjYA4LLOiQVCp8gc
+   fFo9grz5sIQ8IdmcOctwEnWyXXn6lsFifZbKp7e3QTcLvKzREAIeWnCrC
+   Uldf5nNNCS02iXyDjU3b8tRKFfiXbYOc525O36PFU/e7gpRFA+nHm4QGl
+   np3rbBmWR3yauRLpGRousgS2PLfzh54KChbY146MApTZtgqNa1f/aheM2
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="17755511"
+X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="17755516"
 X-IronPort-AV: E=Sophos;i="6.05,241,1701158400"; 
-   d="scan'208";a="17755511"
+   d="scan'208";a="17755516"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 13:36:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,241,1701158400"; 
-   d="scan'208";a="5128204"
+   d="scan'208";a="5128189"
 Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
   by orviesa004.jf.intel.com with ESMTP; 03 Feb 2024 13:36:38 -0800
 Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rWNgg-0005dS-2q;
+	id 1rWNgg-0005dU-2u;
 	Sat, 03 Feb 2024 21:36:34 +0000
-Date: Sun, 4 Feb 2024 05:36:13 +0800
+Date: Sun, 4 Feb 2024 05:36:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Benjamin Berg <benjamin.berg@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: [wireless-next:main 29/68] ERROR: modpost: net/wireless/cfg80211:
- local symbol 'cfg80211_free_coloc_ap_list' was exported
-Message-ID: <202402040534.6AEKtZ7Y-lkp@intel.com>
+	netdev@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: Re: [PATCH v1 net-next 07/16] af_unix: Detect Strongly Connected
+ Components.
+Message-ID: <202402040541.rLg7ze2a-lkp@intel.com>
+References: <20240203030058.60750-8-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,127 +63,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240203030058.60750-8-kuniyu@amazon.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-head:   5932ad87828b267649d750869c89c0f1a3873477
-commit: 45d43937a44c806b8649323b8f5d9f42ae838b0e [29/68] wifi: cfg80211: add a kunit test for 6 GHz colocated AP parsing
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240204/202402040534.6AEKtZ7Y-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240204/202402040534.6AEKtZ7Y-lkp@intel.com/reproduce)
+Hi Kuniyuki,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/af_unix-Add-struct-unix_vertex-in-struct-unix_sock/20240203-110847
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240203030058.60750-8-kuniyu%40amazon.com
+patch subject: [PATCH v1 net-next 07/16] af_unix: Detect Strongly Connected Components.
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240204/202402040541.rLg7ze2a-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240204/202402040541.rLg7ze2a-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402040534.6AEKtZ7Y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402040541.rLg7ze2a-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-loop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvmet-fc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/target/nvme-fcloop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb_debug.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/tuners/tda9887.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/dvb-frontends/au8522_decoder.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/dvb-frontends/mb86a16.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/asus_atk0110.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/intel_soc_dts_iosf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-a4tech.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-aureal.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cherry.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-chicony.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cypress.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-dr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ezkey.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gyration.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-keytouch.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kye.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lcpower.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lenovo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lg-g15.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-dj.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-hidpp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-microsoft.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-monterey.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ortek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-pl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-primax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-samsung.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sjoy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steelseries.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gaff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tmff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tivo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-topseed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-xinmo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zydacron.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-waltop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/intel-ish-hid/intel-ishtp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-hid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-vbtn.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/intel-rst.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/amilo-rfkill.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/classmate-laptop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/libnvdimm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_pmem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_btt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_e820.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dca/dca.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_cmp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_nbyte.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_u32.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_meta.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_text.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ipip.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/esp4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/xfrm4_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tunnel4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ah6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/xfrm6_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/sit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ip6_udp_tunnel.o
->> ERROR: modpost: net/wireless/cfg80211: local symbol 'cfg80211_free_coloc_ap_list' was exported
->> ERROR: modpost: net/wireless/cfg80211: local symbol 'cfg80211_parse_colocated_ap' was exported
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/key/af_key.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/6lowpan/6lowpan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/6lowpan/ieee802154_6lowpan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/ieee802154_socket.o
+>> net/unix/garbage.c:257:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+     257 |         }
+         |         ^
+   1 warning generated.
+
+
+vim +257 net/unix/garbage.c
+
+   227	
+   228	static void __unix_walk_scc(struct unix_vertex *vertex)
+   229	{
+   230		unsigned long index = UNIX_VERTEX_INDEX_START;
+   231		LIST_HEAD(vertex_stack);
+   232		struct unix_edge *edge;
+   233		LIST_HEAD(edge_stack);
+   234	
+   235	next_vertex:
+   236		vertex->index = index;
+   237		vertex->lowlink = index;
+   238		index++;
+   239	
+   240		vertex->on_stack = true;
+   241		list_move(&vertex->scc_entry, &vertex_stack);
+   242	
+   243		list_for_each_entry(edge, &vertex->edges, entry) {
+   244			if (!edge->successor->out_degree)
+   245				continue;
+   246	
+   247			if (edge->successor->index == UNIX_VERTEX_INDEX_UNVISITED) {
+   248				list_add(&edge->stack_entry, &edge_stack);
+   249	
+   250				vertex = edge->successor;
+   251				goto next_vertex;
+   252			}
+   253	
+   254			if (edge->successor->on_stack)
+   255				vertex->lowlink = min(vertex->lowlink, edge->successor->index);
+   256	next_edge:
+ > 257		}
+   258	
+   259		if (vertex->index == vertex->lowlink) {
+   260			LIST_HEAD(scc);
+   261	
+   262			list_cut_position(&scc, &vertex_stack, &vertex->scc_entry);
+   263	
+   264			list_for_each_entry_reverse(vertex, &scc, scc_entry) {
+   265				list_move_tail(&vertex->entry, &unix_visited_vertices);
+   266	
+   267				vertex->on_stack = false;
+   268			}
+   269	
+   270			list_del(&scc);
+   271		}
+   272	
+   273		if (!list_empty(&edge_stack)) {
+   274			edge = list_first_entry(&edge_stack, typeof(*edge), stack_entry);
+   275			list_del_init(&edge->stack_entry);
+   276	
+   277			vertex = edge->predecessor;
+   278			vertex->lowlink = min(vertex->lowlink, edge->successor->lowlink);
+   279			goto next_edge;
+   280		}
+   281	}
+   282	
 
 -- 
 0-DAY CI Kernel Test Service
