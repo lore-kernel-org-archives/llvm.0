@@ -1,58 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EC023B7;
-	Sat,  3 Feb 2024 00:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D4610E6;
+	Sat,  3 Feb 2024 00:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706920886; cv=none; b=B4rF4EtKSFcnk+3h5m1oiUkAYKr4cQlP+RoPJgNfzZo0jqpqQqbN5jLkXIehpqKt8nwRzMXjipqkBYnt32AcmNpabqM90rL2NcwQzYrUme0dgPhPy7lqcUjYDLWTP4PLBm5c54ugzKg1s+dwL+0430YENjkNZM0X/fd+n91I0Lk=
+	t=1706921596; cv=none; b=UVKiUpe0sYkkm1U+iKkDdU5ma+e8kYznyvgm4B6bmb0bC+WME36xHH07wRtdNaJ6MDfjzB+CdUlhNuxyzgZVJ8/ATutyAMoOKrepxDUDVwpX4EVsAX3bTL08dhoGC1MkJ6pi3FHxbeXSUEsey3p75OkYg+qcdkdoMbLbTPxrlcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706920886; c=relaxed/simple;
-	bh=u0wK1YtCvm0CoYsAq2vguxiPdhzRtNy1KdWTPbz5ReI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JQaTOTjTYZcaRheduzCtTfxZZmr3PbTPqE8UFwX0+5XNj9GtqUkMvtWF1LLlE5/aWslsTxzB7xYI3Mcd99NpxQbNHP0kt/ta6EiF1CmOt0nVuFCW0HIypaJwgskivdq6qyZuzskH0bK4Zaa93KLtyr+CrYmEttsOyTTPMZVJLaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FrNTCGae; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1706921596; c=relaxed/simple;
+	bh=XISEj1A5AddImvIh3OUJUuzC3o0uyt6WBqCnbzoVd6E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OzVEIB6do4vIiuHqOWIfllqalQmXrFPIJlGKizS7wC/SePSC6Ny2OKqMvIoDB36XGIT5yjjch3sbkKWdIEy6cVRJLL6F2ndGR1dhHaBa5xEPGDEChQGYziSwlydZM3MKZd9BqRO/WyPOZNovFlMTc5l9rBRQOyU6L1btyg9uxrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OTSXkm1e; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FrNTCGae"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OTSXkm1e"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706920883; x=1738456883;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u0wK1YtCvm0CoYsAq2vguxiPdhzRtNy1KdWTPbz5ReI=;
-  b=FrNTCGaecOMYNZU3Qq74P1Zu4Ar+DjIXdib8w4f2CBVfapJtL7eMgBXB
-   MDS7DgtvhVgdv6OyezsIY3wktSABUf1/uw5Xyhw2yb+Qt5BSjOsOWj+TL
-   cBM5GEiQThGQlyeb6t4bnQq8P8r8crnI438JWoS/nIj6uGozPB0mAZzRb
-   FLpYXEtk64lUnEbaLRnwMMQC6V63Oalcyd3cAUQtplpU/jbp6eQAUTbEE
-   h5LSJtbbpugzuEwmgWcvsnv1OKGlQVoIoF0hdaT26ElcYlHBsJKsAdeMK
-   bwgyzV85RHM7FxQp9cLJnt/MfISBwHqJ+UtZYRFZu1EC/B7fz/Qbfgm5t
+  t=1706921594; x=1738457594;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XISEj1A5AddImvIh3OUJUuzC3o0uyt6WBqCnbzoVd6E=;
+  b=OTSXkm1eFd9K0Nyw5kb+49fwwu09Rf8b8l4bMd8p8TGcqcUjrH0owv0R
+   kh+tZLfKInTo2DPTzzGoHtCDqJsnx7Uha/lbVr3gTSqR7BSGWV4PSP1Gc
+   6sGwWYqIcdqXZceeyQe/70UWCu2PodoLedixW9IzMDzKA8RW9z1zPKTFs
+   8ddzpiTuCa7sMOV6WNLk4WN/ov8f3UdvokOSA9wsZNkXPabSbKNE7pyzH
+   t/F3MAqUmgntfu1K4xeSbRoojc0iuFbSNam4r7wRWqgKgUT7109rjF/uf
+   MwYaxV0HXfxlBsVIjGUBwDS3mwC2H6kTvDS92K65wqMfJ8cIvM0q+a9ry
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="186583"
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="502395"
 X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="186583"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 16:41:22 -0800
+   d="scan'208";a="502395"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 16:53:13 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="208785"
+   d="scan'208";a="502761"
 Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Feb 2024 16:41:19 -0800
+  by orviesa006.jf.intel.com with ESMTP; 02 Feb 2024 16:53:12 -0800
 Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rW45s-0004TF-23;
-	Sat, 03 Feb 2024 00:41:16 +0000
-Date: Sat, 3 Feb 2024 08:41:10 +0800
+	id 1rW4GZ-0004Tm-28;
+	Sat, 03 Feb 2024 00:52:30 +0000
+Date: Sat, 3 Feb 2024 08:51:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Suraj Kandpal <suraj.kandpal@intel.com>,
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	daniele.ceraolospurio@intel.com, chaitanya.kumar.borah@intel.com,
-	ankit.k.nautiyal@intel.com, Suraj Kandpal <suraj.kandpal@intel.com>
-Subject: Re: [PATCH 2/3] drm/xe/hdcp: Enable HDCP for XE
-Message-ID: <202402030852.sSijMp2S-lkp@intel.com>
-References: <20240202083737.1088306-3-suraj.kandpal@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:rxrpc-iothread 23/24] net/rxrpc/output.c:270:37: error:
+ incompatible integer to pointer conversion assigning to 'void *' from
+ 'unsigned long'
+Message-ID: <202402030822.qO3BRXqm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,40 +58,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240202083737.1088306-3-suraj.kandpal@intel.com>
 
-Hi Suraj,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on drm-intel/for-linux-next-fixes drm-xe/drm-xe-next drm-tip/drm-tip linus/master v6.8-rc2 next-20240202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Suraj-Kandpal/drm-i915-hdcp-Move-intel_hdcp_gsc_message-def-away-from-header-file/20240202-164840
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20240202083737.1088306-3-suraj.kandpal%40intel.com
-patch subject: [PATCH 2/3] drm/xe/hdcp: Enable HDCP for XE
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240203/202402030852.sSijMp2S-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git rxrpc-iothread
+head:   975bd4732a7b88c6ec05685c43b639000f888fbe
+commit: 83f863dfba3ae06a4b4f5369c46e9a39594d6da9 [23/24] rxrpc: Implement path-MTU probing using padded PING ACKs (RFC8899)
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240203/202402030822.qO3BRXqm-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402030852.sSijMp2S-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402030822.qO3BRXqm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402030852.sSijMp2S-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402030822.qO3BRXqm-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:7:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:15:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_object.h:11:
-   In file included from drivers/gpu/drm/xe/xe_bo.h:11:
-   In file included from drivers/gpu/drm/xe/xe_bo_types.h:9:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
+   In file included from net/rxrpc/conn_event.c:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      547 |         val = __raw_readb(PCI_IOBASE + addr);
@@ -108,13 +90,10 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
          |                                                      ^
-   In file included from drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:7:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:15:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_object.h:11:
-   In file included from drivers/gpu/drm/xe/xe_bo.h:11:
-   In file included from drivers/gpu/drm/xe/xe_bo_types.h:9:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
+   In file included from net/rxrpc/conn_event.c:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
@@ -125,13 +104,10 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
          |                                                      ^
-   In file included from drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:7:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:15:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_object.h:11:
-   In file included from drivers/gpu/drm/xe/xe_bo.h:11:
-   In file included from drivers/gpu/drm/xe/xe_bo_types.h:9:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
+   In file included from net/rxrpc/conn_event.c:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      584 |         __raw_writeb(value, PCI_IOBASE + addr);
@@ -160,88 +136,206 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      735 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
->> drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:53:9: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-      53 |                 ret = err;
-         |                       ^~~
-   drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:41:9: note: initialize the variable 'err' to silence this warning
-      41 |         int err, ret = 0;
-         |                ^
-         |                 = 0
-   drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:105:23: error: invalid application of 'sizeof' to an incomplete type 'struct i915_hdcp_arbiter'
-     105 |         data = kzalloc(sizeof(*data), GFP_KERNEL);
-         |                              ^~~~~~~
-   drivers/gpu/drm/i915/display/intel_display_core.h:37:8: note: forward declaration of 'struct i915_hdcp_arbiter'
-      37 | struct i915_hdcp_arbiter;
-         |        ^
-   drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:111:28: error: incomplete definition of type 'struct i915_hdcp_arbiter'
-     111 |         i915->display.hdcp.arbiter->hdcp_dev = i915->drm.dev;
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^
-   drivers/gpu/drm/i915/display/intel_display_core.h:37:8: note: forward declaration of 'struct i915_hdcp_arbiter'
-      37 | struct i915_hdcp_arbiter;
-         |        ^
-   drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:112:28: error: incomplete definition of type 'struct i915_hdcp_arbiter'
-     112 |         i915->display.hdcp.arbiter->ops = &gsc_hdcp_ops;
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^
-   drivers/gpu/drm/i915/display/intel_display_core.h:37:8: note: forward declaration of 'struct i915_hdcp_arbiter'
-      37 | struct i915_hdcp_arbiter;
-         |        ^
-   drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:112:37: error: use of undeclared identifier 'gsc_hdcp_ops'
-     112 |         i915->display.hdcp.arbiter->ops = &gsc_hdcp_ops;
-         |                                            ^
-   drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:153:10: error: invalid application of 'sizeof' to an incomplete type 'struct hdcp_cmd_header'
-     153 |                                      sizeof(struct hdcp_cmd_header), NULL);
-         |                                      ^     ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/display/xe_hdcp_gsc.c:153:24: note: forward declaration of 'struct hdcp_cmd_header'
-     153 |                                      sizeof(struct hdcp_cmd_header), NULL);
-         |                                                    ^
-   13 warnings and 5 errors generated.
+>> net/rxrpc/conn_event.c:94:14: warning: variable 'mtu' set but not used [-Wunused-but-set-variable]
+      94 |         u32 serial, mtu, call_id, padding;
+         |                     ^
+   13 warnings generated.
+--
+   In file included from net/rxrpc/output.c:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/rxrpc/output.c:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/rxrpc/output.c:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> net/rxrpc/output.c:270:37: error: incompatible integer to pointer conversion assigning to 'void *' from 'unsigned long' [-Wint-conversion]
+     270 |                         txb->kvec[txb->nr_kvec].iov_base = empty_zero_page;
+         |                                                          ^ ~~~~~~~~~~~~~~~
+   12 warnings and 1 error generated.
+--
+   In file included from net/rxrpc/txbuf.c:11:
+   In file included from net/rxrpc/ar-internal.h:11:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/rxrpc/txbuf.c:11:
+   In file included from net/rxrpc/ar-internal.h:11:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/rxrpc/txbuf.c:11:
+   In file included from net/rxrpc/ar-internal.h:11:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> net/rxrpc/txbuf.c:183:29: warning: comparison between pointer and integer ('void *' and 'unsigned long') [-Wpointer-integer-compare]
+     183 |                     txb->kvec[i].iov_base != empty_zero_page)
+         |                     ~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+   13 warnings generated.
 
 
-vim +/err +53 drivers/gpu/drm/xe/display/xe_hdcp_gsc.c
+vim +270 net/rxrpc/output.c
 
-    34	
-    35	/*This function helps allocate memory for the command that we will send to gsc cs */
-    36	static int intel_hdcp_gsc_initialize_message(struct drm_i915_private *i915,
-    37						     struct intel_hdcp_gsc_message *hdcp_message)
-    38	{
-    39		struct xe_bo *bo = NULL;
-    40		u64 cmd_in, cmd_out;
-    41		int err, ret = 0;
-    42	
-    43		/* allocate object of two page for HDCP command memory and store it */
-    44	
-    45		xe_device_mem_access_get(i915);
-    46		bo = xe_bo_create_pin_map(i915, xe_device_get_root_tile(i915), NULL, PAGE_SIZE * 2,
-    47					  ttm_bo_type_kernel,
-    48					  XE_BO_CREATE_SYSTEM_BIT |
-    49					  XE_BO_CREATE_GGTT_BIT);
-    50	
-    51		if (IS_ERR(bo)) {
-    52			drm_err(&i915->drm, "Failed to allocate bo for HDCP streaming command!\n");
-  > 53			ret = err;
-    54			goto out;
-    55		}
-    56	
-    57		cmd_in = xe_bo_ggtt_addr(bo);
-    58	
-    59		if (iosys_map_is_null(&bo->vmap)) {
-    60			drm_err(&i915->drm, "Failed to map gsc message page!\n");
-    61			ret = PTR_ERR(&bo->vmap);
-    62			goto out;
-    63		}
-    64	
-    65		cmd_out = cmd_in + PAGE_SIZE;
-    66	
-    67		xe_map_memset(i915, &bo->vmap, 0, 0, bo->size);
-    68	
-    69		hdcp_message->hdcp_bo = bo;
-    70		hdcp_message->hdcp_cmd_in = cmd_in;
-    71		hdcp_message->hdcp_cmd_out = cmd_out;
-    72	out:
-    73		xe_device_mem_access_put(i915);
-    74		return ret;
-    75	}
-    76	
+   237	
+   238	/*
+   239	 * Queue an ACK for immediate transmission.
+   240	 */
+   241	void rxrpc_send_ACK(struct rxrpc_call *call, u8 ack_reason,
+   242			    rxrpc_serial_t serial, enum rxrpc_propose_ack_trace why)
+   243	{
+   244		struct rxrpc_txbuf *txb;
+   245	
+   246		if (test_bit(RXRPC_CALL_DISCONNECTED, &call->flags))
+   247			return;
+   248	
+   249		rxrpc_inc_stat(call->rxnet, stat_tx_acks[ack_reason]);
+   250	
+   251		txb = rxrpc_alloc_ack_txbuf(call, call->ackr_wtop - call->ackr_window);
+   252		if (!txb) {
+   253			kleave(" = -ENOMEM");
+   254			return;
+   255		}
+   256	
+   257		txb->ack_why = why;
+   258	
+   259		rxrpc_fill_out_ack(call, txb, ack_reason, serial);
+   260	
+   261		/* Extend a path MTU probe ACK. */
+   262		if (why == rxrpc_propose_ack_ping_for_mtu_probe) {
+   263			size_t probe_mtu = call->peer->pmtud_trial + sizeof(struct rxrpc_wire_header);
+   264	
+   265			if (txb->len > probe_mtu)
+   266				goto skip;
+   267			while (txb->len < probe_mtu) {
+   268				size_t part = min_t(size_t, probe_mtu - txb->len, PAGE_SIZE);
+   269	
+ > 270				txb->kvec[txb->nr_kvec].iov_base = empty_zero_page;
+   271				txb->kvec[txb->nr_kvec].iov_len = part;
+   272				txb->len += part;
+   273				txb->nr_kvec++;
+   274			}
+   275		}
+   276	
+   277		call->ackr_nr_unacked = 0;
+   278		atomic_set(&call->ackr_nr_consumed, 0);
+   279		clear_bit(RXRPC_CALL_RX_IS_IDLE, &call->flags);
+   280	
+   281		trace_rxrpc_send_ack(call, why, ack_reason, serial);
+   282		rxrpc_send_ack_packet(call, txb, why);
+   283	skip:
+   284		rxrpc_put_txbuf(txb, rxrpc_txbuf_put_ack_tx);
+   285	}
+   286	
 
 -- 
 0-DAY CI Kernel Test Service
