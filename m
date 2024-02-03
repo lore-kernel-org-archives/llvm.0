@@ -1,122 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DF45DF15;
-	Sat,  3 Feb 2024 14:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71455F479;
+	Sat,  3 Feb 2024 15:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706970099; cv=none; b=e1xDVFfj8MR4mbRilV7DjOK8N90WPjTct9tiD5rsctUXmtDacgDCPsPH8pX5pKLBuVREM/rEDOhZIuSokOR2ESzxjaqXMEj6fypRRF3OjW41rLXxWDsSODn232rSjLHKTvzvyVWcncaz8b5pcm3IrJUcqTV5euOLcP8kN9kHNPQ=
+	t=1706972759; cv=none; b=PkdRUj0/ZNJjt3mn1J0SgptclyazdWYis3Xzlo4VBsr7RlP5234S95RsHIe8GQFhz9/8vVj2zHXc+kG527AL2+scU1osH1lnAIaFNMt6GzV0slMVT94Ni1EcdpX2TGUroasURj4BS6oyApAEBCJ1cMnbcErp+JNywUbk8L1uGN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706970099; c=relaxed/simple;
-	bh=jbe1RCokte3s+lwYFj+Qw2J1gC36MNGy/9NJXF7DZPs=;
+	s=arc-20240116; t=1706972759; c=relaxed/simple;
+	bh=ELEZEWWk9NQcZeuQTjNOf8Xawd967PBWJKiK7K14SIs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ONHjXNq2zUxN8vlOAC0Xem2fXY9DxsIIeism0zKCt5P5Gat7mGw57h8lzhi0GYSY5q9qV96TUlf8i5ZiW6k3aR/6FQhvA8PRQTm6XhUHconl9bkiRCrDmaHRAE7vu6C+gfR81SquxVSHMYt+8Zp1rNOO6eii88ShCCUtUe0icNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AfpCzIPj; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oyp1HJ5Lh8RKkG4ABTCoGFFPEs7lMn9KIEBZ9bBrdmhcnS0yNL/eCbeXfDcEXOpKFYyoCQq/qYZkTTtzUWw3SkgRvPYPIDEgEUgdcZkVL0L3khAHu1wfRxhvW1sJukdbnrFrzpdVjHhBFJwInoQKAybCqbV8HymiXFLSOvZDP/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eo9N6xfL; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AfpCzIPj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eo9N6xfL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706970096; x=1738506096;
+  t=1706972758; x=1738508758;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jbe1RCokte3s+lwYFj+Qw2J1gC36MNGy/9NJXF7DZPs=;
-  b=AfpCzIPjOhlcfh1BTZm8txynmklamMqvWCwYNMCqSEtI8G24YLq/s90P
-   f2d7HxmuIETQJo6YjpfqgjZEewAAYDMWJM72S3DWmzz0May0JStw+7Dej
-   YHgD1AQ9AkK9Xz50kw5IgAV2/Rb1lqKmDVRbtlkmZgzR8/VCUzksDifW4
-   MwoxV3Vlnq462JgG9Ec+cBQiZI1AvbXGsesuU+vQHZYeBPwFPJ+7IVRug
-   JVReaO6mPcGECHTOxhgxjlHfksqYHBgkJYxn5SIeEsEWj5jZ/Jbp0+A3n
-   B/b+zTLJsWVeLUlXQF5JGkDZGnHZqFYLulUFRmD7qfvydaUK4cUSF1DJO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="11680504"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ELEZEWWk9NQcZeuQTjNOf8Xawd967PBWJKiK7K14SIs=;
+  b=Eo9N6xfL0KrLZgnJ9kOT4iYQcQWKnidQ+KbCgbHaG0hxvSOb+NJsp7MW
+   w1sflXaMT8cAjHlajW35GpEOV5fbXuTEI9n97kRY1fo4uw4rGDlPXEo9Q
+   yRMnZruwof6izOKQp2FlCpzPXsDooyfAmHeb/AGbXDQefRbFymdNYRMvM
+   U667bbH8Jg95eu9JijMh0tItgWK0EPQsmoAfCrHh2hA3jd3CuRJsWdCyE
+   /tJjJ0++QGJafPKv+c82y/P+ukJykjBvMHPWjFBUII8eSgmF3Suj2rrNG
+   sB51x+ekPMfYkNJ+kpHc9+cVi5V1Fn1JNCyVe2VTojKUz7RzXwdSXbm1p
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="555423"
 X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
-   d="scan'208";a="11680504"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 06:21:35 -0800
+   d="scan'208";a="555423"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 07:05:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
-   d="scan'208";a="540616"
+   d="scan'208";a="23607836"
 Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 03 Feb 2024 06:21:32 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 03 Feb 2024 07:05:47 -0800
 Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rWGtd-00059M-28;
-	Sat, 03 Feb 2024 14:21:29 +0000
-Date: Sat, 3 Feb 2024 22:20:51 +0800
+	id 1rWHaS-0005DA-0N;
+	Sat, 03 Feb 2024 15:05:44 +0000
+Date: Sat, 3 Feb 2024 23:04:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Fiona Klute <fiona.klute@gmx.de>, linux-wireless@vger.kernel.org,
-	Ping-Ke Shih <pkshih@realtek.com>
+To: Aleksandr Shubin <privatesub2@gmail.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kalle Valo <kvalo@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-mmc@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-	=?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-	Fiona Klute <fiona.klute@gmx.de>
-Subject: Re: [PATCH 1/9] wifi: rtw88: Shared module for rtw8723x devices
-Message-ID: <202402032222.kwUrsH9V-lkp@intel.com>
-References: <20240202121050.977223-2-fiona.klute@gmx.de>
+	Aleksandr Shubin <privatesub2@gmail.com>,
+	Brandon Cheo Fusi <fusibrandon13@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	John Watts <contact@jookia.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Maksim Kiselev <bigunclemax@gmail.com>, linux-pwm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 2/3] pwm: Add Allwinner's D1/T113-S3/R329 SoCs PWM
+ support
+Message-ID: <202402032222.BiIrD3g4-lkp@intel.com>
+References: <20240131125920.2879433-3-privatesub2@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240202121050.977223-2-fiona.klute@gmx.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240131125920.2879433-3-privatesub2@gmail.com>
 
-Hi Fiona,
+Hi Aleksandr,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on wireless/main linus/master v6.8-rc2 next-20240202]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on sunxi/sunxi/for-next linus/master v6.8-rc2 next-20240202]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fiona-Klute/wifi-rtw88-Shared-module-for-rtw8723x-devices/20240202-201428
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20240202121050.977223-2-fiona.klute%40gmx.de
-patch subject: [PATCH 1/9] wifi: rtw88: Shared module for rtw8723x devices
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240203/202402032222.kwUrsH9V-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aleksandr-Shubin/dt-bindings-pwm-Add-binding-for-Allwinner-D1-T113-S3-R329-PWM-controller/20240131-210313
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240131125920.2879433-3-privatesub2%40gmail.com
+patch subject: [PATCH v8 2/3] pwm: Add Allwinner's D1/T113-S3/R329 SoCs PWM support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240203/202402032222.BiIrD3g4-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402032222.kwUrsH9V-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402032222.BiIrD3g4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402032222.kwUrsH9V-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402032222.BiIrD3g4-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/realtek/rtw88/rtw8723x.c:156:6: warning: no previous prototype for function '__rtw8723x_cfg_ldo25' [-Wmissing-prototypes]
-     156 | void __rtw8723x_cfg_ldo25(struct rtw_dev *rtwdev, bool enable)
-         |      ^
-   drivers/net/wireless/realtek/rtw88/rtw8723x.c:156:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     156 | void __rtw8723x_cfg_ldo25(struct rtw_dev *rtwdev, bool enable)
-         | ^
-         | static 
-   1 warning generated.
+>> drivers/pwm/pwm-sun20i.c:47: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * SUN20I_PWM_MAGIC is used to quickly compute the values of the clock dividers
 
 
-vim +/__rtw8723x_cfg_ldo25 +156 drivers/net/wireless/realtek/rtw88/rtw8723x.c
+vim +47 drivers/pwm/pwm-sun20i.c
 
-   155	
- > 156	void __rtw8723x_cfg_ldo25(struct rtw_dev *rtwdev, bool enable)
-   157	{
-   158		u8 ldo_pwr;
-   159	
-   160		ldo_pwr = rtw_read8(rtwdev, REG_LDO_EFUSE_CTRL + 3);
-   161		if (enable) {
-   162			ldo_pwr &= ~BIT_MASK_LDO25_VOLTAGE;
-   163			ldo_pwr |= (BIT_LDO25_VOLTAGE_V25 << 4) | BIT_LDO25_EN;
-   164		} else {
-   165			ldo_pwr &= ~BIT_LDO25_EN;
-   166		}
-   167		rtw_write8(rtwdev, REG_LDO_EFUSE_CTRL + 3, ldo_pwr);
-   168	}
-   169	
+    45	
+    46	/**
+  > 47	 * SUN20I_PWM_MAGIC is used to quickly compute the values of the clock dividers
+    48	 * div_m (SUN20I_PWM_CLK_CFG_DIV_M) & prescale_k (SUN20I_PWM_CTL_PRESCAL_K)
+    49	 * without using a loop. These dividers limit the # of cycles in a period
+    50	 * to SUN20I_PWM_PCNTR_SIZE by applying a scaling factor of
+    51	 * 1/(div_m * (prescale_k + 1)) to the clock source.
+    52	 *
+    53	 * SUN20I_PWM_MAGIC is derived by solving for div_m and prescale_k
+    54	 * such that for a given requested period,
+    55	 *
+    56	 * i) div_m is minimized for any prescale_k ≤ SUN20I_PWM_CTL_PRESCAL_K_MAX,
+    57	 * ii) prescale_k is minimized.
+    58	 *
+    59	 * The derivation proceeds as follows, with val = # of cycles for reqested
+    60	 * period:
+    61	 *
+    62	 * for a given value of div_m we want the smallest prescale_k such that
+    63	 *
+    64	 * (val >> div_m) // (prescale_k + 1) ≤ 65536 (SUN20I_PWM_PCNTR_SIZE)
+    65	 *
+    66	 * This is equivalent to:
+    67	 *
+    68	 * (val >> div_m) ≤ 65536 * (prescale_k + 1) + prescale_k
+    69	 * ⟺ (val >> div_m) ≤ 65537 * prescale_k + 65536
+    70	 * ⟺ (val >> div_m) - 65536 ≤ 65537 * prescale_k
+    71	 * ⟺ ((val >> div_m) - 65536) / 65537 ≤ prescale_k
+    72	 *
+    73	 * As prescale_k is integer, this becomes
+    74	 *
+    75	 * ((val >> div_m) - 65536) // 65537 ≤ prescale_k
+    76	 *
+    77	 * And is minimized at
+    78	 *
+    79	 * ((val >> div_m) - 65536) // 65537
+    80	 *
+    81	 * Now we pick the smallest div_m that satifies prescale_k ≤ 255
+    82	 * (i.e SUN20I_PWM_CTL_PRESCAL_K_MAX),
+    83	 *
+    84	 * ((val >> div_m) - 65536) // 65537 ≤ 255
+    85	 * ⟺ (val >> div_m) - 65536 ≤ 255 * 65537 + 65536
+    86	 * ⟺ val >> div_m ≤ 255 * 65537 + 2 * 65536
+    87	 * ⟺ val >> div_m < (255 * 65537 + 2 * 65536 + 1)
+    88	 * ⟺ div_m = fls((val) / (255 * 65537 + 2 * 65536 + 1))
+    89	 *
+    90	 * Suggested by Uwe Kleine-König
+    91	 */
+    92	#define SUN20I_PWM_MAGIC			(255 * 65537 + 2 * 65536 + 1)
+    93	
 
 -- 
 0-DAY CI Kernel Test Service
