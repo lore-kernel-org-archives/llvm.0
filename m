@@ -1,78 +1,229 @@
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0D56AB9
-	for <llvm@lists.linux.dev>; Sat,  3 Feb 2024 02:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFA3612B;
+	Sat,  3 Feb 2024 02:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706926026; cv=none; b=Co0Z/QdHX/bq3iBe3TiFYz+q7eJssZxKnvtcJex+7neC/oMce68SHVXcBiT3ARTgZmfoGKEF8kOhVK7xu95QiUgxTWlIfulKxXtbxSb4rUGnNyICtNj60UR8y0b5vkYNyiFj9fUeXKr3RbIMw3uYoa0OWQQwHS5DzWvsaAJ6FbU=
+	t=1706926556; cv=none; b=nc1+wOhBaUEQ93eH786CwL3nVoG1Dy0S+mUgjkb4YK1M57+kQqBmgBgxowu4m57SxCpE9uC7KAeNOv9ANr5Ta2txtAAtGNwcMwMCsVEyqXNgmlrlOXh1WmLKz/FWKTzWHDwuvBb/E4FQhm1Q8kXskqqSr5wIzAKY4Zrsvr3FqjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706926026; c=relaxed/simple;
-	bh=i+JDF/U16A0h2ReCuKESPregCblwWsIb8m6CUL60Wpc=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=tqYy2e87dDmm2uVt3tZyGDvLOlTmfcGhyfQo+few0+H8oTmU9WSfevmL1lzzLQGqlO59mkQGc3i1FlZJij+A2D9u/JLhsuDkgbVV4hiRerMsyk6NwhBw4KXieoILuKGcq+wzXYZCo1HwPodj/XCF5yMu0MhfkISlrx+L74zQvBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-363827f3e55so15517565ab.3
-        for <llvm@lists.linux.dev>; Fri, 02 Feb 2024 18:07:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706926024; x=1707530824;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbrmRoGKWhe6TCC1sGE2MFNaSiHwcC3ZaDKpsmrHR/s=;
-        b=HhnIqgkbpQltwYlVrwi1o6uZhL9b1jvy+NizaQOHDpMAGTkQN85vhE+x7tDre14U6m
-         H3bjAPuD7zQHD9xdwnaFGoXnrQXv1B8XyWRJoS1kkjzATsGi44PGPRg8r0zcl2MBptfJ
-         dFVZppa7Wj2/bpwPzzxDyxfSu05v/GnMpEWgmshV610AtynOUosPgte3uiK0LGe3sRyd
-         93vWlFRFqIwmuNG9H4cA7BEP+vHX/677yN9bQyOY7bTCeQHpHT3fAS54TaDVzAUNikua
-         DwzpwY1bPlytsc8DRb9PFtjSfN1DeSPw1rzixhi7HUXq0AwCbqAC/VXSDy7NCNF12fhY
-         nAQg==
-X-Gm-Message-State: AOJu0YwMK3UdKVm22IjNAmItN8FwyW8pjLbf9snC+cY8R/zoEc/+jv7L
-	GFFkmZWjEFJVhC0dO3aTqQuCKJz+0xHjTiXGPIF9+lUDmI92jH7jc4pcc32av1SAAr29QydxtEz
-	VIG6L7WF4Pj/L8ZVFBoN5/PECMaRaSGaYt29gfzbOcbN+Bh5Ym/44a1c=
-X-Google-Smtp-Source: AGHT+IHwGrrxGICgqXvjF1ce4ToGFnpyWKkdzcU/b4TT1Lnl5bhAvElMzunisL/xzV0/F+QhMt/En7jAWF2jmQunOuCuK0a1HyCw
+	s=arc-20240116; t=1706926556; c=relaxed/simple;
+	bh=jUe6ut4trDSoZXCarOfPmMnUFiYo70AueWJpJriuw/c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SpqOSPXvvwMZmHnTcszWlBGuuU81nr9jj6Fzp5hCOr+oOEahuFSzuconiGSe8OBEV1LFkbGXHMYBo8oeK8rQHRbDR2v1vGVFMofkTUbnKZNuDEfaRtih2fKJiPeJhcqdtXBYzxFFvw5yhsn7119+h+JPMHoY6gWnich2HJXaSjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GL/y6e2A; arc=none smtp.client-ip=134.134.136.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GL/y6e2A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706926554; x=1738462554;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jUe6ut4trDSoZXCarOfPmMnUFiYo70AueWJpJriuw/c=;
+  b=GL/y6e2Ayi6D0LV3k9MB7VHQDuz+nLkjG5UppYszSkPfyag/ag4DfeCd
+   hMurNNcsTTAHBbIh82TpaDH9hEz02VBRaj9LG4APXTiOwXQYhB+j3vuMV
+   QilH7gybYfAMiKQvExF73n4kOUC2LYX1MI7PoOn2HuMVlgoAgfaQa5Sy9
+   C6p/k+Y7boBShB8gtecpezwH2EdcepObVCR6t48NhMEH9B3zIwCHKl1fT
+   F1fHGOLa5nY16SIMYOF5ped2EqvTVh3l/ne09t8bJWczGoIi/gInpV2xl
+   76XQ3Uu9U/nglxAcjkwckx2nWvmS7iVc5Xrxt1CgN/m891MaNpC0jbcld
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="394707723"
+X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
+   d="scan'208";a="394707723"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 18:15:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
+   d="scan'208";a="37648762"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 02 Feb 2024 18:15:52 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rW5Z2-0004XG-2S;
+	Sat, 03 Feb 2024 02:15:43 +0000
+Date: Sat, 3 Feb 2024 10:15:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jirislaby:devel 53/55]
+ drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: warning: declaration of
+ 'struct circ_buf' will not be visible outside of this function
+Message-ID: <202402031058.BjICn73w-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:170d:b0:363:85de:452c with SMTP id
- u13-20020a056e02170d00b0036385de452cmr341535ill.0.1706926024094; Fri, 02 Feb
- 2024 18:07:04 -0800 (PST)
-Date: Fri, 02 Feb 2024 18:07:04 -0800
-In-Reply-To: <0000000000002a909705eb841dda@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000052fe42061070afc4@google.com>
-Subject: Re: [syzbot] [btrfs?] WARNING in btrfs_block_rsv_release
-From: syzbot <syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com>
-To: 18801353760@163.com, anand.jain@oracle.com, brauner@kernel.org, clm@fb.com, 
-	dsterba@suse.com, johannes.thumshirn@wdc.com, josef@toxicpanda.com, 
-	linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	yin31149@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-syzbot suspects this issue was fixed by commit:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   417694d355605a4881edb833d8212c636c6c4c8a
+commit: 8de16c2e3e826f59359da550330149d938e1fb09 [53/55] tty: serial, use kfifo
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240203/202402031058.BjICn73w-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402031058.BjICn73w-lkp@intel.com/reproduce)
 
-commit a1912f712188291f9d7d434fba155461f1ebef66
-Author: Josef Bacik <josef@toxicpanda.com>
-Date:   Wed Nov 22 17:17:55 2023 +0000
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402031058.BjICn73w-lkp@intel.com/
 
-    btrfs: remove code for inode_cache and recovery mount options
+All warnings (new ones prefixed by >>):
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=149a0a38180000
-start commit:   7287904c8771 Merge tag 'for-linus-2023011801' of git://git..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d24faf5fc10540ae
-dashboard link: https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f7a805480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10df5afe480000
+>> drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: warning: declaration of 'struct circ_buf' will not be visible outside of this function [-Wvisibility]
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:391:11: error: incomplete definition of type 'struct circ_buf'
+     391 |                 if (xmit->tail > (UART_XMIT_SIZE - UART_BURST_SIZE))
+         |                     ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:393:32: error: incomplete definition of type 'struct circ_buf'
+     393 |                 writel(*(unsigned int *)&xmit->buf[xmit->tail],
+         |                                          ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:393:42: error: incomplete definition of type 'struct circ_buf'
+     393 |                 writel(*(unsigned int *)&xmit->buf[xmit->tail],
+         |                                                    ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:399:7: error: incomplete definition of type 'struct circ_buf'
+     399 |                 xmit->tail = (xmit->tail + UART_BURST_SIZE) &
+         |                 ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:399:21: error: incomplete definition of type 'struct circ_buf'
+     399 |                 xmit->tail = (xmit->tail + UART_BURST_SIZE) &
+         |                               ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:406:14: error: incomplete definition of type 'struct circ_buf'
+     406 |                 writeb(xmit->buf[xmit->tail], port->membase +
+         |                        ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:406:24: error: incomplete definition of type 'struct circ_buf'
+     406 |                 writeb(xmit->buf[xmit->tail], port->membase +
+         |                                  ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:415:7: error: incomplete definition of type 'struct circ_buf'
+     415 |                 xmit->tail = (xmit->tail + UART_BYTE_SIZE) &
+         |                 ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:415:21: error: incomplete definition of type 'struct circ_buf'
+     415 |                 xmit->tail = (xmit->tail + UART_BYTE_SIZE) &
+         |                               ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:422:33: error: incomplete definition of type 'struct circ_buf'
+     422 |                 if (valid_burst_count && (xmit->tail <
+         |                                           ~~~~^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:13: note: forward declaration of 'struct circ_buf'
+     376 |                                         struct circ_buf *xmit,
+         |                                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:435:23: error: no member named 'xmit' in 'struct uart_state'
+     435 |         xmit = &port->state->xmit;
+         |                 ~~~~~~~~~~~  ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:444:34: error: call to undeclared function 'uart_circ_empty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     444 |         if ((uart_tx_stopped(port)) || (uart_circ_empty(xmit))) {
+         |                                         ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:444:34: note: did you mean 'uart_lsr_tx_empty'?
+   include/linux/serial.h:26:20: note: 'uart_lsr_tx_empty' declared here
+      26 | static inline bool uart_lsr_tx_empty(u16 lsr)
+         |                    ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:450:23: error: call to undeclared function 'uart_circ_chars_pending'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     450 |                         valid_byte_count = uart_circ_chars_pending(xmit);
+         |                                            ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:452:38: error: incompatible pointer types passing 'struct circ_buf *' to parameter of type 'struct circ_buf *' [-Werror,-Wincompatible-pointer-types]
+     452 |                         pci1xxxx_process_write_data(port, xmit,
+         |                                                           ^~~~
+   drivers/tty/serial/8250/8250_pci1xxxx.c:376:23: note: passing argument to parameter 'xmit' here
+     376 |                                         struct circ_buf *xmit,
+         |                                                          ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c:462:6: error: call to undeclared function 'uart_circ_chars_pending'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     462 |         if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+         |             ^
+   1 warning and 15 errors generated.
 
-If the result looks correct, please mark the issue as fixed by replying with:
 
-#syz fix: btrfs: remove code for inode_cache and recovery mount options
+vim +376 drivers/tty/serial/8250/8250_pci1xxxx.c
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+aba8290f368d96 Rengarajan S 2023-12-15  374  
+90d051b63519b0 Rengarajan S 2024-01-25  375  static void pci1xxxx_process_write_data(struct uart_port *port,
+90d051b63519b0 Rengarajan S 2024-01-25 @376  					struct circ_buf *xmit,
+90d051b63519b0 Rengarajan S 2024-01-25  377  					int *data_empty_count,
+90d051b63519b0 Rengarajan S 2024-01-25  378  					u32 *valid_byte_count)
+90d051b63519b0 Rengarajan S 2024-01-25  379  {
+90d051b63519b0 Rengarajan S 2024-01-25  380  	u32 valid_burst_count = *valid_byte_count / UART_BURST_SIZE;
+90d051b63519b0 Rengarajan S 2024-01-25  381  
+90d051b63519b0 Rengarajan S 2024-01-25  382  	/*
+90d051b63519b0 Rengarajan S 2024-01-25  383  	 * Each transaction transfers data in DWORDs. If there are less than
+90d051b63519b0 Rengarajan S 2024-01-25  384  	 * four remaining valid_byte_count to transfer or if the circular
+90d051b63519b0 Rengarajan S 2024-01-25  385  	 * buffer has insufficient space for a DWORD, the data is transferred
+90d051b63519b0 Rengarajan S 2024-01-25  386  	 * one byte at a time.
+90d051b63519b0 Rengarajan S 2024-01-25  387  	 */
+90d051b63519b0 Rengarajan S 2024-01-25  388  	while (valid_burst_count) {
+90d051b63519b0 Rengarajan S 2024-01-25  389  		if (*data_empty_count - UART_BURST_SIZE < 0)
+90d051b63519b0 Rengarajan S 2024-01-25  390  			break;
+90d051b63519b0 Rengarajan S 2024-01-25  391  		if (xmit->tail > (UART_XMIT_SIZE - UART_BURST_SIZE))
+90d051b63519b0 Rengarajan S 2024-01-25  392  			break;
+90d051b63519b0 Rengarajan S 2024-01-25  393  		writel(*(unsigned int *)&xmit->buf[xmit->tail],
+90d051b63519b0 Rengarajan S 2024-01-25  394  		       port->membase + UART_TX_BURST_FIFO);
+90d051b63519b0 Rengarajan S 2024-01-25  395  		*valid_byte_count -= UART_BURST_SIZE;
+90d051b63519b0 Rengarajan S 2024-01-25  396  		*data_empty_count -= UART_BURST_SIZE;
+90d051b63519b0 Rengarajan S 2024-01-25  397  		valid_burst_count -= UART_BYTE_SIZE;
+90d051b63519b0 Rengarajan S 2024-01-25  398  
+90d051b63519b0 Rengarajan S 2024-01-25  399  		xmit->tail = (xmit->tail + UART_BURST_SIZE) &
+90d051b63519b0 Rengarajan S 2024-01-25  400  			     (UART_XMIT_SIZE - 1);
+90d051b63519b0 Rengarajan S 2024-01-25  401  	}
+90d051b63519b0 Rengarajan S 2024-01-25  402  
+90d051b63519b0 Rengarajan S 2024-01-25  403  	while (*valid_byte_count) {
+90d051b63519b0 Rengarajan S 2024-01-25  404  		if (*data_empty_count - UART_BYTE_SIZE < 0)
+90d051b63519b0 Rengarajan S 2024-01-25  405  			break;
+90d051b63519b0 Rengarajan S 2024-01-25  406  		writeb(xmit->buf[xmit->tail], port->membase +
+90d051b63519b0 Rengarajan S 2024-01-25  407  		       UART_TX_BYTE_FIFO);
+90d051b63519b0 Rengarajan S 2024-01-25  408  		*data_empty_count -= UART_BYTE_SIZE;
+90d051b63519b0 Rengarajan S 2024-01-25  409  		*valid_byte_count -= UART_BYTE_SIZE;
+90d051b63519b0 Rengarajan S 2024-01-25  410  
+90d051b63519b0 Rengarajan S 2024-01-25  411  		/*
+90d051b63519b0 Rengarajan S 2024-01-25  412  		 * When the tail of the circular buffer is reached, the next
+90d051b63519b0 Rengarajan S 2024-01-25  413  		 * byte is transferred to the beginning of the buffer.
+90d051b63519b0 Rengarajan S 2024-01-25  414  		 */
+90d051b63519b0 Rengarajan S 2024-01-25  415  		xmit->tail = (xmit->tail + UART_BYTE_SIZE) &
+90d051b63519b0 Rengarajan S 2024-01-25  416  			     (UART_XMIT_SIZE - 1);
+90d051b63519b0 Rengarajan S 2024-01-25  417  
+90d051b63519b0 Rengarajan S 2024-01-25  418  		/*
+90d051b63519b0 Rengarajan S 2024-01-25  419  		 * If there are any pending burst count, data is handled by
+90d051b63519b0 Rengarajan S 2024-01-25  420  		 * transmitting DWORDs at a time.
+90d051b63519b0 Rengarajan S 2024-01-25  421  		 */
+90d051b63519b0 Rengarajan S 2024-01-25  422  		if (valid_burst_count && (xmit->tail <
+90d051b63519b0 Rengarajan S 2024-01-25  423  		   (UART_XMIT_SIZE - UART_BURST_SIZE)))
+90d051b63519b0 Rengarajan S 2024-01-25  424  			break;
+90d051b63519b0 Rengarajan S 2024-01-25  425  	}
+90d051b63519b0 Rengarajan S 2024-01-25  426  }
+90d051b63519b0 Rengarajan S 2024-01-25  427  
+
+:::::: The code at line 376 was first introduced by commit
+:::::: 90d051b63519b0e653432168ecee8a4c0abc24dd 8250: microchip: pci1xxxx: Add Burst mode transmission support in uart driver for reading from FIFO
+
+:::::: TO: Rengarajan S <rengarajan.s@microchip.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
