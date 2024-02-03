@@ -1,180 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2EE11197;
-	Sat,  3 Feb 2024 06:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E285C90D
+	for <llvm@lists.linux.dev>; Sat,  3 Feb 2024 09:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706940356; cv=none; b=HaGdwPjp9eO7VZZXG8vCzfoL33wDujLlTlNe64Lukt1FlAvyFm6Iv4bUB7TbVCiMalJN6TyhTT0dTfAjgVsnLc+yZ1SA9S2e7goTtd7kVh4f0UjQ9e4rWh3/OUmfcrlGWRK9hM5Mpq7LGXm1od/dCJaJkdrfPAGQamxOHTUwFhw=
+	t=1706953859; cv=none; b=gmXkp3gQTXJtsLgKeWpwOJmj4xvHNZqlfLRwpp5m1TBKqXqpBU8gz1R1vyccRrfVPzWNuoe64hSpdVtsWNUU15O/0MTVhylC+rIS3N2QwFdDSgIOKD4dK7KhYllJVmsPRbIOlyzOW1mBed8z+q2rQCj+gcxHr6OIrrxsZyCtub8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706940356; c=relaxed/simple;
-	bh=YDL7yOWZbGjik/I8szOuQPN0WMjv8QnkMxyufkwqeMk=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=th77M3f9ijby+Z5UTtut3Dk2YnyGzXbdMpOhUxWlX1MshB3bdihRJ6SLj6Im7w/KEHjJP/uDa51FdBldJtn9nR0nhJ8FUG+1iggQ2vOGzGyqdY/QVLYs+BESKPapzhwEyBoQuho+evzUhX0x0wXmYxgjBEK/WEq2M1Idfqqtt9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K0CI6kfI; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1706953859; c=relaxed/simple;
+	bh=cJOhXguQPQBr4S4IC6VAvTKVkjqH1fiPyUPQjCwVy0c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l5uUc1Btj2yRW/xEMJ2nwFn3aNYdkNrm82MJgI+uF1+KT+sxSMChS9TVkunXKCKsEgQ3ZeRDJeJuMA9UdduNtsQxkM7RWrB5wgOyW8zUBU7ATf7m5oUlpC3sr385XhySY+UFMHIJbOLrCbR0b9EBrsuIZIoEdoM6jjdMAynLRiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0VHn/O7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K0CI6kfI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706940355; x=1738476355;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=YDL7yOWZbGjik/I8szOuQPN0WMjv8QnkMxyufkwqeMk=;
-  b=K0CI6kfIG9fm4p7c0Ef/Gxa4YTCIzlxNecRMTbP+0O7USylcRF01h7Ga
-   wdkR3JduNm32RnQ6iUtImW3pyYgx42uSXZzE+Je1MFwmhKPk1vbH4h/Ca
-   Cq/gEL5t6K9UDC43gCb5uGG16l7eM+IXLAg34zpdH2MSmACgTATbyocst
-   1CM9KbiadXkZW5yfzxka6l/230CRMOXLZIi9/vKckvqSje7UQCzZheJa2
-   +XU1OC9ZwRPNpYwTXTEIsi23YK2OE66TA1jg1BRNdrSuwXAICx1bCj/G7
-   ynacToj400RSqUFX751hWgK3r2OvP3BZnrDA1YIZiq3vzyOYJ56SRV4uD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="4103524"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="4103524"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 22:05:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="4869602"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 02 Feb 2024 22:05:54 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rW99x-0004gt-0l;
-	Sat, 03 Feb 2024 06:05:50 +0000
-Date: Sat, 3 Feb 2024 14:04:56 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [ardb:x86-pie-for-sev-v4 15/21] vmlinux.o: warning: objtool:
- sme_encrypt_execute+0x4c: call to {dynamic}() leaves .noinstr.text section
-Message-ID: <202402031425.J9aePiK0-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0VHn/O7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B58C433C7
+	for <llvm@lists.linux.dev>; Sat,  3 Feb 2024 09:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706953859;
+	bh=cJOhXguQPQBr4S4IC6VAvTKVkjqH1fiPyUPQjCwVy0c=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Y0VHn/O75QWGxal82mHq9oD8iu/JkSp/jJOodDo18MPjCL1qMmy73zQU6wRIQsJ+Y
+	 UAbNztpXr/3+HLTWqKpb522lne36lafP/0nNX5nHiESO9I/hFZ0VxjBLIzkoLfqF4L
+	 2zW6gbHKzCDj1TZcDGX7VeK0//S8YCGMS28HNf8sRNpNYqsKa89SV8SmKR2QW4dgWP
+	 zmtBQQVR8Ivzdb12LQuH+TqHy3v/lPJLid4Nx5mSbcrGFi3s3Ung6fRLX+BUISnOF9
+	 o+VOiut+PcRIeq7UMx20Kcq4FY0GXoyZNX2AiR13C4Y3001hl2va6AD7PpbL0vcO65
+	 jUlXds0pCmopg==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2cf4d2175b2so32135831fa.0
+        for <llvm@lists.linux.dev>; Sat, 03 Feb 2024 01:50:58 -0800 (PST)
+X-Gm-Message-State: AOJu0YwU30b/B//hFRBPWqQ1e9wVGc4oE9wwOlCb0SUYwbYZObLWAoCX
+	/xO7DJhdBivnTvonDX9/uSeW/UO/w2Zk+mLocSUIscWtSYfsNTsau4Gq33AWi3mCaroLnTX8VN+
+	SmRJ+THQ0674mneP8556wY0SG9DE=
+X-Google-Smtp-Source: AGHT+IGELIIp4B9X8esHC+qMYCIzZNAui/lgl5ooU0YejjT5BL4ohstC4OPvq3oqcEFmHkQTm/CweLTlzZ6+EccDeQI=
+X-Received: by 2002:a05:651c:b27:b0:2d0:87a8:bda4 with SMTP id
+ b39-20020a05651c0b2700b002d087a8bda4mr3383400ljr.25.1706953857022; Sat, 03
+ Feb 2024 01:50:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240201223545.728028-1-maskray@google.com> <Zb0Qu5lR0iZUqImb@e133380.arm.com>
+ <CAMj1kXGSQ4Xq68Cmq6BH37FPJ+R+N5cOfrdC+aVML4sGaNDopg@mail.gmail.com>
+ <Zb0eRogn3rjkeDAs@e133380.arm.com> <20240202225104.f4dsagfwf6gcnddy@google.com>
+In-Reply-To: <20240202225104.f4dsagfwf6gcnddy@google.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Sat, 3 Feb 2024 10:50:44 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGN-nKSzxJoyM9peBTDevuPkH-+P2UzH746P-F913Dg-g@mail.gmail.com>
+Message-ID: <CAMj1kXGN-nKSzxJoyM9peBTDevuPkH-+P2UzH746P-F913Dg-g@mail.gmail.com>
+Subject: Re: [PATCH] arm64: jump_label: use constraints "Si" instead of "i"
+To: Fangrui Song <maskray@google.com>
+Cc: Dave Martin <Dave.Martin@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	Jisheng Zhang <jszhang@kernel.org>, Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-TO: Ard Biesheuvel <ardb@kernel.org>
+On Fri, 2 Feb 2024 at 23:51, Fangrui Song <maskray@google.com> wrote:
+>
+> On 2024-02-02, Dave Martin wrote:
+> >On Fri, Feb 02, 2024 at 05:32:33PM +0100, Ard Biesheuvel wrote:
+> >> On Fri, 2 Feb 2024 at 16:56, Dave Martin <Dave.Martin@arm.com> wrote:
+> >> >
+> >> > On Thu, Feb 01, 2024 at 02:35:45PM -0800, Fangrui Song wrote:
+> >> > > The generic constraint "i" seems to be copied from x86 or arm (and with
+> >> > > a redundant generic operand modifier "c"). It works with -fno-PIE but
+> >> > > not with -fPIE/-fPIC in GCC's aarch64 port.
+> >> > >
+> >> > > The machine constraint "S", which denotes a symbol or label reference
+> >> > > with a constant offset, supports PIC and has been available in GCC since
+> >> > > 2012 and in Clang since 7.0. However, Clang before 19 does not support
+> >> > > "S" on a symbol with a constant offset [1] (e.g.
+> >> > > `static_key_false(&nf_hooks_needed[pf][hook])` in
+> >> > > include/linux/netfilter.h), so we use "i" as a fallback.
+> >> > >
+> >> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> >> > > Signed-off-by: Fangrui Song <maskray@google.com>
+> >> > > Link: https://github.com/llvm/llvm-project/pull/80255 [1]
+> >> > >
+> >> > > ---
+> >> > > Changes from
+> >> > > arm64: jump_label: use constraint "S" instead of "i" (https://lore.kernel.org/all/20240131065322.1126831-1-maskray@google.com/)
+> >> > >
+> >> > > * Use "Si" as Ard suggested to support Clang<19
+> >> > > * Make branch a separate operand
+> >> > > ---
+> >> > >  arch/arm64/include/asm/jump_label.h | 12 ++++++++----
+> >> > >  1 file changed, 8 insertions(+), 4 deletions(-)
+> >> > >
+> >> > > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+> >> > > index 48ddc0f45d22..1f7d529be608 100644
+> >> > > --- a/arch/arm64/include/asm/jump_label.h
+> >> > > +++ b/arch/arm64/include/asm/jump_label.h
+> >> > > @@ -15,6 +15,10 @@
+> >> > >
+> >> > >  #define JUMP_LABEL_NOP_SIZE          AARCH64_INSN_SIZE
+> >> > >
+> >> > > +/*
+> >> > > + * Prefer the constraint "S" to support PIC with GCC. Clang before 19 does not
+> >> > > + * support "S" on a symbol with a constant offset, so we use "i" as a fallback.
+> >> > > + */
+> >> > >  static __always_inline bool arch_static_branch(struct static_key * const key,
+> >> > >                                              const bool branch)
+> >> > >  {
+> >> > > @@ -23,9 +27,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+> >> > >                "      .pushsection    __jump_table, \"aw\"    \n\t"
+> >> > >                "      .align          3                       \n\t"
+> >> > >                "      .long           1b - ., %l[l_yes] - .   \n\t"
+> >> > > -              "      .quad           %c0 - .                 \n\t"
+> >> > > +              "      .quad           %0 + %1 - .             \n\t"
+> >> > >                "      .popsection                             \n\t"
+> >> > > -              :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> >> > > +              :  :  "Si"(key), "i"(branch) :  : l_yes);
+> >> >
+> >> > Is the meaning of multi-alternatives well defined if different arguments
+> >> > specify different numbers of alternatives?  The GCC documentation says:
+> >> >
+> >> > https://gcc.gnu.org/onlinedocs/gcc/Multi-Alternative.html:
+> >> >
+> >> > -8<-
+> >> >
+> >> > [...] All operands for a single instruction must have the same number of
+> >> > alternatives.
+> >> >
+> >> > ->8-
+> >> >
+> >>
+> >> AIUI that does not apply here. That reasons about multiple arguments
+> >> having more than one constraint, where not all combinations of those
+> >> constraints are supported by the instruction.
+> >
+> >Ah, scratch that: I'm confusing multi-alternatives with simple
+> >constraints: all arguments must have the same number of comma-separated
+> >lists of constraint letters, but each list can contain as many or as few
+> >letters as are needed to match the operand.
+> >
+> >So "Si"(), "i"() is fine.
+>
+> "Si" is fine for GCC and Clang.
+> "i" is fine for Clang but not for GCC PIC.
+>
+>      https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly#aarch64
+>
+>      In gcc/config/aarch64, LEGITIMATE_PIC_OPERAND_P(X) disallows any symbol
+>      reference, which means that "i" and "s" cannot be used for PIC. Instead,
+>      the constraint "S" has been supported since the initial port (2012) to
+>      reference a symbol or label.
+>
+> I am also not familiar with
+> https://gcc.gnu.org/onlinedocs/gcc/Multi-Alternative.html (comma in a
+> constraint string). Thankfully we don't need this powerful construct:)
+>
+> >> > Also, I still think it may be redundant to move the addition inside the
+> >> > asm, so long as Clang is happy with the symbol having an offset.
+> >> >
+> >>
+> >> Older Clang is not happy with the symbol having an offset.
+> >>
+> >> And given that the key pointer and the 'branch' boolean are two
+> >> distinct inputs to this function, I struggle to understand why you
+> >> feel it is better to combine them in the argument. 'branch' is used to
+> >> decide whether or not to set bit 0, independently of the value of key.
+> >> Using array indexing to combine those values together to avoid an
+> >> addition in the asm obfuscates the code.
+> >
+> >This was more about not making changes that don't need to be made,
+> >unless it clearly makes the code better.
+> >
+> >But if some verions of Clang accept "S" but choke if there's an offset,
+> >then moving the addition into the asm seems the way to go.
+> >
+> >(I may have misread the commit message on this point.)
+> >
+> >[...]
+> >
+> >Cheers
+> >---Dave
+>
+> I am convinced by Ard' argument that two inputs (key, branch) deserve
+> two operands.
+> The existing "i"(&((char *)key)[branch]) is kinda ugly and also longer:)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-for-sev-v4
-head:   a2c57e6c70798f62230ccdc90e6a5fd6799489ea
-commit: 92e20e4db8ff97fc7d34865d4e1422d63a11beeb [15/21] x86/sev: Make all code reachable from 1:1 mapping __pitext
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240203/202402031425.J9aePiK0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402031425.J9aePiK0-lkp@intel.com/reproduce)
+If it helps clarify things, we might do something like
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402031425.J9aePiK0-lkp@intel.com/
+".quad  (%[key]  - .) + %[bit0]"
 
-All warnings (new ones prefixed by >>):
-
->> vmlinux.o: warning: objtool: sme_encrypt_execute+0x4c: call to {dynamic}() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x46: relocation to !ENDBR: .text+0x164d78
-
-
-objdump-func vmlinux.o sme_encrypt_execute:
-0000 0000000000002380 <sme_encrypt_execute>:
-0000     2380:	f3 0f 1e fa          	endbr64
-0004     2384:	55                   	push   %rbp
-0005     2385:	48 89 e5             	mov    %rsp,%rbp
-0008     2388:	48 89 c8             	mov    %rcx,%rax
-000b     238b:	48 8d a0 00 10 00 00 	lea    0x1000(%rax),%rsp
-0012     2392:	48 05 00 10 00 00    	add    $0x1000,%rax
-0018     2398:	41 54                	push   %r12
-001a     239a:	49 89 fa             	mov    %rdi,%r10
-001d     239d:	49 89 f3             	mov    %rsi,%r11
-0020     23a0:	49 89 d4             	mov    %rdx,%r12
-0023     23a3:	48 89 c7             	mov    %rax,%rdi
-0026     23a6:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 23ad <sme_encrypt_execute+0x2d>	23a9: R_X86_64_PC32	__enc_copy-0x4
-002d     23ad:	48 c7 c1 87 00 00 00 	mov    $0x87,%rcx
-0034     23b4:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi)
-0036     23b6:	4c 89 d7             	mov    %r10,%rdi
-0039     23b9:	4c 89 de             	mov    %r11,%rsi
-003c     23bc:	4c 89 c2             	mov    %r8,%rdx
-003f     23bf:	4c 89 e1             	mov    %r12,%rcx
-0042     23c2:	49 89 c0             	mov    %rax,%r8
-0045     23c5:	49 81 c0 00 10 00 00 	add    $0x1000,%r8
-004c     23cc:	ff d0                	call   *%rax
-004e     23ce:	41 5c                	pop    %r12
-0050     23d0:	48 89 ec             	mov    %rbp,%rsp
-0053     23d3:	5d                   	pop    %rbp
-0054     23d4:	c3                   	ret
-0055     23d5:	cc                   	int3
-0056     23d6:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
-0060     23e0:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
-006a     23ea:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
-0074     23f4:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
-007e     23fe:	66 90                	xchg   %ax,%ax
-0080     2400:	90                   	nop
-0081     2401:	90                   	nop
-0082     2402:	90                   	nop
-0083     2403:	90                   	nop
-0084     2404:	90                   	nop
-0085     2405:	90                   	nop
-0086     2406:	90                   	nop
-0087     2407:	90                   	nop
-0088     2408:	90                   	nop
-0089     2409:	90                   	nop
-008a     240a:	90                   	nop
-008b     240b:	90                   	nop
-008c     240c:	90                   	nop
-008d     240d:	90                   	nop
-008e     240e:	90                   	nop
-008f     240f:	90                   	nop
-0090     2410:	90                   	nop
-0091     2411:	90                   	nop
-0092     2412:	90                   	nop
-0093     2413:	90                   	nop
-0094     2414:	90                   	nop
-0095     2415:	90                   	nop
-0096     2416:	90                   	nop
-0097     2417:	90                   	nop
-0098     2418:	90                   	nop
-0099     2419:	90                   	nop
-009a     241a:	90                   	nop
-009b     241b:	90                   	nop
-009c     241c:	90                   	nop
-009d     241d:	90                   	nop
-009e     241e:	90                   	nop
-009f     241f:	90                   	nop
-00a0     2420:	90                   	nop
-00a1     2421:	90                   	nop
-00a2     2422:	90                   	nop
-00a3     2423:	90                   	nop
-00a4     2424:	90                   	nop
-00a5     2425:	90                   	nop
-00a6     2426:	90                   	nop
-00a7     2427:	90                   	nop
-00a8     2428:	90                   	nop
-00a9     2429:	90                   	nop
-00aa     242a:	90                   	nop
-00ab     242b:	90                   	nop
-00ac     242c:	90                   	nop
-00ad     242d:	90                   	nop
-00ae     242e:	90                   	nop
-00af     242f:	90                   	nop
-00b0     2430:	90                   	nop
-00b1     2431:	90                   	nop
-00b2     2432:	90                   	nop
-00b3     2433:	90                   	nop
-00b4     2434:	90                   	nop
-00b5     2435:	90                   	nop
-00b6     2436:	90                   	nop
-00b7     2437:	90                   	nop
-00b8     2438:	90                   	nop
-00b9     2439:	90                   	nop
-00ba     243a:	90                   	nop
-00bb     243b:	90                   	nop
-00bc     243c:	90                   	nop
-00bd     243d:	90                   	nop
-00be     243e:	90                   	nop
-00bf     243f:	90                   	nop
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+: : [key]"Si"(key), [bit0]"i"(branch) :  : l_yes);
