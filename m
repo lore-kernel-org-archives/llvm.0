@@ -1,124 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6EA5B1F5;
-	Mon,  5 Feb 2024 21:54:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C03482F5;
+	Mon,  5 Feb 2024 23:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707170051; cv=none; b=jKbRoa16qeNjhB7Rf/eJXd89xlfSaY3csbWzxCJwGLQpUue8qz4avLqWT0bA7RNqacSzcjwSXs7v3MCgNDY+OiEIg4AL9qsvR733MLvHA17r9Qio58mEckiyVHkx/1XmsvzrL42T+0AePS2+1kiLScE3gfebVxYV4/+f0KC6jY0=
+	t=1707174828; cv=none; b=MmONVU3JLffxzlIgTvgwlkCSTAaNIlP+14kt2GmxpG1rE0i3Q6/FkvL3wEmIxHIKIMJ7jp3FOPObiJdZiveqTiCqwJTHc7frzvKBi5Z8s/KMv61lkwwtXYfk+OiW775m2wpbNddAriRRtBkcPAiFHPfuXOG+QegtWXeg16Ws3/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707170051; c=relaxed/simple;
-	bh=6GEDCFQk41XP9DzQmt+P7xWPiXzZfQEwbIAYsyL/6lY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qbhl8GS2kDBWg61yAEi3qNM2cW3ILLQBPn6jbktmtKp4r5TQIlphUG5szhsiJDYKHyQ3rXGILksbxv/Ujsx58djGs5Pj++cuDrNopb6/8wv0RrTHJvbPnud2eomaFVYdOV1c/ffGMj51qN5yzH5kAEUgDj4hW7a9WYVdNpSWQB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jj2o3pkn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707174828; c=relaxed/simple;
+	bh=uEOPooNg2SYkTD6le+KknqIc+GX5jBSXTh3C3x/DtOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dyrJzSxjQNN/HVYVP8agQFeIbQZ8MhtWYXT/y8Sd+vZiKpTJmEUlZjiBqsOHYarXxiFJeti3DhLnDJj9Cgp6mQpuExBXxaZLKhc3pGXoadmn1Xr/nRZop9l3MJthqLbHEa+S/J19iO5tdRhL/pJmq1WAE3mUq+bvWX8D+1CXNL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cn+t59ow; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jj2o3pkn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC07C433C7;
-	Mon,  5 Feb 2024 21:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707170050;
-	bh=6GEDCFQk41XP9DzQmt+P7xWPiXzZfQEwbIAYsyL/6lY=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Jj2o3pkngkvdJslLtmThbXMGJLXgEonRU0XkDkA5VSynRzNafZQYBhR0MwS2Yl2Av
-	 WSXySO4kdnczUeTzv1GpIyQQ1tDJb+Pp1mJ2cqmarPN5orAlu3n6091jZg3mSMRER7
-	 nOEuXRcSkcgkayi+1PhrreJvPypDfAHU5GegfQRvTCNHFBIfKKNQp6LcVDU5UWe9fA
-	 v93Gd0MoGmDc34Y+chk4j+l7UMWP+fy83EW0ZIlsAeUkCSUC1pXxCwzNkQ7TpEIuZx
-	 Ekupidglumd3Aode9f/uAldY8t3ukiCX2HOujyZiQSmdGUGQVGfaEYoiGUG2q3e4Mx
-	 br5mYdGEBztJw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 05 Feb 2024 14:54:05 -0700
-Subject: [PATCH] drm/amd/display: Increase frame-larger-than for all
- display_mode_vba files
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cn+t59ow"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707174827; x=1738710827;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uEOPooNg2SYkTD6le+KknqIc+GX5jBSXTh3C3x/DtOE=;
+  b=Cn+t59owImGdBW7j2soIylOdirSdK2no3/nit7gsr4DlgdqL0caH2pUh
+   Xqop3676R4/SoH+0G5ihKIOQo0TgY9tKL1i0PcGR0oydY9rWrRGwI/7fy
+   jcQufzkEOy28TPvOAVIZYEPj3WrqK9wmsqUtMneBczRpg5ZCMOvOMKned
+   +nErVfB/Gc4FnVQWFyN1MbtwWlZYXZ/POz6SkxROAgGMYGk3HerMT1VGq
+   x2l5/qq9hNIbIgaOzT59nbjzn7dwGgk+k88Qc1ILdjlMZ7Y3xmvQk6gFy
+   KRn+pv5qPBangP1Ob3TyY8F6mAN1UVwgnK6XdMemdN/4+4WTSTQ3qtONy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="3587699"
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="3587699"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 15:13:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="841529"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 05 Feb 2024 15:13:43 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rX89l-0000tB-2q;
+	Mon, 05 Feb 2024 23:13:41 +0000
+Date: Tue, 6 Feb 2024 07:12:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Justin Stitt <justinstitt@google.com>
+Subject: [kees:devel/2-arg-strscpy 2/4] fs/exec.c:1234:2: error: call to
+ undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202402060734.jrkbSAtM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240205-amdgpu-raise-flt-for-dml-vba-files-v1-1-9bc8c8b98fb4@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAPxYwWUC/x3NywqDMBBG4VeRWXcgTc2ifZXSRTR/7EC8MFOlI
- L67weW3OWcngwqMXs1Oik1M5qnifmuo/8ZpAEuqJu9867wLHMc0LCtrFAPn8uM8K6ex8NZFzlJ
- gDIQuxGcf0D6ohhZFlv81eX+O4wQUV7JbdAAAAA==
-To: harry.wentland@amd.com, sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com, 
- alexander.deucher@amd.com
-Cc: christian.koenig@amd.com, Xinhui.Pan@amd.com, morbo@google.com, 
- justinstitt@google.com, amd-gfx@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3644; i=nathan@kernel.org;
- h=from:subject:message-id; bh=6GEDCFQk41XP9DzQmt+P7xWPiXzZfQEwbIAYsyL/6lY=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKkHIxnj9YTvrShxvWjc1DiTy07ynlzcAc6LYifEJZkWC
- VXXirJ0lLIwiHExyIopslQ/Vj1uaDjnLOONU5Ng5rAygQxh4OIUgInsVGdk+BHpcmr2r5kGQTMk
- Shd21Z6M5OET7p/ZEyf/12Z6pt7njYwMq3/f7WIIe2TkI/OmcAPbuVePSva0SKnYpwZNCmpP+L2
- GHwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After a recent change in LLVM, allmodconfig (which has CONFIG_KCSAN=y
-and CONFIG_WERROR=y enabled) has a few new instances of
--Wframe-larger-than for the mode support and system configuration
-functions:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git devel/2-arg-strscpy
+head:   ec83dccab8c18d8482dc1934e7079916508b8eea
+commit: db19daefe72fd816f386afed91ae83633382e489 [2/4] string: Allow 2-argument strscpy()
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240206/202402060734.jrkbSAtM-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240206/202402060734.jrkbSAtM-lkp@intel.com/reproduce)
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v2.c:3393:6: error: stack frame size (2144) exceeds limit (2048) in 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-   3393 | void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        |      ^
-  1 error generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402060734.jrkbSAtM-lkp@intel.com/
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.c:3520:6: error: stack frame size (2192) exceeds limit (2048) in 'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-   3520 | void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        |      ^
-  1 error generated.
+All errors (new ones prefixed by >>):
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:3286:6: error: stack frame size (2128) exceeds limit (2048) in 'dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-   3286 | void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        |      ^
-  1 error generated.
+>> fs/exec.c:1234:2: error: call to undeclared function 'CONCATENATE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1234 |         strscpy_pad(buf, tsk->comm, buf_size);
+         |         ^
+   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
+     132 |         __wrote = strscpy(__dst, __src, __count);                       \
+         |                   ^
+   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
+     104 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ^
+>> fs/exec.c:1234:2: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
+     132 |         __wrote = strscpy(__dst, __src, __count);                       \
+         |                   ^
+   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
+     104 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |                                ^
+   fs/exec.c:1234:2: error: use of undeclared identifier '__strscpy'
+   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
+     132 |         __wrote = strscpy(__dst, __src, __count);                       \
+         |                   ^
+   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
+     104 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |                     ^
+   fs/exec.c:1249:2: error: call to undeclared function 'CONCATENATE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1249 |         strscpy_pad(tsk->comm, buf, sizeof(tsk->comm));
+         |         ^
+   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
+     132 |         __wrote = strscpy(__dst, __src, __count);                       \
+         |                   ^
+   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
+     104 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ^
+   fs/exec.c:1249:2: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
+     132 |         __wrote = strscpy(__dst, __src, __count);                       \
+         |                   ^
+   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
+     104 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |                                ^
+   fs/exec.c:1249:2: error: use of undeclared identifier '__strscpy'
+   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
+     132 |         __wrote = strscpy(__dst, __src, __count);                       \
+         |                   ^
+   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
+     104 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |                     ^
+   6 errors generated.
 
-Without the sanitizers enabled, there are no warnings.
 
-This was the catalyst for commit 6740ec97bcdb ("drm/amd/display:
-Increase frame warning limit with KASAN or KCSAN in dml2") and that same
-change was made to dml in commit 5b750b22530f ("drm/amd/display:
-Increase frame warning limit with KASAN or KCSAN in dml") but the
-frame_warn_flag variable was not applied to all files. Do so now to
-clear up the warnings and make all these files consistent.
+vim +/COUNT_ARGS +1234 fs/exec.c
 
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issue/1990
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/amd/display/dc/dml/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  1229  
+3756f6401c3026 Arnd Bergmann  2017-12-14  1230  char *__get_task_comm(char *buf, size_t buf_size, struct task_struct *tsk)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  1231  {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  1232  	task_lock(tsk);
+503471ac36df60 Yafang Shao    2022-01-19  1233  	/* Always NUL terminated and zero-padded */
+503471ac36df60 Yafang Shao    2022-01-19 @1234  	strscpy_pad(buf, tsk->comm, buf_size);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  1235  	task_unlock(tsk);
+59714d65dfbc86 Andrew Morton  2008-02-04  1236  	return buf;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  1237  }
+3756f6401c3026 Arnd Bergmann  2017-12-14  1238  EXPORT_SYMBOL_GPL(__get_task_comm);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  1239  
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-index 6042a5a6a44f..59ade76ffb18 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-@@ -72,11 +72,11 @@ CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_lib.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_vba.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn10/dcn10_fpu.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/dcn20_fpu.o := $(dml_ccflags)
--CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags)
-+CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20.o := $(dml_ccflags)
--CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20v2.o := $(dml_ccflags)
-+CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20v2.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20v2.o := $(dml_ccflags)
--CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_mode_vba_21.o := $(dml_ccflags)
-+CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_mode_vba_21.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_rq_dlg_calc_21.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_mode_vba_30.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_rq_dlg_calc_30.o := $(dml_ccflags)
+:::::: The code at line 1234 was first introduced by commit
+:::::: 503471ac36df60bba037c3b110d76f53a93f61b5 fs/exec: replace strncpy with strscpy_pad in __get_task_comm
 
----
-base-commit: 6813cdca4ab94a238f8eb0cef3d3f3fcbdfb0ee0
-change-id: 20240205-amdgpu-raise-flt-for-dml-vba-files-ee5b5a9c5e43
+:::::: TO: Yafang Shao <laoar.shao@gmail.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
