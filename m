@@ -1,181 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463B32C18F
-	for <llvm@lists.linux.dev>; Mon,  5 Feb 2024 14:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D192C84C
+	for <llvm@lists.linux.dev>; Mon,  5 Feb 2024 14:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707142902; cv=none; b=gHug5/8tJKdny1BAId2C5cV3NcCxpFLchPKCsyma+YKO/iUf85wWCpfPQzh5k5DJqgaVfz3+v8PBhmMV8WWAL+mTGTkz0LGiqyhTOvwn3YlsB9ZW6guhXy4LVk3pXgb0stIqGqHypcy2YVxslp6c8XA1oTCY1UgAMQlacvSoNLs=
+	t=1707144807; cv=none; b=uvRztGbZYmsf2cs7LSRHzAoTpVWL1mfrC+U+r35EthODOZbHWL+lEahqjY9EnCC32hu4fmGXCAD+L3A4PXcEerdTIAHnDnfWO1MTIlPg1jckBQRD7Yuw2iUjaQAlSbOgJjBL7xkxZ+eflFeF9uaTq0vTtG4FW2XBiOk/M1oicUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707142902; c=relaxed/simple;
-	bh=YrDF10Xfa6lGvnVu7tOSeWWEK0v0V6kTEpqFen3VVTk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=dhC8hapAEeoQ3O66pSjjmu5dyMqro87rACh36UW1WbCIAP4fMpcuZykrSeoZ2fsCYzTWfkVb4owOL2B5hX/ws8jWKwR6OmsaNspGHrtKBruUoLFLaqhxMTMpPPnz7+Ca6ZhVjhLBSfrryRnVe5xzBTZFIaWwA/x8AgM4OlpXg44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cOPxkfOR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1707144807; c=relaxed/simple;
+	bh=N5S3QB/YuiwuK74Hpcl5CcJl2TR2YgDRJk+uYMrvNzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W4giYYeu4gx4lPDdynq/QdtcyvnWMPdqHIDR6ScCul88eXU3qMUg2+ypEirYNUWJvugvekNzVLuWsIoxA8yR+/HnkxSW1pPFoebryMoXgGgio51o0dBTSrOCyd73fNVfVr+KMlWHB4hPAfhnynBpWJSbN/TLcqkUweD9Xd+nR7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=v2iTjAGZ; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cOPxkfOR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707142899;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KVm2SAeC3HtnYQtrAejnSnCettNUvzYA0P4pjAKQcEo=;
-	b=cOPxkfORM7ohpUNeK8gSqwoEywaz8PgbTlcV2ho8V2Nqch4ILJIPYvWDDKrZNYhJcmRzVD
-	gERMytwKnTycMwfDeb1YlL8o8Q+UCwA5OkrlaDcKn+hpM1cij7aAO79kj8DSOzUY7jQJIw
-	KHitXXGiEtKVk7VGxOtYAlA//pt9uUk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-325-4nawGdTrO1GpSCRfiwqHSQ-1; Mon, 05 Feb 2024 09:21:37 -0500
-X-MC-Unique: 4nawGdTrO1GpSCRfiwqHSQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="v2iTjAGZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1707144804;
+	bh=N5S3QB/YuiwuK74Hpcl5CcJl2TR2YgDRJk+uYMrvNzY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=v2iTjAGZGi/MpVLUpKPYp/8SRERGhHVyqe3ElC4kyxXzzrPfiPxjPRcAEpJL5vPHU
+	 PnjvCeAtUxwFEStbT4Hdgc7f0Jw/6C5XvNxK80Vjdgw49pvPMtpPnD2wPjEH64i6oo
+	 o4tGCMav+ms1zfmGy81weTr5FTcicH+nR5IbXOsrGuQAkLHCwoN6af4E9wlB1VfTAu
+	 pkSK5se92JKH66V7bMkmlwoUUBbLu/y5Eggh3sIseTlNEkfBuHLTnMXembqsnr5T1E
+	 HB4OWzJCN2JicnG2x1eIJgUJBPo2keCn9/nFd5fXRPV/G1ugUDLTy2fobGgmHmSsRt
+	 oF1tyzf0z2Bkg==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AACF1867943
-	for <llvm@lists.linux.dev>; Mon,  5 Feb 2024 14:21:37 +0000 (UTC)
-Received: from [172.64.10.24] (unknown [10.30.34.11])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 98A4B5012;
-	Mon,  5 Feb 2024 14:21:37 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 14 of 226): Test report for master
- (6.8.0-rc2, mainline.kernel.org-clang, 56897d51)
-Date: Mon, 05 Feb 2024 14:21:37 -0000
-To: llvm@lists.linux.dev
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3C7B537811CD;
+	Mon,  5 Feb 2024 14:53:21 +0000 (UTC)
+Date: Mon, 5 Feb 2024 09:53:19 -0500
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Mike Isely <isely@pobox.com>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 3/3] media: mediatek: vcodedc: Fix
+ Wcast-function-type-strict warnings
+Message-ID: <e75a0207-1f95-427c-8d72-e6a86505522e@notapiano>
+References: <20240128-fix-clang-warnings-v1-0-1d946013a421@chromium.org>
+ <20240128-fix-clang-warnings-v1-3-1d946013a421@chromium.org>
+ <20240201221654.GC2240065@dev-arch.thelio-3990X>
+ <CABCJKudd3SUy3Qor7Tc0zyJsSAWy0PavbbBFALuWEpBa32pBCQ@mail.gmail.com>
+ <5658ec37-868f-454d-a149-467e6de139cd@collabora.com>
+ <12d0c580-788d-4466-af8a-feb5ab3c6677@notapiano>
+ <20240204205549.GA2892810@dev-fedora.aadp>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <73025.124020509213800299@us-mta-325.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240204205549.GA2892810@dev-fedora.aadp>
 
-Hi, we tested your kernel and here are the results:
+On Sun, Feb 04, 2024 at 01:55:49PM -0700, Nathan Chancellor wrote:
+> On Fri, Feb 02, 2024 at 03:15:46PM -0500, Nícolas F. R. A. Prado wrote:
+> > On Fri, Feb 02, 2024 at 01:58:05PM +0100, AngeloGioacchino Del Regno wrote:
+> > > Il 01/02/24 23:25, Sami Tolvanen ha scritto:
+> > > > On Thu, Feb 1, 2024 at 10:17 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > > 
+> > > > > On Sun, Jan 28, 2024 at 02:12:22AM +0000, Ricardo Ribalda wrote:
+> > > > > > Building with LLVM=1 throws the following warning:
+> > > > > > drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c:38:32: warning: cast from 'mtk_vcodec_ipi_handler' (aka 'void (*)(void *, unsigned int, void *)') to 'ipi_handler_t' (aka 'void (*)(const void *, unsigned int, void *)') converts to incompatible function type [-Wcast-function-type-strict]
+> > > > > > 
+> > > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > > > 
+> > > > > I am not positive because I don't have any hardware to test this driver
+> > > > > but I suspect this patch is just hiding the warning without actually
+> > > > > addressing the issue that it is pointing out.
+> > > > 
+> > > > Agreed, this won't fix the issue. The correct solution is to drop the
+> > > > cast and change the handler type to match the pointer type (i.e. use
+> > > > const void* for the first argument).
+> > > > 
+> > > 
+> > > Even though I agree that the correct solution is to change the handler's type,
+> > > I think that having a test on the actual hardware done is still valuable.
+> > > 
+> > > We scheduled a job on KernelCI to test this commit on our integration kernel,
+> > > you'll get results for ChromeOS' tast decoders (MT8195 only) and Fluster tests
+> > > on MT8183/8186/8192/8195.
+> > > 
+> > > 
+> > > The results should be available in a couple of hours here, relative to
+> > > commit `49955a84129dbe1f94fedf729690efcf28513828` on our tree:
+> > > https://chromeos.kernelci.org/job/collabora-chromeos-kernel/branch/for-kernelci/
+> > > 
+> > > P.S.: If they don't, feel free to ping me or Nicolas (added to the loop) about it.
+> > 
+> > Hi,
+> > 
+> > the results are available at 
+> > 
+> > https://chromeos.kernelci.org/test/job/collabora-chromeos-kernel/branch/for-kernelci/kernel/v6.8-rc2-3109-g49955a84129d/
+> > 
+> > (You need to type "decoder" into the search bar to limit the results to only the
+> > decoder tests)
+> > 
+> > The only regressions I see are due to infrastructure error or broken test
+> > unrelated to this change (v4l2-decoder-conformance-h264-frext test on
+> > MT8195-Tomato, and cros-tast-decoder-v4l2-sl-h264 test on MT8183-Juniper)
+> > 
+> > Otherwise, all platforms (MT8183/8186/8192/8195) and video codecs
+> > (VP8/VP9/H264/H265/AV1) seem unaffected.
+> > 
+> > Note that these are GCC builds.
+> 
+> Thank you for running the tests to make sure this series does not
+> regress anything. If possible, it would be good to try and build with
+> LLVM and enable kernel Control Flow Integrity (kCFI, CONFIG_CFI_CLANG)
+> to see if my theory that this is currently broken is correct. I have
+> prebuilt LLVM toolchains on kernel.org but if it is too much of a
+> hassle, I would not worry about it.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+We don't have a way in KernelCI to run a one-off test, instead we need to make a
+PR adding a build definition that will be triggered for every update on a given
+tree. The results I reported above were for configurations that we already had
+in place.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+That said, maybe we should be running with LLVM and CONFIG_CFI_CLANG enabled on
+a regular basis, if you think it is useful as a general tool for identifying
+issues. I'd also be interested in hearing more from you on what other kind of
+clang configs you think might be good to enable in CI to provide value to the
+community.
 
-Kernel information:
-    Commit message: Merge tag 'trace-v6.8-rc2' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/trace/linux-trace
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/127457
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: blktests nvme/ failure due to latest nvme-cli update
-            URL: https://github.com/osandov/blktests/pull/131
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: nvme authentication setup failed observed during blktests nv=
-me/041 nvme/042 nvme/043 nvme/044 nvme/045
-            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
-LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [Rawhide] nvme-cli: hostid/hostnqn warnings to verbose level
-            URL: https://github.com/linux-nvme/nvme-cli/commit/252929069d6c=
-9042e9c95f41788006cb3eb2f452
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Hardware - CPU: Die Test
-      x86_64 (debug) - Storage - swraid scsi_raid
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 - Memory function: memfd_create
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+Nícolas
