@@ -1,86 +1,179 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D06EB3A1A0
-	for <llvm@lists.linux.dev>; Mon,  5 Feb 2024 15:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D04944C64
+	for <llvm@lists.linux.dev>; Mon,  5 Feb 2024 16:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707146398; cv=none; b=tVCooiJdUYk6VFTf42xY5i9StF2xEkpxg9vKNVQzU91g52QxO/6jdfymbJWNYXszMdxb6O82z5XGHZUtDKfq/vYrnAlxwyi/cyhoNpjfeW7jppC8UmH3DV3Tv0kQyFG4J8ynaWvxGMEOjR0vz2U+vK7Smo1VpNs3Imp198oBfUs=
+	t=1707151313; cv=none; b=LRIEFXt8Bve7u+f9oYQDezJ+EdHi4VxZ2jrOFMd5U7/tmUz1+wxFVvv8FZyjyY1PY3wjgTlEgoJH/bLnj1JsPyAY2jt8eZfFrVprslVBSSztOoXEFoqkmG/OGC3LHCE61V2zRg96fcN32P8C42N9acmL9qQi1Yc7k805txBoL4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707146398; c=relaxed/simple;
-	bh=Tp9mtZuUMtWUy7r01PjjTtYAHa5CzgjrkHr/jKLUm0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rUpq3IjI6i1pSHYYRIwVRQ7QkSxitbxwOf/hlPVaqhUQif+GoFxSsiMXtYv07FlYKOTyms9YG//ZYNNUvVajJuWwa6zwe+qsDCemfZRFJjGrieq6DoXSasMF5/oRlLRRKGhrd1JRR+s98sQn+jVyLHANEIpJStU/ZpJSAs+pAHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9E541FB;
-	Mon,  5 Feb 2024 07:20:38 -0800 (PST)
-Received: from e133380.arm.com (e133380.arm.com [10.1.197.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 065833F5A1;
-	Mon,  5 Feb 2024 07:19:54 -0800 (PST)
-Date: Mon, 5 Feb 2024 15:19:47 +0000
-From: Dave Martin <Dave.Martin@arm.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Fangrui Song <maskray@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: jump_label: use constraints "Si" instead of "i"
-Message-ID: <ZcD8k2UTs3wyk9Dx@e133380.arm.com>
-References: <20240201223545.728028-1-maskray@google.com>
- <Zb0Qu5lR0iZUqImb@e133380.arm.com>
- <CAMj1kXGSQ4Xq68Cmq6BH37FPJ+R+N5cOfrdC+aVML4sGaNDopg@mail.gmail.com>
- <Zb0eRogn3rjkeDAs@e133380.arm.com>
- <20240202225104.f4dsagfwf6gcnddy@google.com>
- <CAMj1kXGN-nKSzxJoyM9peBTDevuPkH-+P2UzH746P-F913Dg-g@mail.gmail.com>
+	s=arc-20240116; t=1707151313; c=relaxed/simple;
+	bh=6+k/EVfCmrgNVghTorWb7aBKCaylz9gHTg2ACoTd1DE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=j0MBbmyG0MRpzDBH8JUzG6A0x3rAfiX54HhU9/B2zmmxcNBoeTp8riEqn4qfE1vvm+kaHJq1FF3F85jXM6+j9hJJevFn8vtXtzdfR8YyYO4I9qqUESaygEfBV0vpQUjKf0t9o8130c3aRitPCjciHJWRlC26xueRubwRdw8verI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vu+Bn7u9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vu+Bn7u9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707151309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jk52oTJw+Z0hJYEBXnpD7mg7MDsMVAkPlFnLJIeeClE=;
+	b=Vu+Bn7u9FHvtAHaNQ8w6t8vOZImhy8/AFEq+hiSGCGnSWzLdbz+mjeLs8cx+JDg4Hc3wZF
+	x78SKNTiEZlZ1JyJru7C7LH1GFkLgxZTpX2jJCVb0Vgrkps8AiABLfH32IZGwR597gB6Un
+	UInNQvkCQTZjESPH0gbocOLgDqK5jsA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-642-FwPW62kcOraK7qKIAZLDWQ-1; Mon, 05 Feb 2024 11:41:48 -0500
+X-MC-Unique: FwPW62kcOraK7qKIAZLDWQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ADE5D85A588
+	for <llvm@lists.linux.dev>; Mon,  5 Feb 2024 16:41:47 +0000 (UTC)
+Received: from [172.64.10.24] (unknown [10.30.34.11])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9A34051D5;
+	Mon,  5 Feb 2024 16:41:47 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 12 of 226): Test report for master
+ (6.8.0-rc2, mainline.kernel.org-clang, 3f24fcda)
+Date: Mon, 05 Feb 2024 16:41:47 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGN-nKSzxJoyM9peBTDevuPkH-+P2UzH746P-F913Dg-g@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <66066.124020511414800567@us-mta-642.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 03, 2024 at 10:50:44AM +0100, Ard Biesheuvel wrote:
-> On Fri, 2 Feb 2024 at 23:51, Fangrui Song <maskray@google.com> wrote:
+Hi, we tested your kernel and here are the results:
 
-[...]
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> > "Si" is fine for GCC and Clang.
-> > "i" is fine for Clang but not for GCC PIC.
-> >
-> >      https://maskray.me/blog/2024-01-30-raw-symbol-names-in-inline-assembly#aarch64
-> >
-> >      In gcc/config/aarch64, LEGITIMATE_PIC_OPERAND_P(X) disallows any symbol
-> >      reference, which means that "i" and "s" cannot be used for PIC. Instead,
-> >      the constraint "S" has been supported since the initial port (2012) to
-> >      reference a symbol or label.
-> >
-> > I am also not familiar with
-> > https://gcc.gnu.org/onlinedocs/gcc/Multi-Alternative.html (comma in a
-> > constraint string). Thankfully we don't need this powerful construct:)
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Ack, I had thought that this was relevant, but it is not,
-and "Si" seems right.
+Kernel information:
+    Commit message: Merge tag 'for-linus-6.8-rc3' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/tytso/ext4
 
-[...]
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/127532
 
-> > I am convinced by Ard' argument that two inputs (key, branch) deserve
-> > two operands.
-> > The existing "i"(&((char *)key)[branch]) is kinda ugly and also longer:)
-> 
-> If it helps clarify things, we might do something like
-> 
-> ".quad  (%[key]  - .) + %[bit0]"
-> 
-> : : [key]"Si"(key), [bit0]"i"(branch) :  : l_yes);
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: blktests nvme/ failure due to latest nvme-cli update
+            URL: https://github.com/osandov/blktests/pull/131
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: nvme authentication setup failed observed during blktests nv=
+me/041 nvme/042 nvme/043 nvme/044 nvme/045
+            URL: https://lore.kernel.org/linux-nvme/CAHj4cs8vqrePA-TE_GGNAZ=
+LG3iqZBq9L1GkanA4A0wRF_TXDeA@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [Rawhide] nvme-cli: hostid/hostnqn warnings to verbose level
+            URL: https://github.com/linux-nvme/nvme-cli/commit/252929069d6c=
+9042e9c95f41788006cb3eb2f452
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
-I don't have a strong opinion on the naming, but something like this
-seems fine.
 
-Cheers
----Dave
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 - kselftests upstream - net
+      x86_64 - kselftests upstream - bpf
+      x86_64 - kselftests upstream - bpf_test_progs
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 (debug) - kselftests upstream - net
+      x86_64 (debug) - kselftests upstream - bpf
+      x86_64 (debug) - kselftests upstream - bpf_test_progs
+      x86_64 (debug) - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
