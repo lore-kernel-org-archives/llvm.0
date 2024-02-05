@@ -1,125 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496A718E00;
-	Mon,  5 Feb 2024 11:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A51118EA2
+	for <llvm@lists.linux.dev>; Mon,  5 Feb 2024 11:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707132571; cv=none; b=NrXF+yWouMnKUBkDYpZ6Im7fcJQo9jXuELpwPLCSF6JggBTszS33CVflTRMvzEhMIgrqCnXQi7bKdh8n9GNHB0d6XKy7COH5MmGAdYpkSjM70n9PK+hCRDpumUObqtOKToyEyUjPMDUBQ4BuEV2c2Idna50RBxGsdEXkrYl+OPE=
+	t=1707133824; cv=none; b=UE59PpPsQcyW1Rip+g3dNy00hk5D2mhXo8uVJcrYwlm6xaI2d5mxO0ODosbYnemHho6dDEEqpme+FCAhHm02UFlmFRaqKmUkqKSmhyDdHm/WRJQNsoSAym4BPVu76fp5vP+NUFNUPjpfkg3VtQMhIex7ShE/fpLeMvPHUiHIhck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707132571; c=relaxed/simple;
-	bh=uF1gkyIrxXJK/4Bkw/24aNFO4Q92fF8zob3eSfbJaBw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hisgeu/nuWJEmmz1Du4i3PlhTNDQry6TdxJ0meQeFk2wzsub7cyQ/K/EAclkOte+nVFkpL57RFWSi8j5x8cHjXKtkvsqhEfqF0IdSnRos2avZ7Hh3oXCEV4KzeuftotVBSx3RtGiWCxuN5Qq8126n41l9HBmSJcyGWRMWJQDKW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CswdhMFg; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707133824; c=relaxed/simple;
+	bh=6XWtce4S7GRyjcwlA6+lanS5MbI/XWrjrzDEdYwxALM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=APVuneuyAJngyer//Ejor/xVytMkcCplWAVtVkT/okO4Jp0UZkdiMBcn2OmMW0/1CXII00xJRa/fKCu37deyQTwN+ituE6J3cCs+0meMKZBiO6IBfcuCmkl8VQGS1lDAJI0zEkBLJlNlQBZpx1ih6+hoOufUxI9nSt8UU5+peT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=qFtnvIwy; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CswdhMFg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707132569; x=1738668569;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uF1gkyIrxXJK/4Bkw/24aNFO4Q92fF8zob3eSfbJaBw=;
-  b=CswdhMFgi9LYJkALPNpinr5c2YxB5uU5o2bON+qy0tZmEBzSWABWs8q6
-   9I2+U5BK7ENQynkO4UKefgXL1BHEX0CRJCFhjNUwtIRYk3Mtp7akB4Ynh
-   wLu9HuD0xNJvJma0hZn25g97bJpdDlM0PXFxzYgdlcI3h88wpRgqa8mzt
-   AhGjVJb9AQObGdFEdmv5VkJ4T5OyTfSmC6ril+JqnCygtTcbOruaLzUa8
-   eal8fVkLGOBGf7+tS90hTDsqhpl1VIXTYbreLVSArGJliYOO6mYrdEnTg
-   T9OvfEbakDaOkFVG83YD4IlmrLKmqYPRAeH3HZ38JtmUlegP6/voEfD/0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="658640"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="658640"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 03:29:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="693581"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 05 Feb 2024 03:29:26 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rWxAB-0000RU-0P;
-	Mon, 05 Feb 2024 11:29:23 +0000
-Date: Mon, 5 Feb 2024 19:29:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Dave Kleikamp <shaggy@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	jfs-discussion@lists.sourceforge.net, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 06/13] jfs: Convert drop_metapage and remove_metapage to
- take a folio
-Message-ID: <202402051937.xQSqcqKO-lkp@intel.com>
-References: <20240201224605.4055895-7-willy@infradead.org>
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="qFtnvIwy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1707133820;
+	bh=bq4JnBKH4fcGIQnmBj9NFYLFAco5hbkJPdMheU+N2rg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=qFtnvIwyatxe9V0C/oa7VXw+9uKeDDekYVIcg/rKdZBKYY+sfNOvrYEXpL0khVtcw
+	 xJxX8RBOuz6kcSKoyDZV8Kwl67LBjdGP81LGqiyVTw7dSM4pqsVX8+hCxpgBpTDoey
+	 /IdMaHFHuNNzOQKzKQJLIhfeD45omAFespEwvYoeBs9lBNdd25uGXbqSYugZCD6k5l
+	 M6kBe7lHCNkHIyHpM3ryw3oaHEA9e/OqDEGDNDQJFDZlSqvO0Cejql5lelNbGxT+qs
+	 zDnzji32v67pY5StdX8BM6iyamOfnu160TUsEFx42ek6ozAvZ2qopEN2GwYdcVoVSY
+	 tM8FgIe/rKvsw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4TT4SV4yXvz4wcF;
+	Mon,  5 Feb 2024 22:50:18 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Jan Stancek <jstancek@redhat.com>, Nicholas Piggin <npiggin@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, linuxppc-dev@lists.ozlabs.org, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, jstancek@redhat.com
+Subject: Re: [PATCH] powerpc: add crtsavres.o to always-y instead of extra-y
+In-Reply-To: <ZbjHTMhQ4Z9lRR6L@t14s>
+References: <20231120232332.4100288-1-masahiroy@kernel.org>
+ <CX42TU4QHS1Z.A0UUHMDAMZOL@wheely> <ZbjHTMhQ4Z9lRR6L@t14s>
+Date: Mon, 05 Feb 2024 22:50:17 +1100
+Message-ID: <87v873870m.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240201224605.4055895-7-willy@infradead.org>
+Content-Type: text/plain
 
-Hi Matthew,
+Jan Stancek <jstancek@redhat.com> writes:
+> On Tue, Nov 21, 2023 at 10:51:34AM +1000, Nicholas Piggin wrote:
+>>On Tue Nov 21, 2023 at 9:23 AM AEST, Masahiro Yamada wrote:
+>>> crtsavres.o is linked to modules. However, as explained in commit
+>>> d0e628cd817f ("kbuild: doc: clarify the difference between extra-y
+>>> and always-y"), 'make modules' does not build extra-y.
+>>>
+>>> For example, the following command fails:
+>>>
+>>>   $ make ARCH=powerpc LLVM=1 KBUILD_MODPOST_WARN=1 mrproper ps3_defconfig modules
+>>>     [snip]
+>>>     LD [M]  arch/powerpc/platforms/cell/spufs/spufs.ko
+>>>   ld.lld: error: cannot open arch/powerpc/lib/crtsavres.o: No such file or directory
+>>>   make[3]: *** [scripts/Makefile.modfinal:56: arch/powerpc/platforms/cell/spufs/spufs.ko] Error 1
+>>>   make[2]: *** [Makefile:1844: modules] Error 2
+>>>   make[1]: *** [/home/masahiro/workspace/linux-kbuild/Makefile:350: __build_one_by_one] Error 2
+>>>   make: *** [Makefile:234: __sub-make] Error 2
+>>>
+>>
+>>Thanks. Is this the correct Fixes tag?
+>>
+>>Fixes: d0e628cd817f ("powerpc/64: Do not link crtsavres.o in vmlinux")
+>>
+>>Hmm, looks like LLD might just do this now automatically for us
+>>too without --save-restore-funcs (https://reviews.llvm.org/D79977).
+>>But we probably still need it for older versions, so we still need
+>>your patch.
+>
+> Hi,
+>
+> I'm still seeing the error of crtsavres.o missing when building external modules
+> after "make LLVM=1 modules_prepare". Should it be built also in archprepare?
 
-kernel test robot noticed the following build errors:
+Or modules_prepare?
 
-[auto build test ERROR on kleikamp-shaggy/jfs-next]
-[also build test ERROR on linus/master v6.8-rc3 next-20240205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Example patch below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/jfs-Convert-metapage_read_folio-to-use-folio-APIs/20240202-064805
-base:   https://github.com/kleikamp/linux-shaggy jfs-next
-patch link:    https://lore.kernel.org/r/20240201224605.4055895-7-willy%40infradead.org
-patch subject: [PATCH 06/13] jfs: Convert drop_metapage and remove_metapage to take a folio
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240205/202402051937.xQSqcqKO-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240205/202402051937.xQSqcqKO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402051937.xQSqcqKO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/jfs/jfs_metapage.c:128:24: error: incompatible pointer types passing 'struct page *' to parameter of type 'struct folio *' [-Werror,-Wincompatible-pointer-types]
-     128 |                 folio_detach_private(&folio->page);
-         |                                      ^~~~~~~~~~~~
-   include/linux/pagemap.h:508:56: note: passing argument to parameter 'folio' here
-     508 | static inline void *folio_detach_private(struct folio *folio)
-         |                                                        ^
-   1 error generated.
+cheers
 
 
-vim +128 fs/jfs/jfs_metapage.c
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index 051247027da0..82cdef40a9cd 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -59,6 +59,11 @@ ifeq ($(CONFIG_PPC64)$(CONFIG_LD_IS_BFD),yy)
+ KBUILD_LDFLAGS_MODULE += --save-restore-funcs
+ else
+ KBUILD_LDFLAGS_MODULE += arch/powerpc/lib/crtsavres.o
++
++crtsavres_prepare: scripts
++	$(MAKE) $(build)=arch/powerpc/lib arch/powerpc/lib/crtsavres.o
++
++modules_prepare: crtsavres_prepare
+ endif
+ 
+ ifdef CONFIG_CPU_LITTLE_ENDIAN
 
-   114	
-   115	static inline void remove_metapage(struct folio *folio, struct metapage *mp)
-   116	{
-   117		struct meta_anchor *a = mp_anchor(&folio->page);
-   118		int l2mp_blocks = L2PSIZE - folio->mapping->host->i_blkbits;
-   119		int index;
-   120	
-   121		index = (mp->index >> l2mp_blocks) & (MPS_PER_PAGE - 1);
-   122	
-   123		BUG_ON(a->mp[index] != mp);
-   124	
-   125		a->mp[index] = NULL;
-   126		if (--a->mp_count == 0) {
-   127			kfree(a);
- > 128			folio_detach_private(&folio->page);
-   129			kunmap(&folio->page);
-   130		}
-   131	}
-   132	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
