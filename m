@@ -1,128 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FE756B61;
-	Tue,  6 Feb 2024 02:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FE583A0E
+	for <llvm@lists.linux.dev>; Tue,  6 Feb 2024 07:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707186172; cv=none; b=G1XilWuakjTwKC9tlmB4ScoRghzf48CUFGeWmwmSCIO7S1AM8qcm9zGb8o+v6wUq0b96VFLd62dqvFPundtoFHD7o7dlZ+mTGr4mG/8iIAdpzuWN7pg/ULQK4lQ0qRga+ELoa3L/hLWezjXhT4tfz+Lw79js5kW9FDAau2wcfNs=
+	t=1707205563; cv=none; b=ZaSkxC3KkjZu/7bYCVr020870reqmNckbPI3ViHTqRr9mw2PYn3qHhfwFn2vTT8HkmUoHuF5gr/AN9Ou0KrvE7yVWEq7EDHenLqzqhkWfO/OhwBWQvDe2/Tg55LlUs3ExsvKGxgqLY3EcUEA1SuleUPm+R1WCLZXm6WIjjo0Vek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707186172; c=relaxed/simple;
-	bh=tnN0sWDvnX9erc9l40geLmSpq5/F1xT82zl3SMkzgp8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=S0F2kbQysaD07StNwwvwIS1/P08ohbEAQVZzoVwAOqEGFn/TNkT4qa9fYMdUvkRE2bBxAyxTxUYQ4pfFPuQ69zitIQm4eUcvJx0xLk+aeLAnImlHkk/xC0sLMoCRxNKC0g0h8gDq057pNxd2UEP5PrlhMC8YGfaQrG7fE/1erXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XivcVHo9; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707205563; c=relaxed/simple;
+	bh=G3Yx9KOpI21rH8wCQ+sSJXNl51GQyxbA6QuzJtXr0VM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ZE6LQIEeovzkEsP9pGXscYDV7qjLulFg+hpZTrQLBjKZWWlKn4Ezqwh/68ZUDaZsK6b7eJt31DlRNI6hLXkAIRtxKKTw/5HMU5HehOxUIJsSaEr7U8/Acz6r7HGBIBa4wpVkC8JYhxP1MxPeMLW5WZ40Wnn2clJDV+xh612dDCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--maskray.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b00OFwT0; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--maskray.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XivcVHo9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707186170; x=1738722170;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tnN0sWDvnX9erc9l40geLmSpq5/F1xT82zl3SMkzgp8=;
-  b=XivcVHo9o38mMA5ZXhMThFwDdzKd0xWFh13BKCUoWnCFo7tYDydItzQx
-   tzWSFogd1d6WSDcf/5/NPyBvVBfDdgUtnqLmyi5LXhf2Plco2gsGR8kIP
-   Zgs7EN3zyxl59uwIhkrlk+RqVOXDvbq2o4EGbxJcoC5xblV7GJ1ilGui0
-   LHyTkE5/zzYP0/icA/J3R5Hn+/wai1uhbOoun+j8tEebc0EmQzyVmr9Nx
-   6HhOMsAmlWx/uOgXprY7d4MIoGwA1oR+L/4ofG41AhvG7TMVyLCM7+sws
-   gNMGCAkZIFJio4sDgNwen0MfENIt5nUTNrKyPNLNMP/W15wmRc49rlFel
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="537524"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="537524"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 18:22:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="904694"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 05 Feb 2024 18:22:48 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXB6j-000108-2d;
-	Tue, 06 Feb 2024 02:22:45 +0000
-Date: Tue, 6 Feb 2024 10:22:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kees:devel/2-arg-strscpy 3/4] fs/exec.c:1234:2: error: use of
- undeclared identifier '__strscpy_pad'
-Message-ID: <202402061029.R0opV08e-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b00OFwT0"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6041c633cfaso84758637b3.1
+        for <llvm@lists.linux.dev>; Mon, 05 Feb 2024 23:46:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707205561; x=1707810361; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vh0bN2m+L086LhlsbFk+xSPJ48bcUxn6kZUD+9C817M=;
+        b=b00OFwT0QnUAxZF1ohdzcz2XnHeTPA5kKwEbCK4ATMs7H57UQI6ggnPtK4PBMZTQxS
+         pP+IUkbnJqIbmFExkFk/oRrmFNJPuy3SeJ3sRKO66WRgf/WB1mLmP4v1BzlNKWfGBTLf
+         XHKDsOR+Q2SlZt4NdvOfyx5WNV+OMVZGTUf7OWjHKCzW4dgQPKGBeKdbEfvW+yPb14PD
+         8Ja9Pmv5Ckdd2nRf7aLH5/qK5TMwihPxj0vShGJZyakSoIpuG6mUEy4lOrNEm4cDk3YV
+         uqO5qt64pXlXNwyXlqie3JbvwK1zh+iM3Ye0yvxwjbnvmM6DDqvBKuNXtLnTH5GlxClI
+         QqYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707205561; x=1707810361;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vh0bN2m+L086LhlsbFk+xSPJ48bcUxn6kZUD+9C817M=;
+        b=EfqwplNOWwJR6zCOmW2GFjRCUKMS9N97HFt3vxgBPaeRpXffm/7yW0KeExZR0csydt
+         7iYzpWRNDiejA0KNq7DEj2Dg7isArwvjcI7Tt1/biIsis/23qmol0dauPJokefwjFTqL
+         jsql++h86+CpZtcGr5LqQwmfSbIin8wrvsIXWlkwOsP4x1rP7F0esSO7LHG/szfDtxAI
+         jKTV8XFyv+BiWRbSSk0YH5vQYaBpIlxB020MyQPaEEQiPeHWmSci6KPIVC/jKGDdmL/6
+         vo/1ERAW+fJvY6buXT+N/QjpOQdTuZLLyRAZ+KQdCBZRJpVVO+DNH00Dm6Nn30mFNCjZ
+         27xA==
+X-Gm-Message-State: AOJu0YwNDy6Q19NpgnGnc6oazANVfIS+6saCj399DllL3P7HkEmBQDes
+	KqBHAeIwMfeGg75Rn02wcEEOU83gzwlPGjtY+3ykugujxB6JvHLYxpVBIZEMnXpJA4+SIupgy+M
+	zjmqNxQ==
+X-Google-Smtp-Source: AGHT+IFl4LFYjZ3M6ziPbjx7tz10SMlEpgwo6VsR3nz03CG0qKWnus4NRZtwBV755Vj6TmWAAh6cUW72TLuM
+X-Received: from maskray.svl.corp.google.com ([2620:15c:2d3:205:1950:93e0:1305:9a80])
+ (user=maskray job=sendgmr) by 2002:a81:574c:0:b0:5ff:5389:526c with SMTP id
+ l73-20020a81574c000000b005ff5389526cmr107762ywb.2.1707205561384; Mon, 05 Feb
+ 2024 23:46:01 -0800 (PST)
+Date: Mon,  5 Feb 2024 23:45:52 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Message-ID: <20240206074552.541154-1-maskray@google.com>
+Subject: [PATCH v2] arm64: jump_label: use constraints "Si" instead of "i"
+From: Fangrui Song <maskray@google.com>
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org
+Cc: Jisheng Zhang <jszhang@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git devel/2-arg-strscpy
-head:   ec83dccab8c18d8482dc1934e7079916508b8eea
-commit: dec483587dcaf35a567dc38c50a8800ad4b106d3 [3/4] string: Allow 2-argument strscpy_pad()
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240206/202402061029.R0opV08e-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240206/202402061029.R0opV08e-lkp@intel.com/reproduce)
+The generic constraint "i" seems to be copied from x86 or arm (and with
+a redundant generic operand modifier "c"). It works with -fno-PIE but
+not with -fPIE/-fPIC in GCC's aarch64 port.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402061029.R0opV08e-lkp@intel.com/
+The machine constraint "S", which denotes a symbol or label reference
+with a constant offset, supports PIC and has been available in GCC since
+2012 and in Clang since 7.0. However, Clang before 19 does not support
+"S" on a symbol with a constant offset [1] (e.g.
+`static_key_false(&nf_hooks_needed[pf][hook])` in
+include/linux/netfilter.h), so we use "i" as a fallback.
 
-All errors (new ones prefixed by >>):
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+Link: https://github.com/llvm/llvm-project/pull/80255 [1]
 
-   fs/exec.c:1234:2: error: call to undeclared function 'CONCATENATE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1234 |         strscpy_pad(buf, tsk->comm, buf_size);
-         |         ^
-   include/linux/string.h:143:2: note: expanded from macro 'strscpy_pad'
-     143 |         CONCATENATE(__strscpy_pad, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ^
-   fs/exec.c:1234:2: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   include/linux/string.h:143:29: note: expanded from macro 'strscpy_pad'
-     143 |         CONCATENATE(__strscpy_pad, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |                                    ^
->> fs/exec.c:1234:2: error: use of undeclared identifier '__strscpy_pad'
-   include/linux/string.h:143:14: note: expanded from macro 'strscpy_pad'
-     143 |         CONCATENATE(__strscpy_pad, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |                     ^
-   fs/exec.c:1249:2: error: call to undeclared function 'CONCATENATE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1249 |         strscpy_pad(tsk->comm, buf, sizeof(tsk->comm));
-         |         ^
-   include/linux/string.h:143:2: note: expanded from macro 'strscpy_pad'
-     143 |         CONCATENATE(__strscpy_pad, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ^
-   fs/exec.c:1249:2: error: call to undeclared function 'COUNT_ARGS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   include/linux/string.h:143:29: note: expanded from macro 'strscpy_pad'
-     143 |         CONCATENATE(__strscpy_pad, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |                                    ^
-   fs/exec.c:1249:2: error: use of undeclared identifier '__strscpy_pad'
-   include/linux/string.h:143:14: note: expanded from macro 'strscpy_pad'
-     143 |         CONCATENATE(__strscpy_pad, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |                     ^
-   6 errors generated.
+---
+Changes from
+arm64: jump_label: use constraint "S" instead of "i" (https://lore.kernel.org/all/20240131065322.1126831-1-maskray@google.com/)
 
+* Use "Si" as Ard suggested to support Clang<19
+* Make branch a separate operand
 
-vim +/__strscpy_pad +1234 fs/exec.c
+Changes from v1:
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  1229  
-3756f6401c3026 Arnd Bergmann  2017-12-14  1230  char *__get_task_comm(char *buf, size_t buf_size, struct task_struct *tsk)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  1231  {
-^1da177e4c3f41 Linus Torvalds 2005-04-16  1232  	task_lock(tsk);
-503471ac36df60 Yafang Shao    2022-01-19  1233  	/* Always NUL terminated and zero-padded */
-503471ac36df60 Yafang Shao    2022-01-19 @1234  	strscpy_pad(buf, tsk->comm, buf_size);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  1235  	task_unlock(tsk);
-59714d65dfbc86 Andrew Morton  2008-02-04  1236  	return buf;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  1237  }
-3756f6401c3026 Arnd Bergmann  2017-12-14  1238  EXPORT_SYMBOL_GPL(__get_task_comm);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  1239  
+* Use asmSymbolicName for readability
+---
+ arch/arm64/include/asm/jump_label.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-:::::: The code at line 1234 was first introduced by commit
-:::::: 503471ac36df60bba037c3b110d76f53a93f61b5 fs/exec: replace strncpy with strscpy_pad in __get_task_comm
-
-:::::: TO: Yafang Shao <laoar.shao@gmail.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
+diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+index 48ddc0f45d22..b7716b215f91 100644
+--- a/arch/arm64/include/asm/jump_label.h
++++ b/arch/arm64/include/asm/jump_label.h
+@@ -15,6 +15,10 @@
+ 
+ #define JUMP_LABEL_NOP_SIZE		AARCH64_INSN_SIZE
+ 
++/*
++ * Prefer the constraint "S" to support PIC with GCC. Clang before 19 does not
++ * support "S" on a symbol with a constant offset, so we use "i" as a fallback.
++ */
+ static __always_inline bool arch_static_branch(struct static_key * const key,
+ 					       const bool branch)
+ {
+@@ -23,9 +27,9 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+ 		 "	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		 "	.align		3			\n\t"
+ 		 "	.long		1b - ., %l[l_yes] - .	\n\t"
+-		 "	.quad		%c0 - .			\n\t"
++		 "	.quad		(%[key] - .) + %[bit0]  \n\t"
+ 		 "	.popsection				\n\t"
+-		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
++		 :  :  [key]"Si"(key), [bit0]"i"(branch) :  : l_yes);
+ 
+ 	return false;
+ l_yes:
+@@ -40,9 +44,9 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
+ 		 "	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		 "	.align		3			\n\t"
+ 		 "	.long		1b - ., %l[l_yes] - .	\n\t"
+-		 "	.quad		%c0 - .			\n\t"
++		 "	.quad		(%[key] - .) + %[bit0]  \n\t"
+ 		 "	.popsection				\n\t"
+-		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
++		 :  :  [key]"Si"(key), [bit0]"i"(branch) :  : l_yes);
+ 
+ 	return false;
+ l_yes:
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0.594.gd9cf4e227d-goog
+
