@@ -1,104 +1,124 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF23BD51A;
-	Tue,  6 Feb 2024 17:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529741426E
+	for <llvm@lists.linux.dev>; Tue,  6 Feb 2024 18:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707241672; cv=none; b=RIZPzGq6VBE547r2cteJGVyEHyL/pygKhHdgeqgZCSaycz/3yL0fip19NiRjA6VXDRXzfO0mAryq1unSLro8WU1GTSppynqmbL89SSLZP+ImoVebc18OufY80OdRI3qABfW3pwm5pVZfCHnbMAo60wu4BSHU98FFZ9xBXLmrc6w=
+	t=1707243710; cv=none; b=TNEWQcP9dVsfhzEbrC1AU11ACKBkIvu+c8tPySgK9aKmD0Ld6xwQuETjVpA8rIJ565xUCIJGTpsiNICX+nDcLTiYP2HlJvEt+QGDq+VtT+rvTCt2g4ltpBebfZnkJolJsCl/XYdTH1r6wLxWqFTd3TxIKzVbHOhSGkEjo2xptOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707241672; c=relaxed/simple;
-	bh=M0lBJxkvrEfuVzWG05vQTssQmuCUrVHIs6obrZpqmfE=;
+	s=arc-20240116; t=1707243710; c=relaxed/simple;
+	bh=yOMecqKjKz7wRgRDV+g/dHefsMm6IJp/Jb++ls3LbmM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QXChnG/UxGIiB85h7UXw1AI2oERM5EW42cQG8JIK9fXK79wR36yYroOjbckC3sV7ahSfemX1p/0h92Kgc6lar9LVU13WNFYjf+BO5SrnbkEt279wOrGuOLPBtbOjTS+xUjzPGsmR0OPjYnOKDvaSXHotwNjCvM1tH6Uxd68BC5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=XevbqmtS; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=eLCRrGhcyN1YaPuXsrBqBz6URtkHrVkUImNlnS8TuWoQ7dwweCHDlGIUx2E51qrK2ZSePA80zJKWzVdHQdH2xCmeUpno1Mi3VMvn5Z3y4XOMN8IhV7drqTcyWD3k7201L6S1ikp7EHBWijMxo9MCXybSAE+rODtk9d9IIX1Tm0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=O/hqT4W3; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="XevbqmtS"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d9b2400910so6170525ad.0;
-        Tue, 06 Feb 2024 09:47:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707241670; x=1707846470;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:dkim-signature:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oueQHPVYh7qQOIvfrJui5MM2vsTeWpl0FzYgCGvX8ZA=;
-        b=Ebv1+em1rEQ7NhqwLhG2wCFiDe5DEHUxzJtb4ehnUpFvczvmSyF/MfOnDcf8yWFETf
-         hm9G9WncJ8c0UZS/rO8Ujh9UOmRhcKE1HCw3upO/a/K7rt0aDfoIgUI9UBUftU+98bGM
-         uavZYv0VISstK+wIkr1nQhfi13dW3lwJSSvpAhwMuyM1ZBg4iPWcE3osVjmXGPlIYR1S
-         Ph/P741F/D6IjiNrl0skVzL+WPqQuwjK+yuxDdh67Uk0OSF118lv3QGSmE13CVQc8CEd
-         AOQeJ31EzT0eJ71xqkVCbzCiVLDZQMroy/qmPLynFqFNoSQwd8VuIlCtpO80KJlDDbtu
-         qzmA==
-X-Gm-Message-State: AOJu0Yz6A00fSpe2gBFohD9X024tjM4mFbXYnFj/VXLgeS1ZXlzpJb46
-	1eR1n2tycWBmQwBiAlXoKYnHYaS6O3vRlq2+Zo0qyUq3dTvVCf8D
-X-Google-Smtp-Source: AGHT+IF1A1mqqVSjUX9NkYIbLBVRd5kF8THuXekHU8vUUhJa30v3ZtXBi3N1cl0smSwQO3w0Se6L4Q==
-X-Received: by 2002:a17:902:64d6:b0:1d9:df9a:722f with SMTP id y22-20020a17090264d600b001d9df9a722fmr2118401pli.17.1707241669995;
-        Tue, 06 Feb 2024 09:47:49 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCV1h+OClmF163UbZUE3cCMIFHg1rbK8MV1BOrCXen5eGslxENHHQrwLoJ8n2jlDCSXXc4TStsHDWwKe5zlNBA9D5zPR62j741r2X1WNDmEFRab6id9Nk7u3r2PbCVTqAq/rUaKxnzDES0BA/7Pe6AkBWBOAF2I8vQ==
-Received: from mail.marliere.net ([24.199.118.162])
-        by smtp.gmail.com with ESMTPSA id x8-20020a170902b40800b001d9b0a15bbfsm2125244plr.262.2024.02.06.09.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Feb 2024 09:47:49 -0800 (PST)
-Date: Tue, 6 Feb 2024 14:48:19 -0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=2024; t=1707241667;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oueQHPVYh7qQOIvfrJui5MM2vsTeWpl0FzYgCGvX8ZA=;
-	b=XevbqmtSQpYqQK1b8QpQ94Ze2tVzBWwo51BIACXqhIS4f370i9JyUD0KqcDC3tX0Zwa8Vt
-	2zwf++cAhr8UM/dATCkyqjJXCNVaJxlFoq2PifGmqEDAs1pDRoVav4iHiqdMu1/AmvxIEF
-	TnvaySpAS+YKrEH9jvfpcXA0y9vuw3GdF+sighneTWvwfYymhAe4ntv74+0LNXhnk9OhoS
-	X7FRLZhQ+MHJsU/Kic3QQcNK9Cnb3MKufTlmO2XIcTB4DH6sJtMM83IGofHpVBvZvn6PpR
-	dDYiUYkq5vFfn06qaFd+2fOtqfVaXmHPgfcYSbBma6i11piERvV3yyNwujU4fw==
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
-From: "Ricardo B. Marliere" <ricardo@marliere.net>
-To: Tejun Heo <tj@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [linux-next:master 3841/4021] kernel/workqueue.c:6798:32: error:
- passing 'const struct bus_type *' to parameter of type 'struct bus_type *'
- discards qualifiers
-Message-ID: <wkj256gqj4ghtpfjiy57pbmtx7jfntv7vhfbeckbyk6fwzmpmb@6me7whi7slah>
-References: <202402051505.kM9Rr3CJ-lkp@intel.com>
- <i4yenyojsqdexpr6izup472nsva4badobnz6cyc7icqaahxj7q@bwzdilmscv3c>
- <ZcEeOueCbrltxr_b@slm.duckdns.org>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="O/hqT4W3"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9527F40E016D;
+	Tue,  6 Feb 2024 18:21:45 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id FillHEpEmEEU; Tue,  6 Feb 2024 18:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707243703; bh=wCS6yqrfKCvebslKneG37AHrq0CxVqghInimrV/pRjs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O/hqT4W3uY4QRLCtLw8xDlsRyZAWqBvfqxS4n7dMpZz6Nt8AU79Lw9th33Vmn+ffN
+	 TjBLR0czJCO/z5VB+Kx2iHJYJHGoJPCyt2X7UurJpSZoR3lhWpfbzLEPCJ7tzwR75z
+	 lGJ1K61txaOKljvJxXFBUVClWKGU1Zh6rH8C/j7aKmKGNqKZbTAAm21rrRfMt7Q29y
+	 QxlRClU0JICH4PQ9YkZvObNm1pYZmwZmpgqtInkzZqJSOTW+tlM06F1bJ+5XPgNTBd
+	 Asnl3KGnY6OmdU03ETOZxEqt/K9d1OAY9xLa2BQzqARlTxhO9E3nmVYQPNFuyEnnzi
+	 xh/py0fuuSk/fv0CqVYGRmAVeuptsOIaRZnSGGtehFGdvtQvCI2XZ+z+8/jmlr37zZ
+	 D64GJOx245qIiquB5P2hlaK1W9I03JXRuXphh289wUJ+pfkDMQB3zGKEWszRqFmDQF
+	 1l8bRDU+ogIfqy7sP/ZBSU00QqxmskHqGHGszNQu3qPy5/cWE40M1rqEqU1XuKrktf
+	 FOSjSUxLDfbqWX3hTbyYVKEGhoUEslfewfkh0o5Eo437bGyZgCvP5jTa++NFSDfp02
+	 ZvN7IAJ1eb72bQP+GSMq8ylglvBvY3Zfm2upg+E873C2MZsZYF09xRP92Ul9lyQXzK
+	 PFdjIyg1fqCBJcRDRwpbdvaY=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 415CC40E0177;
+	Tue,  6 Feb 2024 18:21:25 +0000 (UTC)
+Date: Tue, 6 Feb 2024 19:21:15 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 05/19] x86/startup_64: Simplify CR4 handling in
+ startup code
+Message-ID: <20240206182115.GQZcJ4m6amwGCc7D4Z@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-26-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZcEeOueCbrltxr_b@slm.duckdns.org>
+In-Reply-To: <20240129180502.4069817-26-ardb+git@google.com>
 
-Hi Tejun,
-
-On  5 Feb 07:43, Tejun Heo wrote:
-> Hello, Ricardo.
+On Mon, Jan 29, 2024 at 07:05:08PM +0100, Ard Biesheuvel wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
 > 
-> On Mon, Feb 05, 2024 at 10:29:30AM -0300, Ricardo B. Marliere wrote:
-> > I'm not sure how to flag this as invalid, since this is fixed already in
-> > 32f78abe59c7 ("driver core: bus: constantify subsys_register() calls")
-> 
-> So, when there are cross-tree dependencies, it's best to note them when
-> sending out the patch so that the preparatory pulls can be made to avoid
-> breaking the applying trees. I just reverted the patch for now and think
-> it'd be best to route this patch through the driver-core tree. Can you
-> please repost the patch and ask Greg to apply it.
+> When executing in long mode, the CR4.PAE and CR4.LA57 control bits
+> cannot be updated,
 
-Sorry for that, I'll resend to Greg then.
+"Long mode requires PAE to be enabled in order to use the 64-bit
+page-translation data structures to translate 64-bit virtual addresses
+to 52-bit physical addresses."
 
-Thank you,
--	Ricardo.
+which is actually already enabled at that point:
 
+cr4            0x20                [ PAE ]
 
+"5-Level paging is enabled by setting CR4[LA57]=1 when EFER[LMA]=1.
+CR4[LA57] is ignored when long mode is not active (EFER[LMA]=0)."
 
-> 
-> Thanks.
-> 
-> -- 
-> tejun
+and if I had a 5-level guest, it would have LA57 already set too.
+
+So I think you mean "When paging is enabled" as dhansen correctly points
+out.
+
+> and so they can simply be preserved rather than reason about whether
+> or not they need to be set. CR4.PSE has no effect in long mode so it
+> can be omitted.
+
+f4c5ca985012 ("x86_64: Show CR4.PSE on auxiliaries like on BSP")
+
+Please don't forget about git history before doing changes here.
+
+> CR4.PGE is used to flush the TLBs, by clearing it if it was set, and
+
+... to flush TLB entries with the global bit set.
+
+And just like the above commit says, I think the CR4 settings across all
+CPUs on the machine should be the same. So we want to keep PSE.
+
+Removing the CONFIG_X86_5LEVEL ifdeffery is nice, OTOH.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
