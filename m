@@ -1,46 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911A413341C;
-	Tue,  6 Feb 2024 15:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F472C15B;
+	Tue,  6 Feb 2024 17:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707234517; cv=none; b=UqBwEW918OR0u9KWLUAn1z41HC9uO9Pqi91PknsDoZhSgkqe28sdTMBoYsO7Fs386Q/l5TlK9leKoHwRK/xNyDmnOUSLvAY5pXrOMYjD3NXDOWlL/Ird5KHY93emMG/IwFhl0rIX0Fs8vPZhSSts0qsBjyEihQm9eFvTX/8pRZk=
+	t=1707239196; cv=none; b=L2aPZaoCK5fOr2jtTpXNmQXnxNNU7z7+/VO2QyfFwSV5dj171Sc1/MZGewsH7s4ZBay/gdTFb65CCgZkVCWQaJjakkSZ1Txmo8peSn79lLiYhA+Uak1WflhxpT1cXxqitHqji5GFMPn2XEVVjE4tC5Uafn5e+bathGHKztsQlxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707234517; c=relaxed/simple;
-	bh=zaZSsrvYhW5Ke2AYAmP/ja6WNn71gyudEVeXSINNEsM=;
+	s=arc-20240116; t=1707239196; c=relaxed/simple;
+	bh=Mdibn1Y+5lHSiz0nAb0TK65XaYSoIgSUVDm18PAxxiQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dQ5j7qr3f5UarF+KCPt9P3+82A57mhL3TTPjrmuELMlj2yg6S34v0CAL+SuitC/ak/rWtuQiADYWEtK1wYtz/6XgGHRti7NC61hIV85MwmDloIO+t4WN/ZK83Op8Y9KhPqaxMmuvOo+BTPqCZeAwSsduKb0XH9/wVS2P7Eyld4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rak93+G/; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=bc9+2/XcDzdCHrGwkg1fNjWIS7I3gBtabjb5EZnYSGXsI9SjSzY3Xh4avR1psjUd1Ds33e8Y+rD8eUsv1yAJuzYnpxqdZJC29oGJx4HHEXxhDROy5btGyCdQnZAP0cBNYZMRgkPz52PxpBNGN89NW8DO8qCoGbH1qNhC4dYHhvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dPy6ZjEe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rak93+G/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C145DC433F1;
-	Tue,  6 Feb 2024 15:48:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPy6ZjEe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA24FC433C7;
+	Tue,  6 Feb 2024 17:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707234517;
-	bh=zaZSsrvYhW5Ke2AYAmP/ja6WNn71gyudEVeXSINNEsM=;
+	s=k20201202; t=1707239195;
+	bh=Mdibn1Y+5lHSiz0nAb0TK65XaYSoIgSUVDm18PAxxiQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rak93+G/BJ5ORjKtT7vFG8fmk8Bwt1Ix0jXOncUPNsLpN5JcRXpcq/uuHxMwGa/OC
-	 BYwc2bIZqVoxeBRDy7aR8m8/RFB9RT3u0qBiuS6IU+lD22qZEkv3nZ/fJWTw3PoXvV
-	 6foJCiRNwclykXHNvYaVMgcc7sNrxJT5WIaaRXgfTdulEZ+jJGkE1g1yC4CMENy324
-	 iYCsdeZUGt+6gl00zho0VjeUgWgp6TRcs6qepB3mDA8pxDgZJAiGbnK2H1FEwJqZPQ
-	 VKzIxtuCY6zo1MDzmfE3t+sG4xvBD97LH/lfhZU6UpYS9F9ZlIO29kTHaIN+CIHpWb
-	 ObfJEzis5v/TA==
-Date: Tue, 6 Feb 2024 08:48:35 -0700
+	b=dPy6ZjEe2Zt+dwxg52XVC8PESSwxzL9L3ptuPJ6WQy4HpT9fqApeYpZdop4T5gNMj
+	 6aBATnFLZ6W4p7mczcRpd79auYTHgZ49jVXrdpBxVsOuYDC0HFKJOdyf0arHhlc+RH
+	 tb5SDUeT9zjDX5Cu3bcnCDLyh4GT6YX8gsFgHim97E++afyN9gC6w9CKuwYI7m/UoN
+	 zIOkHDWilMfEH+XqI95cewE1BiQpQ8JctOVAuXivaLCBLgCgSDpr+MI7WuSHTB43gS
+	 iv1TJJtc6MWR0e1MTdXuRsg4ci1dWiCmb8cyR5Jx99Cvw1o5aXvbJnWOLzzmV2EJWR
+	 CSqH0s0LPflFQ==
+Date: Tue, 6 Feb 2024 10:06:32 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Donald Zickus <dzickus@redhat.com>, stable@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 1/6] tools/rtla: Fix Makefile compiler options for clang
-Message-ID: <20240206154835.GA1433705@dev-arch.thelio-3990X>
-References: <cover.1707217097.git.bristot@kernel.org>
- <567ac1b94effc228ce9a0225b9df7232a9b35b55.1707217097.git.bristot@kernel.org>
+To: Adam Ford <aford173@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org, marex@denx.de,
+	alexander.stein@ew.tq-group.com, frieder.schrempf@kontron.de,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Richard Leitner <richard.leitner@skidata.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH V8 08/12] drm/bridge: imx: add driver for HDMI TX
+ Parallel Video Interface
+Message-ID: <20240206170632.GA2183819@dev-arch.thelio-3990X>
+References: <20240203165307.7806-1-aford173@gmail.com>
+ <20240203165307.7806-9-aford173@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,74 +72,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <567ac1b94effc228ce9a0225b9df7232a9b35b55.1707217097.git.bristot@kernel.org>
+In-Reply-To: <20240203165307.7806-9-aford173@gmail.com>
 
-On Tue, Feb 06, 2024 at 12:05:29PM +0100, Daniel Bristot de Oliveira wrote:
-> The following errors are showing up when compiling rtla with clang:
-> 
->  $ make HOSTCC=clang CC=clang LLVM_IAS=1
->  [...]
-> 
->   clang -O -g -DVERSION=\"6.8.0-rc1\" -flto=auto -ffat-lto-objects
-> 	-fexceptions -fstack-protector-strong
-> 	-fasynchronous-unwind-tables -fstack-clash-protection  -Wall
-> 	-Werror=format-security -Wp,-D_FORTIFY_SOURCE=2
-> 	-Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
-> 	$(pkg-config --cflags libtracefs)    -c -o src/utils.o src/utils.c
-> 
->   clang: warning: optimization flag '-ffat-lto-objects' is not supported [-Wignored-optimization-argument]
+Hi all,
 
-For what it's worth, this flag is supported in clang 17.0.0 and newer:
+On Sat, Feb 03, 2024 at 10:52:48AM -0600, Adam Ford wrote:
+> From: Lucas Stach <l.stach@pengutronix.de>
+> 
+> This IP block is found in the HDMI subsystem of the i.MX8MP SoC. It has a
+> full timing generator and can switch between different video sources. On
+> the i.MX8MP however the only supported source is the LCDIF. The block
+> just needs to be powered up and told about the polarity of the video
+> sync signals to act in bypass mode.
+> 
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v7)
+> Tested-by: Marek Vasut <marex@denx.de> (v1)
+> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v7)
+> Tested-by: Richard Leitner <richard.leitner@skidata.com> (v2)
+> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de> (v2)
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com> (v3)
+> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Tested-by: Fabio Estevam <festevam@gmail.com>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-https://github.com/llvm/llvm-project/commit/610fc5cbcc8b68879c562f6458608afe2473ab7f
+<snip>
 
-But if it is not critical, just dropping the flag like you have done
-here rather than conditionally supporting it is probably easier.
-
->   warning: unknown warning option '-Wno-maybe-uninitialized'; did you mean '-Wno-uninitialized'? [-Wunknown-warning-option]
->   1 warning generated.
-> 
->   clang -o rtla -ggdb  src/osnoise.o src/osnoise_hist.o src/osnoise_top.o
->   src/rtla.o src/timerlat_aa.o src/timerlat.o src/timerlat_hist.o
->   src/timerlat_top.o src/timerlat_u.o src/trace.o src/utils.o $(pkg-config --libs libtracefs)
-> 
->   src/osnoise.o: file not recognized: file format not recognized
->   clang: error: linker command failed with exit code 1 (use -v to see invocation)
->   make: *** [Makefile:110: rtla] Error 1
-> 
-> Solve these issues by:
->   - removing -ffat-lto-objects and -Wno-maybe-uninitialized if using clang
->   - informing the linker about -flto=auto
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 1a7b22ab15eb ("tools/rtla: Build with EXTRA_{C,LD}FLAGS")
-> Suggested-by: Donald Zickus <dzickus@redhat.com>
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> ---
->  tools/tracing/rtla/Makefile | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-> index 2456a399eb9a..afd18c678ff5 100644
-> --- a/tools/tracing/rtla/Makefile
-> +++ b/tools/tracing/rtla/Makefile
-> @@ -28,10 +28,15 @@ FOPTS	:=	-flto=auto -ffat-lto-objects -fexceptions -fstack-protector-strong \
->  		-fasynchronous-unwind-tables -fstack-clash-protection
->  WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
->  
-> +ifeq ($(CC),clang)
-> +  FOPTS := $(filter-out -ffat-lto-objects, $(FOPTS))
-> +  WOPTS := $(filter-out -Wno-maybe-uninitialized, $(WOPTS))
-> +endif
+> diff --git a/drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c b/drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c
+> new file mode 100644
+> index 000000000000..a76b7669fe8a
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c
+...
+> +static void imx8mp_hdmi_pvi_bridge_enable(struct drm_bridge *bridge,
+> +					  struct drm_bridge_state *bridge_state)
+> +{
+> +	struct drm_atomic_state *state = bridge_state->base.state;
+> +	struct imx8mp_hdmi_pvi *pvi = to_imx8mp_hdmi_pvi(bridge);
+> +	struct drm_connector_state *conn_state;
+> +	const struct drm_display_mode *mode;
+> +	struct drm_crtc_state *crtc_state;
+> +	struct drm_connector *connector;
+> +	u32 bus_flags, val;
 > +
->  TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
->  
->  CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS) $(EXTRA_CFLAGS)
-> -LDFLAGS	:=	-ggdb $(EXTRA_LDFLAGS)
-> +LDFLAGS	:=	-flto=auto -ggdb $(EXTRA_LDFLAGS)
->  LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
->  
->  SRC	:=	$(wildcard src/*.c)
-> -- 
-> 2.43.0
-> 
+> +	connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
+> +	conn_state = drm_atomic_get_new_connector_state(state, connector);
+> +	crtc_state = drm_atomic_get_new_crtc_state(state, conn_state->crtc);
+> +
+> +	if (WARN_ON(pm_runtime_resume_and_get(pvi->dev)))
+> +		return;
+> +
+> +	mode = &crtc_state->adjusted_mode;
+> +
+> +	val = FIELD_PREP(PVI_CTRL_MODE_MASK, PVI_CTRL_MODE_LCDIF) | PVI_CTRL_EN;
+> +
+> +	if (mode->flags & DRM_MODE_FLAG_PVSYNC)
+> +		val |= PVI_CTRL_OP_VSYNC_POL | PVI_CTRL_INP_VSYNC_POL;
+> +
+> +	if (mode->flags & DRM_MODE_FLAG_PHSYNC)
+> +		val |= PVI_CTRL_OP_HSYNC_POL | PVI_CTRL_INP_HSYNC_POL;
+> +
+> +	if (pvi->next_bridge->timings)
+> +		bus_flags = pvi->next_bridge->timings->input_bus_flags;
+> +	else if (bridge_state)
+> +		bus_flags = bridge_state->input_bus_cfg.flags;
+> +
+> +	if (bus_flags & DRM_BUS_FLAG_DE_HIGH)
+> +		val |= PVI_CTRL_OP_DE_POL | PVI_CTRL_INP_DE_POL;
+> +
+> +	writel(val, pvi->regs + HTX_PVI_CTRL);
+> +}
+
+Apologies if this has already been reported or fixed, I searched lore
+and did not find anything. Clang warns (or errors with CONFIG_WERROR=y)
+for this function:
+
+  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:81:11: error: variable 'bus_flags' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+     81 |         else if (bridge_state)
+        |                  ^~~~~~~~~~~~
+  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:84:6: note: uninitialized use occurs here
+     84 |         if (bus_flags & DRM_BUS_FLAG_DE_HIGH)
+        |             ^~~~~~~~~
+  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:81:7: note: remove the 'if' if its condition is always true
+     81 |         else if (bridge_state)
+        |              ^~~~~~~~~~~~~~~~~
+     82 |                 bus_flags = bridge_state->input_bus_cfg.flags;
+  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:60:15: note: initialize the variable 'bus_flags' to silence this warning
+     60 |         u32 bus_flags, val;
+        |                      ^
+        |                       = 0
+  1 error generated.
+
+This seems legitimate. If bridge_state can be NULL, should bus_flags be
+initialized to zero like it suggests or should that 'else if' be turned
+into a plain 'else'? I am happy to send a patch with that guidance.
+
+Cheers,
+Nathan
