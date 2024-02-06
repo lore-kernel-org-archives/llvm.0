@@ -1,79 +1,122 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E793413247F
-	for <llvm@lists.linux.dev>; Tue,  6 Feb 2024 14:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911A413341C;
+	Tue,  6 Feb 2024 15:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707230948; cv=none; b=AU01GWTowxZDYVWua1lnH45Kf8tb4CvAGEPJou+erlsazKgd4lqaGqDWuGQlJ8GG9m7Gi8TCOW4YUlWVc8VaV8y0JttL9N60xq+zKzm82XCt7zOOubaFPixFq0qli1nXhdkJWXUrvUjXGo1XByIBv9XvKB4a0VSeAum9UKslXOY=
+	t=1707234517; cv=none; b=UqBwEW918OR0u9KWLUAn1z41HC9uO9Pqi91PknsDoZhSgkqe28sdTMBoYsO7Fs386Q/l5TlK9leKoHwRK/xNyDmnOUSLvAY5pXrOMYjD3NXDOWlL/Ird5KHY93emMG/IwFhl0rIX0Fs8vPZhSSts0qsBjyEihQm9eFvTX/8pRZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707230948; c=relaxed/simple;
-	bh=ZYhM25AzuOO8uiA+4AJts7dxWvnoP0sziHlbTBDdgdU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=T9tzUqnlCZiBvT1KW6mvvRNWxIyLJ+YjmwW6NldAt7ssJbZzwGeXRQZWNtMdPQHoPSi1Tsr2nb3vdHB+15HgedKNY19HzLZZdjn2JEIwdrc5TX1VvbcHb1OsKcdCeMVjU7RZd3n2q9Br/dcfUIb3QuG3hApw6hHNLWejU8QqLP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7c00a1374ecso395095739f.1
-        for <llvm@lists.linux.dev>; Tue, 06 Feb 2024 06:49:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707230946; x=1707835746;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kSrsdZ/RuKV0gEG27LOO5dIr8YmZtFDZ3FYa41rVAQo=;
-        b=vavi+nUfuislexhYxlLpbe4ZiG3m/315v5B0kPGdT0C3bVCXwKMiCWh9MHhMdgpgZa
-         vMxMm237foKFRQy09h8NJ6qEGQix2NRvwPdFPhTQ9CJIjlecsAq+uYINuP5OcByNT3BI
-         LhWimySMnDvAl4YMuVhXQYiKF+hyldBQWupYGIZqkIM9khB24BfyAFaHGalivIOxpu8U
-         xVF3THcLttsw22IMKHabX81kjgVCrRqs91siN+RKOy/ezZ0vntIiUWmPMH3sJCawZaX6
-         OB6HZaX2vfshsFyYJTAXoBgxI1osyh//+Kr1Y54aoDjS8GgP6fccV+IOOTpHoKPi6Hgd
-         j+CQ==
-X-Gm-Message-State: AOJu0Yy8VE1yop1OPFr7BRneg5wUKUtjiQQDmmr9geHRrfaFHRzymjmg
-	lKXcj/hsrQ7KgVoZmKs3mNRBUkQZyQer9c6MCFG6nuyuhYAMKP9Ztkj6+z0Y8hjuJcG8pxtjlvI
-	kfwdRVkW9Sc6Lrp3SzVLFD3axA6YorjKTwRgSNOVsQHH2mJfG2qRBeFI=
-X-Google-Smtp-Source: AGHT+IGyJ27bMyWH8/GynoFXTjuNU5g+uu1OXbn98nBQ0bYYkpj0BC/KPVZdYE7KwK+zDcXtX/Ot0QVWkk9m9WuMvI7pjKLzBruq
+	s=arc-20240116; t=1707234517; c=relaxed/simple;
+	bh=zaZSsrvYhW5Ke2AYAmP/ja6WNn71gyudEVeXSINNEsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dQ5j7qr3f5UarF+KCPt9P3+82A57mhL3TTPjrmuELMlj2yg6S34v0CAL+SuitC/ak/rWtuQiADYWEtK1wYtz/6XgGHRti7NC61hIV85MwmDloIO+t4WN/ZK83Op8Y9KhPqaxMmuvOo+BTPqCZeAwSsduKb0XH9/wVS2P7Eyld4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rak93+G/; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rak93+G/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C145DC433F1;
+	Tue,  6 Feb 2024 15:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707234517;
+	bh=zaZSsrvYhW5Ke2AYAmP/ja6WNn71gyudEVeXSINNEsM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rak93+G/BJ5ORjKtT7vFG8fmk8Bwt1Ix0jXOncUPNsLpN5JcRXpcq/uuHxMwGa/OC
+	 BYwc2bIZqVoxeBRDy7aR8m8/RFB9RT3u0qBiuS6IU+lD22qZEkv3nZ/fJWTw3PoXvV
+	 6foJCiRNwclykXHNvYaVMgcc7sNrxJT5WIaaRXgfTdulEZ+jJGkE1g1yC4CMENy324
+	 iYCsdeZUGt+6gl00zho0VjeUgWgp6TRcs6qepB3mDA8pxDgZJAiGbnK2H1FEwJqZPQ
+	 VKzIxtuCY6zo1MDzmfE3t+sG4xvBD97LH/lfhZU6UpYS9F9ZlIO29kTHaIN+CIHpWb
+	 ObfJEzis5v/TA==
+Date: Tue, 6 Feb 2024 08:48:35 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Donald Zickus <dzickus@redhat.com>, stable@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/6] tools/rtla: Fix Makefile compiler options for clang
+Message-ID: <20240206154835.GA1433705@dev-arch.thelio-3990X>
+References: <cover.1707217097.git.bristot@kernel.org>
+ <567ac1b94effc228ce9a0225b9df7232a9b35b55.1707217097.git.bristot@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:154d:b0:363:a059:670b with SMTP id
- j13-20020a056e02154d00b00363a059670bmr186965ilu.4.1707230945919; Tue, 06 Feb
- 2024 06:49:05 -0800 (PST)
-Date: Tue, 06 Feb 2024 06:49:05 -0800
-In-Reply-To: <000000000000332a2505e981f474@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000014c9ca0610b7aec6@google.com>
-Subject: Re: [syzbot] [jfs?] KASAN: slab-out-of-bounds Read in dtSearch
-From: syzbot <syzbot+9924e2a08d9ba0fd4ce2@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, brauner@kernel.org, dan.carpenter@linaro.org, 
-	dave.kleikamp@oracle.com, ghandatmanas@gmail.com, jack@suse.cz, 
-	jfs-discussion@lists.sourceforge.net, linux-fsdevel@vger.kernel.org, 
-	linux-kernel-mentees@lists.linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	oe-kbuild@lists.linux.dev, shaggy@kernel.org, syzkaller-bugs@googlegroups.com, 
-	syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <567ac1b94effc228ce9a0225b9df7232a9b35b55.1707217097.git.bristot@kernel.org>
 
-syzbot suspects this issue was fixed by commit:
+On Tue, Feb 06, 2024 at 12:05:29PM +0100, Daniel Bristot de Oliveira wrote:
+> The following errors are showing up when compiling rtla with clang:
+> 
+>  $ make HOSTCC=clang CC=clang LLVM_IAS=1
+>  [...]
+> 
+>   clang -O -g -DVERSION=\"6.8.0-rc1\" -flto=auto -ffat-lto-objects
+> 	-fexceptions -fstack-protector-strong
+> 	-fasynchronous-unwind-tables -fstack-clash-protection  -Wall
+> 	-Werror=format-security -Wp,-D_FORTIFY_SOURCE=2
+> 	-Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
+> 	$(pkg-config --cflags libtracefs)    -c -o src/utils.o src/utils.c
+> 
+>   clang: warning: optimization flag '-ffat-lto-objects' is not supported [-Wignored-optimization-argument]
 
-commit 6f861765464f43a71462d52026fbddfc858239a5
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Nov 1 17:43:10 2023 +0000
+For what it's worth, this flag is supported in clang 17.0.0 and newer:
 
-    fs: Block writes to mounted block devices
+https://github.com/llvm/llvm-project/commit/610fc5cbcc8b68879c562f6458608afe2473ab7f
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13767e8fe80000
-start commit:   bee0e7762ad2 Merge tag 'for-linus-iommufd' of git://git.ke..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b45dfd882e46ec91
-dashboard link: https://syzkaller.appspot.com/bug?extid=9924e2a08d9ba0fd4ce2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=152bfc22e80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1608f4a2e80000
+But if it is not critical, just dropping the flag like you have done
+here rather than conditionally supporting it is probably easier.
 
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: fs: Block writes to mounted block devices
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>   warning: unknown warning option '-Wno-maybe-uninitialized'; did you mean '-Wno-uninitialized'? [-Wunknown-warning-option]
+>   1 warning generated.
+> 
+>   clang -o rtla -ggdb  src/osnoise.o src/osnoise_hist.o src/osnoise_top.o
+>   src/rtla.o src/timerlat_aa.o src/timerlat.o src/timerlat_hist.o
+>   src/timerlat_top.o src/timerlat_u.o src/trace.o src/utils.o $(pkg-config --libs libtracefs)
+> 
+>   src/osnoise.o: file not recognized: file format not recognized
+>   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+>   make: *** [Makefile:110: rtla] Error 1
+> 
+> Solve these issues by:
+>   - removing -ffat-lto-objects and -Wno-maybe-uninitialized if using clang
+>   - informing the linker about -flto=auto
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 1a7b22ab15eb ("tools/rtla: Build with EXTRA_{C,LD}FLAGS")
+> Suggested-by: Donald Zickus <dzickus@redhat.com>
+> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+> ---
+>  tools/tracing/rtla/Makefile | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+> index 2456a399eb9a..afd18c678ff5 100644
+> --- a/tools/tracing/rtla/Makefile
+> +++ b/tools/tracing/rtla/Makefile
+> @@ -28,10 +28,15 @@ FOPTS	:=	-flto=auto -ffat-lto-objects -fexceptions -fstack-protector-strong \
+>  		-fasynchronous-unwind-tables -fstack-clash-protection
+>  WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
+>  
+> +ifeq ($(CC),clang)
+> +  FOPTS := $(filter-out -ffat-lto-objects, $(FOPTS))
+> +  WOPTS := $(filter-out -Wno-maybe-uninitialized, $(WOPTS))
+> +endif
+> +
+>  TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
+>  
+>  CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS) $(EXTRA_CFLAGS)
+> -LDFLAGS	:=	-ggdb $(EXTRA_LDFLAGS)
+> +LDFLAGS	:=	-flto=auto -ggdb $(EXTRA_LDFLAGS)
+>  LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
+>  
+>  SRC	:=	$(wildcard src/*.c)
+> -- 
+> 2.43.0
+> 
