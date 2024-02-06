@@ -1,415 +1,216 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2130.outbound.protection.outlook.com [40.107.114.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BEC41367;
-	Tue,  6 Feb 2024 01:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707182394; cv=none; b=Awa7invsq/uVn5wX3UzC8O3mJh2uEYKsGieBdykmU0PGupwlBVHyuG+M40KEZgrJdKqv0NMGKUJX70nEUmuqIZdoAlvLJWzfZejsEIZrk3QimFEjGpRmXr11BMAA+6sk8S7v1cfn+meYoHoW+FLRCaZKmjnefN9dYafDJb+JuVQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707182394; c=relaxed/simple;
-	bh=sIg62DTJVASmhKoIlJz2JGWAqXSfrfvoEQG5rM28HCw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cEBW2A9mhAMJS7PL7yqBgAYiStOFgHOcg4JJg4IH4/qgh7LqGISw6NeihdM1y3SgCd5YA2vHWnJvtZBB7YX9zsYZu1zWcaL2/IT7ArK4X9dTPl93HiA44XzGdi6f37UmVAzAxiFv9fn/QCVS8pd1Yc53e63wdTeR0sKvEDY/CTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwAAKior; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4731756759;
+	Tue,  6 Feb 2024 02:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.114.130
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707185171; cv=fail; b=RZJcYgVlQHjFWVpe9LEmm/ysy6wSqbmOYdvsk6KnXn+eHAwmPAUyAyG5Pf/fPd3mUB5j9AI/JocJbYbjespYVNZNGkc+/c1Jat6K9d2lkJ7JQrtJqT+OL5Sk+xlcsqTClQw67Yn6arsX7UT+dUu8qo/6phC1S1sSNrusF9546po=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707185171; c=relaxed/simple;
+	bh=CEREX/ZEeTmh0vFe24K22j9mrwYK7m3adX1R9/7TnfY=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=R6CZz9mCAay68WmP04GsEdmIQVQegwNzZGFV/P1ig1gPB16CJREz45aZPHMC97OG3NdVPZJsdvROPaWfZL4QdBrD76tF3w7lDGnv9Ta+5PtSoY8Yip+9kke3Mn0k8WNYaYgXl7zcg8xKbdp7Ezzw+ZaoDmQSCtNhOPCMBHGqHJg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=JxhOOCwC; arc=fail smtp.client-ip=40.107.114.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwAAKior"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707182392; x=1738718392;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sIg62DTJVASmhKoIlJz2JGWAqXSfrfvoEQG5rM28HCw=;
-  b=WwAAKiorBSFs8K8sE7p3yot2KU8aZvQLhjn9iNZY88+KAzOfpFdIvGqh
-   MQd9y+Jml47IgiBZhNF+DoOat6PQNyrb9P5HsMT8sCIVE7bHLmmNXb84U
-   Ws+qQkpT64QWC7NkArzWcAKU8YhInxNYZwLo9Lkg9UP8Qt6IrE9QwYYKa
-   fcBwZxW8ivBwTT5ricprn9+KfVFKtL1b/e7k6tFWxkQksRhV99ccku8BS
-   F3JvFy2lbNWWeWag8o1QhhZAMnE63f6GqwJcLtgayFQh/QQbgaE25N2SK
-   7ok1irNkaCFPXObMQeqUiNoW5zVsGDeLm0bOrvDsJcpwroUw0gJ64kWof
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="26086314"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="26086314"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 17:19:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="31942293"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Feb 2024 17:19:46 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXA7k-0000xY-1c;
-	Tue, 06 Feb 2024 01:19:44 +0000
-Date: Tue, 6 Feb 2024 09:19:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Justin Stitt <justinstitt@google.com>
-Subject: [kees:devel/2-arg-strscpy 2/4] drivers/gpu/drm/drm_property.c:131:2:
- error: implicit declaration of function 'COUNT_ARGS' is invalid in C99
-Message-ID: <202402060925.RBuhPVBO-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="JxhOOCwC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fAMWl0pSD2ECBYn0JopotoMW9C1vUBrxSNq9lH7FVGRvM3QDOvMt2IXbwEkvedmVR3ieE0Ec4jLsbRj9nZA/VjKsmKWPQxQEjmiBtdkUS7laTkFYD5cyBb4vH2ULL8j2HeNLNucqYBtNto5H3+gVMB0SjKq87aCla3J6J0RPW7mHPmM4ERYCk/zWQtyhgbXATSjNA7nrV4+tNROzP69Wmo+WhkhSgyAhP+QfaskB3ka8WogtvgEf/JZMpjSMPzq+97m2wI1CY06RG1xDFo+zd0yJe8x9nfurWjeRB1u0GXb7puGG9Gi9wUWofY18cTf3nzKaF7buovtL2e1shx+3ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gPZF4Q3qh/8eLPV0mgQR34euQlUVEVr+ITaD7QNZ4bU=;
+ b=VLwf9saLStPeMhyLaViVq6oXCEeOZkucqhDB3YW43tyyezLyywX9iPjRPxghVbpeBCZwI8H2Z1e2L/6+hTi50I41+DFYaW4ufOtBfM2NfnTKHqJ+HVRNR+Kh+Fs6voC9E5aXjOKsbdBT/iZ9NHLO5RkkcmajjjhUhawAlY+I4x6Sp76VVv9hqhSP4D3kgpYg5tu+8nKWJRotmE0vLiSQK+p/Fw9T9cMKhFVs3p7WxUbNyDUfepFzYMwGGtCCpZHddcbKJsKV6DQoPxl0QKx+R9Hs0P+Vf4VIwe7k5UauwX/Tw+m2z509A6USp33ECFcNqsL6bWTOVvmfka/JCjQwUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gPZF4Q3qh/8eLPV0mgQR34euQlUVEVr+ITaD7QNZ4bU=;
+ b=JxhOOCwCwBmlt60XXWDjRlVvRii21/CgvQwKyfoKOlv1c0nfQ+tKUuRfTXAvAg2AlYi21P3hJEK18gJO3FokPAgnAw9nwu8h9JaCZuTlxo+t+VD/YcsBE/zEJ1loFVdpOevno/+yE1XJMfwCdO63FW+HEAcqWtYbfKCoY95yXdw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11) by TYWPR01MB9556.jpnprd01.prod.outlook.com
+ (2603:1096:400:19b::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36; Tue, 6 Feb
+ 2024 02:06:03 +0000
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::4d0b:6738:dc2b:51c8]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::4d0b:6738:dc2b:51c8%6]) with mapi id 15.20.7249.035; Tue, 6 Feb 2024
+ 02:06:03 +0000
+Message-ID: <87wmriny7q.wl-kuninori.morimoto.gx@renesas.com>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,	"Lad,  Prabhakar"
+ <prabhakar.csengg@gmail.com>,	=?ISO-8859-1?Q?=22Niklas_S=C3=B6derlund=22?=
+ <niklas.soderlund+renesas@ragnatech.se>,	=?ISO-8859-1?Q?=22Uwe_Kleine-K?=
+ =?ISO-8859-1?Q?=C3=B6nig=22?= <u.kleine-koenig@pengutronix.de>,	Abhinav
+ Kumar <quic_abhinavk@quicinc.com>,	Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>,	Alexander Stein
+ <alexander.stein@ew.tq-group.com>,	Alexandre Belloni
+ <alexandre.belloni@bootlin.com>,	Alexandre Torgue
+ <alexandre.torgue@foss.st.com>,	Alexey Brodkin <abrodkin@synopsys.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,	Andy Gross <agross@kernel.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>,	Bjorn Andersson
+ <andersson@kernel.org>,	Claudiu Beznea <claudiu.beznea@tuxon.dev>,	Daniel
+ Vetter <daniel@ffwll.ch>,	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	David Airlie <airlied@gmail.com>,	Dmitry Baryshkov
+ <dmitry.baryshkov@linaro.org>,	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Emma Anholt <emma@anholt.net>,	Eugen Hristev
+ <eugen.hristev@collabora.com>,	Florian Fainelli
+ <florian.fainelli@broadcom.com>,	Frank Rowand <frowand.list@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,	Hans Verkuil
+ <hverkuil-cisco@xs4all.nl>,	Helge Deller <deller@gmx.de>,	Hugues Fruchet
+ <hugues.fruchet@foss.st.com>,	Jacopo Mondi <jacopo+renesas@jmondi.org>,
+	Jacopo Mondi <jacopo@jmondi.org>,	James Clark <james.clark@arm.com>,
+	Jaroslav Kysela <perex@perex.cz>,	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kevin Hilman <khilman@baylibre.com>,	Kieran Bingham
+ <kieran.bingham+renesas@ideasonboard.com>,	Kieran Bingham
+ <kieran.bingham@ideasonboard.com>,	Konrad Dybcio
+ <konrad.dybcio@linaro.org>,	Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>,	Laurent Pinchart
+ <laurent.pinchart+renesas@ideasonboard.com>,	Laurent Pinchart
+ <laurent.pinchart@ideasonboard.com>,	Liam Girdwood <lgirdwood@gmail.com>,
+	Liu Ying <victor.liu@nxp.com>,	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,	Marek Vasut
+ <marex@denx.de>,	Mark Brown <broonie@kernel.org>,	Mauro Carvalho Chehab
+ <mchehab@kernel.org>,	Maxime Coquelin <mcoquelin.stm32@gmail.com>,	Maxime
+ Ripard <mripard@kernel.org>,	Michael Tretter <m.tretter@pengutronix.de>,
+	Michal Simek <michal.simek@amd.com>,	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,	Neil Armstrong
+ <neil.armstrong@linaro.org>,	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,	Philipp Zabel
+ <p.zabel@pengutronix.de>,	Philippe Cornu <philippe.cornu@foss.st.com>,
+	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,	Rob Clark
+ <robdclark@gmail.com>,	Robert Foss <rfoss@kernel.org>,	Russell King
+ <linux@armlinux.org.uk>,	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Saravana Kannan <saravanak@google.com>,	Sascha Hauer
+ <s.hauer@pengutronix.de>,	Shawn Guo <shawnguo@kernel.org>,	Sowjanya
+ Komatineni <skomatineni@nvidia.com>,	Stefan Agner <stefan@agner.ch>,	Suzuki
+ K Poulose <suzuki.poulose@arm.com>,	Sylwester Nawrocki
+ <s.nawrocki@samsung.com>,	Takashi Iwai <tiwai@suse.com>,	Thierry Reding
+ <thierry.reding@gmail.com>,	Thomas Zimmermann <tzimmermann@suse.de>,	Tim
+ Harvey <tharvey@gateworks.com>,	Todor Tomov <todor.too@gmail.com>,	Tomi
+ Valkeinen <tomi.valkeinen@ideasonboard.com>,	Yannick Fertre
+ <yannick.fertre@foss.st.com>,	Alim Akhtar <alim.akhtar@samsung.com>,	Fabio
+ Estevam <festevam@gmail.com>,	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,	Jerome Brunet
+ <jbrunet@baylibre.com>,	Jessica Zhang <quic_jesszhan@quicinc.com>,	Jonas
+ Karlman <jonas@kwiboo.se>,	Leo Yan <leo.yan@linaro.org>,	Marijn Suijten
+ <marijn.suijten@somainline.org>,	Martin Blumenstingl
+ <martin.blumenstingl@googlemail.com>,	Mike Leach <mike.leach@linaro.org>,
+	Sam Ravnborg <sam@ravnborg.org>,	Sean Paul <sean@poorly.run>,	Tom Rix
+ <trix@redhat.com>,	coresight@lists.linaro.org,	devicetree@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,	freedreno@lists.freedesktop.org,
+	linux-amlogic@lists.infradead.org,	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,	linux-fbdev@vger.kernel.org,
+	linux-media@vger.kernel.org,	linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,	linux-rpi-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,	linux-sound@vger.kernel.org,
+	linux-staging@lists.linux.dev,	linux-stm32@st-md-mailman.stormreply.com,
+	linux-tegra@vger.kernel.org,	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 05/24] media: i2c: switch to use of_graph_get_next_device_endpoint()
+In-Reply-To: <875xz3n6ag.wl-kuninori.morimoto.gx@renesas.com>
+References: <87o7d26qla.wl-kuninori.morimoto.gx@renesas.com>
+	<87h6iu6qjs.wl-kuninori.morimoto.gx@renesas.com>
+	<20240202174941.GA310089-robh@kernel.org>
+	<875xz3n6ag.wl-kuninori.morimoto.gx@renesas.com>
+User-Agent: Wanderlust/2.15.9 Emacs/27.1 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date: Tue, 6 Feb 2024 02:06:02 +0000
+X-ClientProxiedBy: TYCP286CA0168.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:3c6::18) To TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git devel/2-arg-strscpy
-head:   ec83dccab8c18d8482dc1934e7079916508b8eea
-commit: db19daefe72fd816f386afed91ae83633382e489 [2/4] string: Allow 2-argument strscpy()
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240206/202402060925.RBuhPVBO-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240206/202402060925.RBuhPVBO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402060925.RBuhPVBO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/drm_property.c:131:2: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           strscpy_pad(property->name, name, DRM_PROP_NAME_LEN);
-           ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
->> drivers/gpu/drm/drm_property.c:131:2: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   drivers/gpu/drm/drm_property.c:131:2: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   drivers/gpu/drm/drm_property.c:424:2: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           strscpy_pad(prop_enum->name, name, DRM_PROP_NAME_LEN);
-           ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
-   drivers/gpu/drm/drm_property.c:424:2: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   drivers/gpu/drm/drm_property.c:424:2: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   drivers/gpu/drm/drm_property.c:477:2: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           strscpy_pad(out_resp->name, property->name, DRM_PROP_NAME_LEN);
-           ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
-   drivers/gpu/drm/drm_property.c:477:2: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   drivers/gpu/drm/drm_property.c:477:2: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   9 errors generated.
---
->> drivers/rpmsg/rpmsg_ns.c:53:2: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           strscpy_pad(chinfo.name, msg->name, sizeof(chinfo.name));
-           ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
->> drivers/rpmsg/rpmsg_ns.c:53:2: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   drivers/rpmsg/rpmsg_ns.c:53:2: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   3 errors generated.
---
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
->> include/trace/events/writeback.h:68:3: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   strscpy_pad(__entry->name,
-                   ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
->> include/trace/events/writeback.h:68:3: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:68:3: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:113:3: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   strscpy_pad(__entry->name, bdi_dev_name(bdi), 32);
-                   ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:113:3: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:113:3: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:318:3: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   strscpy_pad(__entry->name,
-                   ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:318:3: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:318:3: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   In file included from fs/fs-writeback.c:81:
-   In file included from include/trace/events/writeback.h:861:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:419:
-   include/trace/events/writeback.h:362:3: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   strscpy_pad(__entry->name, bdi_dev_name(wb->bdi), 32);
-                   ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
---
->> fs/exec.c:1234:2: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           strscpy_pad(buf, tsk->comm, buf_size);
-           ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
->> fs/exec.c:1234:2: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   fs/exec.c:1234:2: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   fs/exec.c:1249:2: error: implicit declaration of function 'CONCATENATE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           strscpy_pad(tsk->comm, buf, sizeof(tsk->comm));
-           ^
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:2: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-           ^
-   fs/exec.c:1249:2: error: implicit declaration of function 'COUNT_ARGS' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:25: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                  ^
-   fs/exec.c:1249:2: error: use of undeclared identifier '__strscpy'
-   include/linux/string.h:132:12: note: expanded from macro 'strscpy_pad'
-           __wrote = strscpy(__dst, __src, __count);                       \
-                     ^
-   include/linux/string.h:104:14: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                       ^
-   6 errors generated.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|TYWPR01MB9556:EE_
+X-MS-Office365-Filtering-Correlation-Id: ce6a1e2e-6252-40c5-d70f-08dc26b82b91
+X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	8G3OKnKmXpdjOWzPlNclmCc/7CdNqD8PZTzYZs32sCbC4zn0eBxEjw4js25Ar+ieLWHKfFdAYq8+S+93H7nddhqGW/QMAvHhhuqAgmqY5ItzpuZI6S/TA3GYPr9DvlSC5MEKXV8TUeW7OoUkEP0N3b9qVHCkP2ZTcf3azlOzdB46n63B3c76rjH0STQkhE8K26MBTTjf3rPtklqFxDBvFCVmPlgXaq5DbRobihDGnFXN9rgLT80hlRQr5JLsmdMVWYIq2Yuhi12DQJiB/Xj2Bgw0JQrNb3pXEnC7FGRJ6NnCJBxhy35YOdxcyHSokihBNZacPnLzWcji/nK9h4/0WBShAU5TApjfTdMwhQENEZIQkaQ7TN+MaorT5ziFXDklAR3OLRDD8q6sz9PLiuZX+6XgD/pZEiQPjOwOpoit5M1zJBUeY8lQDdq57qBzxrEHTZRXTtX45CpHmHy0z88NHOV7kSK0SsEnkSW8gHMNU1Sd0Y/M1TBYG69bKlummZsRT9A13ElefcpOGS55oyWIO7LLDr+q3Lxg1enA1KGDAeIPg8yIrS3bX+/coSVNSDaIBfw8qr4mK4m4Qc9fvqqfzN9cVC7OMGeVKkx3R3Kp+SHEcpKyuqo9rIhEu3lQY2DI
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(366004)(346002)(376002)(39860400002)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(41300700001)(66946007)(6512007)(6916009)(66556008)(66476007)(36756003)(52116002)(6506007)(478600001)(6486002)(54906003)(8936002)(316002)(8676002)(38350700005)(4326008)(38100700002)(26005)(86362001)(2616005)(7416002)(2906002)(5660300002)(7406005)(7366002)(7276002)(7336002)(4744005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?chpzc4MYgHRdatDvRkJ3+9AHnhnlVL7DbJhatXFVsFIHiU3Z/4SfA1uVRIZh?=
+ =?us-ascii?Q?KszR4xjcFkNbzCqAD5wWru9pzdb5zu3gmh/FJROTwIp3dImET4CQpo9eHsSf?=
+ =?us-ascii?Q?5/o4hOWDzFinabyzkRTYG12Jm1UZSy6ciLQHLAJm9EKebD4b7DhWE2a3MM4/?=
+ =?us-ascii?Q?y083NBMYFmio8AoiEhcN406q5pO3+M4Gd367MXiLXv0JRziXcLSQExDJ5/zg?=
+ =?us-ascii?Q?7qOGJLE9oujOAIhwlZGfstrbfqRxFtGsecjl9G4CuYP7ue3PPAABI8uA4w4G?=
+ =?us-ascii?Q?KmFlzk86kyFbaL2jnb3uiHP9hcogvhBXD2KFKLdo4KkV7qghJaab26TJMOvZ?=
+ =?us-ascii?Q?D5sM8m4P10mRaZ1TWnlxmNijNV9KznR6UV3XKncMB57ZqABalei7PfG9ii+A?=
+ =?us-ascii?Q?rEknweRN+0Lr05yu0cZHhUP+WFX8FX35+oyM7BOcH7tRv37OVTAI1PQwli18?=
+ =?us-ascii?Q?gVtWOX+RLWDCjx7PNRHArp+/cp9qT/PpXZwCffCLi92L0okv40zKxK2UzRAs?=
+ =?us-ascii?Q?qWiCgZhPJQf8osfGkcwF5BFbwemofhOQo9WED0+XIMBGt8AnpZKcZfz2Z4V/?=
+ =?us-ascii?Q?gTgnzE9QQQhkAC3cwIImy2zruc2me1nmzD4NFqKSo8xYlOcMDo9nQCTANRFf?=
+ =?us-ascii?Q?RIB2/4GWyEkapdTw9nIrr+Y/iy/Q+cfHI/oV426nvAlVwlUI/MoDN8T/imBM?=
+ =?us-ascii?Q?zH1D+i5Drqdwym98KHT5kIm/1ebS91AWwsG25aAiTY392F8gaq5XK1YQiWdL?=
+ =?us-ascii?Q?VtHKnJUeOYirch+5oaTWDVOultT0bm7zVVcmntomUmIfs4uC75elBbFxhddN?=
+ =?us-ascii?Q?Lz1WlhemBh8EZuncG4duj/UHqCVXXjd9AtBHLPqGpg5oVNJpe/wMBLbC86bF?=
+ =?us-ascii?Q?oDl8KCimpPwrkg4MS6RDSX88Hurn80xz13hpCtPcRxzoD+Mc8cpIOaY1rC4Y?=
+ =?us-ascii?Q?41BKdopaye+6ziAKskemHPgWTG0mPDxdMo6Y3rG2clFDhdz7YGSudbjbkft5?=
+ =?us-ascii?Q?bkDKzfBIryhywYleT/1GgJXVNVCcWcjslSjZVs0LOfm1yw/CLMs9JPCUDXHz?=
+ =?us-ascii?Q?mvugjJpW6gAEGnetQNHFXUiHf0p9/dR9qk+aAL1RfwmQtDs8yCj74/VWeD9p?=
+ =?us-ascii?Q?acpvE1SiTvjKElT4KBpPShDo8ZktuqDEycpN1lr5PsmI9H9jc7pvsVVRZDBt?=
+ =?us-ascii?Q?uAdWDE1Mtd4yFH1h+wGw7H3jVq0I3zRZPdeHT3ihZ7sF4zQlF0vkZMf0ovqo?=
+ =?us-ascii?Q?TsGxEZNkNMJhSZHxcaFG78OOKzhtMb1ksFraZRhqFEoVZDJ1yvTFk/SJgzPG?=
+ =?us-ascii?Q?z4RtUVVcGdPip8RGeKzmoECS+6+p14CwOVcZAUQFwo254uHSRGZQNqhhGdAY?=
+ =?us-ascii?Q?K+aegKBeEHcv8wGa9KY/weeRl0OT+Z9LiOnGNwZFaFx9Fxwhd/ibuDGyFUKY?=
+ =?us-ascii?Q?5atdqaIb7siZ+Ga8uRIlXxilPpMYO+zWrwv5Yd7TTjwqsqhVzaLvGZlIiVWy?=
+ =?us-ascii?Q?X77CwR6zyEDFL5X4ehB/s93Urh4Yxu7artdqlmBfo8+lR0HVscsvVHpk1A02?=
+ =?us-ascii?Q?MHcHabbC7nQNky76jnEXWwCAvqgaLm3d0xhUALLcqaeuNo4g9sUxnAB/w+io?=
+ =?us-ascii?Q?Mn6euzJXQjOCCoi/Pn611M4=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce6a1e2e-6252-40c5-d70f-08dc26b82b91
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2024 02:06:02.9564
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zeBeigpbAQOCwV8SEyxuae6SNV3YTmKYhQn2bb/wq8UKip+MXTT9ieAFG6/o3EsW5ph97QJyWvDAIxM/xxyUOz+Sn846JHRynf06/1JF99BlwCCmD0druG3TqiRAe4/J
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9556
 
 
-vim +/COUNT_ARGS +131 drivers/gpu/drm/drm_property.c
+Hi Rob, again
 
-59e71ee746a37f Daniel Vetter    2016-08-29   81  
-59e71ee746a37f Daniel Vetter    2016-08-29   82  /**
-59e71ee746a37f Daniel Vetter    2016-08-29   83   * drm_property_create - create a new property type
-59e71ee746a37f Daniel Vetter    2016-08-29   84   * @dev: drm device
-59e71ee746a37f Daniel Vetter    2016-08-29   85   * @flags: flags specifying the property type
-59e71ee746a37f Daniel Vetter    2016-08-29   86   * @name: name of the property
-59e71ee746a37f Daniel Vetter    2016-08-29   87   * @num_values: number of pre-defined values
-59e71ee746a37f Daniel Vetter    2016-08-29   88   *
-59e71ee746a37f Daniel Vetter    2016-08-29   89   * This creates a new generic drm property which can then be attached to a drm
-6a8a66eda17ea6 Daniel Vetter    2016-11-23   90   * object with drm_object_attach_property(). The returned property object must
-6a8a66eda17ea6 Daniel Vetter    2016-11-23   91   * be freed with drm_property_destroy(), which is done automatically when
-6a8a66eda17ea6 Daniel Vetter    2016-11-23   92   * calling drm_mode_config_cleanup().
-59e71ee746a37f Daniel Vetter    2016-08-29   93   *
-59e71ee746a37f Daniel Vetter    2016-08-29   94   * Returns:
-59e71ee746a37f Daniel Vetter    2016-08-29   95   * A pointer to the newly created property on success, NULL on failure.
-59e71ee746a37f Daniel Vetter    2016-08-29   96   */
-51abc97658b954 Ville Syrjälä    2018-03-06   97  struct drm_property *drm_property_create(struct drm_device *dev,
-51abc97658b954 Ville Syrjälä    2018-03-06   98  					 u32 flags, const char *name,
-51abc97658b954 Ville Syrjälä    2018-03-06   99  					 int num_values)
-59e71ee746a37f Daniel Vetter    2016-08-29  100  {
-59e71ee746a37f Daniel Vetter    2016-08-29  101  	struct drm_property *property = NULL;
-59e71ee746a37f Daniel Vetter    2016-08-29  102  	int ret;
-59e71ee746a37f Daniel Vetter    2016-08-29  103  
-100bc0d9963b50 Ville Syrjälä    2018-03-06  104  	if (WARN_ON(!drm_property_flags_valid(flags)))
-100bc0d9963b50 Ville Syrjälä    2018-03-06  105  		return NULL;
-100bc0d9963b50 Ville Syrjälä    2018-03-06  106  
-5ebbb5b4d424e0 Ville Syrjälä    2018-03-02  107  	if (WARN_ON(strlen(name) >= DRM_PROP_NAME_LEN))
-5ebbb5b4d424e0 Ville Syrjälä    2018-03-02  108  		return NULL;
-5ebbb5b4d424e0 Ville Syrjälä    2018-03-02  109  
-59e71ee746a37f Daniel Vetter    2016-08-29  110  	property = kzalloc(sizeof(struct drm_property), GFP_KERNEL);
-59e71ee746a37f Daniel Vetter    2016-08-29  111  	if (!property)
-59e71ee746a37f Daniel Vetter    2016-08-29  112  		return NULL;
-59e71ee746a37f Daniel Vetter    2016-08-29  113  
-59e71ee746a37f Daniel Vetter    2016-08-29  114  	property->dev = dev;
-59e71ee746a37f Daniel Vetter    2016-08-29  115  
-59e71ee746a37f Daniel Vetter    2016-08-29  116  	if (num_values) {
-59e71ee746a37f Daniel Vetter    2016-08-29  117  		property->values = kcalloc(num_values, sizeof(uint64_t),
-59e71ee746a37f Daniel Vetter    2016-08-29  118  					   GFP_KERNEL);
-59e71ee746a37f Daniel Vetter    2016-08-29  119  		if (!property->values)
-59e71ee746a37f Daniel Vetter    2016-08-29  120  			goto fail;
-59e71ee746a37f Daniel Vetter    2016-08-29  121  	}
-59e71ee746a37f Daniel Vetter    2016-08-29  122  
-2135ea7aafa26b Thierry Reding   2017-02-28  123  	ret = drm_mode_object_add(dev, &property->base, DRM_MODE_OBJECT_PROPERTY);
-59e71ee746a37f Daniel Vetter    2016-08-29  124  	if (ret)
-59e71ee746a37f Daniel Vetter    2016-08-29  125  		goto fail;
-59e71ee746a37f Daniel Vetter    2016-08-29  126  
-59e71ee746a37f Daniel Vetter    2016-08-29  127  	property->flags = flags;
-59e71ee746a37f Daniel Vetter    2016-08-29  128  	property->num_values = num_values;
-59e71ee746a37f Daniel Vetter    2016-08-29  129  	INIT_LIST_HEAD(&property->enum_list);
-59e71ee746a37f Daniel Vetter    2016-08-29  130  
-753f2674ad8db2 Laurent Pinchart 2021-07-31 @131  	strscpy_pad(property->name, name, DRM_PROP_NAME_LEN);
-59e71ee746a37f Daniel Vetter    2016-08-29  132  
-59e71ee746a37f Daniel Vetter    2016-08-29  133  	list_add_tail(&property->head, &dev->mode_config.property_list);
-59e71ee746a37f Daniel Vetter    2016-08-29  134  
-59e71ee746a37f Daniel Vetter    2016-08-29  135  	return property;
-59e71ee746a37f Daniel Vetter    2016-08-29  136  fail:
-59e71ee746a37f Daniel Vetter    2016-08-29  137  	kfree(property->values);
-59e71ee746a37f Daniel Vetter    2016-08-29  138  	kfree(property);
-59e71ee746a37f Daniel Vetter    2016-08-29  139  	return NULL;
-59e71ee746a37f Daniel Vetter    2016-08-29  140  }
-59e71ee746a37f Daniel Vetter    2016-08-29  141  EXPORT_SYMBOL(drm_property_create);
-59e71ee746a37f Daniel Vetter    2016-08-29  142  
+> > This is assuming there's just 1 port and 1 endpoint, but let's be 
+> > specific as the bindings are (first endpoint on port 0):
+> > 
+> > of_graph_get_endpoint_by_regs(client->dev.of_node, 0, -1);
+> > 
+> > Note we could ask for endpoint 0 here, but the bindings generally allow 
+> > for more than 1.
+> > 
+> > I imagine most of the other cases here are the same.
 
-:::::: The code at line 131 was first introduced by commit
-:::::: 753f2674ad8db265986869ca07863758015deebf drm: property: Replace strncpy() with strscpy_pad()
+I'm bit confused here.
+You mentioned that -1 is wrong in previous mail.
 
-:::::: TO: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-:::::: CC: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+	Most cases are in the form of of_graph_get_next_endpoint(dev, NULL) 
+	which is equivalent to of_graph_get_endpoint_by_regs(dev, 0, 0). 
+	Technically, -1 instead of 0 is equivalent, but I'd argue is sloppy and 
+	wrong.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+But you mentioned -1 here, So, I will use it on next patch-set.
+
+
+Thank you for your help !!
+
+Best regards
+---
+Renesas Electronics
+Ph.D. Kuninori Morimoto
