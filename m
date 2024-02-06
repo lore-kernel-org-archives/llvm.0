@@ -1,222 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD90C1B951;
-	Tue,  6 Feb 2024 21:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B142C1CD24
+	for <llvm@lists.linux.dev>; Tue,  6 Feb 2024 22:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707255086; cv=none; b=HSaRveUtEqLII9wpbg8gbGMm2nVHybz5UCe7GhNKnw86j5fWmIhDb/Llubr3aL6rJ+Zsz3kIuUH8YeHRLLzp6N37nR80DcI7HE6m4M/mmqZv1qScaPMzMw11sDtbBDKUCEt4bJwnkV5skLkeCl8D8RAxFE4ptiEKSQPZHf8WBrE=
+	t=1707259010; cv=none; b=u6YqrWEVrN2MtDnTsc4AFu3jFum+SNC/KqShi3dpDF0iJD5n+db4JZTcnqyQ3d7bIvl8Tx3uuF4p4h4mr/c3L32KHcSe8RmQ7VjAezeSjHd6oJiqoSj8LoQh4DQnGai92HRcpcjt9RnW9GOgdeWGhNwnHgLymD7HgAf2ofDYSF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707255086; c=relaxed/simple;
-	bh=GfYkQ+wmvhilD4S0J24vgWuyWeoJwxzYahORsu2PvI8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HsVSP38jzl2DFNHi0aVlO2jG5e6SrHz/GY0JMLM2gtDrHtxDGFxQQAEUyacDwkV8QnALhTitoIgSbLqIbfhZq77VZoy9aiKHceOWEp/oL6j1/DGzoMlbOXjgMRwU5qmIdhvY3x7eQBInSV/aIarLwnpOXnKrmDaI+rG8gGJL/mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PKq5f+3L; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707259010; c=relaxed/simple;
+	bh=N6KTTGVlioPgR9j+o8pygtYiTQpajG3elp7P2BRhHJ4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=hVpOrXczGgyEXAfNTcYjviOe1gWrroMzPn44yEHYm5CoWXZ4z9uxNjynuvSelSMPqoQQsq6+o3TxXjP0OKiAyAbyOYJIAz2vW1mmzdcfhqMH2bQbG5kmtnBPguQ2/aPqhhF65E4wys67gtEbuOpzgPGEpPrpTBlynCFJUEAuBgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--acdunlap.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jtJj1GZD; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--acdunlap.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PKq5f+3L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707255084; x=1738791084;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GfYkQ+wmvhilD4S0J24vgWuyWeoJwxzYahORsu2PvI8=;
-  b=PKq5f+3LvGir8hZdnQ2MY0xdqGBo74wKRHS/59NlQwB5FCT4w1pQ0p9U
-   U4Rt08dpApiZtp/RuO7Voy0jFrZPZ1GXMkWh1gtoyK/mGJwQXtSxw3WcX
-   LGWWwBGtkOIQ15M0DI3oWWhMYWKjyJUWJ4IzcdrAdVpVkah999NcnbJe/
-   ygojvbqRtsTSLUu6LX3saCMGXirUPB5QkafXxOvNs8zOXt3TLXAfVeXK3
-   2WzP6nfwTWFTq5lmrAl+dcmOmHAQRmX8P/tpfh9ssrkX+3JWxaerkMd68
-   jNV4mn/ZL5soTvHBvlILgFYCc/JuVfTbBAnUTxpeQSuTcERNa8sIioN9R
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="11433736"
-X-IronPort-AV: E=Sophos;i="6.05,248,1701158400"; 
-   d="scan'208";a="11433736"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 13:31:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,248,1701158400"; 
-   d="scan'208";a="5767978"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 06 Feb 2024 13:31:21 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXT2E-0001o0-0O;
-	Tue, 06 Feb 2024 21:31:18 +0000
-Date: Wed, 7 Feb 2024 05:31:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 59/66] drivers/md/bcache/sysfs.c:747:2:
- error: too few arguments to function call, expected 3, have 2
-Message-ID: <202402070517.d8Nu87mD-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jtJj1GZD"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60484dba283so90927b3.3
+        for <llvm@lists.linux.dev>; Tue, 06 Feb 2024 14:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707259007; x=1707863807; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=S9KktXhbpCP9EKhC0dGFOyn7FIX3yfw9fFagtMfvzvU=;
+        b=jtJj1GZDP5wYhI65AKsLymEqt7G5osBE+Rg4/c6+d8eO3imx9OKAhoAlBelQWWADMP
+         U7Z+vvWTxHQbK5Iot3SrddPuqQ/5gHc/JM5Fej/Gars7bA7QqVRvpoDsKV/E8j+5m0X4
+         MtOUeB/2nzW//AF+akcA0ooheSg6JfBqNjWhfxz/w/km+lUU7C6tOKKVAaj2DVv00erb
+         I7FFuIrkf72VEww1yQfvVhMVdO9QdH/3SWF31hj4WN9UdZwx8TpZxGDwg8gEUwG6iAin
+         Lbnkjb3uDu7UanbR6PIdkCY20FfAjDfZoUX6doQa/d2+x6x9EyOaMOSwp52uUECFOHIz
+         kHfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707259007; x=1707863807;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S9KktXhbpCP9EKhC0dGFOyn7FIX3yfw9fFagtMfvzvU=;
+        b=Sf+e9IAX89Z6utjsVTCurhebuyq1PCI2xi8K8D8N3IdzH5u8eIvy1Ct/1jO5jf0dYT
+         3hgt6f7b7Qj39SVmDaf+XZQw14IvtzLyrb5sgci+OVnbJ8JRjJh3La24MjH3hyTlT0DG
+         zOsXZZpOeXbMFGzk5u3CuBEyS97fcwgZuEQZeOiVNnyCd1dgTBylmAymRt2t/6ag82U0
+         fd4Xl+2fBo94hfn+AlBoypAByVILoZYVxMf/z38m65GPFdB8fXS7AhOUeAcTLS8tu5PE
+         T5JtgnDzq5Tga7TorbWdKHqO5sTSOYFre+lSKRKcAzThUH+2WtNi86Du6E/7pk158Z9V
+         uBhQ==
+X-Gm-Message-State: AOJu0YwbAlj1XnR3cNwMCfwL4R6QK2JY4f6pApSZm7ZjmTQa/jB4wOhO
+	68GWyepgL3YgCa6iwZYa2RRozKPM1jBmMruGj3RH4ENDpLt4/XTAorehpC7703gHP2Qd0dRm9Ro
+	qAIkWCTR5lw==
+X-Google-Smtp-Source: AGHT+IG7gLSaa9jMCT9d0NEPqxvKadBuDEXuteGmsRb0eeA7aKaH3TsZ4sN4MtvnolZG6mfBKokO9qJycTAqRA==
+X-Received: from anticipation.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4517])
+ (user=acdunlap job=sendgmr) by 2002:a05:690c:fd0:b0:604:1eea:a39e with SMTP
+ id dg16-20020a05690c0fd000b006041eeaa39emr435630ywb.3.1707259007638; Tue, 06
+ Feb 2024 14:36:47 -0800 (PST)
+Date: Tue,  6 Feb 2024 14:36:20 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.594.gd9cf4e227d-goog
+Message-ID: <20240206223620.1833276-1-acdunlap@google.com>
+Subject: [PATCH v3] x86/asm: Force native_apic_mem_read to use mov
+From: Adam Dunlap <acdunlap@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Arjan van de Ven <arjan@linux.intel.com>, Wei Liu <wei.liu@kernel.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
+	Kevin Loughlin <kevinloughlin@google.com>, Peter Gonda <pgonda@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>
+Cc: Adam Dunlap <acdunlap@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   50847e296b34efabe199e408ec4d72f10a866c39
-commit: c7caff27eedeef30d457cbe0d5aae0698fcc954f [59/66] time_stats: don't print any output if event count is zero
-config: i386-randconfig-002-20240206 (https://download.01.org/0day-ci/archive/20240207/202402070517.d8Nu87mD-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402070517.d8Nu87mD-lkp@intel.com/reproduce)
+When done from a virtual machine, instructions that touch APIC memory
+must be emulated. By convention, MMIO access are typically performed via
+io.h helpers such as 'readl()' or 'writeq()' to simplify instruction
+emulation/decoding (ex: in KVM hosts and SEV guests) [0].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402070517.d8Nu87mD-lkp@intel.com/
+Currently, native_apic_mem_read does not follow this convention,
+allowing the compiler to emit instructions other than the mov generated
+by readl(). In particular, when compiled with clang and run as a SEV-ES
+or SEV-SNP guest, the compiler would emit a testl instruction which is
+not supported by the SEV-ES emulator, causing a boot failure in that
+environment. It is likely the same problem would happen in a TDX guest
+as that uses the same instruction emulator as SEV-ES.
 
-All errors (new ones prefixed by >>):
+To make sure all emulators can emulate APIC memory reads via mov, use
+the readl function in native_apic_mem_read. It is expected that any
+emulator would support mov in any addressing mode it is the most generic
+and is what is ususally emitted currently.
 
->> drivers/md/bcache/sysfs.c:747:2: error: too few arguments to function call, expected 3, have 2
-     747 |         sysfs_print_time_stats(&c->btree_gc_time,       btree_gc_times);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/bcache/util.h:366:36: note: expanded from macro 'sysfs_print_time_stats'
-     366 |                 time_stats_to_seq_buf(&seq, stats);                     \
-         |                 ~~~~~~~~~~~~~~~~~~~~~            ^
-   include/linux/time_stats.h:153:6: note: 'time_stats_to_seq_buf' declared here
-     153 | void time_stats_to_seq_buf(struct seq_buf *, struct time_stats *,
-         |      ^                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     154 |                 unsigned int flags);
-         |                 ~~~~~~~~~~~~~~~~~~
-   drivers/md/bcache/sysfs.c:748:2: error: too few arguments to function call, expected 3, have 2
-     748 |         sysfs_print_time_stats(&c->btree_split_time,    btree_split_times);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/bcache/util.h:366:36: note: expanded from macro 'sysfs_print_time_stats'
-     366 |                 time_stats_to_seq_buf(&seq, stats);                     \
-         |                 ~~~~~~~~~~~~~~~~~~~~~            ^
-   include/linux/time_stats.h:153:6: note: 'time_stats_to_seq_buf' declared here
-     153 | void time_stats_to_seq_buf(struct seq_buf *, struct time_stats *,
-         |      ^                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     154 |                 unsigned int flags);
-         |                 ~~~~~~~~~~~~~~~~~~
-   drivers/md/bcache/sysfs.c:749:2: error: too few arguments to function call, expected 3, have 2
-     749 |         sysfs_print_time_stats(&c->sort.time,           btree_sort_times);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/bcache/util.h:366:36: note: expanded from macro 'sysfs_print_time_stats'
-     366 |                 time_stats_to_seq_buf(&seq, stats);                     \
-         |                 ~~~~~~~~~~~~~~~~~~~~~            ^
-   include/linux/time_stats.h:153:6: note: 'time_stats_to_seq_buf' declared here
-     153 | void time_stats_to_seq_buf(struct seq_buf *, struct time_stats *,
-         |      ^                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     154 |                 unsigned int flags);
-         |                 ~~~~~~~~~~~~~~~~~~
-   drivers/md/bcache/sysfs.c:750:2: error: too few arguments to function call, expected 3, have 2
-     750 |         sysfs_print_time_stats(&c->btree_read_time,     btree_read_times);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/bcache/util.h:366:36: note: expanded from macro 'sysfs_print_time_stats'
-     366 |                 time_stats_to_seq_buf(&seq, stats);                     \
-         |                 ~~~~~~~~~~~~~~~~~~~~~            ^
-   include/linux/time_stats.h:153:6: note: 'time_stats_to_seq_buf' declared here
-     153 | void time_stats_to_seq_buf(struct seq_buf *, struct time_stats *,
-         |      ^                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     154 |                 unsigned int flags);
-         |                 ~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+The testl instruction is emitted when native_apic_mem_read
+is inlined into __xapic_wait_icr_idle. The emulator comes from
+insn_decode_mmio in arch/x86/lib/insn-eval.c. It would not be worth it
+to extend insn_decode_mmio to support more instructions since, in
+theory, the compiler could choose to output nearly any instruction for
+such reads which would bloat the emulator beyond reason.
 
+An alterative to this approach would be to use inline assembly instead
+of the readl helper, as that is what native_apic_mem_write does. I
+consider using readl to be cleaner since it is documented to be a simple
+wrapper and inline assembly is less readable. native_apic_mem_write
+cannot be trivially updated to use writel since it appears to use custom
+asm to workaround for a processor-specific bug.
 
-vim +747 drivers/md/bcache/sysfs.c
+[0] https://lore.kernel.org/all/20220405232939.73860-12-kirill.shutemov@linux.intel.com/
 
-cafe563591446c Kent Overstreet 2013-03-23  731  
-cb85114956dc88 John Sheu       2014-03-17  732  SHOW(__bch_cache_set)
-cb85114956dc88 John Sheu       2014-03-17  733  {
-cafe563591446c Kent Overstreet 2013-03-23  734  	struct cache_set *c = container_of(kobj, struct cache_set, kobj);
-cafe563591446c Kent Overstreet 2013-03-23  735  
-6f9414e0f6f35c Coly Li         2020-10-01  736  	sysfs_print(synchronous,		CACHE_SYNC(&c->cache->sb));
-cafe563591446c Kent Overstreet 2013-03-23  737  	sysfs_print(journal_delay_ms,		c->journal_delay_ms);
-63a96c05cd43cc Coly Li         2020-10-01  738  	sysfs_hprint(bucket_size,		bucket_bytes(c->cache));
-4e1ebae3ee4e0c Coly Li         2020-10-01  739  	sysfs_hprint(block_size,		block_bytes(c->cache));
-cafe563591446c Kent Overstreet 2013-03-23  740  	sysfs_print(tree_depth,			c->root->level);
-cb85114956dc88 John Sheu       2014-03-17  741  	sysfs_print(root_usage_percent,		bch_root_usage(c));
-cafe563591446c Kent Overstreet 2013-03-23  742  
-cb85114956dc88 John Sheu       2014-03-17  743  	sysfs_hprint(btree_cache_size,		bch_cache_size(c));
-cb85114956dc88 John Sheu       2014-03-17  744  	sysfs_print(btree_cache_max_chain,	bch_cache_max_chain(c));
-cafe563591446c Kent Overstreet 2013-03-23  745  	sysfs_print(cache_available_percent,	100 - c->gc_stats.in_use);
-cafe563591446c Kent Overstreet 2013-03-23  746  
-21ba4155ff2f9e Kent Overstreet 2024-01-26 @747  	sysfs_print_time_stats(&c->btree_gc_time,	btree_gc_times);
-21ba4155ff2f9e Kent Overstreet 2024-01-26  748  	sysfs_print_time_stats(&c->btree_split_time,	btree_split_times);
-21ba4155ff2f9e Kent Overstreet 2024-01-26  749  	sysfs_print_time_stats(&c->sort.time,		btree_sort_times);
-21ba4155ff2f9e Kent Overstreet 2024-01-26  750  	sysfs_print_time_stats(&c->btree_read_time,	btree_read_times);
-cafe563591446c Kent Overstreet 2013-03-23  751  
-cb85114956dc88 John Sheu       2014-03-17  752  	sysfs_print(btree_used_percent,	bch_btree_used(c));
-cafe563591446c Kent Overstreet 2013-03-23  753  	sysfs_print(btree_nodes,	c->gc_stats.nodes);
-cb85114956dc88 John Sheu       2014-03-17  754  	sysfs_hprint(average_key_size,	bch_average_key_size(c));
-cafe563591446c Kent Overstreet 2013-03-23  755  
-cafe563591446c Kent Overstreet 2013-03-23  756  	sysfs_print(cache_read_races,
-cafe563591446c Kent Overstreet 2013-03-23  757  		    atomic_long_read(&c->cache_read_races));
-cafe563591446c Kent Overstreet 2013-03-23  758  
-a728eacbbdd229 Tang Junhui     2018-02-07  759  	sysfs_print(reclaim,
-a728eacbbdd229 Tang Junhui     2018-02-07  760  		    atomic_long_read(&c->reclaim));
-a728eacbbdd229 Tang Junhui     2018-02-07  761  
-dff90d58a1c815 Coly Li         2019-06-28  762  	sysfs_print(reclaimed_journal_buckets,
-dff90d58a1c815 Coly Li         2019-06-28  763  		    atomic_long_read(&c->reclaimed_journal_buckets));
-dff90d58a1c815 Coly Li         2019-06-28  764  
-a728eacbbdd229 Tang Junhui     2018-02-07  765  	sysfs_print(flush_write,
-a728eacbbdd229 Tang Junhui     2018-02-07  766  		    atomic_long_read(&c->flush_write));
-a728eacbbdd229 Tang Junhui     2018-02-07  767  
-cafe563591446c Kent Overstreet 2013-03-23  768  	sysfs_print(writeback_keys_done,
-cafe563591446c Kent Overstreet 2013-03-23  769  		    atomic_long_read(&c->writeback_keys_done));
-cafe563591446c Kent Overstreet 2013-03-23  770  	sysfs_print(writeback_keys_failed,
-cafe563591446c Kent Overstreet 2013-03-23  771  		    atomic_long_read(&c->writeback_keys_failed));
-cafe563591446c Kent Overstreet 2013-03-23  772  
-77c320eb46e216 Kent Overstreet 2013-07-11  773  	if (attr == &sysfs_errors)
-77c320eb46e216 Kent Overstreet 2013-07-11  774  		return bch_snprint_string_list(buf, PAGE_SIZE, error_actions,
-77c320eb46e216 Kent Overstreet 2013-07-11  775  					       c->on_error);
-77c320eb46e216 Kent Overstreet 2013-07-11  776  
-cafe563591446c Kent Overstreet 2013-03-23  777  	/* See count_io_errors for why 88 */
-cafe563591446c Kent Overstreet 2013-03-23  778  	sysfs_print(io_error_halflife,	c->error_decay * 88);
-7ba0d830dc0e4c Coly Li         2018-02-07  779  	sysfs_print(io_error_limit,	c->error_limit);
-cafe563591446c Kent Overstreet 2013-03-23  780  
-cafe563591446c Kent Overstreet 2013-03-23  781  	sysfs_hprint(congested,
-cafe563591446c Kent Overstreet 2013-03-23  782  		     ((uint64_t) bch_get_congested(c)) << 9);
-cafe563591446c Kent Overstreet 2013-03-23  783  	sysfs_print(congested_read_threshold_us,
-cafe563591446c Kent Overstreet 2013-03-23  784  		    c->congested_read_threshold_us);
-cafe563591446c Kent Overstreet 2013-03-23  785  	sysfs_print(congested_write_threshold_us,
-cafe563591446c Kent Overstreet 2013-03-23  786  		    c->congested_write_threshold_us);
-cafe563591446c Kent Overstreet 2013-03-23  787  
-9aaf51654672b1 Coly Li         2018-12-13  788  	sysfs_print(cutoff_writeback, bch_cutoff_writeback);
-9aaf51654672b1 Coly Li         2018-12-13  789  	sysfs_print(cutoff_writeback_sync, bch_cutoff_writeback_sync);
-9aaf51654672b1 Coly Li         2018-12-13  790  
-cafe563591446c Kent Overstreet 2013-03-23  791  	sysfs_print(active_journal_entries,	fifo_used(&c->journal.pin));
-cafe563591446c Kent Overstreet 2013-03-23  792  	sysfs_printf(verify,			"%i", c->verify);
-cafe563591446c Kent Overstreet 2013-03-23  793  	sysfs_printf(key_merging_disabled,	"%i", c->key_merging_disabled);
-280481d06c8a68 Kent Overstreet 2013-10-24  794  	sysfs_printf(expensive_debug_checks,
-280481d06c8a68 Kent Overstreet 2013-10-24  795  		     "%i", c->expensive_debug_checks);
-cafe563591446c Kent Overstreet 2013-03-23  796  	sysfs_printf(gc_always_rewrite,		"%i", c->gc_always_rewrite);
-cafe563591446c Kent Overstreet 2013-03-23  797  	sysfs_printf(btree_shrinker_disabled,	"%i", c->shrinker_disabled);
-cafe563591446c Kent Overstreet 2013-03-23  798  	sysfs_printf(copy_gc_enabled,		"%i", c->copy_gc_enabled);
-c5fcdedcee4e6a Coly Li         2019-11-13  799  	sysfs_printf(idle_max_writeback_rate,	"%i",
-c5fcdedcee4e6a Coly Li         2019-11-13  800  		     c->idle_max_writeback_rate_enabled);
-7a671d8ef821bf Coly Li         2018-12-13  801  	sysfs_printf(gc_after_writeback,	"%i", c->gc_after_writeback);
-771f393e8ffc9b Coly Li         2018-03-18  802  	sysfs_printf(io_disable,		"%i",
-771f393e8ffc9b Coly Li         2018-03-18  803  		     test_bit(CACHE_SET_IO_DISABLE, &c->flags));
-cafe563591446c Kent Overstreet 2013-03-23  804  
-cafe563591446c Kent Overstreet 2013-03-23  805  	if (attr == &sysfs_bset_tree_stats)
-cafe563591446c Kent Overstreet 2013-03-23  806  		return bch_bset_print_stats(c, buf);
-cafe563591446c Kent Overstreet 2013-03-23  807  
-092bd54d69230b Coly Li         2020-07-25  808  	if (attr == &sysfs_feature_compat)
-092bd54d69230b Coly Li         2020-07-25  809  		return bch_print_cache_set_feature_compat(c, buf, PAGE_SIZE);
-092bd54d69230b Coly Li         2020-07-25  810  	if (attr == &sysfs_feature_ro_compat)
-092bd54d69230b Coly Li         2020-07-25  811  		return bch_print_cache_set_feature_ro_compat(c, buf, PAGE_SIZE);
-092bd54d69230b Coly Li         2020-07-25  812  	if (attr == &sysfs_feature_incompat)
-092bd54d69230b Coly Li         2020-07-25  813  		return bch_print_cache_set_feature_incompat(c, buf, PAGE_SIZE);
-092bd54d69230b Coly Li         2020-07-25  814  
-cafe563591446c Kent Overstreet 2013-03-23  815  	return 0;
-cafe563591446c Kent Overstreet 2013-03-23  816  }
-cafe563591446c Kent Overstreet 2013-03-23  817  SHOW_LOCKED(bch_cache_set)
-cafe563591446c Kent Overstreet 2013-03-23  818  
+Signed-off-by: Adam Dunlap <acdunlap@google.com>
+Tested-by: Kevin Loughlin <kevinloughlin@google.com>
+---
 
-:::::: The code at line 747 was first introduced by commit
-:::::: 21ba4155ff2f9e17cf4d27f1ad2ea42fecfed4ae bcache: Convert to lib/time_stats
+Patch changelog:
+V1 -> V2: Replaced asm with readl function which does the same thing
+V2 -> V3: Updated commit message to show more motivation and
+justification
 
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+Link to v2 discussion: https://lore.kernel.org/all/20220908170456.3177635-1-acdunlap@google.com/
 
+ arch/x86/include/asm/apic.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+index 9d159b771dc8..dddd3fc195ef 100644
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -13,6 +13,7 @@
+ #include <asm/mpspec.h>
+ #include <asm/msr.h>
+ #include <asm/hardirq.h>
++#include <asm/io.h>
+ 
+ #define ARCH_APICTIMER_STOPS_ON_C3	1
+ 
+@@ -96,7 +97,7 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
+ 
+ static inline u32 native_apic_mem_read(u32 reg)
+ {
+-	return *((volatile u32 *)(APIC_BASE + reg));
++	return readl((void __iomem *)(APIC_BASE + reg));
+ }
+ 
+ static inline void native_apic_mem_eoi(void)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0.594.gd9cf4e227d-goog
+
