@@ -1,189 +1,169 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31476200D2;
-	Wed,  7 Feb 2024 22:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297B8535B4
+	for <llvm@lists.linux.dev>; Wed,  7 Feb 2024 23:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707346404; cv=none; b=PeObR9UAGj2nJGwHdbLV4GFEKXf7TuWuQPrGkEV3Nos7B/GLC/zyIKuVAfePeftZayATHJq9dbF86Fjj5vr8U1rF2CXy7QY1YG8J9nKCr9UcN/y9wa71UthrF3K76h+bq/n4IiIqIcIHl3zRPJq+B5WZ1S5xRWE8Vn/szC6I12o=
+	t=1707349888; cv=none; b=EBNFItduyN5w8hbIePs6TdKiwl1b+N2g3hbZiBHYo8nc47xjfiNaYMRK6gWK8Lo7gDVbAzyorrETu/u0ntZcX2shZKnNSrtSopCKGqcLUcziOnGOQvbjWrsJfFx53dEYXSnQORphoUb9qkEeS28XIbZr11s33opbV0JPTCBKFu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707346404; c=relaxed/simple;
-	bh=nmb2k3C9v+KzAmt2g3cPPXFlei6g+FVLekXJpHiBpLI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NS/JFQWxsk2zCAxt6XubWZepqLaZht/c6YuBXEJp6nbzfedrPLvhovpemA6pmB2WtgX1QJPok2g6TYkmjck/bVJdPiKM+CtXb5Vonqorb40Q0xjfCRb0uE/kAbOR5FSV4afj8n76bRmEjrPdptCdiIvpkj8j2EWlNe3JOREaZvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bx4B6DK9; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707349888; c=relaxed/simple;
+	bh=1/tOOHsj37mlI63g31+J4e4KiDbwt0k1caKuGOTMtE4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gXg75YyXBxhW4VUEDUcxe1RDYQy1bSLHOFwN6fcApn6r3hjMJP8TB9X7wckx+r22vUHMxoDGtmFZr+l3Nrgc9J7EQ5y1Epcf5NiAfqYhAt5wgKNgAIQ7AuFjIg+5CaVARGnJI1d3FdI6I2MtAmaJ0Lud/2MU8j8bCzP8DOuDzpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WSeJaG24; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bx4B6DK9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707346402; x=1738882402;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nmb2k3C9v+KzAmt2g3cPPXFlei6g+FVLekXJpHiBpLI=;
-  b=bx4B6DK9cAZW4NeoF+ZNq8KkKYJ3r2FMD0aBkRwCc2B1aWPSVjA+ZvKd
-   s3QrytosAXeEXwP2ZGQv343c2wAx+rgMqjo9C26yIUtfba+FtLwi0YIOv
-   aOg6mpKde7VbQph7Xsq/1YZURkXMOVd5muoCEn2LaPbinsFIamFGadqkg
-   lS42kimccj4seghVoD9kT7k/3aAsliinV2m1TjKOkbxe0Y5F9B7l4gr/+
-   3GMO3QFSwEjozigOcpw6k+lMLefVF4apNqF938XPDtWYC8x8VJcBUQiZR
-   3Kizc/Yr9VaEmPxobF9/Ly7rSmHInMW0dQno7FTUclPc+Xb3NhZNHiWXq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="12467559"
-X-IronPort-AV: E=Sophos;i="6.05,252,1701158400"; 
-   d="scan'208";a="12467559"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 14:53:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,252,1701158400"; 
-   d="scan'208";a="1494186"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 07 Feb 2024 14:53:17 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXqn3-000376-2u;
-	Wed, 07 Feb 2024 22:53:13 +0000
-Date: Thu, 8 Feb 2024 06:52:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Prashant Malani <pmalani@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Emilie Roberts <hadrosaur@google.com>,
-	"Nyman, Mathias" <mathias.nyman@intel.com>,
-	"Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-	"Radjacoumar, Shyam Sundar" <ssradjacoumar@google.com>,
-	Samuel Jacob <samjaco@google.com>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Uday Bhat <uday.m.bhat@intel.com>
-Subject: Re: [PATCH 2/2] platform/chrome: cros_ec_typec: Make sure the USB
- role switch has PLD
-Message-ID: <202402080600.zOq5UvYq-lkp@intel.com>
-References: <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WSeJaG24"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707349883;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XQ52WvwPw84u0JZq6QIgIB+g9GUR3A9ZpqQPJBNIXVQ=;
+	b=WSeJaG24v4TrPiha0jVfz7fGqos7oUCzcZN3ZTquF2nRTyN3x4/FsRGSzwgfhKRShmT/en
+	XoTZ9xyHNxYVedktNLHn5KMnYonG9YI/+q1bLsHqOMCepx3Mmoxy8xXBDM+ax3JpKaWCB5
+	JuI3Lj9rBS938Vr4a2h0VFdy4HYfzW8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-688-ZaQt-huuMoyVa_x9X7kz2A-1; Wed,
+ 07 Feb 2024 18:51:19 -0500
+X-MC-Unique: ZaQt-huuMoyVa_x9X7kz2A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA2341C05EC6
+	for <llvm@lists.linux.dev>; Wed,  7 Feb 2024 23:51:18 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C388A400D6D2;
+	Wed,  7 Feb 2024 23:51:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 226): Test report for master
+ (6.8.0-rc3, mainline.kernel.org-clang, 6d280f4d)
+Date: Wed, 07 Feb 2024 23:51:18 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <91640.124020718511900217@us-mta-688.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Heikki,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus chrome-platform/for-next chrome-platform/for-firmware-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.8-rc3 next-20240207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-roles-Link-the-switch-to-its-connector/20240207-230017
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20240207145851.1603237-3-heikki.krogerus%40linux.intel.com
-patch subject: [PATCH 2/2] platform/chrome: cros_ec_typec: Make sure the USB role switch has PLD
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240208/202402080600.zOq5UvYq-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240208/202402080600.zOq5UvYq-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'for-6.8-rc3-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402080600.zOq5UvYq-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/128098
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
->> drivers/platform/chrome/cros_ec_typec.c:75:20: error: incomplete definition of type 'struct acpi_device'
-                   if (adev && !adev->pld_crc)
-                                ~~~~^
-   include/linux/acpi.h:795:8: note: forward declaration of 'struct acpi_device'
-   struct acpi_device;
-          ^
-   drivers/platform/chrome/cros_ec_typec.c:76:8: error: incomplete definition of type 'struct acpi_device'
-                           adev->pld_crc = to_acpi_device_node(fwnode)->pld_crc;
-                           ~~~~^
-   include/linux/acpi.h:795:8: note: forward declaration of 'struct acpi_device'
-   struct acpi_device;
-          ^
-   drivers/platform/chrome/cros_ec_typec.c:76:47: error: incomplete definition of type 'struct acpi_device'
-                           adev->pld_crc = to_acpi_device_node(fwnode)->pld_crc;
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-   include/linux/acpi.h:795:8: note: forward declaration of 'struct acpi_device'
-   struct acpi_device;
-          ^
-   3 errors generated.
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 - kselftests upstream - net
+      x86_64 - kselftests upstream - bpf
+      x86_64 - kselftests upstream - bpf_test_progs
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 (debug) - kselftests upstream - net
+      x86_64 (debug) - kselftests upstream - bpf
+      x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
-vim +75 drivers/platform/chrome/cros_ec_typec.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-    23	
-    24	#define DP_PORT_VDO	(DP_CONF_SET_PIN_ASSIGN(BIT(DP_PIN_ASSIGN_C) | BIT(DP_PIN_ASSIGN_D)) | \
-    25					DP_CAP_DFP_D | DP_CAP_RECEPTACLE)
-    26	
-    27	static int cros_typec_parse_port_props(struct typec_capability *cap,
-    28					       struct fwnode_handle *fwnode,
-    29					       struct device *dev)
-    30	{
-    31		struct fwnode_handle *sw_fwnode;
-    32		const char *buf;
-    33		int ret;
-    34	
-    35		memset(cap, 0, sizeof(*cap));
-    36		ret = fwnode_property_read_string(fwnode, "power-role", &buf);
-    37		if (ret) {
-    38			dev_err(dev, "power-role not found: %d\n", ret);
-    39			return ret;
-    40		}
-    41	
-    42		ret = typec_find_port_power_role(buf);
-    43		if (ret < 0)
-    44			return ret;
-    45		cap->type = ret;
-    46	
-    47		ret = fwnode_property_read_string(fwnode, "data-role", &buf);
-    48		if (ret) {
-    49			dev_err(dev, "data-role not found: %d\n", ret);
-    50			return ret;
-    51		}
-    52	
-    53		ret = typec_find_port_data_role(buf);
-    54		if (ret < 0)
-    55			return ret;
-    56		cap->data = ret;
-    57	
-    58		/* Try-power-role is optional. */
-    59		ret = fwnode_property_read_string(fwnode, "try-power-role", &buf);
-    60		if (ret) {
-    61			dev_warn(dev, "try-power-role not found: %d\n", ret);
-    62			cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
-    63		} else {
-    64			ret = typec_find_power_role(buf);
-    65			if (ret < 0)
-    66				return ret;
-    67			cap->prefer_role = ret;
-    68		}
-    69	
-    70		/* Assing the USB role switch the correct pld_crc if it's missing. */
-    71		sw_fwnode = fwnode_find_reference(fwnode, "usb-role-switch", 0);
-    72		if (!IS_ERR_OR_NULL(sw_fwnode)) {
-    73			struct acpi_device *adev = to_acpi_device_node(sw_fwnode);
-    74	
-  > 75			if (adev && !adev->pld_crc)
-    76				adev->pld_crc = to_acpi_device_node(fwnode)->pld_crc;
-    77			fwnode_handle_put(sw_fwnode);
-    78		}
-    79	
-    80		cap->fwnode = fwnode;
-    81	
-    82		return 0;
-    83	}
-    84	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
