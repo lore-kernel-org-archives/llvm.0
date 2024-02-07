@@ -1,89 +1,39 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7FA2031C;
-	Wed,  7 Feb 2024 08:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B633C23759;
+	Wed,  7 Feb 2024 09:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707295257; cv=none; b=Cw1tXhxdyxZ2uFzIpj/gPSys0gZZJVzhHnz5b+H5Emrp2Govani6fDHl3qhkR00Ce+N8AJ+2uyhIKOToMGknfNRUaFSSNZLV5fJfaDxRdU8WFYlSprXAXEpJC30RSsomcXVks3cJSyIrQLkX8anEf6bq0X9aA+kMEFVwRS31Vtg=
+	t=1707299505; cv=none; b=duhnhT+ju30JFkMno0Iw2Wlzzpq4OpAVSenWYfZKRNxPkbs00JzQHpMtRfWgF8vAiqHUZL/CEbr0fzDsbY42xN8H57mo9CMeNaqSpZy2eQbcQHYnklgpT4SpEoA2GFgmuVLIZ/M1DMH64Cop5dU742RwzpXn9XGtVZQIDXSQ8Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707295257; c=relaxed/simple;
-	bh=7mWCDilBtyn6a8R/MQs4iWeqLin9foUbZ3OlyKHlEtY=;
+	s=arc-20240116; t=1707299505; c=relaxed/simple;
+	bh=q43MH+lenOB9ylP/fJbs+XxYluDSrl1obvPsCaw5/qI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZvKYUbX8UkoXUFWL/V/ISV6zuVmPDadKXc8MJ3F2LNIzOP6+rJJSTwtM88HsS8wor298mBEsAlHzdVEpQwlGq+Xk+WtBblZ7GmHkU9cebOCV0/dHTNWG/+GkadlQN0ytixSjDOxSFQeO1Zht89rwwFUqY00WqIB/ZcjBSfiOAIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uo2iAS4V; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=g6lFN9sT; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uo2iAS4V; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=g6lFN9sT; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wk+YVBe948tb33cJOKBRuFm+gqESf7FpBG6TnHFWDfJ7oCEyMG9/ghSLMfHhAr5o3mZBqXgox8227KtLc5F5hftj9qwsi3LFVJ2qdrP/YyMNj54ta3Yb70EBtpC0QudEmwZ+Gj4Ogzs1udYSGIj6CdEkdff4F3O9WWTi5AM5teA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NG4uDLd9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uo2iAS4V";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="g6lFN9sT";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uo2iAS4V";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="g6lFN9sT"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 50666221D1;
-	Wed,  7 Feb 2024 08:40:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1707295254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R7q8iY10uoxfBBuRXr+Ei/C8akP0H6jzk/X1fqaQvQY=;
-	b=uo2iAS4VHfmzbP8+sGhwxwBhz+ITGZl9aP7Eg4thsPHmTH4Q4BSFt0SmR80AT8NeCxoAE+
-	ClThyH205khyJ4lwUie453vYGg/E21jtlQASqbOVwRoQtX3TbeTjfrnt6dUx5+zPfzdoDE
-	xg/ZhFcksSLcX0jP2GVJUZBpq3i1oEg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1707295254;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R7q8iY10uoxfBBuRXr+Ei/C8akP0H6jzk/X1fqaQvQY=;
-	b=g6lFN9sTD/PIiY3ic7OCv2L/NLz6tjpsciHv8cGE0TTVGwwBl5WNTHRilGSwbuertuNxWz
-	/78FUB4U2yS1TMAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1707295254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R7q8iY10uoxfBBuRXr+Ei/C8akP0H6jzk/X1fqaQvQY=;
-	b=uo2iAS4VHfmzbP8+sGhwxwBhz+ITGZl9aP7Eg4thsPHmTH4Q4BSFt0SmR80AT8NeCxoAE+
-	ClThyH205khyJ4lwUie453vYGg/E21jtlQASqbOVwRoQtX3TbeTjfrnt6dUx5+zPfzdoDE
-	xg/ZhFcksSLcX0jP2GVJUZBpq3i1oEg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1707295254;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R7q8iY10uoxfBBuRXr+Ei/C8akP0H6jzk/X1fqaQvQY=;
-	b=g6lFN9sTD/PIiY3ic7OCv2L/NLz6tjpsciHv8cGE0TTVGwwBl5WNTHRilGSwbuertuNxWz
-	/78FUB4U2yS1TMAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3EFF8139D8;
-	Wed,  7 Feb 2024 08:40:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id pjggDxZCw2U6QwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Wed, 07 Feb 2024 08:40:54 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 9CC16A0809; Wed,  7 Feb 2024 09:40:53 +0100 (CET)
-Date: Wed, 7 Feb 2024 09:40:53 +0100
-From: Jan Kara <jack@suse.cz>
-To: syzbot <syzbot+9924e2a08d9ba0fd4ce2@syzkaller.appspotmail.com>
-Cc: axboe@kernel.dk, brauner@kernel.org, dan.carpenter@linaro.org,
-	dave.kleikamp@oracle.com, ghandatmanas@gmail.com, jack@suse.cz,
-	jfs-discussion@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org, lkp@intel.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev,
-	shaggy@kernel.org, syzkaller-bugs@googlegroups.com,
-	syzkaller@googlegroups.com
-Subject: Re: [syzbot] [jfs?] KASAN: slab-out-of-bounds Read in dtSearch
-Message-ID: <20240207084053.ydlu3fnyzzvjpdr3@quack3>
-References: <000000000000332a2505e981f474@google.com>
- <00000000000014c9ca0610b7aec6@google.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NG4uDLd9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6028C433C7;
+	Wed,  7 Feb 2024 09:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707299505;
+	bh=q43MH+lenOB9ylP/fJbs+XxYluDSrl1obvPsCaw5/qI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NG4uDLd9567/mD8Cm7Y9Ll0pAWb10GtbdlnARs2MEag3EyRff/WSo2U8BczID2Iyk
+	 wjI4YnlCwNpvunO9JSTzxFQj8+4EAF7wuYDW6pHKAKGCdmJScnnbkPUlfPYUL+eiwg
+	 NlQnVQrQb3luE+BhMQ+FqmKURmFTGq8HCzzc11Ds=
+Date: Wed, 7 Feb 2024 09:51:42 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Sreenath Vijayan <sreenath.vijayan@sony.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-serial@vger.kernel.org,
+	Shimoyashiki Taichi <taichi.shimoyashiki@sony.com>,
+	John Ogness <john.ogness@linutronix.de>
+Subject: Re: [tty:tty-testing 28/29] include/linux/printk.h:275:13: error:
+ unused function 'dump_printk_buffer'
+Message-ID: <2024020708-unknotted-ceramics-f6ec@gregkh>
+References: <202402071252.Zj78sTXN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -92,71 +42,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00000000000014c9ca0610b7aec6@google.com>
-X-Spam-Level: *
-X-Spamd-Bar: +
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=uo2iAS4V;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=g6lFN9sT
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [1.49 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	 TO_DN_SOME(0.00)[];
-	 R_RATELIMIT(0.00)[to_ip_from(RLjmuxkameenh34oafz4d4fopd)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.cz:+];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-0.00)[33.64%];
-	 SUBJECT_HAS_QUESTION(0.00)[];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 FROM_HAS_DN(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=b45dfd882e46ec91];
-	 TAGGED_RCPT(0.00)[9924e2a08d9ba0fd4ce2];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[18];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[kernel.dk,kernel.org,linaro.org,oracle.com,gmail.com,suse.cz,lists.sourceforge.net,vger.kernel.org,lists.linuxfoundation.org,intel.com,lists.linux.dev,googlegroups.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: 1.49
-X-Rspamd-Queue-Id: 50666221D1
-X-Spam-Flag: NO
+In-Reply-To: <202402071252.Zj78sTXN-lkp@intel.com>
 
-On Tue 06-02-24 06:49:05, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
+On Wed, Feb 07, 2024 at 12:22:40PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+> head:   014e10bea593b963574d607faa34e7eaaad3c02b
+> commit: 558367b641b3802572132e7ed865f5eb887c41ea [28/29] printk: Add function to dump printk buffer directly to consoles
+> config: i386-buildonly-randconfig-006-20240207 (https://download.01.org/0day-ci/archive/20240207/202402071252.Zj78sTXN-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402071252.Zj78sTXN-lkp@intel.com/reproduce)
 > 
-> commit 6f861765464f43a71462d52026fbddfc858239a5
-> Author: Jan Kara <jack@suse.cz>
-> Date:   Wed Nov 1 17:43:10 2023 +0000
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202402071252.Zj78sTXN-lkp@intel.com/
 > 
->     fs: Block writes to mounted block devices
+> All errors (new ones prefixed by >>):
 > 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13767e8fe80000
-> start commit:   bee0e7762ad2 Merge tag 'for-linus-iommufd' of git://git.ke..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b45dfd882e46ec91
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9924e2a08d9ba0fd4ce2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=152bfc22e80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1608f4a2e80000
+>    In file included from lib/test_bitops.c:9:
+>    In file included from include/linux/module.h:13:
+>    In file included from include/linux/stat.h:19:
+>    In file included from include/linux/time.h:60:
+>    In file included from include/linux/time32.h:13:
+>    In file included from include/linux/timex.h:67:
+>    In file included from arch/x86/include/asm/timex.h:5:
+>    In file included from arch/x86/include/asm/processor.h:23:
+>    In file included from arch/x86/include/asm/msr.h:11:
+>    In file included from arch/x86/include/asm/cpumask.h:5:
+>    In file included from include/linux/cpumask.h:10:
+>    In file included from include/linux/kernel.h:31:
+> >> include/linux/printk.h:275:13: error: unused function 'dump_printk_buffer' [-Werror,-Wunused-function]
+>      275 | static void dump_printk_buffer(void)
+>          |             ^~~~~~~~~~~~~~~~~~
+>    1 error generated.
 > 
-> If the result looks correct, please mark the issue as fixed by replying with:
+> 
+> vim +/dump_printk_buffer +275 include/linux/printk.h
+> 
+>    268	
+>    269	static inline void dump_stack(void)
+>    270	{
+>    271	}
+>    272	static inline void printk_trigger_flush(void)
+>    273	{
+>    274	}
+>  > 275	static void dump_printk_buffer(void)
 
-Makes sense.
- 
-#syz fix: fs: Block writes to mounted block devices
+Ah, inline was missed :(
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I'll drop these from my tree for now, can you resubmit fixed patches
+with all of the collected reviewed tags?
+
+thanks,
+
+greg k-h
