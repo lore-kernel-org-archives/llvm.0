@@ -1,57 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D279B77F0E;
-	Wed,  7 Feb 2024 15:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9EC82D77;
+	Wed,  7 Feb 2024 17:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707320403; cv=none; b=YDrBo9cTJZdynW8aRs/qK2rIVJbzzitKwRPjSTjtq4nzV98hpYdRocx0ufL5fPJ+b5grHDce8p8pGkg+ktmbf/gN+1hVbJ1eWS1k/mxLr6I7RJrlcrP21xvxMU1q/u3bMqR2vlSHokgg8sCylDiNDnkA4UGCTDXf59pD58r1xlg=
+	t=1707326652; cv=none; b=gceulaAyXgVp6tj37q1y7gASruo7VMJRwH7iLBmzwdSmJ5tZp8H1aqJ7uiNgcDuslDScv46qHcLC/LWzMa2ONIh82PL/Z6IKeFpbg0oXxxlERD3xNFEdRlFncEph8lmfPKCFwCVX6rRGnmJy91fwngHdAYgPdjmE5IMVxjpNn9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707320403; c=relaxed/simple;
-	bh=hsSn8krijksYdVdJnRB4OQuEj9nkDlOneCTs/9iDsaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WRWg75Z91QJyyYfivm52JkQWhA4vwC2ICP8uOkc9cmXbIMh4c4C0b/iWMBgpZzkbhILDMV1v7bsR9T5UiSeqVVEmzpmEuTC8D45ZedztNzQ662mWoCxu1RB/Y8/kDDASoplt/ekLLM86Qj4laM03nExY2DwUkfBjA2Keogaferc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNg2audZ; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1707326652; c=relaxed/simple;
+	bh=x5ppnwsf4pgCGz1yIwdCpgLN6d2nBaj7v+QHJdweFuk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YBiFT/C6WI5kR7XzMYQigyfBd9lOqps38VBzNSPJWD5WNXvPfXYPHvOlSaolM+98D9u3QhMIdTNx3hr4xYMOS2gT0t7p4nToo+ovYUORBFb0kbQbjPEmmb9vPqoTWI8wDatNalXU/Leu0A3FXryR4eSqheJvUznUy4MzDnRHONQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X4oKTarT; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNg2audZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X4oKTarT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707320401; x=1738856401;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hsSn8krijksYdVdJnRB4OQuEj9nkDlOneCTs/9iDsaQ=;
-  b=mNg2audZAOEtQMBAQWyICOe0IC984Lat6p4GdNRH+wOAdb7Np2asZ/0x
-   Pa03+5YQxok/IJzcXWeL5LOJQpl7y9PVMA2t1J6xkd/J9EdMUaBQODmYt
-   geObgoFanja62jsT44BpZkiMEw3Meo45y3Ax6JIDv/gX80uT+X60KfxEF
-   kNwfpQCjnHr6DWfR6HJkkLJhRuqe1JofthOjWBMrVZNNZvgWhjiDY/N+O
-   hmyxeRn4s0+y3r00oZ4GkC218cMkomeF3t108yDXibPRViPNowg+XnAb8
-   XTY/etkJEzBVaQpZe4gUc3YT6y3narAivd107qfaiDDmgyhHdHa5Q/uUH
+  t=1707326649; x=1738862649;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x5ppnwsf4pgCGz1yIwdCpgLN6d2nBaj7v+QHJdweFuk=;
+  b=X4oKTarTWUHZhNvq8YFPpHtlpoADWeyGDEKwjEwKpiJLlFL5wg5oQRZ6
+   hxm9jHJYOnG1p4wr+USexSXf+2yLFP06JfRyVnvXyc86VzzIB5Okzanxc
+   H0iR9RvXXLsxChiON36XGFgmyQwpJiKEKm1mbKQKBtkhPQ+chVYlzI2al
+   NzT89PWgCcS0NYKz54VxTZWgOr6lztDrWG6D8ie1IKQ72ZYzUB+wRheTL
+   T57esk+lKBnaaULMt22yZC/9jFi0BuoZtPMTE5g37J+NlAv+If1zvvmuJ
+   kDpE7akn6gt2Q5KC4EmPrIo1IioCdpiZX2rjPx7GUUKZP9NHRvL6m6Jvh
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="893089"
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="23512963"
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="893089"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 07:40:00 -0800
+   d="scan'208";a="23512963"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 09:24:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="910024572"
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="910024572"
+   d="scan'208";a="32196969"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Feb 2024 07:39:59 -0800
+  by orviesa002.jf.intel.com with ESMTP; 07 Feb 2024 09:24:06 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rXk1l-0002km-1L;
-	Wed, 07 Feb 2024 15:39:57 +0000
-Date: Wed, 7 Feb 2024 23:39:29 +0800
+	id 1rXleV-0002sS-1O;
+	Wed, 07 Feb 2024 17:24:03 +0000
+Date: Thu, 8 Feb 2024 01:23:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
+To: Hugo Villeneuve <hugo@hugovil.com>, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chenyi Qiang <chenyi.qiang@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 66/376]
- arch/x86/kvm/vmx/main.c:83:17: error: no member named 'flush_remote_tlbs' in
- 'struct kvm_x86_ops'
-Message-ID: <202402072345.dCvXtwP8-lkp@intel.com>
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH 3/4] serial: sc16is7xx: split into core and I2C/SPI parts
+ (sc16is7xx_lines)
+Message-ID: <202402080139.jQSw8VKg-lkp@intel.com>
+References: <20240206214208.2141067-4-hugo@hugovil.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,82 +62,196 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240206214208.2141067-4-hugo@hugovil.com>
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   e7a7b1f2a1c28403511e71538d30888c9e1425ef
-commit: 154dd2ab6afc31785ec68ff099e8c54618a0e49c [66/376] KVM: TDX: TDP MMU TDX support
-config: i386-randconfig-002-20240207 (https://download.01.org/0day-ci/archive/20240207/202402072345.dCvXtwP8-lkp@intel.com/config)
+Hi Hugo,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 52b56990d214c7403b20f691ac61861a37c0f0db]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hugo-Villeneuve/serial-sc16is7xx-simplify-and-improve-Kconfig-help-text/20240207-061642
+base:   52b56990d214c7403b20f691ac61861a37c0f0db
+patch link:    https://lore.kernel.org/r/20240206214208.2141067-4-hugo%40hugovil.com
+patch subject: [PATCH 3/4] serial: sc16is7xx: split into core and I2C/SPI parts (sc16is7xx_lines)
+config: i386-buildonly-randconfig-003-20240207 (https://download.01.org/0day-ci/archive/20240208/202402080139.jQSw8VKg-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402072345.dCvXtwP8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240208/202402080139.jQSw8VKg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402072345.dCvXtwP8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402080139.jQSw8VKg-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/vmx/main.c:83:17: error: no member named 'flush_remote_tlbs' in 'struct kvm_x86_ops'
-      83 |         if (vt_x86_ops.flush_remote_tlbs ||
-         |             ~~~~~~~~~~ ^
->> arch/x86/kvm/vmx/main.c:84:17: error: no member named 'flush_remote_tlbs_range' in 'struct kvm_x86_ops'
-      84 |             vt_x86_ops.flush_remote_tlbs_range) {
-         |             ~~~~~~~~~~ ^
-   arch/x86/kvm/vmx/main.c:92:14: error: no member named 'flush_remote_tlbs' in 'struct kvm_x86_ops'
-      92 |                 vt_x86_ops.flush_remote_tlbs = vt_flush_remote_tlbs;
-         |                 ~~~~~~~~~~ ^
-   3 errors generated.
+>> drivers/tty/serial/sc16is7xx.c:1539:23: error: call to undeclared function 'find_and_set_bit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1539 |                 s->p[i].port.line = find_and_set_bit(sc16is7xx_lines,
+         |                                     ^
+   drivers/tty/serial/sc16is7xx.c:1539:23: note: did you mean 'test_and_set_bit'?
+   include/asm-generic/bitops/instrumented-atomic.h:68:29: note: 'test_and_set_bit' declared here
+      68 | static __always_inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
+         |                             ^
+   1 error generated.
 
 
-vim +83 arch/x86/kvm/vmx/main.c
+vim +/find_and_set_bit +1539 drivers/tty/serial/sc16is7xx.c
 
-    50	
-    51	static __init int vt_hardware_setup(void)
-    52	{
-    53		int ret;
-    54	
-    55		ret = vmx_hardware_setup();
-    56		if (ret)
-    57			return ret;
-    58	
-    59		/*
-    60		 * As kvm_mmu_set_ept_masks() updates enable_mmio_caching, call it
-    61		 * before checking enable_mmio_caching.
-    62		 */
-    63		if (enable_ept)
-    64			kvm_mmu_set_ept_masks(enable_ept_ad_bits,
-    65					      cpu_has_vmx_ept_execute_only());
-    66		/* TDX requires KVM TDP MMU. */
-    67		if (enable_tdx && !tdp_enabled) {
-    68			enable_tdx = false;
-    69			pr_warn_ratelimited("TDX requires TDP MMU.  Please enable TDP MMU for TDX.\n");
-    70		}
-    71	
-    72		/* TDX requires MMIO caching. */
-    73		if (enable_tdx && !enable_mmio_caching) {
-    74			enable_tdx = false;
-    75			pr_warn_ratelimited("TDX requires mmio caching.  Please enable mmio caching for TDX.\n");
-    76		}
-    77	
-    78		/*
-    79		 * TDX KVM overrides flush_remote_tlbs method and assumes
-    80		 * flush_remote_tlbs_range = NULL that falls back to
-    81		 * flush_remote_tlbs.  Disable TDX if there are conflicts.
-    82		 */
-  > 83		if (vt_x86_ops.flush_remote_tlbs ||
-  > 84		    vt_x86_ops.flush_remote_tlbs_range) {
-    85			enable_tdx = false;
-    86			pr_warn_ratelimited("TDX requires baremetal. Not Supported on VMM guest.\n");
-    87		}
-    88	
-    89		enable_tdx = enable_tdx && !tdx_hardware_setup(&vt_x86_ops);
-    90	
-    91		if (enable_tdx)
-    92			vt_x86_ops.flush_remote_tlbs = vt_flush_remote_tlbs;
-    93	
-    94		return 0;
-    95	}
-    96	
+  1462	
+  1463	int sc16is7xx_probe(struct device *dev, const struct sc16is7xx_devtype *devtype,
+  1464			    struct regmap *regmaps[], int irq)
+  1465	{
+  1466		unsigned long freq = 0, *pfreq = dev_get_platdata(dev);
+  1467		unsigned int val;
+  1468		u32 uartclk = 0;
+  1469		int i, ret;
+  1470		struct sc16is7xx_port *s;
+  1471		bool port_registered[SC16IS7XX_MAX_PORTS];
+  1472	
+  1473		for (i = 0; i < devtype->nr_uart; i++)
+  1474			if (IS_ERR(regmaps[i]))
+  1475				return PTR_ERR(regmaps[i]);
+  1476	
+  1477		/*
+  1478		 * This device does not have an identification register that would
+  1479		 * tell us if we are really connected to the correct device.
+  1480		 * The best we can do is to check if communication is at all possible.
+  1481		 *
+  1482		 * Note: regmap[0] is used in the probe function to access registers
+  1483		 * common to all channels/ports, as it is guaranteed to be present on
+  1484		 * all variants.
+  1485		 */
+  1486		ret = regmap_read(regmaps[0], SC16IS7XX_LSR_REG, &val);
+  1487		if (ret < 0)
+  1488			return -EPROBE_DEFER;
+  1489	
+  1490		/* Alloc port structure */
+  1491		s = devm_kzalloc(dev, struct_size(s, p, devtype->nr_uart), GFP_KERNEL);
+  1492		if (!s) {
+  1493			dev_err(dev, "Error allocating port structure\n");
+  1494			return -ENOMEM;
+  1495		}
+  1496	
+  1497		/* Always ask for fixed clock rate from a property. */
+  1498		device_property_read_u32(dev, "clock-frequency", &uartclk);
+  1499	
+  1500		s->clk = devm_clk_get_optional(dev, NULL);
+  1501		if (IS_ERR(s->clk))
+  1502			return PTR_ERR(s->clk);
+  1503	
+  1504		ret = clk_prepare_enable(s->clk);
+  1505		if (ret)
+  1506			return ret;
+  1507	
+  1508		freq = clk_get_rate(s->clk);
+  1509		if (freq == 0) {
+  1510			if (uartclk)
+  1511				freq = uartclk;
+  1512			if (pfreq)
+  1513				freq = *pfreq;
+  1514			if (freq)
+  1515				dev_dbg(dev, "Clock frequency: %luHz\n", freq);
+  1516			else
+  1517				return -EINVAL;
+  1518		}
+  1519	
+  1520		s->devtype = devtype;
+  1521		dev_set_drvdata(dev, s);
+  1522	
+  1523		kthread_init_worker(&s->kworker);
+  1524		s->kworker_task = kthread_run(kthread_worker_fn, &s->kworker,
+  1525					      "sc16is7xx");
+  1526		if (IS_ERR(s->kworker_task)) {
+  1527			ret = PTR_ERR(s->kworker_task);
+  1528			goto out_clk;
+  1529		}
+  1530		sched_set_fifo(s->kworker_task);
+  1531	
+  1532		/* reset device, purging any pending irq / data */
+  1533		regmap_write(regmaps[0], SC16IS7XX_IOCONTROL_REG,
+  1534			     SC16IS7XX_IOCONTROL_SRESET_BIT);
+  1535	
+  1536		for (i = 0; i < devtype->nr_uart; ++i) {
+  1537			port_registered[i] = false;
+  1538	
+> 1539			s->p[i].port.line = find_and_set_bit(sc16is7xx_lines,
+  1540							     SC16IS7XX_MAX_DEVS);
+  1541			if (s->p[i].port.line >= SC16IS7XX_MAX_DEVS) {
+  1542				ret = -ERANGE;
+  1543				goto out_ports;
+  1544			}
+  1545	
+  1546			/* Initialize port data */
+  1547			s->p[i].port.dev	= dev;
+  1548			s->p[i].port.irq	= irq;
+  1549			s->p[i].port.type	= PORT_SC16IS7XX;
+  1550			s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
+  1551			s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
+  1552			s->p[i].port.iobase	= i;
+  1553			/*
+  1554			 * Use all ones as membase to make sure uart_configure_port() in
+  1555			 * serial_core.c does not abort for SPI/I2C devices where the
+  1556			 * membase address is not applicable.
+  1557			 */
+  1558			s->p[i].port.membase	= (void __iomem *)~0;
+  1559			s->p[i].port.iotype	= UPIO_PORT;
+  1560			s->p[i].port.uartclk	= freq;
+  1561			s->p[i].port.rs485_config = sc16is7xx_config_rs485;
+  1562			s->p[i].port.rs485_supported = sc16is7xx_rs485_supported;
+  1563			s->p[i].port.ops	= &sc16is7xx_ops;
+  1564			s->p[i].old_mctrl	= 0;
+  1565			s->p[i].regmap		= regmaps[i];
+  1566	
+  1567			mutex_init(&s->p[i].efr_lock);
+  1568	
+  1569			ret = uart_get_rs485_mode(&s->p[i].port);
+  1570			if (ret)
+  1571				goto out_ports;
+  1572	
+  1573			/* Disable all interrupts */
+  1574			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_IER_REG, 0);
+  1575			/* Disable TX/RX */
+  1576			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFCR_REG,
+  1577					     SC16IS7XX_EFCR_RXDISABLE_BIT |
+  1578					     SC16IS7XX_EFCR_TXDISABLE_BIT);
+  1579	
+  1580			/* Initialize kthread work structs */
+  1581			kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc);
+  1582			kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_proc);
+  1583			kthread_init_delayed_work(&s->p[i].ms_work, sc16is7xx_ms_proc);
+  1584	
+  1585			/* Register port */
+  1586			ret = uart_add_one_port(&sc16is7xx_uart, &s->p[i].port);
+  1587			if (ret)
+  1588				goto out_ports;
+  1589	
+  1590			port_registered[i] = true;
+  1591	
+  1592			/* Enable EFR */
+  1593			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_LCR_REG,
+  1594					     SC16IS7XX_LCR_CONF_MODE_B);
+  1595	
+  1596			regcache_cache_bypass(regmaps[i], true);
+  1597	
+  1598			/* Enable write access to enhanced features */
+  1599			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFR_REG,
+  1600					     SC16IS7XX_EFR_ENABLE_BIT);
+  1601	
+  1602			regcache_cache_bypass(regmaps[i], false);
+  1603	
+  1604			/* Restore access to general registers */
+  1605			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_LCR_REG, 0x00);
+  1606	
+  1607			/* Go to suspend mode */
+  1608			sc16is7xx_power(&s->p[i].port, 0);
+  1609		}
+  1610	
+  1611		sc16is7xx_setup_irda_ports(s);
+  1612	
+  1613		ret = sc16is7xx_setup_mctrl_ports(s, regmaps[0]);
+  1614		if (ret)
+  1615			goto out_ports;
+  1616	
 
 -- 
 0-DAY CI Kernel Test Service
