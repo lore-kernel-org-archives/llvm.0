@@ -1,69 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8741A12E78;
-	Wed,  7 Feb 2024 03:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8D212E68;
+	Wed,  7 Feb 2024 04:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707277779; cv=none; b=SD3CInT1H0o/vTyWqOPAXAM5AiYAne/MOzcXMTl4EC+PpGk0SEBO7VfChZIyY5WRJHQLUDJfz6S6DkBnKuPcRQ80WiRqIHmWbds1yKuNyWzX798jxmIOSbNL5hc03Dqd3kAk4YipBoiJfc2JeX8Mk3mY6rhFZglxbbuWeAQ8Ovs=
+	t=1707279818; cv=none; b=kH6iJs4O16ypgHoWSNEL3kHR4KObBmoA5dYCzpkPz5iDeSPBiky0hz+CZQjDr/u28Cp9HPClfqBxclMfyurORmrB2M5IR+PntFzdS/CqLYr4SHLhSwufqfwGv+hvK5HeJN5WSr+Aumfu7KdjGjLknHK9QuFKFrynfREdXxavrVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707277779; c=relaxed/simple;
-	bh=ObkV3zInduvhSkY4zn3MNEHSwTQuIk8E/taDaK7eh1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=infiHKeZ//fAOilyJ6J8fpF/D63EOrlPqjWk7r1m7Oyr8ZncFZSTevH52ns1Menf4kaVGNVDitf5DiBEEsirAagCh0C0cJis9UquCezdhKKQUzokuaa0NTfXL7Syfi8lPh4r/b4dIp66uOadQjBUvkqPrIVNKGuonGl2Z1KM+Uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WRSfXb5g; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1707279818; c=relaxed/simple;
+	bh=eYRXl/UxPoHLCIohZWJYP3Tc7X8XZG5CHXVF3pHZ/Ds=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XSdqQoLaqbidtVKG0YRptGBjuzv+IiJsDeqNA3XY7vHXGVgI06Uk6ZAwPRJ94UEiYVhGclDsk+N6Q0TIcuw1yhOj1Y3bNeWxofCLMGCnsFNLDkCSp0rns1xke7CnG3DCHuXL8oqLScUmCqlfbVYifCi30xI3sfZR94XwVi4o8yQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TlC70ZLm; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WRSfXb5g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TlC70ZLm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707277777; x=1738813777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ObkV3zInduvhSkY4zn3MNEHSwTQuIk8E/taDaK7eh1I=;
-  b=WRSfXb5gX94iaJDY/smAUga9ND1/koJxgx9QM+6pFzyxwxnJPEp0PE3O
-   vMOhq+iqzC6iFNSjoZY/ghtD/ZJmak6ICePDQAQFUcY0TTnBf5qzIa+gV
-   Q55bVPS7WzNX6xrAGu5wdXNGopomZCbjsqAaKh/s7z5F4mZwIb9T2Q2LR
-   wzgunk/nLiRhpz/jowJ5J3S3V4aIXAX4P6QYo1r7zhPuCtated2lkU83f
-   eHSHFGOCLxPjo54WmEfXXAcrVewJybhGVWXgPkHC6oY1DYl2CnYP4ZSWg
-   wXLAxYUnLR3BFV0RE9ZbziFmiZVPek2Sa+gOIJpmKFXpIQtIDl3rKCLq4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="1049671"
+  t=1707279817; x=1738815817;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eYRXl/UxPoHLCIohZWJYP3Tc7X8XZG5CHXVF3pHZ/Ds=;
+  b=TlC70ZLm8GrYoi+2iBQSyE6OlqFmY3mlIZCW8kdThBQfVvj06qlUBKdz
+   WM4SucZF73MxTPdtAJqfdA0uWSAvib5YNiw2xaluxOWShzF9MDJ9k1tih
+   kC2TpkSQdAkK1Zor7iT5DXCgsCxGFXaxBqrLTZwn33UDxtSUWQXcxKLeI
+   qjIkLFzR0D+MxPZeqOneZ+0hKiybTe7hPCRqiKbLR1dxHnbc8gRc/bvf7
+   Ql4HGmWd7EUXANjwWX/Pj0I/eykqMZfC+cfpmb92BhtP8IqDse/zr4rga
+   YbpSmf1Xh4z3NrH7QvifgoGb2TVCwb3dJkOzVb6TaGCNtHKkJByDQOXJC
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="11644561"
 X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="1049671"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 19:49:37 -0800
+   d="scan'208";a="11644561"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 20:23:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="5825634"
+   d="scan'208";a="1220202"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 06 Feb 2024 19:49:32 -0800
+  by orviesa009.jf.intel.com with ESMTP; 06 Feb 2024 20:23:34 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rXYwE-00024y-1S;
-	Wed, 07 Feb 2024 03:49:30 +0000
-Date: Wed, 7 Feb 2024 11:49:27 +0800
+	id 1rXZT9-00027A-1R;
+	Wed, 07 Feb 2024 04:23:31 +0000
+Date: Wed, 7 Feb 2024 12:22:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jagadeesh Kona <quic_jkona@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Sreenath Vijayan <sreenath.vijayan@sony.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	Ajit Pandey <quic_ajipan@quicinc.com>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>
-Subject: Re: [PATCH 2/5] clk: qcom: videocc-sm8550: Add support for SM8650
- videocc
-Message-ID: <202402071128.aZc6BNmF-lkp@intel.com>
-References: <20240206113145.31096-3-quic_jkona@quicinc.com>
+	linux-serial@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shimoyashiki Taichi <taichi.shimoyashiki@sony.com>,
+	John Ogness <john.ogness@linutronix.de>
+Subject: [tty:tty-testing 28/29] include/linux/printk.h:275:13: error: unused
+ function 'dump_printk_buffer'
+Message-ID: <202402071252.Zj78sTXN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,109 +61,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240206113145.31096-3-quic_jkona@quicinc.com>
 
-Hi Jagadeesh,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on robh/for-next linus/master v6.8-rc3 next-20240206]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jagadeesh-Kona/dt-bindings-clock-qcom-Add-video-clock-bindings-for-SM8650/20240206-194148
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20240206113145.31096-3-quic_jkona%40quicinc.com
-patch subject: [PATCH 2/5] clk: qcom: videocc-sm8550: Add support for SM8650 videocc
-config: i386-buildonly-randconfig-002-20240207 (https://download.01.org/0day-ci/archive/20240207/202402071128.aZc6BNmF-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+head:   014e10bea593b963574d607faa34e7eaaad3c02b
+commit: 558367b641b3802572132e7ed865f5eb887c41ea [28/29] printk: Add function to dump printk buffer directly to consoles
+config: i386-buildonly-randconfig-006-20240207 (https://download.01.org/0day-ci/archive/20240207/202402071252.Zj78sTXN-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402071128.aZc6BNmF-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402071252.Zj78sTXN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402071128.aZc6BNmF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402071252.Zj78sTXN-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/clk/qcom/videocc-sm8550.c:570:14: warning: variable 'offset' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     570 |         } else  if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8650-videocc")) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/qcom/videocc-sm8550.c:590:29: note: uninitialized use occurs here
-     590 |         regmap_update_bits(regmap, offset, BIT(0), BIT(0));
-         |                                    ^~~~~~
-   drivers/clk/qcom/videocc-sm8550.c:570:10: note: remove the 'if' if its condition is always true
-     570 |         } else  if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8650-videocc")) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/qcom/videocc-sm8550.c:547:12: note: initialize the variable 'offset' to silence this warning
-     547 |         u32 offset;
-         |                   ^
-         |                    = 0
-   1 warning generated.
+   In file included from lib/test_bitops.c:9:
+   In file included from include/linux/module.h:13:
+   In file included from include/linux/stat.h:19:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:23:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:10:
+   In file included from include/linux/kernel.h:31:
+>> include/linux/printk.h:275:13: error: unused function 'dump_printk_buffer' [-Werror,-Wunused-function]
+     275 | static void dump_printk_buffer(void)
+         |             ^~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +570 drivers/clk/qcom/videocc-sm8550.c
+vim +/dump_printk_buffer +275 include/linux/printk.h
 
-   542	
-   543	static int video_cc_sm8550_probe(struct platform_device *pdev)
-   544	{
-   545		struct regmap *regmap;
-   546		int ret;
-   547		u32 offset;
-   548	
-   549		ret = devm_pm_runtime_enable(&pdev->dev);
-   550		if (ret)
-   551			return ret;
-   552	
-   553		ret = pm_runtime_resume_and_get(&pdev->dev);
-   554		if (ret)
-   555			return ret;
-   556	
-   557		regmap = qcom_cc_map(pdev, &video_cc_sm8550_desc);
-   558		if (IS_ERR(regmap)) {
-   559			pm_runtime_put(&pdev->dev);
-   560			return PTR_ERR(regmap);
-   561		}
-   562	
-   563		if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8550-videocc")) {
-   564			video_cc_sm8550_clocks[VIDEO_CC_MVS0_SHIFT_CLK] = NULL;
-   565			video_cc_sm8550_clocks[VIDEO_CC_MVS0C_SHIFT_CLK] = NULL;
-   566			video_cc_sm8550_clocks[VIDEO_CC_MVS1_SHIFT_CLK] = NULL;
-   567			video_cc_sm8550_clocks[VIDEO_CC_MVS1C_SHIFT_CLK] = NULL;
-   568			video_cc_sm8550_clocks[VIDEO_CC_XO_CLK_SRC] = NULL;
-   569			offset = 0x8140;
- > 570		} else  if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8650-videocc")) {
-   571			video_cc_pll0_config.l = 0x1e;
-   572			video_cc_pll0_config.alpha = 0xa000;
-   573			video_cc_pll1_config.l = 0x2b;
-   574			video_cc_pll1_config.alpha = 0xc000;
-   575			video_cc_mvs0_clk_src.freq_tbl = ftbl_video_cc_mvs0_clk_src_sm8650;
-   576			video_cc_mvs1_clk_src.freq_tbl = ftbl_video_cc_mvs1_clk_src_sm8650;
-   577			offset = 0x8150;
-   578		}
-   579	
-   580		clk_lucid_ole_pll_configure(&video_cc_pll0, regmap, &video_cc_pll0_config);
-   581		clk_lucid_ole_pll_configure(&video_cc_pll1, regmap, &video_cc_pll1_config);
-   582	
-   583		/*
-   584		 * Keep clocks always enabled:
-   585		 *	video_cc_ahb_clk
-   586		 *	video_cc_sleep_clk
-   587		 *	video_cc_xo_clk
-   588		 */
-   589		regmap_update_bits(regmap, 0x80f4, BIT(0), BIT(0));
-   590		regmap_update_bits(regmap, offset, BIT(0), BIT(0));
-   591		regmap_update_bits(regmap, 0x8124, BIT(0), BIT(0));
-   592	
-   593		ret = qcom_cc_really_probe(pdev, &video_cc_sm8550_desc, regmap);
-   594	
-   595		pm_runtime_put(&pdev->dev);
-   596	
-   597		return ret;
-   598	}
-   599	
+   268	
+   269	static inline void dump_stack(void)
+   270	{
+   271	}
+   272	static inline void printk_trigger_flush(void)
+   273	{
+   274	}
+ > 275	static void dump_printk_buffer(void)
+   276	{
+   277	}
+   278	#endif
+   279	
 
 -- 
 0-DAY CI Kernel Test Service
