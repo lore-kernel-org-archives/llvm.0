@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9EC82D77;
-	Wed,  7 Feb 2024 17:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EF0127B50;
+	Wed,  7 Feb 2024 21:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707326652; cv=none; b=gceulaAyXgVp6tj37q1y7gASruo7VMJRwH7iLBmzwdSmJ5tZp8H1aqJ7uiNgcDuslDScv46qHcLC/LWzMa2ONIh82PL/Z6IKeFpbg0oXxxlERD3xNFEdRlFncEph8lmfPKCFwCVX6rRGnmJy91fwngHdAYgPdjmE5IMVxjpNn9I=
+	t=1707340219; cv=none; b=dwfSs571zz+q31UzXvlznUX19Xh6BfkLhW0BBMQKLkHH4fZ4z3Xaf3V6ygLQBmFvSoMuTDZV6KouCZSuVVLd7hS4q7mwtWeDQxHhk7HIELcntkjRH8fnjiAQiavsQC6tEncU2n9c1EHS8mizsab4pSiaCOeTGfonRmq9q7ZiuOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707326652; c=relaxed/simple;
-	bh=x5ppnwsf4pgCGz1yIwdCpgLN6d2nBaj7v+QHJdweFuk=;
+	s=arc-20240116; t=1707340219; c=relaxed/simple;
+	bh=YF5W5h5FJ2BTof0Z5hlJe4uKw4I2TVKX3szp6tcd8Yw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YBiFT/C6WI5kR7XzMYQigyfBd9lOqps38VBzNSPJWD5WNXvPfXYPHvOlSaolM+98D9u3QhMIdTNx3hr4xYMOS2gT0t7p4nToo+ovYUORBFb0kbQbjPEmmb9vPqoTWI8wDatNalXU/Leu0A3FXryR4eSqheJvUznUy4MzDnRHONQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X4oKTarT; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=fTYwAKH3AHv5YF1uvyORfAW3xA12B4PxLWZJN1yVoZLe7jgJoY0uJ3hvY7cyS0rw4ffEdn5F7qIfyTgHzYMUVQsAJWlH7QCCgP6B/w5k2ZR4M1Oh5WpJHc2w/U/MwQmLIQNEuK+eIwVm7xGBDv0njHIZN4oMN1lf2p+EnZ5X1IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dfTcm14d; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X4oKTarT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dfTcm14d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707326649; x=1738862649;
+  t=1707340218; x=1738876218;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=x5ppnwsf4pgCGz1yIwdCpgLN6d2nBaj7v+QHJdweFuk=;
-  b=X4oKTarTWUHZhNvq8YFPpHtlpoADWeyGDEKwjEwKpiJLlFL5wg5oQRZ6
-   hxm9jHJYOnG1p4wr+USexSXf+2yLFP06JfRyVnvXyc86VzzIB5Okzanxc
-   H0iR9RvXXLsxChiON36XGFgmyQwpJiKEKm1mbKQKBtkhPQ+chVYlzI2al
-   NzT89PWgCcS0NYKz54VxTZWgOr6lztDrWG6D8ie1IKQ72ZYzUB+wRheTL
-   T57esk+lKBnaaULMt22yZC/9jFi0BuoZtPMTE5g37J+NlAv+If1zvvmuJ
-   kDpE7akn6gt2Q5KC4EmPrIo1IioCdpiZX2rjPx7GUUKZP9NHRvL6m6Jvh
+  bh=YF5W5h5FJ2BTof0Z5hlJe4uKw4I2TVKX3szp6tcd8Yw=;
+  b=dfTcm14d0MnxXfyZTlmTbnv9Et8pTJ9vn3J1D4XGMLaVbPmmzaNdKsP6
+   4z86bcy0AJ+ns3na8j1Jmnbcod02rUiErh8CD6v5R6uwRDqYPBaMb8O+2
+   IIIJZU9KiLSk1V9KUN/B/n1UanXZAs8e3fiY//sx8qev0IublC4om7ZAQ
+   3L5lWcmbGMX0Lk4bDQq0HjEZGx42rdw7i+G/AhgnIaXJujXhKw02HIMN1
+   vl2nJgU86WxtQEN9ZnuREMNBiul1lQCi82vE+mOzFBT/1ynrCZOxoLePq
+   k8tox683sjZ0OrvtYo4upd2LfVmYIHhU51jgQrArJktt3GU3Xlf0F9/iU
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="23512963"
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="4901642"
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="23512963"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 09:24:08 -0800
+   d="scan'208";a="4901642"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 13:10:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="32196969"
+   d="scan'208";a="1445149"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 07 Feb 2024 09:24:06 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 07 Feb 2024 13:10:14 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rXleV-0002sS-1O;
-	Wed, 07 Feb 2024 17:24:03 +0000
-Date: Thu, 8 Feb 2024 01:23:53 +0800
+	id 1rXpBL-00033A-2j;
+	Wed, 07 Feb 2024 21:10:11 +0000
+Date: Thu, 8 Feb 2024 05:09:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hugo Villeneuve <hugo@hugovil.com>, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org
+To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>,
+	Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH 3/4] serial: sc16is7xx: split into core and I2C/SPI parts
- (sc16is7xx_lines)
-Message-ID: <202402080139.jQSw8VKg-lkp@intel.com>
-References: <20240206214208.2141067-4-hugo@hugovil.com>
+	Cezary Rojewski <cezary.rojewski@intel.com>,
+	Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
+	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
+	=?utf-8?Q?=C5=81ukasz?= Majczak <lma@chromium.org>,
+	Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
+Subject: Re: [PATCH 2/3] ASoC: Intel: avs: Add topology parsing support for
+ initial config
+Message-ID: <202402080403.reu2fMfN-lkp@intel.com>
+References: <20240207120946.2140480-3-amadeuszx.slawinski@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,196 +65,162 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240206214208.2141067-4-hugo@hugovil.com>
+In-Reply-To: <20240207120946.2140480-3-amadeuszx.slawinski@linux.intel.com>
 
-Hi Hugo,
+Hi Amadeusz,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 52b56990d214c7403b20f691ac61861a37c0f0db]
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.8-rc3 next-20240207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hugo-Villeneuve/serial-sc16is7xx-simplify-and-improve-Kconfig-help-text/20240207-061642
-base:   52b56990d214c7403b20f691ac61861a37c0f0db
-patch link:    https://lore.kernel.org/r/20240206214208.2141067-4-hugo%40hugovil.com
-patch subject: [PATCH 3/4] serial: sc16is7xx: split into core and I2C/SPI parts (sc16is7xx_lines)
-config: i386-buildonly-randconfig-003-20240207 (https://download.01.org/0day-ci/archive/20240208/202402080139.jQSw8VKg-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240208/202402080139.jQSw8VKg-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Amadeusz-S-awi-ski/ASoC-Intel-avs-UAPI-Add-tokens-for-initial-config-feature/20240207-201212
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20240207120946.2140480-3-amadeuszx.slawinski%40linux.intel.com
+patch subject: [PATCH 2/3] ASoC: Intel: avs: Add topology parsing support for initial config
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240208/202402080403.reu2fMfN-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240208/202402080403.reu2fMfN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402080139.jQSw8VKg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402080403.reu2fMfN-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/tty/serial/sc16is7xx.c:1539:23: error: call to undeclared function 'find_and_set_bit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1539 |                 s->p[i].port.line = find_and_set_bit(sc16is7xx_lines,
-         |                                     ^
-   drivers/tty/serial/sc16is7xx.c:1539:23: note: did you mean 'test_and_set_bit'?
-   include/asm-generic/bitops/instrumented-atomic.h:68:29: note: 'test_and_set_bit' declared here
-      68 | static __always_inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
-         |                             ^
-   1 error generated.
+   In file included from sound/soc/intel/avs/topology.c:11:
+   In file included from include/sound/soc.h:21:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from sound/soc/intel/avs/topology.c:11:
+   In file included from include/sound/soc.h:21:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from sound/soc/intel/avs/topology.c:11:
+   In file included from include/sound/soc.h:21:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> sound/soc/intel/avs/topology.c:1490:13: warning: parameter 'block_size' set but not used [-Wunused-but-set-parameter]
+    1490 |                                            u32 block_size)
+         |                                                ^
+   13 warnings generated.
 
 
-vim +/find_and_set_bit +1539 drivers/tty/serial/sc16is7xx.c
+vim +/block_size +1490 sound/soc/intel/avs/topology.c
 
-  1462	
-  1463	int sc16is7xx_probe(struct device *dev, const struct sc16is7xx_devtype *devtype,
-  1464			    struct regmap *regmaps[], int irq)
-  1465	{
-  1466		unsigned long freq = 0, *pfreq = dev_get_platdata(dev);
-  1467		unsigned int val;
-  1468		u32 uartclk = 0;
-  1469		int i, ret;
-  1470		struct sc16is7xx_port *s;
-  1471		bool port_registered[SC16IS7XX_MAX_PORTS];
-  1472	
-  1473		for (i = 0; i < devtype->nr_uart; i++)
-  1474			if (IS_ERR(regmaps[i]))
-  1475				return PTR_ERR(regmaps[i]);
-  1476	
-  1477		/*
-  1478		 * This device does not have an identification register that would
-  1479		 * tell us if we are really connected to the correct device.
-  1480		 * The best we can do is to check if communication is at all possible.
-  1481		 *
-  1482		 * Note: regmap[0] is used in the probe function to access registers
-  1483		 * common to all channels/ports, as it is guaranteed to be present on
-  1484		 * all variants.
-  1485		 */
-  1486		ret = regmap_read(regmaps[0], SC16IS7XX_LSR_REG, &val);
-  1487		if (ret < 0)
-  1488			return -EPROBE_DEFER;
-  1489	
-  1490		/* Alloc port structure */
-  1491		s = devm_kzalloc(dev, struct_size(s, p, devtype->nr_uart), GFP_KERNEL);
-  1492		if (!s) {
-  1493			dev_err(dev, "Error allocating port structure\n");
-  1494			return -ENOMEM;
-  1495		}
-  1496	
-  1497		/* Always ask for fixed clock rate from a property. */
-  1498		device_property_read_u32(dev, "clock-frequency", &uartclk);
-  1499	
-  1500		s->clk = devm_clk_get_optional(dev, NULL);
-  1501		if (IS_ERR(s->clk))
-  1502			return PTR_ERR(s->clk);
+  1487	
+  1488	static int avs_tplg_parse_initial_configs(struct snd_soc_component *comp,
+  1489						   struct snd_soc_tplg_vendor_array *tuples,
+> 1490						   u32 block_size)
+  1491	{
+  1492		struct avs_soc_component *acomp = to_avs_soc_component(comp);
+  1493		struct avs_tplg *tplg = acomp->tplg;
+  1494		int ret, i;
+  1495	
+  1496		/* Parse tuple section telling how many init configs there are. */
+  1497		ret = parse_dictionary_header(comp, tuples, (void **)&tplg->init_configs,
+  1498					      &tplg->num_init_configs,
+  1499					      sizeof(*tplg->init_configs),
+  1500					      AVS_TKN_MANIFEST_NUM_INIT_CONFIGS_U32);
+  1501		if (ret)
+  1502			return ret;
   1503	
-  1504		ret = clk_prepare_enable(s->clk);
-  1505		if (ret)
-  1506			return ret;
+  1504		block_size -= le32_to_cpu(tuples->size);
+  1505		/* With header parsed, move on to parsing entries. */
+  1506		tuples = avs_tplg_vendor_array_next(tuples);
   1507	
-  1508		freq = clk_get_rate(s->clk);
-  1509		if (freq == 0) {
-  1510			if (uartclk)
-  1511				freq = uartclk;
-  1512			if (pfreq)
-  1513				freq = *pfreq;
-  1514			if (freq)
-  1515				dev_dbg(dev, "Clock frequency: %luHz\n", freq);
-  1516			else
-  1517				return -EINVAL;
-  1518		}
-  1519	
-  1520		s->devtype = devtype;
-  1521		dev_set_drvdata(dev, s);
-  1522	
-  1523		kthread_init_worker(&s->kworker);
-  1524		s->kworker_task = kthread_run(kthread_worker_fn, &s->kworker,
-  1525					      "sc16is7xx");
-  1526		if (IS_ERR(s->kworker_task)) {
-  1527			ret = PTR_ERR(s->kworker_task);
-  1528			goto out_clk;
-  1529		}
-  1530		sched_set_fifo(s->kworker_task);
+  1508		for (i = 0; i < tplg->num_init_configs; i++) {
+  1509			struct avs_tplg_init_config *config = &tplg->init_configs[i];
+  1510			struct snd_soc_tplg_vendor_array *tmp;
+  1511			void *init_config_data;
+  1512			u32 esize;
+  1513	
+  1514			/*
+  1515			 * Usually to get section length we search for first token of next group of data,
+  1516			 * but in this case we can't as tuples are followed by raw data.
+  1517			 */
+  1518			tmp = avs_tplg_vendor_array_next(tuples);
+  1519			esize = le32_to_cpu(tuples->size) + le32_to_cpu(tmp->size);
+  1520	
+  1521			ret = parse_dictionary_entries(comp, tuples, esize, config, 1, sizeof(*config),
+  1522						       AVS_TKN_MOD_INIT_CONFIG_ID_U32,
+  1523						       mod_init_config_parsers,
+  1524						       ARRAY_SIZE(mod_init_config_parsers));
+  1525	
+  1526			block_size -= esize;
+  1527	
+  1528			/* handle raw data section */
+  1529			init_config_data = (void *)tuples + esize;
+  1530			esize = config->length;
   1531	
-  1532		/* reset device, purging any pending irq / data */
-  1533		regmap_write(regmaps[0], SC16IS7XX_IOCONTROL_REG,
-  1534			     SC16IS7XX_IOCONTROL_SRESET_BIT);
+  1532			config->data = devm_kmemdup(comp->card->dev, init_config_data, esize, GFP_KERNEL);
+  1533			if (!config->data)
+  1534				return -ENOMEM;
   1535	
-  1536		for (i = 0; i < devtype->nr_uart; ++i) {
-  1537			port_registered[i] = false;
+  1536			tuples = init_config_data + esize;
+  1537		}
   1538	
-> 1539			s->p[i].port.line = find_and_set_bit(sc16is7xx_lines,
-  1540							     SC16IS7XX_MAX_DEVS);
-  1541			if (s->p[i].port.line >= SC16IS7XX_MAX_DEVS) {
-  1542				ret = -ERANGE;
-  1543				goto out_ports;
-  1544			}
-  1545	
-  1546			/* Initialize port data */
-  1547			s->p[i].port.dev	= dev;
-  1548			s->p[i].port.irq	= irq;
-  1549			s->p[i].port.type	= PORT_SC16IS7XX;
-  1550			s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
-  1551			s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
-  1552			s->p[i].port.iobase	= i;
-  1553			/*
-  1554			 * Use all ones as membase to make sure uart_configure_port() in
-  1555			 * serial_core.c does not abort for SPI/I2C devices where the
-  1556			 * membase address is not applicable.
-  1557			 */
-  1558			s->p[i].port.membase	= (void __iomem *)~0;
-  1559			s->p[i].port.iotype	= UPIO_PORT;
-  1560			s->p[i].port.uartclk	= freq;
-  1561			s->p[i].port.rs485_config = sc16is7xx_config_rs485;
-  1562			s->p[i].port.rs485_supported = sc16is7xx_rs485_supported;
-  1563			s->p[i].port.ops	= &sc16is7xx_ops;
-  1564			s->p[i].old_mctrl	= 0;
-  1565			s->p[i].regmap		= regmaps[i];
-  1566	
-  1567			mutex_init(&s->p[i].efr_lock);
-  1568	
-  1569			ret = uart_get_rs485_mode(&s->p[i].port);
-  1570			if (ret)
-  1571				goto out_ports;
-  1572	
-  1573			/* Disable all interrupts */
-  1574			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_IER_REG, 0);
-  1575			/* Disable TX/RX */
-  1576			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFCR_REG,
-  1577					     SC16IS7XX_EFCR_RXDISABLE_BIT |
-  1578					     SC16IS7XX_EFCR_TXDISABLE_BIT);
-  1579	
-  1580			/* Initialize kthread work structs */
-  1581			kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc);
-  1582			kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_proc);
-  1583			kthread_init_delayed_work(&s->p[i].ms_work, sc16is7xx_ms_proc);
-  1584	
-  1585			/* Register port */
-  1586			ret = uart_add_one_port(&sc16is7xx_uart, &s->p[i].port);
-  1587			if (ret)
-  1588				goto out_ports;
-  1589	
-  1590			port_registered[i] = true;
-  1591	
-  1592			/* Enable EFR */
-  1593			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_LCR_REG,
-  1594					     SC16IS7XX_LCR_CONF_MODE_B);
-  1595	
-  1596			regcache_cache_bypass(regmaps[i], true);
-  1597	
-  1598			/* Enable write access to enhanced features */
-  1599			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFR_REG,
-  1600					     SC16IS7XX_EFR_ENABLE_BIT);
-  1601	
-  1602			regcache_cache_bypass(regmaps[i], false);
-  1603	
-  1604			/* Restore access to general registers */
-  1605			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_LCR_REG, 0x00);
-  1606	
-  1607			/* Go to suspend mode */
-  1608			sc16is7xx_power(&s->p[i].port, 0);
-  1609		}
-  1610	
-  1611		sc16is7xx_setup_irda_ports(s);
-  1612	
-  1613		ret = sc16is7xx_setup_mctrl_ports(s, regmaps[0]);
-  1614		if (ret)
-  1615			goto out_ports;
-  1616	
+  1539		return 0;
+  1540	}
+  1541	
 
 -- 
 0-DAY CI Kernel Test Service
