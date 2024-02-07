@@ -1,55 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353001CD13;
-	Wed,  7 Feb 2024 05:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D07A12E7F;
+	Wed,  7 Feb 2024 05:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707282342; cv=none; b=DNIfxxbSOh3QXkUWz9jgJECNWTEPyZGfuHdDfVgxRSdipo6EedUUNgVUzpn5RVCyMnLp6o59DN6nfkOWjM3y3YEb5qx8d2ojF5tVdwxHS9PnK/KjPgW3mGAqCRscw3kHA0IU23lD2BU9X+7MuM+0bpX6l/TqRfA5P2Oe766yHtE=
+	t=1707282346; cv=none; b=nMRLTk3FEsmjhS0AGFjfuAINNEsP1qjCLOg8Px5CRLzI8QgtuGvvWIpfvp69rpSp2O3p0TbBnVwSQS+2NAEw4OiF5OxNjm7HbxjZfQROXLhArbeF88o0SVvUwDBSqJ2bh0jCBe6vcZwA6mbd7aFCxjEw2kzEB18BuG8UPuC4ZPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707282342; c=relaxed/simple;
-	bh=cgGCkJB0Kf1y1VxVX3oe5UMXNHdjH7m/vPAUidkVj5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NtT7oV8ZZSa+MK/XeWjkvm5qG+TN2uIWLVDNLeHPXPUGCZLRzyNN4OmsHXVYmHBxl6BK+vu9HsG+vlTC20UdgadY4v/eS9wNKv8Ql65nr8hfWk64yfbMT8YPBB4uBnqEyCje9As+xGEokboTbzIV4OeV5b9fLdxkyXUKqOcuzuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=khxyUZll; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1707282346; c=relaxed/simple;
+	bh=TNbOIHNIUAkklbSCkVxhZ2LYHAebQaHbRzHIdmiIxOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SAGfcY0FVGojsOSHJ4sYIHLpyQjCewdOplZLuYWpkHpKcW1dZbh2d1DS5lfCrq8rNSf2SvqrPqZgTRjyTx9SuqS79+rYp0bayEO/EzLsDBfY1HWtphGUm91lMVhUSO48Oy6F3DgUtDOQbt8bvF84qQlBb3Stt0HkwF/BhkD179c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i885OU8q; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="khxyUZll"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i885OU8q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707282341; x=1738818341;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cgGCkJB0Kf1y1VxVX3oe5UMXNHdjH7m/vPAUidkVj5Y=;
-  b=khxyUZllvXowMdk3QD9YvQujB2JtFHTEZ7Gwv9sDdfgF3uUBuunYhB3c
-   vp6D+C1QoMM9SkVc1m9RNwIW4lQRNW/UawGhaOCVfncSs+phHUAEzQ8bC
-   jJwu91GiidNfboT9MLZDeaNKzBL+xM6QDDGqNGNoa9hAwJbOTyIbN9O4s
-   T7ZPvLOETqGO84ajfanzymNoA/JPfdb90PsmjdVehSE1mRwJJDB8rU4x/
-   4oDl7OPCwKQiCZFnmWt3PrY0MsnGPVrat6IPDlXpBfG9+ddTYIBwi4lFt
-   MHK9Ax1EMxCnQVd1ZEtumimgwn4Mx+A4dkq7JNiCtnTOt6wIGjkX/g9uZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="23389787"
+  t=1707282344; x=1738818344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TNbOIHNIUAkklbSCkVxhZ2LYHAebQaHbRzHIdmiIxOE=;
+  b=i885OU8qPNVRKcXAbdydWWBweKPmNqV8iGCOeMytqUeWr+x3d5wLNPQS
+   W2cFWBAM0ewiVLiv8NlKB4uTPFjUnK4zgrtC+c2GZfaXZ9HLbfx39Lewp
+   qp8+W0LRHM/fz13lKT1m4kyasSJ4vizHbFY2w+wpB3i2OFXIoXTQeQSWH
+   b15ye7Hz1xsB62OZ2EIdsIafwqN9tbk0FH7RsJDz4LL6aGbjIrVQzMpqQ
+   mToUbOPnhcxTao2aCb1Rjk3KJKCS04cEm7e3Mnyl8ldYlIH59Zuk7MusE
+   GcWqOCkTc730dzYqwoKy8ZQ6zITYE8OxEWaY5fspwZY/8wmzNc+De2Cso
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="12268892"
 X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="23389787"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 21:05:40 -0800
+   d="scan'208";a="12268892"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 21:05:43 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="824400199"
 X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="6001417"
+   d="scan'208";a="824400199"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 06 Feb 2024 21:05:38 -0800
+  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2024 21:05:38 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rXa7s-0002Dw-0o;
+	id 1rXa7s-0002E1-0v;
 	Wed, 07 Feb 2024 05:05:36 +0000
-Date: Wed, 7 Feb 2024 13:04:58 +0800
+Date: Wed, 7 Feb 2024 13:04:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kees:devel/overflow/signed-sanitizer 22/23]
- include/linux/atomic/atomic-arch-fallback.h:2491:42: error: implicit
- declaration of function 'wrapping_add' is invalid in C99
-Message-ID: <202402071216.dMdA1Ngr-lkp@intel.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-unionfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, paul@paul-moore.com,
+	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+	roberto.sassu@huawei.com, amir73il@gmail.com, brauner@kernel.org,
+	miklos@szeredi.hu, Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v2 4/9] ima: Reset EVM status upon detecting changes to
+ the real file
+Message-ID: <202402071226.lXIiGtbl-lkp@intel.com>
+References: <20240205182506.3569743-5-stefanb@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,125 +66,259 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240205182506.3569743-5-stefanb@linux.ibm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git devel/overflow/signed-sanitizer
-head:   e8fb67c1c93048b6cdfd9315ec8df73a684c1e92
-commit: 9896208386fe6f65438f312f80e5e5f957d66091 [22/23] locking/atomic: Annotate generic atomics with wrapping
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240207/202402071216.dMdA1Ngr-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402071216.dMdA1Ngr-lkp@intel.com/reproduce)
+Hi Stefan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on zohar-integrity/next-integrity]
+[also build test ERROR on pcmoore-selinux/next linus/master v6.8-rc3 next-20240206]
+[cannot apply to mszeredi-vfs/overlayfs-next mszeredi-vfs/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/ima-Rename-backing_inode-to-real_inode/20240206-022848
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+patch link:    https://lore.kernel.org/r/20240205182506.3569743-5-stefanb%40linux.ibm.com
+patch subject: [PATCH v2 4/9] ima: Reset EVM status upon detecting changes to the real file
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240207/202402071226.lXIiGtbl-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402071226.lXIiGtbl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402071216.dMdA1Ngr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402071226.lXIiGtbl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:68:
-   In file included from arch/arm/include/asm/bitops.h:245:
-   In file included from include/asm-generic/bitops/lock.h:5:
-   In file included from include/linux/atomic.h:80:
->> include/linux/atomic/atomic-arch-fallback.h:2491:42: error: implicit declaration of function 'wrapping_add' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           } while (!raw_atomic_try_cmpxchg(v, &c, wrapping_add(int, c, 1)));
-                                                   ^
-   include/linux/atomic/atomic-arch-fallback.h:2491:55: error: expected expression
-           } while (!raw_atomic_try_cmpxchg(v, &c, wrapping_add(int, c, 1)));
-                                                                ^
->> include/linux/atomic/atomic-arch-fallback.h:2518:42: error: implicit declaration of function 'wrapping_sub' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           } while (!raw_atomic_try_cmpxchg(v, &c, wrapping_sub(int, c, 1)));
-                                                   ^
-   include/linux/atomic/atomic-arch-fallback.h:2518:55: error: expected expression
-           } while (!raw_atomic_try_cmpxchg(v, &c, wrapping_sub(int, c, 1)));
-                                                                ^
-   include/linux/atomic/atomic-arch-fallback.h:2543:9: error: implicit declaration of function 'wrapping_sub' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   dec = wrapping_sub(int, c, 1);
-                         ^
-   include/linux/atomic/atomic-arch-fallback.h:2543:22: error: expected expression
-                   dec = wrapping_sub(int, c, 1);
-                                      ^
-   include/linux/atomic/atomic-arch-fallback.h:4603:44: error: implicit declaration of function 'wrapping_add' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           } while (!raw_atomic64_try_cmpxchg(v, &c, wrapping_add(s64, c, 1)));
-                                                     ^
-   include/linux/atomic/atomic-arch-fallback.h:4603:57: error: unexpected type name 's64': expected expression
-           } while (!raw_atomic64_try_cmpxchg(v, &c, wrapping_add(s64, c, 1)));
-                                                                  ^
-   include/linux/atomic/atomic-arch-fallback.h:4630:44: error: implicit declaration of function 'wrapping_sub' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           } while (!raw_atomic64_try_cmpxchg(v, &c, wrapping_sub(s64, c, 1)));
-                                                     ^
-   include/linux/atomic/atomic-arch-fallback.h:4630:57: error: unexpected type name 's64': expected expression
-           } while (!raw_atomic64_try_cmpxchg(v, &c, wrapping_sub(s64, c, 1)));
-                                                                  ^
-   10 errors generated.
-   make[3]: *** [scripts/Makefile.build:116: kernel/bounds.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1199: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:240: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> security/integrity/ima/ima_main.c:303:9: error: use of undeclared identifier 'D_REAL_METADATA'
+     303 |                                                          D_REAL_METADATA)))
+         |                                                          ^
+   1 error generated.
 
 
-vim +/wrapping_add +2491 include/linux/atomic/atomic-arch-fallback.h
+vim +/D_REAL_METADATA +303 security/integrity/ima/ima_main.c
 
-  2469	
-  2470	/**
-  2471	 * raw_atomic_inc_unless_negative() - atomic increment unless negative with full ordering
-  2472	 * @v: pointer to atomic_t
-  2473	 *
-  2474	 * If (@v >= 0), atomically updates @v to (@v + 1) with full ordering.
-  2475	 *
-  2476	 * Safe to use in noinstr code; prefer atomic_inc_unless_negative() elsewhere.
-  2477	 *
-  2478	 * Return: @true if @v was updated, @false otherwise.
-  2479	 */
-  2480	static __always_inline bool
-  2481	raw_atomic_inc_unless_negative(atomic_t *v)
-  2482	{
-  2483	#if defined(arch_atomic_inc_unless_negative)
-  2484		return arch_atomic_inc_unless_negative(v);
-  2485	#else
-  2486		int c = raw_atomic_read(v);
-  2487	
-  2488		do {
-  2489			if (unlikely(c < 0))
-  2490				return false;
-> 2491		} while (!raw_atomic_try_cmpxchg(v, &c, wrapping_add(int, c, 1)));
-  2492	
-  2493		return true;
-  2494	#endif
-  2495	}
-  2496	
-  2497	/**
-  2498	 * raw_atomic_dec_unless_positive() - atomic decrement unless positive with full ordering
-  2499	 * @v: pointer to atomic_t
-  2500	 *
-  2501	 * If (@v <= 0), atomically updates @v to (@v - 1) with full ordering.
-  2502	 *
-  2503	 * Safe to use in noinstr code; prefer atomic_dec_unless_positive() elsewhere.
-  2504	 *
-  2505	 * Return: @true if @v was updated, @false otherwise.
-  2506	 */
-  2507	static __always_inline bool
-  2508	raw_atomic_dec_unless_positive(atomic_t *v)
-  2509	{
-  2510	#if defined(arch_atomic_dec_unless_positive)
-  2511		return arch_atomic_dec_unless_positive(v);
-  2512	#else
-  2513		int c = raw_atomic_read(v);
-  2514	
-  2515		do {
-  2516			if (unlikely(c > 0))
-  2517				return false;
-> 2518		} while (!raw_atomic_try_cmpxchg(v, &c, wrapping_sub(int, c, 1)));
-  2519	
-  2520		return true;
-  2521	#endif
-  2522	}
-  2523	
+   207	
+   208	static int process_measurement(struct file *file, const struct cred *cred,
+   209				       u32 secid, char *buf, loff_t size, int mask,
+   210				       enum ima_hooks func)
+   211	{
+   212		struct inode *real_inode, *inode = file_inode(file);
+   213		struct integrity_iint_cache *iint = NULL;
+   214		struct ima_template_desc *template_desc = NULL;
+   215		char *pathbuf = NULL;
+   216		char filename[NAME_MAX];
+   217		const char *pathname = NULL;
+   218		int rc = 0, action, must_appraise = 0;
+   219		int pcr = CONFIG_IMA_MEASURE_PCR_IDX;
+   220		struct evm_ima_xattr_data *xattr_value = NULL;
+   221		struct modsig *modsig = NULL;
+   222		int xattr_len = 0;
+   223		bool violation_check;
+   224		enum hash_algo hash_algo;
+   225		unsigned int allowed_algos = 0;
+   226	
+   227		if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+   228			return 0;
+   229	
+   230		/* Return an IMA_MEASURE, IMA_APPRAISE, IMA_AUDIT action
+   231		 * bitmask based on the appraise/audit/measurement policy.
+   232		 * Included is the appraise submask.
+   233		 */
+   234		action = ima_get_action(file_mnt_idmap(file), inode, cred, secid,
+   235					mask, func, &pcr, &template_desc, NULL,
+   236					&allowed_algos);
+   237		violation_check = ((func == FILE_CHECK || func == MMAP_CHECK ||
+   238				    func == MMAP_CHECK_REQPROT) &&
+   239				   (ima_policy_flag & IMA_MEASURE));
+   240		if (!action && !violation_check)
+   241			return 0;
+   242	
+   243		must_appraise = action & IMA_APPRAISE;
+   244	
+   245		/*  Is the appraise rule hook specific?  */
+   246		if (action & IMA_FILE_APPRAISE)
+   247			func = FILE_CHECK;
+   248	
+   249		inode_lock(inode);
+   250	
+   251		if (action) {
+   252			iint = integrity_inode_get(inode);
+   253			if (!iint)
+   254				rc = -ENOMEM;
+   255		}
+   256	
+   257		if (!rc && violation_check)
+   258			ima_rdwr_violation_check(file, iint, action & IMA_MEASURE,
+   259						 &pathbuf, &pathname, filename);
+   260	
+   261		inode_unlock(inode);
+   262	
+   263		if (rc)
+   264			goto out;
+   265		if (!action)
+   266			goto out;
+   267	
+   268		mutex_lock(&iint->mutex);
+   269	
+   270		if (test_and_clear_bit(IMA_CHANGE_ATTR, &iint->atomic_flags))
+   271			/* reset appraisal flags if ima_inode_post_setattr was called */
+   272			iint->flags &= ~(IMA_APPRAISE | IMA_APPRAISED |
+   273					 IMA_APPRAISE_SUBMASK | IMA_APPRAISED_SUBMASK |
+   274					 IMA_NONACTION_FLAGS);
+   275	
+   276		/*
+   277		 * Re-evaulate the file if either the xattr has changed or the
+   278		 * kernel has no way of detecting file change on the filesystem.
+   279		 * (Limited to privileged mounted filesystems.)
+   280		 */
+   281		if (test_and_clear_bit(IMA_CHANGE_XATTR, &iint->atomic_flags) ||
+   282		    ((inode->i_sb->s_iflags & SB_I_IMA_UNVERIFIABLE_SIGNATURE) &&
+   283		     !(inode->i_sb->s_iflags & SB_I_UNTRUSTED_MOUNTER) &&
+   284		     !(action & IMA_FAIL_UNVERIFIABLE_SIGS))) {
+   285			iint->flags &= ~IMA_DONE_MASK;
+   286			iint->measured_pcrs = 0;
+   287		}
+   288	
+   289		/*
+   290		 * Detect and re-evaluate changes made to the inode holding file data.
+   291		 */
+   292		real_inode = d_real_inode(file_dentry(file));
+   293		if (real_inode != inode &&
+   294		    (action & IMA_DO_MASK) && (iint->flags & IMA_DONE_MASK)) {
+   295			if (!IS_I_VERSION(real_inode) ||
+   296			    real_inode->i_sb->s_dev != iint->real_dev ||
+   297			    real_inode->i_ino != iint->real_ino ||
+   298			    !inode_eq_iversion(real_inode, iint->version)) {
+   299				iint->flags &= ~IMA_DONE_MASK;
+   300				iint->measured_pcrs = 0;
+   301	
+   302				if (real_inode == d_inode(d_real(file_dentry(file),
+ > 303								 D_REAL_METADATA)))
+   304					evm_reset_cache_status(file_dentry(file), iint);
+   305			}
+   306		}
+   307	
+   308		/* Determine if already appraised/measured based on bitmask
+   309		 * (IMA_MEASURE, IMA_MEASURED, IMA_XXXX_APPRAISE, IMA_XXXX_APPRAISED,
+   310		 *  IMA_AUDIT, IMA_AUDITED)
+   311		 */
+   312		iint->flags |= action;
+   313		action &= IMA_DO_MASK;
+   314		action &= ~((iint->flags & (IMA_DONE_MASK ^ IMA_MEASURED)) >> 1);
+   315	
+   316		/* If target pcr is already measured, unset IMA_MEASURE action */
+   317		if ((action & IMA_MEASURE) && (iint->measured_pcrs & (0x1 << pcr)))
+   318			action ^= IMA_MEASURE;
+   319	
+   320		/* HASH sets the digital signature and update flags, nothing else */
+   321		if ((action & IMA_HASH) &&
+   322		    !(test_bit(IMA_DIGSIG, &iint->atomic_flags))) {
+   323			xattr_len = ima_read_xattr(file_dentry(file),
+   324						   &xattr_value, xattr_len);
+   325			if ((xattr_value && xattr_len > 2) &&
+   326			    (xattr_value->type == EVM_IMA_XATTR_DIGSIG))
+   327				set_bit(IMA_DIGSIG, &iint->atomic_flags);
+   328			iint->flags |= IMA_HASHED;
+   329			action ^= IMA_HASH;
+   330			set_bit(IMA_UPDATE_XATTR, &iint->atomic_flags);
+   331		}
+   332	
+   333		/* Nothing to do, just return existing appraised status */
+   334		if (!action) {
+   335			if (must_appraise) {
+   336				rc = mmap_violation_check(func, file, &pathbuf,
+   337							  &pathname, filename);
+   338				if (!rc)
+   339					rc = ima_get_cache_status(iint, func);
+   340			}
+   341			goto out_locked;
+   342		}
+   343	
+   344		if ((action & IMA_APPRAISE_SUBMASK) ||
+   345		    strcmp(template_desc->name, IMA_TEMPLATE_IMA_NAME) != 0) {
+   346			/* read 'security.ima' */
+   347			xattr_len = ima_read_xattr(file_dentry(file),
+   348						   &xattr_value, xattr_len);
+   349	
+   350			/*
+   351			 * Read the appended modsig if allowed by the policy, and allow
+   352			 * an additional measurement list entry, if needed, based on the
+   353			 * template format and whether the file was already measured.
+   354			 */
+   355			if (iint->flags & IMA_MODSIG_ALLOWED) {
+   356				rc = ima_read_modsig(func, buf, size, &modsig);
+   357	
+   358				if (!rc && ima_template_has_modsig(template_desc) &&
+   359				    iint->flags & IMA_MEASURED)
+   360					action |= IMA_MEASURE;
+   361			}
+   362		}
+   363	
+   364		hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
+   365	
+   366		rc = ima_collect_measurement(iint, file, buf, size, hash_algo, modsig);
+   367		if (rc != 0 && rc != -EBADF && rc != -EINVAL)
+   368			goto out_locked;
+   369	
+   370		if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
+   371			pathname = ima_d_path(&file->f_path, &pathbuf, filename);
+   372	
+   373		if (action & IMA_MEASURE)
+   374			ima_store_measurement(iint, file, pathname,
+   375					      xattr_value, xattr_len, modsig, pcr,
+   376					      template_desc);
+   377		if (rc == 0 && (action & IMA_APPRAISE_SUBMASK)) {
+   378			rc = ima_check_blacklist(iint, modsig, pcr);
+   379			if (rc != -EPERM) {
+   380				inode_lock(inode);
+   381				rc = ima_appraise_measurement(func, iint, file,
+   382							      pathname, xattr_value,
+   383							      xattr_len, modsig);
+   384				inode_unlock(inode);
+   385			}
+   386			if (!rc)
+   387				rc = mmap_violation_check(func, file, &pathbuf,
+   388							  &pathname, filename);
+   389		}
+   390		if (action & IMA_AUDIT)
+   391			ima_audit_measurement(iint, pathname);
+   392	
+   393		if ((file->f_flags & O_DIRECT) && (iint->flags & IMA_PERMIT_DIRECTIO))
+   394			rc = 0;
+   395	
+   396		/* Ensure the digest was generated using an allowed algorithm */
+   397		if (rc == 0 && must_appraise && allowed_algos != 0 &&
+   398		    (allowed_algos & (1U << hash_algo)) == 0) {
+   399			rc = -EACCES;
+   400	
+   401			integrity_audit_msg(AUDIT_INTEGRITY_DATA, file_inode(file),
+   402					    pathname, "collect_data",
+   403					    "denied-hash-algorithm", rc, 0);
+   404		}
+   405	out_locked:
+   406		if ((mask & MAY_WRITE) && test_bit(IMA_DIGSIG, &iint->atomic_flags) &&
+   407		     !(iint->flags & IMA_NEW_FILE))
+   408			rc = -EACCES;
+   409		mutex_unlock(&iint->mutex);
+   410		kfree(xattr_value);
+   411		ima_free_modsig(modsig);
+   412	out:
+   413		if (pathbuf)
+   414			__putname(pathbuf);
+   415		if (must_appraise) {
+   416			if (rc && (ima_appraise & IMA_APPRAISE_ENFORCE))
+   417				return -EACCES;
+   418			if (file->f_mode & FMODE_WRITE)
+   419				set_bit(IMA_UPDATE_XATTR, &iint->atomic_flags);
+   420		}
+   421		return 0;
+   422	}
+   423	
 
 -- 
 0-DAY CI Kernel Test Service
