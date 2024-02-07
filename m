@@ -1,91 +1,84 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8487C09D
-	for <llvm@lists.linux.dev>; Wed,  7 Feb 2024 14:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC1C7E791;
+	Wed,  7 Feb 2024 15:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707317484; cv=none; b=uLx+MIy52Fnr1rhQJfpNwsmXPB5zdHCGTjayalXNk4RXZ5b96MRgLXtIxcV8FIB1ZVMPOBxbj1dEEWGGa9/9YCDwSY7SOB58Z/elGCo8hbGbvgbS/qY+aD6dQ3soiCuagzow/2pUIxceHWp7vyAttrmisQOlfAUHZ0iHKUJ1N54=
+	t=1707318496; cv=none; b=DwhnTU5GsEK+6ticAISkPtuzJfpSY9FwA+b4YmdmLHmRQ45IXqHaIHYduEltUuJQtVWN3/V6B72d5YRoMCvlgd2R2M5qlrJgLynaI6ELjjCDIXg4sf6FbrXklg/5FwS9ZNsuCS2GU8vnuhE2DxSzrIUdNQkJrQ2BOmSGjajDEVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707317484; c=relaxed/simple;
-	bh=OOAbHlyRd6MHrlmkd/eS+sHShxOzcKIxp2jLwSfF0uI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IUoGSfFEbqxTbtQ63vs7mvcHDVeiZwnko0A5/tDQRrBnBDUjE1jopR1ybjfh4gGLkhk1iORWfZRgLNhKQnZ9DPvGfcSq0eG1m42aikO2bQOThS6htjeu7MiyRvhOCMVPc8Tt75lvOdtc1w52dDIC6/rdybRGvseirQG1BgvueQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=H39KQxHa; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1707318496; c=relaxed/simple;
+	bh=y/x282TGyBYCjdhcKYKHYG/kynm2rucyoPS3V5ieUbM=;
+	h=Content-Type:MIME-Version:Subject:From:In-Reply-To:References:To:
+	 Cc:Message-ID:Date; b=l13NEFv7dXiTPKc9lJaBzpOXGhiVPPF2iwkroW+sIUx+dedxwkODLvDUZeVidQ0ewGSkaLQuuvmG82gNPJQ6taoXTheixe6mMlUikPSa9A9WDFeYfBAnfuMrqLUwcfjwKk/Y7KD8zhTa7vTtraMVzFDfE5bb9+tRmgtBH+HmEks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VD+Ura7k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="H39KQxHa"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6CE7740E0192;
-	Wed,  7 Feb 2024 14:51:19 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 1zpc7Z4YBbwU; Wed,  7 Feb 2024 14:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707317477; bh=fX2I7dCXTcSn6Im5QL1hau5DXO0GnphgpIzn3tO3/5k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H39KQxHaDOeU+IPzVVl2coXNiV/RFBMlJ+rauVCMVyCxKfBrgE31Km/KpaSjaIwya
-	 21cu7wgUem8ZVTlivTa3+1nMfd+iggQjLzn08CDSyjzgafPaJhS2cTOJfaQezLO6Ys
-	 mpMCwUcT46xixuVTLwXLRU1s2qayhSasN39PRt5m8i1Fq3B6e08wCwoIFInSjqaFip
-	 +0scplbRZF34+iFWewB1Ui2ogPRuX+h8FlEImZsaL9R/rbsoLjC5iLmkckDxVRU8NK
-	 KGfKNOLXT2cS5HD08xakmKwvVg6SgRXkDGPuN3QXSnyJWWWGjIqZLedzjfWeoJHTE0
-	 TGvUXq6T3f4OEox1rOTd49a28CXH6iamAkPq4Pi7Is69fhU8E9IXA1JKRJ/X6Nqf5d
-	 N67fR0LPmk5Qfwu6TqO1Mb7Z140H4EJkO4CLP8fyQuaq4gy0hIWIzDEfGYT94lqvN4
-	 5wS5QjFl/OsjsqL4dYw/nzknxlqs95AkXGf82b8tlZpnHacDAYTkydQVnQBPbRj1xy
-	 75rfxlKLCE4qX5kImyxNAcykgTTyFI0jm1mYRlJkJsdEpIumOf9pPfmZ+3RUZVdClN
-	 uUDdTdnBqfl7CAot1EsBvxm4ixRYVS7Is+iEXSxqR3VGeLvLk8sWbDPJpLgdeZ6Neb
-	 lRwzsXz/oq93H7GJEm2EcshU=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2449240E00B2;
-	Wed,  7 Feb 2024 14:50:59 +0000 (UTC)
-Date: Wed, 7 Feb 2024 15:50:53 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 07/19] x86/startup_64: Simplify virtual switch on
- primary boot
-Message-ID: <20240207145053.GTZcOYze6ZBizogwf5@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-28-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VD+Ura7k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB68C433C7;
+	Wed,  7 Feb 2024 15:08:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707318496;
+	bh=y/x282TGyBYCjdhcKYKHYG/kynm2rucyoPS3V5ieUbM=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=VD+Ura7ktRstWIYsHIa0uBGaRlrylJuQiMb0G/Z1Ou/klx3BKPrNCku8O1PnAr1UU
+	 rvp/vWbyITQnsJpu6D0bAB2etGy+Jbz1Sg0TxzhabyHBx3/EM1OHrG3m36ha5EumsV
+	 S+Q/7b38B4inl0Pw3jRCNOqCHK4PYZcb0e7lmHvDjw4GFKD7rPTj+AcLx5BupeHXCH
+	 Uc+/e8h83XnknucKPCfn4oFURhl7giw8RzjKTPTXLYp9kBcXEluB06St/WY5frZlcO
+	 h5tm2ekwL3m/MMf/j+w6iLZp9qqcgCYebibORvCinj+uiNxqiF3sAJyp0Abj9RvDlR
+	 HNfC1dJlP4NTA==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240129180502.4069817-28-ardb+git@google.com>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: ath12k: Fix uninitialized use of ret in
+ ath12k_mac_allocate()
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20240205-ath12k-mac-wuninitialized-v1-1-3fda7b17357f@kernel.org>
+References: <20240205-ath12k-mac-wuninitialized-v1-1-3fda7b17357f@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: quic_jjohnson@quicinc.com, morbo@google.com, justinstitt@google.com,
+ quic_periyasa@quicinc.com, ath12k@lists.infradead.org,
+ linux-wireless@vger.kernel.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
+Message-ID: <170731849247.2220494.17976129376947521581.kvalo@kernel.org>
+Date: Wed,  7 Feb 2024 15:08:14 +0000 (UTC)
 
-On Mon, Jan 29, 2024 at 07:05:10PM +0100, Ard Biesheuvel wrote:
-> +SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
-> +	UNWIND_HINT_END_OF_STACK
-> +	ANNOTATE_NOENDBR // above
-			^^^^^^^^^^
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-leftover comment.
+> Clang warns (or errors with CONFIG_WERROR=y):
+> 
+>   drivers/net/wireless/ath/ath12k/mac.c:8060:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+>    8060 |         return ret;
+>         |                ^~~
+>   drivers/net/wireless/ath/ath12k/mac.c:8022:9: note: initialize the variable 'ret' to silence this warning
+>    8022 |         int ret, i, j;
+>         |                ^
+>         |                 = 0
+>   1 error generated.
+> 
+> Commit 6db6e70a17f6 ("wifi: ath12k: Introduce the container for mac80211
+> hw") added a completely uninitialized use of ret. Prior to that change,
+> -ENOMEM was returned to the callers of ath12k_mac_allocate() whenever
+> ath12k_mac_hw_allocate() failed. Assign that value to ret to make sure
+> it is always initialized when used and clear up the warning.
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/1989i
+> Fixes: 6db6e70a17f6 ("wifi: ath12k: Introduce the container for mac80211 hw")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+
+Patch applied to ath-next branch of ath.git, thanks.
+
+04edb5dc68f4 wifi: ath12k: Fix uninitialized use of ret in ath12k_mac_allocate()
 
 -- 
-Regards/Gruss,
-    Boris.
+https://patchwork.kernel.org/project/linux-wireless/patch/20240205-ath12k-mac-wuninitialized-v1-1-3fda7b17357f@kernel.org/
 
-https://people.kernel.org/tglx/notes-about-netiquette
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
