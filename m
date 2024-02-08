@@ -1,89 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCDE36B17;
-	Thu,  8 Feb 2024 00:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170C4D50F;
+	Thu,  8 Feb 2024 00:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707351314; cv=none; b=IjOl5zlWOSNbzd6+/9hebujTerZ25wJhqmOXVTCGsG7IFNxWQy+bE9xXdWDXpdPmujRnZEtUlVyCZ785CYdP070y6QH0CHxSSaIt5eJDvrYm5iukq++rAetwvtxyzwncHELHVQTEwNdlLDcp5/jK5W+KdzHTj0F9rYBBaVBGTfc=
+	t=1707352124; cv=none; b=HuOTDzWeatxGElCv0kvkmLWLDqEx9eSc5w44bDwgKGc90xtsCpdFkg0FTrwBimfg7AOy/UM4ip5G7OEiKm7KnbhwHKnlRI1uECVtyeWH0XfMurWTNk97yVeaVO0Pdy6T89Vp1bShrgZC+9xTWjqSo0SCFzZc5dmFn+pnmPmvDaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707351314; c=relaxed/simple;
-	bh=CCi+rDw2ejcWvZ1EnjQItxIQNAEtlo1/MQkx4v+uHWI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YLqXxBF5Hp0SPIY+9f0gMiEuffrtWnIGc3V/r5H4fY5T5/HHk2nTUaO89i7Z7vQm1ou9nM28jXTImO5ZFnWB/Tt2GUImbQOnxTr09IUyS5pSLaFEoNsek12oTwjUEhdD68IBn25aIBy+TwWCrh128WecOV/qocRSJMuBOiAFKpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T7CJ6x6X; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707352124; c=relaxed/simple;
+	bh=cPz3cntvgTaqX86dInJeHWpqJqDb0A2mhivO4Y7prAg=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=er6yFWWjhvy5poBvZ8jgeC6TG112rtxSq524991hUwVdtp9crY81ch5uuAzADIh4tMnJSZ2tRLX4UiKuNkpcfz3PPHoR32jxPNf8oCNIrQM9gekC6+6xOrTZpZcMYI2QotdqWeYWNhQzL4RzxstdA0SqQo3jSB4uFyqESFw9KxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eU6pLsEl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T7CJ6x6X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8BBC43330;
-	Thu,  8 Feb 2024 00:15:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eU6pLsEl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D301C433C7;
+	Thu,  8 Feb 2024 00:28:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707351314;
-	bh=CCi+rDw2ejcWvZ1EnjQItxIQNAEtlo1/MQkx4v+uHWI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=T7CJ6x6XIWpT6ltuWuNXD3Isgp2jG34gY6hwPmQwC59BaC9OcNZWXyf4u5j9S7ZzA
-	 dJS1H+RWe8ZGSsOw7gfvO8tebgFZGrpP+0yb6iKf45+YmT0CFD3X5TSS6eigcScAPQ
-	 fkBygchQOo5eFx1AF9/bUBSe2iTSE4HCANpCJ5gQIqC7u3Qhr0vMd3dk2gNZ30foVJ
-	 o16BsHgHhozDLipNHM+KpF5HSLDYk5cSFwdouOY3MOwtG03sq0KV9+Ds0DoH/3HVux
-	 HbfyU9UB8W/c5aGrwizpGyilUu3CVy5RYQq+TiInbcFEz6OAgq8c65y0cAVcPynUBO
-	 6SrO7tb0HW28A==
+	s=k20201202; t=1707352123;
+	bh=cPz3cntvgTaqX86dInJeHWpqJqDb0A2mhivO4Y7prAg=;
+	h=Date:From:To:Subject:From;
+	b=eU6pLsElZGOUNsZcqoXY9fE8nOY+mklOADD/QYfV5WFUYlHHyi8vi8il+BmvEq95G
+	 +DpCHPFtI8trQpiXnyGQokJyComMSjCKzWPY6FnLE/8UEzwCQYi+xO89hWOL0fSEst
+	 mh7J7TXeyr3RYZ896Z8fKMW78lVvJ4yZoLrTPlLEobSZwro+iCwhXYygwnz5Ynb/xo
+	 v60Kc796bSwvKubRAFANVA80d4fybPuQws0xruniBbCmWPFNTbGCVY8xnOlLIPvtM5
+	 lLCKcJFAHKyxWg98pnxH85MnhSKF3ZdmE+bRwcrHoEltvj2CgKYDj07xyh00W9cwbm
+	 JrUsEWZowxjzA==
+Date: Wed, 7 Feb 2024 17:28:41 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 07 Feb 2024 17:15:03 -0700
-Subject: [PATCH 11/11] s390: Link vmlinux with '-z notext'
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Prebuilt LLVM 18.1.0-rc2 uploaded
+Message-ID: <20240208002841.GA2601476@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240207-s390-lld-and-orphan-warn-v1-11-8a665b3346ab@kernel.org>
-References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
-In-Reply-To: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
-To: hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
-Cc: borntraeger@linux.ibm.com, svens@linux.ibm.com, maskray@google.com, 
- ndesaulniers@google.com, linux-s390@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1081; i=nathan@kernel.org;
- h=from:subject:message-id; bh=CCi+rDw2ejcWvZ1EnjQItxIQNAEtlo1/MQkx4v+uHWI=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKlHZDlcu6wyHtW0mmT9myax7ljYBO69LD6vjC9bn6pz7
- 1+5ruFJRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhI7lqGX8x5F768tA/muHWQ
- 7f3Ph9aN82f9iFvVZqi6+I5f962f0SyMDHffRdYYZLmkq3zt/xzLfrH40kSl3KWyi2S0/QxDf/Q
- s5wIA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-ld.bfd defaults to '-z notext' (although it is customizable with the
-'--enable-textrel-check' configure option) but ld.lld defaults to '-z
-text', which causes issues with building the kernel due to the presence
-of dynamic relocations in sections that are not writable.
+Hi all,
 
-  ld.lld: error: relocation R_390_64 cannot be used against local symbol; recompile with -fPIC
+I have built and uploaded a prebuilt version of LLVM 18.1.0-rc2 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-Add '-z notext' to avoid these errors, as this is expected, which
-matches other architectures.
+As with Linux -rc releases, this is not the final version that will
+ship. If you run across any issues, especially ones that were not
+present in earlier LLVM releases, please consider reporting them to us
+so that we have a chance to investigate and fix them before the final
+release.
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/s390/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-index 73873e451686..994f9b3d575f 100644
---- a/arch/s390/Makefile
-+++ b/arch/s390/Makefile
-@@ -15,7 +15,7 @@ KBUILD_CFLAGS_MODULE += -fPIC
- KBUILD_AFLAGS	+= -m64
- KBUILD_CFLAGS	+= -m64
- KBUILD_CFLAGS	+= -fPIE
--LDFLAGS_vmlinux	:= -pie
-+LDFLAGS_vmlinux	:= -pie -z notext
- aflags_dwarf	:= -Wa,-gdwarf-2
- KBUILD_AFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -D__ASSEMBLY__
- ifndef CONFIG_AS_IS_LLVM
-
--- 
-2.43.0
-
+Cheers,
+Nathan
