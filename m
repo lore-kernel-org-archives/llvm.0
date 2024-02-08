@@ -1,81 +1,113 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DC86A024
-	for <llvm@lists.linux.dev>; Thu,  8 Feb 2024 08:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DDE6BFBB;
+	Thu,  8 Feb 2024 09:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707381727; cv=none; b=Gvyqw/G+lC/u13kEKDtpkUqJHUWnZJVfa1ORF8fKwlSH0fVkkj7D1UdVOWlUOjio3I6C7bHv2fKxKU4+DAWrO7SjxWBwYy/HPp1HBifUG8igSM7Pj2T1sLCrkhObrzrx7HyFIwgnyxb2AOA/YS3PWsZsMhEIs5RgSvMu8gUVlf4=
+	t=1707385660; cv=none; b=R6Fy/ZeIIHeYIGNWb4hEnLSyD9eGg5CONtk7JaxtQSVMHYQzFUOkTeJgqqrqYj/KMFEtzY6SFcRBH54fTxzfsASwcqzim8GwaR+23QHY4bFH5sfeBLJEFxfa8PYSnw0H4Lj/WHgVtXFSHGJNnymi/cjkg+1cFYau6qpsORyZUTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707381727; c=relaxed/simple;
-	bh=owM+DNpsKkXyinnw4wd0FBpjXm/GovegDPMh1yJNq3k=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=c9JSGh/tVj4u5M306pQpnnG/mGw5u37DijlFedIxMrKnJjw8EhNhjf7edMl058YPOnU5YBXqGZsRiFp3FLu31xEVtMoOQ1u8C4Q6p+L3ZQHshe22izkW/macef+FkZg1Qx3yN6+uNKVEyg5S7JBMCgZAPNC/UQyCah1LSBiwpCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7bfffd9b47fso125993839f.1
-        for <llvm@lists.linux.dev>; Thu, 08 Feb 2024 00:42:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707381725; x=1707986525;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gi3Aj5CpZSqfEPpOTz0NyFdtwkFwo4vzB4CbD3V/hMU=;
-        b=Gx2cYLNsvje+Snagtk6JH7xjsylTR8Rv2l+zTTQTrch4EuXI8Agf98v5kQoHu3BClA
-         27XHpex5WGdKE3/i1NKd+MAXt6NOSw3ya1txUQJIiqZg1ah8tWFvxZ16iLQMHnK40twp
-         Lvi1ez2+ImKd2ktTlAMGmerEctbwHQqUcyULoXeYpq0oTLhLJ8YsS/oj2egXgCDcGHRp
-         ntjEFfnqrsKRXfACP34StD+gfY0/VDn6hRA8yrpRihEtN1371JFHTuOMWO+V6BxFhvIB
-         jsR2XbPHMkaqSP5mlJoMRvieWUmDZJIsXeIOE9wM5Ez9Fcb+0P5nR9ImRanSHUD4aSBa
-         pXrg==
-X-Gm-Message-State: AOJu0YwCG0NWcn3nc9o9o3gDGuMp1ps5mjMNqxu9Wq3VyNJTjr1JLFAv
-	0ebAm47PGhM1lWSaW7zN0mcazvGkLDy6r+4bc5l6rZ0y/xNgU1p78/iwkpi6kG14gWjERhUk7ai
-	bovn2+vqoFIxRNsUpScRVgehyb7+tbZQeXBt75NI/TVKPBZ8tymkRd20=
-X-Google-Smtp-Source: AGHT+IG7PoBe/+uQDEV3xHx1bDZIx7KmSroS4aAxMKdS6uE3XoEiKFcrp+MQPEGidl9GEYHKZ9GTPfdaZh84P8DZd8F1RvyrB1SV
+	s=arc-20240116; t=1707385660; c=relaxed/simple;
+	bh=B8cqTdsl61hbTwAme0/u6L8Z4DeauMK0xgKqDax73kI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tn3bgiOltt4mSZbK943uZuYcS+bfqIcSDUId0AepJUTtIgQ/EsBuD+OQApkC1tLqugiPugCkyndw7rNnTuTr0adDF8Fd7H2g4CTQ2qlBLOgtf+9dlEM8sSQKl5ur9CxlWQx2Cr/2LOOPQS97i5uA+mf96pxoPBZI8aTm34h3MyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ejfPyVKn; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ejfPyVKn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707385658; x=1738921658;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B8cqTdsl61hbTwAme0/u6L8Z4DeauMK0xgKqDax73kI=;
+  b=ejfPyVKnXXRXyNsklI39PmygINOHjpM4SEoDyJAJJhtdINz/oBy2undC
+   Z7UhPWoMoyric4MxDQ6tn1WVZZciSXIVtOom5OCMOov+ZbgQcRsT4QBJJ
+   VjYCamBoghwcDasz2vNMlrWlybUf61fLPfIUuD6cFkCoYfxepsht+MFcz
+   xSPt2o3rcwgIQp8Rxokmp7T3wnbh/seL6feOwjHNaaTQbAnz8B75U7kr8
+   wK/2mz+Wp4sXy7DLuaRwRa94PszlSm/4tTAY28r5s5FbktJuHMvb7kdBY
+   Cjfr6doxZjiGZPUz8c8kPM0PUyAFFd/SzO02LN2LAangx+6RP5IemK5lh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="23663289"
+X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
+   d="scan'208";a="23663289"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 01:47:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
+   d="scan'208";a="1894976"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 08 Feb 2024 01:47:35 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rY10G-0003aQ-0h;
+	Thu, 08 Feb 2024 09:47:32 +0000
+Date: Thu, 8 Feb 2024 17:47:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
+	sui.jingfeng@linux.dev, pjones@redhat.com, deller@gmx.de,
+	ardb@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v3 3/8] firmware/sysfb: Set firmware-framebuffer parent
+ device
+Message-ID: <202402081758.cylLKURZ-lkp@intel.com>
+References: <20240207134932.7321-4-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:6428:b0:7c0:38b:403c with SMTP id
- gn40-20020a056602642800b007c0038b403cmr395454iob.4.1707381725627; Thu, 08 Feb
- 2024 00:42:05 -0800 (PST)
-Date: Thu, 08 Feb 2024 00:42:05 -0800
-In-Reply-To: <0000000000006f7cb5060cc9c9ac@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000408e8f0610dac93b@google.com>
-Subject: Re: [syzbot] [bpf?] UBSAN: shift-out-of-bounds in adjust_reg_min_max_vals
-From: syzbot <syzbot+46700eea57ecc7f84776@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev, 
-	nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org, 
-	sdf@google.com, shung-hsi.yu@suse.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240207134932.7321-4-tzimmermann@suse.de>
 
-syzbot suspects this issue was fixed by commit:
+Hi Thomas,
 
-commit 96381879a370425a30b810906946f64c0726450e
-Author: Andrii Nakryiko <andrii@kernel.org>
-Date:   Sun Nov 12 01:05:58 2023 +0000
+kernel test robot noticed the following build errors:
 
-    bpf: generalize is_scalar_branch_taken() logic
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm-tip/drm-tip linus/master v6.8-rc3 next-20240208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16e65a9fe80000
-start commit:   b1dfc0f76231 net: phy: skip LED triggers on PHYs on SFP mo..
-git tree:       net
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e043d554f0a5f852
-dashboard link: https://syzkaller.appspot.com/bug?extid=46700eea57ecc7f84776
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=128c8ad1e80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12456fb6e80000
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/video-Add-helpers-for-decoding-screen_info/20240207-215100
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240207134932.7321-4-tzimmermann%40suse.de
+patch subject: [PATCH v3 3/8] firmware/sysfb: Set firmware-framebuffer parent device
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240208/202402081758.cylLKURZ-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240208/202402081758.cylLKURZ-lkp@intel.com/reproduce)
 
-If the result looks correct, please mark the issue as fixed by replying with:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402081758.cylLKURZ-lkp@intel.com/
 
-#syz fix: bpf: generalize is_scalar_branch_taken() logic
+All errors (new ones prefixed by >>):
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+   In file included from drivers/firmware/sysfb.c:36:
+>> include/linux/sysfb.h:108:1: error: expected identifier or '('
+     108 | {
+         | ^
+   1 error generated.
+
+
+vim +108 include/linux/sysfb.h
+
+e3263ab389a7bc arch/x86/include/asm/sysfb.h David Rheinsberg         2013-08-02  104  
+9e121040e54abe include/linux/sysfb.h        Javier Martinez Canillas 2022-06-07  105  static inline struct platform_device *sysfb_create_simplefb(const struct screen_info *si,
+c0a4e7e120d3e9 include/linux/sysfb.h        Thomas Zimmermann        2024-02-07  106  							    const struct simplefb_platform_data *mode,
+c0a4e7e120d3e9 include/linux/sysfb.h        Thomas Zimmermann        2024-02-07  107  							    struct device *parent);
+e3263ab389a7bc arch/x86/include/asm/sysfb.h David Rheinsberg         2013-08-02 @108  {
+9e121040e54abe include/linux/sysfb.h        Javier Martinez Canillas 2022-06-07  109  	return ERR_PTR(-EINVAL);
+e3263ab389a7bc arch/x86/include/asm/sysfb.h David Rheinsberg         2013-08-02  110  }
+e3263ab389a7bc arch/x86/include/asm/sysfb.h David Rheinsberg         2013-08-02  111  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
