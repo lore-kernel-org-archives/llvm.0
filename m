@@ -1,169 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297B8535B4
-	for <llvm@lists.linux.dev>; Wed,  7 Feb 2024 23:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FF312E7C;
+	Thu,  8 Feb 2024 00:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707349888; cv=none; b=EBNFItduyN5w8hbIePs6TdKiwl1b+N2g3hbZiBHYo8nc47xjfiNaYMRK6gWK8Lo7gDVbAzyorrETu/u0ntZcX2shZKnNSrtSopCKGqcLUcziOnGOQvbjWrsJfFx53dEYXSnQORphoUb9qkEeS28XIbZr11s33opbV0JPTCBKFu4=
+	t=1707351306; cv=none; b=DQP7C8Xa+XQaHZRpviPKz4GC0endFUspiLs9XyrCQAGX6y8e5/C5WXaY/mQhMiHyA/oSZf0uei6gSG9ZxEAEExye5ypMJjg/AZoRR3SYkEMzJvn0tnWuRTD7AwJS9rMcxFAlah3OAXtWk0Rnsp3BnKLdlk5yt9rmRK3npuTX9b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707349888; c=relaxed/simple;
-	bh=1/tOOHsj37mlI63g31+J4e4KiDbwt0k1caKuGOTMtE4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gXg75YyXBxhW4VUEDUcxe1RDYQy1bSLHOFwN6fcApn6r3hjMJP8TB9X7wckx+r22vUHMxoDGtmFZr+l3Nrgc9J7EQ5y1Epcf5NiAfqYhAt5wgKNgAIQ7AuFjIg+5CaVARGnJI1d3FdI6I2MtAmaJ0Lud/2MU8j8bCzP8DOuDzpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WSeJaG24; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1707351306; c=relaxed/simple;
+	bh=4r4lVMT5XZg/PVxx8uc9r6bi2UoaXPgMwWYNnJay8/Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZXgok7JPrOP9P6VMsRt62IDKl5eFTrL4NMKibXb72yo2zpdjWXcRpzZc9KpYzlnuRbZKqpmVK3bVTMzuuTXEKXj1XNXVwyUqp9Pxf17QsTcJQX0LKRZE8YSBzuS1sZ8t6U6zGr3LIAD4tbTUyBzfm/B9V9zN3xv3qpXB2FPKWlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cyoJPxQV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WSeJaG24"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707349883;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XQ52WvwPw84u0JZq6QIgIB+g9GUR3A9ZpqQPJBNIXVQ=;
-	b=WSeJaG24v4TrPiha0jVfz7fGqos7oUCzcZN3ZTquF2nRTyN3x4/FsRGSzwgfhKRShmT/en
-	XoTZ9xyHNxYVedktNLHn5KMnYonG9YI/+q1bLsHqOMCepx3Mmoxy8xXBDM+ax3JpKaWCB5
-	JuI3Lj9rBS938Vr4a2h0VFdy4HYfzW8=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-688-ZaQt-huuMoyVa_x9X7kz2A-1; Wed,
- 07 Feb 2024 18:51:19 -0500
-X-MC-Unique: ZaQt-huuMoyVa_x9X7kz2A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA2341C05EC6
-	for <llvm@lists.linux.dev>; Wed,  7 Feb 2024 23:51:18 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C388A400D6D2;
-	Wed,  7 Feb 2024 23:51:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 226): Test report for master
- (6.8.0-rc3, mainline.kernel.org-clang, 6d280f4d)
-Date: Wed, 07 Feb 2024 23:51:18 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cyoJPxQV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAC9C433F1;
+	Thu,  8 Feb 2024 00:15:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707351305;
+	bh=4r4lVMT5XZg/PVxx8uc9r6bi2UoaXPgMwWYNnJay8/Y=;
+	h=From:Subject:Date:To:Cc:From;
+	b=cyoJPxQVgZBDF4tloJ26tP+4yzsbDNNYCZPbf1clbDlVeamoJx2nxem5nxkElPVGI
+	 +hVfQN93B9N+Uw/WqjhWyn/85TcjxdkJbRQZ58dUgtK/R4KBeYWC0sYqCIZamXYHiU
+	 y97ach5l2wnP8l44JXHs2db4lEm4039UW7s4/d4kZp/B5kGXQ09BSFnKtmHlxcAdSM
+	 X8RQP39kN7W/Zfi6sDtTzE964MzV6YPg64cj1EJZYbX8R/FGjYGSG81UCDcTUzaniq
+	 Qu6g88l36pkFluPswNcfgorEOSWxRaEkdruAd+BexZgJ5E4/C+oLXaq3gEK8NFM/ms
+	 uogY0Zc2ThLqA==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 00/11] s390: Support linking with ld.lld
+Date: Wed, 07 Feb 2024 17:14:52 -0700
+Message-Id: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <91640.124020718511900217@us-mta-688.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPwcxGUC/x2M0QqDMAwAf0XyvEBW3Yr7leFDtckWkCopqCD9d
+ 4uPB3d3QmZTzvBpTjDeNOuSKjwfDUz/kH6MGiuDI9eRI4+57QnnOWJIERdbq4R7sISRRDqR98u
+ PBDVfjUWPe/0dSrkAxMRk4WoAAAA=
+To: hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
+Cc: borntraeger@linux.ibm.com, svens@linux.ibm.com, maskray@google.com, 
+ ndesaulniers@google.com, linux-s390@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5045; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=4r4lVMT5XZg/PVxx8uc9r6bi2UoaXPgMwWYNnJay8/Y=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKlHZNkfdW+1yr2rwiPTyV6bsIbXxizsEvMOP9WyHzImE
+ jmyvaodpSwMYlwMsmKKLNWPVY8bGs45y3jj1CSYOaxMIEMYuDgFYCIrHzIynD2l3q65zI3jhG1S
+ 0WyGZpefDpc+PQiY0Xwh7cqD88Lc+owMd+WXN27/dnrGnWc1dRwNE5rLVke3li+ay+Eucj35oLw
+ HPwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Hi all,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+This series allows the s390 kernel to be linked with ld.lld (support for
+s390 is under review at [1]). This implicitly depends on [2], which was
+created and sent before it was realized that this series was necessary.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+The first chunk of this series enables support for
+CONFIG_LD_ORPHAN_WARN, as it was discovered during testing that the
+kernel fails to build with ld.lld due to differences in orphan section
+handling, which would have been caught with the linker's orphan section
+warnings ahead of the actual build error. There are no warnings when
+building ARCH=s390 defconfig and allmodconfig with GCC 6 through 13 or
+tip of tree Clang using ld.bfd or ld.lld
 
-Kernel information:
-    Commit message: Merge tag 'for-6.8-rc3-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
+The final patch resolves a series of errors due to ld.lld having a
+different default for checking for DT_TEXTREL ('-z text') vs ld.bfd,
+which defaults to '-z notext' (but this is configurable at build time).
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/128098
+There is one outstanding issue due to something that ld.lld does not
+support that the kernel relies on:
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+  ld.lld: error: drivers/nvme/host/fc.o:(__bug_table): writable SHF_MERGE section is not supported
 
+This was changed in the kernel in commit e21f8baf8d9a ("s390/bug: add
+entry size to the __bug_table section"). Is this change truly necessary?
+I selectively applied a revert on top of current mainline and I did not
+observe any issues with either Clang or GCC.
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
+diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
+index aebe1e22c7be..c500d45fb465 100644
+--- a/arch/s390/include/asm/bug.h
++++ b/arch/s390/include/asm/bug.h
+@@ -14,7 +14,7 @@
+ 		".section .rodata.str,\"aMS\",@progbits,1\n"	\
+ 		"1:	.asciz	\""__FILE__"\"\n"		\
+ 		".previous\n"					\
+-		".section __bug_table,\"awM\",@progbits,%2\n"	\
++		".section __bug_table,\"aw\"\n"			\
+ 		"2:	.long	0b-.\n"				\
+ 		"	.long	1b-.\n"				\
+ 		"	.short	%0,%1\n"			\
+@@ -30,7 +30,7 @@
+ #define __EMIT_BUG(x) do {					\
+ 	asm_inline volatile(					\
+ 		"0:	mc	0,0\n"				\
+-		".section __bug_table,\"awM\",@progbits,%1\n"	\
++		".section __bug_table,\"aw\"\n"			\
+ 		"1:	.long	0b-.\n"				\
+ 		"	.short	%0\n"				\
+ 		"	.org	1b+%1\n"			\
 
+If it is necessary, is there any way to work around this error? For
+testing purposes, disabling CONFIG_BUG is easy enough but that is not
+usable in the real world.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+To test this series with ld.lld, you'll need to build ld.lld from the
+pull request, which is easy to do following LLVM's instructions [3].
+Here is a TL;DR version I tested that just builds LLD with minimal noise
+during the build.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+$ git clone https://github.com/llvm/llvm-project
+$ cd llvm-project
+$ git fetch https://github.com/llvm/llvm-project pull/75643/head
+$ git switch -d FETCH_HEAD
+$ cmake \
+    -B build \
+    -G Ninja \
+    -S llvm \
+    --log-level=NOTICE \
+    -Wno-dev \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DLLVM_ENABLE_PROJECTS=lld \
+    -DLLVM_ENABLE_WARNINGS=OFF \
+    -DLLVM_TARGETS_TO_BUILD=SystemZ
+$ ninja -C build lld
+$ export PATH=$PWD/build/bin:$PATH
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Then build the kernel with 'LD=ld.lld' in addition to whatever command
+line you use (I tested both Clang and GCC). I can boot an ld.lld linked
+kernel built with both compilers in QEMU with this series.
+
+[    1.386970] Linux version 6.8.0-rc3-00043-g05761ede85d6-dirty (nathan@dev-fedora.aadp) (s390-linux-gcc (GCC) 13.2.0, ClangBuiltLinux LLD 19.0.0) #1 SMP Wed Feb  7 16:51:12 MST 2024
+
+[    0.871923] Linux version 6.8.0-rc3-00043-g05761ede85d6-dirty (nathan@dev-fedora.aadp) (ClangBuiltLinux clang version 19.0.0git (https://github.com/llvm/llvm-project 417075e56aeba5a5b20301c7bfeba9c2a800982b), ClangBuiltLinux LLD 19.0.0) #1 SMP Wed Feb  7 17:01:22 MST 2024
+
+[1]: https://github.com/llvm/llvm-project/pull/75643
+[2]: https://lore.kernel.org/r/20240130-s390-vdso-drop-fpic-from-ldflags-v1-1-094ad104fc55@kernel.org/
+[3]: https://llvm.org/docs/CMake.html
+
+---
+Nathan Chancellor (11):
+      s390: boot: Add support for CONFIG_LD_ORPHAN_WARN
+      s390: vmlinux.lds.S: Handle '.data.rel' sections explicitly
+      s390: vmlinux.lds.S: Explicitly handle '.got' and '.plt' sections
+      s390: vmlinux.lds.S: Discard unnecessary sections
+      s390/boot: vmlinux.lds.S: Handle '.init.text'
+      s390/boot: vmlinux.lds.S: Handle '.rela' sections
+      s390/boot: vmlinux.lds.S: Handle DWARF debug sections
+      s390/boot: vmlinux.lds.S: Handle ELF required sections
+      s390/boot: vmlinux.lds.S: Handle commonly discarded sections
+      s390: Select CONFIG_ARCH_WANT_LD_ORPHAN_WARN
+      s390: Link vmlinux with '-z notext'
+
+ arch/s390/Kconfig              |  1 +
+ arch/s390/Makefile             |  2 +-
+ arch/s390/boot/Makefile        |  5 +++--
+ arch/s390/boot/vmlinux.lds.S   | 28 ++++++++++++++++++++++++++++
+ arch/s390/kernel/vmlinux.lds.S | 28 +++++++++++++++++++++++++++-
+ 5 files changed, 60 insertions(+), 4 deletions(-)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20240207-s390-lld-and-orphan-warn-d0ff4ff657b0
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
