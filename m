@@ -1,117 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE7556B63;
-	Fri,  9 Feb 2024 05:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C38328DC0;
+	Fri,  9 Feb 2024 07:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707456919; cv=none; b=TCf8jazkl+jTrqZmaG28d6Rhf05O6M0LPh2C2qhs7iHdkNo+Pw/W9m9Vgagp2G1BjmxXbXXZ11xKmT2D/C0ctnF7gL5CFUL5KAZ8a1Xx7LClCcdPkwPzqpXxS8AJSbqKxf8wqKciWY9HRxwIQuDBCRjyfE2gZhaFDbEIM3lSY5E=
+	t=1707462248; cv=none; b=gbSKJbnifsvxsgaNu++0tCNuDkI9rbWhU8NP6rJxyWkW5AIHjIL0BT90tr0kX3CV669C20briveiehzcBIvCNOSIfSF1hjso1JOQHepjWqzOWhuYkDB+2fkLRqjINNHphoj0TVaVR6tixVAZuPFxPdJ5zAGujiRGv8xZxgY0820=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707456919; c=relaxed/simple;
-	bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kSDBER01NbpP33z5U0yb40053CPqmvT4LVlS0dWVbXy/w9ZCz+ZeEezxjglMGfE/Bsa2iAgn3JdI8i+IfbADyh0dzKeDhktVFkPijwlVNBLuq8yW5IIEUYkBeQpmIAAWnwZAg8lY203x/So3xydsQJAzVOTvrdT7Z1QUzhKo0TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hOHRWBu6; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hOHRWBu6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707456917; x=1738992917;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
-  b=hOHRWBu6dfMH435Xfh4w1oS7XnVtaFG7L0FzrckYrxbJuJqeYPebJMH8
-   +q4yV8xoUxOirZptbFQOVzgPqWIR2ROXF95LaoLvPzNy00NUPcrrXv8yN
-   XG5tYOi3dxoK971QGKua5L9kkbwaWYy2bRBvNsGbnSv95MLERIXBz/cC2
-   flDwAx/0HTtmEepmPXf9cJUW7JEnelGGQ+HOsr12zTOMUziFVFb/voUEu
-   aQFbGoyMq/c3rpWHFpt5Vat2FTMbiRx752pZlhvzbE4dKgGZ/1+sG2wuh
-   U4G45za3GxoPMbhQva9vd/oqrkesdlS5llpXomLA/qF1LU62tGH3thxdO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="12453790"
-X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
-   d="scan'208";a="12453790"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 21:35:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
-   d="scan'208";a="32650935"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 08 Feb 2024 21:35:15 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rYJXc-0004Qg-0T;
-	Fri, 09 Feb 2024 05:35:12 +0000
-Date: Fri, 9 Feb 2024 13:34:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [rafael-pm:bleeding-edge 74/77] drivers/thermal/thermal_of.c:444:34:
- error: initializing 'struct thermal_zone_device_ops *' with an expression of
- incompatible type 'struct thermal_zone_device_ops'; take the address with &
-Message-ID: <202402091355.DUYRncj7-lkp@intel.com>
+	s=arc-20240116; t=1707462248; c=relaxed/simple;
+	bh=ID6r5uLg88QSlNWzQ0Q0CTm3PFTfLres5/WxNG7rsjs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=m1LPPNtdOSJA1Jq86djbM6Gy16JEeEtZBXiMTmYzY2zsIedydYnfmKMRuXqfvhoXbLJf8ydnHhDMS+ENleLW2nPpP09NjcxHfcBKb7+m/aiCzPNQndoSjwOJBVvh1zuHx9onxVRT00gBhFAf5+LE9nvG1uYsuC0/WF8c6lsaPO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 41973sdG6549921, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 41973sdG6549921
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 9 Feb 2024 15:03:54 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.17; Fri, 9 Feb 2024 15:03:55 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 9 Feb 2024 15:03:54 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::c9b7:82a9:7e98:fa7f]) by
+ RTEXMBS04.realtek.com.tw ([fe80::c9b7:82a9:7e98:fa7f%7]) with mapi id
+ 15.01.2507.035; Fri, 9 Feb 2024 15:03:49 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: "kvalo@kernel.org" <kvalo@kernel.org>, "lkp@intel.com" <lkp@intel.com>
+CC: "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Kevin
+ Yang" <kevin_yang@realtek.com>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        Bernie Huang <phhuang@realtek.com>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        Gary Chang
+	<gary.chang@realtek.com>
+Subject: Re: [PATCH 02/11] wifi: rtw89: load BB parameters to PHY-1
+Thread-Topic: [PATCH 02/11] wifi: rtw89: load BB parameters to PHY-1
+Thread-Index: AQHaWja791ThhqIe+keGfQW9KJDaBbEAqXAAgABoJAA=
+Date: Fri, 9 Feb 2024 07:03:49 +0000
+Message-ID: <a3c4c6bbcb7282767883bfcb387ceaf48a0d359f.camel@realtek.com>
+References: <20240208022857.14379-3-pkshih@realtek.com>
+	 <202402090838.S5xcKIlg-lkp@intel.com>
+In-Reply-To: <202402090838.S5xcKIlg-lkp@intel.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+user-agent: Evolution 3.36.1-2 
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <17EC0518B516064096A726FD5F0CD11B@realtek.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   976b96a64c53e1e3d0fa71c97be2bcbe1a64feb1
-commit: c483d4c88bfcd98d7819a722f48edb0adb89c32f [74/77] thermal: core: Store zone ops in struct thermal_zone_device
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402091355.DUYRncj7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/thermal/thermal_of.c:444:34: error: initializing 'struct thermal_zone_device_ops *' with an expression of incompatible type 'struct thermal_zone_device_ops'; take the address with &
-           struct thermal_zone_device_ops *ops = tz->ops;
-                                           ^     ~~~~~~~
-                                                 &
-   1 error generated.
-
-
-vim +444 drivers/thermal/thermal_of.c
-
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  432  
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  433  /**
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  434   * thermal_of_zone_unregister - Cleanup the specific allocated ressources
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  435   *
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  436   * This function disables the thermal zone and frees the different
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  437   * ressources allocated specific to the thermal OF.
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  438   *
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  439   * @tz: a pointer to the thermal zone structure
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  440   */
-ac614a9b4c35bf Daniel Lezcano 2023-04-04  441  static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  442  {
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  443  	struct thermal_trip *trips = tz->trips;
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09 @444  	struct thermal_zone_device_ops *ops = tz->ops;
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  445  
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  446  	thermal_zone_device_disable(tz);
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  447  	thermal_zone_device_unregister(tz);
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  448  	kfree(trips);
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  449  	kfree(ops);
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  450  }
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  451  
-
-:::::: The code at line 444 was first introduced by commit
-:::::: 8fb5b71ed37dbe469eaa930e2ddc93ec9e305f3c thermal/of: Fix free after use in thermal_of_unregister()
-
-:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
-:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+T24gRnJpLCAyMDI0LTAyLTA5IGF0IDA4OjUwICswODAwLCBrZXJuZWwgdGVzdCByb2JvdCB3cm90
+ZToNCj4gDQo+IA0KPiA+ID4gZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OS9waHku
+YzoxMDQ3Ojc6IHdhcm5pbmc6IGNhc3QgdG8gc21hbGxlciBpbnRlZ2VyIHR5cGUgJ2VudW0NCj4g
+PiA+IHJ0dzg5X3BoeV9pZHgnIGZyb20gJ3ZvaWQgKicgWy1Xdm9pZC1wb2ludGVyLXRvLWVudW0t
+Y2FzdF0NCj4gICAgIDEwNDcgfCAgICAgICAgICAgICAgICAgaWYgKChlbnVtIHJ0dzg5X3BoeV9p
+ZHgpZXh0cmFfZGF0YSA9PSBSVFc4OV9QSFlfMSkNCj4gICAgICAgICAgfCAgICAgICAgICAgICAg
+ICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KPiAgICAxIHdhcm5pbmcgZ2Vu
+ZXJhdGVkLg0KPiANCj4gDQo+IHZpbSArMTA0NyBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVr
+L3J0dzg5L3BoeS5jDQo+IA0KPiAgIDEwMjINCj4gICAxMDIzICBzdGF0aWMgdm9pZCBydHc4OV9w
+aHlfY29uZmlnX2JiX3JlZyhzdHJ1Y3QgcnR3ODlfZGV2ICpydHdkZXYsDQo+ICAgMTAyNCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0IHJ0dzg5X3JlZzJf
+ZGVmICpyZWcsDQo+ICAgMTAyNSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ZW51bSBydHc4OV9yZl9wYXRoIHJmX3BhdGgsDQo+ICAgMTAyNiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgdm9pZCAqZXh0cmFfZGF0YSkNCj4gICAxMDI3ICB7DQo+ICAgMTAy
+OCAgICAgICAgICB1MzIgYWRkcjsNCj4gICAxMDI5DQo+ICAgMTAzMCAgICAgICAgICBpZiAocmVn
+LT5hZGRyID09IDB4ZmUpIHsNCj4gICAxMDMxICAgICAgICAgICAgICAgICAgbWRlbGF5KDUwKTsN
+Cj4gICAxMDMyICAgICAgICAgIH0gZWxzZSBpZiAocmVnLT5hZGRyID09IDB4ZmQpIHsNCj4gICAx
+MDMzICAgICAgICAgICAgICAgICAgbWRlbGF5KDUpOw0KPiAgIDEwMzQgICAgICAgICAgfSBlbHNl
+IGlmIChyZWctPmFkZHIgPT0gMHhmYykgew0KPiAgIDEwMzUgICAgICAgICAgICAgICAgICBtZGVs
+YXkoMSk7DQo+ICAgMTAzNiAgICAgICAgICB9IGVsc2UgaWYgKHJlZy0+YWRkciA9PSAweGZiKSB7
+DQo+ICAgMTAzNyAgICAgICAgICAgICAgICAgIHVkZWxheSg1MCk7DQo+ICAgMTAzOCAgICAgICAg
+ICB9IGVsc2UgaWYgKHJlZy0+YWRkciA9PSAweGZhKSB7DQo+ICAgMTAzOSAgICAgICAgICAgICAg
+ICAgIHVkZWxheSg1KTsNCj4gICAxMDQwICAgICAgICAgIH0gZWxzZSBpZiAocmVnLT5hZGRyID09
+IDB4ZjkpIHsNCj4gICAxMDQxICAgICAgICAgICAgICAgICAgdWRlbGF5KDEpOw0KPiAgIDEwNDIg
+ICAgICAgICAgfSBlbHNlIGlmIChyZWctPmRhdGEgPT0gQllQQVNTX0NSX0RBVEEpIHsNCj4gICAx
+MDQzICAgICAgICAgICAgICAgICAgcnR3ODlfZGVidWcocnR3ZGV2LCBSVFc4OV9EQkdfUEhZX1RS
+QUNLLCAiQnlwYXNzIENSIDB4JXhcbiIsIHJlZy0+YWRkcik7DQo+ICAgMTA0NCAgICAgICAgICB9
+IGVsc2Ugew0KPiAgIDEwNDUgICAgICAgICAgICAgICAgICBhZGRyID0gcmVnLT5hZGRyOw0KPiAg
+IDEwNDYNCj4gPiAxMDQ3ICAgICAgICAgICAgICAgICAgaWYgKChlbnVtIHJ0dzg5X3BoeV9pZHgp
+ZXh0cmFfZGF0YSA9PSBSVFc4OV9QSFlfMSkNCj4gICAxMDQ4ICAgICAgICAgICAgICAgICAgICAg
+ICAgICBhZGRyICs9IHJ0dzg5X3BoeTBfcGh5MV9vZmZzZXQocnR3ZGV2LCByZWctPmFkZHIpOw0K
+PiAgIDEwNDkNCj4gICAxMDUwICAgICAgICAgICAgICAgICAgcnR3ODlfcGh5X3dyaXRlMzIocnR3
+ZGV2LCBhZGRyLCByZWctPmRhdGEpOw0KPiAgIDEwNTEgICAgICAgICAgfQ0KPiAgIDEwNTIgIH0N
+Cj4gDQoNClRoaXMgZnVuY3Rpb24gaXMgb25lIG9mIGNhbGxiYWNrIGZ1bmN0aW9uIG9mICdjb25m
+aWcnIGFyZ3VtZW50IG9mIHJ0dzg5X3BoeV9pbml0X3JlZygpLg0KDQpzdGF0aWMgdm9pZCBydHc4
+OV9waHlfaW5pdF9yZWcoc3RydWN0IHJ0dzg5X2RldiAqcnR3ZGV2LA0KCQkJICAgICAgIGNvbnN0
+IHN0cnVjdCBydHc4OV9waHlfdGFibGUgKnRhYmxlLA0KCQkJICAgICAgIHZvaWQgKCpjb25maWcp
+KHN0cnVjdCBydHc4OV9kZXYgKnJ0d2RldiwNCgkJCQkJICAgICAgY29uc3Qgc3RydWN0IHJ0dzg5
+X3JlZzJfZGVmICpyZWcsDQoJCQkJCSAgICAgIGVudW0gcnR3ODlfcmZfcGF0aCByZl9wYXRoLA0K
+CQkJCQkgICAgICB2b2lkICpkYXRhKSwNCgkJCSAgICAgICB2b2lkICpleHRyYV9kYXRhKQ0KDQpU
+aGUgJ3ZvaWQgKmV4dHJhX2RhdGEnIGlzIGV4cGxhaW5lZCBieSBjYWxsYmFjayBmdW5jdGlvbiAn
+Y29uZmlnJywgYW5kIHRoZXJlIGFyZQ0KbWFueSBleGlzdGluZyBjYWxsYmFjayBmdW5jdGlvbnMu
+IFRvIHNpbXBseSBzdXBwcmVzcyB0aGlzIHdhcm5pbmcgLCBJIHBsYW4gdG8NCmNhc3QgJ2V4dHJh
+X2RhdGEnIGZyb20gJ3ZvaWQgKicgYnkgJ3VpbnRwdHJfdCcgdG8gYXZvaWQgY2xhbmcgd2Fybmlu
+ZywgYW5kIGdjYw0KY2FuIGFsc28gYWNjZXB0IHRoaXMuIEkgZGlkIHRoaXMgYnkgdjIuDQoNCg0K
+UGluZy1LZQ0KDQo=
