@@ -1,151 +1,81 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27DB76030
-	for <llvm@lists.linux.dev>; Fri,  9 Feb 2024 18:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8295A8286E;
+	Fri,  9 Feb 2024 18:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707502841; cv=none; b=aGWUHRz8k53HygsA/tgKJ6k/gzl+hkh07Nh15lKmdjOwpPJTFxLc4ylKAn3AkY5agtTCXruqA9rXnCXkihKGCqXqfXxBHg0fuQ/LU0GywUyVEbTW0cjXjyDG/LmI/qslhW4bm6xXXsdADM6NCstHFchEYBAmZckLRBVrII+Zw6E=
+	t=1707503484; cv=none; b=T4awoPmwQhbzl7OGSrBhDpnXvAAqCFW6dAmvRAwPx4qa2zSzIwl7g7nk5z5O9anAjBWKAv4XalQQv8evdlPaf1/aSV+n6xHFNA7X+zp4EM/SEIjrYW2St6hNMMKgaF3267YWvh7rAGuEMmP0lB0/i1EKXKU1C3eXB9XTGtPTEpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707502841; c=relaxed/simple;
-	bh=flaRgTjJ3ECoc4R2pegG/D+sFiX6IzLBk6IwXeTkD6c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rXD+wQwB+Snb2KrR5srkMapEoW/clPIg3WtCWGCU/va4hg1HWVZ3FzEBRS14qcCzdC9hySw2lLd1eiVPnBSGoYJFi7EQ+Zkl29WdT8AftKJN0cDxeA0u9dGKcmJm+IOlfgIoY6jYqGuRhmiuKHvaDtWlwRpfJ2SqWM0r0uS1EF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TcLJHXTD; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1707503484; c=relaxed/simple;
+	bh=yMevUDxLK0NwGJ8Z8pZ5Sin6BlhE8eNPdZ5e6aErPGA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kguY2iOZ5pcYJoStUwe+7Tw+fBkrXyuOn8tTpsmVeAiP76gbnvkZ9qUNmMwi47cf40CAfgeFguDUV2oWla5W+kALKavtW6zwjn8v5v4mNKALkNdEuApemR/v8TeXXhY6LSc4VW90IJ7Muhpp9HyvFJVzNpS1nUX1Y4G67ti7azc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALal7hRT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TcLJHXTD"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-296a5863237so1742141a91.0
-        for <llvm@lists.linux.dev>; Fri, 09 Feb 2024 10:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707502839; x=1708107639; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TxepppgEC3P8V7/7bMlcPF10Hibly4nFjR2zsEK0CGc=;
-        b=TcLJHXTD3Ns4zp7rZl1BvTaH7FULulN978kwA85J4/3200DE1PhU7+dVce3PcC+H+n
-         yWoyYK7I5OOK+lCCDS7eN9fBypmHF4Wmze5/xhp+JLyxdt2RrEx1laEKJGXCaA+Ec0+I
-         KWwMPJk9FQKBYP6abZDzYaWqWVU+IsQ/gSdvuNxE5FJRfgF2XxvctZoJIkYhLSs7qD0V
-         kd/+Ij1VdT2DjV7BcXZJYcCVqzwqSaBPXG9FkhDb8PFeo/Vh9HfeCegbZ5D8hQXdHDqs
-         9BY0N15fOmGBRllQUs9qNkN/jmLliKgnwrky6OIR7Ur1zOm6QtbfA31S7ajp4N257pTU
-         Cr0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707502839; x=1708107639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TxepppgEC3P8V7/7bMlcPF10Hibly4nFjR2zsEK0CGc=;
-        b=fCyTNJ1ZZqf7LuOM5AQzl9OaczNO0bZj1HOC7X0MDj2F/IP+fqTP5o3xs80dc+g2JP
-         GAtTHbBeHFPEsvqfsoOWF4dzyDLpkuegA2JJsx4Wc7dhTMS3m0HbZaZyPlXCC6LYeb7t
-         Ita9GXyXoWmlNOpBJd0a+LiWNBNwQpPggCeRehadApOWlzybPvLAUlnik80GqDfCPI6o
-         KY5RXwigUKX9ET8i2adMwoHcBLq89V5bRpTcXeK9KMtVbUPQNncd9azrpwZ7aBz1/GBV
-         zj0JbeUSmRmTDh0lpW3kffJ3YKDw6S0q/Y+KJMPlfQ/pRGcKFuoBI+XgpkD+Ksqqr9ZJ
-         NBag==
-X-Gm-Message-State: AOJu0Yyctp1asFkVixerKVgfb0IJdcWMyY+Ux+E471nvZyg1gdNpcPGU
-	El6fXsIq9tPomzINQyiFx7y4KVy6e2U4Ymnkd37UalcQUYfdLoY5AabVMxLSNLLfRpay0rn06XR
-	lPILZm4O7EbsKv01Rmbz1sLX/VVVPMwx/LYdO
-X-Google-Smtp-Source: AGHT+IH5k138KN/lx8w8wnOdChIayRIbRLw+Ip2KZOZtXQGr/VQOaVqNA0HM7sX4J0PaEEh/aV3GmupmNIxdr0qE5ZA=
-X-Received: by 2002:a17:90a:f0c3:b0:296:1667:e879 with SMTP id
- fa3-20020a17090af0c300b002961667e879mr2282435pjb.23.1707502838891; Fri, 09
- Feb 2024 10:20:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALal7hRT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E320C433C7;
+	Fri,  9 Feb 2024 18:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707503484;
+	bh=yMevUDxLK0NwGJ8Z8pZ5Sin6BlhE8eNPdZ5e6aErPGA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ALal7hRT51AXkooxAQe7tbFSCnXqsv1P8A49tGycGrPr0G/Nt/XfREhi1LEjzRdKP
+	 iYdxGyAvYp+JTAvxy+oxXMTjrQZ8urT0iOlEgclt4fiS2EBxglUfCPgkusSw5bS+1Z
+	 RHrFlIE6GsqJMaC70d1f2gXpPMR6hqB76bOJuuOlStzkCLtndrMlQxLtCAZohbxAwS
+	 lANWZNjWkfvEOj7rHxhRin0Us2HIc3i3yx9PAls8BE6L1lToC3qbWnTBGgIcPqEO3M
+	 7vBQnF8lolqpO6OXE/Lz9A7eP/Chhr1a9Fe0gJi5wg1au7AMib/cXFOiAyclggdYlX
+	 Z6DSZC3fFSCPg==
+From: Will Deacon <will@kernel.org>
+To: linux-arm-kernel@lists.infradead.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Fangrui Song <maskray@google.com>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Peter Smith <peter.smith@arm.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v2] arm64: jump_label: use constraints "Si" instead of "i"
+Date: Fri,  9 Feb 2024 18:31:08 +0000
+Message-Id: <170749826521.2630324.4507897270923627883.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20240206074552.541154-1-maskray@google.com>
+References: <20240206074552.541154-1-maskray@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240206223620.1833276-1-acdunlap@google.com> <168b4e3b-8076-4fc3-92bc-fcd9f2b516a8@intel.com>
- <CAMj1kXE4Yhh_5y=ybFkD7YQUZuh7+-P_Vyzv-gpvbQ=i=eRMnw@mail.gmail.com>
-In-Reply-To: <CAMj1kXE4Yhh_5y=ybFkD7YQUZuh7+-P_Vyzv-gpvbQ=i=eRMnw@mail.gmail.com>
-From: Adam Dunlap <acdunlap@google.com>
-Date: Fri, 9 Feb 2024 10:20:22 -0800
-Message-ID: <CAMBK9=bTMJircCK9SYHsZcKvbD0oZUByQPXcYciD6mcVqgg6=g@mail.gmail.com>
-Subject: Re: [PATCH v3] x86/asm: Force native_apic_mem_read to use mov
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Dave Hansen <dave.hansen@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Arjan van de Ven <arjan@linux.intel.com>, Wei Liu <wei.liu@kernel.org>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
-	Kevin Loughlin <kevinloughlin@google.com>, Peter Gonda <pgonda@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 9, 2024 at 7:22=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wro=
-te:
->
-> On Thu, 8 Feb 2024 at 16:48, Dave Hansen <dave.hansen@intel.com> wrote:
-> >
-> > On 2/6/24 14:36, Adam Dunlap wrote:
-> > ...
-> > > In particular, when compiled with clang and run as a SEV-ES or
-> > > SEV-SNP guest, the compiler would emit a testl instruction which is
-> > > not supported by the SEV-ES emulator
-> >
-> > What changed?  Why is this a bug that we're only noticing now?  The lin=
-e
-> > of code that's modified here is from 2008.
-> >
-> > I assume that it's something new in clang, but it'd be great to know
-> > that for sure.
-> >
->
-> Might be the use of LTO in the Google prod[uction]kernel. Adam, can you c=
-onfirm?
+On Mon, 5 Feb 2024 23:45:52 -0800, Fangrui Song wrote:
+> The generic constraint "i" seems to be copied from x86 or arm (and with
+> a redundant generic operand modifier "c"). It works with -fno-PIE but
+> not with -fPIE/-fPIC in GCC's aarch64 port.
+> 
+> The machine constraint "S", which denotes a symbol or label reference
+> with a constant offset, supports PIC and has been available in GCC since
+> 2012 and in Clang since 7.0. However, Clang before 19 does not support
+> "S" on a symbol with a constant offset [1] (e.g.
+> `static_key_false(&nf_hooks_needed[pf][hook])` in
+> include/linux/netfilter.h), so we use "i" as a fallback.
+> 
+> [...]
 
-It doesn't look like it's LTO. I disabled the LTO options in .config
-and you can see the
-problem just in a single object file:
+Applied to arm64 (for-next/fixes), thanks!
 
-With gcc:
+[1/1] arm64: jump_label: use constraints "Si" instead of "i"
+      https://git.kernel.org/arm64/c/f9daab0ad01c
 
-% gdb -batch -ex 'file arch/x86/kernel/apic/ipi.o' -ex 'disassemble
-apic_mem_wait_icr_idle'
-Dump of assembler code for function apic_mem_wait_icr_idle:
-   0x0000000000000260 <+0>:     endbr64
-   0x0000000000000264 <+4>:     jmp    0x268 <apic_mem_wait_icr_idle+8>
-   0x0000000000000266 <+6>:     pause
-   0x0000000000000268 <+8>:     mov    0xffffffffff5fc300,%eax
-   0x000000000000026f <+15>:    test   $0x10,%ah
-   0x0000000000000272 <+18>:    jne    0x266 <apic_mem_wait_icr_idle+6>
-   0x0000000000000274 <+20>:    jmpq   0x279
+Cheers,
+-- 
+Will
 
-With clang:
-
-% gdb -batch -ex 'file arch/x86/kernel/apic/ipi.o' -ex 'disassemble
-apic_mem_wait_icr_idle'
-Dump of assembler code for function apic_mem_wait_icr_idle:
-   0x0000000000000250 <+0>:     endbr64
-   0x0000000000000254 <+4>:     testl  $0x1000,0xffffffffff5fc300
-   0x000000000000025f <+15>:    je     0x270 <apic_mem_wait_icr_idle+32>
-   0x0000000000000261 <+17>:    pause
-   0x0000000000000263 <+19>:    testl  $0x1000,0xffffffffff5fc300
-   0x000000000000026e <+30>:    jne    0x261 <apic_mem_wait_icr_idle+17>
-   0x0000000000000270 <+32>:    cs jmpq 0x276
-
-This shows how gcc uses mov to load the apic memory and then testl to
-test it, while clang
-combines those instructions.
-
-I plugged in the relevant subsection into godbolt [0] and it appears
-the assembly changed in
-clang 8 (released 2019). I'm not set up to do full compilations with
-old clang versions, but
-this is the most likely change point.
-
-> this seems like the kind of thing we'll want in -stable in case folks
-> are compiling stable kernels with new clangs.
-
-That makes sense. Note that there was another patch accepted recently
-that fixed another
-clang-with-SEV problem [1], so they should probably be backported to
-the same stable
-branches since neither is that useful without the other.
-
-[0] https://godbolt.org/z/nq9M9e8ex
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=
-=3D1c811d403afd73f04bde82b83b24c754011bd0e8
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
