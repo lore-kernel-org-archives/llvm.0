@@ -1,57 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4056139B;
-	Fri,  9 Feb 2024 00:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE7556B63;
+	Fri,  9 Feb 2024 05:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707439872; cv=none; b=VBgJsY94664hipUI+XBllP3AINdl+eUWhKPh1oiZoak3NNRCTlJ3kONGH/1dJgVsxlyCWDpv3wYz6U/HvZ7Qs8jpOWxBTt3LUpfjh7WBlyXgMXW+jfquzO0mUxiwNkGclwLeV+CZwoe+ur7uPcIeQzuRJmIvQFHdAiBxAClA39k=
+	t=1707456919; cv=none; b=TCf8jazkl+jTrqZmaG28d6Rhf05O6M0LPh2C2qhs7iHdkNo+Pw/W9m9Vgagp2G1BjmxXbXXZ11xKmT2D/C0ctnF7gL5CFUL5KAZ8a1Xx7LClCcdPkwPzqpXxS8AJSbqKxf8wqKciWY9HRxwIQuDBCRjyfE2gZhaFDbEIM3lSY5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707439872; c=relaxed/simple;
-	bh=rMoBWoQ8IQGZqC9VrNz4ZerwsCRMosmLHiRyZB+esps=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=szryGTIJJbY+d4nhKG93FvszA+53nb53kwPyDJO41GiLRhA6LIZUlpu190sHaYfE5amo+GZSjNxt01BtwpoSP9yrYX5AvfWVj0RO+SLF1wWD5nkmRJPjGz433VwZCz9ZFZSe14Zf6kmlUo2PUTbFZSkh4bDV0Sy9mzx3Kc6YhcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B87IUrGK; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1707456919; c=relaxed/simple;
+	bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kSDBER01NbpP33z5U0yb40053CPqmvT4LVlS0dWVbXy/w9ZCz+ZeEezxjglMGfE/Bsa2iAgn3JdI8i+IfbADyh0dzKeDhktVFkPijwlVNBLuq8yW5IIEUYkBeQpmIAAWnwZAg8lY203x/So3xydsQJAzVOTvrdT7Z1QUzhKo0TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hOHRWBu6; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B87IUrGK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hOHRWBu6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707439871; x=1738975871;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rMoBWoQ8IQGZqC9VrNz4ZerwsCRMosmLHiRyZB+esps=;
-  b=B87IUrGKuAMvogLRYrQ+gso5Nsq9YVHDUvAnYemr4kDOdTH/y/Bwa2fO
-   ZcuwQt8lTgD8SmFX9kfomSiJDEftWvWEZuqcPRg+Z78oUEBkSl5CIsaaJ
-   IDWGsbwcLxrfNmVHvrmmEP5mzjJaSD0nEyNyGr7pKKxBgqAoe5JeN0bUu
-   rVGNhK4HxCLkbaceu9uabAVmzQySkDT2gidXRg6JHo574OSRiKDz7zb6w
-   Jrf1XX7+wzdqcIbyOafV2u/Ubxi3TOZBfwyWDNocGZs1ZYFOQRnGcwOao
-   0ZkPuwl08Hu9eFf0syjs9hRV2/X5qYVSKuSTWPKHmjiMM3oxUCpw7vpxm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="5202934"
+  t=1707456917; x=1738992917;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
+  b=hOHRWBu6dfMH435Xfh4w1oS7XnVtaFG7L0FzrckYrxbJuJqeYPebJMH8
+   +q4yV8xoUxOirZptbFQOVzgPqWIR2ROXF95LaoLvPzNy00NUPcrrXv8yN
+   XG5tYOi3dxoK971QGKua5L9kkbwaWYy2bRBvNsGbnSv95MLERIXBz/cC2
+   flDwAx/0HTtmEepmPXf9cJUW7JEnelGGQ+HOsr12zTOMUziFVFb/voUEu
+   aQFbGoyMq/c3rpWHFpt5Vat2FTMbiRx752pZlhvzbE4dKgGZ/1+sG2wuh
+   U4G45za3GxoPMbhQva9vd/oqrkesdlS5llpXomLA/qF1LU62tGH3thxdO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="12453790"
 X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
-   d="scan'208";a="5202934"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 16:51:10 -0800
+   d="scan'208";a="12453790"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 21:35:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
-   d="scan'208";a="2035502"
+   d="scan'208";a="32650935"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 08 Feb 2024 16:51:07 -0800
+  by orviesa002.jf.intel.com with ESMTP; 08 Feb 2024 21:35:15 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rYF6e-0004FA-1I;
-	Fri, 09 Feb 2024 00:51:04 +0000
-Date: Fri, 9 Feb 2024 08:50:34 +0800
+	id 1rYJXc-0004Qg-0T;
+	Fri, 09 Feb 2024 05:35:12 +0000
+Date: Fri, 9 Feb 2024 13:34:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ping-Ke Shih <pkshih@realtek.com>, kvalo@kernel.org
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gary.chang@realtek.com, phhuang@realtek.com, kevin_yang@realtek.com,
-	linux-wireless@vger.kernel.org
-Subject: Re: [PATCH 02/11] wifi: rtw89: load BB parameters to PHY-1
-Message-ID: <202402090838.S5xcKIlg-lkp@intel.com>
-References: <20240208022857.14379-3-pkshih@realtek.com>
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: [rafael-pm:bleeding-edge 74/77] drivers/thermal/thermal_of.c:444:34:
+ error: initializing 'struct thermal_zone_device_ops *' with an expression of
+ incompatible type 'struct thermal_zone_device_ops'; take the address with &
+Message-ID: <202402091355.DUYRncj7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,74 +61,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240208022857.14379-3-pkshih@realtek.com>
 
-Hi Ping-Ke,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on next-20240208]
-[cannot apply to wireless/main linus/master v6.8-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ping-Ke-Shih/wifi-rtw89-correct-PHY-register-offset-for-PHY-1/20240208-103413
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20240208022857.14379-3-pkshih%40realtek.com
-patch subject: [PATCH 02/11] wifi: rtw89: load BB parameters to PHY-1
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240209/202402090838.S5xcKIlg-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240209/202402090838.S5xcKIlg-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   976b96a64c53e1e3d0fa71c97be2bcbe1a64feb1
+commit: c483d4c88bfcd98d7819a722f48edb0adb89c32f [74/77] thermal: core: Store zone ops in struct thermal_zone_device
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402090838.S5xcKIlg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402091355.DUYRncj7-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/wireless/realtek/rtw89/phy.c:1047:7: warning: cast to smaller integer type 'enum rtw89_phy_idx' from 'void *' [-Wvoid-pointer-to-enum-cast]
-    1047 |                 if ((enum rtw89_phy_idx)extra_data == RTW89_PHY_1)
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/thermal/thermal_of.c:444:34: error: initializing 'struct thermal_zone_device_ops *' with an expression of incompatible type 'struct thermal_zone_device_ops'; take the address with &
+           struct thermal_zone_device_ops *ops = tz->ops;
+                                           ^     ~~~~~~~
+                                                 &
+   1 error generated.
 
 
-vim +1047 drivers/net/wireless/realtek/rtw89/phy.c
+vim +444 drivers/thermal/thermal_of.c
 
-  1022	
-  1023	static void rtw89_phy_config_bb_reg(struct rtw89_dev *rtwdev,
-  1024					    const struct rtw89_reg2_def *reg,
-  1025					    enum rtw89_rf_path rf_path,
-  1026					    void *extra_data)
-  1027	{
-  1028		u32 addr;
-  1029	
-  1030		if (reg->addr == 0xfe) {
-  1031			mdelay(50);
-  1032		} else if (reg->addr == 0xfd) {
-  1033			mdelay(5);
-  1034		} else if (reg->addr == 0xfc) {
-  1035			mdelay(1);
-  1036		} else if (reg->addr == 0xfb) {
-  1037			udelay(50);
-  1038		} else if (reg->addr == 0xfa) {
-  1039			udelay(5);
-  1040		} else if (reg->addr == 0xf9) {
-  1041			udelay(1);
-  1042		} else if (reg->data == BYPASS_CR_DATA) {
-  1043			rtw89_debug(rtwdev, RTW89_DBG_PHY_TRACK, "Bypass CR 0x%x\n", reg->addr);
-  1044		} else {
-  1045			addr = reg->addr;
-  1046	
-> 1047			if ((enum rtw89_phy_idx)extra_data == RTW89_PHY_1)
-  1048				addr += rtw89_phy0_phy1_offset(rtwdev, reg->addr);
-  1049	
-  1050			rtw89_phy_write32(rtwdev, addr, reg->data);
-  1051		}
-  1052	}
-  1053	
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  432  
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  433  /**
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  434   * thermal_of_zone_unregister - Cleanup the specific allocated ressources
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  435   *
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  436   * This function disables the thermal zone and frees the different
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  437   * ressources allocated specific to the thermal OF.
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  438   *
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  439   * @tz: a pointer to the thermal zone structure
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  440   */
+ac614a9b4c35bf Daniel Lezcano 2023-04-04  441  static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  442  {
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  443  	struct thermal_trip *trips = tz->trips;
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09 @444  	struct thermal_zone_device_ops *ops = tz->ops;
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  445  
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  446  	thermal_zone_device_disable(tz);
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  447  	thermal_zone_device_unregister(tz);
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  448  	kfree(trips);
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  449  	kfree(ops);
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  450  }
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  451  
+
+:::::: The code at line 444 was first introduced by commit
+:::::: 8fb5b71ed37dbe469eaa930e2ddc93ec9e305f3c thermal/of: Fix free after use in thermal_of_unregister()
+
+:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
+:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
