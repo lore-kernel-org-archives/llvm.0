@@ -1,82 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCAD7EF01;
-	Fri,  9 Feb 2024 18:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27DB76030
+	for <llvm@lists.linux.dev>; Fri,  9 Feb 2024 18:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707502300; cv=none; b=IMZ6NJV9Rr1HgCbuLEA8Ay5e/38rgB1Q/dn6D4O88dQkwOlFu27TgNd0XgI1/n5o7dYSinlw7nrptLN1BVM1Gs+M3R7k531EfGD14p9oCctRNn5l3akJlU/QOIpxHW3M0YF3c2DJptcX/rnx2ktDAeAVE6fHGALt96oVhdZrhrI=
+	t=1707502841; cv=none; b=aGWUHRz8k53HygsA/tgKJ6k/gzl+hkh07Nh15lKmdjOwpPJTFxLc4ylKAn3AkY5agtTCXruqA9rXnCXkihKGCqXqfXxBHg0fuQ/LU0GywUyVEbTW0cjXjyDG/LmI/qslhW4bm6xXXsdADM6NCstHFchEYBAmZckLRBVrII+Zw6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707502300; c=relaxed/simple;
-	bh=udkSw/jXmix2hS8UPAU68VQC1L9IDTlI6JkFx+gVgUo=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PeR5CfZX+r/xmNhGtZ8ESaVLfWsMrE4L6rOKunvTY6fiXrree6tNVyG533g5rD7OJxiL5VLq5xilIm5LOC03AlC0IXOhCSLwZ0gdDnP3F/4u2HSLc4znQQuV2dXd+qWgOIowTd091miFshXM5O/RyV+bSWZYmQcIcvknOVILUZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cuYH2Yj8; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707502841; c=relaxed/simple;
+	bh=flaRgTjJ3ECoc4R2pegG/D+sFiX6IzLBk6IwXeTkD6c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rXD+wQwB+Snb2KrR5srkMapEoW/clPIg3WtCWGCU/va4hg1HWVZ3FzEBRS14qcCzdC9hySw2lLd1eiVPnBSGoYJFi7EQ+Zkl29WdT8AftKJN0cDxeA0u9dGKcmJm+IOlfgIoY6jYqGuRhmiuKHvaDtWlwRpfJ2SqWM0r0uS1EF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TcLJHXTD; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cuYH2Yj8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707502298; x=1739038298;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=udkSw/jXmix2hS8UPAU68VQC1L9IDTlI6JkFx+gVgUo=;
-  b=cuYH2Yj8h4+5OTD+/ReGY3swn8nWyB21tb4hx21rKeHlk7s1nWPeE7IU
-   gOaztw/1NFy8r2ldeticY2Dh2wGRJGUcQEniP36i6j2/yOQNwc5XjXBAM
-   ON/ok7FFGdB0zdkNGD+iNbrQqLbSt59D8YD8dpaL6TrxbONPvvO21Mqxf
-   t57FKgOAuYxTeHyW1oTRSEww7UMJCpBA7+RxTX3uaR71LHD9yoBnyTt/O
-   gKEfueyPKIwpE7BZ/rm/Cg3Dg1KgpQPJnluZuHApwiXwDuuj/BGTtaNsx
-   FXBHyNSKWLfEhvYsaayFPg+PoXlHlKMyyl0v/gQVA9UiqWJb/uWwTSUQ0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1610719"
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="1610719"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 10:11:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="2341450"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 09 Feb 2024 10:11:36 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rYVLa-000508-0y;
-	Fri, 09 Feb 2024 18:11:34 +0000
-Date: Sat, 10 Feb 2024 02:10:40 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to
- next function ip_vs_wlc_init()
-Message-ID: <202402100205.PWXIz1ZK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TcLJHXTD"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-296a5863237so1742141a91.0
+        for <llvm@lists.linux.dev>; Fri, 09 Feb 2024 10:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707502839; x=1708107639; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TxepppgEC3P8V7/7bMlcPF10Hibly4nFjR2zsEK0CGc=;
+        b=TcLJHXTD3Ns4zp7rZl1BvTaH7FULulN978kwA85J4/3200DE1PhU7+dVce3PcC+H+n
+         yWoyYK7I5OOK+lCCDS7eN9fBypmHF4Wmze5/xhp+JLyxdt2RrEx1laEKJGXCaA+Ec0+I
+         KWwMPJk9FQKBYP6abZDzYaWqWVU+IsQ/gSdvuNxE5FJRfgF2XxvctZoJIkYhLSs7qD0V
+         kd/+Ij1VdT2DjV7BcXZJYcCVqzwqSaBPXG9FkhDb8PFeo/Vh9HfeCegbZ5D8hQXdHDqs
+         9BY0N15fOmGBRllQUs9qNkN/jmLliKgnwrky6OIR7Ur1zOm6QtbfA31S7ajp4N257pTU
+         Cr0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707502839; x=1708107639;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TxepppgEC3P8V7/7bMlcPF10Hibly4nFjR2zsEK0CGc=;
+        b=fCyTNJ1ZZqf7LuOM5AQzl9OaczNO0bZj1HOC7X0MDj2F/IP+fqTP5o3xs80dc+g2JP
+         GAtTHbBeHFPEsvqfsoOWF4dzyDLpkuegA2JJsx4Wc7dhTMS3m0HbZaZyPlXCC6LYeb7t
+         Ita9GXyXoWmlNOpBJd0a+LiWNBNwQpPggCeRehadApOWlzybPvLAUlnik80GqDfCPI6o
+         KY5RXwigUKX9ET8i2adMwoHcBLq89V5bRpTcXeK9KMtVbUPQNncd9azrpwZ7aBz1/GBV
+         zj0JbeUSmRmTDh0lpW3kffJ3YKDw6S0q/Y+KJMPlfQ/pRGcKFuoBI+XgpkD+Ksqqr9ZJ
+         NBag==
+X-Gm-Message-State: AOJu0Yyctp1asFkVixerKVgfb0IJdcWMyY+Ux+E471nvZyg1gdNpcPGU
+	El6fXsIq9tPomzINQyiFx7y4KVy6e2U4Ymnkd37UalcQUYfdLoY5AabVMxLSNLLfRpay0rn06XR
+	lPILZm4O7EbsKv01Rmbz1sLX/VVVPMwx/LYdO
+X-Google-Smtp-Source: AGHT+IH5k138KN/lx8w8wnOdChIayRIbRLw+Ip2KZOZtXQGr/VQOaVqNA0HM7sX4J0PaEEh/aV3GmupmNIxdr0qE5ZA=
+X-Received: by 2002:a17:90a:f0c3:b0:296:1667:e879 with SMTP id
+ fa3-20020a17090af0c300b002961667e879mr2282435pjb.23.1707502838891; Fri, 09
+ Feb 2024 10:20:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240206223620.1833276-1-acdunlap@google.com> <168b4e3b-8076-4fc3-92bc-fcd9f2b516a8@intel.com>
+ <CAMj1kXE4Yhh_5y=ybFkD7YQUZuh7+-P_Vyzv-gpvbQ=i=eRMnw@mail.gmail.com>
+In-Reply-To: <CAMj1kXE4Yhh_5y=ybFkD7YQUZuh7+-P_Vyzv-gpvbQ=i=eRMnw@mail.gmail.com>
+From: Adam Dunlap <acdunlap@google.com>
+Date: Fri, 9 Feb 2024 10:20:22 -0800
+Message-ID: <CAMBK9=bTMJircCK9SYHsZcKvbD0oZUByQPXcYciD6mcVqgg6=g@mail.gmail.com>
+Subject: Re: [PATCH v3] x86/asm: Force native_apic_mem_read to use mov
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Dave Hansen <dave.hansen@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Arjan van de Ven <arjan@linux.intel.com>, Wei Liu <wei.liu@kernel.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
+	Kevin Loughlin <kevinloughlin@google.com>, Peter Gonda <pgonda@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Kees Cook <keescook@chromium.org>
+On Fri, Feb 9, 2024 at 7:22=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wro=
+te:
+>
+> On Thu, 8 Feb 2024 at 16:48, Dave Hansen <dave.hansen@intel.com> wrote:
+> >
+> > On 2/6/24 14:36, Adam Dunlap wrote:
+> > ...
+> > > In particular, when compiled with clang and run as a SEV-ES or
+> > > SEV-SNP guest, the compiler would emit a testl instruction which is
+> > > not supported by the SEV-ES emulator
+> >
+> > What changed?  Why is this a bug that we're only noticing now?  The lin=
+e
+> > of code that's modified here is from 2008.
+> >
+> > I assume that it's something new in clang, but it'd be great to know
+> > that for sure.
+> >
+>
+> Might be the use of LTO in the Google prod[uction]kernel. Adam, can you c=
+onfirm?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1f719a2f3fa67665578c759ac34fd3d3690c1a20
-commit: 55c84a5cf2c72a821719823ef2ebef01b119025b fortify: strcat: Move definition to use fortified strlcat()
-date:   9 months ago
-config: x86_64-randconfig-076-20240209 (https://download.01.org/0day-ci/archive/20240210/202402100205.PWXIz1ZK-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402100205.PWXIz1ZK-lkp@intel.com/reproduce)
+It doesn't look like it's LTO. I disabled the LTO options in .config
+and you can see the
+problem just in a single object file:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402100205.PWXIz1ZK-lkp@intel.com/
+With gcc:
 
-All warnings (new ones prefixed by >>):
+% gdb -batch -ex 'file arch/x86/kernel/apic/ipi.o' -ex 'disassemble
+apic_mem_wait_icr_idle'
+Dump of assembler code for function apic_mem_wait_icr_idle:
+   0x0000000000000260 <+0>:     endbr64
+   0x0000000000000264 <+4>:     jmp    0x268 <apic_mem_wait_icr_idle+8>
+   0x0000000000000266 <+6>:     pause
+   0x0000000000000268 <+8>:     mov    0xffffffffff5fc300,%eax
+   0x000000000000026f <+15>:    test   $0x10,%ah
+   0x0000000000000272 <+18>:    jne    0x266 <apic_mem_wait_icr_idle+6>
+   0x0000000000000274 <+20>:    jmpq   0x279
 
->> vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function ip_vs_wlc_init()
+With clang:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+% gdb -batch -ex 'file arch/x86/kernel/apic/ipi.o' -ex 'disassemble
+apic_mem_wait_icr_idle'
+Dump of assembler code for function apic_mem_wait_icr_idle:
+   0x0000000000000250 <+0>:     endbr64
+   0x0000000000000254 <+4>:     testl  $0x1000,0xffffffffff5fc300
+   0x000000000000025f <+15>:    je     0x270 <apic_mem_wait_icr_idle+32>
+   0x0000000000000261 <+17>:    pause
+   0x0000000000000263 <+19>:    testl  $0x1000,0xffffffffff5fc300
+   0x000000000000026e <+30>:    jne    0x261 <apic_mem_wait_icr_idle+17>
+   0x0000000000000270 <+32>:    cs jmpq 0x276
+
+This shows how gcc uses mov to load the apic memory and then testl to
+test it, while clang
+combines those instructions.
+
+I plugged in the relevant subsection into godbolt [0] and it appears
+the assembly changed in
+clang 8 (released 2019). I'm not set up to do full compilations with
+old clang versions, but
+this is the most likely change point.
+
+> this seems like the kind of thing we'll want in -stable in case folks
+> are compiling stable kernels with new clangs.
+
+That makes sense. Note that there was another patch accepted recently
+that fixed another
+clang-with-SEV problem [1], so they should probably be backported to
+the same stable
+branches since neither is that useful without the other.
+
+[0] https://godbolt.org/z/nq9M9e8ex
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=
+=3D1c811d403afd73f04bde82b83b24c754011bd0e8
