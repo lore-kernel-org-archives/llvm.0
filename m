@@ -1,57 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D727347F5F;
-	Sat, 10 Feb 2024 12:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7EC31A8F;
+	Sat, 10 Feb 2024 12:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707569306; cv=none; b=Ml/8aRxi4v9x4yVHAooO0fSX/32PVXrgdRdZyZjbUfew0V2FCunmJHd1e0Ka/Ijl7bDOVE2lwtGSM3EJlvDJxx/i6lZ6JtA6E2tRyVhsMfuXDYfpkjxMTNK3XBF+JGO+rFHrG+7pg3a8n+PmKhIm8s8Hm8vesNmB3hnij64/eC8=
+	t=1707569964; cv=none; b=P1Yo19vsiOTbV4RKgpsLJzNnwDkA6DHn05QRCW2xN0McFufGWmXjZvAXxUzAZh5gtky7onW0xKFs/R2Y81tFrtxs/W66Y3elgK+JQzR0Q7oEirpoC5XXTX3N3/OZ+IV6+/A4TjhapBtz9mC/1qcgzGTJuhtbf76avwgOhfTegXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707569306; c=relaxed/simple;
-	bh=s7tJQulCMzXrw+l1/39EpAZgwKS/Tf4uyEU5QBW2waA=;
+	s=arc-20240116; t=1707569964; c=relaxed/simple;
+	bh=Cb1Eh3O2qFMqBZxKzCU4auBY0R5n95zZ3gjKmSOb9JE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cMb9QYTYX6FUaDE+34U4Mx5qwMt9WdCvYy7CAwnnqijmR9iAZszZFdBIoSmisoR0xzcn4BaUrEuPq/5fntw+WNN1tHDBUyHcBOwGU3G4A3jFmVAcE5uVYVvq2a7ODglX4KRZ9+4MjtcFPC4O43QRygutuXDb1U8GRz9jvDrE8SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hcauqa5a; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=OeuToS4a2bFwLDsSqPWaWVYnuBy14ur2i24ybp7COu4AmpY8ci8zGVKWM5yfW09jBCFeiv+z8OapZzrYN3t945V61a6w82GPGpDsmqZNHaU3WhmBBwBiF/Jdv/JIphBPumbKunkxTrEwOaYuRr1j2J3xKhtGjaCgnoBCyOPNXPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FGz0+lSY; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hcauqa5a"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FGz0+lSY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707569304; x=1739105304;
+  t=1707569961; x=1739105961;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=s7tJQulCMzXrw+l1/39EpAZgwKS/Tf4uyEU5QBW2waA=;
-  b=hcauqa5ae2TN/6x8L9BSrQdgygvwW6jVTehOtbKfLSufMw201bN4ON5n
-   0POo8HJIF2pSZTh6V3retDEWRR124QdXpQO0za6toEE/LQVHIJA7ompJW
-   IRfBurxGlCFHceAOiENIBaz2q1kJ3XWhtlz8APUxP9VEwWoUH8jcnOBOv
-   6k3nskRxhWnZe1b7JD6KTKP2VSiaxWuZrUEj/9kv+IYBwsk1USmao7xi4
-   itr0XAkmMOSpP42vyxTEcBhBSYqYwWJy6teaEA2LIX7KvYb3sQgdv2wvr
-   9oNcjxz3zpPjHzuq25XPQu3EMK3ZDYZDI38OzhuYv1oouBSfAGLoeisWZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1692936"
+  bh=Cb1Eh3O2qFMqBZxKzCU4auBY0R5n95zZ3gjKmSOb9JE=;
+  b=FGz0+lSYHesRWo/GmlvBc/NA1qDyxm5801lnDFn6UxMipIpm7l/AQtUF
+   5bm2kpXqH9l5uTV7ZNUtn8oezpWVAv/AiXbTspueXRTS2Too4Qf/x/zLC
+   qlh5GgZrcx8y1dSjiCafX1rTEhIvL23ZivY71WoJ8pL+1KCph5Ta9i+0U
+   Z9MuFn9jr9OgQx0ZIqJN0Us1pAT0jSHzxLQadi8yPBE+Z9948VHXpHYDE
+   qf//YBSJ8JztoR0fEADz5hnsrSUzkdGlCzOozXtjtykC2ht74MDUF1p6j
+   PNexVq2kuypl1NKTRgNc9z9+VfgMAWXL9agPu2mdFKGwzzKy8iJZ9YKKK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1449115"
 X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
-   d="scan'208";a="1692936"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 04:48:21 -0800
+   d="scan'208";a="1449115"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 04:59:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="934664994"
 X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
-   d="scan'208";a="934664994"
+   d="scan'208";a="2380396"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2024 04:48:19 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 10 Feb 2024 04:59:19 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rYmmH-0005f8-0q;
-	Sat, 10 Feb 2024 12:48:17 +0000
-Date: Sat, 10 Feb 2024 20:48:10 +0800
+	id 1rYmwv-0005fm-1n;
+	Sat, 10 Feb 2024 12:59:17 +0000
+Date: Sat, 10 Feb 2024 20:58:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Gomez <da.gomez@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/9] shmem: add per-block uptodate tracking for
- hugepages
-Message-ID: <202402102029.0PdBJnsN-lkp@intel.com>
-References: <20240209142901.126894-3-da.gomez@samsung.com>
+To: Max Kellermann <max.kellermann@ionos.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Max Kellermann <max.kellermann@ionos.com>
+Subject: Re: [PATCH v2 02/35] include: remove unnecessary #include directives
+Message-ID: <202402102047.IswSP6zZ-lkp@intel.com>
+References: <20240209164027.2582906-3-max.kellermann@ionos.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,139 +59,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240209142901.126894-3-da.gomez@samsung.com>
+In-Reply-To: <20240209164027.2582906-3-max.kellermann@ionos.com>
 
-Hi Daniel,
+Hi Max,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on brauner-vfs/vfs.all linus/master v6.8-rc3 next-20240209]
-[cannot apply to vfs-idmapping/for-next]
+[auto build test ERROR on next-20240209]
+[cannot apply to drm-misc/drm-misc-next media-tree/master mkp-scsi/for-next linus/master v6.8-rc3 v6.8-rc2 v6.8-rc1 v6.8-rc3]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Gomez/splice-don-t-check-for-uptodate-if-partially-uptodate-is-impl/20240209-223226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240209142901.126894-3-da.gomez%40samsung.com
-patch subject: [RFC PATCH 2/9] shmem: add per-block uptodate tracking for hugepages
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20240210/202402102029.0PdBJnsN-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ac0577177f053ba7e7016e1b7e44cf5932d00b03)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402102029.0PdBJnsN-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Max-Kellermann/include-add-missing-includes/20240210-005417
+base:   next-20240209
+patch link:    https://lore.kernel.org/r/20240209164027.2582906-3-max.kellermann%40ionos.com
+patch subject: [PATCH v2 02/35] include: remove unnecessary #include directives
+config: i386-buildonly-randconfig-006-20240210 (https://download.01.org/0day-ci/archive/20240210/202402102047.IswSP6zZ-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402102047.IswSP6zZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402102029.0PdBJnsN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402102047.IswSP6zZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/shmem.c:29:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/shmem.c:29:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/shmem.c:29:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> mm/shmem.c:4660:27: error: use of undeclared identifier 'shmem_invalidate_folio'; did you mean 'shmem_replace_folio'?
-    4660 |         .invalidate_folio      = shmem_invalidate_folio,
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~
-         |                                  shmem_replace_folio
-   mm/shmem.c:1866:12: note: 'shmem_replace_folio' declared here
-    1866 | static int shmem_replace_folio(struct folio **foliop, gfp_t gfp,
-         |            ^
->> mm/shmem.c:4661:27: error: use of undeclared identifier 'shmem_release_folio'; did you mean 'shmem_replace_folio'?
-    4661 |         .release_folio         = shmem_release_folio,
-         |                                  ^~~~~~~~~~~~~~~~~~~
-         |                                  shmem_replace_folio
-   mm/shmem.c:1866:12: note: 'shmem_replace_folio' declared here
-    1866 | static int shmem_replace_folio(struct folio **foliop, gfp_t gfp,
-         |            ^
->> mm/shmem.c:4662:27: error: use of undeclared identifier 'shmem_is_partially_uptodate'; did you mean 'shmem_set_range_uptodate'?
-    4662 |         .is_partially_uptodate = shmem_is_partially_uptodate,
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                  shmem_set_range_uptodate
-   mm/shmem.c:242:13: note: 'shmem_set_range_uptodate' declared here
-     242 | static void shmem_set_range_uptodate(struct folio *folio, size_t off,
+>> drivers/gpu/drm/sun4i/sun4i_layer.c:28:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      28 |                 kfree(state);
+         |                 ^
+   drivers/gpu/drm/sun4i/sun4i_layer.c:28:3: note: did you mean 'vfree'?
+   include/linux/vmalloc.h:160:13: note: 'vfree' declared here
+     160 | extern void vfree(const void *addr);
          |             ^
->> mm/shmem.c:4660:27: error: incompatible function pointer types initializing 'void (*)(struct folio *, size_t, size_t)' (aka 'void (*)(struct folio *, unsigned int, unsigned int)') with an expression of type 'int (struct folio **, gfp_t, struct shmem_inode_info *, unsigned long)' (aka 'int (struct folio **, unsigned int, struct shmem_inode_info *, unsigned long)') [-Wincompatible-function-pointer-types]
-    4660 |         .invalidate_folio      = shmem_invalidate_folio,
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~
->> mm/shmem.c:4661:27: error: incompatible function pointer types initializing 'bool (*)(struct folio *, gfp_t)' (aka '_Bool (*)(struct folio *, unsigned int)') with an expression of type 'int (struct folio **, gfp_t, struct shmem_inode_info *, unsigned long)' (aka 'int (struct folio **, unsigned int, struct shmem_inode_info *, unsigned long)') [-Wincompatible-function-pointer-types]
-    4661 |         .release_folio         = shmem_release_folio,
-         |                                  ^~~~~~~~~~~~~~~~~~~
-   mm/shmem.c:4662:27: error: incompatible function pointer types initializing 'bool (*)(struct folio *, size_t, size_t)' (aka '_Bool (*)(struct folio *, unsigned int, unsigned int)') with an expression of type 'void (struct folio *, size_t, size_t)' (aka 'void (struct folio *, unsigned int, unsigned int)') [-Wincompatible-function-pointer-types]
-    4662 |         .is_partially_uptodate = shmem_is_partially_uptodate,
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings and 6 errors generated.
+>> drivers/gpu/drm/sun4i/sun4i_layer.c:32:10: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      32 |         state = kzalloc(sizeof(*state), GFP_KERNEL);
+         |                 ^
+   drivers/gpu/drm/sun4i/sun4i_layer.c:32:10: note: did you mean 'vzalloc'?
+   include/linux/vmalloc.h:140:14: note: 'vzalloc' declared here
+     140 | extern void *vzalloc(unsigned long size) __alloc_size(1);
+         |              ^
+>> drivers/gpu/drm/sun4i/sun4i_layer.c:32:8: error: incompatible integer to pointer conversion assigning to 'struct sun4i_layer_state *' from 'int' [-Wint-conversion]
+      32 |         state = kzalloc(sizeof(*state), GFP_KERNEL);
+         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/sun4i/sun4i_layer.c:43:9: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      43 |         copy = kzalloc(sizeof(*copy), GFP_KERNEL);
+         |                ^
+   drivers/gpu/drm/sun4i/sun4i_layer.c:43:7: error: incompatible integer to pointer conversion assigning to 'struct sun4i_layer_state *' from 'int' [-Wint-conversion]
+      43 |         copy = kzalloc(sizeof(*copy), GFP_KERNEL);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/sun4i/sun4i_layer.c:60:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      60 |         kfree(s_state);
+         |         ^
+   6 errors generated.
 
 
-vim +4660 mm/shmem.c
+vim +/kfree +28 drivers/gpu/drm/sun4i/sun4i_layer.c
 
-  4648	
-  4649	const struct address_space_operations shmem_aops = {
-  4650		.writepage	= shmem_writepage,
-  4651		.dirty_folio	= noop_dirty_folio,
-  4652	#ifdef CONFIG_TMPFS
-  4653		.write_begin	= shmem_write_begin,
-  4654		.write_end	= shmem_write_end,
-  4655	#endif
-  4656	#ifdef CONFIG_MIGRATION
-  4657		.migrate_folio	= migrate_folio,
-  4658	#endif
-  4659		.error_remove_folio    = shmem_error_remove_folio,
-> 4660		.invalidate_folio      = shmem_invalidate_folio,
-> 4661		.release_folio         = shmem_release_folio,
-> 4662		.is_partially_uptodate = shmem_is_partially_uptodate,
-  4663	};
-  4664	EXPORT_SYMBOL(shmem_aops);
-  4665	
+9026e0d122ac87 Maxime Ripard      2015-10-29  18  
+d540f82adf3577 Maxime Ripard      2018-01-22  19  static void sun4i_backend_layer_reset(struct drm_plane *plane)
+d540f82adf3577 Maxime Ripard      2018-01-22  20  {
+d540f82adf3577 Maxime Ripard      2018-01-22  21  	struct sun4i_layer_state *state;
+d540f82adf3577 Maxime Ripard      2018-01-22  22  
+d540f82adf3577 Maxime Ripard      2018-01-22  23  	if (plane->state) {
+d540f82adf3577 Maxime Ripard      2018-01-22  24  		state = state_to_sun4i_layer_state(plane->state);
+d540f82adf3577 Maxime Ripard      2018-01-22  25  
+d540f82adf3577 Maxime Ripard      2018-01-22  26  		__drm_atomic_helper_plane_destroy_state(&state->state);
+d540f82adf3577 Maxime Ripard      2018-01-22  27  
+d540f82adf3577 Maxime Ripard      2018-01-22 @28  		kfree(state);
+d540f82adf3577 Maxime Ripard      2018-01-22  29  		plane->state = NULL;
+d540f82adf3577 Maxime Ripard      2018-01-22  30  	}
+d540f82adf3577 Maxime Ripard      2018-01-22  31  
+d540f82adf3577 Maxime Ripard      2018-01-22 @32  	state = kzalloc(sizeof(*state), GFP_KERNEL);
+e4fff65fdb526a Maxime Ripard      2022-02-21  33  	if (state)
+60252323ec9c36 Alexandru Gheorghe 2018-08-04  34  		__drm_atomic_helper_plane_reset(plane, &state->state);
+d540f82adf3577 Maxime Ripard      2018-01-22  35  }
+d540f82adf3577 Maxime Ripard      2018-01-22  36  
 
 -- 
 0-DAY CI Kernel Test Service
