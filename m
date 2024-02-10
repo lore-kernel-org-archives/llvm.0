@@ -1,205 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0F9525B
-	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 07:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B8A1BC49
+	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 08:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707551501; cv=none; b=Ii64lDy+I8Y4j/+EyG+ybZnn4ogpMUJ/MEXgNM2kXm6szTlUtk64mcRf2w+bNNaTX/9ZLZUTzMylgDW+O+0befX88Oc2OC5o1UhrxF1RR6uHFk2M9oTz6maW5Rp4pPCD+nEP3csmG4h3E5iAIl4FtlfoifQtlJ9iQqXfDIyfbZ4=
+	t=1707552800; cv=none; b=BLfxoGJQP/6V75i5oav9WXFbUllmMM6Cp+22s/g3zNmnJnKG9V3UlB1SYlKLEvaAMG9d5ILpqA8shrDOS+QyDCHmzB/9fJPJ6S0NsGUzZndf1e+CUHKlOLQJ0K83Vz7VG2YWGh/nYjF9nmcvMVVQKuZ+Rn6Oh9komUy8/a0407w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707551501; c=relaxed/simple;
-	bh=+iRTCthQmCM/rD97MOpYnFGqNPuJjAYip3G2YBzh44M=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=L5nrLqNYamzOgCFNqeSMi/Ux8guZs0mjdl2ljJ9FYREyiwmzZftM1rIWL+hgifTZXsL8ncCxRKsVIpOSPyesJNpl8RolBk7JEGcpytxwjV7qEvBsu4sQNkIi6qbHB8O0e2AjREx994jRjaig5rPDyNGUVWIimTqqcAaHZtrUp70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YOzAREpe; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1707552800; c=relaxed/simple;
+	bh=Glo99Q4rZ224bZIULXqWRKYAJ1UBUwAAGaeNDMYK3aY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tzR6ZFGgZW/QSje05u5cyZQcJNCESvskfXdAMANMWeHvBRiwdDJWG0sYz903aR2Ep5f/7/dC0m4XretARdc+HNwJERMLaKac6KcHFBNlY2DkWdujpJibtrpWyfkP6zWLDD7mWhWXf2mVYZyVI9tCw5IwtxXt00hjpnsVoNXIhq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=VNcjQqnf; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YOzAREpe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707551498;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=sqTvkRw8gR7klvLste3GnHjLjp5ATPNP7FY/+OGId8Y=;
-	b=YOzAREpeerdzhIAlfmA3bS2yOO+8XYBrVkU9Vfs/uDdjIcso7/lPDyQcwidKdkWUtquJ93
-	dnsh4UDzPIaPcyIJvuhS3pdst1T7EYSNOhyttf9Qly9ec1JlRjodY88Ir4QEIf0mAIrLK1
-	i8TM1L0PTncffOAcFl1BCWF0jVT+/es=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-60-WMRCAMgXNBy7pOl9Q-bmzw-1; Sat, 10 Feb 2024 02:51:36 -0500
-X-MC-Unique: WMRCAMgXNBy7pOl9Q-bmzw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94E6F828CE2
-	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 07:51:36 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7CE8E112131D;
-	Sat, 10 Feb 2024 07:51:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 226): Test report for master
- (6.8.0-rc3, mainline.kernel.org-clang, 4a7bbe75)
-Date: Sat, 10 Feb 2024 07:51:36 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="VNcjQqnf"
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc6d8f31930so1336919276.0
+        for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 00:13:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umich.edu; s=google-2016-06-03; t=1707552797; x=1708157597; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Glo99Q4rZ224bZIULXqWRKYAJ1UBUwAAGaeNDMYK3aY=;
+        b=VNcjQqnfMF1X1xz7GrCS3i9N+0IIZW6i3GYs2VM9NFQjMvxBqTX2GAX9Sg0HVhuBwK
+         s6CfFpSd/sEcA6vqpY8Fe9k6v0BJ8/kQIbdTe0l4ozideTCj4QLmMG7xK5EeSHKpvPlV
+         DQ5js4q1uus3LICt0muLnUIEBllnizNroiVOQlSqPydx/RZn0SrL8BzkrrYY51jhmwhD
+         itS2Zgr8NwxDI8WPW7ivm78JY5T1/guQwFlqd2NzaBvzpCBVWZGHMghkxl07Nocl+0Io
+         XGul20CdD0carxplgXPdbz0hz9O53lFvpAd47zxK8VwTCk38LF/GyM2t/MU4i1jPFala
+         A6tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707552797; x=1708157597;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Glo99Q4rZ224bZIULXqWRKYAJ1UBUwAAGaeNDMYK3aY=;
+        b=wBehK7f6fYARMwAFjA+tRx7Q6X+Y+wzbN2mM9pYUPTKC3qvI+sHXuKfM9snOp1r48y
+         +6MrvPLOfFOaKjVNpV+qrjUEM4x11K1ABkLzXpRZHuz3kiJyt3TkUmjwgVVVi/sLQVdi
+         djWCpBVITFZ3P3zKgvIhjMsQBhBRiEzbeoVHkkoq71tHwbdKL5Ydu4bwonAshpFZLtIX
+         UjC5lS2QWMrbKdt0t3+EqiSG9OOdqPwH4b7gtjw4kLiS+gTd/hfSVM8Xo4I7aVmK+C69
+         lDaq1p//p2sw9sAAXN1IhlxcGeQ6FiCxZspv03VEL/ejrJEMRsp1mb1xm3DgUR0KUFjl
+         al0A==
+X-Gm-Message-State: AOJu0YwPnLiVnU0hjucD7+DM2jrcBWg4JNjxHudfIWpD8fWdDZRKy0tk
+	0Ou95BzNHyI0LUcxWeikbxJlKA7K7d6NIhLjYsveOD05A6bD3/TyS87VPd4GLPvpYgbkYY/nFJY
+	dnLv8uYhbUcUrrbyttqY3UbnkrnHYhuJEvBrz2w==
+X-Google-Smtp-Source: AGHT+IF4tUvf6ttwQdM3xfeC1VlLijJBFO5NkKyzXeExzVFNvP7Fl5D8PP7Tfno5g/OaAlhCpe9aPfGgUUtsjZouSLw=
+X-Received: by 2002:a25:7c02:0:b0:dc2:201a:7f1a with SMTP id
+ x2-20020a257c02000000b00dc2201a7f1amr2506701ybc.30.1707552796867; Sat, 10 Feb
+ 2024 00:13:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <95349.124021002513600237@us-mta-60.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20240117-swiftly-parasail-618d62972d6e@spud> <CANiq72mVKCOAuK4Qe+8AHmpkFwyJsVfx8AqB7ccGi3DYpSSWcw@mail.gmail.com>
+ <20240118-implode-delirium-eefdd86e170e@spud> <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
+ <20240125-bucked-payroll-47f82077b262@wendy> <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
+ <20240125-lazy-thrower-744aacc6632a@wendy> <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
+ <20240126-eccentric-jaywalker-3560e2151a92@spud> <CANiq72nu2NXUWYanHZd5EXgX4P_v673EWn6SCRW60Es9naraQQ@mail.gmail.com>
+ <20240209-rage-keg-1b2982cd17d9@spud>
+In-Reply-To: <20240209-rage-keg-1b2982cd17d9@spud>
+From: Trevor Gross <tmgross@umich.edu>
+Date: Sat, 10 Feb 2024 02:13:06 -0600
+Message-ID: <CALNs47sRqAbE=u3=_ciO2oge7Afz-6GBBhW+BwcLRET-TsuxTg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+To: Conor Dooley <conor@kernel.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>, Ramon de C Valle <rcvalle@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Fri, Feb 9, 2024 at 9:18=E2=80=AFAM Conor Dooley <conor@kernel.org> wrot=
+e:
+>
+> On Sat, Jan 27, 2024 at 02:46:38PM +0100, Miguel Ojeda wrote:
+> > On Fri, Jan 26, 2024 at 11:01=E2=80=AFPM Conor Dooley <conor@kernel.org=
+> wrote:
+> > >
+> > > Is that even needed? We already have ARCH_SUPPORTS_CFI_CLANG and AFAI=
+U
+> > > rust supports it if clang does, so a second option is superfluous?
+> >
+> > From a quick look, I don't see it enabled in any RISC-V built-in
+> > target in `rustc` yet.
+> >
+> > It may also still be the case that KCFI needs some tweaks for, say,
+> > RISC-V, before the flag actually works, i.e. we couldn't just test the
+> > flag in that case -- Ramon: how likely is it that RISC-V would work if
+> > KCFI works for aarch64 and x86_64?
+>
+> Well, there's been no reply here. I'll do sa you suggested and add a
+> depends on !CFI_CLANG to RUST.
+>
+> Cheers,
+> Conor.
+>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I asked on Zulip and it sounds like Ramon may be out [1]. It
+_probably_ works, but going with a dependency to not be blocked on
+KCFI is probably reasonable for now.
 
+- Trevor
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/128780
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11290681
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [Rawhide] nvme-cli: hostid/hostnqn warnings to verbose level
-            URL: https://github.com/linux-nvme/nvme-cli/commit/252929069d6c=
-9042e9c95f41788006cb3eb2f452
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
-koza machines
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1852
-            Affected tests:
-                  x86_64 - Libkcapi AF_ALG test
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [Rawhide] Storage: ERROR: Could not build wheels for ruamel.=
-yaml.clib, which is required to install pyproject.toml-based projects
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1859
-            Affected tests:
-                 ppc64le - Storage - dm/common
-                   s390x - Storage - dm/common
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+[1]: https://rust-lang.zulipchat.com/#narrow/stream/343119-project-exploit-=
+mitigations/topic/KCFI.20on.20RISC-V.20questions
