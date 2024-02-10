@@ -1,53 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F803DBAE;
-	Sat, 10 Feb 2024 12:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38FB3D0D8;
+	Sat, 10 Feb 2024 12:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707567262; cv=none; b=U+hCY3LEYQV8OiuPFIl+yfxFzwp53VOk1Jc72VmWa+1CwVKoxudsKRfrF0H4Vt10VBl/w+kWQjy32mFmap4iUIZpbzSY3jCcdWW3PHwvq4weoRPE/G/LFfPc5/tSpDQ0n6H6vLM+d6QYLvHAwCdKN76YA4WdzN66/WU5/1eb6w0=
+	t=1707569303; cv=none; b=pEdVe40cfE4dRTj15l4o0n9HQUnlbMDdSt7pCgOa+bjpSsHLafbqzFuXMJckGy0qiB6LsHtzRe7eJ/B0ox3m70Txn5OkRDvyDPZD+c5KOtqIaIZ7cKuRU9U0iVtmNVg2YE1axCBDpGxXEKrfeh/empi5AhrdBNSPf3va9xIAs/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707567262; c=relaxed/simple;
-	bh=N+mT2rq0SmwY4I44Z/BEvfh2CiGTN5fhq20HbwmOuXU=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oWpDhiIa1nYWUBooQr/Oh3/NQFxfPv5cl60b08i9W7uaITg+UPFEoUzpMv92oULBLhx7knSiZkqaC4Q/ql/O7/3LLCPX0dP3gOg7Hc+3RlwZ71B/OJ8JFzIgBZbaCyKH2mT3u48tegeaZLYS6Xe2dT++d6SzZ/Z8EFz8+p/Wygc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kQSMJNKk; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1707569303; c=relaxed/simple;
+	bh=FIRhFSWaJkHSi5euNaEQekJvZSlwmwHv9DA2ItEaa2A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JYIwZ8G+dwPDYpeNnp0fKkXCpuZ8kfy5SkLEbzAUlCB3C2IjgzIDWqyZYU4864YTOeJVvqsvs0rJZee6+eHJQkhctTZj1iAMKuFFwx+avthoU5r/vx5WxzEettHeGxcrGh7/LW2MovEQlrI301Gucjx8RoSLPLDy86aVUbgb9a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LP4R4oZA; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kQSMJNKk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LP4R4oZA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707567260; x=1739103260;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=N+mT2rq0SmwY4I44Z/BEvfh2CiGTN5fhq20HbwmOuXU=;
-  b=kQSMJNKkkXpkVnBMWituYsbCmZpSrrqYSccQE23jAbggrHv/0/7wGaRb
-   v+XrVDpGDLdW6coa1Byi+PuuIpuXULQQTlo7/qZJY4bPg6B+a5m8j0WNB
-   4rf4KUi2O/3MO9F0kHYBNCzwMdqYoXp0XdGBtk2nSLdpgavOg5Xg46bSw
-   hloFVjDDX/A/GzgnV+N4j9pFh93r6FJy2Auf0kZzOW10oQPt5MOTpe6XM
-   /eccggGZOF0Kc31CJVkoMmp35gT6jiKnOSm+7no74szsdXigohnS3uclb
-   9mQJQ0RGBK1sBL/PSrlSr0toikTsLqQAlbBVHXstkAaaoRVjTl1u7jofM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="12645407"
+  t=1707569302; x=1739105302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FIRhFSWaJkHSi5euNaEQekJvZSlwmwHv9DA2ItEaa2A=;
+  b=LP4R4oZATfQTuZVJn4shC6BrYjcnq+mwurnOYYbprbdCNBUg/slqP+4/
+   gCjr8If6oU5jNXfOKg1Zg1/8S9+I3aFlbBM94/aYLC5SBKJSJYpH7yV8X
+   2JEQgK8dfw3gk9XdT8YLRza/ZaZaNjgHow5IJo1Y1iZ4SG323dNvZzGir
+   Kv24e1B6LFvKpRKw6DTCgsBrowpXvnsiwy1ehOUxjjq7QE7pyi1GbfrX6
+   q3OKlMPE6qWDU1SgY8v/ATYT/+CbaspIYCxZunGq9XXWzvPEqVqHWEuZ4
+   QZyVJI7a57ihAHYtpZt1O1r/D52StaK4+FXpTon1us1eVZYnF8FqmwnK7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1692934"
 X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
-   d="scan'208";a="12645407"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 04:14:20 -0800
+   d="scan'208";a="1692934"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 04:48:21 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="934664995"
 X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
-   d="scan'208";a="2550627"
+   d="scan'208";a="934664995"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 10 Feb 2024 04:14:18 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2024 04:48:19 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rYmFM-0005dQ-1h;
-	Sat, 10 Feb 2024 12:14:16 +0000
-Date: Sat, 10 Feb 2024 20:14:15 +0800
+	id 1rYmmH-0005fA-0v;
+	Sat, 10 Feb 2024 12:48:17 +0000
+Date: Sat, 10 Feb 2024 20:48:11 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to
- next function __cfi_ip_vs_rr_init()
-Message-ID: <202402102007.mWVYAfR0-lkp@intel.com>
+To: Daniel Gomez <da.gomez@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 7/9] shmem: check if a block is uptodate before
+ splice into pipe
+Message-ID: <202402102036.XUZTIesW-lkp@intel.com>
+References: <20240209142901.126894-8-da.gomez@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,27 +60,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240209142901.126894-8-da.gomez@samsung.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Kees Cook <keescook@chromium.org>
+Hi Daniel,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4a7bbe7519b6a5d189feeba1d417c8ce9f7e852b
-commit: 55c84a5cf2c72a821719823ef2ebef01b119025b fortify: strcat: Move definition to use fortified strlcat()
-date:   9 months ago
-config: x86_64-randconfig-073-20240210 (https://download.01.org/0day-ci/archive/20240210/202402102007.mWVYAfR0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402102007.mWVYAfR0-lkp@intel.com/reproduce)
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on brauner-vfs/vfs.all linus/master v6.8-rc3 next-20240209]
+[cannot apply to vfs-idmapping/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Gomez/splice-don-t-check-for-uptodate-if-partially-uptodate-is-impl/20240209-223226
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240209142901.126894-8-da.gomez%40samsung.com
+patch subject: [RFC PATCH 7/9] shmem: check if a block is uptodate before splice into pipe
+config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20240210/202402102036.XUZTIesW-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ac0577177f053ba7e7016e1b7e44cf5932d00b03)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402102036.XUZTIesW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402102007.mWVYAfR0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402102036.XUZTIesW-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __cfi_ip_vs_rr_init()
-   vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !ENDBR: machine_kexec+0x3f
+>> ld.lld: error: undefined symbol: __hexagon_moddi3
+   >>> referenced by shmem.c
+   >>>               mm/shmem.o:(shmem_file_splice_read) in archive vmlinux.a
+   >>> referenced by shmem.c
+   >>>               mm/shmem.o:(shmem_file_splice_read) in archive vmlinux.a
+   >>> did you mean: __hexagon_modsi3
+   >>> defined in: vmlinux.a(arch/hexagon/lib/modsi3.o)
 
 -- 
 0-DAY CI Kernel Test Service
