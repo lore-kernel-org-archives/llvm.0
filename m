@@ -1,58 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C3520E4;
-	Sat, 10 Feb 2024 02:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5FE23B9;
+	Sat, 10 Feb 2024 03:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707532988; cv=none; b=uJyW9jUzUT8Ce7Ggqf08tzLZzCuJUisA1wQfKYBdb7soEFdnHK2x8AMRnHulIkkfVaWWStqXH0H7EyVcoIzCbr9Q54zPXiJo8eZ6PNw7tVQUAmpbimO2n3VyRvbyb4I+HBwZVnJp3KVry5sbiTbyQChqH6g485Eh6Wh0l39K+Ww=
+	t=1707534306; cv=none; b=eqZQ50iyPgVju+J/XCQidrM0Z19Z/Z6FsPXr00dvHBxdwlEsT/d4ed2C4KQyEqGpdIhDH0vu0Aq6+JuWYW6dmk44N3n25vkaTgfrN0jYnWpCNCdlaKBxcSHAZm3IkVVVY4pwLN8boW+29eAx85BWeiOr0SQQPikXus/NLdrunEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707532988; c=relaxed/simple;
-	bh=iJCdJqeAzOIYB4a07TrvzCEDXKz6pJdlBnBiGLbV8ew=;
+	s=arc-20240116; t=1707534306; c=relaxed/simple;
+	bh=Wp/c6MLnkyuLOrKc8Us59a9RMebO7T44GwPJbgIan+4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FxTmDudK7w1Hb0eZz/5uGAxdfrApJojGOyxw0mTBZ9OSgWOiNzKuWY5tZ8jFVbwqnO5qNi8qDgTbLwP+yq4h2zkwf5GfG3vkT7QbmoN/EeAIx7r3yGqOBBcJx1rYN2jrCo25y+qCjF1yKNZx+fabs0DnvZ9gmYo2pI9Ildeuqec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SQYkMvHB; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=vFa0gRO+i17sm5MoPWtlx/c6Z4/FM3dkKgqQB6AzjOUIH3HxudXOM39h0VtwOt0ymeMiN22ZLJ2znz7ZTz/b6+5ieIpB881ePowbyZWCXZXWKYqZZcfRmquifctQzMHD/0p5hc6Sls86Nu/Hi1DpYiQGv3yAckGen3/Cw17Lt4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dxqo4XJT; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SQYkMvHB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dxqo4XJT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707532983; x=1739068983;
+  t=1707534304; x=1739070304;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iJCdJqeAzOIYB4a07TrvzCEDXKz6pJdlBnBiGLbV8ew=;
-  b=SQYkMvHBO/uWtaWPpCF6vKmr9PjKmI5oetgA+5OBK9IofJtSXYRNHrEw
-   lpGiY0K28t+cMg6APHdFtl0lGzCZC0lFvZPQwZAQCF5Z5Q2QXRKs7AB5o
-   i47i4sVrhqHpCfpOO7dAq0FXUufjZDxw7z/+ax/AIPn1MRxUcrtBcA5og
-   UeI7md/tDcqNLidY1OHFdfp2s4rGQluDkKX8nyry0a62ey1/goVii279r
-   ZjBiDJ/p5kJctaf3c6DAWJTS6kVBLClFZqgLKOr9bHK3jz16JqoQyunpg
-   OZ41Wy+fZUNn2ZdWHmtx+qP0kafNffO7P2W0r9r1iENWv/OWPxqsyMC92
+  bh=Wp/c6MLnkyuLOrKc8Us59a9RMebO7T44GwPJbgIan+4=;
+  b=Dxqo4XJTL2JSUsTpE/MWpTlxgReNTPo6hzk11taC6/isJ31rzeVgQybO
+   YhqW9N8o4AOdq+rTqpKpq89H+MC7K8bnWbLMqlt7XpSi76pYPqgbrT0dW
+   bzQYzOvQs8gWPtesI27YAt6XZUCQfm3ekinm9l55jfHxVDww5z6XK2VHm
+   35ygmWMm3H1U01owTSI7P7SXYxyZlzQVAgq8IrTYWA8FfCERekIah3TXw
+   aIysy6Y0CfsihoDaq0VGBN30yE0s4zYZneScptgje8M902SxaKuRXexz6
+   tdoSFEIW2Emv/ZI+vbcH9vEnCi42i8BzCPGNADjkaO8zZIE1fKL3VHwtv
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1679417"
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="12181935"
 X-IronPort-AV: E=Sophos;i="6.05,258,1701158400"; 
-   d="scan'208";a="1679417"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 18:43:01 -0800
+   d="scan'208";a="12181935"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 19:05:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,258,1701158400"; 
-   d="scan'208";a="2402902"
+   d="scan'208";a="39541571"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 09 Feb 2024 18:42:59 -0800
+  by orviesa001.jf.intel.com with ESMTP; 09 Feb 2024 19:04:59 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rYdKT-0005I0-07;
-	Sat, 10 Feb 2024 02:42:57 +0000
-Date: Sat, 10 Feb 2024 10:42:44 +0800
+	id 1rYdfl-0005IM-1L;
+	Sat, 10 Feb 2024 03:04:57 +0000
+Date: Sat, 10 Feb 2024 11:04:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [rafael-pm:bleeding-edge 71/77] drivers/thermal/thermal_of.c:536:8:
- error: passing 'struct thermal_zone_device_ops' to parameter of incompatible
- type 'const void *'
-Message-ID: <202402101037.cQIOnsH8-lkp@intel.com>
+	Pavel Machek <pavel@denx.de>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Subject: [cip:linux-5.10.y-cip 43/56] drivers/cache/ax45mp_cache.c:141:6:
+ warning: no previous prototype for function 'arch_sync_dma_for_device'
+Message-ID: <202402101053.wMnRgYch-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,129 +60,158 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   2bc44535ed4f6a6013ec53b505c4c381e166f0ce
-commit: fe0ea8a4d293acaf02031aaaaeb3dcf7f262e5b3 [71/77] thermal: core: Store zone ops in struct thermal_zone_device
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240210/202402101037.cQIOnsH8-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402101037.cQIOnsH8-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git linux-5.10.y-cip
+head:   a624abaa85d7f3ff289eb2e257db5c4485d11d18
+commit: 2656f92bc7dc5ac286595c8eac040828c2f180af [43/56] cache: ax45mp_cache: Add non coherent support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240210/202402101053.wMnRgYch-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402101053.wMnRgYch-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402101037.cQIOnsH8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402101053.wMnRgYch-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/thermal/thermal_of.c:536:8: error: passing 'struct thermal_zone_device_ops' to parameter of incompatible type 'const void *'
-           kfree(of_ops);
-                 ^~~~~~
-   include/linux/slab.h:227:24: note: passing argument to parameter 'objp' here
-   void kfree(const void *objp);
-                          ^
-   1 error generated.
+   In file included from drivers/cache/ax45mp_cache.c:9:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     464 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     477 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
+      36 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/cache/ax45mp_cache.c:9:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     490 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+      34 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/cache/ax45mp_cache.c:9:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     501 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     511 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     521 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     609 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     617 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     625 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     634 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     643 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     652 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   drivers/cache/ax45mp_cache.c:70:3: error: implicit declaration of function 'csr_write' [-Werror,-Wimplicit-function-declaration]
+      70 |                 csr_write(AX45MP_CCTL_REG_UCCTLBEGINADDR_NUM, start);
+         |                 ^
+>> drivers/cache/ax45mp_cache.c:141:6: warning: no previous prototype for function 'arch_sync_dma_for_device' [-Wmissing-prototypes]
+     141 | void arch_sync_dma_for_device(phys_addr_t paddr,
+         |      ^
+   drivers/cache/ax45mp_cache.c:141:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     141 | void arch_sync_dma_for_device(phys_addr_t paddr,
+         | ^
+         | static 
+>> drivers/cache/ax45mp_cache.c:165:6: warning: no previous prototype for function 'arch_sync_dma_for_cpu' [-Wmissing-prototypes]
+     165 | void arch_sync_dma_for_cpu(phys_addr_t paddr,
+         |      ^
+   drivers/cache/ax45mp_cache.c:165:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     165 | void arch_sync_dma_for_cpu(phys_addr_t paddr,
+         | ^
+         | static 
+>> drivers/cache/ax45mp_cache.c:183:6: warning: no previous prototype for function 'arch_setup_dma_ops' [-Wmissing-prototypes]
+     183 | void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+         |      ^
+   drivers/cache/ax45mp_cache.c:183:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     183 | void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+         | ^
+         | static 
+   15 warnings and 1 error generated.
 
 
-vim +536 drivers/thermal/thermal_of.c
+vim +/arch_sync_dma_for_device +141 drivers/cache/ax45mp_cache.c
 
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  449  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  450  /**
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  451   * thermal_of_zone_register - Register a thermal zone with device node
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  452   * sensor
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  453   *
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  454   * The thermal_of_zone_register() parses a device tree given a device
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  455   * node sensor and identifier. It searches for the thermal zone
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  456   * associated to the couple sensor/id and retrieves all the thermal
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  457   * zone properties and registers new thermal zone with those
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  458   * properties.
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  459   *
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  460   * @sensor: A device node pointer corresponding to the sensor in the device tree
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  461   * @id: An integer as sensor identifier
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  462   * @data: A private data to be stored in the thermal zone dedicated private area
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  463   * @ops: A set of thermal sensor ops
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  464   *
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  465   * Return: a valid thermal zone structure pointer on success.
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  466   * 	- EINVAL: if the device tree thermal description is malformed
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  467   *	- ENOMEM: if one structure can not be allocated
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  468   *	- Other negative errors are returned by the underlying called functions
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  469   */
-ac614a9b4c35bf Daniel Lezcano    2023-04-04  470  static struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  471  							    const struct thermal_zone_device_ops *ops)
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  472  {
-fe0ea8a4d293ac Rafael J. Wysocki 2024-02-09  473  	struct thermal_zone_device_ops of_ops = *ops;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  474  	struct thermal_zone_device *tz;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  475  	struct thermal_trip *trips;
-ac4436a5b20e0e Ahmad Fatoum      2023-07-08  476  	struct thermal_zone_params tzp = {};
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  477  	struct device_node *np;
-62e79e38b257a5 Fabio Estevam     2023-11-29  478  	const char *action;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  479  	int delay, pdelay;
-990efe2b4813ff Rafael J. Wysocki 2024-02-08  480  	int ntrips;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  481  	int ret;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  482  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  483  	np = of_thermal_zone_find(sensor, id);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  484  	if (IS_ERR(np)) {
-9d6792df07367a Daniel Lezcano    2022-08-09  485  		if (PTR_ERR(np) != -ENODEV)
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  486  			pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
-7ef2f023c2c77a Ido Schimmel      2022-10-20  487  		ret = PTR_ERR(np);
-7ef2f023c2c77a Ido Schimmel      2022-10-20  488  		goto out_kfree_of_ops;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  489  	}
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  490  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  491  	trips = thermal_of_trips_init(np, &ntrips);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  492  	if (IS_ERR(trips)) {
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  493  		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
-7ef2f023c2c77a Ido Schimmel      2022-10-20  494  		ret = PTR_ERR(trips);
-7ef2f023c2c77a Ido Schimmel      2022-10-20  495  		goto out_kfree_of_ops;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  496  	}
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  497  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  498  	ret = thermal_of_monitor_init(np, &delay, &pdelay);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  499  	if (ret) {
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  500  		pr_err("Failed to initialize monitoring delays from %pOFn\n", np);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  501  		goto out_kfree_trips;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  502  	}
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  503  
-ac4436a5b20e0e Ahmad Fatoum      2023-07-08  504  	thermal_of_parameters_init(np, &tzp);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  505  
-fe0ea8a4d293ac Rafael J. Wysocki 2024-02-09  506  	of_ops.bind = thermal_of_bind;
-fe0ea8a4d293ac Rafael J. Wysocki 2024-02-09  507  	of_ops.unbind = thermal_of_unbind;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  508  
-62e79e38b257a5 Fabio Estevam     2023-11-29  509  	ret = of_property_read_string(np, "critical-action", &action);
-62e79e38b257a5 Fabio Estevam     2023-11-29  510  	if (!ret)
-fe0ea8a4d293ac Rafael J. Wysocki 2024-02-09  511  		if (!of_ops.critical && !strcasecmp(action, "reboot"))
-fe0ea8a4d293ac Rafael J. Wysocki 2024-02-09  512  			of_ops.critical = thermal_zone_device_critical_reboot;
-62e79e38b257a5 Fabio Estevam     2023-11-29  513  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  514  	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
-fe0ea8a4d293ac Rafael J. Wysocki 2024-02-09  515  						     data, &of_ops, &tzp,
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  516  						     pdelay, delay);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  517  	if (IS_ERR(tz)) {
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  518  		ret = PTR_ERR(tz);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  519  		pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
-ac4436a5b20e0e Ahmad Fatoum      2023-07-08  520  		goto out_kfree_trips;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  521  	}
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  522  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  523  	ret = thermal_zone_device_enable(tz);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  524  	if (ret) {
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  525  		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  526  		       tz->type, tz->id, ret);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  527  		thermal_of_zone_unregister(tz);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  528  		return ERR_PTR(ret);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  529  	}
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  530  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  531  	return tz;
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  532  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  533  out_kfree_trips:
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  534  	kfree(trips);
-7ef2f023c2c77a Ido Schimmel      2022-10-20  535  out_kfree_of_ops:
-7ef2f023c2c77a Ido Schimmel      2022-10-20 @536  	kfree(of_ops);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  537  
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  538  	return ERR_PTR(ret);
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  539  }
-3fd6d6e2b4e80f Daniel Lezcano    2022-08-05  540  
-
-:::::: The code at line 536 was first introduced by commit
-:::::: 7ef2f023c2c77a452ba5d0c9b1ad04a5a895d553 thermal/of: Fix memory leak on thermal_of_zone_register() failure
-
-:::::: TO: Ido Schimmel <idosch@nvidia.com>
-:::::: CC: Daniel Lezcano <daniel.lezcano@kernel.org>
+   140	
+ > 141	void arch_sync_dma_for_device(phys_addr_t paddr,
+   142				      size_t size, enum dma_data_direction dir)
+   143	{
+   144		switch (dir) {
+   145		case DMA_TO_DEVICE:
+   146			ax45mp_dma_cache_wback(paddr, size);
+   147			break;
+   148	
+   149		case DMA_FROM_DEVICE:
+   150			fallthrough;
+   151	
+   152		case DMA_BIDIRECTIONAL:
+   153			/* Skip the invalidate here if it's done later */
+   154			if (IS_ENABLED(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU))
+   155				ax45mp_dma_cache_wback(paddr, size);
+   156			else
+   157				ax45mp_dma_cache_wback_inv(paddr, size);
+   158			break;
+   159	
+   160		default:
+   161			break;
+   162		}
+   163	}
+   164	
+ > 165	void arch_sync_dma_for_cpu(phys_addr_t paddr,
+   166				   size_t size, enum dma_data_direction dir)
+   167	{
+   168		switch (dir) {
+   169		case DMA_TO_DEVICE:
+   170			break;
+   171	
+   172		case DMA_FROM_DEVICE:
+   173		case DMA_BIDIRECTIONAL:
+   174			/* FROM_DEVICE invalidate needed if speculative CPU prefetch only */
+   175			ax45mp_dma_cache_inv(paddr, size);
+   176			break;
+   177	
+   178		default:
+   179			break;
+   180		}
+   181	}
+   182	
+ > 183	void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+   184				const struct iommu_ops *iommu, bool coherent)
+   185	{
+   186		dev->dma_coherent = coherent;
+   187	}
+   188	
 
 -- 
 0-DAY CI Kernel Test Service
