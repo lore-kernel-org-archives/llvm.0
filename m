@@ -1,107 +1,113 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3066365
-	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 00:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9EBEAF4
+	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 00:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707524525; cv=none; b=aEKCt/EBHJvDSsd9UbnNeWZeqT3zL870ttmWl5WpY8UcIhlhyPMrLdJhxFnSb9gS0FVHRKEhqQbV681lG3uvkKIOoBbHe7RDo1dBotictp3mwQVj2SyO2xzArOb7i7Hr142X2USmw0w4g6oOxQQ4p9IAcwawjxDbWERWSKpBm7c=
+	t=1707526142; cv=none; b=Z/4XsIFWshoQKcrKp3mb9BaspV0PjczrSnuo/iyqkwCYn7sTdsvYZoV8/sQ9lbIE43xIMDOmKIwHKchazh/msYIqldfxy7i7X12lBJODBfKrPwyZTIZADCcST7CKCo0KJNqj6ut/9of/6IiTdMVJM/uer1K5r6V+SuPSTD00cjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707524525; c=relaxed/simple;
-	bh=p4HJtbC7sr9+mRbDPyd1tVdbBoNEAVlwdpQ81uwZGkU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mZfRnmRn4GV4SZrNHxlBgIHbvFOuXGG2y1tnu+YwziQsMiPsVs39qtfZ4pdCF+HKc/lV6MzFKM3G1pa8Dkm/k7InhdbZv97dLh8BgS6Hj63ZV1dJemcZw2sHUzqlJ8S6DNGjZ/i6UA48D4dhz7YrbZz5L8aFDnfluk2YPOzyv6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-53fa455cd94so1005194a12.2
-        for <llvm@lists.linux.dev>; Fri, 09 Feb 2024 16:22:03 -0800 (PST)
+	s=arc-20240116; t=1707526142; c=relaxed/simple;
+	bh=hrEhIt0za4zXX+4YcZvr59C24AojcEa8uuOYHTznHjw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uIqI6jjbZe+Lra7p7dEFNx32lzc1uAEz+H/vUKO8W4iVAPJ2moKj/lpLavs+mVFO5MiwsyuZl3DrAeruv8Y1HW+ZRO8haftHQOKdEH831NYL38t9Nl/Hy1OGKJyYHJcUfhUsTFpFHeKlGBsHC9yHEgVXJSNpNPGwSZpp9LRQkWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mq6YYoi+; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mq6YYoi+"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1d74045c463so13328405ad.3
+        for <llvm@lists.linux.dev>; Fri, 09 Feb 2024 16:49:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707526141; x=1708130941; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhIOsBixkq6X+I5UtLFYmEvlA1q4nQi2Uk71zOMtrW4=;
+        b=mq6YYoi+o3TStqh54FOQkrzYWdzj4d0rwxao4K/E3KpL7iPS3MKR8outOLq76blZFj
+         QR+CbzRsl2PRqSmTyUnlEatjzobybfo2omUUh3KQJKnmgVsN1mZVmbkxQxQVTovVMDeI
+         ey9u08hinOwFAuXMXxC/amCbXt/k2J7aDx+5M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707524523; x=1708129323;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0GER+N6at/M+itjVzqKdSOcZKhDVYgoDwe42TsTNQd0=;
-        b=el5XtrP8ACYYT9GJAXp6nmE7Z0MXSEwuAThU3iQkOYLNojpO+4Ml34QvMC1eCtveaP
-         KNHZK1YUSf0K6FyITsaXD+JaJDgiqVUsABzs94yCRJmEUigOpaIn77nLcOolkU9HZx7g
-         5zZOmhykcg1Lkowq2O2hgceUMQ2SEtFia22BAEvA9qFtUpL4UUn4eGO7uE/AlFKtzuFu
-         h8+IqZ7X1PqsDMSONjHc8DkjdEt5404y2H1QRCB1jsmTx2DZQl7gRhGb1nvsov3SvF4n
-         bRjMVXuN/id6cXAOS/sldXeS95K3CC7qYv0+OEyp71qMfBeY3Cas5EzPyjYSM0v2uKvh
-         oPww==
-X-Forwarded-Encrypted: i=1; AJvYcCWk72VhtbIAwW/Fjx7AwE2l2bAVba3isDgh9Ki4zzX878GtzT655WqaFxs4qeBvj1IEWjqd0cw6HdHJoOvu4Qbnv4BveQ==
-X-Gm-Message-State: AOJu0YzRn4KWa6IfkeCvSu1duB6htA8RWKVqb+C9uVkrgM4YLAoOsg55
-	2Ep6mDUxU2CF4x4yMOOo/FRBqLPpGVNYY1G6Y9lCwrLJwNjvcgICx7r6kzIr30aCw0vOEWjCwON
-	JdaBi46IUy1ZD6yCMjD1d4cFwT4I=
-X-Google-Smtp-Source: AGHT+IEXD3A5dWjGC7KaVKM0HkmFVfazNpWmdE3zsdI9nfzsz03DrCJD6p6G6694QrXqD/84HA7fzF4QKRHzTQXHZbY=
-X-Received: by 2002:a17:90b:380e:b0:296:43a:932e with SMTP id
- mq14-20020a17090b380e00b00296043a932emr712507pjb.7.1707524523094; Fri, 09 Feb
- 2024 16:22:03 -0800 (PST)
+        d=1e100.net; s=20230601; t=1707526141; x=1708130941;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xhIOsBixkq6X+I5UtLFYmEvlA1q4nQi2Uk71zOMtrW4=;
+        b=N8haRFoDig6XgQzuK39P+X/w0Vol5VaGnM3uotFSRlX4PwdaDC/yBohrAE+khxKuV8
+         vuMXcmWHXblGb42H25KoSsEuJO42LcGKGgwKz//5jgNwMtec4Z+O5udTUw5LKlEFpe4B
+         rAlFjsByi6u+a6TyKS247HCotAEAW65kXIzDcpuIkigr/JK15EzXkBXTSSxaQmgTPK3x
+         qbsN+3XHOlzdnZEXa0ieD4Jh6WohB1HIfjByIxzGTXGVjyKNZi0JDKXqTYPX4BxYeiWS
+         ZDD8MOBv2c9gXL1wUoU59vYpNmnOq1f4rIPzwE3Mh038/bqmyQY8iBIVewjqs+ewrwqT
+         7zXw==
+X-Gm-Message-State: AOJu0Yy/KQrSl4gbQDRH3tcS64MiuepFV/kkU67aNUg7+mpjmkjG/GF2
+	9pjV7oCEhpyF9AxSj7eo2luXQrlu4RHr2QrBryAy60ykaUtmr42tPae1Z6/mBw==
+X-Google-Smtp-Source: AGHT+IGqFQmp48EV/HeK/ohKlHb7zxUA5fEEZHeG+9UTzYyujZAJTn94wWRhwDxrqBopNav53lCKsg==
+X-Received: by 2002:a17:902:ea09:b0:1d9:b8cb:3665 with SMTP id s9-20020a170902ea0900b001d9b8cb3665mr1167619plg.36.1707526140735;
+        Fri, 09 Feb 2024 16:49:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVI0SOI2E3VC0AE0of9/MYFRR0yVYQzthkFmv0JW7fA/SJQhhnnI3Nj5OEsNvrtNcdRFhHpOf5u+C3DGYEj7y1QmZKG9DqmJxhSLGKUmKRtiym081eBwXvmlPvnPoRFbYozaBCVcEzpfdzvKL5XsE6na+cvYGSIz8z/iw3GGz5NgMjZyC8x1ylmlUU500p9eC7PsDUz3qdjaUJ4lDemv8WJ00f0xgTx30k9IBXOA4ukuDuItip5wN0tqF2XRRURTeOK4zFlkc/U1xMHtLiGXHCiJxbOfRkGuI6qbhSgFvTKnpkPDxwJIq+B0WYaKEtx/pSF/bhP69oEmAjzAfeoA5ZDA9/FFXosjMJlFihIuYBkey/d
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h3-20020a170902748300b001d9eef9892asm2062122pll.174.2024.02.09.16.49.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Feb 2024 16:49:00 -0800 (PST)
+Date: Fri, 9 Feb 2024 16:48:59 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, maskray@google.com,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] kbuild: Fix changing ELF file type for output of gen_btf
+ for big endian
+Message-ID: <202402091648.2B8D95062B@keescook>
+References: <20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240201001504.1348511-1-irogers@google.com> <20240201001504.1348511-8-irogers@google.com>
-In-Reply-To: <20240201001504.1348511-8-irogers@google.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Fri, 9 Feb 2024 16:21:51 -0800
-Message-ID: <CAM9d7cih+JqmhVOSoYmRUK2+FRWnknQ6VucYpg5ZC01BYqdv=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] perf srcline: Add missed addr2line closes
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org>
 
-On Wed, Jan 31, 2024 at 4:15=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> The child_process for addr2line sets in and out to -1 so that pipes
-> get created. It is the caller's responsibility to close the pipes,
-> finish_command doesn't do it. Add the missed closes.
->
-> Fixes: b3801e791231 ("perf srcline: Simplify addr2line subprocess")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/srcline.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-> index 034b496df297..7addc34afcf5 100644
-> --- a/tools/perf/util/srcline.c
-> +++ b/tools/perf/util/srcline.c
-> @@ -399,6 +399,8 @@ static void addr2line_subprocess_cleanup(struct child=
-_process *a2l)
->                 kill(a2l->pid, SIGKILL);
->                 finish_command(a2l); /* ignore result, we don't care */
->                 a2l->pid =3D -1;
-> +               close(a2l->in);
-> +               close(a2l->out);
+On Thu, Feb 08, 2024 at 01:21:06PM -0700, Nathan Chancellor wrote:
+> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> changed the ELF type of .btf.vmlinux.bin.o from ET_EXEC to ET_REL via
+> dd, which works fine for little endian platforms:
+> 
+>    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+>   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+> 
+> However, for big endian platforms, it changes the wrong byte, resulting
+> in an invalid ELF file type, which ld.lld rejects:
+> 
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+>   Type:                              <unknown>: 103
+> 
+>   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+> 
+> Fix this by using a different seek value for dd when targeting big
+> endian, so that the correct byte gets changed and everything works
+> correctly for all linkers.
+> 
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+>   Type:                              REL (Relocatable file)
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> Link: https://github.com/llvm/llvm-project/pull/75643
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-I was about to ask the stderr, but addr2line_subprocess_init()
-sets a2l->no_stderr already.
+Yeah, looks good to me.
 
-I wish it could be handled in finish_command() but it seems
-the API allows setting external file descriptors (before calling
-start_command).  Hmm..
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Anyway it looks like an independent fix.
-
-Thanks,
-Namhyung
-
-
->         }
->
->         free(a2l);
-> --
-> 2.43.0.429.g432eaa2c6b-goog
->
+-- 
+Kees Cook
