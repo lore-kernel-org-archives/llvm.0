@@ -1,109 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7441C14;
-	Sat, 10 Feb 2024 00:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3066365
+	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 00:22:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707523621; cv=none; b=au5F6KRPJk0Kjfv9QzYkqFn2VM4+hsxO7795FYfTPlv0k7DhIbQRrgqxj0nVjz7mvgP4BiOJrPbUvU18nOye8KRMDuDt1Lp3j/4aX2UF0Owom5Y+sxdolqmARmyNO+v69ZiUE1BKnxvTts3f0gFd2INYeFsElAInIYGloKY6sJM=
+	t=1707524525; cv=none; b=aEKCt/EBHJvDSsd9UbnNeWZeqT3zL870ttmWl5WpY8UcIhlhyPMrLdJhxFnSb9gS0FVHRKEhqQbV681lG3uvkKIOoBbHe7RDo1dBotictp3mwQVj2SyO2xzArOb7i7Hr142X2USmw0w4g6oOxQQ4p9IAcwawjxDbWERWSKpBm7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707523621; c=relaxed/simple;
-	bh=4JuHIqxZrQxecnWUBRyW/Oj83+V/zwY+WyKYRNe4ITo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W/xPV/zEVFy2okDQ+3Hq4PhoI43WgImAULyWv9RWf/zpqdgrP2l9j6vfQpPAXYF/tTOk+o6nz7ZR9KXFA93ngjL7HjL9hYziDi4LFEY681rdAsgVZtYzt2U0xnX5ngRfG8hs23FzhheWEcyptDvXBaSpY/vZUmyx6iQxQkyD81k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KmJVAS/F; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KmJVAS/F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707523619; x=1739059619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4JuHIqxZrQxecnWUBRyW/Oj83+V/zwY+WyKYRNe4ITo=;
-  b=KmJVAS/FxeouSMEBYpj259L1oIeiqYbBQ39FstzSlBCcNKqq5boG8lkv
-   ahjShjLkpp54K9KAFBLD+DnN7Q/Tj22Eu+/kv8T0bBityS56UnCFqMiNU
-   n+JJIy/hnFQrPwmkM5b+vfXCGJD+e3Vo4zuK3docBccfiMn7ejY+Z+Yqf
-   tFWhU0Bn/anhBslENRbKdbii26kR3GhuA/fAUshIqS0LwuN9ovwtM8DIa
-   Knw3psAUAkIMG/6MEIgZMND1umENznI9jB51EakpuLPIparOZOQkaEGNI
-   MbA54XipKl0aI2kYeXFM3GpI0xkHUUbAmP270jnrQXUXGndBy3a3AoUkZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1656981"
-X-IronPort-AV: E=Sophos;i="6.05,258,1701158400"; 
-   d="scan'208";a="1656981"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 16:06:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="825272946"
-X-IronPort-AV: E=Sophos;i="6.05,258,1701158400"; 
-   d="scan'208";a="825272946"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Feb 2024 16:06:57 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rYatS-0005Dc-1r;
-	Sat, 10 Feb 2024 00:06:54 +0000
-Date: Sat, 10 Feb 2024 08:06:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 bpf-next 03/20] bpf: Plumb get_unmapped_area()
- callback into bpf_map_ops
-Message-ID: <202402100739.m56uNkG2-lkp@intel.com>
-References: <20240209040608.98927-4-alexei.starovoitov@gmail.com>
+	s=arc-20240116; t=1707524525; c=relaxed/simple;
+	bh=p4HJtbC7sr9+mRbDPyd1tVdbBoNEAVlwdpQ81uwZGkU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mZfRnmRn4GV4SZrNHxlBgIHbvFOuXGG2y1tnu+YwziQsMiPsVs39qtfZ4pdCF+HKc/lV6MzFKM3G1pa8Dkm/k7InhdbZv97dLh8BgS6Hj63ZV1dJemcZw2sHUzqlJ8S6DNGjZ/i6UA48D4dhz7YrbZz5L8aFDnfluk2YPOzyv6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-53fa455cd94so1005194a12.2
+        for <llvm@lists.linux.dev>; Fri, 09 Feb 2024 16:22:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707524523; x=1708129323;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0GER+N6at/M+itjVzqKdSOcZKhDVYgoDwe42TsTNQd0=;
+        b=el5XtrP8ACYYT9GJAXp6nmE7Z0MXSEwuAThU3iQkOYLNojpO+4Ml34QvMC1eCtveaP
+         KNHZK1YUSf0K6FyITsaXD+JaJDgiqVUsABzs94yCRJmEUigOpaIn77nLcOolkU9HZx7g
+         5zZOmhykcg1Lkowq2O2hgceUMQ2SEtFia22BAEvA9qFtUpL4UUn4eGO7uE/AlFKtzuFu
+         h8+IqZ7X1PqsDMSONjHc8DkjdEt5404y2H1QRCB1jsmTx2DZQl7gRhGb1nvsov3SvF4n
+         bRjMVXuN/id6cXAOS/sldXeS95K3CC7qYv0+OEyp71qMfBeY3Cas5EzPyjYSM0v2uKvh
+         oPww==
+X-Forwarded-Encrypted: i=1; AJvYcCWk72VhtbIAwW/Fjx7AwE2l2bAVba3isDgh9Ki4zzX878GtzT655WqaFxs4qeBvj1IEWjqd0cw6HdHJoOvu4Qbnv4BveQ==
+X-Gm-Message-State: AOJu0YzRn4KWa6IfkeCvSu1duB6htA8RWKVqb+C9uVkrgM4YLAoOsg55
+	2Ep6mDUxU2CF4x4yMOOo/FRBqLPpGVNYY1G6Y9lCwrLJwNjvcgICx7r6kzIr30aCw0vOEWjCwON
+	JdaBi46IUy1ZD6yCMjD1d4cFwT4I=
+X-Google-Smtp-Source: AGHT+IEXD3A5dWjGC7KaVKM0HkmFVfazNpWmdE3zsdI9nfzsz03DrCJD6p6G6694QrXqD/84HA7fzF4QKRHzTQXHZbY=
+X-Received: by 2002:a17:90b:380e:b0:296:43a:932e with SMTP id
+ mq14-20020a17090b380e00b00296043a932emr712507pjb.7.1707524523094; Fri, 09 Feb
+ 2024 16:22:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240209040608.98927-4-alexei.starovoitov@gmail.com>
+References: <20240201001504.1348511-1-irogers@google.com> <20240201001504.1348511-8-irogers@google.com>
+In-Reply-To: <20240201001504.1348511-8-irogers@google.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Fri, 9 Feb 2024 16:21:51 -0800
+Message-ID: <CAM9d7cih+JqmhVOSoYmRUK2+FRWnknQ6VucYpg5ZC01BYqdv=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] perf srcline: Add missed addr2line closes
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexei,
+On Wed, Jan 31, 2024 at 4:15=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
+>
+> The child_process for addr2line sets in and out to -1 so that pipes
+> get created. It is the caller's responsibility to close the pipes,
+> finish_command doesn't do it. Add the missed closes.
+>
+> Fixes: b3801e791231 ("perf srcline: Simplify addr2line subprocess")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/srcline.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+> index 034b496df297..7addc34afcf5 100644
+> --- a/tools/perf/util/srcline.c
+> +++ b/tools/perf/util/srcline.c
+> @@ -399,6 +399,8 @@ static void addr2line_subprocess_cleanup(struct child=
+_process *a2l)
+>                 kill(a2l->pid, SIGKILL);
+>                 finish_command(a2l); /* ignore result, we don't care */
+>                 a2l->pid =3D -1;
+> +               close(a2l->in);
+> +               close(a2l->out);
 
-kernel test robot noticed the following build errors:
+I was about to ask the stderr, but addr2line_subprocess_init()
+sets a2l->no_stderr already.
 
-[auto build test ERROR on bpf-next/master]
+I wish it could be handled in finish_command() but it seems
+the API allows setting external file descriptors (before calling
+start_command).  Hmm..
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexei-Starovoitov/bpf-Allow-kfuncs-return-void/20240209-120941
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240209040608.98927-4-alexei.starovoitov%40gmail.com
-patch subject: [PATCH v2 bpf-next 03/20] bpf: Plumb get_unmapped_area() callback into bpf_map_ops
-config: arm-randconfig-001-20240209 (https://download.01.org/0day-ci/archive/20240210/202402100739.m56uNkG2-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ac0577177f053ba7e7016e1b7e44cf5932d00b03)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402100739.m56uNkG2-lkp@intel.com/reproduce)
+Anyway it looks like an independent fix.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402100739.m56uNkG2-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/bpf/syscall.c:948:22: error: no member named 'get_unmapped_area' in 'struct mm_struct'
-     948 |         return current->mm->get_unmapped_area(filp, addr, len, pgoff, flags);
-         |                ~~~~~~~~~~~  ^
-   1 error generated.
+Thanks,
+Namhyung
 
 
-vim +948 kernel/bpf/syscall.c
-
-   939	
-   940	static unsigned long bpf_get_unmapped_area(struct file *filp, unsigned long addr,
-   941						   unsigned long len, unsigned long pgoff,
-   942						   unsigned long flags)
-   943	{
-   944		struct bpf_map *map = filp->private_data;
-   945	
-   946		if (map->ops->map_get_unmapped_area)
-   947			return map->ops->map_get_unmapped_area(filp, addr, len, pgoff, flags);
- > 948		return current->mm->get_unmapped_area(filp, addr, len, pgoff, flags);
-   949	}
-   950	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>         }
+>
+>         free(a2l);
+> --
+> 2.43.0.429.g432eaa2c6b-goog
+>
