@@ -1,179 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE25537E5;
-	Sat, 10 Feb 2024 13:44:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA33C288DB
+	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 14:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707572666; cv=none; b=CxMVUflOpn2RTfJhvO6SexEv5hchphKxvt6BNpYkpbrE+w3A73Abt6C4Ul+VbfZksmutvUjbqQesrKS9he/Z/Y3PuS0b4nsm/DOYvKIl2TX/0FQi2kaSs86TL2SAMPRyLUZpNgmKsGTQXFWXu+amjYLmCOjU+2VQsYJtY6RGDyI=
+	t=1707577147; cv=none; b=AnxgpIJjeMDFHUA6CUb+DqkPm7OsW4a3zCM0PA1fIg2tnR5LxrbR0D1HUOy7wzLOD3COWpgNoQdRw2BmBlrM78kkBaw2Mk7dHa+tfULCMQN17yy/+FDxVijJi/4IdZGfm4Iq9tDavUAuT+N4EQoTTK81oRlVxuiIKRyvu0buOOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707572666; c=relaxed/simple;
-	bh=XcSECDNC/r1nXUOrjHhU0a6q6NoCWQRYvgQLh4gPj1g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=de9t2bg0I3b7t2wtmGeunPwTCb2gn30RzZ4P4Wxty42qv2BYxqpg8msXWhC7gB5mG6a7lfUQXaaBo2pZwB5bnhoyDtK8wn80lsVrPoAHWF/C5y+ZEc4jbkx7S/4pJdu4+yb4Ii9ImUj8zJcB0cFigFdwZxVNYmmZZTWgy70OP4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UvpMwBVe; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UvpMwBVe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707572663; x=1739108663;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XcSECDNC/r1nXUOrjHhU0a6q6NoCWQRYvgQLh4gPj1g=;
-  b=UvpMwBVed+1+W/aL6SAaKRlqEj3eJ9UoI+FiTD1B9ySbSEt2ltNJMmb2
-   AvdxP44+Uj19bU4MzHnDjmdHcZ3JjS492WQu1Uqyi2XqBiONf6NdM6hl9
-   B015KcEgzI2P9TwV+gjQg1GHS4ZvZxCeqgoRgpIC5PHsqe6e5t4kvexB1
-   CKtiA+dJKc1Ee7zpW+/n3xjST1plzU7jchz6MU5hWN0DXZDS4lsAUyTXa
-   Rd0DLTpfi+/lX6ti/npzreT352B2duSI1GMv/sNGgGcmbzzb2t987B1Nv
-   NQXGXhFmyLBm0EA1PZbT/9a56ZhVNOEPtL6CJby180889MSVNHdjRUreY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1888239"
-X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
-   d="scan'208";a="1888239"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 05:44:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
-   d="scan'208";a="2150284"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Feb 2024 05:44:21 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rYneU-0005gw-0i;
-	Sat, 10 Feb 2024 13:44:18 +0000
-Date: Sat, 10 Feb 2024 21:44:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-	johannes@sipsolutions.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org,
-	Mukesh Sisodiya <mukesh.sisodiya@intel.com>,
-	Gregory Greenman <gregory.greenman@intel.com>
-Subject: Re: [PATCH 01/13] wifi: iwlwifi: nvm: parse the VLP/AFC bit from
- regulatory
-Message-ID: <202402102159.h0x3mL2v-lkp@intel.com>
-References: <20240208185302.9c6a4acabdb3.I501de5c0d86b9702bf61158a2e91c954a1da9a2a@changeid>
+	s=arc-20240116; t=1707577147; c=relaxed/simple;
+	bh=iMfLEeTHTbt85d74UE8+VxZe4C33mSor9bptkb0ZW3Q=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=HN+H68Pwq8uPqw77y9TK0sa9OTXB0AiumULaJ4hFdOfd8HS626CyoE67+lMoxSx9UbhSsdzh3gFoGfhRSUa8Knatvxmad0HJv4CRpn6tiRQWeHsKFJdtqbGcFy/9/NAfqMmKG+QSAGDrnnLUxjZJmkIEp8C8zHK/ZCicyphL8Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-363d5475522so13153395ab.1
+        for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 06:59:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707577145; x=1708181945;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nBaTulYzbUdDpsiTgalVNpa6HlwtpwY9I9TOZGhZE/M=;
+        b=nHmqqSZ6Aoq04C/pmR2wgzpOLukqBMS4uhX9DIwYyUUKBUILrkkEnE+sAUcPbvxVQT
+         5vjq858F9ppj7N+x+pxATuLl9PhSH86mExhRWdLseR456hMk+6Auyh2gDaquSR0cGOaI
+         T3Lpo9xDtMIyNjKiIOlILzVvjia6EoSuEIrOrx/mKn8KAyuTfZy8m5DmJ3jboHDapJSp
+         ej4N6W7eq7E6WM4OnWWKrVBILbQ21svrzd82NpqDPzD6PiyBkQah7latmp9xqkcg9202
+         +TDbWtVWS99bFKDHbtWH67WtABsZnyCiQyAiH++6Dlh66QFydcpsQ0ELoQYvvqb+j4mu
+         Py6Q==
+X-Gm-Message-State: AOJu0YxPK8V6LCeRVvDalWWKn2Yuur4GHmI71QxuKoSyEBzochkMwhH1
+	wrJKqncZECRlJTyGt2gBFqyYVTe+yQdNjJUlKMhA65enOQy0Fsz+ooRBVc+whsYF541dccFaRaX
+	skRI5j8fjVYnxAQSu0+4tkjUdbbcxUhsE9Ubq16S9cpzWAh54lZocInM=
+X-Google-Smtp-Source: AGHT+IGmAQRbDJqel4FaA4qUReFM5I2NwHCScpZnNSB6C4xHvyv5rabwFqEEw+dDZRjdgu4En3nr0xI0AspplmuTO0iQkmpt9pYy
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240208185302.9c6a4acabdb3.I501de5c0d86b9702bf61158a2e91c954a1da9a2a@changeid>
+X-Received: by 2002:a05:6e02:1a2e:b0:363:ac48:e28d with SMTP id
+ g14-20020a056e021a2e00b00363ac48e28dmr222334ile.3.1707577145096; Sat, 10 Feb
+ 2024 06:59:05 -0800 (PST)
+Date: Sat, 10 Feb 2024 06:59:05 -0800
+In-Reply-To: <0000000000000126ec05ffd5a528@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002903a406110849e9@google.com>
+Subject: Re: [syzbot] [ext4?] kernel BUG in ext4_enable_quotas
+From: syzbot <syzbot+693985588d7a5e439483@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, axboe@kernel.dk, brauner@kernel.org, 
+	jack@suse.cz, linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
+	tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Miri,
+syzbot suspects this issue was fixed by commit:
 
-kernel test robot noticed the following build errors:
+commit 6f861765464f43a71462d52026fbddfc858239a5
+Author: Jan Kara <jack@suse.cz>
+Date:   Wed Nov 1 17:43:10 2023 +0000
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v6.8-rc3 next-20240209]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    fs: Block writes to mounted block devices
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Miri-Korenblit/wifi-iwlwifi-nvm-parse-the-VLP-AFC-bit-from-regulatory/20240209-010143
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20240208185302.9c6a4acabdb3.I501de5c0d86b9702bf61158a2e91c954a1da9a2a%40changeid
-patch subject: [PATCH 01/13] wifi: iwlwifi: nvm: parse the VLP/AFC bit from regulatory
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240210/202402102159.h0x3mL2v-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402102159.h0x3mL2v-lkp@intel.com/reproduce)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=147e5b20180000
+start commit:   89bf6209cad6 Merge tag 'devicetree-fixes-for-6.5-2' of git..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1b32f62c755c3a9c
+dashboard link: https://syzkaller.appspot.com/bug?extid=693985588d7a5e439483
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ba1fefa80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1636640fa80000
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402102159.h0x3mL2v-lkp@intel.com/
+If the result looks correct, please mark the issue as fixed by replying with:
 
-All errors (new ones prefixed by >>):
+#syz fix: fs: Block writes to mounted block devices
 
->> drivers/net/wireless/intel/iwlwifi/iwl-nvm-parse.c:377:12: error: use of undeclared identifier 'IEEE80211_CHAN_NO_6GHZ_VLP_CLIENT'; did you mean 'IEEE80211_CHAN_NO_UHB_VLP_CLIENT'?
-     377 |                 flags |= IEEE80211_CHAN_NO_6GHZ_VLP_CLIENT;
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                          IEEE80211_CHAN_NO_UHB_VLP_CLIENT
-   include/net/cfg80211.h:149:2: note: 'IEEE80211_CHAN_NO_UHB_VLP_CLIENT' declared here
-     149 |         IEEE80211_CHAN_NO_UHB_VLP_CLIENT= 1<<22,
-         |         ^
->> drivers/net/wireless/intel/iwlwifi/iwl-nvm-parse.c:379:12: error: use of undeclared identifier 'IEEE80211_CHAN_NO_6GHZ_AFC_CLIENT'; did you mean 'IEEE80211_CHAN_NO_UHB_AFC_CLIENT'?
-     379 |                 flags |= IEEE80211_CHAN_NO_6GHZ_AFC_CLIENT;
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                          IEEE80211_CHAN_NO_UHB_AFC_CLIENT
-   include/net/cfg80211.h:150:2: note: 'IEEE80211_CHAN_NO_UHB_AFC_CLIENT' declared here
-     150 |         IEEE80211_CHAN_NO_UHB_AFC_CLIENT= 1<<23,
-         |         ^
->> drivers/net/wireless/intel/iwlwifi/iwl-nvm-parse.c:1665:13: error: use of undeclared identifier 'NL80211_RRF_NO_6GHZ_VLP_CLIENT'; did you mean 'NL80211_RRF_NO_UHB_VLP_CLIENT'?
-    1665 |                         flags |= NL80211_RRF_NO_6GHZ_VLP_CLIENT;
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                  NL80211_RRF_NO_UHB_VLP_CLIENT
-   include/uapi/linux/nl80211.h:4543:2: note: 'NL80211_RRF_NO_UHB_VLP_CLIENT' declared here
-    4543 |         NL80211_RRF_NO_UHB_VLP_CLIENT   = 1<<22,
-         |         ^
->> drivers/net/wireless/intel/iwlwifi/iwl-nvm-parse.c:1668:13: error: use of undeclared identifier 'NL80211_RRF_NO_6GHZ_AFC_CLIENT'; did you mean 'NL80211_RRF_NO_UHB_AFC_CLIENT'?
-    1668 |                         flags |= NL80211_RRF_NO_6GHZ_AFC_CLIENT;
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                  NL80211_RRF_NO_UHB_AFC_CLIENT
-   include/uapi/linux/nl80211.h:4544:2: note: 'NL80211_RRF_NO_UHB_AFC_CLIENT' declared here
-    4544 |         NL80211_RRF_NO_UHB_AFC_CLIENT   = 1<<23,
-         |         ^
-   4 errors generated.
-
-
-vim +377 drivers/net/wireless/intel/iwlwifi/iwl-nvm-parse.c
-
-   334	
-   335	static u32 iwl_get_channel_flags(u8 ch_num, int ch_idx, enum nl80211_band band,
-   336					 u32 nvm_flags, const struct iwl_cfg *cfg)
-   337	{
-   338		u32 flags = IEEE80211_CHAN_NO_HT40;
-   339	
-   340		if (band == NL80211_BAND_2GHZ && (nvm_flags & NVM_CHANNEL_40MHZ)) {
-   341			if (ch_num <= LAST_2GHZ_HT_PLUS)
-   342				flags &= ~IEEE80211_CHAN_NO_HT40PLUS;
-   343			if (ch_num >= FIRST_2GHZ_HT_MINUS)
-   344				flags &= ~IEEE80211_CHAN_NO_HT40MINUS;
-   345		} else if (nvm_flags & NVM_CHANNEL_40MHZ) {
-   346			if ((ch_idx - NUM_2GHZ_CHANNELS) % 2 == 0)
-   347				flags &= ~IEEE80211_CHAN_NO_HT40PLUS;
-   348			else
-   349				flags &= ~IEEE80211_CHAN_NO_HT40MINUS;
-   350		}
-   351		if (!(nvm_flags & NVM_CHANNEL_80MHZ))
-   352			flags |= IEEE80211_CHAN_NO_80MHZ;
-   353		if (!(nvm_flags & NVM_CHANNEL_160MHZ))
-   354			flags |= IEEE80211_CHAN_NO_160MHZ;
-   355	
-   356		if (!(nvm_flags & NVM_CHANNEL_IBSS))
-   357			flags |= IEEE80211_CHAN_NO_IR;
-   358	
-   359		if (!(nvm_flags & NVM_CHANNEL_ACTIVE))
-   360			flags |= IEEE80211_CHAN_NO_IR;
-   361	
-   362		if (nvm_flags & NVM_CHANNEL_RADAR)
-   363			flags |= IEEE80211_CHAN_RADAR;
-   364	
-   365		if (nvm_flags & NVM_CHANNEL_INDOOR_ONLY)
-   366			flags |= IEEE80211_CHAN_INDOOR_ONLY;
-   367	
-   368		/* Set the GO concurrent flag only in case that NO_IR is set.
-   369		 * Otherwise it is meaningless
-   370		 */
-   371		if ((nvm_flags & NVM_CHANNEL_GO_CONCURRENT) &&
-   372		    (flags & IEEE80211_CHAN_NO_IR))
-   373			flags |= IEEE80211_CHAN_IR_CONCURRENT;
-   374	
-   375		/* Set the AP type for the UHB case. */
-   376		if (!(nvm_flags & NVM_CHANNEL_VLP))
- > 377			flags |= IEEE80211_CHAN_NO_6GHZ_VLP_CLIENT;
-   378		if (!(nvm_flags & NVM_CHANNEL_AFC))
- > 379			flags |= IEEE80211_CHAN_NO_6GHZ_AFC_CLIENT;
-   380	
-   381		return flags;
-   382	}
-   383	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
