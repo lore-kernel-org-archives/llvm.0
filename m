@@ -1,109 +1,204 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F345031758
-	for <llvm@lists.linux.dev>; Sat, 10 Feb 2024 10:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D6717554;
+	Sat, 10 Feb 2024 11:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707561674; cv=none; b=qbs4PwRY6Y6/dpwBEWhDNDQ+YSPzfKDIRFcxi/Ejmwcdx5aIl6frNU2pMcwCPvoDJuxa422hg+7ESWAu/MgV29HHTT5Orh6kWdtSUjqRCm5zdHEBIMhAMK1srTmQ0m6jqd7t9o2g9otCtvUBsxmazc3Mp9Mr116q7a2OhTbXLi4=
+	t=1707564801; cv=none; b=LKSDlsg+3fXJqlJo/HTZ6JFHhcZDJDs6oA89GfvHXLh5kSoP8qW74eFOu9N/oX+aKlMV94WPJs+qgZIohZNh7QkE73oGLYUQoXrOjtdcUZFj5CEkiBDDo3fdy6KLHy4M4DwJp14S10pAlkRQuwWPq22hUhvtkHUUFcB7rNCcMIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707561674; c=relaxed/simple;
-	bh=x+rMoLaemDU7O0UiEISg9iBNvLvyhD2E78cUrJEqRBQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u1PeMY+WJrx+xLYGBTCZi0TxSwrfUnn0F26ugm/IKVgdn884fXpuULDdCoPcMb8BVc59JjRXV/Kpv7BBpXBpLHU3A94FCgKL7QSFrp2Mt2N99IIYkoyM5ucvwRACfNdYvs8m3dOwAv7wNMIbkPO/6xilVIMYl8nrV9J12wBurIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fiAme/xL; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1707564801; c=relaxed/simple;
+	bh=j1OB/OMrX1bxPGG9OjNeAmWW7AX7FcjWAQz4R1t+qsE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=seU4g4+XGivOMQL4BQ5Y41cEhssQQR5YLPpstcsGbpELYMXX8602sY2yKZegLhontXx6/zl3xpiRbohPcY/gVvBenwZk4H8Is0fsOf1kExJLzwSD/8WMIWrFJe8AcHMnr0LjgvjcriU/ZZxcruZcM8twWTRYuUo/4UcMiDo8TX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nF/RLWs1; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fiAme/xL"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4C03140E023B;
-	Sat, 10 Feb 2024 10:41:09 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id m99D3Vit8Jsc; Sat, 10 Feb 2024 10:41:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707561663; bh=dSjCyKghVnE+pRQUrxWXdE0XNE6p+IPHoxYYpdgP9us=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fiAme/xLbxI9xs3wkAhG1kZG5wyVoM4V1XKCVCC0swGLdmtiwa7MaO03/y4OHEjNs
-	 VaB3vxeu4id6Kq/X3yNPcD5f5H/NYek5IrpW5gjDvSo7KZJ8r7i46phk+mNGdmIHl3
-	 3fJ/+riwV4dPYtLefa9scDtwq+7ImGpJuJBcQ2POuVrgufM4PatyrqhUBuR6r76AvS
-	 CBfq9BO8MC9J0ItBR9jHj0WjYaV+Fiscoe75TZI1h+bBM5mpo2buAfzDkV3Q5saYhb
-	 RGdVnfvTTJzDN6G2d9QAfhJmOO6G1Nmu4Yk24+t8OqHVoVoq1DsEU2kRzOq0BeF1Yq
-	 godtyWo/kG9rZ7GBvqawDR8utdWnKcBb85Adej0ZoXeIpTm6PJ9gyZO/3zFFZyHlCe
-	 PRBTcGwwo+lewUlDtol/IGPfY0Hb9lw5efXRXrIHcHLeou+Uaka93qqvFjUtVDYKJe
-	 lyiE/dWBk5LHnmJawWmL6J61WY+c51s4HkceOHpviRgQG5g1Bo/IU0IFGWoaM22+xj
-	 Z1GhrW365Yh7OxZaGQ/llEAaPNQULy7aiaOmn+wa7OOH32rElcV5XnxMjA+qh7tCiR
-	 ksU2V4la9EECtnshreDatfablejJLgN0BBsdz1khmWYmC8j4NpQijZw9yT2GljUtXb
-	 /OfWu6tyQrxRaT1hEIqhwm1Q=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A027140E016D;
-	Sat, 10 Feb 2024 10:40:45 +0000 (UTC)
-Date: Sat, 10 Feb 2024 11:40:39 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 06/19] x86/startup_64: Drop global variables keeping
- track of LA57 state
-Message-ID: <20240210104039.GAZcdSp7dRbgqBy3fg@fat_crate.local>
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-27-ardb+git@google.com>
- <20240207132922.GSZcOFspSGaVluJo92@fat_crate.local>
- <CAMj1kXF+mHCYs08q58QFGuzZ4nzGd2sDr1gp2ydkOHHQ2LK5tQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nF/RLWs1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707564800; x=1739100800;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j1OB/OMrX1bxPGG9OjNeAmWW7AX7FcjWAQz4R1t+qsE=;
+  b=nF/RLWs1NnOIbvqtbGf1yN8Iif3gLQXSJaEdDdN8FFNh5RSPeOoErpN0
+   UIyu83Kqj7+HrAqU3eeFQWEqIwW1fEw3Tlg22GYtxP46Vr+0Ux2AtYgp6
+   xOeJ7oiE2prZZwDMm0BXoqJDHq4pKyW1V+cMu8qpGNq4WfttwqlsXOGct
+   l7PH19ujVvdWjD7DOE14niZ+kdo92vuU+oGNTD0B+0hfr+bAVFe7uBR/3
+   Y6R41eoYWhpW/ubiwXtzMNACJffeROomxcT+vXJAxNnxfGq5ponptLY0u
+   8R9amlr2Lma0O0ufAEttCQYZp9ZxYkpWyXof3zCIUZlo3StvSANiMcCUW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1444787"
+X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
+   d="scan'208";a="1444787"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 03:33:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,259,1701158400"; 
+   d="scan'208";a="33239086"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 10 Feb 2024 03:33:18 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rYlbf-0005bs-1U;
+	Sat, 10 Feb 2024 11:33:15 +0000
+Date: Sat, 10 Feb 2024 19:33:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Lutomirski <luto@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [luto:net/recverr 2/2] include/net/ip.h:838:22: error: no member
+ named '__sk_common' in 'struct socket'
+Message-ID: <202402101949.cMkR01fr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXF+mHCYs08q58QFGuzZ4nzGd2sDr1gp2ydkOHHQ2LK5tQ@mail.gmail.com>
 
-On Fri, Feb 09, 2024 at 01:55:02PM +0000, Ard Biesheuvel wrote:
-> I was trying to get rid of global variable assignments and accesses
-> from the 1:1 mapping, but since we cannot get rid of those entirely,
-> we might just keep __pgtable_l5_enabled but use RIP_REL_REF() in the
-> accessors, and move the assignment to the asm startup code.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/luto/linux.git net/recverr
+head:   d3ed76fed22d68d297a7740671c0d010f8ca205d
+commit: d3ed76fed22d68d297a7740671c0d010f8ca205d [2/2] [WIP] net/ip: Consolidate RECVERR-vs-sk_err handling
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240210/202402101949.cMkR01fr-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ac0577177f053ba7e7016e1b7e44cf5932d00b03)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240210/202402101949.cMkR01fr-lkp@intel.com/reproduce)
 
-Yeah.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402101949.cMkR01fr-lkp@intel.com/
 
->    asm(ALTERNATIVE_TERNARY(
->        "movq %%cr4, %[reg] \n\t btl %[la57], %k[reg]" CC_SET(c),
->        %P[feat], "stc", "clc")
->        : [reg] "=r" (r), CC_OUT(c) (ret)
->        : [feat] "i" (X86_FEATURE_LA57),
->          [la57] "i" (X86_CR4_LA57_BIT)
->        : "cc");
+All errors (new ones prefixed by >>):
 
-Creative :)
+   In file included from fs/select.c:33:
+   In file included from include/net/busy_poll.h:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from fs/select.c:33:
+   In file included from include/net/busy_poll.h:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from fs/select.c:33:
+   In file included from include/net/busy_poll.h:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from fs/select.c:33:
+   In file included from include/net/busy_poll.h:18:
+>> include/net/ip.h:838:22: error: no member named '__sk_common' in 'struct socket'
+     838 |         if ((harderr && sk->sk_state == TCP_ESTABLISHED) || recverr) {
+         |                         ~~  ^
+   include/net/sock.h:381:19: note: expanded from macro 'sk_state'
+     381 | #define sk_state                __sk_common.skc_state
+         |                                 ^
+   In file included from fs/select.c:33:
+   In file included from include/net/busy_poll.h:18:
+>> include/net/ip.h:839:7: error: no member named 'sk_err' in 'struct socket'
+     839 |                 sk->sk_err = err;
+         |                 ~~  ^
+>> include/net/ip.h:840:19: error: incompatible pointer types passing 'struct socket *' to parameter of type 'struct sock *' [-Werror,-Wincompatible-pointer-types]
+     840 |                 sk_error_report(sk);
+         |                                 ^~
+   include/net/sock.h:2513:35: note: passing argument to parameter 'sk' here
+    2513 | void sk_error_report(struct sock *sk);
+         |                                   ^
+   12 warnings and 3 errors generated.
 
-> but we'd still have two versions in that case.
 
-Yap. RIP_REL_REF() ain't too bad ...
+vim +838 include/net/ip.h
 
-Thx.
+   814	
+   815	/*
+   816	 * When an ICMP error is received that matches a datagram socket, some combination of
+   817	 * queueing an IP_RECVERR-style message, setting sk_err, and signaling POLLERR needs
+   818	 * to happen.
+   819	 *
+   820	 * Use like this:
+   821	 *
+   822	 * bool recverr = inet_test_bit(RECVERR, sk) [and account for ipv6]
+   823	 * int err = ...;
+   824	 * bool harderr;  <- true if the error is 'hard', meaning that it should be reported
+   825	 *                   for !RECVERR connected sockets
+   826	 * if (recverr)
+   827	 * 	ip_icmp_error() or ipv6_icmp_error() as appropriate.
+   828	 * ip_error_report(sk, err, harderr, recverr);
+   829	 */
+   830	static inline bool ip_error_report(struct socket *sk, int err, bool harderr, bool recverr)
+   831	{
+   832		/*
+   833		 * Linux sets sk_err for connected sockets if the error is 'hard' (which makes
+   834		 * perfect sense) and for all sockets if RECVERR[6] (which does not make very
+   835		 * much sense).  It does indeed make sense that sk_error_report(), which signals
+   836		 * POLLERR, is called if RECVERR[6], though.
+   837		 */
+ > 838		if ((harderr && sk->sk_state == TCP_ESTABLISHED) || recverr) {
+ > 839			sk->sk_err = err;
+ > 840			sk_error_report(sk);
+   841		}
+   842	}
+   843	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
