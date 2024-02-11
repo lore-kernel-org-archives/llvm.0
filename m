@@ -1,186 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A551106
-	for <llvm@lists.linux.dev>; Sun, 11 Feb 2024 01:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A840185A;
+	Sun, 11 Feb 2024 02:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707615697; cv=none; b=ra0kYBelFYjFy6tHnBmCRDrhVk45AEkZ8SqGZK0HDPCFZz4BMFwV7FmlgwXnI0isE68IU3mFE/SPmwOrYeUVAHsXqsKUFdrhywnp+HxHzXaekJRiQMG9Fkd7KEEHd8p5yrFLUlDUfaUGzwTtRn0kUha423Tcyd/vswB0YxKyBM0=
+	t=1707620151; cv=none; b=c4ejQlONruy2K9LK1aeOAXEQYeZUoZwMDl3jOrv1QXDrZ5j2WT52YCU0OWOnwX22tF7Ei5KwxWc4qlQygHSI7+f7KpLNIvBKGgamrcWoJV79mk2UCCD/Eb7o/9kabUE8qaFincnn7iCb2f+wFxa6WyKspLNbPIZI3Rz8AyTFBag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707615697; c=relaxed/simple;
-	bh=luJ0AM5ZgoYrMGreEFnSRxp8uHGbzgIBfaQK5HXx2rg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Lvol5R3sapqYeChZvTt7EuNJIbrrvYa4w3nBqIQIQhMREanAd3DsUtPomP44efoM7nRlpA2W3H/Tuz8Mng7/Du8TPoNfXsa2MlgN7MsSXSvN7qyJ2QGlvbcrv9NVXsS2+GErJ1PYdt/p0jYFMO0IGw0soMVwfA/Xm3V6yiFbslc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jCv5ndID; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1707620151; c=relaxed/simple;
+	bh=0pltjj3IxO9UbP2Pe6j6DyDup+1kuC3uk42TIYuMDT8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HK8jGFojbrc9y2kxeE8YQQBoPAKmYbz+JtDy5my4sl8gMpYQOUYipIm5K/suLDHG7eKL3xMCtUhv017z0XWw5HM6rcn2cbVwHTojak5k9XqMIjOXZFB6DjvEEikUX05c/uPOymJbU0yx5x8YbekmS4XRjD8PNa+7MUKcCaQsJnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ddWc0zFl; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jCv5ndID"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707615694;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nzuG8pDf2dvePvqmIhkUuPIt1G+CfSfmPm8ovUKuKXo=;
-	b=jCv5ndIDbPuqmSajP0//edscN+GySpDqyV3CbUoexITDRwefyul38nS2Gc0//Q3LwNlDd7
-	Gh3szHU8BgxqBMYCOx2UzGUIi82cKpLJAam7fHLHExCY69m+O4rDNzdKR5//BYZJlPEuu/
-	1ZXx8ffD5H7L5BI2SUYWWFn4plgo7sE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-596-ZLm--z3vOLSka38HHyzZvw-1; Sat, 10 Feb 2024 20:41:32 -0500
-X-MC-Unique: ZLm--z3vOLSka38HHyzZvw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D7C73185A780
-	for <llvm@lists.linux.dev>; Sun, 11 Feb 2024 01:41:31 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 827184F2DE0;
-	Sun, 11 Feb 2024 01:41:30 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 226): Test report for master
- (6.8.0-rc3, mainline.kernel.org-clang, a5b6244c)
-Date: Sun, 11 Feb 2024 01:41:30 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ddWc0zFl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707620148; x=1739156148;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0pltjj3IxO9UbP2Pe6j6DyDup+1kuC3uk42TIYuMDT8=;
+  b=ddWc0zFl6zav8PBifTllgMj8R/OopJuQv6UN0RB0OAPs5oifjHgCRz9i
+   mpfSygtvD9ORMHeqjwBDxnVCEuHsHycXLIz5tNFv9jQPR+mvF/xIlNN/i
+   UjHGkAzPs/QX8cMl5UatdoQVd7BuYiCkDvG8JDkV1U2wxlXR7qpiPQ4BA
+   RJNmPtbseb9+lbM5cI1ow1khkUZAZj62gY22HmJtfA/IA/k0GG2b5V09z
+   xDJUfSAMeShfARQxHLO+LZ8WYTP5SEznPpgsdSYiHwsTD7YzFwRdLQP+9
+   6u79HS6czUSSMElqCO8kc/g/1RSJH1w7fDsqC5ofhq2IvYUmaMCJDBQPi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10980"; a="12331135"
+X-IronPort-AV: E=Sophos;i="6.05,260,1701158400"; 
+   d="scan'208";a="12331135"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 18:55:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10980"; a="934762816"
+X-IronPort-AV: E=Sophos;i="6.05,260,1701158400"; 
+   d="scan'208";a="934762816"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2024 18:55:45 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rZ00M-0006HC-2d;
+	Sun, 11 Feb 2024 02:55:42 +0000
+Date: Sun, 11 Feb 2024 10:55:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: [rafael-pm:bleeding-edge 74/80]
+ drivers/thermal/thermal_core.c:1230:11: warning: address of array
+ 'tz->trips' will always evaluate to 'true'
+Message-ID: <202402111049.8Q45bnyf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <49573.124021020413200136@us-mta-596.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   1cc7a914a31bd41feb404b644539a007f99b4f00
+commit: 888085f258b2e617bfc4548a9907b09f935efcbb [74/80] thermal: core: Store zone trips table in struct thermal_zone_device
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240211/202402111049.8Q45bnyf-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240211/202402111049.8Q45bnyf-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402111049.8Q45bnyf-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'block-6.8-2024-02-10' of git://git.kernel.dk=
-/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/128820
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Storage - swraid scsi_raid
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [Rawhide] nvme-cli: hostid/hostnqn warnings to verbose level
-            URL: https://github.com/linux-nvme/nvme-cli/commit/252929069d6c=
-9042e9c95f41788006cb3eb2f452
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [Rawhide] Storage: ERROR: Could not build wheels for ruamel.=
-yaml.clib, which is required to install pyproject.toml-based projects
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1859
-            Affected tests:
-                 ppc64le - Storage - dm/common
-                   s390x - Storage - dm/common
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/thermal/thermal_core.c:1230:11: warning: address of array 'tz->trips' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (!tz->trips)
+               ~~~~~^~~~~
+   1 warning generated.
+--
+>> drivers/thermal/thermal_trip.c:125:18: warning: address of array 'tz->trips' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (!tz || !tz->trips || trip_id < 0 || trip_id >= tz->num_trips || !trip)
+                      ~~~~~^~~~~
+   1 warning generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - kselftests upstream - net
-      x86_64 (debug) - kselftests upstream - bpf
-      x86_64 (debug) - kselftests upstream - bpf_test_progs
-      x86_64 - Memory function: memfd_create
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
+vim +1230 drivers/thermal/thermal_core.c
 
+e5f2cda61d068e Daniel Lezcano 2022-07-22  1222  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1223  int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1224  {
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1225  	int i, ret = -EINVAL;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1226  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1227  	if (tz->ops->get_crit_temp)
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1228  		return tz->ops->get_crit_temp(tz, temp);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1229  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03 @1230  	if (!tz->trips)
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1231  		return -EINVAL;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1232  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1233  	mutex_lock(&tz->lock);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1234  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1235  	for (i = 0; i < tz->num_trips; i++) {
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1236  		if (tz->trips[i].type == THERMAL_TRIP_CRITICAL) {
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1237  			*temp = tz->trips[i].temperature;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1238  			ret = 0;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1239  			break;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1240  		}
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1241  	}
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1242  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1243  	mutex_unlock(&tz->lock);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1244  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1245  	return ret;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1246  }
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1247  EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1248  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+:::::: The code at line 1230 was first introduced by commit
+:::::: 7c3d5c20dc169e55064f7f38c1c56cfbc39ee5b2 thermal/core: Add a generic thermal_zone_get_trip() function
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
+:::::: CC: Daniel Lezcano <daniel.lezcano@kernel.org>
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
