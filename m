@@ -1,94 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F121427B
-	for <llvm@lists.linux.dev>; Sun, 11 Feb 2024 22:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A4117C2;
+	Mon, 12 Feb 2024 01:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707691025; cv=none; b=iyq9b5JgEHQ8evO4YjzIbWG4+U51h7Nnz+/np+Cqwz5zvJ0CaP+ICMwOAeymjFYSGlIRnykscyBnwrybRPilY+ohT3ae+qPIUShwoQxI0bI30wkWy3jxSNKpd3fhcYRu4ysN2G4c6WUjpEheDqCkRKoTchcRjlrTkIyUQR7NLP4=
+	t=1707702801; cv=none; b=Isxi03aXgSaufbVFgkPWQhY0MZl2/fMpx5nAFa8MjC6sbvEPM+5Msh8wxM7rNB9m3YwMoN5Nst4eHboQMPbLucBB/poD1tfB93c3lT7gcHN17eWHRD3Axt/s1hU1ztPGqoiXgs0rBc8PqYXG1e0cjkKl+13v6W5b5zmUVECfTEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707691025; c=relaxed/simple;
-	bh=v4G6ehhPG/T4ElMEaTqhlNoQjbCZltvlaQ9iSgQ/jqs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CjWu3huFL3kI3GqJrKWyf7q2ID5d19xJ0lrgUmdcnjFrZ9xxOP7IHsWuXd29YAXjZ6Woga4rtbWdrCHyunEWY7gEr4w2f7sG65OM8JPdG5i4Egp3AENc7l+zzc26wjqT+Jkmn8xwzQ+wCR1y8dqlj6WwBC7Akc2r1LtnpRVigQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIFMKM/c; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707702801; c=relaxed/simple;
+	bh=tdqEiITcjnUQ8+Cfsv9BjzEAX2VwC9h3wAtRJPeLQ+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=m2OMFx6GYYqb4BJdv4+Gac1dprQhTYm8crm7EP6nCAHs28PVEJVsZlo/It7M4TW86qdwGE0WgPN7gcbDKuYRV9UN095RI9/10syzc259Wo9fovhqdMDZFBm+nRWjra4enTQaX+vg+sytyYwlozaJpKgTg6GsujRzbj619O02DR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B/pJE1vP; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIFMKM/c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061D2C433C7
-	for <llvm@lists.linux.dev>; Sun, 11 Feb 2024 22:37:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707691025;
-	bh=v4G6ehhPG/T4ElMEaTqhlNoQjbCZltvlaQ9iSgQ/jqs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TIFMKM/caEh5dJ+bulkCR0q0gdp8pENZGkgU9CkmDCd5Oq1bSaUzntyguvgsJOvv4
-	 gjTjnGKCNzWlTToma07fms9Vcw2c+AZ0gxd1qaIR1L+7WNH8f+CnvuF/kDaPJJMAgG
-	 OeXcjmQI/c3V4bHwvSaaqgOu2o7bzLd42KFmhOPW3zZSd25LDzQ1deBLdDJyQTCzkK
-	 ikJMXpN0zJjpVanMBA070l+UVbhVC9+PLB5jUZdeLdtYULy1GMvyS17nC0QHaYBTIc
-	 wJ2pxMbg199kFs/b3OTVOd+tYLkfoSzSiUWVWn3jKHzcu/N7DK8DUYZWSXVavA0Mo/
-	 /2qdpBvaOXosg==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-51186925925so898410e87.0
-        for <llvm@lists.linux.dev>; Sun, 11 Feb 2024 14:37:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWtKs10k80rZ6Lyaf/aToHrMEL8T4SBCbbolv8b5/PLbSCyy6twuq4iJ/r7yL5XXXlA32xCQ6/8wUNttJ/YEkMloRQ8Uw==
-X-Gm-Message-State: AOJu0YxqIp+ng+DKaWgBDrp8wgElICcmhhQFYpt5H2yhlzq45g7gBmpP
-	MsUAC5+0kR13tTDocCtML1rerXpFczbUCR3795ee1HvrQdhkZGe9n7gVC549zgnmH0yopT3l4Vl
-	Y3ztN4n4IUV7s422TaMXj+m34QiU=
-X-Google-Smtp-Source: AGHT+IFl4zc+Ad1i+CBjqwi2XTTno9sUz3Cm/iJnlLj5Ldx7zEG3AwZJXSsOHOLHudvXqss07zu7p/FqLBwWJmYbkNc=
-X-Received: by 2002:ac2:4579:0:b0:511:87b7:6d88 with SMTP id
- k25-20020ac24579000000b0051187b76d88mr1609035lfm.32.1707691023239; Sun, 11
- Feb 2024 14:37:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B/pJE1vP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707702800; x=1739238800;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tdqEiITcjnUQ8+Cfsv9BjzEAX2VwC9h3wAtRJPeLQ+4=;
+  b=B/pJE1vPXI0tI1cHUPkt+8f8K6VS8Hu6pqnWPz7uuCbdk89l+isCXm05
+   3hcQ3Q9MkT9EW/Rd24mzyPE+AKOXMNl5VI+7UOxg0xJT/zrw53Vjv/r/s
+   ef2Y4F0pOlcpCrcP0kFRujNVrr3oBRpBWkOFyyd7ZVvqj75YacE0LFL6v
+   qTnbNiSJ3ic8h7On60PXVCBTzBzesGsPbClP/up16uRI7ZIhsWg7I3wVL
+   DCQOTpooARLpNF2fNU9nKJx2fFua7XQUtQGNycras1YnQNyZ8LRBEmffN
+   DH6V/in0rsbB6mNtKLEfHKuTLa2fxhn+bejZ/WwYIX/zTzIVDisne4UAO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1812643"
+X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
+   d="scan'208";a="1812643"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2024 17:53:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
+   d="scan'208";a="7098577"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 11 Feb 2024 17:53:18 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rZLVT-0006rW-2C;
+	Mon, 12 Feb 2024 01:53:15 +0000
+Date: Mon, 12 Feb 2024 09:53:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	Luca Coelho <luciano.coelho@intel.com>
+Subject: [drm-misc:for-linux-next 49/49]
+ drivers/gpu/drm/tests/drm_mm_test.c:191:25: error: implicit declaration of
+ function 'drm_debug_printer' is invalid in C99
+Message-ID: <202402120908.e1oAZN0i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-27-ardb+git@google.com> <20240207132922.GSZcOFspSGaVluJo92@fat_crate.local>
- <CAMj1kXF+mHCYs08q58QFGuzZ4nzGd2sDr1gp2ydkOHHQ2LK5tQ@mail.gmail.com> <20240210104039.GAZcdSp7dRbgqBy3fg@fat_crate.local>
-In-Reply-To: <20240210104039.GAZcdSp7dRbgqBy3fg@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sun, 11 Feb 2024 23:36:51 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG5+KEAE5F0EFkZCkt1244M3UBJXH_O3ULg0oRHV2YnmQ@mail.gmail.com>
-Message-ID: <CAMj1kXG5+KEAE5F0EFkZCkt1244M3UBJXH_O3ULg0oRHV2YnmQ@mail.gmail.com>
-Subject: Re: [PATCH v3 06/19] x86/startup_64: Drop global variables keeping
- track of LA57 state
-To: Borislav Petkov <bp@alien8.de>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Sat, 10 Feb 2024 at 11:41, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Fri, Feb 09, 2024 at 01:55:02PM +0000, Ard Biesheuvel wrote:
-> > I was trying to get rid of global variable assignments and accesses
-> > from the 1:1 mapping, but since we cannot get rid of those entirely,
-> > we might just keep __pgtable_l5_enabled but use RIP_REL_REF() in the
-> > accessors, and move the assignment to the asm startup code.
->
-> Yeah.
->
-> >    asm(ALTERNATIVE_TERNARY(
-> >        "movq %%cr4, %[reg] \n\t btl %[la57], %k[reg]" CC_SET(c),
-> >        %P[feat], "stc", "clc")
-> >        : [reg] "=r" (r), CC_OUT(c) (ret)
-> >        : [feat] "i" (X86_FEATURE_LA57),
-> >          [la57] "i" (X86_CR4_LA57_BIT)
-> >        : "cc");
->
-> Creative :)
->
-> > but we'd still have two versions in that case.
->
-> Yap. RIP_REL_REF() ain't too bad ...
->
+tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
+head:   7edd06233958d9086a9e3eb723a8768d3c5a9ce1
+commit: e154c4fc7bf2d5c3f86d07628ab1cb03e8085c25 [49/49] drm: remove drm_debug_printer in favor of drm_dbg_printer
+config: powerpc-randconfig-002-20240211 (https://download.01.org/0day-ci/archive/20240212/202402120908.e1oAZN0i-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240212/202402120908.e1oAZN0i-lkp@intel.com/reproduce)
 
-We can actually rip all of that stuff out, and have only a single
-implementation of pgtable_l5_enabled() that is not based on a variable
-at all. It results in a nice cleanup, but I'll keep it as a separate
-patch in the next revision so we can easily drop it if preferred.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402120908.e1oAZN0i-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/tests/drm_mm_test.c:191:25: error: implicit declaration of function 'drm_debug_printer' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           struct drm_printer p = drm_debug_printer(test->name);
+                                  ^
+   drivers/gpu/drm/tests/drm_mm_test.c:191:25: note: did you mean 'drm_dbg_printer'?
+   include/drm/drm_print.h:328:34: note: 'drm_dbg_printer' declared here
+   static inline struct drm_printer drm_dbg_printer(struct drm_device *drm,
+                                    ^
+   drivers/gpu/drm/tests/drm_mm_test.c:191:21: error: initializing 'struct drm_printer' with an expression of incompatible type 'int'
+           struct drm_printer p = drm_debug_printer(test->name);
+                              ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/drm_debug_printer +191 drivers/gpu/drm/tests/drm_mm_test.c
+
+393b50f30566ba drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  188  
+961bcdf956a464 drivers/gpu/drm/tests/drm_mm_test.c     Maíra Canal      2022-09-11  189  static void drm_test_mm_debug(struct kunit *test)
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  190  {
+3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16 @191  	struct drm_printer p = drm_debug_printer(test->name);
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  192  	struct drm_mm mm;
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  193  	struct drm_mm_node nodes[2];
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  194  
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  195  	/* Create a small drm_mm with a couple of nodes and a few holes, and
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  196  	 * check that the debug iterator doesn't explode over a trivial drm_mm.
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  197  	 */
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  198  	drm_mm_init(&mm, 0, 4096);
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  199  
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  200  	memset(nodes, 0, sizeof(nodes));
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  201  	nodes[0].start = 512;
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  202  	nodes[0].size = 1024;
+fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  203  	KUNIT_ASSERT_FALSE_MSG(test, drm_mm_reserve_node(&mm, &nodes[0]),
+fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  204  			       "failed to reserve node[0] {start=%lld, size=%lld)\n",
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  205  			       nodes[0].start, nodes[0].size);
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  206  
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  207  	nodes[1].size = 1024;
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  208  	nodes[1].start = 4096 - 512 - nodes[1].size;
+fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  209  	KUNIT_ASSERT_FALSE_MSG(test, drm_mm_reserve_node(&mm, &nodes[1]),
+fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  210  			       "failed to reserve node[0] {start=%lld, size=%lld)\n",
+fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  211  			       nodes[0].start, nodes[0].size);
+3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16  212  
+3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16  213  	drm_mm_print(&mm, &p);
+3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16  214  	KUNIT_SUCCEED(test);
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  215  }
+06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  216  
+
+:::::: The code at line 191 was first introduced by commit
+:::::: 3eb791c891aa91603a5fbbfea940f8acf5f17d45 drm/tests: mm: Call drm_mm_print in drm_test_mm_debug
+
+:::::: TO: Michał Winiarski <michal.winiarski@intel.com>
+:::::: CC: Maxime Ripard <mripard@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
