@@ -1,175 +1,124 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E9C4B5CD;
-	Mon, 12 Feb 2024 13:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576A33A1D0
+	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 14:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707746126; cv=none; b=E+LY1Ffpx5LLk4Gp+DGdNgSwuZxb5QEGtHufsdaEOdRETjuWcuWSsMHtm8ZtvZ1b+B9T3dYrDqbmX7RyNpFOD5NbKXPsC0vlQW0XKDt93OGtLFEyF7sF67i5TZpntBwmS7J1TDoIlQVox2NLYOu4LSakFCZ4be4KygJR5PlMUyM=
+	t=1707747525; cv=none; b=PvziyZvakNDAXDNYMyZ/3tw8ubu+DUP9ZHMaFGdGXYSkhJTsIXXEapxTr6SEuaHHbe2G6mvKJDPqC1VPd2/18DHF7KCKpe11eVvngcHMDDNXiE7tDQNJm4u/mU5B5P6U6rvXLdhUUk3zB7JmugxPqFgRt8wqH/X2W+ii8q6Velo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707746126; c=relaxed/simple;
-	bh=l8lJVhpkkMOQn4SYIDOmKjhE1C4PJtr6LTU/kQWgbWM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=o9/OY4ygrHxsUbyiI3RLPoFtq8Xiid3u7nHGikTuVjr5K/0anmyCCxaERnBoHzvP+yraO3C7M38gvS1P+lPQaqMCFM73GicNZb4Sm50nE30Qsrn8/96TWQ9RWxCImngk3fetodfj8GZz3KHWip7ZZtpwIgnEKxa4DjecEfzHFLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DxQCJbvS; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1707747525; c=relaxed/simple;
+	bh=diPelT6Y5PrLF1JoSluZSPxFcNd3XxVYAnkF1E99aTc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XMrqqj1C3CuB/RPqoOlA57mscb0lfFO7zB6wJz+4zuH/gQhxAL4kY9ITVcTDCe8W6BcaqkVlpzxKM+CdDT1v5ozu1pzdwkc1xkm7Wyut4U3AzHRM2H34SaZpPWnrALVqps8PWYyK4DI5ED0Em8uucbE3UpvgB3zYsP/i3nCQPx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DhAUe4nz; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DxQCJbvS"
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41CDll6R002089;
-	Mon, 12 Feb 2024 13:55:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=1VsmOyecYehuELNL1sbz6IGptMSx6hES5aL/RB2W1V8=;
- b=DxQCJbvSXEYk/EtPG7SslOqdyu76QYro297XQenBo3AbxyjIOrWw7qJED+5ls5ysySY9
- 2y5WTncbztnEnJxUHbSCipJ2m7dfS0BLI+DAgQPvhAwh0IeFLSXkFuYCAEKH9OMnVdGz
- lAaAlcnaSFv5aH8hRLneWSai2QnH1BPMsN6lAAY7jMow0Lp1/oJe2rkSjam+rV6VMt84
- gB9sEAKCqQvG0d5dQvObAvLS7syI0XbolWIu2wdL408mD4MB6+hHEbbfzoeK1hoFeT+N
- roDNtT3AHOCPl4CMfKg+ex2LrcKLUKE4tEh4JkNQUdV9L05C3KDlDBVyw7cBYxMks7Ce TQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7mheg56b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 13:55:21 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41CDn1N3006548;
-	Mon, 12 Feb 2024 13:55:20 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7mheg561-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 13:55:20 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41CDhtIc024961;
-	Mon, 12 Feb 2024 13:55:19 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mfp0vce-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 13:55:19 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41CDtDnF17105456
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Feb 2024 13:55:15 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A1C2920043;
-	Mon, 12 Feb 2024 13:55:13 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 02BFD20040;
-	Mon, 12 Feb 2024 13:55:13 +0000 (GMT)
-Received: from osiris (unknown [9.171.5.16])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 12 Feb 2024 13:55:12 +0000 (GMT)
-Date: Mon, 12 Feb 2024 14:55:11 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, maskray@google.com, ndesaulniers@google.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 04/11] s390: vmlinux.lds.S: Discard unnecessary sections
-Message-ID: <20240212135511.65142-A-hca@linux.ibm.com>
-References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
- <20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tuVIMDreazdkQtVfRLrmJ6yBZCO6xFUF
-X-Proofpoint-GUID: y5h8jGMhNdFw4guclN1-R3JpP2Oi7u6i
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DhAUe4nz"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7747340E01BB;
+	Mon, 12 Feb 2024 14:18:40 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id nUZNN3hS0edi; Mon, 12 Feb 2024 14:18:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707747518; bh=Mbg10JQUB0lPBCtUWFlsiStYjE1OGMMzSdgwiAyceo8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DhAUe4nzS0Hdh0Z391hKMbHgSf4e6xOHu++V8YdbKN5S+TlLEVNgEye38Kbi3UZ1q
+	 y7LAamRaJ8Ve5Qdq1157SPrmjCz4mQ4mZbLvxDxXwAwh6lo06GZLr88r0Xyy7OcJVP
+	 X027AmgWooiL95mCdCrhMNULBRh3RqOAIIFN59ZrVauKutOrnYThdc23FKkukNfSFR
+	 UzWWx5gvOCDc+nOG0HpCklblR7wUpSVV/uvbEqPRkq53yPUCYK4++Er1fWa8Tup/dv
+	 2d6snO2wIPPOGBhSYJ0yNEoVQDIUU8vn3DzFbR4P/+jwQB03RUhmgOo16eIpicCYiN
+	 yf/L899rtLp6dbJgm2zxgDXN+XW2rRKp6rAMINoCiqJvEvRZWqGXGfVxzVX6WE6nrq
+	 1orKZ1Zk0BjOBcnNUkqSFaIsgSe3a5nKHaSlqtoWt5DFWLuZNGHraAsyLeAclFmW0f
+	 XFRCER6PhOMV4PnGYtNn0Um/0wnHzJ7/BIt25ODF/1szqbp5mwlG85wHuJwMdi6Yel
+	 UPAb4rSeTd1BDSK4Op98DNp8+HZn/9Si1o4AVNyfLzpiYd0S60HEFK1MMyn2nTdXkX
+	 987LeLXCMwx9fjDOPfVSELrbmxjd/qu1v3cpor3IMY4VBL21CZVaYQPybJk4mxRXDt
+	 Uc8rbmrcCsvsufPteW2JvfWM=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CA46C40E0196;
+	Mon, 12 Feb 2024 14:18:19 +0000 (UTC)
+Date: Mon, 12 Feb 2024 15:18:15 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 08/19] x86/head64: Replace pointer fixups with PIE
+ codegen
+Message-ID: <20240212141815.GDZcoop-AL-a6kiHcY@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-29-ardb+git@google.com>
+ <20240212102901.GVZcny7WeK_ZWt0HEP@fat_crate.local>
+ <CAMj1kXH2uwLT-EgqYFRcC0OH524W=sYtDoFC-x+isifzsia17w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-12_10,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0
- phishscore=0 clxscore=1015 adultscore=0 priorityscore=1501 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402120105
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXH2uwLT-EgqYFRcC0OH524W=sYtDoFC-x+isifzsia17w@mail.gmail.com>
 
-On Wed, Feb 07, 2024 at 05:14:56PM -0700, Nathan Chancellor wrote:
-> When building with CONFIG_LD_ORPHAN_WARN after selecting
-> CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
-> ELF sections that are unnecessary for the kernel's purposes.
-> 
->   s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
->   s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
->   s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
->   s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
-> 
-> Add them to the discards to clear up the warnings, which matches other
-> architectures.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/s390/kernel/vmlinux.lds.S | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-...
-> -		*(.interp)
-> +		*(.interp .dynamic)
-> +		*(.dynstr .hash .gnu.hash)
+On Mon, Feb 12, 2024 at 12:52:01PM +0100, Ard Biesheuvel wrote:
+> Yeah. That would means adding PIE_CFLAGS_REMOVE alongside PIE_CFLAGS
+> and applying both in every place it is used, but we are only dealing
+> with a handful of object files here.
 
-This seems to be wrong, since it leads to 1000s of error messages when
-using the "crash" utility e.g. when looking into a live dump of system
-with the generated debug info:
+Right.
 
-BFD: /usr/lib/debug/usr/lib/modules/6.8.0-20240211.rc3.git0.bdca9b8dcf3f.300.fc39.s390x/vmlinux: attempt to load strings from a non-string section (number 0)
+And we already have such a thing with PURGATORY_CFLAGS_REMOVE.
 
-I will change this commit to the below; it seems to work and is in
-line with other architectures:
+> Thanks. But now that we have RIP_REL_REF(), I might split the cleanup
+> from the actual switch to -fpie, which I am still a bit on the fence
+> about, given different compiler versions, LTO, etc.
 
------
+Tell me about it. Considering how much jumping through hoops we had to
+do in recent years to accomodate building the source with the different
+compilers, I'm all for being very conservative here.
 
-When building with CONFIG_LD_ORPHAN_WARN after selecting
-CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
-ELF sections:
+> RIP_REL_REF(foo) just turns into 'foo' when compiling with -fpie and
+> we could drop those piecemeal once we are confident that -fpie does
+> not cause any regressions.
 
-  s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
-  s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
-  s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
-  s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
+Ack.
 
-Explicitly keep those sections like other architectures when
-CONFIG_RELOCATABLE is enabled, which is always true for s390.
+> Note that I have some reservations now about .pi.text as well: it is a
+> bit intrusive, and on x86, we might just as well move everything that
+> executes from the 1:1 mapping into .head.text, and teach objtool that
+> those sections should not contain any ELF relocations involving
+> absolute addresses. But this is another thing that I want to spend a
+> bit more time on before I respin it, so I will just do the cleanup in
+> the next revision, and add the rigid correctness checks the next
+> cycle.
 
-[hca@linux.ibm.com: keep sections instead of discarding]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
----
- arch/s390/kernel/vmlinux.lds.S | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+I am fully onboard with being conservative and doing things in small
+steps considering how many bugs tend to fall out when the stuff hits
+upstream. So going slowly and making sure our sanity is intact is a very
+good idea!
 
-diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-index 661a487a3048..d46e3c383952 100644
---- a/arch/s390/kernel/vmlinux.lds.S
-+++ b/arch/s390/kernel/vmlinux.lds.S
-@@ -200,6 +200,21 @@ SECTIONS
- 		*(.rela*)
- 		__rela_dyn_end = .;
- 	}
-+	.dynamic ALIGN(8) : {
-+		*(.dynamic)
-+	}
-+	.dynsym ALIGN(8) : {
-+		*(.dynsym)
-+	}
-+	.dynstr ALIGN(8) : {
-+		*(.dynstr)
-+	}
-+	.hash ALIGN(8) : {
-+		*(.hash)
-+	}
-+	.gnu.hash ALIGN(8) : {
-+		*(.gnu.hash)
-+	}
- 
- 	. = ALIGN(PAGE_SIZE);
- 	__init_end = .;		/* freed after init ends here */
+Thx.
+
 -- 
-2.40.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
