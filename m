@@ -1,232 +1,131 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541E74E1B5
-	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 22:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E34F4EB49;
+	Mon, 12 Feb 2024 23:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707777718; cv=none; b=m0hp+zbxa6beZdTukIKZDKIP3yt93pHE76Etru+u8iNWDm3al2cTX5fINAxh/KYZeqWd+QzZmr7/+Btw+JE9JwqyC5Xf9zDE1KQZB7J9clo4yDVv733PftFXssTOsxYTmwvDt5MBTdohbknUXqgeHe4LM/8lXTUNn+vMjmP4iko=
+	t=1707780069; cv=none; b=hbMYNjPygMtTKc7wnCG7oRbQnJBeB/CHefEIc+SR0UBFy6laBGotq3P700CuFXLjk/sjUThgQgLw8i5DfC9j5Y8WZ756LVtESuyjZv3hfuc+9QCKJEk9e58h8EFbYddGKjrNy+lB9z17HM5hhTfMZ9DcTFSJJTRitY+0RxDizC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707777718; c=relaxed/simple;
-	bh=cAUEs+amnVSeKIK8NpO4FC2BVKtrt76059q1ciUIwV8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fP+OHIPknk80BlxCcOxX8TaDwW4hEkf62Uei1CgzD/oUi1SxwnTdvh0p3kV3XH19eSgpD2f8dsXQGi7fIB4gXPoWhPLGbEvC26J+3dx9X/EzgBnQW5a2mcGK8B2e289xcdxkaDm4N0X2481Ede1rzfFYG/aZUExwZGg46geDJEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IOWb1qkM; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707780069; c=relaxed/simple;
+	bh=sEnlAnPtx/b3N5OPsMnT5S5yhEA8bixB/wz+9/zOvWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s8KPrIVfrORAURahFEo7IDaLd1E4oe1yIZpA3ao8DI8Vx7k8a8niF/UUHD4Fw24NyW29WiOExzwpQQi+jU9lY+pKb9S7HmJGdYQL7Vlp0hiu9+dCgfRm4jfir5YtQqPRv5GkcRjkG61OxWfzpTM0sJWNuMYwXxBCxBMOM46eh6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B5thEsZG; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IOWb1qkM"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d09bdddfc9so49005391fa.2
-        for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 14:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707777714; x=1708382514; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZiHemHBfh4EaF7fWAPqUeUVvkic0kmQVtldtUj1mK2Q=;
-        b=IOWb1qkMyN0jkqAQ2OtwW5/5k8xR6ZVmCyte+VRP7+RzG3a/NFZL9a2Rjq8holn91X
-         LGpCZOa9XNo4SDSN/KnJl0whIpk02H79gzZleCDZpLGoyv8rP8T8f4mjjMxa6BczpB61
-         p4d44STAIoSoTGRJ1jQeLrkSh985vnIbxuTvPcVBFa3+BFzKMjRVQ71dxIuh4fZ3Lmo1
-         RZ5FB1nQpZ1tBZ4pwZFqyP0ioqq8pCq7zCnk+mLYWFcxU0aZFhxBh2ED6OEJVnsF1u2z
-         hTCLYVviODmjyHN5nKKYh8JWhNgI2363DNh1U+MA/DyHg6YCbbU3nIZPsGL6oiiIIb7m
-         V2nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707777714; x=1708382514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZiHemHBfh4EaF7fWAPqUeUVvkic0kmQVtldtUj1mK2Q=;
-        b=Ag3r5SUcFMuW306Qm5Po/Z0xJKaO5BzkkWZv8K/xlNkxETCpDs0wQzbDEYj2YjSkQO
-         xVS4nIJVnQMIdGmSZpWhquikxPpj4bHF21lWCPjbIzfCCisWgBtEa6uMZ4rBQHYhlGpb
-         U3mTA5bsB47IbzcP1QSyiYyLRjGBHa2MfxIey8KFQzZSKmv4u4882QH6RWnWMyEySoK6
-         wX/4hVDsRSt5foVG9J5jXY7LMBEFj8rxP0paymzjSfzLxn7oNDozzmGhB13nweAxOvcR
-         gVBWIRVjF1XSTTnek580hCmELlwH0x+E9XvhNsDnC1RKD+VCKzghmCJHOg2SBzXHPHMO
-         djXw==
-X-Gm-Message-State: AOJu0YzmQknXtsBfwK1B9aUYRzigEOCJr2kM6SFox/y03CEw6elr2+Vv
-	5FeKe6UwSCnu7k8u3brVWHMqXGNsu4m9pmbfD5WdwZ+l/4UOP9p6JcBJ8MU11cfyOyCWrTlD6aV
-	7lmW2cVSZ/T9HHPeReJfepw7qajOk242wxzA=
-X-Google-Smtp-Source: AGHT+IERyjvfCjhn603iTivehWnyeXs3W/EcTiLPKkZ4jkU87YeiavRXuORh8ve9NLURqBkLybIhq4E0QvKF6/s6xIQ=
-X-Received: by 2002:a2e:2e11:0:b0:2d0:d3d8:a44d with SMTP id
- u17-20020a2e2e11000000b002d0d3d8a44dmr4995934lju.41.1707777713943; Mon, 12
- Feb 2024 14:41:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B5thEsZG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707780068; x=1739316068;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sEnlAnPtx/b3N5OPsMnT5S5yhEA8bixB/wz+9/zOvWk=;
+  b=B5thEsZGbsgCc5ON0y698xu1nwrAs4QTKBCsV8JIWfYTNFjtDVdJ2iRJ
+   5SjPK2byxJ7wEUKd/j4gZ91y5ejfFhe8fnEDF9hRF0+u3EDjvkiwiv0i5
+   SAFg+Iu/Pyn19BOs6cA1CZlZSeQe+/Ctn5/BNG0Ift7gk0+3HlpeneB9U
+   c6G5+ryxjsiU7IJ2y3Q5/46ewfWJ2GaG0LttVSE0xeNwPPfUvfVOelQvK
+   aA4fIOltB5ltUqtMJGvCEvrl0KXcXL+y3S2C+/CAduiUD2a78UAdXcQME
+   nwrZY4V+QJePxuOg0yUbgrNbephzcHiuAblE+vJmmycaqLgLjTSBN7eYS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="12867754"
+X-IronPort-AV: E=Sophos;i="6.06,155,1705392000"; 
+   d="scan'208";a="12867754"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 15:21:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,155,1705392000"; 
+   d="scan'208";a="2678247"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 12 Feb 2024 15:21:03 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rZfbh-0007PW-1A;
+	Mon, 12 Feb 2024 23:21:01 +0000
+Date: Tue, 13 Feb 2024 07:20:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cristian Marussi <cristian.marussi@arm.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	sudeep.holla@arm.com, vincent.guittot@linaro.org,
+	peng.fan@oss.nxp.com, michal.simek@amd.com, quic_sibis@quicinc.com,
+	quic_nkela@quicinc.com, souvik.chakravarty@arm.com,
+	Cristian Marussi <cristian.marussi@arm.com>
+Subject: Re: [PATCH 06/11] firmware: arm_scmi: Implement Clock
+ .is_notify_supported callback
+Message-ID: <202402130758.vkfAqrx0-lkp@intel.com>
+References: <20240212123233.1230090-7-cristian.marussi@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240208012057.2754421-2-yshuiv7@gmail.com> <CAK7LNAT0KT7sbZJZNXtq5waM-UjUm4zHyf9xHZc3uHLvZ_eAfA@mail.gmail.com>
- <CAFP8O3Kqx-gdTBFn_hesWzd-6NCpGEz1=fMoJXuX+n4c7sp0Bw@mail.gmail.com>
-In-Reply-To: <CAFP8O3Kqx-gdTBFn_hesWzd-6NCpGEz1=fMoJXuX+n4c7sp0Bw@mail.gmail.com>
-From: Yuxuan Shui <yshuiv7@gmail.com>
-Date: Mon, 12 Feb 2024 22:41:42 +0000
-Message-ID: <CAGqt0zzq3yK6340d1OxGAByH+ZQLV3LWY+-WqxTu7MGU0cNbyQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Fix building with LLVM on NixOS
-To: Fangrui Song <maskray@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev, nathan@kernel.org, 
-	nicolas@fjasle.eu, linux-kbuild@vger.kernel.org, tglx@linutronix.de, 
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
-	hpa@zytor.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240212123233.1230090-7-cristian.marussi@arm.com>
 
-Hi,
+Hi Cristian,
 
-On Mon, Feb 12, 2024 at 9:59=E2=80=AFPM Fangrui Song <maskray@google.com> w=
-rote:
->
-> On Mon, Feb 12, 2024 at 1:30=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > +Cc: Fangrui Song <maskray@google.com>
-> >
-> >
-> >
-> > On Thu, Feb 8, 2024 at 10:22=E2=80=AFAM Yuxuan Shui <yshuiv7@gmail.com>=
- wrote:
-> > >
-> > > NixOS is designed to have immutable packages, and explicit dependenci=
-es.
-> > > It allows multiple different versions of the same shared library to
-> > > co-exist in its file system.
-> > >
-> > > Each application built with Nix, the NixOS package manager, will have
-> > > paths to its dependency shared libraries hardcoded into its executabl=
-e,
-> > > this includes the dynamic linker. To achieve this, Nix adds a
-> > > --dynamic-linker linker flag when building any application.
-> > >
-> > > This isn't a problem if the kernel is built with ld.bfd, because ld.b=
-fd
-> > > ignores the --dynamic-linker flag when the resulting binary doesn't h=
-ave
-> > > a DT_NEEDED entry. However, ld.lld respects --dynamic-linker
-> > > unconditionally, which breaks linking in several cases.
-> > >
-> > > This commit adds an explicit --no-dynamic-linker flag which overrides
-> > > the flag added by Nix.
-> >
-> >
-> >
-> > I expect some Acks from LLVM folks (especially, from Frangrui)
-> > if this is the right thing to do.
->
-> GNU ld seems to ignore --dynamic-linker for a position-dependent
-> executable (ET_EXEC) when there is no DT_NEEDED entry.
-> ld.lld respects --dynamic-linker in this case. Before this kernel
-> report, I do not know any user inconvenienced by this difference.
-> (mold respects --dynamic-linker as well.)
-> This could be helpful to test an executable with PT_INTERP but no DT_NEED=
-ED.
->
-> I think this patch does not fix non-x86 builds.
+kernel test robot noticed the following build warnings:
 
-This is true. I am not familiar with non-x86, and I don't have a test
-environment for them.
-That being said, if you or someone can point to me what other linker
-flag variables I need
-to change, I will try to fix them as well.
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.8-rc4 next-20240212]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> It feels to me that NixOS should provide a linker wrapper that does
-> not force --dynamic-linker=3D.
+url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Marussi/firmware-arm_scmi-Check-for-notification-support/20240212-203727
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20240212123233.1230090-7-cristian.marussi%40arm.com
+patch subject: [PATCH 06/11] firmware: arm_scmi: Implement Clock .is_notify_supported callback
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240213/202402130758.vkfAqrx0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402130758.vkfAqrx0-lkp@intel.com/reproduce)
 
-I actually tried that. The problem is, NixOS tries to enforce the same
-build environment
-for downstream packages that depend on the kernel (think kernel
-modules, perf, etc.) This
-is reasonable in most cases. But if I use a linker wrapper that does
-_not_ have --dynamic-linker
-for the kernel, then all downstream packages will inherit the same
-linker wrapper too. This
-breaks, for example, zfs. Because its configure script tries to build
-some executable and
-run them, which fails because it's using a linker wrapper without
---dynamic-linker.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402130758.vkfAqrx0-lkp@intel.com/
 
-> While it's extremely uncommon (and generally not recommended), certain
-> programs invoke the linker directly (instead of using a compiler
-> driver).
-> Such programs would run into a problem when they make a
-> position-dependent executable with no dependency as well.
+All warnings (new ones prefixed by >>):
 
-I don't think I quite get what you are trying to say here.
+   drivers/firmware/arm_scmi/clock.c:853:8: error: implicit declaration of function 'scmi_clock_domain_lookup' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           clk = scmi_clock_domain_lookup(ci, src_id);
+                 ^
+>> drivers/firmware/arm_scmi/clock.c:853:6: warning: incompatible integer to pointer conversion assigning to 'struct scmi_clock_info *' from 'int' [-Wint-conversion]
+           clk = scmi_clock_domain_lookup(ci, src_id);
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
-> I don't feel that NixOS forcing --dynamic-linker=3D is enough
-> justification to change linkers.
 
-You already rejected the option of changing lld to match ld.bfd's behavior.
-If you reject this kernel patch also, then what's left can only be some hor=
-rible
-hacks on NixOS' side; or this means NixOS will never get a clang built kern=
-el.
-Which would be quite unfortunate.
+vim +853 drivers/firmware/arm_scmi/clock.c
 
->
-> > > Signed-off-by: Yuxuan Shui <yshuiv7@gmail.com>
-> > > ---
-> > >  Makefile                      | 3 +++
-> > >  arch/x86/boot/Makefile        | 2 +-
-> > >  arch/x86/realmode/rm/Makefile | 2 +-
-> > >  3 files changed, 5 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index a171eafce2a3b..10ed19caecb1b 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -531,6 +531,9 @@ RUSTFLAGS_KERNEL =3D
-> > >  AFLAGS_KERNEL  =3D
-> > >  LDFLAGS_vmlinux =3D
-> > >
-> > > +LDFLAGS_MODULE +=3D --no-dynamic-linker
-> > > +LDFLAGS_vmlinux +=3D --no-dynamic-linker
-> > > +
-> > >  # Use USERINCLUDE when you must reference the UAPI directories only.
-> > >  USERINCLUDE    :=3D \
-> > >                 -I$(srctree)/arch/$(SRCARCH)/include/uapi \
-> > > diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
-> > > index 3cece19b74732..390a4604166eb 100644
-> > > --- a/arch/x86/boot/Makefile
-> > > +++ b/arch/x86/boot/Makefile
-> > > @@ -102,7 +102,7 @@ $(obj)/zoffset.h: $(obj)/compressed/vmlinux FORCE
-> > >  AFLAGS_header.o +=3D -I$(objtree)/$(obj)
-> > >  $(obj)/header.o: $(obj)/zoffset.h
-> > >
-> > > -LDFLAGS_setup.elf      :=3D -m elf_i386 -z noexecstack -T
-> > > +LDFLAGS_setup.elf      :=3D --no-dynamic-linker -m elf_i386 -z noexe=
-cstack -T
-> > >  $(obj)/setup.elf: $(src)/setup.ld $(SETUP_OBJS) FORCE
-> > >         $(call if_changed,ld)
-> > >
-> > > diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Mak=
-efile
-> > > index f614009d3e4e2..4b42006d9ce02 100644
-> > > --- a/arch/x86/realmode/rm/Makefile
-> > > +++ b/arch/x86/realmode/rm/Makefile
-> > > @@ -50,7 +50,7 @@ $(obj)/pasyms.h: $(REALMODE_OBJS) FORCE
-> > >  targets +=3D realmode.lds
-> > >  $(obj)/realmode.lds: $(obj)/pasyms.h
-> > >
-> > > -LDFLAGS_realmode.elf :=3D -m elf_i386 --emit-relocs -T
-> > > +LDFLAGS_realmode.elf :=3D --no-dynamic-linker -m elf_i386 --emit-rel=
-ocs -T
-> > >  CPPFLAGS_realmode.lds +=3D -P -C -I$(objtree)/$(obj)
-> > >
-> > >  targets +=3D realmode.elf
-> > > --
-> > > 2.43.0
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
-> >
->
->
-> --
-> =E5=AE=8B=E6=96=B9=E7=9D=BF
+   842	
+   843	static bool scmi_clk_notify_supported(const struct scmi_protocol_handle *ph,
+   844					      u8 evt_id, u32 src_id)
+   845	{
+   846		bool supported;
+   847		struct scmi_clock_info *clk;
+   848		struct clock_info *ci = ph->get_priv(ph);
+   849	
+   850		if (evt_id >= ARRAY_SIZE(evt_2_cmd))
+   851			return false;
+   852	
+ > 853		clk = scmi_clock_domain_lookup(ci, src_id);
+   854		if (IS_ERR(clk))
+   855			return false;
+   856	
+   857		if (evt_id == SCMI_EVENT_CLOCK_RATE_CHANGED)
+   858			supported = clk->rate_changed_notifications;
+   859		else
+   860			supported = clk->rate_change_requested_notifications;
+   861	
+   862		return supported;
+   863	}
+   864	
 
---=20
-
-Regards
-Yuxuan Shui
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
