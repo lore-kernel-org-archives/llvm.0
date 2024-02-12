@@ -1,88 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF1C3C699
-	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 15:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775953D0A7
+	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 16:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707751446; cv=none; b=Jb5Q8xUZcF+role7K2rTTwm5HOMwiRSvH4bhR0SQvstc4I97qrJ82OrKJ1R5SQRec+047QqZIi7YNfB0J375/kDd1z0mgNLC2e7QKBSsuiPXnPU3IeXqkPARFQe6C+jlKEqDXZUprPSeo7uHBInBU0OfAf1nMTU1d9m5cW6wiJo=
+	t=1707754021; cv=none; b=Jb+tEWVC5H2bgfzfCYnD7Wh6V6xlvjQah26SBgkeYIEKrhE5oQCLy/WpDvzWig2ZvhdUw/Bjtd0TAAOWEhzp/tWm067dNhx2MvT+iZTm+z3uepEUTrVmFW6bJJXW04DRFYms+vH70iUHNIoDiPJLXhhTI0zkQWYaXsKBqMXjA+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707751446; c=relaxed/simple;
-	bh=WWUVJAhmle29IPDO4RHpaZbuj8n80ec/lO+P4P9s3sU=;
+	s=arc-20240116; t=1707754021; c=relaxed/simple;
+	bh=6VljTnqgIgygVWGxmCUMJQmUDyt4BmVYXuCIwltV1hw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n1nV2cHLeQjZ7N3rXCY/kROOG3K1V4vsOqSKdDcRW9aZ9NlW0x2olqg9Im2dJ5msbFiZCcMbyc+YBkL14GsAoBsv+/weDsg14z17xGFebMs1Q7neV/IZ94b84MQr1ac7++yzfcTX3BvUDIrIONkTkP5sAjrv+Tl/WS2DFOLaAKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pb7TQuAh; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=f34GxJqnKo/trTMYUG9IBzSgpF/KyTR5xE4V+/541DeS38dU9SnVia4HgExVUxS/E+mBXmMhA3kaR8Jn7EWCgrRpgBpl1WtuXYT4bF0MhL+tR6lAB03mJ3VdJAMJbIsRYpsCOTdWGbjsdwcxQrsIQUHbwOTddA7kCnIyZxGLYzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4TXtZ3cQ; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pb7TQuAh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37749C43394
-	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 15:24:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707751446;
-	bh=WWUVJAhmle29IPDO4RHpaZbuj8n80ec/lO+P4P9s3sU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Pb7TQuAh5LA2V0Z1dQbw1kV4UTkB48nJHh5Z7sC/btLGtAe5e9A1pMVEDYkxshldY
-	 VguzMoWcI2M+N3bbvhtS0dLP0+pHzaSiK7F5dgAQi64/pCfVQStkqtzAhzavXURgB2
-	 wtzkzz6aXMms0If8UyhaF9f3mod0RbGSfQxQ7+cvkiAg8jXcUU3cE7fVyqZTaIsKFO
-	 WRrZWf0UTZqwRyiDk7e0O+S2eWYsmJ5KY8uo4DRj9vpeHoaXtn0DWmIYcLp61Vt5Nu
-	 dPWJatH+M8jGWtmsL+qLgUPbKcJd2c72qZbpk40uV4GlarsmD6LwUHeg8LB7CeuoWj
-	 6U0pLrcxB2mNw==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51147d0abd1so3632081e87.1
-        for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 07:24:06 -0800 (PST)
-X-Gm-Message-State: AOJu0Yx92fI8FoCvaTUPOxovqe5h8d3YTNwdp38iGL71byLcFIx6kYnM
-	w/9ydlAYeCZr7axeOh4QT3EJeOjuyfRH7sh7r1BuCHDKjSjiDYDAOPXGUh2PoL9iClQRlSgot4S
-	h6bWdBEcTP+fEgEUBtqEi2wr3QYM=
-X-Google-Smtp-Source: AGHT+IHIWYUd8/JvmBEqXUvmGaRWai49eznUC5vZoorTEhUDMCzAofBDgtcWjpFO1JFOZmeCNxyWxz6PBlsbAxS4kk0=
-X-Received: by 2002:a05:6512:238d:b0:511:81ed:1a53 with SMTP id
- c13-20020a056512238d00b0051181ed1a53mr5043463lfv.42.1707751444365; Mon, 12
- Feb 2024 07:24:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4TXtZ3cQ"
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-363c87a3e12so491885ab.1
+        for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 08:06:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707754018; x=1708358818; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V812vhaPKlOTRNmWcK0bgkq24J9lpm1PdtO4QK4iOp4=;
+        b=4TXtZ3cQkIZ9QJzcoI2ouJKyeJcgWS/aMDyJ3WEBPogGMLAK/eyBwhOfnNJuXKy1nv
+         CS441dPjTcj0jfdhFk+dm/1VfG/aA/K2YwrKVA6nZBnBtkNZSPStSHsJMnjDGSL4QWze
+         Tn+z0LJHTmqrPUOHEoJLhqEz5+JxF6ijvNabyqkimPfegFFYJBHhXIZ11PVTipvO02+T
+         qbX+pTmD6uWAYSaqgSMdOfRHe79auZCyjEp1OdVEAydhDeyAXt6O5EtP/Uz2bTQZ+KON
+         qRsPfGNK5oETjbaSRO2nKaJS3LXBAIshZoS1WYEFCGSVhbzcUan3WHGQyW43cqfbz7Xc
+         yA2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707754018; x=1708358818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V812vhaPKlOTRNmWcK0bgkq24J9lpm1PdtO4QK4iOp4=;
+        b=ucxbIeDg0IPE55g9q0s9/nkUJ/TJIbIrVStXUyRkW63NLTcm8dG+FRK11WNs2B8ft6
+         bq5gnlelWLns8ckZd1PpEC3yftpw8G0UgJoB5oR3uSCran8Iw/Iwk5w4WrUxRldW3Wcd
+         7Xsune5loh6bHyfh5Xo4dOyRA87ft29ptNkwpzgmHcbqzc2+qlgdWH4XEECrazbOClbW
+         bisAV6xbqwdTyOBZa4iTGIh8ODuJdpuNiemT1KNVB3xUgqgTqZOwpm62vJCHkO35yOjH
+         TjpqT7HQ3DOoE5vuS8VAOBxoSBZDeoUZ6R1d9Y+n8Pj7+pcn3cL3bmfxbuffswiSOyZj
+         V86Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU/e1sxTxi6EDq4LoaRchvylFYYlKlinif10tOkmHLTTHv6WKsAysgSL4UmsJsluaWpRb/d02A27kjDyT3RO6S9y2ehtQ==
+X-Gm-Message-State: AOJu0YyIdLxkBxOT6wB1URf0OSA+fyc2rBhlRYeQFar0T0qI9zcl3UFt
+	GpdKFiYmrmi/77ZWh8V+qeAcPwj4FmgAE3UvVKF/0eWHPAw2s0O0CHCD9dIUNdNfRHODeThKB3u
+	GHWEkdVGb7n2C+Gq9C43eis5rwPZidtxM54ql
+X-Google-Smtp-Source: AGHT+IFN1k4a8xKqLL837bVzWrBksaHMIqM1/h45wRcG9S7HfMYRYNm1TbVw0RhAd9mTK+DTdio3lh12s3nw55K2q8I=
+X-Received: by 2002:a05:6e02:3385:b0:363:d56d:1b0c with SMTP id
+ bn5-20020a056e02338500b00363d56d1b0cmr435240ilb.26.1707754018456; Mon, 12 Feb
+ 2024 08:06:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240129180502.4069817-21-ardb+git@google.com>
- <20240129180502.4069817-30-ardb+git@google.com> <20240212143717.GWZcotHRH-8a3x1gTH@fat_crate.local>
-In-Reply-To: <20240212143717.GWZcotHRH-8a3x1gTH@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 12 Feb 2024 16:23:53 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGNnHzCWJB8RHYUqePRjN_k-8mRXKTM3B_Qq2je3k5iyQ@mail.gmail.com>
-Message-ID: <CAMj1kXGNnHzCWJB8RHYUqePRjN_k-8mRXKTM3B_Qq2je3k5iyQ@mail.gmail.com>
-Subject: Re: [PATCH v3 09/19] x86/head64: Simplify GDT/IDT initialization code
-To: Borislav Petkov <bp@alien8.de>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+References: <20240201001504.1348511-1-irogers@google.com> <20240201001504.1348511-6-irogers@google.com>
+ <CAM9d7cjka_O5OmCxkrp-K6g45VnxEJNd73jjv6kQanutf+6sbg@mail.gmail.com>
+In-Reply-To: <CAM9d7cjka_O5OmCxkrp-K6g45VnxEJNd73jjv6kQanutf+6sbg@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 12 Feb 2024 08:06:43 -0800
+Message-ID: <CAP-5=fV1dA_hbH=UAZFL8DeuRzvRqW51-gQFSpuEsHpWEDDtWw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/9] perf tests: Use scandirat for shell script finding
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 12 Feb 2024 at 15:37, Borislav Petkov <bp@alien8.de> wrote:
+On Fri, Feb 9, 2024 at 8:41=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> w=
+rote:
 >
-> On Mon, Jan 29, 2024 at 07:05:12PM +0100, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
+> On Wed, Jan 31, 2024 at 4:15=E2=80=AFPM Ian Rogers <irogers@google.com> w=
+rote:
 > >
-> > There used to be two separate code paths for programming the IDT early:
-> > one that was called via the 1:1 mapping, and one via the kernel virtual
-> > mapping, where the former used explicit pointer fixups to obtain 1:1
-> > mapped addresses.
+> > Avoid filename appending buffers by using openat, faccessat and
+> > scandirat more widely. Turn the script's path back to a file name
+> > using readlink from /proc/<pid>/fd/<fd>.
 > >
-> > That distinction is now gone so the GDT/IDT init code can be unified and
-> > simplified accordingly.
+> > Read the script's description using api/io.h to avoid fdopen
+> > conversions. Whilst reading perform additional sanity checks on the
+> > script's contents.
 > >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> >  arch/x86/kernel/head64.c | 57 +++++++-------------
-> >  1 file changed, 18 insertions(+), 39 deletions(-)
+> [SNIP]
+> > -static const char *shell_test__description(char *description, size_t s=
+ize,
+> > -                                           const char *path, const cha=
+r *name)
+> > +static char *shell_test__description(int dir_fd, const char *name)
+> >  {
+> > -       FILE *fp;
+> > -       char filename[PATH_MAX];
+> > -       int ch;
+> > +       struct io io;
+> > +       char buf[128], desc[256];
+> > +       int ch, pos =3D 0;
+> >
+> > -       path__join(filename, sizeof(filename), path, name);
+> > -       fp =3D fopen(filename, "r");
+> > -       if (!fp)
+> > +       io__init(&io, openat(dir_fd, name, O_RDONLY), buf, sizeof(buf))=
+;
+> > +       if (io.fd < 0)
+> >                 return NULL;
+> >
+> >         /* Skip first line - should be #!/bin/sh Shebang */
+> > +       if (io__get_char(&io) !=3D '#')
+> > +               goto err_out;
+> > +       if (io__get_char(&io) !=3D '!')
+> > +               goto err_out;
+> >         do {
+> > -               ch =3D fgetc(fp);
+> > -       } while (ch !=3D EOF && ch !=3D '\n');
+> > -
+> > -       description =3D fgets(description, size, fp);
+> > -       fclose(fp);
+> > +               ch =3D io__get_char(&io);
+> > +               if (ch < 0)
+> > +                       goto err_out;
+> > +       } while (ch !=3D '\n');
+> >
+> > -       /* Assume first char on line is omment everything after that de=
+sc */
+> > -       return description ? strim(description + 1) : NULL;
+> > +       do {
+> > +               ch =3D io__get_char(&io);
+> > +               if (ch < 0)
+> > +                       goto err_out;
+> > +       } while (ch =3D=3D '#' || isspace(ch));
+> > +       while (ch > 0 && ch !=3D '\n') {
+> > +               desc[pos++] =3D ch;
+> > +               if (pos >=3D (int)sizeof(desc) - 1)
 >
-> Ok, I don't see anything wrong here and since this one is the last of
-> the cleanup, lemme stop here so that you can send a new revision. We can
-> deal with whether we want .pi.text later.
+> Maybe (pos =3D=3D sizeof(desc) - 2) ?  I'm not sure what happens if it ha=
+s a
+> description longer than the buffer size.
+
+Thanks Namhyung!
+
+sizeof(desc) - 1 =3D=3D sizeof(char[256]) - 1 =3D=3D 255 , so at this point
+pos can at most be 255 and there is one space after pos for a trailing
+'\0'.
+
+> > +                       break;
+> > +               ch =3D io__get_char(&io);
+> > +       }
+> > +       while (pos > 0 && isspace(desc[--pos]))
+> > +               ;
+
+Here pos is moved back to at least one to 254.
+
+> > +       desc[++pos] =3D '\0';
 >
+> Wouldn't it overflow the buffer?
 
-OK.
+At this point pos can only have a maximum value of 255 which is within
+the bounds of desc.
 
-I'll have the next rev out shortly, thanks.
+Thanks,
+Ian
+
+> Thanks,
+> Namhyung
+>
+>
+> > +       close(io.fd);
+> > +       return strdup(desc);
+> > +err_out:
+> > +       close(io.fd);
+> > +       return NULL;
+> >  }
