@@ -1,76 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62ECA51025;
-	Mon, 12 Feb 2024 23:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CA94F5FA;
+	Mon, 12 Feb 2024 23:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707780480; cv=none; b=Ob5jWBUO+pBgBcXjMrA3jnx4mmXv10P8/owiYk0EEIUxi8jNDhO2QkJor2VXo4413V0GiS2fYAlTTiV8y8g+EVL5+ExS1Y9RVApZfqInAgTN+lXEfyoQZxFfUPKmQES0klLDx3KhwPHJUU0D8uGHU2cdnOF+Nk9RZRpiyHaT6J4=
+	t=1707781733; cv=none; b=lCGyLHOX4PxwBBkaIsYnmU3egcYxP99fyzigzgwNIu6vtylkwDK1ba72Da2YMkc0ZennZj1Lfbn9ZUEHGZT1bofJ6OQXWCR1L3S39kWW3eOtctL7JtftzKId7rUeCfwjcL1y4BhF1pmhAdInk2savTs+MQz1tPWM/bbTv0HehO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707780480; c=relaxed/simple;
-	bh=K5hnkWF2pr9qY4CMY8S2FGPFj4eYlUn4D0jII5LC88I=;
+	s=arc-20240116; t=1707781733; c=relaxed/simple;
+	bh=N0FaQE0vHSopm6AME+8az+/MTsHIzXcz1fDK/aRn3BQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S1WYCN2T5fTkzXcVNcBIjqudm7Hp0poWvrThMH1X1EGWlH10J83jIYtLa72e8K/KoJ9N8xYgXlo114sbK16ySZqEDRsC3M0fMtOa5Gk9B3jZ1RgyG6wsyWQwRs3KigYfE9t05o6auKddfPzJzY8BtC9mvupBe5YTo7Yije4Ygx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z3qhP0eK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=tGF8ltCt7rlhqcSwkijniQJM+W39EOiZpOyG2qnhIDXmyOVknNsdJ3df1jckY1THt8VTJ/zJGhtuJjXrsTggl+P1ZsTj0nV0rYJz+XbaYBHDcs57XY3q7oeS7VVzveh4fsoalO9IvxVNz4Ohdzxe6m/VgHh/Zs81hGAyA94hOTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=patan0HD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z3qhP0eK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F07EC433F1;
-	Mon, 12 Feb 2024 23:27:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="patan0HD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AD5C433F1;
+	Mon, 12 Feb 2024 23:48:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707780479;
-	bh=K5hnkWF2pr9qY4CMY8S2FGPFj4eYlUn4D0jII5LC88I=;
+	s=k20201202; t=1707781732;
+	bh=N0FaQE0vHSopm6AME+8az+/MTsHIzXcz1fDK/aRn3BQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z3qhP0eKL69hznd9YtDHbdoj0ZXRgCuF1To9aggV8TWYpzbLhEG8ozPKGiRPIBVut
-	 Pksi/9/lV6Jz9Uo58kbf8h4itYXIMkDEtmX/ZmVaflf+N0rgdEZz8KTnmqnzXKqDBa
-	 AnyggUHWOF2jRCU5muZJvZjeLbwUwDNEfvtfaXhZRldjG7ZS6/UYb+2xuN9UWBKZv5
-	 seYIippDmVkkjnHwm/tNKJAMktXoDgrDcGuuoNCuLQ2kYpvqSiINnBAS/rw9l2UAzj
-	 EDstOhNfdq0Ocbbx95UmH1LJS6kghx9HB2MGPrvHFCjgP6PowWqbemtZ4tf0UHcNEl
-	 /CzgxKGOZN38w==
-Date: Mon, 12 Feb 2024 16:27:57 -0700
+	b=patan0HD5soE+gBudXrfudQL98WiQ/5vfwvnHXCboGYtCztc4VwPbnKE8WsW+Zrrf
+	 UrkMMFWAezzDX8xAIwF8/UY2p/MgyOO/luOk1an0afJ9R0LLcqNfXtiyFFpBYIXtcI
+	 hOPpUzZzfrlueXD/lDLBSB1gu+vE69gS2JLhPZUZLei1VvXHQNwW0p8YVEbbW2Q5PC
+	 VjroYDDKUmfUyeCbYQWgEsYX/3bwMhn3rpH3rtsVCZ5ELSC+oRj2QZ+06RQSuIo8Ru
+	 g98tACk1Em22+kSJk5booXP6OFlcAixlWiSzTu/aDFyOP8bMzwWRKRO8RUCgCH4eQG
+	 r+RIPW4Acq3SA==
+Date: Mon, 12 Feb 2024 16:48:50 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: justinstitt@google.com, linux-media@vger.kernel.org,
-	llvm@lists.linux.dev, mchehab@kernel.org, morbo@google.com,
-	ndesaulniers@google.com, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] media: mxl5xx: Move xpt structures off stack
-Message-ID: <20240212232757.GA3221859@dev-arch.thelio-3990X>
-References: <20240111-dvb-mxl5xx-move-structs-off-stack-v1-1-ca4230e67c11@kernel.org>
- <20240210162604.342349-1-ojeda@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: Prebuilt LLVM 18.1.0-rc2 uploaded
+Message-ID: <20240212234850.GB3221859@dev-arch.thelio-3990X>
+References: <20240208002841.GA2601476@dev-arch.thelio-3990X>
+ <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240210162604.342349-1-ojeda@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
 
-On Sat, Feb 10, 2024 at 05:26:04PM +0100, Miguel Ojeda wrote:
-> > On Thu, 11 Jan 2024 17:40:36 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
+Hi Miguel,
+
+On Sat, Feb 10, 2024 at 05:36:01PM +0100, Miguel Ojeda wrote:
+> On Thu, Feb 8, 2024 at 1:28 AM Nathan Chancellor <nathan@kernel.org> wrote:
 > >
-> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1977
+> > I have built and uploaded a prebuilt version of LLVM 18.1.0-rc2 to
+> > https://mirrors.edge.kernel.org/pub/tools/llvm/.
+> >
+> > As with Linux -rc releases, this is not the final version that will
+> > ship. If you run across any issues, especially ones that were not
+> > present in earlier LLVM releases, please consider reporting them to us
+> > so that we have a chance to investigate and fix them before the final
+> > release.
 > 
-> The next one: 1978 :)
+> I took a look at the LLVM 18 prerelease to see if these would work
+> with Rust for e.g. CI and other users (instead of using the
+> LLVM-provided apt ones, for instance), and noticed it does not bundle
+> `libclang.so`.
+> 
+> Would it be possible to include it so that we can use `bindgen` and
+> thus enable Rust with them?
+> 
+> I understand they are intended to be minimal toolchains, but if you
+> think it would not be an unreasonable overhead, then it would be great
+> to have it.
 
-This is probably the third link I have messed up in the past couple of
-weeks :/ Mauro, do you want a v2 for these two minor issues or can you
-fix them up during application?
+Absolutely, I am more than happy to include libclang.so and anything
+else that would be useful for the kernel. Everything gets built but I
+only install what has felt needed for the kernel, so there is no real
+overhead aside from package size, which obviously should not increase
+much with this change. I've added the targets to my build scripts and
+kicked off a set of builds. If they finish successfully, I will upload
+them so that you can test them out and make sure they will work.
 
-> > of the stackvia 'static const', which is a better location for these
-> 
-> Nit: space.
-> 
-> Built-tested for loongarch64:
-> 
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> Tested-by: Miguel Ojeda <ojeda@kernel.org>
-> 
-> With this applied, I have a `WERROR`-clean `defconfig` build with a Rust-enabled
-> kernel using LLVM 18 (using LLVM-provided apt pre-releases).
-
-Thanks for taking a look, this is great to hear!
-
-Cheers,
+Thanks for bringing this up and giving them a go, cheers!
 Nathan
