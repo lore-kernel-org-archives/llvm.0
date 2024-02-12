@@ -1,151 +1,175 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2013B782
-	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 13:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E9C4B5CD;
+	Mon, 12 Feb 2024 13:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707744234; cv=none; b=mHJC2Y4Rjhp+G8df3NxKr2uPHTlc2z1agubHzp50+5pEWaddm0soC4OXkb/ePLNnaOYwqs/ea2zgfDhRi942yMTyulbMKsFUTa6gawJysklVIuxEHQdT1pBAKG50yTyA+4dcTaYH+78sN0ssGzKFUnMk4HH1yEgczQfidkOxDVQ=
+	t=1707746126; cv=none; b=E+LY1Ffpx5LLk4Gp+DGdNgSwuZxb5QEGtHufsdaEOdRETjuWcuWSsMHtm8ZtvZ1b+B9T3dYrDqbmX7RyNpFOD5NbKXPsC0vlQW0XKDt93OGtLFEyF7sF67i5TZpntBwmS7J1TDoIlQVox2NLYOu4LSakFCZ4be4KygJR5PlMUyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707744234; c=relaxed/simple;
-	bh=wSQR6gsLt3mG1V9dqLVK5pFi2KxJsal8RGKoLPtALr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jn12mqPRbA1SLU/N7hp2YzQBolq70qrerdX+4jaWusaYB/x98AAS7FvvsdVruaydP5ykM04IDuO5jhrYRhJO/hAOctov5ZGetpR0Ug8fw2/5xYck2VGZKL/56tIomdSCR5f8TAuaqADu14+JazHkkegwf6RKAPS2/5QnM5xtAj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rqVzJaxC; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=LAWNKNui; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QenqSsS6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Z2CxIUZW; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1707746126; c=relaxed/simple;
+	bh=l8lJVhpkkMOQn4SYIDOmKjhE1C4PJtr6LTU/kQWgbWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=o9/OY4ygrHxsUbyiI3RLPoFtq8Xiid3u7nHGikTuVjr5K/0anmyCCxaERnBoHzvP+yraO3C7M38gvS1P+lPQaqMCFM73GicNZb4Sm50nE30Qsrn8/96TWQ9RWxCImngk3fetodfj8GZz3KHWip7ZZtpwIgnEKxa4DjecEfzHFLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DxQCJbvS; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rqVzJaxC";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="LAWNKNui";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QenqSsS6";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Z2CxIUZW"
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D65AC1F769;
-	Mon, 12 Feb 2024 13:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1707744231; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6JkVcVZxZODTrdG1g0ooZoXOZDuPkKduhykZYkAPZq0=;
-	b=rqVzJaxCdss1LH04Ym0CSvcK1bTB8gJFNIk2lAhgvX5fjUFzj7Dg3DdLLCCOg0V4lYdLWs
-	CgkoAWZdqii+TPi8rkGW/iyTNDtzCagSFSYUzFL9aza2gPvsnBLkGbbagpydFIpmdgP7B5
-	xcAYcxkNug71WtwxO/W5QaYO2p757e8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1707744231;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6JkVcVZxZODTrdG1g0ooZoXOZDuPkKduhykZYkAPZq0=;
-	b=LAWNKNuiVW4v0he9H+338pFeDaR3AkSJbgtJM4XXJN4C7PNo0dRI+DqZTaVNile5q4A09o
-	m9fcthPQed1LZlCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1707744230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6JkVcVZxZODTrdG1g0ooZoXOZDuPkKduhykZYkAPZq0=;
-	b=QenqSsS6WZz7R2n1edat8BSuvZw7dvJwhuZ12pO0+w9nLYSI81tVqJFvo6R4qT/RV34PrQ
-	pnVoCp8yq9M5m0//ZOn2aFY9hbTpcDgNZMESiR7YACmh4F/Qn/tjq3LKO3UbQVvpTPEpOx
-	vk5/M9VPy/x2M+FRFp8FmUCwTwwjt84=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1707744230;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6JkVcVZxZODTrdG1g0ooZoXOZDuPkKduhykZYkAPZq0=;
-	b=Z2CxIUZWdkji8Ocyn1ByKhfdkz5/yPGJBn/RAhpLA4pnQldJ1LqF9DLBe3a4SRqEvN6j5D
-	/jKnZ7TshS67a2Dg==
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id C5C0213212;
-	Mon, 12 Feb 2024 13:23:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id vdoEMOYbymUtMwAAn2gu4w
-	(envelope-from <jack@suse.cz>); Mon, 12 Feb 2024 13:23:50 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 56EA3A0809; Mon, 12 Feb 2024 14:23:50 +0100 (CET)
-Date: Mon, 12 Feb 2024 14:23:50 +0100
-From: Jan Kara <jack@suse.cz>
-To: syzbot <syzbot+693985588d7a5e439483@syzkaller.appspotmail.com>
-Cc: adilger.kernel@dilger.ca, axboe@kernel.dk, brauner@kernel.org,
-	jack@suse.cz, linux-ext4@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
-Subject: Re: [syzbot] [ext4?] kernel BUG in ext4_enable_quotas
-Message-ID: <20240212132350.ipdht3ttxyivl33p@quack3>
-References: <0000000000000126ec05ffd5a528@google.com>
- <0000000000002903a406110849e9@google.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DxQCJbvS"
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41CDll6R002089;
+	Mon, 12 Feb 2024 13:55:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=1VsmOyecYehuELNL1sbz6IGptMSx6hES5aL/RB2W1V8=;
+ b=DxQCJbvSXEYk/EtPG7SslOqdyu76QYro297XQenBo3AbxyjIOrWw7qJED+5ls5ysySY9
+ 2y5WTncbztnEnJxUHbSCipJ2m7dfS0BLI+DAgQPvhAwh0IeFLSXkFuYCAEKH9OMnVdGz
+ lAaAlcnaSFv5aH8hRLneWSai2QnH1BPMsN6lAAY7jMow0Lp1/oJe2rkSjam+rV6VMt84
+ gB9sEAKCqQvG0d5dQvObAvLS7syI0XbolWIu2wdL408mD4MB6+hHEbbfzoeK1hoFeT+N
+ roDNtT3AHOCPl4CMfKg+ex2LrcKLUKE4tEh4JkNQUdV9L05C3KDlDBVyw7cBYxMks7Ce TQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7mheg56b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 13:55:21 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41CDn1N3006548;
+	Mon, 12 Feb 2024 13:55:20 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7mheg561-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 13:55:20 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41CDhtIc024961;
+	Mon, 12 Feb 2024 13:55:19 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mfp0vce-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 13:55:19 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41CDtDnF17105456
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 12 Feb 2024 13:55:15 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A1C2920043;
+	Mon, 12 Feb 2024 13:55:13 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 02BFD20040;
+	Mon, 12 Feb 2024 13:55:13 +0000 (GMT)
+Received: from osiris (unknown [9.171.5.16])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 12 Feb 2024 13:55:12 +0000 (GMT)
+Date: Mon, 12 Feb 2024 14:55:11 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, maskray@google.com, ndesaulniers@google.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 04/11] s390: vmlinux.lds.S: Discard unnecessary sections
+Message-ID: <20240212135511.65142-A-hca@linux.ibm.com>
+References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
+ <20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tuVIMDreazdkQtVfRLrmJ6yBZCO6xFUF
+X-Proofpoint-GUID: y5h8jGMhNdFw4guclN1-R3JpP2Oi7u6i
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000002903a406110849e9@google.com>
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Level: *
-X-Spam-Score: 1.69
-X-Spamd-Result: default: False [1.69 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.01)[51.36%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=1b32f62c755c3a9c];
-	 TAGGED_RCPT(0.00)[693985588d7a5e439483];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 R_RATELIMIT(0.00)[to_ip_from(RL9mptuuj8f371ag1nhgyt86ac)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCPT_COUNT_TWELVE(0.00)[14];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,syzkaller.appspot.com:url];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 SUBJECT_HAS_QUESTION(0.00)[]
-X-Spam-Flag: NO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-12_10,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0
+ phishscore=0 clxscore=1015 adultscore=0 priorityscore=1501 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402120105
 
-On Sat 10-02-24 06:59:05, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
+On Wed, Feb 07, 2024 at 05:14:56PM -0700, Nathan Chancellor wrote:
+> When building with CONFIG_LD_ORPHAN_WARN after selecting
+> CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
+> ELF sections that are unnecessary for the kernel's purposes.
 > 
-> commit 6f861765464f43a71462d52026fbddfc858239a5
-> Author: Jan Kara <jack@suse.cz>
-> Date:   Wed Nov 1 17:43:10 2023 +0000
+>   s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
+>   s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
+>   s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
+>   s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
 > 
->     fs: Block writes to mounted block devices
+> Add them to the discards to clear up the warnings, which matches other
+> architectures.
 > 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=147e5b20180000
-> start commit:   89bf6209cad6 Merge tag 'devicetree-fixes-for-6.5-2' of git..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1b32f62c755c3a9c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=693985588d7a5e439483
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ba1fefa80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1636640fa80000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/s390/kernel/vmlinux.lds.S | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+...
+> -		*(.interp)
+> +		*(.interp .dynamic)
+> +		*(.dynstr .hash .gnu.hash)
+
+This seems to be wrong, since it leads to 1000s of error messages when
+using the "crash" utility e.g. when looking into a live dump of system
+with the generated debug info:
+
+BFD: /usr/lib/debug/usr/lib/modules/6.8.0-20240211.rc3.git0.bdca9b8dcf3f.300.fc39.s390x/vmlinux: attempt to load strings from a non-string section (number 0)
+
+I will change this commit to the below; it seems to work and is in
+line with other architectures:
+
+-----
+
+When building with CONFIG_LD_ORPHAN_WARN after selecting
+CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
+ELF sections:
+
+  s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
+  s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
+  s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
+  s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
+
+Explicitly keep those sections like other architectures when
+CONFIG_RELOCATABLE is enabled, which is always true for s390.
+
+[hca@linux.ibm.com: keep sections instead of discarding]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
+ arch/s390/kernel/vmlinux.lds.S | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
+index 661a487a3048..d46e3c383952 100644
+--- a/arch/s390/kernel/vmlinux.lds.S
++++ b/arch/s390/kernel/vmlinux.lds.S
+@@ -200,6 +200,21 @@ SECTIONS
+ 		*(.rela*)
+ 		__rela_dyn_end = .;
+ 	}
++	.dynamic ALIGN(8) : {
++		*(.dynamic)
++	}
++	.dynsym ALIGN(8) : {
++		*(.dynsym)
++	}
++	.dynstr ALIGN(8) : {
++		*(.dynstr)
++	}
++	.hash ALIGN(8) : {
++		*(.hash)
++	}
++	.gnu.hash ALIGN(8) : {
++		*(.gnu.hash)
++	}
  
-The syzbot reproducer seems to mess with multiple ext4 mounts stacked on
-one another and the loop device as well. Quite likely it managed to corrupt
-the mounted filesystem. So:
-
-#syz fix: fs: Block writes to mounted block devices
-
-								Honza
+ 	. = ALIGN(PAGE_SIZE);
+ 	__init_end = .;		/* freed after init ends here */
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.40.1
+
