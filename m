@@ -1,125 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285C41EB58;
-	Mon, 12 Feb 2024 20:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D3F4CB3D
+	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 21:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707770280; cv=none; b=fhHKtbtppvNJT+BddZik0b2HzwJYgiEPug/XlHLvynYyXB+Ub5NklFJGO4QIyCJZ3/AA3fK8tHU7xQdK4iXEcIFq/IFCcglPV/9ovBVQr9b9AsEXjrr3lvC6V4DZZ6nmO0988h9BFOVpCvIzZwaNLlrYcfKi+9oGJF7zQwRHfsM=
+	t=1707773434; cv=none; b=JElRMF5AL3iZVFN4W1O8gZqRybWwID2y9QMsILZOrrW0JoEhDymPQskXKOVXiLNO635QUNdcX9UBBK/F3oxyEYvLkebIWnbJT7hH0Qs/blfWtF+NpJ5px9X1b9DTL87rr4yQwQIfCE3juBZx12sU0tje8oWB7jXeQgWl8m3ZPzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707770280; c=relaxed/simple;
-	bh=Fpc0F+qyMdb3ioJ2lc0gnHuRhUOcZrHYZrPqSExGyO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u0tK/JHwLy0AxC8F5DOVyRVwMDSea3lVtsYg90i0U9km8VtDGX1KSFGStiQpoKcEjRfIaN2wlBwmgMHiLwPsfi8elnEbxChg747ajpPHpbjm1JOyTU9E9ZYa+mPsgf7/cS3pcwNlP4qn4gU6a5BJX9n52F4O4/MnMPyx18Yn9dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERoYmQ4j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707773434; c=relaxed/simple;
+	bh=IDcEWsDLa+W/tADrSclCXIDqdaEJoRI6zAbAWffUmhE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e262zVxrVTJ+ZUDoUBPwEIXtWsFdW07sUxQS4PTHcPs+aLG5f6rTn5AVxxmJRlMeIPm6RyeAwhAdQtjN0XqCml87CU6e9g0y7TiH6B4K2j9UqcyExD65hEL5tTCMANmmsEU78Vba8qzp8H8MQmZrbjNIQiBbTySwacqwUpx5ZkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tBh9GsN2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERoYmQ4j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 680E0C433C7;
-	Mon, 12 Feb 2024 20:37:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tBh9GsN2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0787EC433A6
+	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 21:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707770279;
-	bh=Fpc0F+qyMdb3ioJ2lc0gnHuRhUOcZrHYZrPqSExGyO0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ERoYmQ4jogZzX3jGbXTPFUvQKZxZNyUDWD1L2SOQZHWtQ7IFM5lc9jiHFaHnsMIXX
-	 FuaeoD3/gDRGSXA6Q0aG0m0mRh3347oJzaYWzkY2HfQuua1xc53rOETQSs9Vmn58Fd
-	 rlAXeBece75Z0pCccGm6xTU/O3OCAnzS5JiJohr90Dm1DK5RWh46KFxwjnQxh4izeu
-	 HSQOyL3bfOQ6/W3mqm1GuWLJUhB2EiNdWsxcrXqRmkbSgZBU1l7wRHclc3D9vN1pDk
-	 azNptHEvsIBkkmmNalf8ik6jEbP/rpO/lgIQeQSrxowuNPYZiAq6webhKmgLTFpTrE
-	 YoKwiqot/WBWg==
-Date: Mon, 12 Feb 2024 20:37:53 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Ramon de C Valle <rcvalle@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Matthew Maurer <mmaurer@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-Message-ID: <20240212-outdoors-french-a40d57e38c71@spud>
-References: <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
- <20240125-lazy-thrower-744aacc6632a@wendy>
- <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
- <20240126-eccentric-jaywalker-3560e2151a92@spud>
- <CANiq72nu2NXUWYanHZd5EXgX4P_v673EWn6SCRW60Es9naraQQ@mail.gmail.com>
- <20240209-rage-keg-1b2982cd17d9@spud>
- <CALNs47sRqAbE=u3=_ciO2oge7Afz-6GBBhW+BwcLRET-TsuxTg@mail.gmail.com>
- <CAOcBZORDaHHH3jTL3GO7OsDubhhyQE0Uy2uAjJpiRzrKBgqaOw@mail.gmail.com>
- <CANiq72=VBFvB9O9c84YxpBBftpfNnnXx-+Xes0h8h6rN3EN5pA@mail.gmail.com>
- <20240212-demotion-blitz-1c9ab85dbc73@spud>
+	s=k20201202; t=1707773434;
+	bh=IDcEWsDLa+W/tADrSclCXIDqdaEJoRI6zAbAWffUmhE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tBh9GsN2YTr0uV1cMX3NEaVhUFAZ/7k1vl7DCHtpUOGDZvMduBCBLm1h1eHfuvRbg
+	 OHSmUiydH+Sw15gNRuGOLooI26oac2VgeeWdORWnLEmYcPLZ5Q6YWaPMoLOVWtJFty
+	 eVkmIgHz+wZ4E5iBcKFihe5/LFfV8Vfvlm6Ceg/jHurgPLexrxmIq8wLrk0HRXtf8+
+	 EXnDIOgg61fTydzJSmV2bVVvZJ78m3v67BN47mMbgglWJmI1NwI9ixXQJB5s+91mc2
+	 2yuPydGeqBRPLoK6ivhPacFPnkQvfiDdDAgD9U2Z3pMm+NmJeyWpSxbHJ4FrQrciBk
+	 i4QqOMdGiHBwA==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5116588189aso6424435e87.1
+        for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 13:30:33 -0800 (PST)
+X-Gm-Message-State: AOJu0YyO2o1GAXL5HmigINgp4XKp7ZN18nk5hj9TWD25jlMcJDppgHsr
+	zUE5wD7vTq7qjgbxgj7sgC5O3XmILLYIlQxdvlJq1Elh9/s7mi8XCkBZrupBtra6suJVGD5X0+Q
+	InG/dPtwPKvnyTC6BFlc6k2m95hg=
+X-Google-Smtp-Source: AGHT+IFF7NM/Y8BmMMUYJCxgIz4JDYBoiGpG9Wkp7V3yEjm3Wk0ZoHbI8xHfixr5nQ0N/NXdCvdV1+LWDtCJYwzuutE=
+X-Received: by 2002:a05:6512:104b:b0:511:84f1:b895 with SMTP id
+ c11-20020a056512104b00b0051184f1b895mr5001222lfb.4.1707773432532; Mon, 12 Feb
+ 2024 13:30:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="7thX9cC6woknPGKe"
-Content-Disposition: inline
-In-Reply-To: <20240212-demotion-blitz-1c9ab85dbc73@spud>
-
-
---7thX9cC6woknPGKe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20240208012057.2754421-2-yshuiv7@gmail.com>
+In-Reply-To: <20240208012057.2754421-2-yshuiv7@gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 13 Feb 2024 06:29:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT0KT7sbZJZNXtq5waM-UjUm4zHyf9xHZc3uHLvZ_eAfA@mail.gmail.com>
+Message-ID: <CAK7LNAT0KT7sbZJZNXtq5waM-UjUm4zHyf9xHZc3uHLvZ_eAfA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Fix building with LLVM on NixOS
+To: Yuxuan Shui <yshuiv7@gmail.com>
+Cc: llvm@lists.linux.dev, nathan@kernel.org, nicolas@fjasle.eu, 
+	linux-kbuild@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 12, 2024 at 08:17:31PM +0000, Conor Dooley wrote:
-> On Mon, Feb 12, 2024 at 08:11:21PM +0100, Miguel Ojeda wrote:
-> > On Mon, Feb 12, 2024 at 8:02=E2=80=AFPM Ramon de C Valle <rcvalle@googl=
-e.com> wrote:
-> > >
-> > > Sorry for the late reply. Sami might be the best person to answer thi=
-s, but KCFI (not CFI) tests are lowered by passes that are architecture spe=
-cific (see https://reviews.llvm.org/D119296), so we'd need to add support f=
-or RISC-V. There is no additional work required in the Rust compiler beside=
-s enabling it for the new target.
-> >=20
-> > Thanks a lot Ramon!
-> >=20
-> > Then for RISC-V let's go for the `depends on` for the moment, and we
-> > can remove when the support lands for RISC-V (ideally when someone has
-> > managed to boot it at least under some configuration).
->=20
-> If all you want is a boot under some configuration, that's not
-> difficult. After all, I found the original issue by booting a kernel
-> with CFI_CLANG enabled on the C side...
-
-Also, regardless of depends on on RISC-V, things will still be broken
-on arm64 and x86_64, since KCFI is not enabled in rustc there either?
-
-> > There is no additional work required in the Rust compiler besides enabl=
-ing it for the new target.
->=20
-> This is not super clear though, it says "in the Rust compiler", not "in
-> the kernel's buildsystem".
-
-I realise I was not clear either. What I meant was that this talks about
-rustc and not kbuild, so what is meant by "the new target" is not clear.
-Do arm64 and x86_64 have functional support, so adding RISC-V in rustc
-is needed, or did you mean for the new target in the kernel?
++Cc: Fangrui Song <maskray@google.com>
 
 
 
---7thX9cC6woknPGKe
-Content-Type: application/pgp-signature; name="signature.asc"
+On Thu, Feb 8, 2024 at 10:22=E2=80=AFAM Yuxuan Shui <yshuiv7@gmail.com> wro=
+te:
+>
+> NixOS is designed to have immutable packages, and explicit dependencies.
+> It allows multiple different versions of the same shared library to
+> co-exist in its file system.
+>
+> Each application built with Nix, the NixOS package manager, will have
+> paths to its dependency shared libraries hardcoded into its executable,
+> this includes the dynamic linker. To achieve this, Nix adds a
+> --dynamic-linker linker flag when building any application.
+>
+> This isn't a problem if the kernel is built with ld.bfd, because ld.bfd
+> ignores the --dynamic-linker flag when the resulting binary doesn't have
+> a DT_NEEDED entry. However, ld.lld respects --dynamic-linker
+> unconditionally, which breaks linking in several cases.
+>
+> This commit adds an explicit --no-dynamic-linker flag which overrides
+> the flag added by Nix.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZcqBoQAKCRB4tDGHoIJi
-0iGKAP97UKgRmbxcqgRIJWahLsNbdWqhmMMWsoa78Iykcp7gmQD+JtaSuLVZzvRC
-7MFMT30bfndJIV8nNlMBmx4+XtVlHw8=
-=gsZ6
------END PGP SIGNATURE-----
 
---7thX9cC6woknPGKe--
+I expect some Acks from LLVM folks (especially, from Frangrui)
+if this is the right thing to do.
+
+
+
+
+
+
+
+> Signed-off-by: Yuxuan Shui <yshuiv7@gmail.com>
+> ---
+>  Makefile                      | 3 +++
+>  arch/x86/boot/Makefile        | 2 +-
+>  arch/x86/realmode/rm/Makefile | 2 +-
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index a171eafce2a3b..10ed19caecb1b 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -531,6 +531,9 @@ RUSTFLAGS_KERNEL =3D
+>  AFLAGS_KERNEL  =3D
+>  LDFLAGS_vmlinux =3D
+>
+> +LDFLAGS_MODULE +=3D --no-dynamic-linker
+> +LDFLAGS_vmlinux +=3D --no-dynamic-linker
+> +
+>  # Use USERINCLUDE when you must reference the UAPI directories only.
+>  USERINCLUDE    :=3D \
+>                 -I$(srctree)/arch/$(SRCARCH)/include/uapi \
+> diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+> index 3cece19b74732..390a4604166eb 100644
+> --- a/arch/x86/boot/Makefile
+> +++ b/arch/x86/boot/Makefile
+> @@ -102,7 +102,7 @@ $(obj)/zoffset.h: $(obj)/compressed/vmlinux FORCE
+>  AFLAGS_header.o +=3D -I$(objtree)/$(obj)
+>  $(obj)/header.o: $(obj)/zoffset.h
+>
+> -LDFLAGS_setup.elf      :=3D -m elf_i386 -z noexecstack -T
+> +LDFLAGS_setup.elf      :=3D --no-dynamic-linker -m elf_i386 -z noexecsta=
+ck -T
+>  $(obj)/setup.elf: $(src)/setup.ld $(SETUP_OBJS) FORCE
+>         $(call if_changed,ld)
+>
+> diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefil=
+e
+> index f614009d3e4e2..4b42006d9ce02 100644
+> --- a/arch/x86/realmode/rm/Makefile
+> +++ b/arch/x86/realmode/rm/Makefile
+> @@ -50,7 +50,7 @@ $(obj)/pasyms.h: $(REALMODE_OBJS) FORCE
+>  targets +=3D realmode.lds
+>  $(obj)/realmode.lds: $(obj)/pasyms.h
+>
+> -LDFLAGS_realmode.elf :=3D -m elf_i386 --emit-relocs -T
+> +LDFLAGS_realmode.elf :=3D --no-dynamic-linker -m elf_i386 --emit-relocs =
+-T
+>  CPPFLAGS_realmode.lds +=3D -P -C -I$(objtree)/$(obj)
+>
+>  targets +=3D realmode.elf
+> --
+> 2.43.0
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
