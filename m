@@ -1,145 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD19101C2;
-	Mon, 12 Feb 2024 09:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D261117BCA
+	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 10:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707729342; cv=none; b=jlqKWUvt7O/BsvLyxJsu7woZmybgDcOOMAvrF/YySnZFtUf7Ca1KTfwvTK9BO1WHrxGmfF07G4/a8SxxlOJKm/eIGYMgykLYglKGTN+lO4tiTw2I2yrFD3zdkxNPsUXVdp/sCcRzqdfmyjvzfPvbmt/RjJRnUTmuvM304HDOKCk=
+	t=1707733774; cv=none; b=EttkAj+zji33FwdqQgP75l63Fot0DVD2AytoX6yAJnCmpar11x26oBNJS8XTYIchOotywXCjaXvoCw2fYrvuXohpYlgVMuiHdNsJqt20+mnLGWnnEm4ljpdf6nAkCI9E+YPUbwcJ0iyZwi3nWqhfoHY44NBnUfHsU5PvQri2nYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707729342; c=relaxed/simple;
-	bh=9I+IIux1dmdOum7JKLr/HdkGzJKPDj/8SR5f+urjR98=;
+	s=arc-20240116; t=1707733774; c=relaxed/simple;
+	bh=lM1ikn/+ntRnbPmGODrfBa9eMNqWS/z2GjeqQpt4V0Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PCw1vAzVy3GfPdXmCuyuQyPhPFpTVt7pnXKBJQji1e8TrIr+vjovuSIt+jGdM/1eA1UHewDkLHvSxei6tQ9I+ZdV4V8lqP7clPk9DJeLLk9P1XaUPrYmDJBRlRfbuJZD/FNK0UeCVZy0l4fEv9dPfgXoAivhSxJUOVItXwnmA5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SZNB1GYn; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=iqG8JbQ/Us0RtJAH6gJDUbU+Xm73c40s7MSP1TSrPyV2SLSK1j02t+XBqatSuMBqMmhHYuR9XZf1KB6hrDUqjL4UCm4dMIVA5gJoNlyzLVbZUCY7ZvTCA9Bv32hakX0l77A/TXrTkFHAG8mDKmavfIYaoIsO7q/06JF6gdwg8mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ewZU95JZ; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SZNB1GYn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707729341; x=1739265341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9I+IIux1dmdOum7JKLr/HdkGzJKPDj/8SR5f+urjR98=;
-  b=SZNB1GYn7qT27ybgC1fJ5qY3bZKgc2vnRbnJRHPgYFLfgAysSDaXscLZ
-   rsPjwm3SBsOW7VApc7Fz4WxLXbdiB3Co3vkKQ799nRfG8aQHR/Qp2mk4h
-   b7Jwy0wJ/0P0KApxDvaDUj+g6phXNfhjmjBXQlOKVCENIlMvCki0hAA5p
-   oYzQCNov7ruQdu4Y3TC0JxUCkXPj4UPp8+dPKIb6O/dZOBf7yEO/antMa
-   VoaV2p1tBkGXu+5TAEkXAdl0S+O62SKpQw76qkB5bBjpJ9vEn8w4KlgCK
-   shaeFE0aM4y+ILt2xXU//4QIVxS/eOMa94TbOzKhfee0ZJgPp2J62D0Mm
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="5511044"
-X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
-   d="scan'208";a="5511044"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 01:15:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
-   d="scan'208";a="7197027"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 12 Feb 2024 01:15:38 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZSPX-000734-3A;
-	Mon, 12 Feb 2024 09:15:35 +0000
-Date: Mon, 12 Feb 2024 17:15:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Max Kellermann <max.kellermann@ionos.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Max Kellermann <max.kellermann@ionos.com>
-Subject: Re: [PATCH v4 02/35] include: remove unnecessary #include directives
-Message-ID: <202402121640.L0Pwfx8v-lkp@intel.com>
-References: <20240211231518.349442-3-max.kellermann@ionos.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ewZU95JZ"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 54CE940E01A9;
+	Mon, 12 Feb 2024 10:29:28 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Qfqc-ypnMKxE; Mon, 12 Feb 2024 10:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707733765; bh=8zzxZzAd70wLVlqCQfwTbwt/dFp7veEPvkKLq3mmCGc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ewZU95JZ5AgG6rZJLPSyQ4+uco/ylQ/tMZeYqEi7wKs9BhYt/fG7UUUw5O9c+EANz
+	 PSom6AgWUMW2IS8WNEUftXLmPq3pN41pcL/lPl3Gs6sVikGhK3Uv147SDRM8qFdvI6
+	 O4ICiy7mrjH18ayfOBcEHRXSI6KU7zjCK+FPdkrx5XyyVDvrNUmK2FIFkjCrUY9t07
+	 nvzxQimDDhYzoLZ/30kpmiOwB5+s5SJLLA0GPjtbH2OhEd6GpQvU2vLDKH5OACoh1G
+	 x6of9WfDLm8z5xPXQIpU5179BSwfJtwmo/F5n+6nHTVmrW2ALHtwLNfqohPSK3dJex
+	 6mv7RMbVLCXcVyjluiK0DvUKxPZQJX35vKF2OgcMN8GTmDVlu+J/P8efvxpIzznLs5
+	 rSdU+n7H8mrAxoeQFuNMu3BI9kHDsGDETqPzTo1hCZU6qiXdg/ThRjEoX/Tb/EvajN
+	 MDn4GSgKo/gzOq5gv9mJ8vEjCA+/zEBCindjhc+OeCGhW1bIBjK1hsHd3hKxmzky79
+	 fYJiCPIT3BcOQJ7wOUlO0HtgmUFu/x4VyJL+53TbPc3MTLnVijXoCKik3ByfmwzdLN
+	 vFdwoJq+FzycmgelzaQn/+VPw3wnvDRgmxWLpW74v7xdmEab8qX0+E4Pv6uzS4FS+l
+	 1ln5F/fr/a3P8lcfbf0/v0YQ=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A5EF940E0192;
+	Mon, 12 Feb 2024 10:29:07 +0000 (UTC)
+Date: Mon, 12 Feb 2024 11:29:01 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 08/19] x86/head64: Replace pointer fixups with PIE
+ codegen
+Message-ID: <20240212102901.GVZcny7WeK_ZWt0HEP@fat_crate.local>
+References: <20240129180502.4069817-21-ardb+git@google.com>
+ <20240129180502.4069817-29-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240211231518.349442-3-max.kellermann@ionos.com>
+In-Reply-To: <20240129180502.4069817-29-ardb+git@google.com>
 
-Hi Max,
+On Mon, Jan 29, 2024 at 07:05:11PM +0100, Ard Biesheuvel wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
+> 
+> Some of the C code in head64.c may be called from a different virtual
+> address than it was linked at. Currently, we deal with this by using
 
-kernel test robot noticed the following build warnings:
+Yeah, make passive pls: "Currently, this is done by using... "
 
-[auto build test WARNING on next-20240209]
-[cannot apply to drm-misc/drm-misc-next media-tree/master mkp-scsi/for-next linus/master v6.8-rc4 v6.8-rc3 v6.8-rc2 v6.8-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> ordinary, position dependent codegen, and fixing up all symbol
+> references on the fly. This is fragile and tricky to maintain. It is
+> also unnecessary: we can use position independent codegen (with hidden
+		   ^^^
+Ditto: "use ..."
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Max-Kellermann/include-add-missing-includes/20240212-072756
-base:   next-20240209
-patch link:    https://lore.kernel.org/r/20240211231518.349442-3-max.kellermann%40ionos.com
-patch subject: [PATCH v4 02/35] include: remove unnecessary #include directives
-config: powerpc-mpc834x_itxgp_defconfig (https://download.01.org/0day-ci/archive/20240212/202402121640.L0Pwfx8v-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240212/202402121640.L0Pwfx8v-lkp@intel.com/reproduce)
+In the comments below too, pls, where it says "we".
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402121640.L0Pwfx8v-lkp@intel.com/
+> visibility) to ensure that all compiler generated symbol references are
+> RIP-relative, removing the need for fixups entirely.
+> 
+> It does mean we need explicit references to kernel virtual addresses to
+> be generated by hand, so generate those using a movabs instruction in
+> inline asm in the handful places where we actually need this.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/x86/Makefile                 |  8 ++
+>  arch/x86/boot/compressed/Makefile |  2 +-
+>  arch/x86/include/asm/desc.h       |  3 +-
+>  arch/x86/include/asm/setup.h      |  4 +-
+>  arch/x86/kernel/Makefile          |  5 ++
+>  arch/x86/kernel/head64.c          | 88 +++++++-------------
+>  arch/x86/kernel/head_64.S         |  5 +-
+>  7 files changed, 51 insertions(+), 64 deletions(-)
+> 
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 1a068de12a56..2b5954e75318 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -168,6 +168,14 @@ else
+>          KBUILD_CFLAGS += -mcmodel=kernel
+>          KBUILD_RUSTFLAGS += -Cno-redzone=y
+>          KBUILD_RUSTFLAGS += -Ccode-model=kernel
+> +
+> +	PIE_CFLAGS-$(CONFIG_STACKPROTECTOR)	+= -fno-stack-protector
 
-All warnings (new ones prefixed by >>):
+Main Makefile has
 
-   arch/powerpc/platforms/83xx/misc.c:79:7: error: implicit declaration of function 'of_find_compatible_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           np = of_find_compatible_node(NULL, NULL, "fsl,ipic");
-                ^
->> arch/powerpc/platforms/83xx/misc.c:79:5: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
-           np = of_find_compatible_node(NULL, NULL, "fsl,ipic");
-              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/platforms/83xx/misc.c:81:8: error: implicit declaration of function 'of_find_node_by_type' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   np = of_find_node_by_type(NULL, "ipic");
-                        ^
-   arch/powerpc/platforms/83xx/misc.c:81:6: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
-                   np = of_find_node_by_type(NULL, "ipic");
-                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/platforms/83xx/misc.c:87:2: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           of_node_put(np);
-           ^
-   arch/powerpc/platforms/83xx/misc.c:117:2: error: implicit declaration of function 'for_each_compatible_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           for_each_compatible_node(np, "pci", "fsl,mpc8349-pci")
-           ^
-   arch/powerpc/platforms/83xx/misc.c:117:56: error: expected ';' after expression
-           for_each_compatible_node(np, "pci", "fsl,mpc8349-pci")
-                                                                 ^
-                                                                 ;
-   arch/powerpc/platforms/83xx/misc.c:119:57: error: expected ';' after expression
-           for_each_compatible_node(np, "pci", "fsl,mpc8314-pcie")
-                                                                  ^
-                                                                  ;
-   2 warnings and 6 errors generated.
+KBUILD_CFLAGS += -fno-PIE
 
+and this ends up being:
 
-vim +79 arch/powerpc/platforms/83xx/misc.c
+gcc -Wp,-MMD,arch/x86/kernel/.head64.s.d -nostdinc ... -fno-PIE ... -fpie ... -fverbose-asm -S -o arch/x86/kernel/head64.s arch/x86/kernel/head64.c
 
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  73  
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  74  void __init mpc83xx_ipic_init_IRQ(void)
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  75  {
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  76  	struct device_node *np;
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  77  
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  78  	/* looking for fsl,pq2pro-pic which is asl compatible with fsl,ipic */
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22 @79  	np = of_find_compatible_node(NULL, NULL, "fsl,ipic");
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  80  	if (!np)
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  81  		np = of_find_node_by_type(NULL, "ipic");
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  82  	if (!np)
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  83  		return;
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  84  
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  85  	ipic_init(np, 0);
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  86  
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  87  	of_node_put(np);
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  88  
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  89  	/* Initialize the default interrupt mapping priorities,
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  90  	 * in case the boot rom changed something on us.
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  91  	 */
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  92  	ipic_set_default_priority();
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  93  }
-d4fb5ebd83c704 Dmitry Baryshkov 2011-07-22  94  
+Can you pls remove -fno-PIE from those TUs which use PIE_CFLAGS so that
+there's no confusion when staring at V=1 output?
+
+> +	PIE_CFLAGS-$(CONFIG_LTO)		+= -fno-lto
+> +
+> +	PIE_CFLAGS := -fpie -mcmodel=small $(PIE_CFLAGS-y) \
+> +		      -include $(srctree)/include/linux/hidden.h
+> +
+> +	export PIE_CFLAGS
+>  endif
+>  
+>  #
+
+Other than that, that code becomes much more readable, cool!
+
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
