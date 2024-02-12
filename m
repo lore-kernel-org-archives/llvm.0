@@ -1,133 +1,257 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A4117C2;
-	Mon, 12 Feb 2024 01:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412D579C0
+	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 04:11:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707702801; cv=none; b=Isxi03aXgSaufbVFgkPWQhY0MZl2/fMpx5nAFa8MjC6sbvEPM+5Msh8wxM7rNB9m3YwMoN5Nst4eHboQMPbLucBB/poD1tfB93c3lT7gcHN17eWHRD3Axt/s1hU1ztPGqoiXgs0rBc8PqYXG1e0cjkKl+13v6W5b5zmUVECfTEg=
+	t=1707711104; cv=none; b=Ttcpu2Ij1tsqr7QRay1LHx7bx0O6oWO7gXVgWWBQNYcjGqssFUpkkeI9/GUw3a3D+7wk3v29gd2+pLnpCbwjRznsCYlu3IxhRpEkBuFOOjzTQJiU/GDVbpza0GLwAzareSn84MYJHr7d1I7iXnkZBqmXVkdA+FzEyk+gEodwh0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707702801; c=relaxed/simple;
-	bh=tdqEiITcjnUQ8+Cfsv9BjzEAX2VwC9h3wAtRJPeLQ+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=m2OMFx6GYYqb4BJdv4+Gac1dprQhTYm8crm7EP6nCAHs28PVEJVsZlo/It7M4TW86qdwGE0WgPN7gcbDKuYRV9UN095RI9/10syzc259Wo9fovhqdMDZFBm+nRWjra4enTQaX+vg+sytyYwlozaJpKgTg6GsujRzbj619O02DR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B/pJE1vP; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707711104; c=relaxed/simple;
+	bh=oqfQOSb1MPcmjIWu8vBJ/X64rkY29Go7tVPHK7xovMk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Zf0H579OMhY11iDheyFjSHw/qb5pVLoBuuUgXa4CC+rdGqFhWh9ULW3trCl0ZaBMspAUi5Gru4JVS2q8JKeuay1/mZhMjLHLj+kL6TJV0aT+Y58+LSsFj0ovdAj8L9MqiXWYJk9TEM0QheGD/uV+vPDOYOlP0sq881tOtVuP6fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RSpp/9jd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B/pJE1vP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707702800; x=1739238800;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tdqEiITcjnUQ8+Cfsv9BjzEAX2VwC9h3wAtRJPeLQ+4=;
-  b=B/pJE1vPXI0tI1cHUPkt+8f8K6VS8Hu6pqnWPz7uuCbdk89l+isCXm05
-   3hcQ3Q9MkT9EW/Rd24mzyPE+AKOXMNl5VI+7UOxg0xJT/zrw53Vjv/r/s
-   ef2Y4F0pOlcpCrcP0kFRujNVrr3oBRpBWkOFyyd7ZVvqj75YacE0LFL6v
-   qTnbNiSJ3ic8h7On60PXVCBTzBzesGsPbClP/up16uRI7ZIhsWg7I3wVL
-   DCQOTpooARLpNF2fNU9nKJx2fFua7XQUtQGNycras1YnQNyZ8LRBEmffN
-   DH6V/in0rsbB6mNtKLEfHKuTLa2fxhn+bejZ/WwYIX/zTzIVDisne4UAO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1812643"
-X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
-   d="scan'208";a="1812643"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2024 17:53:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
-   d="scan'208";a="7098577"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 11 Feb 2024 17:53:18 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZLVT-0006rW-2C;
-	Mon, 12 Feb 2024 01:53:15 +0000
-Date: Mon, 12 Feb 2024 09:53:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jani Nikula <jani.nikula@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Luca Coelho <luciano.coelho@intel.com>
-Subject: [drm-misc:for-linux-next 49/49]
- drivers/gpu/drm/tests/drm_mm_test.c:191:25: error: implicit declaration of
- function 'drm_debug_printer' is invalid in C99
-Message-ID: <202402120908.e1oAZN0i-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RSpp/9jd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707711101;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Puxlwp0AVwFbHBF7ZBdPq908p+KcuZz9mMdVRzmNoTw=;
+	b=RSpp/9jdFoq9swvkgQ6FB1U4KFP2wbWnBaQS7P9fL5v3nQqETHGp7n9PbrcfrtJL8K8cRt
+	gzH8TZCiQPL49lldUkIrNA11nSUJR35WE/tlSmc7h32riD70hq0uJ3HNK3Usdgcwj4dN84
+	lBrKMHYYEudRFWUNi7FzjpEWipiaZ5M=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-82-C-AMeaggNCipfnTbZ1upYw-1; Sun,
+ 11 Feb 2024 23:11:34 -0500
+X-MC-Unique: C-AMeaggNCipfnTbZ1upYw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7343B3C0ED4F
+	for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 04:11:34 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C91EDC185C1;
+	Mon, 12 Feb 2024 04:11:32 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 226): Test report for master
+ (6.8.0-rc4, mainline.kernel.org-clang, 841c3516)
+Date: Mon, 12 Feb 2024 04:11:32 -0000
+To: jishi@redhat.com, jiji@redhat.com, yizhan@redhat.com, omosnace@redhat.com,
+ czhong@redhat.com, xzhou@redhat.com, mm-qe@redhat.com, haliu@redhat.com,
+ llvm@lists.linux.dev, zlang@redhat.com, fsuba@redhat.com, yiche@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <87958.124021123113400315@us-mta-82.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
-head:   7edd06233958d9086a9e3eb723a8768d3c5a9ce1
-commit: e154c4fc7bf2d5c3f86d07628ab1cb03e8085c25 [49/49] drm: remove drm_debug_printer in favor of drm_dbg_printer
-config: powerpc-randconfig-002-20240211 (https://download.01.org/0day-ci/archive/20240212/202402120908.e1oAZN0i-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240212/202402120908.e1oAZN0i-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402120908.e1oAZN0i-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/tests/drm_mm_test.c:191:25: error: implicit declaration of function 'drm_debug_printer' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           struct drm_printer p = drm_debug_printer(test->name);
-                                  ^
-   drivers/gpu/drm/tests/drm_mm_test.c:191:25: note: did you mean 'drm_dbg_printer'?
-   include/drm/drm_print.h:328:34: note: 'drm_dbg_printer' declared here
-   static inline struct drm_printer drm_dbg_printer(struct drm_device *drm,
-                                    ^
-   drivers/gpu/drm/tests/drm_mm_test.c:191:21: error: initializing 'struct drm_printer' with an expression of incompatible type 'int'
-           struct drm_printer p = drm_debug_printer(test->name);
-                              ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/drm_debug_printer +191 drivers/gpu/drm/tests/drm_mm_test.c
+Kernel information:
+    Commit message: Linux 6.8-rc4
 
-393b50f30566ba drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  188  
-961bcdf956a464 drivers/gpu/drm/tests/drm_mm_test.c     Maíra Canal      2022-09-11  189  static void drm_test_mm_debug(struct kunit *test)
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  190  {
-3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16 @191  	struct drm_printer p = drm_debug_printer(test->name);
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  192  	struct drm_mm mm;
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  193  	struct drm_mm_node nodes[2];
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  194  
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  195  	/* Create a small drm_mm with a couple of nodes and a few holes, and
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  196  	 * check that the debug iterator doesn't explode over a trivial drm_mm.
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  197  	 */
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  198  	drm_mm_init(&mm, 0, 4096);
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  199  
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  200  	memset(nodes, 0, sizeof(nodes));
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  201  	nodes[0].start = 512;
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  202  	nodes[0].size = 1024;
-fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  203  	KUNIT_ASSERT_FALSE_MSG(test, drm_mm_reserve_node(&mm, &nodes[0]),
-fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  204  			       "failed to reserve node[0] {start=%lld, size=%lld)\n",
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  205  			       nodes[0].start, nodes[0].size);
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  206  
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  207  	nodes[1].size = 1024;
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  208  	nodes[1].start = 4096 - 512 - nodes[1].size;
-fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  209  	KUNIT_ASSERT_FALSE_MSG(test, drm_mm_reserve_node(&mm, &nodes[1]),
-fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  210  			       "failed to reserve node[0] {start=%lld, size=%lld)\n",
-fc8d29e298cf47 drivers/gpu/drm/tests/drm_mm_test.c     Arthur Grillo    2022-07-08  211  			       nodes[0].start, nodes[0].size);
-3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16  212  
-3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16  213  	drm_mm_print(&mm, &p);
-3eb791c891aa91 drivers/gpu/drm/tests/drm_mm_test.c     Michał Winiarski 2024-01-16  214  	KUNIT_SUCCEED(test);
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  215  }
-06df8ac682e6a0 drivers/gpu/drm/selftests/test-drm_mm.c Chris Wilson     2016-12-22  216  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/128873
 
-:::::: The code at line 191 was first introduced by commit
-:::::: 3eb791c891aa91603a5fbbfea940f8acf5f17d45 drm/tests: mm: Call drm_mm_print in drm_test_mm_debug
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296907
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL storage/blktests/tests/nvme/029
+           s390x - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296908
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
+tcp/tests/nvme/029
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - POSIX pjd-fstest suites
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296917
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Filesystem - Loopdev Sanity
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296918
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - AMTU (Abstract Machine Test Utility)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296920
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Networking cki netfilter test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296922
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Networking vnic: ipvlan/basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296923
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296924
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Storage - multipath mapping test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296925
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+                       =E2=9D=8C FAIL /10_avc_check
+           s390x - Storage - lvm thinp sanity
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11296927
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
 
-:::::: TO: Michał Winiarski <michal.winiarski@intel.com>
-:::::: CC: Maxime Ripard <mripard@kernel.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [Rawhide] Storage: ERROR: Could not build wheels for ruamel.=
+yaml.clib, which is required to install pyproject.toml-based projects
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1859
+            Affected tests:
+                 ppc64le - Storage - dm/common
+                   s390x - Storage - dm/common
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
+koza machines
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1852
+            Affected tests:
+                  x86_64 - Libkcapi AF_ALG test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
