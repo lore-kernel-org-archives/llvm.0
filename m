@@ -1,207 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5758481C2;
-	Mon, 12 Feb 2024 19:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17ABA46549;
+	Mon, 12 Feb 2024 20:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707767816; cv=none; b=LOJnC4R0PhLk/TjGDSub7gZe1Y2Z89CqBKuWfkrelnKNa+MMeDjQQ0xJ7Naqm57B+wfdVy2WK/yH/DOdursNl4+0NGqkwbsmJm34M8oOTaRYMUHep7pIBhLhBCvhuD4mYX1Dbp7Mb5c2+iwU7K1PRN/wz8NiAZhuwSsDuSuILvE=
+	t=1707769059; cv=none; b=IgRyXjrQoFsgKzSLPpTq+oRLWHS6HVSvEJZ/TS+2t/vui8XRRkG4RUrnDeU77T9d2HX2dW6bmjMFjY4EAtxC12NzzWomwLQF6zfO+Z2wv/WN+njkUaOwUAfu/nZIdy/L09QNTJvRrbycfWoTBvuTm6CbGtRnnuBqlJVi/w7DtSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707767816; c=relaxed/simple;
-	bh=VbiWwUlRwFGEs9WFueIKvPJkqFyBrhzz4cOYE4POKHY=;
+	s=arc-20240116; t=1707769059; c=relaxed/simple;
+	bh=Rj06hafTCiyYS44RXdDjgCx/QrBaExSSWLkRezkp1WA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qmPMn/fE9K18SqbmyzWjPiyzDtxB2nvv85HGnKJVH0BLXB61RV8T2F3JcJx41RdYSyLDQoh1gK/OnPm+RXtzqduLHab0l1c29duCGQDrVNEyN24o0XN6F75J/zrdiiWyoNHbHfGosZYSYS0grgZROXvukdFnbkTmJU+IrQ8tqP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WjIgjePG; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=QDbGwyJIymzEfE02VKUc4zTuqlclShyg9JqEEZ2JdbCAOK9dpSv0xk8xGAhRcLP+FG8ADhtSbQHgbPFOnJa93tSBfEEE4e9fSdmdeUzpkd/fJtKGJw8SmgY409dwBJvay7bNhUSqrBMiFS7RRRiMwLiReGf+ZG2kpS6AZUxWThk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X+i4Kcy8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WjIgjePG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707767814; x=1739303814;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=VbiWwUlRwFGEs9WFueIKvPJkqFyBrhzz4cOYE4POKHY=;
-  b=WjIgjePGgReMaUlODe6zZvGNM0Ryup60UlnFsi7eLBkGKjCmRS5lMeft
-   DpcoN4lPSNwujcS9cZWMVsnxDq1rvZwKznWr1giRqbCj1NLBvVzodVem8
-   Vmo/eV2EpK5CTL6x9dICKX+PTlSMDiVZASdssl+d5xdNv2ip+mnND55Ni
-   rAV/DROdgXaX1l1Dx2UuDiUyDNbxODcYlSvnLaMHoRpRuQUhqn+cgR+NT
-   HvwRvQczFuF7a9iAaosW9hcfkBV7fm1hOo47zIdUNZppVs6glrdmPxUtT
-   eMSvw1+mTIBFVIuEfp1SnoqR0r92eTbpoAgtz5RzwCrcbxGWItibj0428
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1898409"
-X-IronPort-AV: E=Sophos;i="6.06,155,1705392000"; 
-   d="scan'208";a="1898409"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 11:56:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,155,1705392000"; 
-   d="scan'208";a="2986160"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Feb 2024 11:56:50 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZcQ3-0007LE-12;
-	Mon, 12 Feb 2024 19:56:47 +0000
-Date: Tue, 13 Feb 2024 03:56:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
-	kherbst@redhat.com, lyude@redhat.com, dakr@redhat.com,
-	daniel@ffwll.ch, airlied@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 2/7] fbdev: Do not include <linux/backlight.h> in header
-Message-ID: <202402130346.2iGNwgDE-lkp@intel.com>
-References: <20240212101712.23675-3-tzimmermann@suse.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X+i4Kcy8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F75C433F1;
+	Mon, 12 Feb 2024 20:17:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707769058;
+	bh=Rj06hafTCiyYS44RXdDjgCx/QrBaExSSWLkRezkp1WA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X+i4Kcy8KwTYZaA9DRB9gp/BAdGBVRfD7bKOCgPjeydbfp0mblshUNNi+P5qU3Ntt
+	 9lSQdgC9J4E0ZScwHXsFpzj7dBZccyZve+F4ps1bMyLKQ12t2tW1LNjEpB3sgxXsbD
+	 tbzqtA+3ken2t/Xtbvn3/2Te6Hr0zJvzXRS2L7fK+nOm8Tey9Q6RN1v42u5lKhQds2
+	 /wOuE+NL7eLCzORsTsJK2K9N3BwYIl0lYBmdSgKDtRV5kixXlRSrNM74oKh67oB4zv
+	 Io2hsp7zoaX2X1V52Hq6eYNDnecdK/TD3sjwSFVCzThrovySIIQlbv8kfJGJHZDUy4
+	 Uvseb6GNI3UbQ==
+Date: Mon, 12 Feb 2024 20:17:31 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Ramon de C Valle <rcvalle@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Matthew Maurer <mmaurer@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+Message-ID: <20240212-demotion-blitz-1c9ab85dbc73@spud>
+References: <20240125-bucked-payroll-47f82077b262@wendy>
+ <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
+ <20240125-lazy-thrower-744aacc6632a@wendy>
+ <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
+ <20240126-eccentric-jaywalker-3560e2151a92@spud>
+ <CANiq72nu2NXUWYanHZd5EXgX4P_v673EWn6SCRW60Es9naraQQ@mail.gmail.com>
+ <20240209-rage-keg-1b2982cd17d9@spud>
+ <CALNs47sRqAbE=u3=_ciO2oge7Afz-6GBBhW+BwcLRET-TsuxTg@mail.gmail.com>
+ <CAOcBZORDaHHH3jTL3GO7OsDubhhyQE0Uy2uAjJpiRzrKBgqaOw@mail.gmail.com>
+ <CANiq72=VBFvB9O9c84YxpBBftpfNnnXx-+Xes0h8h6rN3EN5pA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Fnsa84sXGmOTaKtZ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240212101712.23675-3-tzimmermann@suse.de>
-
-Hi Thomas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.8-rc4 next-20240212]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-nouveau-Include-linux-backlight-h/20240212-181930
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240212101712.23675-3-tzimmermann%40suse.de
-patch subject: [PATCH 2/7] fbdev: Do not include <linux/backlight.h> in header
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240213/202402130346.2iGNwgDE-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project c08b90c50bcac9f3f563c79491c8dbcbe7c3b574)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402130346.2iGNwgDE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402130346.2iGNwgDE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/staging/fbtft/fb_ssd1351.c:192:26: error: call to undeclared function 'bl_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     192 |         struct fbtft_par *par = bl_get_data(bd);
-         |                                 ^
->> drivers/staging/fbtft/fb_ssd1351.c:192:20: error: incompatible integer to pointer conversion initializing 'struct fbtft_par *' with an expression of type 'int' [-Wint-conversion]
-     192 |         struct fbtft_par *par = bl_get_data(bd);
-         |                           ^     ~~~~~~~~~~~~~~~
->> drivers/staging/fbtft/fb_ssd1351.c:197:21: error: incomplete definition of type 'struct backlight_device'
-     197 |                       __func__, bd->props.power, bd->props.fb_blank);
-         |                                 ~~^
-   drivers/staging/fbtft/fbtft.h:433:43: note: expanded from macro 'fbtft_par_dbg'
-     433 |                 dev_info((par)->info->device, format, ##arg);  \
-         |                                                         ^~~
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   include/linux/fb.h:20:8: note: forward declaration of 'struct backlight_device'
-      20 | struct backlight_device;
-         |        ^
-   drivers/staging/fbtft/fb_ssd1351.c:197:38: error: incomplete definition of type 'struct backlight_device'
-     197 |                       __func__, bd->props.power, bd->props.fb_blank);
-         |                                                  ~~^
-   drivers/staging/fbtft/fbtft.h:433:43: note: expanded from macro 'fbtft_par_dbg'
-     433 |                 dev_info((par)->info->device, format, ##arg);  \
-         |                                                         ^~~
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   include/linux/fb.h:20:8: note: forward declaration of 'struct backlight_device'
-      20 | struct backlight_device;
-         |        ^
->> drivers/staging/fbtft/fb_ssd1351.c:199:8: error: call to undeclared function 'backlight_is_blank'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     199 |         on = !backlight_is_blank(bd);
-         |               ^
->> drivers/staging/fbtft/fb_ssd1351.c:206:35: error: variable has incomplete type 'const struct backlight_ops'
-     206 | static const struct backlight_ops bl_ops = {
-         |                                   ^
-   drivers/staging/fbtft/fb_ssd1351.c:206:21: note: forward declaration of 'struct backlight_ops'
-     206 | static const struct backlight_ops bl_ops = {
-         |                     ^
->> drivers/staging/fbtft/fb_ssd1351.c:213:30: error: variable has incomplete type 'struct backlight_properties'
-     213 |         struct backlight_properties bl_props = { 0, };
-         |                                     ^
-   drivers/staging/fbtft/fb_ssd1351.c:213:9: note: forward declaration of 'struct backlight_properties'
-     213 |         struct backlight_properties bl_props = { 0, };
-         |                ^
->> drivers/staging/fbtft/fb_ssd1351.c:215:18: error: use of undeclared identifier 'BACKLIGHT_RAW'
-     215 |         bl_props.type = BACKLIGHT_RAW;
-         |                         ^
->> drivers/staging/fbtft/fb_ssd1351.c:218:7: error: call to undeclared function 'backlight_device_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     218 |         bd = backlight_device_register(dev_driver_string(par->info->device),
-         |              ^
-   drivers/staging/fbtft/fb_ssd1351.c:218:7: note: did you mean '__root_device_register'?
-   include/linux/device.h:1143:16: note: '__root_device_register' declared here
-    1143 | struct device *__root_device_register(const char *name, struct module *owner);
-         |                ^
-   9 errors generated.
+In-Reply-To: <CANiq72=VBFvB9O9c84YxpBBftpfNnnXx-+Xes0h8h6rN3EN5pA@mail.gmail.com>
 
 
-vim +197 drivers/staging/fbtft/fb_ssd1351.c
+--Fnsa84sXGmOTaKtZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  189  
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  190  static int update_onboard_backlight(struct backlight_device *bd)
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  191  {
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31 @192  	struct fbtft_par *par = bl_get_data(bd);
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  193  	bool on;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  194  
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  195  	fbtft_par_dbg(DEBUG_BACKLIGHT, par,
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  196  		      "%s: power=%d, fb_blank=%d\n",
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31 @197  		      __func__, bd->props.power, bd->props.fb_blank);
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  198  
-66d653c37228cb Stephen Kitt     2022-06-07 @199  	on = !backlight_is_blank(bd);
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  200  	/* Onboard backlight connected to GPIO0 on SSD1351, GPIO1 unused */
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  201  	write_reg(par, 0xB5, on ? 0x03 : 0x02);
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  202  
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  203  	return 0;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  204  }
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  205  
-23801e3438f6ce Mike Rapoport    2015-09-03 @206  static const struct backlight_ops bl_ops = {
-23801e3438f6ce Mike Rapoport    2015-09-03  207  	.update_status = update_onboard_backlight,
-23801e3438f6ce Mike Rapoport    2015-09-03  208  };
-23801e3438f6ce Mike Rapoport    2015-09-03  209  
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  210  static void register_onboard_backlight(struct fbtft_par *par)
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  211  {
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  212  	struct backlight_device *bd;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31 @213  	struct backlight_properties bl_props = { 0, };
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  214  
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31 @215  	bl_props.type = BACKLIGHT_RAW;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  216  	bl_props.power = FB_BLANK_POWERDOWN;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  217  
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31 @218  	bd = backlight_device_register(dev_driver_string(par->info->device),
-333c7b940526be Leonardo Brás    2018-08-07  219  				       par->info->device, par, &bl_ops,
-333c7b940526be Leonardo Brás    2018-08-07  220  				       &bl_props);
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  221  	if (IS_ERR(bd)) {
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  222  		dev_err(par->info->device,
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  223  			"cannot register backlight device (%ld)\n",
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  224  			PTR_ERR(bd));
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  225  		return;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  226  	}
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  227  	par->info->bl_dev = bd;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  228  
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  229  	if (!par->fbtftops.unregister_backlight)
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  230  		par->fbtftops.unregister_backlight = fbtft_unregister_backlight;
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  231  }
-883daf0a5c35c8 Thomas Petazzoni 2014-12-31  232  
+On Mon, Feb 12, 2024 at 08:11:21PM +0100, Miguel Ojeda wrote:
+> On Mon, Feb 12, 2024 at 8:02=E2=80=AFPM Ramon de C Valle <rcvalle@google.=
+com> wrote:
+> >
+> > Sorry for the late reply. Sami might be the best person to answer this,=
+ but KCFI (not CFI) tests are lowered by passes that are architecture speci=
+fic (see https://reviews.llvm.org/D119296), so we'd need to add support for=
+ RISC-V. There is no additional work required in the Rust compiler besides =
+enabling it for the new target.
+>=20
+> Thanks a lot Ramon!
+>=20
+> Then for RISC-V let's go for the `depends on` for the moment, and we
+> can remove when the support lands for RISC-V (ideally when someone has
+> managed to boot it at least under some configuration).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If all you want is a boot under some configuration, that's not
+difficult. After all, I found the original issue by booting a kernel
+with CFI_CLANG enabled on the C side...
+
+> There is no additional work required in the Rust compiler besides enablin=
+g it for the new target.
+
+This is not super clear though, it says "in the Rust compiler", not "in
+the kernel's buildsystem".
+
+--Fnsa84sXGmOTaKtZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZcp82wAKCRB4tDGHoIJi
+0l0+AQDwAn/aq+Fts6yHPXow2miyTAWD/hM47HfQMPIODOb5ZQD/dkB5CAfEyKfu
+rkbwjea4usmgQD4BLThgzp4mlabBVwM=
+=ORjx
+-----END PGP SIGNATURE-----
+
+--Fnsa84sXGmOTaKtZ--
