@@ -1,47 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A85F17567;
-	Tue, 13 Feb 2024 10:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15DBC249F9;
+	Tue, 13 Feb 2024 10:05:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707818685; cv=none; b=n0GynSJHqhGpSaisXeHoLnz16/T28ZS71f+RmJb9ZO5EyZBYJMnZqYKqnMllEjdQqp7u/F3Ss3ygARdC8Qc5Zmgxhy0V7hlqKm+FIfl2De7YEPPoxEn4b6rJk1CYfCofC0EwyWgxvOysrl8lWIjJP67WLRtDpufIB14SN9wQ3Zw=
+	t=1707818725; cv=none; b=JYIjAR8jigtTyr3BM5C2xYe/Gq8T7a1NXRuGiCM3+VBCxH4j8ny6fi6S3hqQFasUVyyat31u5+5fP3vm5y1NxuydA10C7PD+gY5BBRL9HZ1Mx28JoghJGoVgLPs9xH1mt6zv5hnN9ddEGQIX26Nelww1MPDlBKRXCw9Of/14o9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707818685; c=relaxed/simple;
-	bh=Arq9qNlXARFYxt4OXAC6yP44LIX+O7ZdPI6fd3sX+wk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EhdRdxMLPikxO/ED1xrpDIsQrFhqVo+iTymEtCx3fW0WzkGndH+zUH9Ra7CeuE/tjDmCQy+u+SUsufskLR9G3oGO8s6QJi4r6s1oFcwlzwfuwgK1ypu58f0E99BdTcew1VIht9/O3PTB6uaBBs+Yq7MJ20ovuaTRzi5l96b6oWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DbQSEYY6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707818725; c=relaxed/simple;
+	bh=emMWihdG3YmlZB9a2YuEdmHk2vnpD5HUAdSQ+KiaJ6U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Mg+pmQJj8MeBm3+nFYjXGW4fiqlA4GGDXkS7pyBdBP+7xiTslp6YKeuBGNNrQ8ssTGqtpf+3vGFeP1PWvrXRBlJAHQgksPXeqhQUmY1FCpHgin0laJxRnnPX8xvZOCgBmcJbUz9+6kn0yOOFZ5bsNHP8z/IaByDnfTq0Vj5kBvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g6XMpU/c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DbQSEYY6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E306FC433F1;
-	Tue, 13 Feb 2024 10:04:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g6XMpU/c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0099EC433F1;
+	Tue, 13 Feb 2024 10:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707818684;
-	bh=Arq9qNlXARFYxt4OXAC6yP44LIX+O7ZdPI6fd3sX+wk=;
+	s=k20201202; t=1707818724;
+	bh=emMWihdG3YmlZB9a2YuEdmHk2vnpD5HUAdSQ+KiaJ6U=;
 	h=From:To:Cc:Subject:Date:From;
-	b=DbQSEYY6rZjfiKueayqJ39snIfBlDkSwHPpOrc8EV58H02tMPGzYaXnnspeLDSaqq
-	 SNSQeztccLKqgNa219NSBi5zUrpjgqPgucIYj1k1CbJwep9CgMsUi+raL7y2cLamsz
-	 Z1igDID6WPC5nXetFlyN5S1DsdjngU4UQdMMW5u93RKxnvRGy8sCQAAiFF+aAvpKZP
-	 55jPeboB3ROcrPoM6aoPPta75iNHVqU3XvPVOe9ojEM3+sD7yu23zZ9ZDwlpLQXF67
-	 LUdB5SJVNfFtIEI3CvDU14aKuBxeAMNLABIauq33XMp7JoIAiqCki3miJaJsDeu8X3
-	 KVGu8pxEkOqXg==
+	b=g6XMpU/c/C4zVcOqAnH8qctNqQfSeyU0RRegFvSKE0ZOfDT9JRvhc45z2WxRcO50U
+	 ufVpF1BdcdKjziP4BCnnpc0oMsk3NEfq32rz3QDPO8lumirpZeAAOZ+5ZyhJ047969
+	 Te3bLskKkIMIA0if6gYRiRtHlMjMMeSBpy/73c3Gjv0e8y58ujuLR7ZHPQRu2m29CV
+	 5iyFbmwZOP9PzSJS9IyOZymtqc8kKKCEy6fnJQw4LMKP/k4YrWwUi5cNbtJUqeTAzv
+	 yqI04ygtWkit92oUjQ3EAlS33l0a/3wIjSbJXnqqBJ7gSSG9Agx3xanox8lTR977hX
+	 pWXprkxTWG9Wg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Mike Isely <isely@pobox.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
+To: "James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Michael Krufky <mkrufky@linuxtv.org>,
-	linux-media@vger.kernel.org,
+	James Bottomley <JBottomley@Parallels.com>,
+	Naresh Kumar Inna <naresh@chelsio.com>,
+	linux-scsi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] media: pvrusb2: fix pvr2_stream_callback casts
-Date: Tue, 13 Feb 2024 11:04:27 +0100
-Message-Id: <20240213100439.457403-1-arnd@kernel.org>
+Subject: [PATCH] scsi: csiostor: avoid function pointer casts
+Date: Tue, 13 Feb 2024 11:05:00 +0100
+Message-Id: <20240213100518.457623-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -53,107 +52,126 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-16 complains about a control flow integrity (KCFI) issue in pvrusb2,
-which casts three different prototypes into pvr2_stream_callback:
+csiostor uses function pointer casts to keep the csio_ln_ev state machine
+hidden, but this causes warnings about control flow integrity (KCFI) violations
+in clang-16 and higher:
 
-drivers/media/usb/pvrusb2/pvrusb2-v4l2.c:1070:30: error: cast from 'void (*)(struct pvr2_v4l2_fh *)' to 'pvr2_stream_callback' (aka 'void (*)(void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
- 1070 |         pvr2_stream_set_callback(sp,(pvr2_stream_callback)pvr2_v4l2_notify,fh);
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/usb/pvrusb2/pvrusb2-context.c:110:6: error: cast from 'void (*)(struct pvr2_context *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-  110 |                                         (void (*)(void *))pvr2_context_notify,
-      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/usb/pvrusb2/pvrusb2-dvb.c:152:6: error: cast from 'void (*)(struct pvr2_dvb_adapter *)' to 'pvr2_stream_callback' (aka 'void (*)(void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-  152 |                                  (pvr2_stream_callback) pvr2_dvb_notify, adap);
-      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/csiostor/csio_lnode.c:1098:33: error: cast from 'void (*)(struct csio_lnode *, enum csio_ln_ev)' to 'csio_sm_state_t' (aka 'void (*)(void *, unsigned int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+ 1098 |         return (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_ready));
+      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/csiostor/csio_lnode.c:1369:29: error: cast from 'void (*)(struct csio_lnode *, enum csio_ln_ev)' to 'csio_sm_state_t' (aka 'void (*)(void *, unsigned int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+ 1369 |         if (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_uninit)) {
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/csiostor/csio_lnode.c:1373:29: error: cast from 'void (*)(struct csio_lnode *, enum csio_ln_ev)' to 'csio_sm_state_t' (aka 'void (*)(void *, unsigned int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+ 1373 |         if (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_ready)) {
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/csiostor/csio_lnode.c:1377:29: error: cast from 'void (*)(struct csio_lnode *, enum csio_ln_ev)' to 'csio_sm_state_t' (aka 'void (*)(void *, unsigned int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+ 1377 |         if (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_offline)) {
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Change the functions to actually take a void* argument so the cast is no longer
-needed.
+Move the enum into a shared header so the correct types can be used without the
+need for casts.
 
-Fixes: bb8ce9d9143c ("V4L/DVB (7682): pvrusb2-dvb: finish up stream & buffer handling")
+Fixes: a3667aaed569 ("[SCSI] csiostor: Chelsio FCoE offload driver")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-context.c | 8 ++++----
- drivers/media/usb/pvrusb2/pvrusb2-dvb.c     | 6 ++++--
- drivers/media/usb/pvrusb2/pvrusb2-v4l2.c    | 6 ++++--
- 3 files changed, 12 insertions(+), 8 deletions(-)
+ drivers/scsi/csiostor/csio_defs.h  | 18 ++++++++++++++++--
+ drivers/scsi/csiostor/csio_lnode.c |  8 ++++----
+ drivers/scsi/csiostor/csio_lnode.h | 13 -------------
+ 3 files changed, 20 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-context.c b/drivers/media/usb/pvrusb2/pvrusb2-context.c
-index 1764674de98b..58f2f3ff10ee 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-context.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-context.c
-@@ -90,8 +90,10 @@ static void pvr2_context_destroy(struct pvr2_context *mp)
- }
+diff --git a/drivers/scsi/csiostor/csio_defs.h b/drivers/scsi/csiostor/csio_defs.h
+index c38017b4af98..e50e93e7fe5a 100644
+--- a/drivers/scsi/csiostor/csio_defs.h
++++ b/drivers/scsi/csiostor/csio_defs.h
+@@ -73,7 +73,21 @@ csio_list_deleted(struct list_head *list)
+ #define csio_list_prev(elem)	(((struct list_head *)(elem))->prev)
  
- 
--static void pvr2_context_notify(struct pvr2_context *mp)
-+static void pvr2_context_notify(void *ptr)
- {
-+	struct pvr2_context *mp = ptr;
+ /* State machine */
+-typedef void (*csio_sm_state_t)(void *, uint32_t);
++struct csio_lnode;
 +
- 	pvr2_context_set_notify(mp,!0);
- }
- 
-@@ -106,9 +108,7 @@ static void pvr2_context_check(struct pvr2_context *mp)
- 		pvr2_trace(PVR2_TRACE_CTXT,
- 			   "pvr2_context %p (initialize)", mp);
- 		/* Finish hardware initialization */
--		if (pvr2_hdw_initialize(mp->hdw,
--					(void (*)(void *))pvr2_context_notify,
--					mp)) {
-+		if (pvr2_hdw_initialize(mp->hdw, pvr2_context_notify, mp)) {
- 			mp->video_stream.stream =
- 				pvr2_hdw_get_video_stream(mp->hdw);
- 			/* Trigger interface initialization.  By doing this
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-index 26811efe0fb5..9a9bae21c614 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-@@ -88,8 +88,10 @@ static int pvr2_dvb_feed_thread(void *data)
- 	return stat;
- }
- 
--static void pvr2_dvb_notify(struct pvr2_dvb_adapter *adap)
-+static void pvr2_dvb_notify(void *ptr)
- {
-+	struct pvr2_dvb_adapter *adap = ptr;
++/* State machine evets */
++enum csio_ln_ev {
++	CSIO_LNE_NONE = (uint32_t)0,
++	CSIO_LNE_LINKUP,
++	CSIO_LNE_FAB_INIT_DONE,
++	CSIO_LNE_LINK_DOWN,
++	CSIO_LNE_DOWN_LINK,
++	CSIO_LNE_LOGO,
++	CSIO_LNE_CLOSE,
++	CSIO_LNE_MAX_EVENT,
++};
 +
- 	wake_up(&adap->buffer_wait_data);
++typedef void (*csio_sm_state_t)(struct csio_lnode *ln, enum csio_ln_ev evt);
+ 
+ struct csio_sm {
+ 	struct list_head	sm_list;
+@@ -83,7 +97,7 @@ struct csio_sm {
+ static inline void
+ csio_set_state(void *smp, void *state)
+ {
+-	((struct csio_sm *)smp)->sm_state = (csio_sm_state_t)state;
++	((struct csio_sm *)smp)->sm_state = state;
  }
  
-@@ -149,7 +151,7 @@ static int pvr2_dvb_stream_do_start(struct pvr2_dvb_adapter *adap)
+ static inline void
+diff --git a/drivers/scsi/csiostor/csio_lnode.c b/drivers/scsi/csiostor/csio_lnode.c
+index d5ac93897023..5b3ffefae476 100644
+--- a/drivers/scsi/csiostor/csio_lnode.c
++++ b/drivers/scsi/csiostor/csio_lnode.c
+@@ -1095,7 +1095,7 @@ csio_handle_link_down(struct csio_hw *hw, uint8_t portid, uint32_t fcfi,
+ int
+ csio_is_lnode_ready(struct csio_lnode *ln)
+ {
+-	return (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_ready));
++	return (csio_get_state(ln) == csio_lns_ready);
+ }
+ 
+ /*****************************************************************************/
+@@ -1366,15 +1366,15 @@ csio_free_fcfinfo(struct kref *kref)
+ void
+ csio_lnode_state_to_str(struct csio_lnode *ln, int8_t *str)
+ {
+-	if (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_uninit)) {
++	if (csio_get_state(ln) == csio_lns_uninit) {
+ 		strcpy(str, "UNINIT");
+ 		return;
  	}
+-	if (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_ready)) {
++	if (csio_get_state(ln) == csio_lns_ready) {
+ 		strcpy(str, "READY");
+ 		return;
+ 	}
+-	if (csio_get_state(ln) == ((csio_sm_state_t)csio_lns_offline)) {
++	if (csio_get_state(ln) == csio_lns_offline) {
+ 		strcpy(str, "OFFLINE");
+ 		return;
+ 	}
+diff --git a/drivers/scsi/csiostor/csio_lnode.h b/drivers/scsi/csiostor/csio_lnode.h
+index 372a67d122d3..607698a0f063 100644
+--- a/drivers/scsi/csiostor/csio_lnode.h
++++ b/drivers/scsi/csiostor/csio_lnode.h
+@@ -53,19 +53,6 @@
+ extern int csio_fcoe_rnodes;
+ extern int csio_fdmi_enable;
  
- 	pvr2_stream_set_callback(pvr->video_stream.stream,
--				 (pvr2_stream_callback) pvr2_dvb_notify, adap);
-+				 pvr2_dvb_notify, adap);
- 
- 	ret = pvr2_stream_set_buffer_count(stream, PVR2_DVB_BUFFER_COUNT);
- 	if (ret < 0) return ret;
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-index c04ab7258d64..b305ae7ed415 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-@@ -1033,8 +1033,10 @@ static int pvr2_v4l2_open(struct file *file)
- }
- 
- 
--static void pvr2_v4l2_notify(struct pvr2_v4l2_fh *fhp)
-+static void pvr2_v4l2_notify(void *ptr)
- {
-+	struct pvr2_v4l2_fh *fhp = ptr;
-+
- 	wake_up(&fhp->wait_data);
- }
- 
-@@ -1067,7 +1069,7 @@ static int pvr2_v4l2_iosetup(struct pvr2_v4l2_fh *fh)
- 
- 	hdw = fh->channel.mc_head->hdw;
- 	sp = fh->pdi->stream->stream;
--	pvr2_stream_set_callback(sp,(pvr2_stream_callback)pvr2_v4l2_notify,fh);
-+	pvr2_stream_set_callback(sp, pvr2_v4l2_notify, fh);
- 	pvr2_hdw_set_stream_type(hdw,fh->pdi->config);
- 	if ((ret = pvr2_hdw_set_streaming(hdw,!0)) < 0) return ret;
- 	return pvr2_ioread_set_enabled(fh->rhp,!0);
+-/* State machine evets */
+-enum csio_ln_ev {
+-	CSIO_LNE_NONE = (uint32_t)0,
+-	CSIO_LNE_LINKUP,
+-	CSIO_LNE_FAB_INIT_DONE,
+-	CSIO_LNE_LINK_DOWN,
+-	CSIO_LNE_DOWN_LINK,
+-	CSIO_LNE_LOGO,
+-	CSIO_LNE_CLOSE,
+-	CSIO_LNE_MAX_EVENT,
+-};
+-
+-
+ struct csio_fcf_info {
+ 	struct list_head	list;
+ 	uint8_t			priority;
 -- 
 2.39.2
 
