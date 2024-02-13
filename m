@@ -1,162 +1,119 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CB762A14
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 21:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B3562147
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 22:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707861501; cv=none; b=p//NG184mdxBmtk6OpejlULph1wEgIMdI1R/Bi1UhCCClUu3aXeMaI7N/W9yeKh9IYYr7lzQlpsVt1UpxoFUQ7o1Vz2ZsT1s2ij10rnawvjNIxm3n8tYGGXNGkw3pnIAKfWM5KUzU7YGgKYfNB6cZ3LrrXzPrTXTXpjK21ORtGw=
+	t=1707862746; cv=none; b=gu8e3SZddq3rjUs/DJuncD9duaJuN9wgSTkcF/iWlrIcBMLst4XgzmbW66Jv8yChftKjvH0QqD57GkU4B0ecL2AB1QM2thwUSs7ilgotomu1v58p4g11VgTUDaxZgmI9LLh1vQaH/INW8zQghHjyZPJ5KdOn3eildaWJBg8sOhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707861501; c=relaxed/simple;
-	bh=XCEzGiySNrzVsGywGANcAcUebyxPHAJnm9xzwLcysLY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qZOuPFGz/taL5iac8enLJ4O4xUJWuP4VU4kl+ZqsyZqfuxCw9vdLq96mz8AtjVjcfs0A9lG+2HCsiC6gcIQ/bfP46SyFqO+jSktsi1kcSHwjOYG9ZPNPUl/OOUC4lN1HdWnMCIUBF6+5ZeG83bPAK4KMQTnP9/GaTTDFWdS9YNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=lY9MswSx; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1707862746; c=relaxed/simple;
+	bh=fupPzFq/mOzPQg49g5zT0ntfs9nXTHiAGCPpCwKSJQA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CLKMXs0Ln3boVZAoOa4HqjdP9oBafdFtkdUNF6fTRTQe87URqHcWdcVk4YFTw4ZAh8+ib0BU6gzfxUue8j8jZXJyK004+MWQ68S2x3cgoGsDV5qAUMuTGu3/QjiMhHKmoHt2Ic5QVPl0eSFHW7+HHSRGvaT+dkXqutcH6SvkCwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mwzmgUZU; arc=none smtp.client-ip=209.85.160.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="lY9MswSx"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-411d3c75026so4517215e9.0
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 13:58:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mwzmgUZU"
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-219108b8e9cso2419119fac.2
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 14:19:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707861497; x=1708466297; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fqyuBahTPLTAYF+110cUFRV0sBjf6cZZgU9lFVSbKt0=;
-        b=lY9MswSxKWIefItDvPSVPKPn/inKTq+xNNEwB3lD9V4/cItBFq+YtLQo/eUN3g4wB2
-         g6s3kU12hUJTW0l2TkhmNIU34tQ6Dhe6k01eW2Zx1fBj1Y0c4/wiwVC81fBmELSQojZe
-         QdKeHeFmBaVSd+f5CyC/l/VkiqnSYAjpUT3CFwH4ZrWck5On4qDulJr1rKV7iPjM5Mqk
-         7QMUohtXpQdh8MC4AX1e7L3We0oeYMhz4k3npDAxA+H6fEyKMTlyNKDJeUtsj/Z3/l2q
-         oWAf+fFWIZPITRPn/Eit1ZpIA7++b/yLY5EWJZ0zHctQ45UMBT50JdBE+dlm1pPdswhm
-         +FsA==
+        d=chromium.org; s=google; t=1707862744; x=1708467544; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NEtsz3nbQBwXPKC2RpUXbyPnr0oHPliF/lmcdhUWxA0=;
+        b=mwzmgUZUm7+AePCAZYKRLBpAzP6OMRfHLz1crjABzv8yTsUfACUmpRtQmMA1+w9Azt
+         A1tdMXxeKYwFmKjxoJC+jfVKgY0At3KbRw8h6bx4vTokP6ZCG5AuAq7xxoA2enLw6TQK
+         GGwiytCyFcfPh8naAGaAjd008SCM/LWy50pDA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707861497; x=1708466297;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fqyuBahTPLTAYF+110cUFRV0sBjf6cZZgU9lFVSbKt0=;
-        b=bUPz4H9K+g5Mg9+CX5UR/QD6vzqdQ+6WwsRakoaLpYA8wL06Pfe0G53/UQlDMc6Q7c
-         yROU+5SFhH+p+23fBB1fhCxnWU+lQXvCTMsrNcPUglCLprNDjlWlrVz+lXVDz1o4xgJE
-         fDG4Rft712OJHZlmZWqsCt0fNqVPOr3vCnMMwZccOU7rargLxXMlatlbtZjx1YFwk86k
-         xF8ujRzW5dqBzd0vOxuDcqgZ0kK0/LPhVzDrK6raB+F1O37ekrftYg+wXShXM6jGhIpN
-         VBOKrki1jOPVUKhK6riJJGPqKyuwDDMh/f5MuEQoMuzfVyyZEys0UFiSOZ3g2ejH2x3C
-         oAeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUrw518oy8FHFNDRQUkjKBYPpur00OvJmBqGLHq3TL/P3zYG4iUpk0iQBGaiMk5kHTiGFxCe/KPlJ7uZyDIMs5U213wA==
-X-Gm-Message-State: AOJu0YxpXC8zHGarQ3nqLNCvqrVv3WzrhT100nIR8QvMeixcHe8tjDjz
-	yUBpRYmjdwdsx0bfy5H1OtoWup7xbmDBOpZv7ASFxDKPGQLQCXqO2ekf+pgio0c=
-X-Google-Smtp-Source: AGHT+IFQmIg0n0GJLfQcjyAmY5aOtHbpVk0kKAcJWpMWmARHiy2H/vQt8V6epQv+QeBGgNL4tEMGfw==
-X-Received: by 2002:a5d:6ac3:0:b0:33c:e2d9:ad36 with SMTP id u3-20020a5d6ac3000000b0033ce2d9ad36mr369591wrw.20.1707861497019;
-        Tue, 13 Feb 2024 13:58:17 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXatIVkhfi4XEgXz5p/gNLbo1vWmEs55v5qyHuI9D0zr8zRt8TJ8ZvxAEkAOJ8a3kznQNaB9CwA0yXFBxNMvj53rHwJ036OVmcocDuLVPfg+PhWLsrC9mlRpniTJxWwH6grCm6vDtmEPJKmWES7/cqSCgpdP/SP1XUCZZN/cAwDr9J27u3hbZyUxvljt3BMCZHmzTpd0QV0bB1cqVdFgl8r1MWmfH7UPkPZq5G2SLjKlWyYV1Bny7ioTDZ9a0tYFo0aVVX3mZT8YahfGGdNcI0a2y2v5rR2Q//H/EU2oWk+rBkR2RDeq8lDwto1myB3M5HTP7it3hesDm99vHUtWHz2n2VKv4Q4O3O2jjAJiuJUqYaCCLIdo0fHDM/dFr/tAaBy30Q6tJz0fcYSUXI8mhoAxW/AWT/oJ1y9vKLuEWj5f8/2i42oUMG6NlN/UzLWMOBw3vS/ecrqYiEobhSloI9qEMgg2SNdaAJXIWgEP2QA8Ev5ZO4piJzUKTZcua59IhWs2zPvSJydJocUe7HdqVKGsdBiuUkwwPb1YyCR9TYWE9OrWora9hpg0mrQsWDgwKLvGk2X3utxRuNVkTTdirRufduCj547YWj/gaQCGXx+o44FtvU=
-Received: from toaster.lan ([2a01:e0a:3c5:5fb1:af6b:4350:776e:dcda])
-        by smtp.googlemail.com with ESMTPSA id r3-20020adfca83000000b0033cdbe335bcsm2415244wrh.71.2024.02.13.13.58.15
+        d=1e100.net; s=20230601; t=1707862744; x=1708467544;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NEtsz3nbQBwXPKC2RpUXbyPnr0oHPliF/lmcdhUWxA0=;
+        b=XQ2APjvFLeWed4WxmXmHxEhr2l1xx0nY9TLkFpYUS9D2z4gkizOLIajuFLgY4Ed/yf
+         38VGeTRBS903dqcJ1S5UDgi4BWmBt5U4WeDyxSGuhIYsNoxRXk6/gUxNuX457w4dJ8lx
+         fRiccSXvWNUNNLjqrFLACQc75kYF0U308tN8Dtc26d9VoAb3wkjsakxHqiAuZfuGN/W+
+         yyXiRtWW68ry6RrvugU2fCA4aJQEPINKmR70HT0yrqdxLzVzspxlX6iUD/S6G/XVkHhn
+         tecKNErmoAtNg3qYTAyILewlw+c5xSJT2LV3/lr4tGU6OnGgGYXXnbnFfKNAXZ4yCEj6
+         /zKw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAmVHO1ZC55lXC345Y+9176Qhty+G+1zYFqLslpIVOlUX/Nwqp9DAprzHG/CWzOlzwCHsD/aMafYuOlbCvkjrHQZRxig==
+X-Gm-Message-State: AOJu0YxP+Q4HGIQlacTM0jU9OJ9Q0CsvZmWzO8AbafRpsegnyJpgFI1p
+	ON4npYCW0Kjr3etcsWGa8yJlEaC81itU6VCB08cesCjBIATsBDy0jagfM2uPaQ==
+X-Google-Smtp-Source: AGHT+IHTEQ8wwSveSYvl+t5iWH5jHvKp2JNEd3pVIZ53DZ3GINpiRg01YzM7bjG1Y+XAbeMm+x+wJg==
+X-Received: by 2002:a05:6871:3a13:b0:21a:80cd:734a with SMTP id pu19-20020a0568713a1300b0021a80cd734amr874714oac.52.1707862743756;
+        Tue, 13 Feb 2024 14:19:03 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVqeObbu+ItRZ+eJqf1kncpf5EJ3lH1k5WBhURpbH35pDNdgVhmgrUO67MPvRBOssCYpMpuZghAsI3gVHGWXQ4zr5EoG3JEt5HFIFo4MXQb4GLBfeW2Dv2KZ0v5EjBveV4M/WQpFaCz4yzmL+T4uwyZ86MetJ1r1AGxX1kRO6hoPoQRG11vhleH5xqUGld6pFZPXIGLUB1ZGyf2YJVkUL45tEUt82021f7fv6OGKR0LrZh5dLpaZQ/uCXbrNxGplqQbgaVf1wYD2j6RBG8myUgu97IRAqeuJpaSOneq4dc4fblBs6CE8zzvLMFec+AuCgM+CY+hPM0vF5opoCQPMAFIjCdgpVWJbETbd9cjuiq1Y6n0
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id ck25-20020a056a02091900b005d8b89bbf20sm2522310pgb.63.2024.02.13.14.19.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 13:58:16 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Jerome Brunet <jbrunet@baylibre.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	alsa-devel@alsa-project.org,
-	linux-sound@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 1/2] ASoC: meson: aiu: fix function pointer type mismatch
-Date: Tue, 13 Feb 2024 22:58:03 +0100
-Message-ID: <20240213215807.3326688-2-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240213215807.3326688-1-jbrunet@baylibre.com>
-References: <20240213215807.3326688-1-jbrunet@baylibre.com>
+        Tue, 13 Feb 2024 14:19:03 -0800 (PST)
+Date: Tue, 13 Feb 2024 14:19:02 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, maskray@google.com,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: Fix changing ELF file type for output of
+ gen_btf for big endian
+Message-ID: <202402131418.3DB3FF7@keescook>
+References: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
 
-clang-16 warns about casting functions to incompatible types, as is done
-here to call clk_disable_unprepare:
+On Mon, Feb 12, 2024 at 07:05:10PM -0700, Nathan Chancellor wrote:
+> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> changed the ELF type of .btf.vmlinux.bin.o to ET_REL via dd, which works
+> fine for little endian platforms:
+> 
+>    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+>   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+> 
+> However, for big endian platforms, it changes the wrong byte, resulting
+> in an invalid ELF file type, which ld.lld rejects:
+> 
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+>   Type:                              <unknown>: 103
+> 
+>   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+> 
+> Fix this by updating the entire 16-bit e_type field rather than just a
+> single byte, so that everything works correctly for all platforms and
+> linkers.
+> 
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+> 
+>   Type:                              REL (Relocatable file)
+> 
+> While in the area, update the comment to mention that binutils 2.35+
+> matches LLD's behavior of rejecting an ET_EXEC input, which occurred
+> after the comment was added.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> Link: https://github.com/llvm/llvm-project/pull/75643
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-sound/soc/meson/aiu.c:243:12: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-  243 |                                        (void(*)(void *))clk_disable_unprepare,
+Writing the u16 looks fine to me.
 
-The pattern of getting, enabling and setting a disable callback for a
-clock can be replaced with devm_clk_get_enabled(), which also fixes
-this warning.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Fixes: 6ae9ca9ce986 ("ASoC: meson: aiu: add i2s and spdif support")
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- sound/soc/meson/aiu.c | 19 ++++---------------
- sound/soc/meson/aiu.h |  1 -
- 2 files changed, 4 insertions(+), 16 deletions(-)
-
-diff --git a/sound/soc/meson/aiu.c b/sound/soc/meson/aiu.c
-index 7109b81cc3d0..5d1419ed7a62 100644
---- a/sound/soc/meson/aiu.c
-+++ b/sound/soc/meson/aiu.c
-@@ -212,11 +212,12 @@ static const char * const aiu_spdif_ids[] = {
- static int aiu_clk_get(struct device *dev)
- {
- 	struct aiu *aiu = dev_get_drvdata(dev);
-+	struct clk *pclk;
- 	int ret;
- 
--	aiu->pclk = devm_clk_get(dev, "pclk");
--	if (IS_ERR(aiu->pclk))
--		return dev_err_probe(dev, PTR_ERR(aiu->pclk), "Can't get the aiu pclk\n");
-+	pclk = devm_clk_get_enabled(dev, "pclk");
-+	if (IS_ERR(pclk))
-+		return dev_err_probe(dev, PTR_ERR(pclk), "Can't get the aiu pclk\n");
- 
- 	aiu->spdif_mclk = devm_clk_get(dev, "spdif_mclk");
- 	if (IS_ERR(aiu->spdif_mclk))
-@@ -233,18 +234,6 @@ static int aiu_clk_get(struct device *dev)
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Can't get the spdif clocks\n");
- 
--	ret = clk_prepare_enable(aiu->pclk);
--	if (ret) {
--		dev_err(dev, "peripheral clock enable failed\n");
--		return ret;
--	}
--
--	ret = devm_add_action_or_reset(dev,
--				       (void(*)(void *))clk_disable_unprepare,
--				       aiu->pclk);
--	if (ret)
--		dev_err(dev, "failed to add reset action on pclk");
--
- 	return ret;
- }
- 
-diff --git a/sound/soc/meson/aiu.h b/sound/soc/meson/aiu.h
-index 393b6c2307e4..0f94c8bf6081 100644
---- a/sound/soc/meson/aiu.h
-+++ b/sound/soc/meson/aiu.h
-@@ -33,7 +33,6 @@ struct aiu_platform_data {
- };
- 
- struct aiu {
--	struct clk *pclk;
- 	struct clk *spdif_mclk;
- 	struct aiu_interface i2s;
- 	struct aiu_interface spdif;
 -- 
-2.43.0
-
+Kees Cook
