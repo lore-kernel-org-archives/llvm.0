@@ -1,49 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC07D224C6;
-	Tue, 13 Feb 2024 09:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86D42BB01;
+	Tue, 13 Feb 2024 09:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707818279; cv=none; b=rTx9pxTsNXN+OtZ/lAvYx7rKmmj8hmtVilO7XvL8FkuqM0ctvGKE/arNaFcRkKbETSnyFV/P+EcP2kDVF2Jmex5H3I3d1C46kOK/PaFvKH4qPrFY8AaeofIbIi+fcb1Th4maVSvYXsyoPwaNZ3PSZm+sw3MRZ3zaklwYylmqv1M=
+	t=1707818319; cv=none; b=as3HTdFl/C5+Kku1WksYsb6t7M66PgzNB1zrluky5rdP7EkwhsaHgYLfuGj7CCDAEDQmgkqPR58A88NqbqKITRKA1d8vflfFNQ0Ex46nTU/LiCAFNqyArjAFQtnsNhGBg+o26w1gaeoL48wjGIXODRV/GKk0+Ertq4ucjV5I0hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707818279; c=relaxed/simple;
-	bh=Glcc2MGW7elmBxt2g9iRaVB3TCJHQ7FpBrYtJp1jN/s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=meD8I7EQcGs4CGAEcYFJy0reMw1mPI9NX8UHrVt6r/KGep/dpDesYmFRty2I+X/Wjg7T5ijLA2yO70Lge8bpYUeCvSuTHem8LyVO00Bs2MQDSL20cZuxlGf3VVyT5WTPLhQju5YH6cIjnQkTrsIj3kXPUy22svRgae/msKwRW7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZD68QcUv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707818319; c=relaxed/simple;
+	bh=zRzb7KQv3xRBZo9WYphp8IEg9VdrU4vqON6031OOSn0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=THw1qx+0ACLbCG2ZKKzV1S50hfBDyiRsmV3RBH3/DHV+mmHn/82SngqEmcPyyKZxUdbJp4DrAguYv5Me+r0Zx6QpVFtfumAMi0ZCVw3QE2evhaUIxntIPfQhDFkXcrBROF6JiMWAApktMbT7jWoTJZnpbXtz/R+FyoVmiOFu1qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=szljOOS0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZD68QcUv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E178C433F1;
-	Tue, 13 Feb 2024 09:57:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="szljOOS0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF023C433C7;
+	Tue, 13 Feb 2024 09:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707818279;
-	bh=Glcc2MGW7elmBxt2g9iRaVB3TCJHQ7FpBrYtJp1jN/s=;
+	s=k20201202; t=1707818319;
+	bh=zRzb7KQv3xRBZo9WYphp8IEg9VdrU4vqON6031OOSn0=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ZD68QcUv2ZwGhDjFT+aX2PpfQ0DNORu4GNAQoEqkZcUP5+/AKgE8mLG6d5P+Ala/2
-	 JgsEzVcOHxTLoiZS/JJa0v+ed59naCZ+hJgCDf/8QvC+C8+QfIXm+SnV1ol1EfdYgU
-	 69ueNLZZTxa9OsqmWkri/TRLM7yaydQIeYZDTIMQqGfqV+XiCEQo3nf3oJaYUvwT6D
-	 hx92u6Dd/yAG6nP2/dJ5Je9ptkKV4AGtYYCyxqNzOYkLgZReLTChxkUMtJ4dSIszum
-	 kUZ0r1tK7DZoezWKznY/o55nG1ArKoFbSH/fWYOxK/rliNgBuPgNX/ech4pFC6lb1Q
-	 APD1uBMpOdQmw==
+	b=szljOOS0X5reBC/rEedA3Pp3GuGD4SQq7ebT+rhQK6CV0qKApjF0nrIt7hVDh42mv
+	 t3NOycP/SJhpr9wfFtjQcbzaMYE51opx1y56z0RLNyt0Z4U7HN0ndRt/FN5x+y2ORN
+	 UzHqEE8V0ejjXSLZ7C4JkeGM/4m+1AzEZnTvFAMTZGOe3luBtOeFPBrhyFO4LtnA9a
+	 RxrBis7RD+0EFrCTQsVevCGgs2PyqM53/46X+j1X9wlqeq66uhtVEh/MrszBBR+bzW
+	 HEuRulOJ3NDV22pnID7xB9KDaeQpVIbTY3KWvIoo82UA94AIKDBR7WjXJ+9AONr8Yf
+	 /8wBUR0r4oOQA==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Karol Herbst <kherbst@redhat.com>,
-	Lyude Paul <lyude@redhat.com>,
-	Danilo Krummrich <dakr@redhat.com>
+To: David Woodhouse <dwmw2@infradead.org>,
+	Lu Baolu <baolu.lu@linux.intel.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Ben Skeggs <bskeggs@redhat.com>,
-	dri-devel@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org,
+	Kevin Tian <kevin.tian@intel.com>,
+	Yi Liu <yi.l.liu@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>,
+	iommu@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] nouveau: fix function cast warnings
-Date: Tue, 13 Feb 2024 10:57:37 +0100
-Message-Id: <20240213095753.455062-1-arnd@kernel.org>
+Subject: [PATCH] iommu/vt-d: fix constant-out-of-range warning
+Date: Tue, 13 Feb 2024 10:58:20 +0100
+Message-Id: <20240213095832.455245-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -55,45 +57,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-16 warns about casting between incompatible function types:
+On 32-bit builds, the vt-d driver causes a warning with clang:
 
-drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c:161:10: error: cast from 'void (*)(const struct firmware *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-  161 |         .fini = (void(*)(void *))release_firmware,
+drivers/iommu/intel/nested.c:112:13: error: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+  112 |         if (npages == U64_MAX)
+      |             ~~~~~~ ^  ~~~~~~~
 
-This one was done to use the generic shadow_fw_release() function as a
-callback for struct nvbios_source. Change it to use the same prototype
-as the other five instances, with a trivial helper function that actually
-calls release_firmware.
+This can be easily avoided by making the variable a 64-bit type, which matches
+both the caller and the use anyway.
 
-Fixes: 70c0f263cc2e ("drm/nouveau/bios: pull in basic vbios subdev, more to come later")
+Fixes: f6f3721244a8 ("iommu/vt-d: Add iotlb flush for nested domain")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/iommu/intel/nested.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
-index 19188683c8fc..8c2bf1c16f2a 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
-@@ -154,11 +154,17 @@ shadow_fw_init(struct nvkm_bios *bios, const char *name)
- 	return (void *)fw;
+diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
+index f26c7f1c46cc..77a09c982979 100644
+--- a/drivers/iommu/intel/nested.c
++++ b/drivers/iommu/intel/nested.c
+@@ -95,7 +95,7 @@ static void nested_flush_dev_iotlb(struct dmar_domain *domain, u64 addr,
  }
  
-+static void
-+shadow_fw_release(void *fw)
-+{
-+	release_firmware(fw);
-+}
-+
- static const struct nvbios_source
- shadow_fw = {
- 	.name = "firmware",
- 	.init = shadow_fw_init,
--	.fini = (void(*)(void *))release_firmware,
-+	.fini = shadow_fw_release,
- 	.read = shadow_fw_read,
- 	.rw = false,
- };
+ static void intel_nested_flush_cache(struct dmar_domain *domain, u64 addr,
+-				     unsigned long npages, bool ih)
++				     u64 npages, bool ih)
+ {
+ 	struct iommu_domain_info *info;
+ 	unsigned int mask;
 -- 
 2.39.2
 
