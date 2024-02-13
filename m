@@ -1,48 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5348225D2;
-	Tue, 13 Feb 2024 10:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC99C249E6;
+	Tue, 13 Feb 2024 10:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707819420; cv=none; b=KneNTzM/MMK8nliixpi5HKl2d+AOGHwGPgF5LN/bqAmEDkVkF5C0nIzeSZl98GGvhYZx/Z3al2B8tyy0RI553dvnO0SplcO2+TeHkI22e6fE5dIYqEb2k1glAQEeRZRVm5/xlma+PCX05DYD1dxwreF1BCLBQ34vr7BT49kg3U4=
+	t=1707819481; cv=none; b=nfwvkJVn7of/ObW0E4MMO8CE2TJaNT7MWkgVpRD3/re8/WXlOhoVz79/EYb3bEQ28KosYRO+TV+YsSPKrAoVpUwfOSxcqvZg8gd0kZio4UIgRkY8gVOuI0/n9maDKhkv3BIUZni0eInNm/F6+2Z8c/OK6XDaDMSLtMU6UD8CXP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707819420; c=relaxed/simple;
-	bh=yq5HRU9Pb5q1jpmq7XT0U6aYcsw7enTeYRI+zhtoGRc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R40dHwNtvEE8JdtCQjZ8yiZQYngdWnHIbyGlSjzbo8J3WjeR1s/Q0WeOSpopfsqmqz337untMQb1tW+OoOVxhy0PnGoTViiI5Egz4UJaKHtq1rNrM5hApxgbJWP/uwzBmKBxOooGQsJYyvlr16WqujnILis40Y9lEHwkjoQIUm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F9c36Lc/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707819481; c=relaxed/simple;
+	bh=M0omCzupnR3eO9G0ZEKmTrZW1r/VLKkL8eLhQp9cwrA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gjbPMEdVoMh+Rf6d1VzDTJdFNIX9bT1JnEi8zM8v3pPCHLPVkvfUe2a4ZlZNW1dtflndEiq2SceufKCaZdgW0kEktBxyAsuK3MnUHUCzoki40gGksbfiuNVUcd6MDYoJwTI6MECGWAdfRVQLDYvXc9VJDoBcBA/S54L045e0uGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9rSz7y2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F9c36Lc/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A845AC433C7;
-	Tue, 13 Feb 2024 10:16:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9rSz7y2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 311D5C433F1;
+	Tue, 13 Feb 2024 10:17:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707819420;
-	bh=yq5HRU9Pb5q1jpmq7XT0U6aYcsw7enTeYRI+zhtoGRc=;
+	s=k20201202; t=1707819481;
+	bh=M0omCzupnR3eO9G0ZEKmTrZW1r/VLKkL8eLhQp9cwrA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=F9c36Lc/aQZfkBHmvKiejC1gWtzinZ/3+iAc9eR/J3h9zI7g/op8lFYtle0wExOkN
-	 RJw8fXTS/mteuLyEN/8ak2sqqeDAhiIBPGPGvyI3TfycTQcxzNXpOWfGeD8FzLk6j6
-	 TfFGLAaE1fqd1i0qCOF7/K8Gdm72ruNKcLlBZTjWPRWK+2TkyWoucZNe/362p7EGBm
-	 TkrqAfkKafMv0T63/i57Moh3QtBZtul11a8tjxcv+AI2lr1mNsG+LIN6tRnofxC2rq
-	 CweR/tfAOKkm3u1RpSETMEOjjeMsc/Xxmf3h/Ahd2Esi+i9OUgw9dANaSWoRkVaq5I
-	 Y3m2lGbgJLcKQ==
+	b=s9rSz7y2uHJMnZhKr4qSW9mpG7iRl6rFaesUumx6kTwL75nBPio0n+kTi3qJv/DKP
+	 gNGyOl0ZlFS40+OiuZJuVQV18VucJadwMoEhCT8xe5gBgM1y8CHioDDwWwczTl02G7
+	 DiJDA8DIUmNoelB2CJCau+WyZulEZK67E53aoxc+Wnfbc3TOjsjDoVG1UyoiAJPYJc
+	 Naqu3voXnhoBzjqKcUvajkwaOASC+Q0ljhyjtD19NregQBDzt6GyzkCgVjB4XK5DkP
+	 I9Z0+AvAv0g3JtOSu3ydnaCIY6C1beITu7hnuSMBApg08r46EuSu/Ye7oFNzdSg/mH
+	 KREKGIuYyWMZQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Grygorii Strashko <grygorii.strashko@ti.com>,
-	netdev@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] ethernet: cpts: fix function pointer cast warnings
-Date: Tue, 13 Feb 2024 11:16:34 +0100
-Message-Id: <20240213101654.461239-1-arnd@kernel.org>
+Subject: [PATCH] tty: hvc-iucv: fix function pointer casts
+Date: Tue, 13 Feb 2024 11:17:49 +0100
+Message-Id: <20240213101756.461701-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -54,71 +51,44 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-16 warns about the mismatched prototypes for the devm_* callbacks:
+clang warns about explicitly casting between incompatible function
+pointers:
 
-drivers/net/ethernet/ti/cpts.c:691:12: error: cast from 'void (*)(struct clk_hw *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-  691 |                                        (void(*)(void *))clk_hw_unregister_mux,
-      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/device.h:406:34: note: expanded from macro 'devm_add_action_or_reset'
-  406 |         __devm_add_action_or_reset(dev, action, data, #action)
-      |                                         ^~~~~~
-drivers/net/ethernet/ti/cpts.c:703:12: error: cast from 'void (*)(struct device_node *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-  703 |                                        (void(*)(void *))of_clk_del_provider,
-      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/device.h:406:34: note: expanded from macro 'devm_add_action_or_reset'
-  406 |         __devm_add_action_or_reset(dev, action, data, #action)
+drivers/tty/hvc/hvc_iucv.c:1100:23: error: cast from 'void (*)(const void *)' to 'void (*)(struct device *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+ 1100 |         priv->dev->release = (void (*)(struct device *)) kfree;
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use separate helper functions for this instead, using the expected prototypes
-with a void* argument.
+Add a separate function to handle this correctly.
 
-Fixes: a3047a81ba13 ("net: ethernet: ti: cpts: add support for ext rftclk selection")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/ethernet/ti/cpts.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/tty/hvc/hvc_iucv.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ti/cpts.c b/drivers/net/ethernet/ti/cpts.c
-index bcccf43d368b..dbbea9146040 100644
---- a/drivers/net/ethernet/ti/cpts.c
-+++ b/drivers/net/ethernet/ti/cpts.c
-@@ -638,6 +638,16 @@ static void cpts_calc_mult_shift(struct cpts *cpts)
- 		 freq, cpts->cc.mult, cpts->cc.shift, (ns - NSEC_PER_SEC));
- }
+diff --git a/drivers/tty/hvc/hvc_iucv.c b/drivers/tty/hvc/hvc_iucv.c
+index fdecc0d63731..b1149bc62ca1 100644
+--- a/drivers/tty/hvc/hvc_iucv.c
++++ b/drivers/tty/hvc/hvc_iucv.c
+@@ -1035,6 +1035,10 @@ static const struct attribute_group *hvc_iucv_dev_attr_groups[] = {
+ 	NULL,
+ };
  
-+static void cpts_clk_unregister(void *clk)
++static void hvc_iucv_free(struct device *data)
 +{
-+	clk_hw_unregister_mux(clk);
++	kfree(data);
 +}
-+
-+static void cpts_clk_del_provider(void *np)
-+{
-+	of_clk_del_provider(np);
-+}
-+
- static int cpts_of_mux_clk_setup(struct cpts *cpts, struct device_node *node)
- {
- 	struct device_node *refclk_np;
-@@ -687,9 +697,7 @@ static int cpts_of_mux_clk_setup(struct cpts *cpts, struct device_node *node)
- 		goto mux_fail;
- 	}
  
--	ret = devm_add_action_or_reset(cpts->dev,
--				       (void(*)(void *))clk_hw_unregister_mux,
--				       clk_hw);
-+	ret = devm_add_action_or_reset(cpts->dev, cpts_clk_unregister, clk_hw);
- 	if (ret) {
- 		dev_err(cpts->dev, "add clkmux unreg action %d", ret);
- 		goto mux_fail;
-@@ -699,8 +707,7 @@ static int cpts_of_mux_clk_setup(struct cpts *cpts, struct device_node *node)
- 	if (ret)
- 		goto mux_fail;
- 
--	ret = devm_add_action_or_reset(cpts->dev,
--				       (void(*)(void *))of_clk_del_provider,
-+	ret = devm_add_action_or_reset(cpts->dev, cpts_clk_del_provider,
- 				       refclk_np);
- 	if (ret) {
- 		dev_err(cpts->dev, "add clkmux provider unreg action %d", ret);
+ /**
+  * hvc_iucv_alloc() - Allocates a new struct hvc_iucv_private instance
+@@ -1097,7 +1101,7 @@ static int __init hvc_iucv_alloc(int id, unsigned int is_console)
+ 	priv->dev->bus = &iucv_bus;
+ 	priv->dev->parent = iucv_root;
+ 	priv->dev->groups = hvc_iucv_dev_attr_groups;
+-	priv->dev->release = (void (*)(struct device *)) kfree;
++	priv->dev->release = hvc_iucv_free;
+ 	rc = device_register(priv->dev);
+ 	if (rc) {
+ 		put_device(priv->dev);
 -- 
 2.39.2
 
