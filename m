@@ -1,90 +1,84 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B9F60DC2
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 20:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9945FDD7;
+	Tue, 13 Feb 2024 20:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707854993; cv=none; b=LlKVVxZUX8EDHOyWFZBWCiDJOdICZf/44njO4AoFWx3fE6PBpWBqeHRG0iN0jl4mb6Tne8nz8ODZcn5WvaJIOzF/wwvjoSCJ8uhmq0lQnUFwQs8bLC5UDnDE2Gs4L6ykCBq/Sr51XbcnOrNF6upcytyOg+wEz6A/NLNSePRTXdE=
+	t=1707856637; cv=none; b=s215btleW19aPiAROK1xx9kzPr9nWfFe+IlLEVq3LAef71efgruk+MoZpXNnvOKpB757mN3kKM6++F9ud7gw6bAHMSHouqq/wwJu8BFGU5EHEBMWNfLRCPXfiGKiXr+cFdvj7wjXaMEF4FFxfhN8uPT+Rei0LYrT7thiBzLzKmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707854993; c=relaxed/simple;
-	bh=mrszqc2bupU+EBqHPBjyleYP7nZ04WmF+Acwr+mRjOg=;
+	s=arc-20240116; t=1707856637; c=relaxed/simple;
+	bh=n/wW7PIGgqQXSlQ0F7NCV5oNj8FXGjtLdH3aZqJKeHE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZfMi6kSibakSwEaswmgbNKAnQuAhYT9LqlMimq2O8kVVr84iixtV7GKa2iuoMBKCNROHbFOxmFTG5FH4bHuy2RM24tLL6lNPlkVYcnnhj0tIZSbiVaFXiT/wkC2P8SUIDT9dNnetQBk44dSwF7D8V10AZ9Ta85P39jOMas5dehQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rzgcd/k3; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=CwLoOdMfSMH/a+ZqMmC6Uufiogy8sP3vuC+cY/2CbE3QljMmj/ZQ1GFoe4WtIrEg4Wxo15eQUGnA7C1Zwc9+ZevrXQkBn75WXWMh9DF6uZRmLT0mlNyZhzsO06yBiZ6BtpurTvDS8B8TDa4BUq0nbpi/TFPx0wbE2Qo2pQk9Um0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OGvc+fK+; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rzgcd/k3"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a38271c0bd5so602517066b.0
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 12:09:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OGvc+fK+"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dc236729a2bso1234943276.0;
+        Tue, 13 Feb 2024 12:37:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707854990; x=1708459790; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mrszqc2bupU+EBqHPBjyleYP7nZ04WmF+Acwr+mRjOg=;
-        b=Rzgcd/k3QZxyD13B48ngN82HoPxovv2FTEkTIX7LRAAMcYXja41MLfqh5CW/IuaH9C
-         XNGFvyCGv0+zvIs0ZYqc3oqr3wd22s+fc90GxLLEd7GUKPWhI58mBSfpxbWA6741TEee
-         pS2AABE3BNmflXZWyGeSN11YArEja1k+WG8II6PYivGbECYXKPRvbwM1McvBq5Kh+/XD
-         BQKSULgVwjUanYrjv5DfM1M3JSj/ghsDYeXysUA87CgWzJkpiRNYrxr8AwwTvq2qGZAW
-         h9M0xHP8E5+C+GKR107zKWXBc2LZsK5Yfo8QbME48A7uzJy8xgn0YCLad7ea/8oxwnU6
-         RcxA==
+        d=gmail.com; s=20230601; t=1707856635; x=1708461435; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n/wW7PIGgqQXSlQ0F7NCV5oNj8FXGjtLdH3aZqJKeHE=;
+        b=OGvc+fK+romig5bqIBqGZ1YkPy0Z1tn5tatK5hK12CQ2kwa8qi/dBO2Q0QweD2y96n
+         Rlw7AdKl9cqDNRHnM5ctbNAWGH/P6PKdQHDUZ7KRksC5r4y5JM52rmOGLym6wVD0Xqxj
+         2rmMxh2kEFp39xIdQfJCVSgITdbw6RGO10HGTAhM5LJ0RWqGd3JkjH0ARMXyIJhAngVE
+         U0Np6uWugRqk5eyVx4voKXvRepoRCb5KnXOfHyFlF4vTZ+4cogP1oOUgC3+w/y4o3wxD
+         pjzPW/VSNaaR04ju2w0Kb8QoE8gxNcstluZunsK80UVPuCTYpJJJeETypTJbRLgnh9UM
+         3pVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707854990; x=1708459790;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mrszqc2bupU+EBqHPBjyleYP7nZ04WmF+Acwr+mRjOg=;
-        b=mZkF/44dy/QtW4pFYkC3edx0t11GwIHGSNYJI7cFNxabbHk4xpq8XyQDS3hvI3X39N
-         lDAHKZ9qtrRFkWxSuW1tr+JuZjHNIwz0AsZjWSSkYWHCDDBfO25L4H+iBX/TO74vhIxE
-         szj4qMoOCJ21GnWt85IajfZo2OrQLBwpJ0Dwa9IE9gU0+7kYcn9D8IBY3+nNv9v8tYOM
-         Tgmku1ubKttxKksKB38CqYXr7dlGVl9Tq8LwVouXiR1WDJa7EKGUu/Y3HI4NA7BTST0P
-         aWFVxB3j7dWS7YoryqlaptzOuS/XkKKJdrYES8GtH8hQPcX6YmVt970kqkS7ol3XE9aQ
-         Psdg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxr4I6tVyGiKZ4hG5hjsdJuKDAI2sTuv4MDyviu4CYVgAkoD09rbrcQ9Of7SxTH1eat7jY3sU49XZcVIgns0xiadJBuw==
-X-Gm-Message-State: AOJu0YyWu8Q4hdf9HcJI0MLuFY3a2UrjeQht54+MiHi259h6JK5zH+oC
-	7HYdcE7g/DcS2qmzjFrQXe98sEqbGH6pZ9jEHxCLqJA0TqZ2g/+Y54U0AF/eiomf5k1QG8G4zin
-	kaoJoiryEpe8zhO48UUYeLJYg6Ikg3BTeD7vy
-X-Google-Smtp-Source: AGHT+IE3mwMUqJ6DN5geO/x5V71y1Lpt/nQ2yo0uSXGvjLFjxROjLwld/5P5gl5jWXzv7R3BaPdR8dxplGGxRT2ITjo=
-X-Received: by 2002:a17:906:b34c:b0:a3d:3781:6eeb with SMTP id
- cd12-20020a170906b34c00b00a3d37816eebmr70496ejb.34.1707854989739; Tue, 13 Feb
- 2024 12:09:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1707856635; x=1708461435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n/wW7PIGgqQXSlQ0F7NCV5oNj8FXGjtLdH3aZqJKeHE=;
+        b=qZceGdeXzf4gwmKzdyru/hGQ7c2asRqbkYozmf89D8oltcyZvGWNMf5Kv2EgLAzhJK
+         q6AtIa6WpTj0WlU321JmdfpusgpX73ch5FdQHDCziD7rb8aaL9ef3kY2PQdirKB+HxAc
+         bmA/DxUcS1s4s7YRkjfN0Gq+pICNys/pEW6egg+kMvgAnLBi4yHuzLepGx58MvkwpHpG
+         ErzIDk5FbmwOX3brNaGgKyFracZeoAnzPusjVh+SGMd3DnJ6sxTKcsJLtxozx2FekttA
+         d9/l/H/y67noouhDuCBjhAfxAiX5gA4CCvS8aa3/Y1LxOTS4Q2kL5+EJLFxixlA2UePV
+         4A7w==
+X-Forwarded-Encrypted: i=1; AJvYcCXY1wyzkPGh9kbe5KBZfc98KqnPfi3V+q+VdnH9PlGrGEfNFW+IGw2Aljovmt9XjZHeI7E8VHqhdlNiuFgx6LhzOKWXdQZuQi2jMWAo0S7Ma/7HDCbBjwqResAJeNo=
+X-Gm-Message-State: AOJu0YwyTWK/D8oJBCa7UfFDKQLkXhJ8fY707c1GmVyNpkx+z6AgTdj0
+	X4foGneXhg4WHoZY9Fm/0wlIQx2bN4oAaUEaWWzotiWl2rYaHugHPy4olCwxpZUMbu+wF9Q/AF9
+	HKs8NcneoPQshRN0Qf0e327ARKm0cLD5+
+X-Google-Smtp-Source: AGHT+IE7LRxEWEyLjD3Dvo0o8c7YVHNu9ELBH7AyR73SwTWGh6EmoBFMKAf18L2S2tVVni7yUNl0BAAtY4km7kss1Cs=
+X-Received: by 2002:a25:ae16:0:b0:dcd:3172:7271 with SMTP id
+ a22-20020a25ae16000000b00dcd31727271mr445383ybj.3.1707856635046; Tue, 13 Feb
+ 2024 12:37:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
- <20240125-lazy-thrower-744aacc6632a@wendy> <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
- <20240126-eccentric-jaywalker-3560e2151a92@spud> <CANiq72nu2NXUWYanHZd5EXgX4P_v673EWn6SCRW60Es9naraQQ@mail.gmail.com>
- <20240209-rage-keg-1b2982cd17d9@spud> <CALNs47sRqAbE=u3=_ciO2oge7Afz-6GBBhW+BwcLRET-TsuxTg@mail.gmail.com>
- <CAOcBZORDaHHH3jTL3GO7OsDubhhyQE0Uy2uAjJpiRzrKBgqaOw@mail.gmail.com>
- <CANiq72=VBFvB9O9c84YxpBBftpfNnnXx-+Xes0h8h6rN3EN5pA@mail.gmail.com>
- <20240212-demotion-blitz-1c9ab85dbc73@spud> <20240212-outdoors-french-a40d57e38c71@spud>
-In-Reply-To: <20240212-outdoors-french-a40d57e38c71@spud>
-From: Ramon de C Valle <rcvalle@google.com>
-Date: Tue, 13 Feb 2024 12:09:38 -0800
-Message-ID: <CAOcBZOTLBaik5kwHhvCoJ4Q4PQMDjBk3TJsaa5u-vxR72A8jFA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-To: Conor Dooley <conor@kernel.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Trevor Gross <tmgross@umich.edu>, 
-	Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Matthew Maurer <mmaurer@google.com>, Sami Tolvanen <samitolvanen@google.com>
+References: <20240111-dvb-mxl5xx-move-structs-off-stack-v1-1-ca4230e67c11@kernel.org>
+ <20240210162604.342349-1-ojeda@kernel.org> <20240212232757.GA3221859@dev-arch.thelio-3990X>
+In-Reply-To: <20240212232757.GA3221859@dev-arch.thelio-3990X>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 13 Feb 2024 21:37:03 +0100
+Message-ID: <CANiq72nYc0aVOwYKgJ13Fsdp84jZqxPsL=VdCQjGtoFdFVZziQ@mail.gmail.com>
+Subject: Re: [PATCH] media: mxl5xx: Move xpt structures off stack
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, justinstitt@google.com, linux-media@vger.kernel.org, 
+	llvm@lists.linux.dev, mchehab@kernel.org, morbo@google.com, 
+	ndesaulniers@google.com, patches@lists.linux.dev, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> I realise I was not clear either. What I meant was that this talks about
-> rustc and not kbuild, so what is meant by "the new target" is not clear.
-> Do arm64 and x86_64 have functional support, so adding RISC-V in rustc
-> is needed, or did you mean for the new target in the kernel?
+On Tue, Feb 13, 2024 at 12:28=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
+>
+> Thanks for taking a look, this is great to hear!
 
-Sorry, I was referring to the targets at:
-https://github.com/rust-lang/rust/tree/master/compiler/rustc_target/src/spec/targets
+My pleasure!
+
+I am happy to report that it also worked with the new toolchain you
+just uploaded (i.e. the one that included `libclang.so` :)
+
+Cheers,
+Miguel
