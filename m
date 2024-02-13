@@ -1,61 +1,61 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1C8249EA
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 10:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69604241E3
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 10:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707820025; cv=none; b=LvLa/t4gWk1XjtWlKjLv77TzJOmyyTsMFUC3GtDLDI5U7Gz/W+nb230lnNhOJJIW5PS2gzf1dwL0B6CaIbquxKtZk3mgCF5wlfwDy84zosNjYaFo7AqjL66fHVdZwMwawE3/o7nEeer6qPkwNbpVKTYBwv9wNIchuJitq1Gsf74=
+	t=1707820031; cv=none; b=PCoVzlfy4yKeAPAsXtpzdnq/EMJmIiPZWveRBCVmW3PnBJpkMakS2kuR3LKFbGBzKC/rHcJ6diy9IBhTF+ZjG4Fg+mD9Ce2zR6jsP8HpspzhzXbHSXr6mwELCyMkN7VHmtZZG1aJMyHYYmiirM3lqQQNxmDfX/Lcl5K6j+dvmf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707820025; c=relaxed/simple;
-	bh=wLSgMc3bJnAeZo1CWOjEKBvGuJBI2cVzMzh2B5Q/wgQ=;
+	s=arc-20240116; t=1707820031; c=relaxed/simple;
+	bh=uT0vnan64Rg/+aXspOFR/5FOSzvW9CRoJZ50y2WDSyE=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=U+FZicvt7fSLwYAc67ewXsSPd6r0+ZAGlQsLXDm4WYfsx7ow4FeekasjwXklp03HvPbFGEEwSj6OjzE0c+xwZT+gPvMN0zYv+9WtC6px+PX+fwURCsVGUNw7zsaMo9t/cUazq3LMtsvu9LK5UZDZFhP4kO+tlT1V/P3SHpomlz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NHgptVjR; arc=none smtp.client-ip=209.85.208.170
+	 In-Reply-To:Content-Type; b=KdYafh6w4oJzd71uqgDOxnFTXW3lh3etsRCfznJbowH79pX9jGvERvtaVBdcWH0JWB3239XHzCVRi/cYiiOOulbYY4WYMz2ArMzrwRzh8vmucXLET+AqzjAzVTSvC8Ztaw2o9NS8ztUs93BdP/QypZxGnuf2CwWKXXmafXmR5go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WPx48Bck; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NHgptVjR"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2d107ae5288so5819241fa.3
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 02:27:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WPx48Bck"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33cdd1d732dso257074f8f.1
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 02:27:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707820022; x=1708424822; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1707820028; x=1708424828; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4c3xyw/xCs2E5+LzzLXM5z0PjXuIuQUQWO5R/iXN6aQ=;
-        b=NHgptVjR44xqu5ZHms+xgB+r/SO6rdG/+Dx0+Jb+VkLRv8K16mI7wL1sHItgW5VUXE
-         sOsfLItq70gfudpMj6SzUaY1m18s+DL5nv36rLYQZaGSMbCNT0xI1R4dJBOvnODStT2t
-         CqIVMn8KCfEs5iDXFAscQx+amRxj3JgR0aOplEBtdqXk2wPm5mBJ16LshewDkedTrU60
-         4UYM0HIYpvsx2WuZKrqlk/Q2JO/sDlthd15lxRqxBqELDA9628DYtpm1TZRbY2mafnd0
-         csoI5kfIipFd15RAVpTasHtV2jVTm4CSurpJmxKOGpUK3e/hs3WkPXNtOLt8WWI4UkqC
-         f2+A==
+        bh=tyTZUfKxgXBwWopHYb3LgscDsLO34lDgWMz659lp7mo=;
+        b=WPx48BckCmzFDsW4s1libHhqxMQqF3S9Glr2BThzwH41KvqOk7L7mHVTU0py38KK8k
+         vnXyhBIXo+eGphZJd2JdIqsGApgbJetsnMeNngvzqmGPqio1vOs75bXkR8O5PxJX9DEW
+         PxhxuB4rbYveGse4Z7kLz2QvB0a6CK9aYWfHo3MNT4uJ/hRbZQU2G5ea6tmLOBeehZHs
+         OKq83dTHr4FZ6CILK1XklvD3pMko74I9KPWpoD6frMcBpnUsm1qXCnMBJx+QcXazfVX6
+         zTcmOq2RYvzSq6qn3LnmkN3L2wtRHDJoZPuqvrofXXQ4dCUqMzSZIg3fqzPuQr+lglTj
+         Bcvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707820022; x=1708424822;
+        d=1e100.net; s=20230601; t=1707820028; x=1708424828;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=4c3xyw/xCs2E5+LzzLXM5z0PjXuIuQUQWO5R/iXN6aQ=;
-        b=ElyHQnCfYYvMY54vq5eiVki4H6g/NF3ltxU6gqv4kAn91vqlO2A9FEtZphv9spjLxk
-         zS/2omIQ+nk0ocq3PFb83e+FC0bFKdA44qxUsFuowW3rk1mugASBXvI7By59SHNQHxCJ
-         FRFVP1Vjh2kz0x5Koe3EaoCZNVsum6yVSZMwhFih5tQGAQw7jXr9++swyQcSSAaILbDd
-         /REDPZH1F3Hd7nT4QYSrmGG86si+Mq/KeqMJ/1Ybkwx8rN00toKedJ2X2x5RTK5iy5H+
-         fzM7qK/Aelm31fn695MZX2cul3DuKioa3PzOTXH/Isi5R5YcRBcV9ZAP68CjbZ8obPDQ
-         l43w==
-X-Gm-Message-State: AOJu0YyTGiyxUmXDwK9CKo8apSS+w3Cx0mtOOGzDmApaGqOmCbsab3M/
-	0ea/ZVQS1fN7dcwv+F8OWIGt+jJTP4akXRGLPRVJXgRkeJg/4spJjsI5H1bDLI4=
-X-Google-Smtp-Source: AGHT+IHuKNJR46KDTZkQXgqrkgiw2kQoSC8gATB3UY9HLdsK/ekr2G7xO4uo5qQhmNWx/uV2t6T5aQ==
-X-Received: by 2002:a05:651c:220c:b0:2d0:d40d:9697 with SMTP id y12-20020a05651c220c00b002d0d40d9697mr2842108ljq.22.1707820021744;
-        Tue, 13 Feb 2024 02:27:01 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVzDhobkhGIrG9q3xJKC52MHcTtp+goBN6WnDQIxmINkGbfXWF5gOZT2IuchNi/rudcx9drENluvxSSxYwPBrVa/Yo0/AWzlRHPOakw/5Bf5hILiF2b9Zv4CqR2CsLOZAqLORBeLd3Zccmw7w2aPDZH7hkWyTGJG8MHPf8ydbI4giufHmVHFdOmR4RzrTqpop1Z++TKxRhTlM0zg0a+5f43yUWASsajh4ug7bha92YREyrHr/JUlHM3Qz3W6MP8PBahCI2WTKCTFU1l1JKrwvSB3tlJco1IEs8ucKtet8HGDQVzg4wzvMZjchnrfUzuHyi3J4r6CQczFl3cYqU2nifdn6niH13N0lo0KmR8NF8A8YJsU1LBWS+yHqAgF1J5MZIM/ZyKjt843pGPFBqcxh2TMF0eKQb4svjyWv3w8bx+I2QazSSvqgIOEFh2rEI5jlDFgM2P1tsnZcnMEXQH2pspXol4oBkMDhCWJHrk8VmIYOk1PDrV4ahV/WFejiGpYlE6zyEY70OAwpCogiEcvS8LlbEryzohGfQQtfKcxyeRlpFDM5pR7YyROzSzXVodK7JKIY5xscPk8IID+Yo2w3TzMGScXrsAC+8/+O8iv8DNbKLqGTg=
+        bh=tyTZUfKxgXBwWopHYb3LgscDsLO34lDgWMz659lp7mo=;
+        b=FhjbClOsaTs6vNWjmXL9NIk7FfeaWzE4rTtIj8Nd89vxpO8mqjVIoH7B/9FGh1ERa1
+         nfMs/kPjilixwuZkOrqub9N4lbBok/A3geneXsypfDiEqgglLiMDripzgsDK5NzEGByx
+         Nv7RFOq90xYUeTEb2onhfCC1Khr/kGG93VDyfzZEUKb1N5rlbShZV/BIDLlxb00rGYhq
+         Kagb0vqhRNYyyIfQVJjha0rYZGopAAsxTwg+oti+82HN5WgmDdlDAgLP3GlR06Ui1tEU
+         Z/4A8mcG/UoCCKnCQSP2qNFsWPPAesNKVAKKgCdwak0ZlLFTyK8hvwIOn8INh71u7FC9
+         gZ5Q==
+X-Gm-Message-State: AOJu0YweK0LmMNPVFAADZj5cIbPc5P+VasfndnXWFsmnFAnUc/JqdmZC
+	11nmqDFg2tVOqz/lpK2wV64LKKfWX1wM2F7fAxM1b0LdvRmIoA9gQ6GRzyAN2xk=
+X-Google-Smtp-Source: AGHT+IGWMhj0KLJWYR4q7Tu0F5Jf5C6g7wLmViMX9LHHF66KDjADA0qXn6Mq9uVuMDq3lCear/joWg==
+X-Received: by 2002:a5d:6785:0:b0:33b:7d9b:4592 with SMTP id v5-20020a5d6785000000b0033b7d9b4592mr4917512wru.5.1707820027605;
+        Tue, 13 Feb 2024 02:27:07 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXyXuwiUGeFI8zrVCbLtGqd06swkX06JnaokQfykh2lTXXhB3tIEqMiraG3YqDgDjH5MYBF4csqDHvxBXIMAHxWA1mFu4xFhLTIP5fOCZnDTkVr0a3lKAXwDFUuBjBERon1Th2M9KB83d4qJ/n3q2yacuvBHKi8L3jHXO08tB4H2Ry8+MPbmDGzNKS3Bdfykupqi5HIFbFOHBkRZ4D4zhzhWbqazeIzgchVTzIrs7++j1LTGEPRdmPgRfcx8tDSvANtZVE2RBdVc2OX6j5apnNKpyw1hofebP71JWVaD9Rryoi806Qn66amejnfBBUS1UXzPPSOb2lJ8SI9rs3l9PMAsFW/J2WPq2gpcEppd6ou43t2T9PtFOQrQ8XnQpohx+n2xwaKWCXb4DhuC8cS8xHFFDWE4sYIzQ1aK3n1m4D5tmp9td/O+TbcEn2bKL3ZZCc+m3clUKQgoFVNfCRzR0E3lPLkvNf3xSh0q8speVlpDVWLIFO7l3xyoCzdWob5IANexY7XVMQMf6VbzA==
 Received: from ?IPV6:2a01:e0a:982:cbb0:6dfb:5e62:c51f:304b? ([2a01:e0a:982:cbb0:6dfb:5e62:c51f:304b])
-        by smtp.gmail.com with ESMTPSA id m10-20020adff38a000000b0033b0d2ba3a1sm9161150wro.63.2024.02.13.02.27.00
+        by smtp.gmail.com with ESMTPSA id m10-20020adff38a000000b0033b0d2ba3a1sm9161150wro.63.2024.02.13.02.27.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Feb 2024 02:27:01 -0800 (PST)
-Message-ID: <01bdaec0-c926-4dbb-884d-2215981299ab@linaro.org>
-Date: Tue, 13 Feb 2024 11:26:59 +0100
+        Tue, 13 Feb 2024 02:27:07 -0800 (PST)
+Message-ID: <19dc040e-e023-4a17-a6bb-8aca156088d0@linaro.org>
+Date: Tue, 13 Feb 2024 11:27:06 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,20 +65,20 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
 Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] ASoC: meson: add helpers for clk_disable_unprepare
-To: Arnd Bergmann <arnd@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Jerome Brunet <jbrunet@baylibre.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Kevin Hilman <khilman@baylibre.com>,
+Subject: Re: [PATCH] nvmem: meson-efuse: fix function pointer type mismatch
+Content-Language: en-US, fr
+To: Arnd Bergmann <arnd@kernel.org>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Kevin Hilman <khilman@baylibre.com>,
+ Jerome Brunet <jbrunet@baylibre.com>,
  Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
  <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
  linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240213101220.459641-1-arnd@kernel.org>
-Content-Language: en-US, fr
+References: <20240213101607.460930-1-arnd@kernel.org>
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
  GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
@@ -104,94 +104,53 @@ Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
  QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
 Organization: Linaro Developer Services
-In-Reply-To: <20240213101220.459641-1-arnd@kernel.org>
+In-Reply-To: <20240213101607.460930-1-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 13/02/2024 11:11, Arnd Bergmann wrote:
+On 13/02/2024 11:15, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Casting between incompatible function types causes a warning with clang-16
-> because it breaks control flow integrity (KCFI) rules:
+> clang-16 warns about casting functions to incompatible types, as is done
+> here to call clk_disable_unprepare:
 > 
-> sound/soc/meson/aiu.c:243:12: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    243 |                                        (void(*)(void *))clk_disable_unprepare,
->        |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/device.h:406:34: note: expanded from macro 'devm_add_action_or_reset'
->    406 |         __devm_add_action_or_reset(dev, action, data, #action)
->        |                                         ^~~~~~
-> sound/soc/meson/t9015.c:274:4: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    274 |                         (void(*)(void *))clk_disable_unprepare,
->        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/device.h:406:34: note: expanded from macro 'devm_add_action_or_reset'
->    406 |         __devm_add_action_or_reset(dev, action, data, #action)
->        |                                         ^~~~~~
+> drivers/nvmem/meson-efuse.c:78:12: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>     78 |                                        (void(*)(void *))clk_disable_unprepare,
 > 
-> These two meson drivers cast clk_disable_unprepare() into a different type
-> in order to have it automatically called from the driver relase. Add
-> trivial helpers to do the same using correct types.
+> Address this with a trivial helper function that adjusts the return code.
 > 
-> Fixes: 33901f5b9b16 ("ASoC: meson: add t9015 internal DAC driver")
-> Fixes: 6ae9ca9ce986 ("ASoC: meson: aiu: add i2s and spdif support")
+> Fixes: 611fbca1c861 ("nvmem: meson-efuse: add peripheral clock")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   sound/soc/meson/aiu.c   | 9 ++++++---
->   sound/soc/meson/t9015.c | 9 ++++++---
->   2 files changed, 12 insertions(+), 6 deletions(-)
+>   drivers/nvmem/meson-efuse.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> diff --git a/sound/soc/meson/aiu.c b/sound/soc/meson/aiu.c
-> index 7109b81cc3d0..211f360df284 100644
-> --- a/sound/soc/meson/aiu.c
-> +++ b/sound/soc/meson/aiu.c
-> @@ -209,6 +209,11 @@ static const char * const aiu_spdif_ids[] = {
->   	[MCLK]	= "spdif_mclk_sel"
+> diff --git a/drivers/nvmem/meson-efuse.c b/drivers/nvmem/meson-efuse.c
+> index b922df99f9bc..3b9e31d7d073 100644
+> --- a/drivers/nvmem/meson-efuse.c
+> +++ b/drivers/nvmem/meson-efuse.c
+> @@ -38,6 +38,11 @@ static const struct of_device_id meson_efuse_match[] = {
 >   };
+>   MODULE_DEVICE_TABLE(of, meson_efuse_match);
 >   
-> +static void aiu_clk_disable(void *clk)
+> +static void meson_efuse_clk_disable(void *clk)
 > +{
 > +	clk_disable_unprepare(clk);
 > +}
 > +
->   static int aiu_clk_get(struct device *dev)
+>   static int meson_efuse_probe(struct platform_device *pdev)
 >   {
->   	struct aiu *aiu = dev_get_drvdata(dev);
-> @@ -239,9 +244,7 @@ static int aiu_clk_get(struct device *dev)
+>   	struct device *dev = &pdev->dev;
+> @@ -74,9 +79,7 @@ static int meson_efuse_probe(struct platform_device *pdev)
 >   		return ret;
 >   	}
 >   
 > -	ret = devm_add_action_or_reset(dev,
 > -				       (void(*)(void *))clk_disable_unprepare,
-> -				       aiu->pclk);
-> +	ret = devm_add_action_or_reset(dev, aiu_clk_disable, aiu->pclk);
->   	if (ret)
->   		dev_err(dev, "failed to add reset action on pclk");
->   
-> diff --git a/sound/soc/meson/t9015.c b/sound/soc/meson/t9015.c
-> index 9c6b4dac6893..e0f9a603a5e9 100644
-> --- a/sound/soc/meson/t9015.c
-> +++ b/sound/soc/meson/t9015.c
-> @@ -243,6 +243,11 @@ static const struct regmap_config t9015_regmap_config = {
->   	.max_register		= POWER_CFG,
->   };
->   
-> +static void t9015_clk_disable(void *clk)
-> +{
-> +	clk_disable_unprepare(clk);
-> +}
-> +
->   static int t9015_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> @@ -270,9 +275,7 @@ static int t9015_probe(struct platform_device *pdev)
+> -				       clk);
+> +	ret = devm_add_action_or_reset(dev, meson_efuse_clk_disable, clk);
+>   	if (ret) {
+>   		dev_err(dev, "failed to add disable callback");
 >   		return ret;
->   	}
->   
-> -	ret = devm_add_action_or_reset(dev,
-> -			(void(*)(void *))clk_disable_unprepare,
-> -			priv->pclk);
-> +	ret = devm_add_action_or_reset(dev, t9015_clk_disable, priv->pclk);
->   	if (ret)
->   		return ret;
->   
 
 Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
