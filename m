@@ -1,56 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0C310A19;
-	Tue, 13 Feb 2024 18:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEE71D69B;
+	Tue, 13 Feb 2024 19:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707850395; cv=none; b=OygNb+mXzLqKRGkIv6qwDhKNhyfbcMKSSawxBF/B5vwo4GVsFAQcBc1TSsrwD9DdO/BThbmsj2c8AM0q6xn4txJ8y7WnvlmulJUptCoX236wSU5kc28SsAb1Y8ONOGmSt4nu5e8BfVGmeCw9oNZ/h7XOk+SwSgw+GWZynp9VYaI=
+	t=1707852196; cv=none; b=d19R5B7PjLM/13vm5VZYbig/npshy0DGNnL67cjahzFOKNVWQPZXFXmLZZ+wqSvF/vIYLL+jQ3JZrMeACQFY1TsgaG81NGAsCea51eulXp0OiaGzzWIyW3sAFfxlhJJBUhL1FUEkrrgCF8v3nLqF/xjmDfPKMj45vpSNZn3993I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707850395; c=relaxed/simple;
-	bh=WvrOSKzDb/QYARjcr4xYBp2foTGTX0KofFoWltDye/c=;
+	s=arc-20240116; t=1707852196; c=relaxed/simple;
+	bh=T8LX06hU+fKY5LR3czaE//VC2pfABtqANfg5QAceH5M=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IZRTocw1o83IL5qbWvgaYXF4ealhcuSCrRl/AXPv8U6p/i+Ha1DCMqp9tdRIm8yZbKrHybbzmAy7jp+sGFoBpv2uehkxiw/KbpF3IRbexmln4iHFqWvvQZimFIMoB9YkbBJyjM+ObMUbudTnqsBQrzQyJ3bD3bW/iwKTFZmUvZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CNUKEV9y; arc=none smtp.client-ip=134.134.136.20
+	 Content-Disposition; b=WWLPNdA1Ns3g5Wafp9XBmpdxIMYUirROLb6F6UsDHnCINltAm7QIqapi2dnoyP76NPSbgICqlRommu1SUto2r5ZqapAgKvWjJf3KDukBSAYXNUUy/hL2vN8pRIL58Icj4UDWih/CRZxh5TDs27Zm61X/yyM4Js6ym6bPaHZEz3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dW0aOS3y; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CNUKEV9y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dW0aOS3y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707850393; x=1739386393;
+  t=1707852194; x=1739388194;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WvrOSKzDb/QYARjcr4xYBp2foTGTX0KofFoWltDye/c=;
-  b=CNUKEV9y+zLGmYEkwnSGpvq5gj+51GTcfAUmkn/C/bva5MmlzQuk7noW
-   AaqKXNiloWHFEqrcfOyg9l2ny2fwEPEMaUVjYKNhQJm+GAsc4fuKDODLg
-   JciXaDBEnXFrRNPD2vI+tNILU+SbzHKXw27HL1Go2YJ6f9GVstPg9ahBY
-   XM3EuEwTcvShpZ7T/7IJSE7peFgJ1ohj42fHZcbMgAor2wVC2X2rYjvHS
-   3tnXkyyAxN6yZzhqWa5WE8iUT9IJVsBB/HScB7ZUbFR6c0wkUfyjJ7WfN
-   Y0V4UtUXF5o0SEvAn4vHcF3MuaSRpgnTMRbGc7UFK3eWbChIrEXIuuwp3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="396308587"
+  bh=T8LX06hU+fKY5LR3czaE//VC2pfABtqANfg5QAceH5M=;
+  b=dW0aOS3yQwFoG7f39/sCwn3WXdUAhucmDgSEB+3oF5jTUfIYkLmIlxFi
+   tdrvjx4IDD0pyBRtFdZq45676OlurDdv9FBLM7pWkdJIw96FYH7VoAjoy
+   uJfodJTdFyuInQqcp8Zi7/g/dYoSO3SqAjkSgdUEDAXUeqnfzafW0AcDg
+   cCMKQmDI8xKjfNrnsXd6tmF6cLie2V7skzuAXg9TT3sWWYEnQkwbUkMt+
+   7OLu3y5PG98kb93Eps9pfFEBoMSlqh9InxQrE4e386aenwGmm7brcNDd6
+   erTqYfzGG8L8oxLmd/HwSsAdWxeDV7Tj6VfVkXajkY2dgLuEg9GQ34P8I
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1758297"
 X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
-   d="scan'208";a="396308587"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 10:53:12 -0800
+   d="scan'208";a="1758297"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 11:23:12 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
-   d="scan'208";a="34035162"
+X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
+   d="scan'208";a="7618618"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Feb 2024 10:53:11 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 13 Feb 2024 11:23:11 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rZxu0-0007zy-2Q;
-	Tue, 13 Feb 2024 18:53:08 +0000
-Date: Wed, 14 Feb 2024 02:52:10 +0800
+	id 1rZyN3-00081U-1b;
+	Tue, 13 Feb 2024 19:23:09 +0000
+Date: Wed, 14 Feb 2024 03:22:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sonny Jiang <sonny.jiang@amd.com>
+To: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alex Deucher <alexander.deucher@amd.com>, Leo Liu <leo.liu@amd.com>
-Subject: [agd5f:drm-next 358/374]
- drivers/gpu/drm/amd/amdgpu/vcn_v5_0_0.c:713:12: warning: stack frame size
- (2992) exceeds limit (2048) in 'vcn_v5_0_0_start'
-Message-ID: <202402140203.PIO7EJSa-lkp@intel.com>
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [ambarus:hyperbus 1/7] drivers/mtd/hyperbus/hyperbus-sfdp.c:343:18:
+ warning: no previous prototype for function 'hyperbus_sfdp_probe'
+Message-ID: <202402140306.TBxeImg6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,180 +59,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   ce311df91d73eaddc5489d4d63fb96c21e80f7cf
-commit: b6d1a06320519ac3bfda6ce81067a1bc409b9cff [358/374] drm/amdgpu: add VCN_5_0_0 IP block support
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240214/202402140203.PIO7EJSa-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project c08b90c50bcac9f3f563c79491c8dbcbe7c3b574)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402140203.PIO7EJSa-lkp@intel.com/reproduce)
+tree:   https://github.com/ambarus/linux-0day hyperbus
+head:   a15251683a61e8502ebc06584861bf9f5d84823b
+commit: b6d1b619a848f5a304ae59ed71a414058e8d3013 [1/7] mtd: hyperbus: Introduce SFDP probe
+config: arm-randconfig-004-20240213 (https://download.01.org/0day-ci/archive/20240214/202402140306.TBxeImg6-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402140306.TBxeImg6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402140203.PIO7EJSa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402140306.TBxeImg6-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/vcn_v5_0_0.c:713:12: warning: stack frame size (2992) exceeds limit (2048) in 'vcn_v5_0_0_start' [-Wframe-larger-than]
-     713 | static int vcn_v5_0_0_start(struct amdgpu_device *adev)
-         |            ^
-   1 warning generated.
+   In file included from drivers/mtd/hyperbus/hyperbus-sfdp.c:6:
+   In file included from include/linux/mtd/gen_probe.h:10:
+   include/linux/mtd/flashchip.h:77:2: error: unknown type name 'wait_queue_head_t'
+           wait_queue_head_t wq; /* Wait on here when we're waiting for the chip
+           ^
+>> drivers/mtd/hyperbus/hyperbus-sfdp.c:343:18: warning: no previous prototype for function 'hyperbus_sfdp_probe' [-Wmissing-prototypes]
+   struct mtd_info *hyperbus_sfdp_probe(struct map_info *map)
+                    ^
+   drivers/mtd/hyperbus/hyperbus-sfdp.c:343:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct mtd_info *hyperbus_sfdp_probe(struct map_info *map)
+   ^
+   static 
+   1 warning and 1 error generated.
 
 
-vim +/vcn_v5_0_0_start +713 drivers/gpu/drm/amd/amdgpu/vcn_v5_0_0.c
+vim +/hyperbus_sfdp_probe +343 drivers/mtd/hyperbus/hyperbus-sfdp.c
 
-   705	
-   706	/**
-   707	 * vcn_v5_0_0_start - VCN start
-   708	 *
-   709	 * @adev: amdgpu_device pointer
-   710	 *
-   711	 * Start VCN block
-   712	 */
- > 713	static int vcn_v5_0_0_start(struct amdgpu_device *adev)
-   714	{
-   715		volatile struct amdgpu_vcn4_fw_shared *fw_shared;
-   716		struct amdgpu_ring *ring;
-   717		uint32_t tmp;
-   718		int i, j, k, r;
-   719	
-   720		if (adev->pm.dpm_enabled)
-   721			amdgpu_dpm_enable_uvd(adev, true);
-   722	
-   723		for (i = 0; i < adev->vcn.num_vcn_inst; ++i) {
-   724			fw_shared = adev->vcn.inst[i].fw_shared.cpu_addr;
-   725	
-   726			if (adev->pg_flags & AMD_PG_SUPPORT_VCN_DPG) {
-   727				r = vcn_v5_0_0_start_dpg_mode(adev, i, adev->vcn.indirect_sram);
-   728				continue;
-   729			}
-   730	
-   731			/* disable VCN power gating */
-   732			vcn_v5_0_0_disable_static_power_gating(adev, i);
-   733	
-   734			/* set VCN status busy */
-   735			tmp = RREG32_SOC15(VCN, i, regUVD_STATUS) | UVD_STATUS__UVD_BUSY;
-   736			WREG32_SOC15(VCN, i, regUVD_STATUS, tmp);
-   737	
-   738			/* enable VCPU clock */
-   739			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL),
-   740				UVD_VCPU_CNTL__CLK_EN_MASK, ~UVD_VCPU_CNTL__CLK_EN_MASK);
-   741	
-   742			/* disable master interrupt */
-   743			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_MASTINT_EN), 0,
-   744				~UVD_MASTINT_EN__VCPU_EN_MASK);
-   745	
-   746			/* enable LMI MC and UMC channels */
-   747			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_LMI_CTRL2), 0,
-   748				~UVD_LMI_CTRL2__STALL_ARB_UMC_MASK);
-   749	
-   750			tmp = RREG32_SOC15(VCN, i, regUVD_SOFT_RESET);
-   751			tmp &= ~UVD_SOFT_RESET__LMI_SOFT_RESET_MASK;
-   752			tmp &= ~UVD_SOFT_RESET__LMI_UMC_SOFT_RESET_MASK;
-   753			WREG32_SOC15(VCN, i, regUVD_SOFT_RESET, tmp);
-   754	
-   755			/* setup regUVD_LMI_CTRL */
-   756			tmp = RREG32_SOC15(VCN, i, regUVD_LMI_CTRL);
-   757			WREG32_SOC15(VCN, i, regUVD_LMI_CTRL, tmp |
-   758				UVD_LMI_CTRL__WRITE_CLEAN_TIMER_EN_MASK |
-   759				UVD_LMI_CTRL__MASK_MC_URGENT_MASK |
-   760				UVD_LMI_CTRL__DATA_COHERENCY_EN_MASK |
-   761				UVD_LMI_CTRL__VCPU_DATA_COHERENCY_EN_MASK);
-   762	
-   763			vcn_v5_0_0_mc_resume(adev, i);
-   764	
-   765			/* VCN global tiling registers */
-   766			WREG32_SOC15(VCN, i, regUVD_GFX10_ADDR_CONFIG,
-   767				adev->gfx.config.gb_addr_config);
-   768	
-   769			/* unblock VCPU register access */
-   770			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_RB_ARB_CTRL), 0,
-   771				~UVD_RB_ARB_CTRL__VCPU_DIS_MASK);
-   772	
-   773			/* release VCPU reset to boot */
-   774			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL), 0,
-   775				~UVD_VCPU_CNTL__BLK_RST_MASK);
-   776	
-   777			for (j = 0; j < 10; ++j) {
-   778				uint32_t status;
-   779	
-   780				for (k = 0; k < 100; ++k) {
-   781					status = RREG32_SOC15(VCN, i, regUVD_STATUS);
-   782					if (status & 2)
-   783						break;
-   784					mdelay(10);
-   785					if (amdgpu_emu_mode == 1)
-   786						msleep(1);
-   787				}
-   788	
-   789				if (amdgpu_emu_mode == 1) {
-   790					r = -1;
-   791					if (status & 2) {
-   792						r = 0;
-   793						break;
-   794					}
-   795				} else {
-   796					r = 0;
-   797					if (status & 2)
-   798						break;
-   799	
-   800					dev_err(adev->dev,
-   801						"VCN[%d] is not responding, trying to reset the VCPU!!!\n", i);
-   802					WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL),
-   803								UVD_VCPU_CNTL__BLK_RST_MASK,
-   804								~UVD_VCPU_CNTL__BLK_RST_MASK);
-   805					mdelay(10);
-   806					WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_VCPU_CNTL), 0,
-   807								~UVD_VCPU_CNTL__BLK_RST_MASK);
-   808	
-   809					mdelay(10);
-   810					r = -1;
-   811				}
-   812			}
-   813	
-   814			if (r) {
-   815				dev_err(adev->dev, "VCN[%d] is not responding, giving up!!!\n", i);
-   816				return r;
-   817			}
-   818	
-   819			/* enable master interrupt */
-   820			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_MASTINT_EN),
-   821					UVD_MASTINT_EN__VCPU_EN_MASK,
-   822					~UVD_MASTINT_EN__VCPU_EN_MASK);
-   823	
-   824			/* clear the busy bit of VCN_STATUS */
-   825			WREG32_P(SOC15_REG_OFFSET(VCN, i, regUVD_STATUS), 0,
-   826				~(2 << UVD_STATUS__VCPU_REPORT__SHIFT));
-   827	
-   828			ring = &adev->vcn.inst[i].ring_enc[0];
-   829			WREG32_SOC15(VCN, i, regVCN_RB1_DB_CTRL,
-   830				ring->doorbell_index << VCN_RB1_DB_CTRL__OFFSET__SHIFT |
-   831				VCN_RB1_DB_CTRL__EN_MASK);
-   832	
-   833			WREG32_SOC15(VCN, i, regUVD_RB_BASE_LO, ring->gpu_addr);
-   834			WREG32_SOC15(VCN, i, regUVD_RB_BASE_HI, upper_32_bits(ring->gpu_addr));
-   835			WREG32_SOC15(VCN, i, regUVD_RB_SIZE, ring->ring_size / 4);
-   836	
-   837			tmp = RREG32_SOC15(VCN, i, regVCN_RB_ENABLE);
-   838			tmp &= ~(VCN_RB_ENABLE__RB1_EN_MASK);
-   839			WREG32_SOC15(VCN, i, regVCN_RB_ENABLE, tmp);
-   840			fw_shared->sq.queue_mode |= FW_QUEUE_RING_RESET;
-   841			WREG32_SOC15(VCN, i, regUVD_RB_RPTR, 0);
-   842			WREG32_SOC15(VCN, i, regUVD_RB_WPTR, 0);
-   843	
-   844			tmp = RREG32_SOC15(VCN, i, regUVD_RB_RPTR);
-   845			WREG32_SOC15(VCN, i, regUVD_RB_WPTR, tmp);
-   846			ring->wptr = RREG32_SOC15(VCN, i, regUVD_RB_WPTR);
-   847	
-   848			tmp = RREG32_SOC15(VCN, i, regVCN_RB_ENABLE);
-   849			tmp |= VCN_RB_ENABLE__RB1_EN_MASK;
-   850			WREG32_SOC15(VCN, i, regVCN_RB_ENABLE, tmp);
-   851			fw_shared->sq.queue_mode &= ~(FW_QUEUE_RING_RESET | FW_QUEUE_DPG_HOLD_OFF);
-   852		}
-   853	
-   854		return 0;
-   855	}
-   856	
+   342	
+ > 343	struct mtd_info *hyperbus_sfdp_probe(struct map_info *map)
 
 -- 
 0-DAY CI Kernel Test Service
