@@ -1,66 +1,65 @@
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B3562147
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 22:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE01629E4;
+	Tue, 13 Feb 2024 23:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707862746; cv=none; b=gu8e3SZddq3rjUs/DJuncD9duaJuN9wgSTkcF/iWlrIcBMLst4XgzmbW66Jv8yChftKjvH0QqD57GkU4B0ecL2AB1QM2thwUSs7ilgotomu1v58p4g11VgTUDaxZgmI9LLh1vQaH/INW8zQghHjyZPJ5KdOn3eildaWJBg8sOhY=
+	t=1707865770; cv=none; b=FGdNYaTKwl2+xbPMm14NprtjGU2oDTzChrJAxiAGhR7tTwiQNPsvybalQFz6+OMQq97QJNlEfWrafE8VBWuBeVBeHCSxoSXJRuskJvvJcP7RS99Q2KFeiuf2L7dZlGm+HaVYHXSGd4c5nbQZmInyoB/DlbJXpi3ux+a1kx0vGBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707862746; c=relaxed/simple;
-	bh=fupPzFq/mOzPQg49g5zT0ntfs9nXTHiAGCPpCwKSJQA=;
+	s=arc-20240116; t=1707865770; c=relaxed/simple;
+	bh=Ruv49r1sZc5AQTJvy6hZxTyUCUODMyOJZvp+oKDoEfk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CLKMXs0Ln3boVZAoOa4HqjdP9oBafdFtkdUNF6fTRTQe87URqHcWdcVk4YFTw4ZAh8+ib0BU6gzfxUue8j8jZXJyK004+MWQ68S2x3cgoGsDV5qAUMuTGu3/QjiMhHKmoHt2Ic5QVPl0eSFHW7+HHSRGvaT+dkXqutcH6SvkCwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mwzmgUZU; arc=none smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=j59AV/L7aavmy9aoGYz/EwYoFIaHhix4N71vdpN7KQ0eE6G4ZrdOn+lCCZ+oYqdgLT8AgKlhwQPJYzrhnn56CVTa95EqXivW/khGg5YuOlGby1ZYREw8Q5mw2lpM0UyuYJF5CaobRMt/dVNjxEx8L2xiaa9Nu5xjl1SmEsz3vxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UZugletF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mwzmgUZU"
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-219108b8e9cso2419119fac.2
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 14:19:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707862744; x=1708467544; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEtsz3nbQBwXPKC2RpUXbyPnr0oHPliF/lmcdhUWxA0=;
-        b=mwzmgUZUm7+AePCAZYKRLBpAzP6OMRfHLz1crjABzv8yTsUfACUmpRtQmMA1+w9Azt
-         A1tdMXxeKYwFmKjxoJC+jfVKgY0At3KbRw8h6bx4vTokP6ZCG5AuAq7xxoA2enLw6TQK
-         GGwiytCyFcfPh8naAGaAjd008SCM/LWy50pDA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707862744; x=1708467544;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NEtsz3nbQBwXPKC2RpUXbyPnr0oHPliF/lmcdhUWxA0=;
-        b=XQ2APjvFLeWed4WxmXmHxEhr2l1xx0nY9TLkFpYUS9D2z4gkizOLIajuFLgY4Ed/yf
-         38VGeTRBS903dqcJ1S5UDgi4BWmBt5U4WeDyxSGuhIYsNoxRXk6/gUxNuX457w4dJ8lx
-         fRiccSXvWNUNNLjqrFLACQc75kYF0U308tN8Dtc26d9VoAb3wkjsakxHqiAuZfuGN/W+
-         yyXiRtWW68ry6RrvugU2fCA4aJQEPINKmR70HT0yrqdxLzVzspxlX6iUD/S6G/XVkHhn
-         tecKNErmoAtNg3qYTAyILewlw+c5xSJT2LV3/lr4tGU6OnGgGYXXnbnFfKNAXZ4yCEj6
-         /zKw==
-X-Forwarded-Encrypted: i=1; AJvYcCWAmVHO1ZC55lXC345Y+9176Qhty+G+1zYFqLslpIVOlUX/Nwqp9DAprzHG/CWzOlzwCHsD/aMafYuOlbCvkjrHQZRxig==
-X-Gm-Message-State: AOJu0YxP+Q4HGIQlacTM0jU9OJ9Q0CsvZmWzO8AbafRpsegnyJpgFI1p
-	ON4npYCW0Kjr3etcsWGa8yJlEaC81itU6VCB08cesCjBIATsBDy0jagfM2uPaQ==
-X-Google-Smtp-Source: AGHT+IHTEQ8wwSveSYvl+t5iWH5jHvKp2JNEd3pVIZ53DZ3GINpiRg01YzM7bjG1Y+XAbeMm+x+wJg==
-X-Received: by 2002:a05:6871:3a13:b0:21a:80cd:734a with SMTP id pu19-20020a0568713a1300b0021a80cd734amr874714oac.52.1707862743756;
-        Tue, 13 Feb 2024 14:19:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVqeObbu+ItRZ+eJqf1kncpf5EJ3lH1k5WBhURpbH35pDNdgVhmgrUO67MPvRBOssCYpMpuZghAsI3gVHGWXQ4zr5EoG3JEt5HFIFo4MXQb4GLBfeW2Dv2KZ0v5EjBveV4M/WQpFaCz4yzmL+T4uwyZ86MetJ1r1AGxX1kRO6hoPoQRG11vhleH5xqUGld6pFZPXIGLUB1ZGyf2YJVkUL45tEUt82021f7fv6OGKR0LrZh5dLpaZQ/uCXbrNxGplqQbgaVf1wYD2j6RBG8myUgu97IRAqeuJpaSOneq4dc4fblBs6CE8zzvLMFec+AuCgM+CY+hPM0vF5opoCQPMAFIjCdgpVWJbETbd9cjuiq1Y6n0
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ck25-20020a056a02091900b005d8b89bbf20sm2522310pgb.63.2024.02.13.14.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 14:19:03 -0800 (PST)
-Date: Tue, 13 Feb 2024 14:19:02 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com, maskray@google.com,
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: Fix changing ELF file type for output of
- gen_btf for big endian
-Message-ID: <202402131418.3DB3FF7@keescook>
-References: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UZugletF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707865768; x=1739401768;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ruv49r1sZc5AQTJvy6hZxTyUCUODMyOJZvp+oKDoEfk=;
+  b=UZugletFmycMvJSQkKZtJ9IrADxrxfekD+uyAyl93Na+4PzwwhsVb9Rw
+   3och0r0MF5NMaQY8mDAw9/6Ou2MRTv7lCzg20K2C1gQH5zaf1+rGM7rIR
+   WLFJP6b9lKC1fddyIk/5NbkWxM/CByN+EYaJ79wliJ5L9uz2PME5JwlD4
+   5GrIgj/wZ9NUlbEK2BIweBHnnrqTmQgO2ibafxzOq4UbjT9Wt1/IUH69z
+   AITal4jEqLdi+D94WSL+BpRrivSp/LXUL/JY5dSnpV5rbpSdKlzCZ/OjW
+   +ViO2ifqWIVqnottoIF+E7Xno4me9XgldRv8foInn+/qPf5wFZIJvFycS
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="2020511"
+X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
+   d="scan'208";a="2020511"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 15:09:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
+   d="scan'208";a="2997406"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 13 Feb 2024 15:09:20 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ra1tt-00088m-2E;
+	Tue, 13 Feb 2024 23:09:17 +0000
+Date: Wed, 14 Feb 2024 07:09:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+	tj@kernel.org, muchun.song@linux.dev
+Subject: Re: [PATCH v3 29/35] mm: vmalloc: Enable memory allocation profiling
+Message-ID: <202402140643.Sy6Ng0Rw-lkp@intel.com>
+References: <20240212213922.783301-30-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,51 +68,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
+In-Reply-To: <20240212213922.783301-30-surenb@google.com>
 
-On Mon, Feb 12, 2024 at 07:05:10PM -0700, Nathan Chancellor wrote:
-> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
-> changed the ELF type of .btf.vmlinux.bin.o to ET_REL via dd, which works
-> fine for little endian platforms:
-> 
->    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
->   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
->   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
-> 
-> However, for big endian platforms, it changes the wrong byte, resulting
-> in an invalid ELF file type, which ld.lld rejects:
-> 
->    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
->   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
->   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
-> 
->   Type:                              <unknown>: 103
-> 
->   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
-> 
-> Fix this by updating the entire 16-bit e_type field rather than just a
-> single byte, so that everything works correctly for all platforms and
-> linkers.
-> 
->    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
->   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
->   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
-> 
->   Type:                              REL (Relocatable file)
-> 
-> While in the area, update the comment to mention that binutils 2.35+
-> matches LLD's behavior of rejecting an ET_EXEC input, which occurred
-> after the comment was added.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
-> Link: https://github.com/llvm/llvm-project/pull/75643
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Suren,
 
-Writing the u16 looks fine to me.
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+[also build test ERROR on linus/master v6.8-rc4]
+[cannot apply to akpm-mm/mm-everything vbabka-slab/for-next next-20240213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/lib-string_helpers-Add-flags-param-to-string_get_size/20240213-054335
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20240212213922.783301-30-surenb%40google.com
+patch subject: [PATCH v3 29/35] mm: vmalloc: Enable memory allocation profiling
+config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20240214/202402140643.Sy6Ng0Rw-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project c08b90c50bcac9f3f563c79491c8dbcbe7c3b574)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402140643.Sy6Ng0Rw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402140643.Sy6Ng0Rw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/mips/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:15:
+   In file included from include/linux/socket.h:8:
+   In file included from include/linux/uio.h:10:
+   In file included from include/linux/mm_types.h:5:
+   In file included from include/linux/mm_types_task.h:13:
+   In file included from arch/mips/include/asm/page.h:200:
+   In file included from arch/mips/include/asm/io.h:563:
+   In file included from include/asm-generic/io.h:994:
+   In file included from include/linux/vmalloc.h:6:
+>> include/linux/sched.h:1338:30: error: field has incomplete type 'struct tlbflush_unmap_batch'
+    1338 |         struct tlbflush_unmap_batch     tlb_ubc;
+         |                                         ^
+   include/linux/sched.h:1338:9: note: forward declaration of 'struct tlbflush_unmap_batch'
+    1338 |         struct tlbflush_unmap_batch     tlb_ubc;
+         |                ^
+>> include/linux/sched.h:1343:20: error: field has incomplete type 'struct page_frag'
+    1343 |         struct page_frag                task_frag;
+         |                                         ^
+   include/linux/sched.h:1343:9: note: forward declaration of 'struct page_frag'
+    1343 |         struct page_frag                task_frag;
+         |                ^
+   2 errors generated.
+   make[3]: *** [scripts/Makefile.build:116: arch/mips/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1191: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +1338 include/linux/sched.h
+
+af7f588d8f7355 Mathieu Desnoyers 2022-11-22  1337  
+72b252aed506b8 Mel Gorman        2015-09-04 @1338  	struct tlbflush_unmap_batch	tlb_ubc;
+72b252aed506b8 Mel Gorman        2015-09-04  1339  
+5eca1c10cbaa9c Ingo Molnar       2017-02-06  1340  	/* Cache last used pipe for splice(): */
+b92ce55893745e Jens Axboe        2006-04-11  1341  	struct pipe_inode_info		*splice_pipe;
+5640f7685831e0 Eric Dumazet      2012-09-23  1342  
+5640f7685831e0 Eric Dumazet      2012-09-23 @1343  	struct page_frag		task_frag;
+5640f7685831e0 Eric Dumazet      2012-09-23  1344  
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
