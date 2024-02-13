@@ -1,83 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CA94F5FA;
-	Mon, 12 Feb 2024 23:48:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A1A8F4D;
+	Tue, 13 Feb 2024 00:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707781733; cv=none; b=lCGyLHOX4PxwBBkaIsYnmU3egcYxP99fyzigzgwNIu6vtylkwDK1ba72Da2YMkc0ZennZj1Lfbn9ZUEHGZT1bofJ6OQXWCR1L3S39kWW3eOtctL7JtftzKId7rUeCfwjcL1y4BhF1pmhAdInk2savTs+MQz1tPWM/bbTv0HehO0=
+	t=1707783351; cv=none; b=QMqStliUnZ9FNemRheOolVdzBYxE9TWPk/BYUEIhQd+gfydM+KnKn0UmclDv2Ur/iPKknojuC2spg/H5MLealwEvPaHnVUMGxwes8Uk4duBhpcB0hYLQmT7772wnr2cgiIon4Er0s0UYj2Adu2CMSiUZ4d/JQa+TqZl+U7+YaLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707781733; c=relaxed/simple;
-	bh=N0FaQE0vHSopm6AME+8az+/MTsHIzXcz1fDK/aRn3BQ=;
+	s=arc-20240116; t=1707783351; c=relaxed/simple;
+	bh=pGauPJe3pc7ZiPndNvLC3iAdr8bnuuyJx3XLyQ1nH+w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tGF8ltCt7rlhqcSwkijniQJM+W39EOiZpOyG2qnhIDXmyOVknNsdJ3df1jckY1THt8VTJ/zJGhtuJjXrsTggl+P1ZsTj0nV0rYJz+XbaYBHDcs57XY3q7oeS7VVzveh4fsoalO9IvxVNz4Ohdzxe6m/VgHh/Zs81hGAyA94hOTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=patan0HD; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=SbEb/2IKfxuZi/U/wStm/6irA3oNrvghU+I82kB9OVEqOOgjVIarOQuGQqDExE9NUQK7bd24YAVb8X9BB2S9JuUgEplyGL7etbhSAp2Qa+6pLaIbopMki4IJ/5p0+i0HNgLzxTmXwqo9DaPCdSY0eYinuMK4YwhUMKKnE1VrKbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HRu7Kq5N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="patan0HD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AD5C433F1;
-	Mon, 12 Feb 2024 23:48:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HRu7Kq5N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF56C433C7;
+	Tue, 13 Feb 2024 00:15:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707781732;
-	bh=N0FaQE0vHSopm6AME+8az+/MTsHIzXcz1fDK/aRn3BQ=;
+	s=k20201202; t=1707783350;
+	bh=pGauPJe3pc7ZiPndNvLC3iAdr8bnuuyJx3XLyQ1nH+w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=patan0HD5soE+gBudXrfudQL98WiQ/5vfwvnHXCboGYtCztc4VwPbnKE8WsW+Zrrf
-	 UrkMMFWAezzDX8xAIwF8/UY2p/MgyOO/luOk1an0afJ9R0LLcqNfXtiyFFpBYIXtcI
-	 hOPpUzZzfrlueXD/lDLBSB1gu+vE69gS2JLhPZUZLei1VvXHQNwW0p8YVEbbW2Q5PC
-	 VjroYDDKUmfUyeCbYQWgEsYX/3bwMhn3rpH3rtsVCZ5ELSC+oRj2QZ+06RQSuIo8Ru
-	 g98tACk1Em22+kSJk5booXP6OFlcAixlWiSzTu/aDFyOP8bMzwWRKRO8RUCgCH4eQG
-	 r+RIPW4Acq3SA==
-Date: Mon, 12 Feb 2024 16:48:50 -0700
+	b=HRu7Kq5N/r4Q6jC40gbj2fXRkIiJyYdybBD3jAEG3u44DQawDKCCRf+OriNIkmHaM
+	 O3xoK/t+u2mlk2oGrPlWC1AVzhoCdxc4H/vMthGgbSyd2JPogTpSca5HWd1ojKQ+Hu
+	 /I0MMY0o/MgkV63FyVi9cNFSYbRPOIURWXvlLAUpTxLJzeO6/LGRxtHp3q4jOh0tf3
+	 kFviHv6324k/eNaAEuPr5p815McbZcv53aZhuxFNiZwumJpmJiH/e2/hT+y/Cj1od2
+	 uI4ynLfy+l2Uv8xkpD76mgu2SIMTCWDt1l2CkMICuGW4EHWSEaGv/DuvHsMH5z4oeL
+	 kFMgaFSlAMBMA==
+Date: Mon, 12 Feb 2024 17:15:48 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: Prebuilt LLVM 18.1.0-rc2 uploaded
-Message-ID: <20240212234850.GB3221859@dev-arch.thelio-3990X>
-References: <20240208002841.GA2601476@dev-arch.thelio-3990X>
- <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+	svens@linux.ibm.com, maskray@google.com, ndesaulniers@google.com,
+	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 04/11] s390: vmlinux.lds.S: Discard unnecessary sections
+Message-ID: <20240213001548.GA3272429@dev-arch.thelio-3990X>
+References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
+ <20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org>
+ <20240212135511.65142-A-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
+In-Reply-To: <20240212135511.65142-A-hca@linux.ibm.com>
 
-Hi Miguel,
-
-On Sat, Feb 10, 2024 at 05:36:01PM +0100, Miguel Ojeda wrote:
-> On Thu, Feb 8, 2024 at 1:28 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > I have built and uploaded a prebuilt version of LLVM 18.1.0-rc2 to
-> > https://mirrors.edge.kernel.org/pub/tools/llvm/.
-> >
-> > As with Linux -rc releases, this is not the final version that will
-> > ship. If you run across any issues, especially ones that were not
-> > present in earlier LLVM releases, please consider reporting them to us
-> > so that we have a chance to investigate and fix them before the final
-> > release.
+On Mon, Feb 12, 2024 at 02:55:11PM +0100, Heiko Carstens wrote:
+> On Wed, Feb 07, 2024 at 05:14:56PM -0700, Nathan Chancellor wrote:
+> > When building with CONFIG_LD_ORPHAN_WARN after selecting
+> > CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
+> > ELF sections that are unnecessary for the kernel's purposes.
+> > 
+> >   s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
+> >   s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
+> >   s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
+> >   s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
+> > 
+> > Add them to the discards to clear up the warnings, which matches other
+> > architectures.
+> > 
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  arch/s390/kernel/vmlinux.lds.S | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> ...
+> > -		*(.interp)
+> > +		*(.interp .dynamic)
+> > +		*(.dynstr .hash .gnu.hash)
 > 
-> I took a look at the LLVM 18 prerelease to see if these would work
-> with Rust for e.g. CI and other users (instead of using the
-> LLVM-provided apt ones, for instance), and noticed it does not bundle
-> `libclang.so`.
+> This seems to be wrong, since it leads to 1000s of error messages when
+> using the "crash" utility e.g. when looking into a live dump of system
+> with the generated debug info:
 > 
-> Would it be possible to include it so that we can use `bindgen` and
-> thus enable Rust with them?
+> BFD: /usr/lib/debug/usr/lib/modules/6.8.0-20240211.rc3.git0.bdca9b8dcf3f.300.fc39.s390x/vmlinux: attempt to load strings from a non-string section (number 0)
 > 
-> I understand they are intended to be minimal toolchains, but if you
-> think it would not be an unreasonable overhead, then it would be great
-> to have it.
+> I will change this commit to the below; it seems to work and is in
+> line with other architectures:
 
-Absolutely, I am more than happy to include libclang.so and anything
-else that would be useful for the kernel. Everything gets built but I
-only install what has felt needed for the kernel, so there is no real
-overhead aside from package size, which obviously should not increase
-much with this change. I've added the targets to my build scripts and
-kicked off a set of builds. If they finish successfully, I will upload
-them so that you can test them out and make sure they will work.
+Thanks a lot for catching that, your final change seems good to me.
+Here's to hoping I did not get anything else wrong :)
 
-Thanks for bringing this up and giving them a go, cheers!
+Cheers,
 Nathan
+
+> -----
+> 
+> When building with CONFIG_LD_ORPHAN_WARN after selecting
+> CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
+> ELF sections:
+> 
+>   s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
+>   s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
+>   s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
+>   s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
+> 
+> Explicitly keep those sections like other architectures when
+> CONFIG_RELOCATABLE is enabled, which is always true for s390.
+> 
+> [hca@linux.ibm.com: keep sections instead of discarding]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://lore.kernel.org/r/20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org
+> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+> ---
+>  arch/s390/kernel/vmlinux.lds.S | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
+> index 661a487a3048..d46e3c383952 100644
+> --- a/arch/s390/kernel/vmlinux.lds.S
+> +++ b/arch/s390/kernel/vmlinux.lds.S
+> @@ -200,6 +200,21 @@ SECTIONS
+>  		*(.rela*)
+>  		__rela_dyn_end = .;
+>  	}
+> +	.dynamic ALIGN(8) : {
+> +		*(.dynamic)
+> +	}
+> +	.dynsym ALIGN(8) : {
+> +		*(.dynsym)
+> +	}
+> +	.dynstr ALIGN(8) : {
+> +		*(.dynstr)
+> +	}
+> +	.hash ALIGN(8) : {
+> +		*(.hash)
+> +	}
+> +	.gnu.hash ALIGN(8) : {
+> +		*(.gnu.hash)
+> +	}
+>  
+>  	. = ALIGN(PAGE_SIZE);
+>  	__init_end = .;		/* freed after init ends here */
+> -- 
+> 2.40.1
+> 
