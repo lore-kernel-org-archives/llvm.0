@@ -1,105 +1,202 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5193917CD
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 02:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4AF849C
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 02:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707791330; cv=none; b=E177xYRWVrEXDFZLRzfZ+GvsCTBtcjlliFfMcoa+r6r1AsMjEgrino3i042crMoOfoD7SK5RHuQ1/1gYcODpbeC7ue2wBTP4vLwmPntyNnzeMHQQ5Ofa5PQ+x9dPKICJahc+nR2u7w3S0Iqp6ATurDnuI68tvcdRAxG6u4HW1Tc=
+	t=1707792469; cv=none; b=OGERSMrA8VPTTOeE7DYWBNEhCrtXb+67WXmR5TjszQNeBJfavZ6KxnwnB+75y47tZcqjN+vWPK/RcMnEatuVBdzmbSowsgzgZqXkR8nBN95QAx6XU/e4EzBgSgoaAYKV7s/Pid0Z9FC0pkQu/g61LP5ePAfkA2jKB4/5ArfPonE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707791330; c=relaxed/simple;
-	bh=lS7jLHLrY8Ciy5hAj58zcA0N7SPeX/1bhP9tKSiltgo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CP+y2Qu2cdYaMS2OAePFGJITg7FzG+be8HKhacjPJPiQ4S5oHod0SF3sJjCXFRi/C+/Mat4q+XxBEOj42hLLpC6q51Y7UJSfmDQvtiXcmznrDWcwzxIhKhvFD1XM5iwZMmXWOl3VpYflpjDbkmCMRBBUUO1dl2Z7yv58ImyFWuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SBVvDCNI; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707792469; c=relaxed/simple;
+	bh=1ENHKjt3Uc2mr1Ke1IQDakTrAi2JOlr6brAtfQuPsQY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KMY8o31882xo5kVqp/6JrPXmgTpHv4HkSzKYQkXHSfmHpbJ/MvcFdUeo6qC82QY3sQmF1qWJNc9QAcOCazg3CyZqTWYCnYSgjTpuyvaJPeApG6KyUWsJJsN8tDrluC9hFdwmCuyaajBNRUrQwzZ6lvOi92D2vU3O1b3Xjz1B3c4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yVCRnV7B; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SBVvDCNI"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3c02adddb8eso2067743b6e.0
-        for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 18:28:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yVCRnV7B"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-560530f4e21so3545a12.1
+        for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 18:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707791328; x=1708396128; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1707792466; x=1708397266; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f/OmXCx8g8elO8SoedySQ4pLKPgoxvCMvmMdcFHXu4s=;
-        b=SBVvDCNIobQgBcDpbPel0/byTjpDu4SZpea1bqVT775pS6OUCvvB1BnhFVKYRSm/kZ
-         2maXRzbNYRdt+ZMWp4c7Lqvb+zWkCneSOo0C1yzgBV5BvCSiX6UNvq4axLENDun5bTHV
-         rMtEiWRVA6Yh9hCurnsH5tfTwxhaj+G3JISZy+2eXPtrmsLfg2BVjoXDl+Q6JDxgkZQq
-         gpppu71O016z6tt6zDS/uLdghaBfpcfaxqeXnmH61R8D4e9pLLySlIinVlYzGBXm/5HX
-         xkwn6je9TY8llPweZzf6a4dWdEGix3fe21kQuIoOZFwnOBR3tGQKQmMy+PdyNNIzFiwN
-         bHbQ==
+        bh=zgrUTvQOJUYDuKbHFZKlpKXYvoGRnWvQmByrFkbKhpY=;
+        b=yVCRnV7BfDfVLLE4SshJG5dnQT0F2H5Pd/mUBBbn11LkIgsVbGIDojUGZ+cYmO7rOh
+         2AQlZMY6NPvUVb6+Z6I4/AyzAZkwwqZHXQq8QeOVdJvs8iv9LGX+JMmk4s04gdvNvO7q
+         mLeXd5vBXTW3C2WxprRFF8kSKriXr+N82WgvNU7nuPJW9knXIdcAdM1JP/ckL7WQqX/u
+         zPUOhv1B6uo4dUU5aQvYTYIOqIuAxuJ1cRafQ5ILlupn+iKSKUyvwq5kaQ3mdlqx+m5r
+         WLZP98dZAnqxTsTnshnp2CscRRajLRp9XswOgsKY/Dn6wZ58P+Dgr6L2jpd/1IqKXqP5
+         mANQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707791328; x=1708396128;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1707792466; x=1708397266;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=f/OmXCx8g8elO8SoedySQ4pLKPgoxvCMvmMdcFHXu4s=;
-        b=eJmxx3vm8D6Z6VtoiPQYzXxTn4++6sy1L53Q5YigrllAcZHUnqD+1p7WC3HCtu+won
-         tc0P8cCBlJTEpsCRhhJmejRoSvfwa0KmO31CVjvxzHePFOyuQt34F7byHpPqy1fvf7P8
-         i/fr9WmQtOePdLOjqJJCP0uVOZa7flJwSHMefI+YbjPqwIETvoALFlCMNp4GkrDdIYa4
-         qzlThgcyRLQHjLYhqdtm1V98XIg7I/gK7e8n+6F6Wf1qeMpm7kS8H4HN2gi8FoZWqSRO
-         YGCDHgmmCVv2GfSCVFq64yp6tPMVrbIp8cxl7VgddV981djfrikDXqKO+w2OH8kapZhi
-         CyNg==
-X-Gm-Message-State: AOJu0YzIPxm7b8HLOhVF6VymTqjAasULxrhmFsAvDcJvjTVKlf0irQb7
-	0PtFeTT+dpOlz+1YFR2ZomOwg3PBhbcjKHrsIvXeIATMjLqt6+ch
-X-Google-Smtp-Source: AGHT+IFYE7I8Dz7ov5LfZYYYrsOfOjyDP4rG/WT2wczaUt7Dgw8hcpzrYmz6aIurdM+JQ9/CSsvUjg==
-X-Received: by 2002:a05:6871:29e:b0:219:92b2:d2cf with SMTP id i30-20020a056871029e00b0021992b2d2cfmr10616708oae.27.1707791328369;
-        Mon, 12 Feb 2024 18:28:48 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV5Y0UHdG6DgUZwiOuH/Mdr3BAT4veNANsUUPQjuqvFL+K8mT+mGuzm6hZA1vBJ9qfWluwPSx6wZORKT9+4/9mdoZnmvScFYsocx+msYPh2yBq/VS8/JhtZnHC1GMGSLoD+Lu8sKjudVeNVZ50GwVZLQV2MWzhUhHyN/eFEe0us562vuywl5GTgR3V0/jGsn7Tax6wAyGtlLsK26HOAp83q1wfDW8dGu3KLL+OY8XLhPIUJZyJi/zlQ6/uR0VdXJabCNCJzz0mR09KFFAXrHfuzFxvF7vUa9IOGF+l9kd0jRXnJZMD63iyI7j7YV22Dcl9GCxYGTK/9wd2njqdB6hfWFK58gA0jtbP0PmUfk5CHSdbLjhKqcyjxStNnSZUmA73YhK/sOUwH/2g1VLrRLdAugJApLg==
-Received: from my-computer.uh.edu ([129.7.0.170])
-        by smtp.googlemail.com with ESMTPSA id z9-20020a056870514900b002198ca39e99sm1659648oak.17.2024.02.12.18.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Feb 2024 18:28:48 -0800 (PST)
-From: Andrew Ballance <andrewjballance@gmail.com>
-To: masahiroy@kernel.org
-Cc: andrewjballance@gmail.com,
-	justinstitt@google.com,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	nicolas@fjasle.eu,
-	skhan@linuxfoundation.org
-Subject: [PATCH v2] gen_compile_commands: fix invalid escape sequence warning
-Date: Mon, 12 Feb 2024 20:25:52 -0600
-Message-ID: <20240213022552.754830-1-andrewjballance@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAK7LNARaW1V5X79BFW5_YTKY+n+OSp+_ACpRxpiw+VOJ+2hf=g@mail.gmail.com>
-References: <CAK7LNARaW1V5X79BFW5_YTKY+n+OSp+_ACpRxpiw+VOJ+2hf=g@mail.gmail.com>
+        bh=zgrUTvQOJUYDuKbHFZKlpKXYvoGRnWvQmByrFkbKhpY=;
+        b=NYhci5Hw7zDdMuTOUle+EQlUqu22gd3wX+hZKfp6A3+64LIWX+8xEHVRsd5eN89mEG
+         PK1hMNVOJCRv7IAdd/e8ff27hPdKI90y58gVe8QvFQ8h4P9x5kOQvvZ1Lz+tIGfzw8pU
+         1iMulbeLYuBE92WazLrU3C86aal89jAnMhsOX/elbdWaRlMPH/lc5vKIx4Rdij4+uvz5
+         JzDFK5YuRkftyxpCBgYWBIE8C8RYqw+1glynseK7x1alfD4OOGYO3N4zNaiTMj3pcsIB
+         MbKb1DfSbvWBb3FNS0Dmc4k2xSLPn8NjT4gaQoIlKvXCl7wgDA7cysYxiSHAa3/Qh/Q3
+         rNJw==
+X-Gm-Message-State: AOJu0Yy5Dc5o5jN0JcHhdqEvTSendui2AR3UhS8Af7wPo3p8exSSgKyg
+	IdWo+Cgy7agMYUNtfwUUBuJhEBOB8FweQ1vuSgI4E6ukkkGBOWbobywyWW5ghWqD6cYCW5fKUTE
+	zkhoveUythzeZAOAkcXGCjXnWre44K6akOKx4
+X-Google-Smtp-Source: AGHT+IEct+r39gbb5nT7BKUPki00osiOdxLM8JznhwylxUtmHwxRUvLEwmdDrymuS+ebBIImPsxnRRZuVs2lgoq7LJ8=
+X-Received: by 2002:a50:9f21:0:b0:561:519f:85c4 with SMTP id
+ b30-20020a509f21000000b00561519f85c4mr67882edf.4.1707792465570; Mon, 12 Feb
+ 2024 18:47:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
+ <CAK7LNATK=8V+BroyN+uo9OynkfR6s6HtRgh=LF7yan7cPkbaTA@mail.gmail.com>
+In-Reply-To: <CAK7LNATK=8V+BroyN+uo9OynkfR6s6HtRgh=LF7yan7cPkbaTA@mail.gmail.com>
+From: Fangrui Song <maskray@google.com>
+Date: Mon, 12 Feb 2024 18:47:32 -0800
+Message-ID: <CAFP8O3LVgVRsrBAmJKV02bw2yrHziTFeRtJsnqx0iXieYMTJUg@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Fix changing ELF file type for output of
+ gen_btf for big endian
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, nicolas@fjasle.eu, ndesaulniers@google.com, 
+	morbo@google.com, justinstitt@google.com, keescook@chromium.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-with python 12.1 '\#' results in this warning
-    SyntaxWarning: invalid escape sequence '\#'
+On Mon, Feb 12, 2024 at 6:16=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Tue, Feb 13, 2024 at 11:06=E2=80=AFAM Nathan Chancellor <nathan@kernel=
+.org> wrote:
+> >
+> > Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> > changed the ELF type of .btf.vmlinux.bin.o to ET_REL via dd, which work=
+s
+> > fine for little endian platforms:
+> >
+> >    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF...=
+.........|
+> >   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |.......=
+.........|
+> >   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |.......=
+.........|
+> >
+> > However, for big endian platforms, it changes the wrong byte, resulting
+> > in an invalid ELF file type, which ld.lld rejects:
+> >
+> >    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF...=
+.........|
+> >   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.......=
+.........|
+> >   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.......=
+.........|
+> >
+> >   Type:                              <unknown>: 103
+> >
+> >   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+> >
+> > Fix this by updating the entire 16-bit e_type field rather than just a
+> > single byte, so that everything works correctly for all platforms and
+> > linkers.
+> >
+> >    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF...=
+.........|
+> >   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.......=
+.........|
+> >   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.......=
+.........|
+> >
+> >   Type:                              REL (Relocatable file)
+> >
+> > While in the area, update the comment to mention that binutils 2.35+
+> > matches LLD's behavior of rejecting an ET_EXEC input, which occurred
+> > after the comment was added.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> > Link: https://github.com/llvm/llvm-project/pull/75643
+> > Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
----
- scripts/clang-tools/gen_compile_commands.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for updating the comment.
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 5dea4479240b..93f64095fda9 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file_path):
-     # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
-     # kernel version). The compile_commands.json file is not interepreted
-     # by Make, so this code replaces the escaped version with '#'.
--    prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
-+    prefix = command_prefix.replace('\\#', '#').replace('$(pound)', '#')
- 
-     # Return the canonical path, eliminating any symbolic links encountered in the path.
-     abs_path = os.path.realpath(os.path.join(root_directory, file_path))
--- 
-2.43.0
+Reviewed-by: Fangrui Song <maskray@google.com>
 
+>
+> Thanks.
+>
+> I will wait for a few days until
+> the reviewers come back to give Reviewed-by again.
+>
+>
+>
+>
+>
+> > ---
+> > Changes in v2:
+> > - Rather than change the seek value for dd, update the entire e_type
+> >   field (Masahiro). Due to this change, I did not carry forward the
+> >   tags of v1.
+> > - Slightly update commit message to remove mention of ET_EXEC, which
+> >   does not match the dump (Masahiro).
+> > - Update comment to mention binutils 2.35+ has the same behavior as LLD
+> >   (Fangrui).
+> > - Link to v1: https://lore.kernel.org/r/20240208-fix-elf-type-btf-vmlin=
+ux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org
+> > ---
+> >  scripts/link-vmlinux.sh | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> > index a432b171be82..7862a8101747 100755
+> > --- a/scripts/link-vmlinux.sh
+> > +++ b/scripts/link-vmlinux.sh
+> > @@ -135,8 +135,13 @@ gen_btf()
+> >         ${OBJCOPY} --only-section=3D.BTF --set-section-flags .BTF=3Dall=
+oc,readonly \
+> >                 --strip-all ${1} ${2} 2>/dev/null
+> >         # Change e_type to ET_REL so that it can be used to link final =
+vmlinux.
+> > -       # Unlike GNU ld, lld does not allow an ET_EXEC input.
+> > -       printf '\1' | dd of=3D${2} conv=3Dnotrunc bs=3D1 seek=3D16 stat=
+us=3Dnone
+> > +       # GNU ld 2.35+ and lld do not allow an ET_EXEC input.
+> > +       if is_enabled CONFIG_CPU_BIG_ENDIAN; then
+> > +               et_rel=3D'\0\1'
+> > +       else
+> > +               et_rel=3D'\1\0'
+> > +       fi
+> > +       printf "${et_rel}" | dd of=3D${2} conv=3Dnotrunc bs=3D1 seek=3D=
+16 status=3Dnone
+> >  }
+> >
+> >  # Create ${2} .S file with all symbols from the ${1} object file
+> >
+> > ---
+> > base-commit: 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478
+> > change-id: 20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-dbc55a1e1=
+296
+> >
+> > Best regards,
+> > --
+> > Nathan Chancellor <nathan@kernel.org>
+> >
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
+>
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
