@@ -1,136 +1,159 @@
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [194.63.252.55])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB4F60894;
-	Tue, 13 Feb 2024 20:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.63.252.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EF26089D
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 20:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707854433; cv=none; b=Pnz3ccB10Idx/y7SxOUpYjR/edDSEWgGywF2wjnabFVnQwI9dbtINxoYdJxrh9I6f3P+fefXkx8m9rVjCGvYhNveosLEeavwATjDsiIyRI5yAEfiOJH+AoPO4rxXIDD43W5C/d7fxcSZPRtSMnSxsotavaIbYzcBrKqxus+JvP4=
+	t=1707854786; cv=none; b=GM5e5SBv6nknm7EUPqMtj4/ZG1fATzipyvJdpy4oJi1G56IenYfd3q0Iz/Ivv/fEAiIJvn+wHFPCF+Hbra8Z5bUMYtIWrK3kQTaF9BOAEAxk/q0sGxPu0Lbj80h4XlT/sAvy2wRvieJk5JRi9h/AqBObZ4W1d3tRUpYZkJsHj4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707854433; c=relaxed/simple;
-	bh=o+UtUBoWIBnLq7hS5tRy94VdJqWGzZdtZhxoTJc/hNY=;
+	s=arc-20240116; t=1707854786; c=relaxed/simple;
+	bh=vdxp4/PPE9hCtMCXH030GyY19LKK9iQwEhgR0euELVY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JeDBiG1PX5Rdam9fs8LWbzOmjRU30lhSNTDoT85g+95l1F5/BSEkTt5wkZFOaJlSQZUkR/0Tox7xSgS3cQqtTMNrNFUTVnHp6CZB9T6XpcIX5heACyJ56n1OLAhDiPhSOMHEnwHwM+B1Dr6y3pfGTPjG6ts/oVaPwMHQb+BxWEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu; spf=pass smtp.mailfrom=fjasle.eu; dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b=a/I+3k8N; arc=none smtp.client-ip=194.63.252.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fjasle.eu
+	 Content-Type:Content-Disposition:In-Reply-To; b=KhPjIXVl9ndHAZzqz9uGTJS7Fi5cRXqGg9rhY0e2tk4Iyexb5+8ZwqJxrVUqGhcaypQYnoRUk/R2/FPbyg1mpLgnXv32ICzz7zI0mkWBELcv3O6wU1ji93j9/N79bmWbjBPe6hSHhzISujQFFTLxGfPQuXAJPXgWG6NOKAqlzy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=jTN0VsHU; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b="a/I+3k8N"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fjasle.eu;
-	s=ds202307; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=ud9kP134wBy3ssKtmURanYc0oXG48zbkDyfGvOLR8gw=; b=a/I+3k8NEdqqDpeonjGZJj82yW
-	5oS3rePXR9zZccQV6iiBFON5q9h+sazljs400x3igksipq5KCdVPTw8us9MH3TjlGczKzWFt2511S
-	VSmvmEtZTzAvakf8Vu+TWADcwq6ABP+tAdCdW9s+czq2wUrOVYc6CB8tbAkf1YJuSnWyfqP57uteK
-	lcEleXlYSx0GVhmMFf5rwbth+FPVLI76D5gL19Ohuljnw3S1RKGblvWAC2arACs5wVZRqYALvScLO
-	V0vCrwtCIlAUqeIgiVqRBYcYse6rTm1rHQ2+DQI5S0csqBOT7a1eEM3SXTL64COOpTzQEc8x1HgTu
-	eOt60Ggw==;
-Received: from [2001:9e8:9d1:8401:6f0:21ff:fe91:394] (port=48586 helo=bergen.fjasle.eu)
-	by smtp.domeneshop.no with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <nicolas@fjasle.eu>)
-	id 1rZyws-00HFHx-9G;
-	Tue, 13 Feb 2024 21:00:11 +0100
-Date: Tue, 13 Feb 2024 21:00:03 +0100
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Andrew Ballance <andrewjballance@gmail.com>
-Cc: masahiroy@kernel.org, justinstitt@google.com,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	morbo@google.com, nathan@kernel.org, ndesaulniers@google.com,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v2] gen_compile_commands: fix invalid escape sequence
- warning
-Message-ID: <ZcvKQ3SpLNR9RfIe@bergen.fjasle.eu>
-References: <CAK7LNARaW1V5X79BFW5_YTKY+n+OSp+_ACpRxpiw+VOJ+2hf=g@mail.gmail.com>
- <20240213022552.754830-1-andrewjballance@gmail.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jTN0VsHU"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A769740E01BB;
+	Tue, 13 Feb 2024 20:06:20 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 4n2K_bezxT6a; Tue, 13 Feb 2024 20:06:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707854778; bh=goOcw7LN1zf72G8QXmdoMLRbJAF9DoW+MoDb3aH9utw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jTN0VsHUjY3YLADs/06htH0XYziIGGjqIjbZSKXZIKZReSlPlwD17cU292sGLc0bT
+	 BXcax6hSvypq0AsEM05kT+cEBem3YEWo3Kr178JKLbZ/snZ0F858U4HKzNZNpjEPLF
+	 bfJfXB6umEEtvxPXlGkEmwifX6T9I5X/ecJQ9UagagQdltwgnYEIDJz5NLLAiX/en7
+	 PN/5zUrP8/zRxp2zni4xXU3Qs+2D8U7QEFbh+41/mB5mOjyOneMizQtM6A9KRCf7ck
+	 9pIQBSoOD+TcPn24xQ83o5A5/aeKgeCpjQqEM3L7rzptpuTfixSvbVggMTfnyT9/7P
+	 +wxAs5vuJGCZkDKv5fMB8SFR1WCOV0bLkRkbFsUh840rChFU/nirUSVJo169RiLnXE
+	 YdPHGrjVUF8A7rachK3LtlvccDpJzfU6EY84Zqc5DTrywU4alBrwOyRZ9l04ROB82h
+	 BaqZ/m3/f/6ppe3Edcl2BtBTh2HhuAJOdnW+8KfFMTTAUV7kNhRW0lpD4QHmmEUe0W
+	 PSbCZlbHluFvwdYQpk5y8uv6TI6hVb9OO02QoChfcMMHF+Ytl4/gWv9hPKA5hTgzBE
+	 Z/MWvQEnJzPLofiJiuU2zrvIWtiSeJSL21DO1spxf6MV/vd1GArBAFnV0KNLS4ZwKZ
+	 vGvyzpTJ4SN0m+Q985PSuq/w=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0AA6040E0192;
+	Tue, 13 Feb 2024 20:05:59 +0000 (UTC)
+Date: Tue, 13 Feb 2024 21:05:53 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 01/11] x86/startup_64: Simplify global variable
+ accesses in GDT/IDT programming
+Message-ID: <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-14-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4fCuJxvhdgZQ0EhT"
-Content-Disposition: inline
-In-Reply-To: <20240213022552.754830-1-andrewjballance@gmail.com>
-X-Operating-System: Debian GNU/Linux trixie/sid
-Jabber-ID: nicolas@jabber.no
-
-
---4fCuJxvhdgZQ0EhT
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240213124143.1484862-14-ardb+git@google.com>
 
-On Mon 12 Feb 2024 20:25:52 GMT, Andrew Ballance wrote:
-> with python 12.1 '\#' results in this warning
+On Tue, Feb 13, 2024 at 01:41:45PM +0100, Ard Biesheuvel wrote:
+> @@ -632,5 +616,5 @@ void __head startup_64_setup_env(unsigned long physbase)
+>  		     "movl %%eax, %%ss\n"
+>  		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
+>  
+> -	startup_64_load_idt(physbase);
+> +	startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
 
-funny typo: it's Python 3.12 :)
+It took me a while to figure out that even if we pass in one of the two
+GHCB handler pointers, we only set it if CONFIG_AMD_MEM_ENCRYPT.
 
-Kind regards,
-Nicolas
+I think this ontop of yours is a bit more readable as it makes it
+perfectly clear *when* the pointer is valid.
 
+Yeah, if handler is set, we set it for the X86_TRAP_VC vector
+unconditionally but that can be changed later, if really needed.
 
->     SyntaxWarning: invalid escape sequence '\#'
->=20
-> Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
-> ---
->  scripts/clang-tools/gen_compile_commands.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
-tools/gen_compile_commands.py
-> index 5dea4479240b..93f64095fda9 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file=
-_path):
->      # escape the pound sign '#', either as '\#' or '$(pound)' (depending=
- on the
->      # kernel version). The compile_commands.json file is not interepreted
->      # by Make, so this code replaces the escaped version with '#'.
-> -    prefix =3D command_prefix.replace('\#', '#').replace('$(pound)', '#')
-> +    prefix =3D command_prefix.replace('\\#', '#').replace('$(pound)', '#=
-')
-> =20
->      # Return the canonical path, eliminating any symbolic links encounte=
-red in the path.
->      abs_path =3D os.path.realpath(os.path.join(root_directory, file_path=
-))
-> --=20
-> 2.43.0
->=20
+But this way it is clear by having the callers select the pointer. I.e.,
+it is a more common coding pattern this way, I'd say.
 
---=20
-Nicolas Schier
-=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+Thx.
 
---4fCuJxvhdgZQ0EhT
-Content-Type: application/pgp-signature; name="signature.asc"
+---
 
------BEGIN PGP SIGNATURE-----
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 9d7f12829f2d..e39114c348e2 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -582,8 +582,8 @@ static void __head startup_64_load_idt(void *handler)
+ 	};
+ 	gate_desc *idt = (gate_desc *)desc.address;
+ 
+-	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
+-		/* VMM Communication Exception */
++	/* @handler is set only for a VMM Communication Exception */
++	if (handler)
+ 		set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
+ 
+ 	native_load_idt(&desc);
+@@ -592,10 +592,14 @@ static void __head startup_64_load_idt(void *handler)
+ /* This is used when running on kernel addresses */
+ void early_setup_idt(void)
+ {
+-	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
++	void *handler = NULL;
++
++	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
+ 		setup_ghcb();
++		handler = vc_boot_ghcb;
++	}
+ 
+-	startup_64_load_idt(vc_boot_ghcb);
++	startup_64_load_idt(handler);
+ }
+ 
+ /*
+@@ -603,6 +607,8 @@ void early_setup_idt(void)
+  */
+ void __head startup_64_setup_gdt_idt(void)
+ {
++	void *handler = NULL;
++
+ 	struct desc_ptr startup_gdt_descr = {
+ 		.address	= (unsigned long)&RIP_REL_REF(startup_gdt),
+ 		.size		= sizeof(startup_gdt) - 1,
+@@ -616,5 +622,8 @@ void __head startup_64_setup_gdt_idt(void)
+ 		     "movl %%eax, %%ss\n"
+ 		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
+ 
+-	startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
++	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
++		handler = &RIP_REL_REF(vc_no_ghcb);
++
++	startup_64_load_idt(handler);
+ }
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmXLykMACgkQB1IKcBYm
-Emn2WhAAr/uP7ONWF6OazqnaFTX1stVYRqCALkxE77ELcU/9Fwa7+SRBbZHsHoi9
-Qxt5pjUssHWVnEtPDfWbr6lrcFlharkhAXkyBr2AN7Se6qrnRIQGVKn9QR8L6q7k
-nZprjuStF7beixYrlKtFasfnj9u6XQlwiJ87zF5Cl9usJfDHIf3KOEMrZQHKTUzQ
-thAyzIwXXM+q/nSCUk0ot/evURyVjvHqlXS+qeNmUO2qYB8GTKTqXU2QyT/eS6bm
-7kXvuMXHeaCoDNPfYWI7qvKvSzs//bjJVvmhCLbRaoF9kaA6e8ppSuPIEDbmYO7A
-BPlC6wQAMFCqFLJu8O6miyf6YYXDLth4PTzV+LbI2fTcdowyjgPGMXah3EanDrp/
-lnhBx+gUoGKO4pvUHIe6O+KVzSPF2QUjsL716pbeHc+yFF/kJmpP+8aTRmdZb5Vq
-OWSNEmzN79/RsnaaAhk2wZQnT9/62han7+N8DZZ2KYOezeSRzcrrAd+UNKlfPLE8
-HB+PJ+T4C0EcK2YIhcHVgRiKw3wWcdfVYj6P67rF7TK620hSvomo+mvAQVXUSiDy
-2z1mHlz71LEJyyCKwQY15AXRZJF7q01m8Zy8NJcR3aPZAZ3nK35YCElXxpPOrvYh
-iWylrp89sQAZ+om9VxwLX4bxbDp1l5Ce5zRI34uLGhWXpuWEF6k=
-=EmZL
------END PGP SIGNATURE-----
+-- 
+Regards/Gruss,
+    Boris.
 
---4fCuJxvhdgZQ0EhT--
+https://people.kernel.org/tglx/notes-about-netiquette
