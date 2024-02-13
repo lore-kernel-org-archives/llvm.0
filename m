@@ -1,49 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5722A3613A;
-	Tue, 13 Feb 2024 09:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC23F37152;
+	Tue, 13 Feb 2024 10:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707818365; cv=none; b=NFLbc0k7XTsRIYJ0wCATwhj2iVo/1wnb/gTUXNen2MQb+6veDKe+gWyuUJf07a6V8YlRkQVFEgsxKrWyVDWyNSeUT1MTSl1IFLUedK9uZ1T0QlDCUtphAJMIMcp/TemkvEbdYtubDbYr8ZWPZFuOCQuElS3x7FoWdypNJByqZ5g=
+	t=1707818515; cv=none; b=VSX2WmivFhPV5hL2ET3PyJWgzIwKttyjzMoPCvGSPiRE64nllGms11eHDhO9V8Joyc6lJwPnV4RwvCvt55i/YZwvEtHn3+kUiFkmPP93Czd631dKi1J3AZGjPVzv9g/8Cn5qqk7SxG6lPlTaENhSQsmOXuOLTVOOUMVMyAOTkRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707818365; c=relaxed/simple;
-	bh=UNaT/TcOOYKTpTEIwTZQopiZeqe91jixzxP3/uh8vag=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GP4zIPLNjTLwcU7wib1igCEiAr7WP+/QVhvLfuofuvP8+h9uN01jA+5W2yjEJweO603WyAwfrQgeT9Q84E7jB2ujX5UIUXWN0dmFB6NBPlIFSL5SMH6R8V6ZDlWif/USXpl1+xSc8BnXtSShuyrm5+adFc4WN2SQvg5aYzLVf3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P8BmoHJO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707818515; c=relaxed/simple;
+	bh=UU+zpA7I6z15NuI2JwEPZ/xh+eLMAyrqwwsqp31LEJg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gO0thIpzbGuqxH0YGeZoLGtpmVCKi30BlMapNiQcIU8nL1nVyUF4lgLODoQG3JrAcWeza4ydj6Nzg7O3LnEvCGBD7Ah/QeHBxrD3mVnEOsYgn1y6qBKPuVXGMNmVJqnssQSeOtPgfb8fv3lOMeKGeXM1XVQq7batcayPFgkNGHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Czb4jvH3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P8BmoHJO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A4CC433C7;
-	Tue, 13 Feb 2024 09:59:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Czb4jvH3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAECC433F1;
+	Tue, 13 Feb 2024 10:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707818364;
-	bh=UNaT/TcOOYKTpTEIwTZQopiZeqe91jixzxP3/uh8vag=;
+	s=k20201202; t=1707818515;
+	bh=UU+zpA7I6z15NuI2JwEPZ/xh+eLMAyrqwwsqp31LEJg=;
 	h=From:To:Cc:Subject:Date:From;
-	b=P8BmoHJOB+QEfz31J05kpFoB7sp1M81dAD0VI+fCLeuU4u7JwYZu4z/Lo8dFZuj4L
-	 YeF8Uj8nMqakhnaHLSZXdBrNXg+brjp5MgjwL3QsI5pjBlbyy1Ctw58pJvRP9h1Par
-	 g8rEI9q8Kc0tDQOeJsoBbtKghIYWMpWsDPDYPHsZl2XBrfT81BoLsSXaAfAPgH2UNP
-	 JOIzRErOZ9PI5qX5OmOYmV57JZnHNAUuK+p4XerQLkaXU20jwHziCCI3ndJfr3tCHn
-	 hjNDHIA7dSQpLCoW5V91D6GLDAyXA9tbM4U+kKMGHqSftd+Aj0z95LfY67kGk2mwOo
-	 IewacrGqVADfQ==
+	b=Czb4jvH3IBvNqc4VVgfDnGhlWAHmrbg0er9XeuGRTRJyBYbX1aLruGawaJ/efSjbN
+	 hvx3wypXmh45CQpK34csnhnhCrGdyiVZ5watoCo/kn1e8vUUhAPsI3NPdZqkhsqPFR
+	 8LjDk5B483FVmf6LNZ3ctHxF2AwjQ6F4cgKbjl1YUdRG1KKMLi2rHQQFpxbv/lK121
+	 qZUlVKOoNld+fAIHMdg1qe/44wJjux8c1gsbpy6uIVATHgdLsb8aIDVSext6PzV/rB
+	 A/JqmINItFaOMmStnFRpOTMhI+s5xGAvrZUaZ5g6Alg0yCBFdWEjiwqnqj/hJSYd18
+	 SfSeF0dZ3x38Q==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Denis Efremov <efremov@linux.com>,
-	Jens Axboe <axboe@kernel.dk>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Vladimir Zapolskiy <vz@mleia.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Hannes Reinecke <hare@suse.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	linux-block@vger.kernel.org,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Roland Stigge <stigge@antcom.de>,
+	David Woodhouse <David.Woodhouse@intel.com>,
+	linux-mtd@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] floppy: fix function pointer cast warnings
-Date: Tue, 13 Feb 2024 10:59:07 +0100
-Message-Id: <20240213095918.455478-1-arnd@kernel.org>
+Subject: [PATCH] mtd: rawnand: lpc32xx_mlc: fix irq handler prototype
+Date: Tue, 13 Feb 2024 11:00:09 +0100
+Message-Id: <20240213100146.455811-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -55,74 +56,43 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-16 complains about a control flow integrity (kcfi) violation
-casting between incompatible pointers:
+clang-16 warns about mismatched function prototypes:
 
-drivers/block/floppy.c:2001:11: error: cast from 'void (*)(void)' to 'done_f' (aka 'void (*)(int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
- 2001 |         .done           = (done_f)empty
-      |                           ^~~~~~~~~~~~~
+drivers/mtd/nand/raw/lpc32xx_mlc.c:783:29: error: cast from 'irqreturn_t (*)(int, struct lpc32xx_nand_host *)' (aka 'enum irqreturn (*)(int, struct lpc32xx_nand_host *)') to 'irq_handler_t' (aka 'enum irqreturn (*)(int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
 
-Just add another empty function with the correct prototype as a
-workaround.
+Change the interrupt handler to the normal way of just passing
+a void* pointer and converting it inside the function..
 
-The warning is for code that was added before the start of the normal
-git history, but I tracked it done to an early change in the reconstructed
-linux-history.git.
-
-Fixes: 598a477afe06 ("Import 1.1.41")
+Fixes: 70f7cb78ec53 ("mtd: add LPC32xx MLC NAND driver")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/block/floppy.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/mtd/nand/raw/lpc32xx_mlc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
-index d0e41d52d6a9..2ba0ba135951 100644
---- a/drivers/block/floppy.c
-+++ b/drivers/block/floppy.c
-@@ -530,14 +530,13 @@ static struct format_descr format_req;
- static char *floppy_track_buffer;
- static int max_buffer_sectors;
- 
--typedef void (*done_f)(int);
- static const struct cont_t {
- 	void (*interrupt)(void);
- 				/* this is called after the interrupt of the
- 				 * main command */
- 	void (*redo)(void);	/* this is called to retry the operation */
- 	void (*error)(void);	/* this is called to tally an error */
--	done_f done;		/* this is called to say if the operation has
-+	void (*done)(int);	/* this is called to say if the operation has
- 				 * succeeded/failed */
- } *cont;
- 
-@@ -985,6 +984,10 @@ static void empty(void)
- {
+diff --git a/drivers/mtd/nand/raw/lpc32xx_mlc.c b/drivers/mtd/nand/raw/lpc32xx_mlc.c
+index 488fd452611a..677fcb03f9be 100644
+--- a/drivers/mtd/nand/raw/lpc32xx_mlc.c
++++ b/drivers/mtd/nand/raw/lpc32xx_mlc.c
+@@ -303,8 +303,9 @@ static int lpc32xx_nand_device_ready(struct nand_chip *nand_chip)
+ 	return 0;
  }
  
-+static void empty_done(int result)
-+{
-+}
-+
- static void (*floppy_work_fn)(void);
+-static irqreturn_t lpc3xxx_nand_irq(int irq, struct lpc32xx_nand_host *host)
++static irqreturn_t lpc3xxx_nand_irq(int irq, void *data)
+ {
++	struct lpc32xx_nand_host *host = data;
+ 	uint8_t sr;
  
- static void floppy_work_workfn(struct work_struct *work)
-@@ -1998,14 +2001,14 @@ static const struct cont_t wakeup_cont = {
- 	.interrupt	= empty,
- 	.redo		= do_wakeup,
- 	.error		= empty,
--	.done		= (done_f)empty
-+	.done		= empty_done,
- };
+ 	/* Clear interrupt flag by reading status */
+@@ -780,7 +781,7 @@ static int lpc32xx_nand_probe(struct platform_device *pdev)
+ 		goto release_dma_chan;
+ 	}
  
- static const struct cont_t intr_cont = {
- 	.interrupt	= empty,
- 	.redo		= process_fd_request,
- 	.error		= empty,
--	.done		= (done_f)empty
-+	.done		= empty_done,
- };
- 
- /* schedules handler, waiting for completion. May be interrupted, will then
+-	if (request_irq(host->irq, (irq_handler_t)&lpc3xxx_nand_irq,
++	if (request_irq(host->irq, &lpc3xxx_nand_irq,
+ 			IRQF_TRIGGER_HIGH, DRV_NAME, host)) {
+ 		dev_err(&pdev->dev, "Error requesting NAND IRQ\n");
+ 		res = -ENXIO;
 -- 
 2.39.2
 
