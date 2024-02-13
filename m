@@ -1,72 +1,88 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0333612DF
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 21:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70554633E0
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 21:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707859406; cv=none; b=rMMSwa/yQ6DmUcobYnT8HOSc0768VprvtZ1Fmj6CR4MdLjo9KXuWJaTqrFvKQ+vJwBWPzZg9l/WMSKP9gWFQpzlz/QdP06VR6Ct1uzh7VZPrLP23bLkkziDwqRb7ofqg+KBxFdHHRpdz3qWE/HEzJl9wJjS67UXUEzlWayXWsLo=
+	t=1707861205; cv=none; b=eVbXQKi/TFlvi/rYoMwx1W7aq4tXjtBsVRG6zxJVsH5VwUDKKmgUYv3M09DD82eA3TOAPnpH2PXHCrYxRwFHgvXD5jUSuERyLyFwV3RRiNpsfzIpD71bYJ6fMUpS4/ltw9vmCR18M20dgKjYGyh0K6H1WbGdxJn2Zx4hqcj7nSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707859406; c=relaxed/simple;
-	bh=zNdS4IWShzPCUtyQvVJ2Xx9JgtTnB6R56d3FqU5q/zY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T1EZIWqM43zb+N67zOtLLF9M2vXECYIjv/exrAZMvXzsgyP2BPslZZSwUcZDK9wvwoQrA4ggxayxWGT6Ui9HCOxEieGKmzKnyR/jytHqFJanoUGbsMWi1BR2wWryiqdc4Rt5enNBgGYhWTpS8lTK7gFcgxjvfQTR0la9bNPdTA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6e2d83d2568so1852357a34.3
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 13:23:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707859404; x=1708464204;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zNdS4IWShzPCUtyQvVJ2Xx9JgtTnB6R56d3FqU5q/zY=;
-        b=uCl6tx/tiH8/AMzPCghiE6Epc4yahUKwqY4PKPjhZzVQtDVrWb+suYeJMNmUCB3RNV
-         57+SDIDI2vlLKkE7TwxZoGjyweayofl7+qLVETl9xmo6r5I4XaaY34SPLINdidI4cSSS
-         U+y1lIDHHlyQgztUvisOxBdZzQw77hd8zFBAMVwR02isH51SodrVypWf8XLEOO+dAsSI
-         GvcFphBaVguNZKTpAATIqMsAbofLTa/4xljXi9okzrQ0kHecvjjg+ML8N93GCj98JE3j
-         7Lws2MOIBKqj+ow2s0rjnk1rfV18i0IehOr2nZcIgHDVuFs5Xl472jQg0/avnCQtfDtc
-         rELg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZHZ21QiKPlOgWcDgoQMSr3BdG4WbscmF5VYGPJ36gcEH4XMRESFndkjmmUtBJPGaG2xn+16782sL0cJVCaOme9Y74zw==
-X-Gm-Message-State: AOJu0YxRDCq0nrlxel6RjpnzskilCmE8F45vvaTjNTd+LHCjCuqnGSE/
-	uLCSaXxM5NHE3FKS/J5W9ab/EvmGz0Hw8F2gzaOEaMqjQmClju/m
-X-Google-Smtp-Source: AGHT+IHSDIYCiEJpbXHnj72htnQIqjs5Lx58sxhFgYYn/5FXG4QscL6nnfHbAv96HqavqpSaRjzCJA==
-X-Received: by 2002:a05:6358:7e04:b0:175:fc1a:c7df with SMTP id o4-20020a0563587e0400b00175fc1ac7dfmr640257rwm.15.1707859403771;
-        Tue, 13 Feb 2024 13:23:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV61jh8io2cFzHOQgPagQZn/vyQ6eElRDhB+kdJW6BQZDslFrF/G7qFWxOGH2UzodF4/8ggMaC1eIMspdGi9g0+IBKm2h1e7ulOUxa8rrn/SZhL7Ayht/Cwqcs+odOmGhD6QrC4RRFAFTk90qjQ8c8aIT/zuTnfsYYqcYba9inyTQrQjyK0Xiqri7/DBu6XYIuT9075Fr/mOgs7g6P2wFa15VKhsL0zGf6CYvdKHgcgBWOpq5oxQOGYBU+iJtoRvYsAnoYIlemAfbtCiW7duJoBMi/E9V+GJ174g9NrJnbIlg62cte7ddi36lKInbKyoykWB82faiS/ekfmBawnaGj3enVt0uf6oe3BBEshpEBaI461GeW9o7s3wU5+BNAlfxB/SYw2nvoIEuvQxDWXAfT4bS+CHQirAR7gxv18EmFIG+rOvLQBOwWV
-Received: from ?IPV6:2620:0:1000:8411:85a5:575d:be51:8037? ([2620:0:1000:8411:85a5:575d:be51:8037])
-        by smtp.gmail.com with ESMTPSA id r16-20020aa78b90000000b006e0dd50b0d0sm4421634pfd.8.2024.02.13.13.23.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Feb 2024 13:23:23 -0800 (PST)
-Message-ID: <3945a1c1-16b8-4c72-9ff9-3a3f67a6c4b9@acm.org>
-Date: Tue, 13 Feb 2024 13:23:21 -0800
+	s=arc-20240116; t=1707861205; c=relaxed/simple;
+	bh=ypsd4qCVKyRg4P72ROtfXjYfv/4viAmzHOaYW9On954=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rliv6FSWhpkmkUn8fY31boHm9WHL06ZNZX11xM/27dvsQ4BLi7SVl7fytBw17Ff2M4JJyZgkpmTjkw+1QifU9gr1MtMaZfLc03Xu30qKb9eKUXCKqlikVqTFQWAXxf5oud5DryqeMzt1P5fWIPS5ik4KJkbbVcVwvz+XuCMgajU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OqlrH7pH; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OqlrH7pH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D86A6C433F1
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 21:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707861204;
+	bh=ypsd4qCVKyRg4P72ROtfXjYfv/4viAmzHOaYW9On954=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OqlrH7pHYT2cO93m6+51hZvaRhY5JAbLhHgAoptkdPOMlDFnZDODu04bPG0Dejah0
+	 C2V4AU3sygcXSDPf2SiZe5Y9taivpoajgjVTLCzH2sEowfJK0yQjrpxI50Ed7Wc+cj
+	 2H/txUEQ1nvCBHcCa0UMG8Zyq/P8pb7UaWsOrSQ7lRkTQOvyCC2wnazV6sBuow/PMz
+	 UZITeFZP4W/XDaXxO5+DCQyLtSNeea9If6eRYl4C0y+zu50KO3UcpBfQK3YQUH1H03
+	 4+QrOuTSIlvWXfyRKGV5PXuHUjM3ZoLIaOl2aCc8jttMO0szYOW2bbAh6D5qOqOvGR
+	 HXu0bmen9J4rA==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50eac018059so6241547e87.0
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 13:53:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUvAFNwRqGwhGr5+CwhJCNvPnkGPW/Q2wTOnWK4Ng3l21blCHQLZa41bj3RsNaP31oSpk8jOcjjzxQK0Y/EFTTCloapoQ==
+X-Gm-Message-State: AOJu0Yzx80DSOUdvyImcyvL98Uf2Evf9jk3c189Ew22ACh+E5gowtS0f
+	QMtV8oCTF+Vx4RY7ta3TA/WcqX+WdZXawNOhsF1AySYeOI3MEimINmdFohZnUEVt5Wh15mQgTMo
+	37qIgagOs6dZgOmEaf8xBzBIIXhM=
+X-Google-Smtp-Source: AGHT+IHI/s6AqAn4+gru9C0sK+MSMCHjVDZCoWnZOEyshAgWQ/HKDfdgJQ1z+yWdf4EQX/rZlJTNkQkm844cBmWgoGY=
+X-Received: by 2002:a05:6512:32bb:b0:511:6ff9:8b8d with SMTP id
+ q27-20020a05651232bb00b005116ff98b8dmr506646lfe.59.1707861203095; Tue, 13 Feb
+ 2024 13:53:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] RDMA/srpt: fix function pointer cast warnings
-Content-Language: en-US
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- "Nicholas A. Bellinger" <nab@risingtidesystems.com>,
- linux-rdma@vger.kernel.org, target-devel@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240213100728.458348-1-arnd@kernel.org>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20240213100728.458348-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-14-ardb+git@google.com> <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
+In-Reply-To: <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 13 Feb 2024 22:53:11 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG4rSGaB8Q2qFcgOH=dqS0yvR8Ofur=h5C-jq_TqiFzVg@mail.gmail.com>
+Message-ID: <CAMj1kXG4rSGaB8Q2qFcgOH=dqS0yvR8Ofur=h5C-jq_TqiFzVg@mail.gmail.com>
+Subject: Re: [PATCH v4 01/11] x86/startup_64: Simplify global variable
+ accesses in GDT/IDT programming
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 2/13/24 02:07, Arnd Bergmann wrote:
-> Change srpt_qp_event() to use the correct prototype and adjust the
-> argument inside of it.
+On Tue, 13 Feb 2024 at 21:06, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Tue, Feb 13, 2024 at 01:41:45PM +0100, Ard Biesheuvel wrote:
+> > @@ -632,5 +616,5 @@ void __head startup_64_setup_env(unsigned long physbase)
+> >                    "movl %%eax, %%ss\n"
+> >                    "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
+> >
+> > -     startup_64_load_idt(physbase);
+> > +     startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
+>
+> It took me a while to figure out that even if we pass in one of the two
+> GHCB handler pointers, we only set it if CONFIG_AMD_MEM_ENCRYPT.
+>
+> I think this ontop of yours is a bit more readable as it makes it
+> perfectly clear *when* the pointer is valid.
+>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Looks fine to me.
+
+> Yeah, if handler is set, we set it for the X86_TRAP_VC vector
+> unconditionally but that can be changed later, if really needed.
+>
+
+We might call the parameter 'vc_handler' to make this clearer.
