@@ -1,123 +1,232 @@
-Received: from wfhigh8-smtp.messagingengine.com (wfhigh8-smtp.messagingengine.com [64.147.123.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18D54DA0A
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 12:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB7C4207D
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 12:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707828345; cv=none; b=fZvxk1WWpoqzuNExbNRDwuIrS6c5TUbG51iFNFsI+19amPDGpLIp9NGqY5MzUS8Dl6xLI35JthFdoOa7/TARoe8dELSCBZEiWzjwAa0q68ma5fJ0KwI/hWtKkqD8p+TSEUfZQqg+yJNPVLWrBzVZAh66B3SsOVr3inq5TdpyYys=
+	t=1707828984; cv=none; b=H1H/0BZzPKD9Jb2VLQB2TmzjAFHJlpIHOP4aISKBsqKGFgaZrx1v0N43uyjaLgffqcj531Ag5mbrHPxBYLrAn8Pkq8sJPbMF3++B/rDgxa19aqvac4TF2WCukSy68iNXo7SOtM79qWwBf8R5nUB/jt5+n4h6f7M2WKvyZp8R8pY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707828345; c=relaxed/simple;
-	bh=Wlfk7dY0wWDXuDYy0panziIsiJR/AG6s30SqLg65+G0=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=tpu2KVngm5wmnUgT5a89lYpIU6d7nmGA/S85FN3bcGfWc43t5bi3nerQdswISg2+zt67xOXbG+HvpaWSXig8byZMX5jU3nAK4smhuqnq6nntiG+0c2Gl4iZnzlpI5ycGqR/zFzoC57Kyb8YJe4/kG+q5+xPCX34ydIpNQPHEhf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=MVKdScji; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TBER6n7G; arc=none smtp.client-ip=64.147.123.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1707828984; c=relaxed/simple;
+	bh=t1x649ig19aP6KHbfZwn5EC4H55tmsOlY9ADZyGqX1A=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=npyCXFbGRKvjdH6LPQbxij47OH63z9Gc3DKOVJcPCAqBj2G6EtVJJ3LxBZvGlbmy1cRolAMGA9BnQl/9N+ivTn4PajnINN4hoG/edvsIuLI+X/r2+K4noTMF4aD99OIOea27w6mO3GkvpgOLbTLwyC/z55WWVrq86orxxLUesI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jbiwsb5U; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GAEUyXMj; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jbiwsb5U; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GAEUyXMj; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="MVKdScji";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TBER6n7G"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 5A0A818000B3;
-	Tue, 13 Feb 2024 07:45:41 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 13 Feb 2024 07:45:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1707828340; x=1707914740; bh=USQ9m9LRrK
-	EPc6jBigxNFqy6LATxlEiA3y2icE1wmKU=; b=MVKdScjiFTQgmJvjhZ/2M90i23
-	l/fpMktEDMfJppqKTT+/khsgDio7EHjaZpT3+9qAwiIYyrPwVot9zpcK61giOCak
-	sIqQPDL6MwOZ6UxG6xt+gOngE22lnvjTE+cWfkiUp7+CkBaS5PTqPtRevSihjC6N
-	jF0VG3bXfrlI0qoJWP96QJj4OMcsLGphzGOjK+mwZ7keX6moZ6CeTN2y6SGv4IS6
-	/BeeBELwCArYgSZ9aULHv5tu1QPUHusDXOUBQ4g2ShQKjZvqPfwVjN/C1Ydg1vf1
-	UFu7ZAzc1PCrIOeNKl2RtjXW69ZzJKCKIlJ4kMGU9r4KrDldt6RBwtYqWGvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1707828340; x=1707914740; bh=USQ9m9LRrKEPc6jBigxNFqy6LATx
-	lEiA3y2icE1wmKU=; b=TBER6n7G5KS+2jvixiyf2/8+env6bDAeIKdQkwLvkZ9l
-	iUVf4w89ofi1RB6FWoUfCYdKZiz5bWGUzvEDR48HK3qdMp7M14hcOV008HKa0515
-	tqsN1Ufogx5x+o5dO4kXPewWYmEdLZLXzJZWZ5Q8VvZL4MfHCAT7Jhd+qJgPpzS+
-	yh36/WcKtzvE8Ip/rLHsrsTxjQRPmQDYjOmpbLOA/BfSnD7fvMICgzixFkHsZssE
-	SP8E3pOsFhc4YE0j+D0x9gbNQei92jFDfdqICSWsno6APWJv8kZG217EJAY4y/5y
-	EkFSwgwgQmrjStWhlA+6K0Ysk0CooMERyftl1YjZYw==
-X-ME-Sender: <xms:dGTLZeOFthVxaGlMlICy2zGBpA0Z9TCq6WI-dId3lOjYJ7lkzg5UuA>
-    <xme:dGTLZc8PO8q9wAStqrNZzGENQ0Xgjydxie-zGhbHrV87qBUbjrsjyr0kyMGwdcFLX
-    3liXcS8Kvt18b56rQM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehgdegfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:dGTLZVQNjjdd2aSfuCueS9pgZNw49IrY36p83cr-ASUb7aFulkrusA>
-    <xmx:dGTLZeuQyK3SCb7oueqV76z-aoKjGHEm4s-SqW7YEoJYfnCDg1HMFg>
-    <xmx:dGTLZWeagM_-E5iIblPxOi26bQkryjltXKLm3wz-gheyUySQle4jYA>
-    <xmx:dGTLZTCmdRiDL29BNyTl9Wf2np2S9JNbm_VBLoSQq3WyfxCaVWOMriXxAjc>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6D8F2B6008D; Tue, 13 Feb 2024 07:45:40 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jbiwsb5U";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GAEUyXMj";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jbiwsb5U";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GAEUyXMj"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C408C21CCD;
+	Tue, 13 Feb 2024 12:56:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707828980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XZxzAm1AtsNglX5/RVCycu9VVDNzxxqqfa1iuH8Lttc=;
+	b=jbiwsb5U8m7im9qAiRpvb7++489pbODKjl1JF+wwF12q+/e4CYLSHODtnGpOZdQtYFmshF
+	hUc5d1ap0fc9br1cuQXMcPfcYcbowBlfD3R+M9HH4b5/ays5fUW1bJQ6v0hOoVLeuovvUE
+	ZFUYyUcK3kYsvtPiE0OzVWJoyVZTXW4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707828980;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XZxzAm1AtsNglX5/RVCycu9VVDNzxxqqfa1iuH8Lttc=;
+	b=GAEUyXMjAaktrXRIIkJcP8QJbCBrdb3DUt1ZgdEOziHmva61PThKob1XNQlgHs/fDGCQvB
+	RWQrZgWFvUTg/2Cw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707828980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XZxzAm1AtsNglX5/RVCycu9VVDNzxxqqfa1iuH8Lttc=;
+	b=jbiwsb5U8m7im9qAiRpvb7++489pbODKjl1JF+wwF12q+/e4CYLSHODtnGpOZdQtYFmshF
+	hUc5d1ap0fc9br1cuQXMcPfcYcbowBlfD3R+M9HH4b5/ays5fUW1bJQ6v0hOoVLeuovvUE
+	ZFUYyUcK3kYsvtPiE0OzVWJoyVZTXW4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707828980;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XZxzAm1AtsNglX5/RVCycu9VVDNzxxqqfa1iuH8Lttc=;
+	b=GAEUyXMjAaktrXRIIkJcP8QJbCBrdb3DUt1ZgdEOziHmva61PThKob1XNQlgHs/fDGCQvB
+	RWQrZgWFvUTg/2Cw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9892413404;
+	Tue, 13 Feb 2024 12:56:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 6YyyI/Rmy2XxEAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 13 Feb 2024 12:56:20 +0000
+Date: Tue, 13 Feb 2024 13:56:20 +0100
+Message-ID: <87il2sy13f.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Curtis Malainey <cujomalainey@chromium.org>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] ALSA: fix function cast warnings
+In-Reply-To: <20240213101020.459183-1-arnd@kernel.org>
+References: <20240213101020.459183-1-arnd@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Message-Id: <bcd477f9-8619-4121-83ce-fa8ba05a36aa@app.fastmail.com>
-In-Reply-To: <1j7cj8k2se.fsf@starbuckisacylon.baylibre.com>
-References: <20240213101220.459641-1-arnd@kernel.org>
- <1jbk8kk5pk.fsf@starbuckisacylon.baylibre.com>
- <c61d7daf-1b13-4ff8-aeae-7dcd8dd02131@app.fastmail.com>
- <1j7cj8k2se.fsf@starbuckisacylon.baylibre.com>
-Date: Tue, 13 Feb 2024 13:45:19 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jerome Brunet" <jbrunet@baylibre.com>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, "Stephen Boyd" <sboyd@kernel.org>,
- "Mark Brown" <broonie@kernel.org>, "Liam Girdwood" <lgirdwood@gmail.com>,
- "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
- "Neil Armstrong" <neil.armstrong@linaro.org>,
- "Kevin Hilman" <khilman@baylibre.com>,
- "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ASoC: meson: add helpers for clk_disable_unprepare
-Content-Type: text/plain
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -3.30
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[yandex.ru];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_TWELVE(0.00)[13];
+	 MID_CONTAINS_FROM(1.00)[];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[perex.cz,suse.com,arndb.de,kernel.org,google.com,chromium.org,yandex.ru,vger.kernel.org,lists.linux.dev];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%]
+X-Spam-Flag: NO
 
-On Tue, Feb 13, 2024, at 12:09, Jerome Brunet wrote:
-> On Tue 13 Feb 2024 at 11:52, "Arnd Bergmann" <arnd@arndb.de> wrote:
->
->> On Tue, Feb 13, 2024, at 11:36, Jerome Brunet wrote:
->>> On Tue 13 Feb 2024 at 11:11, Arnd Bergmann <arnd@kernel.org> wrote:
->>
->>> This probably pre-dates the introduction of devm_clk_get_enabled()
->>> It would probably be better to use that instead of duplicating helper
->>> functions which do the same thing.
->>
->> Ah, I had not thought of that interface either, so you are probably
->> right that this is the best way to do it.
->> Can you send a replacement patch then and add my Reported-by?
->
-> Sure.
->
-> How may I reproduce the problem ?
-> Just tried with 'Debian clang version 16.0.6 (19)', no warning.
->
-> I suppose I need to add something ?
+On Tue, 13 Feb 2024 11:09:56 +0100,
+Arnd Bergmann wrote:
+> 
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang-16 points out a control flow integrity (kcfi) issue when event
+> callbacks get converted to incompatible types:
+> 
+> sound/core/seq/seq_midi.c:135:30: error: cast from 'int (*)(struct snd_rawmidi_substream *, const char *, int)' to 'snd_seq_dump_func_t' (aka 'int (*)(void *, void *, int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>   135 |                 snd_seq_dump_var_event(ev, (snd_seq_dump_func_t)dump_midi, substream);
+>       |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> sound/core/seq/seq_virmidi.c:83:31: error: cast from 'int (*)(struct snd_rawmidi_substream *, const unsigned char *, int)' to 'snd_seq_dump_func_t' (aka 'int (*)(void *, void *, int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>    83 |                         snd_seq_dump_var_event(ev, (snd_seq_dump_func_t)snd_rawmidi_receive, vmidi->substream);
+>       |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Change these both to take a 'const void *' buffer and a 'void *' context,
+> converting to the respective types in the callee. The change to 'const'
+> buffers propagates to a couple of other functions.
+> 
+> The code was originally added with the initial ALSA merge in linux-2.5.4.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/sound/rawmidi.h            | 3 +--
+>  include/sound/seq_kernel.h         | 2 +-
+>  sound/core/rawmidi.c               | 6 +++---
+>  sound/core/seq/oss/seq_oss_readq.c | 4 ++--
+>  sound/core/seq/oss/seq_oss_readq.h | 2 +-
+>  sound/core/seq/seq_memory.c        | 4 ++--
+>  sound/core/seq/seq_midi.c          | 5 +++--
+>  sound/core/seq/seq_virmidi.c       | 2 +-
+>  8 files changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/include/sound/rawmidi.h b/include/sound/rawmidi.h
+> index f31cabf0158c..91947fb16e07 100644
+> --- a/include/sound/rawmidi.h
+> +++ b/include/sound/rawmidi.h
+> @@ -161,8 +161,7 @@ int snd_rawmidi_free(struct snd_rawmidi *rmidi);
+>  
+>  /* callbacks */
+>  
+> -int snd_rawmidi_receive(struct snd_rawmidi_substream *substream,
+> -			const unsigned char *buffer, int count);
+> +int snd_rawmidi_receive(void *ptr, const void *buffer, int count);
 
-The warning is currently only enabled at W=1 level until
-we have fixed all the existing diagnostic output. I have
-sent the other ones today, but for now, please test with
-'make W=1'.
+If it were only about the type of the buffer argument being a void
+pointer, it's fine.  But the substream argument should be explicitly
+typed, otherwise it's confusing for other normal call patterns.
 
-     Arnd
+I guess the suitable fix for now would be to provide wrapper functions
+that are used for callbacks and bridge to the actual function with
+pointer cast, something like below.  Eventually we can put more const,
+but it's basically irrelevant with the warning itself.
+
+
+thanks,
+
+Takashi
+
+-- 8< --
+--- a/sound/core/seq/seq_midi.c
++++ b/sound/core/seq/seq_midi.c
+@@ -113,6 +113,12 @@ static int dump_midi(struct snd_rawmidi_substream *substream, const char *buf, i
+ 	return 0;
+ }
+ 
++/* callback for snd_seq_dump_var_event(), bridging to dump_midi() */
++static int __dump_midi(void *ptr, void *buf, int count)
++{
++	return dump_midi(ptr, buf, count);
++}
++
+ static int event_process_midi(struct snd_seq_event *ev, int direct,
+ 			      void *private_data, int atomic, int hop)
+ {
+@@ -132,7 +138,7 @@ static int event_process_midi(struct snd_seq_event *ev, int direct,
+ 			pr_debug("ALSA: seq_midi: invalid sysex event flags = 0x%x\n", ev->flags);
+ 			return 0;
+ 		}
+-		snd_seq_dump_var_event(ev, (snd_seq_dump_func_t)dump_midi, substream);
++		snd_seq_dump_var_event(ev, __dump_midi, substream);
+ 		snd_midi_event_reset_decode(msynth->parser);
+ 	} else {
+ 		if (msynth->parser == NULL)
+--- a/sound/core/seq/seq_virmidi.c
++++ b/sound/core/seq/seq_virmidi.c
+@@ -62,6 +62,13 @@ static void snd_virmidi_init_event(struct snd_virmidi *vmidi,
+ /*
+  * decode input event and put to read buffer of each opened file
+  */
++
++/* callback for snd_seq_dump_var_event(), bridging to snd_rawmidi_receive() */
++static int dump_to_rawmidi(void *ptr, void *buf, int count)
++{
++	return snd_rawmidi_receive(ptr, buf, count);
++}
++
+ static int snd_virmidi_dev_receive_event(struct snd_virmidi_dev *rdev,
+ 					 struct snd_seq_event *ev,
+ 					 bool atomic)
+@@ -80,7 +87,7 @@ static int snd_virmidi_dev_receive_event(struct snd_virmidi_dev *rdev,
+ 		if (ev->type == SNDRV_SEQ_EVENT_SYSEX) {
+ 			if ((ev->flags & SNDRV_SEQ_EVENT_LENGTH_MASK) != SNDRV_SEQ_EVENT_LENGTH_VARIABLE)
+ 				continue;
+-			snd_seq_dump_var_event(ev, (snd_seq_dump_func_t)snd_rawmidi_receive, vmidi->substream);
++			snd_seq_dump_var_event(ev, dump_to_rawmidi, vmidi->substream);
+ 			snd_midi_event_reset_decode(vmidi->parser);
+ 		} else {
+ 			len = snd_midi_event_decode(vmidi->parser, msg, sizeof(msg), ev);
