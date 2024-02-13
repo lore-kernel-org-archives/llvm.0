@@ -1,144 +1,613 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FF25789B
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 14:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B0B1B299;
+	Tue, 13 Feb 2024 14:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707834533; cv=none; b=rk9bUrAntZs03nxu3ocYxKDBqOwEEtzopnxHdLXVeg6/yO7+0ULoHCLRM3i2Cd0TOBABi9+rLlSmjnorr3xdNJj/y4ihUPgaS+e2Q+UJVbMaHCD80ETDFxcFjeraK0n3rIlqUguh0lCo3IQ8mPjA/r+e7CAXLZ3/nh0yBugP6h4=
+	t=1707835441; cv=none; b=FeEvYo8AVzzbA9rRqHKbzqjBIPY1PfLs2ZXUCSJi6Lfqiv2heYp8dCgIKbyjL4UD6cenWYjOBaSzjXExfZHMEPBLHKbjAUriAslrSyNgLyW8wLP3YyolZ8wSrrzCS7tFznin+mfYN71hFQvh19oSzD5Wt9jvstVrANaRtoZyvz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707834533; c=relaxed/simple;
-	bh=9Rs+Z1D53lFg4letHGtTelZBrVpQkf1x4avjmD7lVBg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=djdLzR5PQj/+Pjk4AnvxgeXnpLoiJFcsrKmjnyCtSl6RQ9PZz+KaSXclhsHRc1pBvJ2154hPiaPDUB2X5jKDTJOAFCIXt8lvXBQgn+WTMyZw7tu16jUUB50siaG491g/+pxsyBqOGfnnv4wIIoc89NeuAdsUIhUOFHsfiJPMTNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=PuIqAw7d; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1707835441; c=relaxed/simple;
+	bh=EWsjQgX53H1oH/PgNxSm9f2MKbcQUkPN2ds487Lf/e4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aGsJGeX9tVrnHLa1GD2r1Cm0a/mR/jETuYMzdUwJx8+CupJzTIxnSOF7flzuxLrWlMTB317QL0ibQlDu4jZcMa3p0//z88JYLh1CcO+ZFd7HxLPPMxiz7+vu0yHnMkK++28HZ+Zn5kGvLNRNmPr378daZZZxTPfSL4YbKRQsIzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YfluiIxc; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="PuIqAw7d"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-411d76c9ce3so19245e9.3
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 06:28:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707834527; x=1708439327; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/P5OEV1VZDQ2Y6WiXRGS4Q89qwUlbC22uYjuCjHTuIU=;
-        b=PuIqAw7dYFzncv+CEpAwRBCJ6Li/wfcVS+D760UxccHNi4sZp5WmKba0hMAiT2f9Ze
-         uDGz0pLpUE8Ww42SDfNM4OrZG8Rkhn3HUnEitwzXBXsSbnse/WqCjOnIMCZJnfy+uzXq
-         waGuw8vKxDGrR1IAjUEEarHF2Y4tIKFuttROAQqSb4QoIyrYuJzkJ/MOn/oF/mbNtluS
-         dbWf23QdeZyXa6UBbjwzc4eHhi+DpzvQm983qMpJwyL3386wXuXYhqm+RuDAIpR+51iq
-         IcJnVDlBWmHQ0fsrbF9i/PAWbN7ai04BKeQ3TkLi67tyx5W8SwC+kJQd/xtUdqBcrFlm
-         4eoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707834527; x=1708439327;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/P5OEV1VZDQ2Y6WiXRGS4Q89qwUlbC22uYjuCjHTuIU=;
-        b=uxvMglR3r3TU/RVUeddbGeC1ogBzU7dhfDJYldw+/kFoDGXxvTbrUHqWKZbFOsdWEf
-         HMIhBZHZ+dQV8XntMqs304Uqwlr+xlJQkhtiIyiSvWk+2jGWupffnsbDlHNzMNXEbvxT
-         wRMklFPbWQQgirtB+dW55XK6jHden1mVVpZQSlODs6zadPqSdaihkcAwQjkRnBhAOHNs
-         EM+vgN7tMq+5vq0qGvThf9mDSddX3THvfmuNvfdzTOOPYXVmA4rrl75nKxZdWVwWgs0k
-         hGDeXqUxRCX8E4cn1xL4z8cLdVEMRysg+JL3iqSg8ZEWLc6kmJrNxNywFErEmWp3J+ru
-         VXZA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJYigNd0EiDaUkeej7Mh/AXf3tuzrpeiiYLVmSHqEucSw+tqiXNLcbXZlq0LoK6OPmhZH5pg1jHbC69MRkyve40it9ew==
-X-Gm-Message-State: AOJu0YyECwtCGiMVwj4khv0ON+fNXTTTbo9U3rnwHgh5tYHqIfoR7dM3
-	9qgtAcRGjCAIR4KHuKQo2/DDEAQ+6kNgbjG7rjKgtpWPwRaZYVYVVatn6l37HaQ=
-X-Google-Smtp-Source: AGHT+IGiC793LinMHbSN0tqOwAmEoL553oU7/A6JdVsIKr0NUqRw6b4JfedsvFaXrsTmYf3tExqs3A==
-X-Received: by 2002:a5d:6049:0:b0:33b:830c:4747 with SMTP id j9-20020a5d6049000000b0033b830c4747mr4011709wrt.30.1707834527328;
-        Tue, 13 Feb 2024 06:28:47 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXquBLIVBSe9TCBJGJYv2su4y13BafAYhwiX0ElOknAk6XMiKuZMqZpHY/sqIlHyFuQkPvSj03zBEvur9j88JaXMgQ9THxZYuC5RSujIuZBWhZbKIiLg3h6nk4DEgt2wcNOfWXzIamNTygjXtGFE7gxeuKEx+R1MNhm5+R8wsZpmRWscM+awpuwYtaYKLuMLHMagF0zXI2t7386evdi4s6AgCL+lT/aBCVJiwS/7tprLpJlWK59xPN/L7yhi7BuHSVOA+5bL+593PDYrttx5yVi1vpAh7cwbHAkxLS0iTLGlDspuk0dfeYzwA84OVRbOF0Q7jBGIFaU1mI6vMYq5vdJlwJr1ActrIFIPInnbcCWQQhMmV270rvyP/zQpekscueZ0lTROJwdFu93vyfJp/9w7T9kZXscuLUseKLoR9w4m8BHoJpJiZdwQoXXtJcGE16KBDuhR8N/T4G8QiQY2yA+eQjnilujsne457Mzk7zcEwST2R8UkRTUJtS6l09c9g==
-Received: from toaster.lan ([2a01:e0a:3c5:5fb1:509b:4241:48a3:e3e0])
-        by smtp.googlemail.com with ESMTPSA id bs25-20020a056000071900b0033b45bdb2a1sm9880114wrb.4.2024.02.13.06.28.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 06:28:46 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Jerome Brunet <jbrunet@baylibre.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] nvmem: meson-efuse: fix function pointer type mismatch
-Date: Tue, 13 Feb 2024 15:28:28 +0100
-Message-ID: <20240213142831.3069049-1-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YfluiIxc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707835438; x=1739371438;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EWsjQgX53H1oH/PgNxSm9f2MKbcQUkPN2ds487Lf/e4=;
+  b=YfluiIxcdIicixClxNyGlordjkMWYShlEsTKF9KRwr9xth8Bk4kbsxss
+   MiwvfqxGdA9s8VY1Xkzi+/ArEQCLkNCKYYEmjEZrNuAxi+04tFHKq6OQI
+   hD6LaZZcTIm2LiHUw2pqxd7M9/DwnKn31fFqEnpBTotPvBaJsJfdkCQKy
+   RmkAOIkkZK5CrDO32YwRs+CMd8tRMx0JlyA0XFhtZugdSIDxo8oREDlWZ
+   T+Bv4q0dw0pSEHPCs30q/LnlihaLhjDGy+jGnTTTGLAKQN04CXAv29eLR
+   mw0C9oxgwoxs8RRPHpWXLlXelL6oBacSgN72oWSNgoyoHKg+W0W7MNBup
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1982165"
+X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
+   d="scan'208";a="1982165"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 06:43:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
+   d="scan'208";a="7543000"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 13 Feb 2024 06:43:56 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rZu0n-0007nm-2Y;
+	Tue, 13 Feb 2024 14:43:53 +0000
+Date: Tue, 13 Feb 2024 22:42:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vbabka:BROKEN-locking-bench 1/1] lib/slub_kunit.c:227:2: error:
+ unknown type name 'u128'
+Message-ID: <202402132232.fEDQMH1L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-clang-16 warns about casting functions to incompatible types, as is done
-here to call clk_disable_unprepare:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git BROKEN-locking-bench
+head:   e4d39d948cd5cea8989768ec08d7fdbd5171e918
+commit: e4d39d948cd5cea8989768ec08d7fdbd5171e918 [1/1] slub_kunit: hack in a stupid locking/atomics microbenchmark
+config: i386-buildonly-randconfig-004-20240213 (https://download.01.org/0day-ci/archive/20240213/202402132232.fEDQMH1L-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402132232.fEDQMH1L-lkp@intel.com/reproduce)
 
-drivers/nvmem/meson-efuse.c:78:12: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-   78 |                                        (void(*)(void *))clk_disable_unprepare,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402132232.fEDQMH1L-lkp@intel.com/
 
-The pattern of getting, enabling and setting a disable callback for a
-clock can be replaced with devm_clk_get_enabled(), which also fixes
-this warning.
+All errors (new ones prefixed by >>):
 
-Fixes: 611fbca1c861 ("nvmem: meson-efuse: add peripheral clock")
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- drivers/nvmem/meson-efuse.c | 25 +++----------------------
- 1 file changed, 3 insertions(+), 22 deletions(-)
+>> lib/slub_kunit.c:227:2: error: unknown type name 'u128'
+     227 |         u128 full;
+         |         ^
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:435:22: note: expanded from macro 'compiletime_assert'
+     435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:423:23: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:415:9: note: expanded from macro '__compiletime_assert'
+     415 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:435:22: note: expanded from macro 'compiletime_assert'
+     435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:423:23: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:415:9: note: expanded from macro '__compiletime_assert'
+     415 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:435:22: note: expanded from macro 'compiletime_assert'
+     435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:423:23: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:415:9: note: expanded from macro '__compiletime_assert'
+     415 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:435:22: note: expanded from macro 'compiletime_assert'
+     435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:423:23: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:415:9: note: expanded from macro '__compiletime_assert'
+     415 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:435:22: note: expanded from macro 'compiletime_assert'
+     435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:423:23: note: expanded from macro '_compiletime_assert'
+     423 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:415:9: note: expanded from macro '__compiletime_assert'
+     415 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ~~~~~~~~~~~~^~
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                           ~~~~~~~~~~~~~~~~~~~~~~~^~
+   include/linux/compiler_types.h:391:13: note: expanded from macro '__unqual_scalar_typeof'
+     391 |                 _Generic((x),                                           \
+         |                           ^
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ~~~~~~~~~~~~^~
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                           ~~~~~~~~~~~~~~~~~~~~~~~^~
+   include/linux/compiler_types.h:398:15: note: expanded from macro '__unqual_scalar_typeof'
+     398 |                          default: (x)))
+         |                                    ^
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/percpu.h:127:21: note: expanded from macro '__this_cpu_generic_read_nopreempt'
+     127 |         ___ret = READ_ONCE(*raw_cpu_ptr(&(pcp)));                       \
+         |                  ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ~~~~~~~~~~~~^~
+   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                         ^
+   lib/slub_kunit.c:269:10: error: indirection requires pointer operand ('void' invalid)
+     269 |                         old = this_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:209:1: note: expanded from here
+     209 | this_cpu_read_8
+         | ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/percpu.h:148:11: note: expanded from macro 'this_cpu_generic_read'
+     148 |                 __ret = __this_cpu_generic_read_noirq(pcp);             \
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:137:11: note: expanded from macro '__this_cpu_generic_read_noirq'
+     137 |         ___ret = raw_cpu_generic_read(pcp);                             \
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:67:2: note: expanded from macro 'raw_cpu_generic_read'
+      67 |         *raw_cpu_ptr(&(pcp));                                           \
+         |         ^~~~~~~~~~~~~~~~~~~~
+>> lib/slub_kunit.c:271:13: error: expected ';' at end of declaration
+     271 |                 } while (!this_cpu_try_cmpxchg(test_pcps.counter, &old, new));
+         |                           ^
+   include/linux/percpu-defs.h:499:2: note: expanded from macro 'this_cpu_try_cmpxchg'
+     499 |         __pcpu_size_call_return2bool(this_cpu_try_cmpxchg_, pcp, ovalp, nval)
+         |         ^
+   include/linux/percpu-defs.h:354:24: note: expanded from macro '__pcpu_size_call_return2bool'
+     354 |         case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;    \
+         |                               ^
+   <scratch space>:9:1: note: expanded from here
+       9 | this_cpu_try_cmpxchg_8
+         | ^
+   include/asm-generic/percpu.h:498:2: note: expanded from macro 'this_cpu_try_cmpxchg_8'
+     498 |         this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+         |         ^
+   include/asm-generic/percpu.h:186:10: note: expanded from macro 'this_cpu_generic_try_cmpxchg'
+     186 |         __ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);          \
+         |                 ^
+   include/asm-generic/percpu.h:104:35: note: expanded from macro 'raw_cpu_generic_try_cmpxchg'
+     104 |         typeof(pcp) __val = *__p, ___old = *(ovalp);                    \
+         |                                          ^
+>> lib/slub_kunit.c:271:13: error: use of undeclared identifier '___old'
+   include/linux/percpu-defs.h:499:2: note: expanded from macro 'this_cpu_try_cmpxchg'
+     499 |         __pcpu_size_call_return2bool(this_cpu_try_cmpxchg_, pcp, ovalp, nval)
+         |         ^
+   include/linux/percpu-defs.h:354:24: note: expanded from macro '__pcpu_size_call_return2bool'
+     354 |         case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;    \
+         |                               ^
+   <scratch space>:9:1: note: expanded from here
+       9 | this_cpu_try_cmpxchg_8
+         | ^
+   include/asm-generic/percpu.h:498:2: note: expanded from macro 'this_cpu_try_cmpxchg_8'
+     498 |         this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+         |         ^
+   include/asm-generic/percpu.h:186:10: note: expanded from macro 'this_cpu_generic_try_cmpxchg'
+     186 |         __ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);          \
+         |                 ^
+   include/asm-generic/percpu.h:106:15: note: expanded from macro 'raw_cpu_generic_try_cmpxchg'
+     106 |         if (__val == ___old) {                                          \
+         |                      ^
+   lib/slub_kunit.c:283:10: error: indirection requires pointer operand ('void' invalid)
+     283 |                         old = raw_cpu_read(test_pcps.counter);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:408:28: note: expanded from macro 'raw_cpu_read'
+     408 | #define raw_cpu_read(pcp)               __pcpu_size_call_return(raw_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:324:23: note: expanded from macro '__pcpu_size_call_return'
+     324 |         case 8: pscr_ret__ = stem##8(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:30:1: note: expanded from here
+      30 | raw_cpu_read_8
+         | ^
+   include/asm-generic/percpu.h:211:30: note: expanded from macro 'raw_cpu_read_8'
+     211 | #define raw_cpu_read_8(pcp)             raw_cpu_generic_read(pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:67:2: note: expanded from macro 'raw_cpu_generic_read'
+      67 |         *raw_cpu_ptr(&(pcp));                                           \
+         |         ^~~~~~~~~~~~~~~~~~~~
+   lib/slub_kunit.c:285:13: error: expected ';' at end of declaration
+     285 |                 } while (!this_cpu_try_cmpxchg(test_pcps.counter, &old, new));
+         |                           ^
+   include/linux/percpu-defs.h:499:2: note: expanded from macro 'this_cpu_try_cmpxchg'
+     499 |         __pcpu_size_call_return2bool(this_cpu_try_cmpxchg_, pcp, ovalp, nval)
+         |         ^
+   include/linux/percpu-defs.h:354:24: note: expanded from macro '__pcpu_size_call_return2bool'
+     354 |         case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;    \
+         |                               ^
+   <scratch space>:69:1: note: expanded from here
+      69 | this_cpu_try_cmpxchg_8
+         | ^
+   include/asm-generic/percpu.h:498:2: note: expanded from macro 'this_cpu_try_cmpxchg_8'
+     498 |         this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+         |         ^
+   include/asm-generic/percpu.h:186:10: note: expanded from macro 'this_cpu_generic_try_cmpxchg'
+     186 |         __ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);          \
+         |                 ^
+   include/asm-generic/percpu.h:104:35: note: expanded from macro 'raw_cpu_generic_try_cmpxchg'
+     104 |         typeof(pcp) __val = *__p, ___old = *(ovalp);                    \
+         |                                          ^
+   lib/slub_kunit.c:285:13: error: use of undeclared identifier '___old'
+   include/linux/percpu-defs.h:499:2: note: expanded from macro 'this_cpu_try_cmpxchg'
+     499 |         __pcpu_size_call_return2bool(this_cpu_try_cmpxchg_, pcp, ovalp, nval)
+         |         ^
+   include/linux/percpu-defs.h:354:24: note: expanded from macro '__pcpu_size_call_return2bool'
+     354 |         case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;    \
+         |                               ^
+   <scratch space>:69:1: note: expanded from here
+      69 | this_cpu_try_cmpxchg_8
+         | ^
+   include/asm-generic/percpu.h:498:2: note: expanded from macro 'this_cpu_try_cmpxchg_8'
+     498 |         this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+         |         ^
+   include/asm-generic/percpu.h:186:10: note: expanded from macro 'this_cpu_generic_try_cmpxchg'
+     186 |         __ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);          \
+         |                 ^
+   include/asm-generic/percpu.h:106:15: note: expanded from macro 'raw_cpu_generic_try_cmpxchg'
+     106 |         if (__val == ___old) {                                          \
+         |                      ^
+   lib/slub_kunit.c:297:21: error: initializing 'struct test_pcp *' with an expression of incompatible type 'void'
+     297 |                         struct test_pcp *pcp = raw_cpu_ptr(&test_pcps);
+         |                                          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+   lib/slub_kunit.c:301:13: error: expected ';' at end of declaration
+     301 |                 } while (!this_cpu_try_cmpxchg128(test_pcps.counter_ptr.full,
+         |                           ^
+   include/asm-generic/percpu.h:517:2: note: expanded from macro 'this_cpu_try_cmpxchg128'
+     517 |         this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+         |         ^
+   include/asm-generic/percpu.h:186:10: note: expanded from macro 'this_cpu_generic_try_cmpxchg'
+     186 |         __ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);          \
+         |                 ^
+   include/asm-generic/percpu.h:104:35: note: expanded from macro 'raw_cpu_generic_try_cmpxchg'
+     104 |         typeof(pcp) __val = *__p, ___old = *(ovalp);                    \
+         |                                          ^
+   lib/slub_kunit.c:301:13: error: use of undeclared identifier '___old'
+   include/asm-generic/percpu.h:517:2: note: expanded from macro 'this_cpu_try_cmpxchg128'
+     517 |         this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+         |         ^
+   include/asm-generic/percpu.h:186:10: note: expanded from macro 'this_cpu_generic_try_cmpxchg'
+     186 |         __ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);          \
+         |                 ^
+   include/asm-generic/percpu.h:106:15: note: expanded from macro 'raw_cpu_generic_try_cmpxchg'
+     106 |         if (__val == ___old) {                                          \
+         |                      ^
+>> lib/slub_kunit.c:312:3: error: passing 'void' to parameter of incompatible type 'local_lock_t *'
+     312 |                 local_lock(&test_pcps.llock);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/local_lock.h:16:27: note: expanded from macro 'local_lock'
+      16 | #define local_lock(lock)                __local_lock(lock)
+         |                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/local_lock_internal.h:68:22: note: expanded from macro '__local_lock'
+      68 |                 local_lock_acquire(this_cpu_ptr(lock));         \
+         |                                    ^~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:246:32: note: expanded from macro 'this_cpu_ptr'
+     246 | #define this_cpu_ptr(ptr)                                               \
+         |                                                                         ^
+     247 | ({                                                                      \
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     248 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     249 |         SHIFT_PERCPU_PTR(ptr, my_cpu_offset);                           \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     250 | })
+         | ~~
+   include/linux/local_lock_internal.h:27:53: note: passing argument to parameter 'l' here
+      27 | static inline void local_lock_acquire(local_lock_t *l)
+         |                                                     ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
-diff --git a/drivers/nvmem/meson-efuse.c b/drivers/nvmem/meson-efuse.c
-index b922df99f9bc..33678d0af2c2 100644
---- a/drivers/nvmem/meson-efuse.c
-+++ b/drivers/nvmem/meson-efuse.c
-@@ -47,7 +47,6 @@ static int meson_efuse_probe(struct platform_device *pdev)
- 	struct nvmem_config *econfig;
- 	struct clk *clk;
- 	unsigned int size;
--	int ret;
- 
- 	sm_np = of_parse_phandle(pdev->dev.of_node, "secure-monitor", 0);
- 	if (!sm_np) {
-@@ -60,27 +59,9 @@ static int meson_efuse_probe(struct platform_device *pdev)
- 	if (!fw)
- 		return -EPROBE_DEFER;
- 
--	clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(clk)) {
--		ret = PTR_ERR(clk);
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "failed to get efuse gate");
--		return ret;
--	}
--
--	ret = clk_prepare_enable(clk);
--	if (ret) {
--		dev_err(dev, "failed to enable gate");
--		return ret;
--	}
--
--	ret = devm_add_action_or_reset(dev,
--				       (void(*)(void *))clk_disable_unprepare,
--				       clk);
--	if (ret) {
--		dev_err(dev, "failed to add disable callback");
--		return ret;
--	}
-+	clk = devm_clk_get_enabled(dev, NULL);
-+	if (IS_ERR(clk))
-+		return dev_err_probe(dev, PTR_ERR(clk), "failed to get efuse gate");
- 
- 	if (meson_sm_call(fw, SM_EFUSE_USER_MAX, &size, 0, 0, 0, 0, 0) < 0) {
- 		dev_err(dev, "failed to get max user");
+
+vim +/u128 +227 lib/slub_kunit.c
+
+   221	
+   222	typedef union {
+   223		struct {
+   224			unsigned long counter;
+   225			void *dummy;
+   226		};
+ > 227		u128 full;
+   228	} counter_ptr_t;
+   229	
+   230	struct test_pcp {
+   231		local_lock_t llock;
+   232		spinlock_t slock;
+   233		unsigned long counter;
+   234		counter_ptr_t counter_ptr;
+   235	};
+   236	
+   237	static bool __dummy;
+   238	
+   239	static DEFINE_PER_CPU(struct test_pcp, test_pcps) = {
+   240	        .llock = INIT_LOCAL_LOCK(llock),
+   241		.slock = __SPIN_LOCK_UNLOCKED(stock_lock),
+   242	};
+   243	
+   244	#define TIMING_ITERATIONS 1000000000
+   245	
+   246	static void test_lock_timings(struct kunit *test)
+   247	{
+   248		unsigned long long before, after;
+   249		unsigned long __maybe_unused UP_flags;
+   250		struct test_pcp *pcp;
+   251		unsigned long flags;
+   252	
+   253		before = rdtsc_ordered();
+   254	
+   255		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   256			if (this_cpu_inc_return(test_pcps.counter) == 0)
+   257				__dummy = true;
+   258		}
+   259	
+   260		after = rdtsc_ordered();
+   261	
+   262		pr_info("%-25s %12llu cycles", "this_cpu_inc_return", after - before);
+   263	
+   264		before = rdtsc_ordered();
+   265	
+   266		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   267			unsigned long old, new;
+   268			do {
+   269				old = this_cpu_read(test_pcps.counter);
+   270				new = old + 1;
+ > 271			} while (!this_cpu_try_cmpxchg(test_pcps.counter, &old, new));
+   272		}
+   273	
+   274		after = rdtsc_ordered();
+   275	
+   276		pr_info("%-25s %12llu cycles", "this_cpu_try_cmpxchg", after - before);
+   277	
+   278		before = rdtsc_ordered();
+   279	
+   280		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   281			unsigned long old, new;
+   282			do {
+   283				old = raw_cpu_read(test_pcps.counter);
+   284				new = old + 1;
+   285			} while (!this_cpu_try_cmpxchg(test_pcps.counter, &old, new));
+   286		}
+   287	
+   288		after = rdtsc_ordered();
+   289	
+   290		pr_info("%-25s %12llu cycles", "raw+this_cpu_try_cmpxchg", after - before);
+   291	
+   292		before = rdtsc_ordered();
+   293	
+   294		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   295			counter_ptr_t old, new;
+   296			do {
+   297				struct test_pcp *pcp = raw_cpu_ptr(&test_pcps);
+   298				old.full = pcp->counter_ptr.full;
+   299				new.counter = old.counter + 1;
+   300				new.dummy = old.dummy;
+   301			} while (!this_cpu_try_cmpxchg128(test_pcps.counter_ptr.full,
+   302							  &old.full, new.full));
+   303		}
+   304	
+   305		after = rdtsc_ordered();
+   306	
+   307		pr_info("%-25s %12llu cycles", "this_cpu_try_cmpxchg128", after - before);
+   308	
+   309		before = rdtsc_ordered();
+   310	
+   311		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+ > 312			local_lock(&test_pcps.llock);
+   313	
+   314			pcp = this_cpu_ptr(&test_pcps);
+   315	
+   316			pcp->counter++;
+   317	
+   318			local_unlock(&test_pcps.llock);
+   319		}
+   320	
+   321		after = rdtsc_ordered();
+   322	
+   323		pr_info("%-25s %12llu cycles", "local_lock", after - before);
+   324	
+   325		before = rdtsc_ordered();
+   326	
+   327		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   328			if (likely(!in_interrupt())) {
+   329				local_lock(&test_pcps.llock);
+   330	
+   331				pcp = this_cpu_ptr(&test_pcps);
+   332	
+   333				pcp->counter++;
+   334	
+   335				local_unlock(&test_pcps.llock);
+   336			}
+   337		}
+   338	
+   339		after = rdtsc_ordered();
+   340	
+   341		pr_info("%-25s %12llu cycles", "local_lock+in_intr()", after - before);
+   342	
+   343	
+   344		before = rdtsc_ordered();
+   345	
+   346		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   347			local_lock_irq(&test_pcps.llock);
+   348	
+   349			pcp = this_cpu_ptr(&test_pcps);
+   350	
+   351			pcp->counter++;
+   352	
+   353			local_unlock_irq(&test_pcps.llock);
+   354		}
+   355	
+   356		after = rdtsc_ordered();
+   357	
+   358		cond_resched();
+   359	
+   360		pr_info("%-25s %12llu cycles", "local_lock_irq", after - before);
+   361	
+   362		before = rdtsc_ordered();
+   363	
+   364		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   365			local_lock_irqsave(&test_pcps.llock, flags);
+   366	
+   367			pcp = this_cpu_ptr(&test_pcps);
+   368	
+   369			pcp->counter++;
+   370	
+   371			local_unlock_irqrestore(&test_pcps.llock, flags);
+   372		}
+   373	
+   374		after = rdtsc_ordered();
+   375	
+   376		cond_resched();
+   377	
+   378		pr_info("%-25s %12llu cycles", "local_lock_irqsave", after - before);
+   379	
+   380		before = rdtsc_ordered();
+   381	
+   382		for (unsigned long i = 0; i < TIMING_ITERATIONS; i++) {
+   383	
+   384			pcp_trylock_prepare(UP_flags);
+   385	
+   386			pcp = pcpu_spin_trylock(struct test_pcp, slock, &test_pcps);
+   387	
+   388			pcp = this_cpu_ptr(&test_pcps);
+   389	
+   390			pcp->counter++;
+   391	
+   392			pcpu_spin_unlock(slock, pcp);
+   393			pcp_trylock_finish(UP_flags);
+   394		}
+   395	
+   396		after = rdtsc_ordered();
+   397	
+   398		cond_resched();
+   399	
+   400		pr_info("%-25s %12llu cycles", "pcpu_spin_trylock", after - before);
+   401	}
+   402	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
