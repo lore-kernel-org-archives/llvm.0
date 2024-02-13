@@ -1,200 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA4B111AC;
-	Tue, 13 Feb 2024 05:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5B911724
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 05:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707800543; cv=none; b=iMEnYWPmgwNHq/upJ7Dmac56T0t/lvc6nlj3sIGVw7imCjv/28W7s70oh2A9JY2S4718PwdtA+P76SQaaw2UP3tsEYY0VFHN+qPWP2SFMIi3ufvONfArCij5q2TgGTbjUffKDW/PNYIv0o2GUxOb/QZTkfVJK79+UFohiQXP2VE=
+	t=1707801531; cv=none; b=uthB4DJ86/M68KT/Qrow50ZjqGHe4wRrhpOcgn9ZewCjCwAgKkidcayF6SlPxENT46HqHvGqWYwh5IhJ6QXNBWSFSfDh4SQR7wlHLuL/x+atD18cRblGdAmyvNFnI+p0E9u2ld6ScWL3u1Or1mQR4looS0ve0GdUsB0GdgInim0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707800543; c=relaxed/simple;
-	bh=BXxsbJthbAePU6FxYljhSfyNi4QFVAtjFZAvf/EgFsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LIsQihIjimBV0b0AggxQB/ES/6sJQf9SC98wU/OwfCTaqrIxm4h4uIpZKDYwdsJ2O/cWOmoKkOL3784GJ5t1nXggs+crxwRFNmQPgTlPXahngDIzo7ROPr0kCM1SzIdo3dgVDylFqoAkcFhNCam+SsJnlXNuH3Qt43AmsAjVnZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mPzOyK8W; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707801531; c=relaxed/simple;
+	bh=eiQTgF1UiR8Q+fk0Adp4OuUfIL1afzXcdoTxy37Yy5M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NzYYmB7WORJhCacFXYW5qnHvGqhLi5WeddTQWpjA3Vgeh0bfZvs+UHQQHJNgR24c9bg7DQ1on6z6U79ZSXviRLcNG9RPb7FpDaom3j5b0M6BYVD7w/X9n35qnAGEX6Q9ao6BueBbjLO8wfonF2Ugcn0CpEYAX6dFRSofe8aSUYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P43UKvjV; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mPzOyK8W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707800541; x=1739336541;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BXxsbJthbAePU6FxYljhSfyNi4QFVAtjFZAvf/EgFsc=;
-  b=mPzOyK8Wocb0OTVM1hvIY/kq20kT5MBnedIcwIsTkEEI+K/NpFuatzSL
-   UhbXacQN+PW3kp2xcRfePiMLTdpsH4SldKafWEZhBUfB2+ZP7OlHolW5N
-   iwhqWybiDADzyW5VpCnExenFbygbXJ/H2APhHtv69z/+ReRS04HI9sfeP
-   v+trnQO4vpRjaC9ySKmIbLczQ8cdth1ZU6VUBe7iNQ6nkTM6KRMsjsNDC
-   2iWLPEhmiBO/5oG4jai5Ficu0pBs9fUkp9RguFTjMlITFiUkWPkKe86dt
-   O0jfVud+x41BdBoZv8JQtjEBzeQGVh2JEziNLIrKXlXuzEAcSfOq+NBcq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1949745"
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="1949745"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 21:02:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="3087885"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 12 Feb 2024 21:02:18 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZkvw-0007Wi-1G;
-	Tue, 13 Feb 2024 05:02:16 +0000
-Date: Tue, 13 Feb 2024 13:02:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 76/104]
- drivers/thermal/intel/intel_pch_thermal.c:235:45: error: incompatible
- pointer to integer conversion passing 'struct thermal_trip *' to parameter
- of type 'int'
-Message-ID: <202402131207.MEDK8odK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P43UKvjV"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-410cf70a057so22505e9.0
+        for <llvm@lists.linux.dev>; Mon, 12 Feb 2024 21:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707801527; x=1708406327; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ghVxi5tVAq5eNnLPMygpM8GWrTrZsdJ/UPlOsCNOXcM=;
+        b=P43UKvjVN/WVM/8Lziai7Y21wcKkCRXL7eI+3cTgN19NUdCvkvxuxM3ZpfpGcZiKzM
+         mi8VyfiLJYtxghVitjgoZAdZtaeWkFvK5hNQJL0Hy/up63bRxeqijTfMwB8ayyhD+XqQ
+         7dhjXzDkiwrVPp7QCzHyJNmp7fta47yTGUpQXHVTIQ7NU13XdsaTyCy5xf/ZEUg/9Mkb
+         epTGePX8lbMIWSuj+0GwHEUzheq1DSpVzmRZszwU8x/wzmw3XkZZbDAodPhScQGHmy8d
+         QyW2TUgRgWRn85gPuJ5xQZnguHRhlmnlAgRjtsWKU/ZaRzAPTuYNIusTFkVNkrqYChQG
+         d1Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707801527; x=1708406327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ghVxi5tVAq5eNnLPMygpM8GWrTrZsdJ/UPlOsCNOXcM=;
+        b=X7s1VsBs9G99t6IAYsKH03WRIyipqUrkyFDmRSnbj8o3FPqRJHy/QsLwzClxNcwFE8
+         9clRmClAXfz6+fjr8NlxPeFoRftMzvv8m+hRZQ38ghjylniN3ZEUr8N5FxtgL4AAHSbs
+         XoeaykfpLluDQ3KlQIuZYzha/XkpRTtOm2np2o5RqxVxRvr9Caa8706ZPovw/50bGPLO
+         U7zWc7U4O5lXqekwFccgTna2Fn72Qou37LDcwAr2BjoHFMjpFdMJnKhN4CVn1sozv9mx
+         6WnvYzqql82BM+jLDepkNLwpkmV++RIE8YPVcFLUg99s64e8kkWHy8Sd7T+uk5NbdB8I
+         uFBg==
+X-Forwarded-Encrypted: i=1; AJvYcCXkGZf1R6DJX7i5KGgcakdlqR5t4AiRo5uHFCLH5HW2Tah+hmDO3I3MFYO/m1/V9mqJGo3maqoj9S3bwXtXkZsEj9sgYQ==
+X-Gm-Message-State: AOJu0YwEJwtIkKpYLWb1Q8KS0nEzjXzfYdzYTup/B53myHPLPLXmHfUb
+	8s778kuu+84srCsfea3V5W733+5Zxdp6eRcbYGIopQEDHyutd9Nh4vdCpxJE6BfUPycNuak9a3f
+	GHRAv1qcxiECAeFyBx1k1tV7VT22K+Dh254N/
+X-Google-Smtp-Source: AGHT+IGIk9vgIyNEuPvEQWVSn9DTVK8z4lhSQ+F7yHiGndjDMSMn8pMG1+J6wBdEBW/Ugy8gdDTVKttr2XXSPJJzZys=
+X-Received: by 2002:a05:600c:3d8e:b0:410:87e5:42da with SMTP id
+ bi14-20020a05600c3d8e00b0041087e542damr61264wmb.2.1707801527358; Mon, 12 Feb
+ 2024 21:18:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org> <20240207-s390-lld-and-orphan-warn-v1-6-8a665b3346ab@kernel.org>
+In-Reply-To: <20240207-s390-lld-and-orphan-warn-v1-6-8a665b3346ab@kernel.org>
+From: Fangrui Song <maskray@google.com>
+Date: Mon, 12 Feb 2024 21:18:34 -0800
+Message-ID: <CAFP8O3+L6Jpgktk50UBKg_SodH-DTAW2syZueUqxdZsxrOT3bg@mail.gmail.com>
+Subject: Re: [PATCH 06/11] s390/boot: vmlinux.lds.S: Handle '.rela' sections
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, 
+	borntraeger@linux.ibm.com, svens@linux.ibm.com, ndesaulniers@google.com, 
+	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   536723ad19c051cec0b5fa9793100f26c70b28d0
-commit: 8c6e2196a852052fa1696cfe86d1da366f725b19 [76/104] thermal: intel: Discard trip tables after zone registration
-config: i386-buildonly-randconfig-001-20240213 (https://download.01.org/0day-ci/archive/20240213/202402131207.MEDK8odK-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402131207.MEDK8odK-lkp@intel.com/reproduce)
+On Wed, Feb 7, 2024 at 4:15=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> When building with CONFIG_LD_ORPHAN_WARN after selecting
+> CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are several warnings from
+> arch/s390/boot/head.o due to the unhandled presence of '.rela' sections:
+>
+>   s390-linux-ld: warning: orphan section `.rela.iplt' from `arch/s390/boo=
+t/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.head.text' from `arch/s39=
+0/boot/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.got' from `arch/s390/boot=
+/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.data' from `arch/s390/boo=
+t/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.data.rel.ro' from `arch/s=
+390/boot/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.iplt' from `arch/s390/boo=
+t/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.head.text' from `arch/s39=
+0/boot/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.got' from `arch/s390/boot=
+/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.data' from `arch/s390/boo=
+t/head.o' being placed in section `.rela.dyn'
+>   s390-linux-ld: warning: orphan section `.rela.data.rel.ro' from `arch/s=
+390/boot/head.o' being placed in section `.rela.dyn'
+>
+> These sections are unneeded for the decompressor and they are not
+> emitted in the binary currently. In a manner similar to other
+> architectures, coalesce the sections into '.rela.dyn' and ensure it is
+> zero sized, which is a safe/tested approach versus full discard.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/s390/boot/vmlinux.lds.S | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/s390/boot/vmlinux.lds.S b/arch/s390/boot/vmlinux.lds.S
+> index 2f0bc05664ed..ff8c62d84f98 100644
+> --- a/arch/s390/boot/vmlinux.lds.S
+> +++ b/arch/s390/boot/vmlinux.lds.S
+> @@ -137,6 +137,10 @@ SECTIONS
+>                 *(.igot .igot.plt)
+>         }
+>         ASSERT(SIZEOF(.plt) =3D=3D 0, "Unexpected run-time procedure link=
+ages detected!")
+> +       .rela.dyn : {
+> +               *(.rela.*) *(.rela_*)
+> +       }
+> +       ASSERT(SIZEOF(.rela.dyn) =3D=3D 0, "Unexpected run-time relocatio=
+ns (.rela) detected!")
+>
+>         /* Sections to be discarded */
+>         /DISCARD/ : {
+>
+> --
+> 2.43.0
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402131207.MEDK8odK-lkp@intel.com/
+Commit 5354e84598f264793265cc99b4be2a2295826c86 ("x86/build: Add
+asserts for unwanted sections")
+specifies `*(.rela.*) *(.rela_*)` but it's not clear why `.rela_*` is
+included. We only need .rela.* (see also ld.bfd --verbose)
 
-All errors (new ones prefixed by >>):
+This patch LGTM with this changed.
 
->> drivers/thermal/intel/intel_pch_thermal.c:235:45: error: incompatible pointer to integer conversion passing 'struct thermal_trip *' to parameter of type 'int' [-Wint-conversion]
-     235 |         nr_trips += pch_wpt_add_acpi_psv_trip(ptd, &ptd_trips[nr_trips]);
-         |                                                    ^~~~~~~~~~~~~~~~~~~~
-   drivers/thermal/intel/intel_pch_thermal.c:114:74: note: passing argument to parameter 'trip' here
-     114 | static int pch_wpt_add_acpi_psv_trip(struct pch_thermal_device *ptd, int trip)
-         |                                                                          ^
-   1 error generated.
-
-
-vim +235 drivers/thermal/intel/intel_pch_thermal.c
-
-   158	
-   159	static int intel_pch_thermal_probe(struct pci_dev *pdev,
-   160					   const struct pci_device_id *id)
-   161	{
-   162		struct thermal_trip ptd_trips[PCH_MAX_TRIPS] = { 0 };
-   163		enum pch_board_ids board_id = id->driver_data;
-   164		struct pch_thermal_device *ptd;
-   165		int nr_trips = 0;
-   166		u16 trip_temp;
-   167		u8 tsel;
-   168		int err;
-   169	
-   170		ptd = devm_kzalloc(&pdev->dev, sizeof(*ptd), GFP_KERNEL);
-   171		if (!ptd)
-   172			return -ENOMEM;
-   173	
-   174		pci_set_drvdata(pdev, ptd);
-   175		ptd->pdev = pdev;
-   176	
-   177		err = pci_enable_device(pdev);
-   178		if (err) {
-   179			dev_err(&pdev->dev, "failed to enable pci device\n");
-   180			return err;
-   181		}
-   182	
-   183		err = pci_request_regions(pdev, driver_name);
-   184		if (err) {
-   185			dev_err(&pdev->dev, "failed to request pci region\n");
-   186			goto error_disable;
-   187		}
-   188	
-   189		ptd->hw_base = pci_ioremap_bar(pdev, 0);
-   190		if (!ptd->hw_base) {
-   191			err = -ENOMEM;
-   192			dev_err(&pdev->dev, "failed to map mem base\n");
-   193			goto error_release;
-   194		}
-   195	
-   196		/* Check if BIOS has already enabled thermal sensor */
-   197		if (WPT_TSEL_ETS & readb(ptd->hw_base + WPT_TSEL)) {
-   198			ptd->bios_enabled = true;
-   199			goto read_trips;
-   200		}
-   201	
-   202		tsel = readb(ptd->hw_base + WPT_TSEL);
-   203		/*
-   204		 * When TSEL's Policy Lock-Down bit is 1, TSEL become RO.
-   205		 * If so, thermal sensor cannot enable. Bail out.
-   206		 */
-   207		if (tsel & WPT_TSEL_PLDB) {
-   208			dev_err(&ptd->pdev->dev, "Sensor can't be enabled\n");
-   209			err = -ENODEV;
-   210			goto error_cleanup;
-   211		}
-   212	
-   213		writeb(tsel|WPT_TSEL_ETS, ptd->hw_base + WPT_TSEL);
-   214		if (!(WPT_TSEL_ETS & readb(ptd->hw_base + WPT_TSEL))) {
-   215			dev_err(&ptd->pdev->dev, "Sensor can't be enabled\n");
-   216			err = -ENODEV;
-   217			goto error_cleanup;
-   218		}
-   219	
-   220	read_trips:
-   221		trip_temp = readw(ptd->hw_base + WPT_CTT);
-   222		trip_temp &= 0x1FF;
-   223		if (trip_temp) {
-   224			ptd_trips[nr_trips].temperature = GET_WPT_TEMP(trip_temp);
-   225			ptd_trips[nr_trips++].type = THERMAL_TRIP_CRITICAL;
-   226		}
-   227	
-   228		trip_temp = readw(ptd->hw_base + WPT_PHL);
-   229		trip_temp &= 0x1FF;
-   230		if (trip_temp) {
-   231			ptd_trips[nr_trips].temperature = GET_WPT_TEMP(trip_temp);
-   232			ptd_trips[nr_trips++].type = THERMAL_TRIP_HOT;
-   233		}
-   234	
- > 235		nr_trips += pch_wpt_add_acpi_psv_trip(ptd, &ptd_trips[nr_trips]);
-   236	
-   237		ptd->tzd = thermal_zone_device_register_with_trips(board_names[board_id],
-   238								   ptd_trips, nr_trips,
-   239								   ptd, &tzd_ops,
-   240								   NULL, 0, 0);
-   241		if (IS_ERR(ptd->tzd)) {
-   242			dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
-   243				board_names[board_id]);
-   244			err = PTR_ERR(ptd->tzd);
-   245			goto error_cleanup;
-   246		}
-   247		err = thermal_zone_device_enable(ptd->tzd);
-   248		if (err)
-   249			goto err_unregister;
-   250	
-   251		return 0;
-   252	
-   253	err_unregister:
-   254		thermal_zone_device_unregister(ptd->tzd);
-   255	error_cleanup:
-   256		iounmap(ptd->hw_base);
-   257	error_release:
-   258		pci_release_regions(pdev);
-   259	error_disable:
-   260		pci_disable_device(pdev);
-   261		dev_err(&pdev->dev, "pci device failed to probe\n");
-   262		return err;
-   263	}
-   264	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
