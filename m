@@ -1,198 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from wfhigh2-smtp.messagingengine.com (wfhigh2-smtp.messagingengine.com [64.147.123.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F36B57873;
-	Tue, 13 Feb 2024 14:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0019857885
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 15:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707836041; cv=none; b=tcE1NiVZKVUG5ZX9rje3VOp2/H7+34XYTK+dqsxdoc/Vr69UQqXxNHxPu1qfSRHGjYvYYZg57fxNtU1gaK8oBhaavOat9vMNu9PQoj/+Ie1WmxKyzPTy0h81Ngn4JpUOR5CMiuSQ89jw1HbceDYLiOdN6DZg1bcG+ATDYfZxnBk=
+	t=1707836406; cv=none; b=NqFe4F9AEzU23PGTjWn/gflczV8ajWaqlxPQv/o8jyqfqqlpuw6huDmoGsu3gyleHXValhFLqhCgOEbE/kJEkUWqXMRB5n7XMnA+oFidPQsmxdp/7DIyFWmhQ1IWvHL5eg0xnnkA4MsApYkY4e2jNyzAjY71BNdgkAcOW2erKeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707836041; c=relaxed/simple;
-	bh=iYF8WahbSGmckYny6pSe2Hgyn29rEHyghu89jQLTNso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UWm1fq+akYt5Ntd50qUWRAAuR0x8RG4RyuJBufcqCOcKR3pqLdfjeOLokYCnmDrFM0UsemI5tDAOAhDjVE2HEyLUDOS+cHq4DzJ6FTyTB4DqNjUbuuCu1LmMt7tOrz801AUHa1Iw4N8XEPm/I4Dz7fYY1AVRH2ZbFbr9/BAcoeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W/iKxFUF; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707836406; c=relaxed/simple;
+	bh=b3GC7jyyEFRSCBa5nAtN9ZbRd3Xebqo4L7wCHwOMklY=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=pOmqaskvvatQX4tVIg9yjLCJFpX77lUWYnswUHJ9GymdQBsNhX9hc+OdP0bhcxOia/kJXmm5ow7ETQRHI6nLY9FH4L5QwfDSxupY4KA/lb7jozb9/M6iFlnaFUFgCWkq5CGpF74Wfeq5T+zrko7eXSsGUXGjSt9plbJKI71bpjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=rr9W2xZS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qrlQe9hi; arc=none smtp.client-ip=64.147.123.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W/iKxFUF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707836040; x=1739372040;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iYF8WahbSGmckYny6pSe2Hgyn29rEHyghu89jQLTNso=;
-  b=W/iKxFUFdz1dybg0CGch/MAYQg7m6KdlIPm13FTC6M+Lgflfgpl8t63a
-   ozoSWiWKbKKpQU2TR4UhsQ0Hw7uz8wVpCLHZ21IMeMc3QjBWr4SaN2Onw
-   xtcRpCNfWmVxZY8ol6qLr4ZG0UzNseekHWdaM99p29/HFORWLfwxqAupE
-   35Y8T3h+ukAbHYjyiWiQJRGmcHPrQdLQilYpgMtBWbBw9Y84Zw9NZ7wHP
-   EIrVoLSRZGNQ8L3s+Avsk6xJgqoEU7xYF81fZI1oB3ruFgXJ0DCyzVQjf
-   9kHEgby8Kf6KdumAhwpwo/+UooomvWYAl+n9lL21JthS1tRbKd8glBx2X
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="13239183"
-X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
-   d="scan'208";a="13239183"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 06:53:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
-   d="scan'208";a="2858172"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 13 Feb 2024 06:53:56 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZuAU-0007oc-0r;
-	Tue, 13 Feb 2024 14:53:54 +0000
-Date: Tue, 13 Feb 2024 22:53:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, lee@kernel.org,
-	daniel.thompson@linaro.org, jingoohan1@gmail.com, deller@gmx.de,
-	javierm@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Bruno =?iso-8859-1?Q?Pr=E9mont?= <bonbons@linux-vserver.org>
-Subject: Re: [PATCH 04/10] hid/hid-picolcd: Remove struct
- backlight_ops.check_fb
-Message-ID: <202402132248.A5ky78Hx-lkp@intel.com>
-References: <20240212162645.5661-5-tzimmermann@suse.de>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="rr9W2xZS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qrlQe9hi"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id C02C118000A2;
+	Tue, 13 Feb 2024 10:00:02 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 13 Feb 2024 10:00:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1707836402; x=1707922802; bh=mlH1+joGCi
+	tNuHIq4NgYcD03PcGWwGsVclCAlzSrC6g=; b=rr9W2xZSRfUYXJ1K7Er8kmSzdr
+	YPeVZLRDo6na4KI7s6Y318wy1IvOOGMs1THUmpkm21w2WCSEUmC+Chh3StFa07Qv
+	rzXFAC5qVpLw9Mshgct0qFN/zt7LuKANbNJ0tGGHSCiAEmx5NdQSO0hzEpkBtRJN
+	HUO1aDpNc4CnRpq6BPyXwTlW9G+bWMkj4FnQwv6LpizCOSjdzI1WBwgW49J4ZP/Y
+	I0gZHBBKNC129t7BmBIzYT4sF5no8DEUiH5Iz6/PbmRaVJT8/lTyRbSymjLVlJob
+	DJbPwgh+2m0ltbI468PxpuFzzBVPimmGePa+2TremYQfBKJ9pcRnVLYOEOfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1707836402; x=1707922802; bh=mlH1+joGCitNuHIq4NgYcD03PcGW
+	wGsVclCAlzSrC6g=; b=qrlQe9hiFEDFUkxfTxKpqQXl1A2Bq8hi2c/1LQL2jgry
+	F5rWnTb6GhLifUWVur74iuEDk8GglPoeczz8klOKnphJEBFhxBxyj7YglEbtiZV7
+	AP3glPNibTQvL4K6Ti9KnxQBWT6Vum/2GZpRmaavP0yDET4aXiZE0fHvKyHN1YzC
+	YUmuMOyUAJVEdZV1a+Z/eGVBq/j+0pjU5R/p2U8wYv63Mu0SiZ+LeUlqGxy8mp3E
+	PE8Ha+l2Gl9zBhylnYu02tvQVe2vdQoyaUJBFLQ7Zg7kLPgdcDulF9jtyms9Sckv
+	9iMF+lqcxL+6fscH5907nH4SdJUg0eSLCU3wYEmfEQ==
+X-ME-Sender: <xms:8oPLZfdBagPzDr-BidswenT34AnrvC6dCbqXR9HZDKRU-CR5JkpjWA>
+    <xme:8oPLZc-DANaknlX0mZiSM3K1Eq-DLM0np3W1F7FRZfdZpYrGQBfHZCNIzCPvlMiLc
+    rp7QeMBl7b2XKgOfis>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehgdejudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:8oPLZbmU2QNrJ0fAgSkM6rHa0I2O3WxpSTvUPlkvoCSBkuSQtC47Ew>
+    <xmx:8oPLZe8JYLKbxo8YrcGec44O_O7MW6_YVur2RhOjIkBa2Tw0GH2tOA>
+    <xmx:8oPLZZn-9xMDTskIOouTC9d-Q7ATz3fvGN2KUnB0itJFUgpN9iTJlQ>
+    <xmx:8oPLZcHzVescDf5TaVO9ExVYeNrw0RJ6eYRHYOjgK6KZTPF5QqqFPLb0AUI>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 28D58B6008D; Tue, 13 Feb 2024 10:00:02 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212162645.5661-5-tzimmermann@suse.de>
+Message-Id: <5448aaaa-3784-49c5-bc42-c5cd1e953949@app.fastmail.com>
+In-Reply-To: <20240213142831.3069049-1-jbrunet@baylibre.com>
+References: <20240213142831.3069049-1-jbrunet@baylibre.com>
+Date: Tue, 13 Feb 2024 15:59:39 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jerome Brunet" <jbrunet@baylibre.com>,
+ "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>
+Cc: "Neil Armstrong" <neil.armstrong@linaro.org>,
+ "Kevin Hilman" <khilman@baylibre.com>,
+ "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+ linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] nvmem: meson-efuse: fix function pointer type mismatch
+Content-Type: text/plain
 
-Hi Thomas,
+On Tue, Feb 13, 2024, at 15:28, Jerome Brunet wrote:
+> clang-16 warns about casting functions to incompatible types, as is done
+> here to call clk_disable_unprepare:
+>
+> drivers/nvmem/meson-efuse.c:78:12: error: cast from 'void (*)(struct 
+> clk *)' to 'void (*)(void *)' converts to incompatible function type 
+> [-Werror,-Wcast-function-type-strict]
+>    78 |                                        (void(*)(void 
+> *))clk_disable_unprepare,
+>
+> The pattern of getting, enabling and setting a disable callback for a
+> clock can be replaced with devm_clk_get_enabled(), which also fixes
+> this warning.
+>
+> Fixes: 611fbca1c861 ("nvmem: meson-efuse: add peripheral clock")
+> Reported-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 
-kernel test robot noticed the following build errors:
+Perfect, much nicer than my version.
 
-[auto build test ERROR on lee-backlight/for-backlight-next]
-[also build test ERROR on lee-backlight/for-backlight-fixes hid/for-next lee-leds/for-leds-next linus/master v6.8-rc4 next-20240213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/backlight-Match-backlight-device-against-struct-fb_info-bl_dev/20240213-002853
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git for-backlight-next
-patch link:    https://lore.kernel.org/r/20240212162645.5661-5-tzimmermann%40suse.de
-patch subject: [PATCH 04/10] hid/hid-picolcd: Remove struct backlight_ops.check_fb
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240213/202402132248.A5ky78Hx-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402132248.A5ky78Hx-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402132248.A5ky78Hx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hid/hid-picolcd_fb.c:497:8: error: no member named 'bl_dev' in 'struct fb_info'
-     497 |         info->bl_dev = data->backlight;
-         |         ~~~~  ^
-   1 error generated.
-
-
-vim +497 drivers/hid/hid-picolcd_fb.c
-
-   459	
-   460	static DEVICE_ATTR(fb_update_rate, 0664, picolcd_fb_update_rate_show,
-   461			picolcd_fb_update_rate_store);
-   462	
-   463	/* initialize Framebuffer device */
-   464	int picolcd_init_framebuffer(struct picolcd_data *data)
-   465	{
-   466		struct device *dev = &data->hdev->dev;
-   467		struct fb_info *info = NULL;
-   468		struct picolcd_fb_data *fbdata = NULL;
-   469		int i, error = -ENOMEM;
-   470		u32 *palette;
-   471	
-   472		/* The extra memory is:
-   473		 * - 256*u32 for pseudo_palette
-   474		 * - struct fb_deferred_io
-   475		 */
-   476		info = framebuffer_alloc(256 * sizeof(u32) +
-   477				sizeof(struct fb_deferred_io) +
-   478				sizeof(struct picolcd_fb_data) +
-   479				PICOLCDFB_SIZE, dev);
-   480		if (!info)
-   481			goto err_nomem;
-   482	
-   483		info->fbdefio = info->par;
-   484		*info->fbdefio = picolcd_fb_defio;
-   485		info->par += sizeof(struct fb_deferred_io);
-   486		palette = info->par;
-   487		info->par += 256 * sizeof(u32);
-   488		for (i = 0; i < 256; i++)
-   489			palette[i] = i > 0 && i < 16 ? 0xff : 0;
-   490		info->pseudo_palette = palette;
-   491		info->fbops = &picolcdfb_ops;
-   492		info->var = picolcdfb_var;
-   493		info->fix = picolcdfb_fix;
-   494		info->fix.smem_len   = PICOLCDFB_SIZE*8;
-   495	
-   496	#ifdef CONFIG_HID_PICOLCD_BACKLIGHT
- > 497		info->bl_dev = data->backlight;
-   498	#endif
-   499	
-   500		fbdata = info->par;
-   501		spin_lock_init(&fbdata->lock);
-   502		fbdata->picolcd = data;
-   503		fbdata->update_rate = PICOLCDFB_UPDATE_RATE_DEFAULT;
-   504		fbdata->bpp     = picolcdfb_var.bits_per_pixel;
-   505		fbdata->force   = 1;
-   506		fbdata->vbitmap = info->par + sizeof(struct picolcd_fb_data);
-   507		fbdata->bitmap  = vmalloc(PICOLCDFB_SIZE*8);
-   508		if (fbdata->bitmap == NULL) {
-   509			dev_err(dev, "can't get a free page for framebuffer\n");
-   510			goto err_nomem;
-   511		}
-   512		info->flags |= FBINFO_VIRTFB;
-   513		info->screen_buffer = fbdata->bitmap;
-   514		info->fix.smem_start = (unsigned long)fbdata->bitmap;
-   515		memset(fbdata->vbitmap, 0xff, PICOLCDFB_SIZE);
-   516		data->fb_info = info;
-   517	
-   518		error = picolcd_fb_reset(data, 1);
-   519		if (error) {
-   520			dev_err(dev, "failed to configure display\n");
-   521			goto err_cleanup;
-   522		}
-   523	
-   524		error = device_create_file(dev, &dev_attr_fb_update_rate);
-   525		if (error) {
-   526			dev_err(dev, "failed to create sysfs attributes\n");
-   527			goto err_cleanup;
-   528		}
-   529	
-   530		fb_deferred_io_init(info);
-   531		error = register_framebuffer(info);
-   532		if (error) {
-   533			dev_err(dev, "failed to register framebuffer\n");
-   534			goto err_sysfs;
-   535		}
-   536		return 0;
-   537	
-   538	err_sysfs:
-   539		device_remove_file(dev, &dev_attr_fb_update_rate);
-   540		fb_deferred_io_cleanup(info);
-   541	err_cleanup:
-   542		data->fb_info    = NULL;
-   543	
-   544	err_nomem:
-   545		if (fbdata)
-   546			vfree(fbdata->bitmap);
-   547		framebuffer_release(info);
-   548		return error;
-   549	}
-   550	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Arnd Bergmann <arnd@arndb.de>
