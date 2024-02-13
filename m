@@ -1,159 +1,107 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EF26089D
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 20:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87688608ED
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 20:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707854786; cv=none; b=GM5e5SBv6nknm7EUPqMtj4/ZG1fATzipyvJdpy4oJi1G56IenYfd3q0Iz/Ivv/fEAiIJvn+wHFPCF+Hbra8Z5bUMYtIWrK3kQTaF9BOAEAxk/q0sGxPu0Lbj80h4XlT/sAvy2wRvieJk5JRi9h/AqBObZ4W1d3tRUpYZkJsHj4M=
+	t=1707854935; cv=none; b=AIdgzBwTqdEAMi4X6JkZlItcGpaRnFvusZJD5rNrhzVrZjas2BnJ9zInoeC5SbugJbV5JD/dZNaVTgzZ97RhsGpZ8EObF2Nzm+9oYKqymnq6b6odLWcqjwBzmPgL4ajF+PuWY1cUZAZkUCpLnJt8ceQFd8MXUsXop1qfPZDQE+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707854786; c=relaxed/simple;
-	bh=vdxp4/PPE9hCtMCXH030GyY19LKK9iQwEhgR0euELVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KhPjIXVl9ndHAZzqz9uGTJS7Fi5cRXqGg9rhY0e2tk4Iyexb5+8ZwqJxrVUqGhcaypQYnoRUk/R2/FPbyg1mpLgnXv32ICzz7zI0mkWBELcv3O6wU1ji93j9/N79bmWbjBPe6hSHhzISujQFFTLxGfPQuXAJPXgWG6NOKAqlzy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=jTN0VsHU; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1707854935; c=relaxed/simple;
+	bh=cpamOG71/GOjbb277hAjAxNKP85thTjz3Ni8mu6y5O0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J3AFcdtIwl8yYvpi1jmaRvcGJrval1ib0ZBWT5EhmXVXIyHBBK3sMbBYXuxqAX7aTD+zwFdAJpQoCJ3hgDJdLpvOY6FiRNBUux45gbwIYAeKghJOjhsD8NvVST03lSJHbfHdS+TtM+vqA3QbpHYbT5z6mhRFU1vetOBzcVrd+mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YQIu2DF2; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jTN0VsHU"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A769740E01BB;
-	Tue, 13 Feb 2024 20:06:20 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 4n2K_bezxT6a; Tue, 13 Feb 2024 20:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707854778; bh=goOcw7LN1zf72G8QXmdoMLRbJAF9DoW+MoDb3aH9utw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jTN0VsHUjY3YLADs/06htH0XYziIGGjqIjbZSKXZIKZReSlPlwD17cU292sGLc0bT
-	 BXcax6hSvypq0AsEM05kT+cEBem3YEWo3Kr178JKLbZ/snZ0F858U4HKzNZNpjEPLF
-	 bfJfXB6umEEtvxPXlGkEmwifX6T9I5X/ecJQ9UagagQdltwgnYEIDJz5NLLAiX/en7
-	 PN/5zUrP8/zRxp2zni4xXU3Qs+2D8U7QEFbh+41/mB5mOjyOneMizQtM6A9KRCf7ck
-	 9pIQBSoOD+TcPn24xQ83o5A5/aeKgeCpjQqEM3L7rzptpuTfixSvbVggMTfnyT9/7P
-	 +wxAs5vuJGCZkDKv5fMB8SFR1WCOV0bLkRkbFsUh840rChFU/nirUSVJo169RiLnXE
-	 YdPHGrjVUF8A7rachK3LtlvccDpJzfU6EY84Zqc5DTrywU4alBrwOyRZ9l04ROB82h
-	 BaqZ/m3/f/6ppe3Edcl2BtBTh2HhuAJOdnW+8KfFMTTAUV7kNhRW0lpD4QHmmEUe0W
-	 PSbCZlbHluFvwdYQpk5y8uv6TI6hVb9OO02QoChfcMMHF+Ytl4/gWv9hPKA5hTgzBE
-	 Z/MWvQEnJzPLofiJiuU2zrvIWtiSeJSL21DO1spxf6MV/vd1GArBAFnV0KNLS4ZwKZ
-	 vGvyzpTJ4SN0m+Q985PSuq/w=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0AA6040E0192;
-	Tue, 13 Feb 2024 20:05:59 +0000 (UTC)
-Date: Tue, 13 Feb 2024 21:05:53 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 01/11] x86/startup_64: Simplify global variable
- accesses in GDT/IDT programming
-Message-ID: <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-14-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YQIu2DF2"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5116063585aso6091213e87.1
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 12:08:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707854931; x=1708459731; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cpamOG71/GOjbb277hAjAxNKP85thTjz3Ni8mu6y5O0=;
+        b=YQIu2DF2YCCx095ZOdCGnEIrR/ovaJOYY7HcukDn4poYuuJIGuN1dPg2oJeHDuZMJ9
+         qpT4f+TJK+DjCDvoDWpbqr8VOQg48paVk2e1eDuiuv67+VyFdBeyPHmiQj3w1PPwH2iv
+         ignEwizAgkiYtReDdOIHR4nDkozUCqfTI8zoDieF8dQrPJkYRwlNY1JkhcEMlvCxzAhg
+         eQ6KKYdFlfIM2QmsbXfcjMRKYulQwDgI8a4oPGqQ8FP9RPV7Nbjny4Akd+8KBf6N1bmn
+         MPyhSh4ucnjtwvYCRUHivX/R9qezloAEb0RiyS1NM//jK+bHU+CFY6F2G0obH67kSSeo
+         nyMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707854931; x=1708459731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cpamOG71/GOjbb277hAjAxNKP85thTjz3Ni8mu6y5O0=;
+        b=tj/5hvJo9o2r+ZWNaYMphxlGoWnT0LVeOE+8npH4O09Nj6NEf89d3WHpdK0PKUhPEa
+         PpcOPiLOqrpVu8u5038LHinY0zS5ObF6C+TUia3KkdiyeZsl9lwKDXgxjCE0fsbQRiuD
+         b7hDTJNS1agMRcZn40e2tniU6pbdtKATiUwY18RZOcv6Qu6yd8zme43/THO7XLNRNVYw
+         M9yKaGKsBLzfQEBa4gJ95TeOGZbiZV4JJLRla0z+AFMG5OtYJLz+oPX6mYvqlrbiF59Y
+         BkTtRPuzn8K0VaaaAWVqE/yPQRHIs27idXdK1g6/JjzJbcEEeblxQ6Df+z+TRH9xF8ot
+         +l4w==
+X-Forwarded-Encrypted: i=1; AJvYcCXne7IZS5RpaOmt8ycD4agJV/Rga7njfB7/qeCp3vn2p2ihsWcujDvmaETGDgouB/B96bThCqDOb4HjhwBAbFoxmIU2ZQ==
+X-Gm-Message-State: AOJu0Yy8IqoPtcdGffpmsmf5iJZe7wJD7FeH1NsKnEZdkulmigh0yhQO
+	tHMIBVkfWttbcMERAlR8Q8q6X4qTxxR30aTUxC4Y/Cel/lXHEj04nlvWyIh4e3GlJ9s8hQ24YhA
+	x9ABad2liLi3GNmbynrx7HRnjGPXMN61bjEr7
+X-Google-Smtp-Source: AGHT+IEksRyiaHyX94m2jOEP9ui0B6orCI/t9VG5pKeC7bcLR1MRBQFg7mMD33nHbUDo0Wqb4aI/q/lCjH6E4TshwlQ=
+X-Received: by 2002:a19:381e:0:b0:511:9f0d:633f with SMTP id
+ f30-20020a19381e000000b005119f0d633fmr342293lfa.14.1707854931315; Tue, 13 Feb
+ 2024 12:08:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240213124143.1484862-14-ardb+git@google.com>
+References: <20240117-swiftly-parasail-618d62972d6e@spud> <CANiq72mVKCOAuK4Qe+8AHmpkFwyJsVfx8AqB7ccGi3DYpSSWcw@mail.gmail.com>
+ <20240118-implode-delirium-eefdd86e170e@spud> <CANiq72nx1s_nyvPW86jL7eiOxROr18LfOJqNtw8L42CP+gkhRg@mail.gmail.com>
+ <20240125-bucked-payroll-47f82077b262@wendy> <CANiq72k7n0aZrifRRU08N8qLkNe+2EZwijZy5sM7M56n2xYHgQ@mail.gmail.com>
+ <20240125-lazy-thrower-744aacc6632a@wendy> <CANiq72kb+_utZrYHtoKZQtQazikmkjpVUHpTBcaANizduMF5QQ@mail.gmail.com>
+ <20240126-eccentric-jaywalker-3560e2151a92@spud> <CANiq72nu2NXUWYanHZd5EXgX4P_v673EWn6SCRW60Es9naraQQ@mail.gmail.com>
+ <20240209-rage-keg-1b2982cd17d9@spud> <CALNs47sRqAbE=u3=_ciO2oge7Afz-6GBBhW+BwcLRET-TsuxTg@mail.gmail.com>
+ <CAOcBZOSfN8Yefez_Gy_T3_QTAd4HcLzmMCOoR37K2agWD_U_PQ@mail.gmail.com> <CABCJKueFuDkmUmXWbtA3DveQ719vdZx5kBQE1bZ1f6oD5zYNzA@mail.gmail.com>
+In-Reply-To: <CABCJKueFuDkmUmXWbtA3DveQ719vdZx5kBQE1bZ1f6oD5zYNzA@mail.gmail.com>
+From: Ramon de C Valle <rcvalle@google.com>
+Date: Tue, 13 Feb 2024 12:08:39 -0800
+Message-ID: <CAOcBZOQMF9_QqPvTPoRa=uHw11o74-hm=YdjtDCTj-yeq4nwjg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Trevor Gross <tmgross@umich.edu>, Conor Dooley <conor@kernel.org>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 13, 2024 at 01:41:45PM +0100, Ard Biesheuvel wrote:
-> @@ -632,5 +616,5 @@ void __head startup_64_setup_env(unsigned long physbase)
->  		     "movl %%eax, %%ss\n"
->  		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
->  
-> -	startup_64_load_idt(physbase);
-> +	startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
+On Mon, Feb 12, 2024 at 12:36=E2=80=AFPM Sami Tolvanen <samitolvanen@google=
+.com> wrote:
+>
+> On Mon, Feb 12, 2024 at 11:04=E2=80=AFAM Ramon de C Valle <rcvalle@google=
+.com> wrote:
+> >
+> > Sorry for the late reply. Sami might be the best person to answer
+> > this, but KCFI (not CFI) tests are lowered by passes that are
+> > architecture specific (see https://reviews.llvm.org/D119296), so we'd
+> > need to add support for RISC-V. There is no additional work required
+> > in the Rust compiler besides enabling it for the new target.
+>
+> LLVM 17 added KCFI support for RISC-V. Sounds like it's just a
+> question of whether rustc uses a new enough version of LLVM then?
 
-It took me a while to figure out that even if we pass in one of the two
-GHCB handler pointers, we only set it if CONFIG_AMD_MEM_ENCRYPT.
-
-I think this ontop of yours is a bit more readable as it makes it
-perfectly clear *when* the pointer is valid.
-
-Yeah, if handler is set, we set it for the X86_TRAP_VC vector
-unconditionally but that can be changed later, if really needed.
-
-But this way it is clear by having the callers select the pointer. I.e.,
-it is a more common coding pattern this way, I'd say.
-
-Thx.
-
----
-
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 9d7f12829f2d..e39114c348e2 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -582,8 +582,8 @@ static void __head startup_64_load_idt(void *handler)
- 	};
- 	gate_desc *idt = (gate_desc *)desc.address;
- 
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
--		/* VMM Communication Exception */
-+	/* @handler is set only for a VMM Communication Exception */
-+	if (handler)
- 		set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
- 
- 	native_load_idt(&desc);
-@@ -592,10 +592,14 @@ static void __head startup_64_load_idt(void *handler)
- /* This is used when running on kernel addresses */
- void early_setup_idt(void)
- {
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
-+	void *handler = NULL;
-+
-+	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
- 		setup_ghcb();
-+		handler = vc_boot_ghcb;
-+	}
- 
--	startup_64_load_idt(vc_boot_ghcb);
-+	startup_64_load_idt(handler);
- }
- 
- /*
-@@ -603,6 +607,8 @@ void early_setup_idt(void)
-  */
- void __head startup_64_setup_gdt_idt(void)
- {
-+	void *handler = NULL;
-+
- 	struct desc_ptr startup_gdt_descr = {
- 		.address	= (unsigned long)&RIP_REL_REF(startup_gdt),
- 		.size		= sizeof(startup_gdt) - 1,
-@@ -616,5 +622,8 @@ void __head startup_64_setup_gdt_idt(void)
- 		     "movl %%eax, %%ss\n"
- 		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
- 
--	startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
-+	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
-+		handler = &RIP_REL_REF(vc_no_ghcb);
-+
-+	startup_64_load_idt(handler);
- }
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+rustc is using LLVM 17 since
+https://github.com/rust-lang/rust/pull/114048, so I guess I can enable
+it for RISC-V targets in
+https://github.com/rust-lang/rust/tree/master/compiler/rustc_target/src/spe=
+c/targets,
+and the Linux kernel will get it on the next compiler update?
