@@ -1,65 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE01629E4;
-	Tue, 13 Feb 2024 23:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDCE633E3
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 23:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707865770; cv=none; b=FGdNYaTKwl2+xbPMm14NprtjGU2oDTzChrJAxiAGhR7tTwiQNPsvybalQFz6+OMQq97QJNlEfWrafE8VBWuBeVBeHCSxoSXJRuskJvvJcP7RS99Q2KFeiuf2L7dZlGm+HaVYHXSGd4c5nbQZmInyoB/DlbJXpi3ux+a1kx0vGBg=
+	t=1707868598; cv=none; b=DM9g3ZJ0ywM7Lf5jkkeBdoJTrS/NFdLLIxnuE89mfbM6EX5Il1BxMkx1tlMf09XptwHyymH3sptph+ryD6QQ+EcP5SxN3edBlkcrtjaxlJy7s8x3idt2oS9V7jzhpK5LOE0sgQoWSSXDcBX0BcFXt3OcRzfUMw5lMuk9uxXuTtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707865770; c=relaxed/simple;
-	bh=Ruv49r1sZc5AQTJvy6hZxTyUCUODMyOJZvp+oKDoEfk=;
+	s=arc-20240116; t=1707868598; c=relaxed/simple;
+	bh=eG1Z7qXp1jDGBo50wsnYjDQwhUF5D2ifiNDV1RQ+kpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j59AV/L7aavmy9aoGYz/EwYoFIaHhix4N71vdpN7KQ0eE6G4ZrdOn+lCCZ+oYqdgLT8AgKlhwQPJYzrhnn56CVTa95EqXivW/khGg5YuOlGby1ZYREw8Q5mw2lpM0UyuYJF5CaobRMt/dVNjxEx8L2xiaa9Nu5xjl1SmEsz3vxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UZugletF; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=r4GP+yKOX1PxGyCQv9wU5dSRLtelOzhsj8WycurlQX79oyNbGo7i2n79ZkX0PigYsli4TZXEHHaBH0b9ye/z8BChRACmFq2qM8GPyCzGdwfc3TNZ3r7jixWV03216svxZFsvtyVFQ045abNrSglK9mlJLoQMlH/Nx9dgXUVaxdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JKubzfen; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UZugletF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707865768; x=1739401768;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ruv49r1sZc5AQTJvy6hZxTyUCUODMyOJZvp+oKDoEfk=;
-  b=UZugletFmycMvJSQkKZtJ9IrADxrxfekD+uyAyl93Na+4PzwwhsVb9Rw
-   3och0r0MF5NMaQY8mDAw9/6Ou2MRTv7lCzg20K2C1gQH5zaf1+rGM7rIR
-   WLFJP6b9lKC1fddyIk/5NbkWxM/CByN+EYaJ79wliJ5L9uz2PME5JwlD4
-   5GrIgj/wZ9NUlbEK2BIweBHnnrqTmQgO2ibafxzOq4UbjT9Wt1/IUH69z
-   AITal4jEqLdi+D94WSL+BpRrivSp/LXUL/JY5dSnpV5rbpSdKlzCZ/OjW
-   +ViO2ifqWIVqnottoIF+E7Xno4me9XgldRv8foInn+/qPf5wFZIJvFycS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="2020511"
-X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
-   d="scan'208";a="2020511"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 15:09:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
-   d="scan'208";a="2997406"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 13 Feb 2024 15:09:20 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ra1tt-00088m-2E;
-	Tue, 13 Feb 2024 23:09:17 +0000
-Date: Wed, 14 Feb 2024 07:09:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-	tj@kernel.org, muchun.song@linux.dev
-Subject: Re: [PATCH v3 29/35] mm: vmalloc: Enable memory allocation profiling
-Message-ID: <202402140643.Sy6Ng0Rw-lkp@intel.com>
-References: <20240212213922.783301-30-surenb@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JKubzfen"
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3642147202fso2974035ab.0
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 15:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707868596; x=1708473396; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j5i0+7qUkGUR+StQ2aGirnK2+rjtRkZXXH7K9o3+5lE=;
+        b=JKubzfenSfn4I61kyZJ1AYPFwqXFTcO/p5jU8KivUduS0qda5jeHyQmUoIsQWkp+rd
+         XTv8qJ3E/unPgCP4aaAUpDN1dP/c0dwfrMJT4soe/zCILs8HSb3vEpdB5qPKL2px8Uqo
+         pf3OJcaiyOhG289O0Dw2P9Jta1jcgdbphTsG5xL4qbBUQpVFA4Kd5BV5jEteVnVUk7lO
+         ZfrboAr+McMdUsDgmIo/h0NvXcOB3+/jsOYyCNiNV8GNbkx7yTV/1kPmvDigVSSEF0x9
+         i9n5BYGFDV1aj9VE4R2vv5BseN1Z8K2wiEJHNKj90TV2atricYtIX/QfsaI1jUn/qux6
+         UF9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707868596; x=1708473396;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j5i0+7qUkGUR+StQ2aGirnK2+rjtRkZXXH7K9o3+5lE=;
+        b=uNo7ovhHArnYqlofG74zNYpgIZI/Bq/vC3EE5ppR/P0UCHqq7nUv+0PNS+1iylObrC
+         oxij8/4JDHnALJp7SeM229+cM3vfuJnEUcX/IwUgoKvT9MiN5/70xb2XCbZ2iWBInB6L
+         TiPeHjr+0dPK8D8oiDwuU4FtAX54ijygogH7VxoBlpmZqTj5qWqfnnNoJQKww64yzHsj
+         tBEB3Orw/A290TzPYQC/0mFOdvvdLdvuzwHPLs6aLCGo/yoep8w3kHZEKPWKuf2dJb52
+         lqCs1Hco46EYAjnKXNnAMYf9ZA1MEEWKsO9Rxd6dzJYFCsp++RyGIEgcVsITTc2omgJK
+         X3hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUO+2iri1EeShC/FNSC9llYrJjLiovGSJ4QMkByseT8klitAUTiMHDsoYdroof81nrtBIwhDPFeukLL7uqG3pGvaMCrDQ==
+X-Gm-Message-State: AOJu0YxCsY6Kcu9fCs5Dza3pTE/LbYx3RLOiVrjhp110DpJtiaYae1FH
+	grIthyE5tn0yyMvD7ygXnF9q6NWilA0X/WdkYKNDfcctoapoGLyWaSFUXDx1rw==
+X-Google-Smtp-Source: AGHT+IG62RuLwq2OLE5Yz0FmcAHGNtv9/YBtgvIUbfni/ZF6on/cLe36ocrjEhGbaxm7Edp0+sjhbg==
+X-Received: by 2002:a05:6e02:1bc7:b0:363:cbb8:53c7 with SMTP id x7-20020a056e021bc700b00363cbb853c7mr1787567ilv.23.1707868596087;
+        Tue, 13 Feb 2024 15:56:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXYvP9l0sxOZNWxefz67TKAm7Fu6CaEpFHauX0AQItVIogkJSLzPJZFx0UakEwLZxl00t5oU+31mhKid7inxkeFp2reqoNF7I1kQxXuMe0ZLLjU+VNcyvi5h0kzhX+TyeJ1VP43aVOT4m3qsJuZ2WTnAEwLcwMnWktU04ycyXRDgCmsBODEflPdYmaHZucstimY66Km2/Z5gIAEwJ1hCoRUXhk25LYKDboLX3KT8nLXdpopsd/2CwWbSm4unOobRINWMcfmsvORIfDXc7r/Zsi25RKx+qHoRGHeVwQ1Bb6ybiJKW3ABwCmcS53hIVlmX6p+Il8fLHtHn7VLINZCCIx57OjUssEr+x0lmRVkHqzYzjQ=
+Received: from google.com (20.10.132.34.bc.googleusercontent.com. [34.132.10.20])
+        by smtp.gmail.com with ESMTPSA id n11-20020a02cc0b000000b004739f0fc27fsm2028449jap.164.2024.02.13.15.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 15:56:35 -0800 (PST)
+Date: Tue, 13 Feb 2024 23:56:30 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com,
+	morbo@google.com, keescook@chromium.org, maskray@google.com,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: Fix changing ELF file type for output of
+ gen_btf for big endian
+Message-ID: <20240213235630.423raijsgijkgrnj@google.com>
+References: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,78 +72,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240212213922.783301-30-surenb@google.com>
+In-Reply-To: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
 
-Hi Suren,
+Hi,
 
-kernel test robot noticed the following build errors:
+On Mon, Feb 12, 2024 at 07:05:10PM -0700, Nathan Chancellor wrote:
+> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> changed the ELF type of .btf.vmlinux.bin.o to ET_REL via dd, which works
+> fine for little endian platforms:
+>
+>    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+>   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+>
+> However, for big endian platforms, it changes the wrong byte, resulting
+> in an invalid ELF file type, which ld.lld rejects:
+>
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>
+>   Type:                              <unknown>: 103
+>
+>   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+>
+> Fix this by updating the entire 16-bit e_type field rather than just a
+> single byte, so that everything works correctly for all platforms and
+> linkers.
+>
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
+>
+>   Type:                              REL (Relocatable file)
+>
+> While in the area, update the comment to mention that binutils 2.35+
+> matches LLD's behavior of rejecting an ET_EXEC input, which occurred
+> after the comment was added.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> Link: https://github.com/llvm/llvm-project/pull/75643
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-[also build test ERROR on linus/master v6.8-rc4]
-[cannot apply to akpm-mm/mm-everything vbabka-slab/for-next next-20240213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I prefer this version to v1 as well. This seems better than setting the
+seek value.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/lib-string_helpers-Add-flags-param-to-string_get_size/20240213-054335
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/20240212213922.783301-30-surenb%40google.com
-patch subject: [PATCH v3 29/35] mm: vmalloc: Enable memory allocation profiling
-config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20240214/202402140643.Sy6Ng0Rw-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project c08b90c50bcac9f3f563c79491c8dbcbe7c3b574)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402140643.Sy6Ng0Rw-lkp@intel.com/reproduce)
+Reviewed-by: Justin Stitt <justinstitt@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402140643.Sy6Ng0Rw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:15:
-   In file included from include/linux/socket.h:8:
-   In file included from include/linux/uio.h:10:
-   In file included from include/linux/mm_types.h:5:
-   In file included from include/linux/mm_types_task.h:13:
-   In file included from arch/mips/include/asm/page.h:200:
-   In file included from arch/mips/include/asm/io.h:563:
-   In file included from include/asm-generic/io.h:994:
-   In file included from include/linux/vmalloc.h:6:
->> include/linux/sched.h:1338:30: error: field has incomplete type 'struct tlbflush_unmap_batch'
-    1338 |         struct tlbflush_unmap_batch     tlb_ubc;
-         |                                         ^
-   include/linux/sched.h:1338:9: note: forward declaration of 'struct tlbflush_unmap_batch'
-    1338 |         struct tlbflush_unmap_batch     tlb_ubc;
-         |                ^
->> include/linux/sched.h:1343:20: error: field has incomplete type 'struct page_frag'
-    1343 |         struct page_frag                task_frag;
-         |                                         ^
-   include/linux/sched.h:1343:9: note: forward declaration of 'struct page_frag'
-    1343 |         struct page_frag                task_frag;
-         |                ^
-   2 errors generated.
-   make[3]: *** [scripts/Makefile.build:116: arch/mips/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1191: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:240: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +1338 include/linux/sched.h
-
-af7f588d8f7355 Mathieu Desnoyers 2022-11-22  1337  
-72b252aed506b8 Mel Gorman        2015-09-04 @1338  	struct tlbflush_unmap_batch	tlb_ubc;
-72b252aed506b8 Mel Gorman        2015-09-04  1339  
-5eca1c10cbaa9c Ingo Molnar       2017-02-06  1340  	/* Cache last used pipe for splice(): */
-b92ce55893745e Jens Axboe        2006-04-11  1341  	struct pipe_inode_info		*splice_pipe;
-5640f7685831e0 Eric Dumazet      2012-09-23  1342  
-5640f7685831e0 Eric Dumazet      2012-09-23 @1343  	struct page_frag		task_frag;
-5640f7685831e0 Eric Dumazet      2012-09-23  1344  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> Changes in v2:
+> - Rather than change the seek value for dd, update the entire e_type
+>   field (Masahiro). Due to this change, I did not carry forward the
+>   tags of v1.
+> - Slightly update commit message to remove mention of ET_EXEC, which
+>   does not match the dump (Masahiro).
+> - Update comment to mention binutils 2.35+ has the same behavior as LLD
+>   (Fangrui).
+> - Link to v1: https://lore.kernel.org/r/20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org
+> ---
+>  scripts/link-vmlinux.sh | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index a432b171be82..7862a8101747 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -135,8 +135,13 @@ gen_btf()
+>  	${OBJCOPY} --only-section=.BTF --set-section-flags .BTF=alloc,readonly \
+>  		--strip-all ${1} ${2} 2>/dev/null
+>  	# Change e_type to ET_REL so that it can be used to link final vmlinux.
+> -	# Unlike GNU ld, lld does not allow an ET_EXEC input.
+> -	printf '\1' | dd of=${2} conv=notrunc bs=1 seek=16 status=none
+> +	# GNU ld 2.35+ and lld do not allow an ET_EXEC input.
+> +	if is_enabled CONFIG_CPU_BIG_ENDIAN; then
+> +		et_rel='\0\1'
+> +	else
+> +		et_rel='\1\0'
+> +	fi
+> +	printf "${et_rel}" | dd of=${2} conv=notrunc bs=1 seek=16 status=none
+>  }
+>
+>  # Create ${2} .S file with all symbols from the ${1} object file
+>
+> ---
+> base-commit: 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478
+> change-id: 20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-dbc55a1e1296
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+Thanks
+Justin
