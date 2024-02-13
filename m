@@ -1,45 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83212BB03;
-	Tue, 13 Feb 2024 09:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EAD2BB03;
+	Tue, 13 Feb 2024 09:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707818097; cv=none; b=bQmxIkjLG2dW88EYKZSbnVRoNMNfpo4XTJzMCn1RD0br8rV89EnsEhU72hXMdKcSMOzNxNccu495JXbE8OGRtvn8DmDNEiHMfNq+HqfzoCa3TiKcRZb9/t4qhbpi55Qp1uePJr0ZcYOj1dhfFzFrz082pNS7AQZUu3Yz+0Xj/eE=
+	t=1707818198; cv=none; b=NkvBj1BrSCpbRlMfHcd4mXtv9JtPYXGmY7T9tbMmaubbDPPX292w1W5CMW5FNyMS+aTJ++D1mzjBvbkhLFkoLRdq7VY0Lp5011YvXl7PRBKRqxNbQxYCBZ4DFwlO7oXtNsAzalIyXBPTeypD61B2PxFU1jm2BXjS59Dr6kxMuUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707818097; c=relaxed/simple;
-	bh=4De3RyTU7r+pUzJUl0tRw/D7nVV5tAv3p6T8Js04G/c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=M7ZP1qENUFqRSCZY2SD+QrecC7P9D9vNiQvnHnsCah46ti4LofGH8RM46MrmTFUN+HdOPV5Nklx3imFEEx1rOWrTn344ZtThE6YFS5tHj6XHB47CnOaPcYcFH4UTljR/xDeirTrrrn35SnugVJSRtIrIRyePHN14FtgiQB9ypqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KjfvP/Nh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707818198; c=relaxed/simple;
+	bh=vb+KBTnTSXAaZj4rUNtfS8bhDG7fD2FUJ5wHxmolX/E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fmgzXFa51Ne0/9oRsGdNgC0btrCLDyBdEoq/cFdGCMtAHiChlIs1XghMfLZt1sEpfbDI5GiO5OXfjt8nNsKygG7w+xJR4M5g8f6rjKoQPXUtZIARVbjZn+Vqlqjth8T2yaLCfucua95slO8wNXWUusNNIR0IF22QxQdVCzqxtpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJt5Is3z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KjfvP/Nh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5ECC433F1;
-	Tue, 13 Feb 2024 09:54:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJt5Is3z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B311C433F1;
+	Tue, 13 Feb 2024 09:56:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707818097;
-	bh=4De3RyTU7r+pUzJUl0tRw/D7nVV5tAv3p6T8Js04G/c=;
+	s=k20201202; t=1707818197;
+	bh=vb+KBTnTSXAaZj4rUNtfS8bhDG7fD2FUJ5wHxmolX/E=;
 	h=From:To:Cc:Subject:Date:From;
-	b=KjfvP/NhWaO4TPXRscwaIdNAvjfmjfNzJMINOI7zjyj3rzCsHcNLiJAjs9E1aQlki
-	 rg5MogLLMywQQ6U8N5g5KnHPpdcPsaG5aSK9fCZj9ailMSDaA0CfYz6O+mcuYx6llh
-	 NRqe7zADwWnvYKUKveVnKLnbsRcKeKNWS8MO7YTAkM23IgzIslBoEQAWbCJFUH0gKy
-	 EgUXlpYiCl3r07CXddQfD6IE72/vLJYB7QtQ9/4bNCTl0ySYNy9OtRS2DRlefwxGDz
-	 xe4N/R7iLBxVzUHT+P8vescQb4PKfT4Mu2wKba29P4ghiPRgQadUSP9dKojAAVUbmg
-	 Srkt73YXHuY0g==
+	b=VJt5Is3zeq/Zjfhdhjq8lEVPdZGh9L98WDNDPu7YIB/pra9bf1JMk+PkxRtLD72Gp
+	 mteiCp8/9APkYVFjHL3prsi4G+T3O/kR4aasJs7NxYovDHmx5aHQOP+3qDUjD92tOB
+	 Vjgw2uq3LJ77tCCvbEEOdYkY3ObnM0ABaKvIS3cAZSF1CrJwiUI79HYWUI5QUXY3kD
+	 cdf37TIDn/ZXNojU9QUqRlEFdMWp9Grs0c2n/GdVTHH1mu6AFk9B6VuAQP7EWsJPxh
+	 v6AXbU/kPsJj5dpXWOtVEuvYE4uZUwJ5Ve10QMBCCrpfX3SW1MGoxsNVITLP2LvVbM
+	 BWv8cg4PPfTqg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
+To: Bill Metzenthen <billm@melbpc.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] media: sta2x11: fix irq handler cast
-Date: Tue, 13 Feb 2024 10:54:47 +0100
-Message-Id: <20240213095451.454142-1-arnd@kernel.org>
+Subject: [PATCH] x86: math-emu: fix function cast warnings
+Date: Tue, 13 Feb 2024 10:56:18 +0100
+Message-Id: <20240213095631.454543-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -51,44 +54,99 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-16 warns about casting incompatible function pointers:
+clang-16 warns about casting function pointers with incompatible
+prototypes. The x86 math-emu code does this in a number of places
+to call some trivial functions that need no arguments:
 
-drivers/media/pci/sta2x11/sta2x11_vip.c:1057:6: error: cast from 'irqreturn_t (*)(int, struct sta2x11_vip *)' (aka 'enum irqreturn (*)(int, struct sta2x11_vip *)') to 'irq_handler_t' (aka 'enum irqreturn (*)(int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+arch/x86/math-emu/fpu_etc.c:124:14: error: cast from 'void (*)(void)' to 'FUNC_ST0' (aka 'void (*)(struct fpu__reg *, unsigned char)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+  124 |         fchs, fabs, (FUNC_ST0) FPU_illegal, (FUNC_ST0) FPU_illegal,
+      |                     ^~~~~~~~~~~~~~~~~~~~~~
+arch/x86/math-emu/fpu_trig.c:1634:19: error: cast from 'void (*)(void)' to 'FUNC_ST0' (aka 'void (*)(struct fpu__reg *, unsigned char)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+ 1634 |         fxtract, fprem1, (FUNC_ST0) fdecstp, (FUNC_ST0) fincstp
+      |                          ^~~~~~~~~~~~~~~~~~
+arch/x86/math-emu/reg_constant.c:112:53: error: cast from 'void (*)(void)' to 'FUNC_RC' (aka 'void (*)(int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+  112 |         fld1, fldl2t, fldl2e, fldpi, fldlg2, fldln2, fldz, (FUNC_RC) FPU_illegal
 
-Change the prototype of the irq handler to the regular version with a
-local variable to adjust the argument type.
+Change the fdecstp() and fincstp() functions to actually have the correct
+prototypes based on the caller, and add wrappers around FPU_illegal()
+for adapting those.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/pci/sta2x11/sta2x11_vip.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ arch/x86/math-emu/fpu_etc.c      | 9 +++++++--
+ arch/x86/math-emu/fpu_trig.c     | 6 +++---
+ arch/x86/math-emu/reg_constant.c | 7 ++++++-
+ 3 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/pci/sta2x11/sta2x11_vip.c b/drivers/media/pci/sta2x11/sta2x11_vip.c
-index e4cf9d63e926..9def7d08c809 100644
---- a/drivers/media/pci/sta2x11/sta2x11_vip.c
-+++ b/drivers/media/pci/sta2x11/sta2x11_vip.c
-@@ -767,8 +767,9 @@ static const struct video_device video_dev_template = {
-  *
-  * IRQ_HANDLED, interrupt done.
-  */
--static irqreturn_t vip_irq(int irq, struct sta2x11_vip *vip)
-+static irqreturn_t vip_irq(int irq, void *data)
+diff --git a/arch/x86/math-emu/fpu_etc.c b/arch/x86/math-emu/fpu_etc.c
+index 1b118fd93140..39423ec409e1 100644
+--- a/arch/x86/math-emu/fpu_etc.c
++++ b/arch/x86/math-emu/fpu_etc.c
+@@ -120,9 +120,14 @@ static void fxam(FPU_REG *st0_ptr, u_char st0tag)
+ 	setcc(c);
+ }
+ 
++static void FPU_ST0_illegal(FPU_REG *st0_ptr, u_char st0_tag)
++{
++	FPU_illegal();
++}
++
+ static FUNC_ST0 const fp_etc_table[] = {
+-	fchs, fabs, (FUNC_ST0) FPU_illegal, (FUNC_ST0) FPU_illegal,
+-	ftst_, fxam, (FUNC_ST0) FPU_illegal, (FUNC_ST0) FPU_illegal
++	fchs, fabs, FPU_ST0_illegal, FPU_ST0_illegal,
++	ftst_, fxam, FPU_ST0_illegal, FPU_ST0_illegal,
+ };
+ 
+ void FPU_etc(void)
+diff --git a/arch/x86/math-emu/fpu_trig.c b/arch/x86/math-emu/fpu_trig.c
+index 990d847ae902..85daf98c81c3 100644
+--- a/arch/x86/math-emu/fpu_trig.c
++++ b/arch/x86/math-emu/fpu_trig.c
+@@ -433,13 +433,13 @@ static void fxtract(FPU_REG *st0_ptr, u_char st0_tag)
+ #endif /* PARANOID */
+ }
+ 
+-static void fdecstp(void)
++static void fdecstp(FPU_REG *st0_ptr, u_char st0_tag)
  {
-+	struct sta2x11_vip *vip = data;
- 	unsigned int status;
+ 	clear_C1();
+ 	top--;
+ }
  
- 	status = reg_read(vip, DVP_ITS);
-@@ -1053,9 +1054,7 @@ static int sta2x11_vip_init_one(struct pci_dev *pdev,
+-static void fincstp(void)
++static void fincstp(FPU_REG *st0_ptr, u_char st0_tag)
+ {
+ 	clear_C1();
+ 	top++;
+@@ -1631,7 +1631,7 @@ static void fscale(FPU_REG *st0_ptr, u_char st0_tag)
  
- 	spin_lock_init(&vip->slock);
+ static FUNC_ST0 const trig_table_a[] = {
+ 	f2xm1, fyl2x, fptan, fpatan,
+-	fxtract, fprem1, (FUNC_ST0) fdecstp, (FUNC_ST0) fincstp
++	fxtract, fprem1, fdecstp, fincstp,
+ };
  
--	ret = request_irq(pdev->irq,
--			  (irq_handler_t) vip_irq,
--			  IRQF_SHARED, KBUILD_MODNAME, vip);
-+	ret = request_irq(pdev->irq, vip_irq, IRQF_SHARED, KBUILD_MODNAME, vip);
- 	if (ret) {
- 		dev_err(&pdev->dev, "request_irq failed\n");
- 		ret = -ENODEV;
+ void FPU_triga(void)
+diff --git a/arch/x86/math-emu/reg_constant.c b/arch/x86/math-emu/reg_constant.c
+index 742619e94bdf..003a0b2753e6 100644
+--- a/arch/x86/math-emu/reg_constant.c
++++ b/arch/x86/math-emu/reg_constant.c
+@@ -108,8 +108,13 @@ static void fldz(int rc)
+ 
+ typedef void (*FUNC_RC) (int);
+ 
++static void FPU_RC_illegal(int unused)
++{
++	FPU_illegal();
++}
++
+ static FUNC_RC constants_table[] = {
+-	fld1, fldl2t, fldl2e, fldpi, fldlg2, fldln2, fldz, (FUNC_RC) FPU_illegal
++	fld1, fldl2t, fldl2e, fldpi, fldlg2, fldln2, fldz, FPU_RC_illegal
+ };
+ 
+ void fconst(void)
 -- 
 2.39.2
 
