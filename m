@@ -1,72 +1,126 @@
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3A3182A1;
-	Tue, 13 Feb 2024 08:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CACF20B2C;
+	Tue, 13 Feb 2024 08:49:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707813174; cv=none; b=I8+w9TMcdGhG3f7yiNILXTfF0kdaTF5eVcp5NENvV78H/0Ab9gCt0kvWMVt/fuk4Q8+z27kYvHHBg3DlFQ1d5w6XxKy8PCYjEZa8OnJa9HhyRJp39h3WA+oPZQqzG0OoyKaVk0tiISV82nwKqrkUa7TbbgnZqTHImnvSpznEf/c=
+	t=1707814199; cv=none; b=ZiL9Lgga7s/dHLYL3t7gN66ws7CPSv1D71z8cn7bW/wgONsvS4s9LLYN1s6V/ZIhOhU8kM9kN98yVo/0MpnkDo0tGgT9sU2hR2+FDbw9kbOAnAivrxOL6aXYOk9nqFsqV4YsV+dXSgKsuwkqooZudFs2Xav8TmPKCDbXImUrM1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707813174; c=relaxed/simple;
-	bh=vOIDoSydCH//8pVOasWDQUh0fzIXQwR4wuHoEzBECMg=;
+	s=arc-20240116; t=1707814199; c=relaxed/simple;
+	bh=sadaPCdmwkHHMrHeq/JKhLMCFklg7Qow7J7JVWooHss=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZaAEoyTTwe13uRp8rOWgs15uhR3I04XJDcaLFOB+ia48uFjtjVxv02+M9mVv81xB3+xVnC2oHTqid0h+IBLX/tX2UbqvaZsGZeReEhkImzJyPkGUFHeTW1z4YnVhxetgOh9ahEUspZFsKrM+jjQXticAsItUIL3/wzO3Gwgu8l0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de; spf=fail smtp.mailfrom=denx.de; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=denx.de
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 69C761C007F; Tue, 13 Feb 2024 09:32:49 +0100 (CET)
-Date: Tue, 13 Feb 2024 09:32:49 +0100
-From: Pavel Machek <pavel@denx.de>
-To: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc: cip-dev@lists.cip-project.org,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-	Pavel Machek <pavel@denx.de>, Biju Das <biju.das.jz@bp.renesas.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 5.10.y-cip] cache: Kconfig: Add dependency for RISCV on
- AX45MP_L2_CACHE config
-Message-ID: <ZcspMaCweLlpXES0@duo.ucw.cz>
-References: <20240212121914.38493-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gn9m9Qb6/Bevbq1W3QwxGYqEOSli7p+U/zXUzdS2AR/yzRdY0rclWFLBKXUo127PeF8porVhhW6O0r4Orkd5/UHOe58tHJ1SBDkr48cPxshjOiFUGx0KQz4NUZcD+RUvDoW514a3sU8FreptEbshD6isRBYnuEYQH+7IucKcSyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68DFEDA7;
+	Tue, 13 Feb 2024 00:50:36 -0800 (PST)
+Received: from pluto (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 943EA3F5A1;
+	Tue, 13 Feb 2024 00:49:53 -0800 (PST)
+Date: Tue, 13 Feb 2024 08:49:51 +0000
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	sudeep.holla@arm.com, vincent.guittot@linaro.org,
+	peng.fan@oss.nxp.com, michal.simek@amd.com, quic_sibis@quicinc.com,
+	quic_nkela@quicinc.com, souvik.chakravarty@arm.com
+Subject: Re: [PATCH 06/11] firmware: arm_scmi: Implement Clock
+ .is_notify_supported callback
+Message-ID: <ZcstL8tRVKIUFoBr@pluto>
+References: <20240212123233.1230090-7-cristian.marussi@arm.com>
+ <202402131047.2NVZWHma-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="F1Ah9b1UnUoleVi5"
-Content-Disposition: inline
-In-Reply-To: <20240212121914.38493-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-
---F1Ah9b1UnUoleVi5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <202402131047.2NVZWHma-lkp@intel.com>
 
-Hi!
+On Tue, Feb 13, 2024 at 10:58:23AM +0800, kernel test robot wrote:
+> Hi Cristian,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on soc/for-next]
+> [also build test ERROR on linus/master v6.8-rc4 next-20240212]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
 
-> csr_write() is available only for RISC-V which caused build issues with
-> randconfig for ax45mp_cache.c. To avoid this issue add a RISCV dependency
-> on AX45MP_L2_CACHE config.
+Hi,
 
-Looks good to me, thanks. I will apply it soon if it passes testing
-and if there are no other comments.
+this series, as stated in the cover-letter, is based off the current tip of
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+	sudeep/for-next/scmi/updates
 
---F1Ah9b1UnUoleVi5
-Content-Type: application/pgp-signature; name="signature.asc"
+and particularly needs commit:
 
------BEGIN PGP SIGNATURE-----
+	9c5bc650031e firmware: arm_scmi: Rework clock domain info lookups
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZcspMQAKCRAw5/Bqldv6
-8gXoAJ4wb2wwmFE8HTZ+YIwVQUfg5/EtNQCghQ6ZQuBDjiJMWKi7367p9gOIDHk=
-=t0Mt
------END PGP SIGNATURE-----
+from there, since it contains the missing scmi_clock_domain_lookup().
 
---F1Ah9b1UnUoleVi5--
+Not_sure/dont_known if there is any way to convey this "based-on-branch"
+info to your/any CI at the moment.
+
+Thanks,
+Cristian
+
+> url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Marussi/firmware-arm_scmi-Check-for-notification-support/20240212-203727
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+> patch link:    https://lore.kernel.org/r/20240212123233.1230090-7-cristian.marussi%40arm.com
+> patch subject: [PATCH 06/11] firmware: arm_scmi: Implement Clock .is_notify_supported callback
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240213/202402131047.2NVZWHma-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project c08b90c50bcac9f3f563c79491c8dbcbe7c3b574)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402131047.2NVZWHma-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202402131047.2NVZWHma-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/firmware/arm_scmi/clock.c:853:8: error: call to undeclared function 'scmi_clock_domain_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      853 |         clk = scmi_clock_domain_lookup(ci, src_id);
+>          |               ^
+> >> drivers/firmware/arm_scmi/clock.c:853:6: error: incompatible integer to pointer conversion assigning to 'struct scmi_clock_info *' from 'int' [-Wint-conversion]
+>      853 |         clk = scmi_clock_domain_lookup(ci, src_id);
+>          |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    2 errors generated.
+> 
+> 
+> vim +/scmi_clock_domain_lookup +853 drivers/firmware/arm_scmi/clock.c
+> 
+>    842	
+>    843	static bool scmi_clk_notify_supported(const struct scmi_protocol_handle *ph,
+>    844					      u8 evt_id, u32 src_id)
+>    845	{
+>    846		bool supported;
+>    847		struct scmi_clock_info *clk;
+>    848		struct clock_info *ci = ph->get_priv(ph);
+>    849	
+>    850		if (evt_id >= ARRAY_SIZE(evt_2_cmd))
+>    851			return false;
+>    852	
+>  > 853		clk = scmi_clock_domain_lookup(ci, src_id);
+>    854		if (IS_ERR(clk))
+>    855			return false;
+>    856	
+>    857		if (evt_id == SCMI_EVENT_CLOCK_RATE_CHANGED)
+>    858			supported = clk->rate_changed_notifications;
+>    859		else
+>    860			supported = clk->rate_change_requested_notifications;
+>    861	
+>    862		return supported;
+>    863	}
+>    864	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
