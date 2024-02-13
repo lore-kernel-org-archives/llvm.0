@@ -1,197 +1,228 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D09B10A12
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 00:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7061F64CE8;
+	Tue, 13 Feb 2024 00:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707784844; cv=none; b=WbYdNIW2OhDzNrJJyqTXx0jebJmcj8rRXDBjH2i4hDHqqkXtJ7iRij9Io/kNcH3REjFR7ig/ud5No+d4ahMmWNVZEEiVKoudNkx+OlSrdX1YMA6OItB1TnaO+JWIdTbvu5LUb2bkroF8kgsxYeWnthh/owJ3pf9GuR0ZJL/HY1Q=
+	t=1707785746; cv=none; b=CXFokEZ7sx+0U+RFY0yRhKRWJflFTPKtHqVEx3lrJWJDAVPWeT4qeeLTMNepCuwFHsS9I/DO9qy8hIs5QS5hMzTwb0TTDbKnZgYcpFPFqMrhcovhXQwpRyeu6PFPBW53c1sN0FZtVzS7ppRY0DTeFcylrQv9yl+5Fh0yK+R9yRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707784844; c=relaxed/simple;
-	bh=xvvcHOTjklqJ8J+wpdHxZQ5+TwxYvJxRnbQj/nLMpRM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Te2I9QFtuRs2bQYGw7MRHZsxiVmvWHyq+lTobukYmycngITkyUriFwA4HuZaPr2Papnhhx5F1M8MUrpcpLZfNAa5gWei9chO71fVu0yGy06x6e9+9tp0Co2PeYALrA8ew49fPXcyML9xZPipBT6qlRD+sISD7iWogiJWYaztC+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U3fbF9Lz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1707785746; c=relaxed/simple;
+	bh=x5LbtggR4Z3xaic6f6M9HxtLNo4SYpCsgxFez8n4Mqs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u5ej6mFN+6o1TMq7ScucUhCPQHv5kq9ph6vPEteThxn6Ix8HEy7Ugwhd96e2SOrS9xgtVlYMgyki373/kslfY+O9Znt4kuHVGNN9WkT/alMbKm2UcfOWIt/ixDRtNuIT/0ZaTj6j77ig1Y78pODwX3fNqUJ2XAhdnCL8CuLJeQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HH6dqeeM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U3fbF9Lz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707784841;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Qfe5KFcaKOw5z7jjq6IF/z+O0OEEBzeT0/gr0d8IbxA=;
-	b=U3fbF9Lzm91JMhUAl1tve3KB2+FJcKHRk2UCyiYMNIJszX05d399IzIkvmNi0KTvN1Tmll
-	fw0gH4gfXm6Ybrb2xGSIgXserfawmG+WBVdnemmaE8RrfUnP7IX5+TQ8MEQFSiwFlKNmQD
-	nqf/XwDRmzAQq4Dk9a7Z7WtG4CyA7vU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-583-wT1nDtOzOhia0feR9befug-1; Mon, 12 Feb 2024 19:40:40 -0500
-X-MC-Unique: wT1nDtOzOhia0feR9befug-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6230A101A52A
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 00:40:40 +0000 (UTC)
-Received: from [172.64.14.59] (unknown [10.30.32.10])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1DF42C185C1;
-	Tue, 13 Feb 2024 00:40:40 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 210): Test report for master
- (6.8.0-rc4, mainline.kernel.org-clang, 716f4aaa)
-Date: Tue, 13 Feb 2024 00:40:40 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HH6dqeeM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D075C433A6;
+	Tue, 13 Feb 2024 00:55:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707785746;
+	bh=x5LbtggR4Z3xaic6f6M9HxtLNo4SYpCsgxFez8n4Mqs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HH6dqeeMCz4ysgu5nOyiSwKFIVRhElfGwxll//vyMwoV5+dzYmBVbWne9Epn50sHC
+	 Xv64bndEVgi2v47iqTNtM91j1nUk8TZQ1xRburn2kU7BqBRzGs7b8TwCGsHJX9xsOn
+	 6XC256+nLTPFY/DiJ2hRMNRwmfmXB/gRcvckxZOMU8oU+hDjlN/2+9CnvrF+5lAbkZ
+	 9wg3/lc5jeMv2lguto4nh62ncD0EFC5BV2yx+oFrL8Lo1xyDIKd3mXOdYKJ5BeUClh
+	 UL1LRqm8+32I59VUAuWI7VMQ5XB6maGbHVorypG2rBo3VOkVYBPLO6lT9BxDxn9uI+
+	 JQUndQiOOdjJw==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-51147d0abd1so4276629e87.1;
+        Mon, 12 Feb 2024 16:55:45 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX7HTxr2S0eMcBroGBHrE3BfvpQtFykIijoTjiN9OJvQn21XKVTXA0ahlhMRBMSuTHaxWXUUiBfri5GEjwz0C2S/3NnxsAJzPoKhoSUjaax3NfhtxXvmYqqAjNxwtY=
+X-Gm-Message-State: AOJu0Yybz+qfxJL+1QHqYcGS4DELEV0ZXs9h93bvjPi5EMzOc6GUkQuv
+	iaYvT2p3F6xjZ6KCrgVvaODWLQmMATe1fmLk4tA1p1IPTwGj9yO0cbVlpLelLT6RZdrT42zB+SQ
+	ne9X5jnt4ebFE9U5FJqQshY7eyt8=
+X-Google-Smtp-Source: AGHT+IHKL6G3yu5doOJaxyZoeQuHPK6LLjZ7gg1ZT1vESg0Rl9kdoUbQ0BifEkJzoizI59vLRa0vB/zcugpsMQjVSQc=
+X-Received: by 2002:ac2:4245:0:b0:511:4268:3a54 with SMTP id
+ m5-20020ac24245000000b0051142683a54mr5659125lfl.29.1707785744497; Mon, 12 Feb
+ 2024 16:55:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <62707.124021219404000412@us-mta-583.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org>
+In-Reply-To: <20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 13 Feb 2024 09:55:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT1+K87M2f_8enCydaKgDPLP9E1ex-as85eC2hB49bkBA@mail.gmail.com>
+Message-ID: <CAK7LNAT1+K87M2f_8enCydaKgDPLP9E1ex-as85eC2hB49bkBA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Fix changing ELF file type for output of gen_btf
+ for big endian
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: nicolas@fjasle.eu, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, keescook@chromium.org, maskray@google.com, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'vfs-6.8-rc5.fixes' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/vfs/vfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/129052
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [Rawhide] Storage: ERROR: Could not build wheels for ruamel.=
-yaml.clib, which is required to install pyproject.toml-based projects
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1859
-            Affected tests:
-                 ppc64le - Storage - dm/common
-                   s390x - Storage - dm/common
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Storage - dm/common
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+On Fri, Feb 9, 2024 at 5:21=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> changed the ELF type of .btf.vmlinux.bin.o from ET_EXEC to ET_REL via
+> dd, which works fine for little endian platforms:
+>
+>    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF.....=
+.......|
+>   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |.........=
+.......|
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
+
+I am afraid this dump is confusing.
+
+The byte stream "03 00" is ET_DYN, as specified in ELF:
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  Name        Value
+  ------------------
+  ET_REL        1
+  ET_EXEC       2
+  ET_DYN        3
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
+
+It disagrees with your commit message "from ET_EXEC to ET_REL"
+
+The dump for the old ELF was "02 00", wasn't it?
+
+
+
+
+
+>   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |.........=
+.......|
+>
+> However, for big endian platforms, it changes the wrong byte, resulting
+> in an invalid ELF file type, which ld.lld rejects:
+
+
+Fangrui pointed out this is true for inutils >=3D 2.35
+
+
+
+>
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF.....=
+.......|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
+.......|
+>   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
+.......|
+
+ -  00 02
+ +  01 02
+
+
+
+>
+>   Type:                              <unknown>: 103
+>
+>   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+>
+> Fix this by using a different seek value for dd when targeting big
+> endian, so that the correct byte gets changed and everything works
+> correctly for all linkers.
+>
+>    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF.....=
+.......|
+>   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
+.......|
+
+
+Ditto.
+
+
+
+
+>   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
+.......|
+>
+>   Type:                              REL (Relocatable file)
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
+> Link: https://github.com/llvm/llvm-project/pull/75643
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  scripts/link-vmlinux.sh | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index a432b171be82..8a9f48b3cb32 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -135,8 +135,15 @@ gen_btf()
+>         ${OBJCOPY} --only-section=3D.BTF --set-section-flags .BTF=3Dalloc=
+,readonly \
+>                 --strip-all ${1} ${2} 2>/dev/null
+>         # Change e_type to ET_REL so that it can be used to link final vm=
+linux.
+> -       # Unlike GNU ld, lld does not allow an ET_EXEC input.
+> -       printf '\1' | dd of=3D${2} conv=3Dnotrunc bs=3D1 seek=3D16 status=
+=3Dnone
+> +       # Unlike GNU ld, lld does not allow an ET_EXEC input. Make sure t=
+he correct
+> +       # byte gets changed with big endian platforms, otherwise e_type m=
+ay be an
+> +       # invalid value.
+> +       if is_enabled CONFIG_CPU_BIG_ENDIAN; then
+> +               seek=3D17
+> +       else
+> +               seek=3D16
+> +       fi
+> +       printf '\1' | dd of=3D${2} conv=3Dnotrunc bs=3D1 seek=3D${seek} s=
+tatus=3Dnone
+>  }
+>
+>  # Create ${2} .S file with all symbols from the ${1} object file
+
+
+
+Do you want to send v2 to update the commit description?
+
+
+The current code will work, but another approach might be to
+update both byte 16 and byte 17 because e_type is a 16-bit field.
+
+
+It works without relying on the MSB of the previous e_type being zero.
+The comment does not need updating because the intention is obvious
+from the code.
+
+
+if is_enabled CONFIG_CPU_BIG_ENDIAN; then
+        et_rel=3D'\0\1'
+else
+        et_rel=3D'\1\0'
+fi
+
+printf "${et_rel}" | dd of=3D${2} conv=3Dnotrunc bs=3D1 seek=3D16 status=3D=
+none
+
+
+
+
+
+
+
+
+
+
+> ---
+> base-commit: 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478
+> change-id: 20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-dbc55a1e129=
+6
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
