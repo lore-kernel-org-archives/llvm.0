@@ -1,84 +1,118 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9945FDD7;
-	Tue, 13 Feb 2024 20:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CD960B98
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 20:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707856637; cv=none; b=s215btleW19aPiAROK1xx9kzPr9nWfFe+IlLEVq3LAef71efgruk+MoZpXNnvOKpB757mN3kKM6++F9ud7gw6bAHMSHouqq/wwJu8BFGU5EHEBMWNfLRCPXfiGKiXr+cFdvj7wjXaMEF4FFxfhN8uPT+Rei0LYrT7thiBzLzKmI=
+	t=1707856647; cv=none; b=ErSm1SlvOeJBHw3TuQiogpbPmyEPGn8WMbZnclU3N1bz235b2vZAkHW6UQIrz3s4RlpWG3VxCsHRoUVLjjOepSpZSbCrYE+HqDQ2cdWGzl/57Totgwly9ys6kjwwDD4DXZv1fNxfM3Iz+n1Z/XLAz71rwhVaGYtrR5fV3luYanY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707856637; c=relaxed/simple;
-	bh=n/wW7PIGgqQXSlQ0F7NCV5oNj8FXGjtLdH3aZqJKeHE=;
+	s=arc-20240116; t=1707856647; c=relaxed/simple;
+	bh=VRorOrRrHwUnyd7C3zuIEQ0wDQxSEzrfZUP7At+3iIQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CwLoOdMfSMH/a+ZqMmC6Uufiogy8sP3vuC+cY/2CbE3QljMmj/ZQ1GFoe4WtIrEg4Wxo15eQUGnA7C1Zwc9+ZevrXQkBn75WXWMh9DF6uZRmLT0mlNyZhzsO06yBiZ6BtpurTvDS8B8TDa4BUq0nbpi/TFPx0wbE2Qo2pQk9Um0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OGvc+fK+; arc=none smtp.client-ip=209.85.219.171
+	 To:Cc:Content-Type; b=K0HwCWSydjpDx00u3mjMJzwuNcwWOCZNY4s8qEO5t9DCF00jsi011yjVLTdccNWRPRo3lFSIhtSv92sdgpKuMkUz1v7wjLn0r63N7gRf9jyZMvlDdQXP7uWb8wfNh2wPxT+4zhSzx9cTw394N62gGml4X1M9y8K8u+miXNIU7LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUyzqB2y; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OGvc+fK+"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dc236729a2bso1234943276.0;
-        Tue, 13 Feb 2024 12:37:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUyzqB2y"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dcbcea9c261so1938775276.3
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 12:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707856635; x=1708461435; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1707856644; x=1708461444; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n/wW7PIGgqQXSlQ0F7NCV5oNj8FXGjtLdH3aZqJKeHE=;
-        b=OGvc+fK+romig5bqIBqGZ1YkPy0Z1tn5tatK5hK12CQ2kwa8qi/dBO2Q0QweD2y96n
-         Rlw7AdKl9cqDNRHnM5ctbNAWGH/P6PKdQHDUZ7KRksC5r4y5JM52rmOGLym6wVD0Xqxj
-         2rmMxh2kEFp39xIdQfJCVSgITdbw6RGO10HGTAhM5LJ0RWqGd3JkjH0ARMXyIJhAngVE
-         U0Np6uWugRqk5eyVx4voKXvRepoRCb5KnXOfHyFlF4vTZ+4cogP1oOUgC3+w/y4o3wxD
-         pjzPW/VSNaaR04ju2w0Kb8QoE8gxNcstluZunsK80UVPuCTYpJJJeETypTJbRLgnh9UM
-         3pVg==
+        bh=b6UcSSahlv+A2iZdYbarvJ/03s3/9UcPgDdNSrpGp9I=;
+        b=iUyzqB2yY7nSn93LwXPwSkFPkgI8RUwDrfaMcc7kS3O1b2Xf4QssFB0M8lrmIYBHFq
+         hyKGUpGGExnCe1xijEX4zko4cP66PvuKkiCcv9I7XOGRR1C5HReiyndVvUTgpY1gOg7O
+         U+2yD4LDZLPq5ErZZxDLlhQj0QvjF6fnls1fcY3eMeeIXr5r7MAm3WbfxVL5Q+SqHEI/
+         vm77kJHrLZhz+rI+1DoaVeOGL7VtRl0VP+/h9qcUflCFtVq49FMC1v5veNxYGDcicgqX
+         j8lqVq2ow/lD3X8Q92ABGN+sAdoS+FITHC3HiG9jl6sm8bnWHu3SzSiegM3h1aCpQzrT
+         khOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707856635; x=1708461435;
+        d=1e100.net; s=20230601; t=1707856644; x=1708461444;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=n/wW7PIGgqQXSlQ0F7NCV5oNj8FXGjtLdH3aZqJKeHE=;
-        b=qZceGdeXzf4gwmKzdyru/hGQ7c2asRqbkYozmf89D8oltcyZvGWNMf5Kv2EgLAzhJK
-         q6AtIa6WpTj0WlU321JmdfpusgpX73ch5FdQHDCziD7rb8aaL9ef3kY2PQdirKB+HxAc
-         bmA/DxUcS1s4s7YRkjfN0Gq+pICNys/pEW6egg+kMvgAnLBi4yHuzLepGx58MvkwpHpG
-         ErzIDk5FbmwOX3brNaGgKyFracZeoAnzPusjVh+SGMd3DnJ6sxTKcsJLtxozx2FekttA
-         d9/l/H/y67noouhDuCBjhAfxAiX5gA4CCvS8aa3/Y1LxOTS4Q2kL5+EJLFxixlA2UePV
-         4A7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXY1wyzkPGh9kbe5KBZfc98KqnPfi3V+q+VdnH9PlGrGEfNFW+IGw2Aljovmt9XjZHeI7E8VHqhdlNiuFgx6LhzOKWXdQZuQi2jMWAo0S7Ma/7HDCbBjwqResAJeNo=
-X-Gm-Message-State: AOJu0YwyTWK/D8oJBCa7UfFDKQLkXhJ8fY707c1GmVyNpkx+z6AgTdj0
-	X4foGneXhg4WHoZY9Fm/0wlIQx2bN4oAaUEaWWzotiWl2rYaHugHPy4olCwxpZUMbu+wF9Q/AF9
-	HKs8NcneoPQshRN0Qf0e327ARKm0cLD5+
-X-Google-Smtp-Source: AGHT+IE7LRxEWEyLjD3Dvo0o8c7YVHNu9ELBH7AyR73SwTWGh6EmoBFMKAf18L2S2tVVni7yUNl0BAAtY4km7kss1Cs=
-X-Received: by 2002:a25:ae16:0:b0:dcd:3172:7271 with SMTP id
- a22-20020a25ae16000000b00dcd31727271mr445383ybj.3.1707856635046; Tue, 13 Feb
- 2024 12:37:15 -0800 (PST)
+        bh=b6UcSSahlv+A2iZdYbarvJ/03s3/9UcPgDdNSrpGp9I=;
+        b=R3rfdV4DD8mWglFvOX9rzI/oSFY3O6feXdLsW1X4EQwZ3wGQxvYGpdSK1EWWrIuCPW
+         bLKyLLHu9Dd1hqoAzUf7l+hKOReQ0oytAZ0s5V/jFLfEQq6M0NB/AT3sSJCdhSJ0D68B
+         W0gZ8KXT+GAQ2EnLigixk59FAp/Kj2KP81vR0pT3JLZqPm8/V+334+qjfqQMvCA0vdxj
+         JXh0CSCqqia4ZenlHqDNdc5gk6XrSFLi0rtHIiwdoscg+J6eWvWj3i09MmxVfP33DCqv
+         /JZj6x5PInkaGBuDAgtYEeR2fiZQpDUxupx4qnVT2oDndXGVoYZWyCywqEC5PJqVc2iT
+         ks4Q==
+X-Gm-Message-State: AOJu0YwJTRKeyiB5Qy8IyUee3WleC3tD7F+d/YKQoMwhNaWXZxi0hffv
+	j4+J8aMEhqnulEVzQzYJbjnQVilz5VZ6jhA1Mwl/mo7lZBgHsYMz/ku6tMKPFMRf7UilGXEy1p0
+	6GQS0KiMQDm6y3XS+EjYSiQP3E6krWpM/
+X-Google-Smtp-Source: AGHT+IGbBIyZXOV1AimT1jfBQbzVd9NOciEat0xOiKUNMsR3PS2UX0l210eYDJoQLVYDOpviUW5vE/4orzLv0lupGAg=
+X-Received: by 2002:a05:6902:4c1:b0:dc6:af04:2e05 with SMTP id
+ v1-20020a05690204c100b00dc6af042e05mr208159ybs.7.1707856644542; Tue, 13 Feb
+ 2024 12:37:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240111-dvb-mxl5xx-move-structs-off-stack-v1-1-ca4230e67c11@kernel.org>
- <20240210162604.342349-1-ojeda@kernel.org> <20240212232757.GA3221859@dev-arch.thelio-3990X>
-In-Reply-To: <20240212232757.GA3221859@dev-arch.thelio-3990X>
+References: <20240208002841.GA2601476@dev-arch.thelio-3990X>
+ <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
+ <20240212234850.GB3221859@dev-arch.thelio-3990X> <20240213025303.GA4006766@dev-arch.thelio-3990X>
+In-Reply-To: <20240213025303.GA4006766@dev-arch.thelio-3990X>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 13 Feb 2024 21:37:03 +0100
-Message-ID: <CANiq72nYc0aVOwYKgJ13Fsdp84jZqxPsL=VdCQjGtoFdFVZziQ@mail.gmail.com>
-Subject: Re: [PATCH] media: mxl5xx: Move xpt structures off stack
+Date: Tue, 13 Feb 2024 21:37:13 +0100
+Message-ID: <CANiq72npYCD-zKqcXPNOAxnKiUCCXGbFQaGo-8=0-171ni+ncQ@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 18.1.0-rc2 uploaded
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, justinstitt@google.com, linux-media@vger.kernel.org, 
-	llvm@lists.linux.dev, mchehab@kernel.org, morbo@google.com, 
-	ndesaulniers@google.com, patches@lists.linux.dev, stable@vger.kernel.org
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 13, 2024 at 12:28=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
+On Tue, Feb 13, 2024 at 3:53=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> Thanks for taking a look, this is great to hear!
+> Alright, I reuploaded 18.1.0-rc2 with libclang.so included, please let
+> me know if this will work for you going forward.
 
-My pleasure!
+Thanks Nathan, that was quick!
 
-I am happy to report that it also worked with the new toolchain you
-just uploaded (i.e. the one that included `libclang.so` :)
+I tried it, and it worked like a charm. bindgen reports:
+
+    $ bindgen --version --verbose
+    bindgen 0.65.1
+    Clang: ClangBuiltLinux clang version 18.1.0rc
+(https://github.com/llvm/llvm-project.git
+c6c86965d967886ca5a2ed8968c949cd42cdd49a)
+
+ And I built next-20240213 for LoongArch kernel with Rust enabled:
+
+    # Linux/loongarch 6.8.0-rc4 Kernel Configuration
+    CONFIG_CC_VERSION_TEXT=3D"ClangBuiltLinux clang version 18.1.0rc
+(https://github.com/llvm/llvm-project.git
+c6c86965d967886ca5a2ed8968c949cd42cdd49a)"
+    CONFIG_WERROR=3Dy
+    CONFIG_RUST=3Dy
+    CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.75.0 (82e1608df 2023-12-21)"
+    CONFIG_BINDGEN_VERSION_TEXT=3D"bindgen 0.65.1"
+
+I also built our rust-next branch for x86_64 and QEMU-boot tested it
+with the couple Rust samples:
+
+    [ 0.000000] Linux version 6.8.0-rc1-gf090f0d0eea9
+(root@02f0b7650ba6) (ClangBuiltLinux clang version 18.1.0rc
+(https://github.com/llvm/llvm-project.git
+c6c86965d967886ca5a2ed8968c949cd42cdd49a), ClangBuiltLinux LLD 18.1.0)
+#1 SMP PREEMPT_DYNAMIC Tue Feb 13 20:14:57 UTC 2024
+    [ 1.788925] rust_minimal: My numbers are [72, 108, 200]
+
+I have hooked it up into my small CI to keep using your toolchain in a
+subset of the builds :)
+
+Not sure if you pick tags for this sort of thing, but in case it is useful:
+
+    Tested-by: Miguel Ojeda <ojeda@kernel.org>
+
+Thanks again!
 
 Cheers,
 Miguel
