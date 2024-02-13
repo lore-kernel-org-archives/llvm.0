@@ -1,117 +1,103 @@
-Received: from wfout6-smtp.messagingengine.com (wfout6-smtp.messagingengine.com [64.147.123.149])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF8325775
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 10:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C592868D;
+	Tue, 13 Feb 2024 10:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707821598; cv=none; b=WL6K0LxBcFkZ8GedHKnzeEqBAGTGOpXLR3ev93/9N0XIe0zqRTTkbzul7T3WKP6B7vGLWPZXOD7OHak8I+5g65yV5+Yd/E4YAVf0i1q8TaYguOA9WzR7p3L2sy9rxjeSTfBcQKdMCRbohCBjYBGurbP6+FUOQ7NZl1zybycXpvE=
+	t=1707821691; cv=none; b=b7OX4cBpjXhAnmFsev9STQmPgy60kBHTZtuDQYbsx09x0JNCdJpljj6KKx/jVJZs6bOlV+tER0C8LF6ksJzpZ6+OOVN3XwGXyMuESIFSxRCa3o0klmQIGM1+iz08WPc5d+kUQ5XgLINwZJGI+GD55AWW3puA9i9d/oNMDI3/xV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707821598; c=relaxed/simple;
-	bh=+JnBgDGOZAp2YbrH6cwJtYEtXr9eH6MJ20r1BkDzDXE=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=BcLAnGt3JZVKZyCsvc7CUKY/bbqDfKIfarhIcZthGOI46CjrlNHk8CbDJ4Nga71rV9pjyG2+Gkhpt5d6zGyUkFxdIWfef2r9h3Wgbmv0fOT91Cha/QufJMlUrMMAbumzghtc5SeGtA1RiveV6YTPCVqNCJyboiA7YpO6lm16TO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=hdWJrUS8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=G02pROHA; arc=none smtp.client-ip=64.147.123.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1707821691; c=relaxed/simple;
+	bh=i0PH+e6iAE9CVt87DhB8L3tIQLYGI7GlKZAfupFbOho=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EsQSMtjaMcKfov8jHcjhXXcJHKzelpejhE5NPxjBz3px8fDCqJGE5O73Y6BuFfKqquyiQWuL3pOQ77KzINO+iOnuWtSg4Nlxx1eG99r07ejJ37NzR/pcF4KCaDhOHLjsW+PxUPaWrKy66LA88hXRVAl+i70X4PGApDTiY64Dgso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m88Rj1sh; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hdWJrUS8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="G02pROHA"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id DE8C01C00087;
-	Tue, 13 Feb 2024 05:53:13 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 13 Feb 2024 05:53:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1707821593; x=1707907993; bh=6dv3XkVpsh
-	WAdzS8Nc4Xo0CoQTmrm60p1TUc7YC2Dao=; b=hdWJrUS8Cd51e7g6sHyMhMiCxv
-	IDWxmxNLFPEiqY+2GMkGyjR8B8XSgya46SGAtMuyBQ/eW2An26StdfkpA6wC8S6g
-	LuJTGDhGXLsntq83AcJAOtuW98rfnCbKxncDN3QVgRbDxMvaPmCq57xQwVgR2I7H
-	+UlLZ7ltgGP14MFBIcNnSK/dS7wb4+Fi72zXXwTBbOxaVaot+dbzoa4ScEVZGF3w
-	gSxd5R5MMAG38ir1USb5rRVnvmlzFvdPU6idyu6sNe9GkY2HAl2MNhEmDSwnux4Q
-	VmGCD7B9Ruxsgy8d4UdVCKlPPG6k0z3ndm78tVLasKcstligOWQlDT3eEbbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1707821593; x=1707907993; bh=6dv3XkVpshWAdzS8Nc4Xo0CoQTmr
-	m60p1TUc7YC2Dao=; b=G02pROHA+7jjMd7tHb5W9Mk1RHyKHtv+aGTn41ZLW0fH
-	TeDGVYBX5dqUePSIxI0FC/zSx8psmAhZsU2w2xqEZpYNMKtCAqUppnDdcxNKd/Gq
-	t7v7HDGf+wTfHKW1oIRp6dTsyFDFkIRBYLeHpQbB1dDWdAtwyFaa3Od+5wWJq/y4
-	YHhUPnHwW4mbW4LM/+uL4x21bUnKQya075BRbFDcNy3bqfseqZn4J+EZ8HMwvQqe
-	PUeKkR8Ve8iedu7wfp4NfaMD9/aiHMqWwUB8UdvLekkwgqMFJbu6IAnZOAIWOjYW
-	Vw7e7GDFqI6KFb/+a/V/Ofa27HmNYxUzVwGh1D7xYA==
-X-ME-Sender: <xms:F0rLZb_1q4NKRMH-XXweuv45E4i6FkWcds3C1qZ80Ws1TMhlCedt-w>
-    <xme:F0rLZXtYCwVkCjihBn9E_icVc9UEUFEBcYTprGOvxx8x770weQ-EuImCYvFjUiE70
-    vTv3049MW5pipRXSvQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehgddulecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:F0rLZZCGF4p3x0Tli4MvIOHCz3GP44OMlMiAIBqdkgchzB1cmvLNvQ>
-    <xmx:F0rLZXcXjSCXz4H84WVOn0iFRqU4fNWpZD2PIwaO0L4RzJF_UJ1o4g>
-    <xmx:F0rLZQOsH68J5cLPZ8MzFdW_2JYHAoCTzJJ6bmTQV3gsg88zA7cFDA>
-    <xmx:GUrLZRxiq9tjm-VczEMhcII7VaYv9BO8Xu8yf6vQZFSyb0aOzroxWDV57V4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6BDE7B6008D; Tue, 13 Feb 2024 05:53:11 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m88Rj1sh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707821690; x=1739357690;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i0PH+e6iAE9CVt87DhB8L3tIQLYGI7GlKZAfupFbOho=;
+  b=m88Rj1shDrnkMKrsaqe4zHAlDFL4cJVRRILFLpMGOnYiMtowX/0guqTS
+   x7CIdY/8PJhkmZlDRBE5bIXDueDXyYpro1EgzO0Uyvxz/gpE/rcIjHgxW
+   dCgFMmIZ63mfuxPitJPJq54ZDrE+QowzH58/6W+soJQgYVAITLiTs0DNT
+   DGVnDrgDPjTK004Tf8CCsCxhcTXz4XTUQD8d3tLaWES7jFFVzT9lma4DS
+   yuyLBJIXBBxYUTSgmt+ZuQHbRdm4b5sP7UFUP5rMtKTmt/jQI6D+8tkp8
+   i0mW5w4xdNOgvfYtDT4xrLKdk9+rzLeolBezh6J8GAwSTo2sPP/snqtB8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="13215881"
+X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
+   d="scan'208";a="13215881"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 02:54:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
+   d="scan'208";a="2781894"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 13 Feb 2024 02:54:46 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rZqR1-0007fi-2Q;
+	Tue, 13 Feb 2024 10:54:43 +0000
+Date: Tue, 13 Feb 2024 18:54:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [chunkuang-hu:mediatek-cmdq8 4/6]
+ drivers/soc/mediatek/mtk-cmdq-helper.c:372:5: warning: no previous prototype
+ for function 'cmq_pkt_nop'
+Message-ID: <202402131818.89AgTkT5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <c61d7daf-1b13-4ff8-aeae-7dcd8dd02131@app.fastmail.com>
-In-Reply-To: <1jbk8kk5pk.fsf@starbuckisacylon.baylibre.com>
-References: <20240213101220.459641-1-arnd@kernel.org>
- <1jbk8kk5pk.fsf@starbuckisacylon.baylibre.com>
-Date: Tue, 13 Feb 2024 11:52:50 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jerome Brunet" <jbrunet@baylibre.com>, "Arnd Bergmann" <arnd@kernel.org>,
- "Stephen Boyd" <sboyd@kernel.org>
-Cc: "Mark Brown" <broonie@kernel.org>, "Liam Girdwood" <lgirdwood@gmail.com>,
- "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
- "Neil Armstrong" <neil.armstrong@linaro.org>,
- "Kevin Hilman" <khilman@baylibre.com>,
- "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ASoC: meson: add helpers for clk_disable_unprepare
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Feb 13, 2024, at 11:36, Jerome Brunet wrote:
-> On Tue 13 Feb 2024 at 11:11, Arnd Bergmann <arnd@kernel.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git mediatek-cmdq8
+head:   572ee20058cf30ec608e6009421d89e45a6b6f5e
+commit: 7656e1f3f594b39a255f94230c6bbf1dd1d0099c [4/6] soc: mediatek: cmdq: Add cmdq_pkt_nop() helper function
+config: i386-buildonly-randconfig-001-20240213 (https://download.01.org/0day-ci/archive/20240213/202402131818.89AgTkT5-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402131818.89AgTkT5-lkp@intel.com/reproduce)
 
-> This probably pre-dates the introduction of devm_clk_get_enabled()
-> It would probably be better to use that instead of duplicating helper
-> functions which do the same thing.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402131818.89AgTkT5-lkp@intel.com/
 
-Ah, I had not thought of that interface either, so you are probably
-right that this is the best way to do it.
-Can you send a replacement patch then and add my Reported-by?
+All warnings (new ones prefixed by >>):
 
-I also sent the same patch for drivers/nvmem/meson-efuse.c, which
-I guess will also need the same treatment. I also checked and saw
-that all three files already had this code in linux-6.0 when
-devm_clk_get_enabled() got added.
+>> drivers/soc/mediatek/mtk-cmdq-helper.c:372:5: warning: no previous prototype for function 'cmq_pkt_nop' [-Wmissing-prototypes]
+     372 | int cmq_pkt_nop(struct cmdq_pkt *pkt, u8 shift_pa)
+         |     ^
+   drivers/soc/mediatek/mtk-cmdq-helper.c:372:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     372 | int cmq_pkt_nop(struct cmdq_pkt *pkt, u8 shift_pa)
+         | ^
+         | static 
+   1 warning generated.
 
-> If for any reason it is not possible, a common helper in clk.h would
-> preferable I think.
 
-I can't think of anything that prevents us from using
-devm_clk_get_enabled() here.
+vim +/cmq_pkt_nop +372 drivers/soc/mediatek/mtk-cmdq-helper.c
 
-    Arnd
+   371	
+ > 372	int cmq_pkt_nop(struct cmdq_pkt *pkt, u8 shift_pa)
+   373	{
+   374		struct cmdq_instruction inst = { {0} };
+   375	
+   376		/* Jumping to next instruction is equal to no operation */
+   377		inst.op = CMDQ_CODE_JUMP;
+   378		inst.value = CMDQ_INST_SIZE >> shift_pa;
+   379		return cmdq_pkt_append_command(pkt, inst);
+   380	}
+   381	EXPORT_SYMBOL(cmq_pkt_nop);
+   382	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
