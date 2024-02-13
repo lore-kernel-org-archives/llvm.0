@@ -1,139 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A1A8F4D;
-	Tue, 13 Feb 2024 00:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D09B10A12
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 00:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707783351; cv=none; b=QMqStliUnZ9FNemRheOolVdzBYxE9TWPk/BYUEIhQd+gfydM+KnKn0UmclDv2Ur/iPKknojuC2spg/H5MLealwEvPaHnVUMGxwes8Uk4duBhpcB0hYLQmT7772wnr2cgiIon4Er0s0UYj2Adu2CMSiUZ4d/JQa+TqZl+U7+YaLM=
+	t=1707784844; cv=none; b=WbYdNIW2OhDzNrJJyqTXx0jebJmcj8rRXDBjH2i4hDHqqkXtJ7iRij9Io/kNcH3REjFR7ig/ud5No+d4ahMmWNVZEEiVKoudNkx+OlSrdX1YMA6OItB1TnaO+JWIdTbvu5LUb2bkroF8kgsxYeWnthh/owJ3pf9GuR0ZJL/HY1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707783351; c=relaxed/simple;
-	bh=pGauPJe3pc7ZiPndNvLC3iAdr8bnuuyJx3XLyQ1nH+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SbEb/2IKfxuZi/U/wStm/6irA3oNrvghU+I82kB9OVEqOOgjVIarOQuGQqDExE9NUQK7bd24YAVb8X9BB2S9JuUgEplyGL7etbhSAp2Qa+6pLaIbopMki4IJ/5p0+i0HNgLzxTmXwqo9DaPCdSY0eYinuMK4YwhUMKKnE1VrKbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HRu7Kq5N; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707784844; c=relaxed/simple;
+	bh=xvvcHOTjklqJ8J+wpdHxZQ5+TwxYvJxRnbQj/nLMpRM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Te2I9QFtuRs2bQYGw7MRHZsxiVmvWHyq+lTobukYmycngITkyUriFwA4HuZaPr2Papnhhx5F1M8MUrpcpLZfNAa5gWei9chO71fVu0yGy06x6e9+9tp0Co2PeYALrA8ew49fPXcyML9xZPipBT6qlRD+sISD7iWogiJWYaztC+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U3fbF9Lz; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HRu7Kq5N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF56C433C7;
-	Tue, 13 Feb 2024 00:15:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707783350;
-	bh=pGauPJe3pc7ZiPndNvLC3iAdr8bnuuyJx3XLyQ1nH+w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HRu7Kq5N/r4Q6jC40gbj2fXRkIiJyYdybBD3jAEG3u44DQawDKCCRf+OriNIkmHaM
-	 O3xoK/t+u2mlk2oGrPlWC1AVzhoCdxc4H/vMthGgbSyd2JPogTpSca5HWd1ojKQ+Hu
-	 /I0MMY0o/MgkV63FyVi9cNFSYbRPOIURWXvlLAUpTxLJzeO6/LGRxtHp3q4jOh0tf3
-	 kFviHv6324k/eNaAEuPr5p815McbZcv53aZhuxFNiZwumJpmJiH/e2/hT+y/Cj1od2
-	 uI4ynLfy+l2Uv8xkpD76mgu2SIMTCWDt1l2CkMICuGW4EHWSEaGv/DuvHsMH5z4oeL
-	 kFMgaFSlAMBMA==
-Date: Mon, 12 Feb 2024 17:15:48 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-	svens@linux.ibm.com, maskray@google.com, ndesaulniers@google.com,
-	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 04/11] s390: vmlinux.lds.S: Discard unnecessary sections
-Message-ID: <20240213001548.GA3272429@dev-arch.thelio-3990X>
-References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
- <20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org>
- <20240212135511.65142-A-hca@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U3fbF9Lz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707784841;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Qfe5KFcaKOw5z7jjq6IF/z+O0OEEBzeT0/gr0d8IbxA=;
+	b=U3fbF9Lzm91JMhUAl1tve3KB2+FJcKHRk2UCyiYMNIJszX05d399IzIkvmNi0KTvN1Tmll
+	fw0gH4gfXm6Ybrb2xGSIgXserfawmG+WBVdnemmaE8RrfUnP7IX5+TQ8MEQFSiwFlKNmQD
+	nqf/XwDRmzAQq4Dk9a7Z7WtG4CyA7vU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-583-wT1nDtOzOhia0feR9befug-1; Mon, 12 Feb 2024 19:40:40 -0500
+X-MC-Unique: wT1nDtOzOhia0feR9befug-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6230A101A52A
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 00:40:40 +0000 (UTC)
+Received: from [172.64.14.59] (unknown [10.30.32.10])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1DF42C185C1;
+	Tue, 13 Feb 2024 00:40:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 210): Test report for master
+ (6.8.0-rc4, mainline.kernel.org-clang, 716f4aaa)
+Date: Tue, 13 Feb 2024 00:40:40 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212135511.65142-A-hca@linux.ibm.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <62707.124021219404000412@us-mta-583.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 12, 2024 at 02:55:11PM +0100, Heiko Carstens wrote:
-> On Wed, Feb 07, 2024 at 05:14:56PM -0700, Nathan Chancellor wrote:
-> > When building with CONFIG_LD_ORPHAN_WARN after selecting
-> > CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
-> > ELF sections that are unnecessary for the kernel's purposes.
-> > 
-> >   s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
-> >   s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
-> >   s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
-> >   s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
-> > 
-> > Add them to the discards to clear up the warnings, which matches other
-> > architectures.
-> > 
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  arch/s390/kernel/vmlinux.lds.S | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> ...
-> > -		*(.interp)
-> > +		*(.interp .dynamic)
-> > +		*(.dynstr .hash .gnu.hash)
-> 
-> This seems to be wrong, since it leads to 1000s of error messages when
-> using the "crash" utility e.g. when looking into a live dump of system
-> with the generated debug info:
-> 
-> BFD: /usr/lib/debug/usr/lib/modules/6.8.0-20240211.rc3.git0.bdca9b8dcf3f.300.fc39.s390x/vmlinux: attempt to load strings from a non-string section (number 0)
-> 
-> I will change this commit to the below; it seems to work and is in
-> line with other architectures:
+Hi, we tested your kernel and here are the results:
 
-Thanks a lot for catching that, your final change seems good to me.
-Here's to hoping I did not get anything else wrong :)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Cheers,
-Nathan
+Tested-by: CKI Project <cki-project@redhat.com>
 
-> -----
-> 
-> When building with CONFIG_LD_ORPHAN_WARN after selecting
-> CONFIG_ARCH_HAS_LD_ORPHAN_WARN, there are some warnings around certain
-> ELF sections:
-> 
->   s390-linux-ld: warning: orphan section `.dynstr' from `arch/s390/kernel/head64.o' being placed in section `.dynstr'
->   s390-linux-ld: warning: orphan section `.dynamic' from `arch/s390/kernel/head64.o' being placed in section `.dynamic'
->   s390-linux-ld: warning: orphan section `.hash' from `arch/s390/kernel/head64.o' being placed in section `.hash'
->   s390-linux-ld: warning: orphan section `.gnu.hash' from `arch/s390/kernel/head64.o' being placed in section `.gnu.hash'
-> 
-> Explicitly keep those sections like other architectures when
-> CONFIG_RELOCATABLE is enabled, which is always true for s390.
-> 
-> [hca@linux.ibm.com: keep sections instead of discarding]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Link: https://lore.kernel.org/r/20240207-s390-lld-and-orphan-warn-v1-4-8a665b3346ab@kernel.org
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/kernel/vmlinux.lds.S | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-> index 661a487a3048..d46e3c383952 100644
-> --- a/arch/s390/kernel/vmlinux.lds.S
-> +++ b/arch/s390/kernel/vmlinux.lds.S
-> @@ -200,6 +200,21 @@ SECTIONS
->  		*(.rela*)
->  		__rela_dyn_end = .;
->  	}
-> +	.dynamic ALIGN(8) : {
-> +		*(.dynamic)
-> +	}
-> +	.dynsym ALIGN(8) : {
-> +		*(.dynsym)
-> +	}
-> +	.dynstr ALIGN(8) : {
-> +		*(.dynstr)
-> +	}
-> +	.hash ALIGN(8) : {
-> +		*(.hash)
-> +	}
-> +	.gnu.hash ALIGN(8) : {
-> +		*(.gnu.hash)
-> +	}
->  
->  	. = ALIGN(PAGE_SIZE);
->  	__init_end = .;		/* freed after init ends here */
-> -- 
-> 2.40.1
-> 
+Kernel information:
+    Commit message: Merge tag 'vfs-6.8-rc5.fixes' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/vfs/vfs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/129052
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: [Rawhide] Storage: ERROR: Could not build wheels for ruamel.=
+yaml.clib, which is required to install pyproject.toml-based projects
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1859
+            Affected tests:
+                 ppc64le - Storage - dm/common
+                   s390x - Storage - dm/common
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Storage - dm/common
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
