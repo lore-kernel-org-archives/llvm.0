@@ -1,54 +1,53 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D0C482C5
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 12:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956AA4F215
+	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 12:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707828126; cv=none; b=ENpjBseZUoqlQo2vSOd2bVGmEKqBMSGzySjTjkWpmx6gFmVfaVndaF9HNz/Ci812EFrm1zho1kvXboDak5u1ivnjGc97sHkEaS29K8SKAQGmbtID/L58eY7NS24SS0GxwTHz5ADXIPF5ZmCzH/flw07KjcK8GIyfuqR+ZWH0EFk=
+	t=1707828129; cv=none; b=GuOg6LOv6KmQEqJ79AMSMNblU7jthH/79a2RPk94ZEPilVUyxAT7LWrPJ6arwMHIBPscKJUONUaBRBC2YIpPzlLYcf9cwvr9nyLShYiIqirWXMIfObYr++jjzB3qwTlm/1YrHCcW0fih3LXqUJmf9mgHK7qnGJnH3Az8cFDMjuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707828126; c=relaxed/simple;
-	bh=YMvF0ORfuPi3XAD0k0pDL8v73CKkqlg6+lbGX9kyTzw=;
+	s=arc-20240116; t=1707828129; c=relaxed/simple;
+	bh=DJj3BFuLzBkxhSjsLhYR2ws+biY4+9pzQT+zUXENl3c=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gQsPoesAssF7ZNt+Osmcglm8SHJVA0rJGbb13WZz+22CJN7sj6R5vfbgpqa987FVY07ktvMSXOTm+XhbiJ7col1QIwmp+iK0Kikh5kAxDlBA7yPchKfvo/glAQglpcxgkbLX+M1LxrRW0Zv/RKWvJnU5YDtmjK0PAurMbKcb2AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VGXj4LP2; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=DamQPl2f4m9z/8kSU7rep8MLHKfhj9qeVFfRG2AxFcfXX1/Wrzvl3o22B5t9ughWlP0HqPPabjeV1DbFnStKrW67kK/5OOPG2vYn/jYPpPIZTD3dF5+0luOYAc4gNRiAwvejuQAIpWn9+tn4zJnh7khVPCfBAW7/IeZg4zLVTxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xftt5YWV; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VGXj4LP2"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4114d21fca5so8010355e9.2
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 04:42:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xftt5YWV"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-40f01cf71ceso27082875e9.1
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 04:42:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707828123; x=1708432923; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1707828126; x=1708432926; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IntT6izjYhpSpfiju4QdrJP91shTnHbBbhRa2UK23MU=;
-        b=VGXj4LP2GMugP2Qr81aHXX0vqxO4EL6HlvZ9rP2+bPP8VaRw4+A4suIK4WofmFUG/q
-         cNSANCGr5ZmDDfYK06jOSMhgz/+uh6Bozjy0wjnqG11uFDvYmE7kQiUt1gQs2xlUfGe7
-         dnvbX8hROlxY2QwqPoI7c1G/lp5xRahHfaWhtR3LA2RPDMsLfmjSfY/BXRtrnQDug7SU
-         iJBeVBfEVHH5FffKMDT2uxhfmtaUkaGgMb71jXXLZ8yqpBRwuWHz6Z16DF/YU3CvFPV2
-         IqXYB84xm4Ixmb/5ZiRqMJVt5McG7Fh/gf4QG7mC+zoZl0G2cKEPbf0QboKATxduJPoy
-         yaOQ==
+        bh=pi1QTrH02KU6Nn/lWHnRc1l99YL4s4zfhgW+K3Dfm0A=;
+        b=xftt5YWVTP2xEAUNCN8I6KoxQuxupyJNmWpy456Jn4RCGtCkdkDwL92bUFWoDOjjmX
+         Giu6s0Mx4gNbLzUhAZiuV8j9rSAqt2vdTQnihP2XKvdEnZV85FnshM8FNvRS3lg1uVLK
+         ejlqbZa3SawToSbbyPcjPIA5B8kPaKUD49APVHU0uCSh002FRs9ewU0CW1BKhrbH5S36
+         Dv6XNmYfQ2YqNrQ265GkbFm2y8s8B5Mlt9OU8iByTQo1ylTS9NWbzSqjqa3ZPgv06Txm
+         hFvbSDPhlj8ShN6zSRwLlaPJz6EGj5EB6g1zX19SODRTNPdRU0fBsqd1ctZCqAEDl09r
+         Q0Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707828123; x=1708432923;
+        d=1e100.net; s=20230601; t=1707828126; x=1708432926;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IntT6izjYhpSpfiju4QdrJP91shTnHbBbhRa2UK23MU=;
-        b=I9nfjVA6XNnXyWmMyVeiHIqjevufN88PVb6cWBtsrETxaKcrmzoIafHmFkWgDperNB
-         4qnvWig/jnWXGqnG9glTVS4PQt4jKaLeBpNWyF1RGo5cJnOQq6fISQjnKsrQvz+i01RB
-         YytC0eWwv4ucDw5lL+8rREsaFWtXHBGBxOGyguyDLiuf/YswKCyRsHeeGMjLVb8bs8jw
-         g5NPEGVlHxj6ejZccJ2h+2ZQBrQnZLsbbkthze3NS7SQ3KkqkGrhX2MQ2ApaSqAvAzfN
-         +uTKiimNWK3gKblHtYxY1gH/Y5J5PhJkE/T6FMpbV/pW8DqVM/4jaVkpu93HBV9hT6Yw
-         sbsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUn/H0ETXaeqkeL0rPsKkwIiAa/nLsIRSZfBlM1Bf39Mq0ASfHGnpzGa6pr2te0+jjBCHf9KY7+UQUiBrG4OpHZ772CEw==
-X-Gm-Message-State: AOJu0YwNhrXlCXHVl5u4I+WJSPXTjB7Cuecu3sByH1k2F9/MEbUEOoj1
-	oyjJuhmhzitk1sjDNuQjvDv4P+MLSrLlpFH/KHcYI9XXljHxz2GGDAhZP4eJC6ILxkM1gg==
-X-Google-Smtp-Source: AGHT+IGO4JBfeGvnTwxmmn7JIMK9YckhUWh4H18sWfV5jiwrBdxJzdJIlnTTVHSvArGFHZiJixRxORXb
+        bh=pi1QTrH02KU6Nn/lWHnRc1l99YL4s4zfhgW+K3Dfm0A=;
+        b=uXE91bZ+DgpZdANazQeA4kEedtH+4YVXucjOivWhUNaBdXwTjZ7cuTG2ewyCgp06M+
+         7Z7phE9sBCxzUhM51AiYUbIAQjx8OAOJLG+zxIpZSE760vK4pVxEoAqLTSU7pMYRlXNC
+         ybKl8qBbGmFgAIoM5Lb4YFYMranaZ39T0UPzyftv4w+ATWUavrqtx+Xk3GJpXHI7gthO
+         UhesPLpmNJ75Uz6CRTVwR3NI+8OvDp5We0TRtACtB1kGE2gfj9LT4YThD71ZIpEJCsWc
+         HGV/WnBmk/P3kqtGXJJZl2ejhIB6qdObGWCWLgO1bc9MrI26T2e3ttYFFzU5WplHHX5i
+         ECsQ==
+X-Gm-Message-State: AOJu0Yy4PuVNk4BIjZt5E8vRA3vJXuSi1punriv/gAwmUxAHdU1nJm4P
+	EFE7foJtcFbPJmVJtH8bC4KNHHra7pOPE5ZD6nK8L78ttUqyREoue3GlA6Jmrx6CwgyZxw==
+X-Google-Smtp-Source: AGHT+IHLC8GtxXKNTCFF9+V5LAAR+zWHYcyG5/vyeXh9Ce3NCNGuQTJ2QkE6E7s7gjfYScaNvwLWoFLK
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a05:600c:518a:b0:411:a802:700d with SMTP id
- fa10-20020a05600c518a00b00411a802700dmr70870wmb.2.1707828123104; Tue, 13 Feb
- 2024 04:42:03 -0800 (PST)
-Date: Tue, 13 Feb 2024 13:41:45 +0100
+ (user=ardb job=sendgmr) by 2002:a05:600c:518f:b0:411:63af:64a with SMTP id
+ fa15-20020a05600c518f00b0041163af064amr8527wmb.2.1707828125840; Tue, 13 Feb
+ 2024 04:42:05 -0800 (PST)
+Date: Tue, 13 Feb 2024 13:41:46 +0100
 In-Reply-To: <20240213124143.1484862-13-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,15 +57,15 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240213124143.1484862-13-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6089; i=ardb@kernel.org;
- h=from:subject; bh=BsdoewkQfg4v5NoT6opMjWi0Vrg2mA8a392y9Jxs7FU=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfV0cueOKzuMyz5W71o5TYp9kdW5Wa0xu5br/SkOjb++u
- +9vHS9XRykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZjIkguMDDu+bZC0ZT+Yvm5u
- Ise2zLtZBuoPpiZea4wzc1/5zzhy1XOG/2G3FvnknSyvm3xqo5Hi+U/3rS7NzF25v9om6r3Ekno 9Nx4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6745; i=ardb@kernel.org;
+ h=from:subject; bh=OERD3a266KSHXOboqoPZ/suMs8HVBE4QuXB3+uJqMiI=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfV0ctcjcR/xndn+O15duyZz/9+hBPe2oDCmepa35w473
+ WW7Pye3o5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAExkYhIjw5nk2K6wbEedOOE5
+ Aee2v49UfdsekcA1pVqA9/uTXQrPtzIy7F3qo793SfOOimuX7v0o8mtZGZDpkXyn6GYXm8W8lwt VuQA=
 X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
-Message-ID: <20240213124143.1484862-14-ardb+git@google.com>
-Subject: [PATCH v4 01/11] x86/startup_64: Simplify global variable accesses in
- GDT/IDT programming
+Message-ID: <20240213124143.1484862-15-ardb+git@google.com>
+Subject: [PATCH v4 02/11] x86/startup_64: Replace pointer fixups with
+ RIP-relative references
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
@@ -81,173 +80,179 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-There are two code paths in the startup code to program an IDT: one that
-runs from the 1:1 mapping and one that runs from the virtual kernel
-mapping. Currently, these are strictly separate because fixup_pointer()
-is used on the 1:1 path, which will produce the wrong value when used
-while executing from the virtual kernel mapping.
+The code in __startup64() runs from a 1:1 mapping of memory, and uses
+explicit pointer arithmetic to convert symbol references generated by
+the compiler into references that work correctly via this 1:1 mapping.
 
-Switch to RIP_REL_REF() so that the two code paths can be merged. Also,
-move the GDT and IDT descriptors to the stack so that they can be
-referenced directly, rather than via RIP_REL_REF().
+This relies on the compiler generating absolute symbol references, which
+will be resolved by the linker using the kernel virtual mapping.
+However, the compiler may just as well emit RIP-relative references,
+even when not operating in PIC mode, and so this explicit pointer
+arithmetic is fragile and should be avoided. The fixup routines also
+take a 'physical base' argument which needs to be passed around as
+well.
 
-Rename startup_64_setup_env() to startup_64_setup_gdt_idt() while at it,
-to make the call from assembler self-documenting.
+Convert these pointer fixups to RIP-relative references, which are
+guaranteed to produce the correct values without any explicit
+arithmetic, removing the need to pass around the physical load address.
+It also makes the code substantially easier to understand.
+
+Replace bare 510/511 constants with the appropriate symbolic constants
+while at it.  Note that pgd_index(__START_KERNEL_map) always produces
+the value 511, regardless of the number of paging levels used, so a
+symbolic constant is used here as well.
+
+The remaining fixup_int()/fixup_long() calls related to 5-level paging
+will be removed in a subsequent patch.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/include/asm/setup.h |  2 +-
- arch/x86/kernel/head64.c     | 56 +++++++-------------
- arch/x86/kernel/head_64.S    |  4 +-
- 3 files changed, 22 insertions(+), 40 deletions(-)
+ arch/x86/kernel/head64.c | 57 ++++++++------------
+ 1 file changed, 21 insertions(+), 36 deletions(-)
 
-diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
-index 5c83729c8e71..e61e68d71cba 100644
---- a/arch/x86/include/asm/setup.h
-+++ b/arch/x86/include/asm/setup.h
-@@ -48,7 +48,7 @@ extern unsigned long saved_video_mode;
- extern void reserve_standard_io_resources(void);
- extern void i386_reserve_resources(void);
- extern unsigned long __startup_64(unsigned long physaddr, struct boot_params *bp);
--extern void startup_64_setup_env(unsigned long physbase);
-+extern void startup_64_setup_gdt_idt(void);
- extern void early_setup_idt(void);
- extern void __init do_early_exception(struct pt_regs *regs, int trapnr);
- 
 diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index dc0956067944..9d7f12829f2d 100644
+index 9d7f12829f2d..4b08e321d168 100644
 --- a/arch/x86/kernel/head64.c
 +++ b/arch/x86/kernel/head64.c
-@@ -22,6 +22,7 @@
- #include <linux/cc_platform.h>
- #include <linux/pgtable.h>
- 
-+#include <asm/asm.h>
- #include <asm/processor.h>
- #include <asm/proto.h>
- #include <asm/smp.h>
-@@ -76,15 +77,6 @@ static struct desc_struct startup_gdt[GDT_ENTRIES] __initdata = {
+@@ -77,6 +77,7 @@ static struct desc_struct startup_gdt[GDT_ENTRIES] __initdata = {
  	[GDT_ENTRY_KERNEL_DS]           = GDT_ENTRY_INIT(DESC_DATA64, 0, 0xfffff),
  };
  
--/*
-- * Address needs to be set at runtime because it references the startup_gdt
-- * while the kernel still uses a direct mapping.
-- */
--static struct desc_ptr startup_gdt_descr __initdata = {
--	.size = sizeof(startup_gdt)-1,
--	.address = 0,
--};
--
++#ifdef CONFIG_X86_5LEVEL
  static void __head *fixup_pointer(void *ptr, unsigned long physaddr)
  {
  	return ptr - (void *)_text + (void *)physaddr;
-@@ -569,12 +561,7 @@ void __init __noreturn x86_64_start_reservations(char *real_mode_data)
+@@ -87,7 +88,6 @@ static unsigned long __head *fixup_long(void *ptr, unsigned long physaddr)
+ 	return fixup_pointer(ptr, physaddr);
+ }
+ 
+-#ifdef CONFIG_X86_5LEVEL
+ static unsigned int __head *fixup_int(void *ptr, unsigned long physaddr)
+ {
+ 	return fixup_pointer(ptr, physaddr);
+@@ -164,22 +164,21 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
+ /* Code in __startup_64() can be relocated during execution, but the compiler
+  * doesn't have to generate PC-relative relocations when accessing globals from
+  * that function. Clang actually does not generate them, which leads to
+- * boot-time crashes. To work around this problem, every global pointer must
+- * be adjusted using fixup_pointer().
++ * boot-time crashes. To work around this problem, every global variable must
++ * be accessed using RIP_REL_REF().
   */
- static gate_desc bringup_idt_table[NUM_EXCEPTION_VECTORS] __page_aligned_data;
+ unsigned long __head __startup_64(unsigned long physaddr,
+ 				  struct boot_params *bp)
+ {
+-	unsigned long load_delta, *p;
++	pmd_t (*early_pgts)[PTRS_PER_PMD] = RIP_REL_REF(early_dynamic_pgts);
+ 	unsigned long pgtable_flags;
++	unsigned long load_delta;
+ 	pgdval_t *pgd;
+ 	p4dval_t *p4d;
+ 	pudval_t *pud;
+ 	pmdval_t *pmd, pmd_entry;
+-	pteval_t *mask_ptr;
+ 	bool la57;
+ 	int i;
+-	unsigned int *next_pgt_ptr;
  
--static struct desc_ptr bringup_idt_descr = {
--	.size		= (NUM_EXCEPTION_VECTORS * sizeof(gate_desc)) - 1,
--	.address	= 0, /* Set at runtime */
--};
+ 	la57 = check_la57_support(physaddr);
+ 
+@@ -192,6 +191,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	 * and the address I am actually running at.
+ 	 */
+ 	load_delta = physaddr - (unsigned long)(_text - __START_KERNEL_map);
++	RIP_REL_REF(phys_base) = load_delta;
+ 
+ 	/* Is the address not 2M aligned? */
+ 	if (load_delta & ~PMD_MASK)
+@@ -201,25 +201,19 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	load_delta += sme_get_me_mask();
+ 
+ 	/* Fixup the physical addresses in the page table */
 -
--static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
-+static void __head set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
- {
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 	struct idt_data data;
-@@ -586,45 +573,42 @@ static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
- #endif
- }
- 
--/* This runs while still in the direct mapping */
--static void __head startup_64_load_idt(unsigned long physbase)
-+/* This may run while still in the direct mapping */
-+static void __head startup_64_load_idt(void *handler)
- {
--	struct desc_ptr *desc = fixup_pointer(&bringup_idt_descr, physbase);
--	gate_desc *idt = fixup_pointer(bringup_idt_table, physbase);
+-	pgd = fixup_pointer(early_top_pgt, physaddr);
+-	p = pgd + pgd_index(__START_KERNEL_map);
+-	if (la57)
+-		*p = (unsigned long)level4_kernel_pgt;
+-	else
+-		*p = (unsigned long)level3_kernel_pgt;
+-	*p += _PAGE_TABLE_NOENC - __START_KERNEL_map + load_delta;
 -
--
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
--		void *handler;
-+	struct desc_ptr desc = {
-+		.address	= (unsigned long)&RIP_REL_REF(bringup_idt_table),
-+		.size		= sizeof(bringup_idt_table) - 1,
-+	};
-+	gate_desc *idt = (gate_desc *)desc.address;
+ 	if (la57) {
+-		p4d = fixup_pointer(level4_kernel_pgt, physaddr);
+-		p4d[511] += load_delta;
++		p4d = (p4dval_t *)&RIP_REL_REF(level4_kernel_pgt);
++		p4d[MAX_PTRS_PER_P4D - 1] += load_delta;
+ 	}
  
-+	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
- 		/* VMM Communication Exception */
--		handler = fixup_pointer(vc_no_ghcb, physbase);
- 		set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
--	}
- 
--	desc->address = (unsigned long)idt;
--	native_load_idt(desc);
-+	native_load_idt(&desc);
- }
- 
- /* This is used when running on kernel addresses */
- void early_setup_idt(void)
- {
--	/* VMM Communication Exception */
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
-+	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
- 		setup_ghcb();
--		set_bringup_idt_handler(bringup_idt_table, X86_TRAP_VC, vc_boot_ghcb);
--	}
- 
--	bringup_idt_descr.address = (unsigned long)bringup_idt_table;
--	native_load_idt(&bringup_idt_descr);
-+	startup_64_load_idt(vc_boot_ghcb);
- }
- 
- /*
-  * Setup boot CPU state needed before kernel switches to virtual addresses.
-  */
--void __head startup_64_setup_env(unsigned long physbase)
-+void __head startup_64_setup_gdt_idt(void)
- {
-+	struct desc_ptr startup_gdt_descr = {
-+		.address	= (unsigned long)&RIP_REL_REF(startup_gdt),
-+		.size		= sizeof(startup_gdt) - 1,
-+	};
+-	pud = fixup_pointer(level3_kernel_pgt, physaddr);
+-	pud[510] += load_delta;
+-	pud[511] += load_delta;
++	pud = &RIP_REL_REF(level3_kernel_pgt)->pud;
++	pud[PTRS_PER_PUD - 2] += load_delta;
++	pud[PTRS_PER_PUD - 1] += load_delta;
 +
- 	/* Load GDT */
--	startup_gdt_descr.address = (unsigned long)fixup_pointer(startup_gdt, physbase);
- 	native_load_gdt(&startup_gdt_descr);
++	pgd = &RIP_REL_REF(early_top_pgt)->pgd;
++	pgd[PTRS_PER_PGD - 1] = (pgdval_t)(la57 ? p4d : pud) | _PAGE_TABLE_NOENC;
  
- 	/* New GDT is live - reload data segment registers */
-@@ -632,5 +616,5 @@ void __head startup_64_setup_env(unsigned long physbase)
- 		     "movl %%eax, %%ss\n"
- 		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
+-	pmd = fixup_pointer(level2_fixmap_pgt, physaddr);
++	pmd = &RIP_REL_REF(level2_fixmap_pgt)->pmd;
+ 	for (i = FIXMAP_PMD_TOP; i > FIXMAP_PMD_TOP - FIXMAP_PMD_NUM; i--)
+ 		pmd[i] += load_delta;
  
--	startup_64_load_idt(physbase);
-+	startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
- }
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index d4918d03efb4..3cac98c61066 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -68,8 +68,6 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	/* Set up the stack for verify_cpu() */
- 	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+@@ -230,16 +224,14 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	 * it avoids problems around wraparound.
+ 	 */
  
--	leaq	_text(%rip), %rdi
+-	next_pgt_ptr = fixup_pointer(&next_early_pgt, physaddr);
+-	pud = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
+-	pmd = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++], physaddr);
++	pud = &early_pgts[0]->pmd;
++	pmd = &early_pgts[1]->pmd;
++	p4d = &early_pgts[2]->pmd;
++	RIP_REL_REF(next_early_pgt) = 3;
+ 
+ 	pgtable_flags = _KERNPG_TABLE_NOENC + sme_get_me_mask();
+ 
+ 	if (la57) {
+-		p4d = fixup_pointer(early_dynamic_pgts[(*next_pgt_ptr)++],
+-				    physaddr);
 -
- 	/* Setup GSBASE to allow stack canary access for C code */
- 	movl	$MSR_GS_BASE, %ecx
- 	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
-@@ -77,7 +75,7 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	shrq	$32,  %rdx
- 	wrmsr
+ 		i = (physaddr >> PGDIR_SHIFT) % PTRS_PER_PGD;
+ 		pgd[i + 0] = (pgdval_t)p4d + pgtable_flags;
+ 		pgd[i + 1] = (pgdval_t)p4d + pgtable_flags;
+@@ -259,8 +251,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
  
--	call	startup_64_setup_env
-+	call	startup_64_setup_gdt_idt
+ 	pmd_entry = __PAGE_KERNEL_LARGE_EXEC & ~_PAGE_GLOBAL;
+ 	/* Filter out unsupported __PAGE_KERNEL_* bits: */
+-	mask_ptr = fixup_pointer(&__supported_pte_mask, physaddr);
+-	pmd_entry &= *mask_ptr;
++	pmd_entry &= RIP_REL_REF(__supported_pte_mask);
+ 	pmd_entry += sme_get_me_mask();
+ 	pmd_entry +=  physaddr;
  
- 	/* Now switch to __KERNEL_CS so IRET works reliably */
- 	pushq	$__KERNEL_CS
+@@ -286,7 +277,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	 * error, causing the BIOS to halt the system.
+ 	 */
+ 
+-	pmd = fixup_pointer(level2_kernel_pgt, physaddr);
++	pmd = &RIP_REL_REF(level2_kernel_pgt)->pmd;
+ 
+ 	/* invalidate pages before the kernel image */
+ 	for (i = 0; i < pmd_index((unsigned long)_text); i++)
+@@ -301,12 +292,6 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	for (; i < PTRS_PER_PMD; i++)
+ 		pmd[i] &= ~_PAGE_PRESENT;
+ 
+-	/*
+-	 * Fixup phys_base - remove the memory encryption mask to obtain
+-	 * the true physical address.
+-	 */
+-	*fixup_long(&phys_base, physaddr) += load_delta - sme_get_me_mask();
+-
+ 	return sme_postprocess_startup(bp, pmd);
+ }
+ 
 -- 
 2.43.0.687.g38aa6559b0-goog
 
