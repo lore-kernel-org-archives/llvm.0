@@ -1,98 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FD41272C0;
-	Wed, 14 Feb 2024 17:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33CC384FC8;
+	Wed, 14 Feb 2024 18:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707933354; cv=none; b=CbPvI1Ms4WArayWhn4e9qulAih2adHbe8GlNf3QGd/ZqtAXqXmvCxzx9hP0XapT+N7AwkTjX7eyAuBmPTxkW1lyZT/Ghov4qzMfi+ufSXWAmon9QqSpZW4Oir9nkhHWtzQsejQ0LEWyVcwov/rMsqZtjoAz+bzmU+zhNd8bp3mY=
+	t=1707934896; cv=none; b=PtK26Xxb1tuAYDqag1oyduFsER9fb+YavtPdPxa+vZDV9oN7VfgEYu+2YP4NYsKjrlH2ZFEg8XbCfrXoDGSKx5xoxlNsa/BWrEFzW9aHUSoF58BPKdI9cikpT6ZCdyJrbM+0c/OHykTE0Kjz1qSVBbQScuei8i4EEb8/Zvfmx1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707933354; c=relaxed/simple;
-	bh=AekKESNH1YzcWERD9WvAuc+h4Br5J7sxCXJp1H3DgIw=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=LmaG1qlw8P7SXOUVSaANJjJ7TjPqi8aXOPYyUDgh+vEfV7RHzOLis9Jx4V5Xe7UOWU+Brgk3IdUD2fck0Y7FPE5mKdb0akorvXRM5q4zdLj3f5a53F0jrUu0it/qtTWODBa6vbaYH+evs+Ku4koFa5Ky+C8qSsHt28DZ5CPpmEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKuyTVQD; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKuyTVQD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF503C433C7;
-	Wed, 14 Feb 2024 17:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707933354;
-	bh=AekKESNH1YzcWERD9WvAuc+h4Br5J7sxCXJp1H3DgIw=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=hKuyTVQDqnFOOiIzi24tJPQ1jaKR1kx1X+NHUv51k/lBi9dzWWY7AMgukTmxA/xIV
-	 aNU+95ZSw2gZx2SH+v+Kxtc4tAbkqpQ8/DbBwj4Y7Lz9dYyeDxyufOMtTJhxHqXYdq
-	 4TIcd7sX5ZiFUNPeG3yV0JxRWhNtV/U3jMSSnUfzF7tLk5psc5Qf2uZEktBOjeZJGy
-	 VYaBibDRgvKyaHFO8itr9h28IGow/I+UfuFF/EnF1sINg9b8tp6VDV6+bMGY2eFXUK
-	 to9cGho1TZ84A1p+tJhsu1XO2aXsYs/08XblS+r01W1VDlZqM3j1lKvaazWvKrNjCb
-	 WtuOcfbL4Rj0A==
-From: Kalle Valo <kvalo@kernel.org>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Arend van Spriel" <arend.vanspriel@broadcom.com>,  "Arnd Bergmann"
- <arnd@kernel.org>,  "Nathan Chancellor" <nathan@kernel.org>,  "Greg
- Kroah-Hartman" <gregkh@suse.de>,  "Pieter-Paul Giesberts"
- <pieterpg@broadcom.com>,  "Nick Desaulniers" <ndesaulniers@google.com>,
-  "Bill Wendling" <morbo@google.com>,  "Justin Stitt"
- <justinstitt@google.com>,  "Artem Chernyshev"
- <artem.chernyshev@red-soft.ru>,  "Jonas Gorski" <jonas.gorski@gmail.com>,
-  linux-wireless@vger.kernel.org,  brcm80211@lists.linux.dev,
-  brcm80211-dev-list.pdl@broadcom.com,  linux-kernel@vger.kernel.org,
-  llvm@lists.linux.dev
-Subject: Re: [PATCH] brcmsmac: avoid function pointer casts
-References: <20240213100548.457854-1-arnd@kernel.org>
-	<170790035300.3179441.9169506478575963188.kvalo@kernel.org>
-	<fd36f032-3bf6-4cae-a0d0-213604cef024@broadcom.com>
-	<3f1c2d5a-ba98-4ae5-a7a0-0328b7552113@app.fastmail.com>
-Date: Wed, 14 Feb 2024 19:55:48 +0200
-In-Reply-To: <3f1c2d5a-ba98-4ae5-a7a0-0328b7552113@app.fastmail.com> (Arnd
-	Bergmann's message of "Wed, 14 Feb 2024 16:07:00 +0100")
-Message-ID: <87frxvnd5n.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1707934896; c=relaxed/simple;
+	bh=fVtRJgko8Y94qf0CWO9az0MkYE3hGijFPfGtUp+w/4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WQ/ypiA+CrTyYsL2bBeQ5abw5k0EJFvcH9nDQnPgh7gLlEiZ0KgMKfsyv8G1wcecC5wjDTdXcvEEvd3/olf6Wj8xel3y3kwluM+BlUp1co/X8Rguhy5nq3471I5WKChNxnT8rBsZANxxBtJHNoubZWsnV+CBOkAMFaj/jvB8UQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FDDD1FB;
+	Wed, 14 Feb 2024 10:22:14 -0800 (PST)
+Received: from pluto (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF65B3F7B4;
+	Wed, 14 Feb 2024 10:21:31 -0800 (PST)
+Date: Wed, 14 Feb 2024 18:21:29 +0000
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, sudeep.holla@arm.com,
+	vincent.guittot@linaro.org, peng.fan@oss.nxp.com,
+	michal.simek@amd.com, quic_sibis@quicinc.com,
+	souvik.chakravarty@arm.com
+Subject: Re: [PATCH 06/11] firmware: arm_scmi: Implement Clock
+ .is_notify_supported callback
+Message-ID: <Zc0EqV69sg6Dqnti@pluto>
+References: <20240212123233.1230090-7-cristian.marussi@arm.com>
+ <202402131047.2NVZWHma-lkp@intel.com>
+ <ZcstL8tRVKIUFoBr@pluto>
+ <fc28f615-eaaf-459a-96e2-fce104f77fe7@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc28f615-eaaf-459a-96e2-fce104f77fe7@quicinc.com>
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
+On Tue, Feb 13, 2024 at 10:24:48AM -0800, Nikunj Kela wrote:
+> 
+> On 2/13/2024 12:49 AM, Cristian Marussi wrote:
+> > On Tue, Feb 13, 2024 at 10:58:23AM +0800, kernel test robot wrote:
+> > > Hi Cristian,
+> > > 
+> > > kernel test robot noticed the following build errors:
+> > > 
+> > > [auto build test ERROR on soc/for-next]
+> > > [also build test ERROR on linus/master v6.8-rc4 next-20240212]
+> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > > And when submitting patch, we suggest to use '--base' as documented in
+> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > > 
+> > Hi,
+> > 
+> > this series, as stated in the cover-letter, is based off the current tip of
+> > 
+> > 	sudeep/for-next/scmi/updates
+> > 
+> > and particularly needs commit:
+> > 
+> > 	9c5bc650031e firmware: arm_scmi: Rework clock domain info lookups
+> > 
+> > from there, since it contains the missing scmi_clock_domain_lookup().
+> > 
+> > Not_sure/dont_known if there is any way to convey this "based-on-branch"
+> > info to your/any CI at the moment.
+> > 
+> > Thanks,
+> > Cristian
+> Maybe add supdeep's tree in MAINTAINERS and use 'base-commit'.
 
-> On Wed, Feb 14, 2024, at 10:23, Arend van Spriel wrote:
->
->> On 2/14/2024 9:45 AM, Kalle Valo wrote:
->>> Arnd Bergmann <arnd@kernel.org> wrote:
->>> 
->>>> From: Arnd Bergmann <arnd@arndb.de>
->>>>
->>>> An old cleanup went a little too far and causes a warning with clang-16
->>>> and higher as it breaks control flow integrity (KCFI) rules:
->>>>
->>>> drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy_shim.c:64:34: error: cast from 'void (*)(struct brcms_phy *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->>>>     64 |                         brcms_init_timer(physhim->wl, (void (*)(void *))fn,
->>>>        |                                                       ^~~~~~~~~~~~~~~~~~~~
->>>>
->>>> Change this one instance back to passing a void pointer so it can be
->>>> used with the timer callback interface.
->>>>
->>>> Fixes: d89a4c80601d ("staging: brcm80211: removed void * from softmac phy")
->>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->>> 
->>> I guess this should go to wireless tree?
->>
->> This has been like this forever looking at the "staging" part in the 
->> Fixes tag. Is it really so urgent now? On the other hand I have no real 
->> problem with moving this to the wireless tree. Just wondering out loud.
->
-> It's probably fine either way. Some maintainers like to backport
-> the warning fixes to stable kernels, others don't. Since the
-> warning is currently only enabled at W=1 level, it's probably fine
-> to fix it for linux-next only, but if we want the fix backported,
-> it should also go into 6.8.
+Thanks Nikunj, I'll try with base-commit.
+Cristian
 
-Thanks, let's take it wireless-next then.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Marussi/firmware-arm_scmi-Check-for-notification-support/20240212-203727
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+> > > patch link:    https://lore.kernel.org/r/20240212123233.1230090-7-cristian.marussi%40arm.com
+> > > patch subject: [PATCH 06/11] firmware: arm_scmi: Implement Clock .is_notify_supported callback
+> > > config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240213/202402131047.2NVZWHma-lkp@intel.com/config)
+> > > compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project c08b90c50bcac9f3f563c79491c8dbcbe7c3b574)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402131047.2NVZWHma-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202402131047.2NVZWHma-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > > > > drivers/firmware/arm_scmi/clock.c:853:8: error: call to undeclared function 'scmi_clock_domain_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> > >       853 |         clk = scmi_clock_domain_lookup(ci, src_id);
+> > >           |               ^
+> > > > > drivers/firmware/arm_scmi/clock.c:853:6: error: incompatible integer to pointer conversion assigning to 'struct scmi_clock_info *' from 'int' [-Wint-conversion]
+> > >       853 |         clk = scmi_clock_domain_lookup(ci, src_id);
+> > >           |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >     2 errors generated.
+> > > 
+> > > 
+> > > vim +/scmi_clock_domain_lookup +853 drivers/firmware/arm_scmi/clock.c
+> > > 
+> > >     842	
+> > >     843	static bool scmi_clk_notify_supported(const struct scmi_protocol_handle *ph,
+> > >     844					      u8 evt_id, u32 src_id)
+> > >     845	{
+> > >     846		bool supported;
+> > >     847		struct scmi_clock_info *clk;
+> > >     848		struct clock_info *ci = ph->get_priv(ph);
+> > >     849	
+> > >     850		if (evt_id >= ARRAY_SIZE(evt_2_cmd))
+> > >     851			return false;
+> > >     852	
+> > >   > 853		clk = scmi_clock_domain_lookup(ci, src_id);
+> > >     854		if (IS_ERR(clk))
+> > >     855			return false;
+> > >     856	
+> > >     857		if (evt_id == SCMI_EVENT_CLOCK_RATE_CHANGED)
+> > >     858			supported = clk->rate_changed_notifications;
+> > >     859		else
+> > >     860			supported = clk->rate_change_requested_notifications;
+> > >     861	
+> > >     862		return supported;
+> > >     863	}
+> > >     864	
+> > > 
+> > > -- 
+> > > 0-DAY CI Kernel Test Service
+> > > https://github.com/intel/lkp-tests/wiki
