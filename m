@@ -1,119 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505EE13EFF5;
-	Wed, 14 Feb 2024 21:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F13C141988
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 22:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707946689; cv=none; b=TmLDGa0drVyEz6b3uJujsptBI0Y1HF25omJLsl2R/082M055fEnSDB4b/4gzth0/2KIcWUhnPTNM85PSwAux+bNDqKlE4YRDJ91eVl2hmHteu970Hj3GtBVc+ZCXgr98yviRD+a6rtOVwRfCjhbjpE8/LTA7vy8fWiN8NbPZp/o=
+	t=1707948447; cv=none; b=oeOKnkqf6/jn2crj/maGwYD9oSXKIXXtR2ciMn21AFgNS+zhOCl1lqb+GuL2yByPd7Md8zNAWTy2begFkaEoJQXPnNWNh/6fWtXxOQAyCxZQDCqa/EJaFMXDo9T7WM/16TWaijJ4y8C9E916ugM0BBfBP16AO1wgvxaGmiShmSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707946689; c=relaxed/simple;
-	bh=UUPKAcrXV3sriobv5a2MejWKkdWDLFLi5VZHMfDG010=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CW7VkYQAMMsuSEEWaTtSf3sf9KWxj77qKLZqO0iquOYS9A/X5s3DZJNUYpOY/i5N0MAH+vRLVBYGbj5gUEe9hEzyYUjjCxK16aHi4lczqzq9cr3IVlAceC0AqKp28Gbsb5+P8FdznoXE4tc7vxy5xPn9ZSzxF19RuJF2oqmz1Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u/X0U+Jq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707948447; c=relaxed/simple;
+	bh=K6cDHnzAl4sLP14OKUvfd5jdUMhZX1ctJ8TVWJBz+yQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=REq7GqRA660gz6PPrQ/nKO0kQexAtvWwY00iUDQTRsBfyXDKMhB0c7mqT2rRKaNF8zD6rsc5pT2UGjQxxFX8PmMrj3y5UMoyS1LtuiLYWr6WyOz7UXwcG+yg6NdUpJnKcMGINQVfwVsbsLpyg0VEga2qYk4k9kALd0ZA41Ymhjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CWDbRjbA; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u/X0U+Jq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF85C433F1;
-	Wed, 14 Feb 2024 21:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707946689;
-	bh=UUPKAcrXV3sriobv5a2MejWKkdWDLFLi5VZHMfDG010=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=u/X0U+JqFqRNrle6IPy7xdizrvaz3w5fRFbyoqrUiaiJlrKgKcKMx7PgqLeGr4Xr+
-	 A8OahwP6epdjZgFXgJp9etsF42qn1YNLAzEoNquyTvQn04s/HuDPNSYQ75mJRqil6o
-	 iFL30I83YlRm0BkOeGXyvIibjhmqIslDKIWkxSHp5Cu0b3JYXKC+ftnguU4BSRaUv7
-	 vFLHEezVEDfSF+h86rJ59/eAuA8uSDyGG0zx/HHWae92vnPYBhJhLqwUdLmX3cytIg
-	 M/vF+UxTGRRg8l3p8Jb/Hn19d4ty/6QmtpKryPL64pkOay57Tokhs1bVZtSbVq93BL
-	 D/wuRiM9XEZaQ==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5114b2b3b73so233425e87.0;
-        Wed, 14 Feb 2024 13:38:08 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVv7xDYvhj9ecN8SXJDp/VqIo4Lxme5MXJyPLAVictmKmZxQBf9zE+6JKkirRG6cId5j7ns5QfedBomZsvUj1JD3lDSwQQW5S7pajV00fva/z+932eki64oeWnphHc=
-X-Gm-Message-State: AOJu0YxBg03wI+BT0cI92hsXcqpkgIvqG0iKIaa/4J/MKAy7fLGVBXP0
-	9IklEE/irvxOCWc60dyqEo05/6YtxKzSz97pEvibhLKEonSSpfW4Ha1j4Vd3EYXG/VvOz8O7Rsl
-	YviNRWfZNKzgRA7Jep1zi2u3ZUwo=
-X-Google-Smtp-Source: AGHT+IGaYKxN9IyHvOKM2lTDAnhg9bpSWHXdMQSUzrkADaDd9GpHqhCli3rtc+UYqlFqe/KCZCHWjCJQjugyya5+E0A=
-X-Received: by 2002:a05:6512:781:b0:511:a690:45dd with SMTP id
- x1-20020a056512078100b00511a69045ddmr31552lfr.16.1707946687494; Wed, 14 Feb
- 2024 13:38:07 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CWDbRjbA"
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-59a8ee08c23so83570eaf.2
+        for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 14:07:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707948445; x=1708553245; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sleFKn1PUH2Rkn/xzX8cOIwI1bd0b7EDvB+KCcYyKCs=;
+        b=CWDbRjbAjRVRWTKsnSH0IUeGn7fVlUk1vEmVmp1ZUiTzaJhlluQn6riixCBhadB6bG
+         CINRnN9YClqcEwcJFrA+1Iaa/bDswyEd+Z5ov9FA1vfubKvd1G/I/TD6JgbVJbPZrdq+
+         /plH22ZLAQSai5DcVyNktrdBMnh4HFAALlIw4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707948445; x=1708553245;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sleFKn1PUH2Rkn/xzX8cOIwI1bd0b7EDvB+KCcYyKCs=;
+        b=ICK3J9sRwAWkZyjy9uNP0w9XmKFjlnLKhwDNHKzj+4JbLYiJ1jDadAlxTBwXeaj8dY
+         Zyd47nIPpr7SOzO8yJeIhb7atLsDZw2ry+2GU6dhG15o1sygrpke/SsntJgKIPVN6zqH
+         7PBP13CQLAhh2Zj2MviWPCKZBfGL9yQ9Q+L/iq4OF4ZyzRE/RO5dosrLPgAZOhXY46x3
+         xuEYiKwexdjYDaG90SNXBXgrA4T8ddKyV7TgyfImV1MVtUigg6Bjq5cRrsGANOtfWkA5
+         nibwbxcNwy35fYsjbr/Xtm3bhG0Fl5nfEmlN/ZA0gbMHscSDvdCeFDL6dcw6+du8AXYb
+         XUqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXXrFuZlXdLkAIU9JiLek95g4CXMiv6gPgrvXUyltWZjAX+JNGRmY/QdYarXZl9nHtnzWNGAhY7x0GwQa6g63MGwCCEQ==
+X-Gm-Message-State: AOJu0YwDhmtYOSMvWfe8woX7A8+4vqOzhRTO3mYixS+D4US+vGnHplAw
+	ncKCVdd2mX2rHqJzu0TJMmmdoEawwEnpsSJGdV7SawjAPq3KsJiaxNM4Q7H3tQ==
+X-Google-Smtp-Source: AGHT+IGz/ssrchHiTuyzilMpWL/T9c2lkPAOgkUgzUcy8sr4eYzKQF2LdNDAK5B6bwMdevqCle4AAg==
+X-Received: by 2002:a05:6358:648c:b0:176:5a5e:4bfc with SMTP id g12-20020a056358648c00b001765a5e4bfcmr4080166rwh.3.1707948444846;
+        Wed, 14 Feb 2024 14:07:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUchfZsRVKTfQebs+X7kNrW9fUdJ8LZ5XMtaiqhqSXF9jSBU2WtwT1FdJEBgg8UhbKxDiD19wrmGnhaTWs59a91wXO5Kovz00uoPU/4CfRLF8heeZP0m1YGhUECswc9oh85gMjXAYRZjnbhhHHNsuQ4pEubyqNI0rS4LsK6K8PTCLihcN7EOIvmbO7xgwIHPg1c6bEX9brNmiYx+dLwDJA7pfMqyVMo
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id j191-20020a638bc8000000b005cfbdf71baasm4819711pge.47.2024.02.14.14.07.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Feb 2024 14:07:24 -0800 (PST)
+Date: Wed, 14 Feb 2024 14:07:23 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Fangrui Song <maskray@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [PATCH] x86/build: Simplify patterns for unwanted section
+Message-ID: <202402141405.0755DD4E5E@keescook>
+References: <20240214212929.3753766-1-maskray@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
-In-Reply-To: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 15 Feb 2024 06:37:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATZAh9fa8rd6jLwdEGUBHkAs9e4hZh=WvKeNLkGs2=8Aw@mail.gmail.com>
-Message-ID: <CAK7LNATZAh9fa8rd6jLwdEGUBHkAs9e4hZh=WvKeNLkGs2=8Aw@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Fix changing ELF file type for output of
- gen_btf for big endian
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: nicolas@fjasle.eu, ndesaulniers@google.com, morbo@google.com, 
-	justinstitt@google.com, keescook@chromium.org, maskray@google.com, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240214212929.3753766-1-maskray@google.com>
 
-On Tue, Feb 13, 2024 at 11:06=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
-> changed the ELF type of .btf.vmlinux.bin.o to ET_REL via dd, which works
-> fine for little endian platforms:
->
->    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF.....=
-.......|
->   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |.........=
-.......|
->   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |.........=
-.......|
->
-> However, for big endian platforms, it changes the wrong byte, resulting
-> in an invalid ELF file type, which ld.lld rejects:
->
->    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF.....=
-.......|
->   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
-.......|
->   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
-.......|
->
->   Type:                              <unknown>: 103
->
->   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
->
-> Fix this by updating the entire 16-bit e_type field rather than just a
-> single byte, so that everything works correctly for all platforms and
-> linkers.
->
->    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF.....=
-.......|
->   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
-.......|
->   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |.........=
-.......|
->
->   Type:                              REL (Relocatable file)
->
-> While in the area, update the comment to mention that binutils 2.35+
-> matches LLD's behavior of rejecting an ET_EXEC input, which occurred
-> after the comment was added.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
-> Link: https://github.com/llvm/llvm-project/pull/75643
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Wed, Feb 14, 2024 at 01:29:29PM -0800, Fangrui Song wrote:
+> A s390 patch modeling its --orphan-handling= after x86 [1] sparked my
+> motivation to simplify patterns. Commit 5354e84598f2 ("x86/build: Add
+> asserts for unwanted sections") added asserts that certain input
+> sections must be absent or empty. The patterns can be simplified.
+> 
+> For dynamic relocations,
+> 
+> *(.rela.*) is sufficient to match all dynamic relocations synthesized by
+> GNU ld and LLD. .rela_* is unnecessary. --emit-relocs may create .rela_*
+> sections for section names prefixed with _, but they are not matched by
+> linker scripts.
+> 
+> .plt instead of .plt.* is sufficient to match synthesized PLT entries.
+
+Do you mean ".plt.foo" matches ".plt" ?
+
+> .igot and .igot.plt are for non-preemptible STT_GNU_IFUNC in GNU ld (LLD
+> just uses .got), which the kernel does not use. In addition, if .igot or
+> .igot.plt is ever non-empty, there will be .rela.* dynamic relocations
+> leading to an assert failure anyway.
+
+I think at the time I was dealing with avoid multiple warnings out of
+the linker, as I was getting orphan warnings in addition to the
+non-empty warnings.
+
+> 
+> [1]: https://lore.kernel.org/all/20240207-s390-lld-and-orphan-warn-v1-6-8a665b3346ab@kernel.org/
+> 
+> Signed-off-by: Fangrui Song <maskray@google.com>
+
+Is anything harmed by leaving all of this as-is?
+
+-Kees
+
 > ---
+>  arch/x86/boot/compressed/vmlinux.lds.S | 6 +++---
+>  arch/x86/kernel/vmlinux.lds.S          | 8 ++++----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/compressed/vmlinux.lds.S
+> index 083ec6d7722a..9f288f67972a 100644
+> --- a/arch/x86/boot/compressed/vmlinux.lds.S
+> +++ b/arch/x86/boot/compressed/vmlinux.lds.S
+> @@ -104,17 +104,17 @@ SECTIONS
+>  	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+>  
+>  	.plt : {
+> -		*(.plt) *(.plt.*)
+> +		*(.plt)
+>  	}
+>  	ASSERT(SIZEOF(.plt) == 0, "Unexpected run-time procedure linkages detected!")
+>  
+>  	.rel.dyn : {
+> -		*(.rel.*) *(.rel_*)
+> +		*(.rel.*)
+>  	}
+>  	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
+>  
+>  	.rela.dyn : {
+> -		*(.rela.*) *(.rela_*)
+> +		*(.rela.*)
+>  	}
+>  	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
+>  }
+> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+> index a349dbfc6d5a..b3da7b81d2b3 100644
+> --- a/arch/x86/kernel/vmlinux.lds.S
+> +++ b/arch/x86/kernel/vmlinux.lds.S
+> @@ -463,22 +463,22 @@ SECTIONS
+>  	 * explicitly check instead of blindly discarding.
+>  	 */
+>  	.got : {
+> -		*(.got) *(.igot.*)
+> +		*(.got)
+>  	}
+>  	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+>  
+>  	.plt : {
+> -		*(.plt) *(.plt.*) *(.iplt)
+> +		*(.plt)
+>  	}
+>  	ASSERT(SIZEOF(.plt) == 0, "Unexpected run-time procedure linkages detected!")
+>  
+>  	.rel.dyn : {
+> -		*(.rel.*) *(.rel_*)
+> +		*(.rel.*)
+>  	}
+>  	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
+>  
+>  	.rela.dyn : {
+> -		*(.rela.*) *(.rela_*)
+> +		*(.rela.*)
+>  	}
+>  	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
+>  }
+> -- 
+> 2.43.0.687.g38aa6559b0-goog
+> 
 
-Applied to linux-kbuild/fixes.
-Thanks.
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+Kees Cook
