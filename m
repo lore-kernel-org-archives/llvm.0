@@ -1,78 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7CF79C0;
-	Wed, 14 Feb 2024 08:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14677CA73;
+	Wed, 14 Feb 2024 09:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707900359; cv=none; b=UMCXG+EvKxUzdIUYAqWhJyPKLqkvO60TkQB1fP5BzRklrtPoKsz3HXEYReAIHZq+6ga/ge3/B0rAvoJZw5I/kyyJTwkwBxVAMvSW2sx1EBhHqQxsEeoEaSTPRtchtMO9iWdUd34mfDn05s2HU1ThxCU0dcCp7uJj7Nkm9gIvwRk=
+	t=1707902510; cv=none; b=F/1n1olLE17WKK39VquAtaYH7P0t3lmFgSRUs39PuC3sC3r5yt/s6LpbuNbSCl7PpOm8DzscSwFXfMDjaGFrhUtWNFobL0znvo779glCl/+Ke27rJTAoUbKczr+j8QhYyVvjTy7tG38Wo6SWFyPUhfVzeO4RPDNGfu7PjQ69xjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707900359; c=relaxed/simple;
-	bh=80PMX4RRZXC/T1+Nh/TK7dabMmwW48VhI43ZD1PxROI=;
-	h=Content-Type:MIME-Version:Subject:From:In-Reply-To:References:To:
-	 Cc:Message-ID:Date; b=W1gi4zroZ47OzHlhBbI8xzXZSAf9nsYFgI5E2qNyg3EOByHUiWSScsJM+pe0MnpimcK0DEWOuIcwW2dsKK+TfnkFrid0RpA9KpQkx7fhSYVrtHq8ZA1VW9yIzOvC1oMucm/mtdXV9chmkjhLlEjT0FaeaRBuJeyn7YMlQxSPKWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eEjFvACH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707902510; c=relaxed/simple;
+	bh=ir1ZTlVuKq3OpAEOdgpZVagRG7UpTq1IJDjRKpFOG3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mO7q7QXRkNVQs67QXfc1ukPPiqhWc4hGX8Scl0yReUgSD1R61dflQWJ5FDSzuv/Dg5y6loP3nGgLHMCaTzDylTJKO1gly02c/M3Sv6sUSsJSCASgcOyNFv0JCursO/YX4MeFLvp5QnvkGbb1juC5adrCsbiRIpnynlbDSgoOOVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOeZpdxH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eEjFvACH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B443C433F1;
-	Wed, 14 Feb 2024 08:45:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOeZpdxH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB0BAC433F1;
+	Wed, 14 Feb 2024 09:21:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707900358;
-	bh=80PMX4RRZXC/T1+Nh/TK7dabMmwW48VhI43ZD1PxROI=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=eEjFvACHOyLYtBiWnd6/VT8fR7wf5ctAfkoEf5UPHRDFIa8aDerZZ97cKcPsCKLXC
-	 ih1N47S+tp5348Cq9IAt0NAboF7UAV+3fwRF7dZMnZvvRPvbZZMyOaIHy0an58Xvq0
-	 NJmqHMWI8KsznLVpVEYUI3fVijSVc07wBAJp1qXioZoWLpscEGVxhXfLhAnpn+ZQ5s
-	 H/5+3XI/30y5orQ9aL4BW9NNYyGoBDTS/B61bYyi7y42Dltozqrk/mfIo7NfES6v/e
-	 eIT1Qw5PqhNg4SBOVCFVv6oqycnj2Z2OgdQkEN8mM+y7Hcj0cbUOQUKkotWUzHUITT
-	 +bJ7QF9JYy+eQ==
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1707902509;
+	bh=ir1ZTlVuKq3OpAEOdgpZVagRG7UpTq1IJDjRKpFOG3Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NOeZpdxHh+ZiAtHiKBZvRMtcQJNYSTn6wJIgQPyGtTmCeoX72gy4L5K0v34adO0J3
+	 SwASsrRv+tR5NhoN5YO+iA2I6TTRMphhDLoAw6nMs9XqQ2rQrIP006wI70orMouo7Z
+	 bIpIZWYMFOz8/a2AbvMPcPZfG3fKQCNsIcFKbmlbevq6OvqGie/CJGgzrkw+7E3AzH
+	 UWvvEEfLvWdZV3nvPlf01b548oZp1eg6b3jFjFjfzHdBPaoc6aQxdsrzj0Pt3LIcA1
+	 nfKunJSrcf5cbtEnNLTQ4LKb7UGPVBNco7QzOGx5r6Wtc35gwI3WjardFa3ughUyrH
+	 YX0KJiHXIGj5Q==
+Date: Wed, 14 Feb 2024 11:21:44 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Bart Van Assche <bvanassche@acm.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"Nicholas A. Bellinger" <nab@risingtidesystems.com>,
+	linux-rdma@vger.kernel.org, target-devel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] RDMA/srpt: fix function pointer cast warnings
+Message-ID: <20240214092144.GF52640@unreal>
+References: <20240213100728.458348-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] brcmsmac: avoid function pointer casts
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20240213100548.457854-1-arnd@kernel.org>
-References: <20240213100548.457854-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Arend van Spriel <arend.vanspriel@broadcom.com>,
- Nathan Chancellor <nathan@kernel.org>, Greg Kroah-Hartman <gregkh@suse.de>,
- Pieter-Paul Giesberts <pieterpg@broadcom.com>, Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- Artem Chernyshev <artem.chernyshev@red-soft.ru>,
- Jonas Gorski <jonas.gorski@gmail.com>, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
-Message-ID: <170790035300.3179441.9169506478575963188.kvalo@kernel.org>
-Date: Wed, 14 Feb 2024 08:45:55 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240213100728.458348-1-arnd@kernel.org>
 
-Arnd Bergmann <arnd@kernel.org> wrote:
-
+On Tue, Feb 13, 2024 at 11:07:13AM +0100, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> An old cleanup went a little too far and causes a warning with clang-16
-> and higher as it breaks control flow integrity (KCFI) rules:
+> clang-16 notices that srpt_qp_event() gets called through an incompatible
+> pointer here:
 > 
-> drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy_shim.c:64:34: error: cast from 'void (*)(struct brcms_phy *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    64 |                         brcms_init_timer(physhim->wl, (void (*)(void *))fn,
->       |                                                       ^~~~~~~~~~~~~~~~~~~~
+> drivers/infiniband/ulp/srpt/ib_srpt.c:1815:5: error: cast from 'void (*)(struct ib_event *, struct srpt_rdma_ch *)' to 'void (*)(struct ib_event *, void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>  1815 |                 = (void(*)(struct ib_event *, void*))srpt_qp_event;
 > 
-> Change this one instance back to passing a void pointer so it can be
-> used with the timer callback interface.
+> Change srpt_qp_event() to use the correct prototype and adjust the
+> argument inside of it.
 > 
-> Fixes: d89a4c80601d ("staging: brcm80211: removed void * from softmac phy")
+> Fixes: a42d985bd5b2 ("ib_srpt: Initial SRP Target merge for v3.3-rc1")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/infiniband/ulp/srpt/ib_srpt.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-I guess this should go to wireless tree?
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20240213100548.457854-1-arnd@kernel.org/
+This patch generates the following warnings, fixed and applied.
+➜  kernel git:(wip/leon-for-rc) mkt ci
+f17a855457db (HEAD -> build) RDMA/srpt: fix function pointer cast warnings
+drivers/infiniband/ulp/srpt/ib_srpt.c:220: warning: Function parameter or struct member 'ptr' not described in 'srpt_qp_event'
+drivers/infiniband/ulp/srpt/ib_srpt.c:220: warning: Excess function parameter 'ch' description in 'srpt_qp_event'
+drivers/infiniband/ulp/srpt/ib_srpt.c:220: warning: Function parameter or struct member 'ptr' not described in 'srpt_qp_event'
+drivers/infiniband/ulp/srpt/ib_srpt.c:220: warning: Excess function parameter 'ch' description in 'srpt_qp_event'
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
+> 
+> diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/ulp/srpt/ib_srpt.c
+> index 0875f197118f..942b311b6296 100644
+> --- a/drivers/infiniband/ulp/srpt/ib_srpt.c
+> +++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
+> @@ -216,8 +216,10 @@ static const char *get_ch_state_name(enum rdma_ch_state s)
+>   * @event: Description of the event that occurred.
+>   * @ch: SRPT RDMA channel.
+>   */
+> -static void srpt_qp_event(struct ib_event *event, struct srpt_rdma_ch *ch)
+> +static void srpt_qp_event(struct ib_event *event, void *ptr)
+>  {
+> +	struct srpt_rdma_ch *ch = ptr;
+> +
+>  	pr_debug("QP event %d on ch=%p sess_name=%s-%d state=%s\n",
+>  		 event->event, ch, ch->sess_name, ch->qp->qp_num,
+>  		 get_ch_state_name(ch->state));
+> @@ -1811,8 +1813,7 @@ static int srpt_create_ch_ib(struct srpt_rdma_ch *ch)
+>  	ch->cq_size = ch->rq_size + sq_size;
+>  
+>  	qp_init->qp_context = (void *)ch;
+> -	qp_init->event_handler
+> -		= (void(*)(struct ib_event *, void*))srpt_qp_event;
+> +	qp_init->event_handler = srpt_qp_event;
+>  	qp_init->send_cq = ch->cq;
+>  	qp_init->recv_cq = ch->cq;
+>  	qp_init->sq_sig_type = IB_SIGNAL_REQ_WR;
+> -- 
+> 2.39.2
+> 
