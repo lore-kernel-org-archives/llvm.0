@@ -1,108 +1,233 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B29D290C;
-	Wed, 14 Feb 2024 01:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CFA65C
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 01:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707872616; cv=none; b=TOiViNf6bxNixt42PLQ0TnhR+4IM77m7awLqc8fY5fuZpj7+n+KGHH78VCdwRU91qO/0O67AbxXCmClUzAUvjbKi+tX5aqm3+B9jXu6CVhEGEgzXIKkLzG9K2Ohoh10BDNuhfCyawX76iL9/96j1rIMEGOaGuMlHP7LATqxyXPs=
+	t=1707873270; cv=none; b=AcvmwuOJub09xYguFCGj1ZPluykZhNNbJsrLO/VMPloG/bobUf7BS3QsKkQp9sBdrcR8mPQ4a9T+6cQfoaL81I1a2bdxREzRi1xGWsPe+7CtRaxhk4iT2axJXl0b9ACUh6rLymGD5PKG3GS5duPbc80eA5vr4LYeUqrbDOwcz14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707872616; c=relaxed/simple;
-	bh=RvI8sU/ZZv6Ip2AVny6l0ijrE/CKCdDNgDTwC3I6mSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ELWhI7jtJM0/Vj0pBTGJ3O/6Kh2nckkMgYwsjNL7869/Wc16qT0FkyM1lHVx6Dd4stySyeFxaqsGoo4Mjx5OFAvP7ahWw9D1g1LKfKEX16l0coMVnC2BeFjuE4GkBaLLLHqXmfezQ9ez15KG2h/i8m+EOATU1DjPCDzMCbnfuT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=brdfMlqd; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="brdfMlqd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707872615; x=1739408615;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RvI8sU/ZZv6Ip2AVny6l0ijrE/CKCdDNgDTwC3I6mSs=;
-  b=brdfMlqdGcXW1VsOriTVMNVUj41pr6yrll0kYHKH5hjnQWEhJLU0Swts
-   cIOGnyqnt3gEEevQ7OxoV7sDR4chrT2RDJ9sBf4kJK17HRk5HJ9q9M9Cx
-   HvYeGr08R1BtWK98Xhdf+ONA0GGkBoJh8Oi6OY6U4N1o8zbYAf3Ktnx2O
-   9ndesT3dhD9k9sJgn+DdPfFs4mxzcO323v5mU2m8y+bGLO3bZHiod4/Dr
-   DShowQ3uBO/AImOR8NYmeRnc4im6RK3NxTCccYKH1wBTs8bJUMrMxCVEB
-   jmlO6Em9ak0TNB3DFa5Pd/Kx/BXCd4r7eYY9rAK9w8EO8xN9I4ulJ2J24
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="12998065"
-X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
-   d="scan'208";a="12998065"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 17:03:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
-   d="scan'208";a="34105654"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Feb 2024 17:03:26 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ra3gJ-0008C8-2U;
-	Wed, 14 Feb 2024 01:03:23 +0000
-Date: Wed, 14 Feb 2024 09:03:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-	tj@kernel.org, muchun.song@linux.dev
-Subject: Re: [PATCH v3 22/35] mm/slab: enable slab allocation tagging for
- kmalloc and friends
-Message-ID: <202402140813.MLA22JVg-lkp@intel.com>
-References: <20240212213922.783301-23-surenb@google.com>
+	s=arc-20240116; t=1707873270; c=relaxed/simple;
+	bh=uaCmhwOn8mw1USdD5pf5zdexUd38umclcqM6RnhK7bY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sE2+vnPolrKPRiu7J9hmADdevyVI/G6alflwPj087F+1WdqIvm0HlJBLKJ+NFNfX9tP9Le9b2LxHT272tgGS+ZH4tgRrX9Tai6F1WESRnf2JweeqQZ+oGfYuYB4g68U7LMO9kxtQuqTR9Z/qfry5W0V3HhVqER4usZkCp1uCtuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-296df89efd2so3760583a91.0
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 17:14:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707873267; x=1708478067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qiVVTshxLf488JtQvB4freL8sn2VgHj3EfM+SItvhFw=;
+        b=AoJ9o5rl0JzaC4P0NlNK1BS7NQalOlAI80RIGOSEFb0ty605VH32P6Rm8Ky95T4D4k
+         3x9xbyFZQ9hefUXN59nfxdl62LV9IWW8fDpQ+Syvcj7QNxdXlhGkBhvybwAq5BYyaAEW
+         4bgsRUCHQTz9CgqfoqltSUYx0mpwBoSouOybopQu1illjrxHyyJl2DkpqW7lka0Vaw1/
+         U6/P5i+Wryc3/7904/v8pPsPP0j57l0S+rsddKjjhSFkMCPrCe1ZoPnV9Ngr//Ct71yA
+         m0Plt7bONGx8FCnvS6+PzG+s3lH9j20K5nN3qsiAzu6/5Ezm1rqOQSrU+nJMvBGhxO+I
+         qJtw==
+X-Forwarded-Encrypted: i=1; AJvYcCVHPzcdquurLSTdvzSAzp3dxWPcIs+UplFhh3p4vKyB0fXSo5Fnbq0THm5H0gEvlebOw9lYCbx9P5WEkxjqsVS6RkiVFQ==
+X-Gm-Message-State: AOJu0YzB3a9DsXAcU0gmSdNPf9/IXtNFvN4o0uKu4JZg2YP02NVFFTMM
+	uXeUOj6D8+xqIU0vzZk5KBn+9/+tIZjUoxWYbCC07JxiOORB7pzOdqGVq7BV5SMZHp4vWHuyQ54
+	vU95IiU7GQJ+TfajCSVyRk5P9sjQ=
+X-Google-Smtp-Source: AGHT+IErwkMc01Tf/azIdIDCC7FFkLqYU5zAjx8RMnonJ7nwDnz2JckEoxZsVS70HQzcgO7U5pDHLBjJ+/QXjxztTZ0=
+X-Received: by 2002:a17:90b:1054:b0:297:17b0:34e2 with SMTP id
+ gq20-20020a17090b105400b0029717b034e2mr1278414pjb.48.1707873267048; Tue, 13
+ Feb 2024 17:14:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212213922.783301-23-surenb@google.com>
+References: <20240212185858.68189-1-irogers@google.com> <20240212185858.68189-9-irogers@google.com>
+In-Reply-To: <20240212185858.68189-9-irogers@google.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Tue, 13 Feb 2024 17:14:15 -0800
+Message-ID: <CAM9d7chcdJ7zsOEWLo1q-U25YyvP=22+GGxcMEbdkQbW_csoyg@mail.gmail.com>
+Subject: Re: [PATCH v3 8/8] perf tests: Add option to run tests in parallel
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@arm.com>, 
+	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Suren,
+On Mon, Feb 12, 2024 at 10:59=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
+ote:
+>
+> By default tests are forked, add an option (-p or --parallel) so that
+> the forked tests are all started in parallel and then their output
+> gathered serially. This is opt-in as running in parallel can cause
+> test flakes.
+>
+> Rather than fork within the code, the start_command/finish_command
+> from libsubcmd are used. This changes how stderr and stdout are
+> handled. The child stderr and stdout are always read to avoid the
+> child blocking. If verbose is 1 (-v) then if the test fails the child
+> stdout and stderr are displayed. If the verbose is >1 (e.g. -vv) then
+> the stdout and stderr from the child are immediately displayed.
+>
+> An unscientific test on my laptop shows the wall clock time for perf
+> test without parallel being 5 minutes 21 seconds and with parallel
+> (-p) being 1 minute 50 seconds.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+> v1 of this code had a bug where stdout/stderr weren't read fully. This
+> and additional issues/improvements are dealt with in v2.
+> ---
+[SNIP]
+>  static int __cmd_test(int argc, const char *argv[], struct intlist *skip=
+list)
+>  {
+>         struct test_suite *t;
+>         unsigned int j, k;
+>         int i =3D 0;
+>         int width =3D 0;
+> +       size_t num_tests =3D 0;
+> +       struct child_test **child_tests;
+> +       int child_test_num =3D 0;
+>
+>         for_each_test(j, k, t) {
+>                 int len =3D strlen(test_description(t, -1));
+>
+>                 if (width < len)
+>                         width =3D len;
+> +
+> +               if (has_subtests(t)) {
+> +                       for (int l =3D 0, subn =3D num_subtests(t); l < s=
+ubn; l++) {
+> +                               len =3D strlen(test_description(t, -1));
 
-kernel test robot noticed the following build errors:
+Shouldn't it be strlen(test_description(t, i)) ?  Looks like it has len
+of parent test already.
 
-[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-[also build test ERROR on linus/master v6.8-rc4]
-[cannot apply to akpm-mm/mm-everything vbabka-slab/for-next next-20240213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Namhyung
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/lib-string_helpers-Add-flags-param-to-string_get_size/20240213-054335
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/20240212213922.783301-23-surenb%40google.com
-patch subject: [PATCH v3 22/35] mm/slab: enable slab allocation tagging for kmalloc and friends
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240214/202402140813.MLA22JVg-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402140813.MLA22JVg-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402140813.MLA22JVg-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> error[E0425]: cannot find function `krealloc` in crate `bindings`
-   --> rust/kernel/allocator.rs:39:24
-   |
-   39 |     unsafe { bindings::krealloc(ptr as *const core::ffi::c_void, size, flags) as *mut u8 }
-   |                        ^^^^^^^^ not found in `bindings`
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +                               if (width < len)
+> +                                       width =3D len;
+> +                               num_tests++;
+> +                       }
+> +               } else
+> +                       num_tests++;
+>         }
+> +       child_tests =3D calloc(num_tests, sizeof(*child_tests));
+> +       if (!child_tests)
+> +               return -ENOMEM;
+>
+>         for_each_test(j, k, t) {
+>                 int curr =3D i++;
+> @@ -334,52 +458,47 @@ static int __cmd_test(int argc, const char *argv[],=
+ struct intlist *skiplist)
+>                                 continue;
+>                 }
+>
+> -               pr_info("%3d: %-*s:", i, width, test_description(t, -1));
+> -
+>                 if (intlist__find(skiplist, i)) {
+> +                       pr_info("%3d: %-*s:", curr + 1, width, test_descr=
+iption(t, -1));
+>                         color_fprintf(stderr, PERF_COLOR_YELLOW, " Skip (=
+user override)\n");
+>                         continue;
+>                 }
+>
+>                 if (!has_subtests(t)) {
+> -                       test_and_print(t, -1);
+> +                       int err =3D start_test(t, curr, -1, &child_tests[=
+child_test_num++], width);
+> +
+> +                       if (err) {
+> +                               /* TODO: if parallel waitpid the already =
+forked children. */
+> +                               free(child_tests);
+> +                               return err;
+> +                       }
+>                 } else {
+>                         int subn =3D num_subtests(t);
+> -                       /*
+> -                        * minus 2 to align with normal testcases.
+> -                        * For subtest we print additional '.x' in number=
+.
+> -                        * for example:
+> -                        *
+> -                        * 35: Test LLVM searching and compiling         =
+               :
+> -                        * 35.1: Basic BPF llvm compiling test           =
+               : Ok
+> -                        */
+> -                       int subw =3D width > 2 ? width - 2 : width;
+> -
+> -                       if (subn <=3D 0) {
+> -                               color_fprintf(stderr, PERF_COLOR_YELLOW,
+> -                                             " Skip (not compiled in)\n"=
+);
+> -                               continue;
+> -                       }
+> -                       pr_info("\n");
+>
+>                         for (subi =3D 0; subi < subn; subi++) {
+> -                               int len =3D strlen(test_description(t, su=
+bi));
+> +                               int err;
+>
+> -                               if (subw < len)
+> -                                       subw =3D len;
+> -                       }
+> -
+> -                       for (subi =3D 0; subi < subn; subi++) {
+>                                 if (!perf_test__matches(test_description(=
+t, subi),
+>                                                         curr, argc, argv)=
+)
+>                                         continue;
+>
+> -                               pr_info("%3d.%1d: %-*s:", i, subi + 1, su=
+bw,
+> -                                       test_description(t, subi));
+> -                               test_and_print(t, subi);
+> +                               err =3D start_test(t, curr, subi, &child_=
+tests[child_test_num++],
+> +                                                width);
+> +                               if (err)
+> +                                       return err;
+>                         }
+>                 }
+>         }
+> +       for (i =3D 0; i < child_test_num; i++) {
+> +               if (parallel) {
+> +                       int ret  =3D finish_test(child_tests[i], width);
+> +
+> +                       if (ret)
+> +                               return ret;
+> +               }
+> +               free(child_tests[i]);
+> +       }
+> +       free(child_tests);
+>         return 0;
+>  }
+>
+> @@ -447,6 +566,8 @@ int cmd_test(int argc, const char **argv)
+>                     "be more verbose (show symbol address, etc)"),
+>         OPT_BOOLEAN('F', "dont-fork", &dont_fork,
+>                     "Do not fork for testcase"),
+> +       OPT_BOOLEAN('p', "parallel", &parallel,
+> +                   "Run the tests altogether in parallel"),
+>         OPT_STRING('w', "workload", &workload, "work", "workload to run f=
+or testing"),
+>         OPT_STRING(0, "dso", &dso_to_test, "dso", "dso to test"),
+>         OPT_STRING(0, "objdump", &test_objdump_path, "path",
+> --
+> 2.43.0.687.g38aa6559b0-goog
+>
