@@ -1,233 +1,296 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CFA65C
-	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 01:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D8B625
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 01:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707873270; cv=none; b=AcvmwuOJub09xYguFCGj1ZPluykZhNNbJsrLO/VMPloG/bobUf7BS3QsKkQp9sBdrcR8mPQ4a9T+6cQfoaL81I1a2bdxREzRi1xGWsPe+7CtRaxhk4iT2axJXl0b9ACUh6rLymGD5PKG3GS5duPbc80eA5vr4LYeUqrbDOwcz14=
+	t=1707873444; cv=none; b=BfJY4bS2JpPT1j4/tXxhkA82JwxSUhHKVPX7DXxHWosH/W5ChjH9ifKUhkUR6EHgiDnixXcEapKs+4Q+7ZWBCAnIs1K56pWCyZ4JeJBeiVz3pFfNFXI/0TsVw7lfEjbAmXka49MXLwfBzXgeYYlZkfe+li+/AQsAhyfr+iQl0n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707873270; c=relaxed/simple;
-	bh=uaCmhwOn8mw1USdD5pf5zdexUd38umclcqM6RnhK7bY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sE2+vnPolrKPRiu7J9hmADdevyVI/G6alflwPj087F+1WdqIvm0HlJBLKJ+NFNfX9tP9Le9b2LxHT272tgGS+ZH4tgRrX9Tai6F1WESRnf2JweeqQZ+oGfYuYB4g68U7LMO9kxtQuqTR9Z/qfry5W0V3HhVqER4usZkCp1uCtuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-296df89efd2so3760583a91.0
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 17:14:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707873267; x=1708478067;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qiVVTshxLf488JtQvB4freL8sn2VgHj3EfM+SItvhFw=;
-        b=AoJ9o5rl0JzaC4P0NlNK1BS7NQalOlAI80RIGOSEFb0ty605VH32P6Rm8Ky95T4D4k
-         3x9xbyFZQ9hefUXN59nfxdl62LV9IWW8fDpQ+Syvcj7QNxdXlhGkBhvybwAq5BYyaAEW
-         4bgsRUCHQTz9CgqfoqltSUYx0mpwBoSouOybopQu1illjrxHyyJl2DkpqW7lka0Vaw1/
-         U6/P5i+Wryc3/7904/v8pPsPP0j57l0S+rsddKjjhSFkMCPrCe1ZoPnV9Ngr//Ct71yA
-         m0Plt7bONGx8FCnvS6+PzG+s3lH9j20K5nN3qsiAzu6/5Ezm1rqOQSrU+nJMvBGhxO+I
-         qJtw==
-X-Forwarded-Encrypted: i=1; AJvYcCVHPzcdquurLSTdvzSAzp3dxWPcIs+UplFhh3p4vKyB0fXSo5Fnbq0THm5H0gEvlebOw9lYCbx9P5WEkxjqsVS6RkiVFQ==
-X-Gm-Message-State: AOJu0YzB3a9DsXAcU0gmSdNPf9/IXtNFvN4o0uKu4JZg2YP02NVFFTMM
-	uXeUOj6D8+xqIU0vzZk5KBn+9/+tIZjUoxWYbCC07JxiOORB7pzOdqGVq7BV5SMZHp4vWHuyQ54
-	vU95IiU7GQJ+TfajCSVyRk5P9sjQ=
-X-Google-Smtp-Source: AGHT+IErwkMc01Tf/azIdIDCC7FFkLqYU5zAjx8RMnonJ7nwDnz2JckEoxZsVS70HQzcgO7U5pDHLBjJ+/QXjxztTZ0=
-X-Received: by 2002:a17:90b:1054:b0:297:17b0:34e2 with SMTP id
- gq20-20020a17090b105400b0029717b034e2mr1278414pjb.48.1707873267048; Tue, 13
- Feb 2024 17:14:27 -0800 (PST)
+	s=arc-20240116; t=1707873444; c=relaxed/simple;
+	bh=5X98FextZ0itUxUVY6o5Xkh2D+xiDNlyA2KuTbU03aw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XYl8HuRUX52zz5lXc5Tomx00TCfE8z8/2LnHhlJn2zLQmbpPXs6Wa9utfoHiuWOyaJbUrZBAid+gyKHXQp+JQnz6qGOITMONelFwZElOWFTxn7XOQ+6Xbv2wymeOdUtanzL3TNA6dO571lMm0zqai9x9yYSrmInwAYNNo/ZdN4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mTEtEtt4; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mTEtEtt4"
+Date: Tue, 13 Feb 2024 20:17:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1707873440;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Wq24sXllIqJe/0ViQd9NQmetyjYAhlU9XfVwZnsq+xw=;
+	b=mTEtEtt4DYcknimbfAR/ebbMWTFlE/nViEZYSOrjh4lrM4tFfd4reV0dyD6j3jfLogWWqu
+	OvXr+zXNsFVjVzqIGfHrcdyCeJNhmMMOERRlGWgK/wznpMf9Kz2k4ZGNI/uMCT9u2b9V5U
+	gN+BiQwKe/aonjMvWHuQpkXRygVYHGk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, David Laight <David.Laight@aculab.com>, 
+	linux-bcachefs@vger.kernel.org
+Subject: Re: static assertion failed in fs/bcachefs/journal_io.c
+Message-ID: <wl7u2f7gvrw5yeyoa4rit4fy5kepn5tmqgzelrduhpajqvcuxy@4imci5mhzecr>
+References: <20240213215640.GA80329@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240212185858.68189-1-irogers@google.com> <20240212185858.68189-9-irogers@google.com>
-In-Reply-To: <20240212185858.68189-9-irogers@google.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Tue, 13 Feb 2024 17:14:15 -0800
-Message-ID: <CAM9d7chcdJ7zsOEWLo1q-U25YyvP=22+GGxcMEbdkQbW_csoyg@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] perf tests: Add option to run tests in parallel
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@arm.com>, 
-	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240213215640.GA80329@dev-arch.thelio-3990X>
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Feb 12, 2024 at 10:59=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
-ote:
->
-> By default tests are forked, add an option (-p or --parallel) so that
-> the forked tests are all started in parallel and then their output
-> gathered serially. This is opt-in as running in parallel can cause
-> test flakes.
->
-> Rather than fork within the code, the start_command/finish_command
-> from libsubcmd are used. This changes how stderr and stdout are
-> handled. The child stderr and stdout are always read to avoid the
-> child blocking. If verbose is 1 (-v) then if the test fails the child
-> stdout and stderr are displayed. If the verbose is >1 (e.g. -vv) then
-> the stdout and stderr from the child are immediately displayed.
->
-> An unscientific test on my laptop shows the wall clock time for perf
-> test without parallel being 5 minutes 21 seconds and with parallel
-> (-p) being 1 minute 50 seconds.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
-> v1 of this code had a bug where stdout/stderr weren't read fully. This
-> and additional issues/improvements are dealt with in v2.
-> ---
-[SNIP]
->  static int __cmd_test(int argc, const char *argv[], struct intlist *skip=
-list)
->  {
->         struct test_suite *t;
->         unsigned int j, k;
->         int i =3D 0;
->         int width =3D 0;
-> +       size_t num_tests =3D 0;
-> +       struct child_test **child_tests;
-> +       int child_test_num =3D 0;
->
->         for_each_test(j, k, t) {
->                 int len =3D strlen(test_description(t, -1));
->
->                 if (width < len)
->                         width =3D len;
-> +
-> +               if (has_subtests(t)) {
-> +                       for (int l =3D 0, subn =3D num_subtests(t); l < s=
-ubn; l++) {
-> +                               len =3D strlen(test_description(t, -1));
+bcachefs bugs should go to the bcachefs mailing list; I assume this is
+just a case where we need min_t instead of min, if so I'll fix it
+shortly
 
-Shouldn't it be strlen(test_description(t, i)) ?  Looks like it has len
-of parent test already.
-
-Thanks,
-Namhyung
-
-
-> +                               if (width < len)
-> +                                       width =3D len;
-> +                               num_tests++;
-> +                       }
-> +               } else
-> +                       num_tests++;
+On Tue, Feb 13, 2024 at 02:56:40PM -0700, Nathan Chancellor wrote:
+> Hi all,
+>=20
+> I am not really sure where to go with this, so I figured I would loop
+> some people in and see if we can figure out what is going on here.
+>=20
+> After commit 67a8e7de7ef0 ("bcachefs: Clamp replicas_required to
+> replicas") in linux-next, I see a massive error occur when building for
+> ARCH=3Darm64 with both CONFIG_BCACHEFS_FS and CONFIG_LTO enabled, which is
+> important because arm64 defines its own __READ_ONCE() with LTO enabled.
+> The error appears to be related to the minmax.h changes that went into
+> 6.7; I think it is specifically around commit d03eba99f5bf ("minmax:
+> allow min()/max()/clamp() if the arguments have the same signedness.").
+>=20
+> As far as I can tell, replicas_want and the metadata_replicas_required
+> member in struct bch_opts should have the same signedness, unless the
+> __READ_ONCE() macro is messing something up, which is kind of hard to
+> tell at this point...
+>=20
+> I'll keep poking at this tomorrow unless someone else beats me to it.
+>=20
+> Cheers,
+> Nathan
+>=20
+> $ echo 'CONFIG_BCACHEFS_FS=3Dy
+> CONFIG_LTO_NONE=3Dn
+> CONFIG_LTO_CLANG_THIN=3Dy' >kernel/configs/repro.config
+>=20
+> $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 clean defconfig repro.config =
+fs/bcachefs/journal_io.o
+> fs/bcachefs/journal_io.c:1509:27: error: static assertion failed due to r=
+equirement '__builtin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((void =
+*)((long)((((unsigned int)(-1)) < (unsigned int)1)) * 0L)) : (int *)8))), (=
+((unsigned int)(-1)) < (unsigned int)1), 0) =3D=3D __builtin_choose_expr((s=
+izeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((int)(-1)) < (int)1)) * =
+0L)) : (int *)8))), (((int)(-1)) < (int)1), 0) || __builtin_choose_expr((si=
+zeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((unsigned int)(-1)) < (un=
+signed int)1)) * 0L)) : (int *)8))), (((unsigned int)(-1)) < (unsigned int)=
+1), 0) =3D=3D __builtin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((voi=
+d *)((long)((((int)(-1)) < (int)1)) * 0L)) : (int *)8))), (((int)(-1)) < (i=
+nt)1), 0) || (__builtin_choose_expr((sizeof(int) =3D=3D sizeof (*(8 ? ((voi=
+d *)((long)(replicas_want) * 0L)) : (int *)8))) && __builtin_choose_expr((s=
+izeof(int) =3D=3D sizeof (*(8 ? ((void *)((long)((((unsigned int)(-1)) < (u=
+nsigned int)1)) * 0L)) : (int *)8))), (((unsigned int)(-1)) < (unsigned int=
+)1), 0), replicas_want, -1) >=3D 0) || (__builtin_choose_expr((sizeof(int) =
+=3D=3D sizeof (*(8 ? ((void *)((long)(({
+>     do {
+>         extern void __compiletime_assert_578(void);
+>         if (!((sizeof (c->opts.metadata_replicas_required) =3D=3D sizeof(=
+char) || sizeof (c->opts.metadata_replicas_required) =3D=3D sizeof(short) |=
+| sizeof (c->opts.metadata_replicas_required) =3D=3D sizeof(int) || sizeof =
+(c->opts.metadata_replicas_required) =3D=3D sizeof(long)) || sizeof (c->opt=
+s.metadata_replicas_required) =3D=3D sizeof(long long)))
+>             __compiletime_assert_578();
+>     } while (0);
+>     ({
+>         unsigned char *__x =3D &(c->opts.metadata_replicas_required);
+>         int atomic =3D 1;
+>         union {
+>             unsigned char __val;
+>             char __c[1];
+>         } __u;
+>         switch (sizeof (c->opts.metadata_replicas_required)) {
+>           case 1:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldarb\t%w0, %1\n662:\n=
+=2Epushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .=
+hword 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n6=
+63:\n\t.arch_extension rcpc\nldaprb\t%w0, %1\n664:\n\t.org\t. - (664b-663b)=
+ + (662b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\=
+n" : "=3Dr" (*(unsigned char *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           case 2:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldarh\t%w0, %1\n662:\n=
+=2Epushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .=
+hword 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n6=
+63:\n\t.arch_extension rcpc\nldaprh\t%w0, %1\n664:\n\t.org\t. - (664b-663b)=
+ + (662b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\=
+n" : "=3Dr" (*(unsigned short *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           case 4:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldar\t%w0, %1\n662:\n.=
+pushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .hwo=
+rd 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n663:=
+\n\t.arch_extension rcpc\nldapr\t%w0, %1\n664:\n\t.org\t. - (664b-663b) + (=
+662b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\n" :=
+ "=3Dr" (*(unsigned int *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           case 8:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldar\t%0, %1\n662:\n.p=
+ushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .hwor=
+d 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n663:\=
+n\t.arch_extension rcpc\nldapr\t%0, %1\n664:\n\t.org\t. - (664b-663b) + (66=
+2b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\n" : "=
+=3Dr" (*(unsigned long long *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           default:
+>             atomic =3D 0;
 >         }
-> +       child_tests =3D calloc(num_tests, sizeof(*child_tests));
-> +       if (!child_tests)
-> +               return -ENOMEM;
->
->         for_each_test(j, k, t) {
->                 int curr =3D i++;
-> @@ -334,52 +458,47 @@ static int __cmd_test(int argc, const char *argv[],=
- struct intlist *skiplist)
->                                 continue;
->                 }
->
-> -               pr_info("%3d: %-*s:", i, width, test_description(t, -1));
-> -
->                 if (intlist__find(skiplist, i)) {
-> +                       pr_info("%3d: %-*s:", curr + 1, width, test_descr=
-iption(t, -1));
->                         color_fprintf(stderr, PERF_COLOR_YELLOW, " Skip (=
-user override)\n");
->                         continue;
->                 }
->
->                 if (!has_subtests(t)) {
-> -                       test_and_print(t, -1);
-> +                       int err =3D start_test(t, curr, -1, &child_tests[=
-child_test_num++], width);
-> +
-> +                       if (err) {
-> +                               /* TODO: if parallel waitpid the already =
-forked children. */
-> +                               free(child_tests);
-> +                               return err;
-> +                       }
->                 } else {
->                         int subn =3D num_subtests(t);
-> -                       /*
-> -                        * minus 2 to align with normal testcases.
-> -                        * For subtest we print additional '.x' in number=
-.
-> -                        * for example:
-> -                        *
-> -                        * 35: Test LLVM searching and compiling         =
-               :
-> -                        * 35.1: Basic BPF llvm compiling test           =
-               : Ok
-> -                        */
-> -                       int subw =3D width > 2 ? width - 2 : width;
-> -
-> -                       if (subn <=3D 0) {
-> -                               color_fprintf(stderr, PERF_COLOR_YELLOW,
-> -                                             " Skip (not compiled in)\n"=
-);
-> -                               continue;
-> -                       }
-> -                       pr_info("\n");
->
->                         for (subi =3D 0; subi < subn; subi++) {
-> -                               int len =3D strlen(test_description(t, su=
-bi));
-> +                               int err;
->
-> -                               if (subw < len)
-> -                                       subw =3D len;
-> -                       }
-> -
-> -                       for (subi =3D 0; subi < subn; subi++) {
->                                 if (!perf_test__matches(test_description(=
-t, subi),
->                                                         curr, argc, argv)=
-)
->                                         continue;
->
-> -                               pr_info("%3d.%1d: %-*s:", i, subi + 1, su=
-bw,
-> -                                       test_description(t, subi));
-> -                               test_and_print(t, subi);
-> +                               err =3D start_test(t, curr, subi, &child_=
-tests[child_test_num++],
-> +                                                width);
-> +                               if (err)
-> +                                       return err;
->                         }
->                 }
+>         atomic ? (unsigned char)__u.__val : (*(unsigned char *volatile)__=
+x);
+>     });
+> })) * 0L)) : (int *)8))) && __builtin_choose_expr((sizeof(int) =3D=3D siz=
+eof (*(8 ? ((void *)((long)((((int)(-1)) < (int)1)) * 0L)) : (int *)8))), (=
+((int)(-1)) < (int)1), 0), ({
+>     do {
+>         extern void __compiletime_assert_578(void);
+>         if (!((sizeof (c->opts.metadata_replicas_required) =3D=3D sizeof(=
+char) || sizeof (c->opts.metadata_replicas_required) =3D=3D sizeof(short) |=
+| sizeof (c->opts.metadata_replicas_required) =3D=3D sizeof(int) || sizeof =
+(c->opts.metadata_replicas_required) =3D=3D sizeof(long)) || sizeof (c->opt=
+s.metadata_replicas_required) =3D=3D sizeof(long long)))
+>             __compiletime_assert_578();
+>     } while (0);
+>     ({
+>         unsigned char *__x =3D &(c->opts.metadata_replicas_required);
+>         int atomic =3D 1;
+>         union {
+>             unsigned char __val;
+>             char __c[1];
+>         } __u;
+>         switch (sizeof (c->opts.metadata_replicas_required)) {
+>           case 1:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldarb\t%w0, %1\n662:\n=
+=2Epushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .=
+hword 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n6=
+63:\n\t.arch_extension rcpc\nldaprb\t%w0, %1\n664:\n\t.org\t. - (664b-663b)=
+ + (662b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\=
+n" : "=3Dr" (*(unsigned char *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           case 2:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldarh\t%w0, %1\n662:\n=
+=2Epushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .=
+hword 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n6=
+63:\n\t.arch_extension rcpc\nldaprh\t%w0, %1\n664:\n\t.org\t. - (664b-663b)=
+ + (662b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\=
+n" : "=3Dr" (*(unsigned short *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           case 4:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldar\t%w0, %1\n662:\n.=
+pushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .hwo=
+rd 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n663:=
+\n\t.arch_extension rcpc\nldapr\t%w0, %1\n664:\n\t.org\t. - (664b-663b) + (=
+662b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\n" :=
+ "=3Dr" (*(unsigned int *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           case 8:
+>             asm volatile (".if 1 =3D=3D 1\n661:\n\tldar\t%0, %1\n662:\n.p=
+ushsection .altinstructions,\"a\"\n .word 661b - .\n .word 663f - .\n .hwor=
+d 34\n .byte 662b-661b\n .byte 664f-663f\n.popsection\n.subsection 1\n663:\=
+n\t.arch_extension rcpc\nldapr\t%0, %1\n664:\n\t.org\t. - (664b-663b) + (66=
+2b-661b)\n\t.org\t. - (662b-661b) + (664b-663b)\n\t.previous\n.endif\n" : "=
+=3Dr" (*(unsigned long long *)__u.__c) : "Q" (*__x) : "memory");
+>             break;
+>           default:
+>             atomic =3D 0;
 >         }
-> +       for (i =3D 0; i < child_test_num; i++) {
-> +               if (parallel) {
-> +                       int ret  =3D finish_test(child_tests[i], width);
-> +
-> +                       if (ret)
-> +                               return ret;
-> +               }
-> +               free(child_tests[i]);
-> +       }
-> +       free(child_tests);
->         return 0;
->  }
->
-> @@ -447,6 +566,8 @@ int cmd_test(int argc, const char **argv)
->                     "be more verbose (show symbol address, etc)"),
->         OPT_BOOLEAN('F', "dont-fork", &dont_fork,
->                     "Do not fork for testcase"),
-> +       OPT_BOOLEAN('p', "parallel", &parallel,
-> +                   "Run the tests altogether in parallel"),
->         OPT_STRING('w', "workload", &workload, "work", "workload to run f=
-or testing"),
->         OPT_STRING(0, "dso", &dso_to_test, "dso", "dso to test"),
->         OPT_STRING(0, "objdump", &test_objdump_path, "path",
-> --
-> 2.43.0.687.g38aa6559b0-goog
->
+>         atomic ? (unsigned char)__u.__val : (*(unsigned char *volatile)__=
+x);
+>     });
+> }), -1) >=3D 0)': min(replicas_want, ({ do { __attribute__((__noreturn__)=
+) extern void __compiletime_assert_578(void) __attribute__((__error__("Unsu=
+pported access size for {READ,WRITE}_ONCE()."))); if (!((sizeof(c->opts.met=
+adata_replicas_required) =3D=3D sizeof(char) || sizeof(c->opts.metadata_rep=
+licas_required) =3D=3D sizeof(short) || sizeof(c->opts.metadata_replicas_re=
+quired) =3D=3D sizeof(int) || sizeof(c->opts.metadata_replicas_required) =
+=3D=3D sizeof(long)) || sizeof(c->opts.metadata_replicas_required) =3D=3D s=
+izeof(long long))) __compiletime_assert_578(); } while (0); ({ typeof(&(c->=
+opts.metadata_replicas_required)) __x =3D &(c->opts.metadata_replicas_requi=
+red); int atomic =3D 1; union { typeof( _Generic((*__x), char: (char)0, uns=
+igned char: (unsigned char)0, signed char: (signed char)0, unsigned short: =
+(unsigned short)0, signed short: (signed short)0, unsigned int: (unsigned i=
+nt)0, signed int: (signed int)0, unsigned long: (unsigned long)0, signed lo=
+ng: (signed long)0, unsigned long long: (unsigned long long)0, signed long =
+long: (signed long long)0, default: (*__x))) __val; char __c[1]; } __u; swi=
+tch (sizeof(c->opts.metadata_replicas_required)) { case 1: asm volatile(".i=
+f ""1"" =3D=3D 1\n" "661:\n\t" "ldar" "b" "\t" "%w0, %1" "\n" "662:\n" ".pu=
+shsection .altinstructions,\"a\"\n" " .word 661b - .\n" " .word 663f - .\n"=
+ " .hword " "34" "\n" " .byte 662b-661b\n" " .byte 664f-663f\n" ".popsectio=
+n\n" ".subsection 1\n" "663:\n\t" ".arch_extension rcpc\n" "ldapr" "b" "\t"=
+ "%w0, %1" "\n" "664:\n\t" ".org	. - (664b-663b) + (662b-661b)\n\t" ".org	.=
+ - (662b-661b) + (664b-663b)\n\t" ".previous\n" ".endif\n" : "=3Dr" (*(__u8=
+ *)__u.__c) : "Q" (*__x) : "memory"); break; case 2: asm volatile(".if ""1"=
+" =3D=3D 1\n" "661:\n\t" "ldar" "h" "\t" "%w0, %1" "\n" "662:\n" ".pushsect=
+ion .altinstructions,\"a\"\n" " .word 661b - .\n" " .word 663f - .\n" " .hw=
+ord " "34" "\n" " .byte 662b-661b\n" " .byte 664f-663f\n" ".popsection\n" "=
+=2Esubsection 1\n" "663:\n\t" ".arch_extension rcpc\n" "ldapr" "h" "\t" "%w=
+0, %1" "\n" "664:\n\t" ".org	. - (664b-663b) + (662b-661b)\n\t" ".org	. - (=
+662b-661b) + (664b-663b)\n\t" ".previous\n" ".endif\n" : "=3Dr" (*(__u16 *)=
+__u.__c) : "Q" (*__x) : "memory"); break; case 4: asm volatile(".if ""1"" =
+=3D=3D 1\n" "661:\n\t" "ldar" "" "\t" "%w0, %1" "\n" "662:\n" ".pushsection=
+ .altinstructions,\"a\"\n" " .word 661b - .\n" " .word 663f - .\n" " .hword=
+ " "34" "\n" " .byte 662b-661b\n" " .byte 664f-663f\n" ".popsection\n" ".su=
+bsection 1\n" "663:\n\t" ".arch_extension rcpc\n" "ldapr" "" "\t" "%w0, %1"=
+ "\n" "664:\n\t" ".org	. - (664b-663b) + (662b-661b)\n\t" ".org	. - (662b-6=
+61b) + (664b-663b)\n\t" ".previous\n" ".endif\n" : "=3Dr" (*(__u32 *)__u.__=
+c) : "Q" (*__x) : "memory"); break; case 8: asm volatile(".if ""1"" =3D=3D =
+1\n" "661:\n\t" "ldar" "" "\t" "%0, %1" "\n" "662:\n" ".pushsection .altins=
+tructions,\"a\"\n" " .word 661b - .\n" " .word 663f - .\n" " .hword " "34" =
+"\n" " .byte 662b-661b\n" " .byte 664f-663f\n" ".popsection\n" ".subsection=
+ 1\n" "663:\n\t" ".arch_extension rcpc\n" "ldapr" "" "\t" "%0, %1" "\n" "66=
+4:\n\t" ".org	. - (664b-663b) + (662b-661b)\n\t" ".org	. - (662b-661b) + (6=
+64b-663b)\n\t" ".previous\n" ".endif\n" : "=3Dr" (*(__u64 *)__u.__c) : "Q" =
+(*__x) : "memory"); break; default: atomic =3D 0; } atomic ? (typeof(*__x))=
+__u.__val : (*(volatile typeof(__x))__x);}); })) signedness error, fix type=
+s or consider umin() before min_t()
+>  1509 |         unsigned replicas_need =3D min(replicas_want,
+>       |                                  ^~~~~~~~~~~~~~~~~~
+>  1510 |                                      READ_ONCE(c->opts.metadata_r=
+eplicas_required));
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~~~~
+> include/linux/minmax.h:85:19: note: expanded from macro 'min'
+>    85 | #define min(x, y)       __careful_cmp(min, x, y)
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/minmax.h:58:3: note: expanded from macro '__careful_cmp'
+>    58 |                 __cmp_once(op, x, y, __UNIQUE_ID(__x), __UNIQUE_I=
+D(__y)))
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~
+> include/linux/minmax.h:51:16: note: expanded from macro '__cmp_once'
+>    51 |         static_assert(__types_ok(x, y),                 \
+>       |         ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    52 |                 #op "(" #x ", " #y ") signedness error, fix types=
+ or consider u" #op "() before " #op "_t()"); \
+>       |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=3D=
+0 to see all)
+> include/linux/minmax.h:31:2: note: expanded from macro '__is_signed'
+>    31 |         __builtin_choose_expr(__is_constexpr(is_signed_type(typeo=
+f(x))),        \
+>       |         ^
+> include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+>    77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARG=
+S__, #expr)
+>       |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~=
+~~~~~~~~~~~
+> include/linux/build_bug.h:78:56: note: expanded from macro '__static_asse=
+rt'
+>    78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>       |                                                        ^~~~
+> 1 error generated.
