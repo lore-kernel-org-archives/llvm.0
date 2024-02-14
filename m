@@ -1,180 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793DFD51B;
-	Wed, 14 Feb 2024 06:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497CB11739
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 07:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707892520; cv=none; b=PfsNTQ+fNUiGsc1E8bxVRG2Vy17o2n8W4uBtLSmcZOVqksKB468hjlN2+35SeCklzhEnfL9BiY4EL5WRiOhZ6xzNFoisvsM3WgpaiEd8b6W+hGZKpnVPZWwLoStiDNfnv+EhwCxpqHG4cA86nQ+k4UWPCYXB2zLVjoVybihrCBI=
+	t=1707895735; cv=none; b=iirkwHxLWzNIMICHrlIu60Z7sriL4KYhaepY285aabKAE/x9mHQ7dyhCupiatqk7g90GeloQR8T3Uio05F8XT7ruDKfGYnmRnfIoXul8oXoO19bv2WpzM5dTvFSZgw/L7/vYRSMQpz65wUKDrJGXqYCX5PcWmQzH9PNOO+VgFTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707892520; c=relaxed/simple;
-	bh=H/Fa0Ckc85OnRwQaxpFQNTXGMi+i0uX2zO0JNLy5iSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F4PkvFpWl6NSZMhRqfFuBYbMk0nnk04xgMxUGxSpk+jp9l5BHnpRLmxPvDmupIqqeZq0+roT0YcNIDWJhrWreutZwXiM5Vf87omkUJEaAqhg4jsucbWZkI6qRiCgxVa/iAqb2f0pX6bmytfsAg2jUyaA+pmsmh0qPJtBeepX850=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IboZsip2; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707895735; c=relaxed/simple;
+	bh=193v/W9i2ERfHNUMgfSABTMbWEw8kJdYQvvqGCxRdl0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VU5z7pTNuOVqm+cRwZT6IB7dDqSYgg6ye2hXTsBDK8/C9y1F8TRhSfbyaHllgbYpqaWLZzH1dX6iEjuZQbPNYZ4N7aBduylQD91eH97LPE+CBF4AMqc8BzWG6p3sTaFhKV+l2u0l/U69WxMgyYkAE0SZMJOBJ2WVtKP0zA3mVPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYP0N+9w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IboZsip2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707892518; x=1739428518;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=H/Fa0Ckc85OnRwQaxpFQNTXGMi+i0uX2zO0JNLy5iSo=;
-  b=IboZsip29NJ6d3X4Dimp0+DLKLgdyza29eMgZwz90uw+ixzjUwtP7wGe
-   52djVV0a3SMWD6LTu6fB4s31RTlyKjQflxSitf40EPM0tX3ZVin9aoyrz
-   Fu1U32RdxZgGyspAxh4S91oKKtV/DEAQKAoAYJSLZWBzKOdwNlAd9SVHf
-   CtnXQkHnAyLLZrG++X4IeLzLYoLrs3rzt4PQksmFF3mHPCOWdQgv2oJxn
-   41Oih28K1h8m1E8CKfs1sh6pZzAuI6V1BkZuqLd5bDGZIux7fT9mFNCzO
-   3ot+l+3QsBLVsq1skhF7NtVtkG3d6KgtFqnOk4Vxzgd9CeKSGR3l/MAIo
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="5746960"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="5746960"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 22:35:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="7756423"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 13 Feb 2024 22:35:17 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ra8rS-0008XO-0i;
-	Wed, 14 Feb 2024 06:35:14 +0000
-Date: Wed, 14 Feb 2024 14:34:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org
-Subject: [sailus-media-tree:ipu6 65/67]
- drivers/misc/mei/platform-vsc.c:304:42: warning: unknown escape sequence
- 'xFFFFFFC5'
-Message-ID: <202402141409.ivNcqTdP-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYP0N+9w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8613C43141
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 07:28:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707895734;
+	bh=193v/W9i2ERfHNUMgfSABTMbWEw8kJdYQvvqGCxRdl0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uYP0N+9wBwi/1g/8CtcqR4KmpTKXE7wAa+NSqQoOiXCZ4T2v/xCqqT+BK3SaQC3pX
+	 VpyR898Vg3HqW7VzkohGBgCi7O/IkL0OaNHr2DZFXrsU0j/Q5V0WKTU6wuVsGuGAkN
+	 ON5dzOd5STH1PkweByWFMGTnu28Yjn+shjv1f9+z6yDalZpE0fvX1MSm9AJTPZM7ta
+	 u0HdyZzZE+boIF5AwcJ9WjKBH8yexnmoQc2hSxEMSpCLNoN4tI6XVjYwbKl514rlZz
+	 MEtSAZXvuA2KIijq64oGhmzy1g6Z75dFTGK4qAeKWvzBPR7AphdXRITvAlvRfcWmFd
+	 3qikjoF2JQV0g==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5112bd13a4fso560495e87.0
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 23:28:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVf4EIEeY87xxx3PMN7oasgPWBwyMazHcWri6JZDaOjxELeR0+pddJS7+FQGKMp8M6IxqldYMsP3n9bCXTOnOQaqFCxxw==
+X-Gm-Message-State: AOJu0YwL5UFIaZR5WhCMbmJXiv3x397MC+UDCHAlg9hN5MSwzPYw6mou
+	e7TSiBdKEa3av3yxhKoaKk9BKFVm0fyPY8QkEy4/1zeb/OaVzgon7Xe0VnmayRg3pJMl6QmCEpA
+	ulhDhH0I71jFIhGfTvy39JsL9lwY=
+X-Google-Smtp-Source: AGHT+IEqt4BKQ9Y/nYdGfYCcllEmArSxZqjfK/gjK0QYvvSclBfPOgFcv1FCWgqasjjJ/YUMyF8T/FNuzwzM8YrBMq8=
+X-Received: by 2002:a19:655e:0:b0:511:9f53:3974 with SMTP id
+ c30-20020a19655e000000b005119f533974mr373057lfj.2.1707895732786; Tue, 13 Feb
+ 2024 23:28:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-14-ardb+git@google.com> <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
+ <CAMj1kXG4rSGaB8Q2qFcgOH=dqS0yvR8Ofur=h5C-jq_TqiFzVg@mail.gmail.com>
+In-Reply-To: <CAMj1kXG4rSGaB8Q2qFcgOH=dqS0yvR8Ofur=h5C-jq_TqiFzVg@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 14 Feb 2024 08:28:41 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFdUD_kCh0h1HcpOVoQJNcP11OHB+FJ-=HGfP3RRdy81w@mail.gmail.com>
+Message-ID: <CAMj1kXFdUD_kCh0h1HcpOVoQJNcP11OHB+FJ-=HGfP3RRdy81w@mail.gmail.com>
+Subject: Re: [PATCH v4 01/11] x86/startup_64: Simplify global variable
+ accesses in GDT/IDT programming
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://linuxtv.org/sailus/media_tree.git ipu6
-head:   ccfe5fafd33d1b056e3ab93de494cd877a5783a2
-commit: b6eaf785293ecd8deb07ddf9a178d10612340e86 [65/67] debug
-config: i386-randconfig-016-20240214 (https://download.01.org/0day-ci/archive/20240214/202402141409.ivNcqTdP-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402141409.ivNcqTdP-lkp@intel.com/reproduce)
+On Tue, 13 Feb 2024 at 22:53, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Tue, 13 Feb 2024 at 21:06, Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > On Tue, Feb 13, 2024 at 01:41:45PM +0100, Ard Biesheuvel wrote:
+> > > @@ -632,5 +616,5 @@ void __head startup_64_setup_env(unsigned long physbase)
+> > >                    "movl %%eax, %%ss\n"
+> > >                    "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
+> > >
+> > > -     startup_64_load_idt(physbase);
+> > > +     startup_64_load_idt(&RIP_REL_REF(vc_no_ghcb));
+> >
+> > It took me a while to figure out that even if we pass in one of the two
+> > GHCB handler pointers, we only set it if CONFIG_AMD_MEM_ENCRYPT.
+> >
+> > I think this ontop of yours is a bit more readable as it makes it
+> > perfectly clear *when* the pointer is valid.
+> >
+>
+> Looks fine to me.
+>
+> > Yeah, if handler is set, we set it for the X86_TRAP_VC vector
+> > unconditionally but that can be changed later, if really needed.
+> >
+>
+> We might call the parameter 'vc_handler' to make this clearer.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402141409.ivNcqTdP-lkp@intel.com/
+Actually, we can merge set_bringup_idt_handler() into its caller as well:
 
-All warnings (new ones prefixed by >>):
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index aee99cfda4eb..804ba9a2214f 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -501,30 +501,22 @@ void __init __noreturn
+x86_64_start_reservations(char *real_mode_data)
+  */
+ static gate_desc bringup_idt_table[NUM_EXCEPTION_VECTORS] __page_aligned_data;
 
->> drivers/misc/mei/platform-vsc.c:304:42: warning: unknown escape sequence '\xFFFFFFC5' [-Wunknown-escape-sequence]
-     304 |         dev_warn(mei_dev->dev, "mei vsc event cb\ņ");
-         |                                                 ^
-   include/linux/dev_printk.h:146:62: note: expanded from macro 'dev_warn'
-     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ^~~
-   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
->> drivers/misc/mei/platform-vsc.c:304:44: warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-     304 |         dev_warn(mei_dev->dev, "mei vsc event cb\ņ");
-         |                                                  ^
-   include/linux/dev_printk.h:146:62: note: expanded from macro 'dev_warn'
-     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ^~~
-   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   drivers/misc/mei/platform-vsc.c:333:46: warning: unknown escape sequence '\xFFFFFFC5' [-Wunknown-escape-sequence]
-     333 |         dev_warn(mei_dev->dev, "mei vsc event cb end\ņ");
-         |                                                     ^
-   include/linux/dev_printk.h:146:62: note: expanded from macro 'dev_warn'
-     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ^~~
-   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   drivers/misc/mei/platform-vsc.c:333:48: warning: illegal character encoding in string literal [-Winvalid-source-encoding]
-     333 |         dev_warn(mei_dev->dev, "mei vsc event cb end\ņ");
-         |                                                      ^
-   include/linux/dev_printk.h:146:62: note: expanded from macro 'dev_warn'
-     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ^~~
-   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   4 warnings generated.
+-static void __head set_bringup_idt_handler(gate_desc *idt, int n,
+void *handler)
+-{
+-#ifdef CONFIG_AMD_MEM_ENCRYPT
+-       struct idt_data data;
+-       gate_desc desc;
+-
+-       init_idt_data(&data, n, handler);
+-       idt_init_desc(&desc, &data);
+-       native_write_idt_entry(idt, n, &desc);
+-#endif
+-}
+-
+ /* This may run while still in the direct mapping */
+-static void __head startup_64_load_idt(void *handler)
++static void __head startup_64_load_idt(void *vc_handler)
+ {
+        struct desc_ptr desc = {
+                .address        = (unsigned
+long)&RIP_REL_REF(bringup_idt_table),
+                .size           = sizeof(bringup_idt_table) - 1,
+        };
+-       gate_desc *idt = (gate_desc *)desc.address;
++       struct idt_data data;
++       gate_desc idt_desc;
+
+-       if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
+-               /* VMM Communication Exception */
+-               set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
++       if (vc_handler) {
++               init_idt_data(&data, X86_TRAP_VC, vc_handler);
++               idt_init_desc(&idt_desc, &data);
++               native_write_idt_entry((gate_desc *)desc.address,
++                                      X86_TRAP_VC, &idt_desc);
++       }
+
+        native_load_idt(&desc);
+ }
 
 
-vim +/xFFFFFFC5 +304 drivers/misc/mei/platform-vsc.c
-
-   291	
-   292	static void mei_vsc_event_cb(void *context)
-   293	{
-   294		struct mei_device *mei_dev = context;
-   295		struct mei_vsc_hw *hw = mei_dev_to_vsc_hw(mei_dev);
-   296		struct list_head cmpl_list;
-   297		s32 slots;
-   298		int ret;
-   299	
-   300		if (mei_dev->dev_state == MEI_DEV_RESETTING ||
-   301		    mei_dev->dev_state == MEI_DEV_INITIALIZING)
-   302			return;
-   303	
- > 304		dev_warn(mei_dev->dev, "mei vsc event cb\ņ");
-   305	
-   306		INIT_LIST_HEAD(&cmpl_list);
-   307	
-   308		guard(mutex)(&mei_dev->device_lock);
-   309	
-   310		while (vsc_tp_need_read(hw->tp)) {
-   311			/* check slots available for reading */
-   312			slots = mei_count_full_read_slots(mei_dev);
-   313	
-   314			ret = mei_irq_read_handler(mei_dev, &cmpl_list, &slots);
-   315			if (ret) {
-   316				if (ret != -ENODATA) {
-   317					if (mei_dev->dev_state != MEI_DEV_RESETTING &&
-   318					    mei_dev->dev_state != MEI_DEV_POWER_DOWN)
-   319						schedule_work(&mei_dev->reset_work);
-   320				}
-   321	
-   322				return;
-   323			}
-   324		}
-   325	
-   326		mei_dev->hbuf_is_ready = mei_hbuf_is_ready(mei_dev);
-   327		ret = mei_irq_write_handler(mei_dev, &cmpl_list);
-   328		if (ret)
-   329			dev_err(mei_dev->dev, "dispatch write request failed: %d\n", ret);
-   330	
-   331		mei_dev->hbuf_is_ready = mei_hbuf_is_ready(mei_dev);
-   332		mei_irq_compl_handler(mei_dev, &cmpl_list);
-   333		dev_warn(mei_dev->dev, "mei vsc event cb end\ņ");
-   334	}
-   335	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+(^^^ plus your changes boot tested on SEV-SNP)
