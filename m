@@ -1,159 +1,109 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A242F13FFC
-	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 10:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B717B1B958;
+	Wed, 14 Feb 2024 12:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707907492; cv=none; b=OUulN3nJH9RoiH2Q8XKzukmFHzTI50K1SScPNDndXsSgAQt8CmcfQ6H7AsFo9JinvW1wZ9nM3St1qztlvTizvMAMyn0Pmd/rrenW5QClQY5ZMl/Gh/yNKACLu1ZfyU1EVblmqjoujHWdVa2yN1eHePkYODUrSFADViN2CjgcuKQ=
+	t=1707913093; cv=none; b=Cwi69qQH8hF9mz9queFb0ARscAyvdT3jKpXKiHNQ0D9HaGMMeFZmNUCX5dcubUc2bc+qPuPilNAJrYBNeoGbACItQ2dM0Be7fA/N7wuCBsl9VZou5skfRm2+AuMKFz3/QlBjdQ9IkOwd5W3lc1gDdVlyWJIS6TT+2SDFfM016Go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707907492; c=relaxed/simple;
-	bh=vdUVMSN/DBEbi9xLtereQlPEved8sJ0OAE7THRyHVaE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=ISVDO3fgyctl4WWgYYrXbxRuIfsWzHQO/uDU26P6z0Kurp6GAh6D4mGZoAL2yE3W4WB3m/xr9vE+5HmhMpZLXaBuAPfHVwdotnYY9DlnX38vSicnLMbQ/m9wGywKvcdoCSnY3r15J091T0WO1broWr8kgNisvef1k8HrN9ltp8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-56-wLKyE-NdNOaDYt-85i9Meg-1; Wed, 14 Feb 2024 10:42:20 +0000
-X-MC-Unique: wLKyE-NdNOaDYt-85i9Meg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 14 Feb
- 2024 10:41:59 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 14 Feb 2024 10:41:59 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Kent Overstreet' <kent.overstreet@linux.dev>, Nathan Chancellor
-	<nathan@kernel.org>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>, Will Deacon
-	<will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	"linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>
-Subject: RE: static assertion failed in fs/bcachefs/journal_io.c
-Thread-Topic: static assertion failed in fs/bcachefs/journal_io.c
-Thread-Index: AQHaXuOGUA5YsYgoKEe2qel95jLubrEJmFgw
-Date: Wed, 14 Feb 2024 10:41:59 +0000
-Message-ID: <b91d20f513e642669f716a217f15f9de@AcuMS.aculab.com>
-References: <20240213215640.GA80329@dev-arch.thelio-3990X>
- <wl7u2f7gvrw5yeyoa4rit4fy5kepn5tmqgzelrduhpajqvcuxy@4imci5mhzecr>
-In-Reply-To: <wl7u2f7gvrw5yeyoa4rit4fy5kepn5tmqgzelrduhpajqvcuxy@4imci5mhzecr>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1707913093; c=relaxed/simple;
+	bh=ydQckTFp1oxftSLw2+09PZBN+NmK7Vl3pl5OWF9pR1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=scyTvuxxXobUd2PJbjh/N4EXA/5eQDaXUGC5GRzJehUNhSDX65kHzIXzUOAI0RCSev1fasHZFgL+Jq5iTzimDE/WQ9zt74pwodyJ0dLp19MJ3gSe8iYW8XKeS817erLhmhb/pyNNti4aB9J/BXBqPo0fAYj+X/355w1zBFoPQGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=O2g1UjlX; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="O2g1UjlX"
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41EC6nFk027524;
+	Wed, 14 Feb 2024 12:18:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=FO7kM2t1hHvlMoHVxfJUhmtbNNq5lW1oJMoCJ4hc5cM=;
+ b=O2g1UjlXw3xG+Sl67LOcpTE/0vEkkypeHCW5dTO0ubQoyFzJ6tR9oDTcJ2LZgHwO4mrc
+ b7aLFyHklsPoy/BjDMuRztJrsBuk614h2UO/BUpmzSqHvejwPBJJMKWj+ZQZYUcmp2cG
+ 0bl3xTvQz81aHmUZl8qpgxLwLjZucF+L1JT3pf1VIXCRAB3jj1n1Y72USOxmwwkzzOdO
+ f5fOJXLmqA712+qPvX0/q5UTEpABhDoVhX9h4kkN0PTiho8u2E8VrO4kB9lmNld3C/m9
+ e5gLCPtupydRIHKXmPhgXITezUlKuoqy6Gms9TjnufNYSsHH0nCubL4nBURlMD0WIg70 RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w8w8409b9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 12:18:04 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41EC8F2b000930;
+	Wed, 14 Feb 2024 12:18:04 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w8w84099g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 12:18:04 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41EAQm4J016517;
+	Wed, 14 Feb 2024 12:18:02 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mymnp45-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 12:18:02 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41ECHudX5964342
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 14 Feb 2024 12:17:58 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C31CE20040;
+	Wed, 14 Feb 2024 12:17:56 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 80FAB2004B;
+	Wed, 14 Feb 2024 12:17:56 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.60])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 14 Feb 2024 12:17:56 +0000 (GMT)
+Date: Wed, 14 Feb 2024 13:17:55 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Fangrui Song <maskray@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ndesaulniers@google.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev
+Subject: Re: [PATCH 06/11] s390/boot: vmlinux.lds.S: Handle '.rela' sections
+Message-ID: <20240214121755.6438-C-hca@linux.ibm.com>
+References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
+ <20240207-s390-lld-and-orphan-warn-v1-6-8a665b3346ab@kernel.org>
+ <CAFP8O3+L6Jpgktk50UBKg_SodH-DTAW2syZueUqxdZsxrOT3bg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFP8O3+L6Jpgktk50UBKg_SodH-DTAW2syZueUqxdZsxrOT3bg@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HFECV309TxvMBgETUAvxE9F6Rql2XSz-
+X-Proofpoint-GUID: e4JmGb2ncB2o78Tu8NB0WgnTfDIi6Sps
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-14_05,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=307 adultscore=0
+ spamscore=0 impostorscore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402140096
 
-From: Kent Overstreet
-> Sent: 14 February 2024 01:17
->=20
-> bcachefs bugs should go to the bcachefs mailing list; I assume this is
-> just a case where we need min_t instead of min, if so I'll fix it
-> shortly
+On Mon, Feb 12, 2024 at 09:18:34PM -0800, Fangrui Song wrote:
+> >         ASSERT(SIZEOF(.plt) == 0, "Unexpected run-time procedure linkages detected!")
+> > +       .rela.dyn : {
+> > +               *(.rela.*) *(.rela_*)
+> > +       }
+> > +       ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
+...
+> Commit 5354e84598f264793265cc99b4be2a2295826c86 ("x86/build: Add
+> asserts for unwanted sections")
+> specifies `*(.rela.*) *(.rela_*)` but it's not clear why `.rela_*` is
+> included. We only need .rela.* (see also ld.bfd --verbose)
+> 
+> This patch LGTM with this changed.
 
-You should pretty much never use min_t() - it contains casts that are just
-waiting to cause grief.
-
-I'm sure a bug got raised on clang so it outputting the source of the
-_Static_assert() when there is a message.
-That just makes the error message worse.
-
-Hacking at the error message, it comes from (expanded by min()):
-
-min(replicas_want, ({
-    do {
-        __attribute__((__noreturn__))
-            extern void __compiletime_assert_578(void)
-            __attribute__((__error__("Unsupported access size for {READ,WRI=
-TE}_ONCE().")));
-        if (...)
-            __compiletime_assert_578();
-    } while (0);
-    ({
-        typeof(&(c->opts.metadata_replicas_required)) __x =3D &(c->opts.met=
-adata_replicas_required);
-        int atomic =3D 1;
-        union {
-            typeof( _Generic((*__x),
-                char: (char)0,
-                unsigned char: (unsigned char)0,
-                signed char: (signed char)0,
-                unsigned short: (unsigned short)0,
-                signed short: (signed short)0,
-                unsigned int: (unsigned int)0,
-                signed int: (signed int)0,
-                unsigned long: (unsigned long)0,
-                signed long: (signed long)0,
-                unsigned long long: (unsigned long long)0,
-                signed long long: (signed long long)0,
-                default: (*__x))) __val;
-            char __c[1];
-        } __u;
-        switch (sizeof(c->opts.metadata_replicas_required)) {
-        case 1: asm volatile("..." : "=3Dr" (*(__u8 *)__u.__c) : "Q" (*__x)=
- : "memory");
-            break;
-        case 2: asm volatile("..." : "=3Dr" (*(__u16 *)__u.__c) : "Q" (*__x=
-) : "memory");
-            break;
-        case 4: asm volatile("..." : "=3Dr" (*(__u32 *)__u.__c) : "Q" (*__x=
-) : "memory");
-            break;
-        case 8: asm volatile("..." : "=3Dr" (*(__u64 *)__u.__c) : "Q" (*__x=
-) : "memory");
-            break;
-        default:
-            atomic =3D 0;
-        }
-        atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(__x))__x);
-    });
-}))
-
-So I suspect it is min(replicas_want, READ_ONCE(replices_required)).
-I think replicas_want is unsigned (int) and replicas_required u8.
-
->=20
-> On Tue, Feb 13, 2024 at 02:56:40PM -0700, Nathan Chancellor wrote:
-> > Hi all,
-> >
-> > I am not really sure where to go with this, so I figured I would loop
-> > some people in and see if we can figure out what is going on here.
-> >
-> > After commit 67a8e7de7ef0 ("bcachefs: Clamp replicas_required to
-> > replicas") in linux-next, I see a massive error occur when building for
-> > ARCH=3Darm64 with both CONFIG_BCACHEFS_FS and CONFIG_LTO enabled, which=
- is
-> > important because arm64 defines its own __READ_ONCE() with LTO enabled.
-> > The error appears to be related to the minmax.h changes that went into
-> > 6.7; I think it is specifically around commit d03eba99f5bf ("minmax:
-> > allow min()/max()/clamp() if the arguments have the same signedness.").
-> >
-> > As far as I can tell, replicas_want and the metadata_replicas_required
-> > member in struct bch_opts should have the same signedness, unless the
-> > __READ_ONCE() macro is messing something up, which is kind of hard to
-> > tell at this point...
-
-The last line of that READ_ONCE() expansion looks dubious to me.
-The result type is independent of 'atomic' and I suspect ?: counts
-as an arithmetic operation and u8 gets promoted to int.
-
-That would fail the old min() as well as the new one.
-Is this code new? I can see it online in 6.8.4-rc4.
-
-=09David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
-
+I'll keep it as it is, just to be consistent with x86.
