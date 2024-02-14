@@ -1,87 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440BE4315C;
-	Wed, 14 Feb 2024 13:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED5053801;
+	Wed, 14 Feb 2024 13:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707915628; cv=none; b=k23+bzlLsCyWYWoxFrAUBJBtHGzXigk9stq4+9K3h8d1j9gng7OFWpVifqInPdlO0U7raVflWaq13ECesJp59Yg5vaXorl+P67Lc0qKa96sj0lGOKvqufPgsqmIhi0H4nMOZtW9JwErxHa9Ugeasnnzg56kLMUYGtARtyZIb8UU=
+	t=1707916376; cv=none; b=sN8DGNYJDQRl6dP2156OrZWqOVgHFzBALLFBCf1iS32ySsnMrV1HU3C2hQ+X3Ihv6juZx/USJWypv1KggvSvTS4fMSQBIJSCtZolm26GNrM0iwy7qMdv3V/YELsuzeDX+6B5ezeoS9jC4SbM1piX+oYp+JiA61fZRtq7pDikCRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707915628; c=relaxed/simple;
-	bh=3pRvKC+/bkYHXhcV5Eim0BrHFJuWGf19pUaCh6PMG78=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=TvlJ737WpHlF4tBzV1aCosMy09XDyCItSVySgG/A3HYgaVhx+I4iD/Vz2WkNBOJHCd8N61a5rlVP+ZAATMy94WWfiWHgL6iKNkxooY/9l4i2D49a8kPeDvC4+Rsdig950sNt1TD9OzLr7Aa768R3J9yRpgC8xif4fAll8OWRNW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdwdWDKm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707916376; c=relaxed/simple;
+	bh=ppF6Ky/9HUsd6/RqDwiUAbsV3+Zz3zn7DpSwLi/fI4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S5OMArRv5sICMCMVyN/8DGBOuvAVVSKXqkIJBxNmgqDRmN7M18aOcOyKekiBOixtAk42ql/XVgRIBpA9Zqqe6xpmNEskBbtkPobMaNk6ClbvPhNaWuJQyrjdxQMWowPLc9euWenPwwueArso1FYJ8cGaKSumg18viM1RPa6NgNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAWk6DZA; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdwdWDKm"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B63A1C43390;
-	Wed, 14 Feb 2024 13:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707915627;
-	bh=3pRvKC+/bkYHXhcV5Eim0BrHFJuWGf19pUaCh6PMG78=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gdwdWDKmuqwx9ndoTdlSlTiJPGJzCKaqfK7oN8oHYovjbc3ELCNfHUxucC8TLevFJ
-	 Sbm7wjl6T+jXEwopqdKnbM5JJ0flqavvlh2h0afJzajGVi/SjSygjEiePaOorycyiW
-	 k1CBTKPx89Q8Phi0PdR+/JjU0WzLuRQ5ztGNGlWMSflWGu0c4+/ErxCxkK4cUrg0vG
-	 yUM/jc59x0DQ9g43XgPhxlnzLsP56BQsjUM0r4coAzRwQGVhdJHwzn3JeC3LydcRgT
-	 9r6/u1ncZMwWtzDRx6TjYV5uF+JHAiG/PbS5sZhV48Txmm9+eC4leTrPcbmwU4CEI0
-	 pwRlZtzdLzokg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99821D84BCE;
-	Wed, 14 Feb 2024 13:00:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAWk6DZA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707916375; x=1739452375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ppF6Ky/9HUsd6/RqDwiUAbsV3+Zz3zn7DpSwLi/fI4c=;
+  b=KAWk6DZA/bEJJ43w0wHxYt7dtbOXEdFe4RLrdtABU0eyBu1djpus55qm
+   Rp5FuxvDu6iXkvYiEJC5qCFsnvmaFre7f3SudGfGZZtce6nLn25JGxFUi
+   Xr9jvUDi/Hrj3LGw08bqvXdPnVxagKmvMJEUR7olvQ+MLsNJ+kT2TGSY/
+   wL6WpXHGCHXhKBppHBUcB3YwkLYTnV0Dgv8KDHlEB4hAjLkatwHAUB8MS
+   G/zU0HURpg8N4AzHLJhDOSs6JpcPn6gjT5yzjJ9e90gSMNI/+5+VLR9ZZ
+   7kEvStvQt7rvV6ZoU4XZG+rLguLk47RnG3tq3wKFWKwKhtRxsb1asDT3B
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="5778798"
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="5778798"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 05:12:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="3548587"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 14 Feb 2024 05:12:51 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1raF4C-0008mX-2o;
+	Wed, 14 Feb 2024 13:12:48 +0000
+Date: Wed, 14 Feb 2024 21:11:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Balint Dobszay <balint.dobszay@arm.com>,
+	op-tee@lists.trustedfirmware.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jens.wiklander@linaro.org, sumit.garg@linaro.org, corbet@lwn.net,
+	balint.dobszay@arm.com, sudeep.holla@arm.com, gyorgy.szing@arm.com
+Subject: Re: [PATCH 1/3] tee: optee: Move pool_op helper functions
+Message-ID: <202402142000.xRg35j1i-lkp@intel.com>
+References: <20240213145239.379875-2-balint.dobszay@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ethernet: cpts: fix function pointer cast warnings
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170791562762.13263.17726811271145661649.git-patchwork-notify@kernel.org>
-Date: Wed, 14 Feb 2024 13:00:27 +0000
-References: <20240213101654.461239-1-arnd@kernel.org>
-In-Reply-To: <20240213101654.461239-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: kuba@kernel.org, arnd@arndb.de, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, richardcochran@gmail.com,
- grygorii.strashko@ti.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240213145239.379875-2-balint.dobszay@arm.com>
 
-Hello:
+Hi Balint,
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+kernel test robot noticed the following build errors:
 
-On Tue, 13 Feb 2024 11:16:34 +0100 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang-16 warns about the mismatched prototypes for the devm_* callbacks:
-> 
-> drivers/net/ethernet/ti/cpts.c:691:12: error: cast from 'void (*)(struct clk_hw *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->   691 |                                        (void(*)(void *))clk_hw_unregister_mux,
->       |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/device.h:406:34: note: expanded from macro 'devm_add_action_or_reset'
->   406 |         __devm_add_action_or_reset(dev, action, data, #action)
->       |                                         ^~~~~~
-> drivers/net/ethernet/ti/cpts.c:703:12: error: cast from 'void (*)(struct device_node *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->   703 |                                        (void(*)(void *))of_clk_del_provider,
->       |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/device.h:406:34: note: expanded from macro 'devm_add_action_or_reset'
->   406 |         __devm_add_action_or_reset(dev, action, data, #action)
-> 
-> [...]
+[auto build test ERROR on lwn/docs-next]
+[also build test ERROR on soc/for-next linus/master v6.8-rc4 next-20240214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here is the summary with links:
-  - ethernet: cpts: fix function pointer cast warnings
-    https://git.kernel.org/netdev/net/c/9b23fceb4158
+url:    https://github.com/intel-lab-lkp/linux/commits/Balint-Dobszay/tee-optee-Move-pool_op-helper-functions/20240213-225716
+base:   git://git.lwn.net/linux.git docs-next
+patch link:    https://lore.kernel.org/r/20240213145239.379875-2-balint.dobszay%40arm.com
+patch subject: [PATCH 1/3] tee: optee: Move pool_op helper functions
+config: i386-buildonly-randconfig-002-20240214 (https://download.01.org/0day-ci/archive/20240214/202402142000.xRg35j1i-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402142000.xRg35j1i-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402142000.xRg35j1i-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/tee/tee_shm.c:227:15: error: call to undeclared function 'virt_to_phys'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     227 |         shm->paddr = virt_to_phys(shm->kaddr);
+         |                      ^
+   1 error generated.
+
+
+vim +/virt_to_phys +227 drivers/tee/tee_shm.c
+
+   204	
+   205	int tee_shm_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
+   206					 size_t size, size_t align,
+   207					 int (*shm_register)(struct tee_context *ctx,
+   208							     struct tee_shm *shm,
+   209							     struct page **pages,
+   210							     size_t num_pages,
+   211							     unsigned long start))
+   212	{
+   213		size_t nr_pages = roundup(size, PAGE_SIZE) / PAGE_SIZE;
+   214		struct page **pages;
+   215		unsigned int i;
+   216		int rc = 0;
+   217	
+   218		/*
+   219		 * Ignore alignment since this is already going to be page aligned
+   220		 * and there's no need for any larger alignment.
+   221		 */
+   222		shm->kaddr = alloc_pages_exact(nr_pages * PAGE_SIZE,
+   223					       GFP_KERNEL | __GFP_ZERO);
+   224		if (!shm->kaddr)
+   225			return -ENOMEM;
+   226	
+ > 227		shm->paddr = virt_to_phys(shm->kaddr);
+   228		shm->size = nr_pages * PAGE_SIZE;
+   229	
+   230		pages = kcalloc(nr_pages, sizeof(*pages), GFP_KERNEL);
+   231		if (!pages) {
+   232			rc = -ENOMEM;
+   233			goto err;
+   234		}
+   235	
+   236		for (i = 0; i < nr_pages; i++)
+   237			pages[i] = virt_to_page((u8 *)shm->kaddr + i * PAGE_SIZE);
+   238	
+   239		shm->pages = pages;
+   240		shm->num_pages = nr_pages;
+   241	
+   242		if (shm_register) {
+   243			rc = shm_register(shm->ctx, shm, pages, nr_pages,
+   244					  (unsigned long)shm->kaddr);
+   245			if (rc)
+   246				goto err;
+   247		}
+   248	
+   249		return 0;
+   250	err:
+   251		free_pages_exact(shm->kaddr, shm->size);
+   252		shm->kaddr = NULL;
+   253		return rc;
+   254	}
+   255	EXPORT_SYMBOL_GPL(tee_shm_pool_op_alloc_helper);
+   256	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
