@@ -1,69 +1,77 @@
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDCE633E3
-	for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 23:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A39C191
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 00:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707868598; cv=none; b=DM9g3ZJ0ywM7Lf5jkkeBdoJTrS/NFdLLIxnuE89mfbM6EX5Il1BxMkx1tlMf09XptwHyymH3sptph+ryD6QQ+EcP5SxN3edBlkcrtjaxlJy7s8x3idt2oS9V7jzhpK5LOE0sgQoWSSXDcBX0BcFXt3OcRzfUMw5lMuk9uxXuTtA=
+	t=1707870183; cv=none; b=QkmfA4kf2DVdNozj6TNTpNjNnzWg69ruoHT/xkNeS+7UhpkEFk7KxFB8+FdbjFdAwzvlijn4w/TJ2hizqmEz3O+8rME5UVaoEwmJixrGTHL3I8tKpnjsR1oTAle4cRfrSnLESrLDc+f9wzaqzy0PGkoxodXaC6Sc41K7PmoDCuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707868598; c=relaxed/simple;
-	bh=eG1Z7qXp1jDGBo50wsnYjDQwhUF5D2ifiNDV1RQ+kpQ=;
+	s=arc-20240116; t=1707870183; c=relaxed/simple;
+	bh=ds1jHombM1rmzITyFT/LkXRFY7v4NO/aeENbS+5oo6w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r4GP+yKOX1PxGyCQv9wU5dSRLtelOzhsj8WycurlQX79oyNbGo7i2n79ZkX0PigYsli4TZXEHHaBH0b9ye/z8BChRACmFq2qM8GPyCzGdwfc3TNZ3r7jixWV03216svxZFsvtyVFQ045abNrSglK9mlJLoQMlH/Nx9dgXUVaxdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JKubzfen; arc=none smtp.client-ip=209.85.166.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=pbthYt3HQJl8cy57eJIcaKncpPeU0nNOJvhzbZSA3EvcNU5wXmSSGt3Dk8WsCtjma+d2fyMOh6ttaBtM5gKeDdxLHx6paWadaGtAMzmrApMP07S7t7sfgVbe17poB0C2khIdb5zRfDGNCYnss2bf6KteMoUdGH/VUv0Ub0pPHc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UKGkNUX6; arc=none smtp.client-ip=209.85.166.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JKubzfen"
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3642147202fso2974035ab.0
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 15:56:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UKGkNUX6"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-363b5ce4260so14509955ab.0
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 16:23:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707868596; x=1708473396; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1707870180; x=1708474980; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5i0+7qUkGUR+StQ2aGirnK2+rjtRkZXXH7K9o3+5lE=;
-        b=JKubzfenSfn4I61kyZJ1AYPFwqXFTcO/p5jU8KivUduS0qda5jeHyQmUoIsQWkp+rd
-         XTv8qJ3E/unPgCP4aaAUpDN1dP/c0dwfrMJT4soe/zCILs8HSb3vEpdB5qPKL2px8Uqo
-         pf3OJcaiyOhG289O0Dw2P9Jta1jcgdbphTsG5xL4qbBUQpVFA4Kd5BV5jEteVnVUk7lO
-         ZfrboAr+McMdUsDgmIo/h0NvXcOB3+/jsOYyCNiNV8GNbkx7yTV/1kPmvDigVSSEF0x9
-         i9n5BYGFDV1aj9VE4R2vv5BseN1Z8K2wiEJHNKj90TV2atricYtIX/QfsaI1jUn/qux6
-         UF9g==
+        bh=/jWP8VrxhP1EJOZNrm4lfKLrk9GA9+9HRFG23gj3nBY=;
+        b=UKGkNUX65WmRDSnJbb5m3mJfGtXiAG0PXygN06YSo4bIIO5/h64qOMQLJUFi3zzWnO
+         NV0wcNnJmpuNWbJhz9k7M3d3jAh/Po/Yl+5rQPPj3FoaXLE+mzj8zS4/ETsj1J/8A+ul
+         RJHvW2Tr0gQcoCiMU0PAVEBbktzk5EBoQxhs7H2txDkMrzP99cDLfva/bOjLlEy2xB/L
+         3e8vRpuJd3K5W6o7KArw5KyxnXGyGX2vT4vfOiRiAhBKZ7yKMc56dj+Mc4fHkzOg3D1Y
+         c6n9avJSEmzgfU0Kq5Invd98+7o7O8VYpn1H9cUJlOFuDqt4X/aC30jNkTA0uvJk4EK0
+         HGVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707868596; x=1708473396;
+        d=1e100.net; s=20230601; t=1707870180; x=1708474980;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j5i0+7qUkGUR+StQ2aGirnK2+rjtRkZXXH7K9o3+5lE=;
-        b=uNo7ovhHArnYqlofG74zNYpgIZI/Bq/vC3EE5ppR/P0UCHqq7nUv+0PNS+1iylObrC
-         oxij8/4JDHnALJp7SeM229+cM3vfuJnEUcX/IwUgoKvT9MiN5/70xb2XCbZ2iWBInB6L
-         TiPeHjr+0dPK8D8oiDwuU4FtAX54ijygogH7VxoBlpmZqTj5qWqfnnNoJQKww64yzHsj
-         tBEB3Orw/A290TzPYQC/0mFOdvvdLdvuzwHPLs6aLCGo/yoep8w3kHZEKPWKuf2dJb52
-         lqCs1Hco46EYAjnKXNnAMYf9ZA1MEEWKsO9Rxd6dzJYFCsp++RyGIEgcVsITTc2omgJK
-         X3hg==
-X-Forwarded-Encrypted: i=1; AJvYcCUO+2iri1EeShC/FNSC9llYrJjLiovGSJ4QMkByseT8klitAUTiMHDsoYdroof81nrtBIwhDPFeukLL7uqG3pGvaMCrDQ==
-X-Gm-Message-State: AOJu0YxCsY6Kcu9fCs5Dza3pTE/LbYx3RLOiVrjhp110DpJtiaYae1FH
-	grIthyE5tn0yyMvD7ygXnF9q6NWilA0X/WdkYKNDfcctoapoGLyWaSFUXDx1rw==
-X-Google-Smtp-Source: AGHT+IG62RuLwq2OLE5Yz0FmcAHGNtv9/YBtgvIUbfni/ZF6on/cLe36ocrjEhGbaxm7Edp0+sjhbg==
-X-Received: by 2002:a05:6e02:1bc7:b0:363:cbb8:53c7 with SMTP id x7-20020a056e021bc700b00363cbb853c7mr1787567ilv.23.1707868596087;
-        Tue, 13 Feb 2024 15:56:36 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXYvP9l0sxOZNWxefz67TKAm7Fu6CaEpFHauX0AQItVIogkJSLzPJZFx0UakEwLZxl00t5oU+31mhKid7inxkeFp2reqoNF7I1kQxXuMe0ZLLjU+VNcyvi5h0kzhX+TyeJ1VP43aVOT4m3qsJuZ2WTnAEwLcwMnWktU04ycyXRDgCmsBODEflPdYmaHZucstimY66Km2/Z5gIAEwJ1hCoRUXhk25LYKDboLX3KT8nLXdpopsd/2CwWbSm4unOobRINWMcfmsvORIfDXc7r/Zsi25RKx+qHoRGHeVwQ1Bb6ybiJKW3ABwCmcS53hIVlmX6p+Il8fLHtHn7VLINZCCIx57OjUssEr+x0lmRVkHqzYzjQ=
+        bh=/jWP8VrxhP1EJOZNrm4lfKLrk9GA9+9HRFG23gj3nBY=;
+        b=H0+tU1Yenv2huXOA7eE2leXDgz1Hs94Kp8gC30AND0bpmAFJA2dHxK2fDMt4lKVhcb
+         CrSjUs4mt2tDPBYwx3dxdf4B6gKZCBUMY2cHgIxAZVEAdGoce077w20mmZ31/ZgDlf/w
+         QYMsndQ3hzIAAmWrXf3uQIMMsnt8erVzUQqSBj53KTIxeHNndHrwirmrZ1ZqxdX8ElOk
+         ba+9ipHQUAh+oAbHxZVCiXCL4FDTk9kIaAVVDEAxa9WrPwI7/Pk1rGsgVGk7lq8m+jXC
+         d1MnlPJ4ERu4c7nZ6w3jN2RHMsbnMh8NECVhkDPJnM6JNjm+ZQ5mmG3+Um3IHypArj2D
+         yzaA==
+X-Forwarded-Encrypted: i=1; AJvYcCXblB5UnHAXekVDmob8637TIlzgm/JMxCBXfd5AeZ9CvDhU6WhX8CqDSTgKXyTUbuCWJ1tEp3m5/BNk0UZHdjk17AcXSQ==
+X-Gm-Message-State: AOJu0YyCYKO1E4bPABXXd1iTw39+Ql651xxQdvxKaTFcQrnd4bRnpSWJ
+	Rr6jXfkYhRu5LNzoS9swUzcpUl60o35ZSItQGiHlk9IvCjcm8VfQ0NXGishmmw==
+X-Google-Smtp-Source: AGHT+IGi6VVf6G6G8U5GGlsAZixQm5utU4tQarB9++MQ9JBSEGLE5FtrB605cWFIAkOkehjJn7O4vg==
+X-Received: by 2002:a05:6e02:dd3:b0:363:9eb7:46ce with SMTP id l19-20020a056e020dd300b003639eb746cemr1293877ilj.11.1707870180370;
+        Tue, 13 Feb 2024 16:23:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVJKMkm18l+fATv5w8BOBEKdFq5seFQbl5h8/yelfPushV4gdBWN7jKSCWpz1BhL0Sti/1SuJTgYJ/fcVNH6XkrSm0NoaHSTSiI/fHwLilNsRJJtzimpBrGCTjtT9d3s2Ax3XegIe224IxqH7rcEwDA/kG7pamQItEMG58Jw4j5Ztxy29vglNeTsEkMdK0qDj8iMdP55M3/SCtxrS7QqjBNmHKuqoD07nm1SOMqL4/+aRObxOrky5V8t79knGogtBK/fly+mKEsz6LWFLZ/wRwleXiVozK6opOE16Q1C7tq1q89SonCNFWA89DU4D2TqFFavCW50sbPG+21GohBloHyGfw0ifOY2bFFrKJpEW3nXIMdIk7lVG+8R/xWdpNr5QXw1S7YliqMm+3mZOK0/P1E6lS9JjXddM/7Krxk56meFswS3dbQgAEWldQtjWJza6FMFw9c/mH20D+fWerx4TZ/afCihkwC1TzV+rBBmcZJRaKcldG2sFu38nMuPrF6aGgtI8dpeqPq8y0bVNRQfBUdTcdcWkCYI2pY3Cm0qX1G3/4M+87FoJzMfaTmNQydVUReHzA5OP8dyUn5MgQ=
 Received: from google.com (20.10.132.34.bc.googleusercontent.com. [34.132.10.20])
-        by smtp.gmail.com with ESMTPSA id n11-20020a02cc0b000000b004739f0fc27fsm2028449jap.164.2024.02.13.15.56.35
+        by smtp.gmail.com with ESMTPSA id s11-20020a056e021a0b00b00363a91effdbsm2807134ild.76.2024.02.13.16.22.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 15:56:35 -0800 (PST)
-Date: Tue, 13 Feb 2024 23:56:30 +0000
+        Tue, 13 Feb 2024 16:22:59 -0800 (PST)
+Date: Wed, 14 Feb 2024 00:22:57 +0000
 From: Justin Stitt <justinstitt@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com,
-	morbo@google.com, keescook@chromium.org, maskray@google.com,
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: Fix changing ELF file type for output of
- gen_btf for big endian
-Message-ID: <20240213235630.423raijsgijkgrnj@google.com>
-References: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, alsa-devel@alsa-project.org,
+	linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 1/2] ASoC: meson: aiu: fix function pointer type
+ mismatch
+Message-ID: <20240214002257.bfp6wk5j3wsaq6f6@google.com>
+References: <20240213215807.3326688-1-jbrunet@baylibre.com>
+ <20240213215807.3326688-2-jbrunet@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,97 +80,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240212-fix-elf-type-btf-vmlinux-bin-o-big-endian-v2-1-22c0a6352069@kernel.org>
+In-Reply-To: <20240213215807.3326688-2-jbrunet@baylibre.com>
 
 Hi,
 
-On Mon, Feb 12, 2024 at 07:05:10PM -0700, Nathan Chancellor wrote:
-> Commit 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
-> changed the ELF type of .btf.vmlinux.bin.o to ET_REL via dd, which works
-> fine for little endian platforms:
+On Tue, Feb 13, 2024 at 10:58:03PM +0100, Jerome Brunet wrote:
+> clang-16 warns about casting functions to incompatible types, as is done
+> here to call clk_disable_unprepare:
 >
->    00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
->   -00000010  03 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
->   +00000010  01 00 b7 00 01 00 00 00  00 00 00 80 00 80 ff ff  |................|
+> sound/soc/meson/aiu.c:243:12: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>   243 |                                        (void(*)(void *))clk_disable_unprepare,
 >
-> However, for big endian platforms, it changes the wrong byte, resulting
-> in an invalid ELF file type, which ld.lld rejects:
+> The pattern of getting, enabling and setting a disable callback for a
+> clock can be replaced with devm_clk_get_enabled(), which also fixes
+> this warning.
 >
->    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
->   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
->   +00000010  01 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
->
->   Type:                              <unknown>: 103
->
->   ld.lld: error: .btf.vmlinux.bin.o: unknown file type
->
-> Fix this by updating the entire 16-bit e_type field rather than just a
-> single byte, so that everything works correctly for all platforms and
-> linkers.
->
->    00000000  7f 45 4c 46 02 02 01 00  00 00 00 00 00 00 00 00  |.ELF............|
->   -00000010  00 03 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
->   +00000010  00 01 00 16 00 00 00 01  00 00 00 00 00 10 00 00  |................|
->
->   Type:                              REL (Relocatable file)
->
-> While in the area, update the comment to mention that binutils 2.35+
-> matches LLD's behavior of rejecting an ET_EXEC input, which occurred
-> after the comment was added.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 90ceddcb4950 ("bpf: Support llvm-objcopy for vmlinux BTF")
-> Link: https://github.com/llvm/llvm-project/pull/75643
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Fixes: 6ae9ca9ce986 ("ASoC: meson: aiu: add i2s and spdif support")
+> Reported-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 
-I prefer this version to v1 as well. This seems better than setting the
-seek value.
+Silences the warning and makes the code more readable without adding any
+new helpers. Awesome!
 
 Reviewed-by: Justin Stitt <justinstitt@google.com>
-
 > ---
-> Changes in v2:
-> - Rather than change the seek value for dd, update the entire e_type
->   field (Masahiro). Due to this change, I did not carry forward the
->   tags of v1.
-> - Slightly update commit message to remove mention of ET_EXEC, which
->   does not match the dump (Masahiro).
-> - Update comment to mention binutils 2.35+ has the same behavior as LLD
->   (Fangrui).
-> - Link to v1: https://lore.kernel.org/r/20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-v1-1-cb3112491edc@kernel.org
-> ---
->  scripts/link-vmlinux.sh | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+>  sound/soc/meson/aiu.c | 19 ++++---------------
+>  sound/soc/meson/aiu.h |  1 -
+>  2 files changed, 4 insertions(+), 16 deletions(-)
 >
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index a432b171be82..7862a8101747 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -135,8 +135,13 @@ gen_btf()
->  	${OBJCOPY} --only-section=.BTF --set-section-flags .BTF=alloc,readonly \
->  		--strip-all ${1} ${2} 2>/dev/null
->  	# Change e_type to ET_REL so that it can be used to link final vmlinux.
-> -	# Unlike GNU ld, lld does not allow an ET_EXEC input.
-> -	printf '\1' | dd of=${2} conv=notrunc bs=1 seek=16 status=none
-> +	# GNU ld 2.35+ and lld do not allow an ET_EXEC input.
-> +	if is_enabled CONFIG_CPU_BIG_ENDIAN; then
-> +		et_rel='\0\1'
-> +	else
-> +		et_rel='\1\0'
-> +	fi
-> +	printf "${et_rel}" | dd of=${2} conv=notrunc bs=1 seek=16 status=none
+> diff --git a/sound/soc/meson/aiu.c b/sound/soc/meson/aiu.c
+> index 7109b81cc3d0..5d1419ed7a62 100644
+> --- a/sound/soc/meson/aiu.c
+> +++ b/sound/soc/meson/aiu.c
+> @@ -212,11 +212,12 @@ static const char * const aiu_spdif_ids[] = {
+>  static int aiu_clk_get(struct device *dev)
+>  {
+>  	struct aiu *aiu = dev_get_drvdata(dev);
+> +	struct clk *pclk;
+>  	int ret;
+>
+> -	aiu->pclk = devm_clk_get(dev, "pclk");
+> -	if (IS_ERR(aiu->pclk))
+> -		return dev_err_probe(dev, PTR_ERR(aiu->pclk), "Can't get the aiu pclk\n");
+> +	pclk = devm_clk_get_enabled(dev, "pclk");
+> +	if (IS_ERR(pclk))
+> +		return dev_err_probe(dev, PTR_ERR(pclk), "Can't get the aiu pclk\n");
+>
+>  	aiu->spdif_mclk = devm_clk_get(dev, "spdif_mclk");
+>  	if (IS_ERR(aiu->spdif_mclk))
+> @@ -233,18 +234,6 @@ static int aiu_clk_get(struct device *dev)
+>  	if (ret)
+>  		return dev_err_probe(dev, ret, "Can't get the spdif clocks\n");
+>
+> -	ret = clk_prepare_enable(aiu->pclk);
+> -	if (ret) {
+> -		dev_err(dev, "peripheral clock enable failed\n");
+> -		return ret;
+> -	}
+> -
+> -	ret = devm_add_action_or_reset(dev,
+> -				       (void(*)(void *))clk_disable_unprepare,
+> -				       aiu->pclk);
+> -	if (ret)
+> -		dev_err(dev, "failed to add reset action on pclk");
+> -
+>  	return ret;
 >  }
 >
->  # Create ${2} .S file with all symbols from the ${1} object file
+> diff --git a/sound/soc/meson/aiu.h b/sound/soc/meson/aiu.h
+> index 393b6c2307e4..0f94c8bf6081 100644
+> --- a/sound/soc/meson/aiu.h
+> +++ b/sound/soc/meson/aiu.h
+> @@ -33,7 +33,6 @@ struct aiu_platform_data {
+>  };
 >
-> ---
-> base-commit: 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478
-> change-id: 20240208-fix-elf-type-btf-vmlinux-bin-o-big-endian-dbc55a1e1296
->
-> Best regards,
+>  struct aiu {
+> -	struct clk *pclk;
+>  	struct clk *spdif_mclk;
+>  	struct aiu_interface i2s;
+>  	struct aiu_interface spdif;
 > --
-> Nathan Chancellor <nathan@kernel.org>
+> 2.43.0
 >
 Thanks
 Justin
