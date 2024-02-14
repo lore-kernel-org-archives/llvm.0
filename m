@@ -1,129 +1,178 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6307465
-	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 00:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C847E2
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 00:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707871234; cv=none; b=OD7ocj523borYHeUDh+KzeBSzu4fh7l5idSkoYDtL1b8bhqYZ/JqsNMV4crNT4IDlTKvVnijP/smP+mjPBlN/2mFKqKM0ICiFjXC+DokEfD948NrCMzGjN6hh6Io7lNa9+O9h84jozHH0EyzsVkSomgM01wgplXaLEWaMVLs3AU=
+	t=1707871929; cv=none; b=JqKcuJb1D6T37LbM6b5H2s6FtzKsEH+xoqkV+Cn+QvF0hy8gQHMcUXSnMVaX+NN88r1EGBpan3AifuP/j7txhIXQHotxErsrJqzXBzySZrYArkOxUpHVETtdN4UFmQj7Xmb/yhAIGgJgHCj0HIahQ8ZxgFnhVxjXv5EfOPisTQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707871234; c=relaxed/simple;
-	bh=732+Z96bjl+fssXUyJzSLJfOmRgK7uvzPvL/AgukfWQ=;
+	s=arc-20240116; t=1707871929; c=relaxed/simple;
+	bh=2+YC4GCoCVjMy2Ct2cJUi3Cr5RlvqD+v+ENXkPB6w7M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BGgXApiAmLi6vY7hrralLWZ/V3R+CwKerJvuWxdUhXCntzUm1UsQdGNiLzbbxlEBHs82APC0taV96Plp3IcBv5RjseYf7LlmRcRtcEr/vmXS5nHZdEwVu4RCuqVSkelESrJ/UPnwEx8oBNVAumlTa+VfEa2h+4EqF48Rimokh4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Im/0d5UA; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Im/0d5UA"
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d0e521de4eso45381051fa.2
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 16:40:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707871230; x=1708476030; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=odl7g7SmrflKYLXiwuyOjEG83lRHDsTab35r8GfTGWQ=;
-        b=Im/0d5UANn0uWUKG9H/4kGeTP0GTM+DeS0Wfh5/gW6e1sm4D9R8LRwRfiz/054uqNh
-         +ON3WKK0QgLuIMFB1afQuY2xnwQM6kHzt/bk8FMcEdx2eyr1xFFi90O3Lcg7pPPrVRyu
-         uGWwpFIPnngQN2q3eqdNtfYWuFsuXwnzJsJM/s6ld2hCv5DjuXTV/IvgXPv5V3/RejVU
-         8wpE02dhfufMOWbKFVDMyi0OLmUWxl4QeA+wS6+1OjkWAta15kv0Rycej49lZcvcDtir
-         PIsbqEfyiSseUm+wb2MZhFeoxGdB0SoMiqg6WmCl+VzKammi7iiN+vT9D9gJnXDIOACJ
-         nCoA==
+	 To:Cc:Content-Type; b=g47Bj1PTOpd1KsqnblIKRDfl4vludUi9KZlT1QoOS2ezdKmAAQyrjTin2mZU/3vm3LBBQFnxXb86q10V0Q/jT2ZWbFwJfvsImGMzj+yTp3cAnav9cOeiZffyI+QOiWXqdJNKM8GWjV5qWmHctFm8AcBbBiBo58OoaJAa/waie5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5d8df2edd29so1100747a12.2
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 16:52:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707871230; x=1708476030;
+        d=1e100.net; s=20230601; t=1707871928; x=1708476728;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=odl7g7SmrflKYLXiwuyOjEG83lRHDsTab35r8GfTGWQ=;
-        b=fQOjqi76tTau77Ku7boc9Vfn8AFgFtaS+2g8QZsV5WobDzfc/3v3A/Jd2eFxxr4zFs
-         xiGq510LWqC5oJtGi9Z1iS38k/2bFzbEQ++WquYxn9o9u8aPEsOkvGNAtW5JMeysdea8
-         Nf5Mk3qkM6Y99i5bsLrjekGzj5k/eEWkXuDwm1WiyuR7C6mQwKQ1Ufi8eVkcYkR0qQBC
-         KjrEwtQt/Bo6QGLHf69/m39/BwOgziHHdZhL+fVt25UqZr0tBI0AUVYFC3VS829aRKim
-         FbOYKV3TKEb+tyGv4KBEomyjgAAh5F/E/Swva/VacyNmL0Xp7SSCNrviXoUJkNW+lMRW
-         j02Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX5mlz3xJTqdYlTdpDY5EUj/ftsVDgxR2BpK7D4ENqUs8n0zTXfHuq8x0sZEqS4gbygWgZuexKbfXQpFdiNldAvSI2plg==
-X-Gm-Message-State: AOJu0YyJPIeIcUoL+AhlJqkxykVg1T2GbSWx6AuqLaJyLCdGw+0gkdpq
-	s5x+rg2udlBWR5MQG2JpUWH3cizmIwgStxyuNGWTCiY7mVwYNSY/GfE+UM9Q4+4b4UWHyYYVal+
-	qWur/ls5UC9MLyWseGY+wEuAvUUlcpjq2AM4a
-X-Google-Smtp-Source: AGHT+IHaUEkMIsoH9jlZggCVr/lZg/wX9gXvgpogBKJNvdQOntkz1p+0QQQ+q3X5bOtAgqrr5xeujEeC8XfnyLaucL8=
-X-Received: by 2002:a2e:7c06:0:b0:2d0:e36a:6424 with SMTP id
- x6-20020a2e7c06000000b002d0e36a6424mr956016ljc.35.1707871230071; Tue, 13 Feb
- 2024 16:40:30 -0800 (PST)
+        bh=wD7TEKagSlKHEJT8nomaZPXwtx6sNloUd/DUQpDUnxI=;
+        b=Q1LhvleO3VVxvfQH3ETgK+q5qegvgzZYq86W+uqb8B0Gt7k7qDMp15F8mhT9MXM35V
+         v0DmN7cNK0BZDRUG1MlIXdvCo0LVt3tBqOLFsm8fYZtgUoa0vsFp5JQUffqiDLMjsWGG
+         zP4rTZbz1bb/AjzbMui/bNzXCAr5RtozpIIQ9Hf8D8d35aR/tLgKPgq4rAGQpOPFtS4J
+         Lv6/P2pCDER8ztHr4PNuNIRXLMs/u+9VfU2IEDqksE1nA6xCZkO5LxfiwFsILWdwScst
+         CSNZLiQf2k+rbDGWkxz5LR6EhspoCIT3s7rke/Z8lgJD9WB81iU3J1ScRxLd8ELLzMnK
+         1dMg==
+X-Forwarded-Encrypted: i=1; AJvYcCWJoMK0fRc9jZdIQLRotVYKqsiQ4s9tQLX2DWdHUKlqQp5prhoRUky+AbTVOxpzinDj4228ni7jJi1BkPrm6b/I9mGA9A==
+X-Gm-Message-State: AOJu0YxBq13cf/4KCLxR4cJMjNcO6asi491m2AGXQPl2fpoP97P21YvY
+	klpoPaykGM4TalKmO3vwcdLhgn+ppfhJ+m+vRVlZiCH106ju8JENjJ5R6GgA5itJof1aOA5/vFl
+	PigR1puUZgZz+yYPKO0onvcGggeQ=
+X-Google-Smtp-Source: AGHT+IG+bcT6feAmOjm0Rab9dbCrben3IbMYbnj/T7bjKQwI4D7q2hILoTEpOFQyLG6+V+SMtW2W36vE+dFPbh/EGZc=
+X-Received: by 2002:a17:90a:d504:b0:297:bb6:cbe4 with SMTP id
+ t4-20020a17090ad50400b002970bb6cbe4mr1007302pju.27.1707871927459; Tue, 13 Feb
+ 2024 16:52:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAK7LNARaW1V5X79BFW5_YTKY+n+OSp+_ACpRxpiw+VOJ+2hf=g@mail.gmail.com>
- <20240213022552.754830-1-andrewjballance@gmail.com>
-In-Reply-To: <20240213022552.754830-1-andrewjballance@gmail.com>
-From: Justin Stitt <justinstitt@google.com>
-Date: Tue, 13 Feb 2024 16:40:17 -0800
-Message-ID: <CAFhGd8o10KWEX=H56kUN0hjY=fowijov0bn+j_kOmv6BPwJ-yw@mail.gmail.com>
-Subject: Re: [PATCH v2] gen_compile_commands: fix invalid escape sequence warning
-To: Andrew Ballance <andrewjballance@gmail.com>
-Cc: masahiroy@kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel-mentees@lists.linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org, 
-	ndesaulniers@google.com, nicolas@fjasle.eu, skhan@linuxfoundation.org
+References: <20240201001504.1348511-1-irogers@google.com> <20240201001504.1348511-6-irogers@google.com>
+ <CAM9d7cjka_O5OmCxkrp-K6g45VnxEJNd73jjv6kQanutf+6sbg@mail.gmail.com> <CAP-5=fV1dA_hbH=UAZFL8DeuRzvRqW51-gQFSpuEsHpWEDDtWw@mail.gmail.com>
+In-Reply-To: <CAP-5=fV1dA_hbH=UAZFL8DeuRzvRqW51-gQFSpuEsHpWEDDtWw@mail.gmail.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Tue, 13 Feb 2024 16:51:56 -0800
+Message-ID: <CAM9d7cim3Geib9QNrtL6FVH-gg-=metH_u_yKnJFa+G=maOz3A@mail.gmail.com>
+Subject: Re: [PATCH v2 6/9] perf tests: Use scandirat for shell script finding
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, James Clark <james.clark@arm.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Mon, Feb 12, 2024 at 6:28=E2=80=AFPM Andrew Ballance
-<andrewjballance@gmail.com> wrote:
+On Mon, Feb 12, 2024 at 8:07=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
+te:
 >
-> with python 12.1 '\#' results in this warning
->     SyntaxWarning: invalid escape sequence '\#'
+> On Fri, Feb 9, 2024 at 8:41=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
+ wrote:
+> >
+> > On Wed, Jan 31, 2024 at 4:15=E2=80=AFPM Ian Rogers <irogers@google.com>=
+ wrote:
+> > >
+> > > Avoid filename appending buffers by using openat, faccessat and
+> > > scandirat more widely. Turn the script's path back to a file name
+> > > using readlink from /proc/<pid>/fd/<fd>.
+> > >
+> > > Read the script's description using api/io.h to avoid fdopen
+> > > conversions. Whilst reading perform additional sanity checks on the
+> > > script's contents.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > [SNIP]
+> > > -static const char *shell_test__description(char *description, size_t=
+ size,
+> > > -                                           const char *path, const c=
+har *name)
+> > > +static char *shell_test__description(int dir_fd, const char *name)
+> > >  {
+> > > -       FILE *fp;
+> > > -       char filename[PATH_MAX];
+> > > -       int ch;
+> > > +       struct io io;
+> > > +       char buf[128], desc[256];
+> > > +       int ch, pos =3D 0;
+> > >
+> > > -       path__join(filename, sizeof(filename), path, name);
+> > > -       fp =3D fopen(filename, "r");
+> > > -       if (!fp)
+> > > +       io__init(&io, openat(dir_fd, name, O_RDONLY), buf, sizeof(buf=
+));
+> > > +       if (io.fd < 0)
+> > >                 return NULL;
+> > >
+> > >         /* Skip first line - should be #!/bin/sh Shebang */
+> > > +       if (io__get_char(&io) !=3D '#')
+> > > +               goto err_out;
+> > > +       if (io__get_char(&io) !=3D '!')
+> > > +               goto err_out;
+> > >         do {
+> > > -               ch =3D fgetc(fp);
+> > > -       } while (ch !=3D EOF && ch !=3D '\n');
+> > > -
+> > > -       description =3D fgets(description, size, fp);
+> > > -       fclose(fp);
+> > > +               ch =3D io__get_char(&io);
+> > > +               if (ch < 0)
+> > > +                       goto err_out;
+> > > +       } while (ch !=3D '\n');
+> > >
+> > > -       /* Assume first char on line is omment everything after that =
+desc */
+> > > -       return description ? strim(description + 1) : NULL;
+> > > +       do {
+> > > +               ch =3D io__get_char(&io);
+> > > +               if (ch < 0)
+> > > +                       goto err_out;
+> > > +       } while (ch =3D=3D '#' || isspace(ch));
+> > > +       while (ch > 0 && ch !=3D '\n') {
+> > > +               desc[pos++] =3D ch;
+> > > +               if (pos >=3D (int)sizeof(desc) - 1)
+> >
+> > Maybe (pos =3D=3D sizeof(desc) - 2) ?  I'm not sure what happens if it =
+has a
+> > description longer than the buffer size.
+>
+> Thanks Namhyung!
+>
+> sizeof(desc) - 1 =3D=3D sizeof(char[256]) - 1 =3D=3D 255 , so at this poi=
+nt
+> pos can at most be 255 and there is one space after pos for a trailing
+> '\0'.
+>
+> > > +                       break;
+> > > +               ch =3D io__get_char(&io);
+> > > +       }
+> > > +       while (pos > 0 && isspace(desc[--pos]))
+> > > +               ;
+>
+> Here pos is moved back to at least one to 254.
 
-Yes, since Python 3.12 escaping invalid characters will result in a
-SyntaxWarning.
+Oh, right.  I missed it moved the pos back.
 
-The complete table of supported escape codes is available here [1].
+Thanks,
+Namhyung
 
 >
-> Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
-> ---
->  scripts/clang-tools/gen_compile_commands.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > +       desc[++pos] =3D '\0';
+> >
+> > Wouldn't it overflow the buffer?
 >
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
-tools/gen_compile_commands.py
-> index 5dea4479240b..93f64095fda9 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file=
-_path):
->      # escape the pound sign '#', either as '\#' or '$(pound)' (depending=
- on the
->      # kernel version). The compile_commands.json file is not intereprete=
-d
->      # by Make, so this code replaces the escaped version with '#'.
-> -    prefix =3D command_prefix.replace('\#', '#').replace('$(pound)', '#'=
-)
-> +    prefix =3D command_prefix.replace('\\#', '#').replace('$(pound)', '#=
-')
-
-I'd personally prefer using a raw string:
--    prefix =3D command_prefix.replace('\#', '#').replace('$(pound)', '#')
-+    prefix =3D command_prefix.replace(r'\#', '#').replace('$(pound)', '#')
-
-This makes it clear that a literal backslash followed by a literal
-pound sign will be replaced.
-
+> At this point pos can only have a maximum value of 255 which is within
+> the bounds of desc.
 >
->      # Return the canonical path, eliminating any symbolic links encounte=
-red in the path.
->      abs_path =3D os.path.realpath(os.path.join(root_directory, file_path=
-))
-> --
-> 2.43.0
+> Thanks,
+> Ian
 >
-
-[1]: https://docs.python.org/3/reference/lexical_analysis.html#index-23
-
-Thanks
-Justin
+> > Thanks,
+> > Namhyung
+> >
+> >
+> > > +       close(io.fd);
+> > > +       return strdup(desc);
+> > > +err_out:
+> > > +       close(io.fd);
+> > > +       return NULL;
+> > >  }
