@@ -1,55 +1,55 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7646D4687
-	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 00:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6307465
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 00:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707870719; cv=none; b=bnKOhGPtHs1JgDajL2z7x6Y2gm0yPwQQPU7mHCSOVLgUxb3/x2NAbUDlOYWIXCanV2XyGV5dOMFc/sroeDt/TjClgk69fEa1gKvuVeTIxNzaCcFJeskyjQxG6TAit3sJzOM7Tykc4w+y4vTz4n/jZ1viR70iGeu7jBicW9ui2wA=
+	t=1707871234; cv=none; b=OD7ocj523borYHeUDh+KzeBSzu4fh7l5idSkoYDtL1b8bhqYZ/JqsNMV4crNT4IDlTKvVnijP/smP+mjPBlN/2mFKqKM0ICiFjXC+DokEfD948NrCMzGjN6hh6Io7lNa9+O9h84jozHH0EyzsVkSomgM01wgplXaLEWaMVLs3AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707870719; c=relaxed/simple;
-	bh=QOITHjTga42hAflI40Ipbts+6T7yutOW1a81G6BTQgE=;
+	s=arc-20240116; t=1707871234; c=relaxed/simple;
+	bh=732+Z96bjl+fssXUyJzSLJfOmRgK7uvzPvL/AgukfWQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VXAyk1rBHh+zGkcpExv/o/ZOp3hb26cW8a03zulQBRZFzpHEb/bHIF1OL29eC/ShV9zMgmKHJw6uP/ccZ5aYt+sVNIjK6XNTIvZ8o+Ye2tZnchVFAB067iIg2BPO/9vJWIbNXhKUCEkHzbAncRAwpfyN9/O6SVMetO0E4I4Fv+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iDYMUlJ3; arc=none smtp.client-ip=209.85.208.48
+	 To:Cc:Content-Type; b=BGgXApiAmLi6vY7hrralLWZ/V3R+CwKerJvuWxdUhXCntzUm1UsQdGNiLzbbxlEBHs82APC0taV96Plp3IcBv5RjseYf7LlmRcRtcEr/vmXS5nHZdEwVu4RCuqVSkelESrJ/UPnwEx8oBNVAumlTa+VfEa2h+4EqF48Rimokh4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Im/0d5UA; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iDYMUlJ3"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5600c43caddso5937399a12.2
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 16:31:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Im/0d5UA"
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d0e521de4eso45381051fa.2
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 16:40:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707870715; x=1708475515; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1707871230; x=1708476030; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BTLJH4nKUhzssrfYYFDWlc0Q3VkrPFVldyClGOqfMTE=;
-        b=iDYMUlJ3bATSYoMJVCWYmXVLHqjltxBX68Hs39qz8+XtmbWzFApGFVfqHKCrztl7VS
-         mQeSAtHDQX73AW2vTZ40AIK2j7sLOBeJQlL2KytIjYXElwc3/he78DlNWyOjOCMJrOir
-         aeUIN4ADAIju4a10TAGqcEGPwAkJ11iwX/QyqjJ3gE1nh088ej/snL4W3WCJq8ScBQgx
-         RXPsIG6K6EF1/1sA9XLP6aidL6ZUEEF8jz0JmgVdTDFcQ5GzlNRVBEry6QppA/66/ytt
-         ybYF4trMhfreXO4oq1wTPhPXNHejLC7R0HK34TxcRNSeuoZfYuT1kcG7NpxaogHKS2gz
-         5xKQ==
+        bh=odl7g7SmrflKYLXiwuyOjEG83lRHDsTab35r8GfTGWQ=;
+        b=Im/0d5UANn0uWUKG9H/4kGeTP0GTM+DeS0Wfh5/gW6e1sm4D9R8LRwRfiz/054uqNh
+         +ON3WKK0QgLuIMFB1afQuY2xnwQM6kHzt/bk8FMcEdx2eyr1xFFi90O3Lcg7pPPrVRyu
+         uGWwpFIPnngQN2q3eqdNtfYWuFsuXwnzJsJM/s6ld2hCv5DjuXTV/IvgXPv5V3/RejVU
+         8wpE02dhfufMOWbKFVDMyi0OLmUWxl4QeA+wS6+1OjkWAta15kv0Rycej49lZcvcDtir
+         PIsbqEfyiSseUm+wb2MZhFeoxGdB0SoMiqg6WmCl+VzKammi7iiN+vT9D9gJnXDIOACJ
+         nCoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707870715; x=1708475515;
+        d=1e100.net; s=20230601; t=1707871230; x=1708476030;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BTLJH4nKUhzssrfYYFDWlc0Q3VkrPFVldyClGOqfMTE=;
-        b=qDPV8p12+G2W0HluwVdP1CJqcTN3SeEQ/Sl23At2QFYwa4RhftT1LoASndPb5WTMsu
-         EjtnZLdImo73mX5bP+kfXrWDTaq7LBt1514BqLXDpxmLMWft3dGOc7t7ODYwKTnG3lvp
-         QhVoJo0GJqIl2QQRxHNMZItKSnPETRNFfz93Qj4N4FFLLT+IPdf/lmcajOdtggAYqA4O
-         tLLVEdV2JYABX7yFucOQkZbjqpnRAJBPNwRB6oJqhf1A/Kka5vUrQIgJ8bZ6gp0eApp0
-         HWqoM2f65EJ/AZYoE6jxU97HqloOKXozPG2EcYyHE8xDVJvcfTUoJljoRtTigb7GrRBq
-         F+gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXvt51e9K7r6FbvzeB4g+JFtNNJlVdWMqjMUCt1My6UORWJTbi09qfHcUhL9ZPzEhP6r8VqPUlH0UrbUoPmTBPuWRMtFQ==
-X-Gm-Message-State: AOJu0YysDlMxeTU32qyTt5II1zxk8O+xrtwk4HMinjmMo0w038SxHtb6
-	IKGSlfsW6fuhWwCoPBmHGvJ+/0RGntQPJbKFaN5NZB48nuhIMvvPFM2nnAZ6HR9wL++1+V8eslP
-	TS61X8cBoUU8ZbgwtQWRkmR20J5VLaiEmdZOk
-X-Google-Smtp-Source: AGHT+IEtxrlAsAa9Q4ABaPzKYYZ7PeY703iUnusW6WDgntH1FFpPpJ1MY7i6BNKNdf7i4Duf3v/vA4f6NUFZRLDsZTM=
-X-Received: by 2002:aa7:d3c9:0:b0:561:123f:a98f with SMTP id
- o9-20020aa7d3c9000000b00561123fa98fmr694626edr.24.1707870715624; Tue, 13 Feb
- 2024 16:31:55 -0800 (PST)
+        bh=odl7g7SmrflKYLXiwuyOjEG83lRHDsTab35r8GfTGWQ=;
+        b=fQOjqi76tTau77Ku7boc9Vfn8AFgFtaS+2g8QZsV5WobDzfc/3v3A/Jd2eFxxr4zFs
+         xiGq510LWqC5oJtGi9Z1iS38k/2bFzbEQ++WquYxn9o9u8aPEsOkvGNAtW5JMeysdea8
+         Nf5Mk3qkM6Y99i5bsLrjekGzj5k/eEWkXuDwm1WiyuR7C6mQwKQ1Ufi8eVkcYkR0qQBC
+         KjrEwtQt/Bo6QGLHf69/m39/BwOgziHHdZhL+fVt25UqZr0tBI0AUVYFC3VS829aRKim
+         FbOYKV3TKEb+tyGv4KBEomyjgAAh5F/E/Swva/VacyNmL0Xp7SSCNrviXoUJkNW+lMRW
+         j02Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX5mlz3xJTqdYlTdpDY5EUj/ftsVDgxR2BpK7D4ENqUs8n0zTXfHuq8x0sZEqS4gbygWgZuexKbfXQpFdiNldAvSI2plg==
+X-Gm-Message-State: AOJu0YyJPIeIcUoL+AhlJqkxykVg1T2GbSWx6AuqLaJyLCdGw+0gkdpq
+	s5x+rg2udlBWR5MQG2JpUWH3cizmIwgStxyuNGWTCiY7mVwYNSY/GfE+UM9Q4+4b4UWHyYYVal+
+	qWur/ls5UC9MLyWseGY+wEuAvUUlcpjq2AM4a
+X-Google-Smtp-Source: AGHT+IHaUEkMIsoH9jlZggCVr/lZg/wX9gXvgpogBKJNvdQOntkz1p+0QQQ+q3X5bOtAgqrr5xeujEeC8XfnyLaucL8=
+X-Received: by 2002:a2e:7c06:0:b0:2d0:e36a:6424 with SMTP id
+ x6-20020a2e7c06000000b002d0e36a6424mr956016ljc.35.1707871230071; Tue, 13 Feb
+ 2024 16:40:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,71 +57,73 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <CAK7LNARaW1V5X79BFW5_YTKY+n+OSp+_ACpRxpiw+VOJ+2hf=g@mail.gmail.com>
- <20240213022552.754830-1-andrewjballance@gmail.com> <ZcvKQ3SpLNR9RfIe@bergen.fjasle.eu>
-In-Reply-To: <ZcvKQ3SpLNR9RfIe@bergen.fjasle.eu>
+ <20240213022552.754830-1-andrewjballance@gmail.com>
+In-Reply-To: <20240213022552.754830-1-andrewjballance@gmail.com>
 From: Justin Stitt <justinstitt@google.com>
-Date: Tue, 13 Feb 2024 16:31:42 -0800
-Message-ID: <CAFhGd8pvhzehMGh1XEHBct7CGEQuF0CZeneMH3D6cKSRj5UdHQ@mail.gmail.com>
+Date: Tue, 13 Feb 2024 16:40:17 -0800
+Message-ID: <CAFhGd8o10KWEX=H56kUN0hjY=fowijov0bn+j_kOmv6BPwJ-yw@mail.gmail.com>
 Subject: Re: [PATCH v2] gen_compile_commands: fix invalid escape sequence warning
-To: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Andrew Ballance <andrewjballance@gmail.com>, masahiroy@kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, morbo@google.com, 
-	nathan@kernel.org, ndesaulniers@google.com, skhan@linuxfoundation.org
+To: Andrew Ballance <andrewjballance@gmail.com>
+Cc: masahiroy@kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel-mentees@lists.linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org, 
+	ndesaulniers@google.com, nicolas@fjasle.eu, skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 13, 2024 at 12:00=E2=80=AFPM Nicolas Schier <nicolas@fjasle.eu>=
- wrote:
->
-> On Mon 12 Feb 2024 20:25:52 GMT, Andrew Ballance wrote:
-> > with python 12.1 '\#' results in this warning
->
-> funny typo: it's Python 3.12 :)
+Hi,
 
-They probably meant Python 3.12.1 and forgot the "3." (or had a vim
-moment resulting in its unfortunate removal)
+On Mon, Feb 12, 2024 at 6:28=E2=80=AFPM Andrew Ballance
+<andrewjballance@gmail.com> wrote:
+>
+> with python 12.1 '\#' results in this warning
+>     SyntaxWarning: invalid escape sequence '\#'
+
+Yes, since Python 3.12 escaping invalid characters will result in a
+SyntaxWarning.
+
+The complete table of supported escape codes is available here [1].
 
 >
-> Kind regards,
-> Nicolas
+> Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
+> ---
+>  scripts/clang-tools/gen_compile_commands.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
+tools/gen_compile_commands.py
+> index 5dea4479240b..93f64095fda9 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file=
+_path):
+>      # escape the pound sign '#', either as '\#' or '$(pound)' (depending=
+ on the
+>      # kernel version). The compile_commands.json file is not intereprete=
+d
+>      # by Make, so this code replaces the escaped version with '#'.
+> -    prefix =3D command_prefix.replace('\#', '#').replace('$(pound)', '#'=
+)
+> +    prefix =3D command_prefix.replace('\\#', '#').replace('$(pound)', '#=
+')
+
+I'd personally prefer using a raw string:
+-    prefix =3D command_prefix.replace('\#', '#').replace('$(pound)', '#')
++    prefix =3D command_prefix.replace(r'\#', '#').replace('$(pound)', '#')
+
+This makes it clear that a literal backslash followed by a literal
+pound sign will be replaced.
+
 >
-> >     SyntaxWarning: invalid escape sequence '\#'
-> >
-> > Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
-> > ---
-> >  scripts/clang-tools/gen_compile_commands.py | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clan=
-g-tools/gen_compile_commands.py
-> > index 5dea4479240b..93f64095fda9 100755
-> > --- a/scripts/clang-tools/gen_compile_commands.py
-> > +++ b/scripts/clang-tools/gen_compile_commands.py
-> > @@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, fi=
-le_path):
-> >      # escape the pound sign '#', either as '\#' or '$(pound)' (dependi=
-ng on the
-> >      # kernel version). The compile_commands.json file is not interepre=
-ted
-> >      # by Make, so this code replaces the escaped version with '#'.
-> > -    prefix =3D command_prefix.replace('\#', '#').replace('$(pound)', '=
-#')
-> > +    prefix =3D command_prefix.replace('\\#', '#').replace('$(pound)', =
-'#')
-> >
-> >      # Return the canonical path, eliminating any symbolic links encoun=
-tered in the path.
-> >      abs_path =3D os.path.realpath(os.path.join(root_directory, file_pa=
-th))
-> > --
-> > 2.43.0
-> >
->
+>      # Return the canonical path, eliminating any symbolic links encounte=
+red in the path.
+>      abs_path =3D os.path.realpath(os.path.join(root_directory, file_path=
+))
 > --
-> Nicolas Schier
+> 2.43.0
 >
-> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
->      -- frykten for herren er opphav til kunnskap --
+
+[1]: https://docs.python.org/3/reference/lexical_analysis.html#index-23
+
+Thanks
+Justin
