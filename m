@@ -1,124 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE672F23;
-	Wed, 14 Feb 2024 14:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D694315C;
+	Wed, 14 Feb 2024 15:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707921357; cv=none; b=aOUogLimCDbQY83GiGKSk6IZmJQBGqP3s9sw8r4q6eIgx5a6ysiiUXvF7FhWOkt8NIcm0OBoZvljiY9+gjMreJirT2L5x2QaRZKtwxlTn+riQCI3yPa2VSOyPtRLFxu4At6zfcOzToRcFPV62tWGCnjyxZ0N08EH7/n/ANpVpBk=
+	t=1707923246; cv=none; b=LJ3979lJiJ4xwZ8JICAuJXSasnOVOm2N2Z7mRvTFWnb/xESvhnzuYnCDhL9/ajkDXyLSJrBM3hfcDYTuE2CIfUx1ikPTFTo33ZAOPs+RwnRJGsKDCrh7987xA1uf/a0YLRaapuoTt3PCr3GYmKlteujOD50xIQdlm4wqlS1yJjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707921357; c=relaxed/simple;
-	bh=lajX3V/+e43N7d8XoI10P6vDu013k6EqiZ4gVuzz+eM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ofavdtBX6M7C/Eocvxc+RJ3ZjyUTspBA0rAhHibEdEVR3R7qWbzJQUxdFs0m1p8s6DWUczGrDbMJ0gyHTRhKiqoOs2lyC310eVj+WmykYaE0cMo7ZIqKVB4vDg8WyfvbauXgEryzfgLb7nPllM21pOoZz3RTPHFmV0vdRaQVoso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XvNtpjwl; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707923246; c=relaxed/simple;
+	bh=EkvVOPPnCFk/hyssrPlfM7oBLOoM7URKkRX378IAYG4=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=CxJM8iMDQiCnAYowIM2HdWkybbqCHo5FlNmo1brib3lUVzffto1YqTlqLJLzK63HesDzvl+udSmFtVKKxriuNS+dxzKxsK5ncqA2trwKe1K2JXNd2uXh17NS9n3riG8R5mzGCq/pRWXIvEYRhxYaiLczMGLGwNNrl533ertQJw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=vXbfXUMK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nC7KHPYT; arc=none smtp.client-ip=64.147.123.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XvNtpjwl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707921356; x=1739457356;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lajX3V/+e43N7d8XoI10P6vDu013k6EqiZ4gVuzz+eM=;
-  b=XvNtpjwl/adbp/ha3HLF98T0rksePmNToRtTiPQO1U3/eKxsi9IZ4wvr
-   ExHXsoY+gXPdRoYro+4KsxRxrjDLwfjtYzNqvrkqDubJHm+MlKObIsXe3
-   3Fx+92R5rrIDYOxfFx2D1aIuw5LEhILbY9SB6VfGKRsgPxWrYqtn7Mz2+
-   xoaRsfQ5BLaQXMu2Iq7WkpLlH4fGt35F7xJyvxZ0LTRMf3JY9OlcCY7O1
-   2S0gVZ6/WX/fuTwKrrD4tF8AuJ1drIqlVE4FSxIfHIhClYiMvb/HWJrkW
-   DbGgBHKxGt4V1jfV8wCLstAQBWER5k/oa02DsWwjpBid1OllVfRjtfThA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1875547"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="1875547"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 06:35:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="40695236"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 14 Feb 2024 06:35:54 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1raGMY-0008po-1R;
-	Wed, 14 Feb 2024 14:35:50 +0000
-Date: Wed, 14 Feb 2024 22:35:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:dlserver-feb-fixes 1/9] kernel/sched/fair.c:8535:9: warning:
- incompatible integer to pointer conversion returning 'int' from a function
- with result type 'struct task_struct *'
-Message-ID: <202402142202.wl4IpWoW-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="vXbfXUMK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nC7KHPYT"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 213113200406;
+	Wed, 14 Feb 2024 10:07:23 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 14 Feb 2024 10:07:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1707923242; x=1708009642; bh=k14qTSuVKV
+	AB2YnlzxbQcFVIAQUz1+6sVcwSBNJ+Dw8=; b=vXbfXUMKvGE5joKax4FsSA1TMd
+	JR8uldw6+ZUxoWU5Vqqp2jL6OkMV/tDtyS47HsUk3YiRMjHFjMLSGiNdhorPFgGO
+	RRy7xGSCP5QBlMWCPFHTEhRSGxJoruukbxpo5kEYnhEB5PQ7zxgnifWtnxcCC0L6
+	e1xFLZKlE2IkPwRdCiV38KXsGHFWXuvP60FqECB1matsjb2oTeSztyvQmshjE2IP
+	tGfvBjEk40OFqSdiqImYh48iFxaqQ4c9MDC6tH9DkgigCmVZuWK4vWy+mn16c0F9
+	3ubz5cvzYUNiI0AxSnEWjahmfE2fLSbYDI33wWa1XEZ0ihaM7HFNlVXLbPbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1707923242; x=1708009642; bh=k14qTSuVKVAB2YnlzxbQcFVIAQUz
+	1+6sVcwSBNJ+Dw8=; b=nC7KHPYThl+xCy2/bCpYs3ACWcqSE8AUyfBBeR9TjIgP
+	pboNZMEppHDh4WyStVYV7i1R/JdhdoyzmAKoLvxkLoTDkQskmZUzK0t7iecRASH/
+	ERM1R60KVdZ1pBu3rKjVgbnZ0VPYnxGaK1txGzckO8qyNCLNANk/JHvo8pVgiJX/
+	FeXA8EWghnY13KZO+MvOyo+xP2snoYGQSbDqUHBPPMT8Nfh1PxlijLYBB8+fPNeX
+	xiLdc9xE0Rp06XxjCsewG1QOl1JJ6bGjZPxBRivWC2/XmW3+fcHELppw3xS9PMeY
+	usyBfyE5oBKiB4UNhbqmw0bPr5Gsr9DZSTVeyJK+mg==
+X-ME-Sender: <xms:KdfMZazRfSPYKA-lIEWo-QU4HTXq6YFCuQyf9ckgMNvM45f0_vWpTA>
+    <xme:KdfMZWTqeOFNmEevtYYy2hKSM0M0aVxfAGkMQZ0qYj2mscC-Gq3Ac2DrzHdR46nUA
+    oYhQfjN76fHRdpEKds>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejgdejfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:KdfMZcX8oWYDH5y0Bi0OFhKJNj-B3Z1FIOmgBxKbuY-AxrcGWWkw6Q>
+    <xmx:KdfMZQgKkVytMwY2klCuFD94I4wclrLpjOoUbYMVCjoXsbXugSY8bQ>
+    <xmx:KdfMZcA5aCSb163aEsKznyV0tczpRtMUrbqPiUWj-WMH0fq9JvP_lw>
+    <xmx:KtfMZUZSwBP8nUi7MPJLCo_x-0c39bB7cFnLfd78jejOz1HaEKnstA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 759D8B6008D; Wed, 14 Feb 2024 10:07:21 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-Id: <3f1c2d5a-ba98-4ae5-a7a0-0328b7552113@app.fastmail.com>
+In-Reply-To: <fd36f032-3bf6-4cae-a0d0-213604cef024@broadcom.com>
+References: <20240213100548.457854-1-arnd@kernel.org>
+ <170790035300.3179441.9169506478575963188.kvalo@kernel.org>
+ <fd36f032-3bf6-4cae-a0d0-213604cef024@broadcom.com>
+Date: Wed, 14 Feb 2024 16:07:00 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Arend van Spriel" <arend.vanspriel@broadcom.com>,
+ "Kalle Valo" <kvalo@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Nathan Chancellor" <nathan@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@suse.de>,
+ "Pieter-Paul Giesberts" <pieterpg@broadcom.com>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Artem Chernyshev" <artem.chernyshev@red-soft.ru>,
+ "Jonas Gorski" <jonas.gorski@gmail.com>, linux-wireless@vger.kernel.org,
+ brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] brcmsmac: avoid function pointer casts
+Content-Type: text/plain
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git dlserver-feb-fixes
-head:   a81d7e41130fa46e91bde4dd820f673250934286
-commit: 60503246d2cf0d7b91d18325cb21c24c13f1d40d [1/9] sched/core: Add clearing of ->dl_server in put_prev_task_balance()
-config: powerpc-mpc834x_itxgp_defconfig (https://download.01.org/0day-ci/archive/20240214/202402142202.wl4IpWoW-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402142202.wl4IpWoW-lkp@intel.com/reproduce)
+On Wed, Feb 14, 2024, at 10:23, Arend van Spriel wrote:
+> On 2/14/2024 9:45 AM, Kalle Valo wrote:
+>> Arnd Bergmann <arnd@kernel.org> wrote:
+>> 
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> An old cleanup went a little too far and causes a warning with clang-16
+>>> and higher as it breaks control flow integrity (KCFI) rules:
+>>>
+>>> drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy_shim.c:64:34: error: cast from 'void (*)(struct brcms_phy *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>>>     64 |                         brcms_init_timer(physhim->wl, (void (*)(void *))fn,
+>>>        |                                                       ^~~~~~~~~~~~~~~~~~~~
+>>>
+>>> Change this one instance back to passing a void pointer so it can be
+>>> used with the timer callback interface.
+>>>
+>>> Fixes: d89a4c80601d ("staging: brcm80211: removed void * from softmac phy")
+>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> I guess this should go to wireless tree?
+>
+> This has been like this forever looking at the "staging" part in the 
+> Fixes tag. Is it really so urgent now? On the other hand I have no real 
+> problem with moving this to the wireless tree. Just wondering out loud.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402142202.wl4IpWoW-lkp@intel.com/
+It's probably fine either way. Some maintainers like to backport
+the warning fixes to stable kernels, others don't. Since the
+warning is currently only enabled at W=1 level, it's probably fine
+to fix it for linux-next only, but if we want the fix backported,
+it should also go into 6.8.
 
-All warnings (new ones prefixed by >>):
-
-   kernel/sched/fair.c:8535:9: error: implicit declaration of function 'pick_task_fair' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return pick_task_fair(dl_se->rq);
-                  ^
->> kernel/sched/fair.c:8535:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct task_struct *' [-Wint-conversion]
-           return pick_task_fair(dl_se->rq);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:13122:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
-   void free_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:13122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:13124:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/fair.c:13124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/fair.c:13129:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
-   void online_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:13129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void online_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:13131:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
-   void unregister_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:13131:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   5 warnings and 1 error generated.
-
-
-vim +8535 kernel/sched/fair.c
-
-  8532	
-  8533	static struct task_struct *fair_server_pick_task(struct sched_dl_entity *dl_se)
-  8534	{
-> 8535		return pick_task_fair(dl_se->rq);
-  8536	}
-  8537	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    Arnd
