@@ -1,63 +1,66 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F50F10A0F
-	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 04:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6428C147
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 04:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707886474; cv=none; b=DTa3sLx8hJ1JtX7ZNf3mRhvyOxzIdoPWL2JoiuLd9IzUTuxdH/xLp9Rh0tomA4wXwfQydswbIGbGZFzaSN3yY6ayeBCf/bIp7P+8/YmjePoi0iMS2qukcT9KxaLQMJ1wDEDQo7NNNA+rWB/o80Qf6eZGZ9RiPsTS1rWfp4zzkOM=
+	t=1707886476; cv=none; b=gHIT36viXJmabojbfoxQN9LzavzHsnwplJysd5C7szNBwujMQViP/ggbysRbwaH2eeP9BsFmeCoW7t5fHwi3hSEzUDFHW3cCaaQvEKuOCpQGodfDeaLCitd6hh6NHAw1t7AeV7poxp25FtC3VlyAp0JJkHBOieKWF+fC2x/MSg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707886474; c=relaxed/simple;
-	bh=AZkj8nr3rTJwCIYBmRK7nb3+iIvG9RkuLmqV/PSrPQs=;
-	h=Date:Message-Id:Mime-Version:Subject:From:To:Content-Type; b=YWv+mNnobSxdx35/RQiPp8i7pBMNAlkR6Wo+AAU9XhIr00+vjSQ8+B/m3Gmavba3ie1S9Mx4jI+IQ1bAre6HP0W8JaQPKnBX1gJ9ek8GWAMyJ2fN1UoE6Fc2Wr7qiQ53XOJ8FXlqbkG+F3EbXRVoVleyEy9xIZ1MVlBSgkLRkWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4YcTtY90; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1707886476; c=relaxed/simple;
+	bh=9GvaQ8U/ciyGf0POxeefEusSW20t+DHMSsugj/N6ETY=;
+	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
+	 To:Content-Type; b=KXd0EB6GbFEiBbX/ZcW3RVpfO8sBARiA/4vB7pD0PqmW32R2ecgqqn2XK5HXQz5sUkZ/1Ct2pK4ypd6YtSMuqsuFGn2SQ5Xpvgwzo4qT6vypE6uLEhaOEpvSKp2PvP6vAL3pY0M9bccWlsLlvaZ7grMjodTa3EH/cG5C5e7tYr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iDUnIJfI; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4YcTtY90"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc6b26845cdso8796877276.3
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 20:54:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iDUnIJfI"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b26eef6cso2503731276.3
+        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 20:54:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707886471; x=1708491271; darn=lists.linux.dev;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ctzZOFDIDCO27f6VAbHfS1jvQWovSoWz66g42EKGfuk=;
-        b=4YcTtY90+RvHjyRb5LUxl/Skwx4RPLxgfs6Tb8KqLQY+3/HWKPTXFGr/IEk9TWmuUS
-         sMRF/sdrriHHYb6b84fHHTGOr8NXzlDC5YMEvkGgSGi9YFysrwVuReD66BtUojUgihea
-         NMnM0AZqcwQhDIqFLs11L20iolu1o+V1Hz82q703VKUbiA8BZ0MSm5SjsX2YHrMePl0x
-         O65RlI3lYKmOPryARAiH8r+lew2Qn2AEPMgjrHTmy3HFekwcMTKOlKcTHAiDDbh7pfDy
-         uDzJQRY0v8wZg+neGmNBJyzChZsQaOlIqoASc5r+97ye2fkYHVurkDPp0iJw2AFrRK8G
-         663A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707886471; x=1708491271;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20230601; t=1707886474; x=1708491274; darn=lists.linux.dev;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ctzZOFDIDCO27f6VAbHfS1jvQWovSoWz66g42EKGfuk=;
-        b=K+13NagZHXw4nt+mc5RBWkHKbPpr8hDq4e0rnePp88gtcWMLxy92vtksC74IXlMvBw
-         KYunyJpKxG5AaN7mB57JE/erfbeh3wYKlPmJq1sh+apPMLS/OotuSGyz953JSX7p2tI+
-         zNcGm+QwK+eUyQWRXPhdrxKoWCQcipBid/f6p/dqi1OcZMgR5vEqbBJhItl6FF21wPvR
-         0UqhKheLwaOMhSXu3A2HO+IXYy6tG0gZdE/06YbTlNKE5LCkRP9hfU9e6s39AipN4QoZ
-         bOyY14SOgywseAh65Yy4SayqmV+Ia+eBfsKKbCYZGc9tSlhtThwIGeUfGsshFpCcHJ6U
-         OE3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVdCj4kwZhgk1LEH6WTajIa2QQB4JpPL69t+xtFRaWrDAk9+2DMjQ74nRFm1zDg8sjWPdxEp2MeURzULB2TNdeqBFsTmw==
-X-Gm-Message-State: AOJu0Yyo73kCR0WPqnxgOp//Phj+rQSKvxdBR+6g+VhsJ5MTvf9LkjaI
-	YCYBdU9VhkqTcuFlZj42bI+19fo4X8TtROuT3BlkHfuuzi0sXewNrdfsoOe4W213VeabVJBa4Xq
-	/ObYWgQ==
-X-Google-Smtp-Source: AGHT+IGPnmcYdhlTyWdG8WwU1B8c6rYZBkfwPChuZzSyqXfDRxnlsUWRs2jjVCCjiapBLHDNTioXDCpl6oPD
+        bh=F6UUwQ6uU0gh1AgBT5LAdlyWuLVQW/eRWP9wNVATd0w=;
+        b=iDUnIJfIqtQOIHl+rJ91Js4YIyqmkVGJWoh5VRj4nPPw+gSPSa1rokq0grPPW5Fy3Y
+         2P3l3sFyxvg1d9+MGvgSBfiPhHLGULjPplCq2t3i3NZQ99WOc17c3jJXE/9dv3CLVSAX
+         DraBQgX2/DxX6MJWZRplxY/lTcGqMtxkU69bq0Q3O+SfM4lmt1uukRob+jFKm8n6ctD6
+         Er2JqgCu3TSdG43ZmnBssLcjtiqnN1NYgxfLi23x1SQAb5kTNlZkz/KdbN+V+h/v754U
+         u0NByn7erfLWkCCyAgufw8Vh28CEyXjprm26p2EQP+MWs7vCW2SbOe7zKoxpehM//J1e
+         0mPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707886474; x=1708491274;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F6UUwQ6uU0gh1AgBT5LAdlyWuLVQW/eRWP9wNVATd0w=;
+        b=rYho6Oa9bPimdAR9oQA7ZSEttHNU3x1V/hClnFGjpj0KJ5bnd2bw30INTlbph+Eumz
+         xX9PpjxBF3Jqi2qosFhd6zagV8O54GiXlSPEJ13bD23XLNoIKr2u15yxbCJFOBVF8I4f
+         8hVxZ7VZ2Z+KAyz/QseKmPTny7+AIWFfZoPF1lr/hr93WxYwDtLvdNwc3wt/w9zkzI19
+         vA0nLyEvZCQIwVIVeF7YvdAKEG8bvOI+oijGg8/sy16Ep+3xgjViLdc0MbpON6LPVaQa
+         GLmhIamLehLe1L49RA8yE4WS+MGuUC5CxvtiVPiQC/wRAO8fYrhUROj3hXb+hgWvY0+I
+         Mp9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWd/Pxw2MkXdAtFdmUKxOYf2mKGGjfal83fELDW29Gpa8NslNJIWlSZQSMkCXi0+3K5GuS7a7MM9cMq43c+XtqD0L2hYw==
+X-Gm-Message-State: AOJu0YwsEW/uxAwCzb/T/ohJBCH590FMEEL46KtGepY5Z9jPTGwVyGEy
+	jYqXEDdVPhug2xy0arpjMJvDtzzpQo3eMWQ6Bce/aeA/WBf/+9g7tQiNMYoUCSARXp2ILCl4aqE
+	9l7Xo8A==
+X-Google-Smtp-Source: AGHT+IEYhgWjbXFx0sxYnQQnVr7GNh7ZLD+INkja+l1mji2uo3Azkx4WVasjvNd44POf3VLkrK39N5w37xYF
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:6d92:85eb:9adc:66dd])
- (user=irogers job=sendgmr) by 2002:a05:6902:150d:b0:dc6:e1ed:bd1a with SMTP
- id q13-20020a056902150d00b00dc6e1edbd1amr357350ybu.2.1707886471142; Tue, 13
- Feb 2024 20:54:31 -0800 (PST)
-Date: Tue, 13 Feb 2024 20:53:48 -0800
-Message-Id: <20240214045356.748330-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:d3c6:0:b0:dc7:6cfa:dc59 with SMTP id
+ e189-20020a25d3c6000000b00dc76cfadc59mr50124ybf.4.1707886473857; Tue, 13 Feb
+ 2024 20:54:33 -0800 (PST)
+Date: Tue, 13 Feb 2024 20:53:49 -0800
+In-Reply-To: <20240214045356.748330-1-irogers@google.com>
+Message-Id: <20240214045356.748330-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20240214045356.748330-1-irogers@google.com>
 X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
-Subject: [PATCH v4 0/8] Run tests in parallel
+Subject: [PATCH v4 1/8] perf thread_map: Skip exited threads when scanning /proc
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -72,48 +75,42 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-If command line option '-p' is provided, start/fork all tests in the
-main thread and then gather them in order at the end. On a laptop test
-time was reduced from 5 minutes 21 seconds to 1 minute 50 seconds. The
-option isn't default as the test shows up perf and test flakes.
+Scanning /proc is inherently racy. Scanning /proc/pid/task within that
+is also racy as the pid can terminate. Rather than failing in
+__thread_map__new_all_cpus, skip pids for such failures.
 
-The '-v' option is modified so that 'perf test -v' will give verbose
-output only from failing tests.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/thread_map.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-v4 - fix bug in width computation.
-v3 - fix a crash if shell test directory isn't found, remove merged patch.
-v2 - fix parallel test output/verbose issue
-v1 - initial PoC
-
-Ian Rogers (8):
-  perf thread_map: Skip exited threads when scanning /proc
-  perf list: Add scandirat compatibility function
-  perf tests: Avoid fork in perf_has_symbol test
-  tools subcmd: Add a no exec function call option
-  perf test: Rename builtin-test-list and add missed header guard
-  perf tests: Use scandirat for shell script finding
-  perf tests: Run time generate shell test suites
-  perf tests: Add option to run tests in parallel
-
- tools/lib/subcmd/run-command.c                |   2 +
- tools/lib/subcmd/run-command.h                |   2 +
- tools/perf/tests/Build                        |   2 +-
- tools/perf/tests/builtin-test-list.c          | 207 ----------
- tools/perf/tests/builtin-test-list.h          |  12 -
- tools/perf/tests/builtin-test.c               | 378 ++++++++++--------
- tools/perf/tests/shell/lib/perf_has_symbol.sh |   2 +-
- tools/perf/tests/tests-scripts.c              | 257 ++++++++++++
- tools/perf/tests/tests-scripts.h              |   9 +
- tools/perf/util/print-events.c                |  12 +-
- tools/perf/util/thread_map.c                  |   9 +-
- tools/perf/util/util.c                        |  19 +
- tools/perf/util/util.h                        |   8 +
- 13 files changed, 509 insertions(+), 410 deletions(-)
- delete mode 100644 tools/perf/tests/builtin-test-list.c
- delete mode 100644 tools/perf/tests/builtin-test-list.h
- create mode 100644 tools/perf/tests/tests-scripts.c
- create mode 100644 tools/perf/tests/tests-scripts.h
-
+diff --git a/tools/perf/util/thread_map.c b/tools/perf/util/thread_map.c
+index ea3b431b9783..b5f12390c355 100644
+--- a/tools/perf/util/thread_map.c
++++ b/tools/perf/util/thread_map.c
+@@ -109,9 +109,10 @@ static struct perf_thread_map *__thread_map__new_all_cpus(uid_t uid)
+ 
+ 		snprintf(path, sizeof(path), "/proc/%d/task", pid);
+ 		items = scandir(path, &namelist, filter, NULL);
+-		if (items <= 0)
+-			goto out_free_closedir;
+-
++		if (items <= 0) {
++			pr_debug("scandir for %d returned empty, skipping\n", pid);
++			continue;
++		}
+ 		while (threads->nr + items >= max_threads) {
+ 			max_threads *= 2;
+ 			grow = true;
+@@ -152,8 +153,6 @@ static struct perf_thread_map *__thread_map__new_all_cpus(uid_t uid)
+ 	for (i = 0; i < items; i++)
+ 		zfree(&namelist[i]);
+ 	free(namelist);
+-
+-out_free_closedir:
+ 	zfree(&threads);
+ 	goto out_closedir;
+ }
 -- 
 2.43.0.687.g38aa6559b0-goog
 
