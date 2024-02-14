@@ -1,156 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED5053801;
-	Wed, 14 Feb 2024 13:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA8854677;
+	Wed, 14 Feb 2024 13:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707916376; cv=none; b=sN8DGNYJDQRl6dP2156OrZWqOVgHFzBALLFBCf1iS32ySsnMrV1HU3C2hQ+X3Ihv6juZx/USJWypv1KggvSvTS4fMSQBIJSCtZolm26GNrM0iwy7qMdv3V/YELsuzeDX+6B5ezeoS9jC4SbM1piX+oYp+JiA61fZRtq7pDikCRA=
+	t=1707916928; cv=none; b=FxYNFdvb7RVMcvVDQ3P6TNE79wd3lqLWyB9XlCBzOPpvNvn3QNIqkM+oAPR3bta28LVdkblCRWR5+DyoQCxjP8Lfu3aicuaZl+WiMkfQzedxamZvbJITYwACh8sdnJHzevAnZPhK4M5lIOaeWb8LCYwLD+vdEBUlBMZ0tP6KYbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707916376; c=relaxed/simple;
-	bh=ppF6Ky/9HUsd6/RqDwiUAbsV3+Zz3zn7DpSwLi/fI4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S5OMArRv5sICMCMVyN/8DGBOuvAVVSKXqkIJBxNmgqDRmN7M18aOcOyKekiBOixtAk42ql/XVgRIBpA9Zqqe6xpmNEskBbtkPobMaNk6ClbvPhNaWuJQyrjdxQMWowPLc9euWenPwwueArso1FYJ8cGaKSumg18viM1RPa6NgNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAWk6DZA; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1707916928; c=relaxed/simple;
+	bh=3BhU0aZnn35CAZKdM6PG56ZetB26JCBoUcsKfsvxGTk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=En1i5SMv8g7EsX9DZ8/RLxNTgQsDSOQYKM5+Svw6a5izv1iqw81JaAh0zPB2lOqWomgeNJqbLzfkCDm+DhS+pf/Sv/GhhyW/323UV0fr418hkzJKVBPbg7oNK6XAPJx1oRmXkY1Sa+zA7AbbXBkMT+vnNNt+HEeK24qneBjWLlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sX/UcCP3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAWk6DZA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707916375; x=1739452375;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ppF6Ky/9HUsd6/RqDwiUAbsV3+Zz3zn7DpSwLi/fI4c=;
-  b=KAWk6DZA/bEJJ43w0wHxYt7dtbOXEdFe4RLrdtABU0eyBu1djpus55qm
-   Rp5FuxvDu6iXkvYiEJC5qCFsnvmaFre7f3SudGfGZZtce6nLn25JGxFUi
-   Xr9jvUDi/Hrj3LGw08bqvXdPnVxagKmvMJEUR7olvQ+MLsNJ+kT2TGSY/
-   wL6WpXHGCHXhKBppHBUcB3YwkLYTnV0Dgv8KDHlEB4hAjLkatwHAUB8MS
-   G/zU0HURpg8N4AzHLJhDOSs6JpcPn6gjT5yzjJ9e90gSMNI/+5+VLR9ZZ
-   7kEvStvQt7rvV6ZoU4XZG+rLguLk47RnG3tq3wKFWKwKhtRxsb1asDT3B
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="5778798"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="5778798"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 05:12:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="3548587"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 14 Feb 2024 05:12:51 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1raF4C-0008mX-2o;
-	Wed, 14 Feb 2024 13:12:48 +0000
-Date: Wed, 14 Feb 2024 21:11:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Balint Dobszay <balint.dobszay@arm.com>,
-	op-tee@lists.trustedfirmware.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jens.wiklander@linaro.org, sumit.garg@linaro.org, corbet@lwn.net,
-	balint.dobszay@arm.com, sudeep.holla@arm.com, gyorgy.szing@arm.com
-Subject: Re: [PATCH 1/3] tee: optee: Move pool_op helper functions
-Message-ID: <202402142000.xRg35j1i-lkp@intel.com>
-References: <20240213145239.379875-2-balint.dobszay@arm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sX/UcCP3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6E5C43390;
+	Wed, 14 Feb 2024 13:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707916928;
+	bh=3BhU0aZnn35CAZKdM6PG56ZetB26JCBoUcsKfsvxGTk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=sX/UcCP3s3y2QCF0191UjJyD2CJK84+XSRUiI1nfqhs8x6EgXD4u/hDmD6bigwF0/
+	 j4AjeSgE3JEtXKxEFmPBtkU8LZVYahLjimx/yREgHv32imHWfpSwWWpju+eb1e06kd
+	 0f5MrjyH0sPnMVLVopaWMcRaet7EWXbGXir6Vi4F1W+jyDvOUE7z4uF2BpAN9JxIUe
+	 iux4t/Hw7uSnQzEdn2E37Z0Nf5bJUGDU0uyQb1vVPmQGo/5OW7xy2xejDh9ixeJnrI
+	 U2CE6YqI+unaEX68jDwd/JNsVxnsOHKrkBbcsNSwIGwOkG0xbFae2+1zSCxzB0hXD9
+	 b73jVOR6qSvnA==
+From: Mark Brown <broonie@kernel.org>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ alsa-devel@alsa-project.org, linux-sound@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <20240213215807.3326688-1-jbrunet@baylibre.com>
+References: <20240213215807.3326688-1-jbrunet@baylibre.com>
+Subject: Re: [PATCH v2 0/2] ASoC: meson: aiu: fix function pointer type
+ mismatch
+Message-Id: <170791692451.143237.6316282376548391909.b4-ty@kernel.org>
+Date: Wed, 14 Feb 2024 13:22:04 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240213145239.379875-2-balint.dobszay@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-Hi Balint,
+On Tue, 13 Feb 2024 22:58:02 +0100, Jerome Brunet wrote:
+> This patchset fixes 2 -Wcast-function-type-strict warning in amlogic
+> audio drivers with clang 16.
+> 
+> Changes since v1: [0]
+> * use devm_clk_get_enabled() instead of adding a dedicated helper in each
+>   driver.
+> * Split the patch, 1 per fixed commit to make it easier for stable.
+> 
+> [...]
 
-kernel test robot noticed the following build errors:
+Applied to
 
-[auto build test ERROR on lwn/docs-next]
-[also build test ERROR on soc/for-next linus/master v6.8-rc4 next-20240214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Balint-Dobszay/tee-optee-Move-pool_op-helper-functions/20240213-225716
-base:   git://git.lwn.net/linux.git docs-next
-patch link:    https://lore.kernel.org/r/20240213145239.379875-2-balint.dobszay%40arm.com
-patch subject: [PATCH 1/3] tee: optee: Move pool_op helper functions
-config: i386-buildonly-randconfig-002-20240214 (https://download.01.org/0day-ci/archive/20240214/202402142000.xRg35j1i-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402142000.xRg35j1i-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402142000.xRg35j1i-lkp@intel.com/
+[1/2] ASoC: meson: aiu: fix function pointer type mismatch
+      commit: 98ac85a00f31d2e9d5452b825a9ed0153d934043
+[2/2] ASoC: meson: t9015: fix function pointer type mismatch
+      commit: 5ad992c71b6a8e8a547954addc7af9fbde6ca10a
 
-All errors (new ones prefixed by >>):
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
->> drivers/tee/tee_shm.c:227:15: error: call to undeclared function 'virt_to_phys'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     227 |         shm->paddr = virt_to_phys(shm->kaddr);
-         |                      ^
-   1 error generated.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-vim +/virt_to_phys +227 drivers/tee/tee_shm.c
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-   204	
-   205	int tee_shm_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
-   206					 size_t size, size_t align,
-   207					 int (*shm_register)(struct tee_context *ctx,
-   208							     struct tee_shm *shm,
-   209							     struct page **pages,
-   210							     size_t num_pages,
-   211							     unsigned long start))
-   212	{
-   213		size_t nr_pages = roundup(size, PAGE_SIZE) / PAGE_SIZE;
-   214		struct page **pages;
-   215		unsigned int i;
-   216		int rc = 0;
-   217	
-   218		/*
-   219		 * Ignore alignment since this is already going to be page aligned
-   220		 * and there's no need for any larger alignment.
-   221		 */
-   222		shm->kaddr = alloc_pages_exact(nr_pages * PAGE_SIZE,
-   223					       GFP_KERNEL | __GFP_ZERO);
-   224		if (!shm->kaddr)
-   225			return -ENOMEM;
-   226	
- > 227		shm->paddr = virt_to_phys(shm->kaddr);
-   228		shm->size = nr_pages * PAGE_SIZE;
-   229	
-   230		pages = kcalloc(nr_pages, sizeof(*pages), GFP_KERNEL);
-   231		if (!pages) {
-   232			rc = -ENOMEM;
-   233			goto err;
-   234		}
-   235	
-   236		for (i = 0; i < nr_pages; i++)
-   237			pages[i] = virt_to_page((u8 *)shm->kaddr + i * PAGE_SIZE);
-   238	
-   239		shm->pages = pages;
-   240		shm->num_pages = nr_pages;
-   241	
-   242		if (shm_register) {
-   243			rc = shm_register(shm->ctx, shm, pages, nr_pages,
-   244					  (unsigned long)shm->kaddr);
-   245			if (rc)
-   246				goto err;
-   247		}
-   248	
-   249		return 0;
-   250	err:
-   251		free_pages_exact(shm->kaddr, shm->size);
-   252		shm->kaddr = NULL;
-   253		return rc;
-   254	}
-   255	EXPORT_SYMBOL_GPL(tee_shm_pool_op_alloc_helper);
-   256	
+Thanks,
+Mark
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
