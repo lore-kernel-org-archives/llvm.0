@@ -1,93 +1,122 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A18413ADB
-	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 09:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4920171C8
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 10:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707904020; cv=none; b=r/u0XzMU4HGXJH5OIbNLYqDckILTBG/Y2fqVlvwFdrrcuP6ILJcB9/7pSmdmyDa8oG/DOWJlcMVjMuSVXwJpU8daqnQS88eyo7aKfK93sEfMA8JeeM0sBLTbQznQ8qLqvYvr2969EKijz48rg3j5jsfVSXpm/a5EeeT4MTAoT8o=
+	t=1707905441; cv=none; b=n6KYoSYa4VGLWDo3qlwlufBFQZiVDVTfkcOBYG9ZQ9lTjDMQaJLE3YR3LvYuPlW1j/9kPJClsy+A2GCNAAZ9yGclYWLbTcYR3aB1wszclpea2xZVgpB50eYQ2homTmdCLGEGPRerMlCzZgNQvzQdYKEh1VAiETg3CVqMn0Vp8mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707904020; c=relaxed/simple;
-	bh=NDP3lJv4zleZeVDMxL6XQcti+46aisw1jmKXENGIgRY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=NuQJj159z++OrDw4m4OtisrLsK2ze6aGVkxGtVmcEqE8ZmQCwgZ9ScFBiWCxo2i/tcTx+TG4r94Erjz6d900hqmiYjjL/2FJTjPrH0Pjc84GaXGddWtEtg+BRiwAtkBSGCSdzgK1vctcfkOiIIiTUoeSFkA8jl9IplXtmtuUH5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-123-NIfzbVeEN7a3ZZr9tPCsfQ-1; Wed, 14 Feb 2024 09:46:55 +0000
-X-MC-Unique: NIfzbVeEN7a3ZZr9tPCsfQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 14 Feb
- 2024 09:46:33 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 14 Feb 2024 09:46:33 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Segher Boessenkool' <segher@kernel.crashing.org>, Arnd Bergmann
-	<arnd@kernel.org>
-CC: "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, "Arnd
- Bergmann" <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nick Desaulniers
-	<ndesaulniers@google.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, "Bill
- Wendling" <morbo@google.com>, "linux-serial@vger.kernel.org"
-	<linux-serial@vger.kernel.org>, Justin Stitt <justinstitt@google.com>, "Jiri
- Slaby" <jirislaby@kernel.org>
-Subject: RE: [PATCH] tty: hvc-iucv: fix function pointer casts
-Thread-Topic: [PATCH] tty: hvc-iucv: fix function pointer casts
-Thread-Index: AQHaXrGUxAtD30hgkEO/PHRuEZrHGLEJlp9g
-Date: Wed, 14 Feb 2024 09:46:33 +0000
-Message-ID: <57d72e2ccc8245fe99982613a11c461c@AcuMS.aculab.com>
-References: <20240213101756.461701-1-arnd@kernel.org>
- <20240213191254.GA19790@gate.crashing.org>
-In-Reply-To: <20240213191254.GA19790@gate.crashing.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1707905441; c=relaxed/simple;
+	bh=NE5tzEFVtlvXw7ZnuqvaSDoPoYH8LaRLru5KtOL3d4I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Kwya3uIGINpKxPgr7BALZoXJWgVfMIdUyEazbgAM/qnsg8lXGAQyHaeyX7XW4E8nO/wy+fUyS0XI0ZKhe+X1pE26qFY40KKf0vxqLCMX66FmRDv1mrCrXFpxQKvSC/ETOn48yTltQ6RYrT6uvUVJy0jSgzEDOerG+l38corJD3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oBnR3UI0; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oBnR3UI0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707905440; x=1739441440;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=NE5tzEFVtlvXw7ZnuqvaSDoPoYH8LaRLru5KtOL3d4I=;
+  b=oBnR3UI0qxTvlTExHSOOAqJ5pyS+3uDTgJg3m5YlqRZ+dfhBMfRriuez
+   YplDf8eG0gTj9hp1XCeOKolj5gTdCnIuMcxF+O1TAuakYftv/8XktmIXO
+   DUumybIQ6DvMcOW85prNa2vnkr9wvHYKxgSCFgoFbK0+IgYkSIubepgBN
+   NnrSVz2KEhujpM42e01G7o3zCKuCK9560dBxTtxA2NLER9FbJki/7QXkE
+   ClIWH5WEXzaev9A0st5WDqn3K7hje/5U4gJB9W+xlr64A3oRTJF3idBP+
+   D4fkwUJfpKQpiTnm7WbeyaDDEE6do6tLnqeKqxD9dWQLrm6q+BlNr75o2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="2065369"
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="2065369"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 02:10:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="7806813"
+Received: from binm223x-mobl2.gar.corp.intel.com (HELO [10.249.254.154]) ([10.249.254.154])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 02:10:35 -0800
+Message-ID: <f0b2b4dda91ef1342fc38540bf3d453366b943e9.camel@linux.intel.com>
+Subject: Re: [PATCH] drm/xe: avoid function cast warnings
+From: Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
+To: Arnd Bergmann <arnd@kernel.org>, Lucas De Marchi
+ <lucas.demarchi@intel.com>,  Oded Gabbay <ogabbay@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Wed, 14 Feb 2024 11:10:31 +0100
+In-Reply-To: <20240213095719.454865-1-arnd@kernel.org>
+References: <20240213095719.454865-1-arnd@kernel.org>
+Autocrypt: addr=thomas.hellstrom@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mDMEZaWU6xYJKwYBBAHaRw8BAQdAj/We1UBCIrAm9H5t5Z7+elYJowdlhiYE8zUXgxcFz360SFRob21hcyBIZWxsc3Ryw7ZtIChJbnRlbCBMaW51eCBlbWFpbCkgPHRob21hcy5oZWxsc3Ryb21AbGludXguaW50ZWwuY29tPoiTBBMWCgA7FiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQuBaTVQrGBr/yQAD/Z1B+Kzy2JTuIy9LsKfC9FJmt1K/4qgaVeZMIKCAxf2UBAJhmZ5jmkDIf6YghfINZlYq6ixyWnOkWMuSLmELwOsgPuDgEZaWU6xIKKwYBBAGXVQEFAQEHQF9v/LNGegctctMWGHvmV/6oKOWWf/vd4MeqoSYTxVBTAwEIB4h4BBgWCgAgFiEEbJFDO8NaBua8diGTuBaTVQrGBr8FAmWllOsCGwwACgkQuBaTVQrGBr/P2QD9Gts6Ee91w3SzOelNjsus/DcCTBb3fRugJoqcfxjKU0gBAKIFVMvVUGbhlEi6EFTZmBZ0QIZEIzOOVfkaIgWelFEH
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-From: Segher Boessenkool
-> Sent: 13 February 2024 19:13
+Hi,
+
+On Tue, 2024-02-13 at 10:56 +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >=20
-> On Tue, Feb 13, 2024 at 11:17:49AM +0100, Arnd Bergmann wrote:
-> > clang warns about explicitly casting between incompatible function
-> > pointers:
-> >
-> > drivers/tty/hvc/hvc_iucv.c:1100:23: error: cast from 'void (*)(const vo=
-id *)' to 'void (*)(struct
-> device *)' converts to incompatible function type [-Werror,-Wcast-functio=
-n-type-strict]
-> >  1100 |         priv->dev->release =3D (void (*)(struct device *)) kfre=
-e;
-> >       |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> clang-16 warns about a cast between incompatible function types:
 >=20
-> Such a cast of course is explicitly allowed by 6.3.2.3/8, only calling a
-> function using a non-compatible type is UB.  This warning message is
-> quite misleading.  Doubly so because of the -Werror, as always.
+> drivers/gpu/drm/xe/xe_range_fence.c:155:10: error: cast from 'void
+> (*)(const void *)' to 'void (*)(struct xe_range_fence *)' converts to
+> incompatible function type [-Werror,-Wcast-function-type-strict]
+> =C2=A0 155 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .free =3D (v=
+oid (*)(struct xe_range_fence *rfence))
+> kfree,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Avoid this with a trivial helper function that calls kfree() here.
+>=20
+> Fixes: 845f64bdbfc9 ("drm/xe: Introduce a range-fence utility")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> =C2=A0drivers/gpu/drm/xe/xe_range_fence.c | 7 ++++++-
+> =C2=A01 file changed, 6 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/xe/xe_range_fence.c
+> b/drivers/gpu/drm/xe/xe_range_fence.c
+> index d35d9ec58e86..8510be4466eb 100644
+> --- a/drivers/gpu/drm/xe/xe_range_fence.c
+> +++ b/drivers/gpu/drm/xe/xe_range_fence.c
+> @@ -151,6 +151,11 @@ xe_range_fence_tree_next(struct xe_range_fence
+> *rfence, u64 start, u64 last)
+> =C2=A0	return xe_range_fence_tree_iter_next(rfence, start, last);
+> =C2=A0}
+> =C2=A0
+> +static void xe_range_fence_free(struct xe_range_fence * rfence)
 
-But it will get called using the wrong type.
-And (is it) fine-ibt will reject the incorrect call.
+There's a checkpatch.pl style error above: s/* rfence/*rfence/. I can
+fix that up when pushing if it's ok with you.
 
-Has clang/gcc added an attribute to 'seed' the ibt hash yet?
-So that functions that are void (*)(void) can be separated?
+/Thomas
 
-=09David
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+> +{
+> +	kfree(rfence);
+> +}
+> +
+> =C2=A0const struct xe_range_fence_ops xe_range_fence_kfree_ops =3D {
+> -	.free =3D (void (*)(struct xe_range_fence *rfence)) kfree,
+> +	.free =3D xe_range_fence_free,
+> =C2=A0};
 
