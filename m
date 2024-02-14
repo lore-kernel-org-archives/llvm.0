@@ -1,98 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA8854677;
-	Wed, 14 Feb 2024 13:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A90535DF;
+	Wed, 14 Feb 2024 13:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707916928; cv=none; b=FxYNFdvb7RVMcvVDQ3P6TNE79wd3lqLWyB9XlCBzOPpvNvn3QNIqkM+oAPR3bta28LVdkblCRWR5+DyoQCxjP8Lfu3aicuaZl+WiMkfQzedxamZvbJITYwACh8sdnJHzevAnZPhK4M5lIOaeWb8LCYwLD+vdEBUlBMZ0tP6KYbg=
+	t=1707918221; cv=none; b=e22ydHnswNX1zPKsmwF8A2RMIuHpMZ9dwP1d1/euK3nhXFLati39kUcd3FXG85jz4eIM8QWbHXLs9PLerpX9frP4kD1FRA9FN6ln7pwBNUCqBQJJN+0JYL+dZ527GYa5Cc/KrdfuFcdnw1d8wrQRn6dppKNBcGoZF/xYI6qL8wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707916928; c=relaxed/simple;
-	bh=3BhU0aZnn35CAZKdM6PG56ZetB26JCBoUcsKfsvxGTk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=En1i5SMv8g7EsX9DZ8/RLxNTgQsDSOQYKM5+Svw6a5izv1iqw81JaAh0zPB2lOqWomgeNJqbLzfkCDm+DhS+pf/Sv/GhhyW/323UV0fr418hkzJKVBPbg7oNK6XAPJx1oRmXkY1Sa+zA7AbbXBkMT+vnNNt+HEeK24qneBjWLlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sX/UcCP3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707918221; c=relaxed/simple;
+	bh=jWkxWAn2QwY1HKIGYXamG4b+Y2/BkSkavkG8tJphE8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=CXQuHSx2Ql/k03ZLfavCtxmaQqGz2FiK04yDTo/ikGxDQ/ppHMV4IyQwlSpSC/RUkI2sTsuNo11l8NND80xkxPNUyzlWPbPEszJPI/VMuFdM5T73+e8kymOhGBDN54YkmmEuV0rxMwdFaKMnEdP0MFGSnEN7FE6vQudCnqAm2og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cbQeKhef; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sX/UcCP3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6E5C43390;
-	Wed, 14 Feb 2024 13:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707916928;
-	bh=3BhU0aZnn35CAZKdM6PG56ZetB26JCBoUcsKfsvxGTk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=sX/UcCP3s3y2QCF0191UjJyD2CJK84+XSRUiI1nfqhs8x6EgXD4u/hDmD6bigwF0/
-	 j4AjeSgE3JEtXKxEFmPBtkU8LZVYahLjimx/yREgHv32imHWfpSwWWpju+eb1e06kd
-	 0f5MrjyH0sPnMVLVopaWMcRaet7EWXbGXir6Vi4F1W+jyDvOUE7z4uF2BpAN9JxIUe
-	 iux4t/Hw7uSnQzEdn2E37Z0Nf5bJUGDU0uyQb1vVPmQGo/5OW7xy2xejDh9ixeJnrI
-	 U2CE6YqI+unaEX68jDwd/JNsVxnsOHKrkBbcsNSwIGwOkG0xbFae2+1zSCxzB0hXD9
-	 b73jVOR6qSvnA==
-From: Mark Brown <broonie@kernel.org>
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Liam Girdwood <lgirdwood@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- alsa-devel@alsa-project.org, linux-sound@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20240213215807.3326688-1-jbrunet@baylibre.com>
-References: <20240213215807.3326688-1-jbrunet@baylibre.com>
-Subject: Re: [PATCH v2 0/2] ASoC: meson: aiu: fix function pointer type
- mismatch
-Message-Id: <170791692451.143237.6316282376548391909.b4-ty@kernel.org>
-Date: Wed, 14 Feb 2024 13:22:04 +0000
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cbQeKhef"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41EDbMLK019282;
+	Wed, 14 Feb 2024 13:43:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=s0tK1YoNd0xkyc0b/gg/hjxmXmHJUfA0TyP0+P9d5z0=;
+ b=cbQeKhef9ZAgG8zLtNhUy4gHkn3L60qJPKnHRTE1GcgRMg2BXbaslZ+3+rTAPY1KgkNq
+ YvYvekytyWbXH8WETGoeCh9O5CZs3ZrxeEKil1PejNFf04vEYDs7jvx/OPNIkNEFz/gG
+ 1CGN9fz/DnsfvIjpHUci1441/y7h+LX2xgNIDdrqjv+8gsjZPj9rC/loQj8z09qlotCN
+ Cjugm1QPHmJsbsfrjjN1mwmnFiB7sOuT0agmrkIwtnUzDSiLS077ZGfWrMir1K9WrTVr
+ cyOfjqMzJR5vdiy2PMvT7tH9uVVjOrIwuPZBczk8jzRqoehPRym6q/1+HJo9n4i60N1o Fw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w8xjb05bw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 13:43:36 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41EDbqMs020160;
+	Wed, 14 Feb 2024 13:43:36 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w8xjb05b5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 13:43:36 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41ECJQhk032614;
+	Wed, 14 Feb 2024 13:43:35 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6kftpdbe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 13:43:34 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41EDhUi759375994
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 14 Feb 2024 13:43:32 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0BD4A20040;
+	Wed, 14 Feb 2024 13:43:30 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CF24220077;
+	Wed, 14 Feb 2024 13:43:29 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.60])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 14 Feb 2024 13:43:29 +0000 (GMT)
+Date: Wed, 14 Feb 2024 14:43:28 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, maskray@google.com, ndesaulniers@google.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 00/11] s390: Support linking with ld.lld
+Message-ID: <20240214134328.6438-F-hca@linux.ibm.com>
+References: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240207-s390-lld-and-orphan-warn-v1-0-8a665b3346ab@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oOfebv6eWff_gDkXmzDSQ8BBROJ-BwB1
+X-Proofpoint-ORIG-GUID: bJ9d1QWArnZ3dPo5kt745E2He42PEyF6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-14_06,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=757 impostorscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 suspectscore=0 adultscore=0 malwarescore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402140106
 
-On Tue, 13 Feb 2024 22:58:02 +0100, Jerome Brunet wrote:
-> This patchset fixes 2 -Wcast-function-type-strict warning in amlogic
-> audio drivers with clang 16.
+On Wed, Feb 07, 2024 at 05:14:52PM -0700, Nathan Chancellor wrote:
+> Hi all,
 > 
-> Changes since v1: [0]
-> * use devm_clk_get_enabled() instead of adding a dedicated helper in each
->   driver.
-> * Split the patch, 1 per fixed commit to make it easier for stable.
+> This series allows the s390 kernel to be linked with ld.lld (support for
+> s390 is under review at [1]). This implicitly depends on [2], which was
+> created and sent before it was realized that this series was necessary.
+...
+> Nathan Chancellor (11):
+>       s390: boot: Add support for CONFIG_LD_ORPHAN_WARN
+>       s390: vmlinux.lds.S: Handle '.data.rel' sections explicitly
+>       s390: vmlinux.lds.S: Explicitly handle '.got' and '.plt' sections
+>       s390: vmlinux.lds.S: Discard unnecessary sections
+>       s390/boot: vmlinux.lds.S: Handle '.init.text'
+>       s390/boot: vmlinux.lds.S: Handle '.rela' sections
+>       s390/boot: vmlinux.lds.S: Handle DWARF debug sections
+>       s390/boot: vmlinux.lds.S: Handle ELF required sections
+>       s390/boot: vmlinux.lds.S: Handle commonly discarded sections
+>       s390: Select CONFIG_ARCH_WANT_LD_ORPHAN_WARN
+>       s390: Link vmlinux with '-z notext'
 > 
-> [...]
+>  arch/s390/Kconfig              |  1 +
+>  arch/s390/Makefile             |  2 +-
+>  arch/s390/boot/Makefile        |  5 +++--
+>  arch/s390/boot/vmlinux.lds.S   | 28 ++++++++++++++++++++++++++++
+>  arch/s390/kernel/vmlinux.lds.S | 28 +++++++++++++++++++++++++++-
+>  5 files changed, 60 insertions(+), 4 deletions(-)
 
-Applied to
+Now available at:
+https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/log/?h=features
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+And should be in linux-next soon.
 
-Thanks!
-
-[1/2] ASoC: meson: aiu: fix function pointer type mismatch
-      commit: 98ac85a00f31d2e9d5452b825a9ed0153d934043
-[2/2] ASoC: meson: t9015: fix function pointer type mismatch
-      commit: 5ad992c71b6a8e8a547954addc7af9fbde6ca10a
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Thanks a lot! :)
