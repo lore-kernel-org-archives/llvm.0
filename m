@@ -1,107 +1,170 @@
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E115C10A31
-	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 01:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125F3B642;
+	Wed, 14 Feb 2024 02:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707873933; cv=none; b=kZno4eOydkLWrCJlze52g69HjP10PY0lL9p88ImM6CTP9RretfX8OiA1AcElO8gLZDMbqYcs36NwfTtJwsO1HOZRfDVtnOqZ58gA/aCZ1qcrgIdKz0cfN5ewCordD5hpJJSrsz5Z2dsdF+giSxAEXvdVGj2SAenAMjmM/hYcu7k=
+	t=1707878827; cv=none; b=XkC1S8p68juERllToDbgPLEI+ODGxzhJzWZEr2qqpJ99iQ+1EreBDzjYbDI2BrxMaYFE1piI9Q76OCkLlrRQR0S6J5b3ASL98GCChnLt9EX2nvU6uDyqDcLEXBFSyjPkcKNwv4oDmSUOKPQwH0lmLGwM4BNivcjwx07WGILSPgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707873933; c=relaxed/simple;
-	bh=yOEMQLS0HBWD1xpp/GEUAOHOe6zYSrs6EjP/pYr8yKk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VFs01rmXl4/KldDFj63HcIe/C5A/SGTsFuPLDUPWGixReogELNWn6N9u35ToWaI1zon+WhaWjRgjW0rUQvOFrjw4hEhe4bRpXUOo6DMHxBdQMcM2oxaYxIb8ldHaMfJmnLMI/yFy1uTRySN9FOmE58J9kJtzGUcXcUdux0thqAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kIX2dB6u; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707878827; c=relaxed/simple;
+	bh=xaoRT3hyyhCIw73e6wBC1dBj93aQsZiOCh3esJJmyS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N6wBCtL06tenk8MXCkOCI0Bd1vtyFoPQhUk42frd50iCdGq7xx1qxWUpTAMCOG8VUa1lyXCM4lXNB8bz5Fvmx/9dqhYgB1RQWmmQIz9/BI/MiDulfgJb0ADkuhszySTtIZzuUIwRCbOxOwq117wHu92DoS4aKocb7JRQRD8jJEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nF3bsTtj; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kIX2dB6u"
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-21a01c100a3so1990171fac.1
-        for <llvm@lists.linux.dev>; Tue, 13 Feb 2024 17:25:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707873931; x=1708478731; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8zqcKGjJIq8z28bcz9jGNmiRh2zlXlrXCYNsKpGAsbk=;
-        b=kIX2dB6ucAGNGz3/BQit17apq3bZX5vgxTrRnVs4XrM8m4zL3yiyFeql9QyNtE2Iqg
-         KAdkPnXgf7QRkytNJx/nYiXYu59Bi0/bl7wFN7nY4LnQCh8BbnUUbwvWGNQm9MgR1xvt
-         JiX+kwq3x29ZiiQ+XTthSZHMFjmB3yUygM7VerBT5GE1x9KOP2+zTAJL2oxI6nZcxeKd
-         Na+tpHPC35BnJgtYBvbxsptgEhSEEnwvJPx8WwHLRf8VN4M5QDgDDZbU9H/S2Q5dbLPg
-         48v4Imk6mGr6/9GgTPYFGfj2SidYCdU0OVnSUeUCyjdyx9ERSJji/VPQjyrb0g7jcKC1
-         7cjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707873931; x=1708478731;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8zqcKGjJIq8z28bcz9jGNmiRh2zlXlrXCYNsKpGAsbk=;
-        b=EYe4AuenvkUwEkOITNlTCqTu765unyCgjK8XeVX6OIWwI+RRbbrm7zTQKiyqkIplXo
-         T5MWVr3JmglQCTUQxbh9EYkhL56Zh0w+o7Dvw+Zsm1NmQRVFOnz37am5g3ESNeFnnfu1
-         L2qsXviHaDQr+587vA6deoz4MQozHjgqND4leX6921UhSMLuA66PkyvP28CLO/43G9vl
-         QIcafPrVORkE/JD5AHs6K0nlbRgAV5CyBLX1HlyR4Xgf1MBl7AeoJq+Vw+HvT4C/p8N0
-         onDY241o5XlrNWgsJEHLO3iHN9SzHKGcSMil0khqR4MIbA5BC+Bf9yXNcZTX7FCcXkNy
-         YhmA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHR4F0PypMk/QXmulum0pF/EKF2HOnXR0Bx4Y83JA+P69fAT03JBvgSGbIIhXUlNuzfslx9EkRt33KrVvOd4hlKVpNwA==
-X-Gm-Message-State: AOJu0YxvG/mwGuAjZtZcLVRNZwK4kd/PFb2IJ08a9j8L5i/+F/nw7R5V
-	peTwgCAy1UuWh7N6gIeK0XigUqlU0fIl6dxR61GqVlTk/NFjL1Dv
-X-Google-Smtp-Source: AGHT+IGkPWH3yWst8zIhaEqoltQddmcw8FOkSPKhRemNOFMvUlGw/MFK4UEg1BMeMV6v3qIWULcviA==
-X-Received: by 2002:a05:6870:84c2:b0:21a:216d:3a6a with SMTP id l2-20020a05687084c200b0021a216d3a6amr1195402oak.52.1707873930990;
-        Tue, 13 Feb 2024 17:25:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVv1/HqwbbPQn8gnhT+3LrX1gtJKlF9y4+dDoI8DuptB9zKlMmYPlEA9NbSXc7Wg1qo5pU1tT2nPwL9R7K/x0hS8W2NQ6FKvh7TFU7du9IwKDTWJTsYCzl/xgDX+pM/hBynoFTzCmtPyjqMTRnatvME3uCT2Yqmi5r+5/X0m9XOEvFf71xLF6HJ+Ch6gyxc3oAatPw9jPfzVxMrjPDUyVy52T5Bw1MDX5whs0UBXXDKWBKTXiat5eSwOir99hrhzR55jp4MkLwW9bUTSdGhqpz3tDxveYLBih+jg96V47GtOSIU7CQgGSijeXr8yIqDqpHgHVxhT6CRRwcHPXkVM1VAnhcr4WDy1//qmSNJLrIip2eevvh4bpwaApC0+d3Thzy0pToic/MDQa9oeFNNLrBhhR8=
-Received: from my-computer.uh.edu ([129.7.0.170])
-        by smtp.googlemail.com with ESMTPSA id pc7-20020a0568701ec700b0021a89fff00esm572928oab.19.2024.02.13.17.25.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 17:25:30 -0800 (PST)
-From: Andrew Ballance <andrewjballance@gmail.com>
-To: justinstitt@google.com
-Cc: andrewjballance@gmail.com,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	masahiroy@kernel.org,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	nicolas@fjasle.eu,
-	skhan@linuxfoundation.org
-Subject: [PATCH v3 1/1] gen_compile_commands: fix invalid escape sequence warning
-Date: Tue, 13 Feb 2024 19:23:05 -0600
-Message-ID: <20240214012439.879134-2-andrewjballance@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240214012439.879134-1-andrewjballance@gmail.com>
-References: <CAFhGd8pvhzehMGh1XEHBct7CGEQuF0CZeneMH3D6cKSRj5UdHQ@mail.gmail.com>
- <20240214012439.879134-1-andrewjballance@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nF3bsTtj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707878825; x=1739414825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xaoRT3hyyhCIw73e6wBC1dBj93aQsZiOCh3esJJmyS0=;
+  b=nF3bsTtjaRUhFQjjnpYJ0EUYtXR7f28RLhNcRRxfA16AVbYDyb/mGR/X
+   bSj3O5AfGgk6Kml338PzmSvtGgYcYinRHqhEY3oX0Pta03+immzd7sHBB
+   ltBaRzt9uIkIyZeIkGj4AUmhT3LODDsIRzPmeNZIZJMKYvEjlISdeRU7s
+   giJjKpqYwjXfCr/T5Z9N1gpj+dpuK1DOzVJXHyapC/nPSTdbZ1TAH92mD
+   we5b30gZAiXj9pRbtIIsWjhkW0O8R0tkuUw+firJaIlXQnv/yWxFE8CaV
+   ECFrAi1hrJC21M7/c1rS7h8UT5dMy4bdaYlvh/kRtppiIe8pNRtSfaZoq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="27360964"
+X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
+   d="scan'208";a="27360964"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 18:47:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
+   d="scan'208";a="26233177"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 13 Feb 2024 18:46:58 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ra5IV-0008Ek-0v;
+	Wed, 14 Feb 2024 02:46:55 +0000
+Date: Wed, 14 Feb 2024 10:46:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uma Shankar <uma.shankar@intel.com>, intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ville.syrjala@linux.intel.com, pekka.paalanen@collabora.com,
+	contact@emersion.fr, harry.wentland@amd.com, mwen@igalia.com,
+	jadahl@redhat.com, sebastian.wick@redhat.com,
+	shashank.sharma@amd.com, agoins@nvidia.com, joshua@froggi.es,
+	mdaenzer@redhat.com, aleixpol@kde.org, xaver.hugl@gmail.com,
+	victoria@system76.com, daniel@ffwll.ch, quic_naseer@quicinc.com,
+	quic_cbraga@quicinc.com, quic_abhinavk@quicinc.com,
+	arthurgrillo@riseup.net, marcan@marcan.st, Liviu.Dudau@arm.com,
+	sashamcintosh@google.com, sean@poorly.run,
+	Uma Shankar <uma.shankar@intel.com>
+Subject: Re: [PATCH 01/28] [NOT FOR REVIEW] drm: color pipeline base work
+Message-ID: <202402141056.LzCSLaOT-lkp@intel.com>
+References: <20240213064835.139464-2-uma.shankar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240213064835.139464-2-uma.shankar@intel.com>
 
-with python 3.12.1 '\#' results in this warning
-    SyntaxWarning: invalid escape sequence '\#'
+Hi Uma,
 
-Signed-off-by: Andrew Ballance <andrewjballance@gmail.com>
----
- scripts/clang-tools/gen_compile_commands.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 5dea4479240b..e4fb686dfaa9 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file_path):
-     # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
-     # kernel version). The compile_commands.json file is not interepreted
-     # by Make, so this code replaces the escaped version with '#'.
--    prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
-+    prefix = command_prefix.replace(r'\#', '#').replace('$(pound)', '#')
- 
-     # Return the canonical path, eliminating any symbolic links encountered in the path.
-     abs_path = os.path.realpath(os.path.join(root_directory, file_path))
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next next-20240213]
+[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes linus/master v6.8-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Uma-Shankar/drm-color-pipeline-base-work/20240213-144544
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240213064835.139464-2-uma.shankar%40intel.com
+patch subject: [PATCH 01/28] [NOT FOR REVIEW] drm: color pipeline base work
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240214/202402141056.LzCSLaOT-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402141056.LzCSLaOT-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402141056.LzCSLaOT-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/tests/drm_fixp_test.c:11:59: warning: overflow in expression; result is 9223372036854775807 with type 'long long' [-Winteger-overflow]
+      11 |         KUNIT_EXPECT_EQ(test, 0x7fffffffffffffffll, ((1LL << 63) - 1));
+         |                                                                  ^
+   1 warning generated.
+--
+>> drivers/gpu/drm/vkms/vkms_composer.c:95:5: warning: no previous prototype for function 'lerp_u16' [-Wmissing-prototypes]
+      95 | u16 lerp_u16(u16 a, u16 b, s64 t)
+         |     ^
+   drivers/gpu/drm/vkms/vkms_composer.c:95:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      95 | u16 lerp_u16(u16 a, u16 b, s64 t)
+         | ^
+         | static 
+>> drivers/gpu/drm/vkms/vkms_composer.c:105:5: warning: no previous prototype for function 'get_lut_index' [-Wmissing-prototypes]
+     105 | s64 get_lut_index(const struct vkms_color_lut *lut, u16 channel_value)
+         |     ^
+   drivers/gpu/drm/vkms/vkms_composer.c:105:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     105 | s64 get_lut_index(const struct vkms_color_lut *lut, u16 channel_value)
+         | ^
+         | static 
+>> drivers/gpu/drm/vkms/vkms_composer.c:167:6: warning: no previous prototype for function 'apply_3x4_matrix' [-Wmissing-prototypes]
+     167 | void apply_3x4_matrix(struct pixel_argb_s32 *pixel, const struct drm_color_ctm_3x4 *matrix)
+         |      ^
+   drivers/gpu/drm/vkms/vkms_composer.c:167:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     167 | void apply_3x4_matrix(struct pixel_argb_s32 *pixel, const struct drm_color_ctm_3x4 *matrix)
+         | ^
+         | static 
+   3 warnings generated.
+--
+>> drivers/gpu/drm/vkms/vkms_colorop.c:11:1: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
+      11 | const int vkms_initialize_tf_pipeline(struct drm_plane *plane, struct drm_prop_enum_list *list)
+         | ^~~~~
+>> drivers/gpu/drm/vkms/vkms_colorop.c:11:11: warning: no previous prototype for function 'vkms_initialize_tf_pipeline' [-Wmissing-prototypes]
+      11 | const int vkms_initialize_tf_pipeline(struct drm_plane *plane, struct drm_prop_enum_list *list)
+         |           ^
+   drivers/gpu/drm/vkms/vkms_colorop.c:11:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      11 | const int vkms_initialize_tf_pipeline(struct drm_plane *plane, struct drm_prop_enum_list *list)
+         |       ^
+         | static 
+>> drivers/gpu/drm/vkms/vkms_colorop.c:80:5: warning: no previous prototype for function 'vkms_initialize_colorops' [-Wmissing-prototypes]
+      80 | int vkms_initialize_colorops(struct drm_plane *plane)
+         |     ^
+   drivers/gpu/drm/vkms/vkms_colorop.c:80:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      80 | int vkms_initialize_colorops(struct drm_plane *plane)
+         | ^
+         | static 
+   3 warnings generated.
+
+
+vim +11 drivers/gpu/drm/tests/drm_fixp_test.c
+
+     8	
+     9	static void drm_test_sm2fixp(struct kunit *test)
+    10	{
+  > 11		KUNIT_EXPECT_EQ(test, 0x7fffffffffffffffll, ((1LL << 63) - 1));
+    12	
+    13		/* 1 */
+    14		KUNIT_EXPECT_EQ(test, drm_int2fixp(1), drm_sm2fixp(1ull << DRM_FIXED_POINT));
+    15	
+    16		/* -1 */
+    17		KUNIT_EXPECT_EQ(test, drm_int2fixp(-1), drm_sm2fixp((1ull << 63) | (1ull << DRM_FIXED_POINT)));
+    18	
+    19		/* 0.5 */
+    20		KUNIT_EXPECT_EQ(test, drm_fixp_from_fraction(1, 2), drm_sm2fixp(1ull << (DRM_FIXED_POINT - 1)));
+    21	
+    22		/* -0.5 */
+    23		KUNIT_EXPECT_EQ(test, drm_fixp_from_fraction(-1, 2), drm_sm2fixp((1ull << 63) | (1ull << (DRM_FIXED_POINT - 1))));
+    24	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
