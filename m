@@ -1,133 +1,93 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5C612E72;
-	Wed, 14 Feb 2024 09:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A18413ADB
+	for <llvm@lists.linux.dev>; Wed, 14 Feb 2024 09:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707903293; cv=none; b=QXdQ4GukZ+96WZhLjXVLd6DPYm5ulYh/pm6Xajm9mgQiQrgSXX9p11/PZfy8T+Dx2gGzuuAPp1UL4z/8/BKFA2YrLX9wH2Ymh7alVzZvTBHjJA/8VIzg1sn4pBWzgkuQK61jWRe3UocPLbLpwmjYZSzPUF9rsVNCjZzPgy2PS8g=
+	t=1707904020; cv=none; b=r/u0XzMU4HGXJH5OIbNLYqDckILTBG/Y2fqVlvwFdrrcuP6ILJcB9/7pSmdmyDa8oG/DOWJlcMVjMuSVXwJpU8daqnQS88eyo7aKfK93sEfMA8JeeM0sBLTbQznQ8qLqvYvr2969EKijz48rg3j5jsfVSXpm/a5EeeT4MTAoT8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707903293; c=relaxed/simple;
-	bh=eWkspjNzFtYVtL67xcsvO3+T3IJryy3wrpfEPZSaC6Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ps7/byLtsIbgOyVuEjPPn22L6oTzIPNh6EfBiRXTXYdKN4ED2yR0neDRgA8LOq+He+yHqiCMHgleUtctjd9UIVfRDD4tEIKgFXYBFZCjhUoDPJAT7YgLlOSCtWx2barsSsYy4mjw/GpLmZtw40O/HzH62K7qzgBRtRvE6uj407M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f8FC5ItF; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f8FC5ItF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707903290; x=1739439290;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eWkspjNzFtYVtL67xcsvO3+T3IJryy3wrpfEPZSaC6Q=;
-  b=f8FC5ItFuk0gb4jwwnaPgyr6P9USjYSOTwhenUlFHfPMvpSlYsF16Twa
-   qOGCUukrW7VRHNJ69g+fBx3juw5d0j+os+DlP9gzhC1xoblHiEYuE/BhS
-   GcAEr5AOrqC6z/86Oo0MVMOXOwFfx27pyNvWT8q/rqCJu2YEKKVevX/fq
-   fNNFFh81w2xx6CBSEDoUz2LQlU5rq4JhvtBw5dYIfy30pvyaMiYf+DK70
-   Bue3pKTsoX0EYuCBhFiGSpkSo62Xis2fOWpBpyWgawIGuHjLYzcLgH799
-   /2Rg41DTT+ckQvAAg/x4Z3PtJuO8dWfcT6vMNN7+45SA0b189q767zLY/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1848356"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="1848356"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 01:34:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="3115962"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 14 Feb 2024 01:34:44 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1raBf7-0008dU-2i;
-	Wed, 14 Feb 2024 09:34:41 +0000
-Date: Wed, 14 Feb 2024 17:33:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Costa Shulyupin <costa.shul@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Waiman Long <longman@redhat.com>,
-	Frederic Weisbecker <frederic@kernel.org>
-Subject: [tip:timers/core 3/3] kernel/time/hrtimer.c:2224:49: error: implicit
- declaration of function 'housekeeping' is invalid in C99
-Message-ID: <202402141742.oYY6J3lC-lkp@intel.com>
+	s=arc-20240116; t=1707904020; c=relaxed/simple;
+	bh=NDP3lJv4zleZeVDMxL6XQcti+46aisw1jmKXENGIgRY=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=NuQJj159z++OrDw4m4OtisrLsK2ze6aGVkxGtVmcEqE8ZmQCwgZ9ScFBiWCxo2i/tcTx+TG4r94Erjz6d900hqmiYjjL/2FJTjPrH0Pjc84GaXGddWtEtg+BRiwAtkBSGCSdzgK1vctcfkOiIIiTUoeSFkA8jl9IplXtmtuUH5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-123-NIfzbVeEN7a3ZZr9tPCsfQ-1; Wed, 14 Feb 2024 09:46:55 +0000
+X-MC-Unique: NIfzbVeEN7a3ZZr9tPCsfQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 14 Feb
+ 2024 09:46:33 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 14 Feb 2024 09:46:33 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Segher Boessenkool' <segher@kernel.crashing.org>, Arnd Bergmann
+	<arnd@kernel.org>
+CC: "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, "Arnd
+ Bergmann" <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nick Desaulniers
+	<ndesaulniers@google.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, "Bill
+ Wendling" <morbo@google.com>, "linux-serial@vger.kernel.org"
+	<linux-serial@vger.kernel.org>, Justin Stitt <justinstitt@google.com>, "Jiri
+ Slaby" <jirislaby@kernel.org>
+Subject: RE: [PATCH] tty: hvc-iucv: fix function pointer casts
+Thread-Topic: [PATCH] tty: hvc-iucv: fix function pointer casts
+Thread-Index: AQHaXrGUxAtD30hgkEO/PHRuEZrHGLEJlp9g
+Date: Wed, 14 Feb 2024 09:46:33 +0000
+Message-ID: <57d72e2ccc8245fe99982613a11c461c@AcuMS.aculab.com>
+References: <20240213101756.461701-1-arnd@kernel.org>
+ <20240213191254.GA19790@gate.crashing.org>
+In-Reply-To: <20240213191254.GA19790@gate.crashing.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
-head:   86342554e102b0d18d50abec43d40f4fc92f1993
-commit: 86342554e102b0d18d50abec43d40f4fc92f1993 [3/3] hrtimer: Select housekeeping CPU during migration
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240214/202402141742.oYY6J3lC-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240214/202402141742.oYY6J3lC-lkp@intel.com/reproduce)
+From: Segher Boessenkool
+> Sent: 13 February 2024 19:13
+>=20
+> On Tue, Feb 13, 2024 at 11:17:49AM +0100, Arnd Bergmann wrote:
+> > clang warns about explicitly casting between incompatible function
+> > pointers:
+> >
+> > drivers/tty/hvc/hvc_iucv.c:1100:23: error: cast from 'void (*)(const vo=
+id *)' to 'void (*)(struct
+> device *)' converts to incompatible function type [-Werror,-Wcast-functio=
+n-type-strict]
+> >  1100 |         priv->dev->release =3D (void (*)(struct device *)) kfre=
+e;
+> >       |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Such a cast of course is explicitly allowed by 6.3.2.3/8, only calling a
+> function using a non-compatible type is UB.  This warning message is
+> quite misleading.  Doubly so because of the -Werror, as always.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402141742.oYY6J3lC-lkp@intel.com/
+But it will get called using the wrong type.
+And (is it) fine-ibt will reject the incorrect call.
 
-All errors (new ones prefixed by >>):
+Has clang/gcc added an attribute to 'seed' the ibt hash yet?
+So that functions that are void (*)(void) can be separated?
 
-   kernel/time/hrtimer.c:1651:7: warning: variable 'expires_in_hardirq' set but not used [-Wunused-but-set-variable]
-           bool expires_in_hardirq;
-                ^
->> kernel/time/hrtimer.c:2224:49: error: implicit declaration of function 'housekeeping' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           int i, ncpu = cpumask_any_and(cpu_active_mask, housekeeping(HK_TYPE_TIMER));
-                                                          ^
->> kernel/time/hrtimer.c:2224:62: error: use of undeclared identifier 'HK_TYPE_TIMER'
-           int i, ncpu = cpumask_any_and(cpu_active_mask, housekeeping(HK_TYPE_TIMER));
-                                                                       ^
-   1 warning and 2 errors generated.
+=09David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-vim +/housekeeping +2224 kernel/time/hrtimer.c
-
-  2221	
-  2222	int hrtimers_cpu_dying(unsigned int dying_cpu)
-  2223	{
-> 2224		int i, ncpu = cpumask_any_and(cpu_active_mask, housekeeping(HK_TYPE_TIMER));
-  2225		struct hrtimer_cpu_base *old_base, *new_base;
-  2226	
-  2227		tick_cancel_sched_timer(dying_cpu);
-  2228	
-  2229		old_base = this_cpu_ptr(&hrtimer_bases);
-  2230		new_base = &per_cpu(hrtimer_bases, ncpu);
-  2231	
-  2232		/*
-  2233		 * The caller is globally serialized and nobody else
-  2234		 * takes two locks at once, deadlock is not possible.
-  2235		 */
-  2236		raw_spin_lock(&old_base->lock);
-  2237		raw_spin_lock_nested(&new_base->lock, SINGLE_DEPTH_NESTING);
-  2238	
-  2239		for (i = 0; i < HRTIMER_MAX_CLOCK_BASES; i++) {
-  2240			migrate_hrtimer_list(&old_base->clock_base[i],
-  2241					     &new_base->clock_base[i]);
-  2242		}
-  2243	
-  2244		/*
-  2245		 * The migration might have changed the first expiring softirq
-  2246		 * timer on this CPU. Update it.
-  2247		 */
-  2248		__hrtimer_get_next_event(new_base, HRTIMER_ACTIVE_SOFT);
-  2249		/* Tell the other CPU to retrigger the next event */
-  2250		smp_call_function_single(ncpu, retrigger_next_event, NULL, 0);
-  2251	
-  2252		raw_spin_unlock(&new_base->lock);
-  2253		raw_spin_unlock(&old_base->lock);
-  2254	
-  2255		return 0;
-  2256	}
-  2257	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
