@@ -1,218 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA104134CA
-	for <llvm@lists.linux.dev>; Thu, 15 Feb 2024 08:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EBF33CF;
+	Thu, 15 Feb 2024 08:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707987090; cv=none; b=P1e8TysbWxc9b4VlCWlAvgzOIjOMRUjY5Bt6IE0FEbzaooE5sFtHC5/JLD1UbENpq5+osMy7siqjYQcUCjjx4Y5TGyu72XgYGQcLgN0pT2gBb7XK1PVEX89P1pmJgJCe211DQHLnbeSd2+1hjFKEHOJeLTW6pPR8lc15I1Vsol8=
+	t=1707987124; cv=none; b=DCv+eZFcmwFeVypZBk+jYLovKb7c0Cb8oVa4jqnBeGWJYgDkMEz3daAWeLV0TLLU+daKjNMG+k44FQ29iiCrlfnRmMSE+hMjclROT8Y0g4Mh9F8ztuwaow1/F8EN6dymbJ8xAgu587abUgt9bcxmsgqzZ8tGO/1F+dsolBinHh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707987090; c=relaxed/simple;
-	bh=ZRCY8yBQeiqS2TRWeopzWgKK06w1fZD3zT2LNlWPxH4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=f0Omgzfc62q8DLvllL4LY+UdKYxWSIKnTSP3fTN76zDo/O3onpwr60MGItLxBi0XboTcLqvCPpa+Qm29X28rWci65zS2Cr2ouYghSFXCuc6AS4c2U4qkSM8JdVe9dwIwSmlHZwdHdeGAhW0rbVKWwDtmZT2shL8zymt7h34cUAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g5Vrtip0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1707987124; c=relaxed/simple;
+	bh=sqq80oasncJz61SBDmdVVD/HUcD+r0fcrop9Wek0L4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Py1nrzU1FXuP7HwOmwH1R94CXNQ37rIdn7Zx1lseIysxqKx9G1lZrP5ecHKLjZPw8klgGb1Z8ePWhbPKXQ5zpBdqvTLkb1Hxes2DwxrUNumV/Ed+MnJaRsErth1Ab61MHRaZSxoXTlDgscYcOm5ke4pR7eKlc98Bvq58yzLJWo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tmBbYmMi; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g5Vrtip0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707987087;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=izdmJSzAQAfFX6HSBosxkteoKdawcPz9kramfAtsP4E=;
-	b=g5Vrtip04cNfk7cPem+B3I5R1M/ptSBFaFlmdVdv6Wg4NAsQUmbol95SEQeFKhzR4xtqKW
-	Es88HQ/KjWxkHm6PITKRvKwRCuSd+4RUaeLEN3jN+cDbgDoIlfGIbP3VkRznMF8cBr6wKq
-	iAQHpdU+8CTMTXKOm2X/G5v5P0fSyLo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-75-c0O27lSDPnGcVALq2j-D0A-1; Thu, 15 Feb 2024 03:51:23 -0500
-X-MC-Unique: c0O27lSDPnGcVALq2j-D0A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 122CB86F12E
-	for <llvm@lists.linux.dev>; Thu, 15 Feb 2024 08:51:23 +0000 (UTC)
-Received: from [172.64.14.29] (unknown [10.30.32.10])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C2B051C05E0F;
-	Thu, 15 Feb 2024 08:51:22 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 21 of 204): Test report for master
- (6.8.0-rc4, mainline.kernel.org-clang, 8d3dea21)
-Date: Thu, 15 Feb 2024 08:51:22 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tmBbYmMi"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41F8aGrT029154;
+	Thu, 15 Feb 2024 08:51:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=2co+1inaADahS61G21mEIOggndUbhDvwt8F1kGzcLEk=;
+ b=tmBbYmMitoJyIPHRqiqqjktlch1I7U9TzrZgpw9waP9t+8JS/TBzBIpy9VDQ70X8QN6I
+ UsVipPn1F/t6MIHu4V3LNaVn2htfisAsxwEfNO7HuOdT9rQep1i52dZvROtfki36DP9Q
+ +5faCm2rH+WPfUid/amtjs5OFL+QoxGz/yrYLo50fSgPYlEAOmE2YusZ4zUDdc9XAaMB
+ D/56qFpwy8Hc/bnjuo7eyyhNO0MZuzBt5FXXTXjU0OMwPY+64m5LnSCflnUa84pgu4ig
+ FQCH5L6E/Wf80cP8I1RxqF4xyCEQTcmXVmzXFyChF81LwUN9dSOwVhdt+wJz2WDhYL12 xA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9ete0x5d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 08:51:58 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41F8aNa2030683;
+	Thu, 15 Feb 2024 08:51:58 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9ete0x55-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 08:51:58 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41F7aW62004251;
+	Thu, 15 Feb 2024 08:51:57 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0kt4q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 08:51:57 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41F8pqBF48103680
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Feb 2024 08:51:54 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 06CA520043;
+	Thu, 15 Feb 2024 08:51:52 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BB87B20040;
+	Thu, 15 Feb 2024 08:51:51 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.60])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu, 15 Feb 2024 08:51:51 +0000 (GMT)
+Date: Thu, 15 Feb 2024 09:51:50 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, morbo@google.com, justinstitt@google.com,
+        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev
+Subject: Re: [PATCH] s390: Don't allow CONFIG_COMPAT with LD=ld.lld
+Message-ID: <20240215085150.6583-A-hca@linux.ibm.com>
+References: <20240214-s390-compat-lld-dep-v1-1-abf1f4b5e514@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <26324.124021503512300233@us-mta-75.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240214-s390-compat-lld-dep-v1-1-abf1f4b5e514@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: KhXJETOcuspk-bhFnI_kjvMItpfgbksq
+X-Proofpoint-ORIG-GUID: cVqv_Fzdhg6blSlhm4N0nvNtlx4fdzPO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-15_08,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 mlxscore=0 mlxlogscore=656 impostorscore=0
+ adultscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402150069
 
-Hi, we tested your kernel and here are the results:
+On Wed, Feb 14, 2024 at 03:53:48PM -0700, Nathan Chancellor wrote:
+> When building 'ARCH=s390 defconfig compat.config' with GCC and
+> LD=ld.lld, there is an error when attempting to link the compat vDSO:
+> 
+>   ld.lld: error: unknown emulation: elf_s390
+>   make[4]: *** [arch/s390/kernel/vdso32/Makefile:48: arch/s390/kernel/vdso32/vdso32.so.dbg] Error 1
+> 
+> Much like clang, ld.lld only supports the 64-bit s390 emulation. Add a
+> dependency on not using LLD to CONFIG_COMPAT to avoid breaking the build
+> with this toolchain combination.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/s390/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'mips-fixes_6.8_2' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/mips/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/129508
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [upstream] [s390x] blktests tests/nvme/029: line 24: local: =
-`bs,': not a valid identifier
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/11298624=
-#result-16900934
-            Affected tests:
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
-koza machines
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1852
-            Affected tests:
-                  x86_64 - Libkcapi AF_ALG test
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - CKI/restraint
-      x86_64 (debug) - SELinux Custom Module Setup
-      x86_64 (debug) - machineinfo
-      x86_64 (debug) - Boot test
-      x86_64 (debug) - Storage - swraid scsi_raid
-      x86_64 (debug) - Reboot test
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - CKI/restraint
-      x86_64 - SELinux Custom Module Setup
-      x86_64 - machineinfo
-      x86_64 - Boot test
-      x86_64 - Storage - blktests - blk - upstream
-      x86_64 - Storage - blktests - nvme-tcp - upstream
-      x86_64 - Storage - swraid scsi_raid
-      x86_64 - stress: stress-ng - cpu-cache
-      x86_64 - stress: stress-ng - memory
-      x86_64 - Reboot test
-      x86_64 - Memory function: memfd_create
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Applied, thanks!
