@@ -1,108 +1,78 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EBF33CF;
-	Thu, 15 Feb 2024 08:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B2C12A14C;
+	Thu, 15 Feb 2024 10:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707987124; cv=none; b=DCv+eZFcmwFeVypZBk+jYLovKb7c0Cb8oVa4jqnBeGWJYgDkMEz3daAWeLV0TLLU+daKjNMG+k44FQ29iiCrlfnRmMSE+hMjclROT8Y0g4Mh9F8ztuwaow1/F8EN6dymbJ8xAgu587abUgt9bcxmsgqzZ8tGO/1F+dsolBinHh0=
+	t=1707993209; cv=none; b=DgjJwoeyhZlDSTJFqL5df2JcqU7BtIdYwkqHejUQ1793pZaUAp9G7TAP4NU9x9mGO/1Z0KP3vMthJo0RxlvMz9ShDAuPz+jNofgoW+59NHEnSBU1J0vfY7AiLy7bRKFIcb2PjE5elrL5QXdoxVEjMuyubNShfxeGBrCbYIQgLzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707987124; c=relaxed/simple;
-	bh=sqq80oasncJz61SBDmdVVD/HUcD+r0fcrop9Wek0L4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Py1nrzU1FXuP7HwOmwH1R94CXNQ37rIdn7Zx1lseIysxqKx9G1lZrP5ecHKLjZPw8klgGb1Z8ePWhbPKXQ5zpBdqvTLkb1Hxes2DwxrUNumV/Ed+MnJaRsErth1Ab61MHRaZSxoXTlDgscYcOm5ke4pR7eKlc98Bvq58yzLJWo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tmBbYmMi; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1707993209; c=relaxed/simple;
+	bh=YMmvKWmJWQ8GBJaKmsMH0BhA/75UXDRgZSp4hIO813I=;
+	h=Content-Type:MIME-Version:Subject:From:In-Reply-To:References:To:
+	 Cc:Message-ID:Date; b=XG4BVZzHj8tVra63zPiJQDmCsOQs2Rb6qmWblR/458SkQ2ksMhUJTwdsdoDgnsDnAG2lYL+Pd5Ufoq0PKln63YbfENtu/vOCi441xRqSa+sYSlPLR0Al/eWnDNLuD+ZLOc2r59i1ZS4b6D6/T6zxYnPE1jahuNswXh+g1O/zsV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sra+8tV7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tmBbYmMi"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41F8aGrT029154;
-	Thu, 15 Feb 2024 08:51:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=2co+1inaADahS61G21mEIOggndUbhDvwt8F1kGzcLEk=;
- b=tmBbYmMitoJyIPHRqiqqjktlch1I7U9TzrZgpw9waP9t+8JS/TBzBIpy9VDQ70X8QN6I
- UsVipPn1F/t6MIHu4V3LNaVn2htfisAsxwEfNO7HuOdT9rQep1i52dZvROtfki36DP9Q
- +5faCm2rH+WPfUid/amtjs5OFL+QoxGz/yrYLo50fSgPYlEAOmE2YusZ4zUDdc9XAaMB
- D/56qFpwy8Hc/bnjuo7eyyhNO0MZuzBt5FXXTXjU0OMwPY+64m5LnSCflnUa84pgu4ig
- FQCH5L6E/Wf80cP8I1RxqF4xyCEQTcmXVmzXFyChF81LwUN9dSOwVhdt+wJz2WDhYL12 xA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9ete0x5d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 08:51:58 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41F8aNa2030683;
-	Thu, 15 Feb 2024 08:51:58 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9ete0x55-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 08:51:58 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41F7aW62004251;
-	Thu, 15 Feb 2024 08:51:57 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0kt4q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 08:51:57 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41F8pqBF48103680
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 08:51:54 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 06CA520043;
-	Thu, 15 Feb 2024 08:51:52 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BB87B20040;
-	Thu, 15 Feb 2024 08:51:51 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 15 Feb 2024 08:51:51 +0000 (GMT)
-Date: Thu, 15 Feb 2024 09:51:50 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, morbo@google.com, justinstitt@google.com,
-        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] s390: Don't allow CONFIG_COMPAT with LD=ld.lld
-Message-ID: <20240215085150.6583-A-hca@linux.ibm.com>
-References: <20240214-s390-compat-lld-dep-v1-1-abf1f4b5e514@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sra+8tV7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47017C43601;
+	Thu, 15 Feb 2024 10:33:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707993208;
+	bh=YMmvKWmJWQ8GBJaKmsMH0BhA/75UXDRgZSp4hIO813I=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=sra+8tV742RUlVmTCl6D0FHDj6mcBgZlGlhaG4uP2BZC/wkFEAVQVKxi3Nnru+WUb
+	 uTL5AXjtBjys+ilIcD9S1Vi9+MuNbFfQf46sYy5GIrPKloAeFqAmKaXyiYRKU0AoEF
+	 h2vqCATeeVolv90hCrNxIUBQxgPXtea//2gNahoY2LmtuWPGXwhBKMJ31svuRMKUOT
+	 JsFHxqIR6cQ6U4VBoGSJmuwX2dB72IjzJZQhEabIA70lWBGdEd3Niy9x44yLsyi0p3
+	 MW67ESTUB9lAtooxyuJaWCW4SQWqj1CrHs5VzA4zZS9tcY+wBk50MlFQxoom0Un7qK
+	 +hxv+vuRdCPMg==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214-s390-compat-lld-dep-v1-1-abf1f4b5e514@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KhXJETOcuspk-bhFnI_kjvMItpfgbksq
-X-Proofpoint-ORIG-GUID: cVqv_Fzdhg6blSlhm4N0nvNtlx4fdzPO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-15_08,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 malwarescore=0 mlxscore=0 mlxlogscore=656 impostorscore=0
- adultscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402150069
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] brcmsmac: avoid function pointer casts
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20240213100548.457854-1-arnd@kernel.org>
+References: <20240213100548.457854-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arend van Spriel <arend.vanspriel@broadcom.com>,
+ Nathan Chancellor <nathan@kernel.org>, Greg Kroah-Hartman <gregkh@suse.de>,
+ Pieter-Paul Giesberts <pieterpg@broadcom.com>, Arnd Bergmann <arnd@arndb.de>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>,
+ Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+ Jonas Gorski <jonas.gorski@gmail.com>, linux-wireless@vger.kernel.org,
+ brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
+Message-ID: <170799320307.3764215.10635499094580279814.kvalo@kernel.org>
+Date: Thu, 15 Feb 2024 10:33:25 +0000 (UTC)
 
-On Wed, Feb 14, 2024 at 03:53:48PM -0700, Nathan Chancellor wrote:
-> When building 'ARCH=s390 defconfig compat.config' with GCC and
-> LD=ld.lld, there is an error when attempting to link the compat vDSO:
-> 
->   ld.lld: error: unknown emulation: elf_s390
->   make[4]: *** [arch/s390/kernel/vdso32/Makefile:48: arch/s390/kernel/vdso32/vdso32.so.dbg] Error 1
-> 
-> Much like clang, ld.lld only supports the 64-bit s390 emulation. Add a
-> dependency on not using LLD to CONFIG_COMPAT to avoid breaking the build
-> with this toolchain combination.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/s390/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Arnd Bergmann <arnd@kernel.org> wrote:
 
-Applied, thanks!
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> An old cleanup went a little too far and causes a warning with clang-16
+> and higher as it breaks control flow integrity (KCFI) rules:
+> 
+> drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy_shim.c:64:34: error: cast from 'void (*)(struct brcms_phy *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>    64 |                         brcms_init_timer(physhim->wl, (void (*)(void *))fn,
+>       |                                                       ^~~~~~~~~~~~~~~~~~~~
+> 
+> Change this one instance back to passing a void pointer so it can be
+> used with the timer callback interface.
+> 
+> Fixes: d89a4c80601d ("staging: brcm80211: removed void * from softmac phy")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+I can add 'wifi:' during commit. Arend, ack?
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20240213100548.457854-1-arnd@kernel.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
