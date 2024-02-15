@@ -1,285 +1,112 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD7913246C
-	for <llvm@lists.linux.dev>; Thu, 15 Feb 2024 13:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA2912FF70;
+	Thu, 15 Feb 2024 16:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708005196; cv=none; b=UA2qO5jkSRuALosQ7CvhUIaLMhPbDq14xu1gG1ISLpgLQAeinYB4Jz97AJ6I2/zefK7/ydePhqHLzQKZS9kRmUARyxyzjky//rnd7Rv2+tg2PMI9T4ji7ln7Y3H5KIIOaFqR5ePQ0uNuYpB/++wnvImw/IEFo3p+Z1eN6Eg01fE=
+	t=1708014686; cv=none; b=tk0dbH1EaQxvv1nqJPtZGb6wcRW7DpVT+0LMUH2VG3udme0VWkx2Y1JtC3YfaBZWUzM81QJRAsTdXUA5BiWRfC7KlpWfpcyfp7bnaJy7Gz5xAeGVRXHXrnmXE5Ymj+1/b5QJCsKbsVLm3jT7TzHWtbhUqGMeS1jejp/5tNI2DB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708005196; c=relaxed/simple;
-	bh=rvX6RnOAGGQyJIg0dJjMvKyh7NRfV8yF4YJiANMP+tk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A4zsbk/274xC3w3hdX8rEgqFdrU96qZXalr9oYf6NMsA2QJIZPDMLH8zR3vU96TEesB2qZfz7mbzPR/lhWuehkAGc+0YG5HI67HNeLEcwdkgVZAb6dSqoW0ZrtdVNTp4TWpIdHuNIVu5M9/KTBAJUOuKJVFKzpVJRv9YsTdaBYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=if3JtnOl; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1708014686; c=relaxed/simple;
+	bh=noOgBvZR7qeQQFGTupjWTHAu2G8dM4lHizJLkWAvvb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NnANUgHqljB8/n1Tpw+ZU5ws9k+MeKhdJ/a9xTaWqeYlW8I+iiFFEOhqcPyYIUFOn+BpxzIM5ncSIXC7e/wvjZgqzAv3v/6+vGuiXiIPPk6/+SyaTsf0np9on992Hn/gI9F8siopKxpVKeqTQ5mo5XcwTSe2QDx9/qI+ar1wnfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GA63qVNI; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="if3JtnOl"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A6FE840E00B2;
-	Thu, 15 Feb 2024 13:53:04 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id fQxdII7x4b3R; Thu, 15 Feb 2024 13:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708005181; bh=fwRh/0oyLIGoZozzIhDH8nJqo40bBjBkFxCW3lPnVPM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=if3JtnOluEbsHGe3vRDp3u5uO6VuGXzf2MpReQTiQzZyKVL1byGpVSiJORr0rEyIt
-	 9LR3NmrJNtvkGS6Hx5OzjGPZZZWWfF01xaDWBlhNRXNG6m2deixZRgg+4joMj/3ZRh
-	 WT56pheYZ3fw9BF573COFPDzCWUt+Arsp/JAAW/DKdns0jGi9JGTeGh1z4udxD9iqL
-	 cwRAAegyQyXI1ED2XTzaMRr4Zney/Y73e79S4QG8PsLqcVlmrPUSXQcNzNuaXlUqEC
-	 wl/sM6bX8nfFnymx2Q2/q4OpOEfAhwTGDMUsRL5PQh/wN0N2BeqrHuc/CROnF165IS
-	 +G4L90a5ef6rar+S5ooBj5/CiGZblq+UBpLopzKGXCmpqf6SYwUgxpkz7rjQYN2Kzo
-	 eqqde30q578i6c7fXI1leY55iPGjca01fiurtsyKJSC4lqwaIBYcwUK+bAKWBrmpeb
-	 jBj4kdlisQ+mj+G2Gkc+luZIHD1GZ78GVTOBYZmnYo9q4qSMi9r7g4lucebS1ZgifQ
-	 0vTkpZgmATujQeMM+Hd28eWZ6IV6BinxGr/7I9Gj6XrkQ3kNaDanRCYZ/QlbX5JhZU
-	 Q8nDiXVx9rbvFv71KKq/cftrcdhML0qg/NA7172ti13x3av0J3Rhc3sF+DE/mbIEPt
-	 jmQcv/9YyZSz5+PI1oHYzevA=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2FD5740E016C;
-	Thu, 15 Feb 2024 13:52:43 +0000 (UTC)
-Date: Thu, 15 Feb 2024 14:52:37 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 01/11] x86/startup_64: Simplify global variable
- accesses in GDT/IDT programming
-Message-ID: <20240215135237.GAZc4XJevmqCjEbbBC@fat_crate.local>
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-14-ardb+git@google.com>
- <20240213200553.GYZcvLoYUNJOPGxoid@fat_crate.local>
- <CAMj1kXG4rSGaB8Q2qFcgOH=dqS0yvR8Ofur=h5C-jq_TqiFzVg@mail.gmail.com>
- <CAMj1kXFdUD_kCh0h1HcpOVoQJNcP11OHB+FJ-=HGfP3RRdy81w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GA63qVNI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708014684; x=1739550684;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=noOgBvZR7qeQQFGTupjWTHAu2G8dM4lHizJLkWAvvb4=;
+  b=GA63qVNIkICP6MWpJUCMD3WDjs91LNTo9RUmh9HCHXg8tGpCrjDrrMIy
+   lEiKweBrTy3rREE5boAS8YDXmbSKN9MQgGEo3J/dkbFLorQFCRFpzBdFx
+   j57fCOiVDLz/TQdg4Lp70cDU62oHoT07+VBQWT9vYG8lrZ8OlF28OfRpO
+   zrban5AVmuRFD7zacUfZPNhnKKflEKJk9/O4hrqB+EyjVULGlpC+etMB5
+   qBujMPPkQ4FMwFyEq9nTZ/CUqSv5moWSgNCYQhbB8kzlQ1Zl3cZFgF+F2
+   0Y5hByJ2u6MsD44hJ04u+lkop+s/NX670nU+atJtv0Qtf15VnpQVa2UV8
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="24575961"
+X-IronPort-AV: E=Sophos;i="6.06,162,1705392000"; 
+   d="scan'208";a="24575961"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 08:31:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,162,1705392000"; 
+   d="scan'208";a="34620382"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 15 Feb 2024 08:31:19 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1raedU-0000dU-2l;
+	Thu, 15 Feb 2024 16:31:03 +0000
+Date: Fri, 16 Feb 2024 00:29:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/WFAMNAE-next20240215 1/1]
+ include/linux/bpf-cgroup.h:191:15: warning: comparison of distinct pointer
+ types ('struct bpf_prog_array *' and 'struct bpf_prog_array_tag *')
+Message-ID: <202402160049.31LWdQ1F-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXFdUD_kCh0h1HcpOVoQJNcP11OHB+FJ-=HGfP3RRdy81w@mail.gmail.com>
 
-On Wed, Feb 14, 2024 at 08:28:41AM +0100, Ard Biesheuvel wrote:
-> Actually, we can merge set_bringup_idt_handler() into its caller as well:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/WFAMNAE-next20240215
+head:   34a5c90f36e0238bfc95cda9e2eccf7e610bff1a
+commit: 34a5c90f36e0238bfc95cda9e2eccf7e610bff1a [1/1] treewide: Address -Wflexible-array-member-not-at-end warnings
+config: arm-randconfig-001-20240215 (https://download.01.org/0day-ci/archive/20240216/202402160049.31LWdQ1F-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240216/202402160049.31LWdQ1F-lkp@intel.com/reproduce)
 
-Yap, here's the final version I have here and yes, it boots fine as
-a SNP guest:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402160049.31LWdQ1F-lkp@intel.com/
 
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 13 Feb 2024 13:41:45 +0100
-Subject: [PATCH] x86/startup_64: Simplify global variable accesses in GDT/IDT
- programming
+All warnings (new ones prefixed by >>):
 
-There are two code paths in the startup code to program an IDT: one that
-runs from the 1:1 mapping and one that runs from the virtual kernel
-mapping. Currently, these are strictly separate because fixup_pointer()
-is used on the 1:1 path, which will produce the wrong value when used
-while executing from the virtual kernel mapping.
+   In file included from security/device_cgroup.c:8:
+>> include/linux/bpf-cgroup.h:191:15: warning: comparison of distinct pointer types ('struct bpf_prog_array *' and 'struct bpf_prog_array_tag *') [-Wcompare-distinct-pointer-types]
+           return array != &bpf_empty_prog_array.hdr;
+                  ~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-Switch to RIP_REL_REF() so that the two code paths can be merged. Also,
-move the GDT and IDT descriptors to the stack so that they can be
-referenced directly, rather than via RIP_REL_REF().
 
-Rename startup_64_setup_env() to startup_64_setup_gdt_idt() while at it,
-to make the call from assembler self-documenting.
+vim +191 include/linux/bpf-cgroup.h
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20240213124143.1484862-14-ardb+git@google.com
----
- arch/x86/include/asm/setup.h |  2 +-
- arch/x86/kernel/head64.c     | 75 +++++++++++++++---------------------
- arch/x86/kernel/head_64.S    |  4 +-
- 3 files changed, 32 insertions(+), 49 deletions(-)
+de9cbbaadba5ad Roman Gushchin 2018-08-02  178  
+b741f1630346de Roman Gushchin 2018-09-28  179  int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
+b741f1630346de Roman Gushchin 2018-09-28  180  int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+b741f1630346de Roman Gushchin 2018-09-28  181  				     void *value, u64 flags);
+b741f1630346de Roman Gushchin 2018-09-28  182  
+46531a30364bd4 Pavel Begunkov 2022-01-27  183  /* Opportunistic check to see whether we have any BPF program attached*/
+46531a30364bd4 Pavel Begunkov 2022-01-27  184  static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
+46531a30364bd4 Pavel Begunkov 2022-01-27  185  					   enum cgroup_bpf_attach_type type)
+46531a30364bd4 Pavel Begunkov 2022-01-27  186  {
+46531a30364bd4 Pavel Begunkov 2022-01-27  187  	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+46531a30364bd4 Pavel Begunkov 2022-01-27  188  	struct bpf_prog_array *array;
+46531a30364bd4 Pavel Begunkov 2022-01-27  189  
+46531a30364bd4 Pavel Begunkov 2022-01-27  190  	array = rcu_access_pointer(cgrp->bpf.effective[type]);
+46531a30364bd4 Pavel Begunkov 2022-01-27 @191  	return array != &bpf_empty_prog_array.hdr;
+46531a30364bd4 Pavel Begunkov 2022-01-27  192  }
+46531a30364bd4 Pavel Begunkov 2022-01-27  193  
 
-diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
-index 5c83729c8e71..e61e68d71cba 100644
---- a/arch/x86/include/asm/setup.h
-+++ b/arch/x86/include/asm/setup.h
-@@ -48,7 +48,7 @@ extern unsigned long saved_video_mode;
- extern void reserve_standard_io_resources(void);
- extern void i386_reserve_resources(void);
- extern unsigned long __startup_64(unsigned long physaddr, struct boot_params *bp);
--extern void startup_64_setup_env(unsigned long physbase);
-+extern void startup_64_setup_gdt_idt(void);
- extern void early_setup_idt(void);
- extern void __init do_early_exception(struct pt_regs *regs, int trapnr);
- 
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index dc0956067944..cdff748bf5cb 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -22,6 +22,7 @@
- #include <linux/cc_platform.h>
- #include <linux/pgtable.h>
- 
-+#include <asm/asm.h>
- #include <asm/processor.h>
- #include <asm/proto.h>
- #include <asm/smp.h>
-@@ -76,15 +77,6 @@ static struct desc_struct startup_gdt[GDT_ENTRIES] __initdata = {
- 	[GDT_ENTRY_KERNEL_DS]           = GDT_ENTRY_INIT(DESC_DATA64, 0, 0xfffff),
- };
- 
--/*
-- * Address needs to be set at runtime because it references the startup_gdt
-- * while the kernel still uses a direct mapping.
-- */
--static struct desc_ptr startup_gdt_descr __initdata = {
--	.size = sizeof(startup_gdt)-1,
--	.address = 0,
--};
--
- static void __head *fixup_pointer(void *ptr, unsigned long physaddr)
- {
- 	return ptr - (void *)_text + (void *)physaddr;
-@@ -569,62 +561,52 @@ void __init __noreturn x86_64_start_reservations(char *real_mode_data)
-  */
- static gate_desc bringup_idt_table[NUM_EXCEPTION_VECTORS] __page_aligned_data;
- 
--static struct desc_ptr bringup_idt_descr = {
--	.size		= (NUM_EXCEPTION_VECTORS * sizeof(gate_desc)) - 1,
--	.address	= 0, /* Set at runtime */
--};
--
--static void set_bringup_idt_handler(gate_desc *idt, int n, void *handler)
-+/* This may run while still in the direct mapping */
-+static void __head startup_64_load_idt(void *vc_handler)
- {
--#ifdef CONFIG_AMD_MEM_ENCRYPT
-+	struct desc_ptr desc = {
-+		.address = (unsigned long)&RIP_REL_REF(bringup_idt_table),
-+		.size	 = sizeof(bringup_idt_table) - 1,
-+	};
- 	struct idt_data data;
--	gate_desc desc;
--
--	init_idt_data(&data, n, handler);
--	idt_init_desc(&desc, &data);
--	native_write_idt_entry(idt, n, &desc);
--#endif
--}
-+	gate_desc idt_desc;
- 
--/* This runs while still in the direct mapping */
--static void __head startup_64_load_idt(unsigned long physbase)
--{
--	struct desc_ptr *desc = fixup_pointer(&bringup_idt_descr, physbase);
--	gate_desc *idt = fixup_pointer(bringup_idt_table, physbase);
--
--
--	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
--		void *handler;
--
--		/* VMM Communication Exception */
--		handler = fixup_pointer(vc_no_ghcb, physbase);
--		set_bringup_idt_handler(idt, X86_TRAP_VC, handler);
-+	/* @vc_handler is set only for a VMM Communication Exception */
-+	if (vc_handler) {
-+		init_idt_data(&data, X86_TRAP_VC, vc_handler);
-+		idt_init_desc(&idt_desc, &data);
-+		native_write_idt_entry((gate_desc *)desc.address, X86_TRAP_VC, &idt_desc);
- 	}
- 
--	desc->address = (unsigned long)idt;
--	native_load_idt(desc);
-+	native_load_idt(&desc);
- }
- 
- /* This is used when running on kernel addresses */
- void early_setup_idt(void)
- {
--	/* VMM Communication Exception */
-+	void *handler = NULL;
-+
- 	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
- 		setup_ghcb();
--		set_bringup_idt_handler(bringup_idt_table, X86_TRAP_VC, vc_boot_ghcb);
-+		handler = vc_boot_ghcb;
- 	}
- 
--	bringup_idt_descr.address = (unsigned long)bringup_idt_table;
--	native_load_idt(&bringup_idt_descr);
-+	startup_64_load_idt(handler);
- }
- 
- /*
-  * Setup boot CPU state needed before kernel switches to virtual addresses.
-  */
--void __head startup_64_setup_env(unsigned long physbase)
-+void __head startup_64_setup_gdt_idt(void)
- {
-+	void *handler = NULL;
-+
-+	struct desc_ptr startup_gdt_descr = {
-+		.address	= (unsigned long)&RIP_REL_REF(startup_gdt),
-+		.size		= sizeof(startup_gdt) - 1,
-+	};
-+
- 	/* Load GDT */
--	startup_gdt_descr.address = (unsigned long)fixup_pointer(startup_gdt, physbase);
- 	native_load_gdt(&startup_gdt_descr);
- 
- 	/* New GDT is live - reload data segment registers */
-@@ -632,5 +614,8 @@ void __head startup_64_setup_env(unsigned long physbase)
- 		     "movl %%eax, %%ss\n"
- 		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
- 
--	startup_64_load_idt(physbase);
-+	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
-+		handler = &RIP_REL_REF(vc_no_ghcb);
-+
-+	startup_64_load_idt(handler);
- }
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index a8eaecbd5c81..bcbebab2cc03 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -68,8 +68,6 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	/* Set up the stack for verify_cpu() */
- 	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
- 
--	leaq	_text(%rip), %rdi
--
- 	/* Setup GSBASE to allow stack canary access for C code */
- 	movl	$MSR_GS_BASE, %ecx
- 	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
-@@ -77,7 +75,7 @@ SYM_CODE_START_NOALIGN(startup_64)
- 	shrq	$32,  %rdx
- 	wrmsr
- 
--	call	startup_64_setup_env
-+	call	startup_64_setup_gdt_idt
- 
- 	/* Now switch to __KERNEL_CS so IRET works reliably */
- 	pushq	$__KERNEL_CS
--- 
-2.43.0
+:::::: The code at line 191 was first introduced by commit
+:::::: 46531a30364bd483bfa1b041c15d42a196e77e93 cgroup/bpf: fast path skb BPF filtering
 
-Thx.
+:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
+:::::: CC: Alexei Starovoitov <ast@kernel.org>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
