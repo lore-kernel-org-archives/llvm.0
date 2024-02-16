@@ -1,45 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74DA135A41;
-	Fri, 16 Feb 2024 20:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8B914535A
+	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 21:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708116152; cv=none; b=KzblqxW4YGlob207Sw/wF/VKuZp9D0mnMFxOkdAUzII0GojGnpeli4Ga0BNVEAwlqismxIwuQ/MkFK28v5Hw7NBaWzUTMqDXmmg+lRkEig44qJjkKULl3fnkCjB/bHfsy85ATMOb4DMf9EN+rFay5XPdfb10y0l89srEp4vOP6M=
+	t=1708118363; cv=none; b=QoRtRkTmJFxgyIfLAtD+Z981HD+jM9drlhvlMro2WZdpGg/fMtozXXB5i1Fy9OQewSNB/tkh5kCXCV7jfnUR3XTvmmbpLD8FCLXHbowr8HPOf5+K7+m+XZwaBhfFTDq8IYOut4BXBilWbhj9htXEl9xda2w0k41Zt6A/7lHcQTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708116152; c=relaxed/simple;
-	bh=F81shhblktltp1h8t42uFEnG2IFNx0MPP8DE2AnUpg8=;
+	s=arc-20240116; t=1708118363; c=relaxed/simple;
+	bh=pjViwhXqVkFuRcb9TtMCBqAXy9IB1rtSAVc+/tWHUoM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcqA5/fJbNvVwSOWuVG4IURRWyJ2BQyffYGgW6mtgSmhdV8+XcrAdWveVSPZGN8pkuS6bxo4+k4y+UGsbVAynmJN4GcAw9DG6PTuDGxsnLzoADr0x1ZmJakrG+F3fd9qSWc68AGaEGiDM5xaXjGf3II52F0ghveAx22rTK9Hlyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxl3kh0d; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kRsOXr3HTxulqNFnVihQhOjVFcoE94A18Idfh7r4EdqZ2wnYBW/Y11AsXMYfsB4qJklZuVuqn0Whd7FS3OdUX0YhUDJhsOeldURa34bdxDsUFSLohRmesNhybOx41sl5/13bjt8q3sTQMQ2Cl5EJhizrBdIXoXZ0XO4y+S48IzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=c/fLlohj; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxl3kh0d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579DAC43390;
-	Fri, 16 Feb 2024 20:42:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708116151;
-	bh=F81shhblktltp1h8t42uFEnG2IFNx0MPP8DE2AnUpg8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jxl3kh0dTB9X6BR2LZOsRknePjNVjA03E9VBHUmVLm65j0oppYDjEIzuYrlqZ3xwC
-	 t1zjpPPoQ+7tT9zU9DuIWFTVFEQ2Sfu/fn3xPMpm7tYPUBmfKy1tSwlVGT/q4inBlQ
-	 CPuG3CKzSfLzypfDbPo8GgppslyblHytmHhQpuFaupFosLpu9v25BIWf3/ibbdzhau
-	 lJQ8+v4MsbT+loeClwwM6pA+dZpsZzirDa09Z1er2tfhrmIu1WVXs9ALx4I77Lm0/s
-	 7G/fuLylB/xtcxZ2JIdnYxqCzNaoaseLeisxeSr8HAOIRdku+/OaDVnN80QHb8yZ98
-	 bHM3Xv5ygml7g==
-Date: Fri, 16 Feb 2024 13:42:28 -0700
-From: Nathan Chancellor <nathan@kernel.org>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="c/fLlohj"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5dbf7b74402so2046448a12.0
+        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 13:19:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708118361; x=1708723161; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Slargkifk+xN9eeRz4eeZrRCV6UdKDbpUow5tWWQ8Nw=;
+        b=c/fLlohjkjiciV1yybn2HLTNmY3NsT2C3heUBTo06D+C2DR5HzEYFRGN12mw3dY+Sc
+         bkWXcV7yJ/6iFXz2XWIoJbPH95qLGbjHOA80IRsMZtVFecO5ah7mUA3AeVzUbOTNJp5X
+         QHYtsZ8ayZRM7/Wg3nNlwm9wlk9Qr+23pALn4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708118361; x=1708723161;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Slargkifk+xN9eeRz4eeZrRCV6UdKDbpUow5tWWQ8Nw=;
+        b=o3TwR7f+u/h4TCAA9SPXv08qAH+ddi+ZV8p+BLH+kanm+4DVrxPZgMKp7Yz6Xktika
+         QS5HoIo0alKYoC8mrsxmYQxg/S0MDNUf22NjTpubVdTH+l3rgL/82ciiwWHpKohc0qNo
+         kMhaPp7a3VEUGE84Z45z67Kvu0PDJzFg8xkfmPcTSalkpDfass/Bx4dT3Ng+UyLVcB/Y
+         CkKK5Ox8bENRQ4X834JJfu+b1c8hxjIbhTcWCoiJr1Vq8turaUHZBcUdujKL4OMumBKs
+         DlNlkRSwKprOn+eNz5rYBYoeKQCynT+lVP5EycIYMld+n9dHNgHXnwpjp6NbBa/k8HIW
+         y7wQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIbGYwZh1A9j28NVT3xveCNR72ddnk0a9S8+3iBKGhzRSeOPxVvdL2pF7DAMyPFOnRCrGX+dFrUu3EYqsFzxPVee4fZA==
+X-Gm-Message-State: AOJu0Yx72/NojOs0CSYqaIKdc9sjAVG8caNuOCMF/aBLXBeXBIPhZkUP
+	PddcLODwmxMoXznONYXKsa1PFH3qkY1uareq8y6F2eaYf1u5SK2BRaxXEYmSBg==
+X-Google-Smtp-Source: AGHT+IHmIetBf12lZgnCIBsuyMKApScxQdHnKJTRQax45DnTFQUW8k5/OMVTOg+jgfmD8hQL5KfA0Q==
+X-Received: by 2002:a05:6a21:670b:b0:19c:9b7b:66a with SMTP id wh11-20020a056a21670b00b0019c9b7b066amr6805585pzb.49.1708118361358;
+        Fri, 16 Feb 2024 13:19:21 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id kq15-20020a056a004b0f00b006db05eb1301sm395754pfb.21.2024.02.16.13.19.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 13:19:20 -0800 (PST)
+Date: Fri, 16 Feb 2024 13:19:20 -0800
+From: Kees Cook <keescook@chromium.org>
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: Steffen Klassert <steffen.klassert@secunet.com>,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
 	Leon Romanovsky <leon@kernel.org>, Lin Ma <linma@zju.edu.cn>,
 	Simon Horman <horms@kernel.org>, Breno Leitao <leitao@debian.org>,
 	Tobias Brunner <tobias@strongswan.org>,
@@ -47,7 +69,7 @@ Cc: Steffen Klassert <steffen.klassert@secunet.com>,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH] [RFC] xfrm: work around a clang-19 fortifiy-string
  false-positive
-Message-ID: <20240216204228.GA3733086@dev-arch.thelio-3990X>
+Message-ID: <202402161301.BBFA14EE@keescook>
 References: <20240216202657.2493685-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,8 +80,6 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240216202657.2493685-1-arnd@kernel.org>
-
-Hi Arnd,
 
 On Fri, Feb 16, 2024 at 09:26:40PM +0100, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
@@ -81,73 +101,22 @@ On Fri, Feb 16, 2024 at 09:26:40PM +0100, Arnd Bergmann wrote:
 > still risks leaking data in the padding between them, which the compiler
 > is free to do here. To work around that problem, explicit padding fields
 > have to get added as well.
-> 
-> My first idea was that just adding the padding would avoid the warning
-> as well, as the padding tends to confused the fortified string helpers,
-> but it turns out that both changes are required here.
-> 
+
+Per C11, padding bits are zero initialized if there is an initializer,
+so "= { }" here should be sufficient -- no need to add the struct
+members.
+
 > Since this is a false positive, a better fix would likely be to
 > fix the compiler.
 
-I have some observations and notes from my initial investigation into
-this issue on our GitHub issue tracker but I have not produced a
-minimized test case either.
-
+As Nathan has found, this appears to be a loop unrolling bug in Clang.
 https://github.com/ClangBuiltLinux/linux/issues/1985
 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/uapi/linux/xfrm.h | 3 +++
->  net/xfrm/xfrm_user.c      | 3 +--
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/uapi/linux/xfrm.h b/include/uapi/linux/xfrm.h
-> index 6a77328be114..99adac4fa648 100644
-> --- a/include/uapi/linux/xfrm.h
-> +++ b/include/uapi/linux/xfrm.h
-> @@ -27,6 +27,7 @@ struct xfrm_id {
->  	xfrm_address_t	daddr;
->  	__be32		spi;
->  	__u8		proto;
-> +	__u8		__pad[3];
->  };
->  
->  struct xfrm_sec_ctx {
-> @@ -242,11 +243,13 @@ struct xfrm_user_sec_ctx {
->  struct xfrm_user_tmpl {
->  	struct xfrm_id		id;
->  	__u16			family;
-> +	__u16			__pad1;
->  	xfrm_address_t		saddr;
->  	__u32			reqid;
->  	__u8			mode;
->  	__u8			share;
->  	__u8			optional;
-> +	__u8			__pad2;
->  	__u32			aalgos;
->  	__u32			ealgos;
->  	__u32			calgos;
-> diff --git a/net/xfrm/xfrm_user.c b/net/xfrm/xfrm_user.c
-> index a5232dcfea46..e81f977e183c 100644
-> --- a/net/xfrm/xfrm_user.c
-> +++ b/net/xfrm/xfrm_user.c
-> @@ -2011,7 +2011,7 @@ static int xfrm_add_policy(struct sk_buff *skb, struct nlmsghdr *nlh,
->  
->  static int copy_to_user_tmpl(struct xfrm_policy *xp, struct sk_buff *skb)
->  {
-> -	struct xfrm_user_tmpl vec[XFRM_MAX_DEPTH];
-> +	struct xfrm_user_tmpl vec[XFRM_MAX_DEPTH] = {};
->  	int i;
->  
->  	if (xp->xfrm_nr == 0)
-> @@ -2021,7 +2021,6 @@ static int copy_to_user_tmpl(struct xfrm_policy *xp, struct sk_buff *skb)
->  		struct xfrm_user_tmpl *up = &vec[i];
->  		struct xfrm_tmpl *kp = &xp->xfrm_vec[i];
->  
-> -		memset(up, 0, sizeof(*up));
->  		memcpy(&up->id, &kp->id, sizeof(up->id));
->  		up->family = kp->encap_family;
->  		memcpy(&up->saddr, &kp->saddr, sizeof(up->saddr));
-> -- 
-> 2.39.2
-> 
+The shorter fix (in the issue) is to explicitly range-check before
+the loop:
+
+       if (xp->xfrm_nr > XFRM_MAX_DEPTH)
+               return -ENOBUFS;
+
+-- 
+Kees Cook
