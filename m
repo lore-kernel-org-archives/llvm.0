@@ -1,94 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE75944369;
-	Fri, 16 Feb 2024 16:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEB9219ED
+	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 17:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708101184; cv=none; b=YqmJJbz3Rspe1XnKfsdI0AMrr/70ZVFt3IOrPv8Mj7iW9KBQVaZyUBHcb3Tbdg4Wth73m8Z75MDj935AEsTYrCWBR7RgWs1foIB+TaPtqajs/GsWcEAzXlMX77++11jtfiwaZlEPyAok1ThjtZvVUcH6oMgzBC9f8UKAK1vKwYg=
+	t=1708104069; cv=none; b=LRyZZKQHkuOuDaDyncujC2Kgx60wV3p3PxKz4iw5h2VPfP2ZyugCyjCVrOLxaCxaKnJ0/n0BXn74/6t+PT7FCFp4C3w8dSZ/FczCwMhQYjgrnLF3KlWebN4UTkAems1bCdRjZ3qwRYH2mopHNL7PwLya07Lvh3figpmrRHciXpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708101184; c=relaxed/simple;
-	bh=Of7v1GxhPAmcslNCv2upPf4LImqPPOW1O8gZ/gUB0K0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ki5ahlPr5++u5/THDLzyqZ6ORUb4vPXRwWmrxAs/ZqIL/ZqNlP9PT4GPG24dXhSHH2ORUP12LObN3Z499fGGXuCJ20ZiWuLP4aYecedWg7BTiyXETNeLQOoPFe2+Yob8qCo6HBLVPWD4w3zYMa/icZ5Bkt51b3QW3HgsNIOJGjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCt+eSyw; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCt+eSyw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063E8C433F1;
-	Fri, 16 Feb 2024 16:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708101184;
-	bh=Of7v1GxhPAmcslNCv2upPf4LImqPPOW1O8gZ/gUB0K0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=CCt+eSywPtfHMHf159xCuj+SEArQm0vinZXB6BlnoVBqEYpD8oB39RXX/hgLEHvQ6
-	 8Rb/uYvmOTcCclLOSkiWIKKM2Ej3gutNnqUMK2l5YHCw35HAQgkHAKWFFuE2988sS6
-	 WpbEean1hiftDBiGRvTDLCVq20o5L5C9ajE8+ttVRzE2keG2Dkns3Nyi1Z0xqd8uT3
-	 4Jocxw6KCYxdzZ+Uae58DbpQLhsBwjISLfai3uErE8cN/lq2vU9feE/vhoPzmLNtHK
-	 /TkwduhA77vJ4pv8CsOe4UYULsp04ut6lWK5lJj0f5ZLaOe6g6pKhmOOLI4aEcmtTM
-	 wpdK7UrXHZOMg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
+	s=arc-20240116; t=1708104069; c=relaxed/simple;
+	bh=yESAlwHUyoqJ9dwcB3Qp++fB/3R3GtWL28LNJ36pRc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HrHX3Ub2BD6fZ+tZ6kj36lrCqOShAQzUdOQ8L5nG9Wa+hDwX9S82313vS8buvzjqefxTwYThBuY4z1HP3n6jVs3SH67B3KJu/5yrL4IvTdXhTq5JOscH44aMzFJ5662RRGgbtAAVrbw8u2SAkuMCV0kdrd+kTegN2q8nH/DYSM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29067DA7;
+	Fri, 16 Feb 2024 09:21:47 -0800 (PST)
+Received: from pluto (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A04A63F694;
+	Fri, 16 Feb 2024 09:21:04 -0800 (PST)
+Date: Fri, 16 Feb 2024 17:21:02 +0000
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] firmware: arm_scmi: avoid returning uninialized data
-Date: Fri, 16 Feb 2024 17:32:53 +0100
-Message-Id: <20240216163259.1927967-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [PATCH] firmware: arm_scmi: avoid returning uninialized data
+Message-ID: <Zc-ZfgVbAvAZVrPu@pluto>
+References: <20240216163259.1927967-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216163259.1927967-1-arnd@kernel.org>
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Feb 16, 2024 at 05:32:53PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Clang notices that there is a code path through
+> scmi_powercap_notify_supported() that returns an
+> undefined value:
+> 
 
-Clang notices that there is a code path through
-scmi_powercap_notify_supported() that returns an
-undefined value:
+Hi Arnd,
 
-drivers/firmware/arm_scmi/powercap.c:821:11: error: variable 'supported' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-  821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/firmware/arm_scmi/powercap.c:824:9: note: uninitialized use occurs here
-  824 |         return supported;
-      |                ^~~~~~~~~
-drivers/firmware/arm_scmi/powercap.c:821:7: note: remove the 'if' if its condition is always true
-  821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  822 |                 supported = dom_info->notify_powercap_measurement_change;
-drivers/firmware/arm_scmi/powercap.c:811:16: note: initialize the variable 'supported' to silence this warning
-  811 |         bool supported;
-      |                       ^
+> drivers/firmware/arm_scmi/powercap.c:821:11: error: variable 'supported' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>   821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/firmware/arm_scmi/powercap.c:824:9: note: uninitialized use occurs here
+>   824 |         return supported;
+>       |                ^~~~~~~~~
+> drivers/firmware/arm_scmi/powercap.c:821:7: note: remove the 'if' if its condition is always true
+>   821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
+>       |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   822 |                 supported = dom_info->notify_powercap_measurement_change;
+> drivers/firmware/arm_scmi/powercap.c:811:16: note: initialize the variable 'supported' to silence this warning
+>   811 |         bool supported;
+>       |                       ^
+> 
+> Return 'false' here, which is probably what was intended.
+> 
+> Fixes: c92a75fe84ce ("firmware: arm_scmi: Implement Powercap .is_notify_supported callback")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Return 'false' here, which is probably what was intended.
+thanks for looking at this, this series that I've just posted is still
+to be reviewd at all, so I would expect issues :D...BUT in this case I
+dont think that the clang report is valid since, inside the culprit
+function scmi_powercap_notify_supported(), a few lines before the
+reported usage of unitialized data there is a check (@line 816) on the
+'bounds' of evt_id itself
 
-Fixes: c92a75fe84ce ("firmware: arm_scmi: Implement Powercap .is_notify_supported callback")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/firmware/arm_scmi/powercap.c | 2 ++
- 1 file changed, 2 insertions(+)
+	if (evt_id >= ARRAY_SIZE(evt_2_cmd) || src_id >= pi->num_domains)
+		return false;
 
-diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-index aae91f47303e..8ee3be8776b0 100644
---- a/drivers/firmware/arm_scmi/powercap.c
-+++ b/drivers/firmware/arm_scmi/powercap.c
-@@ -820,6 +820,8 @@ scmi_powercap_notify_supported(const struct scmi_protocol_handle *ph,
- 		supported = dom_info->notify_powercap_cap_change;
- 	else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
- 		supported = dom_info->notify_powercap_measurement_change;
-+	else
-+		supported = false;
- 
- 	return supported;
- }
--- 
-2.39.2
+so basically the mentioned if/else WILL be evaluated in some of its
+branches for sure and supported wont be uninitialized.
 
+Indeed, I removed from here (and from all the series) the explicit
+initialization at definition time right before posting the series.
+
+Having saidm that...maybe it is just brain-dead this approach of mine
+since it is able to fool clang & friends...I would add bACK an explicit
+initialization of supported all across this series in V2, if this
+sounds good to you.
+
+Thanks,
+Cristian
+
+
+> ---
+>  drivers/firmware/arm_scmi/powercap.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
+> index aae91f47303e..8ee3be8776b0 100644
+> --- a/drivers/firmware/arm_scmi/powercap.c
+> +++ b/drivers/firmware/arm_scmi/powercap.c
+> @@ -820,6 +820,8 @@ scmi_powercap_notify_supported(const struct scmi_protocol_handle *ph,
+>  		supported = dom_info->notify_powercap_cap_change;
+>  	else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
+>  		supported = dom_info->notify_powercap_measurement_change;
+> +	else
+> +		supported = false;
+>  
+>  	return supported;
+>  }
+> -- 
+> 2.39.2
+> 
