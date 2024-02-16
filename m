@@ -1,123 +1,114 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B317320F
-	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 19:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4393130E2D
+	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 20:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708113457; cv=none; b=OEH3RFKvAnNP52tcPU8sFKI+E1Fhz7/G1YdJZ6XUNgQEIhBukmrWksOlF9PkpkXLtRB+PBz6Ca2EZHe6lkDPy3grPbL3GPLR70958R+jkX6hcnJR9x0eqOAKWaDAbCAeQNwLPG6MNUzLOARhAIGPc6rF4L5O2cTbQpoV82Ui3Ts=
+	t=1708114309; cv=none; b=ELVg49qJyadK0JfQxs5lUon/BOOL4PBkyzVisUQAGrIUh1PZ1fyGRuCCR1zcqLNTzFC+ICpEKv1LxfQXy7Fo92trFA8KOYt+teN6gXYkAEasFmUbYsT3pSu49ltYRmJs5btEbjf6qA6HNBWtk/+0pfBjiPT8OLEZaRaBBKwON/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708113457; c=relaxed/simple;
-	bh=mwBXSOLbzppGPcectkAGNJ7sViWWfxda+/ZYkgbgHHE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hIzlqdSHW6QGAmQow//xuT1+7wbkkeUZtEY1J0OiMfk3bgthAwUEbqdL1jZQsIdRo178BkDw1YKIrfe2cQ1SV5XqH+HfXPi4eGWYu6If0DnLKpfs2pNilqO2bpUqBdDy8WK+EDzXdgJUfPuyH1qGSGaUVT0eOSVgsWmAIg3BA4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5cf2d73a183so2513614a12.1
-        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 11:57:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708113455; x=1708718255;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eT8lrnb7gXnsbOnwG07kVXdw+Ry7KiTiqSIe4Bjzp5k=;
-        b=SrRaMbuiN1xbVGyTFnN5SisJOVABbTJVJsda/rTxDoSiGDe/6pKQo/uMi9WRevyYIT
-         KZ1ZWsolCAdoGB+TcFvXDzYn5FoR1zVornXePiKMmbOCKHLiW31+mfUM+ywDeRZdRmXu
-         qCOxTysnRfo0r3nYUmMlsdHNdLSyrMQAdmLu61HP4tMM3VYEQ1JnUPdrKqmjaqC8hFrC
-         1/WWr2Iw4brtr043ZsSiDvHawuHoPcddAWuSKsrkB516rrsAnfovmusnNbaqwIMd/fpW
-         M5hsvP5u/VSzERC/HYJ/dnLUiq56ph234u7jC2gOzIN3c7bwyIjYNY6vSRjbDHYaWF5U
-         Kccw==
-X-Forwarded-Encrypted: i=1; AJvYcCWSZ2ck0C1ML4LDheoxsUVNCnr9ht8AUAa7sI73G7wiBNNJb14SkIGeiB7jpZvS+2t3045LzjUjjzLxmJO/bZBfY7MwaA==
-X-Gm-Message-State: AOJu0YykhWawua+Cx4i/thBpQ3E9+j5mybzeOtgjlps/ddlQzLwwjgn+
-	Y+UW+5B6Hjd5ZrID+w+5u8hEMj0YoAjijv2c2PjLn/+a17gsRx7XBTjCMRsPCsTNC8t97s5TfZp
-	8lwwWNka4EpnIi++XGu9Nl3+fNdI=
-X-Google-Smtp-Source: AGHT+IFWRpynq69LNZN+UBhnF0PizVRFiXuYFvBza7v/gwZSo5+4DFDMusqXm9IXSVEcvBZ2bBqUqKse9+m6yZL3s8I=
-X-Received: by 2002:a17:90b:19d5:b0:299:2d92:4942 with SMTP id
- nm21-20020a17090b19d500b002992d924942mr4919146pjb.7.1708113455044; Fri, 16
- Feb 2024 11:57:35 -0800 (PST)
+	s=arc-20240116; t=1708114309; c=relaxed/simple;
+	bh=sKjVKjm0Cju6dR30zSwBvIMmz/AyJkt9fOrMTl3BxbQ=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=A8h2PtVe/nGGTOB7B3xbM8GTGo6QjpPy1aNxnvYIDNQrd0oAp/9m8sAdBk0uNoHqyp+oAo4QXusv4vbFxyydI7wyMTUWy4RBmVG/iJjfF0IP4vxqlLJg2TO8jEsBS2QDnqLHBYiaNKC/CGKBbtOz6A3JOmaiPP322EXpvC1AFyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=jkSpXLYq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TrL3BRZn; arc=none smtp.client-ip=66.111.4.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="jkSpXLYq";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TrL3BRZn"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.nyi.internal (Postfix) with ESMTP id CB4BF5C0052;
+	Fri, 16 Feb 2024 15:11:46 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 16 Feb 2024 15:11:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1708114306;
+	 x=1708200706; bh=28ebHOOZ0gHWDewFw4LLJRaTSJuyD5ugj7D+HBTHzXc=; b=
+	jkSpXLYqI0AILE08dSPABHejGUHz+VRLdYvX1/IRf/tWJvsds+S09r2GEOJxo5MR
+	oydiPHiuBEkLX9kxGfRbe8BSUMJ5eeU+skRURq6OHMTkH0LhxlbKXL22Z24infiM
+	7G0Namf4UK0PEYz1vmeBWtiKw0ntO7qHGB6h8N6nEcYIA1J2Y8wCzxrX6N3miEUL
+	fULshplfylTmsJ2tygqkg62GHLLl97qGHgjt0D782v8WCXVlGSECXdDqvc0GOuAb
+	KeI34ifnNvik7IGb9Muj3p39qQokKyjcsBxvS1P7cdCBrnmMhQRS0OtjXisFgYqt
+	W+iUROXU+7QPNfQlcNiZLw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1708114306; x=
+	1708200706; bh=28ebHOOZ0gHWDewFw4LLJRaTSJuyD5ugj7D+HBTHzXc=; b=T
+	rL3BRZnZhqGUYTc6wkWWVvaAsWUuD6LiU1laMwS6cHWPQIruE72nVds9KBDhsdnT
+	lnr/MK4GaveT8hNRadrzkese4vCDem0YVEXNI8mEDegIObPlHuz/Dex58Ob1GTok
+	VAn/RAB3z+pqry6wTbj0+0G/XRiQxzzv5oX/V0EVnw3UD5IMwhsc38JprwxqWfig
+	V3PGZMMtjukqaYojKZSD2GwN1QkJ/1hpwUylCumevJLbIZUbB2JtTrObZbiYmSUs
+	6O/pC2RJMudi9o4C93NhOi/K/H96YDKwQmBqq1dadtFVElEUqXpackylMtp7zh6y
+	TE41DFLmMPdDLAQlsXw4A==
+X-ME-Sender: <xms:gsHPZSE_CRG9p-__m-hFXPj44AOxV_BY_i5s_FAgPsoXvO99RwYidw>
+    <xme:gsHPZTWjCag_fKn31XIEglB-m4_sDpBub46ZmFXGflhCZdhUxgsdeibr_4UGD7vSm
+    RjLar9noCOlU_GMgPU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvgddufeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:gsHPZcJz-JbNtrfu_gTQQ0YYCxHS2Nuytqe1M4ahLbtGhNb54Peoyw>
+    <xmx:gsHPZcEBhbfUB5jFJPwgRV5ay8QH3o5t-e6LFZC7SVxL3F3CRIx9WA>
+    <xmx:gsHPZYXpZNvZq26-e2o1zB8fDD5VZbTRNBNPvU5-9CXt-0QI7dy3OA>
+    <xmx:gsHPZRPnHL8cPwoF7XA-s6AiQW1NtsNNTogO1W5erVDiNY4pUXlwVA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 61DA3B6008D; Fri, 16 Feb 2024 15:11:46 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240214045356.748330-1-irogers@google.com>
-In-Reply-To: <20240214045356.748330-1-irogers@google.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Fri, 16 Feb 2024 11:57:23 -0800
-Message-ID: <CAM9d7cjXAKARq_7x0nif+vaiAfHHRhWEWHLYT3jkVugeXMncag@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Run tests in parallel
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@arm.com>, 
-	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <025f63f5-9114-439b-ad49-c37dffd1ea2f@app.fastmail.com>
+In-Reply-To: 
+ <CAFhGd8qmR+EPVUDt0DVttxm3aBQpdL2i4XbFZ3_ko6Li=mVH3A@mail.gmail.com>
+References: <20240216163201.1901744-1-arnd@kernel.org>
+ <CAFhGd8qmR+EPVUDt0DVttxm3aBQpdL2i4XbFZ3_ko6Li=mVH3A@mail.gmail.com>
+Date: Fri, 16 Feb 2024 21:11:25 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Justin Stitt" <justinstitt@google.com>, "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+ "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+ "laurent.pinchart" <Laurent.pinchart@ideasonboard.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Mark Brown" <broonie@kernel.org>,
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] media: dvb-frontends: avoid stack overflow warnings with clang
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ian,
+On Fri, Feb 16, 2024, at 19:56, Justin Stitt wrote:
+> On Fri, Feb 16, 2024 at 8:32=E2=80=AFAM Arnd Bergmann <arnd@kernel.org=
+> wrote:
+>> -
+>> -       buf[0] =3D MSB(reg);
+>> -       buf[1] =3D LSB(reg);
+>> -       memcpy(buf + 2, data, len);
+>
+> I'm curious why a copy was made at all.
+>
+> Reviewed-by: Justin Stitt <justinstitt@google.com>
 
-On Tue, Feb 13, 2024 at 8:54=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> If command line option '-p' is provided, start/fork all tests in the
-> main thread and then gather them in order at the end. On a laptop test
-> time was reduced from 5 minutes 21 seconds to 1 minute 50 seconds. The
-> option isn't default as the test shows up perf and test flakes.
+I guess the idea was to allow writing arbitrarily long
+contents to a single register with a single decriptor.
 
-It's a bit sad that tests flake when run in parallel but I think we can
-work on improving it later.  So
+The current version of the driver only ever writes a single
+byte value, but maybe it either used to have other writes,
+or it was meant to support them later but never did.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks,
-Namhyung
-
->
-> The '-v' option is modified so that 'perf test -v' will give verbose
-> output only from failing tests.
->
-> v4 - fix bug in width computation.
-> v3 - fix a crash if shell test directory isn't found, remove merged patch=
-.
-> v2 - fix parallel test output/verbose issue
-> v1 - initial PoC
->
-> Ian Rogers (8):
->   perf thread_map: Skip exited threads when scanning /proc
->   perf list: Add scandirat compatibility function
->   perf tests: Avoid fork in perf_has_symbol test
->   tools subcmd: Add a no exec function call option
->   perf test: Rename builtin-test-list and add missed header guard
->   perf tests: Use scandirat for shell script finding
->   perf tests: Run time generate shell test suites
->   perf tests: Add option to run tests in parallel
->
->  tools/lib/subcmd/run-command.c                |   2 +
->  tools/lib/subcmd/run-command.h                |   2 +
->  tools/perf/tests/Build                        |   2 +-
->  tools/perf/tests/builtin-test-list.c          | 207 ----------
->  tools/perf/tests/builtin-test-list.h          |  12 -
->  tools/perf/tests/builtin-test.c               | 378 ++++++++++--------
->  tools/perf/tests/shell/lib/perf_has_symbol.sh |   2 +-
->  tools/perf/tests/tests-scripts.c              | 257 ++++++++++++
->  tools/perf/tests/tests-scripts.h              |   9 +
->  tools/perf/util/print-events.c                |  12 +-
->  tools/perf/util/thread_map.c                  |   9 +-
->  tools/perf/util/util.c                        |  19 +
->  tools/perf/util/util.h                        |   8 +
->  13 files changed, 509 insertions(+), 410 deletions(-)
->  delete mode 100644 tools/perf/tests/builtin-test-list.c
->  delete mode 100644 tools/perf/tests/builtin-test-list.h
->  create mode 100644 tools/perf/tests/tests-scripts.c
->  create mode 100644 tools/perf/tests/tests-scripts.h
->
-> --
-> 2.43.0.687.g38aa6559b0-goog
->
+      Arnd
