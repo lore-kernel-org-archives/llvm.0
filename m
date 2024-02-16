@@ -1,46 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF52219ED;
-	Fri, 16 Feb 2024 16:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE75944369;
+	Fri, 16 Feb 2024 16:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708101128; cv=none; b=OeGM/SQDzTyae3VuXQjTkHMqwCz30kHxlLKn4bPRXQswTotgVT0QKXrixPbbt9Uy8o1MHBS9PLvIIIKpSDozkBuPca6GKi/ZloUTs9vpDq2e5qqs7488dGT+z+gasGCc+9MnUvkTs2Q4fw3xeqM/5uUVVxYwGKSYVZe5NN/1VDM=
+	t=1708101184; cv=none; b=YqmJJbz3Rspe1XnKfsdI0AMrr/70ZVFt3IOrPv8Mj7iW9KBQVaZyUBHcb3Tbdg4Wth73m8Z75MDj935AEsTYrCWBR7RgWs1foIB+TaPtqajs/GsWcEAzXlMX77++11jtfiwaZlEPyAok1ThjtZvVUcH6oMgzBC9f8UKAK1vKwYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708101128; c=relaxed/simple;
-	bh=JGR9oWuh9+Gj4ak7aoBRm7nN1ezVNuRLhjn7Tq1Dsog=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fOso0/9urkWPXj6CbF09JXVnJTkZRE+SDOqqQprcYNvDy2ZITjmOdOAIRVR+WRHC/3zuZ+NKv/WhfANGrQle5BRffXXdSaiQ7GV5KImjnTJIyRRu5VLeoeX9WKfEInRVghOx8i26k/zIpUF3+4Z2EdwPRvDS+KjDYrEPq/3SNFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ba9T0zMH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708101184; c=relaxed/simple;
+	bh=Of7v1GxhPAmcslNCv2upPf4LImqPPOW1O8gZ/gUB0K0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ki5ahlPr5++u5/THDLzyqZ6ORUb4vPXRwWmrxAs/ZqIL/ZqNlP9PT4GPG24dXhSHH2ORUP12LObN3Z499fGGXuCJ20ZiWuLP4aYecedWg7BTiyXETNeLQOoPFe2+Yob8qCo6HBLVPWD4w3zYMa/icZ5Bkt51b3QW3HgsNIOJGjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCt+eSyw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ba9T0zMH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBC8C43390;
-	Fri, 16 Feb 2024 16:32:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCt+eSyw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063E8C433F1;
+	Fri, 16 Feb 2024 16:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708101127;
-	bh=JGR9oWuh9+Gj4ak7aoBRm7nN1ezVNuRLhjn7Tq1Dsog=;
+	s=k20201202; t=1708101184;
+	bh=Of7v1GxhPAmcslNCv2upPf4LImqPPOW1O8gZ/gUB0K0=;
 	h=From:To:Cc:Subject:Date:From;
-	b=Ba9T0zMHZyf/Ke4gnCc2keIIDMRzmRuPhteX/as0JvsiQ2E3w6CyWZB5GXO6EOOXl
-	 ucXIIJiRkzT2EjoREmF0CVtbFqRuO1tq6H1hwyV+L8t1gP1HNJH1+LEFC7cBRskE+l
-	 2FRK/nqeRrzX0tnK9giDxPJdiRS2pULsRPuix+xkfs/y/sWmfPAU3E5E9iq2WGQeAS
-	 hhWBqo3mGxn44UfaWRAJ3Fe7HibrSYJ+0FMJdy7G/59XRD960WwNBU/yDqZJkkVBT1
-	 542yYzoTa7b4wTPlf7JqZhkDuSgRKIh+YyM10hckMc9K91iF+6w0G23eW1wigsO2nP
-	 NjUY67zUcgAHg==
+	b=CCt+eSywPtfHMHf159xCuj+SEArQm0vinZXB6BlnoVBqEYpD8oB39RXX/hgLEHvQ6
+	 8Rb/uYvmOTcCclLOSkiWIKKM2Ej3gutNnqUMK2l5YHCw35HAQgkHAKWFFuE2988sS6
+	 WpbEean1hiftDBiGRvTDLCVq20o5L5C9ajE8+ttVRzE2keG2Dkns3Nyi1Z0xqd8uT3
+	 4Jocxw6KCYxdzZ+Uae58DbpQLhsBwjISLfai3uErE8cN/lq2vU9feE/vhoPzmLNtHK
+	 /TkwduhA77vJ4pv8CsOe4UYULsp04ut6lWK5lJj0f5ZLaOe6g6pKhmOOLI4aEcmtTM
+	 wpdK7UrXHZOMg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Arnd Bergmann <arnd@arndb.de>,
+To: Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-media@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] media: dvb-frontends: avoid stack overflow warnings with clang
-Date: Fri, 16 Feb 2024 17:31:44 +0100
-Message-Id: <20240216163201.1901744-1-arnd@kernel.org>
+Subject: [PATCH] firmware: arm_scmi: avoid returning uninialized data
+Date: Fri, 16 Feb 2024 17:32:53 +0100
+Message-Id: <20240216163259.1927967-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,86 +50,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-A previous patch worked around a KASAN issue in stv0367, now a similar
-problem showed up with clang:
+Clang notices that there is a code path through
+scmi_powercap_notify_supported() that returns an
+undefined value:
 
-drivers/media/dvb-frontends/stv0367.c:1222:12: error: stack frame size (3624) exceeds limit (2048) in 'stv0367ter_set_frontend' [-Werror,-Wframe-larger-than]
- 1214 | static int stv0367ter_set_frontend(struct dvb_frontend *fe)
+drivers/firmware/arm_scmi/powercap.c:821:11: error: variable 'supported' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+  821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/firmware/arm_scmi/powercap.c:824:9: note: uninitialized use occurs here
+  824 |         return supported;
+      |                ^~~~~~~~~
+drivers/firmware/arm_scmi/powercap.c:821:7: note: remove the 'if' if its condition is always true
+  821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  822 |                 supported = dom_info->notify_powercap_measurement_change;
+drivers/firmware/arm_scmi/powercap.c:811:16: note: initialize the variable 'supported' to silence this warning
+  811 |         bool supported;
+      |                       ^
 
-Rework the stv0367_writereg() function to be simpler and mark both
-register access functions as noinline_for_stack so the temporary
-i2c_msg structures do not get duplicated on the stack when KASAN_STACK
-is enabled.
+Return 'false' here, which is probably what was intended.
 
-Fixes: 3cd890dbe2a4 ("media: dvb-frontends: fix i2c access helpers for KASAN")
+Fixes: c92a75fe84ce ("firmware: arm_scmi: Implement Powercap .is_notify_supported callback")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/dvb-frontends/stv0367.c | 34 +++++++--------------------
- 1 file changed, 8 insertions(+), 26 deletions(-)
+ drivers/firmware/arm_scmi/powercap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/dvb-frontends/stv0367.c b/drivers/media/dvb-frontends/stv0367.c
-index 48326434488c..72540ef4e5f8 100644
---- a/drivers/media/dvb-frontends/stv0367.c
-+++ b/drivers/media/dvb-frontends/stv0367.c
-@@ -118,50 +118,32 @@ static const s32 stv0367cab_RF_LookUp2[RF_LOOKUP_TABLE2_SIZE][RF_LOOKUP_TABLE2_S
- 	}
- };
+diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
+index aae91f47303e..8ee3be8776b0 100644
+--- a/drivers/firmware/arm_scmi/powercap.c
++++ b/drivers/firmware/arm_scmi/powercap.c
+@@ -820,6 +820,8 @@ scmi_powercap_notify_supported(const struct scmi_protocol_handle *ph,
+ 		supported = dom_info->notify_powercap_cap_change;
+ 	else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
+ 		supported = dom_info->notify_powercap_measurement_change;
++	else
++		supported = false;
  
--static
--int stv0367_writeregs(struct stv0367_state *state, u16 reg, u8 *data, int len)
-+static noinline_for_stack
-+int stv0367_writereg(struct stv0367_state *state, u16 reg, u8 data)
- {
--	u8 buf[MAX_XFER_SIZE];
-+	u8 buf[3] = { MSB(reg), LSB(reg), data };
- 	struct i2c_msg msg = {
- 		.addr = state->config->demod_address,
- 		.flags = 0,
- 		.buf = buf,
--		.len = len + 2
-+		.len = 3,
- 	};
- 	int ret;
- 
--	if (2 + len > sizeof(buf)) {
--		printk(KERN_WARNING
--		       "%s: i2c wr reg=%04x: len=%d is too big!\n",
--		       KBUILD_MODNAME, reg, len);
--		return -EINVAL;
--	}
--
--
--	buf[0] = MSB(reg);
--	buf[1] = LSB(reg);
--	memcpy(buf + 2, data, len);
--
- 	if (i2cdebug)
- 		printk(KERN_DEBUG "%s: [%02x] %02x: %02x\n", __func__,
--			state->config->demod_address, reg, buf[2]);
-+			state->config->demod_address, reg, data);
- 
- 	ret = i2c_transfer(state->i2c, &msg, 1);
- 	if (ret != 1)
- 		printk(KERN_ERR "%s: i2c write error! ([%02x] %02x: %02x)\n",
--			__func__, state->config->demod_address, reg, buf[2]);
-+			__func__, state->config->demod_address, reg, data);
- 
- 	return (ret != 1) ? -EREMOTEIO : 0;
+ 	return supported;
  }
- 
--static int stv0367_writereg(struct stv0367_state *state, u16 reg, u8 data)
--{
--	u8 tmp = data; /* see gcc.gnu.org/bugzilla/show_bug.cgi?id=81715 */
--
--	return stv0367_writeregs(state, reg, &tmp, 1);
--}
--
--static u8 stv0367_readreg(struct stv0367_state *state, u16 reg)
-+static noinline_for_stack
-+u8 stv0367_readreg(struct stv0367_state *state, u16 reg)
- {
- 	u8 b0[] = { 0, 0 };
- 	u8 b1[] = { 0 };
 -- 
 2.39.2
 
