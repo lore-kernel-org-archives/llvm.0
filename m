@@ -1,117 +1,136 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEB9219ED
-	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 17:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329A7130AD5
+	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 18:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708104069; cv=none; b=LRyZZKQHkuOuDaDyncujC2Kgx60wV3p3PxKz4iw5h2VPfP2ZyugCyjCVrOLxaCxaKnJ0/n0BXn74/6t+PT7FCFp4C3w8dSZ/FczCwMhQYjgrnLF3KlWebN4UTkAems1bCdRjZ3qwRYH2mopHNL7PwLya07Lvh3figpmrRHciXpc=
+	t=1708108057; cv=none; b=esA2rwKZknaWTTDUOZvZkC3Z1E361nRvcJ+31xZ95ysc1v659ma8UVLKYK09tTdsa2t0qzH0m+eE6vByzkbtSNGsPaeN7v5Q5iSb+gNA5JFtmu76z0BLUcK6gWjtA8CGlN/GoWvm74F5rzKdnPru2bLzuEIsWRIxY++dpW7sMv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708104069; c=relaxed/simple;
-	bh=yESAlwHUyoqJ9dwcB3Qp++fB/3R3GtWL28LNJ36pRc8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HrHX3Ub2BD6fZ+tZ6kj36lrCqOShAQzUdOQ8L5nG9Wa+hDwX9S82313vS8buvzjqefxTwYThBuY4z1HP3n6jVs3SH67B3KJu/5yrL4IvTdXhTq5JOscH44aMzFJ5662RRGgbtAAVrbw8u2SAkuMCV0kdrd+kTegN2q8nH/DYSM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29067DA7;
-	Fri, 16 Feb 2024 09:21:47 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A04A63F694;
-	Fri, 16 Feb 2024 09:21:04 -0800 (PST)
-Date: Fri, 16 Feb 2024 17:21:02 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] firmware: arm_scmi: avoid returning uninialized data
-Message-ID: <Zc-ZfgVbAvAZVrPu@pluto>
-References: <20240216163259.1927967-1-arnd@kernel.org>
+	s=arc-20240116; t=1708108057; c=relaxed/simple;
+	bh=UnShZ8EdBWD5I7RRNruBpEbtffINfrd97Kk9hac9+lQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CJL2+CEA3P851Uj8Znx2BLB/KL7wFaPTRd4Zwwl6sVn5h6bQlUjeEKbXz4ZGu+W15AccFi/QfWkci0sWJwBN619OhKCAHMHUJx6L95pqpesT4kb2a1odkKrJooSPSQznFk+vfnN8ZtUdVvlUDEgbomF9DSAuoZz0EVWiqCrhuRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b7G1oYpE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b7G1oYpE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708108054;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3pAxnKiY0v6Unt1MeteP4zhCiQHYAe7S4qrGIbBvNAI=;
+	b=b7G1oYpE/YgSTfOcsSCobBMlXADGINEKcigntHlhFWa1FXuf+ZasoN4B1Eo38x66uE3TvU
+	lQnlr2l93l/31xJuqvH+ZUpvwJ3G/3sTUeiMbDeeuTWnW2LQK4Vhq80htFQS6lVecE84V5
+	Yj8w2ev+7WCNJ447CjTFfb0G6EqS/nM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-447-4fRacCqYO-KaUWALy7UJHw-1; Fri, 16 Feb 2024 13:27:33 -0500
+X-MC-Unique: 4fRacCqYO-KaUWALy7UJHw-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-56261857d31so1295938a12.2
+        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 10:27:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708108052; x=1708712852;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3pAxnKiY0v6Unt1MeteP4zhCiQHYAe7S4qrGIbBvNAI=;
+        b=f2h2sirM0Bj28kObq9NHGhDSGptH0qYWMSqsw+2ykMt9pKOIzoC1JMEBGahQ+94hSA
+         MxNTXecD6wbp8VwmrhAwfsBrsnk3WeEd6Ifuo7wUAYQ72ceOGApvqL7ragCZwjwW9Wqc
+         yz/oJS70QT8Z4gHbCZSU7DZQ0aJ2PPMozh/UW1qF1znY42awv8NF7KLew4Y3iJE+Z/WD
+         ZBvxRnSE2U3uEm2nAlBKzXcN2rgb2VXieG7BxYV8G9q8rLdsxeXSa3E1ZxqRbvQkFYYT
+         qAWhhD8yWq6Bnzwo2mgKViaNT+kKVMuZQx7Ob2mnrWjz0tp9YGGDC7ukjuDYuSp2BylQ
+         cM/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUYcefnbpu9uJookac44OeIIp/BCPkZvmS3MAyG+EOnIiGlELORwBgUX5iazDvaYZuDQaD3EqH+yjL19gaR7kEVuy8kuQ==
+X-Gm-Message-State: AOJu0YwimN08qpn5RtIOoKHoUJdx0Dludqz879iLnI/JNsBtyUzaaMhu
+	ZqftxOVlD4fWA2UfgEPu2LxYbwxc3Po287kYsnoVV3Xcu1B2IzF4O559yRtYCMcZyHZWrgtRLpw
+	isQeAo3hdWZi9WRopf5tmCgOzZtK42uuecpZ26SK17JzzXo0JS4I=
+X-Received: by 2002:aa7:de0e:0:b0:564:7b9:8c18 with SMTP id h14-20020aa7de0e000000b0056407b98c18mr1164597edv.22.1708108052538;
+        Fri, 16 Feb 2024 10:27:32 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHc7HnCrb8Q59cHQe9Z/g3oIfkHjAxB+9md3uAcAJ23mrUVRozwXdVXewL5xF6l4JirE/riHw==
+X-Received: by 2002:aa7:de0e:0:b0:564:7b9:8c18 with SMTP id h14-20020aa7de0e000000b0056407b98c18mr1164581edv.22.1708108052264;
+        Fri, 16 Feb 2024 10:27:32 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:ee94:abf:b8ff:feee:998b? ([2a02:810d:4b3f:ee94:abf:b8ff:feee:998b])
+        by smtp.gmail.com with ESMTPSA id p27-20020a056402501b00b00562d908daf4sm224163eda.84.2024.02.16.10.27.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Feb 2024 10:27:31 -0800 (PST)
+Message-ID: <9d9fcdeb-4d0c-4371-b871-ad1fb8055033@redhat.com>
+Date: Fri, 16 Feb 2024 19:27:29 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240216163259.1927967-1-arnd@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] nouveau: fix function cast warnings
+To: Arnd Bergmann <arnd@kernel.org>, Karol Herbst <kherbst@redhat.com>,
+ Lyude Paul <lyude@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Ben Skeggs <bskeggs@redhat.com>, dri-devel@lists.freedesktop.org,
+ nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240213095753.455062-1-arnd@kernel.org>
+From: Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <20240213095753.455062-1-arnd@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 16, 2024 at 05:32:53PM +0100, Arnd Bergmann wrote:
+On 2/13/24 10:57, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Clang notices that there is a code path through
-> scmi_powercap_notify_supported() that returns an
-> undefined value:
+> clang-16 warns about casting between incompatible function types:
 > 
-
-Hi Arnd,
-
-> drivers/firmware/arm_scmi/powercap.c:821:11: error: variable 'supported' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->   821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/firmware/arm_scmi/powercap.c:824:9: note: uninitialized use occurs here
->   824 |         return supported;
->       |                ^~~~~~~~~
-> drivers/firmware/arm_scmi/powercap.c:821:7: note: remove the 'if' if its condition is always true
->   821 |         else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
->       |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   822 |                 supported = dom_info->notify_powercap_measurement_change;
-> drivers/firmware/arm_scmi/powercap.c:811:16: note: initialize the variable 'supported' to silence this warning
->   811 |         bool supported;
->       |                       ^
+> drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c:161:10: error: cast from 'void (*)(const struct firmware *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>    161 |         .fini = (void(*)(void *))release_firmware,
 > 
-> Return 'false' here, which is probably what was intended.
+> This one was done to use the generic shadow_fw_release() function as a
+> callback for struct nvbios_source. Change it to use the same prototype
+> as the other five instances, with a trivial helper function that actually
+> calls release_firmware.
 > 
-> Fixes: c92a75fe84ce ("firmware: arm_scmi: Implement Powercap .is_notify_supported callback")
+> Fixes: 70c0f263cc2e ("drm/nouveau/bios: pull in basic vbios subdev, more to come later")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-thanks for looking at this, this series that I've just posted is still
-to be reviewd at all, so I would expect issues :D...BUT in this case I
-dont think that the clang report is valid since, inside the culprit
-function scmi_powercap_notify_supported(), a few lines before the
-reported usage of unitialized data there is a check (@line 816) on the
-'bounds' of evt_id itself
-
-	if (evt_id >= ARRAY_SIZE(evt_2_cmd) || src_id >= pi->num_domains)
-		return false;
-
-so basically the mentioned if/else WILL be evaluated in some of its
-branches for sure and supported wont be uninitialized.
-
-Indeed, I removed from here (and from all the series) the explicit
-initialization at definition time right before posting the series.
-
-Having saidm that...maybe it is just brain-dead this approach of mine
-since it is able to fool clang & friends...I would add bACK an explicit
-initialization of supported all across this series in V2, if this
-sounds good to you.
-
-Thanks,
-Cristian
-
+Applied to drm-misc-fixes, thanks!
 
 > ---
->  drivers/firmware/arm_scmi/powercap.c | 2 ++
->  1 file changed, 2 insertions(+)
+>   drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-> index aae91f47303e..8ee3be8776b0 100644
-> --- a/drivers/firmware/arm_scmi/powercap.c
-> +++ b/drivers/firmware/arm_scmi/powercap.c
-> @@ -820,6 +820,8 @@ scmi_powercap_notify_supported(const struct scmi_protocol_handle *ph,
->  		supported = dom_info->notify_powercap_cap_change;
->  	else if (evt_id == SCMI_EVENT_POWERCAP_MEASUREMENTS_CHANGED)
->  		supported = dom_info->notify_powercap_measurement_change;
-> +	else
-> +		supported = false;
->  
->  	return supported;
->  }
-> -- 
-> 2.39.2
-> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
+> index 19188683c8fc..8c2bf1c16f2a 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
+> @@ -154,11 +154,17 @@ shadow_fw_init(struct nvkm_bios *bios, const char *name)
+>   	return (void *)fw;
+>   }
+>   
+> +static void
+> +shadow_fw_release(void *fw)
+> +{
+> +	release_firmware(fw);
+> +}
+> +
+>   static const struct nvbios_source
+>   shadow_fw = {
+>   	.name = "firmware",
+>   	.init = shadow_fw_init,
+> -	.fini = (void(*)(void *))release_firmware,
+> +	.fini = shadow_fw_release,
+>   	.read = shadow_fw_read,
+>   	.rw = false,
+>   };
+
