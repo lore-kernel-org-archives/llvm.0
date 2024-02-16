@@ -1,139 +1,141 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADB71350C7
-	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 19:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B136C1350F4;
+	Fri, 16 Feb 2024 19:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708111716; cv=none; b=E8hfkMB4M9PL326u6RePvLQ2y0EKwLaXq/nOfC9ZA5fM+rxYl8yNz3Bm63nXYZe+QjGnrGh3XH6KQKP8zKBsfiAOaLAGahyDI6dSN6mG7xtHSFjUfEpUN6FxwvdSDyvV7LSQ+Re5ZFgKqQfPgEh13PAzz2Zk7mrYZvNFGmDkfRg=
+	t=1708113362; cv=none; b=nNo6m48fnAd52+MSKkSBi9pDnS+6BTdhPGV9mU6kE3+3xjv9fz/hr2vxjbAh3IsxkfwZmik3cnxRpQyAU1JmqzYoAkS7VviStzwkqXwsnEGyg35KNBZblm4EIIumDJPwJpdhCflDXSN/ZfxA4S2LuDMB9T3nIjqhavVNyK0UFbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708111716; c=relaxed/simple;
-	bh=yIdkjjhlnq0V2YqP35lCylOPdgwAG7jHVS1txaLQjpU=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=uN2JjFLT/auDMUu2oQOMxFetIqWnmHM1rZpeWZXavDNYF2qhGk/xY7N2sMSMBuk/kuaYb2fOzOJFmrw4yPyJhCh8TpdsEQk6Tg9LIqUeZQF2ydHYY8IYMfFHeozbd5n5G48cz9SxhODI8R/gIeB+OgRUYmZimnqPZVaAzG87fy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WZUsKk+u; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1708113362; c=relaxed/simple;
+	bh=T1UbgkGOJwrEIoiF1stukcNe2NTIBEUIQmqKJruW/dg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lwoR3+/WzLevtPUpM8Y5PsVkM50/t7FUSHQxHI2kOcikTzkkOWOGbdM3phHTrCkjanjo2yxE2eOVxyWbeshNGQ43SGdmccO9RH6CehTlLicMsUtywhR4sClEOguMkPI3RuHWrWsqIZ7bAj1zC0z2IgvPK6fA00PXupr6UEwODFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KecpzTTx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WZUsKk+u"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3394b892691so1599758f8f.1
-        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 11:28:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708111712; x=1708716512; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=H3YJn4FcnPcgxqBeJlZpypeShY3FOuwcuzGIAMfitGI=;
-        b=WZUsKk+uni+x6Uahs9UPcFs0hA4weyfOEhGIMr57cbfdrII7wuwy4rahsm0oPGfHlI
-         +ZBKNnPQIt+DPfkfXgLL/ZA6RNgX3on4V+ZpzQD3mx220XqdOkPF7Dbqurxg3et+unHd
-         DRa1zlMzkgo3HEW9qqk3Fn2T7y+pGvgF1Ts6qFEZR+dE2O72GEJ532NYN1KnRMbfOGYn
-         GYuHdZ132U8d3Cl++Vcy5pWf/aHEItTqbNCvMc0Lt5TsG45qC0CSId1A22iH5FO3AbA7
-         JoO+WUP5a4dKptN0YXP1LMQ/FTVhsUr7JpeswNERnvHRyP1BuKqA/Vs307vMKIlFsV+l
-         7h1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708111712; x=1708716512;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H3YJn4FcnPcgxqBeJlZpypeShY3FOuwcuzGIAMfitGI=;
-        b=QRfo8+9TVz7UxYpFD1uWtdpdljWZcqLnAtnz9pvKzQrtV7+2Dhqc0ZLQhIHdDaVJvd
-         TE5dLtprx8R4rs8e1/DOxaaC9lpUyMmAyhaKMwGqFgWXkS+7tPSZ4MDzjmkT3pugk4HB
-         ndTp0SowH8jrvwkkpKaobSB2ypiPciSiHe+DARdsbdGRHuXnwlKuliNN9Ha3lWxX6haz
-         31S6ZH8VqYWslsCwUr7A2B2HRYZDNTMA0zBL11t3kFvRb2b3T1tSFfr9xh7lwvrlHQTT
-         WtV9XWwBt6ZEFxIucDt++hN/nbKgkFhVS4/9I00oqH8tk17za0gJCcr+BW8w6OkAJCsN
-         Ox2A==
-X-Gm-Message-State: AOJu0YzEsbDMn0voWgHAh2IpIxOlicm8am6FUpc+TcMTXWOYpta9Qui6
-	fyI9TB6kAFgU+QuaAvMtMdUmW2xw4rOpouKpuOLAEbVpXBJMGrOM7jh8r/Ki60lVHsVtCa14ErJ
-	p
-X-Google-Smtp-Source: AGHT+IFp15FhVOUlHatntaY0T0vUGengaenPeXq3U6EG6m4penbseDFzKA9SS247L3fiCUq3lu9NDg==
-X-Received: by 2002:adf:efd2:0:b0:33d:201f:ea9d with SMTP id i18-20020adfefd2000000b0033d201fea9dmr2108140wrp.2.1708111712492;
-        Fri, 16 Feb 2024 11:28:32 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05600c044a00b004122fbf9253sm3114516wmb.39.2024.02.16.11.28.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 11:28:31 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Fri, 16 Feb 2024 19:28:31 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <50916757.18748.1708111711932@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] llvmorg-19-init-2410-g9cc98e336980: Failure on
- aarch64
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KecpzTTx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD31DC433F1;
+	Fri, 16 Feb 2024 19:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708113362;
+	bh=T1UbgkGOJwrEIoiF1stukcNe2NTIBEUIQmqKJruW/dg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=KecpzTTxQsYYMW6aGOoSccWrNxaSqKEZGTQnMBjuxFpk8MQ0C2c0AjTjksT3kN0T5
+	 sLZyWMyHnCmYLiBMsAciMvuzmicSLuinWLs/w3SDuftuIHU/fDHXrkiOBKBc1JJLTZ
+	 +pfGOIY9d4ZZH1/mUryM7Y925hkk8a+z2cnLNrhrPYllHtNImYr/uH7nh1/+AgaK5g
+	 lfvKSaK5mIu9A/8B4R+TJqwsIWyEoxJoJd5JA9kllXOCeUDlUwpT9rcpQqS8RyHSvN
+	 nWr6jqyZMIfbsijr4PMf8kRioup3Hky2Apm/mnRse+4i6BxFpKJdcVPOljhx10W8OX
+	 rIoATcXVAw+sQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 16 Feb 2024 12:55:53 -0700
+Subject: [PATCH] s390/boot: Add 'alloc' to info.bin .vmlinux.info section
+ flags
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_18747_175492600.1708111711158"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-lts-allyesconfig
-X-Jenkins-Result: SUCCESS
-
-------=_Part_18747_175492600.1708111711158
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240216-s390-fix-boot-with-llvm-objcopy-v1-1-0ac623daf42b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMi9z2UC/x2NywqDMBAAf0X23IUkPlr7K+Ihiatusa4koi3iv
+ xs8DgwzB0QKTBHe2QGBNo4scwL9yMCPdh4IuUsMRplCGV1hzGuFPf/Qiay48zriNG1fFPfxsvx
+ R6do+q/xFpeshVZZAyb4PTXueFzcwHxZxAAAA
+To: hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
+Cc: borntraeger@linux.ibm.com, svens@linux.ibm.com, morbo@google.com, 
+ justinstitt@google.com, linux-s390@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Ulrich Weigand <ulrich.weigand@de.ibm.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4039; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=T1UbgkGOJwrEIoiF1stukcNe2NTIBEUIQmqKJruW/dg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKnn917USnvtm732yfWcfK/ENIFf1vPNWk0cXnteF/tdy
+ jSzRHx3RykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjI/D0Mv9nnXbyxOdFv91tn
+ +wkmhZnZdnqsQvFJJ5q3/zA75Vinnc3wvzD2jHOu+J6g+/uPaekmeu2a8ixIZImN/qQnJ49Pzl4
+ ayQAA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+When attempting to boot a kernel compiled with OBJCOPY=llvm-objcopy,
+there is a crash right at boot:
 
-We appreciate that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
+  Out of memory allocating 6d7800 bytes 8 aligned in range 0:20000000
+  Reserved memory ranges:
+  0000000000000000 a394c3c30d90cdaf DECOMPRESSOR
+  Usable online memory ranges (info source: sclp read info [3]):
+  0000000000000000 0000000020000000
+  Usable online memory total: 20000000 Reserved: a394c3c30d90cdaf Free: 0
+  Call Trace:
+  (sp:0000000000033e90 [<0000000000012fbc>] physmem_alloc_top_down+0x5c/0x104)
+   sp:0000000000033f00 [<0000000000011d56>] startup_kernel+0x3a6/0x77c
+   sp:0000000000033f60 [<00000000000100f4>] startup_normal+0xd4/0xd4
 
-We track this report status in https://linaro.atlassian.net/browse/LLVM-1135 , please let us know if you are looking at the problem and/or when you have a fix.
+GNU objcopy does not have any issues. Looking at differences between the
+object files in each build reveals info.bin does not get properly
+populated with llvm-objcopy, which results in an empty .vmlinux.info
+section.
 
-In CI config tcwg_kernel/llvm-master-aarch64-lts-allyesconfig after:
+  $ file {gnu,llvm}-objcopy/arch/s390/boot/info.bin
+  gnu-objcopy/arch/s390/boot/info.bin:  data
+  llvm-objcopy/arch/s390/boot/info.bin: empty
 
-  | commit llvmorg-19-init-2410-g9cc98e336980
-  | Author: ostannard <oliver.stannard@arm.com>
-  | Date:   Thu Feb 15 12:39:16 2024 +0000
-  | 
-  |     [AArch64] Add soft-float ABI (#74460)
-  |     
-  |     This adds support for the AArch64 soft-float ABI. The specification for
-  |     this ABI was added by https://github.com/ARM-software/abi-aa/pull/232.
-  |     
-  |     Because all existing AArch64 hardware has floating-point hardware, we
-  |     expect this to be a niche option, only used for embedded systems on
-  | ... 11 lines of the commit log omitted.
+  $ llvm-readelf --section-headers {gnu,llvm}-objcopy/arch/s390/boot/vmlinux | rg 'File:|\.vmlinux\.info|\.decompressor\.syms'
+  File: gnu-objcopy/arch/s390/boot/vmlinux
+    [12] .vmlinux.info     PROGBITS        0000000000034000 035000 000078 00  WA  0   0  1
+    [13] .decompressor.syms PROGBITS       0000000000034078 035078 000b00 00  WA  0   0  1
+  File: llvm-objcopy/arch/s390/boot/vmlinux
+    [12] .vmlinux.info     PROGBITS        0000000000034000 035000 000000 00  WA  0   0  1
+    [13] .decompressor.syms PROGBITS       0000000000034000 035000 000b00 00  WA  0   0  1
 
-Results changed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-22071
+Ulrich points out that llvm-objcopy only copies sections marked as alloc
+with a binary output target, whereas the .vmlinux.info section is only
+marked as load. Add 'alloc' in addition to 'load', so that both objcopy
+implementations work properly:
 
-From
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-22291
+  $ file {gnu,llvm}-objcopy/arch/s390/boot/info.bin
+  gnu-objcopy/arch/s390/boot/info.bin:  data
+  llvm-objcopy/arch/s390/boot/info.bin: data
 
-The configuration of this build is:
-CI config tcwg_kernel/llvm-master-aarch64-lts-allyesconfig
+  $ llvm-readelf --section-headers {gnu,llvm}-objcopy/arch/s390/boot/vmlinux | rg 'File:|\.vmlinux\.info|\.decompressor\.syms'
+  File: gnu-objcopy/arch/s390/boot/vmlinux
+    [12] .vmlinux.info     PROGBITS        0000000000034000 035000 000078 00  WA  0   0  1
+    [13] .decompressor.syms PROGBITS       0000000000034078 035078 000b00 00  WA  0   0  1
+  File: llvm-objcopy/arch/s390/boot/vmlinux
+    [12] .vmlinux.info     PROGBITS        0000000000034000 035000 000078 00  WA  0   0  1
+    [13] .decompressor.syms PROGBITS       0000000000034078 035078 000b00 00  WA  0   0  1
 
------------------8<--------------------------8<--------------------------8<--------------------------
-The information below can be used to reproduce a debug environment:
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1996
+Link: https://github.com/llvm/llvm-project/commit/3c02cb7492fc78fb678264cebf57ff88e478e14f
+Suggested-by: Ulrich Weigand <ulrich.weigand@de.ibm.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+No fixes tag because I have not tested to see if there are other issues
+on older kernel versions yet (so I don't think prioritizing a backport
+is necessary yet) but I think commit 5a2e1853d689 ("s390: avoid vmlinux
+segments overlap") introduced this.
+---
+ arch/s390/boot/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/135/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/134/artifact/artifacts
+diff --git a/arch/s390/boot/Makefile b/arch/s390/boot/Makefile
+index ace0bda1ad24..d40135efdec4 100644
+--- a/arch/s390/boot/Makefile
++++ b/arch/s390/boot/Makefile
+@@ -94,7 +94,7 @@ OBJCOPYFLAGS_syms.o := -I binary -O elf64-s390 -B s390:64-bit --rename-section .
+ $(obj)/syms.o: $(obj)/syms.bin FORCE
+ 	$(call if_changed,objcopy)
+ 
+-OBJCOPYFLAGS_info.bin := -O binary --only-section=.vmlinux.info --set-section-flags .vmlinux.info=load
++OBJCOPYFLAGS_info.bin := -O binary --only-section=.vmlinux.info --set-section-flags .vmlinux.info=alloc,load
+ $(obj)/info.bin: vmlinux FORCE
+ 	$(call if_changed,objcopy)
+ 
 
-Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/9cc98e336980f00cbafcbed8841344e6ac472bdc/tcwg_kernel/llvm-master-aarch64-lts-allyesconfig/reproduction_instructions.txt
+---
+base-commit: 03325e9b64c48313527f0373c4688d393b1edaf3
+change-id: 20240216-s390-fix-boot-with-llvm-objcopy-019a7638e5bf
 
-Full commit : https://github.com/llvm/llvm-project/commit/9cc98e336980f00cbafcbed8841344e6ac472bdc
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
-List of configurations that regressed due to this commit :
-* tcwg_kernel
-** llvm-master-aarch64-lts-allyesconfig
-*** Failure
-*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/9cc98e336980f00cbafcbed8841344e6ac472bdc/tcwg_kernel/llvm-master-aarch64-lts-allyesconfig/details.txt
-*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/135/artifact/artifacts
-------=_Part_18747_175492600.1708111711158--
