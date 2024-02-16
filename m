@@ -1,126 +1,133 @@
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6D91E520
-	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 20:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290D712FF60
+	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 20:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708114773; cv=none; b=FvT3ClMJMIKHZz4UBs4rRVer2sM8ZH8Sey/iSP+L4kaCvhoKKsv8NK/kEGdHpgKS0cz3z38H8YpYnmWxft18F8O9/FYeq7TEgDX2foaLYb65u8eJbJUcwBnW+GywQ0AtZRK5gmYNZVQVmWRa8twWqt3F7eSCc5PG0gnxNOBOGVQ=
+	t=1708114946; cv=none; b=E1b3EGCi78SkFF8VVgAaYPBlAO1wNtAiwowvveu59fiBRB+hZ5XJ5n+kflOhYkrQdfi4hE/uihg2wloIiHZ7a6oKaMphsWvpK4CMHGOqmT/3AAicNlvP5N9V8WN8bO+VuVk17DNTFr0WJj6//Ml3qBP7SyDGmaeaKCkVbxXC0DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708114773; c=relaxed/simple;
-	bh=/bokmpfElf63z1ZydB/22t5ENMueGssT3gFl8Sqi5dM=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=RSthYeDq0UfBxWmu32tWj/Jaz/zSXaWTQSx+pc82st5BN7lJ0e3GzlgSfg929SMwT7xNUrWH+hi7hIRn1KdzW7rmhWomP9Q4SewEOPXvLXGWxqCqHT5w4PBhS4mNjYSq5G9abDGTnZDbd3wPoeDxOje//EZWJyXETizwhrJO3MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=wSDTjiuN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YM3T/If4; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="wSDTjiuN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YM3T/If4"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id CE29911400E5;
-	Fri, 16 Feb 2024 15:19:30 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 16 Feb 2024 15:19:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1708114770; x=1708201170; bh=jOuj0uRSw5
-	sSrWJwEuWZ1IConb06mgLahGV1YyhDnQU=; b=wSDTjiuNZtJy0RGz54YzwuXmgI
-	1NgUkVtFnYAiqR3kbdb56KGhBLPd4E2eAb5ATNxchvMWAOSjQNFPwF+8SMkQ28Wg
-	qkSAF2qIGLcO+K+16X90XsJi7gDlls1zQYzQw7mvsVB17t/OZTmacil/vok+ggUX
-	yHYFCh3qefBz38lavm05HV0rzdDjIYCXLAgnfmEpzo6zR5gZ3lfTdnyKq+Ptj7mB
-	TGAVJknVqJ8WqafDUR2jaMglDBM6BTV57kxULWG68XODufQGFhuXZ4CN2yozKDe0
-	m2h/Cxn/OQNpW0/eKc7/bC0d/Ah6rMMLAng90GiWCE4aiWDKhoJOsRKtmn+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1708114770; x=1708201170; bh=jOuj0uRSw5sSrWJwEuWZ1IConb06
-	mgLahGV1YyhDnQU=; b=YM3T/If4ZoM7paOwl27rbPb6cxMqLbnRBjodlMAr2D80
-	rzHl+hqEvWdKyvJkS4wczFl1RmQGwRPYnCpGIgBNzbmBvK8Nd+yxtpQqKnkjgw/D
-	yQUvcPSdV4EX36sWSmpo2t3iEjpQNA2Qy88dpWZM6rC+oOz+hR5F3kr6sGRegGmj
-	Xl4msPwgJaunEh6Qr2w+XNjek8TZxrMb4gPvG4MBCtS7UfzPxec6CsOiPn/wi3Eo
-	aCrBQtDXake8A/ZQfWuGfa0XtpYraHoPLDw9kt5ZWMs1oQXCSIl/MxVKsuay7Fxp
-	sLjBskSSbJYx5eQAOtX8xjKDXySe7P+eMT0Zv7jGhQ==
-X-ME-Sender: <xms:UsPPZR1wBBIeYj3tEDbpIUOaklY3bKZdHRpUb9etLS8Val9apnREEg>
-    <xme:UsPPZYHmT3FyIqJNttulLPgR4HLueQ_TgoOUmviB2s6cD5GTTgzRHz2vPTGm3zczR
-    THpMZh2qAyainlYyUM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvgddufeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:UsPPZR5jaVx0QHUlq_1Bk6uaT0t-VK9cUdGiLHeWDmUoRdFBJ7soaA>
-    <xmx:UsPPZe2Td7BtCNx8_3YFtFcbMBRTd0pxLk9ps9G7Wc1toWvhFJIFGA>
-    <xmx:UsPPZUGukLIZOtvB_lwi3WmocHPYeev9IWp32QXeq4qXybaU3vPLGA>
-    <xmx:UsPPZfCJ_cH5U-CDvQnsPTvjpsBQ6uvQ3JgIbDX14eZ2Ws8YmRTV-w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 7BB0DB6008F; Fri, 16 Feb 2024 15:19:30 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-144-ge5821d614e-fm-20240125.002-ge5821d61
+	s=arc-20240116; t=1708114946; c=relaxed/simple;
+	bh=pnCogIDz14LG5tHCuqzaTGDuVoRYHckFSaXPPX5xATI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C+jeZxzIvDTOHcNHNbn/AiMwru+8OT7/NVbuzS1+8vSW9x8u18oIEp0As2nPBfpawzqeYzMAfOFbVql6jtIsCiVN8iM1+Ke5cdyRUABpR8zRGYwFXt5olLnlloKGrtEX+YY2uImxZLAUg0/Tty26S84HioJh4UJC0K9em3HsuQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5ca29c131ebso1936974a12.0
+        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 12:22:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708114944; x=1708719744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Oq0A0N9FMvQiwLtedEjU1Y/XLo5XcWAr1iJu9cUBjms=;
+        b=gVl7F+EPg9hIt7cnisUPKRDC+Zt9LOgHX27ciZlHeE2+1c+lrCAhf/tDXNLPghmqvS
+         IGFxKX2oRjBgnQZt2Xw4bYHkKCHRM2scz2Ju9BDbRgECJE7VJ2h6gbMPmqoBdVBf9cnO
+         TPbFfd9a7FokO3UMgiRf7/QFo0UTj8p1GFCURn2X7TETixPS98xFIhWWxsTG1k6JIH13
+         jhGAm8oL9SLUXoFJEEuwEi2OeWvWvrVlY8c/XXuhyM6iwwx2Zlf+CPew26vWHJL/NbpG
+         qvaoSi32UyRUmmsITeKOTZ8IhrwTgCVJXtciVfaF/JlARPu847X9JnknNeApKWbPVaKa
+         iX/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWhozReSw/lxomU1Xc4gv3aW8Qdu1Pkokz1bQNI8325XBUw6EQfSpLRprKa0xBTBhq9f1+c2QesCtKgoa02MJyTgMt8/A==
+X-Gm-Message-State: AOJu0YwVskEQ7YK0lDx2d8M18Q7BrcVKI0GrE/Vaw4EMib590x0atBI/
+	xcg/UmDJV6XRwne1RuN6pXD4ZU/cFeUQfkrXRfHRc51q2w/8P052Ov3dUZDL6W51ydTF+qrywDw
+	BgK2tE2RyPdanHgI2J3X8YhUKbfE=
+X-Google-Smtp-Source: AGHT+IFguJIhRwRsgj6T4qcPSOxXHVK81XmIp86YrUJaYpTa7bcm2JYGq7PJIvPTaMXl36nvaefa641o/QO8CYYI9Dw=
+X-Received: by 2002:a17:90a:a883:b0:299:1aaa:5ff with SMTP id
+ h3-20020a17090aa88300b002991aaa05ffmr4758561pjq.7.1708114944478; Fri, 16 Feb
+ 2024 12:22:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <e880e5c4-143c-4c51-adc5-e517f319579e@app.fastmail.com>
-In-Reply-To: <Zc-ZfgVbAvAZVrPu@pluto>
-References: <20240216163259.1927967-1-arnd@kernel.org>
- <Zc-ZfgVbAvAZVrPu@pluto>
-Date: Fri, 16 Feb 2024 21:19:02 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Cristian Marussi" <cristian.marussi@arm.com>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Sudeep Holla" <sudeep.holla@arm.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] firmware: arm_scmi: avoid returning uninialized data
-Content-Type: text/plain
+References: <20240214045356.748330-1-irogers@google.com> <20240214045356.748330-7-irogers@google.com>
+In-Reply-To: <20240214045356.748330-7-irogers@google.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Fri, 16 Feb 2024 12:22:12 -0800
+Message-ID: <CAM9d7cg5O_1yKpk_X5vn380Cu28ObLjjjnOONHF75D07ZbkR3g@mail.gmail.com>
+Subject: Re: [PATCH v4 6/8] perf tests: Use scandirat for shell script finding
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, James Clark <james.clark@arm.com>, 
+	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 16, 2024, at 18:21, Cristian Marussi wrote:
-> On Fri, Feb 16, 2024 at 05:32:53PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> Clang notices that there is a code path through
->> scmi_powercap_notify_supported() that returns an
->> undefined value:
->> 
+On Tue, Feb 13, 2024 at 8:54=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
 >
-> thanks for looking at this, this series that I've just posted is still
-> to be reviewd at all, so I would expect issues :D...BUT in this case I
-> dont think that the clang report is valid since, inside the culprit
-> function scmi_powercap_notify_supported(), a few lines before the
-> reported usage of unitialized data there is a check (@line 816) on the
-> 'bounds' of evt_id itself
+> Avoid filename appending buffers by using openat, faccessat and
+> scandirat more widely. Turn the script's path back to a file name
+> using readlink from /proc/<pid>/fd/<fd>.
 >
-> 	if (evt_id >= ARRAY_SIZE(evt_2_cmd) || src_id >= pi->num_domains)
-> 		return false;
+> Read the script's description using api/io.h to avoid fdopen
+> conversions. Whilst reading perform additional sanity checks on the
+> script's contents.
 >
-> so basically the mentioned if/else WILL be evaluated in some of its
-> branches for sure and supported wont be uninitialized.
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/tests/builtin-test.c  |  21 ++---
+>  tools/perf/tests/tests-scripts.c | 144 ++++++++++++++++++-------------
+>  tools/perf/tests/tests-scripts.h |   1 -
+>  3 files changed, 95 insertions(+), 71 deletions(-)
 >
-> Indeed, I removed from here (and from all the series) the explicit
-> initialization at definition time right before posting the series.
+> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-t=
+est.c
+> index eff3c62e9b47..6d5001daaf63 100644
+> --- a/tools/perf/tests/builtin-test.c
+> +++ b/tools/perf/tests/builtin-test.c
+> @@ -300,22 +300,20 @@ static int test_and_print(struct test_suite *t, int=
+ subtest)
+>  }
 >
-> Having saidm that...maybe it is just brain-dead this approach of mine
-> since it is able to fool clang & friends...I would add bACK an explicit
-> initialization of supported all across this series in V2, if this
-> sounds good to you.
+>  struct shell_test {
+> -       const char *dir;
+>         const char *file;
+>  };
+>
+>  static int shell_test__run(struct test_suite *test, int subdir __maybe_u=
+nused)
+>  {
+>         int err;
+> -       char script[PATH_MAX];
+>         struct shell_test *st =3D test->priv;
+> +       char *cmd;
+>
+> -       path__join(script, sizeof(script) - 3, st->dir, st->file);
+> -
+> -       if (verbose > 0)
+> -               strncat(script, " -v", sizeof(script) - strlen(script) - =
+1);
+> -
+> -       err =3D system(script);
+> +       asprintf(&cmd, "%s%s", st->file, verbose ? " -v" : "");
+> +       if (!cmd)
+> +               return TEST_FAIL;
 
-I'm fine with any solution that avoids the warning. I usually
-prefer the explicit assignment where it's needed over having
-it as part of the declaration, and in this case I would
-probably pick a switch/case of a set of if/else fi/else
-blocks
+It fails to build.
 
-     Arnd
+tests/tests-scripts.c: In function =E2=80=98shell_test__run=E2=80=99:
+tests/tests-scripts.c:130:9: error: ignoring return value of
+=E2=80=98asprintf=E2=80=99 declared with attribute =E2=80=98warn_unused_res=
+ult=E2=80=99
+[-Werror=3Dunused-result]
+  130 |         asprintf(&cmd, "%s%s", file, verbose ? " -v" : "");
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Thanks,
+Namhyung
+
+
+> +       err =3D system(cmd);
+> +       free(cmd);
+>         if (!err)
+>                 return TEST_OK;
+>
