@@ -1,106 +1,155 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954CE41E4E
-	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 22:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5719E14831A
+	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 23:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708124132; cv=none; b=I0eehOlIbu3FGdSvAPXyo0CCAaP/ITl4hgBZ1Q/jccV2TmtNmIZBVYW8eCsGtmzEyWyTRG2xjBmYt9vV4/KUbopLVNCVD0Ms6wZsi43HdI0iXI8kIjpN+aXehJ4wTg4uIELzmHNBLGT4lP3iUIVJiMZT4D+3rX7FiUflhrYyNS8=
+	t=1708126070; cv=none; b=jbUPY+3TYx4Ga5mEL7UtWcnzZ7JM/91No81VKgP4pXiEZeaEyLPq91Z2+MyyscQklqmiom0ZNNaQUJy8yON1Qeg6suw/vzmxLZdOCxLhz/Z5RgeBUfXv766/N9A9oYLQ/1uXTBMGOi3YD7alIpY/Xlos+p2B9pMOt+XMLTOeS6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708124132; c=relaxed/simple;
-	bh=Rkz602uVR84kWe4yxGKeOpgN91RwroBuT17j7ydDsTM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=SU/dnG65XnC3IYchT0p2HmwIdzXowQ3bBV4eLGpDsxzgl7ir5ZcN+VyQz+uGXTRSzE2dpMwpZfTEgapB0wHSd0XEwvtX+j/D4dAWCOJjR38hMIquS0OBOwMjm7PthzDL5q6JW+rkwUIGGD1bWscuV1NhxO+V2GqUnBgII4IyVqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-32-nkuJsbMhOkORTovbgZB2Sg-1; Fri, 16 Feb 2024 22:55:21 +0000
-X-MC-Unique: nkuJsbMhOkORTovbgZB2Sg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 16 Feb
- 2024 22:55:02 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 16 Feb 2024 22:55:02 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Nathan Chancellor' <nathan@kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>
-CC: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Kent
- Overstreet" <kent.overstreet@linux.dev>
-Subject: RE: static assertion failed in fs/bcachefs/journal_io.c
-Thread-Topic: static assertion failed in fs/bcachefs/journal_io.c
-Thread-Index: AQHaXsd+8ES/EAzlpEu++WwpZeCmKbENloQA
-Date: Fri, 16 Feb 2024 22:55:01 +0000
-Message-ID: <6350380462904341a7802f9cf92eca5d@AcuMS.aculab.com>
-References: <20240213215640.GA80329@dev-arch.thelio-3990X>
-In-Reply-To: <20240213215640.GA80329@dev-arch.thelio-3990X>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1708126070; c=relaxed/simple;
+	bh=RNT0g0cgXQrcIvbNgrkk3LhFhJNchXw4WLd58eWGTyM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N3Vj5QCMW+UO7j4By/8jXt2OVMp/Z2G9UnuJjpb5OggW0PEGwCTxSRlCOhV1/0bVr4un5U5ohCuyV5pF+3MuPRYabHO0pPbaq9C2Ky3PGalV1E3YF0mhmX5C5N4R+0idmfc4F+tykhY6JVGQ7M4bu+c04hJZ8E7IOtgmajDPwtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=e7nYgUc5; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="e7nYgUc5"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5ce07cf1e5dso2124519a12.2
+        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 15:27:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708126067; x=1708730867; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLi9PHtxZsuZz7e5RQdykX5MWOEl3dE9qrCPIM1hrRo=;
+        b=e7nYgUc50gzhJkdz6rM3wE6jI7UCeGiapCgx6DGS3ywI/PLShS/Z3+QV9ghhK/BrKU
+         NHd1h4MhBHQboL+puuuZEL2cd0BJRdpfRdTFRwvi0Z2oPDhN6lSpdt61POSQq6q8plhH
+         QWzIhZmyCutHwF2tnBOKmYi3Ew+hepKUSGukA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708126067; x=1708730867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lLi9PHtxZsuZz7e5RQdykX5MWOEl3dE9qrCPIM1hrRo=;
+        b=liWh+6b2My9LY4FmPOLH0dmCCbqtqcYzsylGPa7C3S61JDiYSc1yYarFy4XyhElOhr
+         W++zZWF1aV2Dyf0zBISbnbhaTHpr4tZt3B4JBqcC0cOECZeua64KWYCj37nH5ZR//6uK
+         WR0v8SFe+/fnT6jml6oci4FiQzVabgQhWf6cLIwnNhE+DlMGH0zhNp3SorKqeL8mX8J4
+         y6vJanBLVK+e9Y1WWMkg1mqDDx3LtmSe/183uO8pcjkyX7xelqLk+7xbSXUvyNnY0aqb
+         OA1G11wcLEmY3PTq25UEbSPb2QsF196K6WrrLr6EWAwSZIq5SDHUMZjz+qhQEX8djbyA
+         ssLA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAlOSpriExxoEKdptC0PiAeLX/3TftIM5CJQ3eGskmmcwzRKM3gi/vGPNm3mxYqPe4Iq68a06hQQn1lDrr0YVBCcCnFg==
+X-Gm-Message-State: AOJu0YwTFFfXlvNX+0KaycjCzg+rffOpC+E/4gutfA5FdClSgLTkNwrH
+	4ySmdL1y7lTNfrQ2TjxbaZ0MT/PoE25/548bgj1LZj755g/ht/rv6BWTdNjqgg==
+X-Google-Smtp-Source: AGHT+IGPCpilatN+troOQhhuhZJ1ZyJIP1f1BukTAiQCIoKk/LNCdR5GS6r7rJFOX+rcu0p3vRbu7Q==
+X-Received: by 2002:a05:6a20:4fa2:b0:19e:a9bf:d51a with SMTP id gh34-20020a056a204fa200b0019ea9bfd51amr5455247pzb.32.1708126067651;
+        Fri, 16 Feb 2024 15:27:47 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id kn14-20020a170903078e00b001d8f82c61cdsm369379plb.231.2024.02.16.15.27.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 15:27:47 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] net: sched: Annotate struct tc_pedit with __counted_by
+Date: Fri, 16 Feb 2024 15:27:44 -0800
+Message-Id: <20240216232744.work.514-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2338; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=RNT0g0cgXQrcIvbNgrkk3LhFhJNchXw4WLd58eWGTyM=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlz+9w9qSnRo2mb+YJM+Gu1IwPUsAtgHSw+l89v
+ SbeoLT1YpuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZc/vcAAKCRCJcvTf3G3A
+ JgMGD/9xRXBIxLCBH7+ga8H8o/WOsCi9LCOVzwWZDpHbh6TZefl0ftvDhBHx7fg1n4l61k6f3w9
+ 1El1BpQBebgi7nX+Ets4Ub4/N8660HPXoRbAz6As6Ne5h8z2F1kw3ZBn6ITb7uqN2izMxRfy3/T
+ 8XA/eTuICYCEYDIQa4FqnmhVLh6WkR8mN0/N+LTAymXxd00ECGrhXlJW2dhrUhhTbhkzdvUF3WB
+ XEWJGtf4nP0kA3omfRN5CDGZ0YjDY2GS1mKIvj6eoJZrXXb+a09jCGPm9Y7qU1MB0F5A8pVlwNF
+ hK3T5yvnAdsN2FsboC223ZEzRd9XnGjM+xA+ZoQtpE5cKpu/HX80H11TmqAw/RZZtwbycKZ3MN1
+ VAlI70Igu9n71hjMCRL6of2MjZud4bPUAduFb42FOvZvXqiKkkwRD0LAy0+R2VX8/KsB2E4TrUA
+ vKh4f615Zd5qR3DKd3mjl1F5VnBxqa7oW67YYU/f+MCg86r+pT9RYj3Yl2tLNnjtBTLG+ePv8rK
+ otI00CvwQ2/R2IU/zEL5jtJqM9y+xTTP4Y2MVa2Mv/3RJSPHSSV8x40Hrpc+RA6rIjMFj19BWI5
+ oKc5WEPBofLAACgXz8fhUrXfyuUZfg0qeE0JqzukNFzqWGCbGESpOyHoQBYnslPSqhqGdZ3oJjl
+ TVrnnPI y3rX9jFg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-From: Nathan Chancellor
-> Sent: 13 February 2024 21:57
->=20
-> Hi all,
->=20
-> I am not really sure where to go with this, so I figured I would loop
-> some people in and see if we can figure out what is going on here.
->=20
-> After commit 67a8e7de7ef0 ("bcachefs: Clamp replicas_required to
-> replicas") in linux-next, I see a massive error occur when building for
-> ARCH=3Darm64 with both CONFIG_BCACHEFS_FS and CONFIG_LTO enabled, which i=
-s
-> important because arm64 defines its own __READ_ONCE() with LTO enabled.
-> The error appears to be related to the minmax.h changes that went into
-> 6.7; I think it is specifically around commit d03eba99f5bf ("minmax:
-> allow min()/max()/clamp() if the arguments have the same signedness.").
->=20
-> As far as I can tell, replicas_want and the metadata_replicas_required
-> member in struct bch_opts should have the same signedness, unless the
-> __READ_ONCE() macro is messing something up, which is kind of hard to
-> tell at this point...
->=20
-> I'll keep poking at this tomorrow unless someone else beats me to it.
-...
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-(Spotted in the main list - I've replied before!)
+As found with Coccinelle[1], add __counted_by for struct tc_pedit.
+Additionally, since the element count member must be set before accessing
+the annotated flexible array member, move its initialization earlier.
 
-I've done another check, it is all down to:
->         atomic ? (unsigned char)__u.__val : (*(unsigned char *volatile)__=
-x);
+Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-hardening@vger.kernel.org
+---
+ include/uapi/linux/tc_act/tc_pedit.h | 2 +-
+ net/sched/act_pedit.c                | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-A quick test shows that:
-int q(int z)
-{
-=09return sizeof (z ? (char)z : (char)z);
-}
-returns 4 - so the type will be 'int' and your min() has
-a signed v unsigned mismatch.
-
-So READ_ONCE() is (sort of) broken.
-
-Although I thought I'd added a '+ 0' and rechecked.
-That would convert the LHS (u8) to 'int' and a signed compare
-would then pass - but that might only have been for constants?
-
-=09David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/include/uapi/linux/tc_act/tc_pedit.h b/include/uapi/linux/tc_act/tc_pedit.h
+index f3e61b04fa01..f5cab7fc96ab 100644
+--- a/include/uapi/linux/tc_act/tc_pedit.h
++++ b/include/uapi/linux/tc_act/tc_pedit.h
+@@ -62,7 +62,7 @@ struct tc_pedit_sel {
+ 	tc_gen;
+ 	unsigned char           nkeys;
+ 	unsigned char           flags;
+-	struct tc_pedit_key     keys[0];
++	struct tc_pedit_key     keys[] __counted_by(nkeys);
+ };
+ 
+ #define tc_pedit tc_pedit_sel
+diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
+index 2ef22969f274..21e863d2898c 100644
+--- a/net/sched/act_pedit.c
++++ b/net/sched/act_pedit.c
+@@ -515,11 +515,11 @@ static int tcf_pedit_dump(struct sk_buff *skb, struct tc_action *a,
+ 		spin_unlock_bh(&p->tcf_lock);
+ 		return -ENOBUFS;
+ 	}
++	opt->nkeys = parms->tcfp_nkeys;
+ 
+ 	memcpy(opt->keys, parms->tcfp_keys,
+ 	       flex_array_size(opt, keys, parms->tcfp_nkeys));
+ 	opt->index = p->tcf_index;
+-	opt->nkeys = parms->tcfp_nkeys;
+ 	opt->flags = parms->tcfp_flags;
+ 	opt->action = p->tcf_action;
+ 	opt->refcnt = refcount_read(&p->tcf_refcnt) - ref;
+-- 
+2.34.1
 
