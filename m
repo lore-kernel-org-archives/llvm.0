@@ -1,136 +1,131 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329A7130AD5
-	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 18:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7225E135A6D
+	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 18:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708108057; cv=none; b=esA2rwKZknaWTTDUOZvZkC3Z1E361nRvcJ+31xZ95ysc1v659ma8UVLKYK09tTdsa2t0qzH0m+eE6vByzkbtSNGsPaeN7v5Q5iSb+gNA5JFtmu76z0BLUcK6gWjtA8CGlN/GoWvm74F5rzKdnPru2bLzuEIsWRIxY++dpW7sMv8=
+	t=1708108309; cv=none; b=rmqJbrVuEIX1UcoV0rFgTloqSXc50kOn+dEA2b60rhhdwCBFniuneDjRCeP5CLHyOkquHe1Qy3v/sFkjFtPF2zZu8WmH83+9VKkpyofsgCW8OQ5j02YlpgKVxj8l9DsO1JavJis7Daz/ReTH1I2zyImbdCXkUJPb4M7JMpap2wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708108057; c=relaxed/simple;
-	bh=UnShZ8EdBWD5I7RRNruBpEbtffINfrd97Kk9hac9+lQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CJL2+CEA3P851Uj8Znx2BLB/KL7wFaPTRd4Zwwl6sVn5h6bQlUjeEKbXz4ZGu+W15AccFi/QfWkci0sWJwBN619OhKCAHMHUJx6L95pqpesT4kb2a1odkKrJooSPSQznFk+vfnN8ZtUdVvlUDEgbomF9DSAuoZz0EVWiqCrhuRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b7G1oYpE; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1708108309; c=relaxed/simple;
+	bh=BdbG0yYlQpcAJTV+cb1BRObS/3sDHMAKLat6xu5MQUI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PgazQosYf2uLBI0HUYVo5tU2YljT/ngqeYpGGqxdmlI3T9YK7fsGrMvydSOX3qcvdUIl9/obKAZ5ZlIXtpc0OJ5igUJL2/C+upoBp5vJf5uRbnsoBsO5sdM4CinlUjtI58lGh7VP2FEzPLj4EsR+kvFKFVlGzaCIgp1Uf2GEsRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=RvseacXH; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b7G1oYpE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708108054;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3pAxnKiY0v6Unt1MeteP4zhCiQHYAe7S4qrGIbBvNAI=;
-	b=b7G1oYpE/YgSTfOcsSCobBMlXADGINEKcigntHlhFWa1FXuf+ZasoN4B1Eo38x66uE3TvU
-	lQnlr2l93l/31xJuqvH+ZUpvwJ3G/3sTUeiMbDeeuTWnW2LQK4Vhq80htFQS6lVecE84V5
-	Yj8w2ev+7WCNJ447CjTFfb0G6EqS/nM=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-447-4fRacCqYO-KaUWALy7UJHw-1; Fri, 16 Feb 2024 13:27:33 -0500
-X-MC-Unique: 4fRacCqYO-KaUWALy7UJHw-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-56261857d31so1295938a12.2
-        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 10:27:33 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="RvseacXH"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6861538916cso13080376d6.3
+        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 10:31:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1708108307; x=1708713107; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zgoJ2Cj2+UUPtAnwZcQw+JcHc1DVxxL4Tm75yla0jg4=;
+        b=RvseacXHO0BeeLS0SO4n8HHGXdEk+JuRiyKGlez2Hdth+m0nycOU3dL5Shng/6saeo
+         x5f+NhvuSPiScRRonj3/de9KzAXiG+08kRo1kZf7RHjzFbyyhtccF2j/3mov5kLmB7tQ
+         RZGbNdVKQ/6XYIQ3UixFigXom8FNfuTlcsZy0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708108052; x=1708712852;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3pAxnKiY0v6Unt1MeteP4zhCiQHYAe7S4qrGIbBvNAI=;
-        b=f2h2sirM0Bj28kObq9NHGhDSGptH0qYWMSqsw+2ykMt9pKOIzoC1JMEBGahQ+94hSA
-         MxNTXecD6wbp8VwmrhAwfsBrsnk3WeEd6Ifuo7wUAYQ72ceOGApvqL7ragCZwjwW9Wqc
-         yz/oJS70QT8Z4gHbCZSU7DZQ0aJ2PPMozh/UW1qF1znY42awv8NF7KLew4Y3iJE+Z/WD
-         ZBvxRnSE2U3uEm2nAlBKzXcN2rgb2VXieG7BxYV8G9q8rLdsxeXSa3E1ZxqRbvQkFYYT
-         qAWhhD8yWq6Bnzwo2mgKViaNT+kKVMuZQx7Ob2mnrWjz0tp9YGGDC7ukjuDYuSp2BylQ
-         cM/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUYcefnbpu9uJookac44OeIIp/BCPkZvmS3MAyG+EOnIiGlELORwBgUX5iazDvaYZuDQaD3EqH+yjL19gaR7kEVuy8kuQ==
-X-Gm-Message-State: AOJu0YwimN08qpn5RtIOoKHoUJdx0Dludqz879iLnI/JNsBtyUzaaMhu
-	ZqftxOVlD4fWA2UfgEPu2LxYbwxc3Po287kYsnoVV3Xcu1B2IzF4O559yRtYCMcZyHZWrgtRLpw
-	isQeAo3hdWZi9WRopf5tmCgOzZtK42uuecpZ26SK17JzzXo0JS4I=
-X-Received: by 2002:aa7:de0e:0:b0:564:7b9:8c18 with SMTP id h14-20020aa7de0e000000b0056407b98c18mr1164597edv.22.1708108052538;
-        Fri, 16 Feb 2024 10:27:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHc7HnCrb8Q59cHQe9Z/g3oIfkHjAxB+9md3uAcAJ23mrUVRozwXdVXewL5xF6l4JirE/riHw==
-X-Received: by 2002:aa7:de0e:0:b0:564:7b9:8c18 with SMTP id h14-20020aa7de0e000000b0056407b98c18mr1164581edv.22.1708108052264;
-        Fri, 16 Feb 2024 10:27:32 -0800 (PST)
-Received: from ?IPV6:2a02:810d:4b3f:ee94:abf:b8ff:feee:998b? ([2a02:810d:4b3f:ee94:abf:b8ff:feee:998b])
-        by smtp.gmail.com with ESMTPSA id p27-20020a056402501b00b00562d908daf4sm224163eda.84.2024.02.16.10.27.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 10:27:31 -0800 (PST)
-Message-ID: <9d9fcdeb-4d0c-4371-b871-ad1fb8055033@redhat.com>
-Date: Fri, 16 Feb 2024 19:27:29 +0100
+        d=1e100.net; s=20230601; t=1708108307; x=1708713107;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zgoJ2Cj2+UUPtAnwZcQw+JcHc1DVxxL4Tm75yla0jg4=;
+        b=YDmeo2+TDuJUTWL7mzwFbHLhno46FC6EjybzBfOlF27YeEuyQ3KZyG0I1c44Y084Xq
+         AlQxMiDXvFCGIQZa/VzLc0PJlENhHPSkQ42clNf1sU+1cgLwt4dS/MEqTJMGMbc+hKn3
+         e+e13ECz739BcD+tY3Go8f/fLX/P1tqmcdQmg2pw1CFDeEkqQR4jPBlf01gJLpwG4Qc0
+         3Y2CBnn1u8rjJqFBk901A1Qy69QCCkDrgLTfovTiuGXySNlrBm24FLJw74xmWJXygQVU
+         ztgoYogCIABqGqr36wxWxTFimoUCuynBvpdm9WEVxueLVjKsaD1WdzZjI/8QQsJMZZ74
+         Wmhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVWueCRZci6Xk79iER8M107/5q2Ty9KqH2lucKapDdPSQsHh7YsheiL2boZ+i/epzKdTwmIkak3TElf5qMlUR50CLBzA==
+X-Gm-Message-State: AOJu0YzYy/G1kdW1MPJjPteQI4hUcMngjpl/xB/jFuKssuETKiwt2jIa
+	d5uqX4hN6iD3OOi08RLtghTtbIP6dSl33tDMni2Ti6YIcO3dQdYvANwkif+wOTg=
+X-Google-Smtp-Source: AGHT+IEgm/Rt03+CeLnQ0S8r32mOvp7WezqLoTo4VJlM/CGcCwSRr9+Ve15KD4TNaat1Fb+SopCMdg==
+X-Received: by 2002:a0c:f0ce:0:b0:68e:f036:f5dc with SMTP id d14-20020a0cf0ce000000b0068ef036f5dcmr5456748qvl.15.1708108307279;
+        Fri, 16 Feb 2024 10:31:47 -0800 (PST)
+Received: from joelbox2.. (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id nd13-20020a056214420d00b0068cdadb5e7esm159722qvb.31.2024.02.16.10.31.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 10:31:46 -0800 (PST)
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To: linux-kernel@vger.kernel.org,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Suleiman Souhlal <suleiman@google.com>,
+	Youssef Esmat <youssefesmat@google.com>,
+	David Vernet <void@manifault.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	joseph.salisbury@canonical.com,
+	Luca Abeni <luca.abeni@santannapisa.it>,
+	Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+	Vineeth Pillai <vineeth@bitbyteword.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Phil Auld <pauld@redhat.com>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	llvm@lists.linux.dev
+Subject: [PATCH 05/10] sched/debug: Use unsigned long for cpu variable to prevent cast errors
+Date: Fri, 16 Feb 2024 13:31:03 -0500
+Message-Id: <20240216183108.1564958-6-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240216183108.1564958-1-joel@joelfernandes.org>
+References: <20240216183108.1564958-1-joel@joelfernandes.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] nouveau: fix function cast warnings
-To: Arnd Bergmann <arnd@kernel.org>, Karol Herbst <kherbst@redhat.com>,
- Lyude Paul <lyude@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Ben Skeggs <bskeggs@redhat.com>, dri-devel@lists.freedesktop.org,
- nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240213095753.455062-1-arnd@kernel.org>
-From: Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <20240213095753.455062-1-arnd@kernel.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/13/24 10:57, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang-16 warns about casting between incompatible function types:
-> 
-> drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c:161:10: error: cast from 'void (*)(const struct firmware *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    161 |         .fini = (void(*)(void *))release_firmware,
-> 
-> This one was done to use the generic shadow_fw_release() function as a
-> callback for struct nvbios_source. Change it to use the same prototype
-> as the other five instances, with a trivial helper function that actually
-> calls release_firmware.
-> 
-> Fixes: 70c0f263cc2e ("drm/nouveau/bios: pull in basic vbios subdev, more to come later")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This avoids compiler errors seen with clang:
 
-Applied to drm-misc-fixes, thanks!
+In file included from kernel/sched/build_utility.c:72:
+kernel/sched/debug.c:532:47: error: cast to 'void *' from smaller integer
+	type 'unsigned int' [-Werror,-Wint-to-void-pointer-cast]
+debugfs_create_file("runtime", 0644, d_cpu, (void *) cpu, &fair_server_runtime_fops);
 
-> ---
->   drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
-> index 19188683c8fc..8c2bf1c16f2a 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadow.c
-> @@ -154,11 +154,17 @@ shadow_fw_init(struct nvkm_bios *bios, const char *name)
->   	return (void *)fw;
->   }
->   
-> +static void
-> +shadow_fw_release(void *fw)
-> +{
-> +	release_firmware(fw);
-> +}
-> +
->   static const struct nvbios_source
->   shadow_fw = {
->   	.name = "firmware",
->   	.init = shadow_fw_init,
-> -	.fini = (void(*)(void *))release_firmware,
-> +	.fini = shadow_fw_release,
->   	.read = shadow_fw_read,
->   	.rw = false,
->   };
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ kernel/sched/debug.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index c6c0120ff105..2590041696bc 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -516,7 +516,7 @@ static struct dentry *debugfs_sched;
+ static void debugfs_fair_server_init(void)
+ {
+ 	struct dentry *d_fair;
+-	unsigned int cpu;
++	unsigned long cpu;
+ 
+ 	d_fair = debugfs_create_dir("fair_server", debugfs_sched);
+ 	if (!d_fair)
+@@ -526,7 +526,7 @@ static void debugfs_fair_server_init(void)
+ 		struct dentry *d_cpu;
+ 		char buf[32];
+ 
+-		snprintf(buf, sizeof(buf), "cpu%d", cpu);
++		snprintf(buf, sizeof(buf), "cpu%lu", cpu);
+ 		d_cpu = debugfs_create_dir(buf, d_fair);
+ 
+ 		debugfs_create_file("runtime", 0644, d_cpu, (void *) cpu, &fair_server_runtime_fops);
+-- 
+2.34.1
 
