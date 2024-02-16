@@ -1,81 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD83112F58A;
-	Fri, 16 Feb 2024 15:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF52219ED;
+	Fri, 16 Feb 2024 16:32:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708098561; cv=none; b=YmIS/yhPQH2fug4nrtpTtNfo5O1lB2yfuIoV4p4Mrrmvtmu4WRPX2I35RdUUL1TfN321fiFgYi9HOLgvxEy5mKZK39TNu23G6nPHeT9VQtg6Q9DqnXGh/gxBY0sS2TAPhKsSECyZ4bA6vbyXDx/soqq2syKWyIxBVp0pDD4DswA=
+	t=1708101128; cv=none; b=OeGM/SQDzTyae3VuXQjTkHMqwCz30kHxlLKn4bPRXQswTotgVT0QKXrixPbbt9Uy8o1MHBS9PLvIIIKpSDozkBuPca6GKi/ZloUTs9vpDq2e5qqs7488dGT+z+gasGCc+9MnUvkTs2Q4fw3xeqM/5uUVVxYwGKSYVZe5NN/1VDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708098561; c=relaxed/simple;
-	bh=hoWcoxaE9hHAP7DML157PhtnsOaCJzKVVuI8UORwRr0=;
-	h=Content-Type:MIME-Version:Subject:From:In-Reply-To:References:To:
-	 Cc:Message-ID:Date; b=M7TqodDgIiFxqvhXuG+yNdryIrgaWln8eGYUlSBVW02Ao80XMJf7uYK5odJBaCHpskGSkVTDv0cTS3E0/0XeNFOaKLdnaefFFxdHz0NPUf3OMLYL4pCXyIGlF6O33HpUCDMuI+B5TegRHZWofkBQOCgR3V5cjfkOv3MjXjW6GDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qzCS1Zj4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708101128; c=relaxed/simple;
+	bh=JGR9oWuh9+Gj4ak7aoBRm7nN1ezVNuRLhjn7Tq1Dsog=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fOso0/9urkWPXj6CbF09JXVnJTkZRE+SDOqqQprcYNvDy2ZITjmOdOAIRVR+WRHC/3zuZ+NKv/WhfANGrQle5BRffXXdSaiQ7GV5KImjnTJIyRRu5VLeoeX9WKfEInRVghOx8i26k/zIpUF3+4Z2EdwPRvDS+KjDYrEPq/3SNFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ba9T0zMH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qzCS1Zj4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A60C433C7;
-	Fri, 16 Feb 2024 15:49:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ba9T0zMH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBC8C43390;
+	Fri, 16 Feb 2024 16:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708098561;
-	bh=hoWcoxaE9hHAP7DML157PhtnsOaCJzKVVuI8UORwRr0=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=qzCS1Zj4OpYfDwAJEGip/bFu3oVVNxDOTflazXII7mTfZLEPndyHMPfnwvH8vqj0Y
-	 BdAW/36WcT5OBpxX+HtFo2fcf5+bk6oNEue97HAFimXKDnKIlcKsqkrJ1FaOFAQmNk
-	 RLSTcQIiMq64ho4na5EgEaramAtiwI+Lugx8AeHe0uJGu9rYzkakyfje5ZHjGc34dy
-	 k7ukZuxDSD9ajx/CqAOqXnbOVcAg38KTIabvO7RYdSCYR0SXiVxEas0RCEmiRVaNIP
-	 Qirv99zXeh2X1a8nOdAo1VH8ApjFjigLFEOVBCoa3iXvH3+Vi2WyLHhirI1qfqSmAc
-	 hA4Is9wFOXdTw==
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1708101127;
+	bh=JGR9oWuh9+Gj4ak7aoBRm7nN1ezVNuRLhjn7Tq1Dsog=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Ba9T0zMHZyf/Ke4gnCc2keIIDMRzmRuPhteX/as0JvsiQ2E3w6CyWZB5GXO6EOOXl
+	 ucXIIJiRkzT2EjoREmF0CVtbFqRuO1tq6H1hwyV+L8t1gP1HNJH1+LEFC7cBRskE+l
+	 2FRK/nqeRrzX0tnK9giDxPJdiRS2pULsRPuix+xkfs/y/sWmfPAU3E5E9iq2WGQeAS
+	 hhWBqo3mGxn44UfaWRAJ3Fe7HibrSYJ+0FMJdy7G/59XRD960WwNBU/yDqZJkkVBT1
+	 542yYzoTa7b4wTPlf7JqZhkDuSgRKIh+YyM10hckMc9K91iF+6w0G23eW1wigsO2nP
+	 NjUY67zUcgAHg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] media: dvb-frontends: avoid stack overflow warnings with clang
+Date: Fri, 16 Feb 2024 17:31:44 +0100
+Message-Id: <20240216163201.1901744-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: wifi: brcmsmac: avoid function pointer casts
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20240213100548.457854-1-arnd@kernel.org>
-References: <20240213100548.457854-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Arend van Spriel <arend.vanspriel@broadcom.com>,
- Nathan Chancellor <nathan@kernel.org>, Greg Kroah-Hartman <gregkh@suse.de>,
- Pieter-Paul Giesberts <pieterpg@broadcom.com>, Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- Artem Chernyshev <artem.chernyshev@red-soft.ru>,
- Jonas Gorski <jonas.gorski@gmail.com>, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
-Message-ID: <170809855575.4095987.6738667810057679701.kvalo@kernel.org>
-Date: Fri, 16 Feb 2024 15:49:17 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
-Arnd Bergmann <arnd@kernel.org> wrote:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> An old cleanup went a little too far and causes a warning with clang-16
-> and higher as it breaks control flow integrity (KCFI) rules:
-> 
-> drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy_shim.c:64:34: error: cast from 'void (*)(struct brcms_phy *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    64 |                         brcms_init_timer(physhim->wl, (void (*)(void *))fn,
->       |                                                       ^~~~~~~~~~~~~~~~~~~~
-> 
-> Change this one instance back to passing a void pointer so it can be
-> used with the timer callback interface.
-> 
-> Fixes: d89a4c80601d ("staging: brcm80211: removed void * from softmac phy")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+A previous patch worked around a KASAN issue in stv0367, now a similar
+problem showed up with clang:
 
-Patch applied to wireless-next.git, thanks.
+drivers/media/dvb-frontends/stv0367.c:1222:12: error: stack frame size (3624) exceeds limit (2048) in 'stv0367ter_set_frontend' [-Werror,-Wframe-larger-than]
+ 1214 | static int stv0367ter_set_frontend(struct dvb_frontend *fe)
 
-e1ea6db35fc3 wifi: brcmsmac: avoid function pointer casts
+Rework the stv0367_writereg() function to be simpler and mark both
+register access functions as noinline_for_stack so the temporary
+i2c_msg structures do not get duplicated on the stack when KASAN_STACK
+is enabled.
 
+Fixes: 3cd890dbe2a4 ("media: dvb-frontends: fix i2c access helpers for KASAN")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/media/dvb-frontends/stv0367.c | 34 +++++++--------------------
+ 1 file changed, 8 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/media/dvb-frontends/stv0367.c b/drivers/media/dvb-frontends/stv0367.c
+index 48326434488c..72540ef4e5f8 100644
+--- a/drivers/media/dvb-frontends/stv0367.c
++++ b/drivers/media/dvb-frontends/stv0367.c
+@@ -118,50 +118,32 @@ static const s32 stv0367cab_RF_LookUp2[RF_LOOKUP_TABLE2_SIZE][RF_LOOKUP_TABLE2_S
+ 	}
+ };
+ 
+-static
+-int stv0367_writeregs(struct stv0367_state *state, u16 reg, u8 *data, int len)
++static noinline_for_stack
++int stv0367_writereg(struct stv0367_state *state, u16 reg, u8 data)
+ {
+-	u8 buf[MAX_XFER_SIZE];
++	u8 buf[3] = { MSB(reg), LSB(reg), data };
+ 	struct i2c_msg msg = {
+ 		.addr = state->config->demod_address,
+ 		.flags = 0,
+ 		.buf = buf,
+-		.len = len + 2
++		.len = 3,
+ 	};
+ 	int ret;
+ 
+-	if (2 + len > sizeof(buf)) {
+-		printk(KERN_WARNING
+-		       "%s: i2c wr reg=%04x: len=%d is too big!\n",
+-		       KBUILD_MODNAME, reg, len);
+-		return -EINVAL;
+-	}
+-
+-
+-	buf[0] = MSB(reg);
+-	buf[1] = LSB(reg);
+-	memcpy(buf + 2, data, len);
+-
+ 	if (i2cdebug)
+ 		printk(KERN_DEBUG "%s: [%02x] %02x: %02x\n", __func__,
+-			state->config->demod_address, reg, buf[2]);
++			state->config->demod_address, reg, data);
+ 
+ 	ret = i2c_transfer(state->i2c, &msg, 1);
+ 	if (ret != 1)
+ 		printk(KERN_ERR "%s: i2c write error! ([%02x] %02x: %02x)\n",
+-			__func__, state->config->demod_address, reg, buf[2]);
++			__func__, state->config->demod_address, reg, data);
+ 
+ 	return (ret != 1) ? -EREMOTEIO : 0;
+ }
+ 
+-static int stv0367_writereg(struct stv0367_state *state, u16 reg, u8 data)
+-{
+-	u8 tmp = data; /* see gcc.gnu.org/bugzilla/show_bug.cgi?id=81715 */
+-
+-	return stv0367_writeregs(state, reg, &tmp, 1);
+-}
+-
+-static u8 stv0367_readreg(struct stv0367_state *state, u16 reg)
++static noinline_for_stack
++u8 stv0367_readreg(struct stv0367_state *state, u16 reg)
+ {
+ 	u8 b0[] = { 0, 0 };
+ 	u8 b1[] = { 0 };
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20240213100548.457854-1-arnd@kernel.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.39.2
 
