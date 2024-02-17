@@ -1,56 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA6F1CD1F;
-	Sat, 17 Feb 2024 16:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7114C7D402;
+	Sat, 17 Feb 2024 17:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708187727; cv=none; b=TdKM0zXBCBXnDoa93wM++upUaLlbGBJxmKefzLh+onOtazZzfWPqr/rbsi9VwEwpkgkZEwdxUfLuuC1Sfo/4pM/GPhzhgj00C4TmVYmLsmc3+rQu8+5XTlQdPXntYgADctWxxhWQdbNVNizNXOyMDKYMV2N8sW+pDFC9hgC2fic=
+	t=1708190933; cv=none; b=jXVleNNmmcLu0Hy4EwHJaHpb482IOofh7cWWm0r1O+DeuQleldUHXdnkfQgLkr6otudRFUC/q1AYSc2C6qejQOph2Pbn3dxELBP71IwCiO4zQIqrL/6AiZN5VhOwkO5BF+4zP23dforsi1wXiTWwyG8UsWZy3kr47zuLTTrw6jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708187727; c=relaxed/simple;
-	bh=CX+7rTq+OJdFWPLeb2ZZ5IP3ugk/2VuCgRu3Ayflr7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ScPw8ydybscvTVU+6hdjKPh5CJur7wVFz3m2M7VRB+Jv/z5lSxU6bPMTEui6JuWW1RxOUtYER9v43ycwfB4hdo7gfW7D5z55sakk0u7KHcmeuf/8IFnY8fvx2RFr7bm1AqaAoM950lT4hd9lKVC4I95lmCC6X3AbCn3Aa1TBIKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i7bhnmOT; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1708190933; c=relaxed/simple;
+	bh=XoMAutHoxVHHbRXYGtOfCJCOlfzu7clxXNV9Rrq01Uo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QctJzqaAPmgYypL17voVGFet3/y8F1PIIDrSm9XnFX7K76lGKdLiB4phwai9HzEC2o3gX5zsxjpQZno3AJBbfJRkePbQGC9bN7M0tm6lD22Xbg2//VzGTzt7xPflzR3wDOSS3xGDuRaQ3xwdk3PiaQkVAEjMvAYRSDIDlEJA3iQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RN5itX5B; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i7bhnmOT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RN5itX5B"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708187725; x=1739723725;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CX+7rTq+OJdFWPLeb2ZZ5IP3ugk/2VuCgRu3Ayflr7o=;
-  b=i7bhnmOTwUdiYCvNpqyN2R/Xw0/XQq7v+CTrLEvNv55rxzSchc0mk5pr
-   KdLlNB/iISbaS8QVTw3ZEOLKr/cb5Kg+70lNqVfK8iWCEuSu0ekCRQ89K
-   TiEHPSYfVkFLBOMoGBzmVG/epHbe7b/X4T7B+ylUbv5/cRLVhbNCaPZv8
-   Iej12CAa4SSmCdwErMEqFYUM8s4F6ICBGaqzBln53tQ7yE5KtkZZqloQf
-   PJdDO873W+eBqmj1TW5Pu1g8eTcML9Mdnvl2YsCnvBoQB80vvMPb8OzhU
-   8JBkN7xhoMaBUWEPGvLhyRVdQpEBR3ADfXg60Rs1nf1vImRwB0g+m1hYm
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2456597"
+  t=1708190931; x=1739726931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XoMAutHoxVHHbRXYGtOfCJCOlfzu7clxXNV9Rrq01Uo=;
+  b=RN5itX5BYR+dRgWsDnI11SgEP2cr1Ie4NW3SW8GYYoi43c6vmvKurs9g
+   fVAWLrJgKd7KC+NEr1kSaolUuAX0cPPzceTA1oVnPLxnKHwXUC7ER1Axg
+   rx5Mk+ESkqlCdymG7c7j7QXc0PmPjNUfgHiOnoBpEjxbRz1KttyTRqVvJ
+   coEA33GO0cPnhDh9p0aJ/+9R//pImXHDnyiTKuPSL91m68B33Pd+jzTRl
+   T1xDGutyQxCYnDKtmm2ixcihldM6BgJdWeBKBBBaEq0yHTbivJP7S5DUV
+   wcHsI1+b4k4DHA2HB4+Gzm/AVFUjc6H3KWttHqbXo5q7WiuU2M4e3nEH2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2182392"
 X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
-   d="scan'208";a="2456597"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 08:35:24 -0800
+   d="scan'208";a="2182392"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 09:28:50 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="826735543"
 X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
-   d="scan'208";a="826735543"
+   d="scan'208";a="34902595"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 Feb 2024 08:35:22 -0800
+  by orviesa002.jf.intel.com with ESMTP; 17 Feb 2024 09:28:48 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rbNep-0002H1-2i;
-	Sat, 17 Feb 2024 16:35:19 +0000
-Date: Sun, 18 Feb 2024 00:35:01 +0800
+	id 1rbOUY-0002L2-0d;
+	Sat, 17 Feb 2024 17:28:46 +0000
+Date: Sun, 18 Feb 2024 01:27:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Max Kellermann <max.kellermann@ionos.com>, akpm@linux-foundation.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Suren Baghdasaryan <surenb@google.com>
-Subject: [surenbaghdasaryan:memalloc_prof_v4 2/37] arch/x86/mm/fault.c:264:6:
- warning: no previous prototype for function 'arch_sync_kernel_mappings'
-Message-ID: <202402180012.4zwPepmr-lkp@intel.com>
+	Max Kellermann <max.kellermann@ionos.com>
+Subject: Re: [PATCH v1 14/14] include: reduce dependencies on linux/mm.h
+Message-ID: <202402180115.xH2WHdhd-lkp@intel.com>
+References: <20240215145602.1371274-15-max.kellermann@ionos.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,64 +60,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240215145602.1371274-15-max.kellermann@ionos.com>
 
-tree:   https://github.com/surenbaghdasaryan/linux.git memalloc_prof_v4
-head:   23633d13a520a9f34caf0f1a13820660b95406b5
-commit: d55de34a38a9b226f04758efc2a7949bf81e39fc [2/37] asm-generic/io.h: Kill vmalloc.h dependency
-config: i386-buildonly-randconfig-002-20240217 (https://download.01.org/0day-ci/archive/20240218/202402180012.4zwPepmr-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402180012.4zwPepmr-lkp@intel.com/reproduce)
+Hi Max,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20240215]
+[cannot apply to akpm-mm/mm-everything char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus powerpc/next powerpc/fixes linus/master v6.8-rc4 v6.8-rc3 v6.8-rc2 v6.8-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Max-Kellermann/drivers-add-missing-includes-on-linux-mm-h-and-others/20240215-225853
+base:   next-20240215
+patch link:    https://lore.kernel.org/r/20240215145602.1371274-15-max.kellermann%40ionos.com
+patch subject: [PATCH v1 14/14] include: reduce dependencies on linux/mm.h
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20240218/202402180115.xH2WHdhd-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402180115.xH2WHdhd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402180012.4zwPepmr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402180115.xH2WHdhd-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/mm/fault.c:264:6: warning: no previous prototype for function 'arch_sync_kernel_mappings' [-Wmissing-prototypes]
-     264 | void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
-         |      ^
-   arch/x86/mm/fault.c:264:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     264 | void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
-         | ^
-         | static 
-   1 warning generated.
+   In file included from lib/scatterlist.c:9:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from lib/scatterlist.c:9:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from lib/scatterlist.c:9:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> lib/scatterlist.c:739:9: error: call to undeclared function 'PAGE_ALIGN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     739 |         return PAGE_ALIGN(sg->offset + sg->length) >> PAGE_SHIFT;
+         |                ^
+   lib/scatterlist.c:763:9: error: call to undeclared function 'PAGE_ALIGN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     763 |         return PAGE_ALIGN(sg->offset + sg_dma_len(sg)) >> PAGE_SHIFT;
+         |                ^
+>> lib/scatterlist.c:1153:3: error: call to undeclared function 'unpin_user_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1153 |                 unpin_user_page(sg_page(&sgtable->sgl[--sgtable->nents]));
+         |                 ^
+>> lib/scatterlist.c:1239:8: error: call to undeclared function 'is_vmalloc_or_module_addr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1239 |                         if (is_vmalloc_or_module_addr((void *)kaddr))
+         |                             ^
+>> lib/scatterlist.c:1240:12: error: call to undeclared function 'vmalloc_to_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1240 |                                 page = vmalloc_to_page((void *)kaddr);
+         |                                        ^
+   lib/scatterlist.c:1240:12: note: did you mean 'vmalloc_nr_pages'?
+   include/linux/vmalloc.h:135:22: note: 'vmalloc_nr_pages' declared here
+     135 | extern unsigned long vmalloc_nr_pages(void);
+         |                      ^
+>> lib/scatterlist.c:1240:10: error: incompatible integer to pointer conversion assigning to 'struct page *' from 'int' [-Wint-conversion]
+    1240 |                                 page = vmalloc_to_page((void *)kaddr);
+         |                                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   6 warnings and 6 errors generated.
 
 
-vim +/arch_sync_kernel_mappings +264 arch/x86/mm/fault.c
+vim +/PAGE_ALIGN +739 lib/scatterlist.c
 
-4819e15f740ec8 Joerg Roedel        2020-09-02  263  
-1e15d374bb1cb9 Alexander Potapenko 2023-01-11 @264  void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
-f2f13a8535174d Ingo Molnar         2009-02-20  265  {
-86cf69f1d893d4 Joerg Roedel        2020-06-01  266  	unsigned long addr;
-f2f13a8535174d Ingo Molnar         2009-02-20  267  
-86cf69f1d893d4 Joerg Roedel        2020-06-01  268  	for (addr = start & PMD_MASK;
-86cf69f1d893d4 Joerg Roedel        2020-06-01  269  	     addr >= TASK_SIZE_MAX && addr < VMALLOC_END;
-86cf69f1d893d4 Joerg Roedel        2020-06-01  270  	     addr += PMD_SIZE) {
-f2f13a8535174d Ingo Molnar         2009-02-20  271  		struct page *page;
-f2f13a8535174d Ingo Molnar         2009-02-20  272  
-a79e53d85683c6 Andrea Arcangeli    2011-02-16  273  		spin_lock(&pgd_lock);
-f2f13a8535174d Ingo Molnar         2009-02-20  274  		list_for_each_entry(page, &pgd_list, lru) {
-617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  275  			spinlock_t *pgt_lock;
-617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  276  
-a79e53d85683c6 Andrea Arcangeli    2011-02-16  277  			/* the pgt_lock only for Xen */
-617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  278  			pgt_lock = &pgd_page_get_mm(page)->page_table_lock;
-617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  279  
-617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  280  			spin_lock(pgt_lock);
-86cf69f1d893d4 Joerg Roedel        2020-06-01  281  			vmalloc_sync_one(page_address(page), addr);
-617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  282  			spin_unlock(pgt_lock);
-f2f13a8535174d Ingo Molnar         2009-02-20  283  		}
-a79e53d85683c6 Andrea Arcangeli    2011-02-16  284  		spin_unlock(&pgd_lock);
-f2f13a8535174d Ingo Molnar         2009-02-20  285  	}
-f2f13a8535174d Ingo Molnar         2009-02-20  286  }
-f2f13a8535174d Ingo Molnar         2009-02-20  287  
-
-:::::: The code at line 264 was first introduced by commit
-:::::: 1e15d374bb1cb95f738334018a216e4f6360e821 Revert "x86: kmsan: sync metadata pages on page fault"
-
-:::::: TO: Alexander Potapenko <glider@google.com>
-:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+a321e91b6d73ed Imre Deak 2013-02-27  736  
+a321e91b6d73ed Imre Deak 2013-02-27  737  static int sg_page_count(struct scatterlist *sg)
+a321e91b6d73ed Imre Deak 2013-02-27  738  {
+a321e91b6d73ed Imre Deak 2013-02-27 @739  	return PAGE_ALIGN(sg->offset + sg->length) >> PAGE_SHIFT;
+a321e91b6d73ed Imre Deak 2013-02-27  740  }
+a321e91b6d73ed Imre Deak 2013-02-27  741  
 
 -- 
 0-DAY CI Kernel Test Service
