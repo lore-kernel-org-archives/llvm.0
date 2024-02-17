@@ -1,166 +1,200 @@
-Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA06681E
-	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 00:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DC0171A4
+	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 01:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708128292; cv=none; b=JTYTgqcyzzWA6vsDg5Ck6AqFjZrLUHhFPp55gAV8CxadJ8xuTcO0UvypatsIVbLM6lBBfiGAMWfNrGa/bvqVncJkacmrjYFK2ivRM57eLCGZMRVRZ4G0n4A4pAvJdV4JIH013ju+Cl1patc1Kq5L/JTZx4uZL/PkD90CFLB8DRE=
+	t=1708134688; cv=none; b=jiekLD6LwlfN/BYLr2D1U5SwedZ9r9WGeBIP5ce7lXeZUWsg0I72O3olfeXRrUYjawI0g37UtGTzygEQ3i4pFUDsKEdHuEONQ8zeD/QyoaIbaYW+7ewuYU+AJVk7zJoQKAM6hq7YjZHaa/yABbltM2KUGqW9mBo4r8FO2LqEZ3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708128292; c=relaxed/simple;
-	bh=3nKxXv+a13aom4LTOZ3NnsV2RrerkFayOaft5ppMDkw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YSviGYhsBL2PVB12MAR13u3v9U2ofxW0l+ukiVbl66V7/Wr2qayaj1+k8XoXVV5zKDolpWPQOlkXT8aSUM7zeNcf2UNpnnEy8nfU2OZ47/tJ8si3fe0HufSTDE69Tq7XubHT5AYy+zGtkGJajJhyWVj3r1oPyIy9wgS16VC6vK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=kkbger9l; arc=none smtp.client-ip=44.202.169.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	s=arc-20240116; t=1708134688; c=relaxed/simple;
+	bh=K70eE+6rLALA5PSRh0ib2TyrXyCido5/VawjyrQGvJM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lDnyZ7hVq9AH1GRKJyf5Tibe2Y8yPYgCtXlZGTzCbuFsd3wWOyvTKMyOcsN5Hx/QhPjdHBzPBBvkDQftUIT4k2kLLbp6T/lTJvmFqelHYtjIwAxrZbe1KFwuf15ajTvQZpF5AaCztakl0EwY+EKLPypQp8cH6mDamv7tS6EGVyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gfjn1D9t; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="kkbger9l"
-Received: from eig-obgw-5005a.ext.cloudfilter.net ([10.0.29.234])
-	by cmsmtp with ESMTPS
-	id b7YCrh8AmAxAkb8CArrR3P; Sat, 17 Feb 2024 00:04:42 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id b8C8r9OIUa7EJb8C9rS1CJ; Sat, 17 Feb 2024 00:04:41 +0000
-X-Authority-Analysis: v=2.4 cv=JK6YsNKb c=1 sm=1 tr=0 ts=65cff819
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=VhncohosazJxI00KdYJ/5A==:17
- a=IkcTkHD0fZMA:10 a=k7vzHIieQBIA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=cm27Pg_UAAAA:8 a=VwQbUJbxAAAA:8 a=A7XncKjpAAAA:8 a=pGLkceISAAAA:8
- a=J1Y8HTJGAAAA:8 a=1XWaLZrsAAAA:8 a=20KFwNOVAAAA:8 a=S3e1UlYFMFTUAia5eQoA:9
- a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
- a=R9rPLQDAdC6-Ub70kJmZ:22 a=y1Q9-5lHfBjTkpIzbSAN:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ljkmbjR1wZVH0YMxK1quNarSuTzJMheeVQqhKZsr5SM=; b=kkbger9lKaj723jXWSInOx6/G1
-	E347snhH6PKIcvwa+H9yyCmJJg7R2tWkSxbUzcXyNN/j5tpWsy1YzhPTyJhgTwFkjwR0Co5vH0YH4
-	yPKOUK+A1WEA8e+i2tBGYn4DS/fjcjnZATu0H3KhZY/9Wq3VXlEPu8/6lgpXTEC7Jb6b1ldoLl2IQ
-	FUIuaQ0WBVrFBtagt2SljBfVkeYWYIrTlY6Srdd0TdPW5vDUukrw8nrpCidSpaxF3bRspvbLiNpPq
-	ls6fdqgqkISKEnXZZh3hcZxxJtpJ38UF8oNSOdfxScOuwuTUnsYuMNJ6AriiEFB1qgcXYD4ES6hF0
-	w6einTVA==;
-Received: from [201.172.172.225] (port=49674 helo=[192.168.15.10])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1rb8C7-002dlw-0R;
-	Fri, 16 Feb 2024 18:04:39 -0600
-Message-ID: <9ed28341-8bf7-4b6a-ba9a-6cfe07dc5964@embeddedor.com>
-Date: Fri, 16 Feb 2024 18:04:14 -0600
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gfjn1D9t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708134681;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Hnk2RGk6mtMNSx+5LH8j8PnAAbWGLO3IoUdxwr5DeZo=;
+	b=gfjn1D9t8BH6xocxwXCVQoQ3LMmF+56gglg1iU2LJKrnkzUiuKFyofV5zkiyMfwm+qasXL
+	1D9zvjEaFI3zfA2TKR4HuoPZLy/MJOOo6s/EM3iSN2dFF4nGiiW2okUAiJdMUoRTVmuJ1M
+	28fZUAOHjrC4EPeUcRBkDiQ/lVwAapk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-6-oJNJLmQrM7GsJEv8oKfkjA-1; Fri, 16 Feb 2024 20:51:20 -0500
+X-MC-Unique: oJNJLmQrM7GsJEv8oKfkjA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2DAF884340
+	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 01:51:19 +0000 (UTC)
+Received: from [172.64.14.54] (unknown [10.30.32.10])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AFB591C060B1;
+	Sat, 17 Feb 2024 01:51:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 204): Test report for master
+ (6.8.0-rc4, mainline.kernel.org-clang, 683b783c)
+Date: Sat, 17 Feb 2024 01:51:19 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] net: sched: Annotate struct tc_pedit with __counted_by
-To: Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang
- <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, "Gustavo A. R. Silva"
- <gustavoars@kernel.org>, netdev@vger.kernel.org,
- linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240216232744.work.514-kees@kernel.org>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20240216232744.work.514-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 201.172.172.225
-X-Source-L: No
-X-Exim-ID: 1rb8C7-002dlw-0R
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.15.10]) [201.172.172.225]:49674
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 1
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfMb8xk5yYyl4LY8VLmSKkJfol4xD64MbqEXhUiHxJnW5CsxoCY/J518yA5IdvF3zXGk73o7Xh/mtbPQW1i+KQQcaCC91q15itjz/YjwEFa1Fw081ZP32
- J69+Yu1A1OwTnf3/OlkKfHVoCjZcbdb8oMSvFo2YTHcEMHwm/PXUGIaYx6ExwA+YjyfNKl7/n+LOgB24GFdt36WmxBTpHk3zDBI=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <37111.124021620512000306@us-mta-6.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
+irt/kvm/kvm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/129971
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: [upstream] [s390x] blktests tests/nvme/029: line 24: local: =
+`bs,': not a valid identifier
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1862
+            Affected tests:
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
 
 
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     aarch64 - Reboot test
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 - Reboot test
+      x86_64 (debug) - Memory function: memfd_create
 
-On 2/16/24 17:27, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct tc_pedit.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Jamal Hadi Salim <jhs@mojatatu.com>
-> Cc: Cong Wang <xiyou.wangcong@gmail.com>
-> Cc: Jiri Pirko <jiri@resnulli.us>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-hardening@vger.kernel.org
 
-`opt->nkeys` updated before `memcpy()`, looks good to me:
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Thanks!
---
-Gustavo
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-> ---
->   include/uapi/linux/tc_act/tc_pedit.h | 2 +-
->   net/sched/act_pedit.c                | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/uapi/linux/tc_act/tc_pedit.h b/include/uapi/linux/tc_act/tc_pedit.h
-> index f3e61b04fa01..f5cab7fc96ab 100644
-> --- a/include/uapi/linux/tc_act/tc_pedit.h
-> +++ b/include/uapi/linux/tc_act/tc_pedit.h
-> @@ -62,7 +62,7 @@ struct tc_pedit_sel {
->   	tc_gen;
->   	unsigned char           nkeys;
->   	unsigned char           flags;
-> -	struct tc_pedit_key     keys[0];
-> +	struct tc_pedit_key     keys[] __counted_by(nkeys);
->   };
->   
->   #define tc_pedit tc_pedit_sel
-> diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-> index 2ef22969f274..21e863d2898c 100644
-> --- a/net/sched/act_pedit.c
-> +++ b/net/sched/act_pedit.c
-> @@ -515,11 +515,11 @@ static int tcf_pedit_dump(struct sk_buff *skb, struct tc_action *a,
->   		spin_unlock_bh(&p->tcf_lock);
->   		return -ENOBUFS;
->   	}
-> +	opt->nkeys = parms->tcfp_nkeys;
->   
->   	memcpy(opt->keys, parms->tcfp_keys,
->   	       flex_array_size(opt, keys, parms->tcfp_nkeys));
->   	opt->index = p->tcf_index;
-> -	opt->nkeys = parms->tcfp_nkeys;
->   	opt->flags = parms->tcfp_flags;
->   	opt->action = p->tcf_action;
->   	opt->refcnt = refcount_read(&p->tcf_refcnt) - ref;
