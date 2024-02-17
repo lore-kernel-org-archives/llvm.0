@@ -1,134 +1,128 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDDA69DE7
-	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 12:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646F82C6A4;
+	Sat, 17 Feb 2024 13:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708174297; cv=none; b=Ck9pUXeFRAUKW1ldphvJKe5dfdpyjSap/yPfnxdzTq3cFd/tbQoezzDZf2ODsM12F9pCsHthgCUsDpA50sCjxkzFfSb2tRxtM5pqGg5NVqtTyzRFrVkLm+bjfj3t4yLOVn0O7X4MxuxMDzHM49Pi+H1zm8QhIGxfpXbvrnoJJUo=
+	t=1708175888; cv=none; b=iO67EBWO6KJCfS9C1QgEwOYECOWTzX1RtKv2O1a1JqDxOQHLUttFtWdcdvQYoa2jTD2ArdJNFids1cXbGWBavuZPgrIqicl19/AN5324Tnv7uwcbqwxc7J48jCAZQKbL9YcpGM8XYoAqGatRarKg65eJmj1IlxrOpoFIOxwhINo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708174297; c=relaxed/simple;
-	bh=dOMpZYdm6byi7dSGtTU7CXpz9fL2H66oVNawiZq9BTw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xhw6FfYZxC7XiaHLSb6mMR51DE/ziK/tXJmoThtAfueKMppC1p9JOkddYc8xH0UB7Kc07QTNBVDW+UrS6GhcXgJox8rfCjImi3YMgOUYSOZsHwf6snCI9sgGegLjBQCByN3Yo/N9ZMT2dUcDwXvoHZb+SVRRjBq6LmpJjsc13bI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DMG5e6QS; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1708175888; c=relaxed/simple;
+	bh=4oM+VVwcRaPugThV+ZldUxgA9FOz49VXrMX/eIDPPq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qJ786c3geYYWnulICiU8nb2U3Q6hgfA8lZc6vD9DCBakblR9Zpig81Z3csSQflExn0wA255wRk69XvCQsewPnbf5f3V3V2+66tmX0YLL/0RPJhN2KJrq8y+rtm6uXgble2ZoCnw7zBudOJPKLwJvyxmYTiG+pZYCJSVifKC8LIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ERmvG3lB; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DMG5e6QS"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 40C1F40E01A9;
-	Sat, 17 Feb 2024 12:51:31 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 0hlCv3lIl4HE; Sat, 17 Feb 2024 12:51:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708174288; bh=qo3uSORLj3aVIspHnZOOPPN2BG8DeKw0xfrzHn1JOsE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DMG5e6QSKeR9ubDYe2s0ZoiU51BCQvwIEuO4RCuRvQTeQ8TmKrZw5+z0J5aEFgswY
-	 dZB3Su8kRvsIYCLw1goi1lxlw6+XoLZtp9ebursTnwYRZDBmK6MHhFZwyrvaLbOCkY
-	 HOMZ81djkewhE8iCb1UTKOyl3n523ot7waAzw4wPFGGazCMtJm/BYWisD714CnvEoC
-	 jpv8QnvEsk0+TqoGEx5In9rBjZfucgWjYMKfShUM6qSJP6tYXHHUSOhg8u1xTn+TIe
-	 tQmZmiQgUNXNt54NgYCf+Nf0/wrlcI4CxHH0EBevuyQljR2U1pxFcTUCNU6gp+a/SV
-	 ry1dzpYHJexsOcX35pmggxd4d33+M7MfHqB+IU91Cm4A1vOYMd+NH3zAZOe1fUoNr7
-	 mwlT4BEmTe9n9NCUWR+WKjPvK+xO1xUVMIAq4PNqx774FWt2SsnnM33FYnDZN67fiH
-	 +JI6MkFtLSW8AXNjhY5aO/A+V4FU7WVTxX6P9HsFAxhGArFhushX1uBzCACkY+pfSV
-	 HjVBhjZAzsliTvBpnfQSatzLe6mx38Oj5YTXDQfbZLXRZ12nsIONnKJ7dUtkEeNLkE
-	 BM7/ooFdvOW1t2Du6u4bcg3yrmfN4sTGUW0leRQnLfBWqLyJPmSmTQgTHeHVn31o7j
-	 DsztjJPMNkNsAcDM3brtS7E0=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 969AB40E00B2;
-	Sat, 17 Feb 2024 12:51:10 +0000 (UTC)
-Date: Sat, 17 Feb 2024 13:51:02 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 02/11] x86/startup_64: Replace pointer fixups with
- RIP-relative references
-Message-ID: <20240217125102.GSZdCrtgI-DnHA8DpK@fat_crate.local>
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-15-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ERmvG3lB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708175886; x=1739711886;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4oM+VVwcRaPugThV+ZldUxgA9FOz49VXrMX/eIDPPq0=;
+  b=ERmvG3lBBxBgWoEELeH7+w+jEiD40Ig8Wm2nLXDwOKZuVHRbkr1OOb63
+   xYtZxtPs55yEUb5nvyYeQDduqJ9z41/aWqJrc/biJVUOZNYgvfZQV08Qs
+   9FZYCFGP/xAUlgBVlIJPgQdxmxh2j1QnL2ig9ti7WXlRe3VjjmeHxI0ez
+   E6jvllMFcMF8m9ZLkGwBelclNDj7u6+xqG5a8CeM+CQtpiq1f+MTuIEjC
+   8pZehKrnWzJP448jY+6Q0n3akinrZTXfqxsZimOKVZnYloqjvMUajmuTt
+   3bP0+bGm5U8wkZJD9bsRxljyAQP0qNtOlZsMRi1+WG2r2LnkWvPqRbGIb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10986"; a="6126858"
+X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
+   d="scan'208";a="6126858"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 05:18:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
+   d="scan'208";a="4055398"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 17 Feb 2024 05:18:03 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rbKZm-00027w-1P;
+	Sat, 17 Feb 2024 13:17:57 +0000
+Date: Sat, 17 Feb 2024 21:16:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Suren Baghdasaryan <surenb@google.com>
+Subject: [surenbaghdasaryan:memalloc_prof_v4 30/37] mm/nommu.c:260: warning:
+ expecting prototype for vmalloc_node(). Prototype was for
+ vmalloc_node_noprof() instead
+Message-ID: <202402172155.QMan8AdY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240213124143.1484862-15-ardb+git@google.com>
 
-On Tue, Feb 13, 2024 at 01:41:46PM +0100, Ard Biesheuvel wrote:
-> @@ -201,25 +201,19 @@ unsigned long __head __startup_64(unsigned long physaddr,
->  	load_delta += sme_get_me_mask();
->  
->  	/* Fixup the physical addresses in the page table */
-> -
-> -	pgd = fixup_pointer(early_top_pgt, physaddr);
-> -	p = pgd + pgd_index(__START_KERNEL_map);
-> -	if (la57)
-> -		*p = (unsigned long)level4_kernel_pgt;
-> -	else
-> -		*p = (unsigned long)level3_kernel_pgt;
-> -	*p += _PAGE_TABLE_NOENC - __START_KERNEL_map + load_delta;
-> -
->  	if (la57) {
-> -		p4d = fixup_pointer(level4_kernel_pgt, physaddr);
-> -		p4d[511] += load_delta;
-> +		p4d = (p4dval_t *)&RIP_REL_REF(level4_kernel_pgt);
-> +		p4d[MAX_PTRS_PER_P4D - 1] += load_delta;
->  	}
->  
-> -	pud = fixup_pointer(level3_kernel_pgt, physaddr);
-> -	pud[510] += load_delta;
-> -	pud[511] += load_delta;
-> +	pud = &RIP_REL_REF(level3_kernel_pgt)->pud;
-> +	pud[PTRS_PER_PUD - 2] += load_delta;
-> +	pud[PTRS_PER_PUD - 1] += load_delta;
-> +
-> +	pgd = &RIP_REL_REF(early_top_pgt)->pgd;
+tree:   https://github.com/surenbaghdasaryan/linux.git memalloc_prof_v4
+head:   23633d13a520a9f34caf0f1a13820660b95406b5
+commit: 6720e180dd2c9151eec11e2d63bb2408cf2184b4 [30/37] mm: vmalloc: Enable memory allocation profiling
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240217/202402172155.QMan8AdY-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240217/202402172155.QMan8AdY-lkp@intel.com/reproduce)
 
-Let's do the pgd assignment above, where it was so that we have that
-natural order of p4d -> pgd -> pud ->pmd etc manipulations.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402172155.QMan8AdY-lkp@intel.com/
 
-> +	pgd[PTRS_PER_PGD - 1] = (pgdval_t)(la57 ? p4d : pud) | _PAGE_TABLE_NOENC;
+All warnings (new ones prefixed by >>):
 
-I see what you mean with pgd_index(__START_KERNEL_map) always being 511
-but this:
+>> mm/nommu.c:260: warning: expecting prototype for vmalloc_node(). Prototype was for vmalloc_node_noprof() instead
+>> mm/nommu.c:278: warning: expecting prototype for vzalloc_node(). Prototype was for vzalloc_node_noprof() instead
 
-	pgd[pgd_index(__START_KERNEL_map)] = (pgdval_t)(la57 ? p4d : pud) | _PAGE_TABLE_NOENC;
 
-says exactly what gets mapped there in the pagetable while
+vim +260 mm/nommu.c
 
-	PTRS_PER_PGD - 1
+e1ca7788dec677 Dave Young      2010-10-26  247  
+e1ca7788dec677 Dave Young      2010-10-26  248  /**
+e1ca7788dec677 Dave Young      2010-10-26  249   * vmalloc_node - allocate memory on a specific node
+e1ca7788dec677 Dave Young      2010-10-26  250   * @size:	allocation size
+e1ca7788dec677 Dave Young      2010-10-26  251   * @node:	numa node
+e1ca7788dec677 Dave Young      2010-10-26  252   *
+e1ca7788dec677 Dave Young      2010-10-26  253   * Allocate enough pages to cover @size from the page level
+e1ca7788dec677 Dave Young      2010-10-26  254   * allocator and map them into contiguous kernel virtual space.
+e1ca7788dec677 Dave Young      2010-10-26  255   *
+e1ca7788dec677 Dave Young      2010-10-26  256   * For tight control over page level allocator and protection flags
+e1ca7788dec677 Dave Young      2010-10-26  257   * use __vmalloc() instead.
+e1ca7788dec677 Dave Young      2010-10-26  258   */
+6720e180dd2c91 Kent Overstreet 2023-07-09  259  void *vmalloc_node_noprof(unsigned long size, int node)
+f61388822a6040 Andrew Morton   2006-02-28 @260  {
+6720e180dd2c91 Kent Overstreet 2023-07-09  261  	return vmalloc_noprof(size);
+f61388822a6040 Andrew Morton   2006-02-28  262  }
+6720e180dd2c91 Kent Overstreet 2023-07-09  263  EXPORT_SYMBOL(vmalloc_node_noprof);
+e1ca7788dec677 Dave Young      2010-10-26  264  
+e1ca7788dec677 Dave Young      2010-10-26  265  /**
+e1ca7788dec677 Dave Young      2010-10-26  266   * vzalloc_node - allocate memory on a specific node with zero fill
+e1ca7788dec677 Dave Young      2010-10-26  267   * @size:	allocation size
+e1ca7788dec677 Dave Young      2010-10-26  268   * @node:	numa node
+e1ca7788dec677 Dave Young      2010-10-26  269   *
+e1ca7788dec677 Dave Young      2010-10-26  270   * Allocate enough pages to cover @size from the page level
+e1ca7788dec677 Dave Young      2010-10-26  271   * allocator and map them into contiguous kernel virtual space.
+e1ca7788dec677 Dave Young      2010-10-26  272   * The memory allocated is set to zero.
+e1ca7788dec677 Dave Young      2010-10-26  273   *
+e1ca7788dec677 Dave Young      2010-10-26  274   * For tight control over page level allocator and protection flags
+e1ca7788dec677 Dave Young      2010-10-26  275   * use __vmalloc() instead.
+e1ca7788dec677 Dave Young      2010-10-26  276   */
+6720e180dd2c91 Kent Overstreet 2023-07-09  277  void *vzalloc_node_noprof(unsigned long size, int node)
+e1ca7788dec677 Dave Young      2010-10-26 @278  {
+6720e180dd2c91 Kent Overstreet 2023-07-09  279  	return vzalloc_noprof(size);
+e1ca7788dec677 Dave Young      2010-10-26  280  }
+6720e180dd2c91 Kent Overstreet 2023-07-09  281  EXPORT_SYMBOL(vzalloc_node_noprof);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  282  
 
-makes me wonder what's that last pud supposed to map.
+:::::: The code at line 260 was first introduced by commit
+:::::: f61388822a6040ff462c5f7260daa0f1017f2db0 [PATCH] nommu: implement vmalloc_node()
 
-Other than that, my gut feeling right now is, this would need extensive
-testing so that we make sure there's no fallout from it.
-
-Thx.
+:::::: TO: Andrew Morton <akpm@osdl.org>
+:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
