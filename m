@@ -1,200 +1,364 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DC0171A4
-	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 01:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD201B7E5;
+	Sat, 17 Feb 2024 02:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708134688; cv=none; b=jiekLD6LwlfN/BYLr2D1U5SwedZ9r9WGeBIP5ce7lXeZUWsg0I72O3olfeXRrUYjawI0g37UtGTzygEQ3i4pFUDsKEdHuEONQ8zeD/QyoaIbaYW+7ewuYU+AJVk7zJoQKAM6hq7YjZHaa/yABbltM2KUGqW9mBo4r8FO2LqEZ3w=
+	t=1708136247; cv=none; b=SVA1k2CZ/UcSnOruWV7z40LRFY006Re+Tw0BzNYyFoBAO9TDQW/a80KFCm960n6uDBkEem6C8cTSs+CqVYsoruvK3wMnGukZ2UKLgpDDvdvDJltZRGeTJ6j4Yh8AYqlslzUApq65/d7gLGRMZEZq+DpcM0g3lrYGOzPWqigRfMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708134688; c=relaxed/simple;
-	bh=K70eE+6rLALA5PSRh0ib2TyrXyCido5/VawjyrQGvJM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lDnyZ7hVq9AH1GRKJyf5Tibe2Y8yPYgCtXlZGTzCbuFsd3wWOyvTKMyOcsN5Hx/QhPjdHBzPBBvkDQftUIT4k2kLLbp6T/lTJvmFqelHYtjIwAxrZbe1KFwuf15ajTvQZpF5AaCztakl0EwY+EKLPypQp8cH6mDamv7tS6EGVyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gfjn1D9t; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1708136247; c=relaxed/simple;
+	bh=YE/PvgNqkcihxiMRO2BPM1Ruk9GX/CIFkqUWtcWCyyI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HlpfGvOTx2OuuDNmdBbIFHehtrwggk7q3P6/nUNa8SoagWQ2V8BjYfOlhYwKJqNqyWzy9iKS3bvgsOM5OgYLN7AGMEadH+65M2LExhYv7AKTS0x0hCUPbfaSahZZ9L05FrEojSi2WF8cqjWZSPud7WTKPg/eMSYwmE1fWwUQxhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eiUAZnPW; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gfjn1D9t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708134681;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Hnk2RGk6mtMNSx+5LH8j8PnAAbWGLO3IoUdxwr5DeZo=;
-	b=gfjn1D9t8BH6xocxwXCVQoQ3LMmF+56gglg1iU2LJKrnkzUiuKFyofV5zkiyMfwm+qasXL
-	1D9zvjEaFI3zfA2TKR4HuoPZLy/MJOOo6s/EM3iSN2dFF4nGiiW2okUAiJdMUoRTVmuJ1M
-	28fZUAOHjrC4EPeUcRBkDiQ/lVwAapk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-6-oJNJLmQrM7GsJEv8oKfkjA-1; Fri, 16 Feb 2024 20:51:20 -0500
-X-MC-Unique: oJNJLmQrM7GsJEv8oKfkjA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2DAF884340
-	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 01:51:19 +0000 (UTC)
-Received: from [172.64.14.54] (unknown [10.30.32.10])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id AFB591C060B1;
-	Sat, 17 Feb 2024 01:51:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 204): Test report for master
- (6.8.0-rc4, mainline.kernel.org-clang, 683b783c)
-Date: Sat, 17 Feb 2024 01:51:19 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eiUAZnPW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708136244; x=1739672244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YE/PvgNqkcihxiMRO2BPM1Ruk9GX/CIFkqUWtcWCyyI=;
+  b=eiUAZnPWuuRkSiODA0G/FrV+8+0rGTtEpeIXmb8yVZ+6e2vD3lFSiVHs
+   JK9g9aF5VVTE+fNlOZdCv8gZ2qW03uJPsIaS8Z+yknMuNitpodd4Zf9FG
+   u3sxruKdXu5FDlcZQlCcnMyNJSadOwzkhgJ6W7Htb4qCiEYHByz1M+frI
+   W9joCpygMk9OOg8XAmnv+GvLAhePe24cjzvUp3Uz+BGsfthjmMYjSi5hh
+   uxt30tus6gnQWxpoMtN40iNAwjTy1wBrwMN3iTFG/Mu0El6aJnMqb0cZp
+   fJ8bKNN4fEegJ0K6xHNv3b+DNK3tLouuXXK7VnK6voJCItL9L/bdB2elv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10986"; a="12907738"
+X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
+   d="scan'208";a="12907738"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 18:17:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
+   d="scan'208";a="3973389"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 16 Feb 2024 18:17:21 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rbAGV-0001l6-1D;
+	Sat, 17 Feb 2024 02:17:19 +0000
+Date: Sat, 17 Feb 2024 10:16:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC v3 5/5] overlayfs: Optimize credentials usage
+Message-ID: <202402171018.wLqzCOn5-lkp@intel.com>
+References: <20240216051640.197378-6-vinicius.gomes@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <37111.124021620512000306@us-mta-6.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216051640.197378-6-vinicius.gomes@intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Vinicius,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on linus/master v6.8-rc4 next-20240216]
+[cannot apply to mszeredi-vfs/overlayfs-next mszeredi-vfs/next vfs-idmapping/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
+url:    https://github.com/intel-lab-lkp/linux/commits/Vinicius-Costa-Gomes/cleanup-Fix-discarded-const-warning-when-defining-lock-guard/20240216-132100
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20240216051640.197378-6-vinicius.gomes%40intel.com
+patch subject: [RFC v3 5/5] overlayfs: Optimize credentials usage
+config: i386-buildonly-randconfig-003-20240216 (https://download.01.org/0day-ci/archive/20240217/202402171018.wLqzCOn5-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240217/202402171018.wLqzCOn5-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/129971
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402171018.wLqzCOn5-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: [upstream] [s390x] blktests tests/nvme/029: line 24: local: =
-`bs,': not a valid identifier
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1862
-            Affected tests:
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+All errors (new ones prefixed by >>):
+
+>> fs/overlayfs/file.c:435:3: error: cannot jump from this goto statement to its label
+     435 |                 goto out_unlock;
+         |                 ^
+   fs/overlayfs/file.c:437:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     437 |         guard(cred)(ovl_creds(file_inode(file)->i_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:210:1: note: expanded from here
+     210 | __UNIQUE_ID_guard291
+         | ^
+   fs/overlayfs/file.c:431:3: error: cannot jump from this goto statement to its label
+     431 |                 goto out_unlock;
+         |                 ^
+   fs/overlayfs/file.c:437:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     437 |         guard(cred)(ovl_creds(file_inode(file)->i_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:210:1: note: expanded from here
+     210 | __UNIQUE_ID_guard291
+         | ^
+   fs/overlayfs/file.c:498:3: error: cannot jump from this goto statement to its label
+     498 |                 goto out_unlock;
+         |                 ^
+   fs/overlayfs/file.c:501:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     501 |         guard(cred)(ovl_creds(file_inode(file_out)->i_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:228:1: note: expanded from here
+     228 | __UNIQUE_ID_guard293
+         | ^
+   fs/overlayfs/file.c:493:3: error: cannot jump from this goto statement to its label
+     493 |                 goto out_unlock;
+         |                 ^
+   fs/overlayfs/file.c:501:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     501 |         guard(cred)(ovl_creds(file_inode(file_out)->i_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:228:1: note: expanded from here
+     228 | __UNIQUE_ID_guard293
+         | ^
+   fs/overlayfs/file.c:488:4: error: cannot jump from this goto statement to its label
+     488 |                         goto out_unlock;
+         |                         ^
+   fs/overlayfs/file.c:501:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     501 |         guard(cred)(ovl_creds(file_inode(file_out)->i_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+--
+>> fs/overlayfs/inode.c:78:4: error: cannot jump from this goto statement to its label
+      78 |                         goto out_put_write;
+         |                         ^
+   fs/overlayfs/inode.c:81:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+      81 |                 guard(cred)(ovl_creds(dentry->d_sb));
+         |                 ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:244:1: note: expanded from here
+     244 | __UNIQUE_ID_guard286
+         | ^
+   1 error generated.
+--
+>> fs/overlayfs/namei.c:989:3: error: cannot jump from this goto statement to its label
+     989 |                 goto out;
+         |                 ^
+   fs/overlayfs/namei.c:991:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     991 |         guard(cred)(ovl_creds(dentry->d_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:237:1: note: expanded from here
+     237 | __UNIQUE_ID_guard287
+         | ^
+   1 error generated.
+--
+>> fs/overlayfs/dir.c:892:3: error: cannot jump from this goto statement to its label
+     892 |                 goto out;
+         |                 ^
+   fs/overlayfs/dir.c:894:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     894 |         guard(cred)(ovl_creds(dentry->d_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:25:1: note: expanded from here
+      25 | __UNIQUE_ID_guard299
+         | ^
+   fs/overlayfs/dir.c:888:3: error: cannot jump from this goto statement to its label
+     888 |                 goto out;
+         |                 ^
+   fs/overlayfs/dir.c:894:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     894 |         guard(cred)(ovl_creds(dentry->d_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:25:1: note: expanded from here
+      25 | __UNIQUE_ID_guard299
+         | ^
+   fs/overlayfs/dir.c:883:4: error: cannot jump from this goto statement to its label
+     883 |                         goto out;
+         |                         ^
+   fs/overlayfs/dir.c:894:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     894 |         guard(cred)(ovl_creds(dentry->d_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:25:1: note: expanded from here
+      25 | __UNIQUE_ID_guard299
+         | ^
+   3 errors generated.
+--
+>> fs/overlayfs/util.c:1167:3: error: cannot jump from this goto statement to its label
+    1167 |                 goto out_unlock;
+         |                 ^
+   fs/overlayfs/util.c:1172:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1172 |         guard(cred)(ovl_creds(dentry->d_sb));
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:19:1: note: expanded from here
+      19 | __UNIQUE_ID_guard284
+         | ^
+   1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     aarch64 - Reboot test
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 - Reboot test
-      x86_64 (debug) - Memory function: memfd_create
+vim +435 fs/overlayfs/file.c
 
+2f502839e85ab2 Miklos Szeredi       2018-07-18  419  
+aab8848cee5eca Miklos Szeredi       2018-07-18  420  static long ovl_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
+aab8848cee5eca Miklos Szeredi       2018-07-18  421  {
+aab8848cee5eca Miklos Szeredi       2018-07-18  422  	struct inode *inode = file_inode(file);
+aab8848cee5eca Miklos Szeredi       2018-07-18  423  	struct fd real;
+aab8848cee5eca Miklos Szeredi       2018-07-18  424  	int ret;
+aab8848cee5eca Miklos Szeredi       2018-07-18  425  
+23a8ce16419a30 Amir Goldstein       2022-10-17  426  	inode_lock(inode);
+23a8ce16419a30 Amir Goldstein       2022-10-17  427  	/* Update mode */
+23a8ce16419a30 Amir Goldstein       2022-10-17  428  	ovl_copyattr(inode);
+23a8ce16419a30 Amir Goldstein       2022-10-17  429  	ret = file_remove_privs(file);
+23a8ce16419a30 Amir Goldstein       2022-10-17  430  	if (ret)
+23a8ce16419a30 Amir Goldstein       2022-10-17  431  		goto out_unlock;
+23a8ce16419a30 Amir Goldstein       2022-10-17  432  
+aab8848cee5eca Miklos Szeredi       2018-07-18  433  	ret = ovl_real_fdget(file, &real);
+aab8848cee5eca Miklos Szeredi       2018-07-18  434  	if (ret)
+23a8ce16419a30 Amir Goldstein       2022-10-17 @435  		goto out_unlock;
+aab8848cee5eca Miklos Szeredi       2018-07-18  436  
+d98e0bce422c37 Vinicius Costa Gomes 2024-02-15  437  	guard(cred)(ovl_creds(file_inode(file)->i_sb));
+aab8848cee5eca Miklos Szeredi       2018-07-18  438  	ret = vfs_fallocate(real.file, mode, offset, len);
+aab8848cee5eca Miklos Szeredi       2018-07-18  439  
+aab8848cee5eca Miklos Szeredi       2018-07-18  440  	/* Update size */
+c002728f608183 Amir Goldstein       2023-09-27  441  	ovl_file_modified(file);
+aab8848cee5eca Miklos Szeredi       2018-07-18  442  
+aab8848cee5eca Miklos Szeredi       2018-07-18  443  	fdput(real);
+aab8848cee5eca Miklos Szeredi       2018-07-18  444  
+23a8ce16419a30 Amir Goldstein       2022-10-17  445  out_unlock:
+23a8ce16419a30 Amir Goldstein       2022-10-17  446  	inode_unlock(inode);
+23a8ce16419a30 Amir Goldstein       2022-10-17  447  
+aab8848cee5eca Miklos Szeredi       2018-07-18  448  	return ret;
+aab8848cee5eca Miklos Szeredi       2018-07-18  449  }
+aab8848cee5eca Miklos Szeredi       2018-07-18  450  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
