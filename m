@@ -1,161 +1,134 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F396A034
-	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 12:18:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDDA69DE7
+	for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 12:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708172300; cv=none; b=T2ESO620PH8WWzbQuXNXmcTL7m/rcBR/Ki1Knn7cZ74Klb9A9DC+FV0d0jh+IV/TiMrV2ANrPXSMyYl9FgVW57l/Muano2K73PrYG5AkaJUvBpQ3236ovb4iR0dG/OFRXQk3iZhbjOI46qNt02FboEpTkysinKM32Hp6jcqpJ8I=
+	t=1708174297; cv=none; b=Ck9pUXeFRAUKW1ldphvJKe5dfdpyjSap/yPfnxdzTq3cFd/tbQoezzDZf2ODsM12F9pCsHthgCUsDpA50sCjxkzFfSb2tRxtM5pqGg5NVqtTyzRFrVkLm+bjfj3t4yLOVn0O7X4MxuxMDzHM49Pi+H1zm8QhIGxfpXbvrnoJJUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708172300; c=relaxed/simple;
-	bh=UKjxS5vpoedsgomMAJB5omeAKldlU4nDgXE0PfEP1jw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jKpclUiZgXjzEk/cT+ZZoRYQsiO2zGdObG/iRap40zpjqY7VJbXV/+KRC8HIsozedu+HCEkrI0V5BJPpvOVrAjhSQrZHcrj9odD9PSQL+lt6YBteJSERGtS9ts1WE3etNc7FSwf+DYihGnk1er/1ujHImOfwYLhvLgPIPzQd/dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=MXO5qP6A; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1708174297; c=relaxed/simple;
+	bh=dOMpZYdm6byi7dSGtTU7CXpz9fL2H66oVNawiZq9BTw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xhw6FfYZxC7XiaHLSb6mMR51DE/ziK/tXJmoThtAfueKMppC1p9JOkddYc8xH0UB7Kc07QTNBVDW+UrS6GhcXgJox8rfCjImi3YMgOUYSOZsHwf6snCI9sgGegLjBQCByN3Yo/N9ZMT2dUcDwXvoHZb+SVRRjBq6LmpJjsc13bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DMG5e6QS; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="MXO5qP6A"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dc6d8bd618eso2658009276.3
-        for <llvm@lists.linux.dev>; Sat, 17 Feb 2024 04:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1708172297; x=1708777097; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dakj+J26FIps8JKFMFOM1GnEisCAC0H9NUZsZ7rhH34=;
-        b=MXO5qP6AisFkFQrXjz2Sg/JbG6oV2ilFh8jN+z4miu8Of+BnkNZTzgdsPyy7mVV1uM
-         q4fSundmznjYw6bJ+x1VpIAorHuf90f5iTUPJmxkYrJXX/BA9fG1rQpRPvzR3//+OFlD
-         8QdDBqYnevZHynER4L81zJUPiw21eWLpHximHKmVvr0uv2a7IlbnRejaOQYDmSEKCI2t
-         rkpSD4SUPzOSnWKZSd5EIHZgCmi3KHg1eurkdvaTN08BHwFg9hXzapvCwOGqh5nRaw5r
-         wYniEdXHTn6svdmaFqVQH9bgSSN22wWSaAKbxBcHNCLVUbtLsBHArxv3zfcB/8brD89H
-         YQrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708172297; x=1708777097;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dakj+J26FIps8JKFMFOM1GnEisCAC0H9NUZsZ7rhH34=;
-        b=HjiMQAO9SypBd5rrMK2NEUDQEK8+4Xhr9mZlCS5jX4kyn47ZxxBe6wsyjuXnZPTKRW
-         7jdZ/V2M28D9lcC7pJcIaFGuKVKCoZGksFhi2+WFpG8DS+VDnhwM0vOJm5LXqh0sVkEI
-         RRnk+Q2QIqOATt7KSPcyLWDfCqMNadGQvzacp3KplY2Zr2spgPd2CxBDP9j4VMVX9Ojz
-         wIHUHu05fL+R1yG5EUW3Sv5HdybmZA/posyVi4bsWaRDzhtt+zxdR03BmiwhYyp/7CmQ
-         lqKPe0Rq14SrBYQ05HWup+R3RdeYRY2cJyIQSiUYGXM09SQPIU+l1gwpECbQkEpui6sA
-         t8bw==
-X-Forwarded-Encrypted: i=1; AJvYcCXi+SAgNgic8AyTsvbhr0GTNTJ3WOIdaTP8ukStoSb3j0zrBbHTW23meVHXa1MYXsZ8GIexTRa+2CkPIeo+fUMYu+uSOQ==
-X-Gm-Message-State: AOJu0YxFRHoBv+Utcc2OPqOqpIUhq2Qa/XrSMGcHm4kiKUjXWjY91DJ4
-	kd479uOxC29pKJkBjeVJ4Zo9ZWMGSOJmZt8hNO3mLvRA8UPt7jnNrbA0c5ryMYuzHgAXUEwX0K0
-	TmLEYv0VcbNCijSBdRGqV+kUnfTLi7UoIx5Xs
-X-Google-Smtp-Source: AGHT+IEYHTeRxmK8Tgb29GhppupMJ2XDrsJxJTUarro8uv3qP63OjBIOPHkVh7dMXpiawqTtzwrBAlosTJQ5VBj7vcw=
-X-Received: by 2002:a25:adc9:0:b0:dcd:63f8:ba32 with SMTP id
- d9-20020a25adc9000000b00dcd63f8ba32mr6963090ybe.65.1708172297594; Sat, 17 Feb
- 2024 04:18:17 -0800 (PST)
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DMG5e6QS"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 40C1F40E01A9;
+	Sat, 17 Feb 2024 12:51:31 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 0hlCv3lIl4HE; Sat, 17 Feb 2024 12:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1708174288; bh=qo3uSORLj3aVIspHnZOOPPN2BG8DeKw0xfrzHn1JOsE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DMG5e6QSKeR9ubDYe2s0ZoiU51BCQvwIEuO4RCuRvQTeQ8TmKrZw5+z0J5aEFgswY
+	 dZB3Su8kRvsIYCLw1goi1lxlw6+XoLZtp9ebursTnwYRZDBmK6MHhFZwyrvaLbOCkY
+	 HOMZ81djkewhE8iCb1UTKOyl3n523ot7waAzw4wPFGGazCMtJm/BYWisD714CnvEoC
+	 jpv8QnvEsk0+TqoGEx5In9rBjZfucgWjYMKfShUM6qSJP6tYXHHUSOhg8u1xTn+TIe
+	 tQmZmiQgUNXNt54NgYCf+Nf0/wrlcI4CxHH0EBevuyQljR2U1pxFcTUCNU6gp+a/SV
+	 ry1dzpYHJexsOcX35pmggxd4d33+M7MfHqB+IU91Cm4A1vOYMd+NH3zAZOe1fUoNr7
+	 mwlT4BEmTe9n9NCUWR+WKjPvK+xO1xUVMIAq4PNqx774FWt2SsnnM33FYnDZN67fiH
+	 +JI6MkFtLSW8AXNjhY5aO/A+V4FU7WVTxX6P9HsFAxhGArFhushX1uBzCACkY+pfSV
+	 HjVBhjZAzsliTvBpnfQSatzLe6mx38Oj5YTXDQfbZLXRZ12nsIONnKJ7dUtkEeNLkE
+	 BM7/ooFdvOW1t2Du6u4bcg3yrmfN4sTGUW0leRQnLfBWqLyJPmSmTQgTHeHVn31o7j
+	 DsztjJPMNkNsAcDM3brtS7E0=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 969AB40E00B2;
+	Sat, 17 Feb 2024 12:51:10 +0000 (UTC)
+Date: Sat, 17 Feb 2024 13:51:02 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 02/11] x86/startup_64: Replace pointer fixups with
+ RIP-relative references
+Message-ID: <20240217125102.GSZdCrtgI-DnHA8DpK@fat_crate.local>
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-15-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240216232744.work.514-kees@kernel.org> <9ed28341-8bf7-4b6a-ba9a-6cfe07dc5964@embeddedor.com>
-In-Reply-To: <9ed28341-8bf7-4b6a-ba9a-6cfe07dc5964@embeddedor.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Sat, 17 Feb 2024 07:18:06 -0500
-Message-ID: <CAM0EoMnDHDGao6NToo5WcT16GZCyQ_SR8aXQ3AXmJFYaWoqv1A@mail.gmail.com>
-Subject: Re: [PATCH] net: sched: Annotate struct tc_pedit with __counted_by
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, netdev@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240213124143.1484862-15-ardb+git@google.com>
 
-On Fri, Feb 16, 2024 at 7:04=E2=80=AFPM Gustavo A. R. Silva
-<gustavo@embeddedor.com> wrote:
->
->
->
-> On 2/16/24 17:27, Kees Cook wrote:
-> > Prepare for the coming implementation by GCC and Clang of the __counted=
-_by
-> > attribute. Flexible array members annotated with __counted_by can have
-> > their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOU=
-NDS
-> > (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-famil=
-y
-> > functions).
-> >
-> > As found with Coccinelle[1], add __counted_by for struct tc_pedit.
-> > Additionally, since the element count member must be set before accessi=
-ng
-> > the annotated flexible array member, move its initialization earlier.
-> >
-> > Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/exampl=
-es/counted_by.cocci [1]
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Jamal Hadi Salim <jhs@mojatatu.com>
-> > Cc: Cong Wang <xiyou.wangcong@gmail.com>
-> > Cc: Jiri Pirko <jiri@resnulli.us>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: netdev@vger.kernel.org
-> > Cc: linux-hardening@vger.kernel.org
->
-> `opt->nkeys` updated before `memcpy()`, looks good to me:
->
-> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+On Tue, Feb 13, 2024 at 01:41:46PM +0100, Ard Biesheuvel wrote:
+> @@ -201,25 +201,19 @@ unsigned long __head __startup_64(unsigned long physaddr,
+>  	load_delta += sme_get_me_mask();
+>  
+>  	/* Fixup the physical addresses in the page table */
+> -
+> -	pgd = fixup_pointer(early_top_pgt, physaddr);
+> -	p = pgd + pgd_index(__START_KERNEL_map);
+> -	if (la57)
+> -		*p = (unsigned long)level4_kernel_pgt;
+> -	else
+> -		*p = (unsigned long)level3_kernel_pgt;
+> -	*p += _PAGE_TABLE_NOENC - __START_KERNEL_map + load_delta;
+> -
+>  	if (la57) {
+> -		p4d = fixup_pointer(level4_kernel_pgt, physaddr);
+> -		p4d[511] += load_delta;
+> +		p4d = (p4dval_t *)&RIP_REL_REF(level4_kernel_pgt);
+> +		p4d[MAX_PTRS_PER_P4D - 1] += load_delta;
+>  	}
+>  
+> -	pud = fixup_pointer(level3_kernel_pgt, physaddr);
+> -	pud[510] += load_delta;
+> -	pud[511] += load_delta;
+> +	pud = &RIP_REL_REF(level3_kernel_pgt)->pud;
+> +	pud[PTRS_PER_PUD - 2] += load_delta;
+> +	pud[PTRS_PER_PUD - 1] += load_delta;
+> +
+> +	pgd = &RIP_REL_REF(early_top_pgt)->pgd;
 
-Looks good to me.
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Let's do the pgd assignment above, where it was so that we have that
+natural order of p4d -> pgd -> pud ->pmd etc manipulations.
 
-cheers,
-jamal
+> +	pgd[PTRS_PER_PGD - 1] = (pgdval_t)(la57 ? p4d : pud) | _PAGE_TABLE_NOENC;
 
-> Thanks!
-> --
-> Gustavo
->
-> > ---
-> >   include/uapi/linux/tc_act/tc_pedit.h | 2 +-
-> >   net/sched/act_pedit.c                | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/tc_act/tc_pedit.h b/include/uapi/linux/=
-tc_act/tc_pedit.h
-> > index f3e61b04fa01..f5cab7fc96ab 100644
-> > --- a/include/uapi/linux/tc_act/tc_pedit.h
-> > +++ b/include/uapi/linux/tc_act/tc_pedit.h
-> > @@ -62,7 +62,7 @@ struct tc_pedit_sel {
-> >       tc_gen;
-> >       unsigned char           nkeys;
-> >       unsigned char           flags;
-> > -     struct tc_pedit_key     keys[0];
-> > +     struct tc_pedit_key     keys[] __counted_by(nkeys);
-> >   };
-> >
-> >   #define tc_pedit tc_pedit_sel
-> > diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-> > index 2ef22969f274..21e863d2898c 100644
-> > --- a/net/sched/act_pedit.c
-> > +++ b/net/sched/act_pedit.c
-> > @@ -515,11 +515,11 @@ static int tcf_pedit_dump(struct sk_buff *skb, st=
-ruct tc_action *a,
-> >               spin_unlock_bh(&p->tcf_lock);
-> >               return -ENOBUFS;
-> >       }
-> > +     opt->nkeys =3D parms->tcfp_nkeys;
-> >
-> >       memcpy(opt->keys, parms->tcfp_keys,
-> >              flex_array_size(opt, keys, parms->tcfp_nkeys));
-> >       opt->index =3D p->tcf_index;
-> > -     opt->nkeys =3D parms->tcfp_nkeys;
-> >       opt->flags =3D parms->tcfp_flags;
-> >       opt->action =3D p->tcf_action;
-> >       opt->refcnt =3D refcount_read(&p->tcf_refcnt) - ref;
+I see what you mean with pgd_index(__START_KERNEL_map) always being 511
+but this:
+
+	pgd[pgd_index(__START_KERNEL_map)] = (pgdval_t)(la57 ? p4d : pud) | _PAGE_TABLE_NOENC;
+
+says exactly what gets mapped there in the pagetable while
+
+	PTRS_PER_PGD - 1
+
+makes me wonder what's that last pud supposed to map.
+
+Other than that, my gut feeling right now is, this would need extensive
+testing so that we make sure there's no fallout from it.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
