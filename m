@@ -1,57 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7114C7D402;
-	Sat, 17 Feb 2024 17:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1697E0E3;
+	Sat, 17 Feb 2024 18:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708190933; cv=none; b=jXVleNNmmcLu0Hy4EwHJaHpb482IOofh7cWWm0r1O+DeuQleldUHXdnkfQgLkr6otudRFUC/q1AYSc2C6qejQOph2Pbn3dxELBP71IwCiO4zQIqrL/6AiZN5VhOwkO5BF+4zP23dforsi1wXiTWwyG8UsWZy3kr47zuLTTrw6jo=
+	t=1708195325; cv=none; b=TgMdz33nPc9fOgPPtbY2GQDbjzF5ZBabTNUohzvsx0HUkkA0Ufc72UEouj53qxeywh27KBpsDuu01rx320cve/xLxZTHUA9CLVNtbBILv7a2PTD4E3fy1EPMFVdlau613mGfQys/14rc5zREwPR1IFpgIg5sxFJzJUaIy6cqJ38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708190933; c=relaxed/simple;
-	bh=XoMAutHoxVHHbRXYGtOfCJCOlfzu7clxXNV9Rrq01Uo=;
+	s=arc-20240116; t=1708195325; c=relaxed/simple;
+	bh=mWardUOGWKUFxdUNZGCnQyy01Z2a4EbDqCGLIrYFD7o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QctJzqaAPmgYypL17voVGFet3/y8F1PIIDrSm9XnFX7K76lGKdLiB4phwai9HzEC2o3gX5zsxjpQZno3AJBbfJRkePbQGC9bN7M0tm6lD22Xbg2//VzGTzt7xPflzR3wDOSS3xGDuRaQ3xwdk3PiaQkVAEjMvAYRSDIDlEJA3iQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RN5itX5B; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=sga9ZLa9em+4T1w5dpTs/nRlUE3LfUEbM0bLmz8PBOAPTRhnOV9I54loVoM5EDKVT0hNwgsYmgOahCwOCEJE+SSbbGPp8MzXKe+CbGBjVGmL2DXZBd9qnaY/2lDqlQ7yiUOMduGQaxsZHLGQHosTCtH0/pqIp4i7+RpZR0Mw3DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G6AiHWIq; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RN5itX5B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G6AiHWIq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708190931; x=1739726931;
+  t=1708195324; x=1739731324;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XoMAutHoxVHHbRXYGtOfCJCOlfzu7clxXNV9Rrq01Uo=;
-  b=RN5itX5BYR+dRgWsDnI11SgEP2cr1Ie4NW3SW8GYYoi43c6vmvKurs9g
-   fVAWLrJgKd7KC+NEr1kSaolUuAX0cPPzceTA1oVnPLxnKHwXUC7ER1Axg
-   rx5Mk+ESkqlCdymG7c7j7QXc0PmPjNUfgHiOnoBpEjxbRz1KttyTRqVvJ
-   coEA33GO0cPnhDh9p0aJ/+9R//pImXHDnyiTKuPSL91m68B33Pd+jzTRl
-   T1xDGutyQxCYnDKtmm2ixcihldM6BgJdWeBKBBBaEq0yHTbivJP7S5DUV
-   wcHsI1+b4k4DHA2HB4+Gzm/AVFUjc6H3KWttHqbXo5q7WiuU2M4e3nEH2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2182392"
-X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
-   d="scan'208";a="2182392"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 09:28:50 -0800
+  bh=mWardUOGWKUFxdUNZGCnQyy01Z2a4EbDqCGLIrYFD7o=;
+  b=G6AiHWIqlQwdrUU8Kp/AlvQbP4AeZZM8ojMzwJ91hjcechgaUGoA8J7W
+   Rv3HbQt1+xH+4I60m3y+K6ibdUYDynxQDlBJpaX8j1puivIta5kvbkrMJ
+   5GOt9QSZ0elNj88ExcMrUe3LDt2bh1EjuPf22O1IaUFQLtNwqgiNRMOSV
+   UvMQZMDvkCe0LR/eg+FQa+CqD7NUAEm1hGyzn+yVAq1q+sNgW+cGBfaLz
+   PWrDCSgaSZJA5qoAUkNx8o+Cj72vSrJrR1jqKJxFvdMau7aWW3W/hwXm6
+   D88Pb+HC7x83FSuYDUpBpf15uvrT+meoV8n5sE1RdE49dq1wGp/AAH1UZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2439605"
+X-IronPort-AV: E=Sophos;i="6.06,167,1705392000"; 
+   d="scan'208";a="2439605"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 10:42:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
-   d="scan'208";a="34902595"
+X-IronPort-AV: E=Sophos;i="6.06,167,1705392000"; 
+   d="scan'208";a="4475782"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 17 Feb 2024 09:28:48 -0800
+  by orviesa006.jf.intel.com with ESMTP; 17 Feb 2024 10:41:59 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rbOUY-0002L2-0d;
-	Sat, 17 Feb 2024 17:28:46 +0000
-Date: Sun, 18 Feb 2024 01:27:46 +0800
+	id 1rbPdM-0002Ow-1e;
+	Sat, 17 Feb 2024 18:41:56 +0000
+Date: Sun, 18 Feb 2024 02:41:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Max Kellermann <max.kellermann@ionos.com>, akpm@linux-foundation.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Max Kellermann <max.kellermann@ionos.com>
-Subject: Re: [PATCH v1 14/14] include: reduce dependencies on linux/mm.h
-Message-ID: <202402180115.xH2WHdhd-lkp@intel.com>
-References: <20240215145602.1371274-15-max.kellermann@ionos.com>
+To: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 2/4] clk: hisilicon: add CRG driver for Hi3798MV200
+ SoC
+Message-ID: <202402180201.nL8HDrod-lkp@intel.com>
+References: <20240216-clk-mv200-v1-2-a29ace29e636@outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,99 +59,196 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240215145602.1371274-15-max.kellermann@ionos.com>
+In-Reply-To: <20240216-clk-mv200-v1-2-a29ace29e636@outlook.com>
 
-Hi Max,
+Hi Yang,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on next-20240215]
-[cannot apply to akpm-mm/mm-everything char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus powerpc/next powerpc/fixes linus/master v6.8-rc4 v6.8-rc3 v6.8-rc2 v6.8-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 8d3dea210042f54b952b481838c1e7dfc4ec751d]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Max-Kellermann/drivers-add-missing-includes-on-linux-mm-h-and-others/20240215-225853
-base:   next-20240215
-patch link:    https://lore.kernel.org/r/20240215145602.1371274-15-max.kellermann%40ionos.com
-patch subject: [PATCH v1 14/14] include: reduce dependencies on linux/mm.h
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20240218/202402180115.xH2WHdhd-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402180115.xH2WHdhd-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Xiwen-via-B4-Relay/dt-binding-clock-histb-clock-Add-missing-common-clock-and-Hi3798MV200-specific-clock-definition/20240216-193926
+base:   8d3dea210042f54b952b481838c1e7dfc4ec751d
+patch link:    https://lore.kernel.org/r/20240216-clk-mv200-v1-2-a29ace29e636%40outlook.com
+patch subject: [PATCH RFC 2/4] clk: hisilicon: add CRG driver for Hi3798MV200 SoC
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240218/202402180201.nL8HDrod-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402180201.nL8HDrod-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402180115.xH2WHdhd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402180201.nL8HDrod-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from lib/scatterlist.c:9:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from lib/scatterlist.c:9:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from lib/scatterlist.c:9:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> lib/scatterlist.c:739:9: error: call to undeclared function 'PAGE_ALIGN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     739 |         return PAGE_ALIGN(sg->offset + sg->length) >> PAGE_SHIFT;
-         |                ^
-   lib/scatterlist.c:763:9: error: call to undeclared function 'PAGE_ALIGN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     763 |         return PAGE_ALIGN(sg->offset + sg_dma_len(sg)) >> PAGE_SHIFT;
-         |                ^
->> lib/scatterlist.c:1153:3: error: call to undeclared function 'unpin_user_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1153 |                 unpin_user_page(sg_page(&sgtable->sgl[--sgtable->nents]));
-         |                 ^
->> lib/scatterlist.c:1239:8: error: call to undeclared function 'is_vmalloc_or_module_addr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1239 |                         if (is_vmalloc_or_module_addr((void *)kaddr))
-         |                             ^
->> lib/scatterlist.c:1240:12: error: call to undeclared function 'vmalloc_to_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1240 |                                 page = vmalloc_to_page((void *)kaddr);
-         |                                        ^
-   lib/scatterlist.c:1240:12: note: did you mean 'vmalloc_nr_pages'?
-   include/linux/vmalloc.h:135:22: note: 'vmalloc_nr_pages' declared here
-     135 | extern unsigned long vmalloc_nr_pages(void);
-         |                      ^
->> lib/scatterlist.c:1240:10: error: incompatible integer to pointer conversion assigning to 'struct page *' from 'int' [-Wint-conversion]
-    1240 |                                 page = vmalloc_to_page((void *)kaddr);
-         |                                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings and 6 errors generated.
+>> drivers/clk/hisilicon/crg-hi3798mv200.c:189:4: error: use of undeclared identifier 'HI3798MV200_USB3_REF_CLK'
+           { HI3798MV200_USB3_REF_CLK, "clk_u3_ref", "125m",
+             ^
+>> drivers/clk/hisilicon/crg-hi3798mv200.c:229:5: error: invalid application of 'sizeof' to an incomplete type 'const struct hisi_gate_clock[]'
+                                   ARRAY_SIZE(hi3798mv200_gate_clks),
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^~~~~
+   drivers/clk/hisilicon/crg-hi3798mv200.c:243:5: error: invalid application of 'sizeof' to an incomplete type 'const struct hisi_gate_clock[]'
+                                   ARRAY_SIZE(hi3798mv200_gate_clks),
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^~~~~
+   drivers/clk/hisilicon/crg-hi3798mv200.c:263:5: error: invalid application of 'sizeof' to an incomplete type 'const struct hisi_gate_clock[]'
+                                   ARRAY_SIZE(hi3798mv200_gate_clks),
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^~~~~
+   4 errors generated.
 
 
-vim +/PAGE_ALIGN +739 lib/scatterlist.c
+vim +/HI3798MV200_USB3_REF_CLK +189 drivers/clk/hisilicon/crg-hi3798mv200.c
 
-a321e91b6d73ed Imre Deak 2013-02-27  736  
-a321e91b6d73ed Imre Deak 2013-02-27  737  static int sg_page_count(struct scatterlist *sg)
-a321e91b6d73ed Imre Deak 2013-02-27  738  {
-a321e91b6d73ed Imre Deak 2013-02-27 @739  	return PAGE_ALIGN(sg->offset + sg->length) >> PAGE_SHIFT;
-a321e91b6d73ed Imre Deak 2013-02-27  740  }
-a321e91b6d73ed Imre Deak 2013-02-27  741  
+   116	
+   117	static const struct hisi_gate_clock hi3798mv200_gate_clks[] = {
+   118		/* UART */
+   119		{ HISTB_UART2_CLK, "clk_uart2", "75m",
+   120			CLK_SET_RATE_PARENT, 0x68, 4, 0, },
+   121		{ HISTB_UART3_CLK, "clk_uart3", "75m",
+   122			CLK_SET_RATE_PARENT, 0x68, 6, 0, },
+   123		/* I2C */
+   124		{ HISTB_I2C0_CLK, "clk_i2c0", NULL,
+   125			CLK_SET_RATE_PARENT, 0x6c, 4, 0, },
+   126		{ HISTB_I2C1_CLK, "clk_i2c1", NULL,
+   127			CLK_SET_RATE_PARENT, 0x6c, 8, 0, },
+   128		{ HISTB_I2C2_CLK, "clk_i2c2", NULL,
+   129			CLK_SET_RATE_PARENT, 0x6c, 12, 0, },
+   130		/* SDIO */
+   131		{ HISTB_SDIO0_BIU_CLK, "clk_sdio0_biu", "200m",
+   132			CLK_SET_RATE_PARENT, 0x9c, 0, 0, },
+   133		{ HISTB_SDIO0_CIU_CLK, "clk_sdio0_ciu", "sdio0_mux",
+   134			CLK_SET_RATE_PARENT, 0x9c, 1, 0, },
+   135		{ HISTB_SDIO1_BIU_CLK, "clk_sdio1_biu", "200m",
+   136			CLK_SET_RATE_PARENT, 0x28c, 0, 0, },
+   137		{ HISTB_SDIO1_CIU_CLK, "clk_sdio1_ciu", "sdio1_mux",
+   138			CLK_SET_RATE_PARENT, 0x28c, 1, 0, },
+   139		/* EMMC */
+   140		{ HISTB_MMC_BIU_CLK, "clk_mmc_biu", "200m",
+   141			CLK_SET_RATE_PARENT, 0xa0, 0, 0, },
+   142		{ HISTB_MMC_CIU_CLK, "clk_mmc_ciu", "mmc_mux",
+   143			CLK_SET_RATE_PARENT, 0xa0, 1, 0, },
+   144		/* Ethernet */
+   145		{ HI3798MV200_GMAC_CLK, "clk_gmac", NULL,
+   146			CLK_SET_RATE_PARENT, 0xcc, 2, 0, },
+   147		{ HI3798MV200_GMACIF_CLK, "clk_gmacif", NULL,
+   148			CLK_SET_RATE_PARENT, 0xcc, 0, 0, },
+   149		{ HI3798MV200_FEMAC_CLK, "clk_femac", NULL,
+   150			CLK_SET_RATE_PARENT, 0xd0, 1, 0, },
+   151		{ HI3798MV200_FEMACIF_CLK, "clk_femacif", NULL,
+   152			CLK_SET_RATE_PARENT, 0xd0, 0, 0, },
+   153		{ HI3798MV200_FEPHY_CLK, "clk_fephy", NULL,
+   154			CLK_SET_RATE_PARENT, 0x388, 0, 0, },
+   155		/* COMBPHY0 */
+   156		{ HISTB_COMBPHY0_CLK, "clk_combphy0", "combphy0_mux",
+   157			CLK_SET_RATE_PARENT, 0x188, 0, 0, },
+   158		/* USB2 */
+   159		{ HISTB_USB2_BUS_CLK, "clk_u2_bus", "clk_ahb",
+   160			CLK_SET_RATE_PARENT, 0xb8, 0, 0, },
+   161		{ HISTB_USB2_PHY_CLK, "clk_u2_phy", "60m",
+   162			CLK_SET_RATE_PARENT, 0xb8, 4, 0, },
+   163		{ HISTB_USB2_12M_CLK, "clk_u2_12m", "12m",
+   164			CLK_SET_RATE_PARENT, 0xb8, 2, 0 },
+   165		{ HISTB_USB2_48M_CLK, "clk_u2_48m", "48m",
+   166			CLK_SET_RATE_PARENT, 0xb8, 1, 0 },
+   167		{ HISTB_USB2_UTMI0_CLK, "clk_u2_utmi0", "60m",
+   168			CLK_SET_RATE_PARENT, 0xb8, 5, 0 },
+   169		{ HISTB_USB2_UTMI1_CLK, "clk_u2_utmi1", "60m",
+   170			CLK_SET_RATE_PARENT, 0xb8, 6, 0 },
+   171		{ HISTB_USB2_OTG_UTMI_CLK, "clk_u2_otg_utmi", "60m",
+   172			CLK_SET_RATE_PARENT, 0xb8, 3, 0 },
+   173		{ HISTB_USB2_PHY1_REF_CLK, "clk_u2_phy1_ref", "24m",
+   174			CLK_SET_RATE_PARENT, 0xbc, 0, 0 },
+   175		{ HISTB_USB2_PHY2_REF_CLK, "clk_u2_phy2_ref", "24m",
+   176			CLK_SET_RATE_PARENT, 0xbc, 2, 0 },
+   177		/* USB3 bus */
+   178		{ HISTB_USB3_GM_CLK, "clk_u3_gm", "clk_ahb",
+   179			CLK_SET_RATE_PARENT, 0xb0, 6, 0 },
+   180		{ HISTB_USB3_GS_CLK, "clk_u3_gs", "clk_ahb",
+   181			CLK_SET_RATE_PARENT, 0xb0, 5, 0 },
+   182		{ HISTB_USB3_BUS_CLK, "clk_u3_bus", "clk_ahb",
+   183			CLK_SET_RATE_PARENT, 0xb0, 0, 0 },
+   184		/* USB3 ctrl */
+   185		{ HISTB_USB3_SUSPEND_CLK, "clk_u3_suspend", NULL,
+   186			CLK_SET_RATE_PARENT, 0xb0, 2, 0 },
+   187		{ HISTB_USB3_PIPE_CLK, "clk_u3_pipe", NULL,
+   188			CLK_SET_RATE_PARENT, 0xb0, 3, 0 },
+ > 189		{ HI3798MV200_USB3_REF_CLK, "clk_u3_ref", "125m",
+   190			CLK_SET_RATE_PARENT, 0xb0, 1, 0 },
+   191		{ HISTB_USB3_UTMI_CLK, "clk_u3_utmi", "60m",
+   192			CLK_SET_RATE_PARENT, 0xb0, 4, 0 },
+   193		/* Watchdog */
+   194		{ HISTB_WDG0_CLK, "clk_wdg0", "24m",
+   195			CLK_SET_RATE_PARENT, 0x178, 0, 0 },
+   196	};
+   197	
+   198	static struct hisi_clock_data *hi3798mv200_clk_register(
+   199					struct platform_device *pdev)
+   200	{
+   201		struct hisi_clock_data *clk_data;
+   202		int ret;
+   203	
+   204		clk_data = hisi_clk_alloc(pdev, HI3798MV200_CRG_NR_CLKS);
+   205		if (!clk_data)
+   206			return ERR_PTR(-ENOMEM);
+   207	
+   208		/* hisi_phase_clock is resource managed */
+   209		ret = hisi_clk_register_phase(&pdev->dev,
+   210					hi3798mv200_phase_clks,
+   211					ARRAY_SIZE(hi3798mv200_phase_clks),
+   212					clk_data);
+   213		if (ret)
+   214			return ERR_PTR(ret);
+   215	
+   216		ret = hisi_clk_register_fixed_rate(hi3798mv200_fixed_rate_clks,
+   217					     ARRAY_SIZE(hi3798mv200_fixed_rate_clks),
+   218					     clk_data);
+   219		if (ret)
+   220			return ERR_PTR(ret);
+   221	
+   222		ret = hisi_clk_register_mux(hi3798mv200_mux_clks,
+   223					ARRAY_SIZE(hi3798mv200_mux_clks),
+   224					clk_data);
+   225		if (ret)
+   226			goto unregister_fixed_rate;
+   227	
+   228		ret = hisi_clk_register_gate(hi3798mv200_gate_clks,
+ > 229					ARRAY_SIZE(hi3798mv200_gate_clks),
+   230					clk_data);
+   231		if (ret)
+   232			goto unregister_mux;
+   233	
+   234		ret = of_clk_add_provider(pdev->dev.of_node,
+   235				of_clk_src_onecell_get, &clk_data->clk_data);
+   236		if (ret)
+   237			goto unregister_gate;
+   238	
+   239		return clk_data;
+   240	
+   241	unregister_gate:
+   242		hisi_clk_unregister_gate(hi3798mv200_gate_clks,
+   243					ARRAY_SIZE(hi3798mv200_gate_clks),
+   244					clk_data);
+   245	unregister_mux:
+   246		hisi_clk_unregister_mux(hi3798mv200_mux_clks,
+   247					ARRAY_SIZE(hi3798mv200_mux_clks),
+   248					clk_data);
+   249	unregister_fixed_rate:
+   250		hisi_clk_unregister_fixed_rate(hi3798mv200_fixed_rate_clks,
+   251					ARRAY_SIZE(hi3798mv200_fixed_rate_clks),
+   252					clk_data);
+   253		return ERR_PTR(ret);
+   254	}
+   255	
 
 -- 
 0-DAY CI Kernel Test Service
