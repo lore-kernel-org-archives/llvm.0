@@ -1,517 +1,154 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D42153BF4
-	for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 23:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CED1C36;
+	Sat, 17 Feb 2024 00:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708127734; cv=none; b=uEm3LbCnjXc4BZl4KKLjE+5Rk1TzODRFmrjekYzdwDg57x9xvDH/GPReCC7ISvpjQRYwVROSbZfuz+80yU6X9ScmR3JYl5htZJn2eOwRrrX2+McefBiLCxyI5qaq7NocloNfh/SkEJXvirf8mPXUnBfhZwXgn9Fto+KhvyuCUyQ=
+	t=1708128187; cv=none; b=fDnlePOAMu85jSu+TLQwNXnZPWLA5081kpT1d6j5xd1STmdq4otto22wAI7BJv/hWrpxsP5Aj+vyj/ykOkRlRHNBf6lQITa4Wnko20OQsM5KLkPYrMGogb0IXtb+Dku3p752OyeHGhqFzphlgNUTUdUrc2ohIsPn8mfqOu7W6Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708127734; c=relaxed/simple;
-	bh=SV8Q2XP3AEzUCdEScST86iV7qnjMAWaIiYJHWAwVraA=;
-	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=KAxcUTmegcmf9xE56Qv1KeVBdYReETsThpqjF2IW7+IpMar0udcXDmtL/H54h/3F8lLpqMhsmc6wMLUzsRm1ZRdnWPLt4SXNYL6hg/1I49x62Sjqw6qB7OtZGLMf2WIgU2IhCnPdrGpR947E423Wi2vRjxZrr3ByD8DThG6jdcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HI4SN+xL; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1708128187; c=relaxed/simple;
+	bh=TWz44F2ZNw+AgUXqzS6iNm/VAQClI4R2NMSsnPODE9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VtnLfVJYsZX0aRUu102ehq+Af4DsjaTFrho+QvrME3S20ECYrV1Sbd7XdN3YZtXDijdjSvPfdGSwc0Xn1WQVhxToqYdjd6h/Anpq9R38ppRcEexOx3r4BhKi2Pa6W43NvTMhS9VVTDQpDW3h2KlWv0mNfr6Oh4W3MuWenhUuf3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kqg1ceVA; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HI4SN+xL"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc647f65573so4338753276.2
-        for <llvm@lists.linux.dev>; Fri, 16 Feb 2024 15:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708127731; x=1708732531; darn=lists.linux.dev;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=46NbERsw+rX6VfHxglAqwzl8LfYw4J5J2BPeonbB4cQ=;
-        b=HI4SN+xLA6AfN7X3MjG219gywCzBMqo4yU/1TADKTYlFRIJJb6GoT8R7mh8IUiXGaD
-         pfZpC/t+qRKt2FWcUk95kWBLgtFtNfh/WEKXGFZyN9NWj4VJ1ZXNedQzStwLRv/N8cnk
-         rWvj4aAaqivSgPvnMn1RyQrtObkAplByx7Dj42Xi8Md0pppUDVS9wPZoOIt0YsFH7d0k
-         9iBptQqWel2e3sEilgO+fZezPbnusFwtd4looOWDA1hFdNST0hvnYzB8UlBFXqGuq2oh
-         9CZ4Uve3gUSQvXl3sGSF9kQEsn7HnAJ8DcONje/hQPLdp1cXc6gZtTkzVvACnEuqW3w3
-         UFsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708127731; x=1708732531;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=46NbERsw+rX6VfHxglAqwzl8LfYw4J5J2BPeonbB4cQ=;
-        b=UoVW5gx5c1Fp30hHQJ4NGYx+tja7dnrbubUFXFTxdfNoeKQ/J1fuUoOZNEAF+uG7Ce
-         vnQzHkrFk7Ob1HkHQq5RADh7p17UnCi6Dw4b9JGKaOnyPr3NsA6aF0PJDpY5XT2V0wYe
-         7bld0Ji3XjKXKzcnPZjp93Wrfp0ng3jBZSvc2IfKQh1KVYvbwuR3lo5kiS4F4aijn57g
-         D0byYLdMvGqluJQaSKCU8zBbAmfAtBHooB64w9d4X+u1zDZhRSCf/7lOrTuYRXB1kd9R
-         i/8RKevauNYy75OMaX87UNeG+ka9bI9EwclYkEDnhC/u++IrqNCJJ03xU09PlpkM9rIW
-         HL/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVTjNBhCJU02+SFJH4Wy1VcKp9ilkJPKH0537STF+8cnbTuSRXGHka9PQcSR8mw2tLu0RZzzrVFAwTBdYRl7b07udkV8g==
-X-Gm-Message-State: AOJu0YxuFx0g1lANf91Kb5JavW0O9GwJaOoh5kBQymX18YwR7sGq1R/6
-	1UjA0rdPK5FZ5n2KZjqvUET03PNujfQM9WAgQgYrMcmgFj2MKWM+Tk+YHIsHFvWTit5tD6n1VZP
-	nos+OBQ==
-X-Google-Smtp-Source: AGHT+IE4bQY/CB1B0/WXTdaQyv1n3CcOnSyLya3adYFdC1HymqVRSC47qHyQNvHyN98hRvzQahTLeIlhVmlk
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:4b5c:352:4272:e34e])
- (user=irogers job=sendgmr) by 2002:a25:a4c9:0:b0:dcd:25be:aefb with SMTP id
- g67-20020a25a4c9000000b00dcd25beaefbmr1583424ybi.13.1708127731233; Fri, 16
- Feb 2024 15:55:31 -0800 (PST)
-Date: Fri, 16 Feb 2024 15:52:02 -0800
-In-Reply-To: <20240216235203.229256-1-irogers@google.com>
-Message-Id: <20240216235203.229256-9-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kqg1ceVA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708128186; x=1739664186;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TWz44F2ZNw+AgUXqzS6iNm/VAQClI4R2NMSsnPODE9c=;
+  b=Kqg1ceVA/h1L8ydEDgQPBDm/xrp+DTGY7cozTurNqsRUCTNM4+cshY+d
+   g1DLW1wcXgqQFcQOjNDSKVYtVQJQ9wwkaXmS53HoItNJbE0hEOVurhC+i
+   e2Fn/IOv7iCmO5HgKmgV9qM03kmmeKIc2j7GBbt6FNWijicdt5vBywWWW
+   o+ZMgXZaRvLboG/xLF7TRQ2JrtHudLV8bsY7xC30/3diXLUjrMutOQUhB
+   6tauAdTwIQiJmuYNI9cDHwWGbO4bhvDD7VwslptZroljmrQBX5G761KXs
+   o200Bqp03rVtodZ7Ko6NxcQX1Wdm73PHdAb/vpr1w+PlRgpfZBx3Rlt2l
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10986"; a="19695172"
+X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
+   d="scan'208";a="19695172"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 16:02:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
+   d="scan'208";a="34764566"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 16 Feb 2024 16:02:50 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rb8AK-0001hM-1f;
+	Sat, 17 Feb 2024 00:02:48 +0000
+Date: Sat, 17 Feb 2024 08:02:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 3/4] drm/ttm: Consider hitch moves within bulk sublist
+ moves
+Message-ID: <202402170714.cflOUDkj-lkp@intel.com>
+References: <20240216131446.101961-4-thomas.hellstrom@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20240216235203.229256-1-irogers@google.com>
-X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Subject: [PATCH v5 8/8] perf tests: Add option to run tests in parallel
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, James Clark <james.clark@arm.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216131446.101961-4-thomas.hellstrom@linux.intel.com>
 
-By default tests are forked, add an option (-p or --parallel) so that
-the forked tests are all started in parallel and then their output
-gathered serially. This is opt-in as running in parallel can cause
-test flakes.
+Hi Thomas,
 
-Rather than fork within the code, the start_command/finish_command
-from libsubcmd are used. This changes how stderr and stdout are
-handled. The child stderr and stdout are always read to avoid the
-child blocking. If verbose is 1 (-v) then if the test fails the child
-stdout and stderr are displayed. If the verbose is >1 (e.g. -vv) then
-the stdout and stderr from the child are immediately displayed.
+kernel test robot noticed the following build warnings:
 
-An unscientific test on my laptop shows the wall clock time for perf
-test without parallel being 5 minutes 21 seconds and with parallel
-(-p) being 1 minute 50 seconds.
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm-tip/drm-tip next-20240216]
+[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes linus/master v6.8-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/builtin-test.c | 314 ++++++++++++++++++++++----------
- 1 file changed, 215 insertions(+), 99 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Hellstr-m/drm-ttm-Allow-TTM-LRU-list-nodes-of-different-types/20240216-211801
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240216131446.101961-4-thomas.hellstrom%40linux.intel.com
+patch subject: [PATCH 3/4] drm/ttm: Consider hitch moves within bulk sublist moves
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240217/202402170714.cflOUDkj-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240217/202402170714.cflOUDkj-lkp@intel.com/reproduce)
 
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index c42cb40fc242..d13ee7683d9d 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -6,6 +6,7 @@
-  */
- #include <fcntl.h>
- #include <errno.h>
-+#include <poll.h>
- #include <unistd.h>
- #include <string.h>
- #include <stdlib.h>
-@@ -21,9 +22,11 @@
- #include "debug.h"
- #include "color.h"
- #include <subcmd/parse-options.h>
-+#include <subcmd/run-command.h>
- #include "string2.h"
- #include "symbol.h"
- #include "util/rlimit.h"
-+#include "util/strbuf.h"
- #include <linux/kernel.h>
- #include <linux/string.h>
- #include <subcmd/exec-cmd.h>
-@@ -31,7 +34,13 @@
- 
- #include "tests-scripts.h"
- 
-+/*
-+ * Command line option to not fork the test running in the same process and
-+ * making them easier to debug.
-+ */
- static bool dont_fork;
-+/* Fork the tests in parallel and then wait for their completion. */
-+static bool parallel;
- const char *dso_to_test;
- const char *test_objdump_path = "objdump";
- 
-@@ -209,76 +218,36 @@ static bool perf_test__matches(const char *desc, int curr, int argc, const char
- 	return false;
- }
- 
--static int run_test(struct test_suite *test, int subtest)
--{
--	int status, err = -1, child = dont_fork ? 0 : fork();
--	char sbuf[STRERR_BUFSIZE];
--
--	if (child < 0) {
--		pr_err("failed to fork test: %s\n",
--			str_error_r(errno, sbuf, sizeof(sbuf)));
--		return -1;
--	}
--
--	if (!child) {
--		if (!dont_fork) {
--			pr_debug("test child forked, pid %d\n", getpid());
--
--			if (verbose <= 0) {
--				int nullfd = open("/dev/null", O_WRONLY);
--
--				if (nullfd >= 0) {
--					close(STDERR_FILENO);
--					close(STDOUT_FILENO);
--
--					dup2(nullfd, STDOUT_FILENO);
--					dup2(STDOUT_FILENO, STDERR_FILENO);
--					close(nullfd);
--				}
--			} else {
--				signal(SIGSEGV, sighandler_dump_stack);
--				signal(SIGFPE, sighandler_dump_stack);
--			}
--		}
--
--		err = test_function(test, subtest)(test, subtest);
--		if (!dont_fork)
--			exit(err);
--	}
--
--	if (!dont_fork) {
--		wait(&status);
-+struct child_test {
-+	struct child_process process;
-+	struct test_suite *test;
-+	int test_num;
-+	int subtest;
-+};
- 
--		if (WIFEXITED(status)) {
--			err = (signed char)WEXITSTATUS(status);
--			pr_debug("test child finished with %d\n", err);
--		} else if (WIFSIGNALED(status)) {
--			err = -1;
--			pr_debug("test child interrupted\n");
--		}
--	}
-+static int run_test_child(struct child_process *process)
-+{
-+	struct child_test *child = container_of(process, struct child_test, process);
-+	int err;
- 
--	return err;
-+	pr_debug("--- start ---\n");
-+	pr_debug("test child forked, pid %d\n", getpid());
-+	err = test_function(child->test, child->subtest)(child->test, child->subtest);
-+	pr_debug("---- end(%d) ----\n", err);
-+	fflush(NULL);
-+	return -err;
- }
- 
--#define for_each_test(j, k, t)			\
--	for (j = 0, k = 0; j < ARRAY_SIZE(tests); j++, k = 0)	\
--		while ((t = tests[j][k++]) != NULL)
--
--static int test_and_print(struct test_suite *t, int subtest)
-+static int print_test_result(struct test_suite *t, int i, int subtest, int result, int width)
- {
--	int err;
-+	if (has_subtests(t)) {
-+		int subw = width > 2 ? width - 2 : width;
- 
--	pr_debug("\n--- start ---\n");
--	err = run_test(t, subtest);
--	pr_debug("---- end ----\n");
-+		pr_info("%3d.%1d: %-*s:", i + 1, subtest + 1, subw, test_description(t, subtest));
-+	} else
-+		pr_info("%3d: %-*s:", i + 1, width, test_description(t, subtest));
- 
--	if (!has_subtests(t))
--		pr_debug("%s:", t->desc);
--	else
--		pr_debug("%s subtest %d:", t->desc, subtest + 1);
--
--	switch (err) {
-+	switch (result) {
- 	case TEST_OK:
- 		pr_info(" Ok\n");
- 		break;
-@@ -297,34 +266,186 @@ static int test_and_print(struct test_suite *t, int subtest)
- 		break;
- 	}
- 
--	return err;
-+	return 0;
-+}
-+
-+static int finish_test(struct child_test *child_test, int width)
-+{
-+	struct test_suite *t = child_test->test;
-+	int i = child_test->test_num;
-+	int subi = child_test->subtest;
-+	int out = child_test->process.out;
-+	int err = child_test->process.err;
-+	bool out_done = out <= 0;
-+	bool err_done = err <= 0;
-+	struct strbuf out_output = STRBUF_INIT;
-+	struct strbuf err_output = STRBUF_INIT;
-+	int ret;
-+
-+	/*
-+	 * For test suites with subtests, display the suite name ahead of the
-+	 * sub test names.
-+	 */
-+	if (has_subtests(t) && subi == 0)
-+		pr_info("%3d: %-*s:\n", i + 1, width, test_description(t, -1));
-+
-+	/*
-+	 * Busy loop reading from the child's stdout and stderr that are set to
-+	 * be non-blocking until EOF.
-+	 */
-+	if (!out_done)
-+		fcntl(out, F_SETFL, O_NONBLOCK);
-+	if (!err_done)
-+		fcntl(err, F_SETFL, O_NONBLOCK);
-+	if (verbose > 1) {
-+		if (has_subtests(t))
-+			pr_info("%3d.%1d: %s:\n", i + 1, subi + 1, test_description(t, subi));
-+		else
-+			pr_info("%3d: %s:\n", i + 1, test_description(t, -1));
-+	}
-+	while (!out_done || !err_done) {
-+		struct pollfd pfds[2] = {
-+			{ .fd = out,
-+			  .events = POLLIN | POLLERR | POLLHUP | POLLNVAL,
-+			},
-+			{ .fd = err,
-+			  .events = POLLIN | POLLERR | POLLHUP | POLLNVAL,
-+			},
-+		};
-+		char buf[512];
-+		ssize_t len;
-+
-+		/* Poll to avoid excessive spinning, timeout set for 1000ms. */
-+		poll(pfds, ARRAY_SIZE(pfds), /*timeout=*/1000);
-+		if (!out_done && pfds[0].revents) {
-+			errno = 0;
-+			len = read(out, buf, sizeof(buf) - 1);
-+
-+			if (len <= 0) {
-+				out_done = errno != EAGAIN;
-+			} else {
-+				buf[len] = '\0';
-+				if (verbose > 1)
-+					fprintf(stdout, "%s", buf);
-+				else
-+					strbuf_addstr(&out_output, buf);
-+			}
-+		}
-+		if (!err_done && pfds[1].revents) {
-+			errno = 0;
-+			len = read(err, buf, sizeof(buf) - 1);
-+
-+			if (len <= 0) {
-+				err_done = errno != EAGAIN;
-+			} else {
-+				buf[len] = '\0';
-+				if (verbose > 1)
-+					fprintf(stdout, "%s", buf);
-+				else
-+					strbuf_addstr(&err_output, buf);
-+			}
-+		}
-+	}
-+	/* Clean up child process. */
-+	ret = finish_command(&child_test->process);
-+	if (verbose == 1 && ret == TEST_FAIL) {
-+		/* Add header for test that was skipped above. */
-+		if (has_subtests(t))
-+			pr_info("%3d.%1d: %s:\n", i + 1, subi + 1, test_description(t, subi));
-+		else
-+			pr_info("%3d: %s:\n", i + 1, test_description(t, -1));
-+		fprintf(stdout, "%s", out_output.buf);
-+		fprintf(stderr, "%s", err_output.buf);
-+	}
-+	strbuf_release(&out_output);
-+	strbuf_release(&err_output);
-+	print_test_result(t, i, subi, ret, width);
-+	if (out > 0)
-+		close(out);
-+	if (err > 0)
-+		close(err);
-+	return 0;
-+}
-+
-+static int start_test(struct test_suite *test, int i, int subi, struct child_test **child,
-+		      int width)
-+{
-+	int err;
-+
-+	*child = NULL;
-+	if (dont_fork) {
-+		pr_debug("--- start ---\n");
-+		err = test_function(test, subi)(test, subi);
-+		pr_debug("---- end ----\n");
-+		print_test_result(test, i, subi, err, width);
-+		return 0;
-+	}
-+
-+	*child = zalloc(sizeof(**child));
-+	if (!*child)
-+		return -ENOMEM;
-+
-+	(*child)->test = test;
-+	(*child)->test_num = i;
-+	(*child)->subtest = subi;
-+	(*child)->process.pid = -1;
-+	(*child)->process.no_stdin = 1;
-+	if (verbose <= 0) {
-+		(*child)->process.no_stdout = 1;
-+		(*child)->process.no_stderr = 1;
-+	} else {
-+		(*child)->process.out = -1;
-+		(*child)->process.err = -1;
-+	}
-+	(*child)->process.no_exec_cmd = run_test_child;
-+	err = start_command(&(*child)->process);
-+	if (err || parallel)
-+		return  err;
-+	return finish_test(*child, width);
- }
- 
-+#define for_each_test(j, k, t)					\
-+	for (j = 0, k = 0; j < ARRAY_SIZE(tests); j++, k = 0)	\
-+		while ((t = tests[j][k++]) != NULL)
-+
- static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
- {
- 	struct test_suite *t;
- 	unsigned int j, k;
- 	int i = 0;
- 	int width = 0;
-+	size_t num_tests = 0;
-+	struct child_test **child_tests;
-+	int child_test_num = 0;
- 
- 	for_each_test(j, k, t) {
- 		int len = strlen(test_description(t, -1));
- 
- 		if (width < len)
- 			width = len;
-+
-+		if (has_subtests(t)) {
-+			for (int subi = 0, subn = num_subtests(t); subi < subn; subi++) {
-+				len = strlen(test_description(t, subi));
-+				if (width < len)
-+					width = len;
-+				num_tests++;
-+			}
-+		} else {
-+			num_tests++;
-+		}
- 	}
-+	child_tests = calloc(num_tests, sizeof(*child_tests));
-+	if (!child_tests)
-+		return -ENOMEM;
- 
- 	for_each_test(j, k, t) {
- 		int curr = i++;
--		int subi;
- 
- 		if (!perf_test__matches(test_description(t, -1), curr, argc, argv)) {
- 			bool skip = true;
--			int subn;
--
--			subn = num_subtests(t);
- 
--			for (subi = 0; subi < subn; subi++) {
-+			for (int subi = 0, subn = num_subtests(t); subi < subn; subi++) {
- 				if (perf_test__matches(test_description(t, subi),
- 							curr, argc, argv))
- 					skip = false;
-@@ -334,52 +455,45 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
- 				continue;
- 		}
- 
--		pr_info("%3d: %-*s:", i, width, test_description(t, -1));
--
- 		if (intlist__find(skiplist, i)) {
-+			pr_info("%3d: %-*s:", curr + 1, width, test_description(t, -1));
- 			color_fprintf(stderr, PERF_COLOR_YELLOW, " Skip (user override)\n");
- 			continue;
- 		}
- 
- 		if (!has_subtests(t)) {
--			test_and_print(t, -1);
--		} else {
--			int subn = num_subtests(t);
--			/*
--			 * minus 2 to align with normal testcases.
--			 * For subtest we print additional '.x' in number.
--			 * for example:
--			 *
--			 * 35: Test LLVM searching and compiling                        :
--			 * 35.1: Basic BPF llvm compiling test                          : Ok
--			 */
--			int subw = width > 2 ? width - 2 : width;
--
--			if (subn <= 0) {
--				color_fprintf(stderr, PERF_COLOR_YELLOW,
--					      " Skip (not compiled in)\n");
--				continue;
--			}
--			pr_info("\n");
-+			int err = start_test(t, curr, -1, &child_tests[child_test_num++], width);
- 
--			for (subi = 0; subi < subn; subi++) {
--				int len = strlen(test_description(t, subi));
--
--				if (subw < len)
--					subw = len;
-+			if (err) {
-+				/* TODO: if parallel waitpid the already forked children. */
-+				free(child_tests);
-+				return err;
- 			}
-+		} else {
-+			for (int subi = 0, subn = num_subtests(t); subi < subn; subi++) {
-+				int err;
- 
--			for (subi = 0; subi < subn; subi++) {
- 				if (!perf_test__matches(test_description(t, subi),
- 							curr, argc, argv))
- 					continue;
- 
--				pr_info("%3d.%1d: %-*s:", i, subi + 1, subw,
--					test_description(t, subi));
--				test_and_print(t, subi);
-+				err = start_test(t, curr, subi, &child_tests[child_test_num++],
-+						 width);
-+				if (err)
-+					return err;
- 			}
- 		}
- 	}
-+	for (i = 0; i < child_test_num; i++) {
-+		if (parallel) {
-+			int ret  = finish_test(child_tests[i], width);
-+
-+			if (ret)
-+				return ret;
-+		}
-+		free(child_tests[i]);
-+	}
-+	free(child_tests);
- 	return 0;
- }
- 
-@@ -447,6 +561,8 @@ int cmd_test(int argc, const char **argv)
- 		    "be more verbose (show symbol address, etc)"),
- 	OPT_BOOLEAN('F', "dont-fork", &dont_fork,
- 		    "Do not fork for testcase"),
-+	OPT_BOOLEAN('p', "parallel", &parallel,
-+		    "Run the tests altogether in parallel"),
- 	OPT_STRING('w', "workload", &workload, "work", "workload to run for testing"),
- 	OPT_STRING(0, "dso", &dso_to_test, "dso", "dso to test"),
- 	OPT_STRING(0, "objdump", &test_objdump_path, "path",
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402170714.cflOUDkj-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/ttm/ttm_resource.c:545:20: warning: incompatible pointer to integer conversion assigning to 'u64' (aka 'unsigned long long') from 'u64 *' (aka 'unsigned long long *'); remove & [-Wint-conversion]
+                   cursor->bulk_age = &bulk->age;
+                                    ^ ~~~~~~~~~~
+>> drivers/gpu/drm/ttm/ttm_resource.c:551:23: warning: comparison between pointer and integer ('u64' (aka 'unsigned long long') and 'u64 *' (aka 'unsigned long long *')) [-Wpointer-integer-compare]
+           if (cursor->bulk_age == &bulk->age)
+               ~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +545 drivers/gpu/drm/ttm/ttm_resource.c
+
+   517	
+   518	/* Adjust to a bulk sublist being bumped while traversing it.*/
+   519	static bool
+   520	ttm_resource_cursor_check_bulk(struct ttm_resource_cursor *cursor,
+   521				       struct ttm_lru_item *next_lru)
+   522	{
+   523		struct ttm_resource *next = ttm_lru_item_to_res(next_lru);
+   524		struct ttm_lru_bulk_move *bulk = NULL;
+   525		struct ttm_buffer_object *bo = next->bo;
+   526	
+   527		lockdep_assert_held(&cursor->man->bdev->lru_lock);
+   528		if (bo && bo->resource == next)
+   529			bulk = bo->bulk_move;
+   530	
+   531		if (!bulk) {
+   532			ttm_resource_cursor_clear_bulk(cursor);
+   533			return false;
+   534		}
+   535	
+   536		/*
+   537		 * We encountered a bulk sublist. Record its age and
+   538		 * set a hitch after the sublist.
+   539		 */
+   540		if (cursor->bulk != bulk) {
+   541			struct ttm_lru_bulk_move_pos *pos =
+   542				ttm_lru_bulk_move_pos(bulk, next);
+   543	
+   544			cursor->bulk = bulk;
+ > 545			cursor->bulk_age = &bulk->age;
+   546			list_move(&cursor->bulk_hitch.link, &pos->last->lru.link);
+   547			return false;
+   548		}
+   549	
+   550		/* Continue iterating down the bulk sublist */
+ > 551		if (cursor->bulk_age == &bulk->age)
+   552			return false;
+   553	
+   554		/*
+   555		 * The bulk sublist in which we had a hitch has moved and the
+   556		 * hitch moved with it. Restart iteration from a previously
+   557		 * set hitch after the bulk_move, and remove that backup
+   558		 * hitch.
+   559		 */
+   560		list_move(&cursor->hitch.link, &cursor->bulk_hitch.link);
+   561		ttm_resource_cursor_clear_bulk(cursor);
+   562	
+   563		return true;
+   564	}
+   565	
+
 -- 
-2.44.0.rc0.258.g7320e95886-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
