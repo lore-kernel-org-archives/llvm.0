@@ -1,41 +1,41 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01974A28
-	for <llvm@lists.linux.dev>; Sun, 18 Feb 2024 01:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4153EA4
+	for <llvm@lists.linux.dev>; Sun, 18 Feb 2024 01:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708219562; cv=none; b=O3h2LPtimHbXEYHYIhT66QJRN3xgEOR25jY6CLZxjMVeCR6a3wv1qAujDefdIUJB2BR5t1moSDKEija500YnB52KrMau8U40AzF0IxoXC6LQt4aXQlv/0PyHWWB11r1fmmEadK2LUU+9MP7cQuTv/P9xcMTlvlXPeCirpflUXAc=
+	t=1708220416; cv=none; b=srQOJ5T2ImuZQUOyIz721RlsSlV1e2zRMkvf92bCbSH1Z1k1ZR+N5XNKw5mkWzcjrwu697mNMEGr7U/nv+ijcXd819EhdrkLTZoMkWYSpUDw2QpjiicypttYTgcwmaFuv1FB+KDpYcAMhfOPzdTsf6emWjkiVUeQuhSzWQ/Z0tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708219562; c=relaxed/simple;
-	bh=TZjic76A8kuTdFOi//kqSuC2cW56oelgKFo7TvSy1y4=;
+	s=arc-20240116; t=1708220416; c=relaxed/simple;
+	bh=WNQbxKVFpHm9Lmd2Xka8K18EGXlXYe/WvQMzH4jHjUM=;
 	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=mJxaQ13lT/IN+n4TVmxU1YuGYHlLNZe0MOEkjquLs1hBGpB9tbe4uLNMzb4mQNev27a+NuPsTbmDK+Tst2AX7ENyvaFJykAvTx4cL+mPU1Wwg67aMeYkxmo55myqdmBtLKNb3IVBOMr6ZJBXR68sISTCTvO2Lj4QVyQSnYe/7Xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+	 In-Reply-To:Content-Type; b=S06YvWYGjdTbj5xds5iZxMg7882ezbPcjDAKByczUp27TsHzw8SXMUiJW/1opDRr5PzyVTgIJ3+XRopurkEvIFTQQ7aTA/gC3WMsQo9FMVJRo1b3ivlvvI9eYna3AMZTG7ZJTAN+LE5C7YzIQzYd6/+VSWNmP5EaqO4Nfvhntt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TcnyY2Fwxz1xnZm;
-	Sun, 18 Feb 2024 09:24:37 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4TcpG41X3cz1gydy;
+	Sun, 18 Feb 2024 09:38:04 +0800 (CST)
 Received: from kwepemm600013.china.huawei.com (unknown [7.193.23.68])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4193D140157;
-	Sun, 18 Feb 2024 09:25:56 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id DBFE11400CC;
+	Sun, 18 Feb 2024 09:40:09 +0800 (CST)
 Received: from [10.174.178.46] (10.174.178.46) by
  kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 18 Feb 2024 09:25:55 +0800
-Subject: Re: [PATCH 1/2] ubifs: fix sort function prototype
+ 15.1.2507.35; Sun, 18 Feb 2024 09:40:08 +0800
+Subject: Re: [PATCH 2/2] ubifs: fix function pointer cast warnings
 To: Arnd Bergmann <arnd@kernel.org>, Richard Weinberger <richard@nod.at>,
-	Nathan Chancellor <nathan@kernel.org>, Adrian Hunter
-	<ext-adrian.hunter@nokia.com>, Artem Bityutskiy <Artem.Bityutskiy@nokia.com>
+	Nathan Chancellor <nathan@kernel.org>
 CC: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
 	<linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
 	<llvm@lists.linux.dev>
 References: <20240213095412.453787-1-arnd@kernel.org>
+ <20240213095412.453787-2-arnd@kernel.org>
 From: Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <e9687d56-1ee4-37ee-4a0e-d0b7933f3353@huawei.com>
-Date: Sun, 18 Feb 2024 09:25:43 +0800
+Message-ID: <0921a996-c579-5760-a6ff-dbd9b9eca057@huawei.com>
+Date: Sun, 18 Feb 2024 09:40:07 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 Precedence: bulk
@@ -44,61 +44,150 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20240213095412.453787-1-arnd@kernel.org>
+In-Reply-To: <20240213095412.453787-2-arnd@kernel.org>
 Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  kwepemm600013.china.huawei.com (7.193.23.68)
 
 ÔÚ 2024/2/13 17:54, Arnd Bergmann Ð´µÀ:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The global sort() function expects a callback pointer to a function with two
-> void* arguments, but ubifs has a function with specific object types, which
-> causes a warning in clang-16 and higher:
+> ubifs has a number of callback functions for ubifs_lpt_scan_nolock() using
+> two different prototypes, either passing a struct scan_data or
+> a struct ubifs_lp_stats, but the caller expects a void pointer instead.
 > 
-> fs/ubifs/lprops.c:1272:9: error: cast from 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, struct ubifs_lp_stats *)' to 'ubifs_lpt_scan_callback' (aka 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->   1272 |                                     (ubifs_lpt_scan_callback)scan_check_cb,
->        |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> clang-16 now warns about this:
 > 
-> Change the prototype to the regular one and cast the object pointers
-> locally instead.
+> fs/ubifs/find.c:170:9: error: cast from 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, struct scan_data *)' to 'ubifs_lpt_scan_callback' (aka 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>    170 |                                     (ubifs_lpt_scan_callback)scan_for_dirty_cb,
+>        |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> fs/ubifs/find.c:449:9: error: cast from 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, struct scan_data *)' to 'ubifs_lpt_scan_callback' (aka 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>    449 |                                     (ubifs_lpt_scan_callback)scan_for_free_cb,
+>        |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Fixes: 1e51764a3c2a ("UBIFS: add new flash file system")
+> Change all of these callback functions to actually take the void * argument
+> that is passed by their caller.
+> 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   fs/ubifs/find.c | 9 ++++-----
->   1 file changed, 4 insertions(+), 5 deletions(-)
+>   fs/ubifs/find.c   | 23 ++++++++++++-----------
+>   fs/ubifs/lprops.c |  6 +++---
+>   2 files changed, 15 insertions(+), 14 deletions(-)
+> 
 
 Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> 
 > diff --git a/fs/ubifs/find.c b/fs/ubifs/find.c
-> index 873e6e1c92b5..1cb79b167a4f 100644
+> index 1cb79b167a4f..6ebf3c04ac5f 100644
 > --- a/fs/ubifs/find.c
 > +++ b/fs/ubifs/find.c
-> @@ -726,11 +726,10 @@ int ubifs_find_free_leb_for_idx(struct ubifs_info *c)
->   	return err;
->   }
->   
-> -static int cmp_dirty_idx(const struct ubifs_lprops **a,
-> -			 const struct ubifs_lprops **b)
-> +static int cmp_dirty_idx(const void *a, const void *b)
+> @@ -82,8 +82,9 @@ static int valuable(struct ubifs_info *c, const struct ubifs_lprops *lprops)
+>    */
+>   static int scan_for_dirty_cb(struct ubifs_info *c,
+>   			     const struct ubifs_lprops *lprops, int in_tree,
+> -			     struct scan_data *data)
+> +			     void *arg)
 >   {
-> -	const struct ubifs_lprops *lpa = *a;
-> -	const struct ubifs_lprops *lpb = *b;
-> +	const struct ubifs_lprops *lpa = *(const struct ubifs_lprops **)a;
-> +	const struct ubifs_lprops *lpb = *(const struct ubifs_lprops **)b;
+> +	struct scan_data *data = arg;
+>   	int ret = LPT_SCAN_CONTINUE;
 >   
->   	return lpa->dirty + lpa->free - lpb->dirty - lpb->free;
->   }
-> @@ -754,7 +753,7 @@ int ubifs_save_dirty_idx_lnums(struct ubifs_info *c)
->   	       sizeof(void *) * c->dirty_idx.cnt);
->   	/* Sort it so that the dirtiest is now at the end */
->   	sort(c->dirty_idx.arr, c->dirty_idx.cnt, sizeof(void *),
-> -	     (int (*)(const void *, const void *))cmp_dirty_idx, NULL);
-> +	     cmp_dirty_idx, NULL);
->   	dbg_find("found %d dirty index LEBs", c->dirty_idx.cnt);
->   	if (c->dirty_idx.cnt)
->   		dbg_find("dirtiest index LEB is %d with dirty %d and free %d",
+>   	/* Exclude LEBs that are currently in use */
+> @@ -166,8 +167,7 @@ static const struct ubifs_lprops *scan_for_dirty(struct ubifs_info *c,
+>   	data.pick_free = pick_free;
+>   	data.lnum = -1;
+>   	data.exclude_index = exclude_index;
+> -	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
+> -				    (ubifs_lpt_scan_callback)scan_for_dirty_cb,
+> +	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum, scan_for_dirty_cb,
+>   				    &data);
+>   	if (err)
+>   		return ERR_PTR(err);
+> @@ -349,8 +349,9 @@ int ubifs_find_dirty_leb(struct ubifs_info *c, struct ubifs_lprops *ret_lp,
+>    */
+>   static int scan_for_free_cb(struct ubifs_info *c,
+>   			    const struct ubifs_lprops *lprops, int in_tree,
+> -			    struct scan_data *data)
+> +			    void *arg)
+>   {
+> +	struct scan_data *data = arg;
+>   	int ret = LPT_SCAN_CONTINUE;
+>   
+>   	/* Exclude LEBs that are currently in use */
+> @@ -446,7 +447,7 @@ const struct ubifs_lprops *do_find_free_space(struct ubifs_info *c,
+>   	data.pick_free = pick_free;
+>   	data.lnum = -1;
+>   	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
+> -				    (ubifs_lpt_scan_callback)scan_for_free_cb,
+> +				    scan_for_free_cb,
+>   				    &data);
+>   	if (err)
+>   		return ERR_PTR(err);
+> @@ -589,8 +590,9 @@ int ubifs_find_free_space(struct ubifs_info *c, int min_space, int *offs,
+>    */
+>   static int scan_for_idx_cb(struct ubifs_info *c,
+>   			   const struct ubifs_lprops *lprops, int in_tree,
+> -			   struct scan_data *data)
+> +			   void *arg)
+>   {
+> +	struct scan_data *data = arg;
+>   	int ret = LPT_SCAN_CONTINUE;
+>   
+>   	/* Exclude LEBs that are currently in use */
+> @@ -625,8 +627,7 @@ static const struct ubifs_lprops *scan_for_leb_for_idx(struct ubifs_info *c)
+>   	int err;
+>   
+>   	data.lnum = -1;
+> -	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
+> -				    (ubifs_lpt_scan_callback)scan_for_idx_cb,
+> +	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum, scan_for_idx_cb,
+>   				    &data);
+>   	if (err)
+>   		return ERR_PTR(err);
+> @@ -781,8 +782,9 @@ int ubifs_save_dirty_idx_lnums(struct ubifs_info *c)
+>    */
+>   static int scan_dirty_idx_cb(struct ubifs_info *c,
+>   			   const struct ubifs_lprops *lprops, int in_tree,
+> -			   struct scan_data *data)
+> +			   void *arg)
+>   {
+> +	struct scan_data *data = arg;
+>   	int ret = LPT_SCAN_CONTINUE;
+>   
+>   	/* Exclude LEBs that are currently in use */
+> @@ -841,8 +843,7 @@ static int find_dirty_idx_leb(struct ubifs_info *c)
+>   	if (c->pnodes_have >= c->pnode_cnt)
+>   		/* All pnodes are in memory, so skip scan */
+>   		return -ENOSPC;
+> -	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
+> -				    (ubifs_lpt_scan_callback)scan_dirty_idx_cb,
+> +	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum, scan_dirty_idx_cb,
+>   				    &data);
+>   	if (err)
+>   		return err;
+> diff --git a/fs/ubifs/lprops.c b/fs/ubifs/lprops.c
+> index 6d6cd85c2b4c..a11c3dab7e16 100644
+> --- a/fs/ubifs/lprops.c
+> +++ b/fs/ubifs/lprops.c
+> @@ -1014,8 +1014,9 @@ void dbg_check_heap(struct ubifs_info *c, struct ubifs_lpt_heap *heap, int cat,
+>    */
+>   static int scan_check_cb(struct ubifs_info *c,
+>   			 const struct ubifs_lprops *lp, int in_tree,
+> -			 struct ubifs_lp_stats *lst)
+> +			 void *arg)
+>   {
+> +	struct ubifs_lp_stats *lst = arg;
+>   	struct ubifs_scan_leb *sleb;
+>   	struct ubifs_scan_node *snod;
+>   	int cat, lnum = lp->lnum, is_idx = 0, used = 0, free, dirty, ret;
+> @@ -1269,8 +1270,7 @@ int dbg_check_lprops(struct ubifs_info *c)
+>   
+>   	memset(&lst, 0, sizeof(struct ubifs_lp_stats));
+>   	err = ubifs_lpt_scan_nolock(c, c->main_first, c->leb_cnt - 1,
+> -				    (ubifs_lpt_scan_callback)scan_check_cb,
+> -				    &lst);
+> +				    scan_check_cb, &lst);
+>   	if (err && err != -ENOSPC)
+>   		goto out;
+>   
 > 
 
