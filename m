@@ -1,79 +1,208 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E743A42052
-	for <llvm@lists.linux.dev>; Sun, 18 Feb 2024 11:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4126342047;
+	Sun, 18 Feb 2024 13:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708257185; cv=none; b=pztpBRspdqTVeGqUsLVR9oXKjlHTGIYw3SdrGcJjxsF0kb0ZGVdzEmDxyqo/NSNZy5o4HpAgjEOfXIUtJkNq8nMtO+CyZYU6SSSkHryT7KJQIvMy9xjGhBAvXPGnTX6ngHjvmzR/2AIYbKa6TaxIwlVUaLglJ4Cu1cv4rkn86co=
+	t=1708261345; cv=none; b=WB3MBJQ3pPZM/69LUOTEaWosamQSCwIZoXJkz+osdxodlZBWn/V86rynSVso5i+h7lkfbFILTqquRbs3M1bsGA/xq/e0shOnfYC/SPR1apHkxdyfXdAyec+iud2cg9JjSttAabdJlrBh/7ahi2xuvhFARKqiCQ7OfjNOhlXI3uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708257185; c=relaxed/simple;
-	bh=6+hmd+W4BV+dvIrq+c8lyx1zUvi2WhOlm4Y9/3qs7UE=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=sSSUlIfVDZx5CAtsQJdx2+dxGvqDw2df/g3PWutxv4Wq9zjaADEOFmBWS29QkaESfpv5IJ/vIzZpzCQ88FVz4J31BeHxSYz0uM+g0Q/8/mLwzRZZ+/6qPaXSyZPQMmYDCxgtOpdq/DMvOyBACGM1SZJ3SyUGlNL2nT8rlVC1We4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7c72d53aa6cso56856539f.1
-        for <llvm@lists.linux.dev>; Sun, 18 Feb 2024 03:53:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708257183; x=1708861983;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BWsbO4aSSs4DO+xVFIe6sZD6wCzyO5IWX6HRTcWueSM=;
-        b=Q5kPkU1Hm3AzYJd5N+fFRYMfi41MfZHRXnJ6NQtgQBk6XnrodcPmtMT4yvFX0geLlN
-         c2Gao9lEcxWyuwFjks97IniFjKqYwpo/J6Cwd5YhH2rAUhryxwdhbR4t2KM73PrnHEfI
-         aV4N40WfCwXRlSJVV5yOGhJrPJdN2gxAsUbHcjcWXlHMlx5Q+lFleBnTjqZTvUDa9Xoc
-         juGbrhhxrC427tLq75ORJTMi0N+r2VX7YWh+rv0zoHp19Qk8mUrioirZSfvrK0Qrz6BZ
-         18SjJHv5SXX6Ly5CmQpxJE2kfrenUA2+BaMik75OLhT38gM83h9yVpSAcgaR6MFBIjcp
-         kbTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCNQKb2GHOZnqz7ZBFw1YqxBJJ0owS2NRJDftuCsp5QCps9q+To2aOpxFuqAJhvT3byHmnN/2DCDEryr/WpOnHRL2IlQ==
-X-Gm-Message-State: AOJu0YxGwO0a9Qplme2NLE0GJ6hJQa3Y0F3TuRHNFC5q/boSSr/SADfK
-	6GFkJQZ+OKfZI3Vi9hn1uIkESTJt5nYRSJ+GwVtoaE2dkY1elnlAwTg2Xt78qhVqStuWYmetJfP
-	Nnph4xaO1kyZsnEWxpIIEYJ2CPoLHp5nFo2mVwrp06zyyw4Cl9qW6qLU=
-X-Google-Smtp-Source: AGHT+IFIXT3OhUsCbMVjYYsUWl3l9wpox5NiVMHC1HP2UXvlCL7fbuxvKuCnoQpKXDGz68p2pMLDaqBASQ70HUFhk4Qbd0wtQ812
+	s=arc-20240116; t=1708261345; c=relaxed/simple;
+	bh=dVY8BMPtchDOweysfrajkGdjXqnmHGF53GbnihHyl/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A/8PLPdIgs+kgqgotVNbhxXsgVepbGCtqxMQBiihs9hMT1k+0iwUcusFruhvEgb+8kC160J6ZMLRMfFyBUjZP7m5Gi2OCz4KELetoAOPTzX2ikenWBVVPuOhkoOrhiIH1jnOMDRJwCa46s3pMCLCLRDxpW2zztMDOkcvbb+wwuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZNs1Dh4A; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZNs1Dh4A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708261343; x=1739797343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dVY8BMPtchDOweysfrajkGdjXqnmHGF53GbnihHyl/8=;
+  b=ZNs1Dh4AugRT7qpSPRFVWo8Ui0tYrXEoE+GqKufJAqnCVQrjgn4KbeCC
+   NvTy18+zQbt1LmOFyjBl6y4SaBU5l5LEJN0yGZ7hfZli0mjYXLq4414Wf
+   kAotmcCheCUhiB0ABd0WdCSqGPVZ8TVhfe4wd3Wmo7wbXHwFjqLO7UsJ+
+   AObQkjp1XPzi0E3kyDJ3bLx8qhyjwgbQqhgCdfdqnnId8JCe/n37/lC/m
+   c2QoXQgtmaaI3S2xC9wp6TDmT5NnVYFYTNMfYwtgDnlQlwyQs23IlRIQq
+   3MmCGbstzcdeZHnhKoJlvX6R0tJ+gyBEW6nImC+MR4CfdIuIruRCKeGlb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2207208"
+X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
+   d="scan'208";a="2207208"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 05:02:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
+   d="scan'208";a="8850629"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 18 Feb 2024 05:02:18 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rbgnS-00031w-2W;
+	Sun, 18 Feb 2024 13:01:49 +0000
+Date: Sun, 18 Feb 2024 20:58:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Robert Richter <rrichter@amd.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Len Brown <lenb@kernel.org>, Robert Richter <rrichter@amd.com>,
+	linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] lib/firmware_table: Provide buffer length
+ argument to cdat_table_parse()
+Message-ID: <202402182055.zfTIyfls-lkp@intel.com>
+References: <20240216155844.406996-4-rrichter@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c568:0:b0:363:8b04:6df7 with SMTP id
- b8-20020a92c568000000b003638b046df7mr783797ilj.0.1708257183250; Sun, 18 Feb
- 2024 03:53:03 -0800 (PST)
-Date: Sun, 18 Feb 2024 03:53:03 -0800
-In-Reply-To: <0000000000004b7b3a05f0bc25f8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000097c4480611a69ec8@google.com>
-Subject: Re: [syzbot] [ntfs3?] kernel panic: stack is corrupted in
- __lock_acquire (5)
-From: syzbot <syzbot+0bc4c0668351ce1cab8f@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, axboe@kernel.dk, 
-	brauner@kernel.org, hdanton@sina.com, jack@suse.cz, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216155844.406996-4-rrichter@amd.com>
 
-syzbot suspects this issue was fixed by commit:
+Hi Robert,
 
-commit 6f861765464f43a71462d52026fbddfc858239a5
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Nov 1 17:43:10 2023 +0000
+kernel test robot noticed the following build warnings:
 
-    fs: Block writes to mounted block devices
+[auto build test WARNING on 6be99530c92c6b8ff7a01903edc42393575ad63b]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1301e1d0180000
-start commit:   ce9ecca0238b Linux 6.6-rc2
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e4ca82a1bedd37e4
-dashboard link: https://syzkaller.appspot.com/bug?extid=0bc4c0668351ce1cab8f
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11814954680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103bc138680000
+url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Richter/cxl-pci-Rename-DOE-mailbox-handle-to-doe_mb/20240217-000206
+base:   6be99530c92c6b8ff7a01903edc42393575ad63b
+patch link:    https://lore.kernel.org/r/20240216155844.406996-4-rrichter%40amd.com
+patch subject: [PATCH v4 3/3] lib/firmware_table: Provide buffer length argument to cdat_table_parse()
+config: i386-randconfig-006-20240217 (https://download.01.org/0day-ci/archive/20240218/202402182055.zfTIyfls-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402182055.zfTIyfls-lkp@intel.com/reproduce)
 
-If the result looks correct, please mark the issue as fixed by replying with:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402182055.zfTIyfls-lkp@intel.com/
 
-#syz fix: fs: Block writes to mounted block devices
+All warnings (new ones prefixed by >>):
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>> drivers/cxl/core/pci.c:673:4: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     672 |                 dev_warn(dev, "Malformed CDAT table length (%lu:%lu), discarding trailing data\n",
+         |                                                             ~~~
+         |                                                             %zu
+     673 |                         table_length, length);
+         |                         ^~~~~~~~~~~~
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                     ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/cxl/core/pci.c:673:18: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     672 |                 dev_warn(dev, "Malformed CDAT table length (%lu:%lu), discarding trailing data\n",
+         |                                                                 ~~~
+         |                                                                 %zu
+     673 |                         table_length, length);
+         |                                       ^~~~~~
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                     ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +673 drivers/cxl/core/pci.c
+
+   611	
+   612	/**
+   613	 * read_cdat_data - Read the CDAT data on this port
+   614	 * @port: Port to read data from
+   615	 *
+   616	 * This call will sleep waiting for responses from the DOE mailbox.
+   617	 */
+   618	void read_cdat_data(struct cxl_port *port)
+   619	{
+   620		struct device *uport = port->uport_dev;
+   621		struct device *dev = &port->dev;
+   622		struct pci_doe_mb *doe_mb;
+   623		struct pci_dev *pdev = NULL;
+   624		struct cxl_memdev *cxlmd;
+   625		struct cdat_doe_rsp *buf;
+   626		size_t table_length, length;
+   627		int rc;
+   628	
+   629		if (is_cxl_memdev(uport)) {
+   630			struct device *host;
+   631	
+   632			cxlmd = to_cxl_memdev(uport);
+   633			host = cxlmd->dev.parent;
+   634			if (dev_is_pci(host))
+   635				pdev = to_pci_dev(host);
+   636		} else if (dev_is_pci(uport)) {
+   637			pdev = to_pci_dev(uport);
+   638		}
+   639	
+   640		if (!pdev)
+   641			return;
+   642	
+   643		doe_mb = pci_find_doe_mailbox(pdev, PCI_DVSEC_VENDOR_ID_CXL,
+   644					      CXL_DOE_PROTOCOL_TABLE_ACCESS);
+   645		if (!doe_mb) {
+   646			dev_dbg(dev, "No CDAT mailbox\n");
+   647			return;
+   648		}
+   649	
+   650		port->cdat_available = true;
+   651	
+   652		if (cxl_cdat_get_length(dev, doe_mb, &length)) {
+   653			dev_dbg(dev, "No CDAT length\n");
+   654			return;
+   655		}
+   656	
+   657		/*
+   658		 * The begin of the CDAT buffer needs space for additional 4
+   659		 * bytes for the DOE header. Table data starts afterwards.
+   660		 */
+   661		buf = devm_kzalloc(dev, sizeof(*buf) + length, GFP_KERNEL);
+   662		if (!buf)
+   663			goto err;
+   664	
+   665		table_length = length;
+   666	
+   667		rc = cxl_cdat_read_table(dev, doe_mb, buf, &length);
+   668		if (rc)
+   669			goto err;
+   670	
+   671		if (table_length != length)
+   672			dev_warn(dev, "Malformed CDAT table length (%lu:%lu), discarding trailing data\n",
+ > 673				table_length, length);
+   674	
+   675		if (cdat_checksum(buf->data, length))
+   676			goto err;
+   677	
+   678		port->cdat.table = buf->data;
+   679		port->cdat.length = length;
+   680	
+   681		return;
+   682	err:
+   683		/* Don't leave table data allocated on error */
+   684		devm_kfree(dev, buf);
+   685		dev_err(dev, "Failed to read/validate CDAT.\n");
+   686	}
+   687	EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
+   688	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
