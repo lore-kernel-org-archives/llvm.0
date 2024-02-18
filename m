@@ -1,193 +1,101 @@
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4153EA4
-	for <llvm@lists.linux.dev>; Sun, 18 Feb 2024 01:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F53A5F;
+	Sun, 18 Feb 2024 01:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708220416; cv=none; b=srQOJ5T2ImuZQUOyIz721RlsSlV1e2zRMkvf92bCbSH1Z1k1ZR+N5XNKw5mkWzcjrwu697mNMEGr7U/nv+ijcXd819EhdrkLTZoMkWYSpUDw2QpjiicypttYTgcwmaFuv1FB+KDpYcAMhfOPzdTsf6emWjkiVUeQuhSzWQ/Z0tg=
+	t=1708220677; cv=none; b=VlE4BO3atHTBkPePbC8L3pJxsfWu2D9Hrs8X7dJTm+B5z4aV1GpRPLiJVA9TaSDWadJhBlPML60UnWvk5FS6r6eGasi5iFqnzrqeeIdC6OAmcplVysy9fvXlqBAG4RUrMHhQc+mrTvbQt+gV1WfzgcMW3929yKGIK8YvLQ2lc/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708220416; c=relaxed/simple;
-	bh=WNQbxKVFpHm9Lmd2Xka8K18EGXlXYe/WvQMzH4jHjUM=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=S06YvWYGjdTbj5xds5iZxMg7882ezbPcjDAKByczUp27TsHzw8SXMUiJW/1opDRr5PzyVTgIJ3+XRopurkEvIFTQQ7aTA/gC3WMsQo9FMVJRo1b3ivlvvI9eYna3AMZTG7ZJTAN+LE5C7YzIQzYd6/+VSWNmP5EaqO4Nfvhntt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4TcpG41X3cz1gydy;
-	Sun, 18 Feb 2024 09:38:04 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (unknown [7.193.23.68])
-	by mail.maildlp.com (Postfix) with ESMTPS id DBFE11400CC;
-	Sun, 18 Feb 2024 09:40:09 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 18 Feb 2024 09:40:08 +0800
-Subject: Re: [PATCH 2/2] ubifs: fix function pointer cast warnings
-To: Arnd Bergmann <arnd@kernel.org>, Richard Weinberger <richard@nod.at>,
-	Nathan Chancellor <nathan@kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	<linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20240213095412.453787-1-arnd@kernel.org>
- <20240213095412.453787-2-arnd@kernel.org>
-From: Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <0921a996-c579-5760-a6ff-dbd9b9eca057@huawei.com>
-Date: Sun, 18 Feb 2024 09:40:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+	s=arc-20240116; t=1708220677; c=relaxed/simple;
+	bh=tf2r4AzwXUPAE0xvuqJfwuseKVLcLIL4fJEvDtaUSB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BlXlpvDYnDXojx8LQoShuKHHs+ErDCJAO/CVwIkANOaCQ9iLtrE0yHi9wVOQOe5HN4aVY2+IjQUpIgoRbdSFfEOPJIizX9p3dqql2+K+9WGZoTRv5RMgG1OYy30zXYKkAhnGu9+nsBUaVov5RYDVO/ubOLYJRvYkHj/G4leWKyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nE2alJ69; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nE2alJ69"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708220675; x=1739756675;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tf2r4AzwXUPAE0xvuqJfwuseKVLcLIL4fJEvDtaUSB0=;
+  b=nE2alJ69Lv1q5rXscNECaVn2yNdRgjmW+OJs4cX1oQxwFzqGFN8uQW6v
+   jPLeE4J471GYplimqXd4k1mV5M/lm+3Oijaxtskn3qYOyRG1QQ2q8iudl
+   SLHYU2h275+JBPj8EHJuoI6vsvN7WAteBfJHoFg+qb76mJTVyL6X93erj
+   42GPpd/HwHqbunvrqyPq71qhRcop26OOxY2a/HyYEoDAE4w2MnKpz59vr
+   pEWwWMcW8ww+OGNDWej4+ioJpBHCCL1yJpX1jHEJuHRGT/xJiaG8O+O9n
+   E6xwmAzkxv1pUoy5nbIf5QpLYSm76o+162Xx6tHz/CesdKHcN6AlovFkv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="6126682"
+X-IronPort-AV: E=Sophos;i="6.06,167,1705392000"; 
+   d="scan'208";a="6126682"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 17:44:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,167,1705392000"; 
+   d="scan'208";a="4465005"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 17 Feb 2024 17:44:34 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rbWEI-0002gQ-2W;
+	Sun, 18 Feb 2024 01:44:30 +0000
+Date: Sun, 18 Feb 2024 09:43:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing 10/11] lib/checksum_kunit.c:235:18: warning:
+ unused variable 'expected_csum_ipv6_magic_corner'
+Message-ID: <202402180953.upWqUKdc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20240213095412.453787-2-arnd@kernel.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-ÔÚ 2024/2/13 17:54, Arnd Bergmann Ð´µÀ:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> ubifs has a number of callback functions for ubifs_lpt_scan_nolock() using
-> two different prototypes, either passing a struct scan_data or
-> a struct ubifs_lp_stats, but the caller expects a void pointer instead.
-> 
-> clang-16 now warns about this:
-> 
-> fs/ubifs/find.c:170:9: error: cast from 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, struct scan_data *)' to 'ubifs_lpt_scan_callback' (aka 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    170 |                                     (ubifs_lpt_scan_callback)scan_for_dirty_cb,
->        |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> fs/ubifs/find.c:449:9: error: cast from 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, struct scan_data *)' to 'ubifs_lpt_scan_callback' (aka 'int (*)(struct ubifs_info *, const struct ubifs_lprops *, int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    449 |                                     (ubifs_lpt_scan_callback)scan_for_free_cb,
->        |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Change all of these callback functions to actually take the void * argument
-> that is passed by their caller.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   fs/ubifs/find.c   | 23 ++++++++++++-----------
->   fs/ubifs/lprops.c |  6 +++---
->   2 files changed, 15 insertions(+), 14 deletions(-)
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+head:   87a37f01e744b2203a6d053322632f680f30fade
+commit: 068e2e1754d7c9e92e07c8332b2b64673b4989cc [10/11] lib: checksum: Add some corner cases to csum_ipv6_magic tests
+config: arm-randconfig-001-20240218 (https://download.01.org/0day-ci/archive/20240218/202402180953.upWqUKdc-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402180953.upWqUKdc-lkp@intel.com/reproduce)
 
-Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> diff --git a/fs/ubifs/find.c b/fs/ubifs/find.c
-> index 1cb79b167a4f..6ebf3c04ac5f 100644
-> --- a/fs/ubifs/find.c
-> +++ b/fs/ubifs/find.c
-> @@ -82,8 +82,9 @@ static int valuable(struct ubifs_info *c, const struct ubifs_lprops *lprops)
->    */
->   static int scan_for_dirty_cb(struct ubifs_info *c,
->   			     const struct ubifs_lprops *lprops, int in_tree,
-> -			     struct scan_data *data)
-> +			     void *arg)
->   {
-> +	struct scan_data *data = arg;
->   	int ret = LPT_SCAN_CONTINUE;
->   
->   	/* Exclude LEBs that are currently in use */
-> @@ -166,8 +167,7 @@ static const struct ubifs_lprops *scan_for_dirty(struct ubifs_info *c,
->   	data.pick_free = pick_free;
->   	data.lnum = -1;
->   	data.exclude_index = exclude_index;
-> -	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
-> -				    (ubifs_lpt_scan_callback)scan_for_dirty_cb,
-> +	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum, scan_for_dirty_cb,
->   				    &data);
->   	if (err)
->   		return ERR_PTR(err);
-> @@ -349,8 +349,9 @@ int ubifs_find_dirty_leb(struct ubifs_info *c, struct ubifs_lprops *ret_lp,
->    */
->   static int scan_for_free_cb(struct ubifs_info *c,
->   			    const struct ubifs_lprops *lprops, int in_tree,
-> -			    struct scan_data *data)
-> +			    void *arg)
->   {
-> +	struct scan_data *data = arg;
->   	int ret = LPT_SCAN_CONTINUE;
->   
->   	/* Exclude LEBs that are currently in use */
-> @@ -446,7 +447,7 @@ const struct ubifs_lprops *do_find_free_space(struct ubifs_info *c,
->   	data.pick_free = pick_free;
->   	data.lnum = -1;
->   	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
-> -				    (ubifs_lpt_scan_callback)scan_for_free_cb,
-> +				    scan_for_free_cb,
->   				    &data);
->   	if (err)
->   		return ERR_PTR(err);
-> @@ -589,8 +590,9 @@ int ubifs_find_free_space(struct ubifs_info *c, int min_space, int *offs,
->    */
->   static int scan_for_idx_cb(struct ubifs_info *c,
->   			   const struct ubifs_lprops *lprops, int in_tree,
-> -			   struct scan_data *data)
-> +			   void *arg)
->   {
-> +	struct scan_data *data = arg;
->   	int ret = LPT_SCAN_CONTINUE;
->   
->   	/* Exclude LEBs that are currently in use */
-> @@ -625,8 +627,7 @@ static const struct ubifs_lprops *scan_for_leb_for_idx(struct ubifs_info *c)
->   	int err;
->   
->   	data.lnum = -1;
-> -	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
-> -				    (ubifs_lpt_scan_callback)scan_for_idx_cb,
-> +	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum, scan_for_idx_cb,
->   				    &data);
->   	if (err)
->   		return ERR_PTR(err);
-> @@ -781,8 +782,9 @@ int ubifs_save_dirty_idx_lnums(struct ubifs_info *c)
->    */
->   static int scan_dirty_idx_cb(struct ubifs_info *c,
->   			   const struct ubifs_lprops *lprops, int in_tree,
-> -			   struct scan_data *data)
-> +			   void *arg)
->   {
-> +	struct scan_data *data = arg;
->   	int ret = LPT_SCAN_CONTINUE;
->   
->   	/* Exclude LEBs that are currently in use */
-> @@ -841,8 +843,7 @@ static int find_dirty_idx_leb(struct ubifs_info *c)
->   	if (c->pnodes_have >= c->pnode_cnt)
->   		/* All pnodes are in memory, so skip scan */
->   		return -ENOSPC;
-> -	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum,
-> -				    (ubifs_lpt_scan_callback)scan_dirty_idx_cb,
-> +	err = ubifs_lpt_scan_nolock(c, -1, c->lscan_lnum, scan_dirty_idx_cb,
->   				    &data);
->   	if (err)
->   		return err;
-> diff --git a/fs/ubifs/lprops.c b/fs/ubifs/lprops.c
-> index 6d6cd85c2b4c..a11c3dab7e16 100644
-> --- a/fs/ubifs/lprops.c
-> +++ b/fs/ubifs/lprops.c
-> @@ -1014,8 +1014,9 @@ void dbg_check_heap(struct ubifs_info *c, struct ubifs_lpt_heap *heap, int cat,
->    */
->   static int scan_check_cb(struct ubifs_info *c,
->   			 const struct ubifs_lprops *lp, int in_tree,
-> -			 struct ubifs_lp_stats *lst)
-> +			 void *arg)
->   {
-> +	struct ubifs_lp_stats *lst = arg;
->   	struct ubifs_scan_leb *sleb;
->   	struct ubifs_scan_node *snod;
->   	int cat, lnum = lp->lnum, is_idx = 0, used = 0, free, dirty, ret;
-> @@ -1269,8 +1270,7 @@ int dbg_check_lprops(struct ubifs_info *c)
->   
->   	memset(&lst, 0, sizeof(struct ubifs_lp_stats));
->   	err = ubifs_lpt_scan_nolock(c, c->main_first, c->leb_cnt - 1,
-> -				    (ubifs_lpt_scan_callback)scan_check_cb,
-> -				    &lst);
-> +				    scan_check_cb, &lst);
->   	if (err && err != -ENOSPC)
->   		goto out;
->   
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402180953.upWqUKdc-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+   lib/checksum_kunit.c:219:18: warning: unused variable 'expected_csum_ipv6_magic' [-Wunused-const-variable]
+     219 | static const u16 expected_csum_ipv6_magic[] = {
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+>> lib/checksum_kunit.c:235:18: warning: unused variable 'expected_csum_ipv6_magic_corner' [-Wunused-const-variable]
+     235 | static const u16 expected_csum_ipv6_magic_corner[] = {
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/expected_csum_ipv6_magic_corner +235 lib/checksum_kunit.c
+
+   234	
+ > 235	static const u16 expected_csum_ipv6_magic_corner[] = {
+   236		0xff00,	/* all 0xff	*/
+   237		0x0000,	/* proto==0	*/
+   238		0xfffe,	/* proto==1	*/
+   239		0xff00,	/* len==0	*/
+   240		0xfeff,	/* len==1	*/
+   241		0xff00,	/* csum==0	*/
+   242		0xfeff,	/* csum==1	*/
+   243	};
+   244	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
