@@ -1,55 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F95149E15;
-	Sun, 18 Feb 2024 06:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AAEF9CF;
+	Sun, 18 Feb 2024 08:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708236510; cv=none; b=e+M/rsLQ9TX/IVFnpETp96sLVVnWvnzZCtopql4Uvw+VRo2kzExRqlsfW1+r8o/udzgNUKkXhaYQocNcQPr9g9/JBBTMFyEiUZOPxrBB1LRb8j34aetX+Qz+w3YJcKAdfK2bI7J7Sx98KWveny/hSfZtEOMoVTRuxiJ5cOdFTbY=
+	t=1708244121; cv=none; b=MgKBPnaBvOWTzuZtnOR9JGiHOXIS/wb2JLdllkj8MhkqfzxRY1s5Jv9iqGOGIKpS214yIO+iGdBq0t5/pTOvdG/oE+KY6RRcomARM3Y1ncJb3koeMR5rgPum63QcaupU2ey/xEXERykhDS+n8eW2t002wtianoUGF5GXxpGlPMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708236510; c=relaxed/simple;
-	bh=HOh2AqFepwaVnFOYrC++d3Goj6xYR5A1mKA41LPWT90=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JBE997VFpm5vvAyQsFiUqpmNcbEBWgzmecTMRL5T0CtnUGpPi6hg7DIFB93JD1Ydg6Batfs9JjoFDdQ5T8LwOaRkMSOm6TfHolsjkcZ0LoRQRg4VrxKAPFeWdySy762kSTZUilh4jVKEpyadzVciEJj+3T7OIgRfbwd8vv1rmIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R9v2s/8k; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1708244121; c=relaxed/simple;
+	bh=WYzmBNpH6cGczEIpfsWVPnXKFuEzrstvirYrXLCIkqo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gCvuYXUFVElJgxR2fNvniBfJaRY3hyC3hTte7JgEGkMJmNEBUk7kcPjICoM1JYRNaEGN/FWlN3DSuzxW62IeiUiiOaAhNJuTjloqdMt62GkfjwXnlDhUEavmh1WM+px5tzqSuj2NiALPlmsLqbGx1VGstEp9Dm54uNvrV0ZiMP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jfW+Kjge; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R9v2s/8k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jfW+Kjge"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708236509; x=1739772509;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HOh2AqFepwaVnFOYrC++d3Goj6xYR5A1mKA41LPWT90=;
-  b=R9v2s/8kgRXRO0JauGQDptepA7CJph0H9aopWDH8fBmdzfm3b9/y3dvn
-   ljP2bfQNom/mrPmI6IlCeVA4e1zPU0peBYSuyYVEEXTudUsIh6nSokLPg
-   6dQWkeEhHtAsQ6V+bxMGlrAQM0YkR6DnpGBTRXw8unenDFifgBo5nNK4N
-   o6T73JMu/cHyCL5VWZraUgkOAIzsypkuUXbAiJldtzZCYI4D8IbmW7UXS
-   SjGqFkDICDP7PPO0ZriVOMvnrBKxAykS/qgX0R3oKerQ9DcJPp7QkxExR
-   YfEh1hhKCJwyCghtZuRK3rDa+Zxixt8M2to8zqmKKsNHVwNG6dbP7mUhy
+  t=1708244120; x=1739780120;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WYzmBNpH6cGczEIpfsWVPnXKFuEzrstvirYrXLCIkqo=;
+  b=jfW+KjgeuejzzGo8TrqV9T3I/PQgc485+MiSpP6Gi8qYcjGUScTKO4dM
+   jgssWnNFhnGhrMncszJFlgR1RoKFesUQEnBJsw2BZk4iw/uYyq3MSi1Vv
+   vx/rPveXvIG53pkX4KZ3rpbxqufxJVyFYEZpS8Aj7wTqZ5GCrU2p2LoPh
+   eJ6DkH8ITPDueypfxXVQeTZIE1ZXAEiMe6kO6MJzGin2F4WaFre3a4cvx
+   IOAItFT8jDWgAaOeAJkRnS2J2YLY/vLqseFBJVs/CJd3GmlBwv72L1Pky
+   CcYexXtJCPfPWq/nwxTDHAWXtvsPQ1oFbRmfX7Dq0tCuzUa2t6vTRadJD
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2440748"
+X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2197458"
 X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
-   d="scan'208";a="2440748"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 22:08:28 -0800
+   d="scan'208";a="2197458"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 00:15:20 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
-   d="scan'208";a="4172125"
+   d="scan'208";a="8882060"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 17 Feb 2024 22:08:27 -0800
+  by orviesa003.jf.intel.com with ESMTP; 18 Feb 2024 00:15:18 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rbaLg-0002pg-2i;
-	Sun, 18 Feb 2024 06:08:24 +0000
-Date: Sun, 18 Feb 2024 14:07:44 +0800
+	id 1rbcKR-0002t8-2W;
+	Sun, 18 Feb 2024 08:15:15 +0000
+Date: Sun, 18 Feb 2024 16:14:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Petr Tesarik <petrtesarik@huaweicloud.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 7/8] KEYS: Run PGP key parser in a sandbox
-Message-ID: <202402181348.UBJZpHnh-lkp@intel.com>
-References: <20240216152435.1575-8-petrtesarik@huaweicloud.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Suren Baghdasaryan <surenb@google.com>
+Subject: [surenbaghdasaryan:memalloc_prof_v4 49/49]
+ include/linux/mm.h:3116:6: error: call to undeclared function
+ 'mem_alloc_profiling_enabled'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202402181620.v9zvCTpl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,84 +60,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240216152435.1575-8-petrtesarik@huaweicloud.com>
 
-Hi Petr,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master soc/for-next linus/master v6.8-rc4 next-20240216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Tesarik/mpi-Introduce-mpi_key_length/20240216-233743
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20240216152435.1575-8-petrtesarik%40huaweicloud.com
-patch subject: [RFC 7/8] KEYS: Run PGP key parser in a sandbox
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240218/202402181348.UBJZpHnh-lkp@intel.com/config)
+tree:   https://github.com/surenbaghdasaryan/linux.git memalloc_prof_v4
+head:   a9e8134c559030b55a98c4be4b3efaf0604c4e57
+commit: a9e8134c559030b55a98c4be4b3efaf0604c4e57 [49/49] fixup: move mem_alloc_profiling_enabled() to be checked earlier
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240218/202402181620.v9zvCTpl-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402181348.UBJZpHnh-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402181620.v9zvCTpl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402181348.UBJZpHnh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402181620.v9zvCTpl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from crypto/asymmetric_keys/pgp_public_key.c:12:
-   In file included from include/linux/mpi.h:21:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from crypto/asymmetric_keys/pgp_public_key.c:12:
-   In file included from include/linux/mpi.h:21:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from crypto/asymmetric_keys/pgp_public_key.c:12:
-   In file included from include/linux/mpi.h:21:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> crypto/asymmetric_keys/pgp_public_key.c:13:10: fatal error: 'linux/sbm.h' file not found
-      13 | #include <linux/sbm.h>
-         |          ^~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+>> include/linux/mm.h:3116:6: error: call to undeclared function 'mem_alloc_profiling_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3116 |         if (mem_alloc_profiling_enabled()) {
+         |             ^
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:116: arch/arm/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1199: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +13 crypto/asymmetric_keys/pgp_public_key.c
+vim +/mem_alloc_profiling_enabled +3116 include/linux/mm.h
 
-  > 13	#include <linux/sbm.h>
-    14	#include <keys/asymmetric-subtype.h>
-    15	#include <keys/asymmetric-parser.h>
-    16	#include <crypto/hash.h>
-    17	#include <crypto/public_key.h>
-    18	
+  3109	
+  3110	extern void reserve_bootmem_region(phys_addr_t start,
+  3111					   phys_addr_t end, int nid);
+  3112	
+  3113	/* Free the reserved page into the buddy system, so it gets managed. */
+  3114	static inline void free_reserved_page(struct page *page)
+  3115	{
+> 3116		if (mem_alloc_profiling_enabled()) {
+  3117			union codetag_ref *ref = get_page_tag_ref(page);
+  3118	
+  3119			if (ref) {
+  3120				set_codetag_empty(ref);
+  3121				put_page_tag_ref(ref);
+  3122			}
+  3123		}
+  3124		ClearPageReserved(page);
+  3125		init_page_count(page);
+  3126		__free_page(page);
+  3127		adjust_managed_page_count(page, 1);
+  3128	}
+  3129	#define free_highmem_page(page) free_reserved_page(page)
+  3130	
 
 -- 
 0-DAY CI Kernel Test Service
