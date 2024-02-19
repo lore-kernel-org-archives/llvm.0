@@ -1,87 +1,197 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA571FA3
-	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 02:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A61C12E
+	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 03:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708309713; cv=none; b=GZVuV7GncRwWdLhRwLv8v+OTkwSTMGTXdvwuNV4YiZXcDofoKrClbp2LX2OnaUjd/ocAoHaOBd81CUnJHPQUh0VrkERoM+uKHECvO1fLHbZIvwNZ+s+hW6QNX1VLTxs7Ic6bvRRr29jeEha7UNb/jX/Xcl10Spp/ChQarMRz/58=
+	t=1708312894; cv=none; b=LR2bfUJxGq0uKqQWD0nfFHkobe2BkPsGHba4O0PViXJf/IjSjmx5BuTPs+jEH91Av5YQ9hlEUvAer0Sol0zTtqPI+r/C3kaxLr/Z3bk5lgCJ6U7dKKZNvLY1lqL0aT0kKTYyWHDKoYMzQkng7joJG9maD0shSCSlQSYcSnnf/T4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708309713; c=relaxed/simple;
-	bh=T3iYYfOGyXURvLXVfrDd8rFn2rXciuaCL5lbx26GKe8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EcyFvmREgNdRNdsM7bc35qc5rbyP2ttMfJ18cmj43KoossHJ4NyHf8pHsJ4cVMUxByjnzHq6XlEmapUe5ifRPYeKX/ZJQbpiRHSM9zldcNYDrd2t70Q8GPYdzxaBQV+3DztJsvzvPgqWXqJdVdksLGfShQPIynASi2DA+dIEiaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LBEgKY4v; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1708312894; c=relaxed/simple;
+	bh=Te1v6vtMA6ySYixTgMKMqWqufrxCg3VGT/NFWEIvJ40=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gE37KJgqoLbScHJEt+iz9glg4wt9K0vDgORdeuwTLXG1ZnZYwHsAVpT5uc6xb4sPNdTatLs7pnH0clC4SZMW8ezgvGnLj06yWqi61BkSmNrqao0qi2AnA7JfQdewHjwViCdIPxAR7q+EDLNy6wHEk8ouhQarBCTMkbCr+3HREEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BXuxyp6c; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LBEgKY4v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708309712; x=1739845712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T3iYYfOGyXURvLXVfrDd8rFn2rXciuaCL5lbx26GKe8=;
-  b=LBEgKY4vjff/7ci3w3TnnAVFgJuvh7cY4nfZ0hDcJQzOZ3O4TsJX/NTx
-   AdxD1craZZyyvQ7HezdDui6wiiW8NiMD4dj4E6rL71QHbvXJ9WfutPweN
-   5QSRsbPUgYa7lnBwIJym/Vdy+kiR9yJlS4BwJT9kN0Nl+fXN8yqzR7j5p
-   esYDdEiJ1BNzImHjEaok85pZj4p9njMqWm5OXr16MC8jFW7+yHcvBWIUb
-   P+BSII75HSaWrhzfDVxQgMxqY9zOBU4DI6c7k/Prp3U48gDLQF6+zXOn/
-   ll+jd+MfuT1qtjaaKGUUgeNJ0mDAEuJXH0Pk6ymtQbi63r+7Qyw3FfKzv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10988"; a="13001138"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="13001138"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 18:28:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="4314701"
-Received: from tassilo.jf.intel.com (HELO tassilo) ([10.54.38.190])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 18:28:31 -0800
-Date: Sun, 18 Feb 2024 18:28:29 -0800
-From: Andi Kleen <ak@linux.intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] fs/select: rework stack allocation hack for clang
-Message-ID: <ZdK8zaBic5NNbYNw@tassilo>
-References: <20240216202352.2492798-1-arnd@kernel.org>
- <ZdHZydVbQ7rIhMYV@tassilo>
- <3a829098-612b-4e5a-bcec-3727acee7ff8@app.fastmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BXuxyp6c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708312890;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fIImm9LQiTaT41ExOKQEoVNQMxQbUbXZfJ5WlvP00Do=;
+	b=BXuxyp6cy5LFde3+tqqYSa7CVhUJaAMG6VHA0mr0Xgo5oBnS9iqfFmohYoeapZlaCYFE1u
+	4ccTlKFPPex1nz+A/8BSTbNt1wkSyB4xR9IMhYszCMS/exiv7Ff9wjSro8fsbvayJRdbt7
+	tQBUmc1MO0NhZ99naE+kfnX7jMcmviU=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-634-0Jhia6miNrK3G3raemxzmA-1; Sun,
+ 18 Feb 2024 22:21:28 -0500
+X-MC-Unique: 0Jhia6miNrK3G3raemxzmA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A99A1380671B
+	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 03:21:28 +0000 (UTC)
+Received: from [172.64.14.54] (unknown [10.30.32.10])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6559A1C060AF;
+	Mon, 19 Feb 2024 03:21:28 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0-rc4, mainline.kernel.org-clang, 6c160f16)
+Date: Mon, 19 Feb 2024 03:21:28 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a829098-612b-4e5a-bcec-3727acee7ff8@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <22620.124021822212800102@us-mta-634.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Feb 18, 2024 at 11:29:32AM +0100, Arnd Bergmann wrote:
-> On Sun, Feb 18, 2024, at 11:19, Andi Kleen wrote:
-> > I suspect given the larger default stack now we could maybe just increase the
-> > warning limit too, but that should be fine.
-> 
-> I don't think we have increased the default stack size in decades,
-> it's still 8KB on almost all 32-bit architectures (sh, hexagon and m68k
-> still allow 4KB stacks, but that's probably broken). I would actually
-> like to (optionally) reduce the stack size for 64-bit machines
-> from 16KB to 12KB now that it's always vmapped.
+Hi, we tested your kernel and here are the results:
 
-now == after 4/8K.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-The 1024 warning limit dates back to the 4/8K times. It could
-be certainly reevaluated for this decade's setup.
+Tested-by: CKI Project <cki-project@redhat.com>
 
--Andi
+Kernel information:
+    Commit message: Merge tag 'kbuild-fixes-v6.8-2' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/130082
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Storage - swraid scsi_raid
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
+koza machines
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1852
+            Affected tests:
+                  x86_64 - Libkcapi AF_ALG test
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
