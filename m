@@ -1,100 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CED32C1B9
-	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 10:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025AA25620
+	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 10:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708339672; cv=none; b=b25fYoGVOu6oYU7ACqgjUdOmUEX1c2teBf6j4HJuyaH7nqoVYlEGqfv3fUwrbDBW5cYRasBlm/ZB4IYKt9vMsf4y8DNaFhJSA6OMxO4rE9gaawQF82gpHQqZlSzDqGm/Qdbn50ymyCVmwXIiBcxsqvgFxtOiSQoSB2pYEscI+OA=
+	t=1708340198; cv=none; b=nINtB7Opk8mqYr9zSiAwK9ku5gRKNVU1cdZbt2QtL74BfomOcEG1Q/z2c7rctNZuNV5XLhqmcXHGLlr2nX9ZZkln12UZjFLLUOOvCNGNi/jMf7GDUzqAHsCl/HNTmwr27cbCOKFnZ24qtzQpKiCwFLPQNMqQfBwNfvH2y9r1iZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708339672; c=relaxed/simple;
-	bh=Jfo6TfwmGwLUsV6LesciDk9MRgp2/h+EYgVBnXUJszM=;
+	s=arc-20240116; t=1708340198; c=relaxed/simple;
+	bh=Uy1Jl1CqfhrDZgwbUBQbiwomFF5GZX4KFrXVlHyX7b8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g8tOKB9sM2CtglQhwcs0DeGfAvhrAn09ukxpy578yvoK5GwRwpJ2RAFDdlbu3CoHykBM6tVVNrwfNSf2zOmnEegRyVsmJJXI79qqSvC0B8/9OzoJ7A4TRzGaem8iI1yE4CCVPQ4q3od2VYthYcsy9UZ2BrP4QWqJIks/97OYbQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PM6pzIX0; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=FjfWERlpRiZeNW4MadutJgLzKmTJxE/gOjSQTBUdtFGUQVWF/xFDt2w1zNYlgyjqdGGArezItQ14RBT5NiEg8CyxJVzTHv+NOnQC45SIIH9fjufXqN2to8tCDVi5YMVhnN5/HwtC/GfObl/rVhHCDLB+WWkh8QpM/a70mVReau0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8VuS35S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PM6pzIX0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D2DC43399
-	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 10:47:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8VuS35S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9927CC43394
+	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 10:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708339672;
-	bh=Jfo6TfwmGwLUsV6LesciDk9MRgp2/h+EYgVBnXUJszM=;
+	s=k20201202; t=1708340197;
+	bh=Uy1Jl1CqfhrDZgwbUBQbiwomFF5GZX4KFrXVlHyX7b8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PM6pzIX03tt4ZjrxnYPJXPGUX5ADnjh07V73zqD2omNQ4Xk9qSfJfl3GsLdLJnffd
-	 osYaXkKlJpqogY/SPg0hw1jVPJHtWPS1r9N6APmdJ87PXKsoc9GjxT4fFtkmgFOrR1
-	 wvtMoS8iRqGbO5JMuv8sHJAdVZyrj9X9p7Sfor/wo433BXO0vGAM9VhhRj+LmuDDrk
-	 pPDYP9aFdOFUkfTAZXOMwbd1F1LIHXzO/hYoj3X/6ImodrI7my9qlMbbuBGDHMDzl/
-	 2Cg3vo0E0huhrCNGfaBoQL+h1RS6xZIg7zoLXAs3STouIJZaSC2+ox6jA9Aty5i06L
-	 0ozKuW1QQq/JQ==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-511976c126dso4993847e87.1
-        for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 02:47:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVR9SrH0qAi4swK/K3hDoL585zVgv8lfxeqK78SuBWb24msxFKdEjAIrH7H0bTesuPQvNdc1Gt1wgHWkQHWggRvJomiHw==
-X-Gm-Message-State: AOJu0YwsaAbXdEW4zLjNxHlMJ1B0k5cj6xZ7kkTOGmq5Bl3MEAzhPcdO
-	KenvyWmKl/y7SzpsXhfnuUQNf/3TKVetkCDuSpnwM+eHLD8WhGvVRQvFt/cNyKMBI+zV/VT9b5O
-	rsSGla4FFm7JqDrRIhLsv+Pqz1eg=
-X-Google-Smtp-Source: AGHT+IGuVJ1P1iK/x+vOmrtC/tU48rUsDna2+oeh1glDTw2nC4sRpzBKFaqlDQkaZk6qcR3xVV+mXqWRMCazBcGGgSs=
-X-Received: by 2002:a05:6512:609:b0:512:a984:267f with SMTP id
- b9-20020a056512060900b00512a984267fmr2885423lfe.58.1708339670239; Mon, 19 Feb
- 2024 02:47:50 -0800 (PST)
+	b=B8VuS35SYdcI7h1o6HRcYf8GFBxnlQ0Mn87b2ZOKsIwl+YT8cnZ+iUzLgGOCSTkR5
+	 MU7RllgRnk4DD9SDZOKmcJMCWB5RPtlnutz9Y78yzJqrLVq8Ln/4iUECBB+XM/bbdx
+	 HW1NrSItDnX6A7Na0jD6goQBjZ8sHK4H/uJ2ylbgLXkPbDNGD/vZo9DahMZKNB+1jE
+	 hOQuZWZptWu5zECzCSesnz7BCRb7W3yK68TtSBjGagqZjxCUCL2tte2YW3+Hwkm7Nq
+	 eVWwq9ysFobA2xdy4ui69NweWeR5ZwCwZbf5aDsAelyyB4+yIaRBAL+YFBV52eqOdd
+	 yDOTgcrn9le6g==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-512b84bdaf1so621017e87.1
+        for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 02:56:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXOQe+8SnIRLfrEbHAxTmpzCPg8CSrzmz1Y78QdXy/kFEVPUlFTogOhzOPl1W8aNFaT7h6DZiWLSIYkuiz/CtD+1oj4eg==
+X-Gm-Message-State: AOJu0YxsivFt6EeMnBn7RyTi+JjIPHaneWq5HGHS+AYkzRuvEOzSYwCs
+	H7hlFP2uGODC3G4qn7OFqx+ka9zzFU40YcFX5QpOv8yNjIN/vs9Zi2tYBh6cWWeIxYIUGVo7rA2
+	dZHl7y+Pm40idB6CkEqiMDqzUEVo=
+X-Google-Smtp-Source: AGHT+IGjAfOlfWjVl33b+jbVBz4EBHg+YiDe0EqEg12/9/I5auQLZKZLVOB24y7lWixLN8X8PebjOFVxpbNL3CLg4aU=
+X-Received: by 2002:a05:6512:3ba5:b0:511:2e7c:768f with SMTP id
+ g37-20020a0565123ba500b005112e7c768fmr9887369lfv.46.1708340195832; Mon, 19
+ Feb 2024 02:56:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-15-ardb+git@google.com> <20240217125102.GSZdCrtgI-DnHA8DpK@fat_crate.local>
- <CAMj1kXEcTfvRcNh_VDhj5QxzMhD9rFhVmeAfuSF7vm1c_4_iHg@mail.gmail.com> <20240219100124.GCZdMm9IAWoMcfEKhF@fat_crate.local>
-In-Reply-To: <20240219100124.GCZdMm9IAWoMcfEKhF@fat_crate.local>
+References: <20240206074552.541154-1-maskray@google.com> <CAMuHMdVOoxVFohcwwoQtY0KgZEvbjgJJ6mib8Fabo97P0krEqw@mail.gmail.com>
+In-Reply-To: <CAMuHMdVOoxVFohcwwoQtY0KgZEvbjgJJ6mib8Fabo97P0krEqw@mail.gmail.com>
 From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 19 Feb 2024 11:47:39 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH7CtN2j1os7Ujw7G_xtD2H0g=pfxNBLK=ayj4XGPkudA@mail.gmail.com>
-Message-ID: <CAMj1kXH7CtN2j1os7Ujw7G_xtD2H0g=pfxNBLK=ayj4XGPkudA@mail.gmail.com>
-Subject: Re: [PATCH v4 02/11] x86/startup_64: Replace pointer fixups with
- RIP-relative references
-To: Borislav Petkov <bp@alien8.de>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Kevin Loughlin <kevinloughlin@google.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	Dionna Glaze <dionnaglaze@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
+Date: Mon, 19 Feb 2024 11:56:24 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGaF5bobHTr1pTg+-=s4Ft7+5SSbX72-NxsR_W_Yuxb8Q@mail.gmail.com>
+Message-ID: <CAMj1kXGaF5bobHTr1pTg+-=s4Ft7+5SSbX72-NxsR_W_Yuxb8Q@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: jump_label: use constraints "Si" instead of "i"
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Fangrui Song <maskray@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	Jisheng Zhang <jszhang@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
+	Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 19 Feb 2024 at 11:01, Borislav Petkov <bp@alien8.de> wrote:
+On Mon, 19 Feb 2024 at 11:03, Geert Uytterhoeven <geert@linux-m68k.org> wro=
+te:
 >
-> On Sat, Feb 17, 2024 at 02:58:29PM +0100, Ard Biesheuvel wrote:
-> > More testing is always good, but I am not particularly nervous about
-> > these changes.
+> Hi Fangrui,
 >
-> Perhaps but there's a big difference between testing everything as much
-> as one can and *then* queueing it - vs testing a bit, not being really
-> nervous about the changes and then someone reporting a snafu when the
-> patches are already in Linus' tree.
+> On Tue, Feb 6, 2024 at 8:46=E2=80=AFAM Fangrui Song <maskray@google.com> =
+wrote:
+> > The generic constraint "i" seems to be copied from x86 or arm (and with
+> > a redundant generic operand modifier "c"). It works with -fno-PIE but
+> > not with -fPIE/-fPIC in GCC's aarch64 port.
 >
-> Means dropping everything and getting on that. And then imagine a couple
-> more breakages happening in parallel and needing urgent attention.
+> Thanks for your patch, which is now commit f9daab0ad01cf9d1 ("arm64:
+> jump_label: use constraints "Si" instead of "i"") in v6.8-rc5.
 >
-> Not something you wanna deal with. Speaking from my experience, at
-> least.
+> > The machine constraint "S", which denotes a symbol or label reference
+> > with a constant offset, supports PIC and has been available in GCC sinc=
+e
+> > 2012 and in Clang since 7.0. However, Clang before 19 does not support
+> > "S" on a symbol with a constant offset [1] (e.g.
+> > `static_key_false(&nf_hooks_needed[pf][hook])` in
+> > include/linux/netfilter.h), so we use "i" as a fallback.
+>
+> https://gcc.gnu.org/releases.html says gcc-5 was released in 2015,
+> i.e. after 2012 ...
+>
+> > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+> > Link: https://github.com/llvm/llvm-project/pull/80255 [1]
+> >
+> > ---
+> > Changes from
+> > arm64: jump_label: use constraint "S" instead of "i" (https://lore.kern=
+el.org/all/20240131065322.1126831-1-maskray@google.com/)
+> >
+> > * Use "Si" as Ard suggested to support Clang<19
+> > * Make branch a separate operand
+> >
+> > Changes from v1:
+> >
+> > * Use asmSymbolicName for readability
+>
+> But it still fails on gcc-5:
+>
+>     arch/arm64/include/asm/jump_label.h:25:2: error: invalid 'asm':
+> invalid operand
+>       asm goto(
+>       ^
+>
+> http://kisskb.ellerman.id.au/kisskb/buildresult/15129281/
 >
 
-Not disagreeing with that.
+How odd. godbolt.org has 5.4 and it seems perfectly happy with it.
 
-> > I could split this up into 3+ patches so we could bisect any resulting
-> > issues more effectively.
->
-> Yeah, splitting changes into separate bits - ala, one logical change per
-> patch - is always a good idea.
->
-> In this particular case, I don't mind splitting them even more so that
-> it is perfectly clear what happens and looking at those changes doesn't
-> make people have to go look at the source to figure out what the change
-> actually looks like applied, in order to fully grok it.
->
-
-I split this into 5 patches for v5. The final patch in this v4 is
-broken for CONFIG_X86_5LEVEL=n so I was going to have to respin
-anyway. (I'll pick up the latest version of patch #1 you pasted)
+https://godbolt.org/z/szzG3s59K
