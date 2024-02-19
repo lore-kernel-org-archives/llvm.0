@@ -1,94 +1,95 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B4D481AB
-	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 18:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B592E408;
+	Mon, 19 Feb 2024 19:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708366953; cv=none; b=ZsUjBlCpoOluCVbFtDK8FpzJFGOn3RAtwkjm/wx5d+k6KUM3QCcJSSfDNuEIBuIEHHb4exYNgEYsvdZkLYZ+5kM6sPPPI0mn2Ct4DRnpZPq1HPu6IRISoQUUUbetFyfVsbq2F+LbXw5CnGK7gtFqtAbFGwkL1BC6rQdPJwSAf4A=
+	t=1708369452; cv=none; b=elFCm1bc8nvXawktkB72dVCdtOIP7Hhw3raAq97TyLYWMJvIVSD5W45UuM93dmuL7Af2HVF0wIGGDE5AT05inn1fiKLpEfNLR4oBVNNAfVOWtV85ml1dJlOMRHpJXOqaQakufHrRqaMnZo5RdPuwucPXNFgHK5xP45cR9dVGIv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708366953; c=relaxed/simple;
-	bh=btrFO5+2vaS7IMyffuC98/87q7X/ok+FsHXq6YojZkU=;
+	s=arc-20240116; t=1708369452; c=relaxed/simple;
+	bh=KgsvHWbboERan+JN0vWR0UmbKSP49QP+8jjmUGjbisI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WW1mHI3uStxP8pXh9s68EKJSWniNn4MQNjr1AdJ59hBYb9vDwEly3PPh6lVNK3xi46ZtghxUOdV2kbv0b/lrTuCreFy2aw5v7gp1klDv82XQU6rm9ZfyGl6yWo7FbJ6ckT0c/c0xJc+5ZtRLmTsOoTfG4Q6bN9GnV3qAIWml3dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63CFBFEC;
-	Mon, 19 Feb 2024 10:23:10 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.67.88])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94A623F73F;
-	Mon, 19 Feb 2024 10:22:28 -0800 (PST)
-Date: Mon, 19 Feb 2024 18:22:21 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Ard Biesheuvel <ardb@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Fangrui Song <maskray@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Dave Martin <Dave.Martin@arm.com>,
-	Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: jump_label: use constraints "Si" instead of "i"
-Message-ID: <ZdOcXTvvHyl8s56I@FVFF77S0Q05N>
-References: <20240206074552.541154-1-maskray@google.com>
- <CAMuHMdVOoxVFohcwwoQtY0KgZEvbjgJJ6mib8Fabo97P0krEqw@mail.gmail.com>
- <CAMj1kXGaF5bobHTr1pTg+-=s4Ft7+5SSbX72-NxsR_W_Yuxb8Q@mail.gmail.com>
- <CAMj1kXGw+r7yEEBA8gYBcdrqkiP=VYOSzz9YLnNavJn2snmFwA@mail.gmail.com>
- <CAMuHMdX+6fnAf8Hm6EqYJPAjrrLO9T7c=Gu3S8V_pqjSDowJ6g@mail.gmail.com>
- <CAMj1kXHh_m=V0QsiTpHrUXpFBXFbFfezdysz8quhPSgUrZg1MA@mail.gmail.com>
- <dca5b082-90d1-40ab-954f-8b3b6f51138c@app.fastmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VCPfK48ovFA9r0nZr/IgxPIVQfjhfKPJX41MlpqI4HdcJK1dj5KP3OB6d/0RjGYbiqCZOCm1dJ5tQ+Ill7l5w/9QP9X8a5SptwR1D/979c8aLyumyIv7muBY7Wh/y71ZqlxlJlJpFXHsBp1i5DQuPxmEYZa1ceJAKEuv13lj4Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Up8H6bHF; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Up8H6bHF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9664C43399;
+	Mon, 19 Feb 2024 19:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708369451;
+	bh=KgsvHWbboERan+JN0vWR0UmbKSP49QP+8jjmUGjbisI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Up8H6bHFlnABdsMZJViTWTzbLUdMt8Sk9MRLrinlfQ9l5edYfLrwTWz9iUnkXNi5F
+	 qgzQMlq5ksC7niWjSdjycvf123QOVRyiEqz1JTvknYAa9/Jgl0KXnvxjhWFT5shMSi
+	 C1T5PKvvzi/IWju38rxg3mmU2JilvAadvj8d16g07HEJRlr2nU080+AEJHZZzU+U22
+	 axEVnYsOIBDpgTa/6v+qUftHsEkS/y13hbUFnYjfja3UQAzIsjp9+j0OsmzzzXZtqk
+	 I3VGA1e0El+Tp9cAPoPnPLLxBg7AfQCyS6c4NAzuehZnOmwEPWXWGWUU7GomHKat4T
+	 bGUk8gUy/QH5A==
+Date: Mon, 19 Feb 2024 12:04:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: masahiroy@kernel.org, stable-commits@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Subject: Re: Patch "modpost: Add '.ltext' and '.ltext.*' to TEXT_SECTIONS"
+ has been added to the 6.6-stable tree
+Message-ID: <20240219190409.GB2348301@dev-arch.thelio-3990X>
+References: <2024021932-overpass-stinger-b897@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dca5b082-90d1-40ab-954f-8b3b6f51138c@app.fastmail.com>
+In-Reply-To: <2024021932-overpass-stinger-b897@gregkh>
 
-On Mon, Feb 19, 2024 at 06:06:19PM +0100, Arnd Bergmann wrote:
-> On Mon, Feb 19, 2024, at 16:41, Ard Biesheuvel wrote:
-> > On Mon, 19 Feb 2024 at 15:43, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >> On Mon, Feb 19, 2024 at 11:57 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >> > On Mon, 19 Feb 2024 at 11:56, Ard Biesheuvel <ardb@kernel.org> wrote:
+Hi Greg,
+
+On Mon, Feb 19, 2024 at 05:28:33PM +0100, gregkh@linuxfoundation.org wrote:
 > 
-> >> > https://godbolt.org/z/GTnf3vPaT
-> >>
-> >> I could reproduce the issue on v6.8-rc5 using arm64 defconfig
-> >> and x86_64-gcc-5.5.0-nolibc-aarch64-linux.tar.xz from
-> >> https://cdn.kernel.org/pub/tools/crosstool/files/bin/x86_64/5.5.0/:
-> >>
-> >
-> > OK, I managed to do so as well.
-> >
-> > And GCC 6.4 from the same source works correctly.
-> >
-> > Not sure whether there are any plans to bump the minimal GCC version
-> > any time soon (cc'ing Arnd), but we should probably drop this change
-> > until that happens.
+> This is a note to let you know that I've just added the patch titled
 > 
-> From what I can tell, we may as well formally raise the minimum
-> gcc version to 8.1+ already, as that is a version that is
-> actually used in distros, and we have been on 5.1+ for a few
-> years already.
+>     modpost: Add '.ltext' and '.ltext.*' to TEXT_SECTIONS
 > 
-> Not sure if there are any other benefits to gcc-8 besides
-> allowing minor cleanups.
+> to the 6.6-stable tree which can be found at:
+>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+> 
+> The filename of the patch is:
+>      modpost-add-.ltext-and-.ltext.-to-text_sections.patch
+> and it can be found in the queue-6.6 subdirectory.
+> 
+> If you, or anyone else, feels it should not be added to the stable tree,
+> please let <stable@vger.kernel.org> know about it.
+> 
+> 
+> From 397586506c3da005b9333ce5947ad01e8018a3be Mon Sep 17 00:00:00 2001
+> From: Nathan Chancellor <nathan@kernel.org>
+> Date: Tue, 23 Jan 2024 15:59:55 -0700
+> Subject: modpost: Add '.ltext' and '.ltext.*' to TEXT_SECTIONS
+> 
+> From: Nathan Chancellor <nathan@kernel.org>
+> 
+> commit 397586506c3da005b9333ce5947ad01e8018a3be upstream.
 
-Arguably a minor cleanup, but on arm64 that'd allow us to get rid of the old
-mcount-based ftrace implementation and rely on -fpatchable-function-entry.
-On its own that'd save ~130 lines of asm and ~70 lines of C, but it'd also
-remove some constraints on other features (e.g. the mcount-based form's graph
-tracer isn't compatible with pointer authentication), it would simplify a few
-things going forwards (e.g. the implementation of RELIABLE_STACKTRACE, since we
-could rely on having ftrace_regs and a single trampoline), and the remaining
-support would be better tested.
+Please apply upstream commit 6a4e59eeedc3 ("linux/init: remove __memexit*
+annotations") before this change, as there is a warning in modpost
+without it:
 
-I've wanted to remove the old ftrace implementation for a while, but on its own
-it was never important/urgent enough to justify bumping to GCC 8+.
+  scripts/mod/modpost.c:916:37: warning: excess elements in array initializer [-Wexcess-initializers]
+    916 |         .good_tosec = {ALL_TEXT_SECTIONS , NULL},
+        |                                            ^~~~
+  .../lib/clang/19/include/__stddef_null.h:26:14: note: expanded from macro 'NULL'
+     26 | #define NULL ((void*)0)
+        |              ^~~~~~~~~~
+  1 warning generated.
 
-Mark.
+It applies cleanly with 'git format-patch | patch' for me and I don't
+think it is unreasonable as a fix for this issue in stable.
+
+This will be needed in 6.1 as well but that backport is a little more
+involved, I will reply there with an mbox series.
+
+Cheers,
+Nathan
