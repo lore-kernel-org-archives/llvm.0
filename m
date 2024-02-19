@@ -1,122 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C1F28DCB
-	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 10:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609962C1AA;
+	Mon, 19 Feb 2024 11:00:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708340238; cv=none; b=A/qCDZ72TX45iINhEhcQBpQZlKmLSnzeUcsrvPJhmC1H/9aiXzQiziCvLWtvcLpJcTINhSDLs+2r08G1e6+e5w4C/X1LSjM6GKW7NRYvEN4szjZnimCry/lEn3f7O7NXqZMLcOzV0h89EVQz5IiRvwkKIA79WekPInC553Oyt5Y=
+	t=1708340426; cv=none; b=DZglIKlBaQtLe4X2xZFrRj2FOVfBFJmMAMOxISgx5vM+3TT6U0zUp3xfCkh4zBC+cTgeEr2yaLRlEgrtiCddjlUuqHsT1s294+teVyzsioDOkDwNutoacx984d01dktpRChPLZYtuDl9txLqGkHSCFiiHC2bZmXDnx4Fu/hFzq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708340238; c=relaxed/simple;
-	bh=9dOeyiDJsSefv4EBMEfGuKU7J4MB2+An6FzWYy2il5o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uGyYjhMZ3ilI4J6xGz93r4SkSG+l9jwgt/2vZEdzHfm2Y8c03lesVjJ5kN8q8danw+K5hJxdMXP22RCpZawGsiIrgNlFkKYzUoeFTMrL1WcltQzrPILOitxNOe8rHmSD3cxfWfKIp0+npCIyBlxw7D+1pzlCosHBET/lTGGsq/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HvqTtu1G; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708340426; c=relaxed/simple;
+	bh=uvA9+6Dw90IYg/Zyk244coxsLVp6cYV58Ros7J2iFVY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=U/pwj2524sN3MQQuT7zcX8Pk9t1ZaKO37GdIwsD8GlBTt/lFCQ1vvioSpH+fT9orqX1jZft8dXoBJd8bG4opfvbwRVmnRZvwxbkYyHtAPvaMhYRr8wb/8hsJAY9RrdCn7Q4uJdQ7PFPHeP0PLVXALAiPC97DLwqSXR/sZP72Kc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c9gYk8je; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvqTtu1G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C0CC433C7
-	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 10:57:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c9gYk8je"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E03B8C43330;
+	Mon, 19 Feb 2024 11:00:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708340237;
-	bh=9dOeyiDJsSefv4EBMEfGuKU7J4MB2+An6FzWYy2il5o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HvqTtu1GDkne6c7hAAj4kowEJY0j5GUBUUZnIYkpw+D6Br7atvu5XQtpHhF80dNSD
-	 5U8YYjjPENNs/6r6OKEWvmq4AU9+iclJ/FW//j+GXhl09mtA3xN66fb9vO1k/zmT4h
-	 Ce+tnRbA1oMFTmv/2kcKxBrOEgDq+vmL3PcMFLXGUKOlM0V4c/szqTinzPZw9A60Ep
-	 s++XUKH67LEna8+8jZghIMjHvfjrUzET9gecJr+yyElUqniFx4IkbruclWl/gFictk
-	 62TyS/iy1oM0uzy+9SDkLEBfmjxo66z1nMsLsNGjjoOAHI2DRTZeADK2l5Wzv7EGls
-	 wRymHK5x6lQfQ==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-512b84bdaf1so621990e87.1
-        for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 02:57:17 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWVOMiUVEshnBS8xA2lQFHBA1+lJxTCndmZZEaZcq81UcTxL/AXmlH6bVOH0SDPbBwy8kQJiLmwBo0JyxmvSd84E7gMQA==
-X-Gm-Message-State: AOJu0YyC3ord+r4fryCfKq0eD05utxK5exsnaaVwQko+3zZ8NvHkDVj5
-	1ROjN7eTZ3TxrMsIBE/6xrdT55mUASgB/G5BDgoqrH17HfKMb0t4BQo06u9VvWj3zNrrVqURopV
-	a5GLApkW9WgNVVBgOIUSMtPBmgEk=
-X-Google-Smtp-Source: AGHT+IHmfgSZqvHpLB9jfTiYhxvcFbTevouQkei+SQG31nDOKxX4/f0K3SugmVJlMZ2zwMVxayLYcj4wPTVfUn25ENw=
-X-Received: by 2002:a05:6512:239c:b0:512:ae18:7492 with SMTP id
- c28-20020a056512239c00b00512ae187492mr3296031lfv.11.1708340236084; Mon, 19
- Feb 2024 02:57:16 -0800 (PST)
+	s=k20201202; t=1708340425;
+	bh=uvA9+6Dw90IYg/Zyk244coxsLVp6cYV58Ros7J2iFVY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=c9gYk8jeBAlGoKZ43r7vGX6dsYF9PppEMzdgBg8Xb4YsjydCQ/kdDQUIp3ARocahj
+	 hik9ULU0JYZ8DnK0nXiFziLKVAAeKeYhhtEO3dGzBvRLF1BO/6pWXghZsIBMHBlmfd
+	 H84FyCAFAN3RTQMv0BbsqupHuz4edg24bvGfhIcrF6lElwqxQ5s2+rNTQ85boo9Y88
+	 Nmmh9/99l05RB2F2Xo8mdjQjLluPEpAuQmHq6SsNGQixCuqa3UPKM/xmFd59H68sME
+	 XiRGKdRViYTJIcHYRkkRYIh3MpfKmd3X2tmObGGv1q4NxVLOHmsCj10eBGm0WWVim4
+	 GZcdLhjyTP/ug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CCA59D990D8;
+	Mon, 19 Feb 2024 11:00:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240206074552.541154-1-maskray@google.com> <CAMuHMdVOoxVFohcwwoQtY0KgZEvbjgJJ6mib8Fabo97P0krEqw@mail.gmail.com>
- <CAMj1kXGaF5bobHTr1pTg+-=s4Ft7+5SSbX72-NxsR_W_Yuxb8Q@mail.gmail.com>
-In-Reply-To: <CAMj1kXGaF5bobHTr1pTg+-=s4Ft7+5SSbX72-NxsR_W_Yuxb8Q@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 19 Feb 2024 11:57:04 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGw+r7yEEBA8gYBcdrqkiP=VYOSzz9YLnNavJn2snmFwA@mail.gmail.com>
-Message-ID: <CAMj1kXGw+r7yEEBA8gYBcdrqkiP=VYOSzz9YLnNavJn2snmFwA@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: jump_label: use constraints "Si" instead of "i"
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Fangrui Song <maskray@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	Jisheng Zhang <jszhang@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
-	Peter Smith <peter.smith@arm.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: sched: Annotate struct tc_pedit with __counted_by
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170834042583.18215.251918949799805641.git-patchwork-notify@kernel.org>
+Date: Mon, 19 Feb 2024 11:00:25 +0000
+References: <20240216232744.work.514-kees@kernel.org>
+In-Reply-To: <20240216232744.work.514-kees@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: kuba@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, gustavoars@kernel.org, netdev@vger.kernel.org,
+ linux-hardening@vger.kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+ morbo@google.com, justinstitt@google.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
 
-On Mon, 19 Feb 2024 at 11:56, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Mon, 19 Feb 2024 at 11:03, Geert Uytterhoeven <geert@linux-m68k.org> w=
-rote:
-> >
-> > Hi Fangrui,
-> >
-> > On Tue, Feb 6, 2024 at 8:46=E2=80=AFAM Fangrui Song <maskray@google.com=
-> wrote:
-> > > The generic constraint "i" seems to be copied from x86 or arm (and wi=
-th
-> > > a redundant generic operand modifier "c"). It works with -fno-PIE but
-> > > not with -fPIE/-fPIC in GCC's aarch64 port.
-> >
-> > Thanks for your patch, which is now commit f9daab0ad01cf9d1 ("arm64:
-> > jump_label: use constraints "Si" instead of "i"") in v6.8-rc5.
-> >
-> > > The machine constraint "S", which denotes a symbol or label reference
-> > > with a constant offset, supports PIC and has been available in GCC si=
-nce
-> > > 2012 and in Clang since 7.0. However, Clang before 19 does not suppor=
-t
-> > > "S" on a symbol with a constant offset [1] (e.g.
-> > > `static_key_false(&nf_hooks_needed[pf][hook])` in
-> > > include/linux/netfilter.h), so we use "i" as a fallback.
-> >
-> > https://gcc.gnu.org/releases.html says gcc-5 was released in 2015,
-> > i.e. after 2012 ...
-> >
-> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> > > Signed-off-by: Fangrui Song <maskray@google.com>
-> > > Link: https://github.com/llvm/llvm-project/pull/80255 [1]
-> > >
-> > > ---
-> > > Changes from
-> > > arm64: jump_label: use constraint "S" instead of "i" (https://lore.ke=
-rnel.org/all/20240131065322.1126831-1-maskray@google.com/)
-> > >
-> > > * Use "Si" as Ard suggested to support Clang<19
-> > > * Make branch a separate operand
-> > >
-> > > Changes from v1:
-> > >
-> > > * Use asmSymbolicName for readability
-> >
-> > But it still fails on gcc-5:
-> >
-> >     arch/arm64/include/asm/jump_label.h:25:2: error: invalid 'asm':
-> > invalid operand
-> >       asm goto(
-> >       ^
-> >
-> > http://kisskb.ellerman.id.au/kisskb/buildresult/15129281/
-> >
->
-> How odd. godbolt.org has 5.4 and it seems perfectly happy with it.
->
-> https://godbolt.org/z/szzG3s59K
+Hello:
 
-Wrong link
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-https://godbolt.org/z/GTnf3vPaT
+On Fri, 16 Feb 2024 15:27:44 -0800 you wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct tc_pedit.
+> Additionally, since the element count member must be set before accessing
+> the annotated flexible array member, move its initialization earlier.
+> 
+> [...]
+
+Here is the summary with links:
+  - net: sched: Annotate struct tc_pedit with __counted_by
+    https://git.kernel.org/netdev/net-next/c/1e63e5a813fa
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
