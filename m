@@ -1,133 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F291BF3D;
-	Mon, 19 Feb 2024 19:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09EA50A87
+	for <llvm@lists.linux.dev>; Mon, 19 Feb 2024 19:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708370920; cv=none; b=L8v+fSaAG+jcx1KY8V1ENUsIBUhD6kENDFdlxCTbMqFHe7wCilthMydanT4Uou9AST1Ttth4QbSUp+alxApnlGd/+77uysuCgEV7j+9GjrMNFZnMwV/rHcwQOfpjAIwoEmYl3lIEe999eoUpGO+M9w0kIV+yQOdmvMmsy5W3Cos=
+	t=1708371336; cv=none; b=jQIuKqJ/rnMKTNWvgoiV9LWmjxdVPWrNDpEEgLEYEWn7pXE2K9xL7VvMQnSiCi4UxstuijGFht8uXjjZXkuT7tXBXex+xhkvG/Ieo7TslgP35W7e48J4NzQdCyzVZo6OSu9Nw1cC2rPFpiTZwtOEiXGqxkiFFS1PPpMbca+odQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708370920; c=relaxed/simple;
-	bh=BcBpyRvLWEYLR63LQp3ENXVhKmAqe7m/TbOBnz6n/j4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bbJ70CuKMYTJdMHRnzk9vmQtbgu+qjkR6IvaqyypKYIGn5LFAhvP8Ika7FS+pAxvD9xFeC/i9qWSnnp2Hjun6CJ8SxjeeeYaQe7US43NBCe5NPji5G7KvnphV2CyCKl5JALFP1Rh9WYVAJmgq+VHbHgHMCXrdtAwCtFjeRJnqoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGUT35zH; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGUT35zH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8E8C433F1;
-	Mon, 19 Feb 2024 19:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708370919;
-	bh=BcBpyRvLWEYLR63LQp3ENXVhKmAqe7m/TbOBnz6n/j4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aGUT35zHgvccxggFIVuUwKbL1ze+7BWcVxc2HHP5PkOt3RaNHT5Bq1YYcL1fpDdaN
-	 YDhCQVUrgs9r4NXOVQyX1DKmhudm/nlks3CWF3zTk0wkdZWMIcZ8VrcuJuKpqX5km8
-	 phXDfmvDfvkHEY2tfCPBDLlCjddLYMiCeHCx62uvxIa6nfor0dkVeeumtwQjk1ADL+
-	 qQzeqcBm1/EHZQFMEPqlcOpYMaBq1PPePkcjgjB1MGVBgBZ/XlTouXJOoH3Zkw94OG
-	 6XtteU7FimwBqWnY6wVk/P4YUP8yVXlvyQuuD44VqjMLnr3ZOs1TO5I44x+yKC2G/O
-	 aKNF90SptJBBQ==
-Date: Mon, 19 Feb 2024 12:28:37 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: masahiroy@kernel.org, stable-commits@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Subject: Re: Patch "um: Fix adding '-no-pie' for clang" has been added to the
- 5.15-stable tree
-Message-ID: <20240219192837.GD2348301@dev-arch.thelio-3990X>
-References: <2024021939-dullness-calculate-a293@gregkh>
+	s=arc-20240116; t=1708371336; c=relaxed/simple;
+	bh=+5margOpW4CvmYp3SbztDJ9DbM635NMYbVyCCAkM8Cw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=Gk6zo3S20AUHLi6EUE0gpVy7ii3Ks1sCYSpqFEg0FRUwdW+32a9+CH2WrsKGZo4sh2v0elUVHUMZ3v5Ta18PjoiPCLsaXLSZaBM+b/MjN7UmgaP+V2MHjDR4ITZMlJpbrTwh7IWdoMIZB/T2pPzx1oH63UEYWKgeishbHt753ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-314-iR3pvq1wNXunpGpx55236w-1; Mon, 19 Feb 2024 19:35:25 +0000
+X-MC-Unique: iR3pvq1wNXunpGpx55236w-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 19 Feb
+ 2024 19:35:24 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 19 Feb 2024 19:35:24 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Arnd Bergmann' <arnd@arndb.de>, Andi Kleen <ak@linux.intel.com>, "Arnd
+ Bergmann" <arnd@kernel.org>
+CC: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
+	<brauner@kernel.org>, Jan Kara <jack@suse.cz>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Kees
+ Cook <keescook@chromium.org>, Andrew Morton <akpm@linux-foundation.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH] fs/select: rework stack allocation hack for clang
+Thread-Topic: [PATCH] fs/select: rework stack allocation hack for clang
+Thread-Index: AQHaYlVmebUOAwzLC0yN/tKvvf8iVrESDxTg
+Date: Mon, 19 Feb 2024 19:35:24 +0000
+Message-ID: <029aeaa162a64758a548938d5b382cb3@AcuMS.aculab.com>
+References: <20240216202352.2492798-1-arnd@kernel.org>
+ <ZdHZydVbQ7rIhMYV@tassilo>
+ <3a829098-612b-4e5a-bcec-3727acee7ff8@app.fastmail.com>
+In-Reply-To: <3a829098-612b-4e5a-bcec-3727acee7ff8@app.fastmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024021939-dullness-calculate-a293@gregkh>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+From: Arnd Bergmann
+> Sent: 18 February 2024 10:30
+>=20
+> On Sun, Feb 18, 2024, at 11:19, Andi Kleen wrote:
+> > I suspect given the larger default stack now we could maybe just increa=
+se the
+> > warning limit too, but that should be fine.
+>=20
+> I don't think we have increased the default stack size in decades,
+> it's still 8KB on almost all 32-bit architectures (sh, hexagon and m68k
+> still allow 4KB stacks, but that's probably broken). I would actually
+> like to (optionally) reduce the stack size for 64-bit machines
+> from 16KB to 12KB now that it's always vmapped.
 
-On Mon, Feb 19, 2024 at 06:02:39PM +0100, gregkh@linuxfoundation.org wrote:
-> 
-> This is a note to let you know that I've just added the patch titled
-> 
->     um: Fix adding '-no-pie' for clang
-> 
-> to the 5.15-stable tree which can be found at:
->     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-> 
-> The filename of the patch is:
->      um-fix-adding-no-pie-for-clang.patch
-> and it can be found in the queue-5.15 subdirectory.
-> 
-> If you, or anyone else, feels it should not be added to the stable tree,
-> please let <stable@vger.kernel.org> know about it.
-> 
-> 
-> From 846cfbeed09b45d985079a9173cf390cc053715b Mon Sep 17 00:00:00 2001
-> From: Nathan Chancellor <nathan@kernel.org>
-> Date: Tue, 23 Jan 2024 15:59:54 -0700
-> Subject: um: Fix adding '-no-pie' for clang
-> 
-> From: Nathan Chancellor <nathan@kernel.org>
-> 
-> commit 846cfbeed09b45d985079a9173cf390cc053715b upstream.
-> 
-> The kernel builds with -fno-PIE, so commit 883354afbc10 ("um: link
-> vmlinux with -no-pie") added the compiler linker flag '-no-pie' via
-> cc-option because '-no-pie' was only supported in GCC 6.1.0 and newer.
-> 
-> While this works for GCC, this does not work for clang because cc-option
-> uses '-c', which stops the pipeline right before linking, so '-no-pie'
-> is unconsumed and clang warns, causing cc-option to fail just as it
-> would if the option was entirely unsupported:
-> 
->   $ clang -Werror -no-pie -c -o /dev/null -x c /dev/null
->   clang-16: error: argument unused during compilation: '-no-pie' [-Werror,-Wunused-command-line-argument]
-> 
-> A recent version of clang exposes this because it generates a relocation
-> under '-mcmodel=large' that is not supported in PIE mode:
-> 
->   /usr/sbin/ld: init/main.o: relocation R_X86_64_32 against symbol `saved_command_line' can not be used when making a PIE object; recompile with -fPIE
->   /usr/sbin/ld: failed to set dynamic section sizes: bad value
->   clang: error: linker command failed with exit code 1 (use -v to see invocation)
-> 
-> Remove the cc-option check altogether. It is wasteful to invoke the
-> compiler to check for '-no-pie' because only one supported compiler
-> version does not support it, GCC 5.x (as it is supported with the
-> minimum version of clang and GCC 6.1.0+). Use a combination of the
-> gcc-min-version macro and CONFIG_CC_IS_CLANG to unconditionally add
-> '-no-pie' with CONFIG_LD_SCRIPT_DYN=y, so that it is enabled with all
-> compilers that support this. Furthermore, using gcc-min-version can help
-> turn this back into
-> 
->   LINK-$(CONFIG_LD_SCRIPT_DYN) += -no-pie
-> 
-> when the minimum version of GCC is bumped past 6.1.0.
-> 
-> Cc: stable@vger.kernel.org
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1982
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  arch/um/Makefile |    4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> --- a/arch/um/Makefile
-> +++ b/arch/um/Makefile
-> @@ -118,7 +118,9 @@ archprepare:
->  	$(Q)$(MAKE) $(build)=$(HOST_DIR)/um include/generated/user_constants.h
->  
->  LINK-$(CONFIG_LD_SCRIPT_STATIC) += -static
-> -LINK-$(CONFIG_LD_SCRIPT_DYN) += $(call cc-option, -no-pie)
-> +ifdef CONFIG_LD_SCRIPT_DYN
-> +LINK-$(call gcc-min-version, 60100)$(CONFIG_CC_IS_CLANG) += -no-pie
+Hasn't the stack for (some) ppc64 been increased to 32k to try to
+stop some recursive network code (of some kind) exploding the stack.
+(This causes grief when the stack size is doubled for kasan!)
 
-5.15 does not have support for gcc-min-version, so I think this just
-breaks ARCH=um for GCC. I do not think this patch matters much in 5.15
-and earlier, we only test ARCH=um with Linux 6.1 and newer, so it can be
-dropped.
+I really don't understand why the change isn't deemed necessary
+for some cpu types (I think ones that are likely to have less
+processors and less memory) because a small amount of the same
+workload would explode a the smaller stack.
 
-Cheers,
-Nathan
+OTOH more pressure really ought to be applied to remove the recursion.
+Unless you are trying to calculate the ackerman function (don't!) it
+is usually not to difficult to convert recursion to a loop.
+More than one level is really asking for trouble.
+
+=09David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
+
