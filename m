@@ -1,120 +1,108 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC56A13AA48
-	for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 18:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA3A1353E2;
+	Tue, 20 Feb 2024 19:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708454751; cv=none; b=h4+iiRwS67SlXi6qlh4C8VDM2XypoBF1gmGy4lUC/OIR8EL9GabXsCXySRYi7q57zf6ptAUznty1XVCE/oswurKDvZKBNz+AJbB6C4GH2RJ+21ZWXW5glEnCiFAWqyCkElCxMj/roj22Z0ev4lZRTb46SmoQVszY+mr82oLINzI=
+	t=1708456551; cv=none; b=OHySHkBl4PexhDpMcQheSuUy5rOH3tYJXRgAU11gcuH7QZImDl+UpsWPZDJ+1lAha6lAaBj/u/iHzCOxZS7JJ4kLBENmgXG+L7kqngPVPgGhaZo0qEeEhvmIebMBGwxzZ04YxZGEet+qYFGi4+g6fUfQq62NkB+nOzbXatGM8yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708454751; c=relaxed/simple;
-	bh=WTrXf4SbMFDefrf4t0yXfJ+Qx9gR2qrGFB/qrjo+/UE=;
+	s=arc-20240116; t=1708456551; c=relaxed/simple;
+	bh=Z/t+ZsXdV1hYnDG6K/BE0atUmSQOoX6f5wIxvew3KQw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I+JHf++Cm1Q+a/WNklQgdcmBV6BOvCzF9CWsnD7BKfCoRy0rh4fgLqTGiWzIcOLJhh7HrmRTVV7R8L1riH/faog+JM6geLguRMkU1iGwFEiYCEuFwNu65wx3vR/nKaZtQ/8Or4/8GhEewWI7ikze6ZvKDJvFAFOz7I9los9Arsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Ev2f7jnX reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=raFuTzG1v4TeMCv+bi5wOw6uMRs101CRSjMFYpOJEBHRtIq6vJUR6Dn2r5TySRTKw+k/u3CIbPpgvqkoHjV3yLNDwDAEKkqTC1+seHsIm2FWr8r0TCcOwmcx6dF2xY30QICUeLogURtKIHd7UdU9MMxanoAfx+0h1uZEVlqeefM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DeXDADMT; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Ev2f7jnX"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A89EF40E0192;
-	Tue, 20 Feb 2024 18:45:40 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 7SLPSg4QRKna; Tue, 20 Feb 2024 18:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708454738; bh=M5JyPXMACvJDaoY+/xJBALRa25X6wvkga3r70XUpxdA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ev2f7jnXwAUt0ub/SLZVKPipxoDAEpL6j+bWEC9DDMKiixTTpnFZgXCRvxQ5lLu8I
-	 locy+RvHh/r5FQReiCaoe5R9/d4cOFG7YCQWxmmN2TCHbKl6E52UkoIK9N2eyU2U7L
-	 CF1DWmLKEN9G0sytRXX9DvzXclYaq6gHdw7MynBS3nzY5RAbBuL0vfkgRx3cHCIeeh
-	 wxqVVzkkJWsCK5WmtSvls8JqbhRVnpCIbosa32022myuucg7SOVu1tRvhX2VL6vPjs
-	 1HBxCcdKDSFs6TRtxmvTaBCALulRF74c0B0M8fbzxwPSyDQ54EFmSMjLsd7akdIJzP
-	 +DEOLtQzXPUi1M4729nWia7bSm7QsO/Cc9iZ05IGGvE10KYJvrzcn7Mq2kYRlQQ1n0
-	 5rPkjgscnRF67PkChNhBwZli2Jkz+Do0cFl/c04Omaiun4BsrhORUeFxOkQDCQ5eWd
-	 uC5DA7kxzfXQ1Bu7+Dk81WH92zi3eL0135xjSiiYGPD8p4AGcRoKgRE4zmSLO255B/
-	 oSVHUCtx+wnS3fwKjuvjcNy5Z+sGdV/vlKt0t6RJyDHjlYNtMVLJNBm1TTFT6LowXw
-	 wjWkTEJeBDk9oNDB9P4aIGmnPLPtWq1kuW2yJp/dd5JTuDa8GWAoJw3Rhmi0uVFZJa
-	 FEC5IeloOusbjbL1Qx7YFQgw=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AFABB40E01BB;
-	Tue, 20 Feb 2024 18:45:19 +0000 (UTC)
-Date: Tue, 20 Feb 2024 19:45:13 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
- paging global variables
-Message-ID: <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-17-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DeXDADMT"
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41KJ27Rw022316;
+	Tue, 20 Feb 2024 19:15:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=jafodIKVXwEPBS7clsKCI9JQkSkC6D3nXLa87R4o64I=;
+ b=DeXDADMTsL+9a4QkbecRHiUaOeKtA8jBYAzRSQj2NoiPfzaPsdjh9kYIp9qVan9BF9Er
+ NVLFMwe3qIYIcJN3Lnuv40+qzG5VuY6HKqQ3PXLqBa9nqug7drz4fQZUfQ2/OmeUq2GQ
+ X6hk6fgCrRJZr+JAl7WlPQ4cncZfqdGY8iU4sUTQYzJM2XIHutGJWZwWNtpfsJBosxCW
+ GLOgXfIOJrNvXMJ5zTT77yhcLEaLu1yvnXUzGzYEvi8+OCY/eFYeaLDVaHSKxQuxpARa
+ Y5537UJdf6dEoEO5oHPADuGTJ3UK4yv8XXsbJEGQONl8DXDlTwoZMfn0Hb8KbnHXyDra Gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wd1vp0b9s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Feb 2024 19:15:47 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41KJ2SxT023229;
+	Tue, 20 Feb 2024 19:15:46 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wd1vp0b9g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Feb 2024 19:15:46 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41KIOik5014343;
+	Tue, 20 Feb 2024 19:15:45 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb9u2hs1c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Feb 2024 19:15:45 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41KJFaKr26346198
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 20 Feb 2024 19:15:38 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8230820040;
+	Tue, 20 Feb 2024 19:15:36 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DED482004B;
+	Tue, 20 Feb 2024 19:15:35 +0000 (GMT)
+Received: from osiris (unknown [9.171.44.168])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue, 20 Feb 2024 19:15:35 +0000 (GMT)
+Date: Tue, 20 Feb 2024 20:15:34 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, morbo@google.com, justinstitt@google.com,
+        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Ulrich Weigand <ulrich.weigand@de.ibm.com>
+Subject: Re: [PATCH] s390/boot: Add 'alloc' to info.bin .vmlinux.info section
+ flags
+Message-ID: <20240220191534.12893-B-hca@linux.ibm.com>
+References: <20240216-s390-fix-boot-with-llvm-objcopy-v1-1-0ac623daf42b@kernel.org>
+ <20240219113248.16287-C-hca@linux.ibm.com>
+ <20240219231623.GA2565406@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240213124143.1484862-17-ardb+git@google.com>
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240219231623.GA2565406@dev-arch.thelio-3990X>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: oOoC5iAugX_i_5PV1_jvv6Zaf7aoHKxq
+X-Proofpoint-GUID: wRr0fV0dWr20AjYEV8x51daVnL2aee4v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=711 clxscore=1015 spamscore=0 impostorscore=0
+ priorityscore=1501 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2402200139
 
-On Tue, Feb 13, 2024 at 01:41:48PM +0100, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
->=20
-> Assigning the 5-level paging related global variables from the earliest
-> C code using explicit references that use the 1:1 translation of memory
-> is unnecessary, as the startup code itself does not rely on them to
-> create the initial page tables, and this is all it should be doing. So
-> defer these assignments to the primary C entry code that executes via
-> the ordinary kernel virtual mapping.
->=20
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/kernel/head64.c | 44 +++++++-------------
->  1 file changed, 14 insertions(+), 30 deletions(-)
+Hi Nathan,
 
-Whoops:
+> > [...]
+> > So somehow llvmdump's "-j/--section" option doesn not seem to work.
+> 
+> However, since I am more of a kernel hacker than I am an LLVM one, I
+> came up with a potential solution in arch/s390/boot/Makefile, which is
+> basically just filtering the symbol table manually with grep... it
+> appears to produce stable results based on a small test Makefile I have
+> to make sure the output looks sane before running through sha256sum. I'd
+> be happy to send this as a formal patch if you'd accept it for full
+> LLVM=1 compatibility with LLVM 19.0.0+ and Linux 6.9+.
 
-arch/x86/kernel/head64.c: In function =E2=80=98x86_64_start_kernel=E2=80=99=
-:
-arch/x86/kernel/head64.c:442:17: error: =E2=80=98__pgtable_l5_enabled=E2=80=
-=99 undeclared (first use in this function); did you mean =E2=80=98pgtabl=
-e_l5_enabled=E2=80=99?
-  442 |                 __pgtable_l5_enabled    =3D 1;
-      |                 ^~~~~~~~~~~~~~~~~~~~
-      |                 pgtable_l5_enabled
-arch/x86/kernel/head64.c:442:17: note: each undeclared identifier is repo=
-rted only once for each function it appears in
-make[4]: *** [scripts/Makefile.build:243: arch/x86/kernel/head64.o] Error=
- 1
-make[3]: *** [scripts/Makefile.build:481: arch/x86/kernel] Error 2
-make[2]: *** [scripts/Makefile.build:481: arch/x86] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/mnt/kernel/kernel/2nd/linux/Makefile:1921: .] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
-
-
---=20
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Ok, please send a formal patch for this approach.
