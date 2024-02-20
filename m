@@ -1,57 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54C93E485;
-	Tue, 20 Feb 2024 03:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D765C43AAC;
+	Tue, 20 Feb 2024 03:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708398517; cv=none; b=GnowUI4019fQdmrA4uu2sw9r1xFAnmcf/LDY8JE7uFEIENwRBjF/RiAZOBmaDQPpTUJ3hexJSy42ZTw0yj1ZflfMErzsk55IijZFe3h4tRq1ZpDQTOdp/4NEzWK5tTi01G5i8dTBAVqdibjb3isKwUS8peMCBBqXW6ipx8+iXnQ=
+	t=1708399733; cv=none; b=VViVcS/nj5ahQRP1gr2/XTDxg7jROBZLJfSTm0W/WxrvsBB4Fu5G7230RUtgpwjNKa3gw15cyIDCfQ8T1C0FvX9OfRMoaiEUMgdH6LF/zzXsFV2lHZ7DMbJDMJv6qM49ahU8vIj79KPsXwrnAM/1Q4Jd+YXEIeCmIan3FYHEjPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708398517; c=relaxed/simple;
-	bh=VZAPcDq9YZLsosZSE60DcuJ1hzOIdM3hOOxYZj2r2R8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rebw8hUu+q7SMvAWSsp4m3/JsRfNLSkOsx5qq40UMj8dIWGyS0deD57fyG7+w7vf5ppJ44m9DWPk6fU8/zPJtFLBm+CMjUSWPT/n7+v4yxgBMA0LxivXS3CTfKashZehW1Nn/0/HKH8l1POLdwRzB9eJ/gUdE+/hntZe5yV4tzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j5nBuczg; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1708399733; c=relaxed/simple;
+	bh=BQlHpa273SuRCqvblXi5OnaVTNFf5TN8Nfvq3Uk5gu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qzrCOHhXWdQqEvPX8ocVp5qkjKR0gjFPEC9qasu2XpMRO3YGbMTs0BBkD1x5MzF5FotdniXCHfIb2d2sLSzpZcdU50gHOLnVm4P2fMmaGMIavVdB6L/hd8bXONXZHGtqUM00Pmm0kLq2ItcuvdorAyfqbtyEIN7EYPzZi42CSOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QJL1krAJ; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j5nBuczg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QJL1krAJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708398516; x=1739934516;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VZAPcDq9YZLsosZSE60DcuJ1hzOIdM3hOOxYZj2r2R8=;
-  b=j5nBuczgIpUXVl1uQnspwGNnvaSf0M1JzTnPmOaLpon0M9Tg52UUczSr
-   lUURvfqYmQXOHbRvReHYALV+59yFPOwfm0y1ttELwx630pJa5YSjskF+L
-   wMIAjTJoOSaaTwEH+F8l4PPXwtimulfyG9lBRU+IFIPS3rfDSWOLw1qt8
-   WdZ+yrcV+t2nFYPqLQN9K1/00wAWzFFglejlfTq3kZdcnBOxJZn5j2BUG
-   P0RlBSE0unnuXz35wpwjphIOBz1JMecZU5b2jpJJHZ3ve37eXpKXsC+0d
-   57gBkbvM8xnvz1oaeL63HKNxXJKX2wWiI4MffdqxI07587OTDCVJ3vF0E
+  t=1708399732; x=1739935732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BQlHpa273SuRCqvblXi5OnaVTNFf5TN8Nfvq3Uk5gu4=;
+  b=QJL1krAJhE1LBYg2JHUwfmylUQy81N6H4ECaBlCm83P3S9HO74Ugrs0b
+   hx4ivp6Ux8QWX5BybcC1MpymthWU8vpgEDiq9SRUQx3ZmfMQ3C0peW/vm
+   +rXAnPN/xffs8e21V76jnLsPautP3r1SJKSMzyzr8MKel28lo2b6CGw3m
+   ymaGzQbbKtNLp3nOhRbuPYQb1RzUcvTxTvF4LWgNNxY/9bI+1/iGFTO0t
+   +/xF9rErn+T3KZQDcTd2JMBK123zn3oGcGJzie7Lb4YbUYW0+mcMKc9qz
+   pY7EqnKYYtOA17KsNPa0dgkOtORdy7V/+JnENHRvNZ9hc1IR4tmCJBtmH
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="2350973"
+X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="2351345"
 X-IronPort-AV: E=Sophos;i="6.06,171,1705392000"; 
-   d="scan'208";a="2350973"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2024 19:08:35 -0800
+   d="scan'208";a="2351345"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2024 19:28:51 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="936382961"
 X-IronPort-AV: E=Sophos;i="6.06,171,1705392000"; 
-   d="scan'208";a="9340168"
+   d="scan'208";a="936382961"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 19 Feb 2024 19:08:33 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 19 Feb 2024 19:28:46 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rcGUg-0004Dc-1S;
-	Tue, 20 Feb 2024 03:08:30 +0000
-Date: Tue, 20 Feb 2024 11:08:26 +0800
+	id 1rcGoG-0004EC-1z;
+	Tue, 20 Feb 2024 03:28:44 +0000
+Date: Tue, 20 Feb 2024 11:28:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
+To: Kamel Bouhara <kamel.bouhara@bootlin.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Henrik Rydberg <rydberg@bitmath.org>, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Jeff LaBundy <jeff@labundy.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:vfs.pidfd 21/21] fs/libfs.c:2036:14: error:
- incompatible pointer types initializing 'typeof (*(__ai_ptr)) *' (aka
- 'struct dentry **') with an expression of type 'typeof (old)' (aka 'struct
- dentry *'); take the address with &
-Message-ID: <202402201038.QgndybeN-lkp@intel.com>
+	catalin.popescu@leica-geosystems.com,
+	mark.satterthwaite@touchnetix.com,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	bsp-development.geo@leica-geosystems.com,
+	Kamel Bouhara <kamel.bouhara@bootlin.com>
+Subject: Re: [PATCH v8 3/3] Input: Add TouchNetix axiom i2c touchscreen driver
+Message-ID: <202402201157.BKo97uWl-lkp@intel.com>
+References: <20240219101221.129750-4-kamel.bouhara@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,61 +73,151 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240219101221.129750-4-kamel.bouhara@bootlin.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.pidfd
-head:   b5273dc51b5b5843659d6b3ee930ac10ff3ad816
-commit: a211767b02e79fa1984d8014a35932b7683db40b [21/21] libfs: improve path_from_stashed() helper
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240220/202402201038.QgndybeN-lkp@intel.com/config)
+Hi Kamel,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on dtor-input/next]
+[also build test ERROR on dtor-input/for-linus robh/for-next krzk-dt/for-next linus/master v6.8-rc5 next-20240219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kamel-Bouhara/dt-bindings-vendor-prefixes-Add-TouchNetix-AS/20240219-181550
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20240219101221.129750-4-kamel.bouhara%40bootlin.com
+patch subject: [PATCH v8 3/3] Input: Add TouchNetix axiom i2c touchscreen driver
+config: arm64-randconfig-002-20240220 (https://download.01.org/0day-ci/archive/20240220/202402201157.BKo97uWl-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240220/202402201038.QgndybeN-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240220/202402201157.BKo97uWl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402201038.QgndybeN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402201157.BKo97uWl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/libfs.c:2036:14: error: incompatible pointer types initializing 'typeof (*(__ai_ptr)) *' (aka 'struct dentry **') with an expression of type 'typeof (old)' (aka 'struct dentry *'); take the address with & [-Werror,-Wincompatible-pointer-types]
-    2036 |                 if (likely(try_cmpxchg(stashed, old, dentry)))
-         |                     ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:4838:2: note: expanded from macro 'try_cmpxchg'
-    4838 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:191:19: note: expanded from macro 'raw_try_cmpxchg'
-     191 |         typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-         |                          ^
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
+>> drivers/input/touchscreen/touchnetix_axiom.c:332:18: error: use of undeclared identifier 'slot'; did you mean 'sget'?
+     332 |                 target->index, slot, target->present,
+         |                                ^~~~
+         |                                sget
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+     163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+         |                                                             ^
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                                ^
+   include/linux/fs.h:2272:21: note: 'sget' declared here
+    2272 | struct super_block *sget(struct file_system_type *type,
+         |                     ^
    1 error generated.
 
 
-vim +2036 fs/libfs.c
+vim +332 drivers/input/touchscreen/touchnetix_axiom.c
 
-  2018	
-  2019	static struct dentry *stash_dentry(struct dentry **stashed,
-  2020					   struct dentry *dentry)
-  2021	{
-  2022		guard(rcu)();
-  2023		for (;;) {
-  2024			struct dentry *old;
-  2025	
-  2026			/* Assume any old dentry was cleared out. */
-  2027			old = cmpxchg(stashed, NULL, dentry);
-  2028			if (likely(!old))
-  2029				return dentry;
-  2030	
-  2031			/* Check if somebody else installed a reusable dentry. */
-  2032			if (lockref_get_not_dead(&old->d_lockref))
-  2033				return old;
-  2034	
-  2035			/* There's an old dead dentry there, try to take it over. */
-> 2036			if (likely(try_cmpxchg(stashed, old, dentry)))
-  2037				return dentry;
-  2038		}
-  2039	}
-  2040	
+   289	
+   290	/*
+   291	 * Support function to axiom_process_u41_report.
+   292	 * Generates input-subsystem events for every target.
+   293	 * After calling this function the caller shall issue
+   294	 * a Sync to the input sub-system.
+   295	 */
+   296	static bool axiom_process_u41_report_target(struct axiom_data *ts,
+   297						    struct axiom_target_report *target)
+   298	{
+   299		struct input_dev *input_dev = ts->input_dev;
+   300		struct axiom_u41_target *target_prev_state;
+   301		enum axiom_target_state current_state;
+   302		int id;
+   303	
+   304		/* Verify the target index */
+   305		if (target->index >= AXIOM_U41_MAX_TARGETS) {
+   306			dev_err(ts->dev, "Invalid target index! %u\n", target->index);
+   307			return false;
+   308		}
+   309	
+   310		target_prev_state = &ts->targets[target->index];
+   311	
+   312		current_state = AXIOM_TARGET_STATE_NOT_PRESENT;
+   313	
+   314		if (target->present) {
+   315			if (target->z >= 0)
+   316				current_state = AXIOM_TARGET_STATE_TOUCHING;
+   317			else if (target->z > AXIOM_PROX_LEVEL && target->z < 0)
+   318				current_state = AXIOM_TARGET_STATE_HOVER;
+   319			else if (target->z == AXIOM_PROX_LEVEL)
+   320				current_state = AXIOM_TARGET_STATE_PROX;
+   321		}
+   322	
+   323		if (target_prev_state->state == current_state &&
+   324		    target_prev_state->x == target->x &&
+   325		    target_prev_state->y == target->y &&
+   326		    target_prev_state->z == target->z)
+   327			return false;
+   328	
+   329		id = target->index;
+   330	
+   331		dev_dbg(ts->dev, "U41 Target T%u, slot:%u present:%u, x:%u, y:%u, z:%d\n",
+ > 332			target->index, slot, target->present,
+   333			target->x, target->y, target->z);
+   334	
+   335		switch (current_state) {
+   336		case AXIOM_TARGET_STATE_NOT_PRESENT:
+   337		case AXIOM_TARGET_STATE_PROX:
+   338			if (!target_prev_state->insert)
+   339				break;
+   340			target_prev_state->insert = false;
+   341	
+   342			if (!id)
+   343				input_report_key(input_dev, BTN_TOUCH, 0);
+   344	
+   345			input_mt_report_slot_inactive(input_dev);
+   346			/*
+   347			 * make sure the previous coordinates are
+   348			 * all off screen when the finger comes back
+   349			 */
+   350			target->x = 65535;
+   351			target->y = 65535;
+   352			target->z = AXIOM_PROX_LEVEL;
+   353			break;
+   354		case AXIOM_TARGET_STATE_HOVER:
+   355		case AXIOM_TARGET_STATE_TOUCHING:
+   356			target_prev_state->insert = true;
+   357			input_report_abs(input_dev, ABS_MT_TRACKING_ID, id);
+   358			input_report_abs(input_dev, ABS_MT_POSITION_X, target->x);
+   359			input_report_abs(input_dev, ABS_MT_POSITION_Y, target->y);
+   360	
+   361			if (current_state == AXIOM_TARGET_STATE_TOUCHING) {
+   362				input_report_abs(input_dev, ABS_MT_DISTANCE, 0);
+   363				input_report_abs(input_dev, ABS_DISTANCE, 0);
+   364				input_report_abs(input_dev, ABS_MT_PRESSURE, target->z);
+   365				input_report_abs(input_dev, ABS_PRESSURE, target->z);
+   366			} else {
+   367				input_report_abs(input_dev, ABS_MT_DISTANCE, -target->z);
+   368				input_report_abs(input_dev, ABS_DISTANCE, -target->z);
+   369				input_report_abs(input_dev, ABS_MT_PRESSURE, 0);
+   370				input_report_abs(input_dev, ABS_PRESSURE, 0);
+   371			}
+   372	
+   373			if (!id)
+   374				input_report_key(input_dev, BTN_TOUCH, (current_state ==
+   375						 AXIOM_TARGET_STATE_TOUCHING));
+   376			break;
+   377		default:
+   378			break;
+   379		}
+   380	
+   381		target_prev_state->state = current_state;
+   382		target_prev_state->x = target->x;
+   383		target_prev_state->y = target->y;
+   384		target_prev_state->z = target->z;
+   385	
+   386		return true;
+   387	}
+   388	
 
 -- 
 0-DAY CI Kernel Test Service
