@@ -1,224 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BF739875
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 03:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772CA2E842;
+	Wed, 21 Feb 2024 03:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708484494; cv=none; b=kXgmI7/e18ZGs0O6V6KDQZve8lJJpeIoj56WucfuP/QwvFzRrcQe53nMgk3LdvhuAqN6d3YZq8Or8YkTsTSyU2gqgqJZJdsg+Yfsm9IlkQiX2WFHy1ulhbm9wYo9LRc6M5JzPq/XZXAZz6PIysj7hjJ2sgrcvgBCgc9bh0nWSsU=
+	t=1708485719; cv=none; b=UoSgLKVjkiE0v5NjeYnKiw5xCNjV3QttsRHTboGjeDay6K/YZw58aD3Fu56c9CXvH43gMb9j88M4+ZJNLCXsgg8pRX8YckWC5TvbGbGAuc1EdSCcq+HvHRLCZAiYEgJGMNJGLiysl4zVrZe2hqI7NhOToZsS6N8hTX3Pg7Lajw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708484494; c=relaxed/simple;
-	bh=nKqeB3IKn9WfMD8Ihh42vIRJYc6Vut5xHTu+LtuzvPs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=H+3vTflYQkIGUgyQYwh1G0gWJOMboL8L71NazTQ+IEFrc5EuiLt8qg76D3uY5ylH1lK7EBKsZmfG/vV7cdcL5wHuiElVoZU0C9gB2ipvxr9gHuCjXbOk9dFo7A4TcuEe616P7RvkI284YLJ4JLyYEKM/zq6G4ZDXiyk//NdcGII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PlsZItcq; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1708485719; c=relaxed/simple;
+	bh=roR4IWUrlyRBsXjWspybLv8S9RaU5stZ0s47JU/M4dU=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=p0E8tCI2aA1QZKYT2GO4gBFYzEkDZEPCxk/JM/FIfhPoqf6TLRVoXqsd66NKNg4bbt9ZSXCf6tdGCDWNvoPjicgq8buLGKcMvat+7s6burH0qZCz1fhP1N5kXPvMBv5DvtF3wdBuAO4I1QzeVRVJyBjxZK+7cEP602f08/b2jVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dbDjbaT2; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PlsZItcq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708484487;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9kR34gCSdpbzg7yiGk5ZvqsIfrdmLUQX6lCJXl37IPU=;
-	b=PlsZItcqqTPUoV/cxy6clqquins+Bu7cXfKa3MVsXzoOzaab6nfHqMLbMq2BYCeWkV7zsm
-	bSuFXeVKSZaisSDksER5Fy6SzgFv4OdS/w/f8KhgmLHn+5r7lRuXdvA/eonjOZ11A1f54Z
-	p9IANF8eOptlTf0Qb+QsDNiYTSNUSTs=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-453-qzXAHqUwMlSq8FPTocxHtQ-1; Tue,
- 20 Feb 2024 22:01:25 -0500
-X-MC-Unique: qzXAHqUwMlSq8FPTocxHtQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA00D1C07F27
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 03:01:25 +0000 (UTC)
-Received: from [172.64.5.24] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 66C2E1121312;
-	Wed, 21 Feb 2024 03:01:25 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.8.0-rc5, mainline.kernel.org-clang, fca7526b)
-Date: Wed, 21 Feb 2024 03:01:25 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dbDjbaT2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708485717; x=1740021717;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=roR4IWUrlyRBsXjWspybLv8S9RaU5stZ0s47JU/M4dU=;
+  b=dbDjbaT2hbrrtdlnlTpZUje7Q3Nvx6GdIAdc8B52oZ1nrC8ByTL+SUPy
+   r4TiKtYEHkAq+0rZFHJAm6sS9UphqpjDq39SwDmQIdStNU0dxglrwAzNU
+   DZhqggvGllRyu3g/HuQpf1Zlnx3re5JMNi47SjmGPpqsltaDBQ5mF2Ukk
+   iuIDLPykUq8/suhgO9i1ZGvl0MXsJ8rY6m2t0yEE9dYX0ud6oa6fU05Pf
+   BL/3GttKbgpygqreF8oiHxGAUKZabVxpbjJ82HSvbvk41/7t5HENs4WA5
+   H3xYiEnZy/Tg5yuZxKNmzq2oXObZVay4owO9v5BrPVs+JcXeYOaH1gT+0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="6407674"
+X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
+   d="scan'208";a="6407674"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 19:21:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,174,1705392000"; 
+   d="scan'208";a="9649698"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 20 Feb 2024 19:21:55 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rcdAo-0004y8-1z;
+	Wed, 21 Feb 2024 03:21:38 +0000
+Date: Wed, 21 Feb 2024 11:20:52 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [ardb:x86-pie-for-sev-v5 10/16] vmlinux.o: warning: objtool:
+ early_setup_idt+0x4: call to startup_64_load_idt() leaves .noinstr.text
+ section
+Message-ID: <202402211150.wwhC4QA1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <63222.124022022012502873@us-mta-453.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+TO: Ard Biesheuvel <ardb@kernel.org>
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-for-sev-v5
+head:   0cc3d2ea8faa59cc6406f95460e42ae5987ee35b
+commit: 821c593f3d856b83c39d1572b1633b0c9ff6fa9c [10/16] x86/startup_64: Simplify virtual switch on primary boot
+config: x86_64-randconfig-004-20240220 (https://download.01.org/0day-ci/archive/20240221/202402211150.wwhC4QA1-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240221/202402211150.wwhC4QA1-lkp@intel.com/reproduce)
 
-Tested-by: CKI Project <cki-project@redhat.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402211150.wwhC4QA1-lkp@intel.com/
 
-Kernel information:
-    Commit message: drm/tests/drm_buddy: fix build failure on 32-bit target=
-s
+All warnings (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/130439
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
-koza machines
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1852
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests tests nbd/001 failed
-            URL: https://github.com/osandov/blktests/issues/132
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] blktests tests/zbd/010 failed
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: [upstream][s390x] blktests nvme/029 failed due to nvme-cli u=
-pdate
-            URL: https://github.com/linux-nvme/nvme-cli/issues/2218
-            Affected tests:
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> vmlinux.o: warning: objtool: early_setup_idt+0x4: call to startup_64_load_idt() leaves .noinstr.text section
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
+objdump-func vmlinux.o early_setup_idt:
+0000 0000000000000940 <early_setup_idt>:
+0000      940:	f3 0f 1e fa          	endbr64
+0004      944:	e9 00 00 00 00       	jmp    949 <early_setup_idt+0x9>	945: R_X86_64_PLT32	.head.text+0x4bc
+0009      949:	cc                   	int3
+000a      94a:	cc                   	int3
+000b      94b:	cc                   	int3
+000c      94c:	cc                   	int3
+000d      94d:	cc                   	int3
+000e      94e:	cc                   	int3
+000f      94f:	cc                   	int3
+0010      950:	cc                   	int3
+0011      951:	cc                   	int3
+0012      952:	cc                   	int3
+0013      953:	cc                   	int3
+0014      954:	cc                   	int3
+0015      955:	cc                   	int3
+0016      956:	cc                   	int3
+0017      957:	cc                   	int3
+0018      958:	cc                   	int3
+0019      959:	cc                   	int3
+001a      95a:	cc                   	int3
+001b      95b:	cc                   	int3
+001c      95c:	cc                   	int3
+001d      95d:	cc                   	int3
+001e      95e:	cc                   	int3
+001f      95f:	cc                   	int3
+0020      960:	90                   	nop
+0021      961:	90                   	nop
+0022      962:	90                   	nop
+0023      963:	90                   	nop
+0024      964:	90                   	nop
+0025      965:	90                   	nop
+0026      966:	90                   	nop
+0027      967:	90                   	nop
+0028      968:	90                   	nop
+0029      969:	90                   	nop
+002a      96a:	90                   	nop
+002b      96b:	90                   	nop
+002c      96c:	90                   	nop
+002d      96d:	90                   	nop
+002e      96e:	90                   	nop
+002f      96f:	90                   	nop
+0030      970:	90                   	nop
+0031      971:	90                   	nop
+0032      972:	90                   	nop
+0033      973:	90                   	nop
+0034      974:	90                   	nop
+0035      975:	90                   	nop
+0036      976:	90                   	nop
+0037      977:	90                   	nop
+0038      978:	90                   	nop
+0039      979:	90                   	nop
+003a      97a:	90                   	nop
+003b      97b:	90                   	nop
+003c      97c:	90                   	nop
+003d      97d:	90                   	nop
+003e      97e:	90                   	nop
+003f      97f:	90                   	nop
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
