@@ -1,53 +1,53 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FA31FDD
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 01:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B268879C6
+	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 01:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708480397; cv=none; b=JRA0OuEIuELGgj4upti1eMztw+h4Abzsl9sx5xtDop5pUpxDaGgZD4DOujaYxSLeg4ShNcMn2IU/oVgdPakn2x0gKAQx7pv1OWP33XAXR6FMZgBNVLlTqB+BT47O0Yxb5bilCBDpY+sBMZ+Caim9WqE5Ilnp/u8pUYeh036Ys8I=
+	t=1708480491; cv=none; b=pej1h9YwpueWfjOEEUzpruapnrm0kxL5fnzmLKYJd6xmGekAmiWjctUg/bYjHJerLnCS0p2IwdbjUWLueevH89i+wHma2MlxaujW9UebO2eeusYEEMhozGqb6+x0fVX9LzFcIMvxWmJ/plOWT8wJLQnA3cqAhBUaTwXXsmTjIKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708480397; c=relaxed/simple;
-	bh=txkMZ/Gg8fpSCMJTWXUn8JbtYWC6xphivOjGiTiGjsw=;
+	s=arc-20240116; t=1708480491; c=relaxed/simple;
+	bh=qvvXGLRd2dBY05DP4mtYdzdlsgKW60gBnGie/EdUL2A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ttZv+eWbXo0jULsSq3WR9aKxw4+lBq1Uoa7ACAhu+dRx6BA5BWtvMde/wqHLTbrERsomMiGAgG9o9nW+zak0Tu3PgJ2noWciGdBMkuQqI1lLe4qRkK6Yi1d3lfdfPG2HI5B89OaHjSZdNwRA+uxjRSvAs/kfh+4w9yNOj/c/pM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.48
+	 To:Cc:Content-Type; b=KZOJ+d5EZEVy7nXLbpAwYj7WDHxyZKOMB1A+beMG0ecP71RgPJMIGFpz8aVSepxCjphGa4CCr+83kVCkCKpezX/S72LGSNjvLlK1hdYjAAwTrtqEjQMEIg14hhS//c80gztrVKEeeEHHORo9penR1yaTClBP4yU/w4pWA10gIRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-299e4b352cdso866882a91.0
-        for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 17:53:16 -0800 (PST)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1d751bc0c15so55490665ad.2
+        for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 17:54:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708480395; x=1709085195;
+        d=1e100.net; s=20230601; t=1708480489; x=1709085289;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TBly6Q2PEojVSg3uLNQmMXendkI9nh//XLo8bYv5jdA=;
-        b=aCHdnhk1dXfNK4L4MEBZ4OrDx4n5q5I1Ot9dK4VpqF/oSotjfXpTrBvfIfCngXOm7W
-         kFZVbeHpXvGV1AG/lnCDN3PPfINZoapft8T6zRpUBZdqDr2ZSfxAUarOoNRUYxvDfoVv
-         5tK/b7aUGgLdjhg0SkAoaLaCbVLpVqw7DT3fGSLZDdh8gaA8ngr0UJEYXQWhxebWJQyn
-         woiJ/D8i03QcqHEjbYA81a0Ydvk9IsskmEIvWezDZGt8nFoh+I9Kfy5WOmLLxlOJItb7
-         FukoAq5Y8FzomxGX4YvpzaKevE76rGGkb8Vgpw7omSXTvn5p3KKyXQLHm2nQXTTl8OQp
-         ErBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwVTJR7L57HfNwX1y2yYjCN31F/t1hRxH7tPzLtWt5uuDsH8cY74FlDpfJI0OnfqoQ5d0OqY7eGrgz+YnikTZTkRxqsw==
-X-Gm-Message-State: AOJu0Yy0oEgmDNTRpCh+s57x1IaRb6k6vDwS5DUU11wFMMWd80eIFlFf
-	TMe7SGqGXNYwij7dXdSjYD631xK4XWWM3NGCN1SGMgHgGuRIEPeGs+syOzFIA474KX265DBlLFy
-	K0fcBb9k7K46IuvZwevSeiXe3fgQ=
-X-Google-Smtp-Source: AGHT+IGyfZl8zQrLCDq95vXqsW3gTFcoH6OrHCZMebf7zF6Qz5F5m+BE5cvJk2Dn+v+46Is9jDoSaI4hLFX36Rx0Gdc=
-X-Received: by 2002:a17:90b:4a0c:b0:299:3334:51d1 with SMTP id
- kk12-20020a17090b4a0c00b00299333451d1mr11485895pjb.10.1708480395448; Tue, 20
- Feb 2024 17:53:15 -0800 (PST)
+        bh=FChvkbuwuumTfTUfxOqNV1G/tDSl1t1W6EEos4crhQE=;
+        b=qdMHmbcASuPL/21LAOlXCbNUJc5XurmMf/R73fzJGfM7GQDI1H0pqdKqw8cbj3VjBs
+         56+xLMVpUA5Cevg0O4B4jTUiozH5MHjBiMpjs3546afKeimwkl1qzr/mV8AJr+X4eQTi
+         CxvI324kXFHAkzlAxfFqnijySLGtM6OsoIdK+ooAZNdrh3dzf9PTpsnDdhNSa9IkU9Wd
+         LCf0FQdZJLku7mMwiv6QmVzx5ZnDL8w2Pw0WBVdBygSYFF7RgKct5/0bbhCHBtOclw+D
+         IUoGoldEPKvfCXbECZUtKQtQ0TbA5qCkJBjLkOuMijGaHtRt+BtuO4yM1hxNf6smGLhE
+         Rl9w==
+X-Forwarded-Encrypted: i=1; AJvYcCW4pqZ2XOpjcaZ/2S/P+TX7AJsenfCG9oKcATZ73ukS1tK7BIIHZ/H4V3JYPjLhvL9IkLQsdjXnNjj/KzNWKXJ59AFMig==
+X-Gm-Message-State: AOJu0YzslzrD8omC+6cUaex7qML4gMJDdIHf3EYu0o+qaigTemOElfzs
+	ND3kiskn+2Sth+tU2RurSSZG8TxsIYAoUlXVkbDAUvdJIDl8FFVcVezBgLlFOKphcG6EAF2yMYg
+	F7xN1TOX4VQ/vYQmVhdjsc4xkilI=
+X-Google-Smtp-Source: AGHT+IGyzooye3Mtp9/+LQQ5tOGpO5yTsTZeTRYtOS00j5v4qEYINRAmRiq8C50kD3wvA1K4tQ2saG/x04O0YqFvq9I=
+X-Received: by 2002:a17:90a:c78a:b0:299:1f85:6fdc with SMTP id
+ gn10-20020a17090ac78a00b002991f856fdcmr12494391pjb.48.1708480488882; Tue, 20
+ Feb 2024 17:54:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240216235203.229256-1-irogers@google.com> <20240216235203.229256-3-irogers@google.com>
-In-Reply-To: <20240216235203.229256-3-irogers@google.com>
+References: <20240216235203.229256-1-irogers@google.com> <20240216235203.229256-7-irogers@google.com>
+In-Reply-To: <20240216235203.229256-7-irogers@google.com>
 From: Namhyung Kim <namhyung@kernel.org>
-Date: Tue, 20 Feb 2024 17:53:03 -0800
-Message-ID: <CAM9d7cgqpvXLgq35B5MoysFzLeUBg7bJzX+pTK_ER=-hM0D=AQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/8] perf list: Add scandirat compatibility function
+Date: Tue, 20 Feb 2024 17:54:36 -0800
+Message-ID: <CAM9d7cgavJtfVjcESq4HRvm9mvmRL9KrfO5HsTMPrgfLvxnymQ@mail.gmail.com>
+Subject: Re: [PATCH v5 6/8] perf tests: Use scandirat for shell script finding
 To: Ian Rogers <irogers@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -61,138 +61,388 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ian,
-
 On Fri, Feb 16, 2024 at 3:55=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
 te:
 >
-> scandirat is used during the printing of tracepoint events but may be
-> missing from certain libcs. Add a compatibility implementation that
-> uses the symlink of an fd in /proc as a path for the reliably present
-> scandir.
+> Avoid filename appending buffers by using openat, faccessat and
+> scandirat more widely. Turn the script's path back to a file name
+> using readlink from /proc/<pid>/fd/<fd>.
+>
+> Read the script's description using api/io.h to avoid fdopen
+> conversions. Whilst reading perform additional sanity checks on the
+> script's contents.
 >
 > Signed-off-by: Ian Rogers <irogers@google.com>
 
-This fails to build in alpine:
+Ditto.
 
-  util/print-events.c: In function 'print_tracepoint_events':
-  util/print-events.c:92:29: error: implicit declaration of function
-'scandirat'; did you mean 'scandir'?
+  tests/tests-scripts.c: In function 'append_scripts_in_dir':
+  tests/tests-scripts.c:200:18: error: implicit declaration of
+function 'scandirat'; did you mean 'scandir'?
 [-Werror=3Dimplicit-function-declaration]
-  92 |                 evt_items =3D scandirat(events_fd,
-sys_dirent->d_name, &evt_namelist, NULL, alphasort);
-  |                             ^~~~~~~~~
-  |                             scandir
+  200 |         n_dirs =3D scandirat(dir_fd, ".", &entlist, NULL,
+alphasort);
+  |                  ^~~~~~~~~
+  |                  scandir
 
 Thanks,
 Namhyung
 
 
 > ---
->  tools/perf/util/print-events.c | 12 +++---------
->  tools/perf/util/util.c         | 19 +++++++++++++++++++
->  tools/perf/util/util.h         |  8 ++++++++
->  3 files changed, 30 insertions(+), 9 deletions(-)
+>  tools/perf/tests/builtin-test.c  |  20 ++---
+>  tools/perf/tests/tests-scripts.c | 144 ++++++++++++++++++-------------
+>  tools/perf/tests/tests-scripts.h |   1 -
+>  3 files changed, 94 insertions(+), 71 deletions(-)
 >
-> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-event=
-s.c
-> index 9e47712507cc..bf79dd366e2e 100644
-> --- a/tools/perf/util/print-events.c
-> +++ b/tools/perf/util/print-events.c
-> @@ -63,6 +63,8 @@ void print_tracepoint_events(const struct print_callbac=
-ks *print_cb __maybe_unus
+> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-t=
+est.c
+> index eff3c62e9b47..162f9eb090ac 100644
+> --- a/tools/perf/tests/builtin-test.c
+> +++ b/tools/perf/tests/builtin-test.c
+> @@ -300,22 +300,19 @@ static int test_and_print(struct test_suite *t, int=
+ subtest)
+>  }
+>
+>  struct shell_test {
+> -       const char *dir;
+>         const char *file;
+>  };
+>
+>  static int shell_test__run(struct test_suite *test, int subdir __maybe_u=
+nused)
 >  {
->         char *events_path =3D get_tracing_file("events");
->         int events_fd =3D open(events_path, O_PATH);
-> +       struct dirent **sys_namelist =3D NULL;
-> +       int sys_items;
+>         int err;
+> -       char script[PATH_MAX];
+>         struct shell_test *st =3D test->priv;
+> +       char *cmd =3D NULL;
 >
->         put_tracing_file(events_path);
->         if (events_fd < 0) {
-> @@ -70,10 +72,7 @@ void print_tracepoint_events(const struct print_callba=
-cks *print_cb __maybe_unus
+> -       path__join(script, sizeof(script) - 3, st->dir, st->file);
+> -
+> -       if (verbose > 0)
+> -               strncat(script, " -v", sizeof(script) - strlen(script) - =
+1);
+> -
+> -       err =3D system(script);
+> +       if (asprintf(&cmd, "%s%s", st->file, verbose ? " -v" : "") < 0)
+> +               return TEST_FAIL;
+> +       err =3D system(cmd);
+> +       free(cmd);
+>         if (!err)
+>                 return TEST_OK;
+>
+> @@ -331,7 +328,7 @@ static int run_shell_tests(int argc, const char *argv=
+[], int i, int width,
+>         files =3D list_script_files();
+>         if (!files)
+>                 return 0;
+> -       for (file =3D files; file->dir; file++) {
+> +       for (file =3D files; file->file; file++) {
+>                 int curr =3D i++;
+>                 struct test_case test_cases[] =3D {
+>                         {
+> @@ -345,13 +342,12 @@ static int run_shell_tests(int argc, const char *ar=
+gv[], int i, int width,
+>                         .test_cases =3D test_cases,
+>                         .priv =3D &st,
+>                 };
+> -               st.dir =3D file->dir;
+> +               st.file =3D file->file;
+>
+>                 if (test_suite.desc =3D=3D NULL ||
+>                     !perf_test__matches(test_suite.desc, curr, argc, argv=
+))
+>                         continue;
+>
+> -               st.file =3D file->file;
+>                 pr_info("%3d: %-*s:", i, width, test_suite.desc);
+>
+>                 if (intlist__find(skiplist, i)) {
+> @@ -455,7 +451,7 @@ static int perf_test__list_shell(int argc, const char=
+ **argv, int i)
+>         files =3D list_script_files();
+>         if (!files)
+>                 return 0;
+> -       for (file =3D files; file->dir; file++) {
+> +       for (file =3D files; file->file; file++) {
+>                 int curr =3D i++;
+>                 struct test_suite t =3D {
+>                         .desc =3D file->desc
+> diff --git a/tools/perf/tests/tests-scripts.c b/tools/perf/tests/tests-sc=
+ripts.c
+> index 4ebd841da05b..9b3b66dd5508 100644
+> --- a/tools/perf/tests/tests-scripts.c
+> +++ b/tools/perf/tests/tests-scripts.c
+> @@ -14,6 +14,7 @@
+>  #include <subcmd/parse-options.h>
+>  #include <sys/wait.h>
+>  #include <sys/stat.h>
+> +#include <api/io.h>
+>  #include "builtin.h"
+>  #include "tests-scripts.h"
+>  #include "color.h"
+> @@ -35,55 +36,69 @@ static size_t files_num =3D 0;
+>  static struct script_file *files =3D NULL;
+>  static int files_max_width =3D 0;
+>
+> -static const char *shell_tests__dir(char *path, size_t size)
+> +static int shell_tests__dir_fd(void)
+>  {
+> -       const char *devel_dirs[] =3D { "./tools/perf/tests", "./tests", }=
+;
+> -       char *exec_path;
+> -       unsigned int i;
+> +       char path[PATH_MAX], *exec_path;
+> +       static const char * const devel_dirs[] =3D { "./tools/perf/tests/=
+shell", "./tests/shell", };
+>
+> -       for (i =3D 0; i < ARRAY_SIZE(devel_dirs); ++i) {
+> -               struct stat st;
+> +       for (size_t i =3D 0; i < ARRAY_SIZE(devel_dirs); ++i) {
+> +               int fd =3D open(devel_dirs[i], O_PATH);
+>
+> -               if (!lstat(devel_dirs[i], &st)) {
+> -                       scnprintf(path, size, "%s/shell", devel_dirs[i]);
+> -                       if (!lstat(devel_dirs[i], &st))
+> -                               return path;
+> -               }
+> +               if (fd >=3D 0)
+> +                       return fd;
+>         }
+>
+>         /* Then installed path. */
+>         exec_path =3D get_argv_exec_path();
+> -       scnprintf(path, size, "%s/tests/shell", exec_path);
+> +       scnprintf(path, sizeof(path), "%s/tests/shell", exec_path);
+>         free(exec_path);
+> -       return path;
+> +       return open(path, O_PATH);
+>  }
+>
+> -static const char *shell_test__description(char *description, size_t siz=
+e,
+> -                                           const char *path, const char =
+*name)
+> +static char *shell_test__description(int dir_fd, const char *name)
+>  {
+> -       FILE *fp;
+> -       char filename[PATH_MAX];
+> -       int ch;
+> +       struct io io;
+> +       char buf[128], desc[256];
+> +       int ch, pos =3D 0;
+>
+> -       path__join(filename, sizeof(filename), path, name);
+> -       fp =3D fopen(filename, "r");
+> -       if (!fp)
+> +       io__init(&io, openat(dir_fd, name, O_RDONLY), buf, sizeof(buf));
+> +       if (io.fd < 0)
+>                 return NULL;
+>
+>         /* Skip first line - should be #!/bin/sh Shebang */
+> +       if (io__get_char(&io) !=3D '#')
+> +               goto err_out;
+> +       if (io__get_char(&io) !=3D '!')
+> +               goto err_out;
+>         do {
+> -               ch =3D fgetc(fp);
+> -       } while (ch !=3D EOF && ch !=3D '\n');
+> -
+> -       description =3D fgets(description, size, fp);
+> -       fclose(fp);
+> +               ch =3D io__get_char(&io);
+> +               if (ch < 0)
+> +                       goto err_out;
+> +       } while (ch !=3D '\n');
+>
+> -       /* Assume first char on line is omment everything after that desc=
+ */
+> -       return description ? strim(description + 1) : NULL;
+> +       do {
+> +               ch =3D io__get_char(&io);
+> +               if (ch < 0)
+> +                       goto err_out;
+> +       } while (ch =3D=3D '#' || isspace(ch));
+> +       while (ch > 0 && ch !=3D '\n') {
+> +               desc[pos++] =3D ch;
+> +               if (pos >=3D (int)sizeof(desc) - 1)
+> +                       break;
+> +               ch =3D io__get_char(&io);
+> +       }
+> +       while (pos > 0 && isspace(desc[--pos]))
+> +               ;
+> +       desc[++pos] =3D '\0';
+> +       close(io.fd);
+> +       return strdup(desc);
+> +err_out:
+> +       close(io.fd);
+> +       return NULL;
+>  }
+>
+>  /* Is this full file path a shell script */
+> -static bool is_shell_script(const char *path)
+> +static bool is_shell_script(int dir_fd, const char *path)
+>  {
+>         const char *ext;
+>
+> @@ -91,20 +106,16 @@ static bool is_shell_script(const char *path)
+>         if (!ext)
+>                 return false;
+>         if (!strcmp(ext, ".sh")) { /* Has .sh extension */
+> -               if (access(path, R_OK | X_OK) =3D=3D 0) /* Is executable =
+*/
+> +               if (faccessat(dir_fd, path, R_OK | X_OK, 0) =3D=3D 0) /* =
+Is executable */
+>                         return true;
+>         }
+>         return false;
+>  }
+>
+>  /* Is this file in this dir a shell script (for test purposes) */
+> -static bool is_test_script(const char *path, const char *name)
+> +static bool is_test_script(int dir_fd, const char *name)
+>  {
+> -       char filename[PATH_MAX];
+> -
+> -       path__join(filename, sizeof(filename), path, name);
+> -       if (!is_shell_script(filename)) return false;
+> -       return true;
+> +       return is_shell_script(dir_fd, name);
+>  }
+>
+>  /* Duplicate a string and fall over and die if we run out of memory */
+> @@ -120,12 +131,21 @@ static char *strdup_check(const char *str)
+>         return newstr;
+>  }
+>
+> -static void append_script(const char *dir, const char *file, const char =
+*desc)
+> +static void append_script(int dir_fd, const char *name, char *desc)
+>  {
+> +       char filename[PATH_MAX], link[128];
+>         struct script_file *files_tmp;
+> -       size_t files_num_tmp;
+> +       size_t files_num_tmp, len;
+>         int width;
+>
+> +       snprintf(link, sizeof(link), "/proc/%d/fd/%d", getpid(), dir_fd);
+> +       len =3D readlink(link, filename, sizeof(filename));
+> +       if (len < 0) {
+> +               pr_err("Failed to readlink %s", link);
+> +               return;
+> +       }
+> +       filename[len++] =3D '/';
+> +       strcpy(&filename[len], name);
+>         files_num_tmp =3D files_num + 1;
+>         if (files_num_tmp >=3D SIZE_MAX) {
+>                 pr_err("Too many script files\n");
+> @@ -142,10 +162,8 @@ static void append_script(const char *dir, const cha=
+r *file, const char *desc)
+>         /* Add file to end and NULL terminate the struct array */
+>         files =3D files_tmp;
+>         files_num =3D files_num_tmp;
+> -       files[files_num - 1].dir =3D strdup_check(dir);
+> -       files[files_num - 1].file =3D strdup_check(file);
+> -       files[files_num - 1].desc =3D strdup_check(desc);
+> -       files[files_num].dir =3D NULL;
+> +       files[files_num - 1].file =3D strdup_check(filename);
+> +       files[files_num - 1].desc =3D desc;
+>         files[files_num].file =3D NULL;
+>         files[files_num].desc =3D NULL;
+>
+> @@ -154,32 +172,39 @@ static void append_script(const char *dir, const ch=
+ar *file, const char *desc)
+>                 files_max_width =3D width;
+>  }
+>
+> -static void append_scripts_in_dir(const char *path)
+> +static void append_scripts_in_dir(int dir_fd)
+>  {
+>         struct dirent **entlist;
+>         struct dirent *ent;
+>         int n_dirs, i;
+> -       char filename[PATH_MAX];
+>
+>         /* List files, sorted by alpha */
+> -       n_dirs =3D scandir(path, &entlist, NULL, alphasort);
+> +       n_dirs =3D scandirat(dir_fd, ".", &entlist, NULL, alphasort);
+>         if (n_dirs =3D=3D -1)
 >                 return;
+>         for (i =3D 0; i < n_dirs && (ent =3D entlist[i]); i++) {
+> +               int fd;
+> +
+>                 if (ent->d_name[0] =3D=3D '.')
+>                         continue; /* Skip hidden files */
+> -               if (is_test_script(path, ent->d_name)) { /* It's a test *=
+/
+> -                       char bf[256];
+> -                       const char *desc =3D shell_test__description
+> -                               (bf, sizeof(bf), path, ent->d_name);
+> +               if (is_test_script(dir_fd, ent->d_name)) { /* It's a test=
+ */
+> +                       char *desc =3D shell_test__description(dir_fd, en=
+t->d_name);
+>
+>                         if (desc) /* It has a desc line - valid script */
+> -                               append_script(path, ent->d_name, desc);
+> -               } else if (is_directory(path, ent)) { /* Scan the subdir =
+*/
+> -                       path__join(filename, sizeof(filename),
+> -                                  path, ent->d_name);
+> -                       append_scripts_in_dir(filename);
+> +                               append_script(dir_fd, ent->d_name, desc);
+> +                       continue;
+> +               }
+> +               if (ent->d_type !=3D DT_DIR) {
+> +                       struct stat st;
+> +
+> +                       if (ent->d_type !=3D DT_UNKNOWN)
+> +                               continue;
+> +                       fstatat(dir_fd, ent->d_name, &st, 0);
+> +                       if (!S_ISDIR(st.st_mode))
+> +                               continue;
+>                 }
+> +               fd =3D openat(dir_fd, ent->d_name, O_PATH);
+> +               append_scripts_in_dir(fd);
 >         }
+>         for (i =3D 0; i < n_dirs; i++) /* Clean up */
+>                 zfree(&entlist[i]);
+> @@ -188,14 +213,17 @@ static void append_scripts_in_dir(const char *path)
 >
-> -#ifdef HAVE_SCANDIRAT_SUPPORT
-> -{
-> -       struct dirent **sys_namelist =3D NULL;
-> -       int sys_items =3D tracing_events__scandir_alphasort(&sys_namelist=
-);
-> +       sys_items =3D tracing_events__scandir_alphasort(&sys_namelist);
+>  const struct script_file *list_script_files(void)
+>  {
+> -       char path_dir[PATH_MAX];
+> -       const char *path;
+> +       int dir_fd;
 >
->         for (int i =3D 0; i < sys_items; i++) {
->                 struct dirent *sys_dirent =3D sys_namelist[i];
-> @@ -130,11 +129,6 @@ void print_tracepoint_events(const struct print_call=
-backs *print_cb __maybe_unus
->         }
+>         if (files)
+>                 return files; /* Singleton - we already know our list */
 >
->         free(sys_namelist);
-> -}
-> -#else
-> -       printf("\nWARNING: Your libc doesn't have the scandirat function,=
- please ask its maintainers to implement it.\n"
-> -              "         As a rough fallback, please do 'ls %s' to see th=
-e available tracepoint events.\n", events_path);
-> -#endif
->         close(events_fd);
+> -       path =3D shell_tests__dir(path_dir, sizeof(path_dir)); /* Walk  d=
+ir */
+> -       append_scripts_in_dir(path);
+> +       dir_fd =3D shell_tests__dir_fd(); /* Walk  dir */
+> +       if (dir_fd < 0)
+> +               return NULL;
+> +
+> +       append_scripts_in_dir(dir_fd);
+> +       close(dir_fd);
+>
+>         return files;
 >  }
+> diff --git a/tools/perf/tests/tests-scripts.h b/tools/perf/tests/tests-sc=
+ripts.h
+> index 3a3ec6191848..3508a293aaf9 100644
+> --- a/tools/perf/tests/tests-scripts.h
+> +++ b/tools/perf/tests/tests-scripts.h
+> @@ -3,7 +3,6 @@
+>  #define TESTS_SCRIPTS_H
 >
-> diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
-> index c1fd9ba6d697..4f561e5e4162 100644
-> --- a/tools/perf/util/util.c
-> +++ b/tools/perf/util/util.c
-> @@ -552,3 +552,22 @@ int sched_getcpu(void)
->         return -1;
->  }
->  #endif
-> +
-> +#ifndef HAVE_SCANDIRAT_SUPPORT
-> +int scandirat(int dirfd, const char *dirp,
-> +             struct dirent ***namelist,
-> +             int (*filter)(const struct dirent *),
-> +             int (*compar)(const struct dirent **, const struct dirent *=
-*))
-> +{
-> +       char path[PATH_MAX];
-> +       int err, fd =3D openat(dirfd, dirp, O_PATH);
-> +
-> +       if (fd < 0)
-> +               return fd;
-> +
-> +       snprintf(path, sizeof(path), "/proc/%d/fd/%d", getpid(), fd);
-> +       err =3D scandir(path, namelist, filter, compar);
-> +       close(fd);
-> +       return err;
-> +}
-> +#endif
-> diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
-> index 7c8915d92dca..9966c21aaf04 100644
-> --- a/tools/perf/util/util.h
-> +++ b/tools/perf/util/util.h
-> @@ -6,6 +6,7 @@
->  /* glibc 2.20 deprecates _BSD_SOURCE in favour of _DEFAULT_SOURCE */
->  #define _DEFAULT_SOURCE 1
->
-> +#include <dirent.h>
->  #include <fcntl.h>
->  #include <stdbool.h>
->  #include <stddef.h>
-> @@ -56,6 +57,13 @@ int perf_tip(char **strp, const char *dirpath);
->  int sched_getcpu(void);
->  #endif
->
-> +#ifndef HAVE_SCANDIRAT_SUPPORT
-> +int scandirat(int dirfd, const char *dirp,
-> +             struct dirent ***namelist,
-> +             int (*filter)(const struct dirent *),
-> +             int (*compar)(const struct dirent **, const struct dirent *=
-*));
-> +#endif
-> +
->  extern bool perf_singlethreaded;
->
->  void perf_set_singlethreaded(void);
+>  struct script_file {
+> -       char *dir;
+>         char *file;
+>         char *desc;
+>  };
 > --
 > 2.44.0.rc0.258.g7320e95886-goog
 >
