@@ -1,138 +1,189 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC641EA8D
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 22:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708554724; cv=none; b=vDGcioum09PpbtCba2yl2xppUX9cFS9L6a96P4pThAQxDtEm5/DAk3CaIRQ3/m+Fy1k6QEaCSKXOPkQcGpOw7TLQiz9siTj9IZxUpCAiT3dOsaF1hEqlL8RIBMRkZD8TrQkChdKmJLy+YCy6Nx2uNqacB0owNKmADdYK15lxxZI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708554724; c=relaxed/simple;
-	bh=e8beQZH/8dTcH2SlskyquNhTiyiTGjmTdYwL9ADmD5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MgYTFUbdFSekEGFlj08wPB/pskhWYQeipp0tjUKsA/YyDHJzcOGI+FWh3DLI5LHjgpN4XmSydiLkbdf/ysKejGj+FU4nNbQQ65uEx2/Mp63riUvc9FL+Z8XnT25eyXY+BCzpw9cGueBDjFNGxRUKw+nU2YF9U2DFZIKje+kvaRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dl1znVU8; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F82686645;
+	Wed, 21 Feb 2024 23:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708558127; cv=fail; b=BuU+MCofZagOKFUwxOYcj4lHoqsT/4xOX5xa8B9ovily9gs2mowviQbxmsbfNCt4jFOpOhpdLEF1bZ0cyqc+7ooWyFo4lrXAerrndooEC8255zjAzxBxi0Kay7sGocT8tqXsZRK7vHWSH6G1Me08ST5FQ6utZjqgcxrBGURVLXQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708558127; c=relaxed/simple;
+	bh=L/41UywScgeVwsZyNgwCmuPR1FSzKOeRcaMJDmEv57k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=c6xvnJmdCky7l15Uqa9cW4enjzPICfr6Gy60soMNbw1OEqKqqvPW3ByKICM256bfC1JZiNPHJ/cChujbXHFFAZJW0yd01ligdqa7f48bZW7U4MMouvfq23a/wdQY8Ea45wSWsd/usA5j5uhgQ5eF+Onz/8AIxryYBg8faCS5FY8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cwODr0cY; arc=fail smtp.client-ip=40.107.243.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dl1znVU8"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e471f5f1a5so2230457b3a.1
-        for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 14:32:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708554722; x=1709159522; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CwSF+RHtQzi0FDht5gRWAtF1IQMU5qPXVryp4kceArc=;
-        b=dl1znVU8zyP/9tqPiGQMUq0D5IlW1LiElaMqfl8mUhP6TjXdQxNPug/JD/6BdsHze5
-         BT2AJ/OxGBDv3+7xr9HuK68HGOw6Nu5flLtHqrq8AT1L3cuGD2zCNGi5ZeJm9IyHHg81
-         SQ38C+tvNyBjZYjXgXHkA/VuPUyNUWQAThlqM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708554722; x=1709159522;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CwSF+RHtQzi0FDht5gRWAtF1IQMU5qPXVryp4kceArc=;
-        b=Gs5IvTJxafP7uZ+8SaDnn8UarGYUVBvglCYtfvi5VUj4ZzkGKGKsvIu42RMyhA/vVI
-         w2ldCgrUo4clJ4r5GTtn0bEIZB9Rl6FZXxsNNT4Ew/uitu9AdeRseoAy7T6enJn0OLJy
-         yqpFMkiSSHCmtywOEMGdRj/eiwIAAzPCho/QUgItJTwrjx5+nyq76vIpp7u5+mUm7vn8
-         nW8wOI0dwy8YPGbXRVknVj/pOBnNmT7/ZjKWRK6jrlGEW5Rd07/2b70qXCR0T4zF7jpD
-         fpdDEQVlVl36LftGPmbuOOOWcOfcMWPh+U+rXoXjdiST/LoDL1X6L+JLg7Dtqg01GL87
-         OEuw==
-X-Forwarded-Encrypted: i=1; AJvYcCXJr4lUH35aPt75r9ywnR4diDT3v9p8BBAOBUi+209BcHLTi1ORRiW4oaPV11Ui5juvfAkLlbA6UEoF59VU1Rb0lFnv4A==
-X-Gm-Message-State: AOJu0YyKhHiGBe91wsJzNGdi+TS3OItZQ10cstR47sieP1eAkyRgZIqy
-	bln/rbyu49hUUeIvpYvF7rslbajZ4/wHbwPbEeqJSkqH7n63DIqPJA2WTDccqg==
-X-Google-Smtp-Source: AGHT+IHRmg+Wo0dAlYaTnjM+LFEy1m1wh/Bq5UQjRL3JwQIIceR9LfrEx3PAPsdmBFeTyj7ADIPXVA==
-X-Received: by 2002:a05:6a21:1394:b0:1a0:aa34:8733 with SMTP id oa20-20020a056a21139400b001a0aa348733mr8310173pzb.17.1708554722256;
-        Wed, 21 Feb 2024 14:32:02 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q69-20020a17090a17cb00b0029954a48c38sm10780321pja.38.2024.02.21.14.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 14:32:01 -0800 (PST)
-Date: Wed, 21 Feb 2024 14:32:01 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, morbo@google.com, justinstitt@google.com,
-	netdev@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH net] xfrm: Avoid clang fortify warning in
- copy_to_user_tmpl()
-Message-ID: <202402211431.ECE9690@keescook>
-References: <20240221-xfrm-avoid-clang-fortify-warning-copy_to_user_tmpl-v1-1-254a788ab8ba@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cwODr0cY"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nl2j/ULX1AApdU5xxffV6UVT22T92fuJcgbdsAFx/KkJpO9JarcGBwlDDI40ASVeRYJdZSP43ODnYdF6/wpDbhKgjJ/pfn81tDUXAA2gM+O5LXu8d8lb2lGduTSp5+9XRwmp72TjNFWW4qm4peuC0SplkV/gPEsHo3Loynd1Nd61NDi+xCXP1PD4WUTR9QehPpDyp3dxvyi/EPYNqvARGaFuqTBmbRPDwMnv2AFGgQZ5oNMcldtuRMvLNlSqC8vHMKgAFkJJSXIgO+6uLNKOARxonXMb00e1U2KwYOnV0qF3AS0idmtTPk9lKpyrcTwHrOcKw+hCrjkcq8Oa5HjfCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IOk/BPIbQExmXo8fdoKhbqz3nGoN72hO2FdzeQd2oow=;
+ b=j4PFtHH5Qi79NH0yEWAwuQfyNHritfrd+2YaW8ZPG9D21NKQCFSZiuBVtyXovWt7iXhqmS5TV19CIw+7FbjMzviRe1+Oy5y5SSDgLapqqkCtUnpwjJvUEX8GN+ewZZyICPAIqztTBirxvv8/awAGpQsSz+gXDyN3wy0YjdFE3afxGow/4mF0DWnvpp5GDXLEEKJ8/BMuDzTZtYYMMnWssINHKysL2M4d+3iu16ixRmtnvIgvEvnmCGp2ANWpnNfSy0Ag9sBnH2whSW6TbDfAxHuAtumNbAbrfGs6tQl+QgoJAbQ4ImsQB0bzxlRDjTlTenlAX9m4LhPe51pVYHr7MQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IOk/BPIbQExmXo8fdoKhbqz3nGoN72hO2FdzeQd2oow=;
+ b=cwODr0cYLNihUYxD1wwVe51aXni8v7QVNe8Bhdp6OPnvVSDmL9FBsKbWhGmXCc7+SQlgpx0Len5N1GkcJdZDr5QRFBpQZip6+E40RJsgDGqTSVrvR17M74eTyvqE0170hRoePIV4Z3Xq/0LNWeoQp5XMBfsDCsxdVhF8M7RxTdzpAF1wL/vCHUWSTGpKC03/FKZQnWGCku35NN4n1h1COHhwGGxzRr1E54mdQlEkpunn9flwumojkT+tzA5udTmD6BT7HTClX6jE10vtJJ4Q6lL+RIkmuEDZ2Vyf/Zs7DItRir5iZfyR898BkRY7TiUQM5RkZzs3iH2VZGTPFWXfuA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH7PR12MB9126.namprd12.prod.outlook.com (2603:10b6:510:2f0::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.20; Wed, 21 Feb
+ 2024 23:28:42 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7316.023; Wed, 21 Feb 2024
+ 23:28:42 +0000
+Date: Wed, 21 Feb 2024 19:28:39 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Will Deacon <will@kernel.org>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>
+Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
+Message-ID: <20240221232839.GY13330@nvidia.com>
+References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <20240221192205.GA7619@willie-the-truck>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221192205.GA7619@willie-the-truck>
+X-ClientProxiedBy: MN2PR04CA0019.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::32) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240221-xfrm-avoid-clang-fortify-warning-copy_to_user_tmpl-v1-1-254a788ab8ba@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB9126:EE_
+X-MS-Office365-Filtering-Correlation-Id: 63f7445e-5496-4b89-3ac6-08dc3334d637
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	C908/LDoKWSJl6rmPVefXFTBy+l6RyZebt1taQ5Eqaar5wDxgvm1WIJJ5N4IThVulZ3L48xM5dQPT7OZCt6Bko8DN48jDuUnRNV9ngKujv+3P+EgrNLRr+7CQ6aN1RWL7XSW7rBCOI9BrmyjlS9GorLcuS/rGz8qCW2DfhSrf0uCmS2ZnpnIX9RZfLVDnYkMVWMXSTkxng+SRjjJxInE1D/IVQskQVWlvi+6cu5+PT3HKtvz75KDLPoM8N1LvO2egboWjjlbmLq0gsSaqJoB8/v9ctjLSgbvVsJrQZpbzmghctbz+NUY1oTnYyNUfEY0JissQuW4PLWl/TMDZ1K8vgp8oWmlPQ0r1B4c4MdjAtiDQE2rqa0DGDwIyP8vyZeOpMVeLdubkPBFvkhUrrmlMMswlmBaZ8pQs/79/K4I1962g/0zs64dTkoynU91J0zLuZaQ3sM5ugFE6U6qcOv+MPS3iP2hzDGPHtakID/TRhFQHnhSYv7qVe5ZCFa8Ps9YkHQjG7NVMDPe1rcBliRFU41PPGYWnkTEP835EcE9Ak8=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?qKoL8mHbTWIpYLvS1ovwaYafn6E8oemV+/qTCZnnKRT+XgJJpQq1innzzWIS?=
+ =?us-ascii?Q?1FJbheyCSoHdUmb0tScEKVdVii4iqHkR/EY94X3CWUOyN9nvuUZsTfoqmx2W?=
+ =?us-ascii?Q?6iP6WlosLL+opUnpsdKKIakvKm0y86AImYrXf/m8WygvmxJIFGyEvsgBh8Sm?=
+ =?us-ascii?Q?9eg5NYYFSGgulKnCFbfkp+cC/JcsXpqp0hFFd95+5bX9FPrNbKvags/ASs/w?=
+ =?us-ascii?Q?Rd9vTMYCK5k4I5gfeNQc4ibliXgoN27JoPtOEjbZHMUAGQT89f4Abo4HA9Lx?=
+ =?us-ascii?Q?lGONCazrgDue3z8IQ+GvmevZt1ZjEJ24iltnsNw14T7I0TqlCKxmmwRK93gd?=
+ =?us-ascii?Q?mR2d/GFGOOX92P6/rW/s+rBstyguK/5qcfoEN49A5AZAoaXToL+l96NdiEuI?=
+ =?us-ascii?Q?2y9wX72/2n3wobgWAZ+Js1JeB39kgYYUhbz2W1jrr+ieHa/gxlU53s6alBGi?=
+ =?us-ascii?Q?G+KzAdAz7ONgMkgaCLRDqdgarohbqr0EMWR6babQbjzCCKK3YEC5kgyWRBNM?=
+ =?us-ascii?Q?FG9Ge2/Sgo1hV/HRQkK0iYrmurypm01Mw1iz5+kLjd0Crl5EakRj/yzwnzK/?=
+ =?us-ascii?Q?BFEsRRcAaJMgk7hk3IYHZKTxcDWHIGdoGvWJ6TpV2cKHBnJo/gWCZn6v3AhS?=
+ =?us-ascii?Q?o3/6gFQcApVyLhIyPu0wrK8DKP3B+f6DT3lyVJR4EO1YWTQMhoDbRoBUe7IZ?=
+ =?us-ascii?Q?4vMUfJxpWpvOf0c7I8gOxhPkVMkb7dCUvjyjxLyiL7BNEdntvnn0yY9hTUe8?=
+ =?us-ascii?Q?Q/lZdj/hsCTMoQDNrrcfEnO+Q1z9aEyS9F2tRm+DuJeUoj8OGXnOe+7ShvfG?=
+ =?us-ascii?Q?1nWMuNmTBrb1LFi5FKyr8J4x/Q1Kq1XRVV+c0pJiqcF3Woz82feTcvTVbA05?=
+ =?us-ascii?Q?A/giYfhaB7HZnL9aQCn1mU1KGmSDEzWh1KDHJV4sIlNSu1/xWhmWLvED2zzR?=
+ =?us-ascii?Q?/wkv4mxn0qLTRVa5ECNXC7e8jT4by3ztdwV/o7JP63uc7p+Ipee1hREzeLhw?=
+ =?us-ascii?Q?Ti+VNQvXWhYab5VwPeulT8cNfPI0pm6JMMx6diXtaOx86wUFpwStF61pPf/i?=
+ =?us-ascii?Q?wK+rS5fuiGMiUqiBERTKARrJsMfbi6vlHjL9EVo/bkTON2vxACfMVhnzd2FC?=
+ =?us-ascii?Q?IXOugN1Yvx/5Hg2rmyQpGeCJis68wY/vcZmIylySTq1N9Aj42w/Uicxx/gzM?=
+ =?us-ascii?Q?FjuD0r5i2uBgWlHYeaVRW6zCWjzXOQXOzP5B3Daqe0yTEu6aAQZ4I2P/b/+n?=
+ =?us-ascii?Q?t02HcizhrGknNJ9wWJMOe5WGvpjDuwTO4v/OmiSaRZT0/2gdwR3O11CWZXe6?=
+ =?us-ascii?Q?WPu5LviUuu0OO2plgoPX4bVKyoHaFKD9pF2wlS2KN5VaR5EgvbWMlb0GyBvZ?=
+ =?us-ascii?Q?qetEctJTEpVtn5YVOLYKiEzVAzm1iQvIANcaVPxCzf54AIu+huLqPNXyC8p5?=
+ =?us-ascii?Q?77fSZYJr6Au2nqUgnjdwCUM/YDcML7VWXsix9eq7IBAIZNLrHOuaUP05vson?=
+ =?us-ascii?Q?Yp6vMjC8X44l25wTEkNsds6fxcyrYo7eWzvXtqc+U/KySMSIWtel8cWEIMpX?=
+ =?us-ascii?Q?GKMLZDoMfhhCC8JWjz1ZzlgyRAxK2ND5HjigYCba?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63f7445e-5496-4b89-3ac6-08dc3334d637
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 23:28:41.9362
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OFqMFAOeBX82eKLciPWR3kPlsXS1sbwMBxx8iseV0kUa1YFw6oSzDe35bSTgQJE2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9126
 
-On Wed, Feb 21, 2024 at 02:46:21PM -0700, Nathan Chancellor wrote:
-> After a couple recent changes in LLVM, there is a warning (or error with
-> CONFIG_WERROR=y or W=e) from the compile time fortify source routines,
-> specifically the memset() in copy_to_user_tmpl().
+On Wed, Feb 21, 2024 at 07:22:06PM +0000, Will Deacon wrote:
+> On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
+> > +static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
+> > +						 const u64 *from, size_t count)
+> > +{
+> > +	switch (count) {
+> > +	case 8:
+> > +		asm volatile("str %x0, [%8, #8 * 0]\n"
+> > +			     "str %x1, [%8, #8 * 1]\n"
+> > +			     "str %x2, [%8, #8 * 2]\n"
+> > +			     "str %x3, [%8, #8 * 3]\n"
+> > +			     "str %x4, [%8, #8 * 4]\n"
+> > +			     "str %x5, [%8, #8 * 5]\n"
+> > +			     "str %x6, [%8, #8 * 6]\n"
+> > +			     "str %x7, [%8, #8 * 7]\n"
+> > +			     :
+> > +			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
+> > +			       "rZ"(from[3]), "rZ"(from[4]), "rZ"(from[5]),
+> > +			       "rZ"(from[6]), "rZ"(from[7]), "r"(to));
+> > +		break;
+> > +	case 4:
+> > +		asm volatile("str %x0, [%4, #8 * 0]\n"
+> > +			     "str %x1, [%4, #8 * 1]\n"
+> > +			     "str %x2, [%4, #8 * 2]\n"
+> > +			     "str %x3, [%4, #8 * 3]\n"
+> > +			     :
+> > +			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
+> > +			       "rZ"(from[3]), "r"(to));
+> > +		break;
+> > +	case 2:
+> > +		asm volatile("str %x0, [%2, #8 * 0]\n"
+> > +			     "str %x1, [%2, #8 * 1]\n"
+> > +			     :
+> > +			     : "rZ"(from[0]), "rZ"(from[1]), "r"(to));
+> > +		break;
+> > +	case 1:
+> > +		__raw_writel(*from, to);
 > 
->   In file included from net/xfrm/xfrm_user.c:14:
->   ...
->   include/linux/fortify-string.h:438:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
->     438 |                         __write_overflow_field(p_size_field, size);
->         |                         ^
->   1 error generated.
-> 
-> While ->xfrm_nr has been validated against XFRM_MAX_DEPTH when its value
-> is first assigned in copy_templates() by calling validate_tmpl() first
-> (so there should not be any issue in practice), LLVM/clang cannot really
-> deduce that across the boundaries of these functions. Without that
-> knowledge, it cannot assume that the loop stops before i is greater than
-> XFRM_MAX_DEPTH, which would indeed result a stack buffer overflow in the
-> memset().
-> 
-> To make the bounds of ->xfrm_nr clear to the compiler and add additional
-> defense in case copy_to_user_tmpl() is ever used in a path where
-> ->xfrm_nr has not been properly validated against XFRM_MAX_DEPTH first,
-> add an explicit bound check and early return, which clears up the
-> warning.
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1985
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Shouldn't this be __raw_writeq?
 
-This seems reasonable to me. Thanks for chasing all this down!
+Yes! Thanks
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
-> ---
->  net/xfrm/xfrm_user.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/net/xfrm/xfrm_user.c b/net/xfrm/xfrm_user.c
-> index f037be190bae..912c1189ba41 100644
-> --- a/net/xfrm/xfrm_user.c
-> +++ b/net/xfrm/xfrm_user.c
-> @@ -2017,6 +2017,9 @@ static int copy_to_user_tmpl(struct xfrm_policy *xp, struct sk_buff *skb)
->  	if (xp->xfrm_nr == 0)
->  		return 0;
->  
-> +	if (xp->xfrm_nr > XFRM_MAX_DEPTH)
-> +		return -ENOBUFS;
-> +
->  	for (i = 0; i < xp->xfrm_nr; i++) {
->  		struct xfrm_user_tmpl *up = &vec[i];
->  		struct xfrm_tmpl *kp = &xp->xfrm_vec[i];
-> 
-> ---
-> base-commit: 14dec56fdd4c70a0ebe40077368e367421ea6fef
-> change-id: 20240221-xfrm-avoid-clang-fortify-warning-copy_to_user_tmpl-40cb10b003e3
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
-
--- 
-Kees Cook
+Jason
