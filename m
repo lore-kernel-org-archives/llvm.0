@@ -1,106 +1,234 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D7C3A1DD
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 07:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DE93B198
+	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 08:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708499861; cv=none; b=iTeGxW+QS/jTZZBAeZd6YAuGJdo0h+p7kxuR6pDI2LwVEpVJsNMtZOX3B8gJx1JBOlF/JT699UTumJQ187b8M4losOWbpua418FRChCxac7XWZ9QXwDvqMQzUlPLf7SXFoBSIKJNDi+Vk1u6C+sI/IsCknbKHCvkESNamARIGdM=
+	t=1708503034; cv=none; b=chsb6ddoT4Vcia4wRaRwzHsW9TaLi2s9x+bnHAWLzhJQkxub5+YskagfKWcFwnkgYcbhBsI8J3J80XN4y6Q6zM9QBtkhdOZ+Y1nbrpci/vGBYqJx5myVQWE8MAIhzAZoSWVBmATF+TJjsx5hKcIFp6/anv4fMFcFoEkKYOuvf8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708499861; c=relaxed/simple;
-	bh=BizncbHOJu53xMldBTXky3VBzNOrGSOrbUjAHdhSMz8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=t7MC5rxiMUyQ1hRFYyZAhz85SYZplGv5JtA6DG0bN3/tQbnbccdqC1CYNP33EG9M0geJ+FWeJZt7HsP0c8jLIDTv3Ii5SECAxTSXtNeY8M0LYfcy7fq7+OP9nFY40LpgSryPxImDqa+gwIn+J1BFsZTe5Me2JcpQhTZLBhR+5wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KqnpnFqp; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1708503034; c=relaxed/simple;
+	bh=MfzHLzIQixjvrZdv4XCkJ/P6oLT3dBmDkr8Om+K8GgQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VeIh1D+9M+vtnbEAPeeplTHhLq58z1sfItbWMZQJYW5Ir/cES/jGOZEawC+6vgdhuIdbR8vNGsMcWzD6uxCqrcceRrQXuEQ1j7nm0LYfJj05vlloqp7ppsRi7+m/CbVy7pQj9wnRXyjsebv+D+UJLP4P3xa/HeFe/dnnCMiBr0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OPTZ2ZUS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KqnpnFqp"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-512c4442095so2195365e87.2
-        for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 23:17:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708499857; x=1709104657; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DDwdGzlFA6tuZPbulz/VQAvLOcdCb4uMPbhP3kDR05Q=;
-        b=KqnpnFqpZ5ARVPBO5WDQLvksE8qCuYZ/Fk6j+GtqnvRbjIQ+DiGPLMIFLu8nj5mp+R
-         w7/5/xVIXOgFMLT7xLDitnXQ9mODsfFVd8DoXQcGIhcpaZmTrg++MfLJJWmzsVdfV0Se
-         TCy7Ccom2uRAxxCMrp6fzEAKCpZJBoAnsBos243USWjmFikzhDf6Y3/Wm/clHzwxHLL2
-         vyjqQnSzYapmJ8NuiwTXRXp/cdOK5fBE005AdevfPa+M90xFD+xHNiGT+xeizrLKTbqC
-         F6G3689G41rmy9Lhn2NMNY5KFeaSn6FCniuQfffgckyM+YDLNW1WF0X9wxtAZxqazU+v
-         1yoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708499857; x=1709104657;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DDwdGzlFA6tuZPbulz/VQAvLOcdCb4uMPbhP3kDR05Q=;
-        b=aUJMJAtFjC58A/tAg86A0/92SYb1AdaWBDRS9nnxD2UfJrxe+ouh3VHDfyiImz55O8
-         JpHfArm5iImQoqHFks4SmxzcFJ5TF2bf3a66JURnMqngHJ+1EatpMDppDe9MWsuDRTB9
-         j443YLloCG8MPKLkSo+sVo8epzkOHUvwhIH34AqKEvlO2BrVwpxC2kQj/AzTXCPMHTh+
-         3pw+xWU+py64mOE+SSESmlTlPCQr//EUDoU+VeBB4h4lZb/6WTuhadDpLExj2eBitE3n
-         gtQyxSQA/51eoR97DHcrcJMxZbIjtazmLi41jikOCaLUtq/i1DJyiMLHx/AsXD5etnLr
-         Netg==
-X-Forwarded-Encrypted: i=1; AJvYcCVw7xbX67yU/3kzSkofIqdejeVgE7son77ospLbjsuzznxzHIb+2U5qdwqwMdtfb3PyPc49F01JU5S3MZutFaSlja9qnQ==
-X-Gm-Message-State: AOJu0YxYJUDTvWAGRxNx8CaGq1xj+CtzkGatZcteNxdMAK+cVeaRYiPW
-	x7WVwfJFBjiEvcEFbm2k/3G3rZVUMylDjhCSIcovtGaU64z+TBOAYUyvI/1UaQ+OCUCLmhNn4y1
-	j
-X-Google-Smtp-Source: AGHT+IGqkGtQA0L2uq9EpwXq/4XZe8OGGMFaJYlXvE9PH1RKEoAlc2YmPJMRPCXfm76f6tpYvUvrKA==
-X-Received: by 2002:a05:6512:3f06:b0:512:8d30:6dce with SMTP id y6-20020a0565123f0600b005128d306dcemr12181479lfa.52.1708499857438;
-        Tue, 20 Feb 2024 23:17:37 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c248100b0041061f094a2sm1459212wms.11.2024.02.20.23.17.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 23:17:37 -0800 (PST)
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20240213142831.3069049-1-jbrunet@baylibre.com>
-References: <20240213142831.3069049-1-jbrunet@baylibre.com>
-Subject: Re: [PATCH v2] nvmem: meson-efuse: fix function pointer type
- mismatch
-Message-Id: <170849985550.23383.15344631998215438769.b4-ty@linaro.org>
-Date: Wed, 21 Feb 2024 07:17:35 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OPTZ2ZUS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708503030;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SvSh16713f+dnYuzIN/EpAFXatZG0RfHtEF/hfE5+9c=;
+	b=OPTZ2ZUSerD8mvOudvFgLFICpJhsFKB/R8wRIiCVtosAsJH+MhvlIfrs8/QJxLXjOkaS3o
+	j9pbPFYbB0Mmkhjbqh2WKAYBfX13V2N6XVt3HLw9/Q8V4BO+f6GrMAl4CSHB4mHBQNcHYT
+	UY46udLq+Z0gYkz5n56j73WXvzxD8O4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-693-_A32g09dM4KnEIP3zaQ3TQ-1; Wed, 21 Feb 2024 03:10:28 -0500
+X-MC-Unique: _A32g09dM4KnEIP3zaQ3TQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69C7D811E81
+	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 08:10:28 +0000 (UTC)
+Received: from [172.64.5.24] (unknown [10.30.32.29])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 26A3F1121337;
+	Wed, 21 Feb 2024 08:10:28 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0-rc5, mainline.kernel.org-clang, 9fc1cccc)
+Date: Wed, 21 Feb 2024 08:10:28 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <48140.124022103102800781@us-mta-693.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/rdma/rdma
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/130473
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: (upstream) Cannot download, all mirrors were already tried w=
+ithout success
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5439024
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests tests nbd/001 failed
+            URL: https://github.com/osandov/blktests/issues/132
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] blktests tests/zbd/010 failed
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: [upstream][s390x] blktests nvme/029 failed due to nvme-cli u=
+pdate
+            URL: https://github.com/linux-nvme/nvme-cli/issues/2218
+            Affected tests:
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-On Tue, 13 Feb 2024 15:28:28 +0100, Jerome Brunet wrote:
-> clang-16 warns about casting functions to incompatible types, as is done
-> here to call clk_disable_unprepare:
-> 
-> drivers/nvmem/meson-efuse.c:78:12: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->    78 |                                        (void(*)(void *))clk_disable_unprepare,
-> 
-> The pattern of getting, enabling and setting a disable callback for a
-> clock can be replaced with devm_clk_get_enabled(), which also fixes
-> this warning.
-> 
-> [...]
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
 
-Applied, thanks!
 
-[1/1] nvmem: meson-efuse: fix function pointer type mismatch
-      commit: 6b475e23544a560b4bf2acfab8dc54c4e7b1749e
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Best regards,
--- 
-Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
