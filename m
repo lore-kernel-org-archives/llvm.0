@@ -1,115 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2085.outbound.protection.outlook.com [40.107.94.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD4F1468E0
-	for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 23:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708472004; cv=none; b=KvP5lsEE370sU9+08YcJu+oIW8U0g3/65zsX9cQMgOqpUhA47KkxJ+RMHJMq98yBvAaS+wh6Jxs0b5GyK19ataN6u9jBI0r9+O1NRDxDrmQ8w0iXV69Znr9+vAe5Wf+UL+p8Nh9CpuKB2kygLnYeD/1Nsk0sYzRP/s8PeEuAhYk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708472004; c=relaxed/simple;
-	bh=Oh/h2cj0YS4RJY/SZoI+qEFikqUE0enIJADIQGhtwFo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d9riHinFGdHbqDNn501XOGSgzT3e9dHF9PRtZH/B0S39QvtOMPn2iKJoBY63J+5b/sFhlmt7tHiUvuCEb11Wd0O8V1p4DmKz4Rlsciwz6p8VzxMUnGDBz+Fv+qG3JuJYUZDtfdcf37PBQeK4r0Wv1ydZziUCm9rB/jf1tKrXlxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxrhSwxu; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B864428;
+	Wed, 21 Feb 2024 01:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.85
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708478248; cv=fail; b=jEAIsNyOfO+BYjbUtbE56gEnQAQ/QSpxA6xTK4N3O+zt49EHYFqjTDH6lHVf+AgtpNAS65m8hB21dBldYGIO+qXJkpde+u6yY1aoLEGe+EOkkTr+rgkzdT2oM/WwgQsXJqaiOTnb1KPzwKDLYcTPkXTh5xm+AkXxVvr4NqiNYiw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708478248; c=relaxed/simple;
+	bh=fk7fcECrybDUha7s5MgcA7pG+5Gh1uF3c7JF3N/ubWM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JiBTiH7Zw0oF4O9CL+nA/WTuiZVqjW7KWz+ppnZbbSsmF3je9k+ZvB8HxKNCLxzNg6K1Txq3zrhd7kwH+mT5JBgY5QXxbQMdK0biq4NmXuahI/BexVKFrob4Bcn5l+Htz1MxA+iPvBqDoKG3zXf3q7E53kZ5UQ7G/hwSVqagGoc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GTda1vpT; arc=fail smtp.client-ip=40.107.94.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxrhSwxu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C58C433F1
-	for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 23:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708472004;
-	bh=Oh/h2cj0YS4RJY/SZoI+qEFikqUE0enIJADIQGhtwFo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jxrhSwxuVnDXEHxeGI2cKothoQdm2XNc6DspariWSnsqPrHTDXHzP+oO9b6mEh1JP
-	 GePHxLj6X8TsqFZV46lkfcbUpQXEwaCUKDL9928VfS02XeJyRLRzLt9AOva30uggrd
-	 ViXSfZYX6J+2BtZLWE1xdqUAusxePdeSEmzodfZRoVip4p3vznM96wfOMFkscfqLmp
-	 G9t9g5Mx+y2aWSFp+DFezztEDq1zIBkKNjb8egJDlIvXgS2OsF+UOeWgauySxaxE4B
-	 XYfSQW5nuP6MtzHxWpnnS4SXeE0Tvgdf1kzm52hrpqC6p6sHGHxykVesI2xMwinlk5
-	 3B/FiaPSKMf1A==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-512c4442095so1828122e87.2
-        for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 15:33:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX+YaUR/j6t4N42hY0eB+eZPlGgf0pS+H7ezURiWpItLnmgSU9tvGhqcSulqpe/p1/PU9tHlcEph2HsDRySryv0D8PP/A==
-X-Gm-Message-State: AOJu0YyDArIM7okkMqX5Q+tv6fgwuWMntKAsBZEe8+vHtOoRLta8vXFr
-	4BOY7jiyylv5w2V1FD1JCIuTLMCZRl6zwg0G3apyGf1RxO4jzDWv8QRkRffRzTtQv4KKM3MijkI
-	cq1oMlT2tLukAqd9ruWAeMktWXsM=
-X-Google-Smtp-Source: AGHT+IGGKb1QYfhmS4BL89Gjr7JP7acVJpMUXlQ6aTbfqpDNvxNKr04Jgn8OxLX5iWG/7bA0RJikrf61Oc1D17UKBEU=
-X-Received: by 2002:a19:e009:0:b0:512:b340:a624 with SMTP id
- x9-20020a19e009000000b00512b340a624mr5025522lfg.6.1708472002228; Tue, 20 Feb
- 2024 15:33:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GTda1vpT"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oM8NrTQ66jERFiZtDH7XbAj9uBemMPkdD5wWN+9tHvyzPUe/pwJuIEkXFo3ZuF9NtLzmzdk+1IVotk8eORNS7XVrKEghzl9wymqI125fKJ2zL0pmmD1jKz/k3e8toVrn/EySPdpA+fXy5KsSteZ4/6Hey1w7TF+fUpNA9/vorT5q0vYyAEVbQzoTg8RaDgujRD/zIw8ppvWbMwKqktxGTpUzjSCzWKKDYWB5aD9ugM0EaWC8wDnJKBd0iiNCFtSrX8a0bFEGHhNRwzUjaPTAf1a4CEfKM17Q0YJB/yWM9V3SovzGatqaHPxw20PKl51Y2PZI8O/A5HPvEP59N3Iavg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eVx8ZHtyQ2mJAYsBPQbCm/vB3XwsGVOaRto1ttd02Po=;
+ b=Q//ztglfRh4J7l/K53kbH3KIjWUldAQbaKUf/nELDuyBLn4LJrQbgdAIcjnH698DkfRudSf+GDJp6awoXrgV8m8QkHfQxd27FxA288feMlgLmfEJ+aZKyccBiIaZsjUAXdq7Vf1abi7jM+/s2T20MCdSq397ml6Q0uxbjx4kn/1ygsYARFcgAqstBomrvd59eD9jnN614T0ANUj9xr/Hit8kanejPwgBy6n8FHzK6A0BMHSnhWUNraAxZw1Br/qoptD64czAGO/faQ8YJNRyU7mCJNRHjtdRfFxH4TXn10+IOFe5+wjUmgWNrcntaHTNg1eJoxj1IvgKPONIt7ql7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eVx8ZHtyQ2mJAYsBPQbCm/vB3XwsGVOaRto1ttd02Po=;
+ b=GTda1vpTZB1x5UgizbvA7xRJbbb8Ls5VC8kTqObIg8zs19GdBs4fOIn98JkgwJpfAPDw/e2Q7H6V6VY412AZpuq/yUnJWUuJmp+Cl9cAxOTsD/jZ2+eHpJVz3kaehCTojUsx9PgF3mfVDhjlirRMJoCbRxmv2zY+yrILt4lLV1tv/uJ8cchMmYeo7i46coXe6/vCmUHcnUlfNnVo34l47TwkJFjsXpc9cp1waOsBfN3s4vv1tXMlMf5x6K0h+udnkOINXdncjmpbhp4SbfKvrlP2cFaZNWmIVIO6uFzx4f3PFeRvfk1Q13LTmsJ13TaOthz0PG4eTc5CfxDLhpuAug==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MN0PR12MB5714.namprd12.prod.outlook.com (2603:10b6:208:371::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.19; Wed, 21 Feb
+ 2024 01:17:11 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7316.018; Wed, 21 Feb 2024
+ 01:17:11 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leon Romanovsky <leonro@mellanox.com>,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Will Deacon <will@kernel.org>
+Subject: [PATCH 5/6] net: hns3: Remove io_stop_wc() calls after __iowrite64_copy()
+Date: Tue, 20 Feb 2024 21:17:09 -0400
+Message-ID: <5-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+In-Reply-To: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+References:
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1P223CA0001.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c4::6) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240213124143.1484862-13-ardb+git@google.com>
- <20240213124143.1484862-17-ardb+git@google.com> <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
-In-Reply-To: <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 21 Feb 2024 00:33:08 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
-Message-ID: <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
-Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
- paging global variables
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN0PR12MB5714:EE_
+X-MS-Office365-Filtering-Correlation-Id: dff2ebf8-f514-48e1-b9df-08dc327ad476
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	SUYm0LcrRTVi6ZmbVICMh1j3dXQOcxtnwMHx2eueW0Neva5BTpE++HHvmY6Egm6G9rnlKrqL4MGhGFKitiSMACdqX51idLjsAxiCnVNUyyGiMLdsicNljXE9P1TyzCxaf5YM+BRB0pI+ORxTmShFPRMj3MfKoUD0mvCASrjJJCQhvX7SiiYwAL0SknzRynMflYV6XKlymdeXYZC+wrLjD9i5JLrGeTY7ZIZTb9nqmXGC8ExeckUsxXqHeC5wHY3LN5iotKSk/93qNlwMOeIzUBTKZs+V9KItRYToObQwrZ11ceKS4+3GrZXmsB+zpLjGXnVaI68mjoZzdeQjjfxswfxDT22ATk9k2CvLMHyg2EideKssQwgsTeUdNLgtLOplpVzJ9ehlGRjihlv8mfVV9ZGraSWW3/ztV5z1XCU/scmLdAtz6b0itDw1sQ2v8PHyKSTIf/3/rKqdwMNVqvR9tv1i8Ub6DlUlqLHbrfYaAp6mEhWTzZWZqcC7M5pNb/gHVeVTfffgvBpCoOPBAzp6VXp6iXu57LdkoyWIV/UlM2gR3rX7kFyp/n2l2Lb0vdUn0KGNEhPxLrqldSJMIQkbdSc3w/vKtlbM94cdBgy/ef0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(921011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?2wIpvvUj6hi97HpuRveI83cGVfJZu8lYkjGWsdJPN70+6UlGAMUcGaGhX35X?=
+ =?us-ascii?Q?QMSPvxzW6LXKpHMYITvhxGYakTRpdv8dTfXW+u5zbjqTJAStu/xNaCxL2VnD?=
+ =?us-ascii?Q?3fDf5ecVwarYThu8uNvS4CEaXTZLIV9cDqlyfB/3yjM1uyAxms/tY9PxKgza?=
+ =?us-ascii?Q?asyeoje/VSB3+x67ZnxmputXwK8mi3v5CDNmdxohGIKzxogf4dukz7N+Lklh?=
+ =?us-ascii?Q?0yNvfCOACZpNZ8mqwbIyS3r40pQQC+RaYn7RpHL7qyHydxxZqnDgW13o//aP?=
+ =?us-ascii?Q?d92qTQyzv95qo+HVnmPi0qbd7yVgfJA5k7yp9tVK35PpkREjRUq+lhZccxZQ?=
+ =?us-ascii?Q?mQkojO4Q2ca9xuKoxXKivHjNv2Fnsi4uw9M1JCUD+aBKRfVUJITwuGr8JXPW?=
+ =?us-ascii?Q?oiyU4C6k+KdwgX7J+McJQR+XIv75+OE8Hagfg4RgqavBORUDVG27Lcryb0X/?=
+ =?us-ascii?Q?hp4HLUlTYrTKpgyHwrLXICfdbwVHfkUskQcaeVmfOwrGmcd6vTS/oUaHMFBW?=
+ =?us-ascii?Q?CbV8DPZbqiQc5bItoYpNLKYMOyXCuWOB1D1nnd1RmJr11FYlPq4XgVP2RzOv?=
+ =?us-ascii?Q?VAZ3s9cd/gdYcKhFRjD9YZ/Oa5tBbrBXDdOuyOq4EZaSJZJRP7iEAVH7XHie?=
+ =?us-ascii?Q?+4IoHeP0WkbgwpMuWJXM9pEdtqtLXlOOJhf4MFpBC09ehE6ZbGTfc5J3LE26?=
+ =?us-ascii?Q?S1awAgRhJ3TAESIVNO1oqh7dW6FAcWVWqxSDOHyRfcd4Rz7zwu7gGkRQe94v?=
+ =?us-ascii?Q?zg8+HFP0dprQTnV2OoOJTa3pphZn69HwISrEbVxadNGNWw4ZvxP49KUSND/H?=
+ =?us-ascii?Q?wsau7H+gP1ZnUGaDuoleXQtOftlSyDqoBXm76kSbj4GhMUplJKYu/MzjtY7Y?=
+ =?us-ascii?Q?u7d809g4HzRHBRio72DWRQ1yc8ucMTgRkmMV7R8kt1e04enGi85oy8MyWb2l?=
+ =?us-ascii?Q?L4dhE1jyMz+hjBXeiP7yIexwbDIjtyZcCE6Nq+uN9B9NCRSSYbom+FdTAOYh?=
+ =?us-ascii?Q?8PSy2A5Bv0wgyDMimAcmhBKef5EZfRru5PWQPDxAW2Zic+pO+kKPXIZSEhGs?=
+ =?us-ascii?Q?48z+NjwOFvtUBRVtEKS55+5qqiwXqbFBsnv+x4jayh22P2EW++mMiCNPS6dT?=
+ =?us-ascii?Q?mAm3sKA+lGlwi48JljzdV6KBChsUPjJ7tftrV9X1BMatp6aJG+wIMt6vdsuu?=
+ =?us-ascii?Q?lS08Vv5LJgeJ6NaEcBCt1615bTzQ94j9KKpBzYRlZSvBWh9Msc0KLPwLsMom?=
+ =?us-ascii?Q?ovCBUPPWtgGPZGXPCxoYOVHHe22uBY8QqrtcwFLUrlVeXv7mF/rM1+jxSW0D?=
+ =?us-ascii?Q?5GeU1+hoc9o3ddYtLy4GASwaRzPCdmXD0wlxmGXs2/j/T390gQEZactOlbsc?=
+ =?us-ascii?Q?F//2B9vI0L3vWl8Um3mYxfPS+oP6vr/z/6pe6tBMXlFglFv3tJkz/CTnLfw9?=
+ =?us-ascii?Q?1gisci48Ds1KpPPdDnP/bDKrLDi0ccmZ1AS9qRgB1SMZ87K6shg9Sp26jS0w?=
+ =?us-ascii?Q?GiuslQuw/09mpfx1G2txAvNWp+s8VfL23jloRIZLDaWlirRLK+mfk2whtt7p?=
+ =?us-ascii?Q?yN+1nC8EHuNg4OvABxV2F2ehbNj1kIF9iKk5nPeU?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dff2ebf8-f514-48e1-b9df-08dc327ad476
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 01:17:11.3342
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v5LgyTOVv825kQghPkcnCtymbkdgi2WgvQTEqFJhv6pL8ulD/iTEOXT9wFWQB7k0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5714
 
-On Tue, 20 Feb 2024 at 19:45, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Feb 13, 2024 at 01:41:48PM +0100, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Assigning the 5-level paging related global variables from the earliest
-> > C code using explicit references that use the 1:1 translation of memory
-> > is unnecessary, as the startup code itself does not rely on them to
-> > create the initial page tables, and this is all it should be doing. So
-> > defer these assignments to the primary C entry code that executes via
-> > the ordinary kernel virtual mapping.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/kernel/head64.c | 44 +++++++-------------
-> >  1 file changed, 14 insertions(+), 30 deletions(-)
->
-> Whoops:
->
+Now that the ARM64 arch implementation does the DGH as part of
+__iowrite64_copy() there is no reason to open code this in drivers.
 
-Right, this is the same issue as in #11 - in both cases, the extern
-declaration of __pgtable_l5_enabled needs to be visible regardless of
-CONFIG_X86_5LEVEL.
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-I'll fix both cases for v5.
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+index f1695c889d3a07..ff556c2b5bacb4 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+@@ -2068,8 +2068,6 @@ static void hns3_tx_push_bd(struct hns3_enet_ring *ring, int num)
+ 	__iowrite64_copy(ring->tqp->mem_base, desc,
+ 			 (sizeof(struct hns3_desc) * HNS3_MAX_PUSH_BD_NUM) /
+ 			 HNS3_BYTES_PER_64BIT);
+-
+-	io_stop_wc();
+ }
+ 
+ static void hns3_tx_mem_doorbell(struct hns3_enet_ring *ring)
+@@ -2088,8 +2086,6 @@ static void hns3_tx_mem_doorbell(struct hns3_enet_ring *ring)
+ 	u64_stats_update_begin(&ring->syncp);
+ 	ring->stats.tx_mem_doorbell += ring->pending_buf;
+ 	u64_stats_update_end(&ring->syncp);
+-
+-	io_stop_wc();
+ }
+ 
+ static void hns3_tx_doorbell(struct hns3_enet_ring *ring, int num,
+-- 
+2.43.2
 
-> arch/x86/kernel/head64.c: In function =E2=80=98x86_64_start_kernel=E2=80=
-=99:
-> arch/x86/kernel/head64.c:442:17: error: =E2=80=98__pgtable_l5_enabled=E2=
-=80=99 undeclared (first use in this function); did you mean =E2=80=98pgtab=
-le_l5_enabled=E2=80=99?
->   442 |                 __pgtable_l5_enabled    =3D 1;
->       |                 ^~~~~~~~~~~~~~~~~~~~
->       |                 pgtable_l5_enabled
-> arch/x86/kernel/head64.c:442:17: note: each undeclared identifier is repo=
-rted only once for each function it appears in
-> make[4]: *** [scripts/Makefile.build:243: arch/x86/kernel/head64.o] Error=
- 1
-> make[3]: *** [scripts/Makefile.build:481: arch/x86/kernel] Error 2
-> make[2]: *** [scripts/Makefile.build:481: arch/x86] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [/mnt/kernel/kernel/2nd/linux/Makefile:1921: .] Error 2
-> make: *** [Makefile:240: __sub-make] Error 2
->
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
