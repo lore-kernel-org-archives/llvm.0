@@ -1,67 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132C985C58;
-	Wed, 21 Feb 2024 19:36:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E83126F10;
+	Wed, 21 Feb 2024 19:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708544205; cv=none; b=NTePhB3zxb1huDZtx5sKeTf0npKmAYbQ729IYQ9JXT2PdkcrkVJWimL4JQvgVgukKkeh4IKxZvgIoqisucGSQ9hSqJ4oWnIO1aBVyqXpQyfZwiaMcwmRdd0oA7z3BTvR09gZmFKPFoUeI+IyXodDs5YzCkPzUUJ4a/irs2enTcI=
+	t=1708545029; cv=none; b=Me7xxIzh/rQH06btpSamn4YOJWsrnAk99wG0r+HVQsX2UXbVRdkpI7KiGGcDySKFJ+OWbtFxDhYL5zoIdEXaXlbQo9PmcdMBXJ6PfhGOjUK6ioGBKKufzcTUGNT4nhCjFSJxQweEpi1iLJVrJiUbxKOh57Mm/Zha/V0HwbOEJzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708544205; c=relaxed/simple;
-	bh=7G9uAWaMMmE2mODGAFT5Amp5y8BNqQnlSsXn4zUonjs=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tt3cH40J5K+LxKMhnillxx2njAsbIYgbtlx1KJ6J6qhfrc7EjgGZf9lKNs0kptwKgOn2dFKtpA8P5ud24JC9kcsVfH0SmhDY0tl9h2yH3eq/xwauU568ANORugIAIeS72+bvlURqrsDDBul/TWixcCzWcczCj/EVMGnc+QcKtEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8dLBJBp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708545029; c=relaxed/simple;
+	bh=P9XNMzb7yrJkUl8ylgZe9V6S39LQZndDJiB/yDEpT/k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=e6k+rFT3vrjQVtrHJt0hrK+gif3vHzTktlH88TzEnj5h1r6rIoiApb6Mv5Jd5etcLQPrmv1El4gyLqysAK4Vs/KgywsKTJWqPkZJk54HrtlENoAtXZLF75IBlp84//hMS1nOnByIn5z/14yau7hQhHxVqOCPkuvEzogTMRA+uUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OW+iTfZ2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8dLBJBp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA31C433C7;
-	Wed, 21 Feb 2024 19:36:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OW+iTfZ2"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70ECCC433F1;
+	Wed, 21 Feb 2024 19:50:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708544204;
-	bh=7G9uAWaMMmE2mODGAFT5Amp5y8BNqQnlSsXn4zUonjs=;
-	h=Date:From:To:Subject:From;
-	b=Q8dLBJBp1p2eVU6ul6Q6WlRl1p84CGokCjHMkZX0gy0Jx6X949S5cr5zuUMVN05Yb
-	 0rtkzDF/076qsLs9uH3bzPsHp81abxS8IZnVDKBuALdhQfRYG+/4Kf25ORPrBEqYXL
-	 F6TaJrr0mY7Chi3bq0SNq5Bkm7AG0+AXYBlbBgH2G8DYFkcbn0C1LUDAk75RPNDE3A
-	 bqdWYh8yvJrKDYbuCXQ5Ts+AWrHYflAaG/UxGovIXLcbCz9VGSggmH5W/EDv+Ek4Eb
-	 DmJQ0bwLk9Fv+L4Er4uCJwK/wbNx27ZwZpt0q3Y0IrGk7qZZVDnBXZrV64l2Ibh0+f
-	 Z3F2A5eonyxGA==
-Date: Wed, 21 Feb 2024 12:36:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Prebuilt LLVM 18.1.0-rc3 uploaded
-Message-ID: <20240221193642.GA2138843@dev-arch.thelio-3990X>
+	s=k20201202; t=1708545029;
+	bh=P9XNMzb7yrJkUl8ylgZe9V6S39LQZndDJiB/yDEpT/k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=OW+iTfZ2iL7h+tXJGNvJqPAfGvzAojx6Z/PSpeXYsAyurVOl8s+3iLeyb8SId2m22
+	 IkMRoLD7pypQ8zmtBKx2zeh5H/3haEAMLidw9UmC9U4K2dKljBA0/k1++W43o+S0Ks
+	 /fVDE5C+fidCZkXVM0exKbCcL3S2IEzx1e/omHSdGBsYPclAoXFh2TeCNU7JEE1Lhz
+	 HoMWUjyPLmLL8VwoNoAJZ5CgjhMpcsys6DbOXUUD9dRFESO6R+/GUwWVgy4mWE5xxH
+	 N0beU/EdiatulBzs0sxFFeD+BITTRP9WedtdcrQY2ORn04pHqjslD1NZypKazqYjvg
+	 5zBhXiHk6UXkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 54346C00446;
+	Wed, 21 Feb 2024 19:50:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/2] RISC-V: Fix CONFIG_AS_HAS_OPTION_ARCH with tip of tree
+ LLVM
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <170854502934.2044.9675160060874211968.git-patchwork-notify@kernel.org>
+Date: Wed, 21 Feb 2024 19:50:29 +0000
+References: <20240125-fix-riscv-option-arch-llvm-18-v1-0-390ac9cc3cd0@kernel.org>
+In-Reply-To: <20240125-fix-riscv-option-arch-llvm-18-v1-0-390ac9cc3cd0@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, masahiroy@kernel.org,
+ nicolas@fjasle.eu, andy.chiu@sifive.com, conor.dooley@microchip.com,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev,
+ stable@vger.kernel.org, ebiggers@kernel.org
 
-Hi all,
+Hello:
 
-I have built and uploaded a prebuilt version of LLVM 18.1.0-rc2 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+This series was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-This release is the first one to have SystemZ (s390) support in ld.lld
-and llvm-objcopy, so this release will be the first one to allow
-'ARCH=s390 LLVM=1' to work properly, along with several patches to the
-kernel that are pending in the s390 features branch (targetting 6.9):
+On Thu, 25 Jan 2024 10:32:10 -0700 you wrote:
+> Hi all,
+> 
+> Eric reported that builds of LLVM with [1] (close to tip of tree) have
+> CONFIG_AS_HAS_OPTION_ARCH=n because the test for expected failure on
+> invalid input has started succeeding.
+> 
+> This Kconfig test was added because '.option arch' only causes an
+> assembler warning when it is unsupported, rather than a hard error,
+> which is what users of as-instr expect when something is unsupported.
+> 
+> [...]
 
-https://git.kernel.org/s390/l/features
+Here is the summary with links:
+  - [1/2] kbuild: Add -Wa,--fatal-warnings to as-instr invocation
+    https://git.kernel.org/riscv/c/0ee695a471a7
+  - [2/2] RISC-V: Drop invalid test from CONFIG_AS_HAS_OPTION_ARCH
+    https://git.kernel.org/riscv/c/3aff0c459e77
 
-Another change in this release is the inclusion of libclang.so on the
-packaging side, which allows bindgen to be used with these toolchains:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-https://lore.kernel.org/CANiq72npYCD-zKqcXPNOAxnKiUCCXGbFQaGo-8=0-171ni+ncQ@mail.gmail.com/
 
-As with Linux -rc releases, this is not the final version that will
-ship. If you run across any issues, especially ones that were not
-present in earlier LLVM releases, please consider reporting them to us
-so that we have a chance to investigate and fix them before the final
-release.
-
-Cheers,
-Nathan
