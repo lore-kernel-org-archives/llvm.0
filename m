@@ -1,100 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA4784FA5;
-	Wed, 21 Feb 2024 18:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5239785953;
+	Wed, 21 Feb 2024 18:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708539666; cv=none; b=tdO+sQkpVr4NH/Hc9SXKVScuwoQwhL3YGwHNoqqlZBoclBYsqwCjKxsiZccZGOz7c9v/ue26FXy7BdY4+4DEdnBaKT/rdOhbAq+sVHW8a9YkUnxGCu+AIihOe89JcjG2ZwNl5eobv/aeRGllyHbm8f2MiviYiEjCSa7q2s57vpA=
+	t=1708540588; cv=none; b=hWV1L6+0CbfnRapppe8ZaTmOHn1NZmczCj4rR5Vr7V8vY8UXUk/CK0YGI9i0NZp0gP3100mMeyAd2JnWV+lhksdvkTPPFf6xyj3Pb30T9Nro2YpMzDT7Eq/PzdQbYlXaE0lVIReLX4c/4dBRUaMDtBvryueghFjQvhbNzcnT17Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708539666; c=relaxed/simple;
-	bh=tQaWzc3U8kyTUOyG3hGc5iK+s3OXDgj0AzeWKbHcNFY=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=OJacFxZj2AVayfzj1rvhKnw7xtnH8oFqV9owaLEducMB0X7LKCe+KCGdiCONiP58U2eKmHEh/lAeoLVrd9APrdwMwt/+PaUozmw6Kiz/Arbrw10udpE315Hir+SvhFIwNLq2+242kC5MHlovNQBcFtbMOKmkX3sNnYEME0YGLd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F561lTe2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708540588; c=relaxed/simple;
+	bh=7N4L3Y3cAcWAplEGy0JO21LC6UAVz5g9p7ywNrvVMKI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TzvWr6Zm+6eSOLbH86oXlmeyfpGO7ExgSd1xXlhyIiEB2bF1oGo9Xbjrt5lPSJA5WHuIWyclO79l30qHz3nML6JZ3cZ/e46+ihs3Li1vvhwM8J2jpKxUPb2R8C0hcI86MHZkkyQbsYTcl4/r6Rfm14P0kxf9188SHHizY4q0mJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=amfDYwSU; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F561lTe2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AECEC433F1;
-	Wed, 21 Feb 2024 18:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708539666;
-	bh=tQaWzc3U8kyTUOyG3hGc5iK+s3OXDgj0AzeWKbHcNFY=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=F561lTe2JDbsfjGXvYgvVLgEO0kOuviDsp5/faAf/biHQ56QorfmvA/inS1XrvfJT
-	 GGtIXWZQlyOn5zCgu/CCCVTEiD04wc86dJrO11M4oo3hNJ9x+e22aEvo5bh/vwUdvw
-	 xL8M1UF4iaWsh+2Fu/L6Y1S4kB2YJ0CGKU3nn/Mf6n9ke3kq9i6sbIrpXlTbGqTm6J
-	 aLMhDan+ZxNA8DQzdiZiWA26zT5RQMq+un8HT1tEe39ugLStCXw08gbBusOz086znX
-	 qus+lwKIc/AqREgUHCJPCeL8CMdRHerpzHrIxreGEZJoYE8nOAyQ+WjOGOlJdhmIKi
-	 3vPYYPiCARF6w==
-From: Kalle Valo <kvalo@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: quic_jjohnson@quicinc.com,  morbo@google.com,  justinstitt@google.com,
-  quic_periyasa@quicinc.com,  ath12k@lists.infradead.org,
-  linux-wireless@vger.kernel.org,  llvm@lists.linux.dev,
-  patches@lists.linux.dev
-Subject: Re: [PATCH] wifi: ath12k: Fix uninitialized use of ret in
- ath12k_mac_allocate()
-References: <20240205-ath12k-mac-wuninitialized-v1-1-3fda7b17357f@kernel.org>
-	<170731849247.2220494.17976129376947521581.kvalo@kernel.org>
-	<20240221180013.GA2074929@dev-arch.thelio-3990X>
-Date: Wed, 21 Feb 2024 20:21:02 +0200
-In-Reply-To: <20240221180013.GA2074929@dev-arch.thelio-3990X> (Nathan
-	Chancellor's message of "Wed, 21 Feb 2024 11:00:13 -0700")
-Message-ID: <87ttm1llv5.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="amfDYwSU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708540586; x=1740076586;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7N4L3Y3cAcWAplEGy0JO21LC6UAVz5g9p7ywNrvVMKI=;
+  b=amfDYwSUOmvPLKyjK9w+NlggzSOuAKIbp962dBYMmSZLFtys4lTH7qWP
+   WW4sGekcUdPE4knt8oxr1GTcIbZJqCx197jBTEobgjP6W1mfa3ZAkd3Cl
+   WSZuMmc7RNAjcDvv3JyNyo7Q3GxPHUkJKB5rwn1VUsOsIZZQZ5DLQJ6hO
+   dK3Chjvi7Wz8gA9UP7OwWhLaf8ccB0jTHDMttLxCzei0kIBdLqPbk5HFJ
+   RCvMk+VKNYMVVlJHq6q3cUBRdSuP4IguzWCNs5EGovtdzYTDRUwXwDjcU
+   yH612Ve0NtT3iGbV2e1/YRJxboqpCj4dmY6BqszpaMwODp9BK7SLZlNIg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="2869300"
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="2869300"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 10:36:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="36013256"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 21 Feb 2024 10:36:24 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rcrRz-0005bE-1W;
+	Wed, 21 Feb 2024 18:36:15 +0000
+Date: Thu, 22 Feb 2024 02:35:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jouni =?iso-8859-1?Q?H=F6gander?= <jouni.hogander@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jouni =?iso-8859-1?Q?H=F6gander?= <jouni.hogander@intel.com>
+Subject: Re: [PATCH v2 5/6] drm/i915/psr: Enable ALPM for eDP Panel replay
+Message-ID: <202402220225.2eViN531-lkp@intel.com>
+References: <20240220121045.2156004-6-jouni.hogander@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240220121045.2156004-6-jouni.hogander@intel.com>
 
-Nathan Chancellor <nathan@kernel.org> writes:
+Hi Jouni,
 
-> Hi Kalle,
->
-> On Wed, Feb 07, 2024 at 03:08:14PM +0000, Kalle Valo wrote:
->> Nathan Chancellor <nathan@kernel.org> wrote:
->> 
->> > Clang warns (or errors with CONFIG_WERROR=y):
->> > 
->> >   drivers/net/wireless/ath/ath12k/mac.c:8060:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
->> >    8060 |         return ret;
->> >         |                ^~~
->> >   drivers/net/wireless/ath/ath12k/mac.c:8022:9: note: initialize
->> > the variable 'ret' to silence this warning
->> >    8022 |         int ret, i, j;
->> >         |                ^
->> >         |                 = 0
->> >   1 error generated.
->> > 
->> > Commit 6db6e70a17f6 ("wifi: ath12k: Introduce the container for mac80211
->> > hw") added a completely uninitialized use of ret. Prior to that change,
->> > -ENOMEM was returned to the callers of ath12k_mac_allocate() whenever
->> > ath12k_mac_hw_allocate() failed. Assign that value to ret to make sure
->> > it is always initialized when used and clear up the warning.
->> > 
->> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1989i
->> > Fixes: 6db6e70a17f6 ("wifi: ath12k: Introduce the container for mac80211 hw")
->> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->> > Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
->> > Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
->> 
->> Patch applied to ath-next branch of ath.git, thanks.
->> 
->> 04edb5dc68f4 wifi: ath12k: Fix uninitialized use of ret in ath12k_mac_allocate()
->
-> It doesn't seem like this tree or branch flows into -next on its own, so
-> this patch is not present in and the build still breaks on
-> next-20240221. Can this be fixed so that this warning stops breaking our
-> builds?
+kernel test robot noticed the following build warnings:
 
-Yeah, ath-next is not pulled to linux-next because of "reasons". We are
-planning to send ath-next pull request to wireless-next in the next few
-days.
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip drm/drm-next next-20240221]
+[cannot apply to drm-intel/for-linux-next-fixes linus/master v6.8-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jouni-H-gander/drm-display-Add-missing-aux-less-alpm-wake-related-bits/20240220-201356
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20240220121045.2156004-6-jouni.hogander%40intel.com
+patch subject: [PATCH v2 5/6] drm/i915/psr: Enable ALPM for eDP Panel replay
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240222/202402220225.2eViN531-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240222/202402220225.2eViN531-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402220225.2eViN531-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_psr.c:1705:3: warning: variable 'alpm_ctl' is uninitialized when used here [-Wuninitialized]
+    1705 |                 alpm_ctl |= ALPM_CTL_ALPM_ENABLE |
+         |                 ^~~~~~~~
+   drivers/gpu/drm/i915/display/intel_psr.c:1699:14: note: initialize the variable 'alpm_ctl' to silence this warning
+    1699 |         u32 alpm_ctl;
+         |                     ^
+         |                      = 0
+   1 warning generated.
+
+
+vim +/alpm_ctl +1705 drivers/gpu/drm/i915/display/intel_psr.c
+
+  1693	
+  1694	static void lnl_alpm_configure(struct intel_dp *intel_dp)
+  1695	{
+  1696		struct drm_i915_private *dev_priv = dp_to_i915(intel_dp);
+  1697		enum transcoder cpu_transcoder = intel_dp->psr.transcoder;
+  1698		struct intel_psr *psr = &intel_dp->psr;
+  1699		u32 alpm_ctl;
+  1700	
+  1701		if (DISPLAY_VER(dev_priv) < 20)
+  1702			return;
+  1703	
+  1704		if (intel_dp->psr.panel_replay_enabled && intel_dp_is_edp(intel_dp)) {
+> 1705			alpm_ctl |= ALPM_CTL_ALPM_ENABLE |
+  1706				ALPM_CTL_ALPM_AUX_LESS_ENABLE |
+  1707				ALPM_CTL_AUX_LESS_SLEEP_HOLD_TIME_50_SYMBOLS;
+  1708	
+  1709			intel_de_write(dev_priv, PORT_ALPM_CTL(cpu_transcoder),
+  1710				       PORT_ALPM_CTL_ALPM_AUX_LESS_ENABLE |
+  1711				       PORT_ALPM_CTL_MAX_PHY_SWING_SETUP(15) |
+  1712				       PORT_ALPM_CTL_MAX_PHY_SWING_HOLD(0) |
+  1713				       PORT_ALPM_CTL_SILENCE_PERIOD(
+  1714					       psr->alpm_parameters.silence_period_sym_clocks));
+  1715	
+  1716			intel_de_write(dev_priv, PORT_ALPM_LFPS_CTL(cpu_transcoder),
+  1717				       PORT_ALPM_LFPS_CTL_LFPS_CYCLE_COUNT(10) |
+  1718				       PORT_ALPM_LFPS_CTL_LFPS_HALF_CYCLE_DURATION(
+  1719					       psr->alpm_parameters.lfps_half_cycle_num_of_syms) |
+  1720				       PORT_ALPM_LFPS_CTL_FIRST_LFPS_HALF_CYCLE_DURATION(
+  1721					       psr->alpm_parameters.lfps_half_cycle_num_of_syms) |
+  1722				       PORT_ALPM_LFPS_CTL_LAST_LFPS_HALF_CYCLE_DURATION(
+  1723					       psr->alpm_parameters.lfps_half_cycle_num_of_syms));
+  1724		} else {
+  1725			alpm_ctl = ALPM_CTL_EXTENDED_FAST_WAKE_ENABLE |
+  1726				ALPM_CTL_EXTENDED_FAST_WAKE_TIME(psr->alpm_parameters.fast_wake_lines);
+  1727		}
+  1728	
+  1729		alpm_ctl |= ALPM_CTL_ALPM_ENTRY_CHECK(psr->alpm_parameters.check_entry_lines);
+  1730	
+  1731		intel_de_write(dev_priv, ALPM_CTL(cpu_transcoder), alpm_ctl);
+  1732	}
+  1733	
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
