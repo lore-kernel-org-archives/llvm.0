@@ -1,448 +1,224 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B268879C6
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 01:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BF739875
+	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 03:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708480491; cv=none; b=pej1h9YwpueWfjOEEUzpruapnrm0kxL5fnzmLKYJd6xmGekAmiWjctUg/bYjHJerLnCS0p2IwdbjUWLueevH89i+wHma2MlxaujW9UebO2eeusYEEMhozGqb6+x0fVX9LzFcIMvxWmJ/plOWT8wJLQnA3cqAhBUaTwXXsmTjIKc=
+	t=1708484494; cv=none; b=kXgmI7/e18ZGs0O6V6KDQZve8lJJpeIoj56WucfuP/QwvFzRrcQe53nMgk3LdvhuAqN6d3YZq8Or8YkTsTSyU2gqgqJZJdsg+Yfsm9IlkQiX2WFHy1ulhbm9wYo9LRc6M5JzPq/XZXAZz6PIysj7hjJ2sgrcvgBCgc9bh0nWSsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708480491; c=relaxed/simple;
-	bh=qvvXGLRd2dBY05DP4mtYdzdlsgKW60gBnGie/EdUL2A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KZOJ+d5EZEVy7nXLbpAwYj7WDHxyZKOMB1A+beMG0ecP71RgPJMIGFpz8aVSepxCjphGa4CCr+83kVCkCKpezX/S72LGSNjvLlK1hdYjAAwTrtqEjQMEIg14hhS//c80gztrVKEeeEHHORo9penR1yaTClBP4yU/w4pWA10gIRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1d751bc0c15so55490665ad.2
-        for <llvm@lists.linux.dev>; Tue, 20 Feb 2024 17:54:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708480489; x=1709085289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FChvkbuwuumTfTUfxOqNV1G/tDSl1t1W6EEos4crhQE=;
-        b=qdMHmbcASuPL/21LAOlXCbNUJc5XurmMf/R73fzJGfM7GQDI1H0pqdKqw8cbj3VjBs
-         56+xLMVpUA5Cevg0O4B4jTUiozH5MHjBiMpjs3546afKeimwkl1qzr/mV8AJr+X4eQTi
-         CxvI324kXFHAkzlAxfFqnijySLGtM6OsoIdK+ooAZNdrh3dzf9PTpsnDdhNSa9IkU9Wd
-         LCf0FQdZJLku7mMwiv6QmVzx5ZnDL8w2Pw0WBVdBygSYFF7RgKct5/0bbhCHBtOclw+D
-         IUoGoldEPKvfCXbECZUtKQtQ0TbA5qCkJBjLkOuMijGaHtRt+BtuO4yM1hxNf6smGLhE
-         Rl9w==
-X-Forwarded-Encrypted: i=1; AJvYcCW4pqZ2XOpjcaZ/2S/P+TX7AJsenfCG9oKcATZ73ukS1tK7BIIHZ/H4V3JYPjLhvL9IkLQsdjXnNjj/KzNWKXJ59AFMig==
-X-Gm-Message-State: AOJu0YzslzrD8omC+6cUaex7qML4gMJDdIHf3EYu0o+qaigTemOElfzs
-	ND3kiskn+2Sth+tU2RurSSZG8TxsIYAoUlXVkbDAUvdJIDl8FFVcVezBgLlFOKphcG6EAF2yMYg
-	F7xN1TOX4VQ/vYQmVhdjsc4xkilI=
-X-Google-Smtp-Source: AGHT+IGyzooye3Mtp9/+LQQ5tOGpO5yTsTZeTRYtOS00j5v4qEYINRAmRiq8C50kD3wvA1K4tQ2saG/x04O0YqFvq9I=
-X-Received: by 2002:a17:90a:c78a:b0:299:1f85:6fdc with SMTP id
- gn10-20020a17090ac78a00b002991f856fdcmr12494391pjb.48.1708480488882; Tue, 20
- Feb 2024 17:54:48 -0800 (PST)
+	s=arc-20240116; t=1708484494; c=relaxed/simple;
+	bh=nKqeB3IKn9WfMD8Ihh42vIRJYc6Vut5xHTu+LtuzvPs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=H+3vTflYQkIGUgyQYwh1G0gWJOMboL8L71NazTQ+IEFrc5EuiLt8qg76D3uY5ylH1lK7EBKsZmfG/vV7cdcL5wHuiElVoZU0C9gB2ipvxr9gHuCjXbOk9dFo7A4TcuEe616P7RvkI284YLJ4JLyYEKM/zq6G4ZDXiyk//NdcGII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PlsZItcq; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PlsZItcq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708484487;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9kR34gCSdpbzg7yiGk5ZvqsIfrdmLUQX6lCJXl37IPU=;
+	b=PlsZItcqqTPUoV/cxy6clqquins+Bu7cXfKa3MVsXzoOzaab6nfHqMLbMq2BYCeWkV7zsm
+	bSuFXeVKSZaisSDksER5Fy6SzgFv4OdS/w/f8KhgmLHn+5r7lRuXdvA/eonjOZ11A1f54Z
+	p9IANF8eOptlTf0Qb+QsDNiYTSNUSTs=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-453-qzXAHqUwMlSq8FPTocxHtQ-1; Tue,
+ 20 Feb 2024 22:01:25 -0500
+X-MC-Unique: qzXAHqUwMlSq8FPTocxHtQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA00D1C07F27
+	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 03:01:25 +0000 (UTC)
+Received: from [172.64.5.24] (unknown [10.30.32.29])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 66C2E1121312;
+	Wed, 21 Feb 2024 03:01:25 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0-rc5, mainline.kernel.org-clang, fca7526b)
+Date: Wed, 21 Feb 2024 03:01:25 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240216235203.229256-1-irogers@google.com> <20240216235203.229256-7-irogers@google.com>
-In-Reply-To: <20240216235203.229256-7-irogers@google.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Tue, 20 Feb 2024 17:54:36 -0800
-Message-ID: <CAM9d7cgavJtfVjcESq4HRvm9mvmRL9KrfO5HsTMPrgfLvxnymQ@mail.gmail.com>
-Subject: Re: [PATCH v5 6/8] perf tests: Use scandirat for shell script finding
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Athira Jajeev <atrajeev@linux.vnet.ibm.com>, 
-	James Clark <james.clark@arm.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Yang Jihong <yangjihong1@huawei.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <63222.124022022012502873@us-mta-453.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 16, 2024 at 3:55=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> Avoid filename appending buffers by using openat, faccessat and
-> scandirat more widely. Turn the script's path back to a file name
-> using readlink from /proc/<pid>/fd/<fd>.
->
-> Read the script's description using api/io.h to avoid fdopen
-> conversions. Whilst reading perform additional sanity checks on the
-> script's contents.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Hi, we tested your kernel and here are the results:
 
-Ditto.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-  tests/tests-scripts.c: In function 'append_scripts_in_dir':
-  tests/tests-scripts.c:200:18: error: implicit declaration of
-function 'scandirat'; did you mean 'scandir'?
-[-Werror=3Dimplicit-function-declaration]
-  200 |         n_dirs =3D scandirat(dir_fd, ".", &entlist, NULL,
-alphasort);
-  |                  ^~~~~~~~~
-  |                  scandir
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Thanks,
-Namhyung
+Kernel information:
+    Commit message: drm/tests/drm_buddy: fix build failure on 32-bit target=
+s
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/130439
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
+koza machines
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1852
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests: generic/354 file exists
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1654
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests tests nbd/001 failed
+            URL: https://github.com/osandov/blktests/issues/132
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] blktests tests/zbd/010 failed
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: [upstream][s390x] blktests nvme/029 failed due to nvme-cli u=
+pdate
+            URL: https://github.com/linux-nvme/nvme-cli/issues/2218
+            Affected tests:
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-> ---
->  tools/perf/tests/builtin-test.c  |  20 ++---
->  tools/perf/tests/tests-scripts.c | 144 ++++++++++++++++++-------------
->  tools/perf/tests/tests-scripts.h |   1 -
->  3 files changed, 94 insertions(+), 71 deletions(-)
->
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-t=
-est.c
-> index eff3c62e9b47..162f9eb090ac 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -300,22 +300,19 @@ static int test_and_print(struct test_suite *t, int=
- subtest)
->  }
->
->  struct shell_test {
-> -       const char *dir;
->         const char *file;
->  };
->
->  static int shell_test__run(struct test_suite *test, int subdir __maybe_u=
-nused)
->  {
->         int err;
-> -       char script[PATH_MAX];
->         struct shell_test *st =3D test->priv;
-> +       char *cmd =3D NULL;
->
-> -       path__join(script, sizeof(script) - 3, st->dir, st->file);
-> -
-> -       if (verbose > 0)
-> -               strncat(script, " -v", sizeof(script) - strlen(script) - =
-1);
-> -
-> -       err =3D system(script);
-> +       if (asprintf(&cmd, "%s%s", st->file, verbose ? " -v" : "") < 0)
-> +               return TEST_FAIL;
-> +       err =3D system(cmd);
-> +       free(cmd);
->         if (!err)
->                 return TEST_OK;
->
-> @@ -331,7 +328,7 @@ static int run_shell_tests(int argc, const char *argv=
-[], int i, int width,
->         files =3D list_script_files();
->         if (!files)
->                 return 0;
-> -       for (file =3D files; file->dir; file++) {
-> +       for (file =3D files; file->file; file++) {
->                 int curr =3D i++;
->                 struct test_case test_cases[] =3D {
->                         {
-> @@ -345,13 +342,12 @@ static int run_shell_tests(int argc, const char *ar=
-gv[], int i, int width,
->                         .test_cases =3D test_cases,
->                         .priv =3D &st,
->                 };
-> -               st.dir =3D file->dir;
-> +               st.file =3D file->file;
->
->                 if (test_suite.desc =3D=3D NULL ||
->                     !perf_test__matches(test_suite.desc, curr, argc, argv=
-))
->                         continue;
->
-> -               st.file =3D file->file;
->                 pr_info("%3d: %-*s:", i, width, test_suite.desc);
->
->                 if (intlist__find(skiplist, i)) {
-> @@ -455,7 +451,7 @@ static int perf_test__list_shell(int argc, const char=
- **argv, int i)
->         files =3D list_script_files();
->         if (!files)
->                 return 0;
-> -       for (file =3D files; file->dir; file++) {
-> +       for (file =3D files; file->file; file++) {
->                 int curr =3D i++;
->                 struct test_suite t =3D {
->                         .desc =3D file->desc
-> diff --git a/tools/perf/tests/tests-scripts.c b/tools/perf/tests/tests-sc=
-ripts.c
-> index 4ebd841da05b..9b3b66dd5508 100644
-> --- a/tools/perf/tests/tests-scripts.c
-> +++ b/tools/perf/tests/tests-scripts.c
-> @@ -14,6 +14,7 @@
->  #include <subcmd/parse-options.h>
->  #include <sys/wait.h>
->  #include <sys/stat.h>
-> +#include <api/io.h>
->  #include "builtin.h"
->  #include "tests-scripts.h"
->  #include "color.h"
-> @@ -35,55 +36,69 @@ static size_t files_num =3D 0;
->  static struct script_file *files =3D NULL;
->  static int files_max_width =3D 0;
->
-> -static const char *shell_tests__dir(char *path, size_t size)
-> +static int shell_tests__dir_fd(void)
->  {
-> -       const char *devel_dirs[] =3D { "./tools/perf/tests", "./tests", }=
-;
-> -       char *exec_path;
-> -       unsigned int i;
-> +       char path[PATH_MAX], *exec_path;
-> +       static const char * const devel_dirs[] =3D { "./tools/perf/tests/=
-shell", "./tests/shell", };
->
-> -       for (i =3D 0; i < ARRAY_SIZE(devel_dirs); ++i) {
-> -               struct stat st;
-> +       for (size_t i =3D 0; i < ARRAY_SIZE(devel_dirs); ++i) {
-> +               int fd =3D open(devel_dirs[i], O_PATH);
->
-> -               if (!lstat(devel_dirs[i], &st)) {
-> -                       scnprintf(path, size, "%s/shell", devel_dirs[i]);
-> -                       if (!lstat(devel_dirs[i], &st))
-> -                               return path;
-> -               }
-> +               if (fd >=3D 0)
-> +                       return fd;
->         }
->
->         /* Then installed path. */
->         exec_path =3D get_argv_exec_path();
-> -       scnprintf(path, size, "%s/tests/shell", exec_path);
-> +       scnprintf(path, sizeof(path), "%s/tests/shell", exec_path);
->         free(exec_path);
-> -       return path;
-> +       return open(path, O_PATH);
->  }
->
-> -static const char *shell_test__description(char *description, size_t siz=
-e,
-> -                                           const char *path, const char =
-*name)
-> +static char *shell_test__description(int dir_fd, const char *name)
->  {
-> -       FILE *fp;
-> -       char filename[PATH_MAX];
-> -       int ch;
-> +       struct io io;
-> +       char buf[128], desc[256];
-> +       int ch, pos =3D 0;
->
-> -       path__join(filename, sizeof(filename), path, name);
-> -       fp =3D fopen(filename, "r");
-> -       if (!fp)
-> +       io__init(&io, openat(dir_fd, name, O_RDONLY), buf, sizeof(buf));
-> +       if (io.fd < 0)
->                 return NULL;
->
->         /* Skip first line - should be #!/bin/sh Shebang */
-> +       if (io__get_char(&io) !=3D '#')
-> +               goto err_out;
-> +       if (io__get_char(&io) !=3D '!')
-> +               goto err_out;
->         do {
-> -               ch =3D fgetc(fp);
-> -       } while (ch !=3D EOF && ch !=3D '\n');
-> -
-> -       description =3D fgets(description, size, fp);
-> -       fclose(fp);
-> +               ch =3D io__get_char(&io);
-> +               if (ch < 0)
-> +                       goto err_out;
-> +       } while (ch !=3D '\n');
->
-> -       /* Assume first char on line is omment everything after that desc=
- */
-> -       return description ? strim(description + 1) : NULL;
-> +       do {
-> +               ch =3D io__get_char(&io);
-> +               if (ch < 0)
-> +                       goto err_out;
-> +       } while (ch =3D=3D '#' || isspace(ch));
-> +       while (ch > 0 && ch !=3D '\n') {
-> +               desc[pos++] =3D ch;
-> +               if (pos >=3D (int)sizeof(desc) - 1)
-> +                       break;
-> +               ch =3D io__get_char(&io);
-> +       }
-> +       while (pos > 0 && isspace(desc[--pos]))
-> +               ;
-> +       desc[++pos] =3D '\0';
-> +       close(io.fd);
-> +       return strdup(desc);
-> +err_out:
-> +       close(io.fd);
-> +       return NULL;
->  }
->
->  /* Is this full file path a shell script */
-> -static bool is_shell_script(const char *path)
-> +static bool is_shell_script(int dir_fd, const char *path)
->  {
->         const char *ext;
->
-> @@ -91,20 +106,16 @@ static bool is_shell_script(const char *path)
->         if (!ext)
->                 return false;
->         if (!strcmp(ext, ".sh")) { /* Has .sh extension */
-> -               if (access(path, R_OK | X_OK) =3D=3D 0) /* Is executable =
-*/
-> +               if (faccessat(dir_fd, path, R_OK | X_OK, 0) =3D=3D 0) /* =
-Is executable */
->                         return true;
->         }
->         return false;
->  }
->
->  /* Is this file in this dir a shell script (for test purposes) */
-> -static bool is_test_script(const char *path, const char *name)
-> +static bool is_test_script(int dir_fd, const char *name)
->  {
-> -       char filename[PATH_MAX];
-> -
-> -       path__join(filename, sizeof(filename), path, name);
-> -       if (!is_shell_script(filename)) return false;
-> -       return true;
-> +       return is_shell_script(dir_fd, name);
->  }
->
->  /* Duplicate a string and fall over and die if we run out of memory */
-> @@ -120,12 +131,21 @@ static char *strdup_check(const char *str)
->         return newstr;
->  }
->
-> -static void append_script(const char *dir, const char *file, const char =
-*desc)
-> +static void append_script(int dir_fd, const char *name, char *desc)
->  {
-> +       char filename[PATH_MAX], link[128];
->         struct script_file *files_tmp;
-> -       size_t files_num_tmp;
-> +       size_t files_num_tmp, len;
->         int width;
->
-> +       snprintf(link, sizeof(link), "/proc/%d/fd/%d", getpid(), dir_fd);
-> +       len =3D readlink(link, filename, sizeof(filename));
-> +       if (len < 0) {
-> +               pr_err("Failed to readlink %s", link);
-> +               return;
-> +       }
-> +       filename[len++] =3D '/';
-> +       strcpy(&filename[len], name);
->         files_num_tmp =3D files_num + 1;
->         if (files_num_tmp >=3D SIZE_MAX) {
->                 pr_err("Too many script files\n");
-> @@ -142,10 +162,8 @@ static void append_script(const char *dir, const cha=
-r *file, const char *desc)
->         /* Add file to end and NULL terminate the struct array */
->         files =3D files_tmp;
->         files_num =3D files_num_tmp;
-> -       files[files_num - 1].dir =3D strdup_check(dir);
-> -       files[files_num - 1].file =3D strdup_check(file);
-> -       files[files_num - 1].desc =3D strdup_check(desc);
-> -       files[files_num].dir =3D NULL;
-> +       files[files_num - 1].file =3D strdup_check(filename);
-> +       files[files_num - 1].desc =3D desc;
->         files[files_num].file =3D NULL;
->         files[files_num].desc =3D NULL;
->
-> @@ -154,32 +172,39 @@ static void append_script(const char *dir, const ch=
-ar *file, const char *desc)
->                 files_max_width =3D width;
->  }
->
-> -static void append_scripts_in_dir(const char *path)
-> +static void append_scripts_in_dir(int dir_fd)
->  {
->         struct dirent **entlist;
->         struct dirent *ent;
->         int n_dirs, i;
-> -       char filename[PATH_MAX];
->
->         /* List files, sorted by alpha */
-> -       n_dirs =3D scandir(path, &entlist, NULL, alphasort);
-> +       n_dirs =3D scandirat(dir_fd, ".", &entlist, NULL, alphasort);
->         if (n_dirs =3D=3D -1)
->                 return;
->         for (i =3D 0; i < n_dirs && (ent =3D entlist[i]); i++) {
-> +               int fd;
-> +
->                 if (ent->d_name[0] =3D=3D '.')
->                         continue; /* Skip hidden files */
-> -               if (is_test_script(path, ent->d_name)) { /* It's a test *=
-/
-> -                       char bf[256];
-> -                       const char *desc =3D shell_test__description
-> -                               (bf, sizeof(bf), path, ent->d_name);
-> +               if (is_test_script(dir_fd, ent->d_name)) { /* It's a test=
- */
-> +                       char *desc =3D shell_test__description(dir_fd, en=
-t->d_name);
->
->                         if (desc) /* It has a desc line - valid script */
-> -                               append_script(path, ent->d_name, desc);
-> -               } else if (is_directory(path, ent)) { /* Scan the subdir =
-*/
-> -                       path__join(filename, sizeof(filename),
-> -                                  path, ent->d_name);
-> -                       append_scripts_in_dir(filename);
-> +                               append_script(dir_fd, ent->d_name, desc);
-> +                       continue;
-> +               }
-> +               if (ent->d_type !=3D DT_DIR) {
-> +                       struct stat st;
-> +
-> +                       if (ent->d_type !=3D DT_UNKNOWN)
-> +                               continue;
-> +                       fstatat(dir_fd, ent->d_name, &st, 0);
-> +                       if (!S_ISDIR(st.st_mode))
-> +                               continue;
->                 }
-> +               fd =3D openat(dir_fd, ent->d_name, O_PATH);
-> +               append_scripts_in_dir(fd);
->         }
->         for (i =3D 0; i < n_dirs; i++) /* Clean up */
->                 zfree(&entlist[i]);
-> @@ -188,14 +213,17 @@ static void append_scripts_in_dir(const char *path)
->
->  const struct script_file *list_script_files(void)
->  {
-> -       char path_dir[PATH_MAX];
-> -       const char *path;
-> +       int dir_fd;
->
->         if (files)
->                 return files; /* Singleton - we already know our list */
->
-> -       path =3D shell_tests__dir(path_dir, sizeof(path_dir)); /* Walk  d=
-ir */
-> -       append_scripts_in_dir(path);
-> +       dir_fd =3D shell_tests__dir_fd(); /* Walk  dir */
-> +       if (dir_fd < 0)
-> +               return NULL;
-> +
-> +       append_scripts_in_dir(dir_fd);
-> +       close(dir_fd);
->
->         return files;
->  }
-> diff --git a/tools/perf/tests/tests-scripts.h b/tools/perf/tests/tests-sc=
-ripts.h
-> index 3a3ec6191848..3508a293aaf9 100644
-> --- a/tools/perf/tests/tests-scripts.h
-> +++ b/tools/perf/tests/tests-scripts.h
-> @@ -3,7 +3,6 @@
->  #define TESTS_SCRIPTS_H
->
->  struct script_file {
-> -       char *dir;
->         char *file;
->         char *desc;
->  };
-> --
-> 2.44.0.rc0.258.g7320e95886-goog
->
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
