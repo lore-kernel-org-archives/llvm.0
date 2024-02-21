@@ -1,43 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3C880C08;
-	Wed, 21 Feb 2024 16:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A997482D9F;
+	Wed, 21 Feb 2024 16:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708534112; cv=none; b=pFAclY9PIJsD6PnrrxDRSLi/ZuVEdMdW4B3DP3bE1xx2XrbcAtD6IWXL4aamZ5im8IwGSYjxctXbfpUD15bzZ4unLfcrNsOfEJ4g8sKdqpk5zZRnM8rZa/gzOqaJMClFkKBfUiAf3fT6DxVsmFQJUORXX9c9qd6KSfKQhh/pQR4=
+	t=1708534776; cv=none; b=Ba9oXlTKgiunSOpq1EdtSmip3NxfLUF5yNeNAnyiRxW99vHh7p8XlvhSPFMBzG3n66ppeveZYqNeM7q/UJ4CoKv88JPe4NWwIQHMsWn37MugniRrx9G8Zr7iaQjHuT1SxdMfE91xDdmjH5dzusOe6bB/6LWRw7Y8BmY18J6avDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708534112; c=relaxed/simple;
-	bh=E3KFvMLZM93hfbHg2L3W2NrtXBqubV8WcxzfaBbEJuQ=;
+	s=arc-20240116; t=1708534776; c=relaxed/simple;
+	bh=ElQjTfhdvPQwFojyzHWUkU4RaRlFyaM9QtJjfwB8+60=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UTJE3x1Y+kOZTzkfQne3njyB7yO0ApXncrzJmARLCsB+GRL8ICE/Z8GYHfwDGRLGGsoft7hFdextmfHERLKfE+QWs1AZi2EYUeQAgB5spc0Y7+EJh2sC4IJaUSV9rwitQI9hX3hcTlsBPKYarcfSWCwJMNHjBTNwTG8kHYhNMOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YU3BH+bQ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=tMuW78qQn26Ye9XGB6j99XDgVx7uEUfh4jIDeyy1zN92FlBf//OzHNA5C8ZKajsdnbf0wQtUdyB8PxbCOJU9Uno3B1QDWmI3GkrPl3a0ujCTh6Hr2/H2XyF5Q1bR1GJYRgZAnFhIaeFK9DcwLU1eo66/QYgqLz9EaBG5fhqGHuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H++CgKO/; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YU3BH+bQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3331C433F1;
-	Wed, 21 Feb 2024 16:48:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708534111;
-	bh=E3KFvMLZM93hfbHg2L3W2NrtXBqubV8WcxzfaBbEJuQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YU3BH+bQkI2cnrxR6M6veZQTZ+hzlxf+xyrqHnd3VSEWXiyFtgBkSgGQQI1emz+Uq
-	 sOwcM4OhvpheEFmIiAy/YCfEA8Ov0nN7YWeZq2B6IACDynKSPVXDXMhoc21R0i//ZN
-	 w+MgDa+iELYFGeiunBZaMAVZS2vBj495IfvhkjxKMwAz8ic/ozsZIO/HaYGGgnoweb
-	 v411IOFRrKhlc2xH9x3wSYUbpJJhLxD0gjYyaAqXWYy/Oz/+y9/F+0CE8bAclGzrBs
-	 ymDH8wXUa9UzAyUJUbkbYWYokFo/qHf3pWPKSdLjHlYZWKtUyPzRWsKRbB58WzQpVm
-	 CxgLrCfne1kNA==
-Date: Wed, 21 Feb 2024 09:48:29 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-	svens@linux.ibm.com, morbo@google.com, justinstitt@google.com,
-	linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] s390/boot: Workaround current 'llvm-objdump -t -j ...'
- behavior
-Message-ID: <20240221164829.GB1782141@dev-arch.thelio-3990X>
-References: <20240220-s390-work-around-llvm-objdump-t-j-v1-1-47bb0366a831@kernel.org>
- <20240221091612.7561-A-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H++CgKO/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708534775; x=1740070775;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ElQjTfhdvPQwFojyzHWUkU4RaRlFyaM9QtJjfwB8+60=;
+  b=H++CgKO/2wRw4BaitXSI1YxKSgdN7AffO2LGVUtGcj5nmFer0yB+iw5E
+   ZRKKRo7sRABFneMmugwyPKk/hwbjb0umRiKqpXmKASbichQuoC7IfJAA2
+   aSJ5/iRvox6/80HO9xfsrLhI3cPoYtr0iOVXAL6BDQa/pfFVkmz7cLiFN
+   dLZ6LIcIGAbqI0RgtZG9IQssRVk4hJ9swb/gueq4/vP+1RF1EbJPXRWcu
+   esQcijxZ0zVOY8iQtIAxxb/3jYZL2LdFv6BLnwXqWJ6KbXk1PVnzVAqej
+   7UkzA5WUMHr7yculUylnBqtMFssdS2oJdAH/dTErgVLeFIpQ/LinXdjr6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="13325604"
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="13325604"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 08:59:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="9815760"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 21 Feb 2024 08:59:18 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rcpwB-0005WE-2W;
+	Wed, 21 Feb 2024 16:59:15 +0000
+Date: Thu, 22 Feb 2024 00:57:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxwell Bland <mbland@motorola.com>,
+	linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gregkh@linuxfoundation.org, agordeev@linux.ibm.com,
+	akpm@linux-foundation.org, andreyknvl@gmail.com, andrii@kernel.org,
+	aneesh.kumar@kernel.org, aou@eecs.berkeley.edu, ardb@kernel.org,
+	arnd@arndb.de, ast@kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, brauner@kernel.org, catalin.marinas@arm.com,
+	christophe.leroy@csgroup.eu, cl@linux.com, daniel@iogearbox.net,
+	dave.hansen@linux.intel.com, david@redhat.com, dennis@kernel.org,
+	dvyukov@google.com, glider@google.com, gor@linux.ibm.com,
+	guoren@kernel.org, haoluo@google.com, hca@linux.ibm.com,
+	hch@infradead.org, john.fastabend@gmail.com, jolsa@kernel.org
+Subject: Re: [PATCH 2/4] mm: pgalloc: support address-conditional pmd
+ allocation
+Message-ID: <202402220006.5v6axq6B-lkp@intel.com>
+References: <20240220203256.31153-3-mbland@motorola.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,61 +70,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240221091612.7561-A-hca@linux.ibm.com>
+In-Reply-To: <20240220203256.31153-3-mbland@motorola.com>
 
-Hi Heiko,
+Hi Maxwell,
 
-On Wed, Feb 21, 2024 at 10:16:12AM +0100, Heiko Carstens wrote:
-> On Tue, Feb 20, 2024 at 01:44:48PM -0700, Nathan Chancellor wrote:
-> > When building with OBJDUMP=llvm-objdump, there are a series of warnings
-> > from the section comparisons that arch/s390/boot/Makefile performs
-> > between vmlinux and arch/s390/boot/vmlinux:
-> ...
-> > It may be possible to change llvm-objdump's behavior to match GNU
-> > objdump's behavior but the difficulty of that task has not yet been
-> > explored. The combination of '$(OBJDUMP) -t -j' is not common in the
-> > kernel tree on a whole, so workaround this tool difference by grepping
-> > for the sections in the full symbol table output in a similar manner to
-> > the sed invocation. This results in no visible change for GNU objdump
-> > users while fixing the warnings for OBJDUMP=llvm-objdump, further
-> > enabling use of LLVM=1 for ARCH=s390 with versions of LLVM that have
-> > support for s390 in ld.lld and llvm-objcopy.
-> > 
-> > Reported-by: Heiko Carstens <hca@linux.ibm.com>
-> > Closes: https://lore.kernel.org/20240219113248.16287-C-hca@linux.ibm.com/
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/859
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > s390 llvm-objcopy support may be backported to LLVM 18.1.0 in time for
-> > the final release.
-> > 
-> > https://github.com/llvm/llvm-project/pull/82324
-> > 
-> > s390 ld.lld has already made it into release/18.x:
-> > 
-> > https://github.com/llvm/llvm-project/commit/0a44c3792a6ff799df5f100670d7e19d1bc49f03
-> > 
-> > If the objcopy change makes 18.1.0 final, features + this change should
-> > build cleanly with LLVM 18.1.0+ using LLVM=1 :)
-> > ---
-> >  arch/s390/boot/Makefile | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> This seems to work like expected (also verified with a couple of scenarios
-> where things are supposed to break).
-> 
-> So compiling the kernel with LLVM=1 finally works on s390!
-> 
-> Patch applied - Thanks a lot!
+kernel test robot noticed the following build errors:
 
-Thanks a lot for testing and applying this quickly! Small update on the
-LLVM side, the llvm-objcopy change made it into 18.1.0-rc3:
+[auto build test ERROR on b401b621758e46812da61fa58a67c3fd8d91de0d]
 
-https://github.com/llvm/llvm-project/commit/5ef297ab611822537a385d45244867519563d3ef
-https://github.com/llvm/llvm-project/commits/llvmorg-18.1.0-rc3
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Bland/mm-vmalloc-allow-arch-specific-vmalloc_node-overrides/20240221-043458
+base:   b401b621758e46812da61fa58a67c3fd8d91de0d
+patch link:    https://lore.kernel.org/r/20240220203256.31153-3-mbland%40motorola.com
+patch subject: [PATCH 2/4] mm: pgalloc: support address-conditional pmd allocation
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240222/202402220006.5v6axq6B-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240222/202402220006.5v6axq6B-lkp@intel.com/reproduce)
 
-So it's pretty much official, 'ARCH=s390 LLVM=1' should build without
-any issues with Linux 6.9+ and LLVM 18.1.0+ :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402220006.5v6axq6B-lkp@intel.com/
 
-Cheers,
-Nathan
+All errors (new ones prefixed by >>):
+
+>> mm/memory.c:459:3: error: implicit declaration of function 'pmd_populate_kernel_at' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   pmd_populate_kernel_at(&init_mm, pmd, new, address);
+                   ^
+   mm/memory.c:459:3: note: did you mean 'pmd_populate_kernel'?
+   arch/arm/include/asm/pgalloc.h:125:1: note: 'pmd_populate_kernel' declared here
+   pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmdp, pte_t *ptep)
+   ^
+   1 error generated.
+
+
+vim +/pmd_populate_kernel_at +459 mm/memory.c
+
+   449	
+   450	int __pte_alloc_kernel(pmd_t *pmd, unsigned long address)
+   451	{
+   452		pte_t *new = pte_alloc_one_kernel(&init_mm);
+   453		if (!new)
+   454			return -ENOMEM;
+   455	
+   456		spin_lock(&init_mm.page_table_lock);
+   457		if (likely(pmd_none(*pmd))) {	/* Has another populated it ? */
+   458			smp_wmb(); /* See comment in pmd_install() */
+ > 459			pmd_populate_kernel_at(&init_mm, pmd, new, address);
+   460			new = NULL;
+   461		}
+   462		spin_unlock(&init_mm.page_table_lock);
+   463		if (new)
+   464			pte_free_kernel(&init_mm, new);
+   465		return 0;
+   466	}
+   467	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
