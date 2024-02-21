@@ -1,136 +1,112 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6669B3C6AB;
-	Wed, 21 Feb 2024 09:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1F139AE3
+	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 10:09:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708506986; cv=none; b=dj1Z2s3c0LQWxci2jHXBmJafXIt8B+mGE9857bkWIwQcmcGl+iBwsPbasrjiiW0ZasX9Lg+KNslvAV8SYLEuLieIm3lGlI+rjeJcoS2W8h8iXQ6Yvg7N1K09NMF5qEH4Bv93Cb8ydP5K8h05SB/Vp3lGyu6QzVyKHW7X5oStCHA=
+	t=1708510187; cv=none; b=kTIcA14ftqOXy1V2UD7kjYCj9NbLW8jOAEuKsEJij9GCI/H+JUMqwjDJ3qZ3gfhhjaTv/HXIcpqyh9BE/ac321v+VTMxcIzo+jNDECt84Xt0slylkb9qHxc83f41AQzdNvfZnSFZzduvwZO8DdqF47jAWhU3n1t+421n6DPhUKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708506986; c=relaxed/simple;
-	bh=oTE4Ln4kYMfpmBPnks4Wfek2SuDUC2rvJeqBR67tew0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=szIIFvdZYLQXNlYdyGcZApCMPdIhROLIWO28OAiByF7J/fEKq2YF/Neal34EMgtoSICkgFLmfw67Qx1VxjL4MtFbd2mn6+DPPAN8D7qxVDIYOkomkoOlVkmTfEeZPdvQjasVxkDRPYxkkLdkl7RZtPtpAfSBE7dTHjuBjBOCVdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Y+nWMqb0; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1708510187; c=relaxed/simple;
+	bh=r5moT70R+oUVljSoprUOEoJfl4/tp6MaAnZM9QhoZhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OtFG4qdIGhXSd0bmN9+gEOPy3Hcipuez7+7HxOUIjomr2jGUmdL2fvHt0+mY+ytJyxUkXM3PiY3YQSP17DhBsFBVvseXHERn7nvqcVi2j9pqqiVwauTYvvhN95Gtz3mMadzeWXag/dlsy7conU1YMq6oOES/PxOvaeCAyEbiZU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ZTB+XIku; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Y+nWMqb0"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41L910hO028490;
-	Wed, 21 Feb 2024 09:16:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=+p5jWd5LnOJpV2l/GmH93lXMehuKHQA1ll7wcjtLdTo=;
- b=Y+nWMqb0aqsWOjOUBl+pgj8hwJbr/uKJCHD8qPLO52zBkW4q0z2xJvzfnlhhiyrswh+V
- 2FinBoOHOUvmWB25VRxuQ6cd2KdRNzOdNhjYqX97e5ih9RvG/hqhK0aXENCxMzUs2yOs
- qidfYp1p5TF1QZsxIPQMe/mpayjfRT1qJx3GcosjUnuday0psG3B2Ce693QBi0b4UGDC
- WSMeOJv2JuemzGjXxIFiHglyihRqxmQNnPHo/XFe8aXKnThvb/tpJCwMLX3l5O4ghVZ/
- KwrKT+xPdwiuLIQebO4WSFoNyZ9soxIDZZ8S6qfjmESzCPdwQBYOxkP/5nd9hoGuDG7S jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdcy2tagf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 09:16:20 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41L9DxSZ001065;
-	Wed, 21 Feb 2024 09:16:20 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdcy2taga-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 09:16:20 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41L7l3GP013522;
-	Wed, 21 Feb 2024 09:16:19 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb7h0eawe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 09:16:19 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41L9GD2j66060652
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 Feb 2024 09:16:15 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9B72D20040;
-	Wed, 21 Feb 2024 09:16:13 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6F56D2004D;
-	Wed, 21 Feb 2024 09:16:13 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 21 Feb 2024 09:16:13 +0000 (GMT)
-Date: Wed, 21 Feb 2024 10:16:12 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, morbo@google.com, justinstitt@google.com,
-        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] s390/boot: Workaround current 'llvm-objdump -t -j ...'
- behavior
-Message-ID: <20240221091612.7561-A-hca@linux.ibm.com>
-References: <20240220-s390-work-around-llvm-objdump-t-j-v1-1-47bb0366a831@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240220-s390-work-around-llvm-objdump-t-j-v1-1-47bb0366a831@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -VWjRl9whk2FYe6flG8AeHVnD9fVEb8E
-X-Proofpoint-GUID: jnI5j-Cgq_ahPR6YFhyiFynHM2ZcDG7C
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ZTB+XIku"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 48B7040E016D;
+	Wed, 21 Feb 2024 10:09:41 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Dsl6LZ2KmMpX; Wed, 21 Feb 2024 10:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1708510179; bh=/J8Kak/gbtX4KB6FH/imEHmEzO+kxDuIp4ODj+Ng24s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZTB+XIkup8g+SSBh84HQ2Xcyp6++sEo5vmXc7I0izLOkKGf2BMVCAiuIUN+J+qKE5
+	 5CXWJw7yjMzTjlgXV3JCpNCYOoXoiFx0N65k9rOnoCecF58ILlHlP+X104H19IrP5x
+	 PsQj39A4azG3Q5napBKwLx6385WsADYKzPMRdone3iNlPF6ls5/y27AzgEZOcfXFQw
+	 lWbqGJCNC4m3IF5jso1uyaMo8UkdSULyXOdQWOz1jRXP4jAhWquWOmdZ5z+bN8XQPw
+	 VYHeqfvAL3o/89V8NqzTeZcUm+iI+5p+o49J4ToOX0bamV1i+rI+rhdzmAiv3Z6SsF
+	 aaMQztGzhLA5FRh5y2PMxY5D1GL7aixLW9EtqB0ykOv+dt6fcfxP9XWNe833tUFUby
+	 odn0T9fFKyFsodwduVs8L3rI3i0eaL3C8G/PsM9O0Ct1WaCxz2OM81e5IBp4yKNG+n
+	 qfakPcaaHBXJKZEmGY+FrShbtGhwRaRk17nPmVLWEnJ6lVPGg73U6RwpFCNxLt8la1
+	 4nQiuuUrt8RnSv5MYExPIxBjNzHQtizbfexkKVH3eJZ6DOOUVoXZFwFQD2Su6olgrF
+	 fq0EyD5JYRKf0RtFBIb85lRyDIePbLBFx00mc4wNiasrcsuuB02rQoU4Q6cLORr07a
+	 Z1GWl04RB1Hh1uCo6fBJHm8s=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F15C840E01A9;
+	Wed, 21 Feb 2024 10:09:21 +0000 (UTC)
+Date: Wed, 21 Feb 2024 11:09:16 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Kevin Loughlin <kevinloughlin@google.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 04/11] x86/startup_64: Defer assignment of 5-level
+ paging global variables
+Message-ID: <20240221100916.GCZdXLzHb-31GMw-f-@fat_crate.local>
+References: <20240213124143.1484862-13-ardb+git@google.com>
+ <20240213124143.1484862-17-ardb+git@google.com>
+ <20240220184513.GAZdTzOQN33Nccwkno@fat_crate.local>
+ <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
- spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402210071
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXF=cGHR4FVUqGrobjB4HxTmm=1upn3TpVEC-_8D9GM=uQ@mail.gmail.com>
 
-Hi Nathan,
+On Wed, Feb 21, 2024 at 12:33:08AM +0100, Ard Biesheuvel wrote:
+> Right, this is the same issue as in #11 - in both cases, the extern
+> declaration of __pgtable_l5_enabled needs to be visible regardless of
+> CONFIG_X86_5LEVEL.
 
-On Tue, Feb 20, 2024 at 01:44:48PM -0700, Nathan Chancellor wrote:
-> When building with OBJDUMP=llvm-objdump, there are a series of warnings
-> from the section comparisons that arch/s390/boot/Makefile performs
-> between vmlinux and arch/s390/boot/vmlinux:
-...
-> It may be possible to change llvm-objdump's behavior to match GNU
-> objdump's behavior but the difficulty of that task has not yet been
-> explored. The combination of '$(OBJDUMP) -t -j' is not common in the
-> kernel tree on a whole, so workaround this tool difference by grepping
-> for the sections in the full symbol table output in a similar manner to
-> the sed invocation. This results in no visible change for GNU objdump
-> users while fixing the warnings for OBJDUMP=llvm-objdump, further
-> enabling use of LLVM=1 for ARCH=s390 with versions of LLVM that have
-> support for s390 in ld.lld and llvm-objcopy.
-> 
-> Reported-by: Heiko Carstens <hca@linux.ibm.com>
-> Closes: https://lore.kernel.org/20240219113248.16287-C-hca@linux.ibm.com/
-> Link: https://github.com/ClangBuiltLinux/linux/issues/859
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> s390 llvm-objcopy support may be backported to LLVM 18.1.0 in time for
-> the final release.
-> 
-> https://github.com/llvm/llvm-project/pull/82324
-> 
-> s390 ld.lld has already made it into release/18.x:
-> 
-> https://github.com/llvm/llvm-project/commit/0a44c3792a6ff799df5f100670d7e19d1bc49f03
-> 
-> If the objcopy change makes 18.1.0 final, features + this change should
-> build cleanly with LLVM 18.1.0+ using LLVM=1 :)
-> ---
->  arch/s390/boot/Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Yap, I don't mind something like below.
 
-This seems to work like expected (also verified with a couple of scenarios
-where things are supposed to break).
+5LEVEL will be practically enabled everywhere.
 
-So compiling the kernel with LLVM=1 finally works on s390!
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 158da0fd01d2..eeb1744215f2 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -52,13 +52,11 @@ extern pmd_t early_dynamic_pgts[EARLY_DYNAMIC_PAGE_TABLES][PTRS_PER_PMD];
+ static unsigned int __initdata next_early_pgt;
+ pmdval_t early_pmd_flags = __PAGE_KERNEL_LARGE & ~(_PAGE_GLOBAL | _PAGE_NX);
+ 
+-#ifdef CONFIG_X86_5LEVEL
+ unsigned int __pgtable_l5_enabled __ro_after_init;
+ unsigned int pgdir_shift __ro_after_init = 39;
+ EXPORT_SYMBOL(pgdir_shift);
+ unsigned int ptrs_per_p4d __ro_after_init = 1;
+ EXPORT_SYMBOL(ptrs_per_p4d);
+-#endif
+ 
+ #ifdef CONFIG_DYNAMIC_MEMORY_LAYOUT
+ unsigned long page_offset_base __ro_after_init = __PAGE_OFFSET_BASE_L4;
 
-Patch applied - Thanks a lot!
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
