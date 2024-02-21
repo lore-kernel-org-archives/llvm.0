@@ -1,59 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863107BB00;
-	Wed, 21 Feb 2024 17:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72557BB00;
+	Wed, 21 Feb 2024 18:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708536679; cv=none; b=LVJWzEgcxJ6QFeljNf0cCx0II9hu/DfPyhaJyJn0BSiLhyCFN0N/J/oY2icLtOTyBSGeNKjF4i9iSmWNhzC+tK3Exahv7QMpgrfm5z+XIO/iXOlows9OSTRkhxDoZSVSoTn+H8F6AeEYSpPNmtMkkCQJ82ZF7RgUJO49NOD1Bec=
+	t=1708538415; cv=none; b=Rxzp5oEMHSHLeerwSYawNeHF2U46u2JAH5DyMxbzCL/Fv5p5KiHMCsMRAIsN3BIR+u4cKNORuyncPm5j53WzqW+B1WCYWXMlKc6Jbsx0Qmq4ZV0UytPKL+fYwbrfexodXBxAHVGe9qnCTX58YQ5NtJHQWF4BPvOLbIvKOUVbnDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708536679; c=relaxed/simple;
-	bh=x4m0ZIEdqBXtWBesysoHgAjQIPLTEUcC/b3cdm0G0oU=;
+	s=arc-20240116; t=1708538415; c=relaxed/simple;
+	bh=jxZwS9DN/zj+74jkA+Tojl38QtgkRwQ4DpNjiGFaawA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gNjjVIuMDLJSkfIU9eY2wr7GeVaNhtzLLstJhI5oKQS1fSLacyOgYUWv4SOOVwBIEP+B6COIkQtrDTGZxgrs41ErwMKn04+6s4ncK5jmqUDIGBaMbVUuBoaSMGeE6I572EZCH4MGsPI+U/WwsL+VMj63osl3oRicvDyIsss7L1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CBIp/lFd; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=J81eSvge2iKvxhU9z/VM/xizVee7ACqlO/IM0gFjZ8G7oIO5xBwdNEdQAuhtPqgfarq9VnG3lsH+hOBB0sVwp/KTbdirZYHO3ns6W0xb4tBzgNTz5sKKvx6KJwsSehwHdSVccZK43kqflS+16M34qroY2b4fS+R/2mCQFEU76lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2ualo2M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CBIp/lFd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708536679; x=1740072679;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x4m0ZIEdqBXtWBesysoHgAjQIPLTEUcC/b3cdm0G0oU=;
-  b=CBIp/lFdBqB8d3vMyZ82FvnrGzNGLuKYvqFa58nKCTraIKvLpqx9W1pf
-   VWK28IIfQHRYUJdwRAVkjzWOV7/o5QEq8bNbEuwTc8YwaKyDup5qJFbkW
-   IXcpG6TRKIkQiquhjTeo3+dyTFlkGj5IWStPT7wRZqNxqJFbbc5BA3eD6
-   Vr7R1bfm473Cneo8ZWPFnBvFIKqzS94quzVsvW+JU6y3uf1DGH7JOoDhq
-   Ep43/fcbZr4tcGFJBBvth88cl3F9EpjLs0qntXDKJLXbmunqxbm6RQRly
-   IRBDIS8g0/omdlXabKZT3HxLozrAqQTJIvOBVx/aGP8hnDzwxHaM5MhIb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="25177043"
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="25177043"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 09:31:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="827382575"
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="827382575"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 21 Feb 2024 09:31:15 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rcqR0-0005Xw-22;
-	Wed, 21 Feb 2024 17:31:08 +0000
-Date: Thu, 22 Feb 2024 01:30:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	muchun.song@linux.dev,
-	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: [PATCH 1/3] mm/memory: Change vmf_anon_prepare() to be non-static
-Message-ID: <202402220109.SIlFdfQ5-lkp@intel.com>
-References: <20240220231424.126600-2-vishal.moola@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2ualo2M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEF5C433F1;
+	Wed, 21 Feb 2024 18:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708538415;
+	bh=jxZwS9DN/zj+74jkA+Tojl38QtgkRwQ4DpNjiGFaawA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O2ualo2McOjkeWFt8Ny1g5JkA0rbFsfW+tHcf5qM2Hny6sF5bRCZiPEFjlT237Jq5
+	 2GTE/Em43/ZGYALhEcStY5oPj5DfA9MgfgKGUK0nzb0GYQdeNzMh3PuXipYfgWUYr6
+	 C0YC6sD/+4gZcufJszBiMpW2zpoRlQtmz4OjYrKepJhFgHWyIgXNdgNf0X4E8IdZ2y
+	 fwbJC66YKfHBeAvJSt7KEBRcq/N8OrHKKftTGy7NfHQTRKTePhqcKY7uPrldc4enSd
+	 vNSr+BdMXVhca85/8/GJnkWsi4vy5MGHOlu42USDa+jUpz1p0UtPOAF+NiRkZ25kDu
+	 a3iVVkVNck4iA==
+Date: Wed, 21 Feb 2024 11:00:13 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: quic_jjohnson@quicinc.com, morbo@google.com, justinstitt@google.com,
+	quic_periyasa@quicinc.com, ath12k@lists.infradead.org,
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] wifi: ath12k: Fix uninitialized use of ret in
+ ath12k_mac_allocate()
+Message-ID: <20240221180013.GA2074929@dev-arch.thelio-3990X>
+References: <20240205-ath12k-mac-wuninitialized-v1-1-3fda7b17357f@kernel.org>
+ <170731849247.2220494.17976129376947521581.kvalo@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,62 +46,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240220231424.126600-2-vishal.moola@gmail.com>
+In-Reply-To: <170731849247.2220494.17976129376947521581.kvalo@kernel.org>
 
-Hi Vishal,
+Hi Kalle,
 
-kernel test robot noticed the following build warnings:
+On Wed, Feb 07, 2024 at 03:08:14PM +0000, Kalle Valo wrote:
+> Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > Clang warns (or errors with CONFIG_WERROR=y):
+> > 
+> >   drivers/net/wireless/ath/ath12k/mac.c:8060:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+> >    8060 |         return ret;
+> >         |                ^~~
+> >   drivers/net/wireless/ath/ath12k/mac.c:8022:9: note: initialize the variable 'ret' to silence this warning
+> >    8022 |         int ret, i, j;
+> >         |                ^
+> >         |                 = 0
+> >   1 error generated.
+> > 
+> > Commit 6db6e70a17f6 ("wifi: ath12k: Introduce the container for mac80211
+> > hw") added a completely uninitialized use of ret. Prior to that change,
+> > -ENOMEM was returned to the callers of ath12k_mac_allocate() whenever
+> > ath12k_mac_hw_allocate() failed. Assign that value to ret to make sure
+> > it is always initialized when used and clear up the warning.
+> > 
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/1989i
+> > Fixes: 6db6e70a17f6 ("wifi: ath12k: Introduce the container for mac80211 hw")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> > Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> 
+> Patch applied to ath-next branch of ath.git, thanks.
+> 
+> 04edb5dc68f4 wifi: ath12k: Fix uninitialized use of ret in ath12k_mac_allocate()
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.8-rc5 next-20240221]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It doesn't seem like this tree or branch flows into -next on its own, so
+this patch is not present in and the build still breaks on
+next-20240221. Can this be fixed so that this warning stops breaking our
+builds?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/mm-memory-Change-vmf_anon_prepare-to-be-non-static/20240221-071907
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240220231424.126600-2-vishal.moola%40gmail.com
-patch subject: [PATCH 1/3] mm/memory: Change vmf_anon_prepare() to be non-static
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240222/202402220109.SIlFdfQ5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240222/202402220109.SIlFdfQ5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402220109.SIlFdfQ5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/memory.c:3283:12: warning: no previous prototype for function 'vmf_anon_prepare' [-Wmissing-prototypes]
-   vm_fault_t vmf_anon_prepare(struct vm_fault *vmf)
-              ^
-   mm/memory.c:3283:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   vm_fault_t vmf_anon_prepare(struct vm_fault *vmf)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/vmf_anon_prepare +3283 mm/memory.c
-
-  3282	
-> 3283	vm_fault_t vmf_anon_prepare(struct vm_fault *vmf)
-  3284	{
-  3285		struct vm_area_struct *vma = vmf->vma;
-  3286	
-  3287		if (likely(vma->anon_vma))
-  3288			return 0;
-  3289		if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-  3290			vma_end_read(vma);
-  3291			return VM_FAULT_RETRY;
-  3292		}
-  3293		if (__anon_vma_prepare(vma))
-  3294			return VM_FAULT_OOM;
-  3295		return 0;
-  3296	}
-  3297	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
