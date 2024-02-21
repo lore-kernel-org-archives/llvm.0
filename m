@@ -1,92 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CCA80C18;
-	Wed, 21 Feb 2024 15:45:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3C880C08;
+	Wed, 21 Feb 2024 16:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708530356; cv=none; b=pKVeiy5Uqxmcmcsk8BomGXoc2dTNZRwIqEPxjIp0IB0CVX/6zYTx9+iCYUZJdPSMl8hWbMq+LGZ08uJ8qlGYQOUnJmSlQboR9/wKCmxRu87M83xilABmE6JExbqrCBsqic4SxCExvWfjgx23q9q0Sz7GwWPSkggz7LaMckNjyII=
+	t=1708534112; cv=none; b=pFAclY9PIJsD6PnrrxDRSLi/ZuVEdMdW4B3DP3bE1xx2XrbcAtD6IWXL4aamZ5im8IwGSYjxctXbfpUD15bzZ4unLfcrNsOfEJ4g8sKdqpk5zZRnM8rZa/gzOqaJMClFkKBfUiAf3fT6DxVsmFQJUORXX9c9qd6KSfKQhh/pQR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708530356; c=relaxed/simple;
-	bh=P/mpas3J/TkZfCO9L2DgIxqYbys+a0Vsm10ZNtd+lcI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=l5CquHOroAwPWneqP1i4b2irSV+GzxXlHh9VFJHNoQ3VymDNPZf6rbuLw8Rob2SPrsqBEDWQ2oYeAAFrh/ECjscRpJDmtGscuC8HNQ0fuGLKipx/NZtH2kVsqryJGFO+loMRqyz994ZCvqXtTEXJf/ZYD9YVIFzSWhyuGhX7Muc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H+Cr9eoL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708534112; c=relaxed/simple;
+	bh=E3KFvMLZM93hfbHg2L3W2NrtXBqubV8WcxzfaBbEJuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UTJE3x1Y+kOZTzkfQne3njyB7yO0ApXncrzJmARLCsB+GRL8ICE/Z8GYHfwDGRLGGsoft7hFdextmfHERLKfE+QWs1AZi2EYUeQAgB5spc0Y7+EJh2sC4IJaUSV9rwitQI9hX3hcTlsBPKYarcfSWCwJMNHjBTNwTG8kHYhNMOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YU3BH+bQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H+Cr9eoL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530DFC433A6;
-	Wed, 21 Feb 2024 15:45:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YU3BH+bQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3331C433F1;
+	Wed, 21 Feb 2024 16:48:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708530356;
-	bh=P/mpas3J/TkZfCO9L2DgIxqYbys+a0Vsm10ZNtd+lcI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=H+Cr9eoLl+fXedgpLYqZMW5afOoTadBK1bLxge/KlxopT+WqCKozCkU2qcX1fAjN8
-	 Vq1xRPwdybtci4gMRXHIEYUxO+dq6p6L9dWxPs4qhOhk9/b30VB9tvupItkoa31+5l
-	 II9E+f2oAvzDWAxpIe/JQbIn2es8Gq+1bwNP59Jb83zlA6c2W84ziLOi93erh5MDuc
-	 Yy9BuUDI6qS0fEkxJXaMJmlPwaN2KxoKtKQJ/msnTfkwNWMklyJcIb1xlCri7pmKb4
-	 ha9IcknixFdeKHRDb6RgtK4dznORynMDrgf4vcGFMhDQtIPtvYwb/RSfQFg5iYLTvb
-	 lnCBhOJN7z2wQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-	Nick Piggin <npiggin@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] mm/mmu_gather: change __tlb_remove_tlb_entry() to an inline function
-Date: Wed, 21 Feb 2024 16:45:21 +0100
-Message-Id: <20240221154549.2026073-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	s=k20201202; t=1708534111;
+	bh=E3KFvMLZM93hfbHg2L3W2NrtXBqubV8WcxzfaBbEJuQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YU3BH+bQkI2cnrxR6M6veZQTZ+hzlxf+xyrqHnd3VSEWXiyFtgBkSgGQQI1emz+Uq
+	 sOwcM4OhvpheEFmIiAy/YCfEA8Ov0nN7YWeZq2B6IACDynKSPVXDXMhoc21R0i//ZN
+	 w+MgDa+iELYFGeiunBZaMAVZS2vBj495IfvhkjxKMwAz8ic/ozsZIO/HaYGGgnoweb
+	 v411IOFRrKhlc2xH9x3wSYUbpJJhLxD0gjYyaAqXWYy/Oz/+y9/F+0CE8bAclGzrBs
+	 ymDH8wXUa9UzAyUJUbkbYWYokFo/qHf3pWPKSdLjHlYZWKtUyPzRWsKRbB58WzQpVm
+	 CxgLrCfne1kNA==
+Date: Wed, 21 Feb 2024 09:48:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+	svens@linux.ibm.com, morbo@google.com, justinstitt@google.com,
+	linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] s390/boot: Workaround current 'llvm-objdump -t -j ...'
+ behavior
+Message-ID: <20240221164829.GB1782141@dev-arch.thelio-3990X>
+References: <20240220-s390-work-around-llvm-objdump-t-j-v1-1-47bb0366a831@kernel.org>
+ <20240221091612.7561-A-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221091612.7561-A-hca@linux.ibm.com>
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Heiko,
 
-clang complains about tlb_remove_tlb_entries() not using the 'ptep' variable
-when __tlb_remove_tlb_entry() is an empty macro:
+On Wed, Feb 21, 2024 at 10:16:12AM +0100, Heiko Carstens wrote:
+> On Tue, Feb 20, 2024 at 01:44:48PM -0700, Nathan Chancellor wrote:
+> > When building with OBJDUMP=llvm-objdump, there are a series of warnings
+> > from the section comparisons that arch/s390/boot/Makefile performs
+> > between vmlinux and arch/s390/boot/vmlinux:
+> ...
+> > It may be possible to change llvm-objdump's behavior to match GNU
+> > objdump's behavior but the difficulty of that task has not yet been
+> > explored. The combination of '$(OBJDUMP) -t -j' is not common in the
+> > kernel tree on a whole, so workaround this tool difference by grepping
+> > for the sections in the full symbol table output in a similar manner to
+> > the sed invocation. This results in no visible change for GNU objdump
+> > users while fixing the warnings for OBJDUMP=llvm-objdump, further
+> > enabling use of LLVM=1 for ARCH=s390 with versions of LLVM that have
+> > support for s390 in ld.lld and llvm-objcopy.
+> > 
+> > Reported-by: Heiko Carstens <hca@linux.ibm.com>
+> > Closes: https://lore.kernel.org/20240219113248.16287-C-hca@linux.ibm.com/
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/859
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> > s390 llvm-objcopy support may be backported to LLVM 18.1.0 in time for
+> > the final release.
+> > 
+> > https://github.com/llvm/llvm-project/pull/82324
+> > 
+> > s390 ld.lld has already made it into release/18.x:
+> > 
+> > https://github.com/llvm/llvm-project/commit/0a44c3792a6ff799df5f100670d7e19d1bc49f03
+> > 
+> > If the objcopy change makes 18.1.0 final, features + this change should
+> > build cleanly with LLVM 18.1.0+ using LLVM=1 :)
+> > ---
+> >  arch/s390/boot/Makefile | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> This seems to work like expected (also verified with a couple of scenarios
+> where things are supposed to break).
+> 
+> So compiling the kernel with LLVM=1 finally works on s390!
+> 
+> Patch applied - Thanks a lot!
 
-include/asm-generic/tlb.h:627:10: error: parameter 'ptep' set but not used [-Werror,-Wunused-but-set-parameter]
+Thanks a lot for testing and applying this quickly! Small update on the
+LLVM side, the llvm-objcopy change made it into 18.1.0-rc3:
 
-Change it to an equivalent inline function that avoids the warning since
-the compiler can see how the variable gets passed into it.
+https://github.com/llvm/llvm-project/commit/5ef297ab611822537a385d45244867519563d3ef
+https://github.com/llvm/llvm-project/commits/llvmorg-18.1.0-rc3
 
-Fixes: 66958b447695 ("mm/mmu_gather: add tlb_remove_tlb_entries()")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- include/asm-generic/tlb.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+So it's pretty much official, 'ARCH=s390 LLVM=1' should build without
+any issues with Linux 6.9+ and LLVM 18.1.0+ :)
 
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index bd00dd238b79..709830274b75 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -600,7 +600,9 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
- }
- 
- #ifndef __tlb_remove_tlb_entry
--#define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
-+static inline void __tlb_remove_tlb_entry(struct mmu_gather *tlb, pte_t *ptep, unsigned long address)
-+{
-+}
- #endif
- 
- /**
--- 
-2.39.2
-
+Cheers,
+Nathan
