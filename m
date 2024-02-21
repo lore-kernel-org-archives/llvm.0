@@ -1,384 +1,401 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E14D4655D
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 11:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D887BB1B;
+	Wed, 21 Feb 2024 13:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708515378; cv=none; b=lypgg3ivrSASORMWElbJcz+6eP7GfBQyDfCwWrbBF9wXGSMqkqf9hOXiFnW0zW9UKzGJiaDH/v1GmdYrngZvtNWzHPmIX+bA1ujM6LRTA6gY87x7q7zVMr2UofvJVSK2JxXDaSZN2VURZ3pUlF1Mg/E+pOMb0uyvQPXRKPUSqPg=
+	t=1708521923; cv=none; b=cHkImwahTOCHoRhAK6BtbDvxHADAiBu+dXEkBfOzbdP2ngdBLBLDfjM0iQUilp850L/2Neg7jSJg9JQXNASrUJYjADCY9FjcuuZxyrd+eP+K+4eMbnP2vDGZybrr72slwaLiMdY1KTNrJm8RabvqnyGqYlU29dMRLCf34VR1bc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708515378; c=relaxed/simple;
-	bh=9RvLk+Y/2nEp04FCrDQs7qdDqW4evXdzWDP9s3Ohwys=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=psQ/acx46CbujqUgP8vAMQNXFKVh84BF5aKRE9xI/LBV8sdGXj8g1SQ6hX0iZ/J15Qhzzrs2H0Rm/unsa1fsDlYdZ+nES6Jad3WS3YGijDsNu7KoAlSGydsvtYZSkHoNNmDABO/0z1jA+nu6S+DJLGmrnhRRL/3AcRqPLpWcv64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZEF6ufUJ; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+	s=arc-20240116; t=1708521923; c=relaxed/simple;
+	bh=Dntzg+l/t8glJYXYo4ElyIah3hisxsF8qKIBhv1bpZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=n/sJwQeXBOrPQtAS4ktfIWwflbZJGW2Wa4cNBhQP35IMbMZkNuhTS7fiJAtYenZBBEB1tFN6Wi9I08ftVLyIgOSnxaD2O6hZb/quM5rfPqXnalUXOLaIglzwxHsgVU1w32+QFrGG/Zprp+MjY5YcNbHXCI2pXXBqp4ky48ADB8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N33FeIW4; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZEF6ufUJ"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60770007e52so74421997b3.1
-        for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 03:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708515374; x=1709120174; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0sTN6yoDasV9agD6pu51ddL9MvEfa3HQq1IU+fzHuI=;
-        b=ZEF6ufUJqrvKo9jmgpJlAP0OwatFT7Qb8slr0kg8IAeAGsZcchzaDqqJ9Z7h3COkvc
-         KKBX1WunpVYFZ9J/XQbf4wDB5P0KC9PUvjsCN6KLXASQ6NdrOy+vYqrBRVMdqccszu+p
-         CNs/7J5bHSZiMz2tywaBmL5O0/13oe4FVuDhbLf9mJnIcs3qnd5vkQpRv6zuCHwBElzD
-         6LKFILuDL6tOKbjm3kHSZdZk31dWLQg06bLMvd8YZy4A1nvUi+acle/vDWegV2mcKuhN
-         Bq4wHYuxbtUzYvyavICKSIJByIAgBzoCgh5zfGBLmdBx07AV5EE5iJ7DPy+U39AG0fLD
-         YqkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708515374; x=1709120174;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0sTN6yoDasV9agD6pu51ddL9MvEfa3HQq1IU+fzHuI=;
-        b=WdBfzDlEtERC1gQrYb3RJ0NfW8VRR97PnE9jLNa9rkWKA5nqC5aTicvK0Ed3dYGSPZ
-         KTd8tcfaixhwt8CU5eyKI5hUIi/lRJgALsR3gEll8XOI2aGbmFYAQo0hJ9oi9fsqDfIP
-         92dLuLiE/jkFFzUWXtM1XM1jJKuZYvULiHLA0Q1jXuucvwAX5+9CODUJ0kSBEQXS1X0+
-         DAJO4J6Kp6ird9E+QjbqYPiSYWJGRgplH6zselOAMWSo3gMNKWIczCqyEufHTCSzEXxg
-         hskoNVEO5VNLiPhpSP52NpA6mkJBKLjiPLS1+CswYHipGR4eJ8OdmQ4BC0XeVPBuwfRm
-         pjGA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1WD22g5hh8PDvqcrQBtjdQEsCnwVBTISK97O+SKV12Qhab1LT9BEFZB86F+OFZh6XuVnaKLF2V+5fC3xQvK1psKVC1Q==
-X-Gm-Message-State: AOJu0YzUTBFgyO08mIdk3cukVPcfwnT7gMybO/nsKViDHEDOe1mpBvBb
-	8lb1ByL21MREZdjIYzWFnozVn/K9kNwVmo0nyrGgYkg/R7GuosbvZblOpotS0Ci49kI8aw==
-X-Google-Smtp-Source: AGHT+IFSSuCpsTsuV51xm151JgnVLEiirYnaEcPmsk653d5XaDVZYtmJquTIptvvhJFVMzyjcTMJVbGB
-X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
- (user=ardb job=sendgmr) by 2002:a0d:c946:0:b0:602:b7ce:f382 with SMTP id
- l67-20020a0dc946000000b00602b7cef382mr3316293ywd.7.1708515374295; Wed, 21 Feb
- 2024 03:36:14 -0800 (PST)
-Date: Wed, 21 Feb 2024 12:35:23 +0100
-In-Reply-To: <20240221113506.2565718-18-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N33FeIW4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708521920; x=1740057920;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Dntzg+l/t8glJYXYo4ElyIah3hisxsF8qKIBhv1bpZY=;
+  b=N33FeIW4YM55ijBCltlSpNGIYISqafqP8t+8Gcv8aovjKVzyROEVL+ub
+   UGbnYkLCIQsvXyec6iTlk+I/FQEwcEx2jwwSuspX7LV53CwEe2XAWe8zp
+   yrimEYm4G5dSiqPBmu8bLNwj3fdu9KiRfJdt3phzlJzSDzRWcGJXYJslP
+   fT+R1944ch3oIGJtoi7RWsUmTX/9de+frIeAdg/OjRwTnHjCtqzqYrq2A
+   JCqgUDzMI2QXbjgePdFRuiaLR59YBCDLDDDC2R2wwcjvSTiKbDJOSR8W6
+   Jt7y6SLzyqexFGpFJXwwa70aVa/YZSDmxav423xL2bGz9YLUQfxlxXv+s
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="2803996"
+X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
+   d="scan'208";a="2803996"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 05:25:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
+   d="scan'208";a="5511402"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 21 Feb 2024 05:25:18 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rcmb5-0005MO-1I;
+	Wed, 21 Feb 2024 13:25:15 +0000
+Date: Wed, 21 Feb 2024 21:25:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [alobakin:idpf-libie 2/51] include/linux/dma-mapping.h:381:2: error:
+ call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202402212143.NUaaEBoi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20240221113506.2565718-18-ardb+git@google.com>
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10347; i=ardb@kernel.org;
- h=from:subject; bh=W61hwMuIbwuGpPHigUY6x0LoOWZL0dAdP6qiyZqzCxY=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIfXq/W95xu/OveqIrnvltGR6qfaMTjYduQc77eUDJh4Nc
- pKcpV/QUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACayr4ThN5uiqViuT2fydCXx
- lXu61aKf7vwtaLSAVyA9JcRPstmijeG/d9fR7tQHnkntrWbi1VosjDMM1n4IkYlb86az6Zf0dXY +AA==
-X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221113506.2565718-34-ardb+git@google.com>
-Subject: [PATCH v5 16/16] x86/startup_64: Drop global variables keeping track
- of LA57 state
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>, Kevin Loughlin <kevinloughlin@google.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Ard Biesheuvel <ardb@kernel.org>
+tree:   https://github.com/alobakin/linux idpf-libie
+head:   29cca1ea6c555a8b97694e38f18926da7969dcfe
+commit: 9a3aa944b33041331d3bf1c1ad194ecffee0cbf0 [2/51] dma: compile-out DMA sync operations when not used
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20240221/202402212143.NUaaEBoi-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240221/202402212143.NUaaEBoi-lkp@intel.com/reproduce)
 
-On x86_64, the core kernel is entered in long mode, which implies that
-paging is enabled. This means that the CR4.LA57 control bit is
-guaranteed to be in sync with the number of paging levels used by the
-kernel, and there is no need to store this in a variable.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402212143.NUaaEBoi-lkp@intel.com/
 
-There is also no need to use variables for storing the calculations of
-pgdir_shift and ptrs_per_p4d, as they are easily determined on the fly.
+All errors (new ones prefixed by >>):
 
-This removes the need for two different sources of truth for determining
-whether 5-level paging is in use: CR4.LA57 always reflects the actual
-state, and never changes from the point of view of the 64-bit core
-kernel. The only potential concern is the cost of CR4 accesses, which
-can be mitigated using alternatives patching based on feature detection.
+   In file included from init/main.c:21:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from init/main.c:21:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from init/main.c:21:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   In file included from init/main.c:102:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:381:2: error: call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           __dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+           ^
+   include/linux/dma-mapping.h:381:2: note: did you mean 'dma_sync_single_for_cpu'?
+   include/linux/dma-mapping.h:227:20: note: 'dma_sync_single_for_cpu' declared here
+   static inline void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+                      ^
+>> include/linux/dma-mapping.h:389:2: error: call to undeclared function '__dma_sync_single_for_device'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           __dma_sync_single_for_device(dev, addr + offset, size, dir);
+           ^
+   include/linux/dma-mapping.h:389:2: note: did you mean 'dma_sync_single_for_device'?
+   include/linux/dma-mapping.h:231:20: note: 'dma_sync_single_for_device' declared here
+   static inline void dma_sync_single_for_device(struct device *dev,
+                      ^
+   12 warnings and 2 errors generated.
+--
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   In file included from arch/um/os-Linux/drivers/ethertap_kern.c:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:381:2: error: call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           __dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+           ^
+   include/linux/dma-mapping.h:381:2: note: did you mean 'dma_sync_single_for_cpu'?
+   include/linux/dma-mapping.h:227:20: note: 'dma_sync_single_for_cpu' declared here
+   static inline void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+                      ^
+>> include/linux/dma-mapping.h:389:2: error: call to undeclared function '__dma_sync_single_for_device'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           __dma_sync_single_for_device(dev, addr + offset, size, dir);
+           ^
+   include/linux/dma-mapping.h:389:2: note: did you mean 'dma_sync_single_for_device'?
+   include/linux/dma-mapping.h:231:20: note: 'dma_sync_single_for_device' declared here
+   static inline void dma_sync_single_for_device(struct device *dev,
+                      ^
+   arch/um/os-Linux/drivers/ethertap_kern.c:66:5: warning: no previous prototype for function 'ethertap_setup' [-Wmissing-prototypes]
+   int ethertap_setup(char *str, char **mac_out, void *data)
+       ^
+   arch/um/os-Linux/drivers/ethertap_kern.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ethertap_setup(char *str, char **mac_out, void *data)
+   ^
+   static 
+   13 warnings and 2 errors generated.
+--
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   In file included from arch/um/os-Linux/drivers/tuntap_kern.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+>> include/linux/dma-mapping.h:381:2: error: call to undeclared function '__dma_sync_single_for_cpu'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           __dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+           ^
+   include/linux/dma-mapping.h:381:2: note: did you mean 'dma_sync_single_for_cpu'?
+   include/linux/dma-mapping.h:227:20: note: 'dma_sync_single_for_cpu' declared here
+   static inline void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+                      ^
+>> include/linux/dma-mapping.h:389:2: error: call to undeclared function '__dma_sync_single_for_device'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           __dma_sync_single_for_device(dev, addr + offset, size, dir);
+           ^
+   include/linux/dma-mapping.h:389:2: note: did you mean 'dma_sync_single_for_device'?
+   include/linux/dma-mapping.h:231:20: note: 'dma_sync_single_for_device' declared here
+   static inline void dma_sync_single_for_device(struct device *dev,
+                      ^
+   arch/um/os-Linux/drivers/tuntap_kern.c:56:5: warning: no previous prototype for function 'tuntap_setup' [-Wmissing-prototypes]
+   int tuntap_setup(char *str, char **mac_out, void *data)
+       ^
+   arch/um/os-Linux/drivers/tuntap_kern.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tuntap_setup(char *str, char **mac_out, void *data)
+   ^
+   static 
+   13 warnings and 2 errors generated.
+..
 
-Note that even the decompressor does not manipulate any page tables
-before updating CR4.LA57, so it can also avoid the associated global
-variables entirely. However, as it does not implement alternatives
-patching, the associated ELF sections need to be discarded.
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/boot/compressed/misc.h         |  4 --
- arch/x86/boot/compressed/pgtable_64.c   | 12 ------
- arch/x86/boot/compressed/vmlinux.lds.S  |  1 +
- arch/x86/include/asm/pgtable_64_types.h | 43 ++++++++++----------
- arch/x86/kernel/cpu/common.c            |  2 -
- arch/x86/kernel/head64.c                | 33 +--------------
- arch/x86/mm/kasan_init_64.c             |  3 --
- arch/x86/mm/mem_encrypt_identity.c      |  9 ----
- 8 files changed, 25 insertions(+), 82 deletions(-)
+vim +/__dma_sync_single_for_cpu +381 include/linux/dma-mapping.h
 
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index bc2f0f17fb90..2b15ddd0e177 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -16,9 +16,6 @@
- 
- #define __NO_FORTIFY
- 
--/* cpu_feature_enabled() cannot be used this early */
--#define USE_EARLY_PGTABLE_L5
--
- /*
-  * Boot stub deals with identity mappings, physical and virtual addresses are
-  * the same, so override these defines.
-@@ -178,7 +175,6 @@ static inline int count_immovable_mem_regions(void) { return 0; }
- #endif
- 
- /* ident_map_64.c */
--extern unsigned int __pgtable_l5_enabled, pgdir_shift, ptrs_per_p4d;
- extern void kernel_add_identity_map(unsigned long start, unsigned long end);
- 
- /* Used by PAGE_KERN* macros: */
-diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
-index 51f957b24ba7..ae72f53f5e77 100644
---- a/arch/x86/boot/compressed/pgtable_64.c
-+++ b/arch/x86/boot/compressed/pgtable_64.c
-@@ -9,13 +9,6 @@
- #define BIOS_START_MIN		0x20000U	/* 128K, less than this is insane */
- #define BIOS_START_MAX		0x9f000U	/* 640K, absolute maximum */
- 
--#ifdef CONFIG_X86_5LEVEL
--/* __pgtable_l5_enabled needs to be in .data to avoid being cleared along with .bss */
--unsigned int __section(".data") __pgtable_l5_enabled;
--unsigned int __section(".data") pgdir_shift = 39;
--unsigned int __section(".data") ptrs_per_p4d = 1;
--#endif
--
- /* Buffer to preserve trampoline memory */
- static char trampoline_save[TRAMPOLINE_32BIT_SIZE];
- 
-@@ -125,11 +118,6 @@ asmlinkage void configure_5level_paging(struct boot_params *bp, void *pgtable)
- 			native_cpuid_eax(0) >= 7 &&
- 			(native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 & 31)))) {
- 		l5_required = true;
--
--		/* Initialize variables for 5-level paging */
--		__pgtable_l5_enabled = 1;
--		pgdir_shift = 48;
--		ptrs_per_p4d = 512;
- 	}
- 
- 	/*
-diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/compressed/vmlinux.lds.S
-index 083ec6d7722a..06358bb067fe 100644
---- a/arch/x86/boot/compressed/vmlinux.lds.S
-+++ b/arch/x86/boot/compressed/vmlinux.lds.S
-@@ -81,6 +81,7 @@ SECTIONS
- 		*(.dynamic) *(.dynsym) *(.dynstr) *(.dynbss)
- 		*(.hash) *(.gnu.hash)
- 		*(.note.*)
-+		*(.altinstructions .altinstr_replacement)
- 	}
- 
- 	.got.plt (INFO) : {
-diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
-index 9053dfe9fa03..2fac8ba9564a 100644
---- a/arch/x86/include/asm/pgtable_64_types.h
-+++ b/arch/x86/include/asm/pgtable_64_types.h
-@@ -6,7 +6,10 @@
- 
- #ifndef __ASSEMBLY__
- #include <linux/types.h>
-+#include <asm/alternative.h>
-+#include <asm/cpufeatures.h>
- #include <asm/kaslr.h>
-+#include <asm/processor-flags.h>
- 
- /*
-  * These are used to make use of C type-checking..
-@@ -21,28 +24,24 @@ typedef unsigned long	pgprotval_t;
- typedef struct { pteval_t pte; } pte_t;
- typedef struct { pmdval_t pmd; } pmd_t;
- 
--extern unsigned int __pgtable_l5_enabled;
--
--#ifdef CONFIG_X86_5LEVEL
--#ifdef USE_EARLY_PGTABLE_L5
--/*
-- * cpu_feature_enabled() is not available in early boot code.
-- * Use variable instead.
-- */
--static inline bool pgtable_l5_enabled(void)
-+static __always_inline __pure bool pgtable_l5_enabled(void)
- {
--	return __pgtable_l5_enabled;
--}
--#else
--#define pgtable_l5_enabled() cpu_feature_enabled(X86_FEATURE_LA57)
--#endif /* USE_EARLY_PGTABLE_L5 */
-+	unsigned long r;
-+	bool ret;
- 
--#else
--#define pgtable_l5_enabled() 0
--#endif /* CONFIG_X86_5LEVEL */
-+	if (!IS_ENABLED(CONFIG_X86_5LEVEL))
-+		return false;
- 
--extern unsigned int pgdir_shift;
--extern unsigned int ptrs_per_p4d;
-+	asm(ALTERNATIVE_TERNARY(
-+		"movq %%cr4, %[reg] \n\t btl %[la57], %k[reg]" CC_SET(c),
-+		%P[feat], "stc", "clc")
-+		: [reg] "=&r" (r), CC_OUT(c) (ret)
-+		: [feat] "i"  (X86_FEATURE_LA57),
-+		  [la57] "i"  (X86_CR4_LA57_BIT)
-+		: "cc");
-+
-+	return ret;
-+}
- 
- #endif	/* !__ASSEMBLY__ */
- 
-@@ -53,7 +52,7 @@ extern unsigned int ptrs_per_p4d;
- /*
-  * PGDIR_SHIFT determines what a top-level page table entry can map
-  */
--#define PGDIR_SHIFT	pgdir_shift
-+#define PGDIR_SHIFT	(pgtable_l5_enabled() ? 48 : 39)
- #define PTRS_PER_PGD	512
- 
- /*
-@@ -61,7 +60,7 @@ extern unsigned int ptrs_per_p4d;
-  */
- #define P4D_SHIFT		39
- #define MAX_PTRS_PER_P4D	512
--#define PTRS_PER_P4D		ptrs_per_p4d
-+#define PTRS_PER_P4D		(pgtable_l5_enabled() ? 512 : 1)
- #define P4D_SIZE		(_AC(1, UL) << P4D_SHIFT)
- #define P4D_MASK		(~(P4D_SIZE - 1))
- 
-@@ -76,6 +75,8 @@ extern unsigned int ptrs_per_p4d;
- #define PTRS_PER_PGD		512
- #define MAX_PTRS_PER_P4D	1
- 
-+#define MAX_POSSIBLE_PHYSMEM_BITS	46
-+
- #endif /* CONFIG_X86_5LEVEL */
- 
- /*
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 9e35e276c55a..d88e4be88868 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1,6 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/* cpu_feature_enabled() cannot be used this early */
--#define USE_EARLY_PGTABLE_L5
- 
- #include <linux/memblock.h>
- #include <linux/linkage.h>
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index b33f47489505..348fd69252ac 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -7,9 +7,6 @@
- 
- #define DISABLE_BRANCH_PROFILING
- 
--/* cpu_feature_enabled() cannot be used this early */
--#define USE_EARLY_PGTABLE_L5
--
- #include <linux/init.h>
- #include <linux/linkage.h>
- #include <linux/types.h>
-@@ -52,14 +49,6 @@ extern pmd_t early_dynamic_pgts[EARLY_DYNAMIC_PAGE_TABLES][PTRS_PER_PMD];
- static unsigned int __initdata next_early_pgt;
- pmdval_t early_pmd_flags = __PAGE_KERNEL_LARGE & ~(_PAGE_GLOBAL | _PAGE_NX);
- 
--#ifdef CONFIG_X86_5LEVEL
--unsigned int __pgtable_l5_enabled __ro_after_init;
--unsigned int pgdir_shift __ro_after_init = 39;
--EXPORT_SYMBOL(pgdir_shift);
--unsigned int ptrs_per_p4d __ro_after_init = 1;
--EXPORT_SYMBOL(ptrs_per_p4d);
--#endif
--
- #ifdef CONFIG_DYNAMIC_MEMORY_LAYOUT
- unsigned long page_offset_base __ro_after_init = __PAGE_OFFSET_BASE_L4;
- EXPORT_SYMBOL(page_offset_base);
-@@ -78,21 +67,6 @@ static struct desc_struct startup_gdt[GDT_ENTRIES] __initdata = {
- 	[GDT_ENTRY_KERNEL_DS]           = GDT_ENTRY_INIT(DESC_DATA64, 0, 0xfffff),
- };
- 
--static inline bool check_la57_support(void)
--{
--	if (!IS_ENABLED(CONFIG_X86_5LEVEL))
--		return false;
--
--	/*
--	 * 5-level paging is detected and enabled at kernel decompression
--	 * stage. Only check if it has been enabled there.
--	 */
--	if (!(native_read_cr4() & X86_CR4_LA57))
--		return false;
--
--	return true;
--}
--
- static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdval_t *pmd)
- {
- 	unsigned long vaddr, vaddr_end;
-@@ -155,7 +129,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	bool la57;
- 	int i;
- 
--	la57 = check_la57_support();
-+	la57 = pgtable_l5_enabled();
- 
- 	/* Is the address too large? */
- 	if (physaddr >> MAX_PHYSMEM_BITS)
-@@ -440,10 +414,7 @@ asmlinkage __visible void __init __noreturn x86_64_start_kernel(char * real_mode
- 				(__START_KERNEL & PGDIR_MASK)));
- 	BUILD_BUG_ON(__fix_to_virt(__end_of_fixed_addresses) <= MODULES_END);
- 
--	if (check_la57_support()) {
--		__pgtable_l5_enabled	= 1;
--		pgdir_shift		= 48;
--		ptrs_per_p4d		= 512;
-+	if (pgtable_l5_enabled()) {
- 		page_offset_base	= __PAGE_OFFSET_BASE_L5;
- 		vmalloc_base		= __VMALLOC_BASE_L5;
- 		vmemmap_base		= __VMEMMAP_BASE_L5;
-diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
-index 0302491d799d..85ae1ef840cc 100644
---- a/arch/x86/mm/kasan_init_64.c
-+++ b/arch/x86/mm/kasan_init_64.c
-@@ -2,9 +2,6 @@
- #define DISABLE_BRANCH_PROFILING
- #define pr_fmt(fmt) "kasan: " fmt
- 
--/* cpu_feature_enabled() cannot be used this early */
--#define USE_EARLY_PGTABLE_L5
--
- #include <linux/memblock.h>
- #include <linux/kasan.h>
- #include <linux/kdebug.h>
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index 174a7192c9cb..3da15e9a8c7d 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -27,15 +27,6 @@
- #undef CONFIG_PARAVIRT_XXL
- #undef CONFIG_PARAVIRT_SPINLOCKS
- 
--/*
-- * This code runs before CPU feature bits are set. By default, the
-- * pgtable_l5_enabled() function uses bit X86_FEATURE_LA57 to determine if
-- * 5-level paging is active, so that won't work here. USE_EARLY_PGTABLE_L5
-- * is provided to handle this situation and, instead, use a variable that
-- * has been set by the early boot code.
-- */
--#define USE_EARLY_PGTABLE_L5
--
- #include <linux/kernel.h>
- #include <linux/mm.h>
- #include <linux/mem_encrypt.h>
+   375	
+   376	static inline void
+   377	__dma_sync_single_range_for_cpu(struct device *dev, dma_addr_t addr,
+   378					unsigned long offset, size_t size,
+   379					enum dma_data_direction dir)
+   380	{
+ > 381		__dma_sync_single_for_cpu(dev, addr + offset, size, dir);
+   382	}
+   383	
+   384	static inline void
+   385	__dma_sync_single_range_for_device(struct device *dev, dma_addr_t addr,
+   386					   unsigned long offset, size_t size,
+   387					   enum dma_data_direction dir)
+   388	{
+ > 389		__dma_sync_single_for_device(dev, addr + offset, size, dir);
+   390	}
+   391	
+
 -- 
-2.44.0.rc0.258.g7320e95886-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
