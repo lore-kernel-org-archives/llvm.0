@@ -1,168 +1,67 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E2C86629
-	for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 19:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132C985C58;
+	Wed, 21 Feb 2024 19:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708543865; cv=none; b=ohx0lad07I2IrxUJRvm3mCztRD8ORASnq4FkZycU1BsARse18uFspI9x3MFm9nN10eJCQXNrrOV6dP80z7mNUcOYqaRtw6KXxOc2W9ZIwz6KrZBxg4sUGH/OAet/Vo4ATicZ3PKVZRRwFQWOfFSZEmD4Ib0avEHGBACsWvK//CY=
+	t=1708544205; cv=none; b=NTePhB3zxb1huDZtx5sKeTf0npKmAYbQ729IYQ9JXT2PdkcrkVJWimL4JQvgVgukKkeh4IKxZvgIoqisucGSQ9hSqJ4oWnIO1aBVyqXpQyfZwiaMcwmRdd0oA7z3BTvR09gZmFKPFoUeI+IyXodDs5YzCkPzUUJ4a/irs2enTcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708543865; c=relaxed/simple;
-	bh=n8rm99TQBU0HI9VQaP2Yzv/1b/39idLuaopiNlQpNCc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nyoK+QGPOYxarngqhjdTKFp8cPcVl4Lo5Qwkblc/blRVBsfeX/yCyeyqnJYg39iFDrrh/UWaPBwPIXzW/SHFRzkPS0eDBLVzsHLuEoY/P0S9FnFU9D6XzNuy61q+xLlrlMkQSFnOjMD/FmERuJbB6aJ8Di1zg8EV1SOwAYwsvkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TGCcwx0y; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1708544205; c=relaxed/simple;
+	bh=7G9uAWaMMmE2mODGAFT5Amp5y8BNqQnlSsXn4zUonjs=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tt3cH40J5K+LxKMhnillxx2njAsbIYgbtlx1KJ6J6qhfrc7EjgGZf9lKNs0kptwKgOn2dFKtpA8P5ud24JC9kcsVfH0SmhDY0tl9h2yH3eq/xwauU568ANORugIAIeS72+bvlURqrsDDBul/TWixcCzWcczCj/EVMGnc+QcKtEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8dLBJBp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TGCcwx0y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708543863;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=e92swIaUqEXhIB7gf6Yq/Avzv/ncoPBOXFnJskwAgWg=;
-	b=TGCcwx0ywuEtbarYPbkarKIo/Etj+5aZGPZE40fx3TJGvW3E7JyB+8q1fU9jB+rciOxio3
-	PLBMYH1GR1DIHThZnDTxdTxGemoa2FeQrUlBhhEJ7Ann+WnWDZ3donwlBwb7kfnoAq1s4x
-	GMuhdyfQScwthkOqnU9/r8ns+gvtlHA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-538-Gb4hVT53MAOiUw0Nyv3R8g-1; Wed, 21 Feb 2024 14:30:56 -0500
-X-MC-Unique: Gb4hVT53MAOiUw0Nyv3R8g-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4125edd9c6bso20207665e9.2
-        for <llvm@lists.linux.dev>; Wed, 21 Feb 2024 11:30:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708543855; x=1709148655;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e92swIaUqEXhIB7gf6Yq/Avzv/ncoPBOXFnJskwAgWg=;
-        b=a3+qaxfPhtb+mZutWCv/UEx3abAeQrj7SmwhTdcSeVcJ9Uax/2FeAgdTR2+aK//v8T
-         2JEeCY72XkdSH4SrDomIPG3usFEZO+oMpklVE9p/1m3ULnRnxf1qJ23+FCmbzB5enP7a
-         dXVsE9EfnIDO4iLNbubaVsSr31CP8eFhCcFCP4ERL6Sonw5BUgHwAm5WvkBI0rMkv6QS
-         4QpSUHR6CWyW2WoSl+mKvL722YZayOnza005RzwOrMWFGDICaGwk3lCbICek0SuCqUmu
-         eqSNW/hgDz7GcT6xP2PZDKoyeAvVmNQE4yH2k1n7L0U7ybLorZgCP3CVUkTRPrGeypuh
-         ktPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSikzKJf/G3y2zdrzrJDJh+PIn1fx1sthBeLAHkk2f9RJyVWHc+wh3Iyk4+x/K/YyiFUPusurRXEPqJVaEb8wPFvtkHw==
-X-Gm-Message-State: AOJu0YxlKj+CaWgzoD77FrXR+9n5VG7otNxMDUF7U6wS0wX5Ou/GRXw7
-	FojkVAnQfrc1I15HEfrZ4oznkBLT8E8DT/SqIJtCBC9yiug6pAScycBTAkauki+GskkqgkeNDdp
-	p9+BNvNJjnVXPb/THjM5N3ng0QDnxo4MydGS509AtLU4woMelgSk=
-X-Received: by 2002:a05:600c:3b9d:b0:412:6ea6:8206 with SMTP id n29-20020a05600c3b9d00b004126ea68206mr3882426wms.3.1708543855668;
-        Wed, 21 Feb 2024 11:30:55 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG6JyNCqtS4prmjexnVFCpGuUHYuxVCVVfbgiUensLVbTQNTKifSwoaAOzgWz/I+um13e3+jA==
-X-Received: by 2002:a05:600c:3b9d:b0:412:6ea6:8206 with SMTP id n29-20020a05600c3b9d00b004126ea68206mr3882402wms.3.1708543855277;
-        Wed, 21 Feb 2024 11:30:55 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70b:4200:ef82:84d2:3d2d:f069? (p200300cbc70b4200ef8284d23d2df069.dip0.t-ipconnect.de. [2003:cb:c70b:4200:ef82:84d2:3d2d:f069])
-        by smtp.gmail.com with ESMTPSA id p6-20020adfe606000000b0033cdbe335bcsm17888920wrm.71.2024.02.21.11.30.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Feb 2024 11:30:54 -0800 (PST)
-Message-ID: <edebfa0b-7955-41c0-89d2-8a86fd3d0c55@redhat.com>
-Date: Wed, 21 Feb 2024 20:30:53 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8dLBJBp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA31C433C7;
+	Wed, 21 Feb 2024 19:36:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708544204;
+	bh=7G9uAWaMMmE2mODGAFT5Amp5y8BNqQnlSsXn4zUonjs=;
+	h=Date:From:To:Subject:From;
+	b=Q8dLBJBp1p2eVU6ul6Q6WlRl1p84CGokCjHMkZX0gy0Jx6X949S5cr5zuUMVN05Yb
+	 0rtkzDF/076qsLs9uH3bzPsHp81abxS8IZnVDKBuALdhQfRYG+/4Kf25ORPrBEqYXL
+	 F6TaJrr0mY7Chi3bq0SNq5Bkm7AG0+AXYBlbBgH2G8DYFkcbn0C1LUDAk75RPNDE3A
+	 bqdWYh8yvJrKDYbuCXQ5Ts+AWrHYflAaG/UxGovIXLcbCz9VGSggmH5W/EDv+Ek4Eb
+	 DmJQ0bwLk9Fv+L4Er4uCJwK/wbNx27ZwZpt0q3Y0IrGk7qZZVDnBXZrV64l2Ibh0+f
+	 Z3F2A5eonyxGA==
+Date: Wed, 21 Feb 2024 12:36:42 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Prebuilt LLVM 18.1.0-rc3 uploaded
+Message-ID: <20240221193642.GA2138843@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/mmu_gather: change __tlb_remove_tlb_entry() to an
- inline function
-To: Arnd Bergmann <arnd@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
- Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Ryan Roberts <ryan.roberts@arm.com>,
- "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
- Alistair Popple <apopple@nvidia.com>, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240221154549.2026073-1-arnd@kernel.org>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240221154549.2026073-1-arnd@kernel.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 21.02.24 16:45, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
+Hi all,
 
-Hi Arnd,
+I have built and uploaded a prebuilt version of LLVM 18.1.0-rc2 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-> clang complains about tlb_remove_tlb_entries() not using the 'ptep' variable
-> when __tlb_remove_tlb_entry() is an empty macro:
-> 
-> include/asm-generic/tlb.h:627:10: error: parameter 'ptep' set but not used [-Werror,-Wunused-but-set-parameter]
-> 
-> Change it to an equivalent inline function that avoids the warning since
-> the compiler can see how the variable gets passed into it.
-> 
+This release is the first one to have SystemZ (s390) support in ld.lld
+and llvm-objcopy, so this release will be the first one to allow
+'ARCH=s390 LLVM=1' to work properly, along with several patches to the
+kernel that are pending in the s390 features branch (targetting 6.9):
 
-Ugh, quite an annoying clang behavior in this particular case. I wonder 
-why no build bot complained so far.
+https://git.kernel.org/s390/l/features
 
-Thanks!
+Another change in this release is the inclusion of libclang.so on the
+packaging side, which allows bindgen to be used with these toolchains:
 
-> Fixes: 66958b447695 ("mm/mmu_gather: add tlb_remove_tlb_entries()")
+https://lore.kernel.org/CANiq72npYCD-zKqcXPNOAxnKiUCCXGbFQaGo-8=0-171ni+ncQ@mail.gmail.com/
 
-That commit id is not stable yet. So Andrew might want to fold it into 
-that commit before moving it to mm-stable.
+As with Linux -rc releases, this is not the final version that will
+ship. If you run across any issues, especially ones that were not
+present in earlier LLVM releases, please consider reporting them to us
+so that we have a chance to investigate and fix them before the final
+release.
 
-
--- 
 Cheers,
-
-David / dhildenb
-
+Nathan
