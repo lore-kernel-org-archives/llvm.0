@@ -1,189 +1,262 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F82686645;
-	Wed, 21 Feb 2024 23:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708558127; cv=fail; b=BuU+MCofZagOKFUwxOYcj4lHoqsT/4xOX5xa8B9ovily9gs2mowviQbxmsbfNCt4jFOpOhpdLEF1bZ0cyqc+7ooWyFo4lrXAerrndooEC8255zjAzxBxi0Kay7sGocT8tqXsZRK7vHWSH6G1Me08ST5FQ6utZjqgcxrBGURVLXQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708558127; c=relaxed/simple;
-	bh=L/41UywScgeVwsZyNgwCmuPR1FSzKOeRcaMJDmEv57k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=c6xvnJmdCky7l15Uqa9cW4enjzPICfr6Gy60soMNbw1OEqKqqvPW3ByKICM256bfC1JZiNPHJ/cChujbXHFFAZJW0yd01ligdqa7f48bZW7U4MMouvfq23a/wdQY8Ea45wSWsd/usA5j5uhgQ5eF+Onz/8AIxryYBg8faCS5FY8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cwODr0cY; arc=fail smtp.client-ip=40.107.243.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D8D10E3;
+	Thu, 22 Feb 2024 00:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708562574; cv=none; b=PrMG4avm8jDzSf0dhp8X6O4Xwbq8ZchntyZiQkPWRl07xlFnYaksIiNz0X8rp3dfwh+y+cFAOPSyM6kRXERashtmqkOK+VNoyK7H+eHisD0rffclerLhWZ8BnPXYbXigTaNhggvIkIyAnsFh00VqwT8OH6xp25vvzf93azhSirg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708562574; c=relaxed/simple;
+	bh=unr6Fw4Z0s4+ZYa+4poq5kOzCrgRM3YCVCVpsJdM1h8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n76kLXMqAq9Kh4QB1/fGx/zacusGZWsm8phWGOyQJD08p47lOZHpwG6cPhHoe9trUz0mcdMfCEegxxHCw8drd7Z/X/YUd1qoYdiqUd4Jp9C780hDyrxbHnZ40aabpgtzxJOgC+WGwSrpwx5WbIgmCVTCKKKVEjCsUiUXB3LJ7IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kyyZh4Yn; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cwODr0cY"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nl2j/ULX1AApdU5xxffV6UVT22T92fuJcgbdsAFx/KkJpO9JarcGBwlDDI40ASVeRYJdZSP43ODnYdF6/wpDbhKgjJ/pfn81tDUXAA2gM+O5LXu8d8lb2lGduTSp5+9XRwmp72TjNFWW4qm4peuC0SplkV/gPEsHo3Loynd1Nd61NDi+xCXP1PD4WUTR9QehPpDyp3dxvyi/EPYNqvARGaFuqTBmbRPDwMnv2AFGgQZ5oNMcldtuRMvLNlSqC8vHMKgAFkJJSXIgO+6uLNKOARxonXMb00e1U2KwYOnV0qF3AS0idmtTPk9lKpyrcTwHrOcKw+hCrjkcq8Oa5HjfCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IOk/BPIbQExmXo8fdoKhbqz3nGoN72hO2FdzeQd2oow=;
- b=j4PFtHH5Qi79NH0yEWAwuQfyNHritfrd+2YaW8ZPG9D21NKQCFSZiuBVtyXovWt7iXhqmS5TV19CIw+7FbjMzviRe1+Oy5y5SSDgLapqqkCtUnpwjJvUEX8GN+ewZZyICPAIqztTBirxvv8/awAGpQsSz+gXDyN3wy0YjdFE3afxGow/4mF0DWnvpp5GDXLEEKJ8/BMuDzTZtYYMMnWssINHKysL2M4d+3iu16ixRmtnvIgvEvnmCGp2ANWpnNfSy0Ag9sBnH2whSW6TbDfAxHuAtumNbAbrfGs6tQl+QgoJAbQ4ImsQB0bzxlRDjTlTenlAX9m4LhPe51pVYHr7MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IOk/BPIbQExmXo8fdoKhbqz3nGoN72hO2FdzeQd2oow=;
- b=cwODr0cYLNihUYxD1wwVe51aXni8v7QVNe8Bhdp6OPnvVSDmL9FBsKbWhGmXCc7+SQlgpx0Len5N1GkcJdZDr5QRFBpQZip6+E40RJsgDGqTSVrvR17M74eTyvqE0170hRoePIV4Z3Xq/0LNWeoQp5XMBfsDCsxdVhF8M7RxTdzpAF1wL/vCHUWSTGpKC03/FKZQnWGCku35NN4n1h1COHhwGGxzRr1E54mdQlEkpunn9flwumojkT+tzA5udTmD6BT7HTClX6jE10vtJJ4Q6lL+RIkmuEDZ2Vyf/Zs7DItRir5iZfyR898BkRY7TiUQM5RkZzs3iH2VZGTPFWXfuA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB9126.namprd12.prod.outlook.com (2603:10b6:510:2f0::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.20; Wed, 21 Feb
- 2024 23:28:42 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7316.023; Wed, 21 Feb 2024
- 23:28:42 +0000
-Date: Wed, 21 Feb 2024 19:28:39 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Will Deacon <will@kernel.org>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Message-ID: <20240221232839.GY13330@nvidia.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <20240221192205.GA7619@willie-the-truck>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240221192205.GA7619@willie-the-truck>
-X-ClientProxiedBy: MN2PR04CA0019.namprd04.prod.outlook.com
- (2603:10b6:208:d4::32) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kyyZh4Yn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708562572; x=1740098572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=unr6Fw4Z0s4+ZYa+4poq5kOzCrgRM3YCVCVpsJdM1h8=;
+  b=kyyZh4Yn5/sXD+tlt4AyRSA2oYBFT48x5TVscPNvmgguLGKg+NZzodAu
+   yARgBF8HZC0kZdyoF4iAfiOa+o3EoMSVzBxAZhPSWFOkVUCCcVMaZ2Fit
+   WkF7BFYi3n+h0adJxzijqG/Dit8NYpPmapKKjE6vEh8ZkwOE2NJsWHmt/
+   4XeUS59kgWIX8HK0ePwD13KOUB6lswwh48NuGDk6abBf4I9kbjFoCanHa
+   FiZmYr5xQshq4hKtxXKyDruqGtMdkGxEUc5J+rDDdBJq/iC8D3PexpY1n
+   20BfJZ5zPWb4UIuWH3e2gtp4tu0OLiP5yW1x/y21nIaSnYgqiYfDNZBbM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="13315818"
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="13315818"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 16:42:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="5464982"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 21 Feb 2024 16:42:49 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rcxAV-0005pY-1W;
+	Thu, 22 Feb 2024 00:42:39 +0000
+Date: Thu, 22 Feb 2024 08:42:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jouni =?iso-8859-1?Q?H=F6gander?= <jouni.hogander@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Jouni =?iso-8859-1?Q?H=F6gander?= <jouni.hogander@intel.com>
+Subject: Re: [PATCH 2/3] drm/i915/psr: Improve fast and IO wake lines
+ calculation
+Message-ID: <202402220859.K3oSmRCi-lkp@intel.com>
+References: <20240221075322.2764209-3-jouni.hogander@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB9126:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63f7445e-5496-4b89-3ac6-08dc3334d637
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	C908/LDoKWSJl6rmPVefXFTBy+l6RyZebt1taQ5Eqaar5wDxgvm1WIJJ5N4IThVulZ3L48xM5dQPT7OZCt6Bko8DN48jDuUnRNV9ngKujv+3P+EgrNLRr+7CQ6aN1RWL7XSW7rBCOI9BrmyjlS9GorLcuS/rGz8qCW2DfhSrf0uCmS2ZnpnIX9RZfLVDnYkMVWMXSTkxng+SRjjJxInE1D/IVQskQVWlvi+6cu5+PT3HKtvz75KDLPoM8N1LvO2egboWjjlbmLq0gsSaqJoB8/v9ctjLSgbvVsJrQZpbzmghctbz+NUY1oTnYyNUfEY0JissQuW4PLWl/TMDZ1K8vgp8oWmlPQ0r1B4c4MdjAtiDQE2rqa0DGDwIyP8vyZeOpMVeLdubkPBFvkhUrrmlMMswlmBaZ8pQs/79/K4I1962g/0zs64dTkoynU91J0zLuZaQ3sM5ugFE6U6qcOv+MPS3iP2hzDGPHtakID/TRhFQHnhSYv7qVe5ZCFa8Ps9YkHQjG7NVMDPe1rcBliRFU41PPGYWnkTEP835EcE9Ak8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?qKoL8mHbTWIpYLvS1ovwaYafn6E8oemV+/qTCZnnKRT+XgJJpQq1innzzWIS?=
- =?us-ascii?Q?1FJbheyCSoHdUmb0tScEKVdVii4iqHkR/EY94X3CWUOyN9nvuUZsTfoqmx2W?=
- =?us-ascii?Q?6iP6WlosLL+opUnpsdKKIakvKm0y86AImYrXf/m8WygvmxJIFGyEvsgBh8Sm?=
- =?us-ascii?Q?9eg5NYYFSGgulKnCFbfkp+cC/JcsXpqp0hFFd95+5bX9FPrNbKvags/ASs/w?=
- =?us-ascii?Q?Rd9vTMYCK5k4I5gfeNQc4ibliXgoN27JoPtOEjbZHMUAGQT89f4Abo4HA9Lx?=
- =?us-ascii?Q?lGONCazrgDue3z8IQ+GvmevZt1ZjEJ24iltnsNw14T7I0TqlCKxmmwRK93gd?=
- =?us-ascii?Q?mR2d/GFGOOX92P6/rW/s+rBstyguK/5qcfoEN49A5AZAoaXToL+l96NdiEuI?=
- =?us-ascii?Q?2y9wX72/2n3wobgWAZ+Js1JeB39kgYYUhbz2W1jrr+ieHa/gxlU53s6alBGi?=
- =?us-ascii?Q?G+KzAdAz7ONgMkgaCLRDqdgarohbqr0EMWR6babQbjzCCKK3YEC5kgyWRBNM?=
- =?us-ascii?Q?FG9Ge2/Sgo1hV/HRQkK0iYrmurypm01Mw1iz5+kLjd0Crl5EakRj/yzwnzK/?=
- =?us-ascii?Q?BFEsRRcAaJMgk7hk3IYHZKTxcDWHIGdoGvWJ6TpV2cKHBnJo/gWCZn6v3AhS?=
- =?us-ascii?Q?o3/6gFQcApVyLhIyPu0wrK8DKP3B+f6DT3lyVJR4EO1YWTQMhoDbRoBUe7IZ?=
- =?us-ascii?Q?4vMUfJxpWpvOf0c7I8gOxhPkVMkb7dCUvjyjxLyiL7BNEdntvnn0yY9hTUe8?=
- =?us-ascii?Q?Q/lZdj/hsCTMoQDNrrcfEnO+Q1z9aEyS9F2tRm+DuJeUoj8OGXnOe+7ShvfG?=
- =?us-ascii?Q?1nWMuNmTBrb1LFi5FKyr8J4x/Q1Kq1XRVV+c0pJiqcF3Woz82feTcvTVbA05?=
- =?us-ascii?Q?A/giYfhaB7HZnL9aQCn1mU1KGmSDEzWh1KDHJV4sIlNSu1/xWhmWLvED2zzR?=
- =?us-ascii?Q?/wkv4mxn0qLTRVa5ECNXC7e8jT4by3ztdwV/o7JP63uc7p+Ipee1hREzeLhw?=
- =?us-ascii?Q?Ti+VNQvXWhYab5VwPeulT8cNfPI0pm6JMMx6diXtaOx86wUFpwStF61pPf/i?=
- =?us-ascii?Q?wK+rS5fuiGMiUqiBERTKARrJsMfbi6vlHjL9EVo/bkTON2vxACfMVhnzd2FC?=
- =?us-ascii?Q?IXOugN1Yvx/5Hg2rmyQpGeCJis68wY/vcZmIylySTq1N9Aj42w/Uicxx/gzM?=
- =?us-ascii?Q?FjuD0r5i2uBgWlHYeaVRW6zCWjzXOQXOzP5B3Daqe0yTEu6aAQZ4I2P/b/+n?=
- =?us-ascii?Q?t02HcizhrGknNJ9wWJMOe5WGvpjDuwTO4v/OmiSaRZT0/2gdwR3O11CWZXe6?=
- =?us-ascii?Q?WPu5LviUuu0OO2plgoPX4bVKyoHaFKD9pF2wlS2KN5VaR5EgvbWMlb0GyBvZ?=
- =?us-ascii?Q?qetEctJTEpVtn5YVOLYKiEzVAzm1iQvIANcaVPxCzf54AIu+huLqPNXyC8p5?=
- =?us-ascii?Q?77fSZYJr6Au2nqUgnjdwCUM/YDcML7VWXsix9eq7IBAIZNLrHOuaUP05vson?=
- =?us-ascii?Q?Yp6vMjC8X44l25wTEkNsds6fxcyrYo7eWzvXtqc+U/KySMSIWtel8cWEIMpX?=
- =?us-ascii?Q?GKMLZDoMfhhCC8JWjz1ZzlgyRAxK2ND5HjigYCba?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63f7445e-5496-4b89-3ac6-08dc3334d637
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2024 23:28:41.9362
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OFqMFAOeBX82eKLciPWR3kPlsXS1sbwMBxx8iseV0kUa1YFw6oSzDe35bSTgQJE2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9126
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221075322.2764209-3-jouni.hogander@intel.com>
 
-On Wed, Feb 21, 2024 at 07:22:06PM +0000, Will Deacon wrote:
-> On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
-> > +static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
-> > +						 const u64 *from, size_t count)
-> > +{
-> > +	switch (count) {
-> > +	case 8:
-> > +		asm volatile("str %x0, [%8, #8 * 0]\n"
-> > +			     "str %x1, [%8, #8 * 1]\n"
-> > +			     "str %x2, [%8, #8 * 2]\n"
-> > +			     "str %x3, [%8, #8 * 3]\n"
-> > +			     "str %x4, [%8, #8 * 4]\n"
-> > +			     "str %x5, [%8, #8 * 5]\n"
-> > +			     "str %x6, [%8, #8 * 6]\n"
-> > +			     "str %x7, [%8, #8 * 7]\n"
-> > +			     :
-> > +			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-> > +			       "rZ"(from[3]), "rZ"(from[4]), "rZ"(from[5]),
-> > +			       "rZ"(from[6]), "rZ"(from[7]), "r"(to));
-> > +		break;
-> > +	case 4:
-> > +		asm volatile("str %x0, [%4, #8 * 0]\n"
-> > +			     "str %x1, [%4, #8 * 1]\n"
-> > +			     "str %x2, [%4, #8 * 2]\n"
-> > +			     "str %x3, [%4, #8 * 3]\n"
-> > +			     :
-> > +			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-> > +			       "rZ"(from[3]), "r"(to));
-> > +		break;
-> > +	case 2:
-> > +		asm volatile("str %x0, [%2, #8 * 0]\n"
-> > +			     "str %x1, [%2, #8 * 1]\n"
-> > +			     :
-> > +			     : "rZ"(from[0]), "rZ"(from[1]), "r"(to));
-> > +		break;
-> > +	case 1:
-> > +		__raw_writel(*from, to);
-> 
-> Shouldn't this be __raw_writeq?
+Hi Jouni,
 
-Yes! Thanks
+kernel test robot noticed the following build warnings:
 
-Jason
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip next-20240221]
+[cannot apply to drm-intel/for-linux-next-fixes linus/master v6.8-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jouni-H-gander/drm-i915-display-Add-aux-function-pointer-for-fast-wake-sync-pulse-count/20240221-160220
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20240221075322.2764209-3-jouni.hogander%40intel.com
+patch subject: [PATCH 2/3] drm/i915/psr: Improve fast and IO wake lines calculation
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240222/202402220859.K3oSmRCi-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240222/202402220859.K3oSmRCi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402220859.K3oSmRCi-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/i915/display/intel_psr.c:28:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:15:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_object.h:11:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:11:
+   In file included from drivers/gpu/drm/xe/xe_bo_types.h:9:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/i915/display/intel_psr.c:28:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:15:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_object.h:11:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:11:
+   In file included from drivers/gpu/drm/xe/xe_bo_types.h:9:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/i915/display/intel_psr.c:28:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:15:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_object.h:11:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:11:
+   In file included from drivers/gpu/drm/xe/xe_bo_types.h:9:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/gpu/drm/i915/display/intel_psr.c:1182:6: warning: variable 'io_wake_time' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1182 |         if (intel_dp->get_aux_fw_sync_len) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_psr.c:1203:34: note: uninitialized use occurs here
+    1203 |                 &crtc_state->hw.adjusted_mode, io_wake_time);
+         |                                                ^~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_psr.c:1182:2: note: remove the 'if' if its condition is always false
+    1182 |         if (intel_dp->get_aux_fw_sync_len) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1183 |                 int io_wake_time = get_io_wake_time(intel_dp, crtc_state);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1184 |                 int tfw_exit_latency = 20; /* eDP spec */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1185 |                 int phy_wake = 4;          /* eDP spec */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1186 |                 int preamble = 8;          /* eDP spec */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1187 |                 int precharge = intel_dp->get_aux_fw_sync_len() - preamble;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1188 | 
+    1189 |                 io_wake_time = max(precharge, io_wake_time) + preamble +
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1190 |                         phy_wake + tfw_exit_latency;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1191 |                 fast_wake_time = precharge + preamble + phy_wake +
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1192 |                         tfw_exit_latency;
+         |                         ~~~~~~~~~~~~~~~~~
+    1193 | 
+    1194 |                 /* TODO: Check how we can use ALPM_CTL fast wake extended field */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1195 |                 max_wake_lines = 12;
+         |                 ~~~~~~~~~~~~~~~~~~~~
+    1196 |         } else {
+         |         ~~~~~~
+   drivers/gpu/drm/i915/display/intel_psr.c:1179:33: note: initialize the variable 'io_wake_time' to silence this warning
+    1179 |         int io_wake_lines, io_wake_time, fast_wake_lines, fast_wake_time;
+         |                                        ^
+         |                                         = 0
+   13 warnings generated.
+
+
+vim +1182 drivers/gpu/drm/i915/display/intel_psr.c
+
+  1174	
+  1175	static bool _compute_alpm_params(struct intel_dp *intel_dp,
+  1176					 struct intel_crtc_state *crtc_state)
+  1177	{
+  1178		struct drm_i915_private *i915 = dp_to_i915(intel_dp);
+  1179		int io_wake_lines, io_wake_time, fast_wake_lines, fast_wake_time;
+  1180		u8 max_wake_lines;
+  1181	
+> 1182		if (intel_dp->get_aux_fw_sync_len) {
+  1183			int io_wake_time = get_io_wake_time(intel_dp, crtc_state);
+  1184			int tfw_exit_latency = 20; /* eDP spec */
+  1185			int phy_wake = 4;	   /* eDP spec */
+  1186			int preamble = 8;	   /* eDP spec */
+  1187			int precharge = intel_dp->get_aux_fw_sync_len() - preamble;
+  1188	
+  1189			io_wake_time = max(precharge, io_wake_time) + preamble +
+  1190				phy_wake + tfw_exit_latency;
+  1191			fast_wake_time = precharge + preamble + phy_wake +
+  1192				tfw_exit_latency;
+  1193	
+  1194			/* TODO: Check how we can use ALPM_CTL fast wake extended field */
+  1195			max_wake_lines = 12;
+  1196		} else {
+  1197			io_wake_time = 50;
+  1198			fast_wake_time = 32;
+  1199			max_wake_lines = 8;
+  1200		}
+  1201	
+  1202		io_wake_lines = intel_usecs_to_scanlines(
+  1203			&crtc_state->hw.adjusted_mode, io_wake_time);
+  1204		fast_wake_lines = intel_usecs_to_scanlines(
+  1205			&crtc_state->hw.adjusted_mode, fast_wake_time);
+  1206	
+  1207		if (io_wake_lines > max_wake_lines ||
+  1208		    fast_wake_lines > max_wake_lines)
+  1209			return false;
+  1210	
+  1211		if (!_lnl_compute_alpm_params(intel_dp, crtc_state))
+  1212			return false;
+  1213	
+  1214		if (i915->display.params.psr_safest_params)
+  1215			io_wake_lines = fast_wake_lines = max_wake_lines;
+  1216	
+  1217		/* According to Bspec lower limit should be set as 7 lines. */
+  1218		intel_dp->psr.alpm_parameters.io_wake_lines = max(io_wake_lines, 7);
+  1219		intel_dp->psr.alpm_parameters.fast_wake_lines = max(fast_wake_lines, 7);
+  1220	
+  1221		return true;
+  1222	}
+  1223	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
