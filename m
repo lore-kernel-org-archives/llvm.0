@@ -1,149 +1,199 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2521E32C84
-	for <llvm@lists.linux.dev>; Thu, 22 Feb 2024 22:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708640625; cv=none; b=eaL/EUEnlRxk1+EgK4g7dvR2pZ5urwfZ9DIJDhZa79M8y9/mXfX3vZUb0lBEYO5BjU6RDEW8vPNqRZO0IzzWRubj1gGlte+l9Xe8qpmdUJSij41obabVuPNcnFOMuo4e1Z/n5LKNqwvHC7qpzm6JwiDb2uq/GOYH9uulBgsp8W8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708640625; c=relaxed/simple;
-	bh=0xRi+wRovLEtle3IAhjBAqJ3i0Q5IwxvEzplbN5MjGY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WeC1bp67BAorrJnOHhVFDNIrO9wO8N+xS7TpHeMuQTFDgfWrZ7105LMhHSTvYbdk6HodwF016ZT7Ss6tD42d2d5xdoDX9GRSXNgOLl4s71d4FvZTMk6t5eAcR5T67dr8LtCIiv5RPoNLBXhqFDe54J79iocaCb7jAcmxSFIdUAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PZMMYjW2; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F89EACD;
+	Thu, 22 Feb 2024 22:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708641384; cv=fail; b=EM6WCcVvwp8yj26fL7NG+adyW5bNoBYLACP+rAOCbkiGXBTSsIlxUp/0cqe9Ok/dY0wF5m+SWTvzNKjNX35kM39ohFTG4UwVzODILd+4LD6OpOJ9RCFZXKOy8fyquIx4PDZM1M4B8X02jKTH52gDlkIZITpx+/ROAsHuCefOsKs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708641384; c=relaxed/simple;
+	bh=m7ew78+X0oEwPWO7F05kjN3ykI9oPfgiw8q+tm1rQVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=WGNC3LfL6l3pOU12uak09ot/uq/5771G4iHAFl+E5RYD9QJVzoX7NJDsCkwcLExwgz2ycxmX401TTm2zbgvHuXu+zBlAXuTCOFXth36Idb9gpsNnIGAN1MATrnqFYa9Bcv5XbkOLHlnttjjyUdgjklZPxiBJsCr+MOit2tz9syI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qyswoUbm; arc=fail smtp.client-ip=40.107.94.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PZMMYjW2"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1dc5d0162bcso1439365ad.0
-        for <llvm@lists.linux.dev>; Thu, 22 Feb 2024 14:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708640622; x=1709245422; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+5ilM19CFuUy0zgxwZQpQ+MBc9LAqwOhihVDIFuqNw=;
-        b=PZMMYjW2KfpdtsnhHenV8gr+5kGMBRWgNOfAsqh8E1efYM8sMrwhbixTYdxec9goXQ
-         8ezymKFMG+2BI1lkaNg2pomVUcBj4+k3Z4yD18WyyjglvxwwiG0iQD1bpXc28IJ2T3W+
-         +mF5+s+SLOW3ixI5vHgxJqo1CnKoZfBk15Iws=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708640622; x=1709245422;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q+5ilM19CFuUy0zgxwZQpQ+MBc9LAqwOhihVDIFuqNw=;
-        b=prg91T0AjuAuT2I/CGTBi+1WWeUZJtehVB4DdFKzvqIk/CWIMI4KtoDa2dDhUyBgOX
-         uwDURmYTbBni/Wv6x2Wa+hdGcXr5Dq2kDBvx/SHEwj6/hdVttLtyhDutPP9g4azQm7ej
-         SNW7WU418kPRCQ794P0V9wCqswD/rtekQFZBg97hmrihnnwYWAThHFaVAQqtq5W2EhDQ
-         D4AJvr8Wncw+0vgnTJlBFcySDU/WhR61Efq1GsJraRXXywzvMG5mJu8wWph6TKGUeMGL
-         Uh8FiVWT6EAsK8NSWodV/pZJ6wwBMX/oghcICbu4A1YfH1IXdF0DIMaDbfeUR1ezzk7g
-         yh1w==
-X-Forwarded-Encrypted: i=1; AJvYcCX2wjkpnu2fwZHnYWlpRtf9fNHnQ1hAgf0H45pr5yjal71FTHjAHSpe8PFQ70WfWhReh1Oxavdjy2EifTD+2gEflnV02g==
-X-Gm-Message-State: AOJu0YzgR1xlqLjsmsGGxUbTbvgthT4AK8X0LR6ZptQfwoL4PWYjh+uh
-	x9klLD9K6OziYjlwgWR4v4WjTzgwyDAYpxR78YP55DP87tbUtF/AfGdL6z/COg==
-X-Google-Smtp-Source: AGHT+IHTlMT87C9FVzzBUlliIz9cjmezsgccL1stCQ33LCcAcJX6p5zAFxvPwu7ziBvSPYuZmtGtZw==
-X-Received: by 2002:a17:902:e5cb:b0:1db:d13e:26fb with SMTP id u11-20020a170902e5cb00b001dbd13e26fbmr266381plf.5.1708640622569;
-        Thu, 22 Feb 2024 14:23:42 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g12-20020a170902c98c00b001d8aadaa7easm10458002plc.96.2024.02.22.14.23.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Feb 2024 14:23:41 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	linux-iio@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qyswoUbm"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Hkx2/cQ5mlx6x0qTlzwIiCTPCo+w4bLke24zHv60dcfQX9eUtT3xM0BBGpOQJCnKpwttuNe/IZ7ciWKKmZXhob6ZBVTRYIWA5D0VnWSZ7JuVNkFESgHoiVF+GEvyjRj++F4Jnyla4iYrJe6x3CYoXJuxWUHL34EOG/w+uD/5HquGnMzad9P3ULSkftaEjXFIKl7U0fdHXtiqvhGDFMspFN1yRHcdqloWhEs/KEL7QWwhk0bVw6LnqxybuJDfYToLayai3ibdMUo/3ZcbUlFg5OKEFtZplOVxH+bRllSSnAlYzyH39vJ751O3r3xe4jEx6Enfw48TuVqdpHuo3rEM8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=556nOXOlFNVOoVAIXOAp7n8Uzz6ZG5JnfbbRK+Fw5UI=;
+ b=i9v1iw8NrrM+cubHvnoolodE6YQGgYtGTHdPHe3EByqkmdBAE/yi7qTnERE++f4fdKvvCQ96DLZZ7XwkAwzn8UvVD/d3+mbpZ9xjj4HwdSvxgZJL5G/EXiY4tlCgewbV5ZH0vzHIVWK42iXUUS7h3cZeBU2K358nEfNVEaBw6hGVcRu/CaQ/V92xTv6j1TpU1S1HiMXglwoo/J0abKHljTcomApmuOt6+u8miikptK3yq3BjmnbJIAL5GermS0XOPYC3ROB9KbEcIOnZzHDvwIhCbtBWeiKnfYubHud79aTV0Fs82VfBkfRrHFw7lEUcbfNj00G7HWxUEEwiejHMhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=556nOXOlFNVOoVAIXOAp7n8Uzz6ZG5JnfbbRK+Fw5UI=;
+ b=qyswoUbmNSnd6Qc2Yue3Y1YVzzEwqW+63BdEPsJr59xnaVtx9TgsGuhvbpbgk2rua1u1SDtbcYvSlJH23Lx7g8+9M4iWYM9OKZg7EoAlGOpahsBbbFnW4q05N22t33oXdoIktXasYmlaHQ99t6AJCpu5YDuetgJU7OvhpXfuTHqy7h+slk9HsYFMfQzMegOJjLFmtqlaaLiPnjnlCmrZdKf8sfN1J2aLGkrRj3uDPH9fziqwCZU5Bgd1KEsDZl0xVmlvlglFWeqT94M4MH3zoyQRb9PrlE1WOAqBOjiy8tQKObY6hvVCHd6Y5/SCMYkMsyuFtU0VqeRwrh10hMtUMw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CH3PR12MB8710.namprd12.prod.outlook.com (2603:10b6:610:173::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.21; Thu, 22 Feb
+ 2024 22:36:19 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::96dd:1160:6472:9873%6]) with mapi id 15.20.7316.023; Thu, 22 Feb 2024
+ 22:36:18 +0000
+Date: Thu, 22 Feb 2024 18:36:17 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: David Laight <David.Laight@aculab.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] [RFC] iio: pressure: dlhl60d: Check mask_width for IRQs
-Date: Thu, 22 Feb 2024 14:23:39 -0800
-Message-Id: <20240222222335.work.759-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"x86@kernel.org" <x86@kernel.org>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leon Romanovsky <leonro@mellanox.com>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
+Message-ID: <20240222223617.GC13330@nvidia.com>
+References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
+X-ClientProxiedBy: BLAPR03CA0158.namprd03.prod.outlook.com
+ (2603:10b6:208:32f::24) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1986; i=keescook@chromium.org;
- h=from:subject:message-id; bh=0xRi+wRovLEtle3IAhjBAqJ3i0Q5IwxvEzplbN5MjGY=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBl18lq4o+31/1R0DWW8xWF6Y+7BP30IH/M1esol
- O1U6dy83cuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZdfJagAKCRCJcvTf3G3A
- JtaRD/9phV+1oaxweCDWM7RyA5yYZNO0eEqTdKf4RB6phXBkx9kEI7rGUVfbyrXtZ0NC+Nx1rNv
- YPwLgODU6hZ6heWm1tX+r26uJ4XR7UM/wqORisZmp8e9X4iicnJtPPF9BpC8YsWfbDf5EFw09ip
- N+4mhNwKHfW6hvAG4l0ujSvKtJnIGTaKy8JowAz0VRswGgw/xGbQatKmvPuABoOxt3HMXXBP3Qm
- gSzJQ09JSv2A74EpZAcRKvX1qg8a3bAdPrHyQFHmZNt1sqW54K2KWU+w2umluFntRwtv9AfItiv
- 81zNznm5WHoKMz83Y8VyHE5bBcUpRp06+1+KfnAZ6JdexzUsQ3Sw7t1rqTfUsRLjreMaplHPbf1
- Xbv4YatUXU3FeQ0kuvAH3z66vmuGvG9j4GvjxjvJ1tgJ/aFAD6gsayqP1j07Op5om1MCgspydfv
- ATbWJR60pbqyr37CFhZ7LDB3ko/cKUq+FBUFl8Ot4iN0ffVMOtLLHNTY0Os0A/L2ZyM9MLilnLF
- 4M5PfHPjKrAeU869+gMxnFWfA/vTdZ3ti4rVtvLwYPzpCbTxcRmOTNY7zo9bA8HEUqHelVjo0Bv
- f0RfC+TisOs7I5itK9ke182+3YIAUbVYWtkOFQluiu5dsJCzihtVr6/0MVdORj1rVJ+Jq4pW1CP
- x2bqQQk KFcoGfpA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH3PR12MB8710:EE_
+X-MS-Office365-Filtering-Correlation-Id: 902bc137-243b-4ef4-10a5-08dc33f6afd1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	MS4Y1HOvY27XSlfqfO37dCkdSVGZd+oZ4n3dGceQ+Ef2ux926E2KQnK1lFd3DdeKnv4Ro+bUFu86R3D1OzrXN0BQqv3QZOSJxKij33ffKl7gl853GjVYBs6Yrse9oEtT0zPNsHLADJa7J9CaQ+r9Zhi2WeY79pukxukq9Oi9zu7+mMxyoxV88bWomsAQC1mXmfBSZg9a/0tJBd5kSD+3HGMtJuhkC1b+r6yZtzMDcIiqPErSW4rXDx9AHSv5yjEui3vISE91Jzv6lda3no/nOYF5SN5+hKxBPW3UrNtoMsy6jZ8k2KT4lZ7iesQKTx5E/eYRqkEZ/o1wL17V7/CQLKAjKG9bjhJ3l9L3HP86hM3Hm9KSTMxNBeSdBmoQsr6J0yi9kHUc59wpL7exMoth14B2c/RqsjZbYP77yvZWubRrmRM6YKQhKaQQ4Pmh/x3vo+pwvPfhFkiwA/EpeEon9D4R7EUyGYihWBcSDzfW2S8aKJ5iRnt3IbsDl6d4+GBUMh+GA8Pd3uneDFZtje+HuDyZ+lVsLBiJOoiYLO6IUg4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?PhS6U//mrXukSZsfeM4pUMuLcjK3Re1MxpSOKcWjs/hsAypONE7YGpzxB5FR?=
+ =?us-ascii?Q?4yO7f5nVftLb/bS3vgzzEh7t+UGyqG5Q9sWxMvWxoLaQG9piyj8QMohlnk6V?=
+ =?us-ascii?Q?h+QlMFRu/3KKmqvUSSXKl89X9Df0vj/encGmIMprZKiS7qJDZsrA7KXR7ix6?=
+ =?us-ascii?Q?1hQXtx1umNxyJ2/B9VoCzgP7oS1yHl1nAeJuZOJaf+0jBLTi9yEYbhw5dSSd?=
+ =?us-ascii?Q?6crdQoqxOVGwTyeMs6fTj8SdiM2fFI+uryqHtYelCJma6moAiNtXKJ/2pZ+T?=
+ =?us-ascii?Q?7C/Yk8ErK8wc52Mmk59UGjDIYFq9DrGU6mhsPU7yi7HSK/xMnhzUyBBkveR5?=
+ =?us-ascii?Q?jcWYqm7gcT8Cud30UpbGWdgSRqKjgodZabKcdJEasKd6mnR5wdSOWMhSO35m?=
+ =?us-ascii?Q?s4qsKkmAm3mHwHBzkNjSms0CF0hOYzjJR/5tuWnpFKuK33zINRkgMPwlbRHz?=
+ =?us-ascii?Q?J2ZbjTcdVErGWaKAwZ4d6PEYq5RstP8Nz9KDEtWacc+NlxKqcpejh7MeFMS5?=
+ =?us-ascii?Q?teYw9CReiDv/kF60n41C3ew0QxYMzCJ4kbfJU68z+g0i7wSOOpwtTC1h1xVK?=
+ =?us-ascii?Q?HuTG48vGYjEbAodpvfE0G42rW29du/s1rJbMQe0l7G35edLABrgau4Ash6B6?=
+ =?us-ascii?Q?svxd0PEyujilP1QqSvIMBj0xva9oCOSeN6QR7em+sdEOyHyDVt9orfkNn3c4?=
+ =?us-ascii?Q?6Bsm04+tfhISEhaVapFRUa4xqXafR7+jeVd+LgJHZd2R5PbpAEg5NTSgO58Q?=
+ =?us-ascii?Q?GnPBSXOpQxgxi1bi2BBSZk1B9tE7uM3YeTP4AuNdr2PqAmI2ZbbI9RxUo9ui?=
+ =?us-ascii?Q?FDA6SZtTAKBiDITbbk1SlgV+KtVrfB3efYuLsLrn6gmCsuQgoW0QLGz0Qc4R?=
+ =?us-ascii?Q?16NcQC43rRM0lYyM8tYTN762M4v6Wqi+ExG3pVZuIGnAuWW909K0IJgOtQuE?=
+ =?us-ascii?Q?7k87OJ1de6Hg4fB2YH6QggCer2l1qGuR0Y9d6JNjcdftSaq0hhTeUO3sEwiu?=
+ =?us-ascii?Q?AwMnNAODBf6rAw78pJYk0ZNpUANLE1c2uWrKW9GK2BRLaraD90qQQ/YGyq4Q?=
+ =?us-ascii?Q?ucZPJ3o0BscWjved+HEDxKrQXTpqefnaYg2kl3bum86Pl2+AcQVZ7Top0fqz?=
+ =?us-ascii?Q?P9IEeXGrGRzfrjgd2yh7LJh7gCgFO0ohP//sME1deISGnB5qL7KiWDhuf/iX?=
+ =?us-ascii?Q?Z92oRrloRhrOsK25W2h1lxjZ0EUL5zqqxOsem0jy2ieuU/YK6mz2XWg87baw?=
+ =?us-ascii?Q?FMgNd5XOX+huIXiuEVfeOTrDWYOTVkHGEc1cEty5P8Suq6EPm6KwRbTC5az/?=
+ =?us-ascii?Q?Nur2ePkRVEbkDR05V4kaUH+FdThq5gkrzBIWD+EB8H+gqIai2DZ2mpCiSLAl?=
+ =?us-ascii?Q?GwUxn0yGH0BTt97PxxD1z0JGyEOlqprjMVaxGD35lxtqG9z4vo0gZg+HSjbA?=
+ =?us-ascii?Q?Rzrar9V3QFFHecpo/BUYAXMMkIaQ025PlVdNRgfbqWYXdBrT5U414TdOze2y?=
+ =?us-ascii?Q?xZGL+aH3jucUByi29eL6mj38muPv0MtjSLu6HmlqofBk5Mfm2EPLYd4cgkip?=
+ =?us-ascii?Q?yDtmeY/JpIxvVpzB3rtSsMyEiEkInRp63/ro0quH?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 902bc137-243b-4ef4-10a5-08dc33f6afd1
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2024 22:36:18.7758
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /XXcBuZTvvvFV8v2i9IEP7kw+07zZtjvcXTkBYme+9zs28eLGhdmL1AJgJJpI0YN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8710
 
-Clang tripped over a FORTIFY warning in this code, and while it seems it
-may be a false positive in Clang due to loop unwinding, the code in
-question seems to make a lot of assumptions. Comments added, and the
-Clang warning[1] has been worked around by growing the array size.
-Also there was an uninitialized 4th byte in the __be32 array that was
-being sent through to iio_push_to_buffers().
+On Thu, Feb 22, 2024 at 10:05:04PM +0000, David Laight wrote:
+> From: Jason Gunthorpe
+> > Sent: 21 February 2024 01:17
+> > 
+> > The kernel provides driver support for using write combining IO memory
+> > through the __iowriteXX_copy() API which is commonly used as an optional
+> > optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environment.
+> > 
+> ...
+> > Implement __iowrite32/64_copy() specifically for ARM64 and use inline
+> > assembly to build consecutive blocks of STR instructions. Provide direct
+> > support for 64/32/16 large TLP generation in this manner. Optimize for
+> > common constant lengths so that the compiler can directly inline the store
+> > blocks.
+> ...
+> > +/*
+> > + * This generates a memcpy that works on a from/to address which is aligned to
+> > + * bits. Count is in terms of the number of bits sized quantities to copy. It
+> > + * optimizes to use the STR groupings when possible so that it is WC friendly.
+> > + */
+> > +#define memcpy_toio_aligned(to, from, count, bits)                        \
+> > +	({                                                                \
+> > +		volatile u##bits __iomem *_to = to;                       \
+> > +		const u##bits *_from = from;                              \
+> > +		size_t _count = count;                                    \
+> > +		const u##bits *_end_from = _from + ALIGN_DOWN(_count, 8); \
+> > +                                                                          \
+> > +		for (; _from < _end_from; _from += 8, _to += 8)           \
+> > +			__const_memcpy_toio_aligned##bits(_to, _from, 8); \
+> > +		if ((_count % 8) >= 4) {    
+> 
+> If (_count & 4) {
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/2000 [1]
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Cc: Jonathan Cameron <jic23@kernel.org>
-Cc: Lars-Peter Clausen <lars@metafoo.de>
-Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Nuno Sá" <nuno.sa@analog.com>
-Cc: linux-iio@vger.kernel.org
----
- drivers/iio/pressure/dlhl60d.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+That would be obfuscating, IMHO. The compiler doesn't need such things
+to generate optimal code.
 
-diff --git a/drivers/iio/pressure/dlhl60d.c b/drivers/iio/pressure/dlhl60d.c
-index 28c8269ba65d..9bbecd0bfe88 100644
---- a/drivers/iio/pressure/dlhl60d.c
-+++ b/drivers/iio/pressure/dlhl60d.c
-@@ -250,20 +250,27 @@ static irqreturn_t dlh_trigger_handler(int irq, void *private)
- 	struct dlh_state *st = iio_priv(indio_dev);
- 	int ret;
- 	unsigned int chn, i = 0;
--	__be32 tmp_buf[2];
-+	/* This was only an array pair of 4 bytes. */
-+	__be32 tmp_buf[4] = { };
- 
- 	ret = dlh_start_capture_and_read(st);
- 	if (ret)
- 		goto out;
- 
-+	/* Nothing was checking masklength vs ARRAY_SIZE(tmp_buf)? */
-+	if (WARN_ON_ONCE(indio_dev->masklength > ARRAY_SIZE(tmp_buf)))
-+		goto out;
-+
- 	for_each_set_bit(chn, indio_dev->active_scan_mask,
- 		indio_dev->masklength) {
--		memcpy(tmp_buf + i,
-+		/* This is copying 3 bytes. What about the 4th? */
-+		memcpy(&tmp_buf[i],
- 			&st->rx_buf[1] + chn * DLH_NUM_DATA_BYTES,
- 			DLH_NUM_DATA_BYTES);
- 		i++;
- 	}
- 
-+	/* How do we know the iio buffer_list has only 2 items? */
- 	iio_push_to_buffers(indio_dev, tmp_buf);
- 
- out:
--- 
-2.34.1
+> > +			__const_memcpy_toio_aligned##bits(_to, _from, 1); \
+> > +	})
+> 
+> But that looks bit a bit large to be inlined.
 
+You trimmed alot, this #define is in a C file and it is a template to
+generate the 32 and 64 bit out of line functions. Things are done like
+this because the 32/64 version are exactly the same logic except just
+with different types and sizes.
+
+Jason
