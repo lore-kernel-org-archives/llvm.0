@@ -1,131 +1,162 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C553FE5D;
-	Thu, 22 Feb 2024 17:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC716107B4;
+	Thu, 22 Feb 2024 20:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708621928; cv=none; b=mcEnqd8BX2L4Vr1HhjBud5c5lePHlF1WN2IscvUIs8sRrp7CXwhQXE8I4lFwy1zZcmJDBdr7Bil3NHoRgSoy2njMcfDLBr/RKi4StXdD60WzASZ6zJL7ZNb06xOtGY9edNHRwbOYZVh/Q1+aoAoxpy4NZE1DTm+yv4VSQZwtD0E=
+	t=1708635398; cv=none; b=YsgPzs54HXVc7QJJjpgVKg5Fe9dnj0CsQ0oQGpVKOq2NH3E/3zah9cW7kXpE3sWKzaQkHzWUjvxmecW0c5JnECVibOhJZdn6/wLxFj3LBxYFrmdmbdl4r6rG86D2ked9gjxMsZxQ32YkMFAlTZxPw0gdIKCEMrqaU5+Mi8SqU34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708621928; c=relaxed/simple;
-	bh=wNfsL80mNMC2d2nidGt395UjfsvPLVaIfIZViGCe8r8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W7UqHAQOzeGD0oCLdnFTEp0I+9yiP2EluOpkerZW9qBBd1Sy3ln71rLkyDURdGlux+MhXglikwYq6yXKpWZnhDEPm5ODx5N7ceyjYS1M9jVuSvKW2DJdCtKw8IDNsqDMONYm15EGXuYWQKAwDLwyTUgt4c07Mmrp4y3dbDrKbMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lq2mOiza; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1708635398; c=relaxed/simple;
+	bh=sCttGzEdOK4egxBE3FWWdZH3y2xnyCFiswncLgXt6Rg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CX08kHxzIhOG04AcK0ByvWjIoN1ertnMhU378fUkJtGyCqpmNfjSBBTVZU+fCBg5sCNtHWg0D3r6gXDKfVpqVqGtbfB8iHGPRaUA10gMQ2coSpbZm1iyXKOivHWAHah0a9GOy2QLDWraXaNv6n+od8DPSuloxL1B7wAJdGO6KLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Azr8ndrQ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lq2mOiza"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a3e7ce7dac9so621953966b.1;
-        Thu, 22 Feb 2024 09:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708621925; x=1709226725; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R62y3zmfO3vkTBKELkMH6EBSN9Umpuk/UWSNDSUJmRE=;
-        b=Lq2mOiza0nwu9wfknP/jSAs44qrexB7RxdFSoAdPQJWP5Izs1qUa4Y4H9+N8FcD5Il
-         0KeSR/HVy58bktbsNEvZ1QI6SOnf2R1pdoVGnbyi+aag/+sczQih++ab50Uy650NMDa3
-         Y40fY59SM0PHO8a0MQD0vvhOUrZaHgWBHi8axxekz0ylqo71hWta8wjKQi+Q/xwmP6is
-         iG/sbBH/LPonzpw3vH+amHrs1IfeHkITqYsp5SuS94mkBJf/ysFxEC3ZPU7rjsKHQAK5
-         dzreaTteoHH54keMF9tz0ZC4M9kp5OtvhLpj9z45xHWhfnPzwPTrRArnYynk7uMwCEC2
-         Wung==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708621925; x=1709226725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R62y3zmfO3vkTBKELkMH6EBSN9Umpuk/UWSNDSUJmRE=;
-        b=BZgubP4dark7FvuE4KJATNDuGdRUjus6nQEjnvzLYlT8obaKxYaSlVfPdVmdKulo70
-         AXVVjslpA+nA0Z8P78YykuFqfmY79oMtMsSOQp/ql4DBtTCaQH1aVSpZK94trOwe6Kqh
-         hnp+BrsnyAuyPdcYwWhGNGCPw48aI+75JzdMNarVgLSHOU5GUNsqYgZbKd/68/AvECf3
-         jl9HsXKnOw7kyubur5FmpEdpPxWgS9ODmcZa4tDpJ9QiQ8sSAb5hr3ppbZdzuRa9kHgh
-         rxgFRCjmgHPCghaDB4rhaQnHqNFuZZ+W0Fo3RfWgfdMInV0VAEmXWpMP1vSKNyOKPuOD
-         Hw2g==
-X-Forwarded-Encrypted: i=1; AJvYcCUwCGP4NJi/i3YZlpOOViAeWmZxYeI82q1IvYmcWxpkyaJk0ULLd5WB+5aXjIU7W5oZ7m2OIaOxMRpDfLGac841Gagl5Bk129Y7RBW/VlSzouBliHyo6cFg3axGZfTMXPVVOpY=
-X-Gm-Message-State: AOJu0YzkRxkP7L+XemzWYknqCe0ufk/R8+KEHYfjL/khPPgvkx+mTAZk
-	4tWMJ0sjGeuOcO9XSMPLGLkJPrxJYkk2RPYF9EBjtxH0u5e+iCM5PcKogMxG4E6TfWIRoet6DW3
-	p8+JgwDVgztk0HwLQfjoJzKdCxz4=
-X-Google-Smtp-Source: AGHT+IE0sPki7t4TbugmLAgjhSr6glJUOzmra/6Ww/Qw1K5v8TM0qF7dC2R8Xsoh68eYEwXKc40Ck7ci/1qOLBc8qHw=
-X-Received: by 2002:a17:906:1cc2:b0:a3e:4d4c:d120 with SMTP id
- i2-20020a1709061cc200b00a3e4d4cd120mr12161358ejh.12.1708621924680; Thu, 22
- Feb 2024 09:12:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Azr8ndrQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708635397; x=1740171397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sCttGzEdOK4egxBE3FWWdZH3y2xnyCFiswncLgXt6Rg=;
+  b=Azr8ndrQy1YSr3AM5Hvfq5ELp5SakOTx5gyqGcBzTkMRlJsKIxG3v5KA
+   77NG10QafvZ2VsIfF8aGbi/4aGyZKSOi6aTpbpW2Evu4hTpRZdBu/Z3iU
+   KMsh3LW5KUOTUvIMVNqHiiu2voeSVRCAu80g/1/1PlclK89HJ5H0elaYd
+   fn1HJfc/smD287f0bv236xLEWice1I/rsm8ukvf9MO6+xGUdXkwFemWbE
+   fJDM+wdlwGAGTsLzl5LlSlnxYHObJvkIU7cz5qUTU+ai6Y3YPUoIgIIqU
+   9OPp8UBWUmGmvLhpiLLLWjaCg40GibN9tNJdPCJNyWMs78z6NgWCCadew
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="2759038"
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="2759038"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 12:56:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="827603218"
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="827603218"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 22 Feb 2024 12:56:24 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rdG7B-0006hW-1B;
+	Thu, 22 Feb 2024 20:56:21 +0000
+Date: Fri, 23 Feb 2024 04:55:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Joe Damato <jdamato@fastly.com>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Larysa Zaremba <larysa.zaremba@intel.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH net-next 1/2] netdev-genl: Add ifname for queue and NAPI
+ APIs
+Message-ID: <202402230429.g2qC2zMK-lkp@intel.com>
+References: <1708531057-67392-2-git-send-email-jdamato@fastly.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230406000212.3442647-6-keescook@chromium.org>
- <202304061930.4Au0PASm-lkp@intel.com> <19930c5a-f1ed-4b04-b69a-d7259966f020@app.fastmail.com>
- <202402220829.10C6C7C@keescook>
-In-Reply-To: <202402220829.10C6C7C@keescook>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 22 Feb 2024 19:11:28 +0200
-Message-ID: <CAHp75VfDxrTyPCunRbteANRu+-Pt0sMvepxnBAgRbc-Bdb=6nQ@mail.gmail.com>
-Subject: Re: [PATCH 6/9] fortify: Split reporting and avoid passing string pointer
-To: Kees Cook <keescook@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Andy Shevchenko <andy@kernel.org>, Cezary Rojewski <cezary.rojewski@intel.com>, 
-	Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Alexander Potapenko <glider@google.com>, Zhaoyang Huang <zhaoyang.huang@unisoc.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"Liam R. Howlett" <liam.howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Dan Williams <dan.j.williams@intel.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Yury Norov <yury.norov@gmail.com>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
-	Sander Vanheule <sander@svanheule.net>, Eric Biggers <ebiggers@google.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1708531057-67392-2-git-send-email-jdamato@fastly.com>
 
-On Thu, Feb 22, 2024 at 6:30=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
-> On Thu, Feb 22, 2024 at 02:00:26PM +0100, Arnd Bergmann wrote:
-> > On Thu, Apr 6, 2023, at 13:19, kernel test robot wrote:
-> >
-> > > If you fix the issue, kindly add following tag where applicable
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Link:
-> > > https://lore.kernel.org/oe-kbuild-all/202304061930.4Au0PASm-lkp@intel=
-.com/
-> > >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > >>> ld.lld: error: undefined symbol: __fortify_panic
-> > >    >>> referenced by fortify-string.h:208 (include/linux/fortify-stri=
-ng.h:208)
-> > >    >>>               arch/arm/boot/compressed/fdt_ro.o:(fdt_stringlis=
-t_count)
-> > >    >>> referenced by fortify-string.h:208 (include/linux/fortify-stri=
-ng.h:208)
-> > >    >>>               arch/arm/boot/compressed/fdt_ro.o:(fdt_stringlis=
-t_search)
-> > >    >>> referenced by fortify-string.h:208 (include/linux/fortify-stri=
-ng.h:208)
-> > >    >>>               arch/arm/boot/compressed/fdt_ro.o:(fdt_stringlis=
-t_get)
-> >
-> > I get a related build failure from the same commit:
-> >
-> > arch/arm/boot/compressed/misc.c:157:6: error: no previous prototype for=
- '__fortify_panic' [-Werror=3Dmissing-prototypes]
-> >   157 | void __fortify_panic(const u8 reason, size_t avail, size_t size=
-)
->
-> Whoops, thank you! This series got a refresh after you did the
-> missing-prototypes work and I missed this one. I've fixed it and
-> double-checked for any others. Hopefully this will be clean in the next
-> -next. :)
+Hi Joe,
 
-Thank you! (FWIW, I also hit it today)
+kernel test robot noticed the following build warnings:
 
---=20
-With Best Regards,
-Andy Shevchenko
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/netdev-genl-Add-ifname-for-queue-and-NAPI-APIs/20240222-000134
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/1708531057-67392-2-git-send-email-jdamato%40fastly.com
+patch subject: [PATCH net-next 1/2] netdev-genl: Add ifname for queue and NAPI APIs
+config: powerpc-acadia_defconfig (https://download.01.org/0day-ci/archive/20240223/202402230429.g2qC2zMK-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240223/202402230429.g2qC2zMK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402230429.g2qC2zMK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/core/netdev-genl.c:388:14: warning: variable 'ifname' is uninitialized when used here [-Wuninitialized]
+     388 |         nla_strscpy(ifname, info->attrs[NETDEV_A_QUEUE_IFNAME], IFNAMSIZ);
+         |                     ^~~~~~
+   net/core/netdev-genl.c:376:14: note: initialize the variable 'ifname' to silence this warning
+     376 |         char *ifname;
+         |                     ^
+         |                      = NULL
+   1 warning generated.
+
+
+vim +/ifname +388 net/core/netdev-genl.c
+
+   370	
+   371	int netdev_nl_queue_get_doit(struct sk_buff *skb, struct genl_info *info)
+   372	{
+   373		u32 q_id, q_type, ifindex;
+   374		struct net_device *netdev;
+   375		struct sk_buff *rsp;
+   376		char *ifname;
+   377		int err;
+   378	
+   379		if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_ID) ||
+   380		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_TYPE) ||
+   381		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_IFINDEX) ||
+   382		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_IFNAME))
+   383			return -EINVAL;
+   384	
+   385		q_id = nla_get_u32(info->attrs[NETDEV_A_QUEUE_ID]);
+   386		q_type = nla_get_u32(info->attrs[NETDEV_A_QUEUE_TYPE]);
+   387		ifindex = nla_get_u32(info->attrs[NETDEV_A_QUEUE_IFINDEX]);
+ > 388		nla_strscpy(ifname, info->attrs[NETDEV_A_QUEUE_IFNAME], IFNAMSIZ);
+   389	
+   390		rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
+   391		if (!rsp)
+   392			return -ENOMEM;
+   393	
+   394		rtnl_lock();
+   395	
+   396		netdev = __dev_get_by_index(genl_info_net(info), ifindex);
+   397	
+   398		if (strcmp(netdev->name, ifname)) {
+   399			err = -ENODEV;
+   400		} else {
+   401			if (netdev)
+   402				err = netdev_nl_queue_fill(rsp, netdev, q_id, q_type, info);
+   403			else
+   404				err = -ENODEV;
+   405		}
+   406	
+   407		rtnl_unlock();
+   408	
+   409		if (err)
+   410			goto err_free_msg;
+   411	
+   412		return genlmsg_reply(rsp, info);
+   413	
+   414	err_free_msg:
+   415		nlmsg_free(rsp);
+   416		return err;
+   417	}
+   418	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
