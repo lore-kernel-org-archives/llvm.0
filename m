@@ -1,151 +1,149 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80DCA12D21B
-	for <llvm@lists.linux.dev>; Thu, 22 Feb 2024 22:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2521E32C84
+	for <llvm@lists.linux.dev>; Thu, 22 Feb 2024 22:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708639514; cv=none; b=lWqVZKF/kjcRYDjG1fXboIIoo9aZPxTt4xNo6Pw98vLvYZ0LYqg29toUnNdYkN9/vlLLphCSOzv+0SpxFSFRTsLPASpjlAQxAsUh7k0tvuycs7r4nEK21PZtf5kVP8UhQ/GmNBiT1ymltN51jEcnV7bJ2KWGWVHGthqNuK+74Lk=
+	t=1708640625; cv=none; b=eaL/EUEnlRxk1+EgK4g7dvR2pZ5urwfZ9DIJDhZa79M8y9/mXfX3vZUb0lBEYO5BjU6RDEW8vPNqRZO0IzzWRubj1gGlte+l9Xe8qpmdUJSij41obabVuPNcnFOMuo4e1Z/n5LKNqwvHC7qpzm6JwiDb2uq/GOYH9uulBgsp8W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708639514; c=relaxed/simple;
-	bh=Ns8POw5Unk7S6TWI/lYpd3ryYdEastG5Bp71gPxYe3k=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=BaFoAKLO3wT2uE2liuj8NrKHnk/2Ckr/Uh1dm81bA94/QPKLDXJXZLMpY4yRy9+gdy2ZOLgyMRLX9RVQriVvArv2Qy8pdGIy2N70c+eI1awRM3v3Qv+eYCYNvlWOY13qvLJBAJwyDCRrOMnXTprDcJIc5e5o/xxget5/XjaQxHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-267-WbNjfvPePtanToAnPgxbaA-1; Thu, 22 Feb 2024 22:05:07 +0000
-X-MC-Unique: WbNjfvPePtanToAnPgxbaA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 22 Feb
- 2024 22:05:05 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 22 Feb 2024 22:05:04 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Jason Gunthorpe' <jgg@nvidia.com>, Alexander Gordeev
-	<agordeev@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Gerald Schaefer
-	<gerald.schaefer@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt
-	<justinstitt@google.com>, Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky
-	<leon@kernel.org>, "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Ingo Molnar
-	<mingo@redhat.com>, Bill Wendling <morbo@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Salil Mehta <salil.mehta@huawei.com>, Jijie Shao
-	<shaojijie@huawei.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner
-	<tglx@linutronix.de>, "x86@kernel.org" <x86@kernel.org>, Yisen Zhuang
-	<yisen.zhuang@huawei.com>
-CC: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
-	Leon Romanovsky <leonro@mellanox.com>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, Niklas Schnelle <schnelle@linux.ibm.com>, "Will
- Deacon" <will@kernel.org>
-Subject: RE: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Topic: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Index: AQHaZGPOOI9/P4jwQk+N+/Phnt6M8bEW6Xcg
-Date: Thu, 22 Feb 2024 22:05:04 +0000
-Message-ID: <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
-In-Reply-To: <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1708640625; c=relaxed/simple;
+	bh=0xRi+wRovLEtle3IAhjBAqJ3i0Q5IwxvEzplbN5MjGY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WeC1bp67BAorrJnOHhVFDNIrO9wO8N+xS7TpHeMuQTFDgfWrZ7105LMhHSTvYbdk6HodwF016ZT7Ss6tD42d2d5xdoDX9GRSXNgOLl4s71d4FvZTMk6t5eAcR5T67dr8LtCIiv5RPoNLBXhqFDe54J79iocaCb7jAcmxSFIdUAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PZMMYjW2; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PZMMYjW2"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1dc5d0162bcso1439365ad.0
+        for <llvm@lists.linux.dev>; Thu, 22 Feb 2024 14:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708640622; x=1709245422; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+5ilM19CFuUy0zgxwZQpQ+MBc9LAqwOhihVDIFuqNw=;
+        b=PZMMYjW2KfpdtsnhHenV8gr+5kGMBRWgNOfAsqh8E1efYM8sMrwhbixTYdxec9goXQ
+         8ezymKFMG+2BI1lkaNg2pomVUcBj4+k3Z4yD18WyyjglvxwwiG0iQD1bpXc28IJ2T3W+
+         +mF5+s+SLOW3ixI5vHgxJqo1CnKoZfBk15Iws=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708640622; x=1709245422;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q+5ilM19CFuUy0zgxwZQpQ+MBc9LAqwOhihVDIFuqNw=;
+        b=prg91T0AjuAuT2I/CGTBi+1WWeUZJtehVB4DdFKzvqIk/CWIMI4KtoDa2dDhUyBgOX
+         uwDURmYTbBni/Wv6x2Wa+hdGcXr5Dq2kDBvx/SHEwj6/hdVttLtyhDutPP9g4azQm7ej
+         SNW7WU418kPRCQ794P0V9wCqswD/rtekQFZBg97hmrihnnwYWAThHFaVAQqtq5W2EhDQ
+         D4AJvr8Wncw+0vgnTJlBFcySDU/WhR61Efq1GsJraRXXywzvMG5mJu8wWph6TKGUeMGL
+         Uh8FiVWT6EAsK8NSWodV/pZJ6wwBMX/oghcICbu4A1YfH1IXdF0DIMaDbfeUR1ezzk7g
+         yh1w==
+X-Forwarded-Encrypted: i=1; AJvYcCX2wjkpnu2fwZHnYWlpRtf9fNHnQ1hAgf0H45pr5yjal71FTHjAHSpe8PFQ70WfWhReh1Oxavdjy2EifTD+2gEflnV02g==
+X-Gm-Message-State: AOJu0YzgR1xlqLjsmsGGxUbTbvgthT4AK8X0LR6ZptQfwoL4PWYjh+uh
+	x9klLD9K6OziYjlwgWR4v4WjTzgwyDAYpxR78YP55DP87tbUtF/AfGdL6z/COg==
+X-Google-Smtp-Source: AGHT+IHTlMT87C9FVzzBUlliIz9cjmezsgccL1stCQ33LCcAcJX6p5zAFxvPwu7ziBvSPYuZmtGtZw==
+X-Received: by 2002:a17:902:e5cb:b0:1db:d13e:26fb with SMTP id u11-20020a170902e5cb00b001dbd13e26fbmr266381plf.5.1708640622569;
+        Thu, 22 Feb 2024 14:23:42 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g12-20020a170902c98c00b001d8aadaa7easm10458002plc.96.2024.02.22.14.23.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 14:23:41 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] [RFC] iio: pressure: dlhl60d: Check mask_width for IRQs
+Date: Thu, 22 Feb 2024 14:23:39 -0800
+Message-Id: <20240222222335.work.759-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1986; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=0xRi+wRovLEtle3IAhjBAqJ3i0Q5IwxvEzplbN5MjGY=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBl18lq4o+31/1R0DWW8xWF6Y+7BP30IH/M1esol
+ O1U6dy83cuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZdfJagAKCRCJcvTf3G3A
+ JtaRD/9phV+1oaxweCDWM7RyA5yYZNO0eEqTdKf4RB6phXBkx9kEI7rGUVfbyrXtZ0NC+Nx1rNv
+ YPwLgODU6hZ6heWm1tX+r26uJ4XR7UM/wqORisZmp8e9X4iicnJtPPF9BpC8YsWfbDf5EFw09ip
+ N+4mhNwKHfW6hvAG4l0ujSvKtJnIGTaKy8JowAz0VRswGgw/xGbQatKmvPuABoOxt3HMXXBP3Qm
+ gSzJQ09JSv2A74EpZAcRKvX1qg8a3bAdPrHyQFHmZNt1sqW54K2KWU+w2umluFntRwtv9AfItiv
+ 81zNznm5WHoKMz83Y8VyHE5bBcUpRp06+1+KfnAZ6JdexzUsQ3Sw7t1rqTfUsRLjreMaplHPbf1
+ Xbv4YatUXU3FeQ0kuvAH3z66vmuGvG9j4GvjxjvJ1tgJ/aFAD6gsayqP1j07Op5om1MCgspydfv
+ ATbWJR60pbqyr37CFhZ7LDB3ko/cKUq+FBUFl8Ot4iN0ffVMOtLLHNTY0Os0A/L2ZyM9MLilnLF
+ 4M5PfHPjKrAeU869+gMxnFWfA/vTdZ3ti4rVtvLwYPzpCbTxcRmOTNY7zo9bA8HEUqHelVjo0Bv
+ f0RfC+TisOs7I5itK9ke182+3YIAUbVYWtkOFQluiu5dsJCzihtVr6/0MVdORj1rVJ+Jq4pW1CP
+ x2bqQQk KFcoGfpA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-From: Jason Gunthorpe
-> Sent: 21 February 2024 01:17
->=20
-> The kernel provides driver support for using write combining IO memory
-> through the __iowriteXX_copy() API which is commonly used as an optional
-> optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environment.
->=20
-...
-> Implement __iowrite32/64_copy() specifically for ARM64 and use inline
-> assembly to build consecutive blocks of STR instructions. Provide direct
-> support for 64/32/16 large TLP generation in this manner. Optimize for
-> common constant lengths so that the compiler can directly inline the stor=
-e
-> blocks.
-...
-> +/*
-> + * This generates a memcpy that works on a from/to address which is alig=
-ned to
-> + * bits. Count is in terms of the number of bits sized quantities to cop=
-y. It
-> + * optimizes to use the STR groupings when possible so that it is WC fri=
-endly.
-> + */
-> +#define memcpy_toio_aligned(to, from, count, bits)                      =
-  \
-> +=09({                                                                \
-> +=09=09volatile u##bits __iomem *_to =3D to;                       \
-> +=09=09const u##bits *_from =3D from;                              \
-> +=09=09size_t _count =3D count;                                    \
-> +=09=09const u##bits *_end_from =3D _from + ALIGN_DOWN(_count, 8); \
-> +                                                                        =
-  \
-> +=09=09for (; _from < _end_from; _from +=3D 8, _to +=3D 8)           \
-> +=09=09=09__const_memcpy_toio_aligned##bits(_to, _from, 8); \
-> +=09=09if ((_count % 8) >=3D 4) {   =20
+Clang tripped over a FORTIFY warning in this code, and while it seems it
+may be a false positive in Clang due to loop unwinding, the code in
+question seems to make a lot of assumptions. Comments added, and the
+Clang warning[1] has been worked around by growing the array size.
+Also there was an uninitialized 4th byte in the __be32 array that was
+being sent through to iio_push_to_buffers().
 
-If (_count & 4) {
-                              \
-> +=09=09=09__const_memcpy_toio_aligned##bits(_to, _from, 4); \
-> +=09=09=09_from +=3D 4;                                       \
-> +=09=09=09_to +=3D 4;                                         \
-> +=09=09}                                                         \
-> +=09=09if ((_count % 4) >=3D 2) {                                  \
-Ditto
-> +=09=09=09__const_memcpy_toio_aligned##bits(_to, _from, 2); \
-> +=09=09=09_from +=3D 2;                                       \
-> +=09=09=09_to +=3D 2;                                         \
-> +=09=09}                                                         \
-> +=09=09if (_count % 2)                                           \
-and again
-> +=09=09=09__const_memcpy_toio_aligned##bits(_to, _from, 1); \
-> +=09})
+Link: https://github.com/ClangBuiltLinux/linux/issues/2000 [1]
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Nuno Sá" <nuno.sa@analog.com>
+Cc: linux-iio@vger.kernel.org
+---
+ drivers/iio/pressure/dlhl60d.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-But that looks bit a bit large to be inlined.
-Except, perhaps, for small constant lengths.
-I'd guess that even with write-combining and posted PCIe writes it
-doesn't take much for it to be PCIe limited rather than cpu limited?
-
-Is there a sane way to do the same for reads - they are far worse
-than writes.
-
-I solved the problem a few years back on a little ppc by using an on-cpu
-DMA controller that could do PCIe master accesses and spinning until
-the transfer completed.
-But that sort of DMA controller seems uncommon.
-We now initiate most of the transfers from the slave (an fpga) - after
-writing a suitable/sane dma controller for that end.
-
-=09David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/drivers/iio/pressure/dlhl60d.c b/drivers/iio/pressure/dlhl60d.c
+index 28c8269ba65d..9bbecd0bfe88 100644
+--- a/drivers/iio/pressure/dlhl60d.c
++++ b/drivers/iio/pressure/dlhl60d.c
+@@ -250,20 +250,27 @@ static irqreturn_t dlh_trigger_handler(int irq, void *private)
+ 	struct dlh_state *st = iio_priv(indio_dev);
+ 	int ret;
+ 	unsigned int chn, i = 0;
+-	__be32 tmp_buf[2];
++	/* This was only an array pair of 4 bytes. */
++	__be32 tmp_buf[4] = { };
+ 
+ 	ret = dlh_start_capture_and_read(st);
+ 	if (ret)
+ 		goto out;
+ 
++	/* Nothing was checking masklength vs ARRAY_SIZE(tmp_buf)? */
++	if (WARN_ON_ONCE(indio_dev->masklength > ARRAY_SIZE(tmp_buf)))
++		goto out;
++
+ 	for_each_set_bit(chn, indio_dev->active_scan_mask,
+ 		indio_dev->masklength) {
+-		memcpy(tmp_buf + i,
++		/* This is copying 3 bytes. What about the 4th? */
++		memcpy(&tmp_buf[i],
+ 			&st->rx_buf[1] + chn * DLH_NUM_DATA_BYTES,
+ 			DLH_NUM_DATA_BYTES);
+ 		i++;
+ 	}
+ 
++	/* How do we know the iio buffer_list has only 2 items? */
+ 	iio_push_to_buffers(indio_dev, tmp_buf);
+ 
+ out:
+-- 
+2.34.1
 
