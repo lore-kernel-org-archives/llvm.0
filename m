@@ -1,93 +1,136 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0615D48A
-	for <llvm@lists.linux.dev>; Fri, 23 Feb 2024 11:05:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB2F78667;
+	Fri, 23 Feb 2024 11:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708686337; cv=none; b=XaUyHCHLuLZB1Dwsn/fv5xkNDAXHh1FhrT+dfR/stzyYd3GqLUcO5XberQH+olQaBhYYqnmcarNVhwf/xk0rphWR/uatazMZfi33hY/nvLBon0GEJ3SDL9ubOj/0woevhZYuTv0FJDS8o7nLu2mF9mKwfy4TbUVNsG9+WI0+yjA=
+	t=1708688002; cv=none; b=aqkeD/A8VNa788sdpZodBa5u8ShBqnRNd690Qw3Sd/thW/+/dnm/HAJs5Z5RKGwf68Iw5pceEEpnlMw2Fw8vhYJuedMe3WY/vfDvRwC1dg4sNMidV4MK5v+H6gURryiGbnrrseUv1GmMd7O8Q/xSprZFZ1sAOqkt4MkIlRVVtew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708686337; c=relaxed/simple;
-	bh=f8K7B4fWzAJ9S0HMWxpxdex4kiotuVYmwyxdYOKndxs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=ey2X3I+SmexozsgPsSC1AHhv2tN5pJ0Yplnf9NBKDgy8akYwPBrvg8Ya1VzrNOCzE7Oq4MgOKXnS9QFL3DErZpOfiaCEHozdBA6+AIqqFaSqHoODk00SpPPSUQOiwztPFG2byfjPg6Mpc0/gJXtxDf1DoWp3XyYZ+MF+Qsix80E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-130-H-3Osv-SP7aTaorVWrPjmg-1; Fri, 23 Feb 2024 11:05:31 +0000
-X-MC-Unique: H-3Osv-SP7aTaorVWrPjmg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Feb
- 2024 11:05:29 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 23 Feb 2024 11:05:29 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Niklas Schnelle' <schnelle@linux.ibm.com>, 'Jason Gunthorpe'
-	<jgg@nvidia.com>
-CC: Alexander Gordeev <agordeev@linux.ibm.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Christian Borntraeger
-	<borntraeger@linux.ibm.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, Gerald Schaefer
-	<gerald.schaefer@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt
-	<justinstitt@google.com>, Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky
-	<leon@kernel.org>, "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Ingo Molnar
-	<mingo@redhat.com>, Bill Wendling <morbo@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Salil Mehta <salil.mehta@huawei.com>, Jijie Shao
-	<shaojijie@huawei.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner
-	<tglx@linutronix.de>, "x86@kernel.org" <x86@kernel.org>, Yisen Zhuang
-	<yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
-	<catalin.marinas@arm.com>, Leon Romanovsky <leonro@mellanox.com>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, Will Deacon <will@kernel.org>
-Subject: RE: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Topic: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Index: AQHaZGPOOI9/P4jwQk+N+/Phnt6M8bEW6XcggAAM2oCAAKwjYIAAJAwAgAABBTA=
-Date: Fri, 23 Feb 2024 11:05:29 +0000
-Message-ID: <3227d5224a9745e388738d016fdae87a@AcuMS.aculab.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
-	 <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
-	 <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
-	 <20240222223617.GC13330@nvidia.com>
-	 <efc727fbb8de45c8b669b6ec174f95ce@AcuMS.aculab.com>
- <61931c626d9bc54369d73fda8f8ee59bbb5e95bc.camel@linux.ibm.com>
-In-Reply-To: <61931c626d9bc54369d73fda8f8ee59bbb5e95bc.camel@linux.ibm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1708688002; c=relaxed/simple;
+	bh=TcK+Iw2zld5U2RS8+AAnETRmCK3lZzzCa7IpNlIpdrM=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=tqrVFU2F14PHTaFUQfUPHUOTMw4hS4fpgkljiYWKpc6hOtMajG+aJn6Fu6fWC0TIIlh3awNlCnpfXSv1Mhvg6qMq93FAc9Jp8dhylzehDUrzvby6m4nrsbtGL2VzQ9bobw86q0W4I1ZB5N3//q8OR+p3WvgmViNeEEq1aWQuYxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rL0WYRj5; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rL0WYRj5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD46C43394;
+	Fri, 23 Feb 2024 11:33:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708688002;
+	bh=TcK+Iw2zld5U2RS8+AAnETRmCK3lZzzCa7IpNlIpdrM=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+	b=rL0WYRj5M5K5hSRncrSWAAeJ4+vqwHZpD9E5SFTuVlEzAx8T7ZM7b44h8crUUcTbZ
+	 tx7WM/6i8ji8z4sWf+yEJ0AjwA7IdIaMXxT1i67EL19LFY/yECgUFFA6ihnU4WVVrq
+	 7Obki8/RxegVSleRfE1F7OEDWbpIXjoy6hQx1eUNZ+Why0Y3/PYPfJhgUbV9/+lZ1V
+	 GswAjfoQ49Rzw23Ul5ji7AeTrd5LIro5+/6o2fp2W7L4WEoP2ZSosXKmyhIFQYXJlE
+	 EoWLUPQVtXDXMc6LQrovq3M+XJwO03qu56kexKUqK9abKUxyn5rsOwG++/eg6D2URb
+	 7Ep9DdBsoIMtg==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 27DFF1200066;
+	Fri, 23 Feb 2024 06:33:21 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 23 Feb 2024 06:33:21 -0500
+X-ME-Sender: <xms:gILYZTQgtF7EnfIGi6j_DWOw9hUgMliCKwVJHRCMupGhZsrHIKfVEw>
+    <xme:gILYZUyKhjegUy3pzUSANi6AWCu22NkCoSw0oC50vrfkQ2ep0zJo_KwiLx6ytQF5T
+    RuLzS2PM1a4S08_x_4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeeigddvlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvveeigfetudegveeiledvgfevuedvgfetgeefieeijeejffeggeehudeg
+    tdevheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudejtddv
+    gedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusgdrug
+    gv
+X-ME-Proxy: <xmx:gILYZY2C-eF67EaErq5p65cst5weL6F2OSyBaa_uDRP94U48S1RIMw>
+    <xmx:gILYZTCwZke92r2KUFUPwtYSar2o-HdSJUrHK9tWuthakIZnRDoczA>
+    <xmx:gILYZcjoh_EEdaW8Y18a9NxP8koF_AaP5JchDaGM64CBcqYivhgIIg>
+    <xmx:gYLYZftGzCXSlfBg-NAqsPl81kQdWwXSceBsWycmZlsiJlQgKsT8dtidI1g>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 940ADB6008D; Fri, 23 Feb 2024 06:33:20 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-153-g7e3bb84806-fm-20240215.007-g7e3bb848
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Message-Id: <90459f4b-74b8-4e1a-9024-6536c7437a19@app.fastmail.com>
+In-Reply-To: <69c27b568d423e7784dcb6eb578253f5e5df8194.camel@linux.ibm.com>
+References: <202402180019.a2GWUA60-lkp@intel.com>
+ <7e9c8f49-4f95-4dcb-a038-36bb5c895b20@app.fastmail.com>
+ <69c27b568d423e7784dcb6eb578253f5e5df8194.camel@linux.ibm.com>
+Date: Fri, 23 Feb 2024 12:33:00 +0100
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "kernel test robot" <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [niks:has_ioport_v6 19/19] lib/iomap.c:81:23: error: call to '_inb'
+ declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
+Content-Type: text/plain
 
-Li4uDQo+ID4gPiA+ID4gKwkJaWYgKChfY291bnQgJSA4KSA+PSA0KSB7DQo+ID4gPiA+DQo+ID4g
-PiA+IElmIChfY291bnQgJiA0KSB7DQo+ID4gPg0KPiA+ID4gVGhhdCB3b3VsZCBiZSBvYmZ1c2Nh
-dGluZywgSU1ITy4gVGhlIGNvbXBpbGVyIGRvZXNuJ3QgbmVlZCBzdWNoIHRoaW5ncw0KPiA+ID4g
-dG8gZ2VuZXJhdGUgb3B0aW1hbCBjb2RlLg0KPiA+DQo+ID4gVHJ5IGl0OiBodHRwczovL2dvZGJv
-bHQub3JnL3ovRXZ2R3JUeHYzDQo+ID4gQW5kIGl0IGlzbid0IHRoYXQgb2JmdXNjYXRlZCAtIG5v
-IG1vcmUgc28gdGhhbiB5b3VyIHZlcnNpb24uDQo+IA0KPiBUaGUgZ29kYm9sdCBsaW5rIGRvZXMg
-Im4gJSA4ID4gNCIgaW5zdGVhZCBvZiAiLi4uID49IDQiIGFzIGluIEphc29uJ3MNCj4gb3JpZ2lu
-YWwgY29kZS4gV2l0aCAiPj0iIHRoZSBjb21waWxlZCBjb2RlIG1hdGNoZXMgdGhhdCBmb3IgIm4g
-JiA0Ii4NCg0KQnVnZ2VyIDotKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
-a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
-IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Fri, Feb 23, 2024, at 11:32, Niklas Schnelle wrote:
+> On Sat, 2024-02-17 at 21:05 +0100, Arnd Bergmann wrote:
+>> On Sat, Feb 17, 2024, at 17:13, kernel test robot wrote:
+>
+> Looking at this again I'm not sure. The IP_COND macro already selects
+> between MMIO and I/O port access. Shouldn't we have something like:
+>
+> #ifdef CONFIG_HAS_IOPORT
+> #define IO_COND(addr, is_pio, is_mmio) do {			\
+> 	unsigned long port = (unsigned long __force)addr;	\
+> 	if (port >= PIO_RESERVED) {				\
+> 		is_mmio;					\
+> 	} else if (port > PIO_OFFSET)
+> {				\
+> 		port &= PIO_MASK;				\
+> 		is_pio;					
+> 	\
+> 	} else							\
+> 		bad_io_access(port, #is_pio );			\
+> } while (0)
+> #else
+> #define IO_COND(addr, is_pio, is_mmio) is_mmio
+> #endif
 
+I think that would work, but we should never need it, as
+there should never be a configuration that has CONFIG_HAS_IOPORT=n
+but CONFIG_GENERIC_IOMAP=y.
+
+For architectures that do not require special instructions for
+inb/outb, we get the defaults from asm-generic/io.h:
+
+#ifndef CONFIG_GENERIC_IOMAP
+#ifndef ioread8
+#define ioread8 ioread8
+static inline u8 ioread8(const volatile void __iomem *addr)
+{
+        return readb(addr);
+}       
+#endif
+
+#ifndef ioread16
+#define ioread16 ioread16
+static inline u16 ioread16(const volatile void __iomem *addr)
+{
+        return readw(addr);
+}
+#endif
+
+#ifndef ioread32
+#define ioread32 ioread32
+static inline u32 ioread32(const volatile void __iomem *addr)
+{
+        return readl(addr);
+}
+#endif
+
+This works equally well for targets that have no I/O port
+access at all and those that implement inl() as readl()
+with an offset anyway.
+
+    Arnd
