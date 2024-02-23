@@ -1,126 +1,380 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0499B80049
-	for <llvm@lists.linux.dev>; Fri, 23 Feb 2024 13:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD9A7F7D0;
+	Fri, 23 Feb 2024 14:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708696365; cv=none; b=nFCU8Wt4NuqYRwPFrgFSgw99P/sALvNlJpVhG79tjS6RtO82POn4EeKJRkF8sdJcpOXekPsygiGKy53MSyadjuvmTnYhfeCGZMX1o4lkT1L/99JGgPcZjMwgrVrZ7KQxINoKysVLioh0cdnVwBMo81MBk4V0gAyvsKh+tMJsGsA=
+	t=1708697369; cv=none; b=sg65/AJyd84DKDeJ5VokWppKtgCYb33AFmIoEdVPMa88Kq9QFsChGQJ+4LhwuY2mW9WSFNMPEiaoxUqUVQx6HgwgP9KnyOld6BhJ1Vlo2Kym6bO2sXgogTh6/hYCeva1SlF7zHvQ09TPZMpvZByG+jDJuH+XtuN2mS1HEdxMUwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708696365; c=relaxed/simple;
-	bh=F+dE5PSi2nh33bOrlLn9Liq7cqW9uBp/B7QQSXRWOZ0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=XaNm4zFTQ0lDKHPGM06Ex2XyahTrBEWkoPCTwKHUr5MEbfrohkX/osNexjsgKUP/orObqUSrqs6ciND4+wg4xh+be47z1GU83yOMnEpRungCyYGEf8TdyBr7bnunKL4I5OFUKdWNZ6ueiqiuowYuRffCGNS8Y3FQ/kSMXSOAj0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-220-N0YvSLKYPYycpbumIvGJWw-1; Fri, 23 Feb 2024 13:52:39 +0000
-X-MC-Unique: N0YvSLKYPYycpbumIvGJWw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Feb
- 2024 13:52:38 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 23 Feb 2024 13:52:38 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Jason Gunthorpe' <jgg@nvidia.com>
-CC: 'Niklas Schnelle' <schnelle@linux.ibm.com>, Alexander Gordeev
-	<agordeev@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Gerald Schaefer
-	<gerald.schaefer@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt
-	<justinstitt@google.com>, Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky
-	<leon@kernel.org>, "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Ingo Molnar
-	<mingo@redhat.com>, Bill Wendling <morbo@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Salil Mehta <salil.mehta@huawei.com>, Jijie Shao
-	<shaojijie@huawei.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner
-	<tglx@linutronix.de>, "x86@kernel.org" <x86@kernel.org>, Yisen Zhuang
-	<yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
-	<catalin.marinas@arm.com>, Leon Romanovsky <leonro@mellanox.com>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, Will Deacon <will@kernel.org>
-Subject: RE: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Topic: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Index: AQHaZGPOOI9/P4jwQk+N+/Phnt6M8bEW6XcggAAM2oCAAKwjYIAALlsAgAACWrCAABVaAIAABEPg
-Date: Fri, 23 Feb 2024 13:52:37 +0000
-Message-ID: <18248cc6f411441c8a68a55f68416150@AcuMS.aculab.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
- <20240222223617.GC13330@nvidia.com>
- <efc727fbb8de45c8b669b6ec174f95ce@AcuMS.aculab.com>
- <e78f6e6294c31d889ace4de3a3c3cebad04f4213.camel@linux.ibm.com>
- <d4150af74d7c45b79c770cd1c5d8eed7@AcuMS.aculab.com>
- <20240223130308.GF13330@nvidia.com>
-In-Reply-To: <20240223130308.GF13330@nvidia.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1708697369; c=relaxed/simple;
+	bh=7wtZsB62Ms3p/Pnj0JFs3kEp+Di4audZVFU9yILgego=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VeVVY9qHaP2Bo53GL0WFM36R9pP1SxDdBeBs94fzzhsGSHalxTtGFAt79LhRVn5wFBmKiaZQ9gLWr3b8kWjhYONerXBdciP1I4H7Nd/Z3Xq/KtIa7XTLff3uwgXxdHmdHrLWimO+sOy9FtFwN8GJKxCaVt3O5XPVu4NT91ODx54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c0tv2eW5; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c0tv2eW5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708697367; x=1740233367;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7wtZsB62Ms3p/Pnj0JFs3kEp+Di4audZVFU9yILgego=;
+  b=c0tv2eW5mLJkwECX4sZLNqBoolg43qSvcSvGXyUmDmgqLOZ/AfazR38J
+   fIjPXjRzyUZMrPzX4IoIR8BHENFce28PVShicO0N7QBVt7CwFNepJ2aU/
+   wO49SGiSQNd3OI0MVhKKOLONcHySchpiNikPgHPk7Y6QhgRh6ws313Q7j
+   UQHtXmB6F2O27hoil87t5PZ+0mdEkXCbwYR+j4AVz8AW0eZk0thvSzRz9
+   pFepAYczs/afp6JmicJRdJu5TA6GPWQ+ULJymIhk2hXhAYakhjWvkl6XD
+   LLQ0pdPQOQ6KRuBXaXl360UhhMXHVkifn1iQ/OY1+cwXLGOuaoawDECkI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="13652152"
+X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
+   d="scan'208";a="13652152"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 06:09:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
+   d="scan'208";a="6126707"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 23 Feb 2024 06:09:24 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rdWEs-0007Yy-0Y;
+	Fri, 23 Feb 2024 14:09:22 +0000
+Date: Fri, 23 Feb 2024 22:08:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: "D. Wythe" <alibuda@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC net-next 19/20] net/smc: support smc inet with merge socks
+Message-ID: <202402232108.8DgVgcgm-lkp@intel.com>
+References: <1708412505-34470-20-git-send-email-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1708412505-34470-20-git-send-email-alibuda@linux.alibaba.com>
 
-From: Jason Gunthorpe
-> Sent: 23 February 2024 13:03
->=20
-> On Fri, Feb 23, 2024 at 12:19:24PM +0000, David Laight wrote:
->=20
-> > Since writes get 'posted' all over the place.
-> > How many writes do you need to do before write-combining makes a
-> > difference?
->=20
-> The issue is that the HW can optimize if the entire transaction is
-> presented in one TLP, if it has to reassemble the transaction it takes
-> a big slow path hit.
+Hi Wythe,
 
-Ah, so you aren't optimising to reduce the number of TLP for
-(effectively) a write to a memory buffer, but have a pcie slave
-that really want to see (for example) the writes for a ring buffer
-entry in a single TLP?
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-So you really want something that (should) generate a 16 (or 32)
-byte TLP? Rather than abusing the function that is expected to
-generate multiple 8 byte TLP to generate larger TLP.
+[auto build test WARNING on net-next/main]
 
-I'm guessing that on arm64 the ldp/stp instructions will generate
-a single 16 byte TLP regardless of write combining?
-They would definitely help memcpy_fromio().
+url:    https://github.com/intel-lab-lkp/linux/commits/D-Wythe/net-export-partial-symbols-in-inet-inet6-proto_ops/20240220-190529
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/1708412505-34470-20-git-send-email-alibuda%40linux.alibaba.com
+patch subject: [RFC net-next 19/20] net/smc: support smc inet with merge socks
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240223/202402232108.8DgVgcgm-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240223/202402232108.8DgVgcgm-lkp@intel.com/reproduce)
 
-Are they enough for arm64?
-Getting but TLP on x86 is probably harder.
-(Unless you use AVX512 registers and aligned accesses.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402232108.8DgVgcgm-lkp@intel.com/
 
-It is rather a shame that there isn't an efficient way to get
-access to a couple of large SIMD registers.
-(eg save on stack and have the fpu code where they are for
-a lazy fpu switch.)
-There is quite a bit of code that would benefit, but kernel_fpu_begin()
-is just too expensive.
+All warnings (new ones prefixed by >>):
 
-=09David
+   In file included from net/smc/af_smc.c:27:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/smc/af_smc.c:27:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/smc/af_smc.c:27:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from net/smc/af_smc.c:59:
+>> net/smc/smc_inet.h:174:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     174 |         default:
+         |         ^
+   net/smc/smc_inet.h:174:2: note: insert 'break;' to avoid fall-through
+     174 |         default:
+         |         ^
+         |         break; 
+>> net/smc/af_smc.c:3911:14: warning: no previous prototype for function '__smc_inet_csk_accept' [-Wmissing-prototypes]
+    3911 | struct sock *__smc_inet_csk_accept(struct sock *sk, int flags, int *err, bool kern, int next_state)
+         |              ^
+   net/smc/af_smc.c:3911:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    3911 | struct sock *__smc_inet_csk_accept(struct sock *sk, int flags, int *err, bool kern, int next_state)
+         | ^
+         | static 
+>> net/smc/af_smc.c:4219:19: warning: variable 'smc' set but not used [-Wunused-but-set-variable]
+    4219 |         struct smc_sock *smc;
+         |                          ^
+>> net/smc/af_smc.c:4434:6: warning: variable 'old_state' set but not used [-Wunused-but-set-variable]
+    4434 |         int old_state, rc;
+         |             ^
+   16 warnings generated.
+--
+   In file included from net/smc/smc_close.c:15:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/smc/smc_close.c:15:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/smc/smc_close.c:15:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from net/smc/smc_close.c:22:
+>> net/smc/smc_inet.h:174:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     174 |         default:
+         |         ^
+   net/smc/smc_inet.h:174:2: note: insert 'break;' to avoid fall-through
+     174 |         default:
+         |         ^
+         |         break; 
+   13 warnings generated.
+--
+   In file included from net/smc/smc_inet.c:17:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/smc/smc_inet.c:17:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/smc/smc_inet.c:17:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from net/smc/smc_inet.c:20:
+>> net/smc/smc_inet.h:174:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     174 |         default:
+         |         ^
+   net/smc/smc_inet.h:174:2: note: insert 'break;' to avoid fall-through
+     174 |         default:
+         |         ^
+         |         break; 
+>> net/smc/smc_inet.c:320:5: warning: no previous prototype for function 'smc_sk_wait_tcp_data' [-Wmissing-prototypes]
+     320 | int smc_sk_wait_tcp_data(struct sock *sk, long *timeo, const struct sk_buff *skb)
+         |     ^
+   net/smc/smc_inet.c:320:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     320 | int smc_sk_wait_tcp_data(struct sock *sk, long *timeo, const struct sk_buff *skb)
+         | ^
+         | static 
+   14 warnings generated.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
 
+vim +174 net/smc/smc_inet.h
+
+   158	
+   159	static inline int smc_inet_sock_try_disable_smc(struct sock *sk, int flag)
+   160	{
+   161		struct smc_sock *smc = smc_sk(sk);
+   162		int success = 0;
+   163	
+   164		write_lock_bh(&sk->sk_callback_lock);
+   165		switch (isck_smc_negotiation_load(smc)) {
+   166		case SMC_NEGOTIATION_TBD:
+   167			/* can not disable now */
+   168			if (flag != SMC_NEGOTIATION_ABORT_FLAG && tcp_sk(sk)->syn_smc)
+   169				break;
+   170			isck_smc_negotiation_set_flags(smc_sk(sk), flag);
+   171			fallthrough;
+   172		case SMC_NEGOTIATION_NO_SMC:
+   173			success = 1;
+ > 174		default:
+   175			break;
+   176		}
+   177		write_unlock_bh(&sk->sk_callback_lock);
+   178		return success;
+   179	}
+   180	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
