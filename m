@@ -1,67 +1,129 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1565DF25;
-	Fri, 23 Feb 2024 10:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618DD241F9;
+	Fri, 23 Feb 2024 11:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708684379; cv=none; b=AV7gdrKZRXWQVDFGzIwBGNlDx3kAOTLS+L2dkKaAtWasJLHHreRI7Wbe9jyKQGgIPZiguEEGpe3OUaapIpn9hv5iXgR4onHNKYEsNDHXenU1UfUaKO1wIMxY39Hn56MxxYHzRYjcfcy8Q4cthxw3DfsbI7oCKW9RHJsrQV28O14=
+	t=1708686158; cv=none; b=NNCr5xGsaUG16lPjsVrelF8QSDHlTUjnG6G7rZ1Yos4tbOq3roSaoJzu6NI+6eX+gv7ndSb4hoOL6aFatqn8oGLgg1DRhl8H8IO1cK2qF1JD8UZPzKewbd8o4pDaMHh22B4j9QXYn6glbDBU0V75Bs3qOhh8cOUtZREwAEBYAK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708684379; c=relaxed/simple;
-	bh=X83OThkt25P5qyi4mSDkFhJC5st+tVdzjwUs8zQK8s8=;
+	s=arc-20240116; t=1708686158; c=relaxed/simple;
+	bh=DdxAsIpwc3hS4BAz2AK9+B5MxowEHSHvzlB0YYfP6uo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DZDqs6xw+Al/JWEG0ys7NR3kuFMW+oMm6jRrFjLaVMZ9a+LSSzMu4CcWaJGbIfCzpumVlW13sXKpwipW6/d/FmZRb+BAWy7zVk/D0PjcVXpvN/WL1DDqAM+xarlcpX083zZztsiN4oEvCeT+xAi6ou8JK4xkf3s7HLhEP/0Dkq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Amq/uaVF; arc=none smtp.client-ip=148.163.156.1
+	 Content-Type:MIME-Version; b=A+HbsjjAxv4n1pa2JWhtlpUyMb39vyukGMpuvHeia1s2/sQXGwVNoWZKAUeblyCRYjIYLbe1FOqh/kqyIiPqo8+a3UyIsZD4jA9S046UgNyfh+wWS7BOtX360xPS5dbVyjOg92q1HZyrVi4JkAHmgPRt76tu/tQaHYy79Rh5aLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sNdWrBOs; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Amq/uaVF"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41NAPoIH032426;
-	Fri, 23 Feb 2024 10:32:52 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sNdWrBOs"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41NAuxGn012671;
+	Fri, 23 Feb 2024 11:01:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  content-transfer-encoding : mime-version; s=pp1;
- bh=fzZTebYXOByVXiJjPwIqZ7XIPtce8kMBBNzqRuheOb8=;
- b=Amq/uaVFu2D4gsrtUyLqmKRUUuVfwCQVbG2WBNq23rVyWYIOFqUcX8XaufhvqdSCgtzC
- 2gAoWE20GqHh7rI27eFCGLDd2/q7dVvuVgarroHgCet8TdKK0DwOiMRnNJZFHTYn52H/
- P3ntrHYa01twKSqeSANPqyclEfavli2s9/Y/Tnq9miOs+BIS4DiHv1STja2sSQ6YM2y/
- /hhtsKqNwp5kx5x/6s9kFRJk2dC0adldPwM/zYKJoqnPQl0e0ZDB36GnumzHklcjpMVh
- CKxBzOTzHi86Pvq6gEdG6pgewVJyyM5JE8kwYKKWt7hYVp/BLsvlZJljFK+sM7OT0SBa IA== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3weqv32p62-1
+ bh=ww65QolQGOgKsbfQi4juf2OWoEIyBcosT/MQIzxjIl8=;
+ b=sNdWrBOsFDHvSEHGZ4HS71/WIXWPRH01//05gLivG26N7wFy3K33uJ58unGEql6Ux1Cr
+ KfOmXYVY7l8SYOkjDda89bhAkRauNr8/sWXx+Fqtq0HH64ccd+Wy7Xh3fNluiy+UYHCC
+ qDkmF0QRz2ux6ahBvq6uNWBcw2e1wb72QEUnMk5VHUVtdfFQ2zqsBSRHdk6C9/yEoNdd
+ 8YODjORj2tDWyb7bg1mRgCUk6gmv+ZUuY5I2AwjCDbvzND8w6xbopssNqsCCwbVtsRrs
+ FFDXSajt9tiyXyfwZT42lJGeT9TMPf8siFY2O5OvzWEwBwn3vUqV8TBtQI55MLZZa1rz oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wesmcgng6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Feb 2024 10:32:51 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41N7vK53013463;
-	Fri, 23 Feb 2024 10:32:50 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb7h0vyfa-1
+	Fri, 23 Feb 2024 11:01:35 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41NAuisG012011;
+	Fri, 23 Feb 2024 11:01:34 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wesmcgnfb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Feb 2024 10:32:50 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41NAWkub63373690
+	Fri, 23 Feb 2024 11:01:34 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41NA1PHC031119;
+	Fri, 23 Feb 2024 11:01:33 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb9bmcefp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 11:01:32 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41NB1Rnh38535816
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 Feb 2024 10:32:48 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 69EEA2004B;
-	Fri, 23 Feb 2024 10:32:46 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 18F5120040;
-	Fri, 23 Feb 2024 10:32:46 +0000 (GMT)
+	Fri, 23 Feb 2024 11:01:29 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4F4B620065;
+	Fri, 23 Feb 2024 11:01:27 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DFDC820040;
+	Fri, 23 Feb 2024 11:01:24 +0000 (GMT)
 Received: from [9.179.5.151] (unknown [9.179.5.151])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 23 Feb 2024 10:32:46 +0000 (GMT)
-Message-ID: <69c27b568d423e7784dcb6eb578253f5e5df8194.camel@linux.ibm.com>
-Subject: Re: [niks:has_ioport_v6 19/19] lib/iomap.c:81:23: error: call to
- '_inb' declared with 'error' attribute: inb()) requires CONFIG_HAS_IOPORT
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 23 Feb 2024 11:01:24 +0000 (GMT)
+Message-ID: <61931c626d9bc54369d73fda8f8ee59bbb5e95bc.camel@linux.ibm.com>
+Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
 From: Niklas Schnelle <schnelle@linux.ibm.com>
-To: Arnd Bergmann <arnd@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Date: Fri, 23 Feb 2024 11:32:45 +0100
-In-Reply-To: <7e9c8f49-4f95-4dcb-a038-36bb5c895b20@app.fastmail.com>
-References: <202402180019.a2GWUA60-lkp@intel.com>
-	 <7e9c8f49-4f95-4dcb-a038-36bb5c895b20@app.fastmail.com>
+To: David Laight <David.Laight@ACULAB.COM>,
+        "'Jason Gunthorpe'"
+ <jgg@nvidia.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrew Morton
+ <akpm@linux-foundation.org>,
+        Christian Borntraeger
+ <borntraeger@linux.ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen
+ <dave.hansen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Gerald Schaefer
+ <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Heiko
+ Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Justin
+ Stitt <justinstitt@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Leon
+ Romanovsky <leon@kernel.org>,
+        "linux-rdma@vger.kernel.org"
+ <linux-rdma@vger.kernel.org>,
+        "linux-s390@vger.kernel.org"
+ <linux-s390@vger.kernel.org>,
+        "llvm@lists.linux.dev"
+ <llvm@lists.linux.dev>,
+        Ingo Molnar <mingo@redhat.com>, Bill Wendling
+ <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick
+ Desaulniers <ndesaulniers@google.com>,
+        "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Salil Mehta
+ <salil.mehta@huawei.com>,
+        Jijie Shao <shaojijie@huawei.com>,
+        Sven Schnelle
+ <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Leon Romanovsky <leonro@mellanox.com>,
+        "linux-arch@vger.kernel.org"
+ <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+        Mark Rutland
+ <mark.rutland@arm.com>,
+        Michael Guralnik <michaelgur@mellanox.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        Will Deacon
+ <will@kernel.org>
+Date: Fri, 23 Feb 2024 12:01:24 +0100
+In-Reply-To: <efc727fbb8de45c8b669b6ec174f95ce@AcuMS.aculab.com>
+References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+	 <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+	 <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
+	 <20240222223617.GC13330@nvidia.com>
+	 <efc727fbb8de45c8b669b6ec174f95ce@AcuMS.aculab.com>
 Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
  keydata=mQINBGHm3M8BEAC+MIQkfoPIAKdjjk84OSQ8erd2OICj98+GdhMQpIjHXn/RJdCZLa58k/ay5x0xIHkWzx1JJOm4Lki7WEzRbYDexQEJP0xUia0U+4Yg7PJL4Dg/W4Ho28dRBROoJjgJSLSHwc3/1pjpNlSaX/qg3ZM8+/EiSGc7uEPklLYu3gRGxcWV/944HdUyLcnjrZwCn2+gg9ncVJjsimS0ro/2wU2RPE4ju6NMBn5Go26sAj1owdYQQv9t0d71CmZS9Bh+2+cLjC7HvyTHKFxVGOznUL+j1a45VrVSXQ+nhTVjvgvXR84z10bOvLiwxJZ/00pwNi7uCdSYnZFLQ4S/JGMs4lhOiCGJhJ/9FR7JVw/1t1G9aUlqVp23AXwzbcoV2fxyE/CsVpHcyOWGDahGLcH7QeitN6cjltf9ymw2spBzpRnfFn80nVxgSYVG1dw75ksBAuQ/3e+oTQk4GAa2ShoNVsvR9GYn7rnsDN5pVILDhdPO3J2PGIXa5ipQnvwb3EHvPXyzakYtK50fBUPKk3XnkRwRYEbbPEB7YT+ccF/HioCryqDPWUivXF8qf6Jw5T1mhwukUV1i+QyJzJxGPh19/N2/GK7/yS5wrt0Lwxzevc5g+jX8RyjzywOZGHTVu9KIQiG8Pqx33UxZvykjaqTMjo7kaAdGEkrHZdVHqoPZwhCsgQARAQABtChOaWtsYXMgU2NobmVsbGUgPHNjaG5lbGxlQGxpbnV4LmlibS5jb20+iQJXBBMBCABBAhsBBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAhkBFiEEnbAAstJ1IDCl9y3cr+Q/FejCYJAFAmWVooIFCQWP+TMACgkQr+Q/FejCYJCmLg/+OgZD6wTjooE77/ZHmW6Egb5nUH6DU+2nMHMHUupkE3dKuLcuzI4aEf/6wGG2xF/LigMRrbb1iKRVk/VG/swyLh/OBOTh8cJnhdmURnj3jhaef
 	zslA1wTHcxeH4wMGJWVRAhOfDUpMMYV2J5XoroiA1+acSuppelmKAK5voVn9/fNtrVr6mgBXT5RUnmW60UUq5z6a1zTMOe8lofwHLVvyG9zMgv6Z9IQJc/oVnjR9PWYDUX4jqFL3yO6DDt5iIQCN8WKaodlNP61lFKAYujV8JY4Ln+IbMIV2h34cGpIJ7f76OYt2XR4RANbOd41+qvlYgpYSvIBDml/fT2vWEjmncm7zzpVyPtCZlijV3npsTVerGbh0Ts/xC6ERQrB+rkUqN/fx+dGnTT9I7FLUQFBhK2pIuD+U1K+A+EgwUiTyiGtyRMqz12RdWzerRmWFo5Mmi8N1jhZRTs0yAUn3MSCdRHP1Nu3SMk/0oE+pVeni3ysdJ69SlkCAZoaf1TMRdSlF71oT/fNgSnd90wkCHUK9pUJGRTUxgV9NjafZy7sx1Gz11s4QzJE6JBelClBUiF6QD4a+MzFh9TkUcpG0cPNsFfEGyxtGzuoeE86sL1tk3yO6ThJSLZyqFFLrZBIJvYK2UiD+6E7VWRW9y1OmPyyFBPBosOvmrkLlDtAtyfYInO0KU5pa2xhcyBTY2huZWxsZSA8bmlrbGFzLnNjaG5lbGxlQGlibS5jb20+iQJUBBMBCAA+AhsBBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAFiEEnbAAstJ1IDCl9y3cr+Q/FejCYJAFAmWVoosFCQWP+TMACgkQr+Q/FejCYJB7oxAAksHYU+myhSZD0YSuYZl3oLDUEFP3fm9m6N9zgtiOg/GGI0jHc+Tt8qiQaLEtVeP/waWKgQnje/emHJOEDZTb0AdeXZk+T5/ydrKRLmYC6rPge3ue1yQUCiA+T72O3WfjZILI2yOstNwd1f0epQ32YaAvM+QbKDloJSmKhGWZlvdVUDXWkS6/maUtUwZpddFY8InXBxsYCbJsqiKF3kPVD515/6keIZmZh1cTIFQ+Kc+UZaz0MxkhiCyWC4
@@ -73,8 +135,8 @@ Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fZZSie3Jx3aVI5o_h9eSMOFJyBt5XuEv
-X-Proofpoint-ORIG-GUID: fZZSie3Jx3aVI5o_h9eSMOFJyBt5XuEv
+X-Proofpoint-GUID: bgB2THGKuAx3wgADMC-vmbS_9w_bVoc2
+X-Proofpoint-ORIG-GUID: lCx2eZhePur3eHZ1-g0Jws8u_tyJgEol
 Content-Transfer-Encoding: quoted-printable
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
@@ -85,69 +147,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-22_15,2024-02-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
- malwarescore=0 phishscore=0 bulkscore=0 adultscore=0 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402230074
+ definitions=2024-02-22_15,2024-02-23_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ mlxscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 impostorscore=0 adultscore=0 priorityscore=1501
+ mlxlogscore=363 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402230078
 
-On Sat, 2024-02-17 at 21:05 +0100, Arnd Bergmann wrote:
-> On Sat, Feb 17, 2024, at 17:13, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git=
-=20
-> > has_ioport_v6
-> > head:   0cc26afe6244fe307926528550a4de09c1e5846e
-> > commit: 0cc26afe6244fe307926528550a4de09c1e5846e [19/19]=20
-> > asm-generic/io.h: Remove I/O port accessors for HAS_IOPORT=3Dn
-> > config: hexagon-allnoconfig=20
-> > (https://download.01.org/0day-ci/archive/20240218/202402180019.a2GWUA60=
--lkp@intel.com/config)
-> > compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project=
-=20
-> > 36adfec155de366d722f2bac8ff9162289dcf06c)
-> > reproduce (this is a W=3D1 build):=20
-> > (https://download.01.org/0day-ci/archive/20240218/202402180019.a2GWUA60=
--lkp@intel.com/reproduce)
+On Fri, 2024-02-23 at 09:07 +0000, David Laight wrote:
+> From: Jason Gunthorpe
+> > Sent: 22 February 2024 22:36
+> > To: David Laight <David.Laight@ACULAB.COM>
 > >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a new=20
-> > version of
-> > the same patch/commit), kindly add following tags
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes:=20
-> > https://lore.kernel.org/oe-kbuild-all/202402180019.a2GWUA60-lkp@intel.c=
-om/
+> > On Thu, Feb 22, 2024 at 10:05:04PM +0000, David Laight wrote:
+> > > From: Jason Gunthorpe
+> > > > Sent: 21 February 2024 01:17
+> > > >=20
+> > > > The kernel provides driver support for using write combining IO mem=
+ory
+> > > > through the __iowriteXX_copy() API which is commonly used as an opt=
+ional
+> > > > optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environ=
+ment.
+> > > >=20
+> > > ...
+> > > > Implement __iowrite32/64_copy() specifically for ARM64 and use inli=
+ne
+> > > > assembly to build consecutive blocks of STR instructions. Provide d=
+irect
+> > > > support for 64/32/16 large TLP generation in this manner. Optimize =
+for
+> > > > common constant lengths so that the compiler can directly inline th=
+e store
+> > > > blocks.
+> > > ...
+> > > > +/*
+> > > > + * This generates a memcpy that works on a from/to address which i=
+s aligned to
+> > > > + * bits. Count is in terms of the number of bits sized quantities =
+to copy. It
+> > > > + * optimizes to use the STR groupings when possible so that it is =
+WC friendly.
+> > > > + */
+> > > > +#define memcpy_toio_aligned(to, from, count, bits)                =
+        \
+> > > > +	({                                                               =
+ \
+> > > > +		volatile u##bits __iomem *_to =3D to;                       \
+> > > > +		const u##bits *_from =3D from;                              \
+> > > > +		size_t _count =3D count;                                    \
+> > > > +		const u##bits *_end_from =3D _from + ALIGN_DOWN(_count, 8); \
+> > > > +                                                                  =
+        \
+> > > > +		for (; _from < _end_from; _from +=3D 8, _to +=3D 8)           \
+> > > > +			__const_memcpy_toio_aligned##bits(_to, _from, 8); \
+> > > > +		if ((_count % 8) >=3D 4) {
+> > >=20
+> > > If (_count & 4) {
 > >=20
-> > All errors (new ones prefixed by >>):
-> >=20
-> > > > lib/iomap.c:81:23: error: call to '_inb' declared with 'error' attr=
-ibute: inb()) requires CONFIG_HAS_IOPORT
-> >       81 |         IO_COND(addr, return inb(port), return readb(addr));
-> >          |                              ^
+> > That would be obfuscating, IMHO. The compiler doesn't need such things
+> > to generate optimal code.
 >=20
-> It looks like hexagon just needs to stop selecting CONFIG_GENERIC_IOMAP.
->=20
->      Arnd
+> Try it: https://godbolt.org/z/EvvGrTxv3=20
+> And it isn't that obfuscated - no more so than your version.
 
-Looking at this again I'm not sure. The IP_COND macro already selects
-between MMIO and I/O port access. Shouldn't we have something like:
-
-#ifdef CONFIG_HAS_IOPORT
-#define IO_COND(addr, is_pio, is_mmio) do {			\
-	unsigned long port =3D (unsigned long __force)addr;	\
-	if (port >=3D PIO_RESERVED) {				\
-		is_mmio;					\
-	} else if (port > PIO_OFFSET)
-{				\
-		port &=3D PIO_MASK;				\
-		is_pio;=09=09=09=09=09
-	\
-	} else							\
-		bad_io_access(port, #is_pio );			\
-} while (0)
-#else
-#define IO_COND(addr, is_pio, is_mmio) is_mmio
-#endif
-
-
-
+The godbolt link does "n % 8 > 4" instead of "... >=3D 4" as in Jason's
+original code. With ">=3D" the compiled code matches that for "n & 4".
