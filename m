@@ -1,63 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914FF38FA1;
-	Fri, 23 Feb 2024 22:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF191419B3;
+	Fri, 23 Feb 2024 23:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708728073; cv=none; b=cuki8iDSXgUERmDWmtGM0ewiaK9zDiEu75ZewBGPhtS8AB7Fi+IDzIpM+gKmEg6N27MvVpNzko2FVrNdfJmeXo9MnYmbV0Yoe/5alz9V/byidxYdv3oCQ5LAxJnOOlz6we+iXR+iwi6imPQqpncVBfoWsB+GLWGQ1iN1i0pL3dQ=
+	t=1708730571; cv=none; b=g/i7DRUXwh8T1X2FzcAWB8EE3bK7+WXlgedLuIyXIKJMh003bjk7BhfNygNU4pqebpBqHp6iRxfaH7UgG27It4PwsHUoOfHYQriYUbe6ooRHRQ2dKsAKu+WvMLvXye6SvcZu13uLGxYuJwGj4ukN+d+oKnuR1RB4HcXZT8l9vjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708728073; c=relaxed/simple;
-	bh=M9KvWFP79FSlwdzb3EPPAWvxhpQ6pdeQUdYnpVN5Fok=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G49gU8O6PnDuOgcTQd4G8jG79X8dJgCmE/BZUZLH0AQGE6cE0Db3PrQxMgy585Iiwk7uo8kBCPtVDMumecgmZao7rCzL9bBK6pSOzs43AdLXleL7+X9gPqrlnTkbfinAU2ROOLvmULG1Nvjh0yAtRWXCrMJ/uJBOZQ4Gm5esnu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kijkdk83; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1708730571; c=relaxed/simple;
+	bh=RG2wTUV6TvUQCWMBeSjV9fAk96OxXzir2MdZkFCf/IQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VoiDHmdsK1LObLax6qNkY9IabZrI6rWbeTKWICGD8GywGDYdvTJjgpr9U01Z0zLdTQdwPPF3u22pIuQ1n2IWPQZJdW81LrM/y+asTHyw1TkeU1kjC1RA4iFVUB2DdF82SbL9N0aNur2Y+en8Fm08tXnO4haFQu8N776eQMjDJl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jGmYKGLo; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kijkdk83"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jGmYKGLo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708728072; x=1740264072;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M9KvWFP79FSlwdzb3EPPAWvxhpQ6pdeQUdYnpVN5Fok=;
-  b=Kijkdk834pmEKEE7BgeQm93zC2NSzE1iZwuvX3fjAQK222Q0EVG56DLu
-   LHX+ex/ASKIZhBDg1OeZDAPLFNUtw8YtEyIl/HazIX+qMvv1+u0S86IoS
-   VtQ/LBr9OLLE4kQRI4mgFtKBxxErOnu16cIeiypLyKjDe1L6JUC4i+hce
-   s6kxJ4uCzhRLl7gIUblk5eCmIe73WT/QN91JyW8bDplMEZ4y37Ajbj3n+
-   BI+nt14ANlgwRsVLkYt+7pdYo+hg919/H1fhpibTdK99kTHhDq47BaQ6g
-   ovy4WImZ1YaFNGqgUPtgTDq5cIpQ4JfBXNqFUyGeRYj+q5ZPYxE3JcWzT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="13714257"
+  t=1708730570; x=1740266570;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RG2wTUV6TvUQCWMBeSjV9fAk96OxXzir2MdZkFCf/IQ=;
+  b=jGmYKGLorXzBnaPUBi4EK2RLLVZMmcs8v/Ih1Um+c2dFHnU1Fj3F6Sd9
+   /jYI+mpHmelD1Tn1xLN9SHAezJt+gQ+qhr3YRFAFUrt0HioSQi/K5jR1q
+   yhXN3WJusM5e2R1lD4KDbnQ9juqVzQnATDHj2DQ+3Q1ksh0/9GgWx1Vho
+   7mjH67O6Fgp7zMgn/uxtWTdj0YesprdzshcYNywpV7ODsJisbh3G5kTuk
+   IYR40vQU1HeH6fvm2VPavt+AgJsjRnspJl8CyJxZshXmY128r7MFWY0Jr
+   u3fZTDVLReth4dE78lcMjJk6Mlb7mF1ygl41CSpdjokT1JnNQELJIDun+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="3201230"
 X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="13714257"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 14:41:10 -0800
+   d="scan'208";a="3201230"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 15:22:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="10601984"
+   d="scan'208";a="5988942"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 23 Feb 2024 14:41:06 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 23 Feb 2024 15:22:46 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rdeE4-0007yi-2H;
-	Fri, 23 Feb 2024 22:41:04 +0000
-Date: Sat, 24 Feb 2024 06:40:06 +0800
+	id 1rdesO-000804-1h;
+	Fri, 23 Feb 2024 23:22:44 +0000
+Date: Sat, 24 Feb 2024 07:22:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Philipp Zabel <p.zabel@pengutronix.de>
+To: Brian Kim <brian.kim@hardkernel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Yang Xiwen <forbidden405@outlook.com>
-Subject: Re: [PATCH 2/2] drivers: bus: simple-pm-bus: Get and deassert resets
- exclusively
-Message-ID: <202402240646.IirqjDw8-lkp@intel.com>
-References: <20240223-b4-bus-v1-2-2803c3ac4673@outlook.com>
+	Dongjin Kim <tobetter@gmail.com>, memeka <mihailescu2m@gmail.com>,
+	Yang Deokgyu <secugyu@gmail.com>
+Subject: [tobetter:odroid-5.15.y 21/204]
+ drivers/char/exynos-gpiomem.c:121:22: error: implicit declaration of
+ function 'phys_mem_access_prot'
+Message-ID: <202402240703.lHthbyvx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,97 +60,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240223-b4-bus-v1-2-2803c3ac4673@outlook.com>
 
-Hi Yang,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 8d3dea210042f54b952b481838c1e7dfc4ec751d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Xiwen-via-B4-Relay/dt-bindings-simple-pm-bus-Add-optional-resets/20240223-115400
-base:   8d3dea210042f54b952b481838c1e7dfc4ec751d
-patch link:    https://lore.kernel.org/r/20240223-b4-bus-v1-2-2803c3ac4673%40outlook.com
-patch subject: [PATCH 2/2] drivers: bus: simple-pm-bus: Get and deassert resets exclusively
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240224/202402240646.IirqjDw8-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240224/202402240646.IirqjDw8-lkp@intel.com/reproduce)
+tree:   https://github.com/tobetter/linux odroid-5.15.y
+head:   200d2466033be9a082bfb81368de8a994e399a02
+commit: 61f45d975621becb00c0aef303769f10428b9cd8 [21/204] ODROID-XU4: char: exynos: add /dev/gpiomem device for rootless user GPIO access
+config: hexagon-randconfig-001-20240224 (https://download.01.org/0day-ci/archive/20240224/202402240703.lHthbyvx-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240224/202402240703.lHthbyvx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402240646.IirqjDw8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402240703.lHthbyvx-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/bus/simple-pm-bus.c:67:43: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      67 |         bus->rsts = devm_reset_control_array_get(dev, false, true);
-         |                                                  ^~~
-   include/linux/reset.h:192:45: note: passing argument to parameter 'dev' here
-     192 | devm_reset_control_array_get(struct device *dev, bool shared, bool optional)
-         |                                             ^
-   1 error generated.
+>> drivers/char/exynos-gpiomem.c:121:22: error: implicit declaration of function 'phys_mem_access_prot' [-Werror,-Wimplicit-function-declaration]
+           vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
+                               ^
+>> drivers/char/exynos-gpiomem.c:121:20: error: assigning to 'pgprot_t' from incompatible type 'int'
+           vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
+                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +67 drivers/bus/simple-pm-bus.c
+vim +/phys_mem_access_prot +121 drivers/char/exynos-gpiomem.c
 
-    26	
-    27	static int simple_pm_bus_probe(struct platform_device *pdev)
-    28	{
-    29		const struct device *dev = &pdev->dev;
-    30		const struct of_dev_auxdata *lookup = dev_get_platdata(dev);
-    31		struct device_node *np = dev->of_node;
-    32		const struct of_device_id *match;
-    33		struct simple_pm_bus *bus;
-    34	
-    35		/*
-    36		 * Allow user to use driver_override to bind this driver to a
-    37		 * transparent bus device which has a different compatible string
-    38		 * that's not listed in simple_pm_bus_of_match. We don't want to do any
-    39		 * of the simple-pm-bus tasks for these devices, so return early.
-    40		 */
-    41		if (pdev->driver_override)
-    42			return 0;
-    43	
-    44		match = of_match_device(dev->driver->of_match_table, dev);
-    45		/*
-    46		 * These are transparent bus devices (not simple-pm-bus matches) that
-    47		 * have their child nodes populated automatically.  So, don't need to
-    48		 * do anything more. We only match with the device if this driver is
-    49		 * the most specific match because we don't want to incorrectly bind to
-    50		 * a device that has a more specific driver.
-    51		 */
-    52		if (match && match->data) {
-    53			if (of_property_match_string(np, "compatible", match->compatible) == 0)
-    54				return 0;
-    55			else
-    56				return -ENODEV;
-    57		}
-    58	
-    59		bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
-    60		if (!bus)
-    61			return -ENOMEM;
-    62	
-    63		bus->num_clks = devm_clk_bulk_get_all(&pdev->dev, &bus->clks);
-    64		if (bus->num_clks < 0)
-    65			return dev_err_probe(&pdev->dev, bus->num_clks, "failed to get clocks\n");
-    66	
-  > 67		bus->rsts = devm_reset_control_array_get(dev, false, true);
-    68		if (IS_ERR(bus->rsts))
-    69			return dev_err_probe(&pdev->dev, PTR_ERR(bus->rsts), "failed to get resets\n");
-    70	
-    71		dev_set_drvdata(&pdev->dev, bus);
-    72	
-    73		dev_dbg(&pdev->dev, "%s\n", __func__);
-    74	
-    75		pm_runtime_enable(&pdev->dev);
-    76	
-    77		if (np)
-    78			of_platform_populate(np, NULL, lookup, &pdev->dev);
-    79	
-    80		return 0;
-    81	}
-    82	
+   106	
+   107	static int exynos_gpiomem_mmap(struct file *file, struct vm_area_struct *vma)
+   108	{
+   109		int gpio_area = 0;
+   110	
+   111		while (gpio_area < inst->gpio_area_count) {
+   112			if ((inst->gpio_regs_phys[gpio_area] >> PAGE_SHIFT) == vma->vm_pgoff)
+   113				goto found;
+   114	
+   115			gpio_area++;
+   116		}
+   117	
+   118		return -EACCES;
+   119	
+   120	found:
+ > 121		vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
+   122				PAGE_SIZE,
+   123				vma->vm_page_prot);
+   124	
+   125		vma->vm_ops = &exynos_gpiomem_vm_ops;
+   126	
+   127		if (remap_pfn_range(vma, vma->vm_start,
+   128					vma->vm_pgoff,
+   129					PAGE_SIZE,
+   130					vma->vm_page_prot)) {
+   131			return -EAGAIN;
+   132		}
+   133	
+   134		return 0;
+   135	}
+   136	
 
 -- 
 0-DAY CI Kernel Test Service
