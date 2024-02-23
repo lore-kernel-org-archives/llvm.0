@@ -1,167 +1,81 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC586210EE
-	for <llvm@lists.linux.dev>; Fri, 23 Feb 2024 09:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5323E1A731;
+	Fri, 23 Feb 2024 09:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708679272; cv=none; b=O5smqVI7LCXXHpTOVaMgk3/gIISrMaRzuZGyXn4xCsp+PTlCbTfthKHVKsMnHIttZK2ktePom6OIWn5MeZDrzrjHeRpaM11P0OZ6E+JpcL55BhU+9OZPGF8WJgmZyURzKiZSVdD7uA5+T+ALjRg6+MeLLDI3BQKX5qdbznP5vPc=
+	t=1708679968; cv=none; b=BwdRAooxNYuNn6CXbTo0nkoGnmI9w1SETPTwFevZPOAXyYWjqcaRrytrIjOkxU5wgXGdTP4bks1v5VJeXjnELQKLo6HyNr9dF5U1JmDOyA6R6Az/h2IhrKrFzM/Cn75mzAuV6bEHX/4QD5CtXHhZ00LZZB5wmaBXuMAywxyFMAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708679272; c=relaxed/simple;
-	bh=HicMqPuP0z9kAN9RI1DRLqxYLPpRsSSu0aExBQ/IKhY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=W9ORz+gtnZHcXkIDf2wKDlis5C46p1pCSiQtONyd6mCgNPzQD3l9ld9ytPX2yqBNAXBTLnMPgqqRs3C0GNpSlzKvSHMEdxFqDM+1zaEoNMou9w64zD1jt/8zWET5eRZ8SMkHO15seaLXnR+lNm+3guXpuOlYuAaSujBVYixEK0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-284-PjVkpfHkNiSprLivrGQVxg-1; Fri, 23 Feb 2024 09:07:29 +0000
-X-MC-Unique: PjVkpfHkNiSprLivrGQVxg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Feb
- 2024 09:07:27 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 23 Feb 2024 09:07:27 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Jason Gunthorpe' <jgg@nvidia.com>
-CC: Alexander Gordeev <agordeev@linux.ibm.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Christian Borntraeger
-	<borntraeger@linux.ibm.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, Gerald Schaefer
-	<gerald.schaefer@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt
-	<justinstitt@google.com>, Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky
-	<leon@kernel.org>, "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Ingo Molnar
-	<mingo@redhat.com>, Bill Wendling <morbo@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Salil Mehta <salil.mehta@huawei.com>, Jijie Shao
-	<shaojijie@huawei.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner
-	<tglx@linutronix.de>, "x86@kernel.org" <x86@kernel.org>, Yisen Zhuang
-	<yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
-	<catalin.marinas@arm.com>, Leon Romanovsky <leonro@mellanox.com>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, Niklas Schnelle <schnelle@linux.ibm.com>, "Will
- Deacon" <will@kernel.org>
-Subject: RE: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Topic: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Thread-Index: AQHaZGPOOI9/P4jwQk+N+/Phnt6M8bEW6XcggAAM2oCAAKwjYA==
-Date: Fri, 23 Feb 2024 09:07:27 +0000
-Message-ID: <efc727fbb8de45c8b669b6ec174f95ce@AcuMS.aculab.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
- <20240222223617.GC13330@nvidia.com>
-In-Reply-To: <20240222223617.GC13330@nvidia.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1708679968; c=relaxed/simple;
+	bh=B2LN/yniV9iT2GJ1kbsrmW4avghqfoHXIm5XQIcvZAg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X6isupdtZ5TbkEBf8dji4BwmY7H3ak/Sqva/tY1r1FHcjsAAZcA+Rn6ZTlYDBLERb/XMgh86OCQX30yDKb30PBzGCgtYP4VcwaLhUz2rJBYt4IYvIklOHfmSeLWgJZFmPIk6G5+7Arf60QZ6uNIAv1TPWn2L8zZJB7d3WuvccQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1rdRi6-0003JB-00; Fri, 23 Feb 2024 10:19:14 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id C738DC0267; Fri, 23 Feb 2024 10:18:00 +0100 (CET)
+Date: Fri, 23 Feb 2024 10:18:00 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 0/8] MIPS: Aggregate build fixes
+Message-ID: <ZdhiyFzR3sC4nc+p@alpha.franken.de>
+References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
 
-From: Jason Gunthorpe
-> Sent: 22 February 2024 22:36
-> To: David Laight <David.Laight@ACULAB.COM>
->=20
-> On Thu, Feb 22, 2024 at 10:05:04PM +0000, David Laight wrote:
-> > From: Jason Gunthorpe
-> > > Sent: 21 February 2024 01:17
-> > >
-> > > The kernel provides driver support for using write combining IO memor=
-y
-> > > through the __iowriteXX_copy() API which is commonly used as an optio=
-nal
-> > > optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environme=
-nt.
-> > >
-> > ...
-> > > Implement __iowrite32/64_copy() specifically for ARM64 and use inline
-> > > assembly to build consecutive blocks of STR instructions. Provide dir=
-ect
-> > > support for 64/32/16 large TLP generation in this manner. Optimize fo=
-r
-> > > common constant lengths so that the compiler can directly inline the =
-store
-> > > blocks.
-> > ...
-> > > +/*
-> > > + * This generates a memcpy that works on a from/to address which is =
-aligned to
-> > > + * bits. Count is in terms of the number of bits sized quantities to=
- copy. It
-> > > + * optimizes to use the STR groupings when possible so that it is WC=
- friendly.
-> > > + */
-> > > +#define memcpy_toio_aligned(to, from, count, bits)                  =
-      \
-> > > +=09({                                                               =
- \
-> > > +=09=09volatile u##bits __iomem *_to =3D to;                       \
-> > > +=09=09const u##bits *_from =3D from;                              \
-> > > +=09=09size_t _count =3D count;                                    \
-> > > +=09=09const u##bits *_end_from =3D _from + ALIGN_DOWN(_count, 8); \
-> > > +                                                                    =
-      \
-> > > +=09=09for (; _from < _end_from; _from +=3D 8, _to +=3D 8)           =
-\
-> > > +=09=09=09__const_memcpy_toio_aligned##bits(_to, _from, 8); \
-> > > +=09=09if ((_count % 8) >=3D 4) {
-> >
-> > If (_count & 4) {
->=20
-> That would be obfuscating, IMHO. The compiler doesn't need such things
-> to generate optimal code.
+On Fri, Feb 02, 2024 at 06:21:39PM +0000, Jiaxun Yang wrote:
+> Hi all,
+> 
+> This series is a collection of build fixes that have been lying
+> at my local trees for a while, some of them are for Clang built
+> linux and others are for some wiredo configurations.
+> 
+> Please review.
+> 
+> Thanks
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> Jiaxun Yang (8):
+>       MIPS: Probe toolchain support of -msym32
+>       MIPS: Remove cc-option checks for -march=octeon
+>       MIPS: Fallback CPU -march flag to ISA level if unsupported
+>       MIPS: BMIPS: Drop unnecessary assembler flag
+>       MIPS: Loongson64: test for -march=loongson3a cflag
+>       MIPS: Limit MIPS_MT_SMP support by ISA reversion
+>       MIPS: Implement microMIPS MT ASE helpers
+>       MIPS: mipsregs: Set proper ISA level for virt extensions
+> 
+>  arch/mips/Kconfig                  |   3 +-
+>  arch/mips/Makefile                 |  46 ++++---
+>  arch/mips/include/asm/asmmacro.h   |  22 ++--
+>  arch/mips/include/asm/mipsmtregs.h | 256 ++++++++++++++++++++++---------------
+>  arch/mips/include/asm/mipsregs.h   |  22 +++-
+>  arch/mips/kernel/vpe-mt.c          |   4 +-
+>  6 files changed, 211 insertions(+), 142 deletions(-)
+> ---
+> base-commit: 076d56d74f17e625b3d63cf4743b3d7d02180379
+> change-id: 20240202-llvm-msym32-6392d410f650
 
-Try it: https://godbolt.org/z/EvvGrTxv3=20
-And it isn't that obfuscated - no more so than your version.
+applied to mips-next.
 
-> > > +=09=09=09__const_memcpy_toio_aligned##bits(_to, _from, 1); \
-> > > +=09})
-> >
-> > But that looks bit a bit large to be inlined.
->=20
-> You trimmed alot, this #define is in a C file and it is a template to
-> generate the 32 and 64 bit out of line functions. Things are done like
-> this because the 32/64 version are exactly the same logic except just
-> with different types and sizes.
+Thomas.
 
-I missed that in a quick read at 11pm :-(
-
-Although I doubt that generating long TLP from byte writes is
-really necessary.
-IIRC you were merging at most 4 writes.
-So better to do a single 32bit write instead.
-(Unless you have misaligned source data - unlikely.)
-
-While write-combining to generate long TLP is probably mostly
-safe for PCIe targets, there are some that will only handle
-TLP for single 32bit data items.
-Which might be why the code is explicitly requesting 4 byte copies.
-So it may be entirely wrong to write-combine anything except
-the generic memcpy_toio().
-
-=09David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
