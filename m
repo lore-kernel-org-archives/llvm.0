@@ -1,130 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2F6823AE;
-	Fri, 23 Feb 2024 13:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0499B80049
+	for <llvm@lists.linux.dev>; Fri, 23 Feb 2024 13:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708695525; cv=none; b=pTPsrx8VIZaSJ6AN9tjcp1IMu/4aTbA8iiNmxM11zBaEqfInDMgItrZdqHIzivmC90uwt2m9VspZRF+vT308pb92S2q0SOKSJIDyhZv9Mi/54Vh8wCGW/xMNHBpVnusBPifrLu6s3qCbHkV4DwYjj6E0VairnTCkBtw4bkAR7b8=
+	t=1708696365; cv=none; b=nFCU8Wt4NuqYRwPFrgFSgw99P/sALvNlJpVhG79tjS6RtO82POn4EeKJRkF8sdJcpOXekPsygiGKy53MSyadjuvmTnYhfeCGZMX1o4lkT1L/99JGgPcZjMwgrVrZ7KQxINoKysVLioh0cdnVwBMo81MBk4V0gAyvsKh+tMJsGsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708695525; c=relaxed/simple;
-	bh=n7EJGb6r/9uWhXBTxysKjx17Y2iaQNTqlPUbVd030hI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rxERmYSxqCzqbm5LOvrItHeLk1lMJRWMeL7z+m6e0VGNECKG9urm4i+GtostmpWZ/0Me4sOku11MwW/oRowz2DUAGtGDzNdqm7Bpy6+mX3C297Eo7eXx9XIvjZfFogTVRwPF4Et6LpKBdLNu871aFJ6/leM250Acds/saPY7ITw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnagCjM0; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnagCjM0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D0BAC43399;
-	Fri, 23 Feb 2024 13:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708695525;
-	bh=n7EJGb6r/9uWhXBTxysKjx17Y2iaQNTqlPUbVd030hI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YnagCjM0KBRU4knIa5ukmyCLbIBQ79mVq8ZFaUsG4bPoq3W2BaAfbzZvmZXqEfMtQ
-	 YYmdDI6hwLjWm88p8iugiOesjBI7iZxep5trLFczsqllK4hpZ/qXJGzNeDR4h2fg+J
-	 XfR4Xs48Ge1PZ8kmw6IVM1ETX8+ykApcfKU7+kbEl0YfhUTmIh/6bCoD6J+79yZO55
-	 2jPbKdE3fhQQWwIKWFQ8ZJSH78wyHoY0ZMjuiBRZb+ZZ9dEoc78qmnj6RZKr3Vlpot
-	 L6eYVy1EjkbMwlLCm3iCTXf2YQDgGfCqRjRbPBj0PCbYI0ErS8EEwSqwMYIiQ5hXi8
-	 6QYi5pY8GEQnA==
-From: Conor Dooley <conor@kernel.org>
-To: linux-riscv@lists.infradead.org
-Cc: conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 3/3] RISC-V: enable building 64-bit kernels with rust support
-Date: Fri, 23 Feb 2024 13:38:05 +0000
-Message-ID: <20240223-palatable-quintuple-ed221a517407@spud>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240223-leverage-walmart-5424542cd8bd@spud>
-References: <20240223-leverage-walmart-5424542cd8bd@spud>
+	s=arc-20240116; t=1708696365; c=relaxed/simple;
+	bh=F+dE5PSi2nh33bOrlLn9Liq7cqW9uBp/B7QQSXRWOZ0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=XaNm4zFTQ0lDKHPGM06Ex2XyahTrBEWkoPCTwKHUr5MEbfrohkX/osNexjsgKUP/orObqUSrqs6ciND4+wg4xh+be47z1GU83yOMnEpRungCyYGEf8TdyBr7bnunKL4I5OFUKdWNZ6ueiqiuowYuRffCGNS8Y3FQ/kSMXSOAj0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-220-N0YvSLKYPYycpbumIvGJWw-1; Fri, 23 Feb 2024 13:52:39 +0000
+X-MC-Unique: N0YvSLKYPYycpbumIvGJWw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Feb
+ 2024 13:52:38 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 23 Feb 2024 13:52:38 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Jason Gunthorpe' <jgg@nvidia.com>
+CC: 'Niklas Schnelle' <schnelle@linux.ibm.com>, Alexander Gordeev
+	<agordeev@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Gerald Schaefer
+	<gerald.schaefer@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "Heiko
+ Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt
+	<justinstitt@google.com>, Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky
+	<leon@kernel.org>, "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Ingo Molnar
+	<mingo@redhat.com>, Bill Wendling <morbo@google.com>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Salil Mehta <salil.mehta@huawei.com>, Jijie Shao
+	<shaojijie@huawei.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner
+	<tglx@linutronix.de>, "x86@kernel.org" <x86@kernel.org>, Yisen Zhuang
+	<yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
+	<catalin.marinas@arm.com>, Leon Romanovsky <leonro@mellanox.com>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, "patches@lists.linux.dev"
+	<patches@lists.linux.dev>, Will Deacon <will@kernel.org>
+Subject: RE: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
+Thread-Topic: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
+Thread-Index: AQHaZGPOOI9/P4jwQk+N+/Phnt6M8bEW6XcggAAM2oCAAKwjYIAALlsAgAACWrCAABVaAIAABEPg
+Date: Fri, 23 Feb 2024 13:52:37 +0000
+Message-ID: <18248cc6f411441c8a68a55f68416150@AcuMS.aculab.com>
+References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <6d335e8701334a15b220b75d49b98d77@AcuMS.aculab.com>
+ <20240222223617.GC13330@nvidia.com>
+ <efc727fbb8de45c8b669b6ec174f95ce@AcuMS.aculab.com>
+ <e78f6e6294c31d889ace4de3a3c3cebad04f4213.camel@linux.ibm.com>
+ <d4150af74d7c45b79c770cd1c5d8eed7@AcuMS.aculab.com>
+ <20240223130308.GF13330@nvidia.com>
+In-Reply-To: <20240223130308.GF13330@nvidia.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2571; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=dXiTCnXsPq6szb52W4FfTLrkIWRphwTLGk/WpEPIpxA=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKk35u+R+n7i+OwT39IUWaQPMGd9WVleuj/N9dhv5lkZX 950bXrd0VHKwiDGwSArpsiSeLuvRWr9H5cdzj1vYeawMoEMYeDiFICJeL1nZNg/wWKXZM7OpDYn 8zeiOy94+N68+CslNMT1aGxkUqdO6GWGP1wisa+2BoUt0/q+ds2FPTL/DtavLuPzr4z/Oe/D15q /ZWwA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Miguel Ojeda <ojeda@kernel.org>
+From: Jason Gunthorpe
+> Sent: 23 February 2024 13:03
+>=20
+> On Fri, Feb 23, 2024 at 12:19:24PM +0000, David Laight wrote:
+>=20
+> > Since writes get 'posted' all over the place.
+> > How many writes do you need to do before write-combining makes a
+> > difference?
+>=20
+> The issue is that the HW can optimize if the entire transaction is
+> presented in one TLP, if it has to reassemble the transaction it takes
+> a big slow path hit.
 
-The rust modules work on 64-bit RISC-V, with no twiddling required.
-Select HAVE_RUST and provide the required flags to kbuild so that the
-modules can be used. The Makefile and Kconfig changes are lifted from
-work done by Miguel in the Rust-for-Linux tree, hence his authorship.
-Following the rabbit hole, the Makefile changes originated in a script,
-created based on config files originally added by Gary, hence his
-co-authorship.
+Ah, so you aren't optimising to reduce the number of TLP for
+(effectively) a write to a memory buffer, but have a pcie slave
+that really want to see (for example) the writes for a ring buffer
+entry in a single TLP?
 
-32-bit is broken in core rust code, so support is limited to 64-bit:
-ld.lld: error: undefined symbol: __udivdi3
+So you really want something that (should) generate a 16 (or 32)
+byte TLP? Rather than abusing the function that is expected to
+generate multiple 8 byte TLP to generate larger TLP.
 
-As 64-bit RISC-V is now supported, add it to the arch support table,
-taking the opportunity to sort the table in alphabetical order.
+I'm guessing that on arm64 the ldp/stp instructions will generate
+a single 16 byte TLP regardless of write combining?
+They would definitely help memcpy_fromio().
 
-Co-developed-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- Documentation/rust/arch-support.rst | 1 +
- arch/riscv/Kconfig                  | 1 +
- arch/riscv/Makefile                 | 2 ++
- 3 files changed, 4 insertions(+)
+Are they enough for arm64?
+Getting but TLP on x86 is probably harder.
+(Unless you use AVX512 registers and aligned accesses.)
 
-diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-index 73203ba1e901..9e18a81fc2ef 100644
---- a/Documentation/rust/arch-support.rst
-+++ b/Documentation/rust/arch-support.rst
-@@ -16,6 +16,7 @@ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
- Architecture   Level of support  Constraints
- =============  ================  ==============================================
- ``loongarch``  Maintained        -
-+``riscv``      Maintained        ``riscv64`` only.
- ``um``         Maintained        ``x86_64`` only.
- ``x86``        Maintained        ``x86_64`` only.
- =============  ================  ==============================================
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5c59e00405e3..3eaae08e1d5c 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -142,6 +142,7 @@ config RISCV
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RETHOOK if !XIP_KERNEL
- 	select HAVE_RSEQ
-+	select HAVE_RUST if 64BIT
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index ebbe02628a27..22fdb1e83744 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -34,6 +34,8 @@ ifeq ($(CONFIG_ARCH_RV64I),y)
- 	KBUILD_AFLAGS += -mabi=lp64
- 
- 	KBUILD_LDFLAGS += -melf64lriscv
-+
-+	KBUILD_RUSTFLAGS += -Ctarget-cpu=generic-rv64
- else
- 	BITS := 32
- 	UTS_MACHINE := riscv32
--- 
-2.43.0
+It is rather a shame that there isn't an efficient way to get
+access to a couple of large SIMD registers.
+(eg save on stack and have the fpu code where they are for
+a lazy fpu switch.)
+There is quite a bit of code that would benefit, but kernel_fpu_begin()
+is just too expensive.
+
+=09David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
