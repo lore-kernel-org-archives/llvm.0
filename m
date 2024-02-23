@@ -1,75 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0426313BAD1;
-	Thu, 22 Feb 2024 23:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E072E1170A;
+	Fri, 23 Feb 2024 04:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708646104; cv=none; b=MviTEfhqNDGC/cVqcjs7VRabNAeON6lAoSKqaSr8Lf5BOZuUTfBYuf/a+N0r4gC22/+N9+eXeHW5Ebs+48y6OSYH5vbnxmh9UtiZASugZOjYBxedYmKqNw59+WR3D/e8UMkSLBYoLzZlmMEYdOR2zxFUCbvixCjXrSdxpgnBXps=
+	t=1708663678; cv=none; b=o9uh1UK8R1aWAM6TyOkWgWX4P7/V9gDUnpwg8N3wuFi4mI9NzfL1I8JNYHIVEFedlC1nxtWScx47qNhW6AiBriXYdLxbVCU1w39UtNCBlbIsSTR9kUgU072IBdECDXOcv2HnrAm/cc8fdhgK17PgmTzxKPpK8TwxoVLkvNFUCu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708646104; c=relaxed/simple;
-	bh=JAWPRH05PCaJ/qhm7l++x2p8cgx/eVbDSM0nYdWb/ZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HaanTRzLP8uDs+1++NVu0CxFXkFY42ZvIXZuiN47w+B9fv+Xpv+QPAG174rFCK+GSRqTT33BWfwZqmUKvE4izAVLzPjcXBnXTVGWA+jB70FLxsoBPnATEyqDpH/sd8z6by8KlV95Ctv+++GZISf5aviJI2rrRgv6XsG20AdV4ZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aIXUSj9r; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1708663678; c=relaxed/simple;
+	bh=+haZ0qgmxCz0nbmY7lAIgz86Y4wP+pnN78uBr4Lkrwg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=AyAHN1uwKNlNlCdDcKg6BbNQckk1wDUi5MqumKJyHzvZIW1eTuEymLdeIAieRQYvtX2D3KxvOEPvN6hP9j6YjsJFQAiTxe2T544VhzLdzITgMSq7BGwfRssU8OEpBgFkhMcGhFreBml6eWlUbj/UadgqN41WLMq/n5o2Al0FFMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P7Qqq1po; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aIXUSj9r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P7Qqq1po"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708646102; x=1740182102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JAWPRH05PCaJ/qhm7l++x2p8cgx/eVbDSM0nYdWb/ZY=;
-  b=aIXUSj9rLu8236qaPreso3z2uIcoT/btnevBJDcnxXzuPzPxhiw3Dinw
-   mb8Io15UdaUTCBVFvqgR0YE76byDuzB/cHLAvsQyXTcJo68L33PEbe1jj
-   pgYjeCABccKhDFZ5hGn5qfHTWnMnUkasaRZgv8eGbpx1WT+WqNYHMpd9e
-   P5FQoDdPwoX3YUJt72tNvYRN4Ov3NAMEdjAfuytDx4GMTZclfPlaMYM9F
-   8G4rUsuRf5otYE9R4jQiphvcMujd4Rxztbtt07xY4GmuXhVUBiwNptxVt
-   bYELbBa4G6hFdfbU7L3/unVi1XUhzQaXUwuVmyIze1r77kowqZ3l9M4Ud
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="25387143"
+  t=1708663672; x=1740199672;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+haZ0qgmxCz0nbmY7lAIgz86Y4wP+pnN78uBr4Lkrwg=;
+  b=P7Qqq1pohA/3aehFD+dObERvqIJQXcLTwNL61RJC7JRj3tdSGittVlnK
+   0CfFH8o+29e43jVR95S1/LbNCjFSfPlnYP5PZIeadT7QwKXdZow/FkJki
+   KQXH28atWUAvyDekY0HDem6atyAKCAtMbk14SyMbwdjhbf7i3Ec7g9UAx
+   nb66LNFPSxXmHjoCPFcQI7diUJOfYiyrFxcfpH1wBgyeUBBSWIuy3SKDx
+   C7Dhj2sRq2gCGHrqLA0CMyOJJW9QaCWOhf9DTLGp4XiVAGoAFa4aJY/48
+   2gi+d2DtBNiJwRFLqrqvrRitwekiFNh51vWxSWtk8ymTP+aqUkxbDOqp1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="20402494"
 X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="25387143"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 15:53:09 -0800
+   d="scan'208";a="20402494"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 20:47:51 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="28809352"
+   d="scan'208";a="10548713"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 22 Feb 2024 15:52:39 -0800
+  by orviesa005.jf.intel.com with ESMTP; 22 Feb 2024 20:47:50 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rdIrl-0006o6-0y;
-	Thu, 22 Feb 2024 23:52:37 +0000
-Date: Fri, 23 Feb 2024 07:52:13 +0800
+	id 1rdNTM-000752-2v;
+	Fri, 23 Feb 2024 04:47:45 +0000
+Date: Fri, 23 Feb 2024 12:47:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-	javierm@redhat.com, deller@gmx.de, suijingfeng@loongson.cn
+To: Takashi Iwai <tiwai@suse.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>
-Subject: Re: [PATCH 3/3] arch: Rename fbdev header and source files
-Message-ID: <202402230737.e7gWpGUp-lkp@intel.com>
-References: <20240221161431.8245-4-tzimmermann@suse.de>
+	alsa-devel@alsa-project.org
+Subject: [tiwai-sound:test/guard 44/62] sound/core/oss/mixer_oss.c:819:3:
+ error: cannot jump from this goto statement to its label
+Message-ID: <202402231259.Tx6bs1or-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,73 +58,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240221161431.8245-4-tzimmermann@suse.de>
 
-Hi Thomas,
+Hi Takashi,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on deller-parisc/for-next arnd-asm-generic/master linus/master v6.8-rc5]
-[cannot apply to next-20240222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-Select-fbdev-helpers-with-CONFIG_VIDEO/20240222-001622
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20240221161431.8245-4-tzimmermann%40suse.de
-patch subject: [PATCH 3/3] arch: Rename fbdev header and source files
-config: um-randconfig-002-20240222 (https://download.01.org/0day-ci/archive/20240223/202402230737.e7gWpGUp-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git test/guard
+head:   e4545d528ae658c35d02593567613c06f1386ffa
+commit: b398454ce784b8a931d9fe80a0c1fb9dec644d29 [44/62] ALSA: mixer_oss: Use guard() for locking
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240223/202402231259.Tx6bs1or-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240223/202402230737.e7gWpGUp-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240223/202402231259.Tx6bs1or-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402230737.e7gWpGUp-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402231259.Tx6bs1or-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: drivers/video/fbdev/core/fb_io_fops.o: in function `fb_io_mmap':
->> drivers/video/fbdev/core/fb_io_fops.c:164: undefined reference to `pgprot_framebuffer'
-   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+>> sound/core/oss/mixer_oss.c:819:3: error: cannot jump from this goto statement to its label
+     819 |                 goto error;
+         |                 ^
+   sound/core/oss/mixer_oss.c:821:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     821 |         guard(rwsem_read)(&card->controls_rwsem);
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:36:1: note: expanded from here
+      36 | __UNIQUE_ID_guard239
+         | ^
+   sound/core/oss/mixer_oss.c:870:3: error: cannot jump from this goto statement to its label
+     870 |                 goto error;
+         |                 ^
+   sound/core/oss/mixer_oss.c:872:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     872 |         guard(rwsem_read)(&card->controls_rwsem);
+         |         ^
+   include/linux/cleanup.h:164:15: note: expanded from macro 'guard'
+     164 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:180:29: note: expanded from macro '__UNIQUE_ID'
+     180 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:45:1: note: expanded from here
+      45 | __UNIQUE_ID_guard240
+         | ^
+   2 errors generated.
 
 
-vim +164 drivers/video/fbdev/core/fb_io_fops.c
+vim +819 sound/core/oss/mixer_oss.c
 
-6b180f66c0dd62 Thomas Zimmermann 2023-09-27  140  
-33253d9e01d405 Thomas Zimmermann 2023-11-27  141  int fb_io_mmap(struct fb_info *info, struct vm_area_struct *vma)
-33253d9e01d405 Thomas Zimmermann 2023-11-27  142  {
-33253d9e01d405 Thomas Zimmermann 2023-11-27  143  	unsigned long start = info->fix.smem_start;
-33253d9e01d405 Thomas Zimmermann 2023-11-27  144  	u32 len = info->fix.smem_len;
-33253d9e01d405 Thomas Zimmermann 2023-11-27  145  	unsigned long mmio_pgoff = PAGE_ALIGN((start & ~PAGE_MASK) + len) >> PAGE_SHIFT;
-33253d9e01d405 Thomas Zimmermann 2023-11-27  146  
-b3e8813773c568 Thomas Zimmermann 2023-11-27  147  	if (info->flags & FBINFO_VIRTFB)
-b3e8813773c568 Thomas Zimmermann 2023-11-27  148  		fb_warn_once(info, "Framebuffer is not in I/O address space.");
-b3e8813773c568 Thomas Zimmermann 2023-11-27  149  
-33253d9e01d405 Thomas Zimmermann 2023-11-27  150  	/*
-33253d9e01d405 Thomas Zimmermann 2023-11-27  151  	 * This can be either the framebuffer mapping, or if pgoff points
-33253d9e01d405 Thomas Zimmermann 2023-11-27  152  	 * past it, the mmio mapping.
-33253d9e01d405 Thomas Zimmermann 2023-11-27  153  	 */
-33253d9e01d405 Thomas Zimmermann 2023-11-27  154  	if (vma->vm_pgoff >= mmio_pgoff) {
-33253d9e01d405 Thomas Zimmermann 2023-11-27  155  		if (info->var.accel_flags)
-33253d9e01d405 Thomas Zimmermann 2023-11-27  156  			return -EINVAL;
-33253d9e01d405 Thomas Zimmermann 2023-11-27  157  
-33253d9e01d405 Thomas Zimmermann 2023-11-27  158  		vma->vm_pgoff -= mmio_pgoff;
-33253d9e01d405 Thomas Zimmermann 2023-11-27  159  		start = info->fix.mmio_start;
-33253d9e01d405 Thomas Zimmermann 2023-11-27  160  		len = info->fix.mmio_len;
-33253d9e01d405 Thomas Zimmermann 2023-11-27  161  	}
-33253d9e01d405 Thomas Zimmermann 2023-11-27  162  
-33253d9e01d405 Thomas Zimmermann 2023-11-27  163  	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
-33253d9e01d405 Thomas Zimmermann 2023-11-27 @164  	vma->vm_page_prot = pgprot_framebuffer(vma->vm_page_prot, vma->vm_start,
-33253d9e01d405 Thomas Zimmermann 2023-11-27  165  					       vma->vm_end, start);
-33253d9e01d405 Thomas Zimmermann 2023-11-27  166  
-33253d9e01d405 Thomas Zimmermann 2023-11-27  167  	return vm_iomap_memory(vma, start, len);
-33253d9e01d405 Thomas Zimmermann 2023-11-27  168  }
-33253d9e01d405 Thomas Zimmermann 2023-11-27  169  EXPORT_SYMBOL(fb_io_mmap);
-33253d9e01d405 Thomas Zimmermann 2023-11-27  170  
+   803	
+   804	static int snd_mixer_oss_get_recsrc2(struct snd_mixer_oss_file *fmixer, unsigned int *active_index)
+   805	{
+   806		struct snd_card *card = fmixer->card;
+   807		struct snd_mixer_oss *mixer = fmixer->mixer;
+   808		struct snd_kcontrol *kctl;
+   809		struct snd_mixer_oss_slot *pslot;
+   810		struct slot *slot;
+   811		struct snd_ctl_elem_info *uinfo;
+   812		struct snd_ctl_elem_value *uctl;
+   813		int err, idx;
+   814		
+   815		uinfo = kzalloc(sizeof(*uinfo), GFP_KERNEL);
+   816		uctl = kzalloc(sizeof(*uctl), GFP_KERNEL);
+   817		if (uinfo == NULL || uctl == NULL) {
+   818			err = -ENOMEM;
+ > 819			goto error;
+   820		}
+   821		guard(rwsem_read)(&card->controls_rwsem);
+   822		kctl = snd_mixer_oss_test_id(mixer, "Capture Source", 0);
+   823		if (! kctl) {
+   824			err = -ENOENT;
+   825			goto error;
+   826		}
+   827		err = kctl->info(kctl, uinfo);
+   828		if (err < 0)
+   829			goto error;
+   830		err = kctl->get(kctl, uctl);
+   831		if (err < 0)
+   832			goto error;
+   833		for (idx = 0; idx < 32; idx++) {
+   834			if (!(mixer->mask_recsrc & (1 << idx)))
+   835				continue;
+   836			pslot = &mixer->slots[idx];
+   837			slot = pslot->private_data;
+   838			if (slot->signature != SNDRV_MIXER_OSS_SIGNATURE)
+   839				continue;
+   840			if (!(slot->present & SNDRV_MIXER_OSS_PRESENT_CAPTURE))
+   841				continue;
+   842			if (slot->capture_item == uctl->value.enumerated.item[0]) {
+   843				*active_index = idx;
+   844				break;
+   845			}
+   846		}
+   847		err = 0;
+   848	error:
+   849	      	kfree(uctl);
+   850	      	kfree(uinfo);
+   851	      	return err;
+   852	}
+   853	
 
 -- 
 0-DAY CI Kernel Test Service
