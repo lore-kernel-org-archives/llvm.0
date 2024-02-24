@@ -1,55 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C636C14B815;
-	Sat, 24 Feb 2024 07:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602F81400B;
+	Sat, 24 Feb 2024 08:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708758175; cv=none; b=W9HAANw2j7P0rpSUXoiK7790pYj40bp4XFloacA8Bpi1HNX/+D4+zi92rGK3T0DvwGsWMy2nKzCrKr0V8lqN4EJ2dcPstVi4a27tk6p762aY8BvAMvFbKJ01lwnjA8GqTQBfYI5I+p7KV09Q8zUjs/VFL3GsX8Wecn0nMTsBqVk=
+	t=1708763979; cv=none; b=tU/+/Pl/Na3bSu+AOqB03pEroEsMoTOzcFeKI4c5Gbf5Vxi6k/1lgSlNtFfLE0OmWDDL3j/WSd1UYaxtNpVlQWiTVNHnQT2dlb/3fosvD9tgzeieH3wqgWpl06sxaLD8lS1uYcKzKiNzxtGtTqrQVX6Z64rI+3YHgHBf/2Knk0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708758175; c=relaxed/simple;
-	bh=ewgWoyyrlZc65Eh9H3Uaui+6uhed6up8fez9ZJbXe74=;
+	s=arc-20240116; t=1708763979; c=relaxed/simple;
+	bh=hX2f+7xU/Y3OM2YrhxKDl2XSXm/0BiNMdfQhJA6JyK8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gRKu35xpjPEyGIGwMsJh9jcLpdReraB/9kwCWeOK8P+J3kqU4jdaBc09UmvwtJXICIL47gGuPt/2L1DphDgqX5i1w/zuDcxdLhxR8LSLZBwLSuAqCANPc2alXZez8oM8q/+nftMGXQS4Lib0ceUeBrinpFbvpiBBjpvQc+pQspw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fr6cKfJJ; arc=none smtp.client-ip=192.198.163.13
+	 Content-Disposition; b=FV71OKYXUNyAuOy4khHIrcVGZVeWMwHWJO0SQtq1JfERBZfaNiEgx4H7Fdi0Y9X36ay6yXws1zCwwEgEW6FPB6OSYRV40W2yfASC0BGS13rYvAmj2Q28dFI1Fv7N2OrHx+ui+bjMOweh+wS/uFXB2BZm5iTx9FVpvjGzph2GPSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=My7P6xlt; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fr6cKfJJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="My7P6xlt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708758173; x=1740294173;
+  t=1708763977; x=1740299977;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ewgWoyyrlZc65Eh9H3Uaui+6uhed6up8fez9ZJbXe74=;
-  b=Fr6cKfJJ0mQqv+6j7T2Oy64kHl5/uG0CcwBuC2obVYM3ejMtjjLGSmZE
-   DagUnGjQZogu+fn7fWfP2J9CIul0cgYv6qr+rHZ8mvzJ2eevxJW530HU4
-   7S2aHl6FdwcwGULfUqWJAGOI9vdRsNNlpCmfYMmA7nVkwRubV5G3aeGnD
-   iILua7CCtwV9OGxIN7rBL7XUorRiM2h9S4HiPnJGadyUKWOpT3MIFF/xc
-   Xmpsat8cLS6RccjXuBryqBoRh/GsOyIml21qv4ItCb23afWmGZ/YolLEb
-   MAffmhgQ9CqKi+ggVFjGQ48pGi+xpZgtVHsHrISODZKuB4QQ6WL2ZFJD3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="6043858"
+  bh=hX2f+7xU/Y3OM2YrhxKDl2XSXm/0BiNMdfQhJA6JyK8=;
+  b=My7P6xltEiBWl6xSb7X/CDP2BHvoqhgCnNp1rxdvGRx1lxjEzBI/h4Mw
+   OpgHOaQr5rpH2eNwSLAhaWGqvYaEtkZWomSpxQ9tMhyQ4lPcaRTjKeHu2
+   LG30P++LYe7AGEfU0kah9vp3V/CQaiRr4q1Z6xiNBqwMknnOdF3041mwU
+   mW9fO6FyXmJ0SrLFJSqrqBimEEBxVoueqqWVZAVYz1fnBI6t5PLGQbo3s
+   tcZZcdFVyU81OvqixcjzeuqXvA6xCxA0pBZUMCE2vUiOncGlRqc4Owag5
+   vE0z4MGK/IybVcdpkKUMEdmuTt8oJMxW/vlKUNVjlFO7nfAHADBoNaWlb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="25571147"
 X-IronPort-AV: E=Sophos;i="6.06,181,1705392000"; 
-   d="scan'208";a="6043858"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 23:02:52 -0800
+   d="scan'208";a="25571147"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2024 00:39:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,181,1705392000"; 
-   d="scan'208";a="6364952"
+   d="scan'208";a="6075606"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 23 Feb 2024 23:02:51 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 24 Feb 2024 00:39:31 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rdm3c-0008Jc-1y;
-	Sat, 24 Feb 2024 07:02:48 +0000
-Date: Sat, 24 Feb 2024 15:01:52 +0800
+	id 1rdnZB-0008O8-0I;
+	Sat, 24 Feb 2024 08:39:29 +0000
+Date: Sat, 24 Feb 2024 16:39:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: "steve.jeong" <jkhpro1003@gmail.com>
+To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dongjin Kim <tobetter@gmail.com>
-Subject: [tobetter:odroid-5.15.y 137/204] drivers/char/aml-gpiomem.c:128:22:
- error: implicit declaration of function 'phys_mem_access_prot'
-Message-ID: <202402241457.7xJjia9V-lkp@intel.com>
+	Lee Jones <lee@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>
+Subject: [lee-backlight:for-backlight-next 3/18]
+ drivers/video/backlight/ktd2801-backlight.c:8:10: fatal error:
+ 'linux/leds-expresswire.h' file not found
+Message-ID: <202402241607.SaVJEOA8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,64 +62,101 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/tobetter/linux odroid-5.15.y
-head:   200d2466033be9a082bfb81368de8a994e399a02
-commit: 0a01b3c15e7c03cfbd687185d96a66d0cca87069 [137/204] ODROID-N2/C4: char: Add /dev/gpiomem device for rootless user GPIO access.
-config: hexagon-randconfig-001-20240224 (https://download.01.org/0day-ci/archive/20240224/202402241457.7xJjia9V-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240224/202402241457.7xJjia9V-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git for-backlight-next
+head:   3c40590fafd4cc2447fb482a640c450e1a58ffa1
+commit: 48749e2f14e3ae6c62ba7d51d140a848582df66c [3/18] backlight: Add Kinetic KTD2801 backlight support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240224/202402241607.SaVJEOA8-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240224/202402241607.SaVJEOA8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402241457.7xJjia9V-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402241607.SaVJEOA8-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/char/aml-gpiomem.c:128:22: error: implicit declaration of function 'phys_mem_access_prot' [-Werror,-Wimplicit-function-declaration]
-           vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
-                               ^
-   drivers/char/aml-gpiomem.c:128:20: error: assigning to 'pgprot_t' from incompatible type 'int'
-           vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
-                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+   In file included from drivers/video/backlight/ktd2801-backlight.c:6:
+   In file included from include/linux/backlight.h:13:
+   In file included from include/linux/fb.h:19:
+   In file included from ./arch/s390/include/generated/asm/fb.h:1:
+   In file included from include/asm-generic/fb.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/video/backlight/ktd2801-backlight.c:6:
+   In file included from include/linux/backlight.h:13:
+   In file included from include/linux/fb.h:19:
+   In file included from ./arch/s390/include/generated/asm/fb.h:1:
+   In file included from include/asm-generic/fb.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/video/backlight/ktd2801-backlight.c:6:
+   In file included from include/linux/backlight.h:13:
+   In file included from include/linux/fb.h:19:
+   In file included from ./arch/s390/include/generated/asm/fb.h:1:
+   In file included from include/asm-generic/fb.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/video/backlight/ktd2801-backlight.c:8:10: fatal error: 'linux/leds-expresswire.h' file not found
+       8 | #include <linux/leds-expresswire.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   12 warnings and 1 error generated.
 
 
-vim +/phys_mem_access_prot +128 drivers/char/aml-gpiomem.c
+vim +8 drivers/video/backlight/ktd2801-backlight.c
 
-   111	
-   112	static int aml_gpiomem_mmap(struct file *file, struct vm_area_struct *vma)
-   113	{
-   114		int gpio_area = 0;
-   115		unsigned long start = vma->vm_pgoff << PAGE_SHIFT;
-   116		unsigned long end   = start + vma->vm_end - vma->vm_start;
-   117	
-   118		while (gpio_area < inst->gpio_area_count) {
-   119			if ((inst->gpio_regs_phys[gpio_area].start >= start) &&
-   120			    (inst->gpio_regs_phys[gpio_area].end   <= end))
-   121				goto found;
-   122			gpio_area++;
-   123		}
-   124	
-   125		return -EACCES;
-   126	
-   127	found:
- > 128		vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
-   129				vma->vm_end - vma->vm_start,
-   130				vma->vm_page_prot);
-   131	
-   132		vma->vm_ops = &aml_gpiomem_vm_ops;
-   133	
-   134		if (remap_pfn_range(vma, vma->vm_start,
-   135					vma->vm_pgoff,
-   136					vma->vm_end - vma->vm_start,
-   137					vma->vm_page_prot)) {
-   138			return -EAGAIN;
-   139		}
-   140	
-   141		return 0;
-   142	}
-   143	
+   > 8	#include <linux/leds-expresswire.h>
+     9	#include <linux/platform_device.h>
+    10	#include <linux/property.h>
+    11	
 
 -- 
 0-DAY CI Kernel Test Service
