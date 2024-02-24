@@ -1,46 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2276D3B79E;
-	Sat, 24 Feb 2024 12:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A623D988;
+	Sat, 24 Feb 2024 12:15:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708776706; cv=none; b=g6mp9N6YA9LyJ0eLeBnfB68huIqTHCRp9x0rHD9MQzp6Ez6iUKGVB3JumZ1E2jWPR7wUaWNpM6R3+ESpAzSd+6dfLMDOYLNJOx+mYQZHGE7eEUySXXo5Fzq7dQ4gHI4qHlobnL28fKRvytvB9obZCoFajIuY+uKx+YOa+r/oqZM=
+	t=1708776953; cv=none; b=O6mtecPf9G3SOxaD4h4i+LcmY2mXYa3PYqiGbMLtgwmje8Myxsq41YdFCHkvvPXDIMHkHg70hyedixGlHeb9g1TxZ7W6dahuqpMtkgRHLjUZTJEJKbL1sh9JeLDu0N0NNgEl6g3JMjzhHZ7qMjIBWe7VEy7WtNCeQgbZdpaTSdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708776706; c=relaxed/simple;
-	bh=rpYOVLIlw2+edCfnGPgTidNvVsmfYwWsDaMoVPZVr8E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IF+Dzp9vRoFu0re0AfrHOjd9SgktBxy6UKRWtAWexklJCjPQeEtxKpNiH3xEif5GMkBRWa1s+fo3/lWz2T9Q7g4LnhFzn00PldxDa4KHyOiVX2MsYI19ikHO1IUiHxymHWSQYps8gPviuT9PXP2Lm0S66Bgb59C0SW895ZjGABY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jMYusG9z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708776953; c=relaxed/simple;
+	bh=oP261W1pt6YMYe8qcA9fKGIH4omThSFAKhryuBOrQu8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VN0TPeWdvSwQBajmyhfevPe6wLebRd+1E5rrULM5EA9waN94Npnv6ovFkJF/l+VGz8ptHq+0cn9x0J25ZzesYsxuNuIL3XdWPZPLmNyRDQJ2xW+02wT4ghBVgz1XjOP6qIKOkMkWfRHgm83pZWyZWykOsmpI/hWlXi6xQh7Nqa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JWj5D/Lb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jMYusG9z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4786FC433F1;
-	Sat, 24 Feb 2024 12:11:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JWj5D/Lb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5597C433C7;
+	Sat, 24 Feb 2024 12:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708776705;
-	bh=rpYOVLIlw2+edCfnGPgTidNvVsmfYwWsDaMoVPZVr8E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=jMYusG9zU120ZBb9vkTnb0qG6A/UiiTaSGVoqNWGurOliBSjvBWVryKy64I+HsV5g
-	 ec3yKfFqRpoRkYCyzp4fmpQBvd82X98XRoJZkGt7l80ESU6NovDz6G3SC6R/pxcjUc
-	 WWjMesOnL+QL2nUL7rjaJWRaULmaM1/SpDkMNvRO+40HJwmmBWjpOeG/icgHV4kxiJ
-	 hfFiCLEyaufNjEirGF2iX50SNMN9EOKoqhZlQC8Waqcb+QJMWMVctgvZMtdkSsdkPY
-	 ELCFD8sW8eK/DziA6ATVbxz5xLI/fod5LI0n/s1SzCx+mTXh1wxBX5fFb6ehxdx/9b
-	 lZc8XbGFs7ang==
+	s=k20201202; t=1708776952;
+	bh=oP261W1pt6YMYe8qcA9fKGIH4omThSFAKhryuBOrQu8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JWj5D/Lbhnfny8owmLC3lczUAT9S5jtD5sU8TU8QhGT26WP/1weK5cK8AHcWA5qEr
+	 vw/Vo5aAnO5uho3XszpE2+nui1H5lIahI6iktAdCxtURW4MTgc3+FC47zrxgJpQba4
+	 H+c9EJ9Y+tW7ixHzdCopIHFqSPERkhYJ0ftNSQwkcoUVYF6PK4IPMVYJBjyiRpwSpP
+	 T8uzMrHbYhFjn1bgKF4r1bujG3jbzogaatVPGfE2j6OOHe3x0KCtdpnIYDzWmOCT2c
+	 zYLL3n+T6eH/0CWXMh2GovCRMWz1efiHBxRG8DZFfVoPXB1NA7ZXcEeV4d/LN1vZN1
+	 bjOt1HAejD04g==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Jonathan Cameron <jic23@kernel.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Lars-Peter Clausen <lars@metafoo.de>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-iio@vger.kernel.org,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Matt Roper <matthew.d.roper@intel.com>,
+	Matthew Auld <matthew.auld@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Koby Elbaz <kelbaz@habana.ai>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	Francois Dugast <francois.dugast@intel.com>,
+	Dave Airlie <airlied@redhat.com>,
+	intel-xe@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] iio: avoid fortify-string overflow error
-Date: Sat, 24 Feb 2024 13:11:34 +0100
-Message-Id: <20240224121140.1883201-1-arnd@kernel.org>
+Subject: [PATCH 2/3] drm/xe/mmio: fix build warning for BAR resize on 32-bit
+Date: Sat, 24 Feb 2024 13:15:00 +0100
+Message-Id: <20240224121528.1972719-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240224121528.1972719-1-arnd@kernel.org>
+References: <20240224121528.1972719-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,37 +68,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The memcpy() call in dlhl60d.c triggers a check with clang-19:
+clang complains about a nonsensical test on builds with a 32-bit phys_addr_t,
+which means resizing will always fail:
 
-In file included from drivers/iio/pressure/dlhl60d.c:11:
-In file included from include/linux/module.h:17:
-include/linux/fortify-string.h:553:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-  553 |                         __write_overflow_field(p_size_field, size);
-      |                         ^
+drivers/gpu/drm/xe/xe_mmio.c:109:23: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+  109 |                     root_res->start > 0x100000000ull)
+      |                     ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
 
-It writes into a two member array from a loop over a linked list
-that likely has some indication of having more than two entries.
+Previously, BAR resize was always disallowed on 32-bit kernels, but
+this apparently changed recently. Since 32-bit machines can in theory
+support PAE/LPAE for large address spaces, this may end up useful,
+so change the driver to shut up the warning but still work when
+phys_addr_t/resource_size_t is 64 bit wide.
 
-Add a conditional check there to avoid the overflow.
-
+Fixes: 9a6e6c14bfde ("drm/xe/mmio: Use non-atomic writeq/readq variant for 32b")
+Fixes: ea97a66a2218 ("drm/xe: Disable 32bits build")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/iio/pressure/dlhl60d.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/xe/xe_mmio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/pressure/dlhl60d.c b/drivers/iio/pressure/dlhl60d.c
-index 28c8269ba65d..a43ecda849db 100644
---- a/drivers/iio/pressure/dlhl60d.c
-+++ b/drivers/iio/pressure/dlhl60d.c
-@@ -262,6 +262,8 @@ static irqreturn_t dlh_trigger_handler(int irq, void *private)
- 			&st->rx_buf[1] + chn * DLH_NUM_DATA_BYTES,
- 			DLH_NUM_DATA_BYTES);
- 		i++;
-+		if (i >= ARRAY_SIZE(tmp_buf))
-+			break;
+diff --git a/drivers/gpu/drm/xe/xe_mmio.c b/drivers/gpu/drm/xe/xe_mmio.c
+index e3db3a178760..7ba2477452d7 100644
+--- a/drivers/gpu/drm/xe/xe_mmio.c
++++ b/drivers/gpu/drm/xe/xe_mmio.c
+@@ -106,7 +106,7 @@ static void xe_resize_vram_bar(struct xe_device *xe)
+ 
+ 	pci_bus_for_each_resource(root, root_res, i) {
+ 		if (root_res && root_res->flags & (IORESOURCE_MEM | IORESOURCE_MEM_64) &&
+-		    root_res->start > 0x100000000ull)
++		    (u64)root_res->start > 0x100000000ul)
+ 			break;
  	}
  
- 	iio_push_to_buffers(indio_dev, tmp_buf);
 -- 
 2.39.2
 
