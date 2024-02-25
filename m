@@ -1,60 +1,60 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CFB1B800
-	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4D11B947
+	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:08:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708891696; cv=none; b=FIoiwIokZzwuUyj3yqSA1oKsStcwehJWbRI/Lh0f6HznexcqHXoUyKMY1CAFws6TjsDdSc5GjCotnZgxC71HLVpYGea+UNDs23SVF9JbvBgFtOxJgqV65xLx259MrjNPL/zm+qOBcTXzWuo85IXRVRgkp3lPxhAfFUuE0mFPmqA=
+	t=1708891698; cv=none; b=p5R1FGCihuRBVNNDte+TrYEeI4Ogw1Hykyh3vSdvScyOmtOzTF6NoZo50dnReEi4KmXi1hBfyUDCBaUIiEx8gMU6l8WWcNUeztjNNdcbIEfhBrs1ynDjlAsr+yvFZr+UDbemWGcd3mEqd6Z1/qlKCxG1B+zPUYWqMPlSgdFcX9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708891696; c=relaxed/simple;
-	bh=6p+a66UDUSXgEFKwwrNNqxq3Xu7yzN1IQ7D6NZSeuOM=;
+	s=arc-20240116; t=1708891698; c=relaxed/simple;
+	bh=6UMk5mSXx4+IV4UQzgRJhE2stZQTf+Eo3MpUZgvR2As=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uC8vo5grjuTmd5ytlJSwEygGagwS0QX7DpMxMXUaLvbO2eCE02/ceEQFxvEeoL2eCFwZmJbUtDWzSO2O1K4FcY/DbI7f+igb3MjFSdYoofA3pRaIv3yNDk/eLACh7USfzYXBxVo+jZjRRQM5m7okxiyeFQk1Evil5xglHS5i6+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a5cewWN5; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:To:Cc; b=Yov77v2790VZQglC0eyFF7ojlFP+lJEBF+WXJuXZ2oCsoI30LusNM1wN0nqC13N+K8GSF7N2N545n6q8RtQd1z5G3aPonHkPNMl3Jerw28zubhKYX0Wt/6GnjY58GSf79sWcgNT01M1yL2sNGLUhG/765UiRKT6MPQBN8Hil/kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Zl6gPkVq; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a5cewWN5"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a3e706f50beso311738466b.0
-        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:08:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zl6gPkVq"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4348aaa705so34877066b.0
+        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:08:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708891693; x=1709496493; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1708891694; x=1709496494; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vaHsL9uZaLpUW/gtSno6U8/q3nfzw7ffg7lr4P7gXB0=;
-        b=a5cewWN5fXaGnnSGZsndmN/emHBO4CEZCftk3OPYW3JrFJrymK4cvKSF58BS/GlVLB
-         KaV/zxvxNrBK2MRmhS/r8rZrSyYnvTTpejD0YfNuQO69mQitAS8+/xCOL04r7XiwZx93
-         8EuiFZ9cmRKMKiPVzG7XmQA2NIlc0a/lCjQ5sI+1o1asu1BAP+mWRsIF756d3S4zcfcF
-         uI80klvuqZGRMMFAVfqK823fYmLFTGXikEN/ce3xDJpmvcw65C1oSd7PSaFMKzery+Cf
-         Wv4r4jOrdrDpAgFhXPhEg5YrxynTWrAMB5Y34BnqdRkWAzk4ru13U5LdyqW5ipgUXRIM
-         JaoQ==
+        bh=x8Pxmb+SJtaf6Rq8IgIflwtKkppPo4bfFWLJbSoBsFk=;
+        b=Zl6gPkVqbT4angbBm1K6WEpxA9BvbJ3i0i7Te5+dvBGMccEUQQ6zA3GQ5Hb2WHcbJo
+         fdmFe7wqo1UCw192/CVLgw1OOEZVFVMAg7TA9Gy9yTDhDPjgda/fAbVfwLip+SnF4G+w
+         9sNEW+Bw3xXscLm3BrtIrHhxtWGtCRDC010TcvvqR5FBxWbCpzm3iXiyoFmOPyKp+xEW
+         NxDIlt4A1Q74nl40NdBS9F2x4dzIiUSEPHQkRqojYpt5P2/6b4fS4UyPEZVmnr7nkc8P
+         s3JM+PqAW0bQaWVB4DczFTiEiybDD8PB3WYTvOxLDp1ijo9AF+T47C6DNioCchKxF1Wf
+         nqTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708891693; x=1709496493;
+        d=1e100.net; s=20230601; t=1708891694; x=1709496494;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vaHsL9uZaLpUW/gtSno6U8/q3nfzw7ffg7lr4P7gXB0=;
-        b=mrovLX1tRj53r69Z3vbVBS/btnCP9BFoeKa8pBQ9WIHIUaCnSNpGExCe6pM2UCuC5S
-         plCBlLzxSXLGuPLCtmNGivsA40lBGAcRR+gVg50ki+JSVp2GbH8P6r2y6qs0mnZSiyh8
-         4L8EIpa37yQJUbbmHm5sQmG36PQejn2RVNd1MvKOjlR7MUTVx4MRMGU+jp+RueOqZyPR
-         +g8M3Fg0BFcZZMPPq3L8XjQy5txfdg5QBYNJm7eHzdH9lV7+0TtgbbDqORWxdBDS0HU9
-         bM0/+rCs2enkGxQlr44AbdSuJeWSBJcmchhsp7kMUIV8m0oxIE1/yaJSFGTPfeUj0nLK
-         KsFw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1tPnaV5nYEe7ikpANyIOYs0emd5WFQmXNxGPy/HsIncMvKyjN2PkjETquCnRUuc4gJ58Rz3Gof6iMvpp9PL56QQTyZw==
-X-Gm-Message-State: AOJu0YzIShzAyeEIMBTN9ZpDbivq7f0EBWhYr8x+eoktNaM+AzaFCoC9
-	RQNjWnBxocgNq/0r53QJ+EEsSsspq1DIgm9J8TAYWYkaN7X59kgybb50NgyS4x0=
-X-Google-Smtp-Source: AGHT+IGw6bV8g5dpeZCGmITdjJ+P4PQpu5m8y9ThBv8s80WquXr+nyJrO4fnc+MLmGg387rv6mLOGA==
-X-Received: by 2002:a17:906:a44d:b0:a3d:9a28:52e6 with SMTP id cb13-20020a170906a44d00b00a3d9a2852e6mr3284540ejb.50.1708891692758;
-        Sun, 25 Feb 2024 12:08:12 -0800 (PST)
+        bh=x8Pxmb+SJtaf6Rq8IgIflwtKkppPo4bfFWLJbSoBsFk=;
+        b=cAByVwXdT85/v5+fLRZvTyobLb4TyNdodO6HgMkXSp4P7QXdqzKhP5V9SMdF2elO4t
+         imByvmIswxUJpGURGEOTQO2bIMuBsJ1yZLOpMUNLQTPvXHwf6+/SCvTpRf/Jn/9cy7yW
+         6TGkEBnk87svMqcP8dYJ/m/OuQy25Kds/H+IGlLCBTWf1Zkdpo0/1zF/inrVkpEtgFv+
+         5QSNHdFpjlM2j1cSJRPv1cx6kNwQP3fUVFD40qIiw9iZE9sImpVzixharQ/ClpMsvGh+
+         ynkHlHRsFdjFH4REU4Ap5NtBdUY1OMchzc6N1Py4KoGzGxIAckxesnr6NPupgwMpJ55Z
+         ie9g==
+X-Forwarded-Encrypted: i=1; AJvYcCX1ehOxsV1awoLQ/hpuBh0CjqES9iYrM6mc2OkBKc869I4kxm8Bumcc9c458rChV8MkkBQX2K5mNF/lnwZj0evBUkJK2w==
+X-Gm-Message-State: AOJu0YwB69h38UayNVqRkRxB/qpRQHQMrTaihZl9Ajo4r24vqsBtTL2N
+	UsNb64cXK/PJtM6uaCongl0h/di7iXKwUieKVchJrWVlZ51KFA8inCFAUv/II94=
+X-Google-Smtp-Source: AGHT+IF9H5P6JRdDN+PJTJcjkkqLAA9eKjemJxWKrfZTcfu2fwQ6Fg4JGDKRQi0oSxCd/8pdja2YVg==
+X-Received: by 2002:a17:906:13d2:b0:a43:1ee2:4345 with SMTP id g18-20020a17090613d200b00a431ee24345mr1634442ejc.75.1708891693861;
+        Sun, 25 Feb 2024 12:08:13 -0800 (PST)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a4340138ab5sm504621ejc.5.2024.02.25.12.08.11
+        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a4340138ab5sm504621ejc.5.2024.02.25.12.08.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Feb 2024 12:08:12 -0800 (PST)
+        Sun, 25 Feb 2024 12:08:13 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sun, 25 Feb 2024 21:08:10 +0100
-Subject: [PATCH 1/7] ARM: Support CLANG CFI
+Date: Sun, 25 Feb 2024 21:08:11 +0100
+Subject: [PATCH 2/7] ARM: tlbflush: Make TLB flushes into static inlines
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240225-arm32-cfi-v1-1-6943306f065b@linaro.org>
+Message-Id: <20240225-arm32-cfi-v1-2-6943306f065b@linaro.org>
 References: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 In-Reply-To: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -75,31 +75,61 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.12.4
 
-Support Control Flow Integrity (CFI) when compiling with
-CLANG.
+Instead of just using defines to define the TLB flush functions,
+use static inlines.
 
-In the as-of-writing LLVM CLANG implementation (v17)
-the 32-bit ARM platform is supported by the generic CFI
-implementation, which isn't tailored specifically for ARM32
-but works well enough to enable the feature.
+This has the upside that we can tag those as __nocfi so we can
+execute a CFI-enabled kernel.
+
+Move the variables around a bit so the functions can find their
+global variable cpu_tlb.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/include/asm/tlbflush.h | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 0af6709570d1..1216656a40bc 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -34,6 +34,7 @@ config ARM
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
- 	select ARCH_SUPPORTS_ATOMIC_RMW
-+	select ARCH_SUPPORTS_CFI_CLANG
- 	select ARCH_SUPPORTS_HUGETLBFS if ARM_LPAE
- 	select ARCH_SUPPORTS_PER_VMA_LOCK
- 	select ARCH_USE_BUILTIN_BSWAP
+diff --git a/arch/arm/include/asm/tlbflush.h b/arch/arm/include/asm/tlbflush.h
+index 38c6e4a2a0b6..7340518ee0e9 100644
+--- a/arch/arm/include/asm/tlbflush.h
++++ b/arch/arm/include/asm/tlbflush.h
+@@ -210,13 +210,23 @@ struct cpu_tlb_fns {
+ 	unsigned long tlb_flags;
+ };
+ 
++extern struct cpu_tlb_fns cpu_tlb;
++
++#define __cpu_tlb_flags			cpu_tlb.tlb_flags
++
+ /*
+  * Select the calling method
+  */
+ #ifdef MULTI_TLB
+ 
+-#define __cpu_flush_user_tlb_range	cpu_tlb.flush_user_range
+-#define __cpu_flush_kern_tlb_range	cpu_tlb.flush_kern_range
++static inline void __nocfi __cpu_flush_user_tlb_range(unsigned long s, unsigned long e, struct vm_area_struct *vma)
++{
++	cpu_tlb.flush_user_range(s, e, vma);
++}
++static inline void __nocfi __cpu_flush_kern_tlb_range(unsigned long s, unsigned long e)
++{
++	cpu_tlb.flush_kern_range(s, e);
++}
+ 
+ #else
+ 
+@@ -228,10 +238,6 @@ extern void __cpu_flush_kern_tlb_range(unsigned long, unsigned long);
+ 
+ #endif
+ 
+-extern struct cpu_tlb_fns cpu_tlb;
+-
+-#define __cpu_tlb_flags			cpu_tlb.tlb_flags
+-
+ /*
+  *	TLB Management
+  *	==============
 
 -- 
 2.34.1
