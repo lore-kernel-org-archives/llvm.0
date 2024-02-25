@@ -1,158 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DB012E47;
-	Sun, 25 Feb 2024 12:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6473CD528;
+	Sun, 25 Feb 2024 12:14:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708862842; cv=none; b=JvO0vwojSdVAwALag6wnpsVGN+KUnERMU2tRoc8rlAJdFoVoW+O5RLBXwmWnF13QITk7uRMwt5Kr864bJ22wq8Ljoe0jUgoQo3F+U0ijzP8cb6eS+pI+R8wBqq9EyAJSHWI+pccCr3zc4WmFS6gjEt7Q/75L6BkgVp1mDftkXXo=
+	t=1708863272; cv=none; b=FhCxRZ5CX/H58VVnF3y3LmcExjuXxdtOr4XNuh63VrSVSZoWjIF+OXR6Ugm7Kco9g4QRj/RrVStAJ+FtQIlTFsq2iS0QpJDZDqX1ysqB/AttzEJ3skjHeTosvu5A4VV+Gm0hSkslSpa2b+tmiS8fyqDeeqHv7MiV0UXLnirNNmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708862842; c=relaxed/simple;
-	bh=Lsnp5Weg1Haxb9ZmDlzKnaA6TKEMU+sL7UaxIGxxqp4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XLwR3wY/n1hIrcZ2AZ/BRI7B6/CHNpTfO47pCb3tbeBKM3GGufz0qMT2OpNdvwkzUrEQKYTet8bCtvskVcEGVxX81taOHuqV4ON1O/ogaTIUVbaw8aW5kKOi4NExNH5roQxQOBM36u6xocziT2hv/Ga1TKBmK5J4brll7NW6WpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fp4NxEhq; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1708863272; c=relaxed/simple;
+	bh=lYRiH0WxZt/e65XgOHzmCpT7ziP+FDLeHqqPGpHDKWw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t8Eku5dP4/3sSw4m1uh0jnVJG6PeRPLgay0zq2+1OVRi2hOhI/xW8jakuWzqivNMdf9hvPfxxB+zqWNt7Vy99kC0VnOVNUTHH4aAzewX35HlEd+m/XhTmB8+fgANbdOx07H8r09XigWLQ2I4pvEhtTj8UBFZKd7hh4Z/PfL6Fxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lAqHxAmn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fp4NxEhq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708862841; x=1740398841;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Lsnp5Weg1Haxb9ZmDlzKnaA6TKEMU+sL7UaxIGxxqp4=;
-  b=Fp4NxEhqPRHrJvwzhUtYlS+P7oHewrak2PDmU0SDDBap7kglhcRObeqC
-   eed92Y46tUY9n/hA1p/ivfoohTiEviEUfuXK2VZNDUq38DPRKvNCMqimL
-   FiENYvYKHCEP1WU0q/x6NiAj7miSAjVxSLxigPgqQhDOAX69PLYgRCWof
-   j42VBVO0t/YcdARavbcV5GX7T+djKE66jxfUEcu9WRTQ7QosIFr2iZhbv
-   nXRyYGbPBMmlivMPrSlZwIRIzIHeymmBYrABOle2pZYVEApCMhcZRq8cw
-   oDjezuTySoI5CgLF/1gboSue6kcFWgzEfUFjJXbCixTaI0eU6tXkhLqTB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10994"; a="3030806"
-X-IronPort-AV: E=Sophos;i="6.06,183,1705392000"; 
-   d="scan'208";a="3030806"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 04:07:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,183,1705392000"; 
-   d="scan'208";a="11076823"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 25 Feb 2024 04:07:18 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1reDHo-0009Vk-1O;
-	Sun, 25 Feb 2024 12:07:16 +0000
-Date: Sun, 25 Feb 2024 20:06:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/WFAMNAE-next20240223 1/1]
- drivers/rpmsg/qcom_glink_native.c:832:7: error: static assertion failed due
- to requirement '__builtin_types_compatible_p(struct glink_msg, struct
- glink_msg_hdr) || __builtin_types_compatible_p(struct glink_msg, void)':
- pointer type mismatch in container_o...
-Message-ID: <202402252045.eiZZhW0P-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lAqHxAmn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93FF5C433C7;
+	Sun, 25 Feb 2024 12:14:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708863271;
+	bh=lYRiH0WxZt/e65XgOHzmCpT7ziP+FDLeHqqPGpHDKWw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lAqHxAmnwX+wQgFgMmo/WoutOetPW7LfjA51qEu/bIinx7PuGe4QFMBtzZ2pli1qe
+	 tCy69NXBD6bc06eLQCHF6upiWLbgyzUIq7Bc/rmxt8y/OrsDt2d/1Gbfas5NeMWXjq
+	 HtGzbG2er9uxpYTo8P8gzNrkj8dSRihiS35BEfYNMpCI3vK3un9emf/E9hTs2u/3Xu
+	 Jv+zllXJaSr0mtf72QAbYRbfK33P2eHSfNS2on2Kog45f0U6GsxTLtQYtCvkLVGUji
+	 Q2efWsaJGetOV5qclliApd73zJV/eNKvSZosBdavPMO39huBNmr5twTc3UpoVQNcrx
+	 UTJhqxwGiDHFw==
+Date: Sun, 25 Feb 2024 12:14:15 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Lars-Peter Clausen
+ <lars@metafoo.de>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
+ <u.kleine-koenig@pengutronix.de>, Nuno =?UTF-8?B?U8Oh?=
+ <nuno.sa@analog.com>, linux-iio@vger.kernel.org, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ llvm@lists.linux.dev, Tomislav Denis <tomislav.denis@avl.com>,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] iio: pressure: dlhl60d: Initialize empty DLH bytes
+Message-ID: <20240225121415.273ec110@jic23-huawei>
+In-Reply-To: <202402230949.E06F3297@keescook>
+References: <20240223172936.it.875-kees@kernel.org>
+	<ZdjaOLVd1yxNXhsp@smile.fi.intel.com>
+	<202402230949.E06F3297@keescook>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/WFAMNAE-next20240223
-head:   b23fc9e6ff31f4ef9e8de5580963cf53579ef0d4
-commit: b23fc9e6ff31f4ef9e8de5580963cf53579ef0d4 [1/1] treewide: Address -Wflexible-array-member-not-at-end warnings
-config: arm-randconfig-003-20240225 (https://download.01.org/0day-ci/archive/20240225/202402252045.eiZZhW0P-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240225/202402252045.eiZZhW0P-lkp@intel.com/reproduce)
+On Fri, 23 Feb 2024 09:50:10 -0800
+Kees Cook <keescook@chromium.org> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402252045.eiZZhW0P-lkp@intel.com/
+> On Fri, Feb 23, 2024 at 07:47:36PM +0200, Andy Shevchenko wrote:
+> > On Fri, Feb 23, 2024 at 09:29:39AM -0800, Kees Cook wrote:  
+> > > 3 bytes were being read but 4 were being written. Explicitly initialize
+> > > the unused bytes to 0 and refactor the loop to use direct array
+> > > indexing, which appears to silence a Clang false positive warning[1].  
+> > 
+> > ...
+> >   
+> > >  	for_each_set_bit(chn, indio_dev->active_scan_mask,
+> > > -		indio_dev->masklength) {
+> > > -		memcpy(tmp_buf + i,
+> > > +			 indio_dev->masklength) {
+> > > +		memcpy(&tmp_buf[i++],
+> > >  			&st->rx_buf[1] + chn * DLH_NUM_DATA_BYTES,
+> > >  			DLH_NUM_DATA_BYTES);
+> > > -		i++;
+> > >  	}  
+> > 
+> > Not that I'm against the changes, but they (in accordance with the commit
+> > message) are irrelevant to this fix. I prefer fixes to be more focused on
+> > the real issues.  
+> 
+> Jonathan, let me know if you'd prefer I split this patch...
+> 
+Andy is strictly speaking correct that the indent should be separate patch
+but meh - not worth the time to split that out + the change makes the
+fixed code itself easier to read. 
 
-All errors (new ones prefixed by >>):
+I added a tiny comment to say it the indent tidying up was incorporated
+so the fixed code was more readable.
 
->> drivers/rpmsg/qcom_glink_native.c:832:7: error: static assertion failed due to requirement '__builtin_types_compatible_p(struct glink_msg, struct glink_msg_hdr) || __builtin_types_compatible_p(struct glink_msg, void)': pointer type mismatch in container_of()
-     832 |                            container_of(&dcmd->msg, struct glink_msg, hdr), 0,
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:20:16: note: expanded from macro 'container_of'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      21 |                       __same_type(*(ptr), void),                        \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      22 |                       "pointer type mismatch in container_of()");       \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:390:27: note: expanded from macro '__same_type'
-     390 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/rpmsg/qcom_glink_native.c:1692:9: error: static assertion failed due to requirement '__builtin_types_compatible_p(struct glink_msg, struct glink_msg_hdr) || __builtin_types_compatible_p(struct glink_msg, void)': pointer type mismatch in container_of()
-    1692 |                 msg = container_of(&dcmd->msg, struct glink_msg, hdr);
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:20:16: note: expanded from macro 'container_of'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      21 |                       __same_type(*(ptr), void),                        \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      22 |                       "pointer type mismatch in container_of()");       \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:390:27: note: expanded from macro '__same_type'
-     390 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   2 errors generated.
+Applied to the fixes-togreg branch of iio.git and marked for stable.
 
+Given timing this may well go in during the merge window rather than
+before.
 
-vim +832 drivers/rpmsg/qcom_glink_native.c
+Jonathan
 
-   813	
-   814	static int qcom_glink_rx_defer(struct qcom_glink *glink, size_t extra)
-   815	{
-   816		struct glink_defer_cmd *dcmd;
-   817	
-   818		extra = ALIGN(extra, 8);
-   819	
-   820		if (qcom_glink_rx_avail(glink) < sizeof(struct glink_msg) + extra) {
-   821			dev_dbg(glink->dev, "Insufficient data in rx fifo");
-   822			return -ENXIO;
-   823		}
-   824	
-   825		dcmd = kzalloc(struct_size(dcmd, data, extra), GFP_ATOMIC);
-   826		if (!dcmd)
-   827			return -ENOMEM;
-   828	
-   829		INIT_LIST_HEAD(&dcmd->node);
-   830	
-   831		qcom_glink_rx_peek(glink,
- > 832				   container_of(&dcmd->msg, struct glink_msg, hdr), 0,
-   833				   sizeof(dcmd->msg) + extra);
-   834	
-   835		spin_lock(&glink->rx_lock);
-   836		list_add_tail(&dcmd->node, &glink->rx_queue);
-   837		spin_unlock(&glink->rx_lock);
-   838	
-   839		schedule_work(&glink->rx_work);
-   840		qcom_glink_rx_advance(glink, sizeof(dcmd->msg) + extra);
-   841	
-   842		return 0;
-   843	}
-   844	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
