@@ -1,60 +1,61 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65F7199BE
-	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A6E17997
+	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708891700; cv=none; b=PLdNgAGjBXwr0rRejE4gwbkK83a3CBCNuqApBsIedwrGoXtBWYmVoV+KVst4KB/fkt+vRgnDgTbuuIo6XFnByjYKX3yU9g/1blgxHFas3fgQ8k2suQL8DulnYzYLKXAIOhI8mN62wa+cd2GyzETRjnkj9sEeej6ZQ/Fzo0+kosA=
+	t=1708891702; cv=none; b=o2dUjp7r92+UgxbxAACeOwb7NZvmviRRmpDSu9r8K0GOymQiKW1tvGZXPe64hJSNL/0ZrRDW+J/SK3K7XShRDfZ3PUgbkmJPOCTYVN/L8OorZ/daoxcBKNTm9+zpZ0TICFl2uABGe/gtZBSwCJ7OZsNn9P9uE84bX1p1LsRU2CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708891700; c=relaxed/simple;
-	bh=5SGDm7QNCUVYjMa5HHJMDC7JvUxru9Eq4fafddtS4Cs=;
+	s=arc-20240116; t=1708891702; c=relaxed/simple;
+	bh=+6Aq4tI7NATXLTxD3OjZObQWjA81Hf0PFu/KNy4tl7g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=h7UfIh/WUSQRBhBV8UFBRv05zqOoSdzAH9F7ma2ug5WF1dwLE+MpxzlFSc/+3VU0Nzq0a+9vkDTYQeOhiU71Lwyo0zJqGjaqYGJ/A4h9TElr0mbzgN763VsVLa/Ly5DqoxAE4JRie+FspF+Lws4k0br89pqUAqQ+YrIXfhXiQVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XwYf1Gr7; arc=none smtp.client-ip=209.85.208.42
+	 In-Reply-To:To:Cc; b=GxMadMv/whXEUvmz942U/aNbT3fHbslLVkoIRf+53pEvw1/Fwe7AxItsulCwIcQvmj9I5olPsw9pBKKgzbIvS30CtEK0JcB9iN7nmNbdBY5tG/FI39TMg5oDC9bftAyKOPB+/ZtaqyvvlKebRV8WAtUGYRabKKa67JbLBd+i4UE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XovmT81Z; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XwYf1Gr7"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso2213912a12.3
-        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:08:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XovmT81Z"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-563c0f13cabso2957276a12.3
+        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:08:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708891697; x=1709496497; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1708891698; x=1709496498; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0hQVFeBxn1IenYJfJewA7K4YjroRXq1981Lcc541jow=;
-        b=XwYf1Gr74MRvz2aYEf6SHCmAzhXu30mfrK60ArnpJAvZs+se91UGBmZcXWYAJ5x4gb
-         sUKn5kf07PsLDi5ZHZDcNvtHNMJaBK86l4K01SoBpH87WTn5c+juUjo5VckDnHIQefor
-         cEVE0xQAkbpi48JlJBzDQ68bY7YK9LFE67z8w8m4CGUf1tjG6aF9hwja4wFIrONOvPUo
-         dl07bUbF7+RWkkPWjI5nlq1T2jo+egMxHUyWx03vg8PO64r9mygmbLfTUsg64ygzhiHl
-         /N6NkgFlJuxjrXuNOG6xZ64zDg9HuV2SXQbS+7JtVm6g3ksYFxCS+hGGuzRLUrfK4cuY
-         5CdA==
+        bh=VdBurprtbHQ0vf8zuRQqqoRGQBp+uV6pNFNeBm4lwRE=;
+        b=XovmT81ZEbpf5KHers25RCm0muThViQajKAAszoX2lZbm9OLOnDkfjcl4ncugOLdqT
+         4Fze9ywbWPJZeqryNovmhTOjIOTecHOE1NCVaCNvZ9WD7xrAXBDj4POvUrOkGqRIJlN8
+         oFdnQU8FGMqO0o4WxnRF4WCUvdMuIjdoW+9wGJ6peOaRXrUD+2cZ2QHAzQQ9d7HqjqOI
+         HZU65hqH30WchfOY6R9M/g0UHLS5bE6gy0LT0pTbnWCBtfiTRKnn4MO4EXftzr8IL6kv
+         Zl+UM9ht+35KmE/VLyuK97IXfi/6pNryf9KCvQzhwUeGlxCQgqyf3qJaeDs0q1XVYiK3
+         rWaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708891697; x=1709496497;
+        d=1e100.net; s=20230601; t=1708891698; x=1709496498;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0hQVFeBxn1IenYJfJewA7K4YjroRXq1981Lcc541jow=;
-        b=sOak7IDbdZmOxh5kj2mAr7s+FDZWC3bzOGFWYSmwCrVOQj8LH3hEg7FRpoFof/YctV
-         X5cqvZvmg8uLQyIJILgweKN7wInzMSbZBtWgSg7+68JjOFJJ55WIHMjKIRTK6ZnFL7bQ
-         xJtdaoZyuKohD1KDYAjfP7GLeb9DWlyPUHZPSSFiDb0SUhEnAuuobSBE+VCofjOrtT8q
-         skay5pwlMvCSL0Sr2sd3e4/JpRzP5hTakoOyIACPSpVaacyfp5VhvBICTLwH0AFmov6d
-         Ao+dIGfrEhetVGHGHhGJ1183E46UugorcnuTY65qNvfTNNK9DElmOvnP8z104ZZjoD6L
-         hUyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUjDJMfTiyqmhOIfdUMEqoj6tauBfdwBVONBf3PiFS4kearqF5+Sfv3ul97prgQ7RtP62DiNZq1vQWZ6uXHP9fBLTfXpA==
-X-Gm-Message-State: AOJu0Yx173hUAVzygsymdnRfKqjk6j5VoIdLEgSL0uSmg88+3b2yE3/u
-	q0lr/za1zpG1Zms9CpiHK0NeMJBShkseCdW/cPD60xIlVr84dRqYI26UB0uE4kQ=
-X-Google-Smtp-Source: AGHT+IHACgERb6xIUeaYkFa6VntM3WbFza/uQrU+TjVC2bkt/yJGY3XoiECyU8pm8Wl+xgSi9WmMFQ==
-X-Received: by 2002:a17:906:f155:b0:a43:3f87:b985 with SMTP id gw21-20020a170906f15500b00a433f87b985mr936069ejb.75.1708891697175;
-        Sun, 25 Feb 2024 12:08:17 -0800 (PST)
+        bh=VdBurprtbHQ0vf8zuRQqqoRGQBp+uV6pNFNeBm4lwRE=;
+        b=CesaARhAqbQ7c+lAd1lnwtii82XKBacd4HeOw33zOxab/NDP/Jc5bI5ARlMRLJK3bV
+         Q0Xp7ngicI+XEyuLsIHQ6FAvEQ+Cv2AKyumlISiPf9IDRZGnCI0LcTST0eWaPl7F9Yne
+         SvwcJmJVnu09yEZkdjZhocjiNjC7YaSw2MTtplmtRCBsx739lmcBzqN+akozute3OyYA
+         IKTp0rI5WT9u035l7OCsWlpIA5qT+i2unWa/OFAJ3FYGxRAM+Gg146LwXilkGEcJrAoW
+         BnvXFbFp2705yMe6AX62rlCoHgFzXOZwz8l9L4Ge7E5TUrTNTvnFfj5TderEr+yI8ZYH
+         PMcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXh2RIBIHXiWoSY/LBX249JG1IibFfKlk7UZcyhPQ3TuzQjgHIPaujQd5Mbo2IAqXosOt4dvRZTO6sZd1F3e66HzGtsPA==
+X-Gm-Message-State: AOJu0YzH42Ij37LklJ9TNBlrXoxQusO/Tr5dukytPfc6U+jRrjW4pER1
+	2MOOMLNrhcBiLg52yNldafMfQPntVcOEaNxG4IA3AmsGK79jF42COaKJNl9VybI=
+X-Google-Smtp-Source: AGHT+IGvoPNI50CVDNAYE+aVj9zM2DSyGYeEYRqrj2AMI1bqHKAqqb7zFpBKsWASbUgdGEAsOR89SA==
+X-Received: by 2002:a17:907:9905:b0:a3e:998a:cab6 with SMTP id ka5-20020a170907990500b00a3e998acab6mr3511234ejc.74.1708891698443;
+        Sun, 25 Feb 2024 12:08:18 -0800 (PST)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a4340138ab5sm504621ejc.5.2024.02.25.12.08.16
+        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a4340138ab5sm504621ejc.5.2024.02.25.12.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Feb 2024 12:08:16 -0800 (PST)
+        Sun, 25 Feb 2024 12:08:18 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sun, 25 Feb 2024 21:08:14 +0100
-Subject: [PATCH 5/7] ARM: delay: Turn delay functions into static inlines
+Date: Sun, 25 Feb 2024 21:08:15 +0100
+Subject: [PATCH 6/7] ARM: turn CPU cache flush functions into static
+ inlines
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,7 +64,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240225-arm32-cfi-v1-5-6943306f065b@linaro.org>
+Message-Id: <20240225-arm32-cfi-v1-6-6943306f065b@linaro.org>
 References: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 In-Reply-To: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -75,53 +76,140 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.12.4
 
-The members of the vector table arm_delay_ops are called
-directly using defines, but this is really confusing for
-KCFI. Wrap the calls in static inlines and tag them with
+The members of the vector table struct cpu_cache_fns cpu_cache
+are called directly using defines, but this is really confusing
+for KCFI. Wrap the calls in static inlines and tag them with
 __nocfi so things start to work.
 
-Without this patch, platforms without a delay timer will
-not boot (sticks in calibrating loop etc).
+Conversely a similar approach is used for the __glue() helpers
+which define their way into an assembly ENTRY(symbol) for respective
+CPU variant. We wrap these into static inlines and prefix them
+with __nocfi as well. (This happens on !MULTI_CACHE systems.)
+For this case we also need to invoke the __glue() macro to
+provide a proper function prototype for the inner function.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/include/asm/delay.h | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ arch/arm/include/asm/cacheflush.h | 45 +++++++++++++++++++++++++++++++--------
+ arch/arm/mm/dma.h                 | 28 ++++++++++++++++++------
+ 2 files changed, 58 insertions(+), 15 deletions(-)
 
-diff --git a/arch/arm/include/asm/delay.h b/arch/arm/include/asm/delay.h
-index 1d069e558d8d..7d611b810b6c 100644
---- a/arch/arm/include/asm/delay.h
-+++ b/arch/arm/include/asm/delay.h
-@@ -55,7 +55,10 @@ extern struct arm_delay_ops {
- 	unsigned long ticks_per_jiffy;
- } arm_delay_ops;
+diff --git a/arch/arm/include/asm/cacheflush.h b/arch/arm/include/asm/cacheflush.h
+index 1075534b0a2e..76fb665162a4 100644
+--- a/arch/arm/include/asm/cacheflush.h
++++ b/arch/arm/include/asm/cacheflush.h
+@@ -122,14 +122,38 @@ struct cpu_cache_fns {
  
--#define __delay(n)		arm_delay_ops.delay(n)
-+static inline void __nocfi __delay(unsigned long n)
+ extern struct cpu_cache_fns cpu_cache;
+ 
+-#define __cpuc_flush_icache_all		cpu_cache.flush_icache_all
+-#define __cpuc_flush_kern_all		cpu_cache.flush_kern_all
+-#define __cpuc_flush_kern_louis		cpu_cache.flush_kern_louis
+-#define __cpuc_flush_user_all		cpu_cache.flush_user_all
+-#define __cpuc_flush_user_range		cpu_cache.flush_user_range
+-#define __cpuc_coherent_kern_range	cpu_cache.coherent_kern_range
+-#define __cpuc_coherent_user_range	cpu_cache.coherent_user_range
+-#define __cpuc_flush_dcache_area	cpu_cache.flush_kern_dcache_area
++static inline void __nocfi __cpuc_flush_icache_all(void)
 +{
-+	arm_delay_ops.delay(n);
++	cpu_cache.flush_icache_all();
++}
++static inline void __nocfi __cpuc_flush_kern_all(void)
++{
++	cpu_cache.flush_icache_all();
++}
++static inline void __nocfi __cpuc_flush_kern_louis(void)
++{
++	cpu_cache.flush_kern_louis();
++}
++static inline void __nocfi __cpuc_flush_user_all(void)
++{
++	cpu_cache.flush_user_all();
++}
++static inline void __nocfi __cpuc_flush_user_range(unsigned long start, unsigned long end, unsigned int flags)
++{
++	cpu_cache.flush_user_range(start, end, flags);
++}
++static inline void __nocfi __cpuc_coherent_kern_range(unsigned long start, unsigned long end)
++{
++	cpu_cache.coherent_kern_range(start, end);
++}
++static inline int __nocfi __cpuc_coherent_user_range(unsigned long start, unsigned long end)
++{
++	return cpu_cache.coherent_user_range(start, end);
++}
++static inline void __nocfi __cpuc_flush_dcache_area(void *kaddr, size_t sz)
++{
++	cpu_cache.flush_kern_dcache_area(kaddr, sz);
 +}
  
  /*
-  * This function intentionally does not exist; if you see references to
-@@ -76,8 +79,15 @@ extern void __bad_udelay(void);
-  * first constant multiplications gets optimized away if the delay is
-  * a constant)
+  * These are private to the dma-mapping API.  Do not use directly.
+@@ -137,7 +161,10 @@ extern struct cpu_cache_fns cpu_cache;
+  * is visible to DMA, or data written by DMA to system memory is
+  * visible to the CPU.
   */
--#define __udelay(n)		arm_delay_ops.udelay(n)
--#define __const_udelay(n)	arm_delay_ops.const_udelay(n)
-+static inline void __nocfi __udelay(unsigned long n)
+-#define dmac_flush_range		cpu_cache.dma_flush_range
++static inline void __nocfi dmac_flush_range(const void *start, const void *end)
 +{
-+	arm_delay_ops.udelay(n);
-+}
-+
-+static inline void __nocfi __const_udelay(unsigned long n)
-+{
-+	arm_delay_ops.const_udelay(n);
++	cpu_cache.dma_flush_range(start, end);
 +}
  
- #define udelay(n)							\
- 	(__builtin_constant_p(n) ?					\
+ #else
+ 
+diff --git a/arch/arm/mm/dma.h b/arch/arm/mm/dma.h
+index aaef64b7f177..251b8a9fffc1 100644
+--- a/arch/arm/mm/dma.h
++++ b/arch/arm/mm/dma.h
+@@ -5,8 +5,6 @@
+ #include <asm/glue-cache.h>
+ 
+ #ifndef MULTI_CACHE
+-#define dmac_map_area			__glue(_CACHE,_dma_map_area)
+-#define dmac_unmap_area 		__glue(_CACHE,_dma_unmap_area)
+ 
+ /*
+  * These are private to the dma-mapping API.  Do not use directly.
+@@ -14,8 +12,20 @@
+  * is visible to DMA, or data written by DMA to system memory is
+  * visible to the CPU.
+  */
+-extern void dmac_map_area(const void *, size_t, int);
+-extern void dmac_unmap_area(const void *, size_t, int);
++
++/* These turn into function declarations for each per-CPU glue function */
++void __glue(_CACHE,_dma_map_area)(const void *, size_t, int);
++void __glue(_CACHE,_dma_unmap_area)(const void *, size_t, int);
++
++static inline void __nocfi dmac_map_area(const void *start, size_t sz, int flags)
++{
++	__glue(_CACHE,_dma_map_area)(start, sz, flags);
++}
++
++static inline void __nocfi dmac_unmap_area(const void *start, size_t sz, int flags)
++{
++	__glue(_CACHE,_dma_unmap_area)(start, sz, flags);
++}
+ 
+ #else
+ 
+@@ -25,8 +35,14 @@ extern void dmac_unmap_area(const void *, size_t, int);
+  * is visible to DMA, or data written by DMA to system memory is
+  * visible to the CPU.
+  */
+-#define dmac_map_area			cpu_cache.dma_map_area
+-#define dmac_unmap_area 		cpu_cache.dma_unmap_area
++static inline void __nocfi dmac_map_area(const void *start, size_t sz, int flags)
++{
++	cpu_cache.dma_map_area(start, sz, flags);
++}
++static inline void __nocfi dmac_unmap_area(const void *start, size_t sz, int flags)
++{
++	cpu_cache.dma_unmap_area(start, sz, flags);
++}
+ 
+ #endif
+ 
 
 -- 
 2.34.1
