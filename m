@@ -1,60 +1,60 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E414A17997
-	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65F7199BE
+	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708891699; cv=none; b=CcMfZ10WAHBQ7fVkdPKNCVuyLCwPURg9ODnWoO/JxkzyUNuiIwc1WCpubPIeMgnNSqJihMhteXH128jgbaRgBnnl1jZLZ+7Xe8GFNoCa/b1GYTxFcDUXplQpQTMqUTGwz5JADoJD3mXLzGCDG4654a5u83O7B5P6CjBVTPnS0vU=
+	t=1708891700; cv=none; b=PLdNgAGjBXwr0rRejE4gwbkK83a3CBCNuqApBsIedwrGoXtBWYmVoV+KVst4KB/fkt+vRgnDgTbuuIo6XFnByjYKX3yU9g/1blgxHFas3fgQ8k2suQL8DulnYzYLKXAIOhI8mN62wa+cd2GyzETRjnkj9sEeej6ZQ/Fzo0+kosA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708891699; c=relaxed/simple;
-	bh=/o6zaQY4fnqF2Jew1Rvu4uhun6oJ98Aihl37DKENFnM=;
+	s=arc-20240116; t=1708891700; c=relaxed/simple;
+	bh=5SGDm7QNCUVYjMa5HHJMDC7JvUxru9Eq4fafddtS4Cs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DVSLnxDwalVsReCB+E4GUGeWY6/FysL+HWrP11k+eAxPyG2INm+P9F8gJSh8NcangG00wPjFE4RTIJnTEeuSS7oUPn93OW7xQFJmB79UbF7UW1o98f46V05rkLZ8BI2u+uYq+Z8MqZvO85J3KmBo2Cry6TVR1aGxZSD/VusTj+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UD9DOTe4; arc=none smtp.client-ip=209.85.218.46
+	 In-Reply-To:To:Cc; b=h7UfIh/WUSQRBhBV8UFBRv05zqOoSdzAH9F7ma2ug5WF1dwLE+MpxzlFSc/+3VU0Nzq0a+9vkDTYQeOhiU71Lwyo0zJqGjaqYGJ/A4h9TElr0mbzgN763VsVLa/Ly5DqoxAE4JRie+FspF+Lws4k0br89pqUAqQ+YrIXfhXiQVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XwYf1Gr7; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UD9DOTe4"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so343287566b.0
-        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:08:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XwYf1Gr7"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso2213912a12.3
+        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:08:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708891696; x=1709496496; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1708891697; x=1709496497; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QC3pcDM1Ey3dTkjBKsVJTDPbi3o492y4kegvDdvubjY=;
-        b=UD9DOTe4m0Fl+zfchLREtVaQYpLZ6S5rsN/qLavxsK5HWBSZRMwCIVoEkvUc6T1BXh
-         eM0srmPT1TL1t2b2LrgWO4RU/UmXnkM9d9T1XBGIW7LWY/g3qS0k1DeknVjTLizx+iYj
-         tS+UxmpocpsGXXxFQSW6AwEtp25ByNfUpBkYg44ZlJtwpTBEEQs6iCSvSIjdxzYVMBaO
-         qBnNi26kWmFT5Rcufl2ob8x/ePDlGRtGnDD/lci1a6/zBorkntgfk9UauaMemtSelyZT
-         44v2HKet2RX58sju0SQMTOsGjkjs/15DDJFWUk+prbYTXknmXcKljCviOjdY+bwRKJ+A
-         FGew==
+        bh=0hQVFeBxn1IenYJfJewA7K4YjroRXq1981Lcc541jow=;
+        b=XwYf1Gr74MRvz2aYEf6SHCmAzhXu30mfrK60ArnpJAvZs+se91UGBmZcXWYAJ5x4gb
+         sUKn5kf07PsLDi5ZHZDcNvtHNMJaBK86l4K01SoBpH87WTn5c+juUjo5VckDnHIQefor
+         cEVE0xQAkbpi48JlJBzDQ68bY7YK9LFE67z8w8m4CGUf1tjG6aF9hwja4wFIrONOvPUo
+         dl07bUbF7+RWkkPWjI5nlq1T2jo+egMxHUyWx03vg8PO64r9mygmbLfTUsg64ygzhiHl
+         /N6NkgFlJuxjrXuNOG6xZ64zDg9HuV2SXQbS+7JtVm6g3ksYFxCS+hGGuzRLUrfK4cuY
+         5CdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708891696; x=1709496496;
+        d=1e100.net; s=20230601; t=1708891697; x=1709496497;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QC3pcDM1Ey3dTkjBKsVJTDPbi3o492y4kegvDdvubjY=;
-        b=AoAecmfl4VJoSxFt6+Mf2f3OnSr5HRek5MelWfsMmyRmk1GG+/RKInMkq5ATlXF8Km
-         jc9+ylO8byEhXtUGX3tnGwSDFFe1bt7pgE1iMxcUr1MLRnAiw7PSk6TQVAhJ1Ngr5wRg
-         pojHt6l/ISIcIVWw/3PE6jHX4OJc7DSmts/HLHortrIyoDZ5ZwpONU53wy2wEUHOPu5n
-         KXcXDk9WuBcrhQMcKHos9qb/TkcZQ4d9WhoRYZg8xm81rlpzmw2cW7VPreKnSNXKnS+Y
-         1wrIRZPZ+9bksiSeo5jw03GFvOMYfMPP14mKj9S7ECUKYhxL54mcIBC8Qug9SvTrZ5Ek
-         V98A==
-X-Forwarded-Encrypted: i=1; AJvYcCWbmYmMmLVTIJIQC1Ap7JTwj6G20GShRVIXVvcOmaGXIYeMVtrfEb19dOiAbxy299CMpp9jXfr66h4pefeq/HfqQwy+CQ==
-X-Gm-Message-State: AOJu0YzID7WcPWrqFDjIo525uNMdcSQ3lS2soaASJ1VfbiZvbAGfam+9
-	KAWy3/7yCRYuUY4Yd0RQgzM/86h58uKRKTJiY62dc2ThCsUfKJoHxr5e3E+DjvI=
-X-Google-Smtp-Source: AGHT+IFhKSmAMGVKE3e79lh/Twxe14kufH36JgG8EFNdH/4PPIzZ7artQFAubFyeEzB2wpB3+rihOg==
-X-Received: by 2002:a17:907:208f:b0:a3f:421:26a5 with SMTP id pv15-20020a170907208f00b00a3f042126a5mr4791471ejb.12.1708891696123;
-        Sun, 25 Feb 2024 12:08:16 -0800 (PST)
+        bh=0hQVFeBxn1IenYJfJewA7K4YjroRXq1981Lcc541jow=;
+        b=sOak7IDbdZmOxh5kj2mAr7s+FDZWC3bzOGFWYSmwCrVOQj8LH3hEg7FRpoFof/YctV
+         X5cqvZvmg8uLQyIJILgweKN7wInzMSbZBtWgSg7+68JjOFJJ55WIHMjKIRTK6ZnFL7bQ
+         xJtdaoZyuKohD1KDYAjfP7GLeb9DWlyPUHZPSSFiDb0SUhEnAuuobSBE+VCofjOrtT8q
+         skay5pwlMvCSL0Sr2sd3e4/JpRzP5hTakoOyIACPSpVaacyfp5VhvBICTLwH0AFmov6d
+         Ao+dIGfrEhetVGHGHhGJ1183E46UugorcnuTY65qNvfTNNK9DElmOvnP8z104ZZjoD6L
+         hUyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUjDJMfTiyqmhOIfdUMEqoj6tauBfdwBVONBf3PiFS4kearqF5+Sfv3ul97prgQ7RtP62DiNZq1vQWZ6uXHP9fBLTfXpA==
+X-Gm-Message-State: AOJu0Yx173hUAVzygsymdnRfKqjk6j5VoIdLEgSL0uSmg88+3b2yE3/u
+	q0lr/za1zpG1Zms9CpiHK0NeMJBShkseCdW/cPD60xIlVr84dRqYI26UB0uE4kQ=
+X-Google-Smtp-Source: AGHT+IHACgERb6xIUeaYkFa6VntM3WbFza/uQrU+TjVC2bkt/yJGY3XoiECyU8pm8Wl+xgSi9WmMFQ==
+X-Received: by 2002:a17:906:f155:b0:a43:3f87:b985 with SMTP id gw21-20020a170906f15500b00a433f87b985mr936069ejb.75.1708891697175;
+        Sun, 25 Feb 2024 12:08:17 -0800 (PST)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a4340138ab5sm504621ejc.5.2024.02.25.12.08.15
+        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a4340138ab5sm504621ejc.5.2024.02.25.12.08.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Feb 2024 12:08:15 -0800 (PST)
+        Sun, 25 Feb 2024 12:08:16 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sun, 25 Feb 2024 21:08:13 +0100
-Subject: [PATCH 4/7] ARM: proc: Use inlines instead of defines
+Date: Sun, 25 Feb 2024 21:08:14 +0100
+Subject: [PATCH 5/7] ARM: delay: Turn delay functions into static inlines
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240225-arm32-cfi-v1-4-6943306f065b@linaro.org>
+Message-Id: <20240225-arm32-cfi-v1-5-6943306f065b@linaro.org>
 References: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 In-Reply-To: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -75,170 +75,53 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.12.4
 
-We currently access the per-cpu vtable with defines such
-as:
+The members of the vector table arm_delay_ops are called
+directly using defines, but this is really confusing for
+KCFI. Wrap the calls in static inlines and tag them with
+__nocfi so things start to work.
 
-  define cpu_proc_init PROC_VTABLE(_proc_init)
-
-Convert all of these instances to static inlines instead:
-
-  static inline __nocfi void cpu_proc_init(void)
-  {
-        PROC_VTABLE(_proc_init)();
-  }
-
-This has the upside that we can add the __nocfi tag to
-the inline function so CFI can skip over this and work,
-and we can simplify some platform code that was looking
-into the symbol table to be able to call cpu_reset(),
-now we can just call it instead.
+Without this patch, platforms without a delay timer will
+not boot (sticks in calibrating loop etc).
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/common/mcpm_entry.c    | 10 ++------
- arch/arm/include/asm/proc-fns.h | 57 +++++++++++++++++++++++++++++++++--------
- arch/arm/mach-sunxi/mc_smp.c    |  7 +----
- 3 files changed, 50 insertions(+), 24 deletions(-)
+ arch/arm/include/asm/delay.h | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/common/mcpm_entry.c b/arch/arm/common/mcpm_entry.c
-index e013ff1168d3..3e19f246caff 100644
---- a/arch/arm/common/mcpm_entry.c
-+++ b/arch/arm/common/mcpm_entry.c
-@@ -234,13 +234,10 @@ int mcpm_cpu_power_up(unsigned int cpu, unsigned int cluster)
- 	return ret;
- }
+diff --git a/arch/arm/include/asm/delay.h b/arch/arm/include/asm/delay.h
+index 1d069e558d8d..7d611b810b6c 100644
+--- a/arch/arm/include/asm/delay.h
++++ b/arch/arm/include/asm/delay.h
+@@ -55,7 +55,10 @@ extern struct arm_delay_ops {
+ 	unsigned long ticks_per_jiffy;
+ } arm_delay_ops;
  
--typedef typeof(cpu_reset) phys_reset_t;
--
- void mcpm_cpu_power_down(void)
- {
- 	unsigned int mpidr, cpu, cluster;
- 	bool cpu_going_down, last_man;
--	phys_reset_t phys_reset;
- 
- 	mpidr = read_cpuid_mpidr();
- 	cpu = MPIDR_AFFINITY_LEVEL(mpidr, 0);
-@@ -298,8 +295,7 @@ void mcpm_cpu_power_down(void)
- 	 * the kernel as if the power_up method just had deasserted reset
- 	 * on the CPU.
- 	 */
--	phys_reset = (phys_reset_t)(unsigned long)__pa_symbol(cpu_reset);
--	phys_reset(__pa_symbol(mcpm_entry_point), false);
-+	cpu_reset(__pa_symbol(mcpm_entry_point), false);
- 
- 	/* should never get here */
- 	BUG();
-@@ -376,7 +372,6 @@ static int __init nocache_trampoline(unsigned long _arg)
- 	unsigned int mpidr = read_cpuid_mpidr();
- 	unsigned int cpu = MPIDR_AFFINITY_LEVEL(mpidr, 0);
- 	unsigned int cluster = MPIDR_AFFINITY_LEVEL(mpidr, 1);
--	phys_reset_t phys_reset;
- 
- 	mcpm_set_entry_vector(cpu, cluster, cpu_resume_no_hyp);
- 	setup_mm_for_reboot();
-@@ -387,8 +382,7 @@ static int __init nocache_trampoline(unsigned long _arg)
- 	__mcpm_outbound_leave_critical(cluster, CLUSTER_DOWN);
- 	__mcpm_cpu_down(cpu, cluster);
- 
--	phys_reset = (phys_reset_t)(unsigned long)__pa_symbol(cpu_reset);
--	phys_reset(__pa_symbol(mcpm_entry_point), false);
-+	cpu_reset(__pa_symbol(mcpm_entry_point), false);
- 	BUG();
- }
- 
-diff --git a/arch/arm/include/asm/proc-fns.h b/arch/arm/include/asm/proc-fns.h
-index 280396483f5d..9bd6bf5f901a 100644
---- a/arch/arm/include/asm/proc-fns.h
-+++ b/arch/arm/include/asm/proc-fns.h
-@@ -131,18 +131,55 @@ static inline void init_proc_vtable(const struct processor *p)
- }
- #endif
- 
--#define cpu_proc_init			PROC_VTABLE(_proc_init)
--#define cpu_check_bugs			PROC_VTABLE(check_bugs)
--#define cpu_proc_fin			PROC_VTABLE(_proc_fin)
--#define cpu_reset			PROC_VTABLE(reset)
--#define cpu_do_idle			PROC_VTABLE(_do_idle)
--#define cpu_dcache_clean_area		PROC_TABLE(dcache_clean_area)
--#define cpu_set_pte_ext			PROC_TABLE(set_pte_ext)
--#define cpu_do_switch_mm		PROC_VTABLE(switch_mm)
-+static inline void __nocfi cpu_proc_init(void)
+-#define __delay(n)		arm_delay_ops.delay(n)
++static inline void __nocfi __delay(unsigned long n)
 +{
-+	PROC_VTABLE(_proc_init)();
-+}
-+static inline void __nocfi cpu_check_bugs(void)
-+{
-+	PROC_VTABLE(check_bugs)();
-+}
-+static inline void __nocfi cpu_proc_fin(void)
-+{
-+	PROC_VTABLE(_proc_fin)();
-+}
-+static inline void __nocfi cpu_reset(unsigned long addr, bool hvc)
-+{
-+	PROC_VTABLE(reset)(addr, hvc);
-+}
-+static inline int __nocfi cpu_do_idle(void)
-+{
-+	return PROC_VTABLE(_do_idle)();
-+}
-+static inline void __nocfi cpu_dcache_clean_area(void *addr, int size)
-+{
-+	PROC_TABLE(dcache_clean_area)(addr, size);
-+}
-+#ifdef CONFIG_ARM_LPAE
-+static inline void __nocfi cpu_set_pte_ext(pte_t *ptep, pte_t pte)
-+{
-+	PROC_TABLE(set_pte_ext)(ptep, pte);
-+}
-+#else
-+static inline void __nocfi cpu_set_pte_ext(pte_t *ptep, pte_t pte, unsigned int ext)
-+{
-+	PROC_TABLE(set_pte_ext)(ptep, pte, ext);
-+}
-+#endif
-+static inline void __nocfi cpu_do_switch_mm(phys_addr_t pgd_phys, struct mm_struct *mm)
-+{
-+	PROC_VTABLE(switch_mm)(pgd_phys, mm);
++	arm_delay_ops.delay(n);
 +}
  
- /* These two are private to arch/arm/kernel/suspend.c */
--#define cpu_do_suspend			PROC_VTABLE(do_suspend)
--#define cpu_do_resume			PROC_VTABLE(do_resume)
-+static inline void __nocfi cpu_do_suspend(void *p)
-+{
-+	PROC_VTABLE(do_suspend)(p);
-+}
-+static inline void __nocfi cpu_do_resume(void *p)
-+{
-+	PROC_VTABLE(do_resume)(p);
-+}
- #endif
- 
- extern void cpu_resume(void);
-diff --git a/arch/arm/mach-sunxi/mc_smp.c b/arch/arm/mach-sunxi/mc_smp.c
-index 277f6aa8e6c2..791eabb7d433 100644
---- a/arch/arm/mach-sunxi/mc_smp.c
-+++ b/arch/arm/mach-sunxi/mc_smp.c
-@@ -646,17 +646,12 @@ static bool __init sunxi_mc_smp_cpu_table_init(void)
-  *
-  * We need the trampoline code to enable CCI-400 on the first cluster
+ /*
+  * This function intentionally does not exist; if you see references to
+@@ -76,8 +79,15 @@ extern void __bad_udelay(void);
+  * first constant multiplications gets optimized away if the delay is
+  * a constant)
   */
--typedef typeof(cpu_reset) phys_reset_t;
--
- static int __init nocache_trampoline(unsigned long __unused)
- {
--	phys_reset_t phys_reset;
--
- 	setup_mm_for_reboot();
- 	sunxi_cluster_cache_disable_without_axi();
+-#define __udelay(n)		arm_delay_ops.udelay(n)
+-#define __const_udelay(n)	arm_delay_ops.const_udelay(n)
++static inline void __nocfi __udelay(unsigned long n)
++{
++	arm_delay_ops.udelay(n);
++}
++
++static inline void __nocfi __const_udelay(unsigned long n)
++{
++	arm_delay_ops.const_udelay(n);
++}
  
--	phys_reset = (phys_reset_t)(unsigned long)__pa_symbol(cpu_reset);
--	phys_reset(__pa_symbol(sunxi_mc_smp_resume), false);
-+	cpu_reset(__pa_symbol(sunxi_mc_smp_resume), false);
- 	BUG();
- }
- 
+ #define udelay(n)							\
+ 	(__builtin_constant_p(n) ?					\
 
 -- 
 2.34.1
