@@ -1,170 +1,138 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59651199BE
-	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19D91B949
+	for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 20:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708891703; cv=none; b=Rd/qlN0wvIQF4AGMKcTJrE9B8eGV7dsVK9pr6EU88fkxhTye2+KQE+3ANsEyOWRnZD+AaAA1tOSpxRjXJMeAwuQgA9XDKJr+HQvZIzulga/MjKnsD3PGWpIyVDiJFIHzvf9p+iqKDrAONBXft/af5Nox01Lb9IfC1N0UNA0++Ic=
+	t=1708892220; cv=none; b=dWdSJIxMY0n5irW1967BtqaE6lWT2r5+U6BGwZRfezRQRhdlZVnRVh4UPUYncWTskXyy702XSEGqcuASqaCyxF5IcVo23ewbAVQf6yBVWuX28gV2xIJSed6zpq1Ve1D5W4lGnb+7vWMDYPKDRobqbOWPwmTVZ27P2+9jH7yChzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708891703; c=relaxed/simple;
-	bh=amin5G4OUB2TOd8qhHcFmiCbc8Lio6xBnelTIHekVoY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P6VGpGsSpLlaCrsofGSFOJbUBnLNZXWDblJ349XK+F0IQTm1FOagpUkosC/aw6BHq/zpRca4MyhjNmr4vRu5WC21AzPIEpDdHO1xcJriRGo+10mB5+JvnHvWO0/L/NX5V1p/lO6c5Jb161RTmCw3OyjeAz1Q+oEuQcVJ96nnSa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RuTTlm8E; arc=none smtp.client-ip=209.85.167.53
+	s=arc-20240116; t=1708892220; c=relaxed/simple;
+	bh=VxLZ7RsZpLYYQuSI66FP3nhHczQ7j/5oRGLYsnKLyxA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HCDxdeZBuwuBuUpGDsvYpFZtzkuDNiltLvdtNVF+OfIGmZxUjqjvZCDsXhtNB2PsD7UXVPPu6bQk6UvEzeIOmzR7Y3efGY8FEw3DCb7w5aOLsU2IJDNSaKc0eSt3W8NnGfVoyzENXkLPbS3FEtbR91LExpx4NdLhHBp92DVzElU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aRVt4/km; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RuTTlm8E"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-512f3e75391so992216e87.2
-        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:08:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aRVt4/km"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3f4464c48dso269268266b.3
+        for <llvm@lists.linux.dev>; Sun, 25 Feb 2024 12:16:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708891699; x=1709496499; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hqBogdja5tMMOO5wTCklLeqAnS4o63/YOLSFeJQB8FQ=;
-        b=RuTTlm8EMcsGHmejKxfSXRUSuCF9ihRUJfnIdC/xWhe8GesOpECF5+yUaPo6TUWMHZ
-         lOlUlkjZ9HPchdzZs6Hv+xVD+MEggEIB66LdplGrOZCr0/txGOVW9T6iirVkuJ2wB+EP
-         33Hv0PxpluOwT8iwnyxDQmkMI/NZysMjNLX29ODls8hh6ZVRHAVyup2ajxkNmhT+t1gJ
-         BZbZPFP8850cn/TmFvTa9hEPJNnZYciejVg1MKCYBGmh2tyNzHxfnr6b4Whzw6qBZFKa
-         sNj3A1wd2Qi+kkjKkoziGY/fSFy89oJRTfZGzM0NlpxDzJJNI4v97ROqzJmCzssau9gq
-         xpow==
+        d=linaro.org; s=google; t=1708892217; x=1709497017; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g0BL3CAb54Q9PTk8ioTJQE7FsRhBBa8lLja7tu/HP78=;
+        b=aRVt4/km0LjkujV06S23K7Yu8gCVMOiGvLlFEKuO57GenLcAgc48UEAX45RqXkSysi
+         4pjqjSp+DS2Z/B8ATX12NqrqzVNtFbLyu6urfjwvPYLfmZHuwlXghDv797W1NEpSqx0+
+         d2rDXXn78u8o/CCSgCf3KmKHMIuCRNDU4wQH3zpIfAlAHwyn6z1jF8/IBNMeVBnRyELS
+         DmfYdscT3nSD2mwn8OMcjlDLYIGb3y4uTrvUzobaDi2EIxPvgMrowG8qpwm6IdXnVqmT
+         jiuPbA46Fyf1dC5AVCQ+S2JRCzSdgC1uqRNj2ybiysgvuggKtbtR0ZkNmA/Pcfh+9jkJ
+         dAFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708891699; x=1709496499;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hqBogdja5tMMOO5wTCklLeqAnS4o63/YOLSFeJQB8FQ=;
-        b=F/A7Rnd1NKK+tRqpqxcFjVDuP1nDulte274TUHVXZu46oCELei+MptpyqEhDR7E9kq
-         Z3zdgUUm43EeSd3XR8AT3lQPQtHqLOZ9/LTrGcxh5a3rInC8Md6IzW3tJKE1HYfuv4CR
-         e4wqQHD6fZ1myZ7vojkgNnRyavNCqNVxYPEXw7lAx5sXxSMJUB+EnUxPvIq919aqDG3Z
-         ctJ9l1J/yz2oUZ4PvY6O/3mFfDq802yYa1CNF4RA/FflJxTVCOz+nnLyE34W+bg9XVjN
-         QO/Zdb2apTSjFfSMPvXqE5Vel8r5/pXKggfcphPEsSUdCLXIs76+C+YHwIuSgGNhv7NQ
-         YbZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWsQek9fPwcEchOP+L8E4bNlB1ZbPk5wdjvS06kBhGfAEuAV3c5VFSAlTFyzj09ti/Cu18EI90LvIGuYVasNhKehmEKjA==
-X-Gm-Message-State: AOJu0YzrmwJNQz1E7XnsCjc7NYoIMItJNkgkpqVO+UCn1cvtfbQGwFD/
-	qchnGlKKcvgDR32mSnowfHRwU4hudGkGvt8XF0ZO0m1ja4mGLBqpNp2bBgz6kjM=
-X-Google-Smtp-Source: AGHT+IFk3ZUSgR50Q//sWITHnD3B/uSdVym8AuueDMcQPsH+TIpsuF27riPyDlhFM+zdSEFscG/Dsw==
-X-Received: by 2002:a05:6512:46c:b0:512:db3f:436 with SMTP id x12-20020a056512046c00b00512db3f0436mr2992602lfd.36.1708891699608;
-        Sun, 25 Feb 2024 12:08:19 -0800 (PST)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a4340138ab5sm504621ejc.5.2024.02.25.12.08.18
+        d=1e100.net; s=20230601; t=1708892217; x=1709497017;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g0BL3CAb54Q9PTk8ioTJQE7FsRhBBa8lLja7tu/HP78=;
+        b=JJMqjs2ccFw2wjVXJpOrRveEjDzZUbeuxkJqFn5VlJdyzNgKjMPHsTp1cgUIV6hLch
+         iPf5SV7ycEOUnOmFiVNS9vPT/OD+FuxsX/dCqMNO8ucbseADzMsHJZugNHzWd3CqEeyv
+         4MSfYtdI0j6UVk8UrLLXILE3UlBkpGyMq3E1woahMBrpSe2d/7cnySUV6yA8ZsObcjCv
+         r9KuyuaV9STGBt8n3xGijWiHL5g1H0cjin3dNoihLdMeDtbSztjpq106txs4mnWvREXZ
+         dqvzhBDwEkczH/1tLLUePG8xoC7tvvfMze1eNLL5grO8vIZc1SFk6SbMgUUOSD98CCVQ
+         JFpw==
+X-Forwarded-Encrypted: i=1; AJvYcCX5QZiNMJwSTSZCnhbraMbZ+VEK0dcenCty1LUfTJRcoxyTnBFnsCTBUU4x7gpz49VZk/pkMDe3VuOQhqBnARzmi2/SDg==
+X-Gm-Message-State: AOJu0Yya5s9fPNSo6XIqyJmwrZ+HOnP+SZtLhABY7eZF5+tN565OhZJa
+	705UNYTjmRVXPm3kATj09Xt63V7suZT+RJQh0LwzJMigYVpA7O3qKu93C4u0Y1k=
+X-Google-Smtp-Source: AGHT+IHwvup2ahGbonMPPRSZ4YpMn5V9B0o/2DNB+FUiQxsAjMoxZAEys1BsJfv7CQ90Ezd9DISwOg==
+X-Received: by 2002:a17:906:f804:b0:a3f:c0bd:b7bd with SMTP id kh4-20020a170906f80400b00a3fc0bdb7bdmr3933047ejb.43.1708892217056;
+        Sun, 25 Feb 2024 12:16:57 -0800 (PST)
+Received: from krzk-bin.. ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id ck13-20020a170906c44d00b00a3d7bcfb9a1sm1741045ejb.128.2024.02.25.12.16.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Feb 2024 12:08:19 -0800 (PST)
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sun, 25 Feb 2024 21:08:16 +0100
-Subject: [PATCH 7/7] ARM: page: Turn highpage accesses into static inlines
+        Sun, 25 Feb 2024 12:16:56 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/2] iio: dac: ad5755: make use of of_device_id table
+Date: Sun, 25 Feb 2024 21:16:53 +0100
+Message-Id: <20240225201654.49450-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240225-arm32-cfi-v1-7-6943306f065b@linaro.org>
-References: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
-In-Reply-To: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
-To: Russell King <linux@armlinux.org.uk>, 
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
- Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
-Clearing and copying pages in highmem uses either the cpu_user
-vtable or the __glue() assembler stubs to call into per-CPU
-versions of these functions.
+Populate the of_device_id table with match data, reference it in the
+spi_driver struct and use spi_get_device_match_data() to perform the
+type matching to fix warning:
 
-This is all really confusing for KCFI so wrap these into static
-inlines and prefix each inline function with __nocfi.
+  ad5755.c:866:34: error: unused variable 'ad5755_of_match' [-Werror,-Wunused-const-variable]
 
-__cpu_clear_user_highpage() and __cpu_copy_user_highpage() are
-exported in arch/arm/mm/proc-syms.c which causes a problem with
-using static inlines, but it turns out that these exports are
-completely unused, so we can just delete them.
+This is also preferred way of matching device variants, then relying on
+fallback via spi_device_id.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- arch/arm/include/asm/page.h | 36 +++++++++++++++++++++++++++++-------
- arch/arm/mm/proc-syms.c     |  7 +------
- 2 files changed, 30 insertions(+), 13 deletions(-)
 
-diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
-index 119aa85d1feb..8bf297228627 100644
---- a/arch/arm/include/asm/page.h
-+++ b/arch/arm/include/asm/page.h
-@@ -138,17 +138,39 @@ void xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr);
- #ifdef MULTI_USER
- extern struct cpu_user_fns cpu_user;
- 
--#define __cpu_clear_user_highpage	cpu_user.cpu_clear_user_highpage
--#define __cpu_copy_user_highpage	cpu_user.cpu_copy_user_highpage
-+static inline void __nocfi __cpu_clear_user_highpage(struct page *page,
-+						     unsigned long vaddr)
-+{
-+	cpu_user.cpu_clear_user_highpage(page, vaddr);
-+}
-+
-+static inline void __nocfi __cpu_copy_user_highpage(struct page *to,
-+			struct page *from, unsigned long vaddr,
-+			struct vm_area_struct *vma)
-+{
-+	cpu_user.cpu_copy_user_highpage(to, from, vaddr, vma);
-+}
- 
- #else
- 
--#define __cpu_clear_user_highpage	__glue(_USER,_clear_user_highpage)
--#define __cpu_copy_user_highpage	__glue(_USER,_copy_user_highpage)
-+/* These turn into function declarations for each per-CPU glue function */
-+void __glue(_USER,_clear_user_highpage)(struct page *page, unsigned long vaddr);
-+void __glue(_USER,_copy_user_highpage)(struct page *to, struct page *from,
-+		unsigned long vaddr, struct vm_area_struct *vma);
-+
-+static inline void __nocfi __cpu_clear_user_highpage(struct page *page,
-+						     unsigned long vaddr)
-+{
-+	__glue(_USER,_clear_user_highpage)(page, vaddr);
-+}
-+
-+static inline void __nocfi __cpu_copy_user_highpage(struct page *to,
-+			struct page *from, unsigned long vaddr,
-+			struct vm_area_struct *vma)
-+{
-+	__glue(_USER,_copy_user_highpage)(to, from, vaddr, vma);
-+}
- 
--extern void __cpu_clear_user_highpage(struct page *page, unsigned long vaddr);
--extern void __cpu_copy_user_highpage(struct page *to, struct page *from,
--			unsigned long vaddr, struct vm_area_struct *vma);
- #endif
- 
- #define clear_user_highpage(page,vaddr)		\
-diff --git a/arch/arm/mm/proc-syms.c b/arch/arm/mm/proc-syms.c
-index e21249548e9f..c93fec38d9f4 100644
---- a/arch/arm/mm/proc-syms.c
-+++ b/arch/arm/mm/proc-syms.c
-@@ -31,14 +31,9 @@ EXPORT_SYMBOL(__cpuc_flush_dcache_area);
- EXPORT_SYMBOL(cpu_cache);
- #endif
- 
--#ifdef CONFIG_MMU
--#ifndef MULTI_USER
--EXPORT_SYMBOL(__cpu_clear_user_highpage);
--EXPORT_SYMBOL(__cpu_copy_user_highpage);
--#else
-+#if defined(CONFIG_MMU) && defined(MULTI_USER)
- EXPORT_SYMBOL(cpu_user);
- #endif
--#endif
- 
- /*
-  * No module should need to touch the TLB (and currently
+Rework according to comments.
 
+An old v1:
+https://lore.kernel.org/all/20230810111933.205619-1-krzysztof.kozlowski@linaro.org/
+---
+ drivers/iio/dac/ad5755.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/iio/dac/ad5755.c b/drivers/iio/dac/ad5755.c
+index 404865e35460..877c1125d892 100644
+--- a/drivers/iio/dac/ad5755.c
++++ b/drivers/iio/dac/ad5755.c
+@@ -809,7 +809,7 @@ static struct ad5755_platform_data *ad5755_parse_fw(struct device *dev)
+ 
+ static int ad5755_probe(struct spi_device *spi)
+ {
+-	enum ad5755_type type = spi_get_device_id(spi)->driver_data;
++	enum ad5755_type type = (kernel_ulong_t)spi_get_device_match_data(spi);
+ 	const struct ad5755_platform_data *pdata;
+ 	struct iio_dev *indio_dev;
+ 	struct ad5755_state *st;
+@@ -864,11 +864,11 @@ static const struct spi_device_id ad5755_id[] = {
+ MODULE_DEVICE_TABLE(spi, ad5755_id);
+ 
+ static const struct of_device_id ad5755_of_match[] = {
+-	{ .compatible = "adi,ad5755" },
+-	{ .compatible = "adi,ad5755-1" },
+-	{ .compatible = "adi,ad5757" },
+-	{ .compatible = "adi,ad5735" },
+-	{ .compatible = "adi,ad5737" },
++	{ .compatible = "adi,ad5755", (void *)ID_AD5755 },
++	{ .compatible = "adi,ad5755-1", (void *)ID_AD5755 },
++	{ .compatible = "adi,ad5757", (void *)ID_AD5757 },
++	{ .compatible = "adi,ad5735", (void *)ID_AD5735 },
++	{ .compatible = "adi,ad5737", (void *)ID_AD5737 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, ad5755_of_match);
+@@ -876,6 +876,7 @@ MODULE_DEVICE_TABLE(of, ad5755_of_match);
+ static struct spi_driver ad5755_driver = {
+ 	.driver = {
+ 		.name = "ad5755",
++		.of_match_table = ad5755_of_match,
+ 	},
+ 	.probe = ad5755_probe,
+ 	.id_table = ad5755_id,
 -- 
 2.34.1
 
