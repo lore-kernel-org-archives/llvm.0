@@ -1,212 +1,226 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5648620DD3
-	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 10:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F2B1D559;
+	Mon, 26 Feb 2024 10:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708943509; cv=none; b=lso+r1SRYeXDJ/8e+yjVr99gl8LecCg8BzUV6/MMafP4f68FU9e7ysy6l7UHKox5ySwc8VfiaCGLfj11LZd7o5xjPDe9duSbOXCaG1ddUmtsAb1GtkBmc87F1HB+j2tnyE2mXTMC4k18xrWgZX/VVToTwGidXngSNlFMKDRg5p8=
+	t=1708943788; cv=none; b=rBJAv3y8YIMuSw/O3wXRUNMls79T0hzZM3yrE24uYEoXtlsJmvGRL+5fqtG9u8jjunCMKVSQ6jFk/9sIPetLqM+mR3ndw2PqWyk7oW7pM1KZ5FzP9O9TqVKMeivCzSK2LcZ9cxa9fdgUHF4pIzCvMnX7w4v4yWQGKIf//IjyBaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708943509; c=relaxed/simple;
-	bh=I4xU7ttfQubSTSZH8VLMXXlEYrJ6AfVembPYcdM4yn4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=G73KYNmo55zWJ4hl5t2PoQCyM7M0kbiJoIwLhgvh2xWbYVFvddvy5E6RxXeKJjkTGReBiPd4UrSogWtbM1Np4nvXyZb3y946VbCZaAr2N4lgfcnpZTpkRSHiSGHajyPdyPlWK1xKeCfb2UZDEBPS3HroKXz3fLbHDLQ9Cr6zkWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TPwARwER; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TPwARwER"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708943503;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=29Ct9QfdREsbENzUcNQTI5YdRj0jXaAywHdNm7CsTgY=;
-	b=TPwARwERGXqJp31H5m3bf5i3H9vVGI7OHcf2uPV2x7jL1RBzjae4MXfqk4Z4Bofx+85xF+
-	K5mrkHnQpdFzMbuCp2+KAp+Sy2yuTZ9wJKNGOqfz0rKOgHQHt2v6POc/DHyr5Fns5dean7
-	DjWw0B7v4/QdjgqqCrJkDqrfCGdgVFI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-161-LEcAY4q6OAu7bRNTirWFEw-1; Mon, 26 Feb 2024 05:31:42 -0500
-X-MC-Unique: LEcAY4q6OAu7bRNTirWFEw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43B8C800074
-	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 10:31:42 +0000 (UTC)
-Received: from [172.64.13.19] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id F3FCE1815;
-	Mon, 26 Feb 2024 10:31:41 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 204): Test report for master
- (6.8.0-rc5, mainline.kernel.org-clang, 91403d50)
-Date: Mon, 26 Feb 2024 10:31:41 -0000
-To: llvm@lists.linux.dev
+	s=arc-20240116; t=1708943788; c=relaxed/simple;
+	bh=Hcf/NvZpH/mt+qo9rXN0h6uQKmQyrr4HjtQJD6+U2BU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VUvdRn5LT9VsdLQy+p1iLWaiMO7oZ6H0iZ2lmptXKqK9XYdg9QHiuqUguJuFiL6qOHfSDw2fYO17dkjDyVf5YJJ6H2fHymgqC9MGfdH2qHcpCXxpXt5i6J/ZxeE+0zZAlG0ABrQwgkkZ2OboTXo+l1K8TDBOkpRz6XCLdRt16q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TjxkX5byVz6K5kG;
+	Mon, 26 Feb 2024 18:32:04 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0C16E140DEC;
+	Mon, 26 Feb 2024 18:36:23 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 26 Feb
+ 2024 10:36:22 +0000
+Date: Mon, 26 Feb 2024 10:36:21 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: kernel test robot <lkp@intel.com>
+CC: Dumitru Ceclan <mitrutzceclan@gmail.com>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, Andy Shevchenko <andy@kernel.org>, "Michael
+ Walle" <michael@walle.cc>, Nuno Sa <nuno.sa@analog.com>
+Subject: Re: [jic23-iio:testing 136/152] drivers/iio/adc/ad7173.c:854:3:
+ warning: variable 'chan_arr' is uninitialized when used here
+Message-ID: <20240226103621.00002845@Huawei.com>
+In-Reply-To: <202402251818.96Ke1Y8O-lkp@intel.com>
+References: <202402251818.96Ke1Y8O-lkp@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
-Message-Id: <27551.124022605314200225@us-mta-161.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Hi, we tested your kernel and here are the results:
+On Sun, 25 Feb 2024 18:31:55 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+> head:   9dcbd08b27c90256725c9dfe83152e1debe079c9
+> commit: ef3626e2264ce730bc57f6c57b7b7049bd8c45c9 [136/152] iio: adc: ad7173: add AD7173 driver
+> config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240225/202402251818.96Ke1Y8O-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240225/202402251818.96Ke1Y8O-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202402251818.96Ke1Y8O-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from drivers/iio/adc/ad7173.c:16:
+>    In file included from include/linux/gpio/driver.h:8:
+>    In file included from include/linux/irqchip/chained_irq.h:10:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:328:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      547 |         val = __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>          |                                                   ^
+>    In file included from drivers/iio/adc/ad7173.c:16:
+>    In file included from include/linux/gpio/driver.h:8:
+>    In file included from include/linux/irqchip/chained_irq.h:10:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:328:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>          |                                                   ^
+>    In file included from drivers/iio/adc/ad7173.c:16:
+>    In file included from include/linux/gpio/driver.h:8:
+>    In file included from include/linux/irqchip/chained_irq.h:10:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:328:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+> >> drivers/iio/adc/ad7173.c:854:3: warning: variable 'chan_arr' is uninitialized when used here [-Wuninitialized]  
+>      854 |                 chan_arr[chan_index] = ad7173_temp_iio_channel_template;
+>          |                 ^~~~~~~~
+>    drivers/iio/adc/ad7173.c:848:32: note: initialize the variable 'chan_arr' to silence this warning
+>      848 |         struct iio_chan_spec *chan_arr, *chan;
+>          |                                       ^
+>          |                                        = NULL
+> >> drivers/iio/adc/ad7173.c:855:19: warning: variable 'chans_st_arr' is uninitialized when used here [-Wuninitialized]  
+>      855 |                 chan_st_priv = &chans_st_arr[chan_index];
+>          |                                 ^~~~~~~~~~~~
+>    drivers/iio/adc/ad7173.c:845:37: note: initialize the variable 'chans_st_arr' to silence this warning
+>      845 |         struct ad7173_channel *chans_st_arr, *chan_st_priv;
+>          |                                            ^
+>          |                                             = NULL
+>    8 warnings generated.
+> 
+> 
+> vim +/chan_arr +854 drivers/iio/adc/ad7173.c
+> 
+>    842	
+>    843	static int ad7173_fw_parse_channel_config(struct iio_dev *indio_dev)
+>    844	{
+>    845		struct ad7173_channel *chans_st_arr, *chan_st_priv;
+>    846		struct ad7173_state *st = iio_priv(indio_dev);
+>    847		struct device *dev = indio_dev->dev.parent;
+>    848		struct iio_chan_spec *chan_arr, *chan;
+>    849		unsigned int ain[2], chan_index = 0;
+>    850		struct fwnode_handle *child;
+>    851		int ref_sel, ret;
 
-Tested-by: CKI Project <cki-project@redhat.com>
+I think the fix is
+			struct iio_chan_spec *chan_arr = indio_dev->channels
 
-Kernel information:
-    Commit message: Merge tag 'iommu-fixes-v6.8-rc5' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/joro/iommu
+I'll fix it up like that unless I hear back with a different fix.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/131151
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [upstream] blktests tests nbd/001 failed
-            URL: https://github.com/osandov/blktests/issues/132
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
-koza machines
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1852
-            Affected tests:
-                  x86_64 - Libkcapi AF_ALG test
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-        Issue: xfstests: generic/354 file exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1654
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - xfstests - ext4
-      x86_64 (debug) - xfstests - xfs
-      x86_64 (debug) - xfstests - btrfs
-      x86_64 (debug) - xfstests - nfsv4.2
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+>    852	
+>    853		if (st->info->has_temp) {
+>  > 854			chan_arr[chan_index] = ad7173_temp_iio_channel_template;
+>  > 855			chan_st_priv = &chans_st_arr[chan_index];  
+>    856			chan_st_priv->ain =
+>    857				AD7173_CH_ADDRESS(chan_arr[chan_index].channel,
+>    858						  chan_arr[chan_index].channel2);
+>    859			chan_st_priv->cfg.bipolar = false;
+>    860			chan_st_priv->cfg.input_buf = true;
+>    861			chan_st_priv->cfg.ref_sel = AD7173_SETUP_REF_SEL_INT_REF;
+>    862			st->adc_mode |= AD7173_ADC_MODE_REF_EN;
+>    863	
+>    864			chan_index++;
+>    865		}
+>    866	
+>    867		device_for_each_child_node(dev, child) {
+>    868			chan = &chan_arr[chan_index];
+>    869			chan_st_priv = &chans_st_arr[chan_index];
+>    870			ret = fwnode_property_read_u32_array(child, "diff-channels",
+>    871							     ain, ARRAY_SIZE(ain));
+>    872			if (ret) {
+>    873				fwnode_handle_put(child);
+>    874				return ret;
+>    875			}
+>    876	
+>    877			if (ain[0] >= st->info->num_inputs ||
+>    878			    ain[1] >= st->info->num_inputs) {
+>    879				fwnode_handle_put(child);
+>    880				return dev_err_probe(dev, -EINVAL,
+>    881					"Input pin number out of range for pair (%d %d).\n",
+>    882					ain[0], ain[1]);
+>    883			}
+>    884	
+>    885			ret = fwnode_property_match_property_string(child,
+>    886								    "adi,reference-select",
+>    887								    ad7173_ref_sel_str,
+>    888								    ARRAY_SIZE(ad7173_ref_sel_str));
+>    889			if (ret < 0)
+>    890				ref_sel = AD7173_SETUP_REF_SEL_INT_REF;
+>    891			else
+>    892				ref_sel = ret;
+>    893	
+>    894			if (ref_sel == AD7173_SETUP_REF_SEL_EXT_REF2 &&
+>    895			    st->info->id != AD7173_ID) {
+>    896				fwnode_handle_put(child);
+>    897				return dev_err_probe(dev, -EINVAL,
+>    898					"External reference 2 is only available on ad7173-8\n");
+>    899			}
+>    900	
+>    901			ret = ad7173_get_ref_voltage_milli(st, ref_sel);
+>    902			if (ret < 0) {
+>    903				fwnode_handle_put(child);
+>    904				return dev_err_probe(dev, ret,
+>    905						     "Cannot use reference %u\n", ref_sel);
+>    906			}
+>    907			if (ref_sel == AD7173_SETUP_REF_SEL_INT_REF)
+>    908				st->adc_mode |= AD7173_ADC_MODE_REF_EN;
+>    909			chan_st_priv->cfg.ref_sel = ref_sel;
+>    910	
+>    911			*chan = ad7173_channel_template;
+>    912			chan->address = chan_index;
+>    913			chan->scan_index = chan_index;
+>    914			chan->channel = ain[0];
+>    915			chan->channel2 = ain[1];
+>    916			chan->differential = true;
+>    917	
+>    918			chan_st_priv->ain = AD7173_CH_ADDRESS(ain[0], ain[1]);
+>    919			chan_st_priv->chan_reg = chan_index;
+>    920			chan_st_priv->cfg.input_buf = true;
+>    921			chan_st_priv->cfg.odr = 0;
+>    922	
+>    923			chan_st_priv->cfg.bipolar = fwnode_property_read_bool(child, "bipolar");
+>    924			if (chan_st_priv->cfg.bipolar)
+>    925				chan->info_mask_separate |= BIT(IIO_CHAN_INFO_OFFSET);
+>    926	
+>    927			chan_index++;
+>    928		}
+>    929		return 0;
+>    930	}
+>    931	
+> 
 
