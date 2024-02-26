@@ -1,104 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA89EC7;
-	Mon, 26 Feb 2024 12:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0327E12F361
+	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 17:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708951700; cv=none; b=tcu0ilXoIQ2jLg6I0LOsTXOaehD9yAEeQMRen/JzVOgdVfMuek1Djvi9QqNkkxvddE6hNPtmjGhrnmFHpiB3uomZtHVFM3Q0ODgaKHG2tukDiUrcpSm8JPA8Tfpl/FHmDDoCbEjQfTK0n4aoSS7gr247tHpbRFs/eNYhIvQX9o0=
+	t=1708968772; cv=none; b=l8D3E4eEMFcETw+B5WiP106CE/kJ+n/QAqyKbNPNhP+IMMGhOxdvmnSjvRTPUnW8Civu58OYw9Rnt0Xh3PwLuef4Op6rwJI4eUMM4PZ6MpEkL4GaOzpzRn7a+sQDWB0qnufbe8kqs+1mIyzV/zDWhJ3KlSVm8brRKaDVztLGuYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708951700; c=relaxed/simple;
-	bh=nwHarD6e/noK0RLpyMyg49ecLqGeQ0DNCXP39VJcJnU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VMpDgaGtCjOt6YmNCOE1b4ur/Q/TS9SEKDsUFSojHU5+2yETA2EA92wGQVbsufu+oepad+JbbdqWm18lSnVFXyd7I5Osf/9oJzHCTVhaxTjgtxrNYtuWFTVCOH8tHtodHfa7Swo0p/kl/4SzkjtQcf6Qr/lkiDtB4GOSBm66BeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bq8V8bu+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708968772; c=relaxed/simple;
+	bh=w2ALZt/64adjKX506ThshIXHvJN/vMxdfdgFwiM9u6U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QaVx3umS/Fd1DeBRU8hNlPOJ1RxUUWhNXhc9kvaD16ek8CPJvA517g9pJVGzEk2WkJC1g6prv4jBBBtYiD+HpSC4qY86BzhodZuS4KULd7FYDLS1IUOKaglS0sb7mbbrYfSSfg5M/H9qwye4/DTbdsoiMKvNPizqyOw21Sa+5cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KKBDJPx+; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bq8V8bu+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87566C433F1;
-	Mon, 26 Feb 2024 12:48:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708951699;
-	bh=nwHarD6e/noK0RLpyMyg49ecLqGeQ0DNCXP39VJcJnU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Bq8V8bu+AnNPQ618fedRUM7MYXae1yTLy649cK81/fffiV4+DdQr+B6CwBXjv1QA/
-	 9XwitYZerkPdzT5oQ/BMnkEy4pIshL73oouNzyIJoPfQp9+cQuhHNB3RpERuh9m4fH
-	 E9M8scMGqCESeLu8Ph8VEitEHpGBWF+T8lMDqXAWow9kDmXkSJ2EMmuDiOL61oW5ak
-	 8GXdCtwNHiGHcJIJA6zt7gf/AdcrTa9iQtsvwNLiQU3QsjS7Nq5smBFZwrq9/k7ZvA
-	 uB0u6Yts0KZNO9gSsCmBl/IqxfViSV3BHGkV+4r+G1t7huI2eVrHUs+49XbtkKfIzY
-	 CjL4rZQN+bcqg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>,
-	Oded Gabbay <ogabbay@kernel.org>,
-	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Matt Roper <matthew.d.roper@intel.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 2/3] [v2] drm/xe/mmio: fix build warning for BAR resize on 32-bit
-Date: Mon, 26 Feb 2024 13:46:37 +0100
-Message-Id: <20240226124736.1272949-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240226124736.1272949-1-arnd@kernel.org>
-References: <20240226124736.1272949-1-arnd@kernel.org>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KKBDJPx+"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-787df45e513so15341385a.1
+        for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 09:32:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708968769; x=1709573569; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NPhOUUbGfyPt95d+thIFpKzftMVi7roAfhqv80cpO4Q=;
+        b=KKBDJPx+3YvprMqE/es88Qa/66bd5JDQfz2CPKypXX/FoQHVGrEPKTON/dXcLbeqYy
+         1ICfTvV94CfrtdV6coiQlXncExlVho4CxOM9DA5L5MI23uHE47SWg98k7ztzo/72C8Mm
+         Mxstnc6R+UpffjBrOfYCXz2HLfazfxQHC5PTY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708968769; x=1709573569;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NPhOUUbGfyPt95d+thIFpKzftMVi7roAfhqv80cpO4Q=;
+        b=jFOTuE6zypMgbB7dG5BDi4jIxTlnEs9heBH/vi1Hst9YkOZvLjBehChGlFZd6mlznq
+         8v2PhgaEJcbYepmFPeYcJhUZVhg7IT8Y6PX/TQBe5cTGXLSzlAh8unSJOJSI4GLBvjjX
+         rNljlB/5n1roPG303m5YxGX9oTvBt0CAep00cKUZQgh1b6E6x8ODlFZ71WK2JVYckvUt
+         6xChfg+sNmA9Jnc5aQlklmOAYXIVMx+sil04/aKC8p3U+wOMmMM0V+3nMzeIaFSR9gSX
+         bQ1hHw6v5vYURJZGq9lZPmoxSiywyGxQPQT24Rw+62xSJOvvKVugovjwyyKsEOMvEgaR
+         3vDA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAKQK+YK6euD9BzUwuxzVZ1yxn7wQOIY5RtDZxheigLx4XPl8JdRYBO3YW+w39HQfjjcXomAnCL1fjtjXlCQJh5t4r5A==
+X-Gm-Message-State: AOJu0Yx/50pdx3yN/rjpOoyUirUmELCC0Y0LgSpbpSIbx9UVxvWwGTA0
+	e8V48H86ym/81f0JK2hl5XLSYWom9yT+xkDAMIes+72KHnztNWVvf/lMzfPdVA==
+X-Google-Smtp-Source: AGHT+IHvLZz0JMsMLxrxZ5LeCz16I0q4crWk7ffwcs10kKwH096y5KdYOmJIsU/8SW+PQA+90LYoog==
+X-Received: by 2002:a37:e113:0:b0:785:c9d1:8636 with SMTP id c19-20020a37e113000000b00785c9d18636mr6773215qkm.59.1708968768956;
+        Mon, 26 Feb 2024 09:32:48 -0800 (PST)
+Received: from denia.c.googlers.com (115.25.199.35.bc.googleusercontent.com. [35.199.25.115])
+        by smtp.gmail.com with ESMTPSA id b11-20020a05620a04eb00b0078725d0345dsm2672669qkh.2.2024.02.26.09.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Feb 2024 09:32:48 -0800 (PST)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v2 0/3] media: Fix warnings building with LLVM=1
+Date: Mon, 26 Feb 2024 17:32:43 +0000
+Message-Id: <20240226-fix-clang-warnings-v2-0-fa1bc931d17e@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADvL3GUC/32NSw6CMBCGr0Jm7ZjO2KC48h6GRS0VJpHWTBU1h
+ LtbOYDL73/OkINKyHCsZtAwSZYUC/CmAj+42AeUrjCwYWuID3iVN/pbcfDlNErsM9aeuGFj672
+ /QCneNZTUOnpuCw+SH0k/68dEP/Xv3ERokLrG1oZ2zjKd/KBplOe4TdpDuyzLF1e5fQq3AAAA
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Mike Isely <isely@pobox.com>, Tiffany Lin <tiffany.lin@mediatek.com>, 
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>, 
+ Yunfei Dong <yunfei.dong@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
+ Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.12.4
 
-From: Arnd Bergmann <arnd@arndb.de>
+LLVM does check -Wcast-function-type-sctrict, which is triggered in a
+couple of places in the media subsystem.
 
-clang complains about a nonsensical test on builds with a 32-bit phys_addr_t,
-which means resizing will always fail:
-
-drivers/gpu/drm/xe/xe_mmio.c:109:23: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-  109 |                     root_res->start > 0x100000000ull)
-      |                     ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-
-Previously, BAR resize was always disallowed on 32-bit kernels, but
-this apparently changed recently. Since 32-bit machines can in theory
-support PAE/LPAE for large address spaces, this may end up useful,
-so change the driver to shut up the warning but still work when
-phys_addr_t/resource_size_t is 64 bit wide.
-
-Fixes: 9a6e6c14bfde ("drm/xe/mmio: Use non-atomic writeq/readq variant for 32b")
-Fixes: 237412e45390 ("drm/xe: Enable 32bits build")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
-v2: use correct Fixes tag
----
- drivers/gpu/drm/xe/xe_mmio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- Refactor media: mediatek patchset
+- sta2x11: Fix Christmas tree order
+- Link to v1: https://lore.kernel.org/r/20240128-fix-clang-warnings-v1-0-1d946013a421@chromium.org
 
-diff --git a/drivers/gpu/drm/xe/xe_mmio.c b/drivers/gpu/drm/xe/xe_mmio.c
-index e3db3a178760..7ba2477452d7 100644
---- a/drivers/gpu/drm/xe/xe_mmio.c
-+++ b/drivers/gpu/drm/xe/xe_mmio.c
-@@ -106,7 +106,7 @@ static void xe_resize_vram_bar(struct xe_device *xe)
- 
- 	pci_bus_for_each_resource(root, root_res, i) {
- 		if (root_res && root_res->flags & (IORESOURCE_MEM | IORESOURCE_MEM_64) &&
--		    root_res->start > 0x100000000ull)
-+		    (u64)root_res->start > 0x100000000ul)
- 			break;
- 	}
- 
+---
+Ricardo Ribalda (3):
+      media: pci: sta2x11: Fix Wcast-function-type-strict warnings
+      media: usb: pvrusb2: Fix Wcast-function-type-strict warnings
+      media: mediatek: vcodedc: Fix Wcast-function-type-strict warnings
+
+ drivers/media/pci/sta2x11/sta2x11_vip.c                      |  5 +++--
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c          | 12 ++++++------
+ .../media/platform/mediatek/vcodec/common/mtk_vcodec_fw.h    |  2 +-
+ .../platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c      | 10 +---------
+ drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c |  2 +-
+ drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c |  2 +-
+ drivers/media/usb/pvrusb2/pvrusb2-context.c                  |  5 +++--
+ drivers/media/usb/pvrusb2/pvrusb2-dvb.c                      |  7 ++++---
+ drivers/media/usb/pvrusb2/pvrusb2-v4l2.c                     |  7 ++++---
+ drivers/remoteproc/mtk_scp.c                                 |  4 ++--
+ include/linux/remoteproc/mtk_scp.h                           |  2 +-
+ include/linux/rpmsg/mtk_rpmsg.h                              |  2 +-
+ 12 files changed, 28 insertions(+), 32 deletions(-)
+---
+base-commit: d206a76d7d2726f3b096037f2079ce0bd3ba329b
+change-id: 20240128-fix-clang-warnings-6c12920467cb
+
+Best regards,
 -- 
-2.39.2
+Ricardo Ribalda <ribalda@chromium.org>
 
