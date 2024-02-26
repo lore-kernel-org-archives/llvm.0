@@ -1,400 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E2A5C5EE;
-	Mon, 26 Feb 2024 09:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708940291; cv=fail; b=jj8Qovj9Hzxuwr1VlVQipvq7raF/no6CSU+IfaIfQxM6xaEK/gD4AB3WdT5lOCYTu5VsMMO65pcysRsdhvKRYDz0FEdKo5CJrpGqeRbpIjgNx1BQJ1d1ONjjwIDK2Zrv3H+1/hBlGJbnmY3qNv78JLatt21TQS0NYvhCvmLIbvc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708940291; c=relaxed/simple;
-	bh=kzEZcrrK/GUj72ygoWb2YH583GE04ex1xcdRO4H9jaA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=WATy18jYCiXE7lKH381HKrcPJ0xl0d8xRwz8gPbT9YXTIQOub9wWf1j6ipulBNKV5IjuW/PsWxZTdpuy0mF8QScnJBwPMqAgSBMeHUv5MV5a5brOX2hwwfUeWdbtDLY1kOSf+O6uQeHjQnO3B+GX15rbduYYALSjlITgFmmb3rM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iEKbYWRe; arc=fail smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7792263A;
+	Mon, 26 Feb 2024 09:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708940592; cv=none; b=YWq57grQ4vVn5bnL81daRnk81N8T8B3wRIDxlxUldqmkdPwb4XLOFV/oMgzA3qD/2q45+V0mtANDQDeMyMOWUvWLNNd0UHbzU2Ab7u2439b1XbwasJg0LMRmer+n79T52GaxRLpsj8SZ4J1wN6FDczDwnsNR5arGW9tP1dIoE0A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708940592; c=relaxed/simple;
+	bh=peeh3uBT6rkaZj0IWaTOnmOqCf87o+9OlPo0K0aPohw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b3ySnzcirLfs3DeR97KMqNJoLFz7npF30x1s8/aUsOfvtK7YLJcFNVVLOaiLO1jLxzy7fvXzU1I7T+1ubDN0QP27GxoXJiBk89+Qz5zQ7jH/ZjtBJ0Hkaf9vHTKKbu3KoegF3JFV9PWyb1cVIbvLft4suNu+Pmpzwmd+/fc6cXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HXNvFhKf; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iEKbYWRe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HXNvFhKf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708940289; x=1740476289;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kzEZcrrK/GUj72ygoWb2YH583GE04ex1xcdRO4H9jaA=;
-  b=iEKbYWReltmjMQPFYFgjgGlX1YgyCor/Ss5/0YcxsgCJI61OA9YEkIJL
-   8TAs44CFrngdvxs7C9VDJH5hZ54EhkxSfCE2c6lX994HRsnwcmlU1Cmq/
-   CIIWHcqODGuzWINqcSFD8Vr13Nm7ggFSuCUYZD84s+4MX5ljFx3TMjCmN
-   /Yrn6Sk1Dr3JuVxNEvazL8ON7j7AXhHyA4X2z0zYVZKS9tdpUPjWIJq/K
-   Kuc0q8VCS7h96DxhuJBYOKhUvvbfqrRgi7FbTjxMDCiB9SDs1LX2Uy9Xj
-   tZ9ZEBaRa7c5G/EAPyHmzG9DPcAhwm8OdRjDutzMHvNokvXSkhbtbgqe0
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="14649550"
+  t=1708940590; x=1740476590;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=peeh3uBT6rkaZj0IWaTOnmOqCf87o+9OlPo0K0aPohw=;
+  b=HXNvFhKf+bHFH3XaVKlF/uYyCSLx0vGwogKBu1T9CZUMiqlYe0DgA1Pp
+   h0RagLTVhmBJzE6WIyW6cWSRn/8aS6rdact470i2eCFXg9MVWyqEerUy/
+   WxibEHwPwm0HNONhTc2pmKyRMD0eDhr1OaUBZLEIcYzxDmj9LMQfaIHaY
+   zoZ3Y4MVlDEZsqJVhitgHCNpIkZ8eq0q11XN51zbYpJf3qd2pQ82ksBVO
+   ZRgOaBiJqMt0hX4bB50fzvy8ztZkDfDeLkgmhXpk3avYp0saPnXUfbD87
+   wHaavXRiRxK6NIn8i9hvruBtlrjjGOkuNS1gmFwond9cft6ke0P7E0i5z
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="14346770"
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="14649550"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 01:38:08 -0800
+   d="scan'208";a="14346770"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 01:43:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="6537216"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Feb 2024 01:38:08 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 26 Feb 2024 01:38:07 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Mon, 26 Feb 2024 01:38:07 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 26 Feb 2024 01:38:07 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SnRQOcuaQFuXxZQTTk1K2WuiOJrO4s5J5Qqh7NgnhECjQHsFLG7YWzJ5175zFC6kcq3HHdyLwLnmXY7EOMhTx6xn5PB3qaMk5j4FWWgCq039fSVlVNqt0fVj93/cZhxc9smtA5LAPWc3+cyTRc7Ccv+dsF86wNuPMrY1aOsE2GCfvLYBGhGAhztBuo/niYAl6Z3xgGU/wtHxhtan81EbDvRyocgHHgk0gwaCz6rjApRehYMNtfYZeKVMG0SI9Zi8h8Qg68lqBZf2vFl/E5fcF1ZROfDaZjsKGBvpnZIGgCqoTDduUAMbxXRWWKk8btjfogsiVbEky23Nui/JOiXjaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bc0Uc7NWIHPcv9r8soPwH1kPphvUVd1FsWA2c0WOk0Q=;
- b=bo83Zngcez9eRbdiWjFY6SWmKEWOEKpYO8mliMFmk3oBZOc1QiT9nMNVaFQyPX+h6tyrasbc36dmmp/jQ78ruADUVk7eLoB0b3LtYml6A4KuUg8SUq9d+wdMHl9fZiHM8AZ9CZRp8M7OE3zNy3HsBmf/MqAty4ykGsejgFyxkJf9oLOfCGwg/NOwt7A+L+BqQoK7+0l/e5XNfJMm4cQCG3HTHf4gML2zMY8hzy4RRbo6Q7q48TTjjhDgH7aNSUa7LdnQbMjGFXQr/2A9iBqvg0/jVvo3uGm//vZqE9PUK+DjFdDiMLoBSKRgCBN2uWimkaBeyzsxoSlNgH0uXi9t4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ0PR11MB5865.namprd11.prod.outlook.com (2603:10b6:a03:428::13)
- by PH7PR11MB5942.namprd11.prod.outlook.com (2603:10b6:510:13e::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.22; Mon, 26 Feb
- 2024 09:38:05 +0000
-Received: from SJ0PR11MB5865.namprd11.prod.outlook.com
- ([fe80::1859:eed7:cd98:cc08]) by SJ0PR11MB5865.namprd11.prod.outlook.com
- ([fe80::1859:eed7:cd98:cc08%7]) with mapi id 15.20.7339.019; Mon, 26 Feb 2024
- 09:38:05 +0000
-From: "Romanowski, Rafal" <rafal.romanowski@intel.com>
-To: "Ertman, David M" <david.m.ertman@intel.com>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
-Subject: RE: [Intel-wired-lan] [PATCH iwl-next v6 02/10] ice: Add driver
- support for firmware changes for LAG
-Thread-Topic: [Intel-wired-lan] [PATCH iwl-next v6 02/10] ice: Add driver
- support for firmware changes for LAG
-Thread-Index: AQHZiRNBJvlbzuvcREC7mGK4OkLw5q9fcbwAgb6qzOA=
-Date: Mon, 26 Feb 2024 09:38:05 +0000
-Message-ID: <SJ0PR11MB5865FEA2D007BA6B65E6C23B8F5A2@SJ0PR11MB5865.namprd11.prod.outlook.com>
-References: <20230517230028.321350-3-david.m.ertman@intel.com>
- <202305181101.gCbJ4JDT-lkp@intel.com>
-In-Reply-To: <202305181101.gCbJ4JDT-lkp@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR11MB5865:EE_|PH7PR11MB5942:EE_
-x-ms-office365-filtering-correlation-id: 9a84bb8a-70a1-4def-5d9e-08dc36aea222
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mAu56BlcXrMclA0+KXCYyySlAfwxViBvQeBjJaHyuNg53WQJ+agl6VKUqgQdBcftboH9N95x7tHspmTlZ1gIf/XwHRj3xvr3c5A01LlPt6HA6HDq68xhfJSYB25pGjeczptmI432tW2QrEdFk3vsvKilOgsMw+k8WGuqIh63/yTgz7zhz6NTl7qTLrKp8HMdxTlFXfy2ZRUFuXLYMBaAkKNvjuGqvihUlOAgpcroooxjRKHZGhu1Waz5ze/t+z3RPqc/s4ApF1YZzN8WIJKojvUhgefvaUZTcnmIoBX2fLVFCx1OMUM9rqKUfRhvUOA5BkXwx49DK1zavE4lXv1/7ecBgKhS/JKufAxPaTVsU1YHDlmLCm0WjFRDfPRdqyTorOOEetFCUQP+xOiuTt4qBfTb5+FGkN2FKdvVvJvKp0H25B66/gAFRDlTNk2RLx1986A+jS0ulkcqiz+2Ag605KuzgFb1K/5TBdVKP7y0pHQKAgpHwfaheFIbETr2vMGzbBs5e3Os+Fb/kGdzk2GpUbNJRMjDYOgi0wrankWY80OBexTftodr9zbN2FFRWgF/hZ1uLzL7TVz801YvxEzXXCcV4lJc7DhaoAp2hoImmVnDWKkyl1iiy0pCP5Wv8cSMndGoW7eQf82AIGroNMvYcECBGtOb8FCa+UgurkYOA4zNizm5wcHoChNDrvdOVALFeTons+Lwc9N9i7yJRYp+zw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5865.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(230273577357003)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3XYal746YCyrSJjMSEbvrE7AHPFaqkftXzhrkTG1uW59k8+/+eq98fj4HBsH?=
- =?us-ascii?Q?FkPx+5akLAOKxBtoSshrCfa8qxDKbOFqEyUtzhKtt4eFeWFupSn/sZTqXgcH?=
- =?us-ascii?Q?bTr7tb5Za2PkHe0KZBM/UdZZ2fdLsSJy98SQE6xcbHIK5OlVGSPahATu6/J7?=
- =?us-ascii?Q?KmlvlFzpRnKlvqHLu7UJsPNIHHymJSgtl8Q/Sqlxr+5GWl/KTp0P6lgeeRqV?=
- =?us-ascii?Q?uKySHbtfs/Y2xirNoh7fafaA1Yshvynp395heaajmqwKo6K+Ye+rN6KKIR0u?=
- =?us-ascii?Q?sh+fFalVsle/rMaZo6RcavJ1ZWow3oA6Rz5LEZiLB55mV7M6G/UiqUJGhkQY?=
- =?us-ascii?Q?0LRwifAt8iWTDFAxPjzKiKbX1JPq56H0MlmAhqY2P9lO5fomd8814clqlgeK?=
- =?us-ascii?Q?U5LsDTgsIKdkXXf9JF3/BuXZ1hkeyykcODyKx5JMzmj21ObrbR3DXCZcdrKc?=
- =?us-ascii?Q?pkrHz2EllNt6i0VRk7RmBfn+CKDnEksLJb/ztZHV0Mn5B35G8yG9mj3tJjdX?=
- =?us-ascii?Q?AXZ3uwu1NbSSbG4QEOHst62w1IflRFypBm1CqZFCBPRL104lyAVVtZcDjG84?=
- =?us-ascii?Q?QyNdetjd5SvdTp7jn6UuNs7gN85ABuP3la/PJq7C+zLSUwd2UWWcvr2G8E7s?=
- =?us-ascii?Q?MBIeGaMp9M38FjFhMqo/ZOcRGTlCPE4CTs2PSv2I8ViAf/AQDfCBKEPzlm3R?=
- =?us-ascii?Q?G8DHzcQnFf3gobCg1m0j+WF0UQl6THIUaHMSt+HKbk37ctFDNFgZKpK2xetH?=
- =?us-ascii?Q?d+kRmNaMysXnMqgflJ6ynpagoYsE0VRjY0+hL3OGf2oAr8ebZ7vebJNJgs6T?=
- =?us-ascii?Q?N/9jOS0CcSKMC1CJOAYE983C2BCmdn+MzyndB3vEGDVVU5YfHbDoojXhFQf/?=
- =?us-ascii?Q?um97nDXBEGWAeXoSVvZnC2YgTWswt+yuHghNh2Ru3ehMIANXBKt/JCr+VnXa?=
- =?us-ascii?Q?j0c63fJuLm7J2OtgXYMKuQ9lYepO/dL7UfYgoNZ9/Dk/1s4OSsA+M1sGnHD4?=
- =?us-ascii?Q?BOrd0Jv1gOi+fHAY5vf25t5EeE1zMC+yIl9j4v5/NxvgPsxi9XVCXG0j6fSu?=
- =?us-ascii?Q?/eUeObU2pZdaLZsI5zPEfYsg6GvWIcZdT4K82+wAwSn5LwSVQNE0ir7BYgE1?=
- =?us-ascii?Q?6KTThEIx9GLOJa3JgW7P+OZVVnFLiBBxJQnvbJkLPfPUdAzl2Vr77s8DQEdT?=
- =?us-ascii?Q?WLP82P5ZqFzHLYMN10SbK47kR2H7gKk6xCwopYcXwZzZBoP7++Jvi95P2Ngl?=
- =?us-ascii?Q?6zcpbut1u7+Fr3oRhyrkrXHkFyYCRxTBiWgZTWiNcL9SlIfn/aSWm66OBB/M?=
- =?us-ascii?Q?FJ8A1z1arQKRR/MeaO3sgMXvSXpDZ05utObvdNJ42Zly/DLbE5WzTJRSBt+n?=
- =?us-ascii?Q?VixpP9Q9fdXsvLHYyN4uOfsxDXLtY9BN2+Tn/MHp/eWnb63Qwft1phQIP2kn?=
- =?us-ascii?Q?1RFDeORyTMk0eOtgdvBqR8O4aEjAaMPR/HMhfDv3cnziGZep5rbw9jSzzbkr?=
- =?us-ascii?Q?yR8cn556Zc881UAstQue1C+IT0CAA47OKd7ybQMrFq6waiynhIO6PKEfLYxI?=
- =?us-ascii?Q?erSqH4QB5+0O6VzlE97ObowXV+Mwi1wvsZZxo7jQBqDYwjJXNbGhRvHS3C0a?=
- =?us-ascii?Q?VQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+   d="scan'208";a="11201013"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 26 Feb 2024 01:43:05 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1reXVn-000AE7-0w;
+	Mon, 26 Feb 2024 09:43:03 +0000
+Date: Mon, 26 Feb 2024 17:42:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Laight <David.Laight@aculab.com>,
+	"'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+	'Linus Torvalds' <torvalds@linux-foundation.org>,
+	'Netdev' <netdev@vger.kernel.org>,
+	"'dri-devel@lists.freedesktop.org'" <dri-devel@lists.freedesktop.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	'Jens Axboe' <axboe@kernel.dk>,
+	"'Matthew Wilcox (Oracle)'" <willy@infradead.org>,
+	'Christoph Hellwig' <hch@infradead.org>,
+	"'linux-btrfs@vger.kernel.org'" <linux-btrfs@vger.kernel.org>,
+	'Andrew Morton' <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+	"'David S . Miller'" <davem@davemloft.net>,
+	'Dan Carpenter' <dan.carpenter@linaro.org>,
+	'Jani Nikula' <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH next v2 11/11] minmax: min() and max() don't need to
+ return constant expressions
+Message-ID: <202402261720.EAMC0eHM-lkp@intel.com>
+References: <a18dcae310f74dcb9c6fc01d5bdc0568@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5865.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a84bb8a-70a1-4def-5d9e-08dc36aea222
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2024 09:38:05.1665
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3Z+a7surLRCq8vFlk6WRFve6a8lDpsLp0BWvTk6FUmFWao8Ww/+np3Xpb+gFHXQ+wHBEDS1+VDmqhC13l2Ykk7vK17pKkwUxvXmnVO2kwbg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5942
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a18dcae310f74dcb9c6fc01d5bdc0568@AcuMS.aculab.com>
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> kernel test robot
-> Sent: Thursday, May 18, 2023 6:34 AM
-> To: Ertman, David M <david.m.ertman@intel.com>; intel-wired-
-> lan@lists.osuosl.org
-> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev
-> Subject: Re: [Intel-wired-lan] [PATCH iwl-next v6 02/10] ice: Add driver
-> support for firmware changes for LAG
->=20
-> Hi Dave,
->=20
-> kernel test robot noticed the following build warnings:
->=20
-> [auto build test WARNING on tnguy-next-queue/dev-queue]
->=20
-> url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Ertman/ice-
-> Correctly-initialize-queue-context-values/20230518-070823
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.=
-git
-> dev-queue
-> patch link:    https://lore.kernel.org/r/20230517230028.321350-3-
-> david.m.ertman%40intel.com
-> patch subject: [Intel-wired-lan] [PATCH iwl-next v6 02/10] ice: Add drive=
-r
-> support for firmware changes for LAG
-> config: i386-randconfig-a013
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project
-> f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-
-> tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-
-> lkp/linux/commit/f417c72c01f3210959baa45e51dd59cc7be16688
->         git remote add linux-review https://github.com/intel-lab-lkp/linu=
-x
->         git fetch --no-tags linux-review Dave-Ertman/ice-Correctly-initia=
-lize-
-> queue-context-values/20230518-070823
->         git checkout f417c72c01f3210959baa45e51dd59cc7be16688
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross
-> W=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross
-> W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/net/ethernet/in=
-tel/ice/
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305181101.gCbJ4JDT-
-> lkp@intel.com/
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> >> drivers/net/ethernet/intel/ice/ice_common.c:2255:31: warning: use of
-> logical '&&' with constant operand [-Wconstant-logical-operand]
->                    caps->sriov_lag =3D !!(number && ICE_AQC_BIT_SRIOV_LAG=
-);
->                                                ^  ~~~~~~~~~~~~~~~~~~~~~
->    drivers/net/ethernet/intel/ice/ice_common.c:2255:31: note: use '&' for=
- a
-> bitwise operation
->                    caps->sriov_lag =3D !!(number && ICE_AQC_BIT_SRIOV_LAG=
-);
->                                                ^~
->                                                &
->    drivers/net/ethernet/intel/ice/ice_common.c:2255:31: note: remove
-> constant to silence this warning
->                    caps->sriov_lag =3D !!(number && ICE_AQC_BIT_SRIOV_LAG=
-);
->                                               ~^~~~~~~~~~~~~~~~~~~~~~~~
->    1 warning generated.
->=20
->=20
-> vim +2255 drivers/net/ethernet/intel/ice/ice_common.c
->=20
->   2132
->   2133	/**
->   2134	 * ice_parse_common_caps - parse common device/function
-> capabilities
->   2135	 * @hw: pointer to the HW struct
->   2136	 * @caps: pointer to common capabilities structure
->   2137	 * @elem: the capability element to parse
->   2138	 * @prefix: message prefix for tracing capabilities
->   2139	 *
->   2140	 * Given a capability element, extract relevant details into the c=
-ommon
->   2141	 * capability structure.
->   2142	 *
->   2143	 * Returns: true if the capability matches one of the common capab=
-ility
-> ids,
->   2144	 * false otherwise.
->   2145	 */
->   2146	static bool
->   2147	ice_parse_common_caps(struct ice_hw *hw, struct
-> ice_hw_common_caps *caps,
->   2148			      struct ice_aqc_list_caps_elem *elem, const char
-> *prefix)
->   2149	{
->   2150		u32 logical_id =3D le32_to_cpu(elem->logical_id);
->   2151		u32 phys_id =3D le32_to_cpu(elem->phys_id);
->   2152		u32 number =3D le32_to_cpu(elem->number);
->   2153		u16 cap =3D le16_to_cpu(elem->cap);
->   2154		bool found =3D true;
->   2155
->   2156		switch (cap) {
->   2157		case ICE_AQC_CAPS_VALID_FUNCTIONS:
->   2158			caps->valid_functions =3D number;
->   2159			ice_debug(hw, ICE_DBG_INIT, "%s: valid_functions
-> (bitmap) =3D %d\n", prefix,
->   2160				  caps->valid_functions);
->   2161			break;
->   2162		case ICE_AQC_CAPS_SRIOV:
->   2163			caps->sr_iov_1_1 =3D (number =3D=3D 1);
->   2164			ice_debug(hw, ICE_DBG_INIT, "%s: sr_iov_1_1 =3D
-> %d\n", prefix,
->   2165				  caps->sr_iov_1_1);
->   2166			break;
->   2167		case ICE_AQC_CAPS_DCB:
->   2168			caps->dcb =3D (number =3D=3D 1);
->   2169			caps->active_tc_bitmap =3D logical_id;
->   2170			caps->maxtc =3D phys_id;
->   2171			ice_debug(hw, ICE_DBG_INIT, "%s: dcb =3D %d\n",
-> prefix, caps->dcb);
->   2172			ice_debug(hw, ICE_DBG_INIT, "%s: active_tc_bitmap =3D
-> %d\n", prefix,
->   2173				  caps->active_tc_bitmap);
->   2174			ice_debug(hw, ICE_DBG_INIT, "%s: maxtc =3D %d\n",
-> prefix, caps->maxtc);
->   2175			break;
->   2176		case ICE_AQC_CAPS_RSS:
->   2177			caps->rss_table_size =3D number;
->   2178			caps->rss_table_entry_width =3D logical_id;
->   2179			ice_debug(hw, ICE_DBG_INIT, "%s: rss_table_size =3D
-> %d\n", prefix,
->   2180				  caps->rss_table_size);
->   2181			ice_debug(hw, ICE_DBG_INIT, "%s:
-> rss_table_entry_width =3D %d\n", prefix,
->   2182				  caps->rss_table_entry_width);
->   2183			break;
->   2184		case ICE_AQC_CAPS_RXQS:
->   2185			caps->num_rxq =3D number;
->   2186			caps->rxq_first_id =3D phys_id;
->   2187			ice_debug(hw, ICE_DBG_INIT, "%s: num_rxq =3D %d\n",
-> prefix,
->   2188				  caps->num_rxq);
->   2189			ice_debug(hw, ICE_DBG_INIT, "%s: rxq_first_id =3D
-> %d\n", prefix,
->   2190				  caps->rxq_first_id);
->   2191			break;
->   2192		case ICE_AQC_CAPS_TXQS:
->   2193			caps->num_txq =3D number;
->   2194			caps->txq_first_id =3D phys_id;
->   2195			ice_debug(hw, ICE_DBG_INIT, "%s: num_txq =3D %d\n",
-> prefix,
->   2196				  caps->num_txq);
->   2197			ice_debug(hw, ICE_DBG_INIT, "%s: txq_first_id =3D
-> %d\n", prefix,
->   2198				  caps->txq_first_id);
->   2199			break;
->   2200		case ICE_AQC_CAPS_MSIX:
->   2201			caps->num_msix_vectors =3D number;
->   2202			caps->msix_vector_first_id =3D phys_id;
->   2203			ice_debug(hw, ICE_DBG_INIT, "%s: num_msix_vectors
-> =3D %d\n", prefix,
->   2204				  caps->num_msix_vectors);
->   2205			ice_debug(hw, ICE_DBG_INIT, "%s:
-> msix_vector_first_id =3D %d\n", prefix,
->   2206				  caps->msix_vector_first_id);
->   2207			break;
->   2208		case ICE_AQC_CAPS_PENDING_NVM_VER:
->   2209			caps->nvm_update_pending_nvm =3D true;
->   2210			ice_debug(hw, ICE_DBG_INIT, "%s:
-> update_pending_nvm\n", prefix);
->   2211			break;
->   2212		case ICE_AQC_CAPS_PENDING_OROM_VER:
->   2213			caps->nvm_update_pending_orom =3D true;
->   2214			ice_debug(hw, ICE_DBG_INIT, "%s:
-> update_pending_orom\n", prefix);
->   2215			break;
->   2216		case ICE_AQC_CAPS_PENDING_NET_VER:
->   2217			caps->nvm_update_pending_netlist =3D true;
->   2218			ice_debug(hw, ICE_DBG_INIT, "%s:
-> update_pending_netlist\n", prefix);
->   2219			break;
->   2220		case ICE_AQC_CAPS_NVM_MGMT:
->   2221			caps->nvm_unified_update =3D
->   2222				(number &
-> ICE_NVM_MGMT_UNIFIED_UPD_SUPPORT) ?
->   2223				true : false;
->   2224			ice_debug(hw, ICE_DBG_INIT, "%s:
-> nvm_unified_update =3D %d\n", prefix,
->   2225				  caps->nvm_unified_update);
->   2226			break;
->   2227		case ICE_AQC_CAPS_RDMA:
->   2228			caps->rdma =3D (number =3D=3D 1);
->   2229			ice_debug(hw, ICE_DBG_INIT, "%s: rdma =3D %d\n",
-> prefix, caps->rdma);
->   2230			break;
->   2231		case ICE_AQC_CAPS_MAX_MTU:
->   2232			caps->max_mtu =3D number;
->   2233			ice_debug(hw, ICE_DBG_INIT, "%s: max_mtu =3D %d\n",
->   2234				  prefix, caps->max_mtu);
->   2235			break;
->   2236		case ICE_AQC_CAPS_PCIE_RESET_AVOIDANCE:
->   2237			caps->pcie_reset_avoidance =3D (number > 0);
->   2238			ice_debug(hw, ICE_DBG_INIT,
->   2239				  "%s: pcie_reset_avoidance =3D %d\n", prefix,
->   2240				  caps->pcie_reset_avoidance);
->   2241			break;
->   2242		case ICE_AQC_CAPS_POST_UPDATE_RESET_RESTRICT:
->   2243			caps->reset_restrict_support =3D (number =3D=3D 1);
->   2244			ice_debug(hw, ICE_DBG_INIT,
->   2245				  "%s: reset_restrict_support =3D %d\n", prefix,
->   2246				  caps->reset_restrict_support);
->   2247			break;
->   2248		case ICE_AQC_CAPS_TX_SCHED_TOPO_COMP_MODE:
->   2249			caps->tx_sched_topo_comp_mode_en =3D (number =3D=3D
-> 1);
->   2250			break;
->   2251		case ICE_AQC_CAPS_FW_LAG_SUPPORT:
->   2252			caps->roce_lag =3D !!(number &&
-> ICE_AQC_BIT_ROCEV2_LAG);
->   2253			ice_debug(hw, ICE_DBG_INIT, "%s: roce_lag =3D %d\n",
->   2254				  prefix, caps->roce_lag);
-> > 2255			caps->sriov_lag =3D !!(number &&
-> ICE_AQC_BIT_SRIOV_LAG);
->   2256			ice_debug(hw, ICE_DBG_INIT, "%s: sriov_lag =3D %d\n",
->   2257				  prefix, caps->sriov_lag);
->   2258			break;
->   2259		default:
->   2260			/* Not one of the recognized common capabilities */
->   2261			found =3D false;
->   2262		}
->   2263
->   2264		return found;
->   2265	}
->   2266
->=20
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Hi David,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linux/master mkl-can-next/testing kdave/for-next akpm-mm/mm-nonmm-unstable linus/master v6.8-rc6]
+[cannot apply to next-20240223 dtor-input/next dtor-input/for-linus axboe-block/for-next horms-ipvs/master next-20240223]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/minmax-Put-all-the-clamp-definitions-together/20240226-005902
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/a18dcae310f74dcb9c6fc01d5bdc0568%40AcuMS.aculab.com
+patch subject: [PATCH next v2 11/11] minmax: min() and max() don't need to return constant expressions
+config: i386-buildonly-randconfig-001-20240226 (https://download.01.org/0day-ci/archive/20240226/202402261720.EAMC0eHM-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240226/202402261720.EAMC0eHM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402261720.EAMC0eHM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/mm/pgtable.c:437:14: warning: variable length array used [-Wvla]
+     437 |         pmd_t *pmds[MAX_PREALLOCATED_PMDS];
+         |                     ^~~~~~~~~~~~~~~~~~~~~
+   arch/x86/mm/pgtable.c:180:31: note: expanded from macro 'MAX_PREALLOCATED_PMDS'
+     180 | #define MAX_PREALLOCATED_PMDS   MAX_UNSHARED_PTRS_PER_PGD
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/mm/pgtable.c:113:2: note: expanded from macro 'MAX_UNSHARED_PTRS_PER_PGD'
+     113 |         max_t(size_t, KERNEL_PGD_BOUNDARY, PTRS_PER_PGD)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:152:27: note: expanded from macro 'max_t'
+     152 | #define max_t(type, x, y)       __careful_cmp(max, (type)(x), (type)(y), __COUNTER__)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:62:2: note: expanded from macro '__careful_cmp'
+      59 | #define __careful_cmp(op, x, y, uniq) ({        \
+         |                                       ~~~~~~~~~~~
+      60 |         _Static_assert(__types_ok(x, y),        \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      61 |                 #op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      62 |         __cmp_once(op, x, y, uniq); })
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:57:2: note: expanded from macro '__cmp_once'
+      57 |         __cmp(op, __x_##uniq, __y_##uniq); })
+         |         ^
+   include/linux/minmax.h:52:26: note: expanded from macro '__cmp'
+      52 | #define __cmp(op, x, y) ((x) __cmp_op_##op (y) ? (x) : (y))
+         |                          ^
+   1 warning generated.
 
 
-Tested-by: Rafal Romanowski <rafal.romanowski@intel.com>
+vim +437 arch/x86/mm/pgtable.c
 
+1db491f77b6ed0 Fenghua Yu          2015-01-15  432  
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  433  pgd_t *pgd_alloc(struct mm_struct *mm)
+1ec1fe73dfb711 Ingo Molnar         2008-03-19  434  {
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  435  	pgd_t *pgd;
+184d47f0fd3651 Kees Cook           2018-10-08  436  	pmd_t *u_pmds[MAX_PREALLOCATED_USER_PMDS];
+184d47f0fd3651 Kees Cook           2018-10-08 @437  	pmd_t *pmds[MAX_PREALLOCATED_PMDS];
+1ec1fe73dfb711 Ingo Molnar         2008-03-19  438  
+1db491f77b6ed0 Fenghua Yu          2015-01-15  439  	pgd = _pgd_alloc();
+1ec1fe73dfb711 Ingo Molnar         2008-03-19  440  
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  441  	if (pgd == NULL)
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  442  		goto out;
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  443  
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  444  	mm->pgd = pgd;
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  445  
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  446  	if (sizeof(pmds) != 0 &&
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  447  			preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  448  		goto out_free_pgd;
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  449  
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  450  	if (sizeof(u_pmds) != 0 &&
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  451  			preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  452  		goto out_free_pmds;
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  453  
+f59dbe9ca6707e Joerg Roedel        2018-07-18  454  	if (paravirt_pgd_alloc(mm) != 0)
+f59dbe9ca6707e Joerg Roedel        2018-07-18  455  		goto out_free_user_pmds;
+f59dbe9ca6707e Joerg Roedel        2018-07-18  456  
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  457  	/*
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  458  	 * Make sure that pre-populating the pmds is atomic with
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  459  	 * respect to anything walking the pgd_list, so that they
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  460  	 * never see a partially populated pgd.
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  461  	 */
+a79e53d85683c6 Andrea Arcangeli    2011-02-16  462  	spin_lock(&pgd_lock);
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  463  
+617d34d9e5d832 Jeremy Fitzhardinge 2010-09-21  464  	pgd_ctor(mm, pgd);
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  465  	if (sizeof(pmds) != 0)
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  466  		pgd_prepopulate_pmd(mm, pgd, pmds);
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  467  
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  468  	if (sizeof(u_pmds) != 0)
+f59dbe9ca6707e Joerg Roedel        2018-07-18  469  		pgd_prepopulate_user_pmd(mm, pgd, u_pmds);
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  470  
+a79e53d85683c6 Andrea Arcangeli    2011-02-16  471  	spin_unlock(&pgd_lock);
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  472  
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  473  	return pgd;
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  474  
+f59dbe9ca6707e Joerg Roedel        2018-07-18  475  out_free_user_pmds:
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  476  	if (sizeof(u_pmds) != 0)
+f59dbe9ca6707e Joerg Roedel        2018-07-18  477  		free_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS);
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  478  out_free_pmds:
+25226df4b9be7f Gustavo A. R. Silva 2022-09-21  479  	if (sizeof(pmds) != 0)
+f59dbe9ca6707e Joerg Roedel        2018-07-18  480  		free_pmds(mm, pmds, PREALLOCATED_PMDS);
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  481  out_free_pgd:
+1db491f77b6ed0 Fenghua Yu          2015-01-15  482  	_pgd_free(pgd);
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  483  out:
+d8d5900ef8afc5 Jeremy Fitzhardinge 2008-06-25  484  	return NULL;
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  485  }
+4f76cd382213b2 Jeremy Fitzhardinge 2008-03-17  486  
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
