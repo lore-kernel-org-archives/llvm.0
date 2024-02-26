@@ -1,183 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B81412EBE3;
-	Mon, 26 Feb 2024 19:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2953B1E878;
+	Mon, 26 Feb 2024 22:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708976348; cv=none; b=NeDlPf/2MdaBjnkS8nDvl/slhaXUnaNv/uzBKe8jssWEZfmGln42ZGeULmrpy8I91uzjSllUVygNScnUABIHLWESjJxdBwNaxeY/CVYcFMZtAQx2XedYJJjiw2ze7PRRmRkvgLtv6mMA5Y10aQgHzx0ieQ66aa9lhvsxAeiOOjA=
+	t=1708988372; cv=none; b=Fed0H6AYzJN/z01rtg1to+KIAqFnnXpNIggLzaYVDDd1JWkaG23KFQl4b1pUj/0NqAN+90RMHqIWEEYqYn9C6ZibZ3ih1+WwvfS2lP+iyY3LZUEvnOAS5W+Eew2ZI5IQpMvyBdf8jgfk9KD+dLWFdi4FpuUGnXZosDTGaUAnkjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708976348; c=relaxed/simple;
-	bh=8dgrE3ZDpRJiV8PrunEjETiI5kjelka8uMk8D8d73UM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BgSejySDEriNyfK8WAGpQ9TPy8ucVWE2M7MuP9VtIgGBI8g0e8JedNrWKtJe8nC1d6uI45SUjzuvnKNM5v9S+IcI8HHcdsM/a3oIgiDDVh5btP+mST0K+Jx6UWYGspxJ7BsKPUEoD+AL2lEVMoNsbOmO91VgWFPrjpsijuBo4tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYOHoYau; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708988372; c=relaxed/simple;
+	bh=AB6wH6fh3xUjGCcELHUEz8Vc9UGxsP93pfzxD8ptCDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EDgzvBQ0Bgo+IUvw+QUHG4rzSnajQVR0u7vTVcYY3J++jX+lOYPKIYCMancugiZzYkdTvxltwaK8b7waP0is1WX7MGXS76exuxIqbec7iyuJ77l9esKLILSPP9iOnUKNltmSvLtQm0Aix/LjLawhdAGtX6rbuNRvy6qWGFfWcN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VEebdeIM; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYOHoYau"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87EFC433F1;
-	Mon, 26 Feb 2024 19:39:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708976348;
-	bh=8dgrE3ZDpRJiV8PrunEjETiI5kjelka8uMk8D8d73UM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CYOHoYauT8CGEdfI4ZiQDwKN/x/v5RNeoQda7PMg42B/fkVc6972hEkh4OVvME5mY
-	 Q34I0wvliTWa7WbG9resrx02DvrURDLMG/mrpUC5ZASErmWlUBEMwqy7nqEEnwSnrh
-	 3miHLr54faNdsPZw4b4HLSOlPSelYLyaMtWWjoXVE0Fvy9/K+6m3kB380v6dshjcmP
-	 dki/JhGdilGadfaVtNISIQuEK3iwMcf+g0wFwegBO1wJEAAyiqF4pAWznfxupxsLKX
-	 hINBLbiz6ldzHjYFsHP2n8LdeJAmo9ALgmecMaKdtP1/JXX03Xcx/calVQ1500GV4W
-	 y83srKPKA3PnQ==
-From: SeongJae Park <sj@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [sj:damon/next 18/20] mm/damon/core.c:752:44: warning: variable 'goal' used in loop condition not modified in loop body
-Date: Mon, 26 Feb 2024 11:39:05 -0800
-Message-Id: <20240226193905.44575-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <202402260800.F3OIgZl9-lkp@intel.com>
-References: 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VEebdeIM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708988370; x=1740524370;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AB6wH6fh3xUjGCcELHUEz8Vc9UGxsP93pfzxD8ptCDg=;
+  b=VEebdeIMRRWHnDOb0D6vfxMAl0h4NG8BZ9U3esn8tYT4GTU2oQekfifq
+   7QAjTFNPHKOX9ULEN5ytq6t1HbTS5STSS/qQ8M/Bq4eEVpOBmd6H/rYy+
+   6Sh1HxWZgG5OTz7DVIpzCGwE59Dsp+qSEVS9G/c6lvwcxu8ZJfzs3OMhE
+   mxR8GKgzHymSTNADPQweHMn7WiHWMWRmLE/NnIrAXY7/NuVVDGAa9Shoo
+   ZBhos5e3tKSsbcredQc36d3FGOtvqC8TuUuBc2tTBWzu8TrggxY/Whisd
+   3uzDTXaBsk+JywA8UgOd4dmgWkjFmeHy9gU/REYPqE8ksjNy7CT4tIIPA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="6256402"
+X-IronPort-AV: E=Sophos;i="6.06,186,1705392000"; 
+   d="scan'208";a="6256402"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 14:59:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,186,1705392000"; 
+   d="scan'208";a="11605294"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 26 Feb 2024 14:59:25 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rejwL-000AkZ-0T;
+	Mon, 26 Feb 2024 22:59:19 +0000
+Date: Tue, 27 Feb 2024 06:58:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Lee Jones <lee@kernel.org>,
+	Daniel Thompson <daniel.thompson@linaro.org>
+Subject: [linux-next:master 9208/10236]
+ drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must
+ precede definition
+Message-ID: <202402270609.79kfRDFE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-On Mon, 26 Feb 2024 08:33:16 +0800 kernel test robot <lkp@intel.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   8552c902efe7ef670b6961fb8885b67961aeb629
+commit: 7a28f9cf6b7c8cad760b4d4ee7f53231cd76d8e4 [9208/10236] Revert "leds: Only descend into leds directory when CONFIG_NEW_LEDS is set"
+config: mips-bcm47xx_defconfig (https://download.01.org/0day-ci/archive/20240227/202402270609.79kfRDFE-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240227/202402270609.79kfRDFE-lkp@intel.com/reproduce)
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-> head:   a9e8680aa284cf5fd994087542cfa9e6f5f491b4
-> commit: 74d79c7a174ab26a8f99bc482dd6b067c93bc554 [18/20] mm/damon: implement DAMON context input-only update function
-> config: i386-buildonly-randconfig-003-20240226 (https://download.01.org/0day-ci/archive/20240226/202402260800.F3OIgZl9-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240226/202402260800.F3OIgZl9-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202402260800.F3OIgZl9-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> mm/damon/core.c:752:44: warning: variable 'goal' used in loop condition not modified in loop body [-Wfor-loop-analysis]
->      752 |         for (goal = damos_nth_quota_goal(i, src); goal; )
->          |                                                   ^~~~
-> >> mm/damon/core.c:799:42: warning: variable 'filter' used in loop condition not modified in loop body [-Wfor-loop-analysis]
->      799 |         for (filter = damos_nth_filter(i, src); filter;)
->          |                                                 ^~~~~~
-> >> mm/damon/core.c:853:42: warning: variable 'scheme' used in loop condition not modified in loop body [-Wfor-loop-analysis]
->      853 |         for (scheme = damon_nth_scheme(i, src); scheme;)
->          |                                                 ^~~~~~
-> >> mm/damon/core.c:841:13: warning: variable 'err' set but not used [-Wunused-but-set-variable]
->      841 |         int i = 0, err;
->          |                    ^
-> >> mm/damon/core.c:929:37: warning: variable 't' used in loop condition not modified in loop body [-Wfor-loop-analysis]
->      929 |         for (t = damon_nth_target(i, src); t;)
->          |                                            ^
->    5 warnings generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402270609.79kfRDFE-lkp@intel.com/
 
-Thank you for this nice report!
+All warnings (new ones prefixed by >>):
 
-I fixed the warnings with below changes, and squashed the diff on the
-problem-caused commit.  I confirmed the warning is disappeared after the change
-using the awesome reproducer that you provided :)
+>> drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must precede definition [-Wignored-attributes]
+   struct platform_device *__init gpio_led_register_device(
+                           ^
+   include/linux/init.h:52:17: note: expanded from macro '__init'
+   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
+                           ^
+   include/linux/compiler_attributes.h:334:56: note: expanded from macro '__section'
+   #define __section(section)              __attribute__((__section__(section)))
+                                                          ^
+   include/linux/leds.h:646:39: note: previous definition is here
+   static inline struct platform_device *gpio_led_register_device(
+                                         ^
+>> drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must precede definition [-Wignored-attributes]
+   struct platform_device *__init gpio_led_register_device(
+                           ^
+   include/linux/init.h:52:41: note: expanded from macro '__init'
+   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
+                                                   ^
+   include/linux/compiler_types.h:113:34: note: expanded from macro '__cold'
+   #define __cold                          __attribute__((__cold__))
+                                                          ^
+   include/linux/leds.h:646:39: note: previous definition is here
+   static inline struct platform_device *gpio_led_register_device(
+                                         ^
+   drivers/leds/leds-gpio-register.c:23:32: error: redefinition of 'gpio_led_register_device'
+   struct platform_device *__init gpio_led_register_device(
+                                  ^
+   include/linux/leds.h:646:39: note: previous definition is here
+   static inline struct platform_device *gpio_led_register_device(
+                                         ^
+   2 warnings and 1 error generated.
 
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -734,7 +734,7 @@ static void damos_update_quota_goals(struct damos_quota *dst,
-                struct damos_quota *src)
- {
-        struct damos_quota_goal *goal, *next;
--       int i = 0;
-+       int i = 0, j = 0;
 
-        damos_for_each_quota_goal_safe(goal, next, dst) {
-                struct damos_quota_goal *src_goal =
-@@ -749,8 +749,11 @@ static void damos_update_quota_goals(struct damos_quota *dst,
-                }
-                damos_destroy_quota_goal(goal);
-        }
--       for (goal = damos_nth_quota_goal(i, src); goal; )
-+       damos_for_each_quota_goal_safe(goal, next, src) {
-+               if (j++ < i)
-+                       continue;
-                damos_move_quota_goal(dst, goal);
-+       }
- }
+vim +23 drivers/leds/leds-gpio-register.c
 
- static struct damos_filter *damos_nth_filter(int n, struct damos *s)
-@@ -768,7 +771,7 @@ static struct damos_filter *damos_nth_filter(int n, struct damos *s)
- static int damos_update_filters(struct damos *dst, struct damos *src)
- {
-        struct damos_filter *filter, *next;
--       int i = 0;
-+       int i = 0, j = 0;
+4440673a95e63a Uwe Kleine-König 2011-05-24  10  
+4440673a95e63a Uwe Kleine-König 2011-05-24  11  /**
+4440673a95e63a Uwe Kleine-König 2011-05-24  12   * gpio_led_register_device - register a gpio-led device
+4440673a95e63a Uwe Kleine-König 2011-05-24  13   * @pdata: the platform data used for the new device
+c5a87a4ac2bfec Lee Jones        2021-05-28  14   * @id: platform ID
+4440673a95e63a Uwe Kleine-König 2011-05-24  15   *
+4440673a95e63a Uwe Kleine-König 2011-05-24  16   * Makes a copy of pdata and pdata->leds and registers a new leds-gpio device
+4440673a95e63a Uwe Kleine-König 2011-05-24  17   * with the result. This allows to have pdata and pdata-leds in .init.rodata
+4440673a95e63a Uwe Kleine-König 2011-05-24  18   * and so saves some bytes compared to a static struct platform_device with
+4440673a95e63a Uwe Kleine-König 2011-05-24  19   * static platform data.
+4440673a95e63a Uwe Kleine-König 2011-05-24  20   *
+4440673a95e63a Uwe Kleine-König 2011-05-24  21   * Returns the registered device or an error pointer.
+4440673a95e63a Uwe Kleine-König 2011-05-24  22   */
+4440673a95e63a Uwe Kleine-König 2011-05-24 @23  struct platform_device *__init gpio_led_register_device(
 
-        damos_for_each_filter_safe(filter, next, dst) {
-                struct damos_filter *src_filter = damos_nth_filter(i++, src);
-@@ -783,8 +786,11 @@ static int damos_update_filters(struct damos *dst, struct damos *src)
-                damos_destroy_filter(filter);
-        }
+:::::: The code at line 23 was first introduced by commit
+:::::: 4440673a95e63ad888a41db596edaa0c55d3a332 leds: provide helper to register "leds-gpio" devices
 
--       for (filter = damos_nth_filter(i, src); filter;)
-+       damos_for_each_filter_safe(filter, next, src) {
-+               if (j++ < i)
-+                       continue;
-                damos_move_filter(dst, filter);
-+       }
-        return 0;
- }
+:::::: TO: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-@@ -825,20 +831,25 @@ static int damon_update_scheme(struct damos *dst, struct damos *src)
- static int damon_update_schemes(struct damon_ctx *dst, struct damon_ctx *src)
- {
-        struct damos *scheme, *next;
--       int i = 0, err;
-+       int i = 0, j = 0, err;
-
-        damon_for_each_scheme_safe(scheme, next, dst) {
-                struct damos *src_scheme = damon_nth_scheme(i++, src);
-
-                if (src_scheme) {
-                        err = damon_update_scheme(scheme, src_scheme);
-+                       if (err)
-+                               return err;
-                        continue;
-                }
-                damon_destroy_scheme(scheme);
-        }
-
--       for (scheme = damon_nth_scheme(i, src); scheme;)
-+       damon_for_each_scheme_safe(scheme, next, src) {
-+               if (j++ < i)
-+                       continue;
-                damon_move_scheme(dst, scheme);
-+       }
-        return 0;
- }
-
-@@ -892,7 +903,7 @@ static struct damon_target *damon_nth_target(int n, struct damon_ctx *ctx)
- static int damon_update_targets(struct damon_ctx *dst, struct damon_ctx *src)
- {
-        struct damon_target *t, *next;
--       int i = 0, err;
-+       int i = 0, j = 0, err;
-
-        damon_for_each_target_safe(t, next, dst) {
-                struct damon_target *src_target = damon_nth_target(i++, src);
-@@ -913,8 +924,11 @@ static int damon_update_targets(struct damon_ctx *dst, struct damon_ctx *src)
-                damon_destroy_target(t);
-        }
-
--       for (t = damon_nth_target(i, src); t;)
-+       damon_for_each_target_safe(t, next, src) {
-+               if (j++ < i)
-+                       continue;
-                damon_move_target(dst, t);
-+       }
-        return 0;
- }
-
-[...]
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
