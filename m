@@ -1,301 +1,212 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A700817;
-	Mon, 26 Feb 2024 00:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708907614; cv=none; b=Icd7O72FxRE2mCGZ9n3/dx6g1fIuMb3v8ocw93PBi1kI/XWzAebL/8981jKnsAV0XviesTSWd4uyEkO6I/JuYsnXnl25u2Lg25IXPMRAL0xGVELtQ6ysU5WmTqMZTqKdDGg+z3Vv3+c+SR/O3mKTmrDq1XcJoyBeEQLonnAZVo0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708907614; c=relaxed/simple;
-	bh=ZMBMcLK5RpzjPhN6mgEp4eouqAMk4n7fNLd456YbA+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uDYaEhUTxx/X94S47dG4ktaonK847YzgbQpy+ko0PZ7GeYaIe1Q1ebwTa4OVrm3bxTwYNG6poheC0b3nInyZe0LR5I1ptPoEj5zUrxGsriEM4DZ1oj5FCHHs+uQFRFX7TaQWXlsWe5SP2NEWAxmpCL7kQZ9YCX0g8J59K36t/6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZkXwlrN2; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8207418E25
+	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 03:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708919114; cv=fail; b=t84x4HCQ0ylruywZ9AuAJhpId+hy3KQlSdJ2tbl8GLXeuG6aOdUfjhpN0mHaveZGkFrxu7uUfNZkIj5UcBJm5wQY7hsw+O7vfroffhvXozPzBx13p2wVhnjy4wPkwVxuQg+wgljxAQueAhjuXSSHpLuR3xYNBp6h4nOuM6Sx37A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708919114; c=relaxed/simple;
+	bh=TO4OAEAu+yj2WYfETyfwdj+0hN5MdRW68pcCjlPQO5A=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=CiYZM53j+ewpql9WIQ4mkGpt4kmrA7RUEK/AqZ0pk2PZCh+DVeN2flMexsogMPRmnaDkRA7pSmuDhnkiXIToJgg9u93oCkSngGHYMwctwU6w76doNxXae5ircHAnEEr5PS3tEatRIBk3Ox3k9bvaZGWr8VbtGFZN4ZLuX/hODqc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zy6FaIST; arc=fail smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZkXwlrN2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zy6FaIST"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708907612; x=1740443612;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZMBMcLK5RpzjPhN6mgEp4eouqAMk4n7fNLd456YbA+w=;
-  b=ZkXwlrN2Swa+A5C4npqM9CL+umjXW8LNZ/iNjvJ6gYQhoOtHGYQqTfNx
-   sQ7pO5lrF6CM9SmZGg6+k8Dhu3EKymfzRyYLej/ksWxJp6kCHkw/3g21V
-   HtlWV6zlmqcKTV8LL63g3sHNAEvt4lDwsTH+F1Z/ncem6+Z4v9r1HuATb
-   +lpKZ9iWfMHUc/i2wX0iQknUYhPF8mTinodJG6jti8pDKs/f/w48PjAV4
-   Ky0Sh+L1+/62Z5hgiMxuN+AESaMNWVzPnhf0Ys3LGA4HOsZyS2s9eegdb
-   PnaxpbISba7f5vYU14Jxq+AJ89RRpf+404RBEWwz/hxPHLOyA3zJAG3Pz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="14608088"
+  t=1708919113; x=1740455113;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=TO4OAEAu+yj2WYfETyfwdj+0hN5MdRW68pcCjlPQO5A=;
+  b=Zy6FaISTC4YgtplDBWPeLGs9SW203jDzlRKDB3s6SmjvEH3dv7jfAanU
+   w3TSsVC0eFl8piXU5CPzt/b/tmmFVTxEQr6tReeUDB8B4xA5bgaZ60YtU
+   LwWNZvOowJh5eg0zQ3X3TeOXUsC3fUbulIwkyFBmeYL27sryL5xXucVRj
+   0pOpq2ZsXf1H/QHNrVzwKWVLlmreGyVOI8veCh6GK4gaxq6RUDAafm3RC
+   7R9+ZcQY0/Yc3FwV6kasNi8DFaqsunxAmAhn845Mt6k1h2MpkLeB8FOSc
+   llAFUTX+hWtVEIc8AMdYpWh0pLCcLPe7ysDUlpbSTHJxlRkv/19h9ul+m
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="28611797"
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="14608088"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 16:33:31 -0800
+   d="scan'208";a="28611797"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 19:45:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="11182883"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 25 Feb 2024 16:33:31 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1reOvw-0009sY-0f;
-	Mon, 26 Feb 2024 00:33:28 +0000
-Date: Mon, 26 Feb 2024 08:33:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: SeongJae Park <sj@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sj:damon/next 18/20] mm/damon/core.c:752:44: warning: variable
- 'goal' used in loop condition not modified in loop body
-Message-ID: <202402260800.F3OIgZl9-lkp@intel.com>
+   d="scan'208";a="37526490"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 25 Feb 2024 19:45:12 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sun, 25 Feb 2024 19:45:11 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sun, 25 Feb 2024 19:45:10 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Sun, 25 Feb 2024 19:45:10 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Sun, 25 Feb 2024 19:45:10 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lb9hHa7n+OuCpGfjHxKZNJi2zxFpHRPx5PtMjHh23lRM/Ck6xVRSfhnecuxG0SwHPLXT8T3jEbj9Xefg8hwlKSJofnQj/HMyd6eOnRYyKu7Qeqgn9FtGMx3HQCoSIZTTrXgE9Ht4YkxVfD+Dw0BTQg5x1+tJ13yR9NPGSl4lC/wffmdLJJUbNmjqRCcb5u+fq5ijp/4fzUr1ZK+sCh03CIMjlcTvT0xt12nz1lb9bBiwrmdiFOcJ5hNIvPKUUPYmrx7Ky68w8dBjosHdPk5FbmogKPBo1KnY69qh3ky4403nMDkq1yWsR3enCxUi1OKFvoSYktjTbKC2K5SKBs70ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=53GP58xtJ0k3lo+jEEqx4kkpp2k5vzbMPo/uyneJwPE=;
+ b=FraXeIi2LVdj5RyVCwLS6fp72sDChZTZeE/s/1ZEclbRbFLgsYBkuAZAJnGM4O/gDxykpyRhWvdMzEbuwZbunk6X4iYxp1egAWQzgqUhXWEakljY5eaoefShpgW9owSOORsbX/OggCsIagViGoyy3+OXgfjuiZATbs5VN4mjIH6YGZVap1P9e9QRj8JLMk8vsmYcngwPrvSnu+6h/r3dsLscARLs2e7V481TwMppNj+r/1B4lk8NcMGx4zg3HzOg8oDnRgXJY5rNge96aaWwR2jpvaHZK1RbJosJhqNsofyD7BCJbfzZ3AobmuNpV53fDpwCa/Rb7ijW8pZi8sduFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by DS0PR11MB7333.namprd11.prod.outlook.com (2603:10b6:8:13e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.24; Mon, 26 Feb
+ 2024 03:45:09 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7352:aa4b:e13e:cb01]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7352:aa4b:e13e:cb01%7]) with mapi id 15.20.7339.024; Mon, 26 Feb 2024
+ 03:45:09 +0000
+Date: Sun, 25 Feb 2024 21:44:59 -0600
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Arnd Bergmann <arnd@kernel.org>
+CC: Oded Gabbay <ogabbay@kernel.org>, Thomas =?utf-8?Q?Hellstr=C3=B6m?=
+	<thomas.hellstrom@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+	<airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>, "Rodrigo
+ Vivi" <rodrigo.vivi@intel.com>, Matt Roper <matthew.d.roper@intel.com>,
+	Matthew Auld <matthew.auld@intel.com>, Matthew Brost
+	<matthew.brost@intel.com>, Koby Elbaz <kelbaz@habana.ai>, "Michael J. Ruhl"
+	<michael.j.ruhl@intel.com>, Francois Dugast <francois.dugast@intel.com>, Dave
+ Airlie <airlied@redhat.com>, <intel-xe@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: Re: [PATCH 2/3] drm/xe/mmio: fix build warning for BAR resize on
+ 32-bit
+Message-ID: <qybrvc6fwxjnnt4lwuf2xmdbhznvwzz2bhmlm6m57bze65f6xf@rxbkx74kv6k7>
+References: <20240224121528.1972719-1-arnd@kernel.org>
+ <20240224121528.1972719-2-arnd@kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240224121528.1972719-2-arnd@kernel.org>
+X-ClientProxiedBy: SJ0PR05CA0041.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::16) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DS0PR11MB7333:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2c2b4d36-322a-466e-2d74-08dc367d5419
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EPm/x34I8EqT/LpjaNS2iQdtto7a186Mb71fzB3fznLVxZggGgZ9uFe5oCMuJHnrIK1RwcOxV9C8x/1UkgLKZYElJVmt9AYAAwQnkTsoQ+aHT5LsdLkbSXIyKHTSRoeZhDJ+O5cB3Z6rRDSi4yGxLag4yWRCrBtULb2pMBjwLMHxzjEiugIn0d6rJJOqnKGrdQhXA2PR3LzYCHDQoRHAV9Wbi5fEjg8/MXx96XGiCBuaWtWAIMRYRSrSj5VNdICxx3/OycMW8y2jGO5lmNyzfNoFr0IKafK6XuP7bAqVUxTTQD2rBYLs/qRCFjk+iI2Qq7uVYcIipE1eBkiH/SE4pPcc6oBlXqvIx/6vNFlypGsP7xBgb6QzvgtWIY08caeDZQJ85PzNJZ4X/k6x5mEyosd8Bjr8NvZNt+vYuRCcM1Ni7ZQ++lTgaISa25vLtp6/UAqk7F1ht25O8HtxhlzHJCgvkIjY2KuSxGTKquEDZEFw9oyshqYSb6J7+df6Bi9yoE9BOMgXaPnkq19jDJ/RO2mYDsQ5Esg7PnBX2B8AP72qf6zDp7hGQ2MSJb9CwsQVbdrPaa/P7KLZKz+3E3mK/jRMJbly8X58gO9GyHOCxWAT0VqKU5bwXUZ5fyb5ZSJKFHcXZ36bI1DcwLhhLuvruIFIRe5ilMz1jOEYklvTnAo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(230273577357003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B5JNGb5lAGSyOqgn5mY+wEAdt6qHwuWFzsHQ3stvjt6i2XDmiWUL71m3c1Oq?=
+ =?us-ascii?Q?OqAPOvDtlRRyElVfFKOw6JPZ40CSMozBW+e7LSl3dSK0YrIvSIJ9INj8I1zB?=
+ =?us-ascii?Q?+q27SCkwi93hdsyTBfjDPihFBNg4E3O5oQVpD4OQ4Oo3LdoAQwUK1zIPO6I3?=
+ =?us-ascii?Q?Yz1bw7H1ki3tsdIcaUdektRC8lv8Y6UyOdIbBaO+eNqmeJaE+hqJmqp23sUf?=
+ =?us-ascii?Q?IkbhwJ9Pk0YRBOIJ40HhgkBLNAykZjPUZTC6IpOSYY6Fw08Nzo0k7btL/ZJN?=
+ =?us-ascii?Q?lePDtp8USY3QtODTAl7bmvJ29IUpW25sDOjqUzuio1/XVW59p8aIW3COvfxn?=
+ =?us-ascii?Q?111ljeLuJxTVnYjtcowXmAiEWMum+NGmBttX9YSm8NPzfgsZpaYE9rGj+55C?=
+ =?us-ascii?Q?pih5xucX2GSzB/9Ceee8XHS602TOQoNSqOpL3rbOGh0l25OiGFhVZyVVaQJ8?=
+ =?us-ascii?Q?giFJGr6LGA6jpwroOT5jkv/RUu6QBXK/qDdomFZLLdZood3Q4JBg3Rs4xKlF?=
+ =?us-ascii?Q?WHMDQftpL0HA0o1NBE+OYrEMzzssBOdZBIUJASMgxGIRmZeiw59VJj8qhvAY?=
+ =?us-ascii?Q?hq3c/9OBItmpowx/nFb0UdWRg85fHOXRyZ16xAfVpNEPrJdwTdwHNqADFj4q?=
+ =?us-ascii?Q?vJ7NI7OsYWv19gUR7JoMLIgH03bT2GALetGApAM0x77cilr5DWYe/QkM4X8t?=
+ =?us-ascii?Q?9+ClrR1s1osPrfY0v3rq2L+eUxoxAtV4sWOZJsnSD9bcKSqDMlv5JAVD7VRV?=
+ =?us-ascii?Q?TwOzoeBLKJZJhmrVgwHKun7IZPNaycZCL7eawmci2vODGIJIbTums5t5wF2l?=
+ =?us-ascii?Q?d04+jJEttvb6dAcJlgbarR8yMQLY/zsHoqJMRCBI10CUqAns/94BlcRx93tE?=
+ =?us-ascii?Q?PyNLuT/jQLJB5CWEawxO9D4DTseRBnmijwhZnDM8nqoRJs46TgogIRj+Hmtp?=
+ =?us-ascii?Q?sLzvxn2aqKgAqgdTogIbvy9EJwAm9Tqx0JNvleqU3oYWt0whYgthhAJ3fX+t?=
+ =?us-ascii?Q?ViO+la43uB8maxNQmYKO2B720Equ33Hyk6XsLhoOsAb5Xma1kRaEr7DvuXEc?=
+ =?us-ascii?Q?AbYmMZQ/h6WURdwRXwArEyXk6cS5OnZTJRcc3fr4tgpV2nx75/LkRfU3Gj0F?=
+ =?us-ascii?Q?viFETng7+DvGpF1jP4NK3mliROc27/rP9+b8PAn+Uc7OFbRuvGuu+7/hNOLF?=
+ =?us-ascii?Q?FCdbnRFwiuz3eL20XEEmRFBWXlChI0ea4eOknJXekXz60Nnj/+QAXX22Rg8v?=
+ =?us-ascii?Q?qLhzaACYaJui2mwMByuC0gu3osLYA4QPs5PuReeb4mpyW1yz+HpC8KNZWlcT?=
+ =?us-ascii?Q?Mf4220tnUC5SpGtmo81hA4Rwa4CxCCJ9za4XlHS2yZNUt5eN7c9aFtdSqO2e?=
+ =?us-ascii?Q?50HTJ2+aiWGNZeViq6L0WzN62jB6nlCrMx21uveTyNTd99YI16WV5JVhqjs8?=
+ =?us-ascii?Q?AfojNyn+qb62fhqVlRUu2+nLjhzw4d4nGeBx/47uyXZu0Bixey8qzaVZPLgi?=
+ =?us-ascii?Q?nk6m7RNzhOLQMGfK1ARKdZfhGoxpeNlWmz2dA8nqd6lWpvMqSY6DZD4Xbhlr?=
+ =?us-ascii?Q?HCpoU0P37hXjcEVUECYsS//AlUwl6ZeutHIK6SbKtWL8bc5S9hhSlo4fTzQZ?=
+ =?us-ascii?Q?tQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c2b4d36-322a-466e-2d74-08dc367d5419
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2024 03:45:09.0851
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 88MxFlvvAW63UUtljVdYhVkpgrXprd8nQiZhQIV9ZXLiPF0D/6iKyWNWxF1xHudTjUX55rnWirfBC1+fl0/F4RPdcY8yU4sdBIJGgn/Hl5w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7333
+X-OriginatorOrg: intel.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-head:   a9e8680aa284cf5fd994087542cfa9e6f5f491b4
-commit: 74d79c7a174ab26a8f99bc482dd6b067c93bc554 [18/20] mm/damon: implement DAMON context input-only update function
-config: i386-buildonly-randconfig-003-20240226 (https://download.01.org/0day-ci/archive/20240226/202402260800.F3OIgZl9-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240226/202402260800.F3OIgZl9-lkp@intel.com/reproduce)
+On Sat, Feb 24, 2024 at 01:15:00PM +0100, Arnd Bergmann wrote:
+>From: Arnd Bergmann <arnd@arndb.de>
+>
+>clang complains about a nonsensical test on builds with a 32-bit phys_addr_t,
+>which means resizing will always fail:
+>
+>drivers/gpu/drm/xe/xe_mmio.c:109:23: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>  109 |                     root_res->start > 0x100000000ull)
+>      |                     ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+>
+>Previously, BAR resize was always disallowed on 32-bit kernels, but
+>this apparently changed recently. Since 32-bit machines can in theory
+>support PAE/LPAE for large address spaces, this may end up useful,
+>so change the driver to shut up the warning but still work when
+>phys_addr_t/resource_size_t is 64 bit wide.
+>
+>Fixes: 9a6e6c14bfde ("drm/xe/mmio: Use non-atomic writeq/readq variant for 32b")
+>Fixes: ea97a66a2218 ("drm/xe: Disable 32bits build")
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402260800.F3OIgZl9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/damon/core.c:752:44: warning: variable 'goal' used in loop condition not modified in loop body [-Wfor-loop-analysis]
-     752 |         for (goal = damos_nth_quota_goal(i, src); goal; )
-         |                                                   ^~~~
->> mm/damon/core.c:799:42: warning: variable 'filter' used in loop condition not modified in loop body [-Wfor-loop-analysis]
-     799 |         for (filter = damos_nth_filter(i, src); filter;)
-         |                                                 ^~~~~~
->> mm/damon/core.c:853:42: warning: variable 'scheme' used in loop condition not modified in loop body [-Wfor-loop-analysis]
-     853 |         for (scheme = damon_nth_scheme(i, src); scheme;)
-         |                                                 ^~~~~~
->> mm/damon/core.c:841:13: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-     841 |         int i = 0, err;
-         |                    ^
->> mm/damon/core.c:929:37: warning: variable 't' used in loop condition not modified in loop body [-Wfor-loop-analysis]
-     929 |         for (t = damon_nth_target(i, src); t;)
-         |                                            ^
-   5 warnings generated.
+this second Fixes should not be here? How would "disabling 32bits build"
+break 32bits build? I think just the first one is enough, otherwise
+237412e45390 ("drm/xe: Enable 32bits build") is your next good
+candidate.
 
 
-vim +/goal +752 mm/damon/core.c
+Acked-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-   731	
-   732	
-   733	static void damos_update_quota_goals(struct damos_quota *dst,
-   734			struct damos_quota *src)
-   735	{
-   736		struct damos_quota_goal *goal, *next;
-   737		int i = 0;
-   738	
-   739		damos_for_each_quota_goal_safe(goal, next, dst) {
-   740			struct damos_quota_goal *src_goal =
-   741				damos_nth_quota_goal(i++, src);
-   742	
-   743			if (src_goal) {
-   744				goal->metric = src_goal->metric;
-   745				goal->target_value = src_goal->target_value;
-   746				goal->current_value = src_goal->current_value;
-   747				goal->last_psi_total = src_goal->last_psi_total;
-   748				continue;
-   749			}
-   750			damos_destroy_quota_goal(goal);
-   751		}
- > 752		for (goal = damos_nth_quota_goal(i, src); goal; )
-   753			damos_move_quota_goal(dst, goal);
-   754	}
-   755	
-   756	static struct damos_filter *damos_nth_filter(int n, struct damos *s)
-   757	{
-   758		struct damos_filter *filter;
-   759		int i = 0;
-   760	
-   761		damos_for_each_filter(filter, s) {
-   762			if (i++ == n)
-   763				return filter;
-   764		}
-   765		return NULL;
-   766	}
-   767	
-   768	static int damos_update_filters(struct damos *dst, struct damos *src)
-   769	{
-   770		struct damos_filter *filter, *next;
-   771		int i = 0;
-   772	
-   773		damos_for_each_filter_safe(filter, next, dst) {
-   774			struct damos_filter *src_filter = damos_nth_filter(i++, src);
-   775	
-   776			if (src_filter) {
-   777				filter->type = src_filter->type;
-   778				filter->matching = src_filter->matching;
-   779				switch (src_filter->type) {
-   780				case DAMOS_FILTER_TYPE_ANON:
-   781					break;
-   782				case DAMOS_FILTER_TYPE_MEMCG:
-   783					filter->memcg_id = src_filter->memcg_id;
-   784					break;
-   785				case DAMOS_FILTER_TYPE_ADDR:
-   786					filter->addr_range = src_filter->addr_range;
-   787					break;
-   788				case DAMOS_FILTER_TYPE_TARGET:
-   789					filter->target_idx = src_filter->target_idx;
-   790					break;
-   791				default:
-   792					break;
-   793				}
-   794				continue;
-   795			}
-   796			damos_destroy_filter(filter);
-   797		}
-   798	
- > 799		for (filter = damos_nth_filter(i, src); filter;)
-   800			damos_move_filter(dst, filter);
-   801		return 0;
-   802	}
-   803	
-   804	static struct damos *damon_nth_scheme(int n, struct damon_ctx *ctx)
-   805	{
-   806		struct damos *s;
-   807		int i = 0;
-   808	
-   809		damon_for_each_scheme(s, ctx) {
-   810			if (i++ == n)
-   811				return s;
-   812		}
-   813		return NULL;
-   814	}
-   815	
-   816	static int damon_update_scheme(struct damos *dst, struct damos *src)
-   817	{
-   818		int err;
-   819	
-   820		dst->pattern = src->pattern;
-   821		dst->action = src->action;
-   822		dst->apply_interval_us = src->apply_interval_us;
-   823		dst->quota.ms = src->quota.ms;
-   824		dst->quota.sz = src->quota.sz;
-   825		dst->quota.reset_interval = src->quota.reset_interval;
-   826		dst->quota.weight_sz = src->quota.weight_sz;
-   827		dst->quota.weight_nr_accesses = src->quota.weight_nr_accesses;
-   828		dst->quota.weight_age = src->quota.weight_age;
-   829	
-   830		damos_update_quota_goals(&dst->quota, &src->quota);
-   831	
-   832		dst->wmarks = src->wmarks;
-   833	
-   834		err = damos_update_filters(dst, src);
-   835		return err;
-   836	}
-   837	
-   838	static int damon_update_schemes(struct damon_ctx *dst, struct damon_ctx *src)
-   839	{
-   840		struct damos *scheme, *next;
- > 841		int i = 0, err;
-   842	
-   843		damon_for_each_scheme_safe(scheme, next, dst) {
-   844			struct damos *src_scheme = damon_nth_scheme(i++, src);
-   845	
-   846			if (src_scheme) {
-   847				err = damon_update_scheme(scheme, src_scheme);
-   848				continue;
-   849			}
-   850			damon_destroy_scheme(scheme);
-   851		}
-   852	
- > 853		for (scheme = damon_nth_scheme(i, src); scheme;)
-   854			damon_move_scheme(dst, scheme);
-   855		return 0;
-   856	}
-   857	
-   858	static int damon_update_target_regions(struct damon_target *dst,
-   859			struct damon_target *src)
-   860	{
-   861		struct damon_addr_range *ranges;
-   862		int i = 0, err;
-   863		struct damon_region *r;
-   864	
-   865		damon_for_each_region(r, src)
-   866			i++;
-   867		if (!i)
-   868			return 0;
-   869		ranges = kmalloc_array(i, sizeof(*ranges), GFP_KERNEL | __GFP_NOWARN);
-   870		if (!ranges)
-   871			return -ENOMEM;
-   872		i = 0;
-   873		damon_for_each_region(r, src) {
-   874			if (r->ar.start > r->ar.end) {
-   875				err = -EINVAL;
-   876				goto out;
-   877			}
-   878			ranges[i].start = r->ar.start;
-   879			ranges[i++].end = r->ar.end;
-   880			if (i == 1)
-   881				continue;
-   882			if (ranges[i - 2].end > ranges[i - 1].start) {
-   883				err = -EINVAL;
-   884				goto out;
-   885			}
-   886		}
-   887		err = damon_set_regions(dst, ranges, i);
-   888	out:
-   889		kfree(ranges);
-   890		return err;
-   891	}
-   892	
-   893	static struct damon_target *damon_nth_target(int n, struct damon_ctx *ctx)
-   894	{
-   895		struct damon_target *t;
-   896		int i = 0;
-   897	
-   898		damon_for_each_target(t, ctx) {
-   899			if (i++ == n)
-   900				return t;
-   901		}
-   902		return NULL;
-   903	}
-   904	
-   905	static int damon_update_targets(struct damon_ctx *dst, struct damon_ctx *src)
-   906	{
-   907		struct damon_target *t, *next;
-   908		int i = 0, err;
-   909	
-   910		damon_for_each_target_safe(t, next, dst) {
-   911			struct damon_target *src_target = damon_nth_target(i++, src);
-   912	
-   913			if (damon_target_has_pid(dst))
-   914				put_pid(t->pid);
-   915	
-   916			if (src_target) {
-   917				if (damon_target_has_pid(src))
-   918					get_pid(src_target->pid);
-   919				t->pid = src_target->pid;
-   920	
-   921				err = damon_update_target_regions(t, src_target);
-   922				if (err)
-   923					return err;
-   924				continue;
-   925			}
-   926			damon_destroy_target(t);
-   927		}
-   928	
- > 929		for (t = damon_nth_target(i, src); t;)
-   930			damon_move_target(dst, t);
-   931		return 0;
-   932	}
-   933	
+Lucas De Marchi
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>---
+> drivers/gpu/drm/xe/xe_mmio.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/gpu/drm/xe/xe_mmio.c b/drivers/gpu/drm/xe/xe_mmio.c
+>index e3db3a178760..7ba2477452d7 100644
+>--- a/drivers/gpu/drm/xe/xe_mmio.c
+>+++ b/drivers/gpu/drm/xe/xe_mmio.c
+>@@ -106,7 +106,7 @@ static void xe_resize_vram_bar(struct xe_device *xe)
+>
+> 	pci_bus_for_each_resource(root, root_res, i) {
+> 		if (root_res && root_res->flags & (IORESOURCE_MEM | IORESOURCE_MEM_64) &&
+>-		    root_res->start > 0x100000000ull)
+>+		    (u64)root_res->start > 0x100000000ul)
+> 			break;
+> 	}
+>
+>-- 
+>2.39.2
+>
