@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB600383B2
-	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 10:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5648620DD3
+	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 10:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708943479; cv=none; b=mNl4tCsjhxcuNWXE+Hgx4IPbY4Lai5UGAgbQlC0ml1mCP2VcvsL46xfAegdnrwWtbBYnT9sfM0jN6G5RjTvnM1jvqPKyYI9j2VUNoapUK0/P0z225weh1vwMwgNiiCOXCNwLclazxqt3WTC1uvbd1O7YdBVHvi8KoN0VNumTSuE=
+	t=1708943509; cv=none; b=lso+r1SRYeXDJ/8e+yjVr99gl8LecCg8BzUV6/MMafP4f68FU9e7ysy6l7UHKox5ySwc8VfiaCGLfj11LZd7o5xjPDe9duSbOXCaG1ddUmtsAb1GtkBmc87F1HB+j2tnyE2mXTMC4k18xrWgZX/VVToTwGidXngSNlFMKDRg5p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708943479; c=relaxed/simple;
-	bh=kD1iE397DifH1iu3WK8G21vMjQ1OMru6tGlj43p+7WY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KLmnDnhZz94FkN2A1p3267BYifZ4Zim0obO62kGRMGg4FgetvzjRf2UbDC7Wt46ycXZWLj+EU8pWod5fjfasI0uBWUtrJ0ahM2e6Y/xMCrWyOPWlzTd/x/Yts/ORmNHUjL/59BA3OCdj0Mxfl2eZd1Ml//cAMdB+FkjoXi+T2Yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P+Sa3N5s; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1708943509; c=relaxed/simple;
+	bh=I4xU7ttfQubSTSZH8VLMXXlEYrJ6AfVembPYcdM4yn4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=G73KYNmo55zWJ4hl5t2PoQCyM7M0kbiJoIwLhgvh2xWbYVFvddvy5E6RxXeKJjkTGReBiPd4UrSogWtbM1Np4nvXyZb3y946VbCZaAr2N4lgfcnpZTpkRSHiSGHajyPdyPlWK1xKeCfb2UZDEBPS3HroKXz3fLbHDLQ9Cr6zkWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TPwARwER; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P+Sa3N5s"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TPwARwER"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708943476;
+	s=mimecast20190719; t=1708943503;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=XeKTKQcHCw+Yg7AfKBazBVJrD8h5CQe6YYFps6k1fSk=;
-	b=P+Sa3N5sphpWXw/wtnYrmu3gTHQ0QALQc2dX27ebg+F0w92xE+2I35WSRgc/xChN/iPR0m
-	YJ0uT0uOYpUHqUkDElDMtB5/CK5MZ9d30NpGsu7MZqKFtzNrHotUKJmPYbRr32JsLIKHVT
-	sUxBN0HEAQJE5Yd/TBHW+la8SfxdANY=
+	bh=29Ct9QfdREsbENzUcNQTI5YdRj0jXaAywHdNm7CsTgY=;
+	b=TPwARwERGXqJp31H5m3bf5i3H9vVGI7OHcf2uPV2x7jL1RBzjae4MXfqk4Z4Bofx+85xF+
+	K5mrkHnQpdFzMbuCp2+KAp+Sy2yuTZ9wJKNGOqfz0rKOgHQHt2v6POc/DHyr5Fns5dean7
+	DjWw0B7v4/QdjgqqCrJkDqrfCGdgVFI=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-438-jS16-rCkP6eRwrkbJLeT1g-1; Mon, 26 Feb 2024 05:31:15 -0500
-X-MC-Unique: jS16-rCkP6eRwrkbJLeT1g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-161-LEcAY4q6OAu7bRNTirWFEw-1; Mon, 26 Feb 2024 05:31:42 -0500
+X-MC-Unique: LEcAY4q6OAu7bRNTirWFEw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F048B848C03
-	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 10:31:14 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43B8C800074
+	for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 10:31:42 +0000 (UTC)
 Received: from [172.64.13.19] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A9113492BC6;
-	Mon, 26 Feb 2024 10:31:14 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F3FCE1815;
+	Mon, 26 Feb 2024 10:31:41 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 204): Test report for master
- (6.8.0-rc5, mainline.kernel.org-clang, 70ff1fe6)
-Date: Mon, 26 Feb 2024 10:31:14 -0000
+ (6.8.0-rc5, mainline.kernel.org-clang, 91403d50)
+Date: Mon, 26 Feb 2024 10:31:41 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -49,8 +49,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <29618.124022605311500239@us-mta-438.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <27551.124022605314200225@us-mta-161.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -66,10 +66,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'docs-6.8-fixes3' of git://git.lwn.net/linux
+    Commit message: Merge tag 'iommu-fixes-v6.8-rc5' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/joro/iommu
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/131193
+    https://datawarehouse.cki-project.org/kcidb/checkouts/131151
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -111,13 +112,20 @@ l-tests/-/issues/1752
                  aarch64 - stress: stress-ng - memory
                    s390x - stress: stress-ng - memory
                   x86_64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
         Issue: [mainline/rawhide] Libkcapi AF_ALG test failing on sweetpig/=
 koza machines
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1852
             Affected tests:
                   x86_64 - Libkcapi AF_ALG test
-                  x86_64 (debug) - Libkcapi AF_ALG test
         Issue: xfstests generic/245: cannot overwrite File exists
             URL: https://www.spinics.net/lists/fstests/msg23667.html
             Affected tests:
@@ -129,31 +137,25 @@ l-tests/-/issues/1654
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1267
             Affected tests:
                  ppc64le - selinux-policy: serge-testsuite
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
         Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
 701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
 context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
