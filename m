@@ -1,97 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE3E1EB27;
-	Mon, 26 Feb 2024 11:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F48604B7;
+	Mon, 26 Feb 2024 12:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708948184; cv=none; b=cSpI3MsqquELjYLmIWgFpNhJPGqw10yUGogAtEv7GBlhmCFDrU+Duuo7stDve9q1lSB54Zw66A8eIIMQbFFWrDSruYwo9QCrQ9oFVsr50aYXYjgEM+3KN+HAFwjviEe/UtAJUNI5gpmKn7e4Er4wo7gJrM3bgPqFliHNB13amnM=
+	t=1708949813; cv=none; b=MUaltJ5BKbPpN+EcegDA4R3BCJ925bYTJfqKmrbf/btRgJwqrSrRrJdMhuAcFb+BF4QgtoAjO9BosGm5lmiQQCMHiYS5lS9BzV52K/mw4PryOoWtEjqiiJ4HO1nKrOnQzDrLXIkMyi1l7Q2DbC38mQGinvHAYYZzutPQryE7amk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708948184; c=relaxed/simple;
-	bh=0g9GcCs8vfketXgTlugah+18Pi8X9CkkeR2K4H65dqY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KyB4/XgQWdDc8hK07hTE2mFobr1bV3UxDc6I2pQaKNv96fw71P48LWCPXlFTj3sttyZyUPeTcxCmESsDAbaXffuhbTJe/GCKszK5puqOCpMrIc6oQYRLUfN/qRScSt1Vaevw8PX29dglRsIfdG3zN/TcAs9S4vKaCAaYvpJIl3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZB7w19GZ; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1708949813; c=relaxed/simple;
+	bh=1ekMycTtyRegpljwcVmhW8UjMqj/zF0d6fHe6uDawoE=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=AYROYNdBIDSdZu0k1tqnVFUriIJF67RrNavKthuqfxeFdUo1djKCgzYErPrbITP1l53VZ+tVnYKl3S60skaPwlsQe1yNUyfCdGoetHgEbht/5vzSDKtRzcs78SKd3cttZG5e0s8qrQOK3LhqsFRJueez6MFZ23DhYJID+VwtZnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Bp6X4CPS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bd0w9LMe; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZB7w19GZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708948184; x=1740484184;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0g9GcCs8vfketXgTlugah+18Pi8X9CkkeR2K4H65dqY=;
-  b=ZB7w19GZfHRMi+PmoUTRS32wjRqYQZF7MklVYaU12MhjJ2LEZueue1KB
-   JMTzse1us15K0pJCk7YK8gg5KtV0W1o3gcczoAQgQ+XfRlpoQ3hW1viP5
-   reabMFxboKglMcIZQqmF5wxY7CpQJAeUOzCnlQc+SgbDYAz4Oe5dYnaSw
-   cRKhBEE2JdCX1mRAXKS8/f/tLkpfgli7yatoaIbLT5tOMLrSpTFPF/gG9
-   ExQuB7fmRbLV3ovu63XcQlUiE90HwDYqx1OrpCHs45X1CP2ENI3bPHOvx
-   9WK24W2KMT5elxNtkyTJwJaqDM3M8KpKkFXEyNaPFhwDy7SHYHfdZaVyz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="28652383"
-X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="28652383"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 03:49:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="6678310"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 26 Feb 2024 03:49:35 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1reZTn-000AHf-22;
-	Mon, 26 Feb 2024 11:49:15 +0000
-Date: Mon, 26 Feb 2024 19:48:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ethan Zhao <haifeng.zhao@linux.intel.com>, baolu.lu@linux.intel.com,
-	bhelgaas@google.com, robin.murphy@arm.com, jgg@ziepe.ca
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kevin.tian@intel.com, dwmw2@infradead.org, will@kernel.org,
-	lukas@wunner.de, yi.l.liu@intel.com, dan.carpenter@linaro.org,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	Ethan Zhao <haifeng.zhao@linux.intel.com>
-Subject: Re: [PATCH v13 3/3] iommu/vt-d: improve ITE fault handling if target
- device isn't valid
-Message-ID: <202402261910.IZ3PGmH3-lkp@intel.com>
-References: <20240222090251.2849702-4-haifeng.zhao@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Bp6X4CPS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bd0w9LMe"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id D2D3913800CD;
+	Mon, 26 Feb 2024 07:16:50 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 26 Feb 2024 07:16:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1708949810;
+	 x=1709036210; bh=om9v02WUOxT/6wSOXj1wRFUKUxVw9Bxh5IjOiYeK8ag=; b=
+	Bp6X4CPStEKXPAoT8r4odk5fLJ1ngm/v09FCV416B4MiM7+kn1ynb6MBYfhTblVp
+	yQzmAsD5mxhbGbuSAvxs0dXvvAYAgWCbTkCosuco0wDqlZkMZ0GG2TDVcEgpZO2R
+	DmaAtlt27wdwSVdLievkz+JyeSvVbZqn7uEnQp0cjD6ODUSsBUMnUxDexHpDoPd5
+	Ih8FdumuNVrAu3Aj0o27qVu0WAenO/kmS2/4oXkOzbCOpkWqRmuFzpl88JxZO4AB
+	v18ohEceIRB6KNsHZLZLd3c+71zzsO6SfjR/TwqMvRRewCI4wi+tX9DvFoMFk9NI
+	rm5RWY6EB5kwAYbwrDV1zQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1708949810; x=
+	1709036210; bh=om9v02WUOxT/6wSOXj1wRFUKUxVw9Bxh5IjOiYeK8ag=; b=b
+	d0w9LMeTq/X61Vvn229Lievr0gP162Vowt4j6J214V6BTnbhEdAJO3E9chITwaVc
+	1VEINXAsJpxa7v+Gcc2cR6kwHxM6TSNuR6Kf3o6+CzrmpEG6Bk1Wg+mvgsLxm+9m
+	Q1m4gMvmKxdCQFJKK9X9cmPnh6xe+wIX3Ugk23lGczxSiOrNiqB08kMCME/bSles
+	CulXAv7jkHo1feG94k7cZ1QxQB5RBq48YzyMHoKDAXyuyRRjF+bwfnCAGrdxtWbK
+	mLXkzlQNw266sRUDme9vlmb03ifI2aPZjAb3snS6WTgJlinkyG0HwlljZEOL7HPy
+	DTSp57IFs4i+q1xg6AFCw==
+X-ME-Sender: <xms:MoHcZe-rf8kMlc5GvQdygs4BbjMJKM1_gXvnqgEPnwLwPc5pj4nGcQ>
+    <xme:MoHcZesKH4rSDeYlLmod6_iNsAcGX45ryiuxZjXFWZfAp-9jHTBGNK9DMNmnhv7lm
+    Ppx3HJy8U-8l4LUsME>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgedvgdefiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepueegteeggfdtueduteefjeeghfehfeeukeekgfdttddufeeuieejudeujeff
+    iedtnecuffhomhgrihhnpehoiihlrggsshdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:MoHcZUAgC4W3gqsFcbUPCwutKR03h20xyeGOU7CeChR6Q28H9XT3PA>
+    <xmx:MoHcZWenmSQhvvO5v5tQe99YjPyHPT4tbnVECmxmd0RQpmqH0AmuZA>
+    <xmx:MoHcZTOVCoNMxLuDflLrZOhtTlW8fUxUAHl3YNfS6wtplqilOG7FJA>
+    <xmx:MoHcZYqbV2f6fbzKi6yyuMUsoxm3EAApSPOj9l1saLAw2HPdYkIBtA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 4777EB6008D; Mon, 26 Feb 2024 07:16:50 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-153-g7e3bb84806-fm-20240215.007-g7e3bb848
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240222090251.2849702-4-haifeng.zhao@linux.intel.com>
+Message-Id: <0fd0b1b6-f14c-4bc9-9d6d-0b6288e139b1@app.fastmail.com>
+In-Reply-To: <4da3ece6-e2da-98cf-5d21-8e6bf296519f@huawei.com>
+References: <202402261559.cYtMOkIn-lkp@intel.com>
+ <4da3ece6-e2da-98cf-5d21-8e6bf296519f@huawei.com>
+Date: Mon, 26 Feb 2024 13:16:28 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Zhihao Cheng" <chengzhihao1@huawei.com>,
+ "kernel test robot" <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Richard Weinberger" <richard@nod.at>
+Subject: Re: [rw-ubifs:next 19/33] fs/ubifs/find.c:86: warning: Function parameter or
+ struct member 'arg' not described in 'scan_for_dirty_cb'
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ethan,
+On Mon, Feb 26, 2024, at 09:19, Zhihao Cheng wrote:
+> =E5=9C=A8 2024/2/26 15:16, kernel test robot =E5=86=99=E9=81=93:
+> Looks like [1] imported a compiling warning, because the functions'=20
+> comments(on parameters) are missed to update. Do you have time to send=
+ a=20
+> patch to fix it? Thanks.
+>
+> [1]=20
+> https://patchwork.ozlabs.org/project/linux-mtd/patch/20240213095412.45=
+3787-2-arnd@kernel.org/
+>>=20
 
-kernel test robot noticed the following build errors:
+Thanks for letting me know, sent a fix to go on top now.
 
-[auto build test ERROR on e60bf5aa1a74c0652cd12d0cdc02f5c2b5fe5c74]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ethan-Zhao/PCI-make-pci_dev_is_disconnected-helper-public-for-other-drivers/20240222-170625
-base:   e60bf5aa1a74c0652cd12d0cdc02f5c2b5fe5c74
-patch link:    https://lore.kernel.org/r/20240222090251.2849702-4-haifeng.zhao%40linux.intel.com
-patch subject: [PATCH v13 3/3] iommu/vt-d: improve ITE fault handling if target device isn't valid
-config: x86_64-randconfig-074-20240226 (https://download.01.org/0day-ci/archive/20240226/202402261910.IZ3PGmH3-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240226/202402261910.IZ3PGmH3-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402261910.IZ3PGmH3-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: device_rbtree_find
-   >>> referenced by dmar.c:1346 (drivers/iommu/intel/dmar.c:1346)
-   >>>               drivers/iommu/intel/dmar.o:(qi_submit_sync) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     Arnd
