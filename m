@@ -1,107 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EAE15CB;
-	Tue, 27 Feb 2024 00:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB38D17FF
+	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 01:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708995306; cv=none; b=maMytcflrA7LcBeQhyEBjyps3/msuuFN3nFbS+o10ni2D0rYjcqAGRhczPMkMFfQZI9f+B6/56hBQ6beXmiKIj8r4XyUKtMzq31H66TGOCC2TYzZeIfv9tHznaKS+lje8V+0WRlflNsCgEgwHPlnYJ2aWEFHnPn+eYKSEYz6hg4=
+	t=1708995972; cv=none; b=VmKjdLJPLs31SY2yVPArVdBR8Y6x3YKJtbZzm3sw5Biie14W4lHbTOV/XncxZhHs5WkzbIkIzaWg2UGUA1RV4diJcfc10e20jrqe76hKRTg/8mrlvSbKlOMHYC8qGSs7xsRYQYXGog2LFTFCK+8m9/nJtFDBKyx0K/3p1AewqP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708995306; c=relaxed/simple;
-	bh=ss8VwZn4a5t6mx/5BWpuy9l0XPO5ja2ql+oKmi1naJg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gn6I7LgSjY85MxzJxaPJyXEYVgzlJRHGuqG5EmW2WHWODkrlxelDIPiKHCWdtV+XgvVbHUIMFm/g/CsL4KR/s8YxWWolFiqQwvKsAvpE89pCYhWTswp5lDhxmAj56yFqUy9A71vrt3FBAbwyuMWPCQuEqf05YEfkVRuMHlit/y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3EtBjPw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708995972; c=relaxed/simple;
+	bh=gT90LYQkAogDUb21whG1pqvBFZBtCaEBGaMP2ERFauc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SijevhreQNydnPiY4krDIe3Hr9umMEzo6z0IAYZydmyHuXkuSyGtrX5V7efeCyDcB/O65lXCblHAlodR4EU6FlC0vSSmD486po68bH2DBi65N+feyDVBzen9EfWjgD52blXFUaqEoy1nOC2KGDX1AfSciXAExBGhfGvw8nU5ZtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=U0YOOK7A; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3EtBjPw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965FDC433F1;
-	Tue, 27 Feb 2024 00:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708995305;
-	bh=ss8VwZn4a5t6mx/5BWpuy9l0XPO5ja2ql+oKmi1naJg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=g3EtBjPw9BkQf1JaTfipWe2RSvJN+FjTxpHl8mmlomdAhvj/4Y1I2Le0T24DZkNBe
-	 7uk3pXy0MTVHwvHFRzs7JSSUUMXDH+i/wTKyexaAn7wxlGJ9lZJUIPpG8WJoXBdSHu
-	 vhIPL0hEmbbIZNyJ/JjsIA7RU/VU2g3JeYNcwTE4wxGeT48sRMl0ehhNGoXR6X72ar
-	 0aYHU/vZuK+gX59lsGbNcbxnk8hf0csOhnV2Zafj1V3Y+vYn7hnYbqiWFwCdXRP0BK
-	 NXHQOWaDKZJdDbpD35VdzgUQ7AT1fsONlOzG9uJFec+F3sCRXHnOR+v8MmoIrC2u/a
-	 MLXdWgVVYvKIg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 26 Feb 2024 17:54:58 -0700
-Subject: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="U0YOOK7A"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso3533618a12.3
+        for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 17:06:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708995970; x=1709600770; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ilxSVtXwJEiNKpvZECeMq2I239dM0LKzAV2B07SGDl8=;
+        b=U0YOOK7AzAg5/1Fmq74LC17/cmp90FCTpfX0S+CiTffTrBLGYic0lK8U968dDUNR2X
+         LPOk5rBzlZr9Iz7wPpKpWUz9WBEzQODjv/g46zwnELNiQM6++IILG2RolGPPvaTYgTmP
+         bgIhBDtrG8Z+PuwUesVySnWtNICTW0kJgAb9I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708995970; x=1709600770;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ilxSVtXwJEiNKpvZECeMq2I239dM0LKzAV2B07SGDl8=;
+        b=MmAOmkrbtn5nN3f0JDzume//Hgy3T0iziRDHKThvkCS9Dr9T9PZO8/+rpFi11BUCFn
+         b8/cZQZ/07VfTcu6mRZa3E74pxi8CJeQpKMe8ARsQ5ejUd3ok6jSVwbSZGqIhGG5/328
+         X8vyPHC+cNj1GNjuqj+6nY1nfkfAjddvzDAEFtwULqURZCUxhALeqn4XO1JUs7ekBNEN
+         baogg1uklgvd89oO6exzylcoLa4LHYKktvytd3IrHNjFb3bTF1srFn1UWWXPM/Du1CiH
+         MNNg3v2PZveFCh5IemhRVesvsoiqfsBomvh5wP2TgnH+uqL4rm/TL75BA1e/lsEIXmnA
+         2y7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUXNCHf1ibWXkbbm1XEkSeInZ91Rb1wLS+F6EmlqtN+LofR/2Tt+duhhs0wSiOz8X3W9dDploeDK/gLa5z79EQlJUBBAw==
+X-Gm-Message-State: AOJu0YzLesE5OkL7skJUNXKfWr9wHDWx4DoQAZ8wMYqxTAO4Wkx4EdMG
+	qal+e1yDY2KVvPXBMEApuonKVqo/SPSHQPQAbSHkOycRVtVWX9KnKx7XIAp8EQ==
+X-Google-Smtp-Source: AGHT+IFHlG+XM9sREVaFA5RCt/za8tb+jnlOMihqGl4vJ7sjJTIzn7SVfADXnIBmqZg/YVWZbU/69A==
+X-Received: by 2002:a17:90a:4c85:b0:29a:8c78:9a7 with SMTP id k5-20020a17090a4c8500b0029a8c7809a7mr5874927pjh.40.1708995970351;
+        Mon, 26 Feb 2024 17:06:10 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id jx18-20020a170903139200b001d9773a1993sm288268plb.213.2024.02.26.17.06.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Feb 2024 17:06:10 -0800 (PST)
+Date: Mon, 26 Feb 2024 17:06:09 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/7] CFI for ARM32 using LLVM
+Message-ID: <202402261703.695B87E6@keescook>
+References: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAOIy3WUC/x2N0QqDMAwAf0XyvEBXO6H7lTFG5xINaC1pJ4r47
- yt7PDjuDsikQhnuzQFKq2RZYoXrpYF+DHEglE9lsMY6Y22HZSSdw4QsG/KiRXjHFKL0GL/zq6i
- kjDf2znjHb9+1UEtJqer/y+N5nj++m9k2dQAAAA==
-To: rafael@kernel.org, daniel.lezcano@linaro.org
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, keescook@chromium.org, 
- gustavoars@kernel.org, morbo@google.com, justinstitt@google.com, 
- stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org, 
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1946; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ss8VwZn4a5t6mx/5BWpuy9l0XPO5ja2ql+oKmi1naJg=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKl3jV6EfCpn4bv2/K1+5c1nAcxxSgyTMxkc86IDc135G
- vZsYrjeUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACYirsHwP07kle3h+3G7nt9R
- Xxc1u6p7a2rBnMfPf16Z5zkrX0R52ylGhrfmh1R3rCtTf/OTYcnvOQa/3ihM7Z07N39DYI9s/2H
- XDDYA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
 
-When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
-that supports __counted_by() (such as clang-18 and newer), there is a
-panic on boot:
+On Sun, Feb 25, 2024 at 09:08:09PM +0100, Linus Walleij wrote:
+> This is a first patch set to support CLANG CFI (Control Flow
+> Integrity) on ARM32.
 
-  [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
-  [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
-  ...
-  [    3.039208] Call trace:
-  [    3.041643]  __fortify_report+0x5c/0x74
-  [    3.045469]  __fortify_panic+0x18/0x20
-  [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
+Yay!
 
-This panic occurs because trips is counted by num_trips but num_trips is
-assigned after the call to memcpy(), so the fortify checks think the
-buffer size is zero because tz was allocated with kzalloc().
+Is CONFIG_CFI_PERMISSIVE=y expected to work with this series?
 
-Move the num_trips assignment before the memcpy() to resolve the panic
-and ensure that the fortify checks work properly.
+I wasn't able to build with CONFIG_FTRACE=y; I got this link error:
 
-Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/thermal/thermal_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ld.lld: error: undefined symbol: ftrace_stub_graph
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index bb21f78b4bfa..1eabc8ebe27d 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
- 
- 	tz->device.class = thermal_class;
- 	tz->devdata = devdata;
--	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
- 	tz->num_trips = num_trips;
-+	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
- 
- 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
- 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
+(FWIW, I'm building against v6.8-rc2, maybe I need a different base?)
 
----
-base-commit: a85739c8c6894c3b9ff860e79e91db44cb59bd63
-change-id: 20240226-thermal-fix-fortify-panic-num_trips-5f94094fb963
+But yes, I can boot and prototype mismatches are caught. Whee! :)
 
-Best regards,
+Tested-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+Kees Cook
