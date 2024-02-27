@@ -1,139 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2953B1E878;
-	Mon, 26 Feb 2024 22:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EAE15CB;
+	Tue, 27 Feb 2024 00:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708988372; cv=none; b=Fed0H6AYzJN/z01rtg1to+KIAqFnnXpNIggLzaYVDDd1JWkaG23KFQl4b1pUj/0NqAN+90RMHqIWEEYqYn9C6ZibZ3ih1+WwvfS2lP+iyY3LZUEvnOAS5W+Eew2ZI5IQpMvyBdf8jgfk9KD+dLWFdi4FpuUGnXZosDTGaUAnkjk=
+	t=1708995306; cv=none; b=maMytcflrA7LcBeQhyEBjyps3/msuuFN3nFbS+o10ni2D0rYjcqAGRhczPMkMFfQZI9f+B6/56hBQ6beXmiKIj8r4XyUKtMzq31H66TGOCC2TYzZeIfv9tHznaKS+lje8V+0WRlflNsCgEgwHPlnYJ2aWEFHnPn+eYKSEYz6hg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708988372; c=relaxed/simple;
-	bh=AB6wH6fh3xUjGCcELHUEz8Vc9UGxsP93pfzxD8ptCDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EDgzvBQ0Bgo+IUvw+QUHG4rzSnajQVR0u7vTVcYY3J++jX+lOYPKIYCMancugiZzYkdTvxltwaK8b7waP0is1WX7MGXS76exuxIqbec7iyuJ77l9esKLILSPP9iOnUKNltmSvLtQm0Aix/LjLawhdAGtX6rbuNRvy6qWGFfWcN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VEebdeIM; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1708995306; c=relaxed/simple;
+	bh=ss8VwZn4a5t6mx/5BWpuy9l0XPO5ja2ql+oKmi1naJg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gn6I7LgSjY85MxzJxaPJyXEYVgzlJRHGuqG5EmW2WHWODkrlxelDIPiKHCWdtV+XgvVbHUIMFm/g/CsL4KR/s8YxWWolFiqQwvKsAvpE89pCYhWTswp5lDhxmAj56yFqUy9A71vrt3FBAbwyuMWPCQuEqf05YEfkVRuMHlit/y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3EtBjPw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VEebdeIM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708988370; x=1740524370;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AB6wH6fh3xUjGCcELHUEz8Vc9UGxsP93pfzxD8ptCDg=;
-  b=VEebdeIMRRWHnDOb0D6vfxMAl0h4NG8BZ9U3esn8tYT4GTU2oQekfifq
-   7QAjTFNPHKOX9ULEN5ytq6t1HbTS5STSS/qQ8M/Bq4eEVpOBmd6H/rYy+
-   6Sh1HxWZgG5OTz7DVIpzCGwE59Dsp+qSEVS9G/c6lvwcxu8ZJfzs3OMhE
-   mxR8GKgzHymSTNADPQweHMn7WiHWMWRmLE/NnIrAXY7/NuVVDGAa9Shoo
-   ZBhos5e3tKSsbcredQc36d3FGOtvqC8TuUuBc2tTBWzu8TrggxY/Whisd
-   3uzDTXaBsk+JywA8UgOd4dmgWkjFmeHy9gU/REYPqE8ksjNy7CT4tIIPA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="6256402"
-X-IronPort-AV: E=Sophos;i="6.06,186,1705392000"; 
-   d="scan'208";a="6256402"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 14:59:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,186,1705392000"; 
-   d="scan'208";a="11605294"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 26 Feb 2024 14:59:25 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rejwL-000AkZ-0T;
-	Mon, 26 Feb 2024 22:59:19 +0000
-Date: Tue, 27 Feb 2024 06:58:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Lee Jones <lee@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>
-Subject: [linux-next:master 9208/10236]
- drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must
- precede definition
-Message-ID: <202402270609.79kfRDFE-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3EtBjPw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965FDC433F1;
+	Tue, 27 Feb 2024 00:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708995305;
+	bh=ss8VwZn4a5t6mx/5BWpuy9l0XPO5ja2ql+oKmi1naJg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=g3EtBjPw9BkQf1JaTfipWe2RSvJN+FjTxpHl8mmlomdAhvj/4Y1I2Le0T24DZkNBe
+	 7uk3pXy0MTVHwvHFRzs7JSSUUMXDH+i/wTKyexaAn7wxlGJ9lZJUIPpG8WJoXBdSHu
+	 vhIPL0hEmbbIZNyJ/JjsIA7RU/VU2g3JeYNcwTE4wxGeT48sRMl0ehhNGoXR6X72ar
+	 0aYHU/vZuK+gX59lsGbNcbxnk8hf0csOhnV2Zafj1V3Y+vYn7hnYbqiWFwCdXRP0BK
+	 NXHQOWaDKZJdDbpD35VdzgUQ7AT1fsONlOzG9uJFec+F3sCRXHnOR+v8MmoIrC2u/a
+	 MLXdWgVVYvKIg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 26 Feb 2024 17:54:58 -0700
+Subject: [PATCH] thermal: core: Move initial num_trips assignment before
+ memcpy()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOIy3WUC/x2N0QqDMAwAf0XyvEBXO6H7lTFG5xINaC1pJ4r47
+ yt7PDjuDsikQhnuzQFKq2RZYoXrpYF+DHEglE9lsMY6Y22HZSSdw4QsG/KiRXjHFKL0GL/zq6i
+ kjDf2znjHb9+1UEtJqer/y+N5nj++m9k2dQAAAA==
+To: rafael@kernel.org, daniel.lezcano@linaro.org
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, keescook@chromium.org, 
+ gustavoars@kernel.org, morbo@google.com, justinstitt@google.com, 
+ stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1946; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ss8VwZn4a5t6mx/5BWpuy9l0XPO5ja2ql+oKmi1naJg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKl3jV6EfCpn4bv2/K1+5c1nAcxxSgyTMxkc86IDc135G
+ vZsYrjeUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACYirsHwP07kle3h+3G7nt9R
+ Xxc1u6p7a2rBnMfPf16Z5zkrX0R52ylGhrfmh1R3rCtTf/OTYcnvOQa/3ihM7Z07N39DYI9s/2H
+ XDDYA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   8552c902efe7ef670b6961fb8885b67961aeb629
-commit: 7a28f9cf6b7c8cad760b4d4ee7f53231cd76d8e4 [9208/10236] Revert "leds: Only descend into leds directory when CONFIG_NEW_LEDS is set"
-config: mips-bcm47xx_defconfig (https://download.01.org/0day-ci/archive/20240227/202402270609.79kfRDFE-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240227/202402270609.79kfRDFE-lkp@intel.com/reproduce)
+When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
+that supports __counted_by() (such as clang-18 and newer), there is a
+panic on boot:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402270609.79kfRDFE-lkp@intel.com/
+  [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
+  [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
+  ...
+  [    3.039208] Call trace:
+  [    3.041643]  __fortify_report+0x5c/0x74
+  [    3.045469]  __fortify_panic+0x18/0x20
+  [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
 
-All warnings (new ones prefixed by >>):
+This panic occurs because trips is counted by num_trips but num_trips is
+assigned after the call to memcpy(), so the fortify checks think the
+buffer size is zero because tz was allocated with kzalloc().
 
->> drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must precede definition [-Wignored-attributes]
-   struct platform_device *__init gpio_led_register_device(
-                           ^
-   include/linux/init.h:52:17: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-                           ^
-   include/linux/compiler_attributes.h:334:56: note: expanded from macro '__section'
-   #define __section(section)              __attribute__((__section__(section)))
-                                                          ^
-   include/linux/leds.h:646:39: note: previous definition is here
-   static inline struct platform_device *gpio_led_register_device(
-                                         ^
->> drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must precede definition [-Wignored-attributes]
-   struct platform_device *__init gpio_led_register_device(
-                           ^
-   include/linux/init.h:52:41: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-                                                   ^
-   include/linux/compiler_types.h:113:34: note: expanded from macro '__cold'
-   #define __cold                          __attribute__((__cold__))
-                                                          ^
-   include/linux/leds.h:646:39: note: previous definition is here
-   static inline struct platform_device *gpio_led_register_device(
-                                         ^
-   drivers/leds/leds-gpio-register.c:23:32: error: redefinition of 'gpio_led_register_device'
-   struct platform_device *__init gpio_led_register_device(
-                                  ^
-   include/linux/leds.h:646:39: note: previous definition is here
-   static inline struct platform_device *gpio_led_register_device(
-                                         ^
-   2 warnings and 1 error generated.
+Move the num_trips assignment before the memcpy() to resolve the panic
+and ensure that the fortify checks work properly.
 
+Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/thermal/thermal_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-vim +23 drivers/leds/leds-gpio-register.c
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index bb21f78b4bfa..1eabc8ebe27d 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
+ 
+ 	tz->device.class = thermal_class;
+ 	tz->devdata = devdata;
+-	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+ 	tz->num_trips = num_trips;
++	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+ 
+ 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
+ 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
 
-4440673a95e63a Uwe Kleine-König 2011-05-24  10  
-4440673a95e63a Uwe Kleine-König 2011-05-24  11  /**
-4440673a95e63a Uwe Kleine-König 2011-05-24  12   * gpio_led_register_device - register a gpio-led device
-4440673a95e63a Uwe Kleine-König 2011-05-24  13   * @pdata: the platform data used for the new device
-c5a87a4ac2bfec Lee Jones        2021-05-28  14   * @id: platform ID
-4440673a95e63a Uwe Kleine-König 2011-05-24  15   *
-4440673a95e63a Uwe Kleine-König 2011-05-24  16   * Makes a copy of pdata and pdata->leds and registers a new leds-gpio device
-4440673a95e63a Uwe Kleine-König 2011-05-24  17   * with the result. This allows to have pdata and pdata-leds in .init.rodata
-4440673a95e63a Uwe Kleine-König 2011-05-24  18   * and so saves some bytes compared to a static struct platform_device with
-4440673a95e63a Uwe Kleine-König 2011-05-24  19   * static platform data.
-4440673a95e63a Uwe Kleine-König 2011-05-24  20   *
-4440673a95e63a Uwe Kleine-König 2011-05-24  21   * Returns the registered device or an error pointer.
-4440673a95e63a Uwe Kleine-König 2011-05-24  22   */
-4440673a95e63a Uwe Kleine-König 2011-05-24 @23  struct platform_device *__init gpio_led_register_device(
+---
+base-commit: a85739c8c6894c3b9ff860e79e91db44cb59bd63
+change-id: 20240226-thermal-fix-fortify-panic-num_trips-5f94094fb963
 
-:::::: The code at line 23 was first introduced by commit
-:::::: 4440673a95e63ad888a41db596edaa0c55d3a332 leds: provide helper to register "leds-gpio" devices
-
-:::::: TO: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
