@@ -1,119 +1,181 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00A617C8B
-	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 02:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708999698; cv=none; b=u9OBFwSfWsSaL7InBOOWqQXDCA5fLhYDebR3a+TbmPFBgGbeE67CsUWGnAb609OD33Xv5xW7A9GpWl9Dcb+3WPEfAeyem0jIIUgChaxUTYcfDm247ctIqih3N/m4gkwD7wxU7MyY2Cs7RTjDgcMC6cAiXMRnzvOJN3ExVOh5hwA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708999698; c=relaxed/simple;
-	bh=1nrHMmEG51Sj437E4s1EkfyuxGl2jRLjyHs/cGUfhXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ez+bG9HJ+bmzYpBjtE6+NWxvkeEUAziRRKi7pHuJXjBydrp+ldn2rwkAXnW95GammTlX13+Q5+q+sjTOIyV5N81zV/VI6Pj48giOUjyJb3KPS+8qE76+lKwJ37jbyPSascmWsE38ktKVwhdFtKupDs2vwQL36m3Xe1GhvMEgKNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FDf9ZQCc; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FEDF4FC
+	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 02:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709000255; cv=fail; b=inooNEREUCkVl1vl0GZwKq6BQlplTsWNYhxcAI8elCn3uLmD8W7kPkfJeLTHx5B7JxxZMHds/+dtISgYgIwfRrChFm++EU/AY0k/yvmiqiGaw9WvExC9PVk2rAQoiomJ8xq6Q6Q6uuuBs+iUqoTRafPTeQY5jfu4lOf/Zv9PerE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709000255; c=relaxed/simple;
+	bh=nqgfUsR7OxJKB9DTv9N9eSPXQC98fuZXT5IQluq7/7I=;
+	h=To:Cc:Subject:From:Message-ID:References:Date:In-Reply-To:
+	 Content-Type:MIME-Version; b=OCCXFr0myqS8+HJp99xH2XNlYdqIhzW37Ats6d7Nnz9tw8MD7OvRUt0TG0GRo29cjXGIgKU/Ot2zzcWjjfxhsR95bpAFcX2E0yJhySfm5d+BxH8e3eWpOZRhcttQE8w+EH0z1qNJOvS4fnryojyBOQ7aTRHJzmeoVJ+ZUAyD2fc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QyDafewn; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=mqKcPiDA; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FDf9ZQCc"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5d4a1e66750so2382548a12.0
-        for <llvm@lists.linux.dev>; Mon, 26 Feb 2024 18:08:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QyDafewn";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="mqKcPiDA"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41R1EAW8002950;
+	Tue, 27 Feb 2024 02:17:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-11-20;
+ bh=GxDwf5z3ZYV/YAK5dbOmk1wVbXP/UdwQJTcGnGUWIoM=;
+ b=QyDafewn2efyuuHH1wMnLPryQrVBfBE7G6yii71YWevWQ+SxHbKeIvkv28mhpXmTzFlT
+ ke2cakzqQPYEuvoph7Wu2ZtFM1x2rSgSBGzTDR04ZU+CNaEZA4MPcdH9k/pU0GxVIYup
+ 48NUoi9ptMm8vg+eD4YJTQ3d6ZXfXDEfuledGZXq1OiJQWoPKteC7vRvDrM7jhIZ/7/y
+ vInxqAqKH0lrZTnRTSrMAjh21nk5Xl/pCnvS6QPrJIj46jHgfYT2X0IZ0KGojvYGSY/r
+ fWCWYp2qZYAXfk7xWed5kJcrcs3AEQmzoIXCV4aZjmKrwPwXPyF8zjZjiWKwiM7kd0h1 DA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wf8bb5vq9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 27 Feb 2024 02:17:13 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41R0NQvl009760;
+	Tue, 27 Feb 2024 02:17:13 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3wf6w6fw6y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 27 Feb 2024 02:17:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hAorzX/u2HjkcJ4oZYAl6bZq/u14nkBmqWkZpxlPxAbCGBB0xfeitGs3B7s/6PhM/ROhElPHjineY1AANDQXYsakydgijvAt+BR1qjQwI6ZLwJfMAdOs8XrG3Yq0q/s84jC8awRbjfKFGe3n043111cB5SieX63nHc+1Jby/RrxHQxlYB834R7JOfCoYtnFZNeRa/SD4dbSbSvR27JoVMgSUWRqzkyM2d6JsBAIY5TP22HAHcQ027sUsceD6iJryVxPgwYsLmPh1EXAi2lGlaKIxUEtPTSz3QtxG8fiVAKxODTG4wTj8QG+mnJZxGxsIDIk86Skcyqarx2ao2aL8cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GxDwf5z3ZYV/YAK5dbOmk1wVbXP/UdwQJTcGnGUWIoM=;
+ b=NqYgEtCIpBi0VJ7HQgmdnEUOT47DGM30WtorIllHewf8+GSgz7Bktomd3oc0n3Ljl8tndzRSRErF/oK8k/16JQzpg1fCMEPaVfCrC3/eVhvOpipPvSAOTbks62+29kXWROWkkJz71OTqjFwmoUqaYI2yrrDHwhWVHXX9GioHtWoar6O+9aE76wSnLJJCEj1AvmMFM2n6dk/nSp237sFmQfJgxg6QZw+O4J3FruNi0CLA2Odbwu4qaQJfh86Yz+VVmkm4NIQiFn3q/8rpzyduHmLg5JsfqT5JHcRISqF+lcbuxik/7xMX4+qJwLeMvi421Irk+/hdxV6mTYhfYE+weA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708999695; x=1709604495; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVkpTbipxCiUrmv2gBFC6axIfIqg3FWn8ARyZarMPgo=;
-        b=FDf9ZQCc1Gfee9SiyySV7CH/seou9n0j/gpWJHk64eQjO5aPPXeSF3BHaMOVtG4NL5
-         jzpP3Pd6OmnOnxpJLgb783zOyKstRyRGwrUsoEPMN2R3QBMYHxzI8TsF6SC6iawmJWBm
-         AcA7y14v8O+EbGu18U79hRp+fbxv7vSqQdQJA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708999695; x=1709604495;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oVkpTbipxCiUrmv2gBFC6axIfIqg3FWn8ARyZarMPgo=;
-        b=JogfHecEUXmc95VhsztJI4X13GREq7ED9rScf7EpKo9EpoX2Yf5uj3jtIzVeOoativ
-         Ezan/a5qJ/wE07tyFT3SVMHUaM74kqypdwDqYrQbnZ9giKRsVhmQt5N3TV9yaBcZ21uA
-         JiVa0pAx49c+k2OC/0ztUcAm6jS5flSxb2gGpl7y9f1r6IxzzskPWEU80rLz2+iAqx9M
-         TqN1tew5NdY+WpO6QsokbHs9mNLVIfCnNGx+hiQ+KvurqC72GvHMlM2zapD8C+9FGOn7
-         +zxljGhrfw57TA4EPaAdOg3UesYOyagrGrXMI2Byurk8zVb8VosrxC9GpF5BjBHLa2cT
-         xhpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4k5PUEMBgEG7PkA74IeX8UJOt4Rr0xXwvy2BtgY0WZen7E80FsapO56nGphzcSoNFaXjvJT83xhF5cJHOhZpPyiNwPg==
-X-Gm-Message-State: AOJu0Yyt6SvMCjT8fAW0nxq7PSCgDa/z0e8tDubIrT7OWSlLyILfQBq1
-	dsPSkg0tX1Smx/+7Bs/+3t3f9TekPS3eZ8FOmV9NREHLz7NWGlp437Cy3XbEjg==
-X-Google-Smtp-Source: AGHT+IF6zdQ/2mc8pHy3ltuh8A68wKo1/k8qw2couBJUhs2wfECHjSq4AtVGKGBQE7knMNxjo75dzg==
-X-Received: by 2002:a17:90b:124d:b0:299:32ee:a426 with SMTP id gx13-20020a17090b124d00b0029932eea426mr5747343pjb.32.1708999695238;
-        Mon, 26 Feb 2024 18:08:15 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s62-20020a17090a2f4400b002992f49922csm5774240pjd.25.2024.02.26.18.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 18:08:14 -0800 (PST)
-Date: Mon, 26 Feb 2024 18:08:14 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-	lukasz.luba@arm.com, gustavoars@kernel.org, morbo@google.com,
-	justinstitt@google.com, stanislaw.gruszka@linux.intel.com,
-	linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
-Message-ID: <202402261806.A8340C71D@keescook>
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GxDwf5z3ZYV/YAK5dbOmk1wVbXP/UdwQJTcGnGUWIoM=;
+ b=mqKcPiDAVywHHxTXQTVCEGrpmoAIn5X8AWPqmeOopoXEY1QYTVi3vmRrFSlajQJLLlQNubvGM+0IsWvpQpo5u4e6qTBkPqS4eJpmNHhBt3eKEzNBh0Er+mFdSJ4g2vhxuJI7xsFwOtpMdMs7oTRxw45rdZ9M2WF+iLO8MFC9HGE=
+Received: from CO1PR10MB4754.namprd10.prod.outlook.com (2603:10b6:303:91::24)
+ by BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Tue, 27 Feb
+ 2024 02:17:10 +0000
+Received: from CO1PR10MB4754.namprd10.prod.outlook.com
+ ([fe80::e542:e35:9ec8:7640]) by CO1PR10MB4754.namprd10.prod.outlook.com
+ ([fe80::e542:e35:9ec8:7640%4]) with mapi id 15.20.7316.035; Tue, 27 Feb 2024
+ 02:17:10 +0000
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru
+ <sudarsana.kalluru@qlogic.com>,
+        "Martin K. Petersen"
+ <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>, Kees Cook
+ <keescook@chromium.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+ <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin
+ Stitt <justinstitt@google.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        James Bottomley
+ <JBottomley@Parallels.com>,
+        Krishna Gudipati <kgudipat@brocade.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] [v2] scsi: bfa: fix function pointer type mismatch
+ for hcb_qe->cbfn
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1bk826484.fsf@ca-mkp.ca.oracle.com>
+References: <20240222124433.2046570-1-arnd@kernel.org>
+Date: Mon, 26 Feb 2024 21:17:08 -0500
+In-Reply-To: <20240222124433.2046570-1-arnd@kernel.org> (Arnd Bergmann's
+	message of "Thu, 22 Feb 2024 13:44:06 +0100")
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0116.namprd05.prod.outlook.com
+ (2603:10b6:a03:334::31) To CO1PR10MB4754.namprd10.prod.outlook.com
+ (2603:10b6:303:91::24)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4754:EE_|BY5PR10MB4129:EE_
+X-MS-Office365-Filtering-Correlation-Id: ce897f0b-70fe-4c9a-e9a7-08dc373a3453
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	JlcCPTmrCHMs/8TKEIwtGXbSWlKoe72Hi7p1xf9RMnfT7yC1e+9+VCNagcriHUTKYfYLjfQsK1snANKmxsznXtYLGc4iVd/dm1PRCt4iYA8zKH/rqLK98Ie+rAJhMprfuyh7Sl0HoeXm0RBmBva5XNjptgEg9pzPbA13YEBjCjajx5z2KidkEIISu9YHTGjtnBn7Ip41GGamrG6adKdqcYPzKUZRkVv7/PGz9UBt7gEGr+9gR2vOr+cEPOUMXhyoxsKDyI9LH+iHFJNQ1/BZFKGWbfyJutpCchmfV7JXbY48mnBNxLm6NUjVCgPzpk2obQunw79Z+07UiqTDSxtd3MoVP8V7Uvd+ztM06AUd1gmreqtzxnsRqAPhtLV2JbfLkZBy6mg5irG4UKhPQTMAaHrGQN/V9XFd1SJGw+GsAa9HI2FNwBKCJ/j5/kPpS/i2vUoJBzdAODgOTAttPBg9OqoTELhANdNmfWJqAdmaqV/nUwD6wEPZFfvy89DJ1Q2eSrQkmEaBKQfahYXw3f+L81ABJsg57rugYXUoNMw7CPqOdhFphU1PlPr5ilb7CALX1ubEpQhSxn0V1A724XRMM/IOL4TYgx/+1KlEdBJ15K0BlMCuw6pdZ1I0NgMCOhfE
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4754.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?+HjCRWdZ5LsVwirkI62JNItiRB8DXpTUEskRJjXEnq4G9hbgUq7QUDZQ8YLm?=
+ =?us-ascii?Q?TM/8s8ERgiAhYM8gn3QcuPacaxY6XQ+L6ZcjCK98QY41Ru6bOTxHvlpxMsS9?=
+ =?us-ascii?Q?PHkpHXh10iGShpnXVdnGSi/52NIWAILVF7KV6u2QEY9Cj4bPuqCuMjTnGftg?=
+ =?us-ascii?Q?tNfgkigzcMoHBjU33iLYntkAJlT8K+7N310bcwVH/oYGqV/lCtZ/ZdGfrozp?=
+ =?us-ascii?Q?GvDNq5SRtb6lwf7Qevu2Hr/0LSnWMR1YDeX4xRUTaC+4r8oxy479RM6B0TDU?=
+ =?us-ascii?Q?FNgjK9+bwsvGeCMr94LmR57jWXUEfFqwMHtJj8cSaAkzEcZqa7npZaon2wXe?=
+ =?us-ascii?Q?fd2uFxjvurhEhM/38ngbzWsZy74HYz9XGq1V00o5h7X2syratE7ax2BZz/mp?=
+ =?us-ascii?Q?S7wlCUdsXoZ/NmXaz31fyOkoxgJ0SLaGQzA+KSopY5PJCQ7Tvq9PKGrzcA4D?=
+ =?us-ascii?Q?rMR9cjd/inKDZrGaIx9zao1vHPqEtd1QR3Uayysj5L9qHvoqGkEk+zq+vnuP?=
+ =?us-ascii?Q?qsm2xDoL09wVdcNHViXa+Ix44OiPWAlBO45QteikUFNlChHA6nbjGwN0MNdU?=
+ =?us-ascii?Q?umWOftEBqYa63AwOXI1Ff12G83hTyl2VvSLzGYM9KILIoZqyBfeqvVYW3IWX?=
+ =?us-ascii?Q?4vwcPDctR++nrRxyc3sPi/7gwpR9Ma+zNzico0E8s8oPOITs1f9OSpnZ6mV0?=
+ =?us-ascii?Q?u1sbZFLoqOUqkJ1n8yQoLi6G25GsAtUY4FhsfsYLxDka6nX9sIw8HgVi7f9x?=
+ =?us-ascii?Q?InpTK5OW8+voArQsSTatRHh8olL5/8Zn1WPbY04fIg/X9YTqrk0DG5LIx3Pj?=
+ =?us-ascii?Q?Ru/wiwbeSIUHBBasRgAQGqHzGl7XFJNImsIv5a/iFlUK0a5Doxz+rUD5GUBd?=
+ =?us-ascii?Q?RCILnsZpeqsKbd1vOH+W8OipdbpN84kfGfxtCpKgBC/iawYzAAbEmtKnUnC3?=
+ =?us-ascii?Q?Y6c+mUEqi1Mp9JVRomUrq/xq1hdWxVoS8sGCfqpV2pTUu+njfCcfP/1uBLMm?=
+ =?us-ascii?Q?2wFdNLOxRCslR03J4AVRO30lKjrFCE1A7pbuqalfpJUfNL6yuSsQCjvbEcRl?=
+ =?us-ascii?Q?vORLFXFM7Nf2rACJePUD9l29zBbuKGNe0Fb+F7TtyTS94pKFik4PXbToxHWB?=
+ =?us-ascii?Q?nTdfIh61sXJZRXtiblNB6KhUiCWssMJQ7JRv8y1kDDtVOB0J85xbgAri1VTC?=
+ =?us-ascii?Q?A2TCMv7N7v65fjmYcIieZ/WGoLzf9f37pTicrKDrc27EUd5yr9H8C2pDBMLZ?=
+ =?us-ascii?Q?63REkUNRxfVhTusCdRKrnhS/6QcAWN+IpDL/tVuxBihwc7k3LBAq9B05tgCl?=
+ =?us-ascii?Q?9xFAYJ5AOdkMG6+6IMBnbYpa3kyyf/Mfn81qKedRon/eXERFvkLQ7XjBQWdW?=
+ =?us-ascii?Q?EjPPf+L2kLXGzqZaWxMY1Z/VKOYbgxJe69ip8eUBbIW7RZLI+/55GzhZqo2d?=
+ =?us-ascii?Q?38byu/I+yEYef3lrtnzCwET6q1BbHUEslrw2XN0lFp0nPGG38T2fCnINW8pi?=
+ =?us-ascii?Q?1Iq/D2MeZbxXxJl2V2hvjBicw7H64A17T+ncqfTzkgHXwmN1O9d0fBKxm9TR?=
+ =?us-ascii?Q?bByfMvrqd5bHHX/epbaO7y5py30WB71wBuOlM+LXVrDad3BF98nD1/ixlJjg?=
+ =?us-ascii?Q?fg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	MVummtrd6OF1ih7BSBKYZAS3pgCQJvX/OWJwOEkAS7RdeiNveQikwvMahQCjn/8zDB+0fc9EdGgBa1jDoSnh02QQzLukHYj/gVhXri36hvps/MlKI3h1kIhwLmg2KlPRH+pyZMgpCNQgZPccU9yuafWgLukac+xwYa7ot0XLYvXtpqucerJhzU7ei0DMOvOdVHHPheiHyzE4YNktyO+xuzTljl6AQXd/oHPvWnWY6niA6uN/kybU4q7O07MXRQBAEvDxkol9+uvGrRc1bd13kCTulRVhp2oXXO9+UCconEVwHijLmzAMtdBYyf8luqjFN4XC9HiA6tLx+eIguIiA5Oy3O6CysJryQ0VTIYPb6ncVbroRs3319oM2uheX2t74Of70L0rpDkUubPh/iS9V2ALUlooAeEVduZYaFhKCi4S76K/w7X9ZgsJ+asoAri/6Ml58LQWEcYkpp7cZrtKIOCtXpnde2Fzk+KabZ+MpB/V1wu349DB439W7wf5z5JHgCWCebLbFezrTQuu3UMwdZuS+BMI06I0vNAYUdGQGMTOud7szaAPGfJO7V2by8XQpAKcqiqx630O6RGcg6ZaL8+fLeuOEVO6ez1zdfZZi+W4=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce897f0b-70fe-4c9a-e9a7-08dc373a3453
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4754.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 02:17:10.6048
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lrAjWOLThMHIwTMvmLUOF5ggr+Q5APHT2ncBvbDslqQJZ7ZyZTuQ8YYeeoGmMdx9CU8iPPdsdoArm+yca731/pY4aiPKBNbJOq9WzdkGNkM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4129
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2402270017
+X-Proofpoint-GUID: 2QYopMxs7sQXwKyKLS-twnW_-YmiBSBx
+X-Proofpoint-ORIG-GUID: 2QYopMxs7sQXwKyKLS-twnW_-YmiBSBx
 
-On Mon, Feb 26, 2024 at 05:54:58PM -0700, Nathan Chancellor wrote:
-> When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
-> that supports __counted_by() (such as clang-18 and newer), there is a
-> panic on boot:
-> 
->   [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
 
-Yay, the "better details" output is working. :)
+Arnd,
 
->   [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
->   ...
->   [    3.039208] Call trace:
->   [    3.041643]  __fortify_report+0x5c/0x74
->   [    3.045469]  __fortify_panic+0x18/0x20
->   [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
-> 
-> This panic occurs because trips is counted by num_trips but num_trips is
-> assigned after the call to memcpy(), so the fortify checks think the
-> buffer size is zero because tz was allocated with kzalloc().
-> 
-> Move the num_trips assignment before the memcpy() to resolve the panic
-> and ensure that the fortify checks work properly.
-> 
-> Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/thermal/thermal_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index bb21f78b4bfa..1eabc8ebe27d 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
->  
->  	tz->device.class = thermal_class;
->  	tz->devdata = devdata;
-> -	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
->  	tz->num_trips = num_trips;
-> +	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+> Some callback functions used here take a boolean argument, others take
+> a status argument. This breaks KCFI type checking, so clang now warns
+> about the function pointer cast:
 
-Looks good to me; thanks for catching this!
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Applied 1+2 to 6.9/scsi-staging, thanks!
 
 -- 
-Kees Cook
+Martin K. Petersen	Oracle Linux Engineering
