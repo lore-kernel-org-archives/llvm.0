@@ -1,116 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81DD25757;
-	Tue, 27 Feb 2024 18:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A571614E2C6;
+	Tue, 27 Feb 2024 21:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709058252; cv=none; b=J6eSSz70P07fRKcRGOq8n2fckHfVqXAR1dPfhIXmDi/kntChZmZ9NRG5GAfT74qiwO1ZXU9mrYATh5Up/7yctP6WPmOyRKQJ7NW1wEEjrXYffWABvFcZy+rDl9ZhCpo60OWplYSrY8L2T1Q5l1jGECy2xZpFytACTM1k+dBQl6w=
+	t=1709070967; cv=none; b=Qar73Nv1YtdkR9gEEo0EBH9zKNpzg2JLmRRNxCP0eTVF+F6t7p1hAn1vwMG440641tXrrMwjWLB2GTc8OOx8NJnkVn/yqisijbunCsMxDyphBzYrJrX4Ivg8WBijm4PJzELNM91D5+Ht1vbz/fbuiyS3oUi6JRmINTY4AC77YA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709058252; c=relaxed/simple;
-	bh=cDF3mXGEW5pin9U2a6M5esBI1SUIsMfuCrh97q573Lk=;
+	s=arc-20240116; t=1709070967; c=relaxed/simple;
+	bh=WE8CL4QtAOdJd0hGsGhSMWCPnxYXa54ehLf4NTnJc5g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V+g9buXC7WK7xCPErO9vGORkIPqZplmJJFgbvw1nBRmaU/rSUW3Trcf6TCXkV6J4Pca/+OpcTjF4evBc2NBBn4A0sRfirtWDxpjpinomPX7s2pS8+Cu96L5zXgcbRtQ63j706r7YGpY1AYYQBtWVXyNzCUEOwUXGKEDutrYhupM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bA1hRpnB; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=uM8Sr8pi/ffTBmIa0n+cFGrMGaQo+/41KuGr/nyk1ou7G3WhRRhhJVOLqKtgRdIVNF2/DJpH3BpgDtfHjw8Eqaz/5SKCdsBxG6Gz22Je2+iu+bbaQz7gxFPnRvEeMtpOfOQDu9UyU6xJ0iDh4v4IIkfg/ZY/EBj8jCh7c70kfZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p7Pd0toZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bA1hRpnB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB4AC433C7;
-	Tue, 27 Feb 2024 18:24:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p7Pd0toZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09B3C433C7;
+	Tue, 27 Feb 2024 21:56:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709058252;
-	bh=cDF3mXGEW5pin9U2a6M5esBI1SUIsMfuCrh97q573Lk=;
+	s=k20201202; t=1709070967;
+	bh=WE8CL4QtAOdJd0hGsGhSMWCPnxYXa54ehLf4NTnJc5g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bA1hRpnBJ3qCAhZXhUlSgF8QuX7KuxIqPL/kQnsGozEYJ3SfUi3/yApOT+QLPA9za
-	 TfYOGP9Y5Tdu6SlJ2yCBjSfLsFjYjme/PQZZWNfQL4Ftut0SpK2HDdBMKzEy/whZa3
-	 PDuoNZxsv34B9Z3u49bMxr8csHUfS4SqVGjk+EIbSwWHUUSV+usGwyALtb7SV1jh15
-	 IUspdokrAhaTrbwRawkGlPhjLjv/t2/LxG5tO3WdDSJZytnWzupKbQ62WzUPDh8R4Q
-	 W9med3/S8RjdcL5uAJc3GyqPEtV/XmdMn5xZmVah/XRnwckx/iIUNTvyVa14sK0/9H
-	 QIQp6amHKLdMQ==
-Date: Tue, 27 Feb 2024 18:24:06 +0000
-From: Conor Dooley <conor@kernel.org>
+	b=p7Pd0toZ3ju4XBbb+MgUxvEA0eXI1IUfH7FKlF0ZZVfvsaM8lbqRfrVtO8ufRb/rV
+	 j8mHTc19vlRUN1gUIk3Q2yA1VqHS0m1HKpLeTFAksHmUPrLeIyNSaZh6iUaOeecNX2
+	 gNKosWkjWEOBewoTsr5GC7JCZxICWK6/Y6MD2vMDcpXc0xAiAFqEWW4Xe6ppfbfdzK
+	 HCQ4cGO8doVYbIITv1TXyFymaYeVnG+T9yh5KKQxp/fow7DeulnFxiFv2sSUM3a1T7
+	 qBNcD7hKULgHBhQVP/wnVgztQo08mIvygPeg8cmXfN5NU8Mbr8fAR77ADfKHRIaudk
+	 JowNeBHuWBFSA==
+Date: Tue, 27 Feb 2024 14:56:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
 To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] scripts: generate_rust_target: enable building on
- RISC-V
-Message-ID: <20240227-aside-limeade-497fb182a5bd@spud>
-References: <20240223-employee-pessimism-03ba0b58db6b@spud>
- <CANiq72ngEZskjH0f=8+cJuQsFTK227bGCxe5G0STMHuPbZYnXg@mail.gmail.com>
- <20240227-resolved-deceit-4a59a6af5b71@wendy>
- <CANiq72mwM+4Oh-H5WmRoqQ_nE1w-eJ1wn-nEwS=BR9JRwzxMMQ@mail.gmail.com>
- <20240227-glove-underwire-f562a56cf2c7@wendy>
- <CANiq72=f03_bw9B8ww8UxHkVyP2F7ZPyvC+KWCyhO3Nk1yqdaw@mail.gmail.com>
- <20240227-swarm-serpent-2010b255f68a@wendy>
- <CANiq72=69uBBhKMrw5P8K6eDHPiwAw_Oj8g1aYcywEYhhUG8OA@mail.gmail.com>
- <20240227-timothy-jailbreak-01a9c29f3607@spud>
- <CANiq72kQ8===wFLQNCR-XAo9KdtPr44UKvyi2074J88vh3kvyg@mail.gmail.com>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Conor Dooley <conor@kernel.org>,
+	Conor Dooley <Conor.Dooley@microchip.com>
+Subject: Re: Prebuilt LLVM 18.1.0-rc2 uploaded
+Message-ID: <20240227215605.GA1422986@dev-arch.thelio-3990X>
+References: <20240208002841.GA2601476@dev-arch.thelio-3990X>
+ <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
+ <20240212234850.GB3221859@dev-arch.thelio-3990X>
+ <20240213025303.GA4006766@dev-arch.thelio-3990X>
+ <CANiq72npYCD-zKqcXPNOAxnKiUCCXGbFQaGo-8=0-171ni+ncQ@mail.gmail.com>
+ <CANiq72kcQUuxcno00+QWrstrcfwC+2_Bvh+8dr5kgVkEtrWOEA@mail.gmail.com>
+ <20240227153728.GA819789@dev-arch.thelio-3990X>
+ <CANiq72mmDquTeoEVErwXH7bVhP0+UifCrK0n=-HD97noWLqryA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="D1EopDYvcEeT6CSG"
-Content-Disposition: inline
-In-Reply-To: <CANiq72kQ8===wFLQNCR-XAo9KdtPr44UKvyi2074J88vh3kvyg@mail.gmail.com>
-
-
---D1EopDYvcEeT6CSG
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72mmDquTeoEVErwXH7bVhP0+UifCrK0n=-HD97noWLqryA@mail.gmail.com>
 
-On Tue, Feb 27, 2024 at 07:11:17PM +0100, Miguel Ojeda wrote:
-> On Tue, Feb 27, 2024 at 6:48=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
+On Tue, Feb 27, 2024 at 05:51:04PM +0100, Miguel Ojeda wrote:
+> On Tue, Feb 27, 2024 at 4:37 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > How far back would you like it added? I don't necessarily mind
+> > rebuilding older releases but certain entities may notice the checksums
+> > change.
+> >
+> > https://gitlab.com/Linaro/tuxmake/-/merge_requests/364
+> >
+> > Not the end of the world though.
+> 
+> I think a reasonable set would be those versions matching the LLVM
+> that Rust bundles (for `rustc` versions we have since 6.1 LTS). That
+> is: 15, 16 and 17.
+> 
+> Conveniently, LLVM 15 also matches the minimum external LLVM supported
+> by `rustc` in 6.6 LTS.
+> 
+> If those are too much, LLVM 17 would already cover what 6.6 LTS' Rust bundles.
 
-> For instance, to disable the compressed instructions, from what I can
-> tell, the flag I mentioned seems to work, so that is fine.
+15 through 17 is a reasonable rebuild request, I've added it to the
+queue along with 18.1.0-rc4, which was just released. I'll message you
+when I have them uploaded.
 
-To me, using flags is a good fit given that's what we do elsewhere,
-and there won't be a mix of stuff that is done conditionally in a
-script and conditionally in a Makefile.
-
-> However,
-> for something like tweaking the data layout for `n64` instead of
-> `n32:64`, I am not aware of a way to do so via a flag (but I see newer
-> LLVM uses `n32:64`, so that may be the better one anyway:
-> https://godbolt.org/z/Eh4cfdeMr).
-
-Yeah, I had looked at the blame for the targets earlier today and
-noticed that it had been changed. Sadly rustc's commit is lacking
-any justification whatsoever for the change, so I was not going to
-really comment on that until I had looked.
-
-> So it all depends on whether you are happy with what the flags
-> approach already give you.
->=20
-> I hope that clarifies a bit!
-
-Ye, thanks. I'll give it a go when I have a bit of time this week.
-
---D1EopDYvcEeT6CSG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd4oxgAKCRB4tDGHoIJi
-0tm5AQDR5I+m1Asy6DGQhAa4NBVf8TGEm4mWhvmKqUunPVp7UAD/Uv/pYmT+0Zzr
-j8fw2SaUOY4F5yKafkbQHmmA9iYdZQQ=
-=qBac
------END PGP SIGNATURE-----
-
---D1EopDYvcEeT6CSG--
+Cheers,
+Nathan
