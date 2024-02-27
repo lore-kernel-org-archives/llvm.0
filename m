@@ -1,150 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201B91369B1;
-	Tue, 27 Feb 2024 09:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049DC131734;
+	Tue, 27 Feb 2024 09:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709027412; cv=none; b=d0XIF+0XDB4Ym+EaR07mrSlDzqmw02nIIzsupQMfNROToca+STR+bJAvEDQlS1rQ+JsRlc9tx4zSeCna9FH8GtLXRpmBir5yhIC7BFCPSFh41O75kJCrFOK+yzGk21yWOCh9l0FP/cEJAa7UhcTGs/AewOMeTKSMpCBccHKAUB0=
+	t=1709027887; cv=none; b=hXL/Png/leVrrGRcyehlENlsLP6LZg24vVjfP4i5E5H1z/BAs5IGt4RfmLPLJ4dnUtTHU9qbauixvEnlD4fXj7JPCTowsRFx8RH8xzNAqiywoXuiXqqW8oFlPuXhXCpbFmVd3jTcmswoXZAWq3usxWIo480rec1Ooc+PLLxCVDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709027412; c=relaxed/simple;
-	bh=hS2iokWHX2N0vEg60UBCjXsgIHbrqYAFo6dyFbn8VWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=c3FJ9KF1ZID/TsWE/NzopZ2FFgSKlEAjoG7a3Zd/60LEJn8AbfVP5KAGHYeu6Qw3Rc0qe279Yg0mcLqLMHPhi8cW5/ambgJLnf3zFV5LNCjB6CsV2m3eVDQYXCu5w1OSwF8j35RDXVPxFFEtvj2HtwZazL+7DBhvVJsFfD4ZkNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l46qZT56; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l46qZT56"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709027410; x=1740563410;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hS2iokWHX2N0vEg60UBCjXsgIHbrqYAFo6dyFbn8VWk=;
-  b=l46qZT56T0m7JpbeMbr3DJ/D/GobFeQMugfYQd1yimOpaxsWQkuuRwdP
-   XxV/TfGYt+/VZWyLkonSysez/XkmgpwGi8qPXlUDhFlHz5FP+wT1FzxWx
-   uKQuV13ZjO26cRMeDb0MlcV22Q8ddUgFQhYZI5Po8tQs1RVngnzDBzIdb
-   aHb4O9Mz5U3Ia3boDeb59jW5n1Z0A+IXVQGmB/YGQAQjODywHV1hNNG6E
-   s4NnBYawKIPuTvA0qJCp97hdKP6wlI6tsjivU1eE8jOXlOYDej7MXRBF6
-   sWtwleupqYBXJNPOhuHgxfhSNysbCGh/xSjm4a9o15lf7SQzAYV/1px8C
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="20902988"
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="20902988"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 01:50:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="37789598"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 27 Feb 2024 01:50:08 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1reu69-000B6v-1a;
-	Tue, 27 Feb 2024 09:50:05 +0000
-Date: Tue, 27 Feb 2024 17:49:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org
-Subject: [pci:wip/2402-bjorn-osc-dpc 3/3] drivers/pci/pci-acpi.c:1424:2:
- error: call to undeclared function 'pci_acpi_add_edr_notifier'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202402271755.7yCmolZa-lkp@intel.com>
+	s=arc-20240116; t=1709027887; c=relaxed/simple;
+	bh=S024RKU4/uf+ZQYZb/1K/aCmcUdsqW1xY1/WsWufW5o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XAk4nqFNMp0ExHVXM2Vu2goXl0OYT9IbvapwvGmlKl1v+CWuCaqoEJ2I6fx9Rk3q7w2AFQDCEYtqWvRbq089UE1NZj5gZcYvftxJHAI+V/YwZ85DxjaRn1XPPBwkTN7i1TgqHpFhwiYyBbChFQIWiQaUBe/4WDvsOu6S6mB4Va4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1BF4DA7;
+	Tue, 27 Feb 2024 01:58:42 -0800 (PST)
+Received: from [10.57.10.173] (unknown [10.57.10.173])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C6AC3F762;
+	Tue, 27 Feb 2024 01:58:02 -0800 (PST)
+Message-ID: <260488a3-2e4b-43bd-a818-c15558e71077@arm.com>
+Date: Tue, 27 Feb 2024 09:58:19 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
+ memcpy()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: rui.zhang@intel.com, keescook@chromium.org, gustavoars@kernel.org,
+ morbo@google.com, justinstitt@google.com, stanislaw.gruszka@linux.intel.com,
+ linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev, rafael@kernel.org,
+ daniel.lezcano@linaro.org
+References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git wip/2402-bjorn-osc-dpc
-head:   f76758eebe9e2f81b37e41d2bdc70825cdb879d7
-commit: f76758eebe9e2f81b37e41d2bdc70825cdb879d7 [3/3] PCI/DPC: Encapsulate pci_acpi_add_edr_notifier()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240227/202402271755.7yCmolZa-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240227/202402271755.7yCmolZa-lkp@intel.com/reproduce)
+Hi Nathan,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402271755.7yCmolZa-lkp@intel.com/
+On 2/27/24 00:54, Nathan Chancellor wrote:
+> When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
+> that supports __counted_by() (such as clang-18 and newer), there is a
+> panic on boot:
+> 
+>    [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
+>    [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
+>    ...
+>    [    3.039208] Call trace:
+>    [    3.041643]  __fortify_report+0x5c/0x74
+>    [    3.045469]  __fortify_panic+0x18/0x20
+>    [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
+> 
+> This panic occurs because trips is counted by num_trips but num_trips is
+> assigned after the call to memcpy(), so the fortify checks think the
+> buffer size is zero because tz was allocated with kzalloc().
 
-All errors (new ones prefixed by >>):
+I don't know this tool (yet), but this description doesn't help to
+understand it better.
 
->> drivers/pci/pci-acpi.c:1424:2: error: call to undeclared function 'pci_acpi_add_edr_notifier'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1424 |         pci_acpi_add_edr_notifier(pci_dev);
-         |         ^
-   drivers/pci/pci-acpi.c:1424:2: note: did you mean 'pci_acpi_add_pm_notifier'?
-   drivers/pci/pci-acpi.c:881:13: note: 'pci_acpi_add_pm_notifier' declared here
-     881 | acpi_status pci_acpi_add_pm_notifier(struct acpi_device *dev,
-         |             ^
->> drivers/pci/pci-acpi.c:1451:2: error: call to undeclared function 'pci_acpi_remove_edr_notifier'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1451 |         pci_acpi_remove_edr_notifier(pci_dev);
-         |         ^
-   drivers/pci/pci-acpi.c:1451:2: note: did you mean 'pci_acpi_remove_pm_notifier'?
-   include/linux/pci-acpi.h:22:27: note: 'pci_acpi_remove_pm_notifier' declared here
-      22 | static inline acpi_status pci_acpi_remove_pm_notifier(struct acpi_device *dev)
-         |                           ^
-   2 errors generated.
+In the memcpy() the 'num_trips' is used not 'tz->num_trips' and
+'num_trips' is set in the function argument.
 
+> 
+> Move the num_trips assignment before the memcpy() to resolve the panic
+> and ensure that the fortify checks work properly.
 
-vim +/pci_acpi_add_edr_notifier +1424 drivers/pci/pci-acpi.c
+I don't see how this change can impact the code not this tool.
 
-617654aae50eb5 Mika Westerberg            2018-08-16  1417  
-4795448117824c Rafael J. Wysocki          2021-09-18  1418  void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1419  {
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1420  	struct pci_dev *pci_dev = to_pci_dev(dev);
-f084280cd34e37 Rafael J. Wysocki          2013-12-29  1421  
-e33caa82e221b0 Aaron Lu                   2015-03-25  1422  	pci_acpi_optimize_delay(pci_dev, adev->handle);
-99b50be9d8ec9e Rajat Jain                 2020-07-07  1423  	pci_acpi_set_external_facing(pci_dev);
-ac1c8e35a3262d Kuppuswamy Sathyanarayanan 2020-03-23 @1424  	pci_acpi_add_edr_notifier(pci_dev);
-e33caa82e221b0 Aaron Lu                   2015-03-25  1425  
-f084280cd34e37 Rafael J. Wysocki          2013-12-29  1426  	pci_acpi_add_pm_notifier(adev, pci_dev);
-f084280cd34e37 Rafael J. Wysocki          2013-12-29  1427  	if (!adev->wakeup.flags.valid)
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1428  		return;
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1429  
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1430  	device_set_wakeup_capable(dev, true);
-6299cf9ec3985c Mika Westerberg            2018-09-27  1431  	/*
-6299cf9ec3985c Mika Westerberg            2018-09-27  1432  	 * For bridges that can do D3 we enable wake automatically (as
-6299cf9ec3985c Mika Westerberg            2018-09-27  1433  	 * we do for the power management itself in that case). The
-6299cf9ec3985c Mika Westerberg            2018-09-27  1434  	 * reason is that the bridge may have additional methods such as
-6299cf9ec3985c Mika Westerberg            2018-09-27  1435  	 * _DSW that need to be called.
-6299cf9ec3985c Mika Westerberg            2018-09-27  1436  	 */
-6299cf9ec3985c Mika Westerberg            2018-09-27  1437  	if (pci_dev->bridge_d3)
-6299cf9ec3985c Mika Westerberg            2018-09-27  1438  		device_wakeup_enable(dev);
-6299cf9ec3985c Mika Westerberg            2018-09-27  1439  
-8370c2dc4c7b91 Rafael J. Wysocki          2017-06-24  1440  	acpi_pci_wakeup(pci_dev, false);
-53b22f900c2d28 Mika Westerberg            2019-06-25  1441  	acpi_device_power_add_dependent(adev, dev);
-62d528712c1db6 Rafael J. Wysocki          2022-04-04  1442  
-62d528712c1db6 Rafael J. Wysocki          2022-04-04  1443  	if (pci_is_bridge(pci_dev))
-62d528712c1db6 Rafael J. Wysocki          2022-04-04  1444  		acpi_dev_power_up_children_with_adr(adev);
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1445  }
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1446  
-4795448117824c Rafael J. Wysocki          2021-09-18  1447  void pci_acpi_cleanup(struct device *dev, struct acpi_device *adev)
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1448  {
-6299cf9ec3985c Mika Westerberg            2018-09-27  1449  	struct pci_dev *pci_dev = to_pci_dev(dev);
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1450  
-ac1c8e35a3262d Kuppuswamy Sathyanarayanan 2020-03-23 @1451  	pci_acpi_remove_edr_notifier(pci_dev);
-f084280cd34e37 Rafael J. Wysocki          2013-12-29  1452  	pci_acpi_remove_pm_notifier(adev);
-6299cf9ec3985c Mika Westerberg            2018-09-27  1453  	if (adev->wakeup.flags.valid) {
-53b22f900c2d28 Mika Westerberg            2019-06-25  1454  		acpi_device_power_remove_dependent(adev, dev);
-6299cf9ec3985c Mika Westerberg            2018-09-27  1455  		if (pci_dev->bridge_d3)
-6299cf9ec3985c Mika Westerberg            2018-09-27  1456  			device_wakeup_disable(dev);
-6299cf9ec3985c Mika Westerberg            2018-09-27  1457  
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1458  		device_set_wakeup_capable(dev, false);
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1459  	}
-6299cf9ec3985c Mika Westerberg            2018-09-27  1460  }
-d2e5f0c16ad60a Rafael J. Wysocki          2012-12-23  1461  
+> 
+> Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   drivers/thermal/thermal_core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index bb21f78b4bfa..1eabc8ebe27d 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
+>   
+>   	tz->device.class = thermal_class;
+>   	tz->devdata = devdata;
+> -	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>   	tz->num_trips = num_trips;
+> +	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>   
+>   	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
+>   	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
+> 
+> ---
+> base-commit: a85739c8c6894c3b9ff860e79e91db44cb59bd63
+> change-id: 20240226-thermal-fix-fortify-panic-num_trips-5f94094fb963
+> 
+> Best regards,
 
-:::::: The code at line 1424 was first introduced by commit
-:::::: ac1c8e35a3262d04cc81b07fac6480a3539e3b0f PCI/DPC: Add Error Disconnect Recover (EDR) support
+Maybe it reports different issue. There is some corner case when the
+num_trips is 0. It's called from
+thermal_tripless_zone_device_register().
+Does your code is triggered from that function?
+(you've cut the call stack so I cannot see this there)
 
-:::::: TO: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Lukasz
