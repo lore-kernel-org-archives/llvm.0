@@ -1,122 +1,116 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36E91384AD
-	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 11:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA691386C4;
+	Tue, 27 Feb 2024 11:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709031909; cv=none; b=Swst7tOP2pbUt09Ph7Kegk1skotXL3e8nmK/g7i8czHY8dEFMztezXPvWV4w33corRnF1jlyXNioLj4/FX/YRNgOCaU40hEpdjL9/DEMst5CJ7EGRUKP+nI94seLnOmS4fBCSG5UGryKf7xdhemmw1VvU8og2gXGzImMVm1YEe0=
+	t=1709032078; cv=none; b=P66eAhGObu/Ve6JS0L3V/OPNTS9573H+HVYuhAtLblPmO5b4K3KXTu4FMgCRhuGcTe2zsV1pHcGZ7MoepIO2IpcW2ZSCZOwn9PaBmCDOh1tssEiB0gTZLEKteT7GJCrkQXSCzoxKeYNCKu16KNc5ly4QKjoDIchI9jzZkwmmYwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709031909; c=relaxed/simple;
-	bh=nkEmgcF2sqsTVrDLvW1DSslli5qr0PA0DGExmFUENFo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gdKmkEVxGKrbo+44kAC+di+AkuQm4HFeVeOFaZwULBEWhkNNbLfrTaLaYoLNaeoY7mOA5uqpMa4GH6xKj7OOW5aseS212vFDxQXDTOm9PT6xzsmsj+f5SJrn4NwchD1hJw4r6FSPDjah7qFUW0nl3A5NujiRRLOyRZEtFYeMLy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kAeNuAsj; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kAeNuAsj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1709031907; x=1740567907;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nkEmgcF2sqsTVrDLvW1DSslli5qr0PA0DGExmFUENFo=;
-  b=kAeNuAsjZPcZrxLSW2xXHhiW9q4lVKoBtABPTYFaZq8pVJn4m+uUPG/I
-   BRjWKJalUXetz5phBc2adYGTqvJc/VncHCPFn6f8KoAnxJa3k2dfU6z32
-   q3Be0IoPRys7MfdcwITd/Yd19x43PedJulUC9HeqbUTvlP/mflJKUAhcs
-   zD3eAoEGpA/Y2M6VaSSDDtvkzn8k92q6/kwyY96N51g1fJM37FEjwEE3J
-   HEyl7q9lqyQMrjARIjHsRkYcuYbdpzRIp8UF4rd+qgj6VfWeTUrvB9DXp
-   29CxDbot132UQptmp5NhC5xayVVPLsiUPA/tTOm678etVoSoRcs1PhjMN
-   w==;
-X-CSE-ConnectionGUID: hJeSGw/8TAyVRlagmnchCA==
-X-CSE-MsgGUID: KTDcPATNQk+OtFWm54w0BA==
-X-IronPort-AV: E=Sophos;i="6.06,187,1705388400"; 
-   d="asc'?scan'208";a="16880169"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Feb 2024 04:05:06 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 27 Feb 2024 04:04:59 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Tue, 27 Feb 2024 04:04:56 -0700
-Date: Tue, 27 Feb 2024 11:04:13 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC: Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>, Miguel
- Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida
- Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
-	<gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
-	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PATCH v2 2/3] scripts: generate_rust_target: enable building on
- RISC-V
-Message-ID: <20240227-glove-underwire-f562a56cf2c7@wendy>
-References: <20240223-leverage-walmart-5424542cd8bd@spud>
- <20240223-employee-pessimism-03ba0b58db6b@spud>
- <CANiq72ngEZskjH0f=8+cJuQsFTK227bGCxe5G0STMHuPbZYnXg@mail.gmail.com>
- <20240227-resolved-deceit-4a59a6af5b71@wendy>
- <CANiq72mwM+4Oh-H5WmRoqQ_nE1w-eJ1wn-nEwS=BR9JRwzxMMQ@mail.gmail.com>
+	s=arc-20240116; t=1709032078; c=relaxed/simple;
+	bh=34F9Z4iZf+zhWbYhtZNRE0IqJQ27+A+XKn1T0p8dgKM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tZxwMldgoMFiL+Kcm8DC+/BbvnY5szacs8mcBu6MIuuQTaJSaPSBWROUn42iXZrLsgVeCm7RbBxTbA32QuD4AUTTvAZtneB+5Lp9vBmbDLjSSPrpQia/+ADKEbvo6KB0cPBp17bn4D5KzR5rGYQEk3gP63nBwv90D+deKKGRBb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3bc21303a35so1723791b6e.0;
+        Tue, 27 Feb 2024 03:07:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709032076; x=1709636876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=skOPLIuxWMEaf7NIrg2gBG0ipla5NBpvoy48o/0tCL4=;
+        b=LOb5GKg8MVcYSKby0dv4wOIuE1DURrjIQ2+ubfAwDgPXSl5EgyYx159azrnu1F0kiK
+         dOWRh2Hr/F2OjHKXMxyaHNntK/MYNRiR6RF7rtY8Xdlu6G29e+7+HyZC7w90XDMpIzh5
+         Vu4+0milD0zsT7TxWeSJaJ8sDSjcmQrTAH5rbmlDlkWjbPUJ7xrPNffjvxMytMflpGKD
+         iW+XbJAMXmwUW0M9GZZr9cUYLXaSmrt0hYrG8HX/QcCdqxsjgj9Q+yq/OXGww0zMBKer
+         l/NM+qkL8BlKbjKnsSSUbg/m/HjsK4vvStPTwnklNNLyZjGmaezS30Xj4hWulfvz3U8N
+         tmVw==
+X-Forwarded-Encrypted: i=1; AJvYcCXVe20nPm0R81czilzQoqMWgy19Po5eGwT5t8yMHb6n+/JpuUPnoVXtrwnuW6AQq8LdDjxVw5QaBbsdzqcO0rrQ1X9Ps3kiq5Mw+JzulWr1RjJb83XeYi+v2ccG3Ic=
+X-Gm-Message-State: AOJu0YysY4aA7r60sEBibIZMrs6c2lqlVvyXeqqbfq567VCe6tPgkk2D
+	w28EA5+1vgQ8kYHqsqKZV/rUPc8qn9jkoy8tM2oXYX5V59v3YuXJ+sqIuUOTaYCwv42LQxBeAId
+	LnzL4MF8ldZpdd8v0wADVjV27s54=
+X-Google-Smtp-Source: AGHT+IGkYlkdOebTrB+0a3ntjFHyIn86N1gDBuhwNRPmsGOjLy1F2kZT0BIFzCuMQhVJVW9189Lkoh5I24vW3xNhKcU=
+X-Received: by 2002:a4a:d037:0:b0:5a0:3d13:a45a with SMTP id
+ w23-20020a4ad037000000b005a03d13a45amr9152893oor.0.1709032075843; Tue, 27 Feb
+ 2024 03:07:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4yFQMGvLloPM49wl"
-Content-Disposition: inline
-In-Reply-To: <CANiq72mwM+4Oh-H5WmRoqQ_nE1w-eJ1wn-nEwS=BR9JRwzxMMQ@mail.gmail.com>
-
---4yFQMGvLloPM49wl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+ <202402261806.A8340C71D@keescook>
+In-Reply-To: <202402261806.A8340C71D@keescook>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 27 Feb 2024 12:07:43 +0100
+Message-ID: <CAJZ5v0gcTZxrgQxbrAFnfEw_Efzud70bg9tVW6Mypu_G6N7hOg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before memcpy()
+To: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	gustavoars@kernel.org, morbo@google.com, justinstitt@google.com, 
+	stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 27, 2024 at 11:46:42AM +0100, Miguel Ojeda wrote:
-> On Tue, Feb 27, 2024 at 11:17=E2=80=AFAM Conor Dooley
-> <conor.dooley@microchip.com> wrote:
+On Tue, Feb 27, 2024 at 3:08=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Mon, Feb 26, 2024 at 05:54:58PM -0700, Nathan Chancellor wrote:
+> > When booting a CONFIG_FORTIFY_SOURCE=3Dy kernel compiled with a toolcha=
+in
+> > that supports __counted_by() (such as clang-18 and newer), there is a
+> > panic on boot:
 > >
-> > Sure, I'll take a look.
->=20
-> Thanks!
->=20
-> > Nah, I think that is silly. Either this goes in as-is, and there's
-> > fixup done by Linus, or the thing should be converted to match arm64,
-> > assuming that that is possible.
->=20
-> Ah, so you are going for 6.9 too? I can give the series a try on my
-> side in that case. When do you plan to apply them?
+> >   [    2.913770] memcpy: detected buffer overflow: 72 byte write of buf=
+fer size 0
+>
+> Yay, the "better details" output is working. :)
+>
+> >   [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __=
+fortify_report+0x5c/0x74
+> >   ...
+> >   [    3.039208] Call trace:
+> >   [    3.041643]  __fortify_report+0x5c/0x74
+> >   [    3.045469]  __fortify_panic+0x18/0x20
+> >   [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
+> >
+> > This panic occurs because trips is counted by num_trips but num_trips i=
+s
+> > assigned after the call to memcpy(), so the fortify checks think the
+> > buffer size is zero because tz was allocated with kzalloc().
+> >
+> > Move the num_trips assignment before the memcpy() to resolve the panic
+> > and ensure that the fortify checks work properly.
+> >
+> > Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct t=
+hermal_zone_device")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/thermal/thermal_core.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_c=
+ore.c
+> > index bb21f78b4bfa..1eabc8ebe27d 100644
+> > --- a/drivers/thermal/thermal_core.c
+> > +++ b/drivers/thermal/thermal_core.c
+> > @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const cha=
+r *type,
+> >
+> >       tz->device.class =3D thermal_class;
+> >       tz->devdata =3D devdata;
+> > -     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+> >       tz->num_trips =3D num_trips;
+> > +     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>
+> Looks good to me; thanks for catching this!
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-If they're to be applied, it would be Palmer, not I. And if history is
-any guide, it could be into the merge window. My point though was more
-that either this was acceptable for v6.9 or would be v6.10 material
-with the same mechanism as arm64. Rebasing after v6.9-rc1 but not
-adapting to that way of doing things is what seemed silly to me, since
-if a resend is required then the other improvements should be carried
-out at the same time.
-
-Cheers,
-Conor.
-
---4yFQMGvLloPM49wl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd3BrQAKCRB4tDGHoIJi
-0l+1AQD2Kv7qn0sG5InjsblGeMCFLO+iLg5s4b1JdnY/mXJAMgEAnPLESP1zEN5H
-BZ6fe0suc1bctDUkHs99G3uQ759MlQc=
-=9yZw
------END PGP SIGNATURE-----
-
---4yFQMGvLloPM49wl--
+Applied, thanks!
