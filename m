@@ -1,116 +1,127 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFCD13A88C
-	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 13:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B42913B2B3;
+	Tue, 27 Feb 2024 13:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709039006; cv=none; b=BRQFAIJyzCKgOuz+3pDjSe5wmopX/B3Qrnnjl1aivp0/gj9TeYRr6fpPV84ySuWslj1SZyhriBj5SfFgZ/CbiZ81zVtmKRfSW2xwl6ZbkRDrYqHp+Ed6PyziGuJyHeRxaiYsA83D0f0QizBaseMLZEK544HsL7fJzw8t5XHEaHM=
+	t=1709040650; cv=none; b=cofDijjT9PekB9Nb1sPLhfqELQkKvCwdSNStAr6W991C56a1UE2jWiZzaVFGsdy4q3rNzoM/IAKzWxT6VIfT/+uHj3VjY5Biyo5r/nZbjDSxSJAGFFOzIHOojWCUJuI/P6BkkwZRfmisii+6SoPXoFowBgq+XOT+Y2jBSSFeqXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709039006; c=relaxed/simple;
-	bh=MXbXhXbeu0cQ9TFbNb7UEonPBK55rX+buvq6bECICU8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7OIe5VDQ/v7G4APezyu2OUS/qX3Q1M70mxZlN7vCF9E2sibfZUVJFmReBsSxVcW0fhxYas4Ndj16OLelmNGweN1LSgB1gQgB2h5bdBjrojocndDp2k4UikoGo4jym3kVussvlQ1dsMFv1Kz6F87K1wcCPi5qKlMDb+PHjtzlwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=dbMq4gCk; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1709040650; c=relaxed/simple;
+	bh=MFKtR2fS4L0WjPDdjEGVFgoJTEjHDdqSj3YnJjAp2+A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=F1YOq0BGmOGY22Jolbxt9cn6tx1DulcVhWdu2OkSTlj3HWQd+E1/Od6tBWbYVQshwjZsRoPds8G1g10zQZhmUsew5C0ZFEe8a/IlsERfgHhEn2/NmO25/4Dm7QxTNrodRuYfup011HOb+3ym91C2J+LMWibAZZecXWVuDhT+eWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bNB77hTw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="dbMq4gCk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1709039005; x=1740575005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MXbXhXbeu0cQ9TFbNb7UEonPBK55rX+buvq6bECICU8=;
-  b=dbMq4gCkgozKQM5P+r2OnRtqJAfxkPSoSuC2Zgw2UNuY9q1ijh1RLmXV
-   sZEJVlpjTv3wDoDknTPqIC7OkS1qdafgu3GLasjzJ7ViVJ5AW2B5/GDxw
-   riu1M+HgBYPD7IEY7XSJevkxT9mainLserfXEvSATCXXrHzpJ8NJi8bfi
-   nDKw0u0IGC/LBItZW64iQ1AA6ORVuMW/uq/kO26lVzrIf47umGCN1UiZ+
-   3S5BJWs0kljGsKRgMUh9qticT61N54/SxRfM3qSJ8Vvjk6U09n0rXFTJD
-   3XcBN2Y1c/iTwKVMJhf6skHXOtpewFpssw+TbRKEXlWVg0MRd96Y7amsT
-   g==;
-X-CSE-ConnectionGUID: we5qw0mfT+K6Mg0u+ozr0g==
-X-CSE-MsgGUID: mMGKrDnoRIqlIlHrvTgxew==
-X-IronPort-AV: E=Sophos;i="6.06,187,1705388400"; 
-   d="asc'?scan'208";a="247636234"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Feb 2024 06:03:22 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 27 Feb 2024 06:02:58 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Tue, 27 Feb 2024 06:02:54 -0700
-Date: Tue, 27 Feb 2024 13:02:11 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC: Nathan Chancellor <nathan@kernel.org>, Conor Dooley <conor@kernel.org>,
-	Matthew Maurer <mmaurer@google.com>, <linux-riscv@lists.infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson
- Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary
- Guo <gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
-	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nick
- Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-	<rust-for-linux@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<stable@vger.kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Ramon de C
- Valle <rcvalle@google.com>
-Subject: Re: [PATCH v2 1/3] rust: make mutually exclusive with CFI_CLANG
-Message-ID: <20240227-unwind-canteen-3da9b07af10c@wendy>
-References: <20240223-leverage-walmart-5424542cd8bd@spud>
- <20240223-perjury-preshow-fc2cf73d552e@spud>
- <CANiq72=mCnm0mKOw5K44PmZ+jF=67jxEEkcXP-E0O8CaUrps=w@mail.gmail.com>
- <20240227-uncertain-amaze-6197e627ad95@wendy>
- <CANiq72=geBobqM0Dc2yv=NjAc3MWXhOrDHfuJ84TgQ+XVxBo0w@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bNB77hTw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 947ACC433F1;
+	Tue, 27 Feb 2024 13:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709040650;
+	bh=MFKtR2fS4L0WjPDdjEGVFgoJTEjHDdqSj3YnJjAp2+A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bNB77hTwgcxSnvc4Le4q048uzOlXWmxGskWMDYJfRH2C0qwFA9FdU4aqkgMT5Hggg
+	 Ktx8XyLJsufPdfdn5+dkmrsB1ryyp7AXgdymvjPdgey/jQL3eP1aATLCr3BSjEl41i
+	 dQiVVoLCCouD7Nw8ePhyxRpBc5A4DkfSaq+Mnvd8=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Steve French <sfrench@samba.org>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>,
+	Tom Talpey <tom@talpey.com>,
+	linux-cifs@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Kees Cook <keescook@chromium.org>,
+	Steve French <stfrench@microsoft.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.7 022/334] smb: Work around Clang __bdos() type confusion
+Date: Tue, 27 Feb 2024 14:18:00 +0100
+Message-ID: <20240227131631.324135878@linuxfoundation.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240227131630.636392135@linuxfoundation.org>
+References: <20240227131630.636392135@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="W8J+rAw6y6pbbfl0"
-Content-Disposition: inline
-In-Reply-To: <CANiq72=geBobqM0Dc2yv=NjAc3MWXhOrDHfuJ84TgQ+XVxBo0w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
---W8J+rAw6y6pbbfl0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+6.7-stable review patch.  If anyone has any objections, please let me know.
 
-On Tue, Feb 27, 2024 at 01:34:14PM +0100, Miguel Ojeda wrote:
-> On Tue, Feb 27, 2024 at 11:54=E2=80=AFAM Conor Dooley
-> <conor.dooley@microchip.com> wrote:
-> >
-> > I did try to test it but I ran into too many toolchain issues - my
-> > older copies of LLVM (pre 17) are not multiarch as I built them by hand
-> > with PGO for x86 and RISC-V. My LLVM 17 is from kernel.org and has no
-> > libclang. And then the copy of LLVM 18 on kernel.org apparently does not
-> > support kcfi at all. I gave up there, but I don't see how this would not
->=20
-> I asked Nathan to add libclang a few days ago, and he very quickly did
-> it for LLVM 18 -- though I don't know the plan for the others. I just
-> pinged in that thread.
+------------------
 
-I had actually said it to him on IRC already (although he is CCed here)
-but I just noticed that this was my fault - I symlinked incorrectly
-after downloading the toolchain. kcfi is detected fine with llvm18.
-I'll give testing another try.
+From: Kees Cook <keescook@chromium.org>
 
---W8J+rAw6y6pbbfl0
-Content-Type: application/pgp-signature; name="signature.asc"
+[ Upstream commit 8deb05c84b63b4fdb8549e08942867a68924a5b8 ]
 
------BEGIN PGP SIGNATURE-----
+Recent versions of Clang gets confused about the possible size of the
+"user" allocation, and CONFIG_FORTIFY_SOURCE ends up emitting a
+warning[1]:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd3dUwAKCRB4tDGHoIJi
-0iscAQCFqXISaMEU8lWDJeRHwsnAImvV4ocTSMxS5RJFKcJHqQD/a/u0vuVtSyp7
-18rvQE+YASYYpq5tCU08KsgXCbSU7gI=
-=o4T8
------END PGP SIGNATURE-----
+repro.c:126:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+  126 |                         __write_overflow_field(p_size_field, size);
+      |                         ^
 
---W8J+rAw6y6pbbfl0--
+for this memset():
+
+        int len;
+        __le16 *user;
+	...
+        len = ses->user_name ? strlen(ses->user_name) : 0;
+        user = kmalloc(2 + (len * 2), GFP_KERNEL);
+	...
+	if (len) {
+		...
+	} else {
+		memset(user, '\0', 2);
+	}
+
+While Clang works on this bug[2], switch to using a direct assignment,
+which avoids memset() entirely which both simplifies the code and silences
+the false positive warning. (Making "len" size_t also silences the
+warning, but the direct assignment seems better.)
+
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1966 [1]
+Link: https://github.com/llvm/llvm-project/issues/77813 [2]
+Cc: Steve French <sfrench@samba.org>
+Cc: Paulo Alcantara <pc@manguebit.com>
+Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>
+Cc: Shyam Prasad N <sprasad@microsoft.com>
+Cc: Tom Talpey <tom@talpey.com>
+Cc: linux-cifs@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/smb/client/cifsencrypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/smb/client/cifsencrypt.c b/fs/smb/client/cifsencrypt.c
+index ef4c2e3c9fa61..6322f0f68a176 100644
+--- a/fs/smb/client/cifsencrypt.c
++++ b/fs/smb/client/cifsencrypt.c
+@@ -572,7 +572,7 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
+ 		len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
+ 		UniStrupr(user);
+ 	} else {
+-		memset(user, '\0', 2);
++		*(u16 *)user = 0;
+ 	}
+ 
+ 	rc = crypto_shash_update(ses->server->secmech.hmacmd5,
+-- 
+2.43.0
+
+
+
