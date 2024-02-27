@@ -1,204 +1,96 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5516C1C6B0
-	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 16:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D631C6B0
+	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 16:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709052469; cv=none; b=C6a31tB5wF4lPwGODPvuKcrXJY2z+8ATcs6QGPmOwjyej2jocVch+wCdSE2o9SORJ45JgXl7eroc13y0F/vWuLFcsibSQsxvdAtLIvuwueAe6SpdU4Faq6giAnmh6Kr30qSWS7EPLe29KAZDYwpR4rxchymHe91UZUQpTz9GoJ0=
+	t=1709052679; cv=none; b=C3cbMsOq4YpcNy9j3fm5yaAW0JcX3eNqyzW4hbSsRm8JB/V53pEaMuOGeHzykx4K2yoOnST15EC98GvCISma629QYLHTyLcUi7NagTwd5foAV5CHvQyeZuQ3Lfkbio3Ly5NqXb4Wa0AZ+sxsXMAKTmVfVTAEbtngG1a45F/QzoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709052469; c=relaxed/simple;
-	bh=6zkBEAuVKD3dn+SJ9jTkTMgU/DW87RV1/7vWT8Sk0h8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IGP+ZJ1sw2YXgvRIUOOE59REK03KFnnJOtCTUIwIVOat8BQ+ZMO/ms6dSyz0OD54Tn/b4McVaZkPhjoe5ir5whuW0oJ7N/Cazm5TSvwhuJkKmvHP6m1Icc+klCszIcAFUSiW1vtCjMnfteSUQJC0jRKk5ipVy+RDwWSVAbG83Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TTy88pis; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1709052679; c=relaxed/simple;
+	bh=OUt6CYZupNiEST0iA+DgEudMWAk4Tmq4OhXq/et4EQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dwm2XNgcfteqSTl8MQCgus7UqMtLKbMeT62StkgBdMyRNGKIt+v4TcRsTKCp/q3hJUuQSP4bOcEonU2VkRxWXaFT0lsfk5dwuJtKNGPWzJ9fguz5QRRdV7rgDuBbVQ//M7DYio6LRU3dSUlX6MbZUZfSR5K+mXCBbZlS53arZH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nbvbE23r; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TTy88pis"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-412af2dca59so5087575e9.2
-        for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 08:47:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nbvbE23r"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e4d48a5823so3664104b3a.1
+        for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 08:51:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709052466; x=1709657266; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BJeS3+GsoLHCZD1u/+yVO3ToKC1f+F8eZicM2YTy7dM=;
-        b=TTy88pisQGEPb1nxiNBYG13xHy5htPt00Wwj30VmOT1jumG5kHPVwCwukWNJZFRACP
-         MLn9y0OPxJhjqYPcpclClxZfj8SOm3Pq0dUVBLFIjCDWRvK9hv1r4wznWM6gbFc11DUp
-         B/XfkTLVL4FpJeFypM5I86OQxoCRlHUVvOAlyRciJy7xhnObY3gQwYB1H3XlhH79nXW+
-         ylpin3fN5elTm2b+RecImUpLcgmx84T3aYmg14vn68Zl0xuaWAHcL5PKGCX87ayvigsi
-         Ydw7GyisOp+gOCh+2gaAFTgXoGsLKanelvvK9c9womwhqvZZxL2KVh9yuPeZK+jXAuRH
-         Pcvw==
+        d=gmail.com; s=20230601; t=1709052678; x=1709657478; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OUt6CYZupNiEST0iA+DgEudMWAk4Tmq4OhXq/et4EQw=;
+        b=nbvbE23rgsKuk39IAFpUksoFpqaDXWR0LFRXCM6NlnsNdGtOPKJ+YWqEZXxREx7frX
+         tcNqdZ3RhD758Du0dBbcdsJmyaK1VbWb6JSJjXPnE/Rl0JsOSdUFCWiMKYuyvtmCM3U5
+         BI9msYRN/p7VY5Qn2BO6rRefhyFzVze08KmNSZhPloLOTCGhcu3knmPOm7yXw5uybis6
+         2/0C+z2q6MfDb3xL8r5ZLg/sW2MCHhCOqVvpD/FVmkyeYyhvDoe5ZAzT7ezkvJPQtYE5
+         l2ib0rP9PIE3qxMny7xf9K4oUQhbO83JJf57UfyBalgLIv62ZSBRyn4ETZQokD6++fu/
+         i/dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709052466; x=1709657266;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BJeS3+GsoLHCZD1u/+yVO3ToKC1f+F8eZicM2YTy7dM=;
-        b=afkBkVn4vcu2rIenQqjjaTQaQHYZ4rZ8/WyOJvN8rWWNmj+5Isfp6vpI3yf+tpBFM1
-         aWTO2xXg43AafV+S7lbBv7H4fPELkCMldOiyqZQ6z/SN4N1dun+igeh5rYXWHpZJ0hl0
-         tJtZeDm5V0rJdM4sacGKomBo2kD3yC1JiB/L/fIs21j1EdA1qXwXMur1WRZSOugf1ddG
-         qVRMmPPseXeF9/G1YLd8pTuah0vOHuS5lfAuYepqDiKTigVDLREb+0r/wqcBRvU9fnmn
-         mCUbBZGWTbk00gpyOSjy2PSTfYB9zCnWzDQf2DmQNtsFdMDl6xXnnyd+YEi3Ih2PHNH9
-         mGrA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTU9L6774aTZS3lFZbCmHJ+lXerg99SziRuF3FcXqHI2l3YPTrEUOJ6Ud6O+lBUQfdeWDVyB5w88FrX2sG/xoBCvpeSw==
-X-Gm-Message-State: AOJu0Yw5MyAcJB6GKtY9csKCrmKNT6w+Ka/92sYFDoJUm2nM9gAk6xSk
-	v65TXnw0SzZjW6a2IjYmOLU3agnIdXd+B+g3ro9VBoPwu/eaGldle4CR+IZX5I8=
-X-Google-Smtp-Source: AGHT+IFR7ptc3nvFIOiQO3yUySKihomDEnERXujeGlC81SqO5CS+DQw5OwFhlkPhWppuYiMTGE5r5A==
-X-Received: by 2002:a05:600c:1c90:b0:412:ae2f:e9fa with SMTP id k16-20020a05600c1c9000b00412ae2fe9famr1761559wms.11.1709052465690;
-        Tue, 27 Feb 2024 08:47:45 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id v13-20020a05600c444d00b0041294d015fbsm11929001wmn.40.2024.02.27.08.47.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 08:47:45 -0800 (PST)
-Message-ID: <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
-Date: Tue, 27 Feb 2024 17:47:44 +0100
+        d=1e100.net; s=20230601; t=1709052678; x=1709657478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OUt6CYZupNiEST0iA+DgEudMWAk4Tmq4OhXq/et4EQw=;
+        b=wxAe41+tFi6cmwi0MLP6OioD/gF6a6S7+CZ7tkwMthqFQbUe3IljYXP0932BuCvv1t
+         FncpF5EppPdQH6VNmKWB478jZNMwzEyuVI4tniRs8r8bdEi29Yajr7rU10wlslTpSnEV
+         BkBcDariFT2YjF7PIhQVMeQf4gjPB17AX0Cl5q+/KLsjow6RIjojQ1CeL0JTttshB8ys
+         mcTCLKJkmyE3OBFKwqRy8CL/hvFQTSK8Xv7hCzKx1TRcs64M49v1cGq4AoSjE0m8PkaX
+         RAbf7qQ2x8SXHh/xLiCVgVtGxsEWFXhcEsdOg8/94Kh1oZ/+wSzXZWw8tnhV5XyNwIyj
+         aONw==
+X-Gm-Message-State: AOJu0YwyOWJIipu/Vw7Mq0PdqKTyER9MLAQoKei9f54mo5LnCS0O9CIv
+	WJ/edEWMkonCgPopVHfXk+TZPvpYRbs81i6y1O9WMx3wCqJI4l+Dc9O4B9MSCiprarDalwSZ1vQ
+	Xud5sZVqP9/2XIDyAn8qBCGMT7qo=
+X-Google-Smtp-Source: AGHT+IHGmk6+rXLPMR3cGR+KN3oHpSsuNkYvicHZWiyeZmHFsnZ45UBOqJWlavu5KkvgBCp3GBye1fgIbui93FLfwDA=
+X-Received: by 2002:a05:6a20:ce4d:b0:1a0:ea67:ecb2 with SMTP id
+ id13-20020a056a20ce4d00b001a0ea67ecb2mr3077170pzb.12.1709052677564; Tue, 27
+ Feb 2024 08:51:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, rui.zhang@intel.com,
- lukasz.luba@arm.com, gustavoars@kernel.org, morbo@google.com,
- justinstitt@google.com, stanislaw.gruszka@linux.intel.com,
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
- <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
- <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
- <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
- <202402270816.0EA3349A76@keescook>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <202402270816.0EA3349A76@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240208002841.GA2601476@dev-arch.thelio-3990X>
+ <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
+ <20240212234850.GB3221859@dev-arch.thelio-3990X> <20240213025303.GA4006766@dev-arch.thelio-3990X>
+ <CANiq72npYCD-zKqcXPNOAxnKiUCCXGbFQaGo-8=0-171ni+ncQ@mail.gmail.com>
+ <CANiq72kcQUuxcno00+QWrstrcfwC+2_Bvh+8dr5kgVkEtrWOEA@mail.gmail.com> <20240227153728.GA819789@dev-arch.thelio-3990X>
+In-Reply-To: <20240227153728.GA819789@dev-arch.thelio-3990X>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 27 Feb 2024 17:51:04 +0100
+Message-ID: <CANiq72mmDquTeoEVErwXH7bVhP0+UifCrK0n=-HD97noWLqryA@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 18.1.0-rc2 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Conor Dooley <conor@kernel.org>, Conor Dooley <Conor.Dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 27/02/2024 17:26, Kees Cook wrote:
-> On Tue, Feb 27, 2024 at 04:37:36PM +0100, Daniel Lezcano wrote:
->> On 27/02/2024 12:09, Rafael J. Wysocki wrote:
->>> On Tue, Feb 27, 2024 at 11:14 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 27/02/2024 01:54, Nathan Chancellor wrote:
->>>>> When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
->>>>> that supports __counted_by() (such as clang-18 and newer), there is a
->>>>> panic on boot:
->>>>>
->>>>>      [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
->>>>>      [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
->>>>>      ...
->>>>>      [    3.039208] Call trace:
->>>>>      [    3.041643]  __fortify_report+0x5c/0x74
->>>>>      [    3.045469]  __fortify_panic+0x18/0x20
->>>>>      [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
->>>>>
->>>>> This panic occurs because trips is counted by num_trips but num_trips is
->>>>> assigned after the call to memcpy(), so the fortify checks think the
->>>>> buffer size is zero because tz was allocated with kzalloc().
->>>>>
->>>>> Move the num_trips assignment before the memcpy() to resolve the panic
->>>>> and ensure that the fortify checks work properly.
->>>>>
->>>>> Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
->>>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->>>>> ---
->>>>>     drivers/thermal/thermal_core.c | 2 +-
->>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->>>>> index bb21f78b4bfa..1eabc8ebe27d 100644
->>>>> --- a/drivers/thermal/thermal_core.c
->>>>> +++ b/drivers/thermal/thermal_core.c
->>>>> @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
->>>>>
->>>>>         tz->device.class = thermal_class;
->>>>>         tz->devdata = devdata;
->>>>> -     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
->>>>>         tz->num_trips = num_trips;
->>>>> +     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
->>>>
->>>> IIUC, clang-18 is used and supports __counted_by().
->>>>
->>>> Is it possible sizeof(*trips) returns already the real trips array size
->>>> and we are multiplying it again by num_trips ?
->>>>
->>>> While with an older compiler, __counted_by() does nothing and we have to
->>>> multiply by num_trips ?
->>>>
->>>> IOW, the array size arithmetic is different depending if we have
->>>> _counted_by supported or not ?
->>>
->>> IIUC it is just the instrumentation using the current value of
->>> tz->num_trips (which is 0 before the initialization).
->>
->> Right, but I am wondering if
->>
->> 	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
->>
->> 	is still correct with __counted_by because:
->>
->>   (1) if the compiler supports it:
->>
->> 	sizeof(*trips) == 24 bytes * num_trips
-> 
-> I think you're misunderstanding. The above sizeof() only evaluates a
-> single instance -- it has no idea how many more there may be.
-> Specifically:
-> 
-> 	sizeof(*trips) == sizeof(struct thermal_trip)
-> 
->> 	then:
->>
->> 	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
->>
->> 	memcpy(tz->trips, trips, num_trips * 24 * num_trips);
->>
->> 	==> memory size = 24 * num_trips^2
-> 
-> It's not counted twice. Under CONFIG_FORTIFY_SOURCE=y, memcpy is a macro
-> that expands to a checking routine (see include/linux/fortify-string.h),
-> which is using __builtin_dynamic_object_size() to determine the
-> available size of the destination buffer (tz->trips). Specifically:
-> 
-> 	__builtin_dynamic_object_size(tz->trips)
-> 
-> When __bdos evaluates a flexible array (i.e. tz->trips), it will see the
-> associated 'counted_by' attribute, and go look up the value of the
-> designated struct member (tz->num_trips). It then calculates:
-> 
-> 	sizeof(*tz->trips) /* a single instance */
-> 		*
-> 	tz->num_trips
+On Tue, Feb 27, 2024 at 4:37=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> How far back would you like it added? I don't necessarily mind
+> rebuilding older releases but certain entities may notice the checksums
+> change.
+>
+> https://gitlab.com/Linaro/tuxmake/-/merge_requests/364
+>
+> Not the end of the world though.
 
-Ok my misunderstanding was I thought sizeof() was calling _bdos under 
-the hood, so when calling sizeof(flex_array), it was returning the 
-computed size inferring from the __counted_by field.
+I think a reasonable set would be those versions matching the LLVM
+that Rust bundles (for `rustc` versions we have since 6.1 LTS). That
+is: 15, 16 and 17.
 
+Conveniently, LLVM 15 also matches the minimum external LLVM supported
+by `rustc` in 6.6 LTS.
 
-> Before the patch, tz->num_trips is 0, so the destination buffer size
-> appears to be of size 0 bytes. After the patch, it contains the
-> same value as the "num_trips" function argument, so the destination
-> buffer appears to be the matching size of "num_trips * sizeof(struct
-> thermal_trip)".
-> 
-> Hopefully that helps! If not, I can try again. :)
+If those are too much, LLVM 17 would already cover what 6.6 LTS' Rust bundl=
+es.
 
-It is ok thanks for the clarification
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Cheers,
+Miguel
