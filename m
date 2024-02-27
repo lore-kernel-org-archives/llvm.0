@@ -1,181 +1,156 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FEDF4FC
-	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 02:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709000255; cv=fail; b=inooNEREUCkVl1vl0GZwKq6BQlplTsWNYhxcAI8elCn3uLmD8W7kPkfJeLTHx5B7JxxZMHds/+dtISgYgIwfRrChFm++EU/AY0k/yvmiqiGaw9WvExC9PVk2rAQoiomJ8xq6Q6Q6uuuBs+iUqoTRafPTeQY5jfu4lOf/Zv9PerE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709000255; c=relaxed/simple;
-	bh=nqgfUsR7OxJKB9DTv9N9eSPXQC98fuZXT5IQluq7/7I=;
-	h=To:Cc:Subject:From:Message-ID:References:Date:In-Reply-To:
-	 Content-Type:MIME-Version; b=OCCXFr0myqS8+HJp99xH2XNlYdqIhzW37Ats6d7Nnz9tw8MD7OvRUt0TG0GRo29cjXGIgKU/Ot2zzcWjjfxhsR95bpAFcX2E0yJhySfm5d+BxH8e3eWpOZRhcttQE8w+EH0z1qNJOvS4fnryojyBOQ7aTRHJzmeoVJ+ZUAyD2fc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QyDafewn; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=mqKcPiDA; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB4B38387;
+	Tue, 27 Feb 2024 03:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709005662; cv=none; b=PSesJzA48EQMsW6RJhNXW0grJAVdVH0WoSrFODwWQmti9iEuQIi1UQvBtVmF3HS/frujIH5IRKkyJuvwR1/DyBPxIlYtbX6E5rZ6RCTCcxvBrZ1elO5PXkcqlYKc7XQ2dvnCQGZum6IqCkqQboDngusVit/p1oG7kUuDMSXaRsI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709005662; c=relaxed/simple;
+	bh=pT+UKzUXyPK8bYyCVlk6ap4TJyueRMHggMvNBpPQRRE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Jqgk+Z5SLe88Ub720emCccHbYBY2KKyHEcJypT6/4tIiTE107i9tRKxPZoHUA+H4IrPiXGior4bSRBWtvP4nQ+4cd7oTeF5ROfJBYR5eVX9sJGi9JeNPxt6hItlrV5rRku8St/fGP9BqFHz7eKu/zC1KmLWk2NtqqZp/5vjUQqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YmAU4pdZ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QyDafewn";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="mqKcPiDA"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41R1EAW8002950;
-	Tue, 27 Feb 2024 02:17:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-11-20;
- bh=GxDwf5z3ZYV/YAK5dbOmk1wVbXP/UdwQJTcGnGUWIoM=;
- b=QyDafewn2efyuuHH1wMnLPryQrVBfBE7G6yii71YWevWQ+SxHbKeIvkv28mhpXmTzFlT
- ke2cakzqQPYEuvoph7Wu2ZtFM1x2rSgSBGzTDR04ZU+CNaEZA4MPcdH9k/pU0GxVIYup
- 48NUoi9ptMm8vg+eD4YJTQ3d6ZXfXDEfuledGZXq1OiJQWoPKteC7vRvDrM7jhIZ/7/y
- vInxqAqKH0lrZTnRTSrMAjh21nk5Xl/pCnvS6QPrJIj46jHgfYT2X0IZ0KGojvYGSY/r
- fWCWYp2qZYAXfk7xWed5kJcrcs3AEQmzoIXCV4aZjmKrwPwXPyF8zjZjiWKwiM7kd0h1 DA== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wf8bb5vq9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 27 Feb 2024 02:17:13 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41R0NQvl009760;
-	Tue, 27 Feb 2024 02:17:13 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3wf6w6fw6y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 27 Feb 2024 02:17:13 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hAorzX/u2HjkcJ4oZYAl6bZq/u14nkBmqWkZpxlPxAbCGBB0xfeitGs3B7s/6PhM/ROhElPHjineY1AANDQXYsakydgijvAt+BR1qjQwI6ZLwJfMAdOs8XrG3Yq0q/s84jC8awRbjfKFGe3n043111cB5SieX63nHc+1Jby/RrxHQxlYB834R7JOfCoYtnFZNeRa/SD4dbSbSvR27JoVMgSUWRqzkyM2d6JsBAIY5TP22HAHcQ027sUsceD6iJryVxPgwYsLmPh1EXAi2lGlaKIxUEtPTSz3QtxG8fiVAKxODTG4wTj8QG+mnJZxGxsIDIk86Skcyqarx2ao2aL8cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GxDwf5z3ZYV/YAK5dbOmk1wVbXP/UdwQJTcGnGUWIoM=;
- b=NqYgEtCIpBi0VJ7HQgmdnEUOT47DGM30WtorIllHewf8+GSgz7Bktomd3oc0n3Ljl8tndzRSRErF/oK8k/16JQzpg1fCMEPaVfCrC3/eVhvOpipPvSAOTbks62+29kXWROWkkJz71OTqjFwmoUqaYI2yrrDHwhWVHXX9GioHtWoar6O+9aE76wSnLJJCEj1AvmMFM2n6dk/nSp237sFmQfJgxg6QZw+O4J3FruNi0CLA2Odbwu4qaQJfh86Yz+VVmkm4NIQiFn3q/8rpzyduHmLg5JsfqT5JHcRISqF+lcbuxik/7xMX4+qJwLeMvi421Irk+/hdxV6mTYhfYE+weA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GxDwf5z3ZYV/YAK5dbOmk1wVbXP/UdwQJTcGnGUWIoM=;
- b=mqKcPiDAVywHHxTXQTVCEGrpmoAIn5X8AWPqmeOopoXEY1QYTVi3vmRrFSlajQJLLlQNubvGM+0IsWvpQpo5u4e6qTBkPqS4eJpmNHhBt3eKEzNBh0Er+mFdSJ4g2vhxuJI7xsFwOtpMdMs7oTRxw45rdZ9M2WF+iLO8MFC9HGE=
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com (2603:10b6:303:91::24)
- by BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Tue, 27 Feb
- 2024 02:17:10 +0000
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::e542:e35:9ec8:7640]) by CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::e542:e35:9ec8:7640%4]) with mapi id 15.20.7316.035; Tue, 27 Feb 2024
- 02:17:10 +0000
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru
- <sudarsana.kalluru@qlogic.com>,
-        "Martin K. Petersen"
- <martin.petersen@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>, Kees Cook
- <keescook@chromium.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
- <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin
- Stitt <justinstitt@google.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        James Bottomley
- <JBottomley@Parallels.com>,
-        Krishna Gudipati <kgudipat@brocade.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] [v2] scsi: bfa: fix function pointer type mismatch
- for hcb_qe->cbfn
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1bk826484.fsf@ca-mkp.ca.oracle.com>
-References: <20240222124433.2046570-1-arnd@kernel.org>
-Date: Mon, 26 Feb 2024 21:17:08 -0500
-In-Reply-To: <20240222124433.2046570-1-arnd@kernel.org> (Arnd Bergmann's
-	message of "Thu, 22 Feb 2024 13:44:06 +0100")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0116.namprd05.prod.outlook.com
- (2603:10b6:a03:334::31) To CO1PR10MB4754.namprd10.prod.outlook.com
- (2603:10b6:303:91::24)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YmAU4pdZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709005661; x=1740541661;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pT+UKzUXyPK8bYyCVlk6ap4TJyueRMHggMvNBpPQRRE=;
+  b=YmAU4pdZEiTpULev8c1hzk75M+QA54cyoKtdL/8UF+kt5KlAWPJrZ0jY
+   dYTgJO4v6ZG6w3RbNFkOKmp4Q6Demo5Cax23CuPa/6En24IE1fRKa3gH4
+   pq2c0cWsEpga7ZPUAsB1N3jrYiZ9CylDjixiyD6fbLj0UPQcmGyQLPIO6
+   3wsWGRjzt3zlHHfO5xLL6iBp4gvXM1+DoN9NEirTDGZ4ETNaYtNIou2EK
+   ABum6ghiR19wIfpa2UDBJujBKjBVepGRRHJEYE/FbgVp4qz28B1fpvw3g
+   Yjb4PQYBQGgFx1LtOXLTvUQ0kedech5SGnwFCSdpsJ7SHeIxJCOZVCJ4T
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="28770602"
+X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
+   d="scan'208";a="28770602"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 19:47:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
+   d="scan'208";a="11564121"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 26 Feb 2024 19:47:39 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1reoRM-000Aun-1i;
+	Tue, 27 Feb 2024 03:47:36 +0000
+Date: Tue, 27 Feb 2024 11:46:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:iowait 1/1] arch/s390/appldata/appldata_base.c:426:19:
+ error: use of undeclared identifier 'nr_iowait'
+Message-ID: <202402271127.N9omtGPJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4754:EE_|BY5PR10MB4129:EE_
-X-MS-Office365-Filtering-Correlation-Id: ce897f0b-70fe-4c9a-e9a7-08dc373a3453
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	JlcCPTmrCHMs/8TKEIwtGXbSWlKoe72Hi7p1xf9RMnfT7yC1e+9+VCNagcriHUTKYfYLjfQsK1snANKmxsznXtYLGc4iVd/dm1PRCt4iYA8zKH/rqLK98Ie+rAJhMprfuyh7Sl0HoeXm0RBmBva5XNjptgEg9pzPbA13YEBjCjajx5z2KidkEIISu9YHTGjtnBn7Ip41GGamrG6adKdqcYPzKUZRkVv7/PGz9UBt7gEGr+9gR2vOr+cEPOUMXhyoxsKDyI9LH+iHFJNQ1/BZFKGWbfyJutpCchmfV7JXbY48mnBNxLm6NUjVCgPzpk2obQunw79Z+07UiqTDSxtd3MoVP8V7Uvd+ztM06AUd1gmreqtzxnsRqAPhtLV2JbfLkZBy6mg5irG4UKhPQTMAaHrGQN/V9XFd1SJGw+GsAa9HI2FNwBKCJ/j5/kPpS/i2vUoJBzdAODgOTAttPBg9OqoTELhANdNmfWJqAdmaqV/nUwD6wEPZFfvy89DJ1Q2eSrQkmEaBKQfahYXw3f+L81ABJsg57rugYXUoNMw7CPqOdhFphU1PlPr5ilb7CALX1ubEpQhSxn0V1A724XRMM/IOL4TYgx/+1KlEdBJ15K0BlMCuw6pdZ1I0NgMCOhfE
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4754.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?+HjCRWdZ5LsVwirkI62JNItiRB8DXpTUEskRJjXEnq4G9hbgUq7QUDZQ8YLm?=
- =?us-ascii?Q?TM/8s8ERgiAhYM8gn3QcuPacaxY6XQ+L6ZcjCK98QY41Ru6bOTxHvlpxMsS9?=
- =?us-ascii?Q?PHkpHXh10iGShpnXVdnGSi/52NIWAILVF7KV6u2QEY9Cj4bPuqCuMjTnGftg?=
- =?us-ascii?Q?tNfgkigzcMoHBjU33iLYntkAJlT8K+7N310bcwVH/oYGqV/lCtZ/ZdGfrozp?=
- =?us-ascii?Q?GvDNq5SRtb6lwf7Qevu2Hr/0LSnWMR1YDeX4xRUTaC+4r8oxy479RM6B0TDU?=
- =?us-ascii?Q?FNgjK9+bwsvGeCMr94LmR57jWXUEfFqwMHtJj8cSaAkzEcZqa7npZaon2wXe?=
- =?us-ascii?Q?fd2uFxjvurhEhM/38ngbzWsZy74HYz9XGq1V00o5h7X2syratE7ax2BZz/mp?=
- =?us-ascii?Q?S7wlCUdsXoZ/NmXaz31fyOkoxgJ0SLaGQzA+KSopY5PJCQ7Tvq9PKGrzcA4D?=
- =?us-ascii?Q?rMR9cjd/inKDZrGaIx9zao1vHPqEtd1QR3Uayysj5L9qHvoqGkEk+zq+vnuP?=
- =?us-ascii?Q?qsm2xDoL09wVdcNHViXa+Ix44OiPWAlBO45QteikUFNlChHA6nbjGwN0MNdU?=
- =?us-ascii?Q?umWOftEBqYa63AwOXI1Ff12G83hTyl2VvSLzGYM9KILIoZqyBfeqvVYW3IWX?=
- =?us-ascii?Q?4vwcPDctR++nrRxyc3sPi/7gwpR9Ma+zNzico0E8s8oPOITs1f9OSpnZ6mV0?=
- =?us-ascii?Q?u1sbZFLoqOUqkJ1n8yQoLi6G25GsAtUY4FhsfsYLxDka6nX9sIw8HgVi7f9x?=
- =?us-ascii?Q?InpTK5OW8+voArQsSTatRHh8olL5/8Zn1WPbY04fIg/X9YTqrk0DG5LIx3Pj?=
- =?us-ascii?Q?Ru/wiwbeSIUHBBasRgAQGqHzGl7XFJNImsIv5a/iFlUK0a5Doxz+rUD5GUBd?=
- =?us-ascii?Q?RCILnsZpeqsKbd1vOH+W8OipdbpN84kfGfxtCpKgBC/iawYzAAbEmtKnUnC3?=
- =?us-ascii?Q?Y6c+mUEqi1Mp9JVRomUrq/xq1hdWxVoS8sGCfqpV2pTUu+njfCcfP/1uBLMm?=
- =?us-ascii?Q?2wFdNLOxRCslR03J4AVRO30lKjrFCE1A7pbuqalfpJUfNL6yuSsQCjvbEcRl?=
- =?us-ascii?Q?vORLFXFM7Nf2rACJePUD9l29zBbuKGNe0Fb+F7TtyTS94pKFik4PXbToxHWB?=
- =?us-ascii?Q?nTdfIh61sXJZRXtiblNB6KhUiCWssMJQ7JRv8y1kDDtVOB0J85xbgAri1VTC?=
- =?us-ascii?Q?A2TCMv7N7v65fjmYcIieZ/WGoLzf9f37pTicrKDrc27EUd5yr9H8C2pDBMLZ?=
- =?us-ascii?Q?63REkUNRxfVhTusCdRKrnhS/6QcAWN+IpDL/tVuxBihwc7k3LBAq9B05tgCl?=
- =?us-ascii?Q?9xFAYJ5AOdkMG6+6IMBnbYpa3kyyf/Mfn81qKedRon/eXERFvkLQ7XjBQWdW?=
- =?us-ascii?Q?EjPPf+L2kLXGzqZaWxMY1Z/VKOYbgxJe69ip8eUBbIW7RZLI+/55GzhZqo2d?=
- =?us-ascii?Q?38byu/I+yEYef3lrtnzCwET6q1BbHUEslrw2XN0lFp0nPGG38T2fCnINW8pi?=
- =?us-ascii?Q?1Iq/D2MeZbxXxJl2V2hvjBicw7H64A17T+ncqfTzkgHXwmN1O9d0fBKxm9TR?=
- =?us-ascii?Q?bByfMvrqd5bHHX/epbaO7y5py30WB71wBuOlM+LXVrDad3BF98nD1/ixlJjg?=
- =?us-ascii?Q?fg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	MVummtrd6OF1ih7BSBKYZAS3pgCQJvX/OWJwOEkAS7RdeiNveQikwvMahQCjn/8zDB+0fc9EdGgBa1jDoSnh02QQzLukHYj/gVhXri36hvps/MlKI3h1kIhwLmg2KlPRH+pyZMgpCNQgZPccU9yuafWgLukac+xwYa7ot0XLYvXtpqucerJhzU7ei0DMOvOdVHHPheiHyzE4YNktyO+xuzTljl6AQXd/oHPvWnWY6niA6uN/kybU4q7O07MXRQBAEvDxkol9+uvGrRc1bd13kCTulRVhp2oXXO9+UCconEVwHijLmzAMtdBYyf8luqjFN4XC9HiA6tLx+eIguIiA5Oy3O6CysJryQ0VTIYPb6ncVbroRs3319oM2uheX2t74Of70L0rpDkUubPh/iS9V2ALUlooAeEVduZYaFhKCi4S76K/w7X9ZgsJ+asoAri/6Ml58LQWEcYkpp7cZrtKIOCtXpnde2Fzk+KabZ+MpB/V1wu349DB439W7wf5z5JHgCWCebLbFezrTQuu3UMwdZuS+BMI06I0vNAYUdGQGMTOud7szaAPGfJO7V2by8XQpAKcqiqx630O6RGcg6ZaL8+fLeuOEVO6ez1zdfZZi+W4=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce897f0b-70fe-4c9a-e9a7-08dc373a3453
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4754.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 02:17:10.6048
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lrAjWOLThMHIwTMvmLUOF5ggr+Q5APHT2ncBvbDslqQJZ7ZyZTuQ8YYeeoGmMdx9CU8iPPdsdoArm+yca731/pY4aiPKBNbJOq9WzdkGNkM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4129
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 bulkscore=0
- spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402270017
-X-Proofpoint-GUID: 2QYopMxs7sQXwKyKLS-twnW_-YmiBSBx
-X-Proofpoint-ORIG-GUID: 2QYopMxs7sQXwKyKLS-twnW_-YmiBSBx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git iowait
+head:   ee21aa8146a213a08ad3c054721c4976d6c5dfad
+commit: ee21aa8146a213a08ad3c054721c4976d6c5dfad [1/1] sched/core: split iowait state into two states
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240227/202402271127.N9omtGPJ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240227/202402271127.N9omtGPJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402271127.N9omtGPJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/appldata/appldata_base.c:30:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/appldata/appldata_base.c:30:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/appldata/appldata_base.c:30:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/s390/appldata/appldata_base.c:426:19: error: use of undeclared identifier 'nr_iowait'
+     426 | EXPORT_SYMBOL_GPL(nr_iowait);
+         |                   ^
+   12 warnings and 1 error generated.
 
 
-Arnd,
+vim +/nr_iowait +426 arch/s390/appldata/appldata_base.c
 
-> Some callback functions used here take a boolean argument, others take
-> a status argument. This breaks KCFI type checking, so clang now warns
-> about the function pointer cast:
+^1da177e4c3f41 Linus Torvalds  2005-04-16  420  
+0c3252d58c54c8 Gerald Schaefer 2008-07-14  421  #ifdef CONFIG_SWAP
+^1da177e4c3f41 Linus Torvalds  2005-04-16  422  EXPORT_SYMBOL_GPL(si_swapinfo);
+0c3252d58c54c8 Gerald Schaefer 2008-07-14  423  #endif
+^1da177e4c3f41 Linus Torvalds  2005-04-16  424  EXPORT_SYMBOL_GPL(nr_threads);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  425  EXPORT_SYMBOL_GPL(nr_running);
+^1da177e4c3f41 Linus Torvalds  2005-04-16 @426  EXPORT_SYMBOL_GPL(nr_iowait);
 
-Applied 1+2 to 6.9/scsi-staging, thanks!
+:::::: The code at line 426 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
