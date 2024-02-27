@@ -1,96 +1,91 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D631C6B0
-	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 16:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888C9249F5
+	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 17:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709052679; cv=none; b=C3cbMsOq4YpcNy9j3fm5yaAW0JcX3eNqyzW4hbSsRm8JB/V53pEaMuOGeHzykx4K2yoOnST15EC98GvCISma629QYLHTyLcUi7NagTwd5foAV5CHvQyeZuQ3Lfkbio3Ly5NqXb4Wa0AZ+sxsXMAKTmVfVTAEbtngG1a45F/QzoI=
+	t=1709053248; cv=none; b=Kqvn/aN+NoIm4pAp7srJkCZDcRDv1NX9+HDeLR0IakkkM7BQdufRdCMiBgeoj7aD3jxGQpD3d/Np21NyBZLlZs5nxMyu41okUrE8qEfJKOLLZajcTuCUWAVax03Vzie9sWyHmn0iCrzktUgBaM+QwL03Yj1j83M5aErBSMZPKWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709052679; c=relaxed/simple;
-	bh=OUt6CYZupNiEST0iA+DgEudMWAk4Tmq4OhXq/et4EQw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Dwm2XNgcfteqSTl8MQCgus7UqMtLKbMeT62StkgBdMyRNGKIt+v4TcRsTKCp/q3hJUuQSP4bOcEonU2VkRxWXaFT0lsfk5dwuJtKNGPWzJ9fguz5QRRdV7rgDuBbVQ//M7DYio6LRU3dSUlX6MbZUZfSR5K+mXCBbZlS53arZH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nbvbE23r; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709053248; c=relaxed/simple;
+	bh=kaZPwy1DnnJwKmEiqW49+N4tGBugK5KqDPoQuOPHqX4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EeRI7hyuqPvvyV8gWtOFALLQ9BsU2RM/3y5TkbVM/vElahZVPw70LK4uqOn0GBoJuaXCs8I7bkd0JPsPQgVox6+qslAdcEF5uBGKLmwWXr7bVMiWCsG5dZ9e3Ny8MsSFAQJEHmQFbCPOn+EBb6RP+oiWliNfQxICsQ0hBZcPkFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LB34cpw9; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nbvbE23r"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e4d48a5823so3664104b3a.1
-        for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 08:51:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LB34cpw9"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-29996cc6382so3133386a91.3
+        for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 09:00:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709052678; x=1709657478; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OUt6CYZupNiEST0iA+DgEudMWAk4Tmq4OhXq/et4EQw=;
-        b=nbvbE23rgsKuk39IAFpUksoFpqaDXWR0LFRXCM6NlnsNdGtOPKJ+YWqEZXxREx7frX
-         tcNqdZ3RhD758Du0dBbcdsJmyaK1VbWb6JSJjXPnE/Rl0JsOSdUFCWiMKYuyvtmCM3U5
-         BI9msYRN/p7VY5Qn2BO6rRefhyFzVze08KmNSZhPloLOTCGhcu3knmPOm7yXw5uybis6
-         2/0C+z2q6MfDb3xL8r5ZLg/sW2MCHhCOqVvpD/FVmkyeYyhvDoe5ZAzT7ezkvJPQtYE5
-         l2ib0rP9PIE3qxMny7xf9K4oUQhbO83JJf57UfyBalgLIv62ZSBRyn4ETZQokD6++fu/
-         i/dA==
+        d=chromium.org; s=google; t=1709053247; x=1709658047; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fVB/mgTuOok+gnoF/FjLnOVs65Yn1KQT4qK8xBXRKZk=;
+        b=LB34cpw9VFyN1TaB/I8aqkFH9pnHcjyzDpzV+3tQ2Ge0vG6tg6LQgrWM1edF6cPzxZ
+         3d4HEI7oKRw37b/GgcSyNXtkSnWwWzAHAuN21a1ssgYphww6pXxxsUYHtJo8KBnWyYUx
+         0tzNG1IYdEDlquZwzV2PGoWYJHbBUdM7we8os=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709052678; x=1709657478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OUt6CYZupNiEST0iA+DgEudMWAk4Tmq4OhXq/et4EQw=;
-        b=wxAe41+tFi6cmwi0MLP6OioD/gF6a6S7+CZ7tkwMthqFQbUe3IljYXP0932BuCvv1t
-         FncpF5EppPdQH6VNmKWB478jZNMwzEyuVI4tniRs8r8bdEi29Yajr7rU10wlslTpSnEV
-         BkBcDariFT2YjF7PIhQVMeQf4gjPB17AX0Cl5q+/KLsjow6RIjojQ1CeL0JTttshB8ys
-         mcTCLKJkmyE3OBFKwqRy8CL/hvFQTSK8Xv7hCzKx1TRcs64M49v1cGq4AoSjE0m8PkaX
-         RAbf7qQ2x8SXHh/xLiCVgVtGxsEWFXhcEsdOg8/94Kh1oZ/+wSzXZWw8tnhV5XyNwIyj
-         aONw==
-X-Gm-Message-State: AOJu0YwyOWJIipu/Vw7Mq0PdqKTyER9MLAQoKei9f54mo5LnCS0O9CIv
-	WJ/edEWMkonCgPopVHfXk+TZPvpYRbs81i6y1O9WMx3wCqJI4l+Dc9O4B9MSCiprarDalwSZ1vQ
-	Xud5sZVqP9/2XIDyAn8qBCGMT7qo=
-X-Google-Smtp-Source: AGHT+IHGmk6+rXLPMR3cGR+KN3oHpSsuNkYvicHZWiyeZmHFsnZ45UBOqJWlavu5KkvgBCp3GBye1fgIbui93FLfwDA=
-X-Received: by 2002:a05:6a20:ce4d:b0:1a0:ea67:ecb2 with SMTP id
- id13-20020a056a20ce4d00b001a0ea67ecb2mr3077170pzb.12.1709052677564; Tue, 27
- Feb 2024 08:51:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709053247; x=1709658047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fVB/mgTuOok+gnoF/FjLnOVs65Yn1KQT4qK8xBXRKZk=;
+        b=syYh/Q+/hWuNDo1MSiG9IBVS2l39NfY15gHOv3mHPXXtlhdm8y+T7UUdj/lfT3xSyt
+         mev1lxscgr5o543kV3ijPR946DO6w0TsWC7myUR13y8z2ELT3cR3BwLbKeqd8hJrIYcy
+         WSF2iBE5sATIb9mRc5vCgKnO7h6x2oUUUYtZpPU/cwuyZg2h8t+iDN2lFRtXKRZj0lxQ
+         mG0ZAeAdxU1VN6xr4mQMI0TCeRG104b9qnyhTaqA+b8Ch979irAdklHp5w8fb2BxTI7Z
+         2u+FSxbDRZUWQ7rHMfyq5K9fnpnGr9pA6LMo1Qo08upwjmmIa83dsQwWyhfmgMibdOlt
+         q3cg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3Ivm24NND6GPcYLahNmZ+PKKb+N9+30AAagJ91HFSiddAVp2LVkolIvWWeV3/sNHv4PNDfy3auftTaeki0svncsNnHg==
+X-Gm-Message-State: AOJu0YyC1zdwhrzXLYdV6OJAetIdoSpqSADZ8unVNDw8pDV/UigxYV7Q
+	siXqEty/bb7J9BAjbFYVwwWBcnlsmZAqyogpVsJOHPvM7oZyJ7Y8AqQ7dF5Xfg==
+X-Google-Smtp-Source: AGHT+IFg0NCtYbETJpvRCOpzy0XTL7KtmhpC1VhxZupEkO0MpW4B3yevf7ZLibVvBRAtyz/LEba0cQ==
+X-Received: by 2002:a17:90a:d90d:b0:29a:a39e:e651 with SMTP id c13-20020a17090ad90d00b0029aa39ee651mr7555235pjv.11.1709053246818;
+        Tue, 27 Feb 2024 09:00:46 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u3-20020a17090ac88300b0029a4db713b9sm8760981pjt.39.2024.02.27.09.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Feb 2024 09:00:46 -0800 (PST)
+Date: Tue, 27 Feb 2024 09:00:44 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, rui.zhang@intel.com,
+	lukasz.luba@arm.com, gustavoars@kernel.org, morbo@google.com,
+	justinstitt@google.com, stanislaw.gruszka@linux.intel.com,
+	linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
+ memcpy()
+Message-ID: <202402270852.E46A5268@keescook>
+References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+ <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
+ <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
+ <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
+ <202402270816.0EA3349A76@keescook>
+ <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240208002841.GA2601476@dev-arch.thelio-3990X>
- <CANiq72=G--5LW-9sg2PscTL863mFVNdnX7LUQX2Xj02qZs4crA@mail.gmail.com>
- <20240212234850.GB3221859@dev-arch.thelio-3990X> <20240213025303.GA4006766@dev-arch.thelio-3990X>
- <CANiq72npYCD-zKqcXPNOAxnKiUCCXGbFQaGo-8=0-171ni+ncQ@mail.gmail.com>
- <CANiq72kcQUuxcno00+QWrstrcfwC+2_Bvh+8dr5kgVkEtrWOEA@mail.gmail.com> <20240227153728.GA819789@dev-arch.thelio-3990X>
-In-Reply-To: <20240227153728.GA819789@dev-arch.thelio-3990X>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 27 Feb 2024 17:51:04 +0100
-Message-ID: <CANiq72mmDquTeoEVErwXH7bVhP0+UifCrK0n=-HD97noWLqryA@mail.gmail.com>
-Subject: Re: Prebuilt LLVM 18.1.0-rc2 uploaded
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Conor Dooley <conor@kernel.org>, Conor Dooley <Conor.Dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
 
-On Tue, Feb 27, 2024 at 4:37=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> How far back would you like it added? I don't necessarily mind
-> rebuilding older releases but certain entities may notice the checksums
-> change.
->
-> https://gitlab.com/Linaro/tuxmake/-/merge_requests/364
->
-> Not the end of the world though.
+On Tue, Feb 27, 2024 at 05:47:44PM +0100, Daniel Lezcano wrote:
+> Ok my misunderstanding was I thought sizeof() was calling _bdos under the
+> hood, so when calling sizeof(flex_array), it was returning the computed size
+> inferring from the __counted_by field.
 
-I think a reasonable set would be those versions matching the LLVM
-that Rust bundles (for `rustc` versions we have since 6.1 LTS). That
-is: 15, 16 and 17.
+Yeah, sizeof() has a very limited scope. __builtin_object_size() has
+more flexibility (via the 2nd argument, "type"), but it was still
+compile-time only. __builtin_dynamic_object_size() was added to bring
+runtime evaluations into the mix (initially to support the alloc_size
+attribute, and now includes the counted_by attribute too).
 
-Conveniently, LLVM 15 also matches the minimum external LLVM supported
-by `rustc` in 6.6 LTS.
-
-If those are too much, LLVM 17 would already cover what 6.6 LTS' Rust bundl=
-es.
-
-Cheers,
-Miguel
+-- 
+Kees Cook
