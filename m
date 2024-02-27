@@ -1,94 +1,123 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63891F9D6
-	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 10:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCA61386C8
+	for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 10:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709030816; cv=none; b=VCdonL00/mAfg5dP8GZOK5pFFD2hSu75rkNJ39UoSMGtLIzbnidDwEynMJHBcEO3EOUe8QEE/g3HfGEAAASc2QSegb+1F7Ikzg4d+cfdM25CAogy94o4cYkblG/MAESDnuGUPSKPgrk3z4pxiyFn+FTltsJpV5Mw2AXzz5ebc60=
+	t=1709031292; cv=none; b=NfmaiTOOjaCbOhSLNPTR7K4SSrmti5iiCj7GuJWckBPjPGbgsmIB0Zg6l4xarFZTMArDvvScX3cJG/uFrJKpkqAMa8k5GjaXErNfK9mnbIaF32rivZSI5o3R/h+dicQWAg7icIz6k0D+Z2n7HAB2IM+wogoSwVolbqnHvs0D+Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709030816; c=relaxed/simple;
-	bh=XHyReOttpij5I54r5x4WgZ+cIyUHaBfTMin6OfRWlGU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B/bRKfKIRC7H3Tv8z7J7dXq7GXmFw1282UuNk2O7suUbFEwpRrL1B6KkqDj0fCmbbO/YXp9DRm6P9FpZouKhnm7BygNbEtUIgW8QEsmuLqOh5n7CHOzo2oodEW032+PY7Ga5qDsZN1KKBhevVvFXBjdF3DMcLNR7SnGt4n6XovE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OQ/xzVEQ; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709031292; c=relaxed/simple;
+	bh=2dJXeGkL18BLr3sq0Pf/vdUj3hVf2tCKH8bAhmkTlSk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tXRJ8w5SFwXzBAuu+BHYKbR/tmeDJ2N0iG+OHcpPJ8fjFjCSQrZMMEzxu8Mhah7OB7QTqW0XNLHG4NN8cuTACU2G5Xjp26PSeqaPN4qaDf3JB2qypcVT29c62XeAQKy3MQdX4I0iV7i7GvT5hvuPs4xu0i5HRclWes2zZ9xSpo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=qZl+MIli; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQ/xzVEQ"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-29a6dcfdd30so2790818a91.0
-        for <llvm@lists.linux.dev>; Tue, 27 Feb 2024 02:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709030815; x=1709635615; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XHyReOttpij5I54r5x4WgZ+cIyUHaBfTMin6OfRWlGU=;
-        b=OQ/xzVEQY6v/O4iUWfDboAYs8ipVHOKclYPcWS9MtVaNiAsheMQFbTzec2+PPwrNyn
-         g444RSUgi1/Osyj9VI1eZhhtAvjn4QHKTwI6NYt8HQAs24wrdKQ+rEQxOipkXskVLLJ7
-         G8A70UhumigLb8lJWve4s99ke71QbzOIXkQMNOiQ9IBsNFdxNcYqN51hMUCdyP8AxlaN
-         evjcHEdx4KtX1OzDDYAGAgZPSt3I0Au8pKMpvSgw03mjr3NqteR75E2q/o8kKladtDUM
-         8K2tnw0K3ND8WjiJO89XtHK/IW0Psa+lPx9ATtM389dYsVOEWsIwiRH22Euo5KTVsYzX
-         Rn5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709030815; x=1709635615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XHyReOttpij5I54r5x4WgZ+cIyUHaBfTMin6OfRWlGU=;
-        b=Hcg9wsx4G+KkZffl8vuCjffhlhmvUYPYSdNIDz6IXHIaOdLWc3bfDWwq7PjfgbxK6t
-         0iJjF05mpyKe+/OnffBH5nkiO6CbZVbVT0HDj+d5BZalNEfxhHlI9ECsNCGdaYmYMAkX
-         M7oUmFT4y6TlJgrt35yWz+dzl17yRkTNkuCCKd2wAG/h9PZ3KnynpLkut/RvYraGQMEy
-         xugI7wxaq0/eF/q8q5BCByZpVaT/5MDxO/nNFC9yTruLyubGXlYs97uIFaM98A06XHPe
-         hh7BkgSUTAJ5bcgRc1jwZiGnkpunNZh/5XEdxMxEf3zMYHN6epk8P94OuNL+1v5jiV/i
-         oozQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlS+0OpJA362TJ9g+S6lLo0VsZMtSRQRgDlt2rjIXEM40gOJk56hGyAZt942sBMV/7eqTQazdCxuR7wTRD/3oBKtTxbA==
-X-Gm-Message-State: AOJu0YydB0GR9KSj7gF70tUtTobd0T51/Wdeo6Tcioh1xa88XCk3Z0Ij
-	LuPmDM0fVdGmGsbV9C+zhtsoD+xjXfQws0ItBI4yEXdlN1HUcY3eFGB0z2DGG7oihgbNm0aZKyW
-	rgiriBEDK+puNad/0d75qRLeGbuw=
-X-Google-Smtp-Source: AGHT+IHM+6rRS1JfIDKhTWqLKrWosGlB3CKAX90C0/Xd3mVu0FyLDdjQsn5XBbm5H/3r+xFgrsAmb7KF3ofv00QMlG8=
-X-Received: by 2002:a17:90a:e018:b0:29a:ce5f:4da1 with SMTP id
- u24-20020a17090ae01800b0029ace5f4da1mr3644307pjy.8.1709030814815; Tue, 27 Feb
- 2024 02:46:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="qZl+MIli"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1709031290; x=1740567290;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2dJXeGkL18BLr3sq0Pf/vdUj3hVf2tCKH8bAhmkTlSk=;
+  b=qZl+MIlifaAXUoAN2GsfM8XC4a1AIWPcgtEbJIL973rxggAGBPxbR6Vs
+   gTtvxuuWT6AgsolvJu48+XB/7bjL+XQZhgGTxNv7gQCasPrTZe+WSUsBX
+   JdX/bXGSAcLPD3wqT0+7HIthcBVtS5I4Fg+Gcj988ljY5Vy37R203BP/X
+   DWsbF4UbWC3rEG8GuLWuDKgA3p1Gkc8aG7XU8NRF9aDyZ9dZ4UNXeC1dV
+   vooiKRd/vT6+M3TNnfi8t9W4mDKPT95cksEAy1wuVWFsOQUzCl1vP2eRr
+   b7hdaKjA6yOzKORtKEHW7iQQ0r0N4VU1EmrQjQrv9uOt3u3/kS9D0KZw0
+   g==;
+X-CSE-ConnectionGUID: 5VRzFmqxShG6JMonl7+fzw==
+X-CSE-MsgGUID: 8on+D4dCRzeaeBB4CqE2NA==
+X-IronPort-AV: E=Sophos;i="6.06,187,1705388400"; 
+   d="asc'?scan'208";a="18451573"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Feb 2024 03:54:43 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 27 Feb 2024 03:54:22 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Tue, 27 Feb 2024 03:54:18 -0700
+Date: Tue, 27 Feb 2024 10:53:35 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+CC: Conor Dooley <conor@kernel.org>, Matthew Maurer <mmaurer@google.com>,
+	<linux-riscv@lists.infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Alex
+ Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Jonathan
+ Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	<rust-for-linux@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<stable@vger.kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Ramon de C
+ Valle <rcvalle@google.com>
+Subject: Re: [PATCH v2 1/3] rust: make mutually exclusive with CFI_CLANG
+Message-ID: <20240227-uncertain-amaze-6197e627ad95@wendy>
+References: <20240223-leverage-walmart-5424542cd8bd@spud>
+ <20240223-perjury-preshow-fc2cf73d552e@spud>
+ <CANiq72=mCnm0mKOw5K44PmZ+jF=67jxEEkcXP-E0O8CaUrps=w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240223-leverage-walmart-5424542cd8bd@spud> <20240223-employee-pessimism-03ba0b58db6b@spud>
- <CANiq72ngEZskjH0f=8+cJuQsFTK227bGCxe5G0STMHuPbZYnXg@mail.gmail.com> <20240227-resolved-deceit-4a59a6af5b71@wendy>
-In-Reply-To: <20240227-resolved-deceit-4a59a6af5b71@wendy>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 27 Feb 2024 11:46:42 +0100
-Message-ID: <CANiq72mwM+4Oh-H5WmRoqQ_nE1w-eJ1wn-nEwS=BR9JRwzxMMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] scripts: generate_rust_target: enable building on RISC-V
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="qesnKr6zWGeidy+1"
+Content-Disposition: inline
+In-Reply-To: <CANiq72=mCnm0mKOw5K44PmZ+jF=67jxEEkcXP-E0O8CaUrps=w@mail.gmail.com>
+
+--qesnKr6zWGeidy+1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 27, 2024 at 11:17=E2=80=AFAM Conor Dooley
-<conor.dooley@microchip.com> wrote:
->
-> Sure, I'll take a look.
+On Fri, Feb 23, 2024 at 03:45:10PM +0100, Miguel Ojeda wrote:
+> On Fri, Feb 23, 2024 at 2:38=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
+rote:
+> >
+> > configuring a kernel without symmetrical support for kfi.
+>=20
+> Nit: typo.
+>=20
+> > This probably needs to go to stable. The correct fixes tag for that I am
+> > not sure of however, but since CFI_CLANG predates RUST, I blamed the
+> > commit adding rust support.
+>=20
+> Cc'ing Matthew et al. in case this is a problem for them, but I guess
+> we can relax it later as needed.
 
-Thanks!
+I suspect that nobody has actually sat down and tried it.
 
-> Nah, I think that is silly. Either this goes in as-is, and there's
-> fixup done by Linus, or the thing should be converted to match arm64,
-> assuming that that is possible.
-
-Ah, so you are going for 6.9 too? I can give the series a try on my
-side in that case. When do you plan to apply them?
+I did try to test it but I ran into too many toolchain issues - my
+older copies of LLVM (pre 17) are not multiarch as I built them by hand
+with PGO for x86 and RISC-V. My LLVM 17 is from kernel.org and has no
+libclang. And then the copy of LLVM 18 on kernel.org apparently does not
+support kcfi at all. I gave up there, but I don't see how this would not
+be a problem on other arches, given rustc never gets told to enable
+kcfi.
 
 Cheers,
-Miguel
+Conor.
+
+--qesnKr6zWGeidy+1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd2/LwAKCRB4tDGHoIJi
+0kCFAQDbFb4J84k51y4ZZDP1Z2Nwwsm14EnLI4s7gDvdwmNr2wD/V+413aDcYoix
+UrYilvihx41Q4hI/sSLoniAT8LzW/Qg=
+=eco2
+-----END PGP SIGNATURE-----
+
+--qesnKr6zWGeidy+1--
