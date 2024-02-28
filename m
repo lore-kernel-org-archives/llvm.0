@@ -1,204 +1,88 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC2F6EEE3
-	for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 16:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833866EF10;
+	Wed, 28 Feb 2024 16:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709137483; cv=none; b=PI4o5Q7IBvIvx3+d1oOmAfu7k6SDGTnHHxx+4N9xYs1LE8RMf/wXq/nySxxYBJe5oQA9Opwwj/gtzM8ax9QB15SwNySTfk5CDMEMMAswjwXFLKuFyMfRMk5h7pS7k9qu5fjpOjj6YoA4tQMo1KBCFhCFQe/MRci5LCR+GegsMAI=
+	t=1709139414; cv=none; b=AO9r6dvSAPHnY77flnajr7nEd8Ihii6wlz/bL8muV0Kfm01k1BKtiLx51DtRNsl539dyNpMPS+vXZvsI1z+QQqPoymnXvkGb7cKOl8BT4Y6Zn2I6awCxNXLZuTcL/QpYNhv4exTXaPZati0nukhmngR95vjnvdZHIb1CsjePvE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709137483; c=relaxed/simple;
-	bh=LutgMGWxuSH9zdQ63oIT9jf7k84JK3YEuonZSk/O6do=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eBBDljZNFwfQQYYd+DAWwu0nwW/JXL927/BcxqLZn5ycRbTU8dw6IoYoBYZHtkS9DX5culywb91a2gQwYmm0TXWkzWjpcC+C7HNtr8XLuP+dPtLYp+zKO/7nNsLYgwIWLb2erRggSqItVrNUtS6ONpyC14sIlC1jxBz96eFrAro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=m61ROf2f; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rT8RwQiU; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=m61ROf2f; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rT8RwQiU; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1709139414; c=relaxed/simple;
+	bh=j8GW5PM05J1eAob6plV8ZY09tWLXwx3VfJvudI3zpx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CeXZkFt1pczSsIvS+we5M3kKEkpfwZwVT7Tpdy5X/Eq29l6e1T7drYG6qhVlyCrqgT077A6+QwduBZkB1w1t4Hg1KhlROtMYf634jFSd7l+1ALtIum79oEKFQ2gqgYyzPFCYV97uZTC+j8sTF/oLRtqkGv5VcgYkciOCF+6k0L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QB3r/qRI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="m61ROf2f";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rT8RwQiU";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="m61ROf2f";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rT8RwQiU"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 26C3722195;
-	Wed, 28 Feb 2024 16:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1709137480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CvZXg0xCo89r9qKtyA9eQ8eOSDhPjhhMBxzcBmMnFQs=;
-	b=m61ROf2fb56mGAxY8U4uH2DH/8yjILyDVrTJtctcEFVRfmXO38KaEq/yjAyBiPl1KRUyaR
-	yye7ciTnGKO7AZobRMn0vuJ+ocLs8z+lzIQCWSr3XrTABdQLU7B3GWaOPKIY63OOfHsAjZ
-	7Cg2XpQrKBACtNhF7XvPah58swRsZVk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1709137480;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CvZXg0xCo89r9qKtyA9eQ8eOSDhPjhhMBxzcBmMnFQs=;
-	b=rT8RwQiUVoxAom5hu4lU5kpA0kvfb5F30L/2zi7AS1KUisdg/Jc1EES1lo3epJkzupxfky
-	fnzp2N7y2ccu81Cg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1709137480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CvZXg0xCo89r9qKtyA9eQ8eOSDhPjhhMBxzcBmMnFQs=;
-	b=m61ROf2fb56mGAxY8U4uH2DH/8yjILyDVrTJtctcEFVRfmXO38KaEq/yjAyBiPl1KRUyaR
-	yye7ciTnGKO7AZobRMn0vuJ+ocLs8z+lzIQCWSr3XrTABdQLU7B3GWaOPKIY63OOfHsAjZ
-	7Cg2XpQrKBACtNhF7XvPah58swRsZVk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1709137480;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CvZXg0xCo89r9qKtyA9eQ8eOSDhPjhhMBxzcBmMnFQs=;
-	b=rT8RwQiUVoxAom5hu4lU5kpA0kvfb5F30L/2zi7AS1KUisdg/Jc1EES1lo3epJkzupxfky
-	fnzp2N7y2ccu81Cg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 905D913A58;
-	Wed, 28 Feb 2024 16:24:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id WO02IUde32V7EgAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Wed, 28 Feb 2024 16:24:39 +0000
-Date: Wed, 28 Feb 2024 17:24:39 +0100
-Message-ID: <87il28h7zs.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Takashi Iwai" <tiwai@suse.de>,
-	"Arnd Bergmann" <arnd@kernel.org>,
-	"Kees Cook" <keescook@chromium.org>,
-	"Jaroslav Kysela" <perex@perex.cz>,
-	"Takashi Iwai" <tiwai@suse.com>,
-	"Nathan Chancellor" <nathan@kernel.org>,
-	"Nick Desaulniers" <ndesaulniers@google.com>,
-	"Bill Wendling" <morbo@google.com>,
-	"Justin Stitt" <justinstitt@google.com>,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] ALSA: asihpi: work around clang-17+ false positive fortify-string warning
-In-Reply-To: <1265517d-b98a-4ec6-9215-10cd988ff78f@app.fastmail.com>
-References: <20240228140152.1824901-1-arnd@kernel.org>
-	<87msrkhcz6.wl-tiwai@suse.de>
-	<1265517d-b98a-4ec6-9215-10cd988ff78f@app.fastmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QB3r/qRI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3549AC43399;
+	Wed, 28 Feb 2024 16:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709139413;
+	bh=j8GW5PM05J1eAob6plV8ZY09tWLXwx3VfJvudI3zpx0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QB3r/qRIx/u9gXVXlbY/IYNL+g/tdiv0GzEOVBTyiHegvQDwBaTaGjm7ZE9xY89+6
+	 f/G6zZzL13nXctyCJdnlEZ82fh/dKtLCwe/VWu05aGyZQfgk1KlNjakwk4rCEaG4CB
+	 h0ovQZ0b016/rxeNkJVs1xgKwPvghpQdKPozy1fYsurBDtoKprTzYUS8yTNUZy5ere
+	 bwk9XgA3aSqr6Yb1M7CM5DRbTw6dK6xsxZp/EcW0kaPikflydMFjZvDb+YsnlS/AvQ
+	 BpJn++NEwa0OIGTeU4W+Jo4t14JZYPnCMy2GmIQbOzY1GGGZ6GzxYrw3bGT08Ryy+w
+	 3C5lLT+c6ioKg==
+Date: Wed, 28 Feb 2024 09:56:51 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+	gustavoars@kernel.org, morbo@google.com, justinstitt@google.com,
+	stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
+ memcpy()
+Message-ID: <20240228165651.GA2158263@dev-arch.thelio-3990X>
+References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+ <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
+ <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
+ <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
+ <202402270816.0EA3349A76@keescook>
+ <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
+ <202402270852.E46A5268@keescook>
+ <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=m61ROf2f;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=rT8RwQiU
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 DKIM_TRACE(0.00)[suse.de:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_TWELVE(0.00)[13];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,arndb.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%]
-X-Spam-Score: -3.51
-X-Rspamd-Queue-Id: 26C3722195
-X-Spam-Flag: NO
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
 
-On Wed, 28 Feb 2024 16:03:56 +0100,
-Arnd Bergmann wrote:
+On Wed, Feb 28, 2024 at 08:41:07AM +0000, Lukasz Luba wrote:
+> Hi Nathan and Kees,
 > 
-> On Wed, Feb 28, 2024, at 15:37, Takashi Iwai wrote:
-> > On Wed, 28 Feb 2024 15:01:45 +0100,
-> > Arnd Bergmann wrote:
-> >> 
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >> 
-> >> One of the memory copies in this driver triggers a warning about a
-> >> possible out of range access:
-> >> 
-> >> In file included from /home/arnd/arm-soc/sound/pci/asihpi/hpimsgx.c:13:
-> >> /home/arnd/arm-soc/include/linux/fortify-string.h:553:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> >>   553 |                         __write_overflow_field(p_size_field, size);
-> >>       |                         ^
-> >
-> > Hmm, I can't see the relevance of those messages with the code you
-> > touched.  Do you have more info?
+> On 2/27/24 17:00, Kees Cook wrote:
+> > On Tue, Feb 27, 2024 at 05:47:44PM +0100, Daniel Lezcano wrote:
+> > > Ok my misunderstanding was I thought sizeof() was calling _bdos under the
+> > > hood, so when calling sizeof(flex_array), it was returning the computed size
+> > > inferring from the __counted_by field.
+> > 
+> > Yeah, sizeof() has a very limited scope. __builtin_object_size() has
+> > more flexibility (via the 2nd argument, "type"), but it was still
+> > compile-time only. __builtin_dynamic_object_size() was added to bring
+> > runtime evaluations into the mix (initially to support the alloc_size
+> > attribute, and now includes the counted_by attribute too).
+> > 
 > 
-> Not much. The warning is caused by this line:
-> 
->         memcpy(&rESP_HPI_ADAPTER_OPEN[adapter], &hr,
->                 sizeof(rESP_HPI_ADAPTER_OPEN[0]));
-> 
-> rESP_HPI_ADAPTER_OPEN[] is a global array with a fixed
-> length of 20 elements, and 'adapter' is a 16-bit index
-> into that array. The warning is intended to trigger when
-> there is a code path that will overflow, but it normally
-> warns only if there is a known value range that the
-> variable can take, not for an unrestricted index.
-> 
-> My first thought was that clang warns about it here because
-> the 'u16 adapter' declaration limits the index to something
-> smaller than an 'int' or 'long', but changing the type
-> did not get rid of the warning.
-> 
-> >> Adding a range check avoids the problem, though I don't quite see
-> >> why it warns in the first place if clang has no knowledge of the
-> >> actual range of the type, or why I never saw the warning in previous
-> >> randconfig tests.
-> >
-> > It's indeed puzzling.  If it's really about adapter_prepare() call,
-> > the caller is only HPIMSGX__init(), and there is already an assignment
-> > with that index value beforehand:
-> >   hpi_entry_points[hr.u.s.adapter_index] = entry_point_func;
-> >
-> > and this array is also the size of HPI_MAX_ADAPTERS.  That is, the
-> > same check should have caught here...
-> 
-> The fortified-string warning only triggers for string.h operations
-> (memset, memcpy, memcmp, strn*...), not for a direct assignment.
+> Thanks for your earlier emails explaining these stuff.
+> Do you have maybe some presentation about those features
+> for the kernel (ideally w/ a video from some conference)?
 
-Ah, I see.  Then from the logical POV, it's better to have a check
-before that assignment; otherwise it'd overflow silently there.
+I think Kees's 2022 and 2023 talks at LPC are a good place to start:
 
-Does putting the check beforehand (like the one below) fix similarly?
+https://youtu.be/tQwv79i02ks?si=Nj9hpvmQwPB4K3Y4&t=452
+https://youtu.be/OEFFqhP5sts?si=u6RnOP641S8FkouD&t=614
 
+https://outflux.net/slides/2022/lpc/features.pdf
+https://outflux.net/slides/2023/lpc/features.pdf
 
-thanks,
-
-Takashi
-
---- a/sound/pci/asihpi/hpimsgx.c
-+++ b/sound/pci/asihpi/hpimsgx.c
-@@ -708,7 +708,8 @@ static u16 HPIMSGX__init(struct hpi_message *phm,
- 		phr->error = HPI_ERROR_PROCESSING_MESSAGE;
- 		return phr->error;
- 	}
--	if (hr.error == 0) {
-+	if (hr.error == 0 &&
-+	    hr.u.s.adapter_index < ARRAY_SIZE(rESP_HPI_ADAPTER_OPEN)) {
- 		/* the adapter was created successfully
- 		   save the mapping for future use */
- 		hpi_entry_points[hr.u.s.adapter_index] = entry_point_func;
+Cheers,
+Nathan
