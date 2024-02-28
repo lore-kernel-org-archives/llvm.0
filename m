@@ -1,196 +1,283 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E8A13D2E6;
-	Wed, 28 Feb 2024 23:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.78
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709161584; cv=fail; b=AUhTIbpSi2lrk30m+PYEtK86wk/bOBh0CFOroJzxBADnutYRqU1bh5Yrrszw40B798lwhaLpoPFF6zDHQPA7t4p9jbIshEP4Esf2WQr/tWeglkAikrWgVSMNy1v31cFQv/QaaA16Y1d+GQzVmYH1kZTk69q7OcAFZjV3iCzAibE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709161584; c=relaxed/simple;
-	bh=b96DxaZ0vdRlBNXj7nYXn/QvI4oZ2HFXv61cr8FbQRY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ZqM8vHCJYfQobpVBdUSfoJzdlcanbxNH4xnmDWaha2vPdd6seFIv9MB+QY8tiD5MPv6etnTv2+1J8mT4NKL4uCMQm5KRS6A/uLUBpfKDpJl9i/lQBZVVhBu3WJqumezNFPrB+qUjcHnedGafojvcvlb0N5dGjzy4sWcJvTuHENE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=K9VLilN6; arc=fail smtp.client-ip=40.107.244.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4485713D2E0;
+	Wed, 28 Feb 2024 23:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709162324; cv=none; b=hs37f1cWhdmOaWBidN9M3Mdyu1Ko7ny9E3F3i7/rtHoLvqYWLekarDvDqmQ5avC/CQ+mzbiP5/D4ZsJG4J0OCxOy8qhfXtVAf6MQ7evlhNpzO66DFKhHA6n+19/Y5WW5vmNMyeiCkI4Aglz9W1gWkNCWMlDOrGNh6xmY7Dtx+HU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709162324; c=relaxed/simple;
+	bh=0QuoyCcebQN8iX2Qs7bIgvX6UGw8gqREbf96xp4gwYs=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VS/kyQhyHIahC8D1xCBFZH7u3M27q+gtITHth9X/msRdNdz06DEIfmWFcjEec3c+b3AuAi7MEj4XAdKbqWkywyHuC/AeV4ieC3pWNT8TJs0Lozk7yu3QgzvwNdxWnvcdCAN3AB4Wx8RrShMD6KSDsJuPLV1l7JGg04/rJpVOMRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ar511jz8; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="K9VLilN6"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YHWLj3gXF/XysF+cMOU6s7th0vRdthaFJLCDS7mCwrUkOt5xhf1J9FlzRKuS0OQwBe0Mq/M3r9w2W3XOIIaWP+DyL3EXNJfDdAkd98CdRDdA6o6bxHTzmeHHQuyNvg8nEkv8rjm+ix5AW6+YgLUKLlxhZTLk2YJXtHGSBuLvM23lWw2i0qsFLNbZSK5xwljWosbMGwpZXbO7qXO3iKJGZlETkMD5utxObEXB06O4G4+iefKrUgPQtKi6WwswL9pPWmyPYKmU+SfRZXwLW1Kjz0Ik3nlEn4t2qMXahowhG2Tk2T7Jp/mWIoHxRJhAVzF79zpx+ioWe/GjBcPWRcLTGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bqa1gAzyjIl/S4o2PRoznHYpTG2g0iENkbXUyWNHni4=;
- b=CJBd27YqJL13w4kyNtjylLlgQ3U0gQDUFGiK8LpbTvnq5cnb6CNyj6LMh5JIEEnhqrR2/v6tKj0ausHjgX5k9pgHDs7d1PMm3M4JN+NdMFxgEWRBwv4NPLBpPpjLVRBRYj9rsj/+KApJiKsUGHrVt7I4aHKVn1Au6Vj/Q+zSykPiLTEYr49H6NOZfYaDk5t3MYC0bIYIQgeypO9TRtprRAvHqSMQhij3Kz15PBMCeF2wwOeWtZ1C2l6qltwv8jRQlUvNdgh72NBnrtuUy0Zuuxkckj6Ka7Ij/BCNH9yi78T/Q+i41laGh7PjK0fbWoiLq8lL8vi2eX/fmdzD6RLXog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bqa1gAzyjIl/S4o2PRoznHYpTG2g0iENkbXUyWNHni4=;
- b=K9VLilN6TcLbw6pZa2pvKDKNCsPxtMclo1/z45HSwMgjxrpvJurNe/A6YtCM7X/mcabxApZJiI2w1e05Q1tC99S0YZloz7XxqInIVSgW7nUFvQ+y2YReUjW2NZeV4etTWwgLepB827LQdHFLyl5ps56/ny5oJmGgNUmr9hPZq/s3oo8R79/FWeys+svjvkCb6/+PiMLjrdC4nysdq3M+3vyoMg3u4d7QM04Em4xQP9ciR7ebveHC25ceUuk6zCVePb98wOrrS4DrAWaIqLT/p69NcE2SLg5Ci/9MuEGcMFGY6doCFrKz/vU7MhetxU451o2fUHdINROE9DiDSpKcUQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com (2603:10b6:5:1c7::26)
- by PH7PR12MB5901.namprd12.prod.outlook.com (2603:10b6:510:1d5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.41; Wed, 28 Feb
- 2024 23:06:17 +0000
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::2e3e:c7c0:84da:3941]) by DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::2e3e:c7c0:84da:3941%6]) with mapi id 15.20.7316.037; Wed, 28 Feb 2024
- 23:06:17 +0000
-Date: Wed, 28 Feb 2024 19:06:16 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Message-ID: <20240228230616.GS13330@nvidia.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <Zd27XtDg_NDzLXg-@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zd27XtDg_NDzLXg-@arm.com>
-X-ClientProxiedBy: DS7PR07CA0005.namprd07.prod.outlook.com
- (2603:10b6:5:3af::15) To DM6PR12MB3849.namprd12.prod.outlook.com
- (2603:10b6:5:1c7::26)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ar511jz8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709162322; x=1740698322;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=0QuoyCcebQN8iX2Qs7bIgvX6UGw8gqREbf96xp4gwYs=;
+  b=Ar511jz8EwHw3tKwFFi+M14SMEijij0jCynriN71hEeriW2wsRCrgC44
+   NSHsPw6a3RX7Ub+CFQAk5j2NexvprnBYIi/vHTVVNl3zh7hDmy+S1SAdb
+   4tTqp/KXoV6sbpbgsyHXDcDr5cyA4uszbulwm3iY/jTVw+tiDe1Cj+6tO
+   BeTZr/dalRb1ILJeFZ0XSS5SFeDfxa2iJfZWAy0SAsQr+r0cYCUCOf3vd
+   mv6X9HJ+JofoHwiWvQPZyCU+yjm66gyjGjeYv6ZiB6k85t12rLs0T5TPL
+   cjzFh/OEK4SbTn3U6jRKFBY4jzk33itIa4v/qeplg/RQ/avab94aOIk5J
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="29035229"
+X-IronPort-AV: E=Sophos;i="6.06,191,1705392000"; 
+   d="scan'208";a="29035229"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 15:18:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,191,1705392000"; 
+   d="scan'208";a="7718963"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 28 Feb 2024 15:18:40 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rfTCA-000CTH-0I;
+	Wed, 28 Feb 2024 23:18:38 +0000
+Date: Thu, 29 Feb 2024 07:18:03 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [sean-jc:svm/vmenter_stack_frames 16/19] vmlinux.o: warning:
+ objtool: svm_vcpu_enter_exit+0xb4: call to sev_es_host_save_area() leaves
+ .noinstr.text section
+Message-ID: <202402290737.kR9Co3cD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3849:EE_|PH7PR12MB5901:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c28f0b5-d1f8-470c-71e8-08dc38b1de44
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	1R/Z2DoK9MFIGp/bQ3/mJJ/ZbV31X9IjwBAWaBiYoq7kEo/SEXRLEFGLfuLDwy6HGgNmjXGLSm52qXYFzX4qnrnnyujGLjalIvS524U7ETvnbwYV/euEPVSCETWsigA3ZnJ5BUi9gYSJwHHY4vJSWhXD+aNZ4j2sC7YtZm9l1MovqRBBisM0XKou68Nuo0sNN2DbZbDDJgaTmiEaPbmlWJNUHmM8YB+nSgex8D5BEKFiKKKd3q5HC2oVaE6FRzMfVv4GopcBWdslR3yYtL/wGsHfT5Oif8DQOOCRDK5YEKgwdj1YsTvjGl6MTk3wsCJ0l0UDY8Fswh2VLlPNqlwJzW3h/aKjpj9Hb5zW6JtWEbQjMiUzmLAOpOb7QQwhiOWj4IikBSIfHxZplu5qrENFX6gZ2KQMAbDq6lfeuh2gV5Gbg7CIvDDDYwrwJokiyrDymtIl+gEKBc+XMYrEHUzVv+MrxfNrG0zy/eNZwSFr6FYoXQdMPKoMfcvNimQdyYK8bwuh4dyH7p0WRgAoG9mxR1yVu9x0qKM/pGKCbU2GFT/ddgtc/2hKAIxpWfsCnOxQd6y6YxV75+wDqQuF+31CV2V72SCCguwm4IqvtzJ4TdhvEyIG2+uhrDeoI2PEG+ym
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?bl33Vq0DxnAgTVxNZhEcYh36gqJFY7Pug7yoOiv50bjWihtvuCvQhWBb2K3D?=
- =?us-ascii?Q?dOa4DUejnRvnjtItie9SrSocZX+erpipnPZ6zx6Ik/mZp6VaKK4aYeHkPomm?=
- =?us-ascii?Q?SlC/lhwvGJewnYvxiSSLtAzjeWuAdp3crCxUVI9s5BJH+5hYVb2Wcoo/zB86?=
- =?us-ascii?Q?O0qphUwEPZ79CDYSTXvXfnChTvQIXGmgP1fhhCIF5trKzwmgmLjprlMQ2nHd?=
- =?us-ascii?Q?elWdLB2oXwlM5xhfyr1k8bv8W0p6MaTLmI0z+4iHBt4fY51TEfLHDiR9Cxno?=
- =?us-ascii?Q?rv7Mz4w/AfHQBaoWOJg8yyEczE3+fx3lC1/sK2HW7EJYyuSMOYgwY21G99Kx?=
- =?us-ascii?Q?+JrSs/pnCo8zvRX4hlkqpt2Q1zMJS+aJAMsLcI0LEeJ8tnaEMhKaZf5JEDZA?=
- =?us-ascii?Q?KL713xFYTqdiW2cqvnvev0iKhrDMMn8TjN5R7C8Qz/K1LjLj+WNZGpX4NVvp?=
- =?us-ascii?Q?WV5+sDsam9VLZefmlQbDVKMCZG9MiR5mbtIlW3yURcellEIcStCJ+L4I8xWa?=
- =?us-ascii?Q?mb9z0gdGY26nxHDqOafc2stJx2RUEW00oafqKD1keb4UQPUHnwvxmdzXi5d3?=
- =?us-ascii?Q?UszQDRWd9DDN8ymT1Ri4wpMCWb9oiXxJIxEUXfmX1Xmc9VkvevYU50ciIzsm?=
- =?us-ascii?Q?ckPRGxwFEkXCAhmCjif235tDNm00RumXOGowaDtEiSn57lgfD3YpJQAuLkop?=
- =?us-ascii?Q?Jr50Bmh6UD29qib+xXIrO4/ZpHovoZ7UMmyeq0Z3BIJtydZxk4CppdQynuug?=
- =?us-ascii?Q?u2pOkBlEQqPfcx8H08X8D4fPHOwADHKlLpcUffdWwiR/gRJfF29t+DgKeyrj?=
- =?us-ascii?Q?aKwGSFdqmc3qXm3Fe0RjArA7UZTptJtc4SVYN3LCMq+riVwddxc6XJoE3Y+x?=
- =?us-ascii?Q?q42EFUMtf6yNrzPL2Q17r9cZVOYfaRhjkOGhWQ5qhQXt90zJUbIkL2QjKCCG?=
- =?us-ascii?Q?E0npfDQRVFLYLAy4QuEc5M3WTbVMdkFqP+Fs5tNen5T1Ilu3A4jsmjZPteAe?=
- =?us-ascii?Q?mU8HTXrL4Sn4uThS5oCcmqFnzwBQieNkhzShdlDiAksRzAe02zIX2VQZzIJn?=
- =?us-ascii?Q?i94edTg8PiKHICQJwWjd0e1oeVtkCsgKABHknxgxguZ8WhmCs1NxSaKpHDLD?=
- =?us-ascii?Q?9Y/YjC2yxeuPBYYm3eXxaRHsfGXcagq6cg5f5e4B9Lelk8QeSbmmekAlORuO?=
- =?us-ascii?Q?tB2Wy0XNyLrhV80Sbd8Kr/xi7mY6i1HVuu+2HBVyRRUMsgS1dApAtpsmJcUD?=
- =?us-ascii?Q?KB2RXIgu9PcCuGQ3Nc7j+752tmE/PfIZOUnhbXWVItfEVkUXYDHmu2CxaANS?=
- =?us-ascii?Q?eCCAvuzpixoK7AqBc9pbkbphEMwtQUJUVjWjqlEyd+QurdTfccV6BZ89Omtx?=
- =?us-ascii?Q?LtOrNbF8flwKvCeMz1oG6VYrK3UihBRTx5Z0Hn49z3O/7yCbai9NNpfvxWFU?=
- =?us-ascii?Q?7SmMrFgECI16Q8KrmP3WkXxTzA42D3jw0DaEPujBLbDz36IC9vGnFFFBM72A?=
- =?us-ascii?Q?eig7G5K9mIsA66xcQPUp1mrAdgvlImkzdadX0O8hMed3J7v4mrrrCYvDPf6p?=
- =?us-ascii?Q?HMgUf90absdk3k6yx2Y=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c28f0b5-d1f8-470c-71e8-08dc38b1de44
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3849.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2024 23:06:17.0667
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LILSMS8ZEh7qGuIN+7D0algwk/mXUR8Yb1GOHfNMJ34rb0yVu07rDpxZyT20mY5R
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5901
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Feb 27, 2024 at 10:37:18AM +0000, Catalin Marinas wrote:
-> On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
-> > +/*
-> > + * This generates a memcpy that works on a from/to address which is aligned to
-> > + * bits. Count is in terms of the number of bits sized quantities to copy. It
-> > + * optimizes to use the STR groupings when possible so that it is WC friendly.
-> > + */
-> > +#define memcpy_toio_aligned(to, from, count, bits)                        \
-> > +	({                                                                \
-> > +		volatile u##bits __iomem *_to = to;                       \
-> > +		const u##bits *_from = from;                              \
-> > +		size_t _count = count;                                    \
-> > +		const u##bits *_end_from = _from + ALIGN_DOWN(_count, 8); \
-> > +                                                                          \
-> > +		for (; _from < _end_from; _from += 8, _to += 8)           \
-> > +			__const_memcpy_toio_aligned##bits(_to, _from, 8); \
-> > +		if ((_count % 8) >= 4) {                                  \
-> > +			__const_memcpy_toio_aligned##bits(_to, _from, 4); \
-> > +			_from += 4;                                       \
-> > +			_to += 4;                                         \
-> > +		}                                                         \
-> > +		if ((_count % 4) >= 2) {                                  \
-> > +			__const_memcpy_toio_aligned##bits(_to, _from, 2); \
-> > +			_from += 2;                                       \
-> > +			_to += 2;                                         \
-> > +		}                                                         \
-> > +		if (_count % 2)                                           \
-> > +			__const_memcpy_toio_aligned##bits(_to, _from, 1); \
-> > +	})
-> 
-> Do we actually need all this if count is not constant? If it's not
-> performance critical anywhere, I'd rather copy the generic
-> implementation, it's easier to read.
+TO: Sean Christopherson <seanjc@google.com>
 
-Which generic version?
+tree:   https://github.com/sean-jc/linux svm/vmenter_stack_frames
+head:   73fb663774f64f20e9c282ced1ab44370fb2b25a
+commit: 71ec1d1e5278b1b8496e3ffffcae945c1544d5de [16/19] KVM: SVM: Save/restore non-volatile GPRs in SEV-ES VMRUN via host save area
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240229/202402290737.kR9Co3cD-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240229/202402290737.kR9Co3cD-lkp@intel.com/reproduce)
 
-The point is to maximize WC effects with non-constant values, so I
-think we do need something like this. ie we can't just fall back to
-looping over 64 bit stores one at a time.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402290737.kR9Co3cD-lkp@intel.com/
 
-If we don't use the large block stores we know we get very poor WC
-behavior. So at least the 8 and 4 constant value sections are
-needed. At that point you may as well just do 4 and 2 instead of
-another loop.
+All warnings (new ones prefixed by >>):
 
-Most places I know about using this are performance paths, the entire
-iocopy infrastructure was introduced as an x86 performance
-optimization..
+   vmlinux.o: warning: objtool: balance_leaf+0x7738: stack state mismatch: cfa1=4+376 cfa2=4+368
+>> vmlinux.o: warning: objtool: svm_vcpu_enter_exit+0xb4: call to sev_es_host_save_area() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x46: relocation to !ENDBR: .text+0x3b0a38
+   vmlinux.o: warning: objtool: bad call to elf_init_reloc_text_sym() for data symbol .rodata
 
-Jason
+
+objdump-func vmlinux.o svm_vcpu_enter_exit:
+0000 0000000000001b00 <svm_vcpu_enter_exit>:
+0000     1b00:	55                   	push   %rbp
+0001     1b01:	41 57                	push   %r15
+0003     1b03:	41 56                	push   %r14
+0005     1b05:	41 55                	push   %r13
+0007     1b07:	41 54                	push   %r12
+0009     1b09:	53                   	push   %rbx
+000a     1b0a:	89 f5                	mov    %esi,%ebp
+000c     1b0c:	48 89 fb             	mov    %rdi,%rbx
+000f     1b0f:	4c 63 77 20          	movslq 0x20(%rdi),%r14
+0013     1b13:	49 81 fe 00 20 00 00 	cmp    $0x2000,%r14
+001a     1b1a:	73 5b                	jae    1b77 <svm_vcpu_enter_exit+0x77>
+001c     1b1c:	49 c7 c7 00 00 00 00 	mov    $0x0,%r15	1b1f: R_X86_64_32S	svm_data
+0023     1b23:	4e 03 3c f5 00 00 00 00 	add    0x0(,%r14,8),%r15	1b27: R_X86_64_32S	__per_cpu_offset
+002b     1b2b:	90                   	nop
+002c     1b2c:	e8 00 00 00 00       	call   1b31 <svm_vcpu_enter_exit+0x31>	1b2d: R_X86_64_PLT32	trace_hardirqs_on_prepare-0x4
+0031     1b31:	e8 00 00 00 00       	call   1b36 <svm_vcpu_enter_exit+0x36>	1b32: R_X86_64_PLT32	lockdep_hardirqs_on_prepare-0x4
+0036     1b36:	90                   	nop
+0037     1b37:	90                   	nop
+0038     1b38:	31 ff                	xor    %edi,%edi
+003a     1b3a:	e8 00 00 00 00       	call   1b3f <svm_vcpu_enter_exit+0x3f>	1b3b: R_X86_64_PLT32	rcu_note_context_switch-0x4
+003f     1b3f:	90                   	nop
+0040     1b40:	4c 8b 74 24 30       	mov    0x30(%rsp),%r14
+0045     1b45:	4c 89 f7             	mov    %r14,%rdi
+0048     1b48:	e8 00 00 00 00       	call   1b4d <svm_vcpu_enter_exit+0x4d>	1b49: R_X86_64_PLT32	lockdep_hardirqs_on-0x4
+004d     1b4d:	e8 00 00 00 00       	call   1b52 <svm_vcpu_enter_exit+0x52>	1b4e: R_X86_64_PLT32	amd_clear_divider-0x4
+0052     1b52:	4c 8b 2b             	mov    (%rbx),%r13
+0055     1b55:	45 0f b6 a5 b9 a5 00 00 	movzbl 0xa5b9(%r13),%r12d
+005d     1b5d:	49 83 fc 02          	cmp    $0x2,%r12
+0061     1b61:	73 25                	jae    1b88 <svm_vcpu_enter_exit+0x88>
+0063     1b63:	41 f6 c4 01          	test   $0x1,%r12b
+0067     1b67:	75 34                	jne    1b9d <svm_vcpu_enter_exit+0x9d>
+0069     1b69:	40 0f b6 f5          	movzbl %bpl,%esi
+006d     1b6d:	48 89 df             	mov    %rbx,%rdi
+0070     1b70:	e8 00 00 00 00       	call   1b75 <svm_vcpu_enter_exit+0x75>	1b71: R_X86_64_PLT32	__svm_vcpu_run-0x4
+0075     1b75:	eb 51                	jmp    1bc8 <svm_vcpu_enter_exit+0xc8>
+0077     1b77:	44 89 f6             	mov    %r14d,%esi
+007a     1b7a:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	1b7d: R_X86_64_32S	.data+0x4fdd0
+0081     1b81:	e8 00 00 00 00       	call   1b86 <svm_vcpu_enter_exit+0x86>	1b82: R_X86_64_PLT32	__ubsan_handle_out_of_bounds-0x4
+0086     1b86:	eb 94                	jmp    1b1c <svm_vcpu_enter_exit+0x1c>
+0088     1b88:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	1b8b: R_X86_64_32S	.data+0x4f470
+008f     1b8f:	4c 89 e6             	mov    %r12,%rsi
+0092     1b92:	e8 00 00 00 00       	call   1b97 <svm_vcpu_enter_exit+0x97>	1b93: R_X86_64_PLT32	__ubsan_handle_load_invalid_value-0x4
+0097     1b97:	41 f6 c4 01          	test   $0x1,%r12b
+009b     1b9b:	74 cc                	je     1b69 <svm_vcpu_enter_exit+0x69>
+009d     1b9d:	45 0f b6 a5 b8 a5 00 00 	movzbl 0xa5b8(%r13),%r12d
+00a5     1ba5:	49 83 fc 02          	cmp    $0x2,%r12
+00a9     1ba9:	73 44                	jae    1bef <svm_vcpu_enter_exit+0xef>
+00ab     1bab:	41 f6 c4 01          	test   $0x1,%r12b
+00af     1baf:	74 53                	je     1c04 <svm_vcpu_enter_exit+0x104>
+00b1     1bb1:	4c 89 ff             	mov    %r15,%rdi
+00b4     1bb4:	e8 00 00 00 00       	call   1bb9 <svm_vcpu_enter_exit+0xb9>	1bb5: R_X86_64_PLT32	.text+0x27733c
+00b9     1bb9:	40 0f b6 f5          	movzbl %bpl,%esi
+00bd     1bbd:	48 89 df             	mov    %rbx,%rdi
+00c0     1bc0:	48 89 c2             	mov    %rax,%rdx
+00c3     1bc3:	e8 00 00 00 00       	call   1bc8 <svm_vcpu_enter_exit+0xc8>	1bc4: R_X86_64_PLT32	__svm_sev_es_vcpu_run-0x4
+00c8     1bc8:	4c 89 f7             	mov    %r14,%rdi
+00cb     1bcb:	e8 00 00 00 00       	call   1bd0 <svm_vcpu_enter_exit+0xd0>	1bcc: R_X86_64_PLT32	lockdep_hardirqs_off-0x4
+00d0     1bd0:	90                   	nop
+00d1     1bd1:	e8 00 00 00 00       	call   1bd6 <svm_vcpu_enter_exit+0xd6>	1bd2: R_X86_64_PLT32	trace_hardirqs_off_finish-0x4
+00d6     1bd6:	90                   	nop
+00d7     1bd7:	5b                   	pop    %rbx
+00d8     1bd8:	41 5c                	pop    %r12
+00da     1bda:	41 5d                	pop    %r13
+00dc     1bdc:	41 5e                	pop    %r14
+00de     1bde:	41 5f                	pop    %r15
+00e0     1be0:	5d                   	pop    %rbp
+00e1     1be1:	31 c0                	xor    %eax,%eax
+00e3     1be3:	31 ff                	xor    %edi,%edi
+00e5     1be5:	31 d2                	xor    %edx,%edx
+00e7     1be7:	31 f6                	xor    %esi,%esi
+00e9     1be9:	2e e9 00 00 00 00    	cs jmp 1bef <svm_vcpu_enter_exit+0xef>	1beb: R_X86_64_PLT32	__x86_return_thunk-0x4
+00ef     1bef:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	1bf2: R_X86_64_32S	.data+0x4f490
+00f6     1bf6:	4c 89 e6             	mov    %r12,%rsi
+00f9     1bf9:	e8 00 00 00 00       	call   1bfe <svm_vcpu_enter_exit+0xfe>	1bfa: R_X86_64_PLT32	__ubsan_handle_load_invalid_value-0x4
+00fe     1bfe:	41 f6 c4 01          	test   $0x1,%r12b
+0102     1c02:	75 ad                	jne    1bb1 <svm_vcpu_enter_exit+0xb1>
+0104     1c04:	90                   	nop
+0105     1c05:	0f 0b                	ud2
+0107     1c07:	90                   	nop
+0108     1c08:	e9 5c ff ff ff       	jmp    1b69 <svm_vcpu_enter_exit+0x69>
+010d     1c0d:	cc                   	int3
+010e     1c0e:	cc                   	int3
+010f     1c0f:	cc                   	int3
+0110     1c10:	cc                   	int3
+0111     1c11:	cc                   	int3
+0112     1c12:	cc                   	int3
+0113     1c13:	cc                   	int3
+0114     1c14:	cc                   	int3
+0115     1c15:	cc                   	int3
+0116     1c16:	cc                   	int3
+0117     1c17:	cc                   	int3
+0118     1c18:	cc                   	int3
+0119     1c19:	cc                   	int3
+011a     1c1a:	cc                   	int3
+011b     1c1b:	cc                   	int3
+011c     1c1c:	cc                   	int3
+011d     1c1d:	cc                   	int3
+011e     1c1e:	cc                   	int3
+011f     1c1f:	cc                   	int3
+0120     1c20:	cc                   	int3
+0121     1c21:	cc                   	int3
+0122     1c22:	cc                   	int3
+0123     1c23:	cc                   	int3
+0124     1c24:	cc                   	int3
+0125     1c25:	cc                   	int3
+0126     1c26:	cc                   	int3
+0127     1c27:	cc                   	int3
+0128     1c28:	cc                   	int3
+0129     1c29:	cc                   	int3
+012a     1c2a:	cc                   	int3
+012b     1c2b:	cc                   	int3
+012c     1c2c:	cc                   	int3
+012d     1c2d:	cc                   	int3
+012e     1c2e:	cc                   	int3
+012f     1c2f:	cc                   	int3
+0130     1c30:	cc                   	int3
+0131     1c31:	cc                   	int3
+0132     1c32:	cc                   	int3
+0133     1c33:	cc                   	int3
+0134     1c34:	cc                   	int3
+0135     1c35:	cc                   	int3
+0136     1c36:	cc                   	int3
+0137     1c37:	cc                   	int3
+0138     1c38:	cc                   	int3
+0139     1c39:	cc                   	int3
+013a     1c3a:	cc                   	int3
+013b     1c3b:	cc                   	int3
+013c     1c3c:	cc                   	int3
+013d     1c3d:	cc                   	int3
+013e     1c3e:	cc                   	int3
+013f     1c3f:	cc                   	int3
+0140     1c40:	90                   	nop
+0141     1c41:	90                   	nop
+0142     1c42:	90                   	nop
+0143     1c43:	90                   	nop
+0144     1c44:	90                   	nop
+0145     1c45:	90                   	nop
+0146     1c46:	90                   	nop
+0147     1c47:	90                   	nop
+0148     1c48:	90                   	nop
+0149     1c49:	90                   	nop
+014a     1c4a:	90                   	nop
+014b     1c4b:	90                   	nop
+014c     1c4c:	90                   	nop
+014d     1c4d:	90                   	nop
+014e     1c4e:	90                   	nop
+014f     1c4f:	90                   	nop
+0150     1c50:	90                   	nop
+0151     1c51:	90                   	nop
+0152     1c52:	90                   	nop
+0153     1c53:	90                   	nop
+0154     1c54:	90                   	nop
+0155     1c55:	90                   	nop
+0156     1c56:	90                   	nop
+0157     1c57:	90                   	nop
+0158     1c58:	90                   	nop
+0159     1c59:	90                   	nop
+015a     1c5a:	90                   	nop
+015b     1c5b:	90                   	nop
+015c     1c5c:	90                   	nop
+015d     1c5d:	90                   	nop
+015e     1c5e:	90                   	nop
+015f     1c5f:	90                   	nop
+0160     1c60:	90                   	nop
+0161     1c61:	90                   	nop
+0162     1c62:	90                   	nop
+0163     1c63:	90                   	nop
+0164     1c64:	90                   	nop
+0165     1c65:	90                   	nop
+0166     1c66:	90                   	nop
+0167     1c67:	90                   	nop
+0168     1c68:	90                   	nop
+0169     1c69:	90                   	nop
+016a     1c6a:	90                   	nop
+016b     1c6b:	90                   	nop
+016c     1c6c:	90                   	nop
+016d     1c6d:	90                   	nop
+016e     1c6e:	90                   	nop
+016f     1c6f:	90                   	nop
+0170     1c70:	90                   	nop
+0171     1c71:	90                   	nop
+0172     1c72:	90                   	nop
+0173     1c73:	90                   	nop
+0174     1c74:	90                   	nop
+0175     1c75:	90                   	nop
+0176     1c76:	90                   	nop
+0177     1c77:	90                   	nop
+0178     1c78:	90                   	nop
+0179     1c79:	90                   	nop
+017a     1c7a:	90                   	nop
+017b     1c7b:	90                   	nop
+017c     1c7c:	90                   	nop
+017d     1c7d:	90                   	nop
+017e     1c7e:	90                   	nop
+017f     1c7f:	90                   	nop
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
