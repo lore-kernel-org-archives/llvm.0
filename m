@@ -1,57 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513B35E073;
-	Wed, 28 Feb 2024 20:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373F21E861;
+	Wed, 28 Feb 2024 20:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709150555; cv=none; b=e5D9H2YbB3/1rQ1V/+Wou1LDLKQie+P5O1NHXf+KJUPDIl/JceBPlkZvhAHHrpQhT9VYFXDW6pFgY4ubnZPbcLVjlrAxHvNz5d329B98UAF03Iww4dRduuF5AYqJAvptRyy6Isb48c3SQyO8IGHr1fiAzDjI33yJpPSmiQHIDT4=
+	t=1709151755; cv=none; b=oCCapcnVPqBRe1O9x9RQhbIs7NG+lxvE/Umx3Dx74bBQ5tBjGRRg9Qot4baZboDv16WwwkKPiIMD8djj3bwuZL60ISfZgfjxPiyQxSd8/wsbOCNG9kMHLW6rYFfElTmMXgl6+Z9YeoFvOjj9euT7nRzI61XqeA60QWHsFWEfE9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709150555; c=relaxed/simple;
-	bh=GltouD20eDXd99Ownkdbc7M3rmr4ujJYzN92zISzvMk=;
+	s=arc-20240116; t=1709151755; c=relaxed/simple;
+	bh=j0jSw4rKkDz/y/GDLXUFBoFmSVa/315BKPEEy10JEzQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=W6yQl2qZNz6VvMvfhKqlyIDdkmjjPb4GOE3DxUeLk6fG6nHckqjHQ8Lmv0WY77ZjMR3GcPpatOi2HKruBk4zycLQ2tzGpbV6dz6phJmwWNIOdpDNjXamwBmh0w0Vua5SysIXO+VzQcLAnvm81EY/NuwaY0rV5BKDmiQKSH/bdiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b7ijMXgB; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=cVQfrmgicsoBVdpg8pP3LLUwBUwaCZouNRIm0KOIfDa6kFpiCUA1D1tQCKBMIGkjkS7s3f1P9Pz6625Qte70bawlj6TROdHVi92SaTlLPV+qtZLShEH+FZZ2zBKPk0PK49lw3NYkL4o+IyIM1rk+Quq0trdiWHZlzQiRf3oIzYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D8Uc98dr; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b7ijMXgB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D8Uc98dr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709150553; x=1740686553;
+  t=1709151753; x=1740687753;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GltouD20eDXd99Ownkdbc7M3rmr4ujJYzN92zISzvMk=;
-  b=b7ijMXgBJXoHFOk7oc+CYPDRmCZE7+rcdjerbJ4FFJ8fGirSwlzOALGS
-   6ca6g4Xuav0ReY2Cyec9qUd2ysveuyM9iOSbMf6jZ39RKV0UPJcnWeAYf
-   oOtGiZyD29/JX2wWPQWxQ897YNyzbxC3jh1ruGH3LENfeSxH8EBu6wVML
-   cvLkb51V9xTFE4xPgSyaGC1rvkDXbyhau65T+YotJtCZhcxt67BkqTiyW
-   GTGxxAgWmj+XuE704L4uACRynEa8tEW6a3U17kBPhCgP1TQnpjvGWEfXp
-   cnZtdPJNckKoHoRx1TX6Qrwie+/eQTAUiilGF81YmUxfXGAbouiOErNQs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="3743185"
+  bh=j0jSw4rKkDz/y/GDLXUFBoFmSVa/315BKPEEy10JEzQ=;
+  b=D8Uc98drmu3xyqQBt6/mi5QxLQ8C2b76mqtKXxEWTJYPE/E31yB08+R8
+   H1e9LcLsZhezV/EXCZSN/7PZGbtObCENmM6EaFLXJNj5ZNz1GA1v2NCNF
+   nrvIuao0ejJj9MOaTS575pMy6nx5ra/bLDW53gjUWh5ZEAD9FLIgCTpmV
+   bXRyGn6dIJWJKrOu0x9Zuwr3XIvdlSIts4m2NpTiRchWrlBfWE5AxZ7uc
+   wHyHTdz2tf068wF/jYXv+GQl7lqXpue+GHofXvzsFUO9LAuUzsp9FXv7H
+   yLLnuNrs15ur/pAbxY9J/xix7hip5ntg4UZNqIKBRVAhVqCqsd8v0K/Y5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="21034956"
 X-IronPort-AV: E=Sophos;i="6.06,191,1705392000"; 
-   d="scan'208";a="3743185"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 12:02:08 -0800
+   d="scan'208";a="21034956"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 12:22:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,191,1705392000"; 
-   d="scan'208";a="12115806"
+   d="scan'208";a="7608320"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 28 Feb 2024 12:02:07 -0800
+  by orviesa009.jf.intel.com with ESMTP; 28 Feb 2024 12:22:31 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rfQ7w-000CMJ-1n;
-	Wed, 28 Feb 2024 20:02:04 +0000
-Date: Thu, 29 Feb 2024 04:01:24 +0800
+	id 1rfQRg-000CMu-1a;
+	Wed, 28 Feb 2024 20:22:28 +0000
+Date: Thu, 29 Feb 2024 04:22:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
+To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Shavit <mshavit@google.com>
-Subject: [jgunthorpe:smmuv3_newapi 59/61]
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:306:13: warning: stack
- frame size (2304) exceeds limit (2048) in
- 'arm_smmu_v3_write_ste_test_s2_to_abort'
-Message-ID: <202402290341.dtjXzc65-lkp@intel.com>
+	linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>
+Subject: [hid:for-next 5/10] drivers/hid/amd-sfh-hid/amd_sfh_pcie.c:413:7:
+ error: use of undeclared identifier 'boot_cpu_data'
+Message-ID: <202402290458.HbkBPldx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,110 +59,165 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jgunthorpe/linux smmuv3_newapi
-head:   60902329db637c9726cd8623c44e8873a7290750
-commit: b7eff415b5e8abed0da4dbd3cc910b4857d8b06a [59/61] iommu/arm-smmu-v3: Add unit tests for arm_smmu_write_entry
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240229/202402290341.dtjXzc65-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+head:   f0cd2e82460c8b6c691bf553480c30144f8c32f7
+commit: 6296562f30b1caf4b5f44e0c89c8f5cbfdb14b4a [5/10] HID: amd_sfh: Extend MP2 register access to SFH
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240229/202402290458.HbkBPldx-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240229/202402290341.dtjXzc65-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240229/202402290458.HbkBPldx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402290341.dtjXzc65-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402290458.HbkBPldx-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the hid/for-next HEAD f0cd2e82460c8b6c691bf553480c30144f8c32f7 builds fine.
+      It only hurts bisectability.
 
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:306:13: warning: stack frame size (2304) exceeds limit (2048) in 'arm_smmu_v3_write_ste_test_s2_to_abort' [-Wframe-larger-than]
-     306 | static void arm_smmu_v3_write_ste_test_s2_to_abort(struct kunit *test)
-         |             ^
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:316:13: warning: stack frame size (2304) exceeds limit (2048) in 'arm_smmu_v3_write_ste_test_abort_to_s2' [-Wframe-larger-than]
-     316 | static void arm_smmu_v3_write_ste_test_abort_to_s2(struct kunit *test)
-         |             ^
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:326:13: warning: stack frame size (2304) exceeds limit (2048) in 'arm_smmu_v3_write_ste_test_s2_to_bypass' [-Wframe-larger-than]
-     326 | static void arm_smmu_v3_write_ste_test_s2_to_bypass(struct kunit *test)
-         |             ^
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:336:13: warning: stack frame size (2304) exceeds limit (2048) in 'arm_smmu_v3_write_ste_test_bypass_to_s2' [-Wframe-larger-than]
-     336 | static void arm_smmu_v3_write_ste_test_bypass_to_s2(struct kunit *test)
-         |             ^
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:346:13: warning: stack frame size (2368) exceeds limit (2048) in 'arm_smmu_v3_write_ste_test_s1_to_s2' [-Wframe-larger-than]
-     346 | static void arm_smmu_v3_write_ste_test_s1_to_s2(struct kunit *test)
-         |             ^
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:359:13: warning: stack frame size (2368) exceeds limit (2048) in 'arm_smmu_v3_write_ste_test_s2_to_s1' [-Wframe-larger-than]
-     359 | static void arm_smmu_v3_write_ste_test_s2_to_s1(struct kunit *test)
-         |             ^
-   6 warnings generated.
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hid/amd-sfh-hid/amd_sfh_pcie.c:14:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/hid/amd-sfh-hid/amd_sfh_pcie.c:14:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/hid/amd-sfh-hid/amd_sfh_pcie.c:14:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/hid/amd-sfh-hid/amd_sfh_pcie.c:413:7: error: use of undeclared identifier 'boot_cpu_data'
+     413 |                 if (boot_cpu_data.x86 >= 0x1A)
+         |                     ^
+   drivers/hid/amd-sfh-hid/amd_sfh_pcie.c:401:45: warning: shift count >= width of type [-Wshift-count-overflow]
+     401 |         rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+         |                                                    ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   13 warnings and 1 error generated.
 
 
-vim +/arm_smmu_v3_write_ste_test_s2_to_abort +306 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c
+vim +/boot_cpu_data +413 drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
 
-   305	
- > 306	static void arm_smmu_v3_write_ste_test_s2_to_abort(struct kunit *test)
-   307	{
-   308		struct arm_smmu_ste ste;
-   309	
-   310		arm_smmu_test_make_s2_ste(&ste, true);
-   311		arm_smmu_v3_test_ste_expect_hitless_transition(
-   312			test, &ste, &abort_ste,
-   313			/*num_syncs_expected=*/2);
-   314	}
-   315	
- > 316	static void arm_smmu_v3_write_ste_test_abort_to_s2(struct kunit *test)
-   317	{
-   318		struct arm_smmu_ste ste;
-   319	
-   320		arm_smmu_test_make_s2_ste(&ste, true);
-   321		arm_smmu_v3_test_ste_expect_hitless_transition(
-   322			test, &abort_ste, &ste,
-   323			/*num_syncs_expected=*/2);
-   324	}
-   325	
- > 326	static void arm_smmu_v3_write_ste_test_s2_to_bypass(struct kunit *test)
-   327	{
-   328		struct arm_smmu_ste ste;
-   329	
-   330		arm_smmu_test_make_s2_ste(&ste, true);
-   331		arm_smmu_v3_test_ste_expect_hitless_transition(
-   332			test, &ste, &bypass_ste,
-   333			/*num_syncs_expected=*/2);
-   334	}
-   335	
- > 336	static void arm_smmu_v3_write_ste_test_bypass_to_s2(struct kunit *test)
-   337	{
-   338		struct arm_smmu_ste ste;
-   339	
-   340		arm_smmu_test_make_s2_ste(&ste, true);
-   341		arm_smmu_v3_test_ste_expect_hitless_transition(
-   342			test, &bypass_ste, &ste,
-   343			/*num_syncs_expected=*/2);
-   344	}
-   345	
- > 346	static void arm_smmu_v3_write_ste_test_s1_to_s2(struct kunit *test)
-   347	{
-   348		struct arm_smmu_ste s1_ste;
-   349		struct arm_smmu_ste s2_ste;
-   350	
-   351		arm_smmu_test_make_cdtable_ste(&s1_ste, STRTAB_STE_1_S1DSS_SSID0,
-   352					       fake_cdtab_dma_addr);
-   353		arm_smmu_test_make_s2_ste(&s2_ste, true);
-   354		arm_smmu_v3_test_ste_expect_hitless_transition(
-   355			test, &s1_ste, &s2_ste,
-   356			/*num_syncs_expected=*/3);
-   357	}
-   358	
- > 359	static void arm_smmu_v3_write_ste_test_s2_to_s1(struct kunit *test)
-   360	{
-   361		struct arm_smmu_ste s1_ste;
-   362		struct arm_smmu_ste s2_ste;
-   363	
-   364		arm_smmu_test_make_cdtable_ste(&s1_ste, STRTAB_STE_1_S1DSS_SSID0,
-   365					       fake_cdtab_dma_addr);
-   366		arm_smmu_test_make_s2_ste(&s2_ste, true);
-   367		arm_smmu_v3_test_ste_expect_hitless_transition(
-   368			test, &s2_ste, &s1_ste,
-   369			/*num_syncs_expected=*/3);
-   370	}
-   371	
+   374	
+   375	static int amd_mp2_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+   376	{
+   377		struct amd_mp2_dev *privdata;
+   378		int rc;
+   379	
+   380		if (dmi_first_match(dmi_nodevs))
+   381			return -ENODEV;
+   382	
+   383		dmi_check_system(dmi_sfh_table);
+   384	
+   385		privdata = devm_kzalloc(&pdev->dev, sizeof(*privdata), GFP_KERNEL);
+   386		if (!privdata)
+   387			return -ENOMEM;
+   388	
+   389		privdata->pdev = pdev;
+   390		dev_set_drvdata(&pdev->dev, privdata);
+   391		rc = pcim_enable_device(pdev);
+   392		if (rc)
+   393			return rc;
+   394	
+   395		rc = pcim_iomap_regions(pdev, BIT(2), DRIVER_NAME);
+   396		if (rc)
+   397			return rc;
+   398	
+   399		privdata->mmio = pcim_iomap_table(pdev)[2];
+   400		pci_set_master(pdev);
+   401		rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+   402		if (rc) {
+   403			dev_err(&pdev->dev, "failed to set DMA mask\n");
+   404			return rc;
+   405		}
+   406	
+   407		privdata->cl_data = devm_kzalloc(&pdev->dev, sizeof(struct amdtp_cl_data), GFP_KERNEL);
+   408		if (!privdata->cl_data)
+   409			return -ENOMEM;
+   410	
+   411		privdata->sfh1_1_ops = (const struct amd_sfh1_1_ops *)id->driver_data;
+   412		if (privdata->sfh1_1_ops) {
+ > 413			if (boot_cpu_data.x86 >= 0x1A)
+   414				privdata->rver = 1;
+   415	
+   416			rc = devm_work_autocancel(&pdev->dev, &privdata->work, sfh1_1_init_work);
+   417			if (rc)
+   418				return rc;
+   419	
+   420			schedule_work(&privdata->work);
+   421			return 0;
+   422		}
+   423	
+   424		mp2_select_ops(privdata);
+   425	
+   426		rc = amd_sfh_irq_init(privdata);
+   427		if (rc) {
+   428			dev_err(&pdev->dev, "amd_sfh_irq_init failed\n");
+   429			return rc;
+   430		}
+   431	
+   432		rc = devm_work_autocancel(&pdev->dev, &privdata->work, sfh_init_work);
+   433		if (rc) {
+   434			amd_sfh_clear_intr(privdata);
+   435			return rc;
+   436		}
+   437	
+   438		schedule_work(&privdata->work);
+   439		return 0;
+   440	}
+   441	
 
 -- 
 0-DAY CI Kernel Test Service
