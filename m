@@ -1,88 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833866EF10;
-	Wed, 28 Feb 2024 16:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DC0159587
+	for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 17:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709139414; cv=none; b=AO9r6dvSAPHnY77flnajr7nEd8Ihii6wlz/bL8muV0Kfm01k1BKtiLx51DtRNsl539dyNpMPS+vXZvsI1z+QQqPoymnXvkGb7cKOl8BT4Y6Zn2I6awCxNXLZuTcL/QpYNhv4exTXaPZati0nukhmngR95vjnvdZHIb1CsjePvE4=
+	t=1709139953; cv=none; b=bRizY4kZhdvOVDATwvHZ8tF74gc2UumZ7jSp9Eobb67+cTUbP4jskMdCC8e2LVsYbEz3+coXtxtAVSsLoZtcrngnwTEu1RUJ3IyQTfeaHCiLxF4iKhcm8Z0bm4O4pazHfjEtN7juZvIizqZnlpyZ3BpjvKo5kQZq1Cl/hNRkFWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709139414; c=relaxed/simple;
-	bh=j8GW5PM05J1eAob6plV8ZY09tWLXwx3VfJvudI3zpx0=;
+	s=arc-20240116; t=1709139953; c=relaxed/simple;
+	bh=6lEGMxDS1vjB0gRavEWmaOAWVfw+gz0J6O2sOpO+5zc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CeXZkFt1pczSsIvS+we5M3kKEkpfwZwVT7Tpdy5X/Eq29l6e1T7drYG6qhVlyCrqgT077A6+QwduBZkB1w1t4Hg1KhlROtMYf634jFSd7l+1ALtIum79oEKFQ2gqgYyzPFCYV97uZTC+j8sTF/oLRtqkGv5VcgYkciOCF+6k0L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QB3r/qRI; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eYZFPLSCnDJJlSsMLPrLy6ozAtrmsSGSHFHm/BxdQhZk0N4O6Q9K7VjeXFLMqw/x9vPozWbOMUMNUnyTkLY4QMF/qngDn/Jmi/xFke10BC5LRptetEKijQ/ug0dhisBkbc4PSTdBQCmOoA90yjX2BS7GM8QSTDa/fXmE/0K0/HI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCny91OP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QB3r/qRI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3549AC43399;
-	Wed, 28 Feb 2024 16:56:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCny91OP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E555BC433F1;
+	Wed, 28 Feb 2024 17:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709139413;
-	bh=j8GW5PM05J1eAob6plV8ZY09tWLXwx3VfJvudI3zpx0=;
+	s=k20201202; t=1709139953;
+	bh=6lEGMxDS1vjB0gRavEWmaOAWVfw+gz0J6O2sOpO+5zc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QB3r/qRIx/u9gXVXlbY/IYNL+g/tdiv0GzEOVBTyiHegvQDwBaTaGjm7ZE9xY89+6
-	 f/G6zZzL13nXctyCJdnlEZ82fh/dKtLCwe/VWu05aGyZQfgk1KlNjakwk4rCEaG4CB
-	 h0ovQZ0b016/rxeNkJVs1xgKwPvghpQdKPozy1fYsurBDtoKprTzYUS8yTNUZy5ere
-	 bwk9XgA3aSqr6Yb1M7CM5DRbTw6dK6xsxZp/EcW0kaPikflydMFjZvDb+YsnlS/AvQ
-	 BpJn++NEwa0OIGTeU4W+Jo4t14JZYPnCMy2GmIQbOzY1GGGZ6GzxYrw3bGT08Ryy+w
-	 3C5lLT+c6ioKg==
-Date: Wed, 28 Feb 2024 09:56:51 -0700
+	b=CCny91OPqm2pFLDL7tH3VsuW3roSPk/LOzau0Fo8hym13UdJNIJPoUsIK6Z2r4Y5S
+	 Pqw9n60v4tqv41kisL0NsAe6qaOi/ondDoNhe1xdRL6JIGl/WRBh/VFLvdXV7QkRLy
+	 03XzLoaW9EizdJfqUppIGKfpeD1g1C0LJd07zegel4b3JrZ07iYtVnN1ZqMl92hvAh
+	 1LJfjFN9Bwgd4phpYEJXIcQT6yd7J2MM+iPLl/R4r1zzqYKWrriGqpYRFATeFFCpI9
+	 lmwpRf8rSTD0g2sfO7cQqmYm5B6foLA/S6JHZWA0gyzhFrENdScDwM/cGaNDy7LRca
+	 2Y7DEDWhgFCEg==
+Date: Wed, 28 Feb 2024 10:05:51 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
-	gustavoars@kernel.org, morbo@google.com, justinstitt@google.com,
-	stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
-Message-ID: <20240228165651.GA2158263@dev-arch.thelio-3990X>
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
- <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
- <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
- <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
- <202402270816.0EA3349A76@keescook>
- <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
- <202402270852.E46A5268@keescook>
- <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
+To: linaro-toolchain@lists.linaro.org
+Cc: llvm@lists.linux.dev
+Subject: Re: [Linaro-TCWG-CI] llvmorg-19-init-3481-g8c2ae42b3e1c: Failure on
+ aarch64
+Message-ID: <20240228170551.GB2158263@dev-arch.thelio-3990X>
+References: <1103948202.2736.1709131633065@jenkins.jenkins>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1103948202.2736.1709131633065@jenkins.jenkins>
 
-On Wed, Feb 28, 2024 at 08:41:07AM +0000, Lukasz Luba wrote:
-> Hi Nathan and Kees,
+On Wed, Feb 28, 2024 at 02:47:11PM +0000, ci_notify@linaro.org wrote:
+> Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 > 
-> On 2/27/24 17:00, Kees Cook wrote:
-> > On Tue, Feb 27, 2024 at 05:47:44PM +0100, Daniel Lezcano wrote:
-> > > Ok my misunderstanding was I thought sizeof() was calling _bdos under the
-> > > hood, so when calling sizeof(flex_array), it was returning the computed size
-> > > inferring from the __counted_by field.
-> > 
-> > Yeah, sizeof() has a very limited scope. __builtin_object_size() has
-> > more flexibility (via the 2nd argument, "type"), but it was still
-> > compile-time only. __builtin_dynamic_object_size() was added to bring
-> > runtime evaluations into the mix (initially to support the alloc_size
-> > attribute, and now includes the counted_by attribute too).
-> > 
+> We appreciate that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
 > 
-> Thanks for your earlier emails explaining these stuff.
-> Do you have maybe some presentation about those features
-> for the kernel (ideally w/ a video from some conference)?
+> We track this report status in https://linaro.atlassian.net/browse/LLVM-1153 , please let us know if you are looking at the problem and/or when you have a fix.
+> 
+> In CI config tcwg_kernel/llvm-master-aarch64-lts-allyesconfig after:
+> 
+>   | commit llvmorg-19-init-3481-g8c2ae42b3e1c
+>   | Author: Kupa-Martin <84517188+Kupa-Martin@users.noreply.github.com>
+>   | Date:   Tue Feb 27 11:58:59 2024 -0300
+>   | 
+>   |     [Clang][Sema] Fix missing warning when comparing mismatched enums in … (#81418)
+>   |     
+>   |     …C mode
+>   |     
+>   |     Factored logic from `CheckImplicitConversion` into new methods
+>   |     `Expr::getEnumConstantDecl` and `Expr::getEnumCoercedType` for use in
+>   |     `checkEnumArithmeticConversions`.
+>   | ... 2 lines of the commit log omitted.
+> 
+> Results changed to
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 37
+> 
+> From
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 22291
+> 
+> The configuration of this build is:
+> CI config tcwg_kernel/llvm-master-aarch64-lts-allyesconfig
+> 
+> -----------------8<--------------------------8<--------------------------8<--------------------------
+> The information below can be used to reproduce a debug environment:
+> 
+> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/143/artifact/artifacts
+> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/142/artifact/artifacts
+> 
+> Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/8c2ae42b3e1c6aa7c18f873edcebff7c0b45a37e/tcwg_kernel/llvm-master-aarch64-lts-allyesconfig/reproduction_instructions.txt
+> 
+> Full commit : https://github.com/llvm/llvm-project/commit/8c2ae42b3e1c6aa7c18f873edcebff7c0b45a37e
+> 
+> List of configurations that regressed due to this commit :
+> * tcwg_kernel
+> ** llvm-master-aarch64-lts-allyesconfig
+> *** Failure
+> *** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/8c2ae42b3e1c6aa7c18f873edcebff7c0b45a37e/tcwg_kernel/llvm-master-aarch64-lts-allyesconfig/details.txt
+> *** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/143/artifact/artifacts
 
-I think Kees's 2022 and 2023 talks at LPC are a good place to start:
-
-https://youtu.be/tQwv79i02ks?si=Nj9hpvmQwPB4K3Y4&t=452
-https://youtu.be/OEFFqhP5sts?si=u6RnOP641S8FkouD&t=614
-
-https://outflux.net/slides/2022/lpc/features.pdf
-https://outflux.net/slides/2023/lpc/features.pdf
+Thanks a lot for the report, this is expected with that change. How we
+want to handle this in the kernel is currently under discussion at
+https://github.com/ClangBuiltLinux/linux/issues/2002.
 
 Cheers,
 Nathan
