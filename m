@@ -1,119 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DC0159587
-	for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 17:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AAD3FBB4
+	for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 17:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709139953; cv=none; b=bRizY4kZhdvOVDATwvHZ8tF74gc2UumZ7jSp9Eobb67+cTUbP4jskMdCC8e2LVsYbEz3+coXtxtAVSsLoZtcrngnwTEu1RUJ3IyQTfeaHCiLxF4iKhcm8Z0bm4O4pazHfjEtN7juZvIizqZnlpyZ3BpjvKo5kQZq1Cl/hNRkFWM=
+	t=1709141017; cv=none; b=KGiElUVrBKuX+BPn9cvAeD/quA737i2e+rsgKNbzPoEaelHpIAgehIPkxQUGjUS1ekKStTNHiqkl9S0WfHWrXVTCZth9aFmg4oMUaalxmQmm/RZFW2EQqr0lnlY4T539UBWxdhdBG9OyTQpUEIzAsezLludeQEXZ2gCsNaOhh7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709139953; c=relaxed/simple;
-	bh=6lEGMxDS1vjB0gRavEWmaOAWVfw+gz0J6O2sOpO+5zc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eYZFPLSCnDJJlSsMLPrLy6ozAtrmsSGSHFHm/BxdQhZk0N4O6Q9K7VjeXFLMqw/x9vPozWbOMUMNUnyTkLY4QMF/qngDn/Jmi/xFke10BC5LRptetEKijQ/ug0dhisBkbc4PSTdBQCmOoA90yjX2BS7GM8QSTDa/fXmE/0K0/HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCny91OP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709141017; c=relaxed/simple;
+	bh=gyHaX4rUH7VfXk5+GSMnekvjp1WHHHsYtG16XBQttRM=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=HI05kRleNIZuMp0CYaqr3Whx1J0B9+TjEpmXfgKWQKLP2reML10UM8sUxueent/Ozbv/R+U0F4e78wf8zBvU2THPQvNV9dll/EwMwMiyYZAX1zbw9C7c9rLV4OyLYpd7WQbyPzcpbnxl8Cs+VvPNdfZSmA3ErtCAVNqr7fB/2uU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=en9o0nri; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JgYaz9Ds; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCny91OP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E555BC433F1;
-	Wed, 28 Feb 2024 17:05:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709139953;
-	bh=6lEGMxDS1vjB0gRavEWmaOAWVfw+gz0J6O2sOpO+5zc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CCny91OPqm2pFLDL7tH3VsuW3roSPk/LOzau0Fo8hym13UdJNIJPoUsIK6Z2r4Y5S
-	 Pqw9n60v4tqv41kisL0NsAe6qaOi/ondDoNhe1xdRL6JIGl/WRBh/VFLvdXV7QkRLy
-	 03XzLoaW9EizdJfqUppIGKfpeD1g1C0LJd07zegel4b3JrZ07iYtVnN1ZqMl92hvAh
-	 1LJfjFN9Bwgd4phpYEJXIcQT6yd7J2MM+iPLl/R4r1zzqYKWrriGqpYRFATeFFCpI9
-	 lmwpRf8rSTD0g2sfO7cQqmYm5B6foLA/S6JHZWA0gyzhFrENdScDwM/cGaNDy7LRca
-	 2Y7DEDWhgFCEg==
-Date: Wed, 28 Feb 2024 10:05:51 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: linaro-toolchain@lists.linaro.org
-Cc: llvm@lists.linux.dev
-Subject: Re: [Linaro-TCWG-CI] llvmorg-19-init-3481-g8c2ae42b3e1c: Failure on
- aarch64
-Message-ID: <20240228170551.GB2158263@dev-arch.thelio-3990X>
-References: <1103948202.2736.1709131633065@jenkins.jenkins>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="en9o0nri";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JgYaz9Ds"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 69C3813800B5;
+	Wed, 28 Feb 2024 12:23:34 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 28 Feb 2024 12:23:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1709141014; x=1709227414; bh=Uczs6P+Vjh
+	lsb/gj6HcF1VFbl7LhQCHMFJrfB/feXkU=; b=en9o0nri8jxQPWja5PFaAxCjBA
+	CVBxhnwxdOqfhXeiKEr+G1DCaaMIRNquKEtCdBroqhtKlzd06Mtko3jduGHe7cOQ
+	S7fWvwXKsXn4Y6vt3CUC13wD9dNVgQ3KMwqHbGEMubfD0iuJcwsamSD++5v0lJ+p
+	k0oZMd94hq5jwqKTKLrja9LEeikZ+sAh9TDqJYKVETniCS/7+hc5iD+4x4p3vcbG
+	xg4NdTCmvxHZ7Q6La679xTekm9TNojZPFpXRbEQH/lmBt7lPmGY+ZmS0qgu4YXPB
+	9982UuShK/IY5SXNoMXRL2qPd9pwvUjdi8JA4jccX7RH0Xg3zhSnvTbT4sUA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709141014; x=1709227414; bh=Uczs6P+Vjhlsb/gj6HcF1VFbl7Lh
+	QCHMFJrfB/feXkU=; b=JgYaz9DsiLHdxiHNDvW8LwzgBn/BCNjf2fob6BKz5jQc
+	DS5kEAeXURNsQZrPIKN9UIcI9+D5d/Ql5rzfYE8oI03V8+6Xcmi8sT7qf1IfcBf3
+	wT/yMM3dUJ3cL7L7YLYNa6FebV0892paATs0dslLr2ZOtmEN+pZEFK3PpVTozZlG
+	ETjDNtSSx5UlIDV/m1U34HExkRAWCshbKoolnF6hJ41jEChZa3Zy3pYPkEpzkySL
+	pBGd7RW2/z3j98TaKrTsUrDPCxnDvlRmokwfGRjmYE6oTNmCQFj3sJ2wsMv3Ge7x
+	t+jbx/Ui/4HcJAe2u8/s3VtdtDojqklL0Yp3mI9hZQ==
+X-ME-Sender: <xms:FWzfZQdJnERtgPUGhWvTMoPTc8vTvStLKqwqM8uoJ15MrQfp6OhDcQ>
+    <xme:FWzfZSN-kUxVIyhgDuW6xybAFJFdxqNHE3h5a2x6cWi7UfIH5uCBT_XKjXyQ93z3P
+    s_vWkt34NI2tth0DYY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgeejgdelhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:FmzfZRh_6upNX0-B6oaWDTR4DjOE33shLapoovFm1eckDY-jte_nSg>
+    <xmx:FmzfZV8ZC_NDmBpXfcAS2AaJgfc1olAVkxquD-MYUuJf4LCRaxgfbA>
+    <xmx:FmzfZcvrXHYnI6fWUzBRb9cRi3I9G6YcUl-TBXpB6I2KbGHi_qdTVQ>
+    <xmx:FmzfZcHoHWEBeJFgNhGJoP0YSpwrg8qfQqIm-0Tt9-sykLuOUbLmwg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id ABF8BB6008D; Wed, 28 Feb 2024 12:23:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-182-gaab6630818-fm-20240222.002-gaab66308
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1103948202.2736.1709131633065@jenkins.jenkins>
+Message-Id: <62f20e36-536d-47ee-b486-28ed87201b60@app.fastmail.com>
+In-Reply-To: <87il28h7zs.wl-tiwai@suse.de>
+References: <20240228140152.1824901-1-arnd@kernel.org>
+ <87msrkhcz6.wl-tiwai@suse.de>
+ <1265517d-b98a-4ec6-9215-10cd988ff78f@app.fastmail.com>
+ <87il28h7zs.wl-tiwai@suse.de>
+Date: Wed, 28 Feb 2024 18:23:13 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Takashi Iwai" <tiwai@suse.de>
+Cc: "Arnd Bergmann" <arnd@kernel.org>, "Kees Cook" <keescook@chromium.org>,
+ "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] ALSA: asihpi: work around clang-17+ false positive fortify-string
+ warning
+Content-Type: text/plain
 
-On Wed, Feb 28, 2024 at 02:47:11PM +0000, ci_notify@linaro.org wrote:
-> Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
-> 
-> We appreciate that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
-> 
-> We track this report status in https://linaro.atlassian.net/browse/LLVM-1153 , please let us know if you are looking at the problem and/or when you have a fix.
-> 
-> In CI config tcwg_kernel/llvm-master-aarch64-lts-allyesconfig after:
-> 
->   | commit llvmorg-19-init-3481-g8c2ae42b3e1c
->   | Author: Kupa-Martin <84517188+Kupa-Martin@users.noreply.github.com>
->   | Date:   Tue Feb 27 11:58:59 2024 -0300
->   | 
->   |     [Clang][Sema] Fix missing warning when comparing mismatched enums in … (#81418)
->   |     
->   |     …C mode
->   |     
->   |     Factored logic from `CheckImplicitConversion` into new methods
->   |     `Expr::getEnumConstantDecl` and `Expr::getEnumCoercedType` for use in
->   |     `checkEnumArithmeticConversions`.
->   | ... 2 lines of the commit log omitted.
-> 
-> Results changed to
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 37
-> 
-> From
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 22291
-> 
-> The configuration of this build is:
-> CI config tcwg_kernel/llvm-master-aarch64-lts-allyesconfig
-> 
-> -----------------8<--------------------------8<--------------------------8<--------------------------
-> The information below can be used to reproduce a debug environment:
-> 
-> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/143/artifact/artifacts
-> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/142/artifact/artifacts
-> 
-> Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/8c2ae42b3e1c6aa7c18f873edcebff7c0b45a37e/tcwg_kernel/llvm-master-aarch64-lts-allyesconfig/reproduction_instructions.txt
-> 
-> Full commit : https://github.com/llvm/llvm-project/commit/8c2ae42b3e1c6aa7c18f873edcebff7c0b45a37e
-> 
-> List of configurations that regressed due to this commit :
-> * tcwg_kernel
-> ** llvm-master-aarch64-lts-allyesconfig
-> *** Failure
-> *** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/8c2ae42b3e1c6aa7c18f873edcebff7c0b45a37e/tcwg_kernel/llvm-master-aarch64-lts-allyesconfig/details.txt
-> *** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allyesconfig-build/143/artifact/artifacts
+On Wed, Feb 28, 2024, at 17:24, Takashi Iwai wrote:
+> On Wed, 28 Feb 2024 16:03:56 +0100,
+>> On Wed, Feb 28, 2024, at 15:37, Takashi Iwai wrote:
+>> > On Wed, 28 Feb 2024 15:01:45 +0100,
+>> 
+>> The fortified-string warning only triggers for string.h operations
+>> (memset, memcpy, memcmp, strn*...), not for a direct assignment.
+>
+> Ah, I see.  Then from the logical POV, it's better to have a check
+> before that assignment; otherwise it'd overflow silently there.
+>
+> Does putting the check beforehand (like the one below) fix similarly?
 
-Thanks a lot for the report, this is expected with that change. How we
-want to handle this in the kernel is currently under discussion at
-https://github.com/ClangBuiltLinux/linux/issues/2002.
+Indeed, it does address the issue. I'll send a v2 with that
+version, since it clearly makes more sense.
 
-Cheers,
-Nathan
+       Arnd
