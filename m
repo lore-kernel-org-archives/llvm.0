@@ -1,109 +1,93 @@
-Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AAD3FBB4
-	for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 17:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0E515DBC4
+	for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 17:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709141017; cv=none; b=KGiElUVrBKuX+BPn9cvAeD/quA737i2e+rsgKNbzPoEaelHpIAgehIPkxQUGjUS1ekKStTNHiqkl9S0WfHWrXVTCZth9aFmg4oMUaalxmQmm/RZFW2EQqr0lnlY4T539UBWxdhdBG9OyTQpUEIzAsezLludeQEXZ2gCsNaOhh7I=
+	t=1709141973; cv=none; b=W2xdhr7GAUxRtuZMlOBa5LSG9PM23YEc4nqR7nv0v8gPOlKgrPgTHSOr4hEkjqv4FJBXgQLRxvY4Lu/u/IoZgLV3rILuDPO2aU7earunlmQ4d6vHVsZ2JWdA/G2NKNUhddCSBRuKLMffAeKEYb2+PaZy1ZrgItK6VZugDl9AKIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709141017; c=relaxed/simple;
-	bh=gyHaX4rUH7VfXk5+GSMnekvjp1WHHHsYtG16XBQttRM=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=HI05kRleNIZuMp0CYaqr3Whx1J0B9+TjEpmXfgKWQKLP2reML10UM8sUxueent/Ozbv/R+U0F4e78wf8zBvU2THPQvNV9dll/EwMwMiyYZAX1zbw9C7c9rLV4OyLYpd7WQbyPzcpbnxl8Cs+VvPNdfZSmA3ErtCAVNqr7fB/2uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=en9o0nri; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JgYaz9Ds; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1709141973; c=relaxed/simple;
+	bh=QC8X8RLJg/EcMAAM6B4fCWDSCW+dwBVTLUthDex9rDk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k/7hIj9IMHOGYJDtDV8wKM9NCDfCfQUIuNAJPHh1uHrHBS7TfdCX52kIxJFXx+Sn8IPM9YQrmW2EGAlwt0suAMa+2wlwlQs+WNlWw8HmozXFWUy0PVwozMj3+F525pvYavUlMycYMh5KONRJAgfR6YRTurtmYauHa3kYHY26K/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SQBI6dpp; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="en9o0nri";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JgYaz9Ds"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 69C3813800B5;
-	Wed, 28 Feb 2024 12:23:34 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 28 Feb 2024 12:23:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1709141014; x=1709227414; bh=Uczs6P+Vjh
-	lsb/gj6HcF1VFbl7LhQCHMFJrfB/feXkU=; b=en9o0nri8jxQPWja5PFaAxCjBA
-	CVBxhnwxdOqfhXeiKEr+G1DCaaMIRNquKEtCdBroqhtKlzd06Mtko3jduGHe7cOQ
-	S7fWvwXKsXn4Y6vt3CUC13wD9dNVgQ3KMwqHbGEMubfD0iuJcwsamSD++5v0lJ+p
-	k0oZMd94hq5jwqKTKLrja9LEeikZ+sAh9TDqJYKVETniCS/7+hc5iD+4x4p3vcbG
-	xg4NdTCmvxHZ7Q6La679xTekm9TNojZPFpXRbEQH/lmBt7lPmGY+ZmS0qgu4YXPB
-	9982UuShK/IY5SXNoMXRL2qPd9pwvUjdi8JA4jccX7RH0Xg3zhSnvTbT4sUA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709141014; x=1709227414; bh=Uczs6P+Vjhlsb/gj6HcF1VFbl7Lh
-	QCHMFJrfB/feXkU=; b=JgYaz9DsiLHdxiHNDvW8LwzgBn/BCNjf2fob6BKz5jQc
-	DS5kEAeXURNsQZrPIKN9UIcI9+D5d/Ql5rzfYE8oI03V8+6Xcmi8sT7qf1IfcBf3
-	wT/yMM3dUJ3cL7L7YLYNa6FebV0892paATs0dslLr2ZOtmEN+pZEFK3PpVTozZlG
-	ETjDNtSSx5UlIDV/m1U34HExkRAWCshbKoolnF6hJ41jEChZa3Zy3pYPkEpzkySL
-	pBGd7RW2/z3j98TaKrTsUrDPCxnDvlRmokwfGRjmYE6oTNmCQFj3sJ2wsMv3Ge7x
-	t+jbx/Ui/4HcJAe2u8/s3VtdtDojqklL0Yp3mI9hZQ==
-X-ME-Sender: <xms:FWzfZQdJnERtgPUGhWvTMoPTc8vTvStLKqwqM8uoJ15MrQfp6OhDcQ>
-    <xme:FWzfZSN-kUxVIyhgDuW6xybAFJFdxqNHE3h5a2x6cWi7UfIH5uCBT_XKjXyQ93z3P
-    s_vWkt34NI2tth0DYY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgeejgdelhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:FmzfZRh_6upNX0-B6oaWDTR4DjOE33shLapoovFm1eckDY-jte_nSg>
-    <xmx:FmzfZV8ZC_NDmBpXfcAS2AaJgfc1olAVkxquD-MYUuJf4LCRaxgfbA>
-    <xmx:FmzfZcvrXHYnI6fWUzBRb9cRi3I9G6YcUl-TBXpB6I2KbGHi_qdTVQ>
-    <xmx:FmzfZcHoHWEBeJFgNhGJoP0YSpwrg8qfQqIm-0Tt9-sykLuOUbLmwg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id ABF8BB6008D; Wed, 28 Feb 2024 12:23:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-182-gaab6630818-fm-20240222.002-gaab66308
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SQBI6dpp"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-29a2545a1e7so3821320a91.2
+        for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 09:39:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709141971; x=1709746771; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NODDRAJhqWW7+B+ilVMpkZpvr1dJVh6fzecoPQ05aGY=;
+        b=SQBI6dpp9tMkjwoYFonhNLU9g7SUA7D2qZW249Udp7rDBcaHJ/9CE8fWoUG8k59SMo
+         0UxD2whusaJ96tUHWgJZWkRXuGJA70XLt2LmhFQUJOQikMgO+TuEn+x7rbkXJDHm50T+
+         7afnVMZCScLbnQL4GT2Zu+djtVop+zKko3rIs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709141971; x=1709746771;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NODDRAJhqWW7+B+ilVMpkZpvr1dJVh6fzecoPQ05aGY=;
+        b=OSH94zPFpAyh5EXc9p4bW4hjmmDLN9APCIHmRl21tB49dnkjREySPm+npJukFWGWi4
+         eLcyG9UJ86MShmlK6QZOHXBH8AfsTLwxEeWr9bhxb4zUN7bFvqIos+APk2sp41/IjR3L
+         JDy/bn2eCrNAUCeGn9KWcZOIN3pRsEhq+juphw0hG81uz75Cio7Pp8ERZbzZ9Jjzlu7x
+         UqlHA/2EnjLtorAYyORj9O3UiOKCiFiRmdwYwpYVxHozbyNa0hzFZdpriJvBfhl4oQBa
+         8YCkpIeKzKbcqtaJjEAyuBENHTm/3/S9BxNDj/3ucR7lJqRKH5PbO6sXExeKuP6vSKou
+         FUwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPQ8fyvNEp4NLR3bTuwJuDT8cbzSsRGyMTPmDDOLTqVM+kjWp3qTGZcrhsyz73Q1mT0QPI73OnEfVEtYcSayrGm5OIUg==
+X-Gm-Message-State: AOJu0Yz2Tn8CDipb6ELzwC0oYmWIVhj/OpStr0p+BIwsgJBC0By2jlnx
+	tGrjnVqPZ0cZz1wMwH99GtHe6N6dk2hAnKIQPOGyxGMjWvjBAUZKVoZhMZ4cpw==
+X-Google-Smtp-Source: AGHT+IGp/woc+TexLF/WvhjGKbASp59EBqxFySULqYfcyiys7bw1alzskx50yFi4SAk3a5wWSI6Icw==
+X-Received: by 2002:a17:90a:cf8a:b0:299:58af:c873 with SMTP id i10-20020a17090acf8a00b0029958afc873mr400790pju.10.1709141971163;
+        Wed, 28 Feb 2024 09:39:31 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id sz3-20020a17090b2d4300b002961a383303sm1953273pjb.14.2024.02.28.09.39.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Feb 2024 09:39:30 -0800 (PST)
+Date: Wed, 28 Feb 2024 09:39:30 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>, Arnd Bergmann <arnd@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Clang __bos vs loop unrolling (was Re: [PATCH] ALSA: asihpi: work
+ around clang-17+ false positive fortify-string warning)
+Message-ID: <202402280925.5B709A60F@keescook>
+References: <20240228140152.1824901-1-arnd@kernel.org>
+ <87msrkhcz6.wl-tiwai@suse.de>
+ <1265517d-b98a-4ec6-9215-10cd988ff78f@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <62f20e36-536d-47ee-b486-28ed87201b60@app.fastmail.com>
-In-Reply-To: <87il28h7zs.wl-tiwai@suse.de>
-References: <20240228140152.1824901-1-arnd@kernel.org>
- <87msrkhcz6.wl-tiwai@suse.de>
- <1265517d-b98a-4ec6-9215-10cd988ff78f@app.fastmail.com>
- <87il28h7zs.wl-tiwai@suse.de>
-Date: Wed, 28 Feb 2024 18:23:13 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Takashi Iwai" <tiwai@suse.de>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, "Kees Cook" <keescook@chromium.org>,
- "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] ALSA: asihpi: work around clang-17+ false positive fortify-string
- warning
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1265517d-b98a-4ec6-9215-10cd988ff78f@app.fastmail.com>
 
-On Wed, Feb 28, 2024, at 17:24, Takashi Iwai wrote:
-> On Wed, 28 Feb 2024 16:03:56 +0100,
->> On Wed, Feb 28, 2024, at 15:37, Takashi Iwai wrote:
->> > On Wed, 28 Feb 2024 15:01:45 +0100,
->> 
->> The fortified-string warning only triggers for string.h operations
->> (memset, memcpy, memcmp, strn*...), not for a direct assignment.
->
-> Ah, I see.  Then from the logical POV, it's better to have a check
-> before that assignment; otherwise it'd overflow silently there.
->
-> Does putting the check beforehand (like the one below) fix similarly?
+On Wed, Feb 28, 2024 at 04:03:56PM +0100, Arnd Bergmann wrote:
+> My first thought was that clang warns about it here because
+> the 'u16 adapter' declaration limits the index to something
+> smaller than an 'int' or 'long', but changing the type
+> did not get rid of the warning.
 
-Indeed, it does address the issue. I'll send a v2 with that
-version, since it clearly makes more sense.
+Our current theory is that Clang has a bug with
+__builtin_object_size/__builtin_dynamic_object_size when doing loop
+unrolling (or other kinds of execution flow splitting). Some examples:
+https://github.com/ClangBuiltLinux/linux/issues?q=label%3A%22loop+unroller%22+
 
-       Arnd
+Which is perhaps related to __bos miscalculations:
+https://github.com/ClangBuiltLinux/linux/issues?q=label%3A%22%5B__bos%5D+miscalculation%22+
+
+-Kees
+
+-- 
+Kees Cook
