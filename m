@@ -1,107 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6124274BFE;
-	Thu, 29 Feb 2024 22:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306634595C;
+	Thu, 29 Feb 2024 23:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709245623; cv=none; b=VtpTkpeHWemJjeKIQp2mfi7n/vjnpEw35r2+s3EWN5eib1o8t5LGboDrDHKsHdpkTp2iPYdm8yViI9qINkLaiG/TYw4FLFE4mps6tloADqNMtQlqfXxEGnpF4LzqCzbIw+EDfftJDUOghCVTnUbu2s8GiaAnflEZAxk9SHPm914=
+	t=1709247851; cv=none; b=ZO8Fw1v85LUOUHuFNLKdfDGTHw5vQNsenaNBiOl4ZItrm4ch5DMMxvRgChCE9QR798R/CWMBfHgYRhHS4mE4puZt5Aq1+70AwrtNXrtI7Tj2hEVMo9ytws6plN8vyBUv+znp+N4D/cPOvpKL7PD5vuvFeLR0Yo6BVlX4VJetcGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709245623; c=relaxed/simple;
-	bh=nEaPwo9nxCX3AKrj4I5+7AeuJMw1iCEr7cpfhKS5Dnk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rXfvj1wW9JXWIpXdDvwHdoVj2gBAJ8r2aUr9Faj76SgUoGZXmQY24QHwxhv5tz8z/BEJDM3y0mpKmiXv8br+Bfyc3l4g/Rj6FajZNTKmFhP3pC2ZUI6Y3i9vo3vRJkFzw7fGh5H56DnzgwbXhugN6Cv2Lq5hr1KAGMPQMa+n664=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gol6sJNk; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gol6sJNk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709245621; x=1740781621;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nEaPwo9nxCX3AKrj4I5+7AeuJMw1iCEr7cpfhKS5Dnk=;
-  b=Gol6sJNkO1Hn4llZCcxO6iklOu7s08IHJDi3CWfbV/n0NFJ3Y5rRQnqL
-   snVSsvbOYIjLluZ+ZaqPaIOLiyfh8I5uwJIu8adP+P6LsVekhPfIL2XiP
-   tT+i8/xEUU6XGNa8omVbANRqPDZN4JS9i5UxL2NHAAdyZOURIgiphzcdQ
-   M7FskN33LZ0gMjahHw3QbHbaaLlhuibwZXdyebQ46tFhii/tR5gLwDOrY
-   asVtp4c+zaBdCOUB4B6TsAg6NoEEnMcFsI0p99I8/0+I/W5OwIbsOGBoO
-   pT/R7w2q6INC2TL7EEMDngtCPGzzKpK0umQkoGwqKq/zWbJiCGr4Sbpei
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="4336521"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="4336521"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 14:26:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="38987292"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Feb 2024 14:26:35 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rforI-000DKB-0h;
-	Thu, 29 Feb 2024 22:26:32 +0000
-Date: Fri, 1 Mar 2024 06:26:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ben Levinsky <ben.levinsky@xilinx.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>,
-	Wendy Liang <wendy.liang@xilinx.com>,
-	Ed Mooring <ed.mooring@xilinx.com>, Jason Wu <j.wu@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v6.6 21/860]
- drivers/remoteproc/zynqmp_r5_remoteproc.c:69: warning: Function parameter or
- member 'max_banks' not described in 'xlnx_rpu_soc_data'
-Message-ID: <202403010623.pyenOecZ-lkp@intel.com>
+	s=arc-20240116; t=1709247851; c=relaxed/simple;
+	bh=sEiG2zLVQSXGzfvv0dbjmyrxlw1+zG1McQAjZM3IKkY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EoPx/EhGBVv34YcfVu/SJez+lc3ki0TpsJ3EdQ2XuC1Z0eVLSsR0TMe4ZNJGmd5mxyLKNGV0o7YCP7z90+SJohaDhSkIBV/WDradPTDuRJ4LqDaayWcMIYzMRjraIdVSOkf52p0D3HuTbehL0KdIpZyUyWYu55vpV9li+KeLz5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219BAC433C7;
+	Thu, 29 Feb 2024 23:04:08 +0000 (UTC)
+Date: Thu, 29 Feb 2024 18:06:16 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, "Masami Hiramatsu
+ (Google)" <mhiramat@kernel.org>
+Subject: Re: [trace:trace/for-next 28/29]
+ include/trace/events/sunrpc.h:703:4: warning: result of comparison against
+ a string literal is unspecified (use an explicit string comparison function
+ instead)
+Message-ID: <20240229180616.48d2c0eb@gandalf.local.home>
+In-Reply-To: <202402292111.KIdExylU-lkp@intel.com>
+References: <202402292111.KIdExylU-lkp@intel.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6
-head:   24eec56fe5bd68cae795c37c61276b4dcf218a53
-commit: a5fe1c1d116f2534a25d0fb511bbdeb5d1971a3e [21/860] remoteproc: Add initial zynqmp R5 remoteproc driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240301/202403010623.pyenOecZ-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403010623.pyenOecZ-lkp@intel.com/reproduce)
+On Thu, 29 Feb 2024 21:35:53 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403010623.pyenOecZ-lkp@intel.com/
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/for-next
+> head:   eb1533d156d307c2125943eaf1925e268094d984
+> commit: 433e1d88a3be93222989e52fa99594fe9eb93622 [28/29] tracing: Add warning if string in __assign_str() does not match __string()
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240229/202402292111.KIdExylU-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240229/202402292111.KIdExylU-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202402292111.KIdExylU-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from net/sunrpc/sched.c:31:
+>    In file included from include/trace/events/sunrpc.h:2520:
+>    In file included from include/trace/define_trace.h:102:
+>    In file included from include/trace/trace_events.h:419:
+> >> include/trace/events/sunrpc.h:703:4: warning: result of comparison against a string literal is unspecified (use an explicit string comparison function instead) [-Wstring-compare]  
+>      663 |                         __assign_str(progname,
+>          |                         ~~~~~~~~~~~~~~~~~~~~~~
+>      664 |                                      task->tk_client->cl_program->name);
+>          |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      665 |                         __entry->version = task->tk_client->cl_vers;
+>          |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      666 |                         __assign_str(procedure, task->tk_msg.rpc_proc->p_name);
+>          |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      667 |                 } else {
+>          |                 ~~~~~~~~
+>      668 |                         __entry->task_id = -1;
+>          |                         ~~~~~~~~~~~~~~~~~~~~~~
+>      669 |                         __entry->client_id = -1;
+>          |                         ~~~~~~~~~~~~~~~~~~~~~~~~
+>      670 |                         __assign_str(progname, "unknown");
+>          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      671 |                         __entry->version = 0;
+>          |                         ~~~~~~~~~~~~~~~~~~~~~
+>      672 |                         __assign_str(procedure, "unknown");
+>          |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      673 |                 }
 
-All warnings (new ones prefixed by >>):
 
->> drivers/remoteproc/zynqmp_r5_remoteproc.c:69: warning: Function parameter or member 'max_banks' not described in 'xlnx_rpu_soc_data'
+I don't build with clang, does this quiet the warning?
 
+-- Steve
 
-vim +69 drivers/remoteproc/zynqmp_r5_remoteproc.c
-
-    51	
-    52	/**
-    53	 * struct xlnx_rpu_soc_data - match data to handle SoC variations
-    54	 * @soc_type:	enum to denote which SOC this is running. on. Some EEMI calls
-    55	 *		behave differently on various SoC's so denote here.
-    56	 * @tcm_bases:	collection of device addresses that SoC has for TCM banks
-    57	 * @num_tcms:	number of entries in the tcm base collection.
-    58	 *		for each core.
-    59	 * @max_rprocs: Maximum number of remoteproc instances allowed per RPU core.
-    60	 * max_banks:	Maximnum number of banks allowed for All Remoteproc instances
-    61	 *		for a given SOC.
-    62	 */
-    63	struct xlnx_rpu_soc_data {
-    64		enum soc_type_t soc_type;
-    65		unsigned int tcm_bases[MAX_BANKS_PER_CORE];
-    66		unsigned int num_tcms;
-    67		unsigned int max_rprocs;
-    68		unsigned int max_banks;
-  > 69	};
-    70	
-
+diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
+index a0c15f67eabe..83da83a0c14f 100644
+--- a/include/trace/stages/stage6_event_callback.h
++++ b/include/trace/stages/stage6_event_callback.h
+@@ -35,7 +35,9 @@
+ 	do {								\
+ 		char *__str__ = __get_str(dst);				\
+ 		int __len__ = __get_dynamic_array_len(dst) - 1;		\
+-		WARN_ON_ONCE((src) != __data_offsets.dst##_ptr_);	\
++		WARN_ON_ONCE(__builtin_constant_p(src) ?		\
++			     strcmp((src), __data_offsets.dst##_ptr_) :	\
++			     (src) != __data_offsets.dst##_ptr_);	\
+ 		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
+ 		       EVENT_NULL_STR, __len__);			\
+ 		__str__[__len__] = '\0';				\
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
