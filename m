@@ -1,24 +1,24 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6EBF70AD7
-	for <llvm@lists.linux.dev>; Thu, 29 Feb 2024 15:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC0F78260
+	for <llvm@lists.linux.dev>; Thu, 29 Feb 2024 15:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709222210; cv=none; b=XK46t64yDjZrBaE823AqliVeg5Kba//QrizNNnzRCoysWuRLrvT7DKYs/tSz8YVvA1VtuZAX7bIJRikz4uk6ruwnhdJqwGA1NS+cHD+oHfk70tLxP/7PT2FzOnlbe/dXmS+gr9ufq63VAUNGuTJcSs5hTya1Uzihmio1AaELi9k=
+	t=1709222338; cv=none; b=saf4c20phbkf+Jhic23zFtJoGuFqAqRC7KEPxp3e/i1wW2Ov8ilTTBWA/H0IuHASMpkbzYrIAVCN1bhcRgTSk8H6bRu3s4zKLuWzAyaOXA4GL1aDNuyFfriegT1XVIkG8ZNVH+uwvl00PzkJXhRpLJheK40PuKqZaMy2cBst5ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709222210; c=relaxed/simple;
-	bh=NSsjwYacVaMu1w7Lnxw+r+og5NN001gTRxc21cDBn5Q=;
+	s=arc-20240116; t=1709222338; c=relaxed/simple;
+	bh=iK16lpg66h+HuxC4HWv0FU1/t+BijC+nfepzGRcL53c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ASTZXkp8Uft2kF1w9RY3giqKR1kseQU8wjGnobydA4Ghd0oqG5XzQibJitQZR+TE0yX+WBfw81Z+H2c4WY4OunbU39kPwMAiP/7GD7U2jI40Dfrd+F6+O3eqbKkwq7EyOdqltXI1JCOtCoWunaS2Ldlr2UnuGxmnlMJYQ7MovNU=
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ji/fxLt4j42KjNtekBc6gcJ4YE3NedtfsDU3wN6KsxTkQQJxMnfTCaV2wadoPqOAERTwywCAdOfFFPs/PwFHaJwExb3g0UTNHeyuOA35oev9W3BjqA4h/Kqabv14zz/wbxhRIh7wYABGa886nCrvZfMm391BoewbSmv8kSeYUEw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D93441FB;
-	Thu, 29 Feb 2024 07:57:26 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BCA01FB;
+	Thu, 29 Feb 2024 07:59:34 -0800 (PST)
 Received: from FVFF77S0Q05N (unknown [10.57.68.196])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D02F33F6C4;
-	Thu, 29 Feb 2024 07:56:45 -0800 (PST)
-Date: Thu, 29 Feb 2024 15:56:40 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F17D3F6C4;
+	Thu, 29 Feb 2024 07:58:53 -0800 (PST)
+Date: Thu, 29 Feb 2024 15:58:50 +0000
 From: Mark Rutland <mark.rutland@arm.com>
 To: Sasha Levin <sashal@kernel.org>
 Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
@@ -27,11 +27,11 @@ Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
 	jpoimboe@kernel.org, jbaron@akamai.com, catalin.marinas@arm.com,
 	nathan@kernel.org, linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 6.7 07/26] arm64: jump_label: use constraints
+Subject: Re: [PATCH AUTOSEL 6.6 06/21] arm64: jump_label: use constraints
  "Si" instead of "i"
-Message-ID: <ZeCpOPDi18OBEclz@FVFF77S0Q05N>
-References: <20240229154851.2849367-1-sashal@kernel.org>
- <20240229154851.2849367-7-sashal@kernel.org>
+Message-ID: <ZeCpuiBtS1HLSQZp@FVFF77S0Q05N>
+References: <20240229154946.2850012-1-sashal@kernel.org>
+ <20240229154946.2850012-6-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,24 +40,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240229154851.2849367-7-sashal@kernel.org>
+In-Reply-To: <20240229154946.2850012-6-sashal@kernel.org>
 
-On Thu, Feb 29, 2024 at 10:48:26AM -0500, Sasha Levin wrote:
+On Thu, Feb 29, 2024 at 10:49:26AM -0500, Sasha Levin wrote:
 > From: Fangrui Song <maskray@google.com>
 > 
 > [ Upstream commit f9daab0ad01cf9d165dbbbf106ca4e61d06e7fe8 ]
 
-That upstream patch caused issues and was subsequently reverted in commit:
+Please drop this; same story as wit the v6.7 backport:
 
-  a6b3eb304a82c29665a0ab947cfe276f6d29f523
-  ("Revert "arm64: jump_label: use constraints "Si" instead of "i""")
-
-Please drop this; it'll break stable in the same way, and it wasn't necessary
-to backport in the first place.
-
-As an aside, that revert has been upstream since v6.8-rc4, ~2.5 weeks ago; it's
-unfortunate for the broken patch to be AUTOSEL'd now! It'd be good if something
-could automatically check for reverts in mainline...
+  https://lore.kernel.org/lkml/ZeCpOPDi18OBEclz@FVFF77S0Q05N/
 
 Mark.
 
