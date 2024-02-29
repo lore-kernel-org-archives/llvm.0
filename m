@@ -1,55 +1,39 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1238D38DF2;
-	Thu, 29 Feb 2024 20:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D901D1504D2;
+	Thu, 29 Feb 2024 21:00:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709238759; cv=none; b=roqAy4aBzjuish7YiLRLRveahTq6OkTwBynyE4h5JNPF9onK7aOYa6zk27Mygcpr+g2Xi/4uzD+0ApcE0dsgPzs/E0Xe+3JeVgsQzJfb4gSiWN8JmO/0sXATzcnUxXCs82PYTEy9s8BuffomeQCt8NkJMk+3HEhspA2ipvWZ9Ws=
+	t=1709240436; cv=none; b=KsOjV3Z1sK1CNVmmYtLbqLE56jvws4C/BDQuwH/K6XSYaa5a01YTyjk5T6pwk0+175PVS9m6TgRrtswBcL8I0qlwpxQifmf7XYKC43NiVKMmtXOyJwrYBn5s43R2mDx3qWYchNH+7EjRCOTUkpMX46NogIndYJT1nHfyGcZGslU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709238759; c=relaxed/simple;
-	bh=QdHW8YGSexj3zLYWs4Lrol9h7GTVySqXvP2XDMRsq/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=N0D9Sz/mWVW0l4t1UVIerikcWEN9tWZkuaOfUDn8niYKsy/Fhu3/BxgWbOelGlmgusqJYMuZatiVVxb+WZ38KzjCOODm5oL6HlanHuOmMWSD7bb6NckMfPADaZXdlkOQvvMdFg2Q3aZ9ZY8VBSvrBBXVbWDGMk5Ojl6P8qQFzwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XaPRBGwH; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709240436; c=relaxed/simple;
+	bh=1PFlaG0ecz4A0TRgIF7F08DP139nGBd6n5zmGJQVjVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BFhc5+ZTqXJx93fG0YdmqR+k/YLI8bdye1o7ghwUeI1EXgjioZnFbJCmFa/D0V8fv4y65gYwJWUiJ1sOe1j432a7+7kM2eYrwA1yRTBSq0QtT1iPfxP2W1od1CBJ+Vl2ATTpp1oNQJPhyUsqf6XO0ah3llM7nDIKeDRQKsaI6aw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p1wrJk3E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XaPRBGwH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709238758; x=1740774758;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QdHW8YGSexj3zLYWs4Lrol9h7GTVySqXvP2XDMRsq/Y=;
-  b=XaPRBGwHeI2aw2RHsB3SEDYYwtSJygqaPghqZ22UI3wPguZPxCnpHr8+
-   kmYNHHRt7UIq6zRvUXd1kHB2Vllp8jtsdXDPBOom6AOeyBeAZnKRip7FM
-   0qnPXa26eE7D+Jks32e4427tYkmzMQGfc/hhNgu7p1qAyd274TM06ILcg
-   wCrT7NGH0Ewk77Wvk5a1fr8yL5Ofsgi4IZ/YgRv7/eDscrtnMT68DWh1p
-   S9dUReTBE3iiptHgRaYTvm4uMbCsf3+J95sBG6Qqj1dvmIj2CRDDHSkKq
-   KudXO5SBI93HGDyQwimRmVPBNQamVB4oEJpjgfwqx+prhkqFnBSSNGWRO
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="6698051"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="6698051"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 12:32:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="12633241"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 29 Feb 2024 12:32:25 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rfn4n-000DH7-2P;
-	Thu, 29 Feb 2024 20:32:21 +0000
-Date: Fri, 1 Mar 2024 04:31:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [chao:feature/fs_param 1/1] fs/f2fs/super.c:4519:14: error: no
- member named 's_qf_names' in 'struct f2fs_fs_context'
-Message-ID: <202403010459.qXWlWwpd-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p1wrJk3E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E74C433C7;
+	Thu, 29 Feb 2024 21:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709240436;
+	bh=1PFlaG0ecz4A0TRgIF7F08DP139nGBd6n5zmGJQVjVM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p1wrJk3E0khFbxj8mmCW8AfReYQ3wrywIMSTfSVxWRjT+bCDq+plJzDBikxSEjt2/
+	 icsX7gTHw6EGyQ+HDbH1mXVmb77QB3PK8I5Xitn2VBkmYaF3Lnuh9MQlPm2BcH0UkC
+	 1PbSvKjpdDLvI6owmZfvlOwtUabm90xFCw+SiFsbdI/yyakz+na151M9bmILxQ4up/
+	 JfiLEWQlPTilDTUnunzKrVavsi8XEW5OitOpkHX7hG5PZloc4lgSS3mitfL55Yd63Q
+	 ePk9hQIfqAiu1GLKsBjACZJ43E1uhafeQ1rH57FdbdnJl4WY4+4O3ute6zXNRWq2KP
+	 zTDfDTYKASkWg==
+Date: Thu, 29 Feb 2024 14:00:34 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: linux-sound@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 05/24] ALSA: hwdep: Use guard() for locking
+Message-ID: <20240229210034.GA185642@dev-arch.thelio-3990X>
+References: <20240227085306.9764-1-tiwai@suse.de>
+ <20240227085306.9764-6-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,73 +42,192 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240227085306.9764-6-tiwai@suse.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/fs_param
-head:   d4eac172f8f9f4594056366859b67e589e6124c3
-commit: d4eac172f8f9f4594056366859b67e589e6124c3 [1/1] [WIP] f2fs: use new fs_context interface
-config: arm-randconfig-002-20240301 (https://download.01.org/0day-ci/archive/20240301/202403010459.qXWlWwpd-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403010459.qXWlWwpd-lkp@intel.com/reproduce)
+Hi Takashi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403010459.qXWlWwpd-lkp@intel.com/
+On Tue, Feb 27, 2024 at 09:52:47AM +0100, Takashi Iwai wrote:
+> We can simplify the code gracefully with new guard() macro and co for
+> automatic cleanup of locks.
+> 
+> There are still a few remaining explicit mutex_lock/unlock calls, and
+> those are for the places where we do temporary unlock/relock, which
+> doesn't fit well with the guard(), so far.
+> 
+> Only the code refactoring, and no functional changes.
+> 
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
+>  sound/core/hwdep.c | 85 +++++++++++++++++++++-------------------------
+>  1 file changed, 38 insertions(+), 47 deletions(-)
+> 
+> diff --git a/sound/core/hwdep.c b/sound/core/hwdep.c
+> index de7476034f2c..9d7e5039c893 100644
+> --- a/sound/core/hwdep.c
+> +++ b/sound/core/hwdep.c
+> @@ -149,12 +149,12 @@ static int snd_hwdep_release(struct inode *inode, struct file * file)
+>  	struct snd_hwdep *hw = file->private_data;
+>  	struct module *mod = hw->card->module;
+>  
+> -	mutex_lock(&hw->open_mutex);
+> -	if (hw->ops.release)
+> -		err = hw->ops.release(hw, file);
+> -	if (hw->used > 0)
+> -		hw->used--;
+> -	mutex_unlock(&hw->open_mutex);
+> +	scoped_guard(mutex, &hw->open_mutex) {
+> +		if (hw->ops.release)
+> +			err = hw->ops.release(hw, file);
+> +		if (hw->used > 0)
+> +			hw->used--;
+> +	}
+>  	wake_up(&hw->open_wait);
+>  
+>  	snd_card_file_remove(hw->card, file);
+> @@ -272,43 +272,43 @@ static int snd_hwdep_control_ioctl(struct snd_card *card,
+>  
+>  			if (get_user(device, (int __user *)arg))
+>  				return -EFAULT;
+> -			mutex_lock(&register_mutex);
+>  
+> -			if (device < 0)
+> -				device = 0;
+> -			else if (device < SNDRV_MINOR_HWDEPS)
+> -				device++;
+> -			else
+> -				device = SNDRV_MINOR_HWDEPS;
+> +			scoped_guard(mutex, &register_mutex) {
+> +				if (device < 0)
+> +					device = 0;
+> +				else if (device < SNDRV_MINOR_HWDEPS)
+> +					device++;
+> +				else
+> +					device = SNDRV_MINOR_HWDEPS;
+>  
+> -			while (device < SNDRV_MINOR_HWDEPS) {
+> -				if (snd_hwdep_search(card, device))
+> -					break;
+> -				device++;
+> +				while (device < SNDRV_MINOR_HWDEPS) {
+> +					if (snd_hwdep_search(card, device))
+> +						break;
+> +					device++;
+> +				}
+> +				if (device >= SNDRV_MINOR_HWDEPS)
+> +					device = -1;
+> +				if (put_user(device, (int __user *)arg))
+> +					return -EFAULT;
+> +				return 0;
+>  			}
+> -			if (device >= SNDRV_MINOR_HWDEPS)
+> -				device = -1;
+> -			mutex_unlock(&register_mutex);
+> -			if (put_user(device, (int __user *)arg))
+> -				return -EFAULT;
+> -			return 0;
+> +			break;
+>  		}
 
-All errors (new ones prefixed by >>):
+Due to a bug in clang that was resolved in clang-17 [1], clang-13
+through clang-16 fail to build this file for ARCH=powerpc after this
+change in -next as commit e6684d08cc19 ("ALSA: hwdep: Use guard() for
+locking"):
 
-   In file included from fs/f2fs/super.c:11:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:33:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   fs/f2fs/super.c:187:1: warning: 'static' ignored on this declaration [-Wmissing-declarations]
-     187 | static const struct mount_opts {
-         | ^
-   fs/f2fs/super.c:187:8: warning: 'const' ignored on this declaration [-Wmissing-declarations]
-     187 | static const struct mount_opts {
-         |        ^
-   fs/f2fs/super.c:910:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     910 |         case Opt_inlinecrypt:
-         |         ^
-   fs/f2fs/super.c:910:2: note: insert '__attribute__((fallthrough));' to silence this warning
-     910 |         case Opt_inlinecrypt:
-         |         ^
-         |         __attribute__((fallthrough)); 
-   fs/f2fs/super.c:910:2: note: insert 'break;' to avoid fall-through
-     910 |         case Opt_inlinecrypt:
-         |         ^
-         |         break; 
-   fs/f2fs/super.c:3973:26: warning: unused variable 'ctx' [-Wunused-variable]
-    3973 |         struct f2fs_fs_context *ctx = fc->fs_private;
-         |                                 ^~~
->> fs/f2fs/super.c:4519:14: error: no member named 's_qf_names' in 'struct f2fs_fs_context'
-    4519 |                 kfree(ctx->s_qf_names[i]);
-         |                       ~~~  ^
-   5 warnings and 1 error generated.
+  sound/core/hwdep.c:291:9: error: cannot jump from this asm goto statement to one of its possible targets
+                                  if (put_user(device, (int __user *)arg))
+                                      ^
+  arch/powerpc/include/asm/uaccess.h:66:5: note: expanded from macro 'put_user'
+                    __put_user(x, _pu_addr) : -EFAULT;                    \
+                    ^
+  arch/powerpc/include/asm/uaccess.h:48:3: note: expanded from macro '__put_user'
+                  __put_user_size_goto(__pu_val, __pu_addr, __pu_size, __pu_failed);      \
+                  ^
+  arch/powerpc/include/asm/uaccess.h:116:10: note: expanded from macro '__put_user_size_goto'
+          case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+                  ^
+  arch/powerpc/include/asm/uaccess.h:86:2: note: expanded from macro '__put_user_asm_goto'
+          asm goto(                                       \
+          ^
+  sound/core/hwdep.c:273:8: note: possible target of asm goto statement
+                          if (get_user(device, (int __user *)arg))
+                              ^
+  arch/powerpc/include/asm/uaccess.h:295:5: note: expanded from macro 'get_user'
+                    __get_user(x, _gu_addr) :                             \
+                    ^
+  arch/powerpc/include/asm/uaccess.h:283:2: note: expanded from macro '__get_user'
+          __get_user_size_allowed(__gu_val, __gu_addr, __gu_size, __gu_err);      \
+          ^
+  arch/powerpc/include/asm/uaccess.h:201:16: note: expanded from macro '__get_user_size_allowed'
+                  break;                                                  \
+                                                                          ^
+  sound/core/hwdep.c:276:4: note: jump exits scope of variable with __attribute__((cleanup))
+                          scoped_guard(mutex, &register_mutex) {
+                          ^
+  include/linux/cleanup.h:169:20: note: expanded from macro 'scoped_guard'
+          for (CLASS(_name, scope)(args),                                 \
+                            ^
+  sound/core/hwdep.c:273:8: error: cannot jump from this asm goto statement to one of its possible targets
+                          if (get_user(device, (int __user *)arg))
+                              ^
+  arch/powerpc/include/asm/uaccess.h:295:5: note: expanded from macro 'get_user'
+                    __get_user(x, _gu_addr) :                             \
+                    ^
+  arch/powerpc/include/asm/uaccess.h:283:2: note: expanded from macro '__get_user'
+          __get_user_size_allowed(__gu_val, __gu_addr, __gu_size, __gu_err);      \
+          ^
+  arch/powerpc/include/asm/uaccess.h:199:3: note: expanded from macro '__get_user_size_allowed'
+                  __get_user_size_goto(x, ptr, size, __gus_failed);       \
+                  ^
+  arch/powerpc/include/asm/uaccess.h:187:10: note: expanded from macro '__get_user_size_goto'
+          case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;  \
+                  ^
+  arch/powerpc/include/asm/uaccess.h:158:2: note: expanded from macro '__get_user_asm_goto'
+          asm_goto_output(                                        \
+          ^
+  include/linux/compiler_types.h:380:31: note: expanded from macro 'asm_goto_output'
+  #define asm_goto_output(x...) asm volatile goto(x)
+                                ^
+  sound/core/hwdep.c:291:9: note: possible target of asm goto statement
+                                  if (put_user(device, (int __user *)arg))
+                                      ^
+  arch/powerpc/include/asm/uaccess.h:66:5: note: expanded from macro 'put_user'
+                    __put_user(x, _pu_addr) : -EFAULT;                    \
+                    ^
+  arch/powerpc/include/asm/uaccess.h:52:9: note: expanded from macro '__put_user'
+                                                                  \
+                                                                  ^
+  sound/core/hwdep.c:276:4: note: jump bypasses initialization of variable with __attribute__((cleanup))
+                          scoped_guard(mutex, &register_mutex) {
+                          ^
+  include/linux/cleanup.h:169:20: note: expanded from macro 'scoped_guard'
+          for (CLASS(_name, scope)(args),                                 \
+                            ^
+  2 errors generated.
 
+However, looking at the original change, could this be avoided/worked
+around by just moving the put_user() call out of the scoped_guard()?
+The put_user() call was not originally under register_mutex, so it seems
+like this would work? As I understand it, mutex_unlock() will be called
+once the scope of the guard is left. I am happy to send a formal patch.
 
-vim +4519 fs/f2fs/super.c
+[1]: https://github.com/ClangBuiltLinux/linux/issues/1886
 
-  4509	
-  4510	static void f2fs_fc_free(struct fs_context *fc)
-  4511	{
-  4512		struct f2fs_fs_context *ctx = fc->fs_private;
-  4513		int i;
-  4514	
-  4515		if (!ctx)
-  4516			return;
-  4517	
-  4518		for (i = 0; i < MAXQUOTAS; i++)
-> 4519			kfree(ctx->s_qf_names[i]);
-  4520	
-  4521		fscrypt_free_dummy_policy(&ctx->dummy_enc_policy);
-  4522		kfree(ctx);
-  4523	}
-  4524	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/sound/core/hwdep.c b/sound/core/hwdep.c
+index 9d7e5039c893..09200df2932c 100644
+--- a/sound/core/hwdep.c
++++ b/sound/core/hwdep.c
+@@ -288,11 +288,10 @@ static int snd_hwdep_control_ioctl(struct snd_card *card,
+ 				}
+ 				if (device >= SNDRV_MINOR_HWDEPS)
+ 					device = -1;
+-				if (put_user(device, (int __user *)arg))
+-					return -EFAULT;
+-				return 0;
+ 			}
+-			break;
++			if (put_user(device, (int __user *)arg))
++				return -EFAULT;
++			return 0;
+ 		}
+ 	case SNDRV_CTL_IOCTL_HWDEP_INFO:
+ 		{
