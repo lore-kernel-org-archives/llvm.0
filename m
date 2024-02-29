@@ -1,66 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AC9757E4;
-	Thu, 29 Feb 2024 17:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD5413F43E;
+	Thu, 29 Feb 2024 20:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709229210; cv=none; b=VBV5gkgpiQlzFCN2q6CDrgdJYZSrZu/LB/QccBpIq/p3Y5WGTLANpmp4yxzTlfObP7YlQ6xxKgaYbK0F1iuWrvUxM5J1bu7UhPHn5aYwWRDuXDHpSf8ee0M+9+fvunZo8rEtrL9aFWL6H9AbfVbfbwhGGv1//8qu/NmpbeQvREg=
+	t=1709238059; cv=none; b=IAUHRdAVVUvNpDMc8vUHDg+vgEUUAkMvUciLzV5kbyObR0PPccDRVIawPGyCQVvob3bUpiamx/Bm7jo1fxiX9DaHRiJJPjkNMaEtX8Q9UoAED043mnZtHihOoQ299ucDiwEnV+i3ufTddx2pnXM/PJw8CVob1GJL/a2Lz4bCKt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709229210; c=relaxed/simple;
-	bh=IZ8tXHi4D6VeM3kc0kx68z1bYQSTMxGuNMx6zsNFNB0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e5rSWcfQ7A+IXIF83BgAc5WBTDgnGFGB/3oNxDIfHTLaMYTwjh3NrcsUpTHNthtVCi600rDPuj2Hk8z+/p5dPGY39T6DlBxbrmdN+k3axxlO8g0VPliXO8APaCtIvOHm98BOmFFtLHTmnZW5u+/5//wvlTtFllLL5pWn+rlqR+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DYGYvzwN; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1709238059; c=relaxed/simple;
+	bh=u6qwG+9AXD0w4KENWeTBsdTk6wjwiBTbTgD0lUNfag0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XdTQ8tgEq86r5IDbV03DfJ+CPQSmMytKBR4MboXL05/dOuDFGAxbzHxGu8410Q5yatMCFhnSIh1PEmt3eQ9LmSZ6Z+maVfVRJ3lyMR+4N89tw1JjOW9XOiKTq4bMYPpx5uH41RU3e7orqgfWq2QgzpHEWvQzm8ZKSUcHb18QdLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hanPaR3q; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DYGYvzwN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hanPaR3q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709229209; x=1740765209;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IZ8tXHi4D6VeM3kc0kx68z1bYQSTMxGuNMx6zsNFNB0=;
-  b=DYGYvzwNfmxpq7ObKabx3RVT+vH5D36T5LzWrArpkzqj2/KUc4irIBPj
-   cGq202ta97rlS3PMXi9aoHB84NMrRe18my66Ff+UQYf4pDbS+uwPyk6f/
-   8m2kIQAYccR22eHSD4YSxm4H6tO8N1clT/4Zptzt7BcpZe8vX9nIJHCBt
-   5xeTpcFQr8F/IyEL+e0LTVNFlrUK3R4GQBYgtcnc5hrtLtO2jCgPAxdmY
-   OPbSU2j/m2om5QW0owi2It8+w2PeozaJp1BPQacj2FSGTcLg8MlQW37nX
-   bfg6NN15QGUKCTMHFNkFDKGtu4FJeaudn6n2UMGI3pRZB/YH/4VM4D6wR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="21177113"
+  t=1709238056; x=1740774056;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u6qwG+9AXD0w4KENWeTBsdTk6wjwiBTbTgD0lUNfag0=;
+  b=hanPaR3qas1HCZ1S30h+I6zHbcQBmxgdHALxYU00GDlcOOkPvscQd7f6
+   js8UyhmiUSTjXR7AJTCDlBCtV49u3fDRilPyB4mlIxvp5vB/FioThCZU6
+   Uzod1lcoEguQ+bXytTURoO5ElLudC6/R11Yhj25iMduxMeJLnKGouZEot
+   d7cbC+8zDk02D62duQ8VwjbdLC25TSl3sZ2QsJS+7a9S3TDCAgw16rOSb
+   9Bc/1lnjVh+NVqieRH+AiTtAg2ZcjAjvM4HudxiHAIyVbfQ1vh1kOhPBG
+   QRyLSIlmm3Vl4htPk1SuEErW4pAfGJSDGXSIxizKV22Wkw0xs7NBYLGhk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="14378666"
 X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="21177113"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 09:53:28 -0800
+   d="scan'208";a="14378666"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 12:20:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="12511155"
+   d="scan'208";a="7831502"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 29 Feb 2024 09:53:23 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 29 Feb 2024 12:20:53 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rfkav-000DAD-0q;
-	Thu, 29 Feb 2024 17:53:21 +0000
-Date: Fri, 1 Mar 2024 01:52:41 +0800
+	id 1rfmtf-000DGV-0Y;
+	Thu, 29 Feb 2024 20:20:51 +0000
+Date: Fri, 1 Mar 2024 04:19:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	Abel Vesa <abelvesa@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, imx@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 2/2] clk: imx: add i.MX95 BLK CTL clk driver
-Message-ID: <202403010142.5gu9hKpX-lkp@intel.com>
-References: <20240228-imx95-blk-ctl-v1-2-9b5ae3c14d83@nxp.com>
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:feature/fs_param 1/1] fs/f2fs/super.c:187:1: warning: 'static'
+ ignored on this declaration
+Message-ID: <202403010439.1bxiDBpy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,89 +58,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240228-imx95-blk-ctl-v1-2-9b5ae3c14d83@nxp.com>
 
-Hi Peng,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 22ba90670a51a18c6b36d285fddf92b9887c0bc3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/dt-bindindgs-clock-support-NXP-i-MX95-BLK-CTL-module/20240228-122408
-base:   22ba90670a51a18c6b36d285fddf92b9887c0bc3
-patch link:    https://lore.kernel.org/r/20240228-imx95-blk-ctl-v1-2-9b5ae3c14d83%40nxp.com
-patch subject: [PATCH 2/2] clk: imx: add i.MX95 BLK CTL clk driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240301/202403010142.5gu9hKpX-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/fs_param
+head:   d4eac172f8f9f4594056366859b67e589e6124c3
+commit: d4eac172f8f9f4594056366859b67e589e6124c3 [1/1] [WIP] f2fs: use new fs_context interface
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240301/202403010439.1bxiDBpy-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403010142.5gu9hKpX-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403010439.1bxiDBpy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403010142.5gu9hKpX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403010439.1bxiDBpy-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/clk/imx/clk-imx95-blk-ctl.c:13:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/clk/imx/clk-imx95-blk-ctl.c:13:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/clk/imx/clk-imx95-blk-ctl.c:13:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/clk/imx/clk-imx95-blk-ctl.c:425:25: error: use of undeclared identifier 'imx95_blk_ctl_match'; did you mean 'imx95_bc_of_match'?
-     425 | MODULE_DEVICE_TABLE(of, imx95_blk_ctl_match);
-         |                         ^~~~~~~~~~~~~~~~~~~
-         |                         imx95_bc_of_match
-   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
-     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |               ^
-   drivers/clk/imx/clk-imx95-blk-ctl.c:416:34: note: 'imx95_bc_of_match' declared here
-     416 | static const struct of_device_id imx95_bc_of_match[] = {
-         |                                  ^
-   6 warnings and 1 error generated.
+   In file included from fs/f2fs/super.c:11:
+   In file included from include/linux/fs_context.h:14:
+   In file included from include/linux/security.h:33:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/f2fs/super.c:187:1: warning: 'static' ignored on this declaration [-Wmissing-declarations]
+     187 | static const struct mount_opts {
+         | ^
+>> fs/f2fs/super.c:187:8: warning: 'const' ignored on this declaration [-Wmissing-declarations]
+     187 | static const struct mount_opts {
+         |        ^
+>> fs/f2fs/super.c:891:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     891 |         case Opt_usrjquota:
+         |         ^
+   fs/f2fs/super.c:891:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     891 |         case Opt_usrjquota:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   fs/f2fs/super.c:891:2: note: insert 'break;' to avoid fall-through
+     891 |         case Opt_usrjquota:
+         |         ^
+         |         break; 
+   fs/f2fs/super.c:3973:26: warning: unused variable 'ctx' [-Wunused-variable]
+    3973 |         struct f2fs_fs_context *ctx = fc->fs_private;
+         |                                 ^~~
+   fs/f2fs/super.c:709:13: warning: unused function 'is_compress_extension_exist' [-Wunused-function]
+     709 | static bool is_compress_extension_exist(struct f2fs_sb_info *sbi,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/f2fs/super.c:770:12: warning: unused function 'f2fs_set_lz4hc_level' [-Wunused-function]
+     770 | static int f2fs_set_lz4hc_level(struct f2fs_sb_info *sbi, const char *str)
+         |            ^~~~~~~~~~~~~~~~~~~~
+   fs/f2fs/super.c:808:12: warning: unused function 'f2fs_set_zstd_level' [-Wunused-function]
+     808 | static int f2fs_set_zstd_level(struct f2fs_sb_info *sbi, const char *str)
+         |            ^~~~~~~~~~~~~~~~~~~
+   12 warnings generated.
 
 
-vim +425 drivers/clk/imx/clk-imx95-blk-ctl.c
+vim +/static +187 fs/f2fs/super.c
 
-   415	
-   416	static const struct of_device_id imx95_bc_of_match[] = {
-   417		{ .compatible = "nxp,imx95-cameramix-csr", .data = &camblk_dev_data },
-   418		{ .compatible = "nxp,imx95-display-master-csr", },
-   419		{ .compatible = "nxp,imx95-dispmix-lvds-csr", .data = &lvds_csr_dev_data },
-   420		{ .compatible = "nxp,imx95-dispmix-csr", .data = &dispmix_csr_dev_data },
-   421		{ .compatible = "nxp,imx95-netcmix-blk-ctrl", },
-   422		{ .compatible = "nxp,imx95-vpumix-csr", .data = &vpublk_dev_data },
-   423		{ /* Sentinel */ },
-   424	};
- > 425	MODULE_DEVICE_TABLE(of, imx95_blk_ctl_match);
-   426	
+   186	
+ > 187	static const struct mount_opts {
+   188		int	token;
+   189		int	opt;
+   190		int	flags;
+   191	};
+   192	
 
 -- 
 0-DAY CI Kernel Test Service
