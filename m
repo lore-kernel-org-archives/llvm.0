@@ -1,92 +1,104 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899694594B;
-	Thu, 29 Feb 2024 07:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1866481CE
+	for <llvm@lists.linux.dev>; Thu, 29 Feb 2024 07:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709192546; cv=none; b=bMoQ3Uqlv4pVyZ6kFjVJOp/ci40feguy0lmaD+Pa5SyHw0jpMrMT+Tb400AT1gghujf1qE6N564wSNe4sb3dJP8j82Mfq2uJdXWnoYruW+E8XSACFEf1W8Em3D67FNbfnsR4DnNVAkI7fjLKxB7tKHMPkpDNI39Mpu3xz8SyVi0=
+	t=1709193387; cv=none; b=hhQ3i8QqQLDkUIhmihsJEDlvMakQlveBZpc6i20zKz89xzmp6thCtJpIN8Fr2XXIsR3JsygO1t7okvIfVAeL7cwV4XiiItwb75knu5DkFmi/nLfzu1ohZroWYrNqlfwzy4GmF7jumy0BcFbG9IZtt3Dpe/dkaGMIlD84N4cP5Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709192546; c=relaxed/simple;
-	bh=Q/11Q49KEKt/Spi4akngBYieCr5yha8+eBtEahXuFrI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W0r9mYdXi+BTz+IoFHI5EPjR/lo4ofxa8ljv306U+I6StIT3LfLbYKAczyworJgOb5UfDoUzBQU0JtG60ZHajcA3oQVeXlxXzrPShkG2OkWDLwyWNaj1Z8yGQ2M0YiScngMzLwgTSrr0WteLUMh1DScTOj9KqpMsz5/XcbmJUCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76EFA1FB;
-	Wed, 28 Feb 2024 23:43:02 -0800 (PST)
-Received: from [10.57.12.184] (unknown [10.57.12.184])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41FBD3F6C4;
-	Wed, 28 Feb 2024 23:42:21 -0800 (PST)
-Message-ID: <2496f490-fbfb-403c-a86c-73960afb4e76@arm.com>
-Date: Thu, 29 Feb 2024 07:42:38 +0000
+	s=arc-20240116; t=1709193387; c=relaxed/simple;
+	bh=q5m5axH+BLCl2agZv8n9DXtP46+hpfFVeTafKX3WiDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=CWfz9lEZQmg9F5COqQm8HzoaF3DpNapsgOrbpyVX1K+DYf/3NEWTuhskNz2a7y0dPZsmJxjEc6qrKsdBgVY36zDFAzmsIaX++lKb0bv5OHk8tnpTqaOT8J6olwxJsDRgGZB/Lh1DoNOpjL/fqZ7ikSo1XnXSbuhKpLN8TjFwpOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OcNZpG3O; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OcNZpG3O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709193384;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rZYUQ2/MyEIs+wTU4JfVi5JkU9l2GM3/3Nd9NcCBnAo=;
+	b=OcNZpG3OqsPzefSEb+z7yVLiWaxHDw4HUkeb04QiETegz7Tlhyw0xJ736Ay30oBZuQ2gpy
+	uwLfIUnvV+l1pziHTd3UTUK0HFOV7Hst26lC31qASqJBYt43dn+W8KMrf08DXNm9Xi8VU2
+	Xbzt66PwreGN6UgicytwGfp2GSmwhNo=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-647-jRKidtlHOOK5GhVDkkGUFQ-1; Thu, 29 Feb 2024 02:56:22 -0500
+X-MC-Unique: jRKidtlHOOK5GhVDkkGUFQ-1
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3651eecf80dso1091695ab.1
+        for <llvm@lists.linux.dev>; Wed, 28 Feb 2024 23:56:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709193382; x=1709798182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rZYUQ2/MyEIs+wTU4JfVi5JkU9l2GM3/3Nd9NcCBnAo=;
+        b=oR2bR7o62YPWbQeQgvtmPboXjmX6Vl69ulELPLDjfq5h1V9NBNJ+D7dPiarJlP/N4x
+         jOP5azGYNdUCDEpD4d0TBbQT+VzgtYgY/XHyYCFU5rueBzMN6/vemvhj7VNG1gt7XIMk
+         oqBh/35Y36OCJx/YfibZyAXLYdkdkuw1Cmq3cJbJUtceiuRq1fQxf11pfptJN8pT+C6p
+         +KrZxmOCapkY++nTDtbOJPsiXgtgMF4T5ZLnXlI01ornYCD6Ga+WwZlIyb4VCG6Ec7Rq
+         +4fghJ2gFCWpW2sJ6MBGCSpnGTwouQUw0Pn3wYgTuriReVkfdZkM5l0zcvzukGT/m0D6
+         cVXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnGxHJ6XX9cyKp3yyYIEvGSv77zuWgcTinLaH7pcU6wRf8XFWDA2kQIg473B0Nbh7oJHWKZaOdsfqttwpGZQbO8alG+w==
+X-Gm-Message-State: AOJu0Yyx/vdpvjQQHJqYDwPm6KT16dttcukerLO9dKB8Sm5+P2ipeyMg
+	jnZM0H2DcAuAOOocwO/5Mq8Lgm4o5D98qaXYQ2cZEgrVf1MPS1yWRXZHMA2iiiYdnhB01OyRpSO
+	3A6xh5QECG2H2pdZFz/XUsL26oVGEq3PW2DnbWtMLiwB/+popCk0=
+X-Received: by 2002:a05:6e02:20ee:b0:365:aeb8:26d1 with SMTP id q14-20020a056e0220ee00b00365aeb826d1mr1725570ilv.0.1709193382278;
+        Wed, 28 Feb 2024 23:56:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFK2Caj/CnSM8btPacrXhbRxxuWkGYLUk6S0weGtsslNFGdZ2LEbvNGX15pEdr1SssPwwCMDw==
+X-Received: by 2002:a05:6e02:20ee:b0:365:aeb8:26d1 with SMTP id q14-20020a056e0220ee00b00365aeb826d1mr1725558ilv.0.1709193381990;
+        Wed, 28 Feb 2024 23:56:21 -0800 (PST)
+Received: from x1n ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id ff11-20020a056a002f4b00b006e57b37a932sm664588pfb.9.2024.02.28.23.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Feb 2024 23:56:21 -0800 (PST)
+Date: Thu, 29 Feb 2024 15:56:11 +0800
+From: Peter Xu <peterx@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Yang Shi <shy828301@gmail.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
+	"Kirill A . Shutemov" <kirill@shutemov.name>,
+	linuxppc-dev@lists.ozlabs.org,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 5/5] mm/treewide: Drop pXd_large()
+Message-ID: <ZeA4m7DK03oHE1Kz@x1n>
+References: <20240228085350.520953-6-peterx@redhat.com>
+ <202402291233.CVhChP2c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
- gustavoars@kernel.org, morbo@google.com, justinstitt@google.com,
- stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
- <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
- <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
- <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
- <202402270816.0EA3349A76@keescook>
- <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
- <202402270852.E46A5268@keescook>
- <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
- <20240228165651.GA2158263@dev-arch.thelio-3990X>
- <202402280944.CE26D81@keescook>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <202402280944.CE26D81@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <202402291233.CVhChP2c-lkp@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
+On Thu, Feb 29, 2024 at 01:17:36PM +0800, kernel test robot wrote:
+> >> arch/x86/include/asm/pgtable.h:1099:19: error: redefinition of 'pud_leaf'
+>     1099 | static inline int pud_leaf(pud_t pud)
+>          |                   ^
+>    include/asm-generic/pgtable-nopmd.h:34:19: note: previous definition is here
+>       34 | static inline int pud_leaf(pud_t pud)           { return 0; }
+>          |                   ^
 
+This is CONFIG_PGTABLE_LEVELS=2.  IIUC patch 5 didn't do anything wrong,
+but when renaming pud_large() it caused this confliction, while in the past
+it was a silent confliction between the old pud_leaf() macro and pud_leaf()
+defintion, the macro could have silently overwrote the function.
 
-On 2/28/24 17:48, Kees Cook wrote:
-> On Wed, Feb 28, 2024 at 09:56:51AM -0700, Nathan Chancellor wrote:
->> On Wed, Feb 28, 2024 at 08:41:07AM +0000, Lukasz Luba wrote:
->>> Hi Nathan and Kees,
->>>
->>> On 2/27/24 17:00, Kees Cook wrote:
->>>> On Tue, Feb 27, 2024 at 05:47:44PM +0100, Daniel Lezcano wrote:
->>>>> Ok my misunderstanding was I thought sizeof() was calling _bdos under the
->>>>> hood, so when calling sizeof(flex_array), it was returning the computed size
->>>>> inferring from the __counted_by field.
->>>>
->>>> Yeah, sizeof() has a very limited scope. __builtin_object_size() has
->>>> more flexibility (via the 2nd argument, "type"), but it was still
->>>> compile-time only. __builtin_dynamic_object_size() was added to bring
->>>> runtime evaluations into the mix (initially to support the alloc_size
->>>> attribute, and now includes the counted_by attribute too).
->>>>
->>>
->>> Thanks for your earlier emails explaining these stuff.
->>> Do you have maybe some presentation about those features
->>> for the kernel (ideally w/ a video from some conference)?
->>
->> I think Kees's 2022 and 2023 talks at LPC are a good place to start:
->>
->> https://youtu.be/tQwv79i02ks?si=Nj9hpvmQwPB4K3Y4&t=452
->> https://youtu.be/OEFFqhP5sts?si=u6RnOP641S8FkouD&t=614
->>
->> https://outflux.net/slides/2022/lpc/features.pdf
->> https://outflux.net/slides/2023/lpc/features.pdf
-> 
-> I've also got a write-up on the entire topic of array bounds, which ends
-> with some discussion of "the future" (which is now) involving the use of
-> the "counted_by" attribute:
-> https://people.kernel.org/kees/bounded-flexible-arrays-in-c#coming-soon-annotate-bounds-of-flexible-arrays
-> 
+IIUC such pud_leaf() is not needed as we have a global fallback.  I'll add
+a pre-requisite patch to remove such pXd_leaf() definitions.
 
-Thank you guys!
+-- 
+Peter Xu
+
