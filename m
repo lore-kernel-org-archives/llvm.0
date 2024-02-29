@@ -1,139 +1,130 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62584200D9
-	for <llvm@lists.linux.dev>; Thu, 29 Feb 2024 23:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF697C094;
+	Thu, 29 Feb 2024 23:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709248611; cv=none; b=OyBO3cE6lxm03hx57c9AofDyx6bMxE4P1RfDvpGHRKsf9+teQFZuJrh09ROYs7ltS9Z3rvsrtPsZXdh7ctZx08A5UUtGd9x79z+SCFJfOqsXup5y8aZ+JBAaFqF4hWZbeXzPSCfqZ35ja430k+Xuyl6MfCZEl0AAcJ1MGDgDgM0=
+	t=1709250297; cv=none; b=gubwble3aqzcxqa9TVCZ3F0bJsou5xIgeuAhhkWI1XQeeTMpMoOc5Hfj3NpvqTyNbpIAvaANhlNLFUbo1S+cY1WBqemrfDed0cme7/om60ve9oge3E2/WHkFiDETVlGOFji90xn+nPnSij1TU/HBv5XbAt5KSr2qMJ7T2IEizJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709248611; c=relaxed/simple;
-	bh=kko1wRbcDQvt3W65DRy9btpMD1yYIdX2oPSHln6jwMQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KOrqsnciot3koltJASAIHNg6Aq6tgPX5d8UzyVaIMEWRa/+y8COzl/E/fGXWfUHj2ilUjGsv3P9rYq2nS4IbjKuxDTgYZOsfn6QI0WuNIdRCx+NryzYYZM9Li149RfG/KGWsyOCnUbFeLDJx1IcbKo636Rtjov2RRJcDGbTIXic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y+JRJRG0; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1709250297; c=relaxed/simple;
+	bh=qa9Uq860kOdvHNmNrVFdx4l6XPMgXK03pRLQ8A95MvE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I4s8M+S4f0RGBVYCXs0xdLiWYg3jgJw68p2I+kZxbwlm3qnH/GUdrz76gj0/c51Vh5tMPzSrj+CGUqqr/xGWGBSypGJ4uSkVRbkkil9Wjd+zeiqmkPsyUac85dftxDbTKlIbKGqYiR6l1KanRxEHyC7oKRIT+ZKmMQyeau6+PgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=guWdubPe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y+JRJRG0"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-412b83cfb44so9846895e9.3
-        for <llvm@lists.linux.dev>; Thu, 29 Feb 2024 15:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709248608; x=1709853408; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=67SNOCAdR0s4Rh4ZptML72F1P1c4wCYZ2HszSt1XfEo=;
-        b=Y+JRJRG0AZrXk5Ef9UTpiywBMPkZw3RuXO6p6xxBDc0K0YLwxKWuQ9k4z+BwadDSD6
-         5LU9IDBmMZp7dE04Ima9lhvhHe1wUMkz1on6E2h0mMbPSmyNVN9Q3S6Tnzsba+TMO1T7
-         hyJnP2hp+GCJb6ypNdwvg6upyHuY0kFr397piOG8Jzc2G9vCNLVG8xrM9TNJxqbgusBL
-         4d6kSAZ+jadsaS+PJaSO3YxhAGcVToQZtpoJU/lQUUDJ+teR7HXqT3kQSdSCUU7bW9/h
-         iRrZf6uQfQQ3XgrucxTC/f/y+kDlenV+pzyJLtaSsuIbC8F6O5jNq1iyRVQLqhEOB5/l
-         W4xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709248608; x=1709853408;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=67SNOCAdR0s4Rh4ZptML72F1P1c4wCYZ2HszSt1XfEo=;
-        b=PsjDlyaHbg8Fs/7qGNoQSbiz8LRl2X+tSK3wXV6zKXg2DzsaGiTNGWrSjJP+iXCAoR
-         mLy0c4bM8EwuhXwFZNV5hVVtwFiuR9SgMDqwu8zfKWSic0MXYDsu1peatzw7qCvAAEhl
-         YflaUZ4pIPKVcuEAnCN2HilTkmF7oww/V5AZSFXOjTZLa3umshuxLEaVkUD56P7FG8OS
-         lZJaQzPugUkbTfuuuC6XtB2lVH7K/QqIjYksvPd/zDmzCkHr4ok1RJ7AnzdBH6waO50/
-         oLyXBYRkMMEjCLvlKbc82dc900VMpUhD916bOpne8Fkp+8U6dFdl0zOh4hHhlPFSrMlw
-         En9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWQFAenULmMO3DSfnXLjX5u19PpEUXlnfRq2RQFDdyeGTLt72tHBhK7U6Q2tu5cPeFP5tTKwlw0IhWb5D+2pc23WqjAIA==
-X-Gm-Message-State: AOJu0YxjXlG9Q1Wj8dSolkcCSZ87SCU+i2lY7oGK1A1ARTm8b7bv0YBS
-	5ifBaj0K0IUXw+mnq25z2FREBP61agElLzv+LjHeGg2AP+ssB6P9
-X-Google-Smtp-Source: AGHT+IE45Yvom/A/j4RSMfDYF1CUEdZTkwIkyVR4ezwPFfY1flUHd2kbPJ5xKXEOW1rOccNE4mu7Qg==
-X-Received: by 2002:a05:600c:c8b:b0:412:85c2:db12 with SMTP id fj11-20020a05600c0c8b00b0041285c2db12mr75679wmb.2.1709248607440;
-        Thu, 29 Feb 2024 15:16:47 -0800 (PST)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id m17-20020a05600c4f5100b00412b7456ef7sm3506412wmq.5.2024.02.29.15.16.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 29 Feb 2024 15:16:46 -0800 (PST)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	nathan@kernel.org,
-	mark.rutland@arm.com,
-	broonie@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: puranjay12@gmail.com
-Subject: [PATCH] arm64: prohibit probing on arch_kunwind_consume_entry()
-Date: Thu, 29 Feb 2024 23:16:20 +0000
-Message-Id: <20240229231620.24846-1-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="guWdubPe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB605C433F1;
+	Thu, 29 Feb 2024 23:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709250297;
+	bh=qa9Uq860kOdvHNmNrVFdx4l6XPMgXK03pRLQ8A95MvE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=guWdubPec5EPeLNkk8zjOlD7e635gnxJTUiO53QcUEGBfqPvJ4NFKwrBg6jozCy+d
+	 ufSh8k65a4w3Rzm6IhUOLO5l8/jonpjozXoo6GCfEj9qPSNaY0NavYmaetObrJTtUo
+	 aY7ABYHyZVMj1VAOc4aglffMe6fcd/I1mToo81gi+1e4tDCFmaJnkQrVWZs5YZm4xv
+	 PLKnDGQW5lp9LQcXGvT2LJFWcuu9iwPkM2ICh5hEzK8m1raU5MmQVkR2ajSWPt0wAs
+	 TMh+67UEGjB5fnm0u5emIm+fZKJiDtZk5Hb28zdBiyyehDOa4TtiA8TDXvzAp9BAaV
+	 za8NIdmdACjyQ==
+Date: Thu, 29 Feb 2024 16:44:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: Re: [trace:trace/for-next 28/29]
+ include/trace/events/sunrpc.h:703:4: warning: result of comparison against a
+ string literal is unspecified (use an explicit string comparison function
+ instead)
+Message-ID: <20240229234455.GA1020819@dev-arch.thelio-3990X>
+References: <202402292111.KIdExylU-lkp@intel.com>
+ <20240229180616.48d2c0eb@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240229180616.48d2c0eb@gandalf.local.home>
 
-Make arch_kunwind_consume_entry() as __always_inline otherwise the
-compiler might not inline it and allow attaching probes to it.
+Hi Steve,
 
-Without this, just probing arch_kunwind_consume_entry() via
-<tracefs>/kprobe_events will crash the kernel on arm64.
+On Thu, Feb 29, 2024 at 06:06:16PM -0500, Steven Rostedt wrote:
+> On Thu, 29 Feb 2024 21:35:53 +0800
+> kernel test robot <lkp@intel.com> wrote:
+> 
+> > tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/for-next
+> > head:   eb1533d156d307c2125943eaf1925e268094d984
+> > commit: 433e1d88a3be93222989e52fa99594fe9eb93622 [28/29] tracing: Add warning if string in __assign_str() does not match __string()
+> > config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240229/202402292111.KIdExylU-lkp@intel.com/config)
+> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240229/202402292111.KIdExylU-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202402292111.KIdExylU-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> >    In file included from net/sunrpc/sched.c:31:
+> >    In file included from include/trace/events/sunrpc.h:2520:
+> >    In file included from include/trace/define_trace.h:102:
+> >    In file included from include/trace/trace_events.h:419:
+> > >> include/trace/events/sunrpc.h:703:4: warning: result of comparison against a string literal is unspecified (use an explicit string comparison function instead) [-Wstring-compare]  
+> >      663 |                         __assign_str(progname,
+> >          |                         ~~~~~~~~~~~~~~~~~~~~~~
+> >      664 |                                      task->tk_client->cl_program->name);
+> >          |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >      665 |                         __entry->version = task->tk_client->cl_vers;
+> >          |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >      666 |                         __assign_str(procedure, task->tk_msg.rpc_proc->p_name);
+> >          |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >      667 |                 } else {
+> >          |                 ~~~~~~~~
+> >      668 |                         __entry->task_id = -1;
+> >          |                         ~~~~~~~~~~~~~~~~~~~~~~
+> >      669 |                         __entry->client_id = -1;
+> >          |                         ~~~~~~~~~~~~~~~~~~~~~~~~
+> >      670 |                         __assign_str(progname, "unknown");
+> >          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >      671 |                         __entry->version = 0;
+> >          |                         ~~~~~~~~~~~~~~~~~~~~~
+> >      672 |                         __assign_str(procedure, "unknown");
+> >          |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >      673 |                 }
+> 
+> 
+> I don't build with clang, does this quiet the warning?
 
-The crash can be reproduced using the following compiler and kernel
-combination:
-clang version 19.0.0git (https://github.com/llvm/llvm-project.git d68d29516102252f6bf6dc23fb22cef144ca1cb3)
-commit 87adedeba51a ("Merge tag 'net-6.8-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
+Unfortunately, it does not. I tested with LLVM 17.0.6 from kernel.org:
 
- [root@localhost ~]# echo 'p arch_kunwind_consume_entry' > /sys/kernel/debug/tracing/kprobe_events
- [root@localhost ~]# echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
+https://mirrors.edge.kernel.org/pub/tools/llvm/
 
- Modules linked in: aes_ce_blk aes_ce_cipher ghash_ce sha2_ce virtio_net sha256_arm64 sha1_ce arm_smccc_trng net_failover failover virtio_mmio uio_pdrv_genirq uio sch_fq_codel dm_mod dax configfs
- CPU: 3 PID: 1405 Comm: bash Not tainted 6.8.0-rc6+ #14
- Hardware name: linux,dummy-virt (DT)
- pstate: 604003c5 (nZCv DAIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : kprobe_breakpoint_handler+0x17c/0x258
- lr : kprobe_breakpoint_handler+0x17c/0x258
- sp : ffff800085d6ab60
- x29: ffff800085d6ab60 x28: ffff0000066f0040 x27: ffff0000066f0b20
- x26: ffff800081fa7b0c x25: 0000000000000002 x24: ffff00000b29bd18
- x23: ffff00007904c590 x22: ffff800081fa6590 x21: ffff800081fa6588
- x20: ffff00000b29bd18 x19: ffff800085d6ac40 x18: 0000000000000079
- x17: 0000000000000001 x16: ffffffffffffffff x15: 0000000000000004
- x14: ffff80008277a940 x13: 0000000000000003 x12: 0000000000000003
- x11: 00000000fffeffff x10: c0000000fffeffff x9 : aa95616fdf80cc00
- x8 : aa95616fdf80cc00 x7 : 205d343137373231 x6 : ffff800080fb48ec
- x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
- x2 : 0000000000000000 x1 : ffff800085d6a910 x0 : 0000000000000079
- Call trace:
- kprobes: Failed to recover from reentered kprobes.
- kprobes: Dump kprobe:
- .symbol_name = arch_kunwind_consume_entry, .offset = 0, .addr = arch_kunwind_consume_entry+0x0/0x40
- ------------[ cut here ]------------
- kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
- kprobes: Failed to recover from reentered kprobes.
- kprobes: Dump kprobe:
- .symbol_name = arch_kunwind_consume_entry, .offset = 0, .addr = arch_kunwind_consume_entry+0x0/0x40
+If there is no other way to silence it, we could potentially use the
+diag infrastructure to silence it, I could look at that tomorrow.
 
-Fixes: 1aba06e7b2b49 ("arm64: stacktrace: factor out kunwind_stack_walk()")
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
- arch/arm64/kernel/stacktrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cheers,
+Nathan
 
-diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-index 7f88028a00c0..b2a60e0bcfd2 100644
---- a/arch/arm64/kernel/stacktrace.c
-+++ b/arch/arm64/kernel/stacktrace.c
-@@ -247,7 +247,7 @@ struct kunwind_consume_entry_data {
- 	void *cookie;
- };
- 
--static bool
-+static __always_inline bool
- arch_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
- {
- 	struct kunwind_consume_entry_data *data = cookie;
-
-base-commit: 87adedeba51a822533649b143232418b9e26d08b
--- 
-2.40.1
-
+> diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
+> index a0c15f67eabe..83da83a0c14f 100644
+> --- a/include/trace/stages/stage6_event_callback.h
+> +++ b/include/trace/stages/stage6_event_callback.h
+> @@ -35,7 +35,9 @@
+>  	do {								\
+>  		char *__str__ = __get_str(dst);				\
+>  		int __len__ = __get_dynamic_array_len(dst) - 1;		\
+> -		WARN_ON_ONCE((src) != __data_offsets.dst##_ptr_);	\
+> +		WARN_ON_ONCE(__builtin_constant_p(src) ?		\
+> +			     strcmp((src), __data_offsets.dst##_ptr_) :	\
+> +			     (src) != __data_offsets.dst##_ptr_);	\
+>  		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
+>  		       EVENT_NULL_STR, __len__);			\
+>  		__str__[__len__] = '\0';				\
+> -- 
+> 2.43.0
+> 
+> 
