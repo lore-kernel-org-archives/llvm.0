@@ -1,139 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD9C3BBE4;
-	Thu, 29 Feb 2024 05:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899694594B;
+	Thu, 29 Feb 2024 07:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709184094; cv=none; b=N1VDyf/AM7VbwzAFXi1Jn8bB6L2YcRjoN64rGWO4wley36+zxIS8HUbDb739uWjWrgh+vt42hF+6FgrcvEi8KkTE+OdiTxZvep6bb7lWR0BC8mg15CjMSdrYFpOxcVudH2jGzg/O4PVn1/uRcRapsFQiQh3yoy2Bdnf1GWHsoic=
+	t=1709192546; cv=none; b=bMoQ3Uqlv4pVyZ6kFjVJOp/ci40feguy0lmaD+Pa5SyHw0jpMrMT+Tb400AT1gghujf1qE6N564wSNe4sb3dJP8j82Mfq2uJdXWnoYruW+E8XSACFEf1W8Em3D67FNbfnsR4DnNVAkI7fjLKxB7tKHMPkpDNI39Mpu3xz8SyVi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709184094; c=relaxed/simple;
-	bh=+OKbZBg8INtp2Ye+Yftr/WMz8Wbb90mWnLDPuYct/UY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rtss1KTpYzvTBC80h3zftWnueVjAlRAlUAYDuFARLcqzPdP8p0+d+YgK9zP0i5IpaIpGhP3/k5tbq23Q6q0m0AYlRH6/2mdeOIF+2e50VaU1/Lu+LaDk46nMBDIkITmWsS2GsKVNv/4vEFbmWFtTV0MeDafiqrO042ZGSjCicSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FVuPTr/c; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FVuPTr/c"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709184093; x=1740720093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+OKbZBg8INtp2Ye+Yftr/WMz8Wbb90mWnLDPuYct/UY=;
-  b=FVuPTr/cYdiMHpDCKkFYSsq6YOCrTSQ7cwT+MmeEyRl3aDJsMvMCn99b
-   7GI4mYj2wo5h4thU1pAck+wa6bs9zp7xearsMhOfrR/VHp1RWJgFxFCNf
-   m6/8DMqaqVhIFjrQzro+xrez1hoYxm6jP0TcBrzgInP3GC+TWDpU8Dd6n
-   vNbgpoQLeF5MB4Lyu470+iId/UXgBiuDEYnjTLRecIZmeDk0tt+Y6OsJ8
-   6r+iSDOfIrfs3vIpdc/ecLPFIUlapSbGYe/dbGzS7rXIRSgl9uetj9OSz
-   k7xq2TgATsQL00IBNRafh0XKfwbx7O013wUjfk4PsygI5gxjSwwsVeSng
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="26097755"
-X-IronPort-AV: E=Sophos;i="6.06,192,1705392000"; 
-   d="scan'208";a="26097755"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 21:21:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,192,1705392000"; 
-   d="scan'208";a="7735235"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 28 Feb 2024 21:21:26 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rfYrD-000CfY-1k;
-	Thu, 29 Feb 2024 05:21:23 +0000
-Date: Thu, 29 Feb 2024 13:17:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: peterx@redhat.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Yang Shi <shy828301@gmail.com>, Muchun Song <muchun.song@linux.dev>,
-	Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
-	"Kirill A . Shutemov" <kirill@shutemov.name>,
-	linuxppc-dev@lists.ozlabs.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	peterx@redhat.com
-Subject: Re: [PATCH 5/5] mm/treewide: Drop pXd_large()
-Message-ID: <202402291233.CVhChP2c-lkp@intel.com>
-References: <20240228085350.520953-6-peterx@redhat.com>
+	s=arc-20240116; t=1709192546; c=relaxed/simple;
+	bh=Q/11Q49KEKt/Spi4akngBYieCr5yha8+eBtEahXuFrI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W0r9mYdXi+BTz+IoFHI5EPjR/lo4ofxa8ljv306U+I6StIT3LfLbYKAczyworJgOb5UfDoUzBQU0JtG60ZHajcA3oQVeXlxXzrPShkG2OkWDLwyWNaj1Z8yGQ2M0YiScngMzLwgTSrr0WteLUMh1DScTOj9KqpMsz5/XcbmJUCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76EFA1FB;
+	Wed, 28 Feb 2024 23:43:02 -0800 (PST)
+Received: from [10.57.12.184] (unknown [10.57.12.184])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41FBD3F6C4;
+	Wed, 28 Feb 2024 23:42:21 -0800 (PST)
+Message-ID: <2496f490-fbfb-403c-a86c-73960afb4e76@arm.com>
+Date: Thu, 29 Feb 2024 07:42:38 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240228085350.520953-6-peterx@redhat.com>
-
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/peterx-redhat-com/mm-ppc-Define-pXd_large-with-pXd_leaf/20240228-170049
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240228085350.520953-6-peterx%40redhat.com
-patch subject: [PATCH 5/5] mm/treewide: Drop pXd_large()
-config: i386-buildonly-randconfig-001-20240228 (https://download.01.org/0day-ci/archive/20240229/202402291233.CVhChP2c-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240229/202402291233.CVhChP2c-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402291233.CVhChP2c-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/x86/include/asm/uaccess.h:17:
-   In file included from arch/x86/include/asm/tlbflush.h:16:
->> arch/x86/include/asm/pgtable.h:1099:19: error: redefinition of 'pud_leaf'
-    1099 | static inline int pud_leaf(pud_t pud)
-         |                   ^
-   include/asm-generic/pgtable-nopmd.h:34:19: note: previous definition is here
-      34 | static inline int pud_leaf(pud_t pud)           { return 0; }
-         |                   ^
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:116: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=298844285
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1191: prepare0] Error 2 shuffle=298844285
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:240: __sub-make] Error 2 shuffle=298844285
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2 shuffle=298844285
-   make: Target 'prepare' not remade because of errors.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
+ memcpy()
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+ gustavoars@kernel.org, morbo@google.com, justinstitt@google.com,
+ stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev, Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+ <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
+ <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
+ <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
+ <202402270816.0EA3349A76@keescook>
+ <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
+ <202402270852.E46A5268@keescook>
+ <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
+ <20240228165651.GA2158263@dev-arch.thelio-3990X>
+ <202402280944.CE26D81@keescook>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <202402280944.CE26D81@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +/pud_leaf +1099 arch/x86/include/asm/pgtable.h
 
-  1093	
-  1094	static inline int pud_bad(pud_t pud)
-  1095	{
-  1096		return (pud_flags(pud) & ~(_KERNPG_TABLE | _PAGE_USER)) != 0;
-  1097	}
-  1098	#else
-> 1099	static inline int pud_leaf(pud_t pud)
-  1100	{
-  1101		return 0;
-  1102	}
-  1103	#endif	/* CONFIG_PGTABLE_LEVELS > 2 */
-  1104	#define pud_leaf pud_leaf
-  1105	
+On 2/28/24 17:48, Kees Cook wrote:
+> On Wed, Feb 28, 2024 at 09:56:51AM -0700, Nathan Chancellor wrote:
+>> On Wed, Feb 28, 2024 at 08:41:07AM +0000, Lukasz Luba wrote:
+>>> Hi Nathan and Kees,
+>>>
+>>> On 2/27/24 17:00, Kees Cook wrote:
+>>>> On Tue, Feb 27, 2024 at 05:47:44PM +0100, Daniel Lezcano wrote:
+>>>>> Ok my misunderstanding was I thought sizeof() was calling _bdos under the
+>>>>> hood, so when calling sizeof(flex_array), it was returning the computed size
+>>>>> inferring from the __counted_by field.
+>>>>
+>>>> Yeah, sizeof() has a very limited scope. __builtin_object_size() has
+>>>> more flexibility (via the 2nd argument, "type"), but it was still
+>>>> compile-time only. __builtin_dynamic_object_size() was added to bring
+>>>> runtime evaluations into the mix (initially to support the alloc_size
+>>>> attribute, and now includes the counted_by attribute too).
+>>>>
+>>>
+>>> Thanks for your earlier emails explaining these stuff.
+>>> Do you have maybe some presentation about those features
+>>> for the kernel (ideally w/ a video from some conference)?
+>>
+>> I think Kees's 2022 and 2023 talks at LPC are a good place to start:
+>>
+>> https://youtu.be/tQwv79i02ks?si=Nj9hpvmQwPB4K3Y4&t=452
+>> https://youtu.be/OEFFqhP5sts?si=u6RnOP641S8FkouD&t=614
+>>
+>> https://outflux.net/slides/2022/lpc/features.pdf
+>> https://outflux.net/slides/2023/lpc/features.pdf
+> 
+> I've also got a write-up on the entire topic of array bounds, which ends
+> with some discussion of "the future" (which is now) involving the use of
+> the "counted_by" attribute:
+> https://people.kernel.org/kees/bounded-flexible-arrays-in-c#coming-soon-annotate-bounds-of-flexible-arrays
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thank you guys!
