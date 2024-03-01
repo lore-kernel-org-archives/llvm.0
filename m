@@ -1,191 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28172F53
-	for <llvm@lists.linux.dev>; Fri,  1 Mar 2024 05:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1522C524B7;
+	Fri,  1 Mar 2024 05:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709271621; cv=none; b=isz+daL0Z+2kuyr5vipPV5BdWrC/n5LqvJab/vS94CGWoPC88nNbLJFkKkehg0s1MW/1yPSiCBA0Jd1XhcvfAQGzgRBty0IxIpyqIkUL20QErv3AhN2h28XvVK+uxhRbpXJ6dG1JTlRr4INeVZDn5feh2YD/8MhhQmVCt8416u0=
+	t=1709272263; cv=none; b=E9Iyp/VSbO08+epEtIo5H4tGJ9jnlsT2akhXjietECjOhSlUIEzZI5m90lyW3EVdXiv67Mi24+UwTRecMLko7PWOtoGXVfepSX7xz+mo7xDE7zOsoaT9FY3sSyvD7gsAiyLGNnlFFZzyZ4ShrW2lzyQvygIQ276oYNP8XNFzJHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709271621; c=relaxed/simple;
-	bh=P9whLwANjyO7+5mMuFwjnUuyw19y+7CIe4TRArkWTM0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Ku9RiheV6M2vhi0tlArw46nSNJpRTUNMpW1Mm/kvwJEogkXGP7513SdbZ9SB+YbdNyVNgzn8UA3cdD1I5eeB/Mj0/jVahGcypTUqbficAEOkhzNQvIp6hslXUN0DgbFRng8+z0ii5NGMP4YVPT7i2GI9ZWzo6DjRij0u6fMyjVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y79o/SMw; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709272263; c=relaxed/simple;
+	bh=VB58vkq9zvpJkKBEkB+cYQb4AmHKD9ZCvhSeJfqXTKI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qACTSdL+Gf7arEwoOxuMNHUPm47Vh03eM3LlcFMqeVl80tMhunj5wYBULFd2TLQA5a2BhMGjcF92GLjcmoOz74/LztD0McjjDG7SR5uiHJiFtiCm9985ofJJpDgchiI3D+4au5gavyKHVNknFhQ6jPMuGWHQGp21+2y3sX+zOyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UTZuK8NP; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y79o/SMw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709271618;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RrFFuKavrogPgGU36i0MzD7FKIXcCFf1aEI/3Qfy3IA=;
-	b=Y79o/SMwJ+9BY/Xbuupuoc1RjSeEA+mf3xk0sSTPN81mVWKKVdwROrTDRUgHW2KRtF+KNz
-	JOk3iORJ47YMc7KXNyBx7f/BuX6OW/4wWPkq5UPrzXD6BxXunsWmtNglEmsnPrNlpLpWHc
-	srjJyvT6o6TPdFA0scr2i/EOmOKyieU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-371-p7itDjDkMey09TxdMgnFiA-1; Fri,
- 01 Mar 2024 00:40:17 -0500
-X-MC-Unique: p7itDjDkMey09TxdMgnFiA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA5E3381201F
-	for <llvm@lists.linux.dev>; Fri,  1 Mar 2024 05:40:16 +0000 (UTC)
-Received: from [172.64.4.41] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9E1CC1121312;
-	Fri,  1 Mar 2024 05:40:16 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 204): Test report for master
- (6.8.0-rc6, mainline.kernel.org-clang, d4f76f80)
-Date: Fri, 01 Mar 2024 05:40:16 -0000
-To: fmaurer@redhat.com, llvm@lists.linux.dev, haliu@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UTZuK8NP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709272261; x=1740808261;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VB58vkq9zvpJkKBEkB+cYQb4AmHKD9ZCvhSeJfqXTKI=;
+  b=UTZuK8NPG97knw/279SsP8FjKCGywTRgrejRPYEYvoewREBuR2nmd8kH
+   Hy5JCHjFvz0W34bk7319vpWmZopRkhooD8ECmslV1/d3Bam05kzouYdtM
+   h/pn4IFvlf2fytaT2kLM8quhAHs9TynPgGSYUUc38dNHcuuEzc7BuR9DG
+   9jTxwTcfkdxFTwBG0sMxjtOaVWIDHT8iSUFSCnHFYMPdClsOlNcdEzFkA
+   JT30jtbeYMZKul2h05I6CDADloNBDwY9kEXAmrQgPbikfELkTDKio7zzy
+   aZ11AijX7o3BRoirm9Ved/LhAT2tsDSrJ96JLnJjUKI3lHhd+tqLvWQQx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="3647632"
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="3647632"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 21:51:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="8328488"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Feb 2024 21:50:59 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rfvnN-000DZl-0I;
+	Fri, 01 Mar 2024 05:50:57 +0000
+Date: Fri, 1 Mar 2024 13:50:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:for_each_port-2024-02-29 19/30]
+ drivers/gpu/drm/omapdrm/dss/dpi.c:712:7: error: implicit declaration of
+ function 'of_graph_get_next_port_endpoint' is invalid in C99
+Message-ID: <202403011335.MZjfmAiU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <67086.124030100401700788@us-mta-371.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/morimoto/linux for_each_port-2024-02-29
+head:   b441fa290a8cd6c124fc8685ad471e4303c3234c
+commit: db4932c907a83220e0d03ca92b5d587655b5b726 [19/30] gpu: drm: omapdrm: use new of_graph endpoint functions
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240301/202403011335.MZjfmAiU-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403011335.MZjfmAiU-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403011335.MZjfmAiU-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'landlock-6.8-rc7' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/mic/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/132225
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11515215
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> drivers/gpu/drm/omapdrm/dss/dpi.c:712:7: error: implicit declaration of function 'of_graph_get_next_port_endpoint' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ep = of_graph_get_next_port_endpoint(port, NULL);
+                ^
+   drivers/gpu/drm/omapdrm/dss/dpi.c:712:7: note: did you mean 'fwnode_graph_get_next_endpoint'?
+   include/linux/property.h:454:23: note: 'fwnode_graph_get_next_endpoint' declared here
+   struct fwnode_handle *fwnode_graph_get_next_endpoint(
+                         ^
+   drivers/gpu/drm/omapdrm/dss/dpi.c:712:5: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+           ep = of_graph_get_next_port_endpoint(port, NULL);
+              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - Reboot test
+vim +/of_graph_get_next_port_endpoint +712 drivers/gpu/drm/omapdrm/dss/dpi.c
 
+   699	
+   700	int dpi_init_port(struct dss_device *dss, struct platform_device *pdev,
+   701			  struct device_node *port, enum dss_model dss_model)
+   702	{
+   703		struct dpi_data *dpi;
+   704		struct device_node *ep;
+   705		u32 datalines;
+   706		int r;
+   707	
+   708		dpi = devm_kzalloc(&pdev->dev, sizeof(*dpi), GFP_KERNEL);
+   709		if (!dpi)
+   710			return -ENOMEM;
+   711	
+ > 712		ep = of_graph_get_next_port_endpoint(port, NULL);
+   713		if (!ep)
+   714			return 0;
+   715	
+   716		r = of_property_read_u32(ep, "data-lines", &datalines);
+   717		of_node_put(ep);
+   718		if (r) {
+   719			DSSERR("failed to parse datalines\n");
+   720			return r;
+   721		}
+   722	
+   723		dpi->data_lines = datalines;
+   724	
+   725		dpi->pdev = pdev;
+   726		dpi->dss_model = dss_model;
+   727		dpi->dss = dss;
+   728		port->data = dpi;
+   729	
+   730		r = dpi_init_regulator(dpi);
+   731		if (r)
+   732			return r;
+   733	
+   734		return dpi_init_output_port(dpi, port);
+   735	}
+   736	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
