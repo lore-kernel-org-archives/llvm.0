@@ -1,54 +1,33 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878786995C;
-	Fri,  1 Mar 2024 11:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0CDA69D3D
+	for <llvm@lists.linux.dev>; Fri,  1 Mar 2024 11:24:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709291708; cv=none; b=CNZ/Lu2KHZ4YlCcrICngv9XcDmqfz5XioRXiwaMrFYXERBqNNA9Cj13dPFSMWF32ZlQ2wBwTRRf4T6z3oKVtlwU0wnnFfF1XAcxnXJGBKsfYmE5yNK3z4Y/DL0m5VQqjqU0d05HFL5M8lGjenFhrSQMc7Vj+4f6/JTW6SquSBbc=
+	t=1709292263; cv=none; b=U2e9ktZo6gYCA1x+Dk48HgGAujWMdZ0tAV7hYz3S5/tL7+J1uul3kVnd+HGTAio0pyDUQekFk6UhqdK25+Zdiy64NNIoLR0t7eEikhqM9FTFTfZm5J8T3wfVZ+NgbeDZlrYAoAjOC+B0enc8fJgGdM1AOiGoYkZF1pXbNWyJrgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709291708; c=relaxed/simple;
-	bh=PlzhoDlPcdrwTSfhcawxgggP12bq3hBxgvfGrUnzjIM=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iT7aCxb5opHOi9XHdxSqgItTeu/eEC1DLyETW1sWZ/hIx8kenPOWAh/vEopwkLhyjADh9tU+g4vm14wT7k0Aq1C2PfA53K3wBNyIpMQp5hhLrBsV9rjF1H0wgpuPAa8kMLPYVD9w6GfpZYP1gleR768hz4yWHEZS25qgFCyUJQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KYKtwOk0; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KYKtwOk0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709291706; x=1740827706;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=PlzhoDlPcdrwTSfhcawxgggP12bq3hBxgvfGrUnzjIM=;
-  b=KYKtwOk0L/2az/M7MEmTjLigLddZwEjOKbs2kJuajr8EXS9vVH3VC7dI
-   z+Ncf4PAZ9rppnCI1Xsffkt3uSJYTckFzX/bZofvQYvDiKjrgTEt5k/Dk
-   6eu7X0DLg7k8j/w8WaZMuuttRERXfQlOQR8iUs/xz+QzZrpOGOWzsoI7X
-   EMzJxvkzi96xjyFlSIg2kEAZJpxyA1beq5MibFVLgiZs/ZqwQ0Tv2Q0SJ
-   jOiFPOHQSujRGSIVP1B8YawukkMm7oVsjz2xNqVrW+dZWLLK2kZTaOMH3
-   jxGgI1swbJYpRQnevfYPPw3ZYr1+XSe5R52NemGNRb6mBjmf8PBUaCZcn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="7644774"
-X-IronPort-AV: E=Sophos;i="6.06,196,1705392000"; 
-   d="scan'208";a="7644774"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 03:15:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,196,1705392000"; 
-   d="scan'208";a="12719365"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 01 Mar 2024 03:15:05 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rg0qp-000Do1-1G;
-	Fri, 01 Mar 2024 11:14:54 +0000
-Date: Fri, 1 Mar 2024 19:13:44 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: fs/bcachefs/btree_io.c:1802:27: warning: bitwise operation between
- different enumeration types ('enum bch_watermark' and 'enum
- bch_trans_commit_flags')
-Message-ID: <202403011933.ZdyUZUo6-lkp@intel.com>
+	s=arc-20240116; t=1709292263; c=relaxed/simple;
+	bh=NXtVQpQbXjbQ+2nDWsgKqIjl673GUDImuBDZ3hHzKmI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2OJSBTggAsuFQPzFrdcPEVKIlISsplo41v+8WrOCIlwvDgvQzvlT3sMuI+xlX+KwYYuRrS3bVOAg06e6UYW/Vrkce/s26DqqBDb96IsJhh7XsIZWs1n7aWm08GiAMJj/eUA1iMFS1tUPJ8oGS32PaofTD+2h4f+9ynw96tdN+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58C141FB;
+	Fri,  1 Mar 2024 03:24:58 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.69.134])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AABE63F6C4;
+	Fri,  1 Mar 2024 03:24:18 -0800 (PST)
+Date: Fri, 1 Mar 2024 11:24:13 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Puranjay Mohan <puranjay12@gmail.com>, catalin.marinas@arm.com,
+	will@kernel.org
+Cc: nathan@kernel.org, broonie@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] arm64: prohibit probing on arch_kunwind_consume_entry()
+Message-ID: <ZeG63LbuDQaOYLKm@FVFF77S0Q05N>
+References: <20240229231620.24846-1-puranjay12@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,175 +36,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240229231620.24846-1-puranjay12@gmail.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Kent Overstreet <kent.overstreet@linux.dev>
+On Thu, Feb 29, 2024 at 11:16:20PM +0000, Puranjay Mohan wrote:
+> Make arch_kunwind_consume_entry() as __always_inline otherwise the
+> compiler might not inline it and allow attaching probes to it.
+> 
+> Without this, just probing arch_kunwind_consume_entry() via
+> <tracefs>/kprobe_events will crash the kernel on arm64.
+> 
+> The crash can be reproduced using the following compiler and kernel
+> combination:
+> clang version 19.0.0git (https://github.com/llvm/llvm-project.git d68d29516102252f6bf6dc23fb22cef144ca1cb3)
+> commit 87adedeba51a ("Merge tag 'net-6.8-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
+> 
+>  [root@localhost ~]# echo 'p arch_kunwind_consume_entry' > /sys/kernel/debug/tracing/kprobe_events
+>  [root@localhost ~]# echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
+> 
+>  Modules linked in: aes_ce_blk aes_ce_cipher ghash_ce sha2_ce virtio_net sha256_arm64 sha1_ce arm_smccc_trng net_failover failover virtio_mmio uio_pdrv_genirq uio sch_fq_codel dm_mod dax configfs
+>  CPU: 3 PID: 1405 Comm: bash Not tainted 6.8.0-rc6+ #14
+>  Hardware name: linux,dummy-virt (DT)
+>  pstate: 604003c5 (nZCv DAIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>  pc : kprobe_breakpoint_handler+0x17c/0x258
+>  lr : kprobe_breakpoint_handler+0x17c/0x258
+>  sp : ffff800085d6ab60
+>  x29: ffff800085d6ab60 x28: ffff0000066f0040 x27: ffff0000066f0b20
+>  x26: ffff800081fa7b0c x25: 0000000000000002 x24: ffff00000b29bd18
+>  x23: ffff00007904c590 x22: ffff800081fa6590 x21: ffff800081fa6588
+>  x20: ffff00000b29bd18 x19: ffff800085d6ac40 x18: 0000000000000079
+>  x17: 0000000000000001 x16: ffffffffffffffff x15: 0000000000000004
+>  x14: ffff80008277a940 x13: 0000000000000003 x12: 0000000000000003
+>  x11: 00000000fffeffff x10: c0000000fffeffff x9 : aa95616fdf80cc00
+>  x8 : aa95616fdf80cc00 x7 : 205d343137373231 x6 : ffff800080fb48ec
+>  x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+>  x2 : 0000000000000000 x1 : ffff800085d6a910 x0 : 0000000000000079
+>  Call trace:
+>  kprobes: Failed to recover from reentered kprobes.
+>  kprobes: Dump kprobe:
+>  .symbol_name = arch_kunwind_consume_entry, .offset = 0, .addr = arch_kunwind_consume_entry+0x0/0x40
+>  ------------[ cut here ]------------
+>  kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+>  kprobes: Failed to recover from reentered kprobes.
+>  kprobes: Dump kprobe:
+>  .symbol_name = arch_kunwind_consume_entry, .offset = 0, .addr = arch_kunwind_consume_entry+0x0/0x40
+> 
+> Fixes: 1aba06e7b2b49 ("arm64: stacktrace: factor out kunwind_stack_walk()")
+> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 
-Hi Kent,
+Thanks for this!
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Whoops; I had meant to make this __always_inline (or noinstr), but I evidently
+messed that up. I don't recall any problem with making this __always_inline,
+and that's preferable here to allow the compiler to fold some of the
+indirection.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   87adedeba51a822533649b143232418b9e26d08b
-commit: cb52d23e77a6e5e9588962ba7e283b0d0d2c1976 bcachefs: Rename BTREE_INSERT flags
-date:   9 weeks ago
-config: hexagon-randconfig-001-20240229 (https://download.01.org/0day-ci/archive/20240301/202403011933.ZdyUZUo6-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403011933.ZdyUZUo6-lkp@intel.com/reproduce)
+From a scan of stacktrace.c I don't see anything else that needs similar
+treatment; the other functions lacking __always_inline and noinstr are safe to
+instrument as they aren't core to the unwinder, and won't recurse into
+themselves in a problematic way.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403011933.ZdyUZUo6-lkp@intel.com/
+Given all the above:
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2177:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> fs/bcachefs/btree_io.c:1802:27: warning: bitwise operation between different enumeration types ('enum bch_watermark' and 'enum bch_trans_commit_flags') [-Wenum-enum-conversion]
-    1802 |                                         BCH_WATERMARK_reclaim|
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-    1803 |                                         BCH_TRANS_COMMIT_journal_reclaim|
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/btree_update.h:148:71: note: expanded from macro 'bch2_trans_do'
-     148 |         bch2_trans_run(_c, commit_do(trans, _disk_res, _journal_seq, _flags, _do))
-         |                                                                              ^~~
-   fs/bcachefs/btree_update.h:132:25: note: expanded from macro 'commit_do'
-     132 |         lockrestart_do(_trans, _do ?: bch2_trans_commit(_trans, (_disk_res),\
-         |                                ^~~
-   fs/bcachefs/btree_iter.h:685:12: note: expanded from macro 'lockrestart_do'
-     685 |                 _ret2 = (_do);                                          \
-         |                          ^~~
-   fs/bcachefs/btree_update.h:142:14: note: expanded from macro 'bch2_trans_run'
-     142 |         int _ret = (_do);                                               \
-         |                     ^~~
-   8 warnings generated.
+Catalin, Will, are you happy to queue this as a fix?
 
+Mark.
 
-vim +1802 fs/bcachefs/btree_io.c
-
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1774  
-9f1833cadda7bb Kent Overstreet 2021-07-10  1775  static void btree_node_write_work(struct work_struct *work)
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1776  {
-9f1833cadda7bb Kent Overstreet 2021-07-10  1777  	struct btree_write_bio *wbio =
-9f1833cadda7bb Kent Overstreet 2021-07-10  1778  		container_of(work, struct btree_write_bio, work);
-9f1833cadda7bb Kent Overstreet 2021-07-10  1779  	struct bch_fs *c	= wbio->wbio.c;
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1780  	struct btree *b		= wbio->wbio.bio.bi_private;
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1781  	struct bch_extent_ptr *ptr;
-09ebfa61130eda Kent Overstreet 2023-04-21  1782  	int ret = 0;
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1783  
-9f1833cadda7bb Kent Overstreet 2021-07-10  1784  	btree_bounce_free(c,
-9f1833cadda7bb Kent Overstreet 2021-07-10  1785  		wbio->data_bytes,
-9f1833cadda7bb Kent Overstreet 2021-07-10  1786  		wbio->wbio.used_mempool,
-9f1833cadda7bb Kent Overstreet 2021-07-10  1787  		wbio->data);
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1788  
-9f1833cadda7bb Kent Overstreet 2021-07-10  1789  	bch2_bkey_drop_ptrs(bkey_i_to_s(&wbio->key), ptr,
-a2753581f6c5c0 Kent Overstreet 2018-09-30  1790  		bch2_dev_list_has_dev(wbio->wbio.failed, ptr->dev));
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1791  
-9f1833cadda7bb Kent Overstreet 2021-07-10  1792  	if (!bch2_bkey_nr_ptrs(bkey_i_to_s_c(&wbio->key)))
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1793  		goto err;
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1794  
-9f1833cadda7bb Kent Overstreet 2021-07-10  1795  	if (wbio->wbio.first_btree_write) {
-9f1833cadda7bb Kent Overstreet 2021-07-10  1796  		if (wbio->wbio.failed.nr) {
-9f1833cadda7bb Kent Overstreet 2021-07-10  1797  
-9f1833cadda7bb Kent Overstreet 2021-07-10  1798  		}
-9f1833cadda7bb Kent Overstreet 2021-07-10  1799  	} else {
-9f1833cadda7bb Kent Overstreet 2021-07-10  1800  		ret = bch2_trans_do(c, NULL, NULL, 0,
-6bd68ec266ad71 Kent Overstreet 2023-09-12  1801  			bch2_btree_node_update_key_get_iter(trans, b, &wbio->key,
-f33c58fc46a9c5 Kent Overstreet 2023-06-27 @1802  					BCH_WATERMARK_reclaim|
-cb52d23e77a6e5 Kent Overstreet 2023-11-11  1803  					BCH_TRANS_COMMIT_journal_reclaim|
-cb52d23e77a6e5 Kent Overstreet 2023-11-11  1804  					BCH_TRANS_COMMIT_no_enospc|
-cb52d23e77a6e5 Kent Overstreet 2023-11-11  1805  					BCH_TRANS_COMMIT_no_check_rw,
-9f1833cadda7bb Kent Overstreet 2021-07-10  1806  					!wbio->wbio.failed.nr));
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1807  		if (ret)
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1808  			goto err;
-9f1833cadda7bb Kent Overstreet 2021-07-10  1809  	}
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1810  out:
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1811  	bio_put(&wbio->wbio.bio);
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1812  	btree_node_write_done(c, b);
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1813  	return;
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1814  err:
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1815  	set_btree_node_noevict(b);
-09ebfa61130eda Kent Overstreet 2023-04-21  1816  	if (!bch2_err_matches(ret, EROFS))
-e4eb661d3a5764 Kent Overstreet 2023-06-27  1817  		bch2_fs_fatal_error(c, "fatal error writing btree node: %s", bch2_err_str(ret));
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1818  	goto out;
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1819  }
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  1820  
-
-:::::: The code at line 1802 was first introduced by commit
-:::::: f33c58fc46a9c5bd6cbf90edb6ce17fa3fd912d5 bcachefs: Kill BTREE_INSERT_USE_RESERVE
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  arch/arm64/kernel/stacktrace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index 7f88028a00c0..b2a60e0bcfd2 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -247,7 +247,7 @@ struct kunwind_consume_entry_data {
+>  	void *cookie;
+>  };
+>  
+> -static bool
+> +static __always_inline bool
+>  arch_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
+>  {
+>  	struct kunwind_consume_entry_data *data = cookie;
+> 
+> base-commit: 87adedeba51a822533649b143232418b9e26d08b
+> -- 
+> 2.40.1
+> 
