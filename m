@@ -1,145 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C553A8CF;
-	Fri,  1 Mar 2024 02:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC632BAE7;
+	Fri,  1 Mar 2024 03:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709261211; cv=none; b=nXeWXRGuXBMmHT6o5+0dv/L2F7ZqdM7zcvF4hLcsk3RDRudjOfwuK0MIRkDHbg4UIrYUR9J+KUM1jZW+b8pE6Ub36kjZAnRUMJHssz18Sr2SbW738GjT+p+HJllcDzNIM9hRoJOywjlSkYoLjkfrRxClILYSSTauLI9Vq+9EA+o=
+	t=1709262532; cv=none; b=i1qYkEFPZ44pVvyE81QaNGvPO0YbcbXKr0MrbKpqNqHc5fodZa0EsKyHD10IpmsCoHjJ3N+9eq9RCdNHmoD8ZmOvVwbzxjACEtNdgWVzNBklY2/MOP3BIBaYklKLTP0FFhbXKTrjFLv2PB8mS8eCjGU9jYXmINgMA8Jq7XTzl+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709261211; c=relaxed/simple;
-	bh=hDtVieXhB+qZYYUka7fqbcj6BoL4w++U3/2RLOvpv0c=;
+	s=arc-20240116; t=1709262532; c=relaxed/simple;
+	bh=s3KJN8JDwITd9zuNN8xJ9dSj+TN3W+VNk4RCKrJTVkk=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=R0ephPYyupumDah3YVDiv6n6JnqM+YluMCJLXIJWD3MtycBg5mvHGYbRVnuOaqOZ5PPUd0ETcRxyZfp2Dxq9dWyx24/3KrK8xAxAEslX15tszEeNJajMmjKuvn3gvSQvUoudlHS2D7IO9rrcHpw1u8YsANYEJXu10d/ClFEjo8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ArwjUQlx; arc=none smtp.client-ip=192.198.163.15
+	 Content-Disposition; b=XsYWcHXRhrgMGzJ2FE+PNcLMxAuPb9IsYQKITgnqaOCzShHeouxBBTpL89tU0euif5qGy1Y6GZtbS4GVmCwdSzq36gDITnixh5HBMrAXerX7Z4teAqTV8Aw0wrM934RlMo9o5sEDmF52eyn63vSuz8X39LZIZEuT+0vvrnlq2go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=STR2iorN; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ArwjUQlx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="STR2iorN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709261209; x=1740797209;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hDtVieXhB+qZYYUka7fqbcj6BoL4w++U3/2RLOvpv0c=;
-  b=ArwjUQlxblUnpVaix4GyFVTCIc67sY7UuZeJ2qRIs4KcSEFnrkd1vkzl
-   NmWUw+FsWhJF9wCa2Q2g0u3RK/cV+nTJkGi81hFClCIlM9KLlQBVfsSvy
-   gF97BHRkijSJxilfzNNBj9sWGj6Eur8XjebaQ5tebZY0la62AEbHncViF
-   k8lRcDMBpTsdRBF18RNzEGP7y7wKKVQ/P73CeQQQQ/LqTQDReAbWEBkFU
-   stI9D9aBI/fe0734BKeS+0nY1xm4eqkVD6fkWIJ/DrKBIz2BC13RD2gjb
-   dqJobdH5ICjQdUoQK9gA/OXVxfEevElj+t/4U4DuyeBsnDWiZKhRg6n8P
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="3954318"
+  t=1709262526; x=1740798526;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s3KJN8JDwITd9zuNN8xJ9dSj+TN3W+VNk4RCKrJTVkk=;
+  b=STR2iorNybG6864uATFUpkPOsfzFUxE9RsRwvhL27ke4zdkeC98T+RJx
+   VXJz+yi8pGS2+GoBlOPc4NjUjv2pjeYdI7+FlARw4R9kgJUt52dkMndks
+   cStdW+g2BthTqEUIlBBnm+Ue/PvZ4Tf+3s6N34e/mQSK9LxJc1P0aczMd
+   aF4qobk751hzjhOlDusOlQtu38mZwZqLYoIsBW05k0LzIKQNNmBByH1Oo
+   4Kml6l5MY93bCGngXwVLLmWR7Yd+m9b/uoPgyMGQV/lPkX+dyB52s5RJ9
+   /TmFYe4G4+2VrQ2/ui05Q6Q8VnDHelyidr1tNul0MxmUXog/Aqnssl35X
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="3901349"
 X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="3954318"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 18:46:48 -0800
+   d="scan'208";a="3901349"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 19:08:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="12646393"
+   d="scan'208";a="8469006"
 Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 29 Feb 2024 18:46:43 -0800
+  by orviesa006.jf.intel.com with ESMTP; 29 Feb 2024 19:08:43 -0800
 Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rfsut-000DTv-13;
-	Fri, 01 Mar 2024 02:46:38 +0000
-Date: Fri, 1 Mar 2024 10:46:31 +0800
+	id 1rftGL-000DUZ-1I;
+	Fri, 01 Mar 2024 03:08:41 +0000
+Date: Fri, 1 Mar 2024 11:08:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Lee Jones <lee@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>
-Subject: [linux-next:master 9077/11156]
- drivers/leds/leds-gpio-register.c:23:32: error: redefinition of
- 'gpio_led_register_device'
-Message-ID: <202403011013.7cDG1rwi-lkp@intel.com>
+To: Michal Simek <monstr@monstr.eu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+	Jianqiang Chen <jianqiang.chen@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v6.6 383/860]
+ drivers/gpu/drm/xlnx/zynqmp_dp.c:361:2: error: call to undeclared function
+ 'writel'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202403011030.Z3zKPlIt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-Hi Duje,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f303a3e2bcfba900efb5aee55236d17030e9f882
-commit: 7a28f9cf6b7c8cad760b4d4ee7f53231cd76d8e4 [9077/11156] Revert "leds: Only descend into leds directory when CONFIG_NEW_LEDS is set"
-config: mips-bcm47xx_defconfig (https://download.01.org/0day-ci/archive/20240301/202403011013.7cDG1rwi-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403011013.7cDG1rwi-lkp@intel.com/reproduce)
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6
+head:   24eec56fe5bd68cae795c37c61276b4dcf218a53
+commit: bdf045814d4629c0ab369b168755b12635532dc3 [383/860] drm: xlnx: Update DP subsystem with downstream version
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240301/202403011030.Z3zKPlIt-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403011030.Z3zKPlIt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403011013.7cDG1rwi-lkp@intel.com/
-
-Note: the linux-next/master HEAD f303a3e2bcfba900efb5aee55236d17030e9f882 builds fine.
-      It may have been fixed somewhere.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403011030.Z3zKPlIt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must precede definition [-Wignored-attributes]
-   struct platform_device *__init gpio_led_register_device(
-                           ^
-   include/linux/init.h:52:17: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-                           ^
-   include/linux/compiler_attributes.h:334:56: note: expanded from macro '__section'
-   #define __section(section)              __attribute__((__section__(section)))
-                                                          ^
-   include/linux/leds.h:646:39: note: previous definition is here
-   static inline struct platform_device *gpio_led_register_device(
-                                         ^
-   drivers/leds/leds-gpio-register.c:23:25: warning: attribute declaration must precede definition [-Wignored-attributes]
-   struct platform_device *__init gpio_led_register_device(
-                           ^
-   include/linux/init.h:52:41: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-                                                   ^
-   include/linux/compiler_types.h:113:34: note: expanded from macro '__cold'
-   #define __cold                          __attribute__((__cold__))
-                                                          ^
-   include/linux/leds.h:646:39: note: previous definition is here
-   static inline struct platform_device *gpio_led_register_device(
-                                         ^
->> drivers/leds/leds-gpio-register.c:23:32: error: redefinition of 'gpio_led_register_device'
-   struct platform_device *__init gpio_led_register_device(
-                                  ^
-   include/linux/leds.h:646:39: note: previous definition is here
-   static inline struct platform_device *gpio_led_register_device(
-                                         ^
-   2 warnings and 1 error generated.
+   In file included from drivers/gpu/drm/xlnx/zynqmp_dp.c:12:
+   In file included from include/drm/drm_atomic_helper.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:30:
+   In file included from include/linux/hdmi.h:28:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/xlnx/zynqmp_dp.c:361:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     361 |         writel(val, base + offset);
+         |         ^
+>> drivers/gpu/drm/xlnx/zynqmp_dp.c:366:9: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     366 |         return readl(base + offset);
+         |                ^
+   5 warnings and 2 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_PANEL_SIMPLE
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && DRM_PANEL [=y] && OF [=y] && BACKLIGHT_CLASS_DEVICE [=m] && PM
+   Selected by [m]:
+   - DRM_XLNX_DSI [=m] && HAS_IOMEM [=y] && DRM_XLNX [=m]
 
 
-vim +/gpio_led_register_device +23 drivers/leds/leds-gpio-register.c
+vim +/writel +361 drivers/gpu/drm/xlnx/zynqmp_dp.c
 
-4440673a95e63a Uwe Kleine-König 2011-05-24  10  
-4440673a95e63a Uwe Kleine-König 2011-05-24  11  /**
-4440673a95e63a Uwe Kleine-König 2011-05-24  12   * gpio_led_register_device - register a gpio-led device
-4440673a95e63a Uwe Kleine-König 2011-05-24  13   * @pdata: the platform data used for the new device
-c5a87a4ac2bfec Lee Jones        2021-05-28  14   * @id: platform ID
-4440673a95e63a Uwe Kleine-König 2011-05-24  15   *
-4440673a95e63a Uwe Kleine-König 2011-05-24  16   * Makes a copy of pdata and pdata->leds and registers a new leds-gpio device
-4440673a95e63a Uwe Kleine-König 2011-05-24  17   * with the result. This allows to have pdata and pdata-leds in .init.rodata
-4440673a95e63a Uwe Kleine-König 2011-05-24  18   * and so saves some bytes compared to a static struct platform_device with
-4440673a95e63a Uwe Kleine-König 2011-05-24  19   * static platform data.
-4440673a95e63a Uwe Kleine-König 2011-05-24  20   *
-4440673a95e63a Uwe Kleine-König 2011-05-24  21   * Returns the registered device or an error pointer.
-4440673a95e63a Uwe Kleine-König 2011-05-24  22   */
-4440673a95e63a Uwe Kleine-König 2011-05-24 @23  struct platform_device *__init gpio_led_register_device(
-
-:::::: The code at line 23 was first introduced by commit
-:::::: 4440673a95e63ad888a41db596edaa0c55d3a332 leds: provide helper to register "leds-gpio" devices
-
-:::::: TO: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+   358	
+   359	static void zynqmp_dp_write(void __iomem *base, int offset, u32 val)
+   360	{
+ > 361		writel(val, base + offset);
+   362	}
+   363	
+   364	static u32 zynqmp_dp_read(void __iomem *base, int offset)
+   365	{
+ > 366		return readl(base + offset);
+   367	}
+   368	
 
 -- 
 0-DAY CI Kernel Test Service
