@@ -1,46 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6340C47F54;
-	Fri,  1 Mar 2024 04:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662962031D;
+	Fri,  1 Mar 2024 04:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709266294; cv=none; b=Px+ffosyMMa4mlxHmBZE24MV93OSQndLoBeWWWaETFkx38TnLI/TFB/KHTwnP43QubMEIp8LPEGAAzsnbVuskXVvrfapgaQE77sHTXxVtv/P2aYSs5+/48VOQ+rmleWziCT0Zvng1eCZhpGXAI4vJXHMyOTbSZsT51zmLzHePYo=
+	t=1709268354; cv=none; b=TGULcK4Tf8F2co9yOjB3/pFgr8CTcXyV2T5/LSKHIUDMkRbnRP4k0oqtCqXwuhukDKyDAexVaFIV6NthCmLtOMUBU3WAOPwjcEmddZ5VzfjRCb+6zai54SmQSZh78nsmvRQoWiaF3LrPsXOQKeOHTeoHCHi0Se6ROh9p2Cg1SwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709266294; c=relaxed/simple;
-	bh=ZLiSyJsBWiOF24DbvxEQPfAShr4vD9tN2Du0IVdD+n8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bz14pCfDjzLR60wqikFk1oKM0WpgBIGeShsTBuPcIN+EuK4VA9pAamR9ZSZ5F4vWtqL47KzO96bWeQRh8K0FDvD5ZnysZmZP7s/JJVPBQO5Jb2pVZHvWqzkEmWBwSLr127jPZApS/P0k85FLOoWiOTmAzzxE+cHB7NQIMAlOdZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PgY2u64R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709268354; c=relaxed/simple;
+	bh=OPG2aQStA33eIEQ79Mi7D/VRphyP4XpwM0zOZBhw+RE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=j0ypYtvJ6OahXxDn+6sQ0CiAn19XhX8n/fXfL8WnehX2GYIWcykiNeEi5Ws2gPWTlVonLIynBhuELp8dA/HnxmVkiGzhB4SuVgFgv9wailqHFqK0FkQGvxe9cuDDlS6UxFZyW3I8uTkJI+two4LsYiffSm2SLKfgKelu1qeHUiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GNZd0bS9; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PgY2u64R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B4DC433C7;
-	Fri,  1 Mar 2024 04:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709266293;
-	bh=ZLiSyJsBWiOF24DbvxEQPfAShr4vD9tN2Du0IVdD+n8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PgY2u64RwkNjf3Lnofj3jJx+gUbJlkkcDGjpXZUdDRGrzf4mAIFY3FNQzFpVHNEIT
-	 FgFMstK53T1/JQqdbCxrtsmbAj2hBeGSWjNGJ+3vObhZIYfHl3XNZZ/48APsqGqh5W
-	 XpNw1Q2by4zN03DS7xMa6tQ+4ANw3noJy3Kwg8EfuoSoxXHx9S6uEO6Y4JfqjKB2cf
-	 KYs2eXa+JgXHsWnRubgopQyrXMWSyFOPXFz1DGar3QnJAvte6j006iCUbZkIaWJKKd
-	 S3DPtgPbQb+1H7+I/NBzGUE/uFrm0QZWG/qG4D/eiUKoml+O5N6p50hIJFfrVXR5Zh
-	 UDdFEOSJSSJ4w==
-Date: Thu, 29 Feb 2024 21:11:31 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [trace:trace/for-next 28/29]
- include/trace/events/sunrpc.h:703:4: warning: result of comparison against a
- string literal is unspecified (use an explicit string comparison function
- instead)
-Message-ID: <20240301041131.GB577965@dev-arch.thelio-3990X>
-References: <202402292111.KIdExylU-lkp@intel.com>
- <20240229180616.48d2c0eb@gandalf.local.home>
- <20240229234455.GA1020819@dev-arch.thelio-3990X>
- <20240229185558.70b6ea86@gandalf.local.home>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GNZd0bS9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709268352; x=1740804352;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OPG2aQStA33eIEQ79Mi7D/VRphyP4XpwM0zOZBhw+RE=;
+  b=GNZd0bS9qfvxulSw1BHynI/JFk8NjQHFL6agMHCChMyQKClyBhaEtkO8
+   LLaBjRucH9X0UO+4eaF01fLlTIRu4qjni6rkQjUVHSifX2czGHItZ8x/k
+   aO1vRDAyWKeKVUOwU9DLboJKoYMs7+6pWXe0Qa2swtGDV8dpGRiZDuHXT
+   gbGHuL3Z135ihf0DOarDMjMBFPzaaK+Fzq9LR6zNWPNEuKu0iQtHqvlfF
+   CmUPvQyblx9bN9M6N5ALyQDgLTwPId2tVjf9yniP33k+46ptLj0lJpKBw
+   NdkdH8Jm8Pqu2mxZdSb+fyTTHVK6prLErwnqDa6S9qfZjt1llb72m2psY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="29215291"
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="29215291"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 20:45:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="8000253"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 29 Feb 2024 20:45:44 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rfumD-000DXB-2Z;
+	Fri, 01 Mar 2024 04:45:41 +0000
+Date: Fri, 1 Mar 2024 12:45:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joshua Hay <joshua.a.hay@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Alan Brady <alan.brady@intel.com>,
+	Madhu Chittim <madhu.chittim@intel.com>,
+	Phani Burra <phani.r.burra@intel.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Pavan Kumar Linga <pavan.kumar.linga@intel.com>
+Subject: drivers/net/ethernet/intel/idpf/idpf_txrx.c:2613:49: warning:
+ bitwise operation between different enumeration types ('enum
+ idpf_tx_desc_dtype_value' and 'enum idpf_tx_flex_ctx_desc_cmd_bits')
+Message-ID: <202403011238.7xvDaw0y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,46 +66,243 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240229185558.70b6ea86@gandalf.local.home>
 
-On Thu, Feb 29, 2024 at 06:55:58PM -0500, Steven Rostedt wrote:
-> On Thu, 29 Feb 2024 16:44:55 -0700
-> Nathan Chancellor <nathan@kernel.org> wrote:
-> 
-> > > I don't build with clang, does this quiet the warning?  
-> > 
-> > Unfortunately, it does not. I tested with LLVM 17.0.6 from kernel.org:
-> > 
-> > https://mirrors.edge.kernel.org/pub/tools/llvm/
-> > 
-> > If there is no other way to silence it, we could potentially use the
-> > diag infrastructure to silence it, I could look at that tomorrow.
-> 
-> Is it the exact same warning? I wonder if I make it into an if statement,
-> it would be better?
-> 
-> #define __assign_str(dst, src)						\
-> 	do {								\
-> 		char *__str__ = __get_str(dst);				\
-> 		int __len__ = __get_dynamic_array_len(dst) - 1;		\
-> 		if (__builtin_constant_p(src))				\
-> 			WARN_ON_ONCE(strcmp((src), __data_offsets.dst##_ptr_)); \
-> 		else							\
-> 			WARN_ON_ONCE((src) != __data_offsets.dst##_ptr_);\
-> 		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
-> 		       EVENT_NULL_STR, __len__);			\
-> 		__str__[__len__] = '\0';				\
-> 	} while (0)
-> 
-> Then the compiler may be better in optimizing out the "bad" portion.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   87adedeba51a822533649b143232418b9e26d08b
+commit: a251eee62133774cf35ff829041377e721ef9c8c idpf: add SRIOV support and other ndo_ops
+date:   6 months ago
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240301/202403011238.7xvDaw0y-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403011238.7xvDaw0y-lkp@intel.com/reproduce)
 
-No, that does not work either, I diffed the warnings and they are
-identical minus line numbers. I don't think clang takes
-__builtin_constant_p() into account in the front end but I could be
-wrong. In fact, I think clang (and even gcc sometimes) will still warn
-for code even if it is within an 'if (0)' block, it's been used as
-justification before in commit 37b47298ab86 ("sched: Disable
--Wunused-but-set-variable").
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403011238.7xvDaw0y-lkp@intel.com/
 
-Cheers,
-Nathan
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/ethernet/intel/idpf/idpf.h:12:
+   In file included from include/net/pkt_sched.h:7:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/powerpc/include/asm/cacheflush.h:7:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/ethernet/intel/idpf/idpf_txrx.c:4:
+   In file included from drivers/net/ethernet/intel/idpf/idpf.h:24:
+   In file included from drivers/net/ethernet/intel/idpf/idpf_txrx.h:8:
+   In file included from include/net/tcp.h:35:
+   In file included from include/net/sock_reuseport.h:5:
+   In file included from include/linux/filter.h:9:
+   include/linux/bpf.h:720:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     720 |         ARG_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | ARG_PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:721:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     721 |         ARG_PTR_TO_MEM_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:722:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     722 |         ARG_PTR_TO_CTX_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_CTX,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:723:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     723 |         ARG_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:724:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     724 |         ARG_PTR_TO_STACK_OR_NULL        = PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:725:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     725 |         ARG_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:729:38: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     729 |         ARG_PTR_TO_UNINIT_MEM           = MEM_UNINIT | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:731:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     731 |         ARG_PTR_TO_FIXED_SIZE_MEM       = MEM_FIXED_SIZE | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:754:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     754 |         RET_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | RET_PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:755:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     755 |         RET_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:756:47: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     756 |         RET_PTR_TO_TCP_SOCK_OR_NULL     = PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:757:50: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     757 |         RET_PTR_TO_SOCK_COMMON_OR_NULL  = PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:759:49: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     759 |         RET_PTR_TO_DYNPTR_MEM_OR_NULL   = PTR_MAYBE_NULL | RET_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:760:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     760 |         RET_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:761:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     761 |         RET_PTR_TO_BTF_ID_TRUSTED       = PTR_TRUSTED    | RET_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~    ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:872:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     872 |         PTR_TO_MAP_VALUE_OR_NULL        = PTR_MAYBE_NULL | PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:873:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     873 |         PTR_TO_SOCKET_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+   include/linux/bpf.h:874:46: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     874 |         PTR_TO_SOCK_COMMON_OR_NULL      = PTR_MAYBE_NULL | PTR_TO_SOCK_COMMON,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:875:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     875 |         PTR_TO_TCP_SOCK_OR_NULL         = PTR_MAYBE_NULL | PTR_TO_TCP_SOCK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~
+   include/linux/bpf.h:876:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     876 |         PTR_TO_BTF_ID_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+>> drivers/net/ethernet/intel/idpf/idpf_txrx.c:2613:49: warning: bitwise operation between different enumeration types ('enum idpf_tx_desc_dtype_value' and 'enum idpf_tx_flex_ctx_desc_cmd_bits') [-Wenum-enum-conversion]
+    2613 |                                 cpu_to_le16(IDPF_TX_DESC_DTYPE_FLEX_TSO_CTX |
+         |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+    2614 |                                             IDPF_TX_FLEX_CTX_DESC_CMD_TSO);
+         |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:90:21: note: expanded from macro 'cpu_to_le16'
+      90 | #define cpu_to_le16 __cpu_to_le16
+         |                     ^
+   include/uapi/linux/byteorder/big_endian.h:36:53: note: expanded from macro '__cpu_to_le16'
+      36 | #define __cpu_to_le16(x) ((__force __le16)__swab16((x)))
+         |                                                     ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   26 warnings generated.
+
+
+vim +2613 drivers/net/ethernet/intel/idpf/idpf_txrx.c
+
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2575  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2576  /**
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2577   * idpf_tx_splitq_frame - Sends buffer on Tx ring using flex descriptors
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2578   * @skb: send buffer
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2579   * @tx_q: queue to send buffer on
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2580   *
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2581   * Returns NETDEV_TX_OK if sent, else an error code
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2582   */
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2583  static netdev_tx_t idpf_tx_splitq_frame(struct sk_buff *skb,
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2584  					struct idpf_queue *tx_q)
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2585  {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2586  	struct idpf_tx_splitq_params tx_params = { };
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2587  	struct idpf_tx_buf *first;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2588  	unsigned int count;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2589  	int tso;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2590  
+a5ab9ee0df0be8 Joshua Hay 2023-08-07  2591  	count = idpf_tx_desc_count_required(tx_q, skb);
+a5ab9ee0df0be8 Joshua Hay 2023-08-07  2592  	if (unlikely(!count))
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2593  		return idpf_tx_drop_skb(tx_q, skb);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2594  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2595  	tso = idpf_tso(skb, &tx_params.offload);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2596  	if (unlikely(tso < 0))
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2597  		return idpf_tx_drop_skb(tx_q, skb);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2598  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2599  	/* Check for splitq specific TX resources */
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2600  	count += (IDPF_TX_DESCS_PER_CACHE_LINE + tso);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2601  	if (idpf_tx_maybe_stop_splitq(tx_q, count)) {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2602  		idpf_tx_buf_hw_update(tx_q, tx_q->next_to_use, false);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2603  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2604  		return NETDEV_TX_BUSY;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2605  	}
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2606  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2607  	if (tso) {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2608  		/* If tso is needed, set up context desc */
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2609  		struct idpf_flex_tx_ctx_desc *ctx_desc =
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2610  			idpf_tx_splitq_get_ctx_desc(tx_q);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2611  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2612  		ctx_desc->tso.qw1.cmd_dtype =
+6818c4d5b3c2e9 Joshua Hay 2023-08-07 @2613  				cpu_to_le16(IDPF_TX_DESC_DTYPE_FLEX_TSO_CTX |
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2614  					    IDPF_TX_FLEX_CTX_DESC_CMD_TSO);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2615  		ctx_desc->tso.qw0.flex_tlen =
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2616  				cpu_to_le32(tx_params.offload.tso_len &
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2617  					    IDPF_TXD_FLEX_CTX_TLEN_M);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2618  		ctx_desc->tso.qw0.mss_rt =
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2619  				cpu_to_le16(tx_params.offload.mss &
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2620  					    IDPF_TXD_FLEX_CTX_MSS_RT_M);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2621  		ctx_desc->tso.qw0.hdr_len = tx_params.offload.tso_hdr_len;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2622  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2623  		u64_stats_update_begin(&tx_q->stats_sync);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2624  		u64_stats_inc(&tx_q->q_stats.tx.lso_pkts);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2625  		u64_stats_update_end(&tx_q->stats_sync);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2626  	}
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2627  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2628  	/* record the location of the first descriptor for this packet */
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2629  	first = &tx_q->tx_buf[tx_q->next_to_use];
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2630  	first->skb = skb;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2631  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2632  	if (tso) {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2633  		first->gso_segs = tx_params.offload.tso_segs;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2634  		first->bytecount = skb->len +
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2635  			((first->gso_segs - 1) * tx_params.offload.tso_hdr_len);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2636  	} else {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2637  		first->gso_segs = 1;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2638  		first->bytecount = max_t(unsigned int, skb->len, ETH_ZLEN);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2639  	}
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2640  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2641  	if (test_bit(__IDPF_Q_FLOW_SCH_EN, tx_q->flags)) {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2642  		tx_params.dtype = IDPF_TX_DESC_DTYPE_FLEX_FLOW_SCHE;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2643  		tx_params.eop_cmd = IDPF_TXD_FLEX_FLOW_CMD_EOP;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2644  		/* Set the RE bit to catch any packets that may have not been
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2645  		 * stashed during RS completion cleaning. MIN_GAP is set to
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2646  		 * MIN_RING size to ensure it will be set at least once each
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2647  		 * time around the ring.
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2648  		 */
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2649  		if (!(tx_q->next_to_use % IDPF_TX_SPLITQ_RE_MIN_GAP)) {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2650  			tx_params.eop_cmd |= IDPF_TXD_FLEX_FLOW_CMD_RE;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2651  			tx_q->txq_grp->num_completions_pending++;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2652  		}
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2653  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2654  		if (skb->ip_summed == CHECKSUM_PARTIAL)
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2655  			tx_params.offload.td_cmd |= IDPF_TXD_FLEX_FLOW_CMD_CS_EN;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2656  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2657  	} else {
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2658  		tx_params.dtype = IDPF_TX_DESC_DTYPE_FLEX_L2TAG1_L2TAG2;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2659  		tx_params.eop_cmd = IDPF_TXD_LAST_DESC_CMD;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2660  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2661  		if (skb->ip_summed == CHECKSUM_PARTIAL)
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2662  			tx_params.offload.td_cmd |= IDPF_TX_FLEX_DESC_CMD_CS_EN;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2663  	}
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2664  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2665  	idpf_tx_splitq_map(tx_q, &tx_params, first);
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2666  
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2667  	return NETDEV_TX_OK;
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2668  }
+6818c4d5b3c2e9 Joshua Hay 2023-08-07  2669  
+
+:::::: The code at line 2613 was first introduced by commit
+:::::: 6818c4d5b3c2e9dd5d7316792f88d371d07d0ebf idpf: add splitq start_xmit
+
+:::::: TO: Joshua Hay <joshua.a.hay@intel.com>
+:::::: CC: Tony Nguyen <anthony.l.nguyen@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
