@@ -1,193 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A1F405DB
-	for <llvm@lists.linux.dev>; Fri,  1 Mar 2024 03:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF31481A4;
+	Fri,  1 Mar 2024 03:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709263223; cv=none; b=hYjeqBG085tpBKbLyWTGftjwNHT3hhDEKuyscrMZga5oKsmfEu4pCylpVQeHfRtBZX8Ao1mw9VbbuPNwYp88I334IC35mR7qV6U+YhogOLgkq4wqm+53Hta52//VXv10I4M70xdKkwn5lg1fUuIacs/Al3113rNdsK5EvFNAssA=
+	t=1709264708; cv=none; b=ONwyUDqNbjFe50M2wqntFId2A5LRzpqpq3UwfxOXc2qWxIkGbVoKaDW6Gjt4NLX+wI3yQVD7WLWDAmFTVc/eQ8Pa/KqUbQKsH11/HP/WIskUN6Nzyc1hLYg8gXHiga7OQpnnVCTi8T0kOkggI0r7bBKC/gltyk8UeeSsTTbrSZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709263223; c=relaxed/simple;
-	bh=e8EqHN60qd6QoeEEODFZOZJlI75qemEky7HgFke01l4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Y29qJ7vy/iq398ObPBxMSYKe8YYCBRedUrzj9yWbNqMBYjSmgfW2/RdCVoD5LXw/NN9FWZzvZdRUIvhyaJk+8B78L7+8Ig9c0uYSD3lFWJjQ3PWVcK/MZvNrq4f3zbI54xDxeZk4khSNX+ZYAVXpM1Yy4wgCDPXJyAJsp1IuTwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hIZXG02f; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709264708; c=relaxed/simple;
+	bh=BX8MyG1c5zNk/AhlZghBkxnfb+uK7DN+kLhpELpjKjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Xu7QWya4G/x2xkUgZR5BiESbvOKe/vdbgZuaRi6X3vG60okXjKHEqNDTrAj5i4/2bcC2owpwpoWrDK+GSmMOy5RwQOweOBZEnRAeKsg26Q6qij/JxuAhCitDRCN6q2hKUlnG5Xa1Z0xbRmVMGDCjfipZLPzL7MGsHPXHBHd2Y0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bPYMQuJy; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hIZXG02f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709263218;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0eAeaRpiy7m+LdTxuHLeQXJBo4hhS0i9lTEck6BSvhY=;
-	b=hIZXG02fnO5eYBzZQ2+Cdu0YYAer3MKnirPKqlyJGoY2C+iupxEpbnyJfmKvHzOxhxzLDF
-	oTZgDcvfR/cgU+AJsH9cqJVCaz3U5iLvYSVJRxL4Q6TMK0jNoieYM8pAZC3XWD1PyYsceI
-	XKw5jlBXH02luzgzZjsBOL+dBI8RARw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-394-6-n3mulMPpqTxjCrTIMS6Q-1; Thu, 29 Feb 2024 22:20:17 -0500
-X-MC-Unique: 6-n3mulMPpqTxjCrTIMS6Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF441106D1A2
-	for <llvm@lists.linux.dev>; Fri,  1 Mar 2024 03:20:16 +0000 (UTC)
-Received: from [172.64.4.41] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 63E15C185C0;
-	Fri,  1 Mar 2024 03:20:16 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
- (6.8.0-rc6, mainline.kernel.org-clang, 87adedeb)
-Date: Fri, 01 Mar 2024 03:20:16 -0000
-To: fmaurer@redhat.com, llvm@lists.linux.dev, haliu@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bPYMQuJy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709264706; x=1740800706;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BX8MyG1c5zNk/AhlZghBkxnfb+uK7DN+kLhpELpjKjM=;
+  b=bPYMQuJybm7DPuzkRuuvRzMgjoJwgrnSs9BnOsG7cQItNb/6J3bpQORN
+   5RrXZx0IHGWe5hkIBlfwz7+ZsKzw/x9Gx5G1CczK5BKuP1BpqhRbn95IF
+   jW7GlUHjCji0xF/JGdE5Ug0j+3m3jWQJWRxQfSZPGKujjj87gN97WAZ0H
+   jC+kWBAyRuTh0t4KEsxe2yhsuzpEVNMVWLhdhGLbcx61NkfOCpT0QcBfx
+   wb/w4dL7UzV9n6iej5ht7leqDEgCLpDBJLIT0ji8sorqPuMUDJsp75zGb
+   pHyNLeSZe90jYCrZ0ZaaGAze/HK/HEUpWrQHWLwYDwqvfuGHYVh/4dfgk
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="26247031"
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="26247031"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 19:45:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
+   d="scan'208";a="38898753"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 29 Feb 2024 19:45:03 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rftoI-000DVl-1b;
+	Fri, 01 Mar 2024 03:44:12 +0000
+Date: Fri, 1 Mar 2024 11:42:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pranavi Somisetty <pranavi.somisetty@xilinx.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+	Michal Simek <monstr@monstr.eu>,
+	Harini Katakam <harini.katakam@xilinx.com>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v6.6 150/860]
+ drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c:46:9: error: call to
+ undeclared function 'in_be32'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202403011130.LYz4858q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <22470.124022922201700198@us-mta-394.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6
+head:   24eec56fe5bd68cae795c37c61276b4dcf218a53
+commit: 613e39d370ef73bc8bffb2c5bfc7e07f8b153d24 [150/860] staging: net: xilinx: add Xilinx TSN driver
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240301/202403011130.LYz4858q-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240301/202403011130.LYz4858q-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403011130.LYz4858q-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'net-6.8-rc7' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/132226
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11515451
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+   In file included from drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c:22:
+   In file included from include/linux/irq.h:23:
+   In file included from arch/riscv/include/asm/irq.h:10:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c:46:9: error: call to undeclared function 'in_be32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      46 |         nsec = in_be32(timer->baseaddr + XTIMER1588_CURRENT_RTC_NS);
+         |                ^
+>> drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c:58:2: error: call to undeclared function 'out_be32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      58 |         out_be32((timer->baseaddr + XTIMER1588_RTC_OFFSET_SEC_H), 0);
+         |         ^
+   drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c:67:15: error: call to undeclared function 'in_be32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      67 |         ts->tv_sec = in_be32(timer->baseaddr + XTIMER1588_RTC_OFFSET_SEC_L);
+         |                      ^
+   drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c:88:2: error: call to undeclared function 'out_be32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      88 |         out_be32((timer->baseaddr + XTIMER1588_RTC_INCREMENT), incval);
+         |         ^
+   drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c:223:2: error: call to undeclared function 'out_be32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     223 |         out_be32((timer->baseaddr + XTIMER1588_INTERRUPT),
+         |         ^
+   5 warnings and 5 errors generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
+vim +/in_be32 +46 drivers/staging/xilinx-tsn/xilinx_tsn_ptp_clock.c
 
+    41	
+    42	static void xlnx_tod_read(struct xlnx_ptp_timer *timer, struct timespec64 *ts)
+    43	{
+    44		u32 sec, nsec;
+    45	
+  > 46		nsec = in_be32(timer->baseaddr + XTIMER1588_CURRENT_RTC_NS);
+    47		sec = in_be32(timer->baseaddr + XTIMER1588_CURRENT_RTC_SEC_L);
+    48	
+    49		ts->tv_sec = sec;
+    50		ts->tv_nsec = nsec;
+    51	}
+    52	
+    53	static void xlnx_rtc_offset_write(struct xlnx_ptp_timer *timer,
+    54					  const struct timespec64 *ts)
+    55	{
+    56		pr_debug("%s: sec: %lld nsec: %ld\n", __func__, ts->tv_sec, ts->tv_nsec);
+    57	
+  > 58		out_be32((timer->baseaddr + XTIMER1588_RTC_OFFSET_SEC_H), 0);
+    59		out_be32((timer->baseaddr + XTIMER1588_RTC_OFFSET_SEC_L),
+    60			 (ts->tv_sec));
+    61		out_be32((timer->baseaddr + XTIMER1588_RTC_OFFSET_NS), ts->tv_nsec);
+    62	}
+    63	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
