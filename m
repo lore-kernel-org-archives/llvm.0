@@ -1,48 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEEC38F9B;
-	Fri,  1 Mar 2024 18:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAB38C1B;
+	Fri,  1 Mar 2024 18:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709318783; cv=none; b=UVLRBbvF+igovw2b9z1u8gj7cwT7kZXMwN96k8u3jehw8tGD8tEUlAfN44JOFUSrxJA+NJWtObBUj8Y+7Sv7IsnkrxrucUWku8SbXqp8pyEgs4L27srXQ7tsLCR6EzXTknTHb2hyrWOAdFahTODSN96N93gTN8TqhdZefXERL6U=
+	t=1709319162; cv=none; b=cheF4U6b+hRQQ2NiIR09czDVxD3LrZYDzQyVF9O4/T+xrKNHbZsEpKHAdFMhJv4x8pQ6sQSCXyKqIMbNmo6dTQ2v7cFAxOnRr3xdhMY6Ij8UAbmY8EnEsjaaGNCj6kdY/ZXUASELI4dEHRs0yDnVkvV9BTgAQ09i5viSrqNuv/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709318783; c=relaxed/simple;
-	bh=ZrxLpa0Ycn3DPNJvqNvgq9pdtt1id5qDBOEFk9y0E8w=;
+	s=arc-20240116; t=1709319162; c=relaxed/simple;
+	bh=44S/7fMa4t3C3sreMd4jk5F0uk+BmeF1MV2xSiGfrrA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d2KXKUllCqVqG9wmaflBxD6zGEiBDKSVx2CAm5rIya5HxoWHAAYOwMdNjbnjBuDVsxXDGncZNGSYsGpDASula/T4gUisv1sNbv+GwRjNyjM32iE4pRa0Q20jIyz4FYxtyT5VPvn1EoyC4+kDoabaHDh4BTCkG97gTfc+ZMJ9rQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhtEj71c; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhtEj71c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF60C433F1;
-	Fri,  1 Mar 2024 18:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709318782;
-	bh=ZrxLpa0Ycn3DPNJvqNvgq9pdtt1id5qDBOEFk9y0E8w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BhtEj71cqlqVi1FmTKHd+5+drYwzluF2f3zf7n4Qm5vB8D6A7g3jIEGli8JRy/9rW
-	 eJjnshhoyY+sXnmUFHOoc90ifI/iSjCMtNjAaOOZppeqOSiVCKC1tzfPXq15aBl9KE
-	 LPhZpUrbW4h8yqlmr+uDHY3pTKPGYjHhW3zgA/v1ZBeDaVSxvPCfB5gniF+7su8fQ8
-	 5MHzi1pjcPYZ1vQjZVSyBo55AAC69dmVixOquX4xOhrFJHAC2odUHxVy4tw01Def+Q
-	 9DUyBssoxVYrSjLUXbOzbdSMDAvZ5RppmdDmVDEodEdcyTsXri5nGeRGOlCWPzlykm
-	 xemPYxvMg3JvA==
-Date: Fri, 1 Mar 2024 11:46:20 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [trace:trace/for-next 28/29]
- include/trace/events/sunrpc.h:703:4: warning: result of comparison against a
- string literal is unspecified (use an explicit string comparison function
- instead)
-Message-ID: <20240301184620.GA150304@dev-arch.thelio-3990X>
-References: <202402292111.KIdExylU-lkp@intel.com>
- <20240229180616.48d2c0eb@gandalf.local.home>
- <20240229234455.GA1020819@dev-arch.thelio-3990X>
- <20240229185558.70b6ea86@gandalf.local.home>
- <20240301041131.GB577965@dev-arch.thelio-3990X>
- <20240301104753.7ca87282@gandalf.local.home>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QjwjDv1rQGT/oFdo6ZeSv9Aua86UiMp76PljyAdWAEo41kSiEKd+3HrOMOoI3hwxoXnqVPHdpQ4KUcM4xkx6uzHh9mb+zOnNpGyCTfv8NgEE7fVYurG9FQ/4B1bb91VnKlVgzNeNaaK9HwTs0Ox43iWqrzGP339drIvLebFhPkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C1AC433F1;
+	Fri,  1 Mar 2024 18:52:34 +0000 (UTC)
+Date: Fri, 1 Mar 2024 18:52:32 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
+Message-ID: <ZeIj8HtdbKS3eqG6@arm.com>
+References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+ <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,142 +60,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240301104753.7ca87282@gandalf.local.home>
+In-Reply-To: <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
 
-On Fri, Mar 01, 2024 at 10:47:53AM -0500, Steven Rostedt wrote:
-> On Thu, 29 Feb 2024 21:11:31 -0700
-> Nathan Chancellor <nathan@kernel.org> wrote:
+On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
+> The kernel provides driver support for using write combining IO memory
+> through the __iowriteXX_copy() API which is commonly used as an optional
+> optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environment.
 > 
-> > > #define __assign_str(dst, src)						\
-> > > 	do {								\
-> > > 		char *__str__ = __get_str(dst);				\
-> > > 		int __len__ = __get_dynamic_array_len(dst) - 1;		\
-> > > 		if (__builtin_constant_p(src))				\
-> > > 			WARN_ON_ONCE(strcmp((src), __data_offsets.dst##_ptr_)); \
-> > > 		else							\
-> > > 			WARN_ON_ONCE((src) != __data_offsets.dst##_ptr_);\
-> > > 		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
-> > > 		       EVENT_NULL_STR, __len__);			\
-> > > 		__str__[__len__] = '\0';				\
-> > > 	} while (0)
-> > > 
-> > > Then the compiler may be better in optimizing out the "bad" portion.  
-> > 
-> > No, that does not work either, I diffed the warnings and they are
-> > identical minus line numbers. I don't think clang takes
-> > __builtin_constant_p() into account in the front end but I could be
-> > wrong. In fact, I think clang (and even gcc sometimes) will still warn
-> > for code even if it is within an 'if (0)' block, it's been used as
-> > justification before in commit 37b47298ab86 ("sched: Disable
-> > -Wunused-but-set-variable").
+> iomap_copy.c provides a generic implementation as a simple 4/8 byte at a
+> time copy loop that has worked well with past ARM64 CPUs, giving a high
+> frequency of large TLPs being successfully formed.
 > 
-> Hmm, well, the original warning was indeed a bug, but I think that the
-> __builtin_constant_p() should be the fix. So clang helped in finding the
-> bug, but is being stupid about allowing the solution (unless it thinks
-> "some-string" is not a constant?).
+> However modern ARM64 CPUs are quite sensitive to how the write combining
+> CPU HW is operated and a compiler generated loop with intermixed
+> load/store is not sufficient to frequently generate a large TLP. The CPUs
+> would like to see the entire TLP generated by consecutive store
+> instructions from registers. Compilers like gcc tend to intermix loads and
+> stores and have poor code generation, in part, due to the ARM64 situation
+> that writeq() does not codegen anything other than "[xN]". However even
+> with that resolved compilers like clang still do not have good code
+> generation.
+> 
+> This means on modern ARM64 CPUs the rate at which __iowriteXX_copy()
+> successfully generates large TLPs is very small (less than 1 in 10,000)
+> tries), to the point that the use of WC is pointless.
+> 
+> Implement __iowrite32/64_copy() specifically for ARM64 and use inline
+> assembly to build consecutive blocks of STR instructions. Provide direct
+> support for 64/32/16 large TLP generation in this manner. Optimize for
+> common constant lengths so that the compiler can directly inline the store
+> blocks.
+> 
+> This brings the frequency of large TLP generation up to a high level that
+> is comparable with older CPU generations.
+> 
+> As the __iowriteXX_copy() family of APIs is intended for use with WC
+> incorporate the DGH hint directly into the function.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
-No, I just don't think that it makes any determination on whether src is
-constant or not at the point in the pipeline that this warning fires.
+Apart from the slightly more complicated code, I don't expect it to make
+things worse on any of the existing hardware.
 
-> I'll add the patch regardless and even keep the reported by. But I'll
-> replace the "closes" link with just "link" as it's not technically closed.
+So, with the typo fix that Will mentioned:
 
-This diff on top of that suggestion above will hide the warning. There
-will be a semantic conflict against Andrew's -mm tree in -next due to
-bumping the minimum supported version of LLVM there but that is easy for
-both Stephen and Linus to handle (change '11' -> '13').
-
-diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
-index c7789a851536..f272ab0b5cce 100644
---- a/include/trace/stages/stage6_event_callback.h
-+++ b/include/trace/stages/stage6_event_callback.h
-@@ -37,8 +37,13 @@
- 		int __len__ = __get_dynamic_array_len(dst) - 1;		\
- 		if (__builtin_constant_p(src))				\
- 			WARN_ON_ONCE(strcmp((src), __data_offsets.dst##_ptr_)); \
--		else							\
-+		else {							\
-+			__diag_push();					\
-+			__diag_ignore(clang, 11, "-Wstring-compare",	\
-+				      "Invalid for this branch");	\
- 			WARN_ON_ONCE((src) != __data_offsets.dst##_ptr_);\
-+			__diag_pop();					\
-+		}							\
- 		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
- 		       EVENT_NULL_STR, __len__);			\
- 		__str__[__len__] = '\0';				\
-
-However, your suggested change appears to cause
--Wincompatible-pointer-types when building that configuration fully,
-although it seems to be the inverse problem as above, so maybe the same
-__diag macros can be used to shut it up as well.
-
-  In file included from net/core/net-traces.c:37:
-  In file included from include/trace/events/qdisc.h:153:
-  In file included from include/trace/define_trace.h:102:
-  In file included from include/trace/trace_events.h:419:
-  include/trace/events/qdisc.h:116:3: error: incompatible pointer types passing 'struct net_device *' to parameter of type 'const char *' [-Werror,-Wincompatible-pointer-types]
-    102 |                 __string(       dev,            qdisc_dev(q)    )
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    103 |                 __string(       kind,           q->ops->id      )
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    104 |                 __field(        u32,            parent          )
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    105 |                 __field(        u32,            handle          )
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    106 |         ),
-        |         ~~
-    107 |
-    108 |         TP_fast_assign(
-        |         ~~~~~~~~~~~~~~~
-    109 |                 __assign_str(dev, qdisc_dev(q));
-        |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    110 |                 __assign_str(kind, q->ops->id);
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    111 |                 __entry->parent = q->parent;
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    112 |                 __entry->handle = q->handle;
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    113 |         ),
-        |         ~~
-    114 |
-    115 |         TP_printk("dev=%s kind=%s parent=%x:%x handle=%x:%x", __get_str(dev),
-        |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    116 |                   __get_str(kind), TC_H_MAJ(__entry->parent) >> 16, TC_H_MIN(__entry->parent),
-        |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    117 |                   TC_H_MAJ(__entry->handle) >> 16, TC_H_MIN(__entry->handle))
-        |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  include/trace/stages/stage6_event_callback.h:39:24: note: expanded from macro '__assign_str'
-     39 |                         WARN_ON_ONCE(strcmp((src), __data_offsets.dst##_ptr_)); \
-        |                                             ^
-  include/asm-generic/bug.h:111:25: note: expanded from macro 'WARN_ON_ONCE'
-    111 |         int __ret_warn_on = !!(condition);                      \
-        |                                ^
-  include/trace/stages/stage6_event_callback.h:142:33: note: expanded from macro 'TP_fast_assign'
-    142 | #define TP_fast_assign(args...) args
-        |                                 ^
-  include/trace/trace_events.h:44:16: note: expanded from macro 'TRACE_EVENT'
-     40 |         DECLARE_EVENT_CLASS(name,                              \
-        |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     41 |                              PARAMS(proto),                    \
-        |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     42 |                              PARAMS(args),                     \
-        |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     43 |                              PARAMS(tstruct),                  \
-        |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     44 |                              PARAMS(assign),                   \
-        |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     45 |                              PARAMS(print));                   \
-        |                              ~~~~~~~~~~~~~~
-  include/linux/tracepoint.h:107:25: note: expanded from macro 'PARAMS'
-    107 | #define PARAMS(args...) args
-        |                         ^
-  include/trace/trace_events.h:402:4: note: expanded from macro 'DECLARE_EVENT_CLASS'
-    402 |         { assign; }                                                     \
-        |           ^~~~~~
-  include/linux/string.h:86:31: note: passing argument to parameter here
-     86 | extern int strcmp(const char *,const char *);
-        |                               ^
-
-Cheers,
-Nathan
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
