@@ -1,113 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAB38C1B;
-	Fri,  1 Mar 2024 18:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208574E1D9;
+	Fri,  1 Mar 2024 18:56:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709319162; cv=none; b=cheF4U6b+hRQQ2NiIR09czDVxD3LrZYDzQyVF9O4/T+xrKNHbZsEpKHAdFMhJv4x8pQ6sQSCXyKqIMbNmo6dTQ2v7cFAxOnRr3xdhMY6Ij8UAbmY8EnEsjaaGNCj6kdY/ZXUASELI4dEHRs0yDnVkvV9BTgAQ09i5viSrqNuv/M=
+	t=1709319416; cv=none; b=rUrlPjezmkX93xeCc3pQsQK4E5I8A4AnjeZBAJYS3/16h7pc3s19J9CDb9Do9+X4yf4iygnbRJAl0CWQ6jehU17xTIhEUSGo12aDkDg2DyAhMBP3DWUdiA2A7PDFgz5kbdbOXOywXJLTQ0cYWbKZfzW4jpoYCAFPdQu8nmuqoSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709319162; c=relaxed/simple;
-	bh=44S/7fMa4t3C3sreMd4jk5F0uk+BmeF1MV2xSiGfrrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QjwjDv1rQGT/oFdo6ZeSv9Aua86UiMp76PljyAdWAEo41kSiEKd+3HrOMOoI3hwxoXnqVPHdpQ4KUcM4xkx6uzHh9mb+zOnNpGyCTfv8NgEE7fVYurG9FQ/4B1bb91VnKlVgzNeNaaK9HwTs0Ox43iWqrzGP339drIvLebFhPkA=
+	s=arc-20240116; t=1709319416; c=relaxed/simple;
+	bh=ixWIf3mGntb55Uaoc3hoSC7H2H1Sly8VgKfMorZCa94=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AktyOdIW4VUp4JSIDQSsGTTJOaC2yV45318fntHN396yKKnZ09QShF/hSSXPiLiKw2c6c1qwGytT63IPO3/MaGcBrwTAummS15NJI82u7xeow/c92d3Toz1cP/1rSnf2Ggt7HQo+WdhGiLDEvu2v9jtxufgfAu1KFDvqaxcc4pU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C1AC433F1;
-	Fri,  1 Mar 2024 18:52:34 +0000 (UTC)
-Date: Fri, 1 Mar 2024 18:52:32 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Message-ID: <ZeIj8HtdbKS3eqG6@arm.com>
-References: <0-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
- <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D4EC43390;
+	Fri,  1 Mar 2024 18:56:54 +0000 (UTC)
+Date: Fri, 1 Mar 2024 13:59:03 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Cong Wang <xiyou.wangcong@gmail.com>,
+ vaclav.zindulka@tlapnet.cz, Jamal Hadi Salim  <jhs@mojatatu.com>, Jiri 
+ Pirko <jiri@resnulli.us>, "David S. Miller" <davem@davemloft.net>
+Subject: Re: [trace:trace/for-next 28/29]
+ include/trace/events/sunrpc.h:703:4: warning: result of comparison against
+ a string literal is unspecified (use an explicit string comparison function
+ instead)
+Message-ID: <20240301135903.543c7947@gandalf.local.home>
+In-Reply-To: <20240301184620.GA150304@dev-arch.thelio-3990X>
+References: <202402292111.KIdExylU-lkp@intel.com>
+	<20240229180616.48d2c0eb@gandalf.local.home>
+	<20240229234455.GA1020819@dev-arch.thelio-3990X>
+	<20240229185558.70b6ea86@gandalf.local.home>
+	<20240301041131.GB577965@dev-arch.thelio-3990X>
+	<20240301104753.7ca87282@gandalf.local.home>
+	<20240301184620.GA150304@dev-arch.thelio-3990X>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4-v1-38290193eace+5-mlx5_arm_wc_jgg@nvidia.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 20, 2024 at 09:17:08PM -0400, Jason Gunthorpe wrote:
-> The kernel provides driver support for using write combining IO memory
-> through the __iowriteXX_copy() API which is commonly used as an optional
-> optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environment.
-> 
-> iomap_copy.c provides a generic implementation as a simple 4/8 byte at a
-> time copy loop that has worked well with past ARM64 CPUs, giving a high
-> frequency of large TLPs being successfully formed.
-> 
-> However modern ARM64 CPUs are quite sensitive to how the write combining
-> CPU HW is operated and a compiler generated loop with intermixed
-> load/store is not sufficient to frequently generate a large TLP. The CPUs
-> would like to see the entire TLP generated by consecutive store
-> instructions from registers. Compilers like gcc tend to intermix loads and
-> stores and have poor code generation, in part, due to the ARM64 situation
-> that writeq() does not codegen anything other than "[xN]". However even
-> with that resolved compilers like clang still do not have good code
-> generation.
-> 
-> This means on modern ARM64 CPUs the rate at which __iowriteXX_copy()
-> successfully generates large TLPs is very small (less than 1 in 10,000)
-> tries), to the point that the use of WC is pointless.
-> 
-> Implement __iowrite32/64_copy() specifically for ARM64 and use inline
-> assembly to build consecutive blocks of STR instructions. Provide direct
-> support for 64/32/16 large TLP generation in this manner. Optimize for
-> common constant lengths so that the compiler can directly inline the store
-> blocks.
-> 
-> This brings the frequency of large TLP generation up to a high level that
-> is comparable with older CPU generations.
-> 
-> As the __iowriteXX_copy() family of APIs is intended for use with WC
-> incorporate the DGH hint directly into the function.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+On Fri, 1 Mar 2024 11:46:20 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Apart from the slightly more complicated code, I don't expect it to make
-things worse on any of the existing hardware.
+> However, your suggested change appears to cause
+> -Wincompatible-pointer-types when building that configuration fully,
+> although it seems to be the inverse problem as above, so maybe the same
+> __diag macros can be used to shut it up as well.
 
-So, with the typo fix that Will mentioned:
+It should not be quieted.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> 
+>   In file included from net/core/net-traces.c:37:
+>   In file included from include/trace/events/qdisc.h:153:
+>   In file included from include/trace/define_trace.h:102:
+>   In file included from include/trace/trace_events.h:419:
+>   include/trace/events/qdisc.h:116:3: error: incompatible pointer types passing 'struct net_device *' to parameter of type 'const char *' [-Werror,-Wincompatible-pointer-types]
+>     102 |                 __string(       dev,            qdisc_dev(q)    )
+
+Yes, and that's a real bug which I also hit and reported:
+
+  https://lore.kernel.org/all/20240229140513.72b2795a@gandalf.local.home/
+
+And posted a patch for:
+
+  https://lore.kernel.org/all/20240229143432.273b4871@gandalf.local.home/
+
+And I'll need to apply that before I can make this fix.
+
+Thanks,
+
+-- Steve
