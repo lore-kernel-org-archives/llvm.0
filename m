@@ -1,99 +1,194 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95865566A
-	for <llvm@lists.linux.dev>; Sat,  2 Mar 2024 08:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+Received: from hust.edu.cn (unknown [202.114.0.240])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4016B28FA
+	for <llvm@lists.linux.dev>; Sat,  2 Mar 2024 14:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.114.0.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709369189; cv=none; b=ioi/Fv3ndUovO+z+rN24bOLtTPov1Ppq2MGrfEq1y2ch3tsTsS12xLesgloCGVi8UxeEn53aFd3myr3qUZ7J6JZgOokFHVjB9GbkO9Bp1lbHvhiI1rhLnyAF4tk3WuHnACfmIxK51uAK2K6M5htKrNaP/tClAjmbFMkntw/4/24=
+	t=1709388487; cv=none; b=imY9AZCuSmsmL06nA8Nc/yfuOxwM1jtRmPc7lc2VSLA17Vvg6UyOGTo/oTY6wFx/k6e88NG10Hu0dH8kTB3VvhpJQsl1FffmVU672iRv6iFTFWtLdTDBlrUbeuQGg82To1fBkz7vFebOdPTtVcgXoyYcfbQm49nW5mhjhNCZ8f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709369189; c=relaxed/simple;
-	bh=FC6OiEUkH9b5NHVhavEjgmP4qQcLGemI6CzYGmZXnI8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M9OFUETETjq/aiivSmo0Xv7YjMbT90FDKMUcPm3k/keTcNeQ8ugGMXYIUiSDnVbLs2UdBgYNunHEnrVYr0V2lPvjaG+FaYG92/X5TCItTFAAMjWwUO+Mtq98AzqE0zuzDsJyFIq/9uo2XnxzQHHfTrX6uuKCdLQXLPBks+4bF1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eZTJsEsF; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eZTJsEsF"
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dcbf82cdf05so2954813276.2
-        for <llvm@lists.linux.dev>; Sat, 02 Mar 2024 00:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709369186; x=1709973986; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FC6OiEUkH9b5NHVhavEjgmP4qQcLGemI6CzYGmZXnI8=;
-        b=eZTJsEsFWcEMUjpaRZhP+vTJAhWN2ZND/SqxAPyYdidbZOt4fqt2oB4B5Pb00jtitR
-         +gSIzK88V73i4PbAq6E/x+9yX7TpTi5xCluvuE5esOnsUv3zCtdJaa4KUNPYOuafx+RY
-         7pf0cww+Fx+2vGAaXyPMKg/3MFinZidnOT6lznYRD8n9BlshIVIf4kvoqJVPnHIZMlNg
-         xDY89V4VjESaj6MAxhBr33/OEZ7ou0JtwOZuNmZmhMl0mIvSSkoe7/g5SwB/eWW5Fr85
-         mPRwxsd8VrgujIk+rxYFgtvGTE+Kkt3jNAQHhuyE9T1I1BA52SR4njToKxS5O2DzEoxV
-         8qpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709369186; x=1709973986;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FC6OiEUkH9b5NHVhavEjgmP4qQcLGemI6CzYGmZXnI8=;
-        b=GNvkLy6XdjjmLttJ0BVfONlrz1UFcaedSsWW/h3XWdtyywV6sI/AK+woxXLgoxjcM2
-         kuJ+ZUPBTtVJs5IKn/FqfkhrqNs0j9evrC0+bSFN6S4nBtBM2DXl/nqBD3kg6CD8+sRG
-         mdgZq675DKvXbILDbEUbOL9dhvvvxQrKeTeja7Mb3Jipz/pfxqqRMobaMD9JIX+gyzfW
-         xZg3qgSEB8bmDwcsbDpO5pGUdurcuu4tumzkWZYsg5SmmNqCs9tdRDoHbFIbqCReaiJj
-         fc/Pmjo8YRAyzy/rGoaFKQLDcDe43ztS8E5WPZgjEAYlVw5y3Rl4qqUwEiDiKdnG9PLg
-         XbWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUH18Cph3X/uQ/vBs9D0FsDjcuBtUvFKsw32y/AKNiJJjtIxAzYuvH7ACx3W9XIo8v1D2gQhK4xgiTuTNb+hqwGeXe7bw==
-X-Gm-Message-State: AOJu0YyqBASqD5+bK0zJ8BJ9VaF3zznTDEDYvLIgy4BDM85Wv/hYgKPQ
-	pv+RpKQYKC3/8hFKV/FNTXuDup18qETsW7UNDx3UxXuFbNWMAyjdElm2eQW4Mbas1WJFZuNLlBO
-	qxy9WgnYZty1c4m5bjMYB0zVA9eTpB600ACs2pA==
-X-Google-Smtp-Source: AGHT+IGeWX1WfX9z22cosBtPiK+LqKpgW2IVKs7tMkQDJX9hXC1b8ohExXbrEl1oGUm6FlU8kF2ewPNkgVH/7HUnzE8=
-X-Received: by 2002:a25:7b83:0:b0:dc6:9b9f:d3c0 with SMTP id
- w125-20020a257b83000000b00dc69b9fd3c0mr3174459ybc.10.1709369186622; Sat, 02
- Mar 2024 00:46:26 -0800 (PST)
+	s=arc-20240116; t=1709388487; c=relaxed/simple;
+	bh=3kY6gEF/bbBuN1fn2sEOLyPv0UhDZotwm4cDRX9hwoU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ZP6YMraLQ0mAXvhAsm+8C3kGLwtf8GJK7SaOQCrCqTV7Z30ITJ7KeHYzEH52fZYW96EZt3XqvqZ/mXVZAYbVIdvbB9J6QZBcYylkM556f25njlN2r4tCy140yejs0EZUgv9YJ9hHl7AVZ04OIsoQIaHPoerGzYUB5akiMrzvcHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=202.114.0.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.52])
+	by app2 (Coremail) with SMTP id HwEQrACXfewmMeNlzAGRAA--.2676S2;
+	Sat, 02 Mar 2024 22:01:10 +0800 (CST)
+Received: from pride-poweredge-r740.. (unknown [222.20.126.129])
+	by gateway (Coremail) with SMTP id _____wAnAmsbMeNl7hK7AA--.2625S2;
+	Sat, 02 Mar 2024 22:01:05 +0800 (CST)
+From: Dongliang Mu <dzm91@hust.edu.cn>
+To: Alex Shi <alexs@kernel.org>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>
+Cc: Dongliang Mu <dzm91@hust.edu.cn>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] docs/zh_CN: Add dev-tools/ubsan Chinese translation
+Date: Sat,  2 Mar 2024 22:00:50 +0800
+Message-Id: <20240302140058.1527765-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240225-arm32-cfi-v1-0-6943306f065b@linaro.org>
- <202402261703.695B87E6@keescook> <CACRpkdYZsBQwUCEKsspkZ=M0Goo9omMH=LM=pWyOJ0U1WtySYg@mail.gmail.com>
- <CABCJKuenWs=11OdBL-+bRWEW2YjTUA9rt=OjUcbKX1PwpEyQKQ@mail.gmail.com>
-In-Reply-To: <CABCJKuenWs=11OdBL-+bRWEW2YjTUA9rt=OjUcbKX1PwpEyQKQ@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sat, 2 Mar 2024 09:46:15 +0100
-Message-ID: <CACRpkdZGo+9n4w=yTcCo90Z607h-uZ8JWf=xCe=-zQxCfCuCGA@mail.gmail.com>
-Subject: Re: [PATCH 0/7] CFI for ARM32 using LLVM
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Russell King <linux@armlinux.org.uk>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HwEQrACXfewmMeNlzAGRAA--.2676S2
+Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFW5Zr4DAr4xGw43Zr1xAFb_yoW7Gw4rpr
+	9YkryxGF48JryUArWxGFy5GF17AF1xu3W7GFn7Jw1FqF18Gr45tr47tryUtr9rWryUAFW7
+	JFn7KF4Yg34jk3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQ2b7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
+	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
+	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
+	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
+	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26F4j6r4UJwAm
+	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42
+	xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU3Ma0DUUUU
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-On Tue, Feb 27, 2024 at 6:44=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
-> On Tue, Feb 27, 2024 at 1:48=E2=80=AFPM Linus Walleij <linus.walleij@lina=
-ro.org> wrote:
-> > On Tue, Feb 27, 2024 at 2:06=E2=80=AFAM Kees Cook <keescook@chromium.or=
-g> wrote:
-> >
-> > > I wasn't able to build with CONFIG_FTRACE=3Dy; I got this link error:
-> > > ld.lld: error: undefined symbol: ftrace_stub_graph
-> > > (FWIW, I'm building against v6.8-rc2, maybe I need a different base?)
-> >
-> > I get that too, from the buildbots, but I'm clueless about what it is.
-> > All of it is in generic code, nothing ARM32-specific, maybe some bug
-> > in v6.8-rc1 that was fixed (I wish...) Sami?
->
-> You need to just define a separate stub for graph tracing with KCFI to
-> avoid type mismatches. Something like this:
->
-> https://lore.kernel.org/all/20230710183544.999540-11-samitolvanen@google.=
-com/
+Translate dev-tools/ubsan.rst into Chinese, add it into
+zh_CN/dev-tools/index.rst.
 
-I managed to fix this so all compiles work now! Thanks Sami.
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ .../translations/zh_CN/dev-tools/index.rst    |  2 +-
+ .../translations/zh_CN/dev-tools/ubsan.rst    | 91 +++++++++++++++++++
+ 2 files changed, 92 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/dev-tools/ubsan.rst
 
-Yours,
-Linus Walleij
+diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
+index c2db3e566b1b..c4463f0750f0 100644
+--- a/Documentation/translations/zh_CN/dev-tools/index.rst
++++ b/Documentation/translations/zh_CN/dev-tools/index.rst
+@@ -22,13 +22,13 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+    sparse
+    gcov
+    kasan
++   ubsan
+    gdb-kernel-debugging
+ 
+ Todolist:
+ 
+  - coccinelle
+  - kcov
+- - ubsan
+  - kmemleak
+  - kcsan
+  - kfence
+diff --git a/Documentation/translations/zh_CN/dev-tools/ubsan.rst b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
+new file mode 100644
+index 000000000000..2487696b3772
+--- /dev/null
++++ b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
+@@ -0,0 +1,91 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/dev-tools/ubsan.rst
++:Translator: Dongliang Mu <dzm91@hust.edu.cn>
++
++未定义行为消毒剂 - UBSAN
++====================================
++
++UBSAN是一种动态未定义行为检查工具。
++
++UBSAN使用编译时插桩捕捉未定义行为。编译器在可能导致未定义行为的操作前插入特定
++检测代码。如果检查失败，即检测到未定义行为，__ubsan_handle_* 函数将被调用打印
++错误信息。
++
++GCC自4.9.x [1_] （详见 ``-fsanitize=undefined`` 选项及其子选项）版本后引入这
++一特性。GCC 5.x 版本实现了更多检查器 [2_]。
++
++报告样例
++--------------
++
++::
++
++	 ================================================================================
++	 UBSAN: Undefined behaviour in ../include/linux/bitops.h:110:33
++	 shift exponent 32 is to large for 32-bit type 'unsigned int'
++	 CPU: 0 PID: 0 Comm: swapper Not tainted 4.4.0-rc1+ #26
++	  0000000000000000 ffffffff82403cc8 ffffffff815e6cd6 0000000000000001
++	  ffffffff82403cf8 ffffffff82403ce0 ffffffff8163a5ed 0000000000000020
++	  ffffffff82403d78 ffffffff8163ac2b ffffffff815f0001 0000000000000002
++	 Call Trace:
++	  [<ffffffff815e6cd6>] dump_stack+0x45/0x5f
++	  [<ffffffff8163a5ed>] ubsan_epilogue+0xd/0x40
++	  [<ffffffff8163ac2b>] __ubsan_handle_shift_out_of_bounds+0xeb/0x130
++	  [<ffffffff815f0001>] ? radix_tree_gang_lookup_slot+0x51/0x150
++	  [<ffffffff8173c586>] _mix_pool_bytes+0x1e6/0x480
++	  [<ffffffff83105653>] ? dmi_walk_early+0x48/0x5c
++	  [<ffffffff8173c881>] add_device_randomness+0x61/0x130
++	  [<ffffffff83105b35>] ? dmi_save_one_device+0xaa/0xaa
++	  [<ffffffff83105653>] dmi_walk_early+0x48/0x5c
++	  [<ffffffff831066ae>] dmi_scan_machine+0x278/0x4b4
++	  [<ffffffff8111d58a>] ? vprintk_default+0x1a/0x20
++	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
++	  [<ffffffff830b2240>] setup_arch+0x405/0xc2c
++	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
++	  [<ffffffff830ae053>] start_kernel+0x83/0x49a
++	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
++	  [<ffffffff830ad386>] x86_64_start_reservations+0x2a/0x2c
++	  [<ffffffff830ad4f3>] x86_64_start_kernel+0x16b/0x17a
++	 ================================================================================
++
++用法
++-----
++
++使用如下内核配置启用UBSAN::
++
++	CONFIG_UBSAN=y
++
++使用如下内核配置检查整个内核::
++
++        CONFIG_UBSAN_SANITIZE_ALL=y
++
++为了在特定文件或目录启动代码插桩，需要在相应的内核Makefile中添加一行类似内容:
++
++- 单文件（如main.o）::
++
++    UBSAN_SANITIZE_main.o := y
++
++- 一个目录中的所有文件::
++
++    UBSAN_SANITIZE := y
++
++即使设置了``CONFIG_UBSAN_SANITIZE_ALL=y``，为了避免文件被插桩，可使用::
++
++  UBSAN_SANITIZE_main.o := n
++
++与::
++
++  UBSAN_SANITIZE := n
++
++未对齐的内存访问检测可通过开启独立选项 - CONFIG_UBSAN_ALIGNMENT 检测。
++该选项在支持未对齐访问的架构上(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y)
++默认为关闭。该选项仍可通过内核配置启用，但它将产生大量的UBSAN报告。
++
++参考文献
++----------
++
++.. _1: https://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Debugging-Options.html
++.. _2: https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
++.. _3: https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
+-- 
+2.39.2
+
