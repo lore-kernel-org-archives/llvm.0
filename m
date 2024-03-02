@@ -1,172 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C445915D;
-	Fri,  1 Mar 2024 22:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB636FB2
+	for <llvm@lists.linux.dev>; Sat,  2 Mar 2024 01:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709331399; cv=none; b=iTKsxVGDhxCDGyQ2TUkp+wBsfkI6lQiR5dsytoh/5psybiU4uo+nsdArOmJxoewNR5epOtw+vK2sdI96jCFKKp7sHaDLFihfJN7L/axko8rxGKn0Y1MK0abOORXCVg1unDAPKT2dkTut2ZefEpORPHk58jCg47b3q5KA016u7kA=
+	t=1709343681; cv=none; b=WktkWxQqfaPrSe7bh1Odv5Im4yb/O6Yb42Bn5UculOi6aJEC7wKvOyef3feLgf+fbDLsDyGGD+qmS7515UjUtKwVRsWAel4i/UkOfMiRUxuNsVZrrvvcZ6ojp+CbGwb+eAY0ajMq12OGcd90vawzsT2J8HuZ1UC1yDc7Gx1hNFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709331399; c=relaxed/simple;
-	bh=oDYARa8WXz+458IiNigRRHYZUnbrXioVYYLvK/lUIG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=X3zwUiWdKI6NBHJkhLIhYuwvC19T4bZdKpaL4RqpAZP8vQVKojHpHiJpjFiPPQj9WF4+zxy8SVs4FHjWTrwHgrvXC2UK1OWWOHzN0+hMIpVNXl4LGy4RzGMb167prsIDhbqU2vz29VNPwUvsK+7tAqNOanI3JaXZdoZOhVi0EKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YGzXhveX; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709343681; c=relaxed/simple;
+	bh=0KCFxMh+icjS1aw9oa5hGY53MTI9PNJIR1ZIXiqr4uE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UFZJOmwhYCaUFsh7CSstrV0KmuGcNpv4sy21BaDwEFBISPE5yH6gpTLLxIUMG/i/UGaJ1g50SxcN+yosPYsC5kdNYexD5FajvrJXmFks+hwSF5PWq6hH+IlRprYo1I1iMeWEsGX6IbD5A7yLWaXDGtjprXvs0cj8vgEkCtrrMw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XwsBA0cN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YGzXhveX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709331394; x=1740867394;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oDYARa8WXz+458IiNigRRHYZUnbrXioVYYLvK/lUIG0=;
-  b=YGzXhveXBvmybDUYS1Y5eUErK5zftzK6AGYWwY/PmygLFOjXpvf/MqRj
-   GoDEEKD7ZS7Iyh439MUE4rdd/24EYkwn45i5+n8EZLfm5pZscipg9BCO4
-   hsi8AY4qCEIDmwuEtRFpL0gI4edQL1oOHHosN6+NfltS+Aep7PCg5QWlN
-   UHMz8MTKbgPQ/VBj9b20dRJt4GkNCfENOiZ1JSUGV6I+o4LAPr5sqv+Rl
-   Ge+mGlmR+T817rcpRsO51zBQDn607Uc83bMc8NYlq9PJlJA5unjLEAF0I
-   h/CrkH9b5WneUmeDvYAp8XMnfrjULuCqPfKIUd3nKOOCXkJ/b0wMNSAUc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11000"; a="4010435"
-X-IronPort-AV: E=Sophos;i="6.06,197,1705392000"; 
-   d="scan'208";a="4010435"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2024 14:16:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,197,1705392000"; 
-   d="scan'208";a="8392426"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 01 Mar 2024 14:16:32 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rgBB7-000E8Q-1w;
-	Fri, 01 Mar 2024 22:16:29 +0000
-Date: Sat, 2 Mar 2024 06:15:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm:net-queue 70/72] drivers/net/phy/phylink.c:1190:49: error: use
- of undeclared identifier 'state'
-Message-ID: <202403020610.dZd9Kzcc-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XwsBA0cN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709343678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=u/Q6zH69/gNNwLUCn+g3edkunI6u6yuwNkxwdRMQSYo=;
+	b=XwsBA0cN4hI6aYoKmgva0d1dVGyVcpD0Um34Xx9tH21oDujTd3nNQLDvLIadw2BKpVu1+E
+	8cN23EdH69wN5/6U/A72E98yEpXkt0rJtdSphiaFODdhP3Dv40WuB6iZDEwcAxyqZD/YfN
+	29y3kDe3WXNFv0bMcoJR70l7sWlMsr8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-442-PRMqdaU6ME6zO6zyt1ldUg-1; Fri, 01 Mar 2024 20:41:15 -0500
+X-MC-Unique: PRMqdaU6ME6zO6zyt1ldUg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C16C010201E8
+	for <llvm@lists.linux.dev>; Sat,  2 Mar 2024 01:41:14 +0000 (UTC)
+Received: from [172.64.4.41] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E14562166B33;
+	Sat,  2 Mar 2024 01:41:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0-rc6, mainline.kernel.org-clang, 17ba5660)
+Date: Sat, 02 Mar 2024 01:41:13 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Message-Id: <86502.124030120411500208@us-mta-442.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git net-queue
-head:   ccd059cded5d2b8ed8f784a837b02a578fa927ff
-commit: c62df466ec00e3b18bc49d91acd19b8ceb3abb63 [70/72] net: phylink: add pcs_query_inband()
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240302/202403020610.dZd9Kzcc-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240302/202403020610.dZd9Kzcc-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403020610.dZd9Kzcc-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> drivers/net/phy/phylink.c:1190:49: error: use of undeclared identifier 'state'
-                   pcs_link_mode = phylink_pcs_query_inband(pcs, state->interface);
-                                                                 ^
->> drivers/net/phy/phylink.c:1192:47: error: too few arguments to function call, expected 2, have 1
-                           phy_link_mode = phy_query_inband(pl->phydev);
-                                           ~~~~~~~~~~~~~~~~           ^
-   include/linux/phy.h:1785:14: note: 'phy_query_inband' declared here
-   unsigned int phy_query_inband(struct phy_device *phydev,
-                ^
-   2 errors generated.
+Kernel information:
+    Commit message: Merge tag 'iommu-fix-v6.8-rc6' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/joro/iommu
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/132368
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-vim +/state +1190 drivers/net/phy/phylink.c
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
 
-  1157	
-  1158	/**
-  1159	 * phylink_pcs_neg_mode() - helper to determine PCS inband mode
-  1160	 * @pl:
-  1161	 * @pcs:
-  1162	 * @mode: one of %MLO_AN_FIXED, %MLO_AN_PHY, %MLO_AN_INBAND.
-  1163	 * @interface: interface mode to be used
-  1164	 * @advertising: adertisement ethtool link mode mask
-  1165	 *
-  1166	 * Determines the negotiation mode to be used by the PCS, and returns
-  1167	 * one of:
-  1168	 *
-  1169	 * - %PHYLINK_PCS_NEG_NONE: interface mode does not support inband
-  1170	 * - %PHYLINK_PCS_NEG_OUTBAND: an out of band mode (e.g. reading the PHY)
-  1171	 *   will be used.
-  1172	 * - %PHYLINK_PCS_NEG_INBAND_DISABLED: inband mode selected but autoneg
-  1173	 *   disabled
-  1174	 * - %PHYLINK_PCS_NEG_INBAND_ENABLED: inband mode selected and autoneg enabled
-  1175	 *
-  1176	 * Note: this is for cases where the PCS itself is involved in negotiation
-  1177	 * (e.g. Clause 37, SGMII and similar) not Clause 73.
-  1178	 */
-  1179	static unsigned int phylink_pcs_neg_mode(struct phylink *pl,
-  1180						 struct phylink_pcs *pcs,
-  1181						 unsigned int mode,
-  1182						 phy_interface_t interface,
-  1183						 const unsigned long *advertising)
-  1184	{
-  1185		unsigned int pcs_link_mode = 0;
-  1186		unsigned int phy_link_mode = 0;
-  1187		unsigned int neg_mode;
-  1188	
-  1189		if (phylink_autoneg_inband(mode)) {
-> 1190			pcs_link_mode = phylink_pcs_query_inband(pcs, state->interface);
-  1191			if (pl->phydev)
-> 1192				phy_link_mode = phy_query_inband(pl->phydev);
-  1193		}
-  1194	
-  1195		switch (interface) {
-  1196		case PHY_INTERFACE_MODE_SGMII:
-  1197		case PHY_INTERFACE_MODE_QSGMII:
-  1198		case PHY_INTERFACE_MODE_QUSGMII:
-  1199		case PHY_INTERFACE_MODE_USXGMII:
-  1200			/* These protocols are designed for use with a PHY which
-  1201			 * communicates its negotiation result back to the MAC via
-  1202			 * inband communication. Note: there exist PHYs that run
-  1203			 * with SGMII but do not send the inband data.
-  1204			 */
-  1205			if (!phylink_autoneg_inband(mode))
-  1206				neg_mode = PHYLINK_PCS_NEG_OUTBAND;
-  1207			else
-  1208				neg_mode = PHYLINK_PCS_NEG_INBAND_ENABLED;
-  1209			break;
-  1210	
-  1211		case PHY_INTERFACE_MODE_1000BASEX:
-  1212		case PHY_INTERFACE_MODE_2500BASEX:
-  1213			/* 1000base-X is designed for use media-side for Fibre
-  1214			 * connections, and thus the Autoneg bit needs to be
-  1215			 * taken into account. We also do this for 2500base-X
-  1216			 * as well, but drivers may not support this, so may
-  1217			 * need to override this.
-  1218			 */
-  1219			if (!phylink_autoneg_inband(mode))
-  1220				neg_mode = PHYLINK_PCS_NEG_OUTBAND;
-  1221			else if (linkmode_test_bit(ETHTOOL_LINK_MODE_Autoneg_BIT,
-  1222						   advertising))
-  1223				neg_mode = PHYLINK_PCS_NEG_INBAND_ENABLED;
-  1224			else
-  1225				neg_mode = PHYLINK_PCS_NEG_INBAND_DISABLED;
-  1226			break;
-  1227	
-  1228		default:
-  1229			neg_mode = PHYLINK_PCS_NEG_NONE;
-  1230			break;
-  1231		}
-  1232	
-  1233		return neg_mode;
-  1234	}
-  1235	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
