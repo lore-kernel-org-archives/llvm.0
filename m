@@ -1,58 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10DC8763EA;
-	Sun,  3 Mar 2024 17:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD77763E1;
+	Sun,  3 Mar 2024 17:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709486160; cv=none; b=DfPYNSat48rI9ao6SsBT4qPxS+6J/Oc+3maMSCKTA+jTeDm+t5IelLGmaPivtVz4EpD02gG+Wy1GRAkdz0w8vGvKcdAY8UwA5l7pKFo70yGK/Mr/5Y9W+qPBzHqq8E7xYj+E0zLly1sVQ5BoCLMFjirvusSeVWO+Ef6/Xo5h7s0=
+	t=1709486163; cv=none; b=Prv8A+l59EDkUpi/t0KxjAQ38gbaervuhZMnmP78zp/xHS4AqvaH0lSYmnJyGQeMPaiQlzUAJB0jZ+quWA+ETnk83CP6zCPg1jXcib55XSiMYX2lLFYAThShibZJ8+y44paE8YBJ7b98heU2hmL+7PDeWKsmhbM17MpzoC81o2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709486160; c=relaxed/simple;
-	bh=wcrkksnJhphjSleCscQTz5I1VrWH4OS8oPm2c3B9oec=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JNIX+kWiOMbNE9xk/1yRKWjIFyAl7WbvhpbySSkqpJDTS0LYKEyv+eo1ZL9bH3KTvb+Ma4jnF+0AkcHf2Z0j7qAhjhT5qBkIO0ZXVbBLtYasqMk1CMhBqFK8mQY9zOxOxSxbgzDD6PdiuCHsLuoiAZEdkbZYejff+ytwa7+WH98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BWBsJA+1; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1709486163; c=relaxed/simple;
+	bh=qRStcwLXl2/7vDMZpOL69TpjetNulwoJj2qetC831JA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aY1AAEuWRemwbhXUDLIXHEyDWI3ISdjVcAyw9hQG4YQHe66ipxcjliTp49qxcVBAqq9cFxRGn6YBdnMMMaNSuQEKnCM2LSJKFjKRXEUBumYdukSA0pkUxWBoLb9zGXZjSFlqwvF1Ny+/VP0lU8ec9gSzzNfwV4QbuMFg43S6Weg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EzZErkQr; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BWBsJA+1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EzZErkQr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709486159; x=1741022159;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wcrkksnJhphjSleCscQTz5I1VrWH4OS8oPm2c3B9oec=;
-  b=BWBsJA+1ydvphIQh57JqNoGH+zqV+1Y22UJA6T6yBQHRrlobwKmk4Z29
-   MxtsIu7bykMA9A2H79wRASFY43j2WBqIKsUy+oMEM4XduTEDMtPmfof4I
-   klR9AJxaw+PKe3b+IZzE5yxbPDEHI4K3q/LxW75CVCemOh4eaw3bIYm2U
-   hjoz6YccKwiGmArrDGq4ASBvDStkgkh3ndFETB2F7X0flPmIO7tBtn8DI
-   AUKneibwRBlqtey3GaSq57XJM8jcHkGuIZouV5aX7Zl6bDGq2UWpWeO6Q
-   xRa05dIjDPBQ9d8Lk9Fb86NF+kdi131FGrvmrhPjz0y+YYuyREZT1q2U8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="15409221"
+  t=1709486161; x=1741022161;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qRStcwLXl2/7vDMZpOL69TpjetNulwoJj2qetC831JA=;
+  b=EzZErkQrgtjMW/seUOIJ9MCRLUhMACcvsBa1FUfg3YQlcsWGJssGs4CU
+   NF4tmFzNqtFBR8S/MpZf2whhc4xhPvrSPkGsPatRwVLM1xhWkqku+8YII
+   02Y60RCd2XEfUp6vmzkMnimrY2sKChTuWVakAFF+8pxLqFuHzQenET3v/
+   4rRoRKho+h1dXcZWLTdb96Vo3C2lIXatYyA8YyHu2vf3rgpwubpL8yr8d
+   z1i4F/bmEmqShnRwNREhmv4S6lRiWkd1Ybk2EcZO4M7w+9VXYdsRsh++V
+   Jn5CPWiTHKzDm6LDc1VX/f48OVhC+DEbbo5IfVBhUrH+ouUKOC+JtQRnI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="7790971"
 X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="15409221"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 09:15:58 -0800
+   d="scan'208";a="7790971"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 09:16:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="8948483"
+   d="scan'208";a="9196876"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 03 Mar 2024 09:15:56 -0800
+  by orviesa006.jf.intel.com with ESMTP; 03 Mar 2024 09:15:56 -0800
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rgpRJ-0001yQ-33;
+	id 1rgpRJ-0001yO-2z;
 	Sun, 03 Mar 2024 17:15:53 +0000
-Date: Mon, 4 Mar 2024 01:15:18 +0800
+Date: Mon, 4 Mar 2024 01:15:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lakshmi Prasanna Eachuri <lakshmi.prasanna.eachuri@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+To: Anatoliy Klymenko <anatoliy.klymenko@amd.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
 	Michal Simek <monstr@monstr.eu>,
-	Vishal Sagar <vishal.sagar@amd.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v6.6 503/860]
- drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c:411:10: error: call to undeclared
- function 'FIELD_GET'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202403040101.CT1IfmrQ-lkp@intel.com>
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Anatoliy Klymenko <anatoliy.klymenko@amd.com>
+Subject: Re: [PATCH 3/4] drm: xlnx: zynqmp_dpsub: Set input live format
+Message-ID: <202403040104.mwzqu5gs-lkp@intel.com>
+References: <20240226-dp-live-fmt-v1-3-b78c3f69c9d8@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,55 +71,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240226-dp-live-fmt-v1-3-b78c3f69c9d8@amd.com>
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6
-head:   24eec56fe5bd68cae795c37c61276b4dcf218a53
-commit: 70ce4da368ab0a329a7efb7c108b3cf889727403 [503/860] drm: xlnx: Add HDCP2X TX support
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240304/202403040101.CT1IfmrQ-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403040101.CT1IfmrQ-lkp@intel.com/reproduce)
+Hi Anatoliy,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bfa4437fd3938ae2e186e7664b2db65bb8775670]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anatoliy-Klymenko/drm-xlnx-zynqmp_dpsub-Set-layer-mode-during-creation/20240227-124631
+base:   bfa4437fd3938ae2e186e7664b2db65bb8775670
+patch link:    https://lore.kernel.org/r/20240226-dp-live-fmt-v1-3-b78c3f69c9d8%40amd.com
+patch subject: [PATCH 3/4] drm: xlnx: zynqmp_dpsub: Set input live format
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240304/202403040104.mwzqu5gs-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403040104.mwzqu5gs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403040101.CT1IfmrQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403040104.mwzqu5gs-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c:117:22: warning: variable 'srm_version' set but not used [-Wunused-but-set-variable]
-     117 |         u16 num_of_devices, srm_version;
-         |                             ^
->> drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c:411:10: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     411 |         return (FIELD_GET(XHDCP2X_TX_RXCAPS_MASK, rxcaps[0]) & HDCP_2_2_RX_CAPS_VERSION_VAL);
-         |                 ^
-   1 warning and 1 error generated.
---
->> drivers/staging/xilinx_hdcp/xlnx_hdcp_rng.c:33:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      33 |         reg_read = FIELD_GET(XHDCP2X_RNG_MASK_16, reg_read);
-         |                    ^
-   1 error generated.
---
->> drivers/staging/xilinx_hdcp/xlnx_hdcp2x_cipher.c:54:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      54 |         reg_read = FIELD_GET(XHDCP2X_CIPHER_MASK_16, reg_read);
-         |                    ^
-   1 error generated.
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:164: warning: Function parameter or struct member 'blend' not described in 'zynqmp_disp'
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:164: warning: Function parameter or struct member 'avbuf' not described in 'zynqmp_disp'
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:164: warning: Function parameter or struct member 'audio' not described in 'zynqmp_disp'
+>> drivers/gpu/drm/xlnx/zynqmp_disp.c:1019: warning: Function parameter or struct member 'bus_format' not described in 'zynqmp_disp_layer_set_live_format'
+>> drivers/gpu/drm/xlnx/zynqmp_disp.c:1019: warning: Excess function parameter 'info' description in 'zynqmp_disp_layer_set_live_format'
 
 
-vim +/FIELD_GET +411 drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_tx.c
+vim +1019 drivers/gpu/drm/xlnx/zynqmp_disp.c
 
-   401	
-   402	bool xlnx_hdcp2x_downstream_capbility(struct xlnx_hdcp2x_config *xhdcp2x_tx)
-   403	{
-   404		u8 rxcaps[HDCP_2_2_RXCAPS_LEN] = {0};
-   405	
-   406		xhdcp2x_tx->handlers.rd_handler(xhdcp2x_tx->interface_ref,
-   407						HDCP2X_TX_HDCPPORT_RX_CAPS_OFFSET,
-   408						(void *)rxcaps,
-   409						HDCP_2_2_RXCAPS_LEN);
-   410	
- > 411		return (FIELD_GET(XHDCP2X_TX_RXCAPS_MASK, rxcaps[0]) & HDCP_2_2_RX_CAPS_VERSION_VAL);
-   412	}
-   413	
+  1009	
+  1010	/**
+  1011	 * zynqmp_disp_layer_set_live_format - Set live layer input format
+  1012	 * @layer: The layer
+  1013	 * @info: Input media bus format
+  1014	 *
+  1015	 * Set the live @layer input bus format. The layer must be disabled.
+  1016	 */
+  1017	void zynqmp_disp_layer_set_live_format(struct zynqmp_disp_layer *layer,
+  1018					       u32 bus_format)
+> 1019	{
+  1020		int i;
+  1021		const struct zynqmp_disp_format *fmt;
+  1022	
+  1023		for (i = 0; i < ARRAY_SIZE(avbuf_live_fmts); ++i) {
+  1024			fmt = &avbuf_live_fmts[i];
+  1025			if (fmt->bus_fmt == bus_format) {
+  1026				layer->disp_fmt = fmt;
+  1027				layer->drm_fmt = drm_format_info(fmt->drm_fmt);
+  1028				zynqmp_disp_avbuf_set_live_format(layer->disp, layer, fmt);
+  1029				return;
+  1030			}
+  1031		}
+  1032	}
+  1033	
 
 -- 
 0-DAY CI Kernel Test Service
