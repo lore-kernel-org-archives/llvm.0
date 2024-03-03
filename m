@@ -1,195 +1,110 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C0A947B
-	for <llvm@lists.linux.dev>; Sun,  3 Mar 2024 13:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698B7B66F;
+	Sun,  3 Mar 2024 13:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709470882; cv=none; b=tMxPoeovAxkgxpGKucGU8c3MrocFhnnAhXgxn1Tlyd+v3OlxNN0NVllPiZCOEM8drK2KlrL1o5pfG+PsOZ4MZjXvYzA3Gi/hY9JGlYW2pxy0FomRnzL3r7hgvYlfd5hlO24jGdDNLm/+ADYrN3ZJsGCWWAz/ucfDfkX8Ul/YnWE=
+	t=1709471632; cv=none; b=b/p3XIO6GZ45m2ZVj5c6jnSMYa7XciHhPYp9leeEv22cDgpSk+wLSda4qLvWWWNseDfpEtBt5WsKaUKWzolFGvTvp3/DsiCADR6sS5k8NgE9XGzlHwQm+25jSls0VTFLP0QbZ+KYjML98bmOuxseMSon8SiE4kGbXbwhHxWW2yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709470882; c=relaxed/simple;
-	bh=4yTPtGNL0ZubE9Eqfg0jrQA8xfHvNftj92vg6ny7k5E=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KCyF3W31MvVjoD+L7knueDonFqowYM7btZLMUaqn6gqtW0cLkmPtTuiELIRmowGZhr+jskGE3j+J6/TE2E/H24PLtimeJhwIIIC2YigMco9NwbEr9Sp4NIAraOge0+V2q+jc3OocDF5yGdmjKz6EcuXtxLXq6W2ArJVBs7JW2R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f/oWAuiN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709471632; c=relaxed/simple;
+	bh=m/yXCkcN6oOhoRMyXfkQ/SuedEu4kXt7zsCvoGBhUIk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MftOgPxSgtB2tO+XgF0HwUhv+QVPGEluew4JdhBphTtcwIoJBLxIB8L2582mtxFvA2T57UoJ7ChKXp53us+7pipLEAISNltn9RxhkDd0BsfGUM6xw8omYHNCf7gEQQdHURSY+qxg8LkIscRqBfeHLQfDJT0oABS5SvMuAgdkNKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WUCtE2uj; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f/oWAuiN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709470879;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LPv++OU8mZWPhXGNSMJVxyqMwB+RyjFWhPMIO6gkC7w=;
-	b=f/oWAuiNGyEkgnI3JDo8C6VdqBA9JxVUjtM+lVeE069/GRSoHkW4Q9ym+6D3PVCjZcMT80
-	UNqG6qRssx1vHEb2beyOPipKgfyXnsUg5ZWtbKbIdZZZi8weGI+Z7XdpR3OnHwnYxoHUsS
-	NENhGCbD/ISkTMT5uwOmj1YajMl7N9Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-116-bXHB_OGTNuujrBcJMO3D6w-1; Sun, 03 Mar 2024 08:01:16 -0500
-X-MC-Unique: bXHB_OGTNuujrBcJMO3D6w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E1391066140
-	for <llvm@lists.linux.dev>; Sun,  3 Mar 2024 13:01:16 +0000 (UTC)
-Received: from [172.64.4.41] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 560B9C185C0;
-	Sun,  3 Mar 2024 13:01:16 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 204): Test report for master
- (6.8.0-rc6, mainline.kernel.org-clang, 04b8076d)
-Date: Sun, 03 Mar 2024 13:01:16 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WUCtE2uj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709471630; x=1741007630;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m/yXCkcN6oOhoRMyXfkQ/SuedEu4kXt7zsCvoGBhUIk=;
+  b=WUCtE2uj5jQpYiUhNzP7lhIeIudSb2ig5AyOVw6R+dPNgvZbE7Hco0I7
+   yPUHAxFgAxeNT3Uyg37YAy453LJ8NjbwuPZ6K1QiBS2+kfQA4/uOq+sX0
+   k9LSZ8f7MD5miXF93EpgAn9oQe1p5Lzr1xKEC520nG/UiJmMUqCQV8B2S
+   nfCwPRH5rmf38jw2z+9dytBnKHIwUyZQq3QJQdoZXHaclX0xTZ+ZT5sdc
+   MGXEQInnT8b4IT7jlPSsFGNXvdtFYGDo9YsN1FHz2/gvefOsdo1Qw33Dn
+   x71pL5YnCdBKA1rH9vxwvqjIyr8rWcR5e61s6MtTTFEVxy7+F69pWTKxB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11001"; a="14676187"
+X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
+   d="scan'208";a="14676187"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 05:13:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
+   d="scan'208";a="8655248"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 03 Mar 2024 05:13:48 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rglf0-0001mb-0F;
+	Sun, 03 Mar 2024 13:13:46 +0000
+Date: Sun, 3 Mar 2024 21:13:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Groves <John@groves.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Subject: [riteshharjani:notmuch-cover.1708709155.git.john@groves.net 9/23]
+ drivers/dax/bus.c:1442:9: error: call to undeclared function
+ '_copy_from_iter_flushcache'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202403032136.MEDHWXbG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <06013.124030308011601295@us-mta-116.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/riteshharjani/linux notmuch-cover.1708709155.git.john@groves.net
+head:   c8318dd2a63c230e5e731bc14750a466d7891ddc
+commit: b1dbe325e1e88d07cf2f245da33393842ff842bc [9/23] dev_dax_iomap: Add CONFIG_DEV_DAX_IOMAP kernel build parameter
+config: i386-buildonly-randconfig-002-20240303 (https://download.01.org/0day-ci/archive/20240303/202403032136.MEDHWXbG-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240303/202403032136.MEDHWXbG-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403032136.MEDHWXbG-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'firewire-fixes-6.8-rc7' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/ieee1394/linux1394
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/132468
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
+>> drivers/dax/bus.c:1442:9: error: call to undeclared function '_copy_from_iter_flushcache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1442 |         return _copy_from_iter_flushcache(addr, bytes, i);
+         |                ^
+   drivers/dax/bus.c:1437:9: warning: variable 'len' set but not used [-Wunused-but-set-variable]
+    1437 |         size_t len, off;
+         |                ^
+   1 warning and 1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 (debug) - xfstests - cifsv3.11
-      x86_64 (debug) - Reboot test
+vim +/_copy_from_iter_flushcache +1442 drivers/dax/bus.c
 
+2e58e20034e6b0 John Groves 2024-02-23  1433  
+2e58e20034e6b0 John Groves 2024-02-23  1434  static size_t dev_dax_recovery_write(struct dax_device *dax_dev, pgoff_t pgoff,
+2e58e20034e6b0 John Groves 2024-02-23  1435  		void *addr, size_t bytes, struct iov_iter *i)
+2e58e20034e6b0 John Groves 2024-02-23  1436  {
+2e58e20034e6b0 John Groves 2024-02-23  1437  	size_t len, off;
+2e58e20034e6b0 John Groves 2024-02-23  1438  
+2e58e20034e6b0 John Groves 2024-02-23  1439  	off = offset_in_page(addr);
+2e58e20034e6b0 John Groves 2024-02-23  1440  	len = PFN_PHYS(PFN_UP(off + bytes));
+2e58e20034e6b0 John Groves 2024-02-23  1441  
+2e58e20034e6b0 John Groves 2024-02-23 @1442  	return _copy_from_iter_flushcache(addr, bytes, i);
+2e58e20034e6b0 John Groves 2024-02-23  1443  }
+2e58e20034e6b0 John Groves 2024-02-23  1444  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+:::::: The code at line 1442 was first introduced by commit
+:::::: 2e58e20034e6b0d8e6f04e6002c6f684dd1a35bd dev_dax_iomap: Add dax_operations for use by fs-dax on devdax
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: TO: John Groves <John@Groves.net>
+:::::: CC: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
