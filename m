@@ -1,54 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF00A67C5C;
-	Sun,  3 Mar 2024 20:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515771CA8F;
+	Sun,  3 Mar 2024 20:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709497565; cv=none; b=b21d0CrDoWgjdHdNWL6LtRNDepGlRimBGkWmO4j/akru4jHSCJSeYRvtraqu68Nqewd3gH3TiTLOiHmQLXPNhhfyAnfMBINska1qlmxXQmV9VzivKVoKjR7wLXIuDNU8zJfJG2U6+tZj849uA7MunFrIDSXcC0vD3GRNP9y8LTE=
+	t=1709499545; cv=none; b=iLTDcma3spcQT/+84X4aEmbRoKLPQnRKMBMRas5+DRpPDlw6Iimoaw57XIam18vF8o39Cer9w2nxqvJDROnbrNZ2GxGGMXXIxwywNkRUEYUVULMExTriwN6IoCK24sPZVWTJd/EdD3f95UDTgiQl3Z6lLMlBdRMA+LtWVZFlWvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709497565; c=relaxed/simple;
-	bh=bitz5EArSWCtn18+lPpNYT7WN4NuoOfNmHlh8tkOlhA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rjIiaCzXWJtcPl+sOVSsY7pvN1EEHgOSSNM0LMeXGlBy2QUaBGxdWpqGPnLKOcOsjbWZBoCpKYFcxfoy96WOD+Suwe8NtDZHpq6mSH6sj4vYyQ9VAwnteMfuId31hwvLjcmd+chtA5esEd1N8Sya59zSp3ZuQ/1EOH8o2uo3ZKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ERZTPGG8; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1709499545; c=relaxed/simple;
+	bh=Shd2GRwjHJOSLqbTorBQLVaSeB+Z7gQi3myuQxEsO5A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jrb1IaqlDrBXh1A8ZrN/KIxc9bL51/q/e0U4rPPk0a8WutTjRoxwDty4r+Dyh/9nOX0+U/5efgd00SH9DM4J31rck2iAUsPSerKt7LmPAJceIpXyHFRo42KpfO+ITT+8FL7MXZ51X3ipJdAy67rDES6tD2EJi6lQ5N5gbPoo8iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SRRQOxeZ; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ERZTPGG8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SRRQOxeZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709497563; x=1741033563;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bitz5EArSWCtn18+lPpNYT7WN4NuoOfNmHlh8tkOlhA=;
-  b=ERZTPGG8DJUsNrz7Fn25jIZTKLbipzhx4EykVxSLKzbYaN7WbAJmZBdx
-   /SOS+bL2OcS5ohomTFPgO4E15T4coLwKvlUI6BMCvSEosOv23yG+7eSlw
-   jB4Ubb6Yb84tZzP3fuL8cJ/czJwAtamSmDkmN3mVy6s9lUyxfkRDVG54p
-   7jpu2a4n1tpBkN8iOkOY6WWHQ9HPgFt1fBdsDi72x9I84JtJQL58dumz5
-   hEWgbcXflPA+XUHg6ywYFog7UTF0fPAhmLEAjd/N9gs5/ZvOaBacf+K9E
-   0nBV2PcWjWU61tPu/SXlsf8qy/FrG9f5Y9Sa5LZE0U6W6+aLFcMewzqlp
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="3840274"
+  t=1709499543; x=1741035543;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Shd2GRwjHJOSLqbTorBQLVaSeB+Z7gQi3myuQxEsO5A=;
+  b=SRRQOxeZmSeNVTfXA9746uUOodwxf7O5oPoy+KD5hdkfb3xTFAhJmcgF
+   IpG3mhR/RRVQncXjUDH2Zkpt8w2yfQacNhAVXUk5h8rim/2A8UoGbIbc6
+   FnU1F6WbwWIVYKnkoVdV1RR5oOLHmi0aZUtHC8ifL8xUBvaVU6BiEISSp
+   OWfa3potxjk36UBheDYnSEnX/vfVg+gX7ZWAB6Pehi/CwdY3xjGuJl/jm
+   KGQtsfi48afcSTXcnDRn3q8nCWzf1IBkpiP9URFaP15ZvAC3J73hpSnwI
+   /YdRQR5jywkLU0VzhO7Y0C9JL9MrqT5CsXxFiVWN+k64b8xX4zbtYi0Er
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="3871788"
 X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="3840274"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 12:26:01 -0800
+   d="scan'208";a="3871788"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 12:59:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="31939878"
+   d="scan'208";a="8848219"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Mar 2024 12:26:00 -0800
+  by orviesa009.jf.intel.com with ESMTP; 03 Mar 2024 12:59:02 -0800
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rgsPG-00025P-0d;
-	Sun, 03 Mar 2024 20:25:58 +0000
-Date: Mon, 4 Mar 2024 04:25:22 +0800
+	id 1rgsvC-00026U-37;
+	Sun, 03 Mar 2024 20:58:58 +0000
+Date: Mon, 4 Mar 2024 04:58:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-writeback 31/31] ERROR: modpost: "writeback_iter"
- [fs/netfs/netfs.ko] undefined!
-Message-ID: <202403040404.evfPyTci-lkp@intel.com>
+Subject: Re: [PATCH v8 02/12] firmware: qcom: scm: enable the TZ mem allocator
+Message-ID: <202403040445.XAdJO3Ta-lkp@intel.com>
+References: <20240303150115.133633-3-brgl@bgdev.pl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,125 +58,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240303150115.133633-3-brgl@bgdev.pl>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-writeback
-head:   afd4a14c1f0fde0fd833c3d1984c4ebb5981f7f8
-commit: afd4a14c1f0fde0fd833c3d1984c4ebb5981f7f8 [31/31] netfs: Use writeback_iter()
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240304/202403040404.evfPyTci-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403040404.evfPyTci-lkp@intel.com/reproduce)
+Hi Bartosz,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on krzk-dt/for-next linus/master v6.8-rc6 next-20240301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/firmware-qcom-add-a-dedicated-TrustZone-buffer-allocator/20240303-230933
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20240303150115.133633-3-brgl%40bgdev.pl
+patch subject: [PATCH v8 02/12] firmware: qcom: scm: enable the TZ mem allocator
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240304/202403040445.XAdJO3Ta-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403040445.XAdJO3Ta-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403040404.evfPyTci-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403040445.XAdJO3Ta-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rpmsg/rpmsg_char.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-ast-cf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/counter/ftm-quaddec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/snd-pcm-dmaengine.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/drivers/snd-pcmtest.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/pci/hda/snd-hda-cirrus-scodec-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/soc-topology-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-ab8500-codec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-sigmadsp.o
-WARNING: modpost: sound/soc/codecs/snd-soc-tlv320adc3xxx: section mismatch in reference: adc3xxx_i2c_driver+0x10 (section: .data) -> adc3xxx_i2c_remove (section: .exit.text)
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/renoir/snd-acp3x-rn.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/yc/snd-soc-acp6x-mach.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/acp/snd-acp-i2s.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/acp/snd-acp-pdm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/acp/snd-acp-legacy-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/acp/snd-acp-pci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/ps/snd-soc-ps-mach.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/fsl/imx-pcm-dma.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-da7219.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-dmic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-es8336.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-i2s-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-max98927.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-max98357a.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-max98373.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-nau8825.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-probe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt274.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt286.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt298.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt5514.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt5663.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt5682.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-ssm4567.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/mxs/snd-soc-mxs-pcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-sdw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/qdsp6/snd-q6dsp-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-atom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-byt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-bdw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda-mlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-tng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-skl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-apl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-cnl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-icl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-tgl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-mtl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-lnl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8ulp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/imx-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mtk-adsp-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8195/snd-sof-mt8195.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8186/snd-sof-mt8186.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-acpi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-of.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-pci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/ac97_bus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy-fb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kprobes/kprobe_example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kprobes/kretprobe_example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/livepatch/livepatch-sample.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/livepatch/livepatch-shadow-fix1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/livepatch/livepatch-shadow-fix2.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/livepatch/livepatch-callbacks-demo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/livepatch/livepatch-callbacks-mod.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/livepatch/livepatch-callbacks-busymod.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kmemleak/kmemleak-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/fprobe/fprobe_example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/6lowpan/ieee802154_6lowpan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/ieee802154_socket.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/video/fbdev.o
->> ERROR: modpost: "writeback_iter" [fs/netfs/netfs.ko] undefined!
->> ERROR: modpost: "netfs_writepages" [fs/smb/client/cifs.ko] undefined!
->> ERROR: modpost: "netfs_writepages" [fs/9p/9p.ko] undefined!
->> ERROR: modpost: "netfs_writepages" [fs/afs/kafs.ko] undefined!
+>> drivers/firmware/qcom/qcom_tzmem.c:266:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           case QCOM_TZMEM_POLICY_ON_DEMAND:
+           ^
+   drivers/firmware/qcom/qcom_tzmem.c:266:2: note: insert 'break;' to avoid fall-through
+           case QCOM_TZMEM_POLICY_ON_DEMAND:
+           ^
+           break; 
+   1 warning generated.
+
+
+vim +266 drivers/firmware/qcom/qcom_tzmem.c
+
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  250  
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  251  static bool qcom_tzmem_try_grow_pool(struct qcom_tzmem_pool *pool,
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  252  				     size_t requested, gfp_t gfp)
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  253  {
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  254  	size_t current_size = gen_pool_size(pool->genpool);
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  255  
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  256  	lockdep_assert_held(&pool->lock);
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  257  
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  258  	if (pool->max_size && (current_size + requested) > pool->max_size)
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  259  		return false;
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  260  
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  261  	switch (pool->policy) {
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  262  	case QCOM_TZMEM_POLICY_STATIC:
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  263  		return false;
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  264  	case QCOM_TZMEM_POLICY_MULTIPLIER:
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  265  		requested = current_size * pool->increment;
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03 @266  	case QCOM_TZMEM_POLICY_ON_DEMAND:
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  267  		break;
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  268  	}
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  269  
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  270  	return !qcom_tzmem_pool_add_memory(pool, requested, gfp);
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  271  }
+4798c267ce94f6 Bartosz Golaszewski 2024-03-03  272  
 
 -- 
 0-DAY CI Kernel Test Service
