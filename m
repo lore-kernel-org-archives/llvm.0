@@ -1,56 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9997F;
-	Sun,  3 Mar 2024 07:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E628AD22;
+	Sun,  3 Mar 2024 08:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709452720; cv=none; b=eWPdZqXhaux0q8UgQIQqzQ1ZUUKGBjWBW03zv/oKJ1FErusha47IIx2gZ5Jncs/5iASI/lLMd6iAFMC2VDGwE8FK+u10gR2B7WcyfVb8argKhAUmPELuFzzY9Hju5hXbL6DFHZw37gqqgkNP7/XgAz20ScO0ZJaEMJoPckf9XEA=
+	t=1709455846; cv=none; b=arJ24c9z7Eivyplkn+Fxsgc9FJq8Vuisc5MavlczzHcb2Wxf/jM3RdDb38Ve8Oym3RUJCWZAeSCzvfQuvweyv8GWgFwf/CeklcLcAdCyzPYaBNndXapDbj10U3IcTaRXyZMmXBh3xt5Dtiw0q79WJFI1YWIQh5l9XVWSPc5KKak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709452720; c=relaxed/simple;
-	bh=qD0aODZf73PVjwdqTOjl1kl3cD4nnkXara/0s8wvZog=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SyEPi28JqgzN3a5SEVt88d8VU0FMgRQlcaBryK2Bio3wgnAqwd8W6sicJ7CiOI2InnCIKqTecmgVx2CpI5dLef9sj9akRlgZ3Aip8f337AI5vi4ShNQHzbdUCAP0PYMxipTU9xAASJOGptBBA7hgDba7tMNMfRyK1ztSniMyMRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KTVDJI3z; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1709455846; c=relaxed/simple;
+	bh=Ac28i28Dd0Q+J3tVJsYgyYlnVF+wi0r0rcNXZW5Z/8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XGdJxNJYCnsUD1Td3UprKTbJ0wwN4OgNPFnj0B+IgYujrH/XAJLrGbc9qQiCYQWYLjHSlM82hB9/wnNtn5NCeL/gFXtpXsfgFdpgBevy/qXbmpe+GguF4aVe+9eaXfk12cLcj8om7uZWS26LZKOMm4SQbPbR6e4hVxmk0U/BKuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IOQLvfkl; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KTVDJI3z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IOQLvfkl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709452718; x=1740988718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qD0aODZf73PVjwdqTOjl1kl3cD4nnkXara/0s8wvZog=;
-  b=KTVDJI3zorhWCr4SdaZkTFSHTVco/QQydMv4akMo/ZDX2WKlEbLNM/DZ
-   U0fM9vdPhgXnaQkuJ8dFfXQFoW3jEf6hTI7qcWLnsHTqTr0yd1XgzusBQ
-   /zT93WjBRdCuRq9QF9LNUHxa4NJkVP5uvKF6qbfXzhOhhrsyuItdEUtZm
-   NInm5EBHXbi76b7bZbWK6yx1zwtQdJX29G/paNCr0CxHeYtV0ANvvQJ/k
-   MK1jOq7xzbN8ExY6HK7Zt35Uo+kH3Kju/9xyP0qhzGQl77AUsaUyi4Xkf
-   jO0k6aqHy/w5MkqETrDrRGEVQ432Py2GnPbQ8Px4PLdIO2OQ5WLNBqG4K
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11001"; a="26421006"
+  t=1709455844; x=1740991844;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ac28i28Dd0Q+J3tVJsYgyYlnVF+wi0r0rcNXZW5Z/8s=;
+  b=IOQLvfklBV3PTpqFhbriMucaf+hmm/SAYOec/3EkC06kySk77govJV33
+   7f9lK774ATMsjafSLC/eHAYK8y5R+60TcDR7/9P6VxKlp7z5RfB4xvdyg
+   2k9UzLUEO4cguusmGp+64yViIHscptOs7wtHjVKsedtgGSnKBPd8uD7gx
+   qOiqy2GoMIT1Jmo6OsMG2TmENqHYlZf6LpEpXEkpzpf4J/y0+M4LGstev
+   E2PAZV4dxQa5sEhqcYvZDP0HoeEyfb59MldOVLShVIcToWkpXOPBKSW5Z
+   N8lVA8x+0OBRh6FnkAbxNXqDHF11x9RfqxKrfOLJkwGcmbtLG6sf55Gf1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11001"; a="3811926"
 X-IronPort-AV: E=Sophos;i="6.06,200,1705392000"; 
-   d="scan'208";a="26421006"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2024 23:58:36 -0800
+   d="scan'208";a="3811926"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 00:50:43 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,200,1705392000"; 
-   d="scan'208";a="8587468"
+   d="scan'208";a="9114888"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Mar 2024 23:58:34 -0800
+  by orviesa006.jf.intel.com with ESMTP; 03 Mar 2024 00:50:42 -0800
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rggjw-0001Ls-16;
-	Sun, 03 Mar 2024 07:58:32 +0000
-Date: Sun, 3 Mar 2024 15:57:33 +0800
+	id 1rghYM-0001Zk-2l;
+	Sun, 03 Mar 2024 08:50:38 +0000
+Date: Sun, 3 Mar 2024 16:50:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Woudstra <ericwouds@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 net-next 2/2] net: phy: air_en8811h: Add the Airoha
- EN8811H PHY driver
-Message-ID: <202403031523.iZ9UxlzW-lkp@intel.com>
-References: <20240302183835.136036-3-ericwouds@gmail.com>
+To: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [pinchartl:rpi/v6.8/unicam/next 8/16]
+ drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c:548:8: warning:
+ variable 'ret' is used uninitialized whenever 'if' condition is false
+Message-ID: <202403031658.yi7bVq8q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,170 +59,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240302183835.136036-3-ericwouds@gmail.com>
 
-Hi Eric,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Woudstra/dt-bindings-net-airoha-en8811h-Add-en8811h/20240303-024417
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240302183835.136036-3-ericwouds%40gmail.com
-patch subject: [PATCH v2 net-next 2/2] net: phy: air_en8811h: Add the Airoha EN8811H PHY driver
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240303/202403031523.iZ9UxlzW-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240303/202403031523.iZ9UxlzW-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git rpi/v6.8/unicam/next
+head:   0301903671d87170fc043a48deb7e0d7a38a332c
+commit: 73bdce8e3693eba9d97649d53eaff7592fd07a5f [8/16] media: v4l: Add V4L2-PIX-FMT-Y14P format
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240303/202403031658.yi7bVq8q-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240303/202403031658.yi7bVq8q-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403031523.iZ9UxlzW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403031658.yi7bVq8q-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm64/include/asm/cacheflush.h:11:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/phy/air_en8811h.c:14:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:19:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:9:
-   In file included from include/linux/security.h:35:
-   include/linux/bpf.h:742:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     742 |         ARG_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | ARG_PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:743:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     743 |         ARG_PTR_TO_MEM_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:744:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     744 |         ARG_PTR_TO_CTX_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_CTX,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:745:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     745 |         ARG_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:746:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     746 |         ARG_PTR_TO_STACK_OR_NULL        = PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:747:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     747 |         ARG_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:751:38: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     751 |         ARG_PTR_TO_UNINIT_MEM           = MEM_UNINIT | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:753:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     753 |         ARG_PTR_TO_FIXED_SIZE_MEM       = MEM_FIXED_SIZE | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:776:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     776 |         RET_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | RET_PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:777:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     777 |         RET_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:778:47: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     778 |         RET_PTR_TO_TCP_SOCK_OR_NULL     = PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:779:50: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     779 |         RET_PTR_TO_SOCK_COMMON_OR_NULL  = PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:781:49: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     781 |         RET_PTR_TO_DYNPTR_MEM_OR_NULL   = PTR_MAYBE_NULL | RET_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:782:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     782 |         RET_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:783:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     783 |         RET_PTR_TO_BTF_ID_TRUSTED       = PTR_TRUSTED    | RET_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~    ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:894:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     894 |         PTR_TO_MAP_VALUE_OR_NULL        = PTR_MAYBE_NULL | PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:895:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     895 |         PTR_TO_SOCKET_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   include/linux/bpf.h:896:46: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     896 |         PTR_TO_SOCK_COMMON_OR_NULL      = PTR_MAYBE_NULL | PTR_TO_SOCK_COMMON,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:897:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     897 |         PTR_TO_TCP_SOCK_OR_NULL         = PTR_MAYBE_NULL | PTR_TO_TCP_SOCK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~
-   include/linux/bpf.h:898:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     898 |         PTR_TO_BTF_ID_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
->> drivers/net/phy/air_en8811h.c:678:3: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-     678 |                 val |= AIR_PHY_LED_ON_ENABLE;
-         |                 ^~~
-   drivers/net/phy/air_en8811h.c:671:9: note: initialize the variable 'val' to silence this warning
-     671 |         int val;
+>> drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c:548:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     548 |                         if (IS_ERR(buf->mmal.dma_buf)) {
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c:563:9: note: uninitialized use occurs here
+     563 |         return ret;
+         |                ^~~
+   drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c:548:4: note: remove the 'if' if its condition is always true
+     548 |                         if (IS_ERR(buf->mmal.dma_buf)) {
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c:483:9: note: initialize the variable 'ret' to silence this warning
+     483 |         int ret;
          |                ^
          |                 = 0
-   26 warnings generated.
+   drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c:160:20: warning: unused function 'node_is_capture' [-Wunused-function]
+     160 | static inline bool node_is_capture(struct bcm2835_isp_node *node)
+         |                    ^~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/val +678 drivers/net/phy/air_en8811h.c
+vim +548 drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
 
-   668	
-   669	static int air_led_init(struct phy_device *phydev, u8 index, u8 state, u8 pol)
-   670	{
-   671		int val;
-   672		int err;
-   673	
-   674		if (index >= EN8811H_LED_COUNT)
-   675			return -EINVAL;
-   676	
-   677		if (state == AIR_LED_ENABLE)
- > 678			val |= AIR_PHY_LED_ON_ENABLE;
-   679		else
-   680			val &= ~AIR_PHY_LED_ON_ENABLE;
-   681	
-   682		if (pol == AIR_ACTIVE_HIGH)
-   683			val |= AIR_PHY_LED_ON_POLARITY;
-   684		else
-   685			val &= ~AIR_PHY_LED_ON_POLARITY;
-   686	
-   687		err = phy_modify_mmd(phydev, MDIO_MMD_VEND2, AIR_PHY_LED_ON(index),
-   688				     AIR_PHY_LED_ON_ENABLE |
-   689				     AIR_PHY_LED_ON_POLARITY, val);
-   690	
-   691		if (err < 0)
-   692			return err;
-   693	
-   694		return 0;
-   695	}
-   696	
+ccf04478fd461b Naushir Patuck   2023-11-09  474  
+ccf04478fd461b Naushir Patuck   2023-11-09  475  static int bcm2835_isp_buf_prepare(struct vb2_buffer *vb)
+ccf04478fd461b Naushir Patuck   2023-11-09  476  {
+ccf04478fd461b Naushir Patuck   2023-11-09  477  	struct bcm2835_isp_node *node = vb2_get_drv_priv(vb->vb2_queue);
+ccf04478fd461b Naushir Patuck   2023-11-09  478  	struct bcm2835_isp_dev *dev = node_get_dev(node);
+ccf04478fd461b Naushir Patuck   2023-11-09  479  	struct vb2_v4l2_buffer *vb2 = to_vb2_v4l2_buffer(vb);
+ccf04478fd461b Naushir Patuck   2023-11-09  480  	struct bcm2835_isp_buffer *buf =
+ccf04478fd461b Naushir Patuck   2023-11-09  481  		container_of(vb2, struct bcm2835_isp_buffer, vb);
+ccf04478fd461b Naushir Patuck   2023-11-09  482  	struct dma_buf *dma_buf;
+ccf04478fd461b Naushir Patuck   2023-11-09  483  	int ret;
+ccf04478fd461b Naushir Patuck   2023-11-09  484  
+ccf04478fd461b Naushir Patuck   2023-11-09  485  	v4l2_dbg(3, debug, &dev->v4l2_dev, "%s: type: %d ptr %p\n",
+ccf04478fd461b Naushir Patuck   2023-11-09  486  		 __func__, vb->vb2_queue->type, vb);
+ccf04478fd461b Naushir Patuck   2023-11-09  487  
+ccf04478fd461b Naushir Patuck   2023-11-09  488  	if (V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type)) {
+ccf04478fd461b Naushir Patuck   2023-11-09  489  		if (vb2->field == V4L2_FIELD_ANY)
+ccf04478fd461b Naushir Patuck   2023-11-09  490  			vb2->field = V4L2_FIELD_NONE;
+ccf04478fd461b Naushir Patuck   2023-11-09  491  		if (vb2->field != V4L2_FIELD_NONE) {
+ccf04478fd461b Naushir Patuck   2023-11-09  492  			v4l2_err(&dev->v4l2_dev,
+ccf04478fd461b Naushir Patuck   2023-11-09  493  				 "%s field isn't supported\n", __func__);
+ccf04478fd461b Naushir Patuck   2023-11-09  494  			return -EINVAL;
+ccf04478fd461b Naushir Patuck   2023-11-09  495  		}
+ccf04478fd461b Naushir Patuck   2023-11-09  496  	}
+ccf04478fd461b Naushir Patuck   2023-11-09  497  
+ccf04478fd461b Naushir Patuck   2023-11-09  498  	if (vb2_plane_size(vb, 0) < node->q_data.sizeimage) {
+ccf04478fd461b Naushir Patuck   2023-11-09  499  		v4l2_err(&dev->v4l2_dev,
+ccf04478fd461b Naushir Patuck   2023-11-09  500  			 "%s data will not fit into plane (%lu < %lu)\n",
+ccf04478fd461b Naushir Patuck   2023-11-09  501  			 __func__, vb2_plane_size(vb, 0),
+ccf04478fd461b Naushir Patuck   2023-11-09  502  			 (long)node->q_data.sizeimage);
+ccf04478fd461b Naushir Patuck   2023-11-09  503  		return -EINVAL;
+ccf04478fd461b Naushir Patuck   2023-11-09  504  	}
+ccf04478fd461b Naushir Patuck   2023-11-09  505  
+ccf04478fd461b Naushir Patuck   2023-11-09  506  	if (!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type))
+ccf04478fd461b Naushir Patuck   2023-11-09  507  		vb2_set_plane_payload(vb, 0, node->q_data.sizeimage);
+ccf04478fd461b Naushir Patuck   2023-11-09  508  
+ccf04478fd461b Naushir Patuck   2023-11-09  509  	switch (vb->memory) {
+ccf04478fd461b Naushir Patuck   2023-11-09  510  	case VB2_MEMORY_DMABUF:
+ccf04478fd461b Naushir Patuck   2023-11-09  511  		dma_buf = dma_buf_get(vb->planes[0].m.fd);
+ccf04478fd461b Naushir Patuck   2023-11-09  512  
+ccf04478fd461b Naushir Patuck   2023-11-09  513  		if (dma_buf != buf->mmal.dma_buf) {
+ccf04478fd461b Naushir Patuck   2023-11-09  514  			/*
+ccf04478fd461b Naushir Patuck   2023-11-09  515  			 * dmabuf either hasn't already been mapped, or it has
+ccf04478fd461b Naushir Patuck   2023-11-09  516  			 * changed.
+ccf04478fd461b Naushir Patuck   2023-11-09  517  			 */
+ccf04478fd461b Naushir Patuck   2023-11-09  518  			if (buf->mmal.dma_buf) {
+ccf04478fd461b Naushir Patuck   2023-11-09  519  				v4l2_err(&dev->v4l2_dev,
+ccf04478fd461b Naushir Patuck   2023-11-09  520  					 "%s Buffer changed - why did the core not call cleanup?\n",
+ccf04478fd461b Naushir Patuck   2023-11-09  521  					 __func__);
+ccf04478fd461b Naushir Patuck   2023-11-09  522  				bcm2835_isp_mmal_buf_cleanup(&buf->mmal);
+ccf04478fd461b Naushir Patuck   2023-11-09  523  			}
+ccf04478fd461b Naushir Patuck   2023-11-09  524  
+ccf04478fd461b Naushir Patuck   2023-11-09  525  			buf->mmal.dma_buf = dma_buf;
+ccf04478fd461b Naushir Patuck   2023-11-09  526  		} else {
+ccf04478fd461b Naushir Patuck   2023-11-09  527  			/*
+ccf04478fd461b Naushir Patuck   2023-11-09  528  			 * Already have a reference to the buffer, so release it
+ccf04478fd461b Naushir Patuck   2023-11-09  529  			 * here.
+ccf04478fd461b Naushir Patuck   2023-11-09  530  			 */
+ccf04478fd461b Naushir Patuck   2023-11-09  531  			dma_buf_put(dma_buf);
+ccf04478fd461b Naushir Patuck   2023-11-09  532  		}
+ccf04478fd461b Naushir Patuck   2023-11-09  533  		ret = 0;
+ccf04478fd461b Naushir Patuck   2023-11-09  534  		break;
+ccf04478fd461b Naushir Patuck   2023-11-09  535  	case VB2_MEMORY_MMAP:
+ccf04478fd461b Naushir Patuck   2023-11-09  536  		/*
+ccf04478fd461b Naushir Patuck   2023-11-09  537  		 * We want to do this at init, but vb2_core_expbuf checks that
+ccf04478fd461b Naushir Patuck   2023-11-09  538  		 * the index < q->num_buffers, and q->num_buffers only gets
+ccf04478fd461b Naushir Patuck   2023-11-09  539  		 * updated once all the buffers are allocated.
+ccf04478fd461b Naushir Patuck   2023-11-09  540  		 */
+ccf04478fd461b Naushir Patuck   2023-11-09  541  		if (!buf->mmal.dma_buf) {
+ccf04478fd461b Naushir Patuck   2023-11-09  542  			buf->mmal.dma_buf = vb2_core_expbuf_dmabuf(vb->vb2_queue,
+ccf04478fd461b Naushir Patuck   2023-11-09  543  								   vb->vb2_queue->type,
+a2017d899ab931 Laurent Pinchart 2023-12-01  544  								   vb, 0, O_CLOEXEC);
+ccf04478fd461b Naushir Patuck   2023-11-09  545  			v4l2_dbg(3, debug, &dev->v4l2_dev,
+ccf04478fd461b Naushir Patuck   2023-11-09  546  				 "%s: exporting ptr %p to dmabuf %p\n",
+ccf04478fd461b Naushir Patuck   2023-11-09  547  				 __func__, vb, buf->mmal.dma_buf);
+ccf04478fd461b Naushir Patuck   2023-11-09 @548  			if (IS_ERR(buf->mmal.dma_buf)) {
+ccf04478fd461b Naushir Patuck   2023-11-09  549  				ret = PTR_ERR(buf->mmal.dma_buf);
+ccf04478fd461b Naushir Patuck   2023-11-09  550  				v4l2_err(&dev->v4l2_dev,
+ccf04478fd461b Naushir Patuck   2023-11-09  551  					 "%s: Failed to expbuf idx %d, ret %d\n",
+ccf04478fd461b Naushir Patuck   2023-11-09  552  					 __func__, vb->index, ret);
+ccf04478fd461b Naushir Patuck   2023-11-09  553  			}
+ccf04478fd461b Naushir Patuck   2023-11-09  554  		} else {
+ccf04478fd461b Naushir Patuck   2023-11-09  555  			ret = 0;
+ccf04478fd461b Naushir Patuck   2023-11-09  556  		}
+ccf04478fd461b Naushir Patuck   2023-11-09  557  		break;
+ccf04478fd461b Naushir Patuck   2023-11-09  558  	default:
+ccf04478fd461b Naushir Patuck   2023-11-09  559  		ret = -EINVAL;
+ccf04478fd461b Naushir Patuck   2023-11-09  560  		break;
+ccf04478fd461b Naushir Patuck   2023-11-09  561  	}
+ccf04478fd461b Naushir Patuck   2023-11-09  562  
+ccf04478fd461b Naushir Patuck   2023-11-09  563  	return ret;
+ccf04478fd461b Naushir Patuck   2023-11-09  564  }
+ccf04478fd461b Naushir Patuck   2023-11-09  565  
+
+:::::: The code at line 548 was first introduced by commit
+:::::: ccf04478fd461b0517a703743a57a65ca304faf2 staging: vc04_services: bcm2835-isp: Add a more complex ISP processing component
+
+:::::: TO: Naushir Patuck <naush@raspberrypi.com>
+:::::: CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 -- 
 0-DAY CI Kernel Test Service
