@@ -1,84 +1,196 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB738F59;
-	Mon,  4 Mar 2024 03:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D256138
+	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 06:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709523666; cv=none; b=DNXEg5RyXxHXaY0ZvgPXCp819+AtSLjNPeQtkCm/Nkg4Fk2r0C1go9EDOdPBmxzgU/DFcA+jLxx+GFM8BdNw6ZMkoVpGgumhDEBjmezHrSBEiLXNFFPyblfnC7RjyF2rtfUZOyUanz+g/a4kRX4HPB/hjPZVl4qrbjaToesYZWM=
+	t=1709532681; cv=none; b=XnovJWwTRfC4dTXL/H2QrSEHUw6hIfzAIOqp9/hsaeF4nU+l0af4YhMBSVRmhgVnidfXKg8gPwra/tCSmXM7ahdNBf1MTbCyxlEqCKVVMjqyfgFbJ2MDyc/vu0FxkkJGj+9G5syKpvj3XA+FiW9joZlyx4Pto7DYx6e3WwGK+4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709523666; c=relaxed/simple;
-	bh=6VPF1ye45SSPVbPugJaGsPrRHmJS1H2y5d0XLZQIQdg=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Buv+2Q7Z0Ias9IsBtz56vYtQI2m6TIfl812LdHDQPrVT7W3rw9vj2WLbv420ctzECS/rMC8oeRiefbOUcxh7wOrrNx8m46IjUX+Ud78CcFv4Zg0c5eV/1jgC2y3prMDjjZ5OxNQO9mSQqcRucvOS/QGDsCnLQdU8f9Rl1HqOAmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pwk/wSya; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709532681; c=relaxed/simple;
+	bh=VDO/5FOLp+7a2Uv3nDL6ryEP0otcQs3bnDm2FQaaMe0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ojTryGOgwN4Rr9ZrX0hVfKIzWOkf2bF/on6H0jhtqQ7YDuFItSndexkbuP6NVfwklm8TSsRy6rfMTusbzopj1Y7b/2znWks/wZ763JncqNoWmRrUlPxmZYo6g/9UkGZ5yzTC32i3SbAKqhEzJ0tiDPDDuEVIJRO3QDnqeuI6WxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fD5VueUc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pwk/wSya"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709523665; x=1741059665;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=6VPF1ye45SSPVbPugJaGsPrRHmJS1H2y5d0XLZQIQdg=;
-  b=Pwk/wSya4so3PXdHyH19s+KcMLcR7+Xy/qwWanW+0vU+KuhZuBN4r5dY
-   eXxLWfMhHmFugpWNVLKU3ZWaTJmpRiCe9P+SplM9LcQDXvUaKjoD3yuVI
-   tZzeiwhu6pwheGWp+xz3RClUJ5yzp+8mjxNsWFLbgeVaUj8sYdQS8xVX+
-   RWX3J6T1LbUexKAxUQLnrauDgLfYYVk3J3tp7uQ126B3Jdg6IGgQVdW1P
-   mqLOBV+vIhxkk0mLruUWDF4ZM4y6dsinDIg2uLBVaf8GbFT4PE09YmtQn
-   eOWGXwTDlmtRJoZyCa/g7R2ATPvPPK7nmAmEBfSYC9zAEuwLT8XipRsiP
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="4165292"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="4165292"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 19:41:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="8784332"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 03 Mar 2024 19:41:03 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rgzCG-0002Jv-21;
-	Mon, 04 Mar 2024 03:41:00 +0000
-Date: Mon, 4 Mar 2024 11:40:35 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: exynos_sysmmu_irq() falls through to
- next function exynos_iommu_identity_attach()
-Message-ID: <202403041132.0Y36UI1Z-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fD5VueUc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709532678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=I0h3DN9M+h2iWT++ow+jIajXugCINv+AAoZoGCnFoWQ=;
+	b=fD5VueUc0/O2/A4PzEqSwAbtoGHZdRq8e5TKL2RD+OqtPgRe6NOPvhhjFX1NEu6h6DFQn7
+	zudB02zX79U9FWr+ERR/FCOAc0Siao37JXZrz0lOSULbnBXbg3TZTwht1G+1RcGiIErNpg
+	23MzRPL9uiESTqkSACyV4S/yAHh2RDQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-330-EsrQaMOVOh6esdlIMHhehw-1; Mon, 04 Mar 2024 01:11:13 -0500
+X-MC-Unique: EsrQaMOVOh6esdlIMHhehw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4EBEE185A780
+	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 06:11:13 +0000 (UTC)
+Received: from [172.64.4.41] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 05CB124D;
+	Mon,  4 Mar 2024 06:11:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 204): Test report for master
+ (6.8.0-rc6, mainline.kernel.org-clang, 58c806d8)
+Date: Mon, 04 Mar 2024 06:11:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <46757.124030401111300217@us-mta-330.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Jason Gunthorpe <jgg@nvidia.com>
-CC: Joerg Roedel <jroedel@suse.de>
-CC: Jerry Snitselaar <jsnitsel@redhat.com>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   90d35da658da8cff0d4ecbb5113f5fac9d00eb72
-commit: b3d14960e629f9ee8c82f8feb211ae43e1cb3246 iommu/exynos: Implement an IDENTITY domain
-date:   5 months ago
-config: x86_64-buildonly-randconfig-001-20240304 (https://download.01.org/0day-ci/archive/20240304/202403041132.0Y36UI1Z-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403041132.0Y36UI1Z-lkp@intel.com/reproduce)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403041132.0Y36UI1Z-lkp@intel.com/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-All warnings (new ones prefixed by >>):
+Kernel information:
+    Commit message: Merge tag 'phy-fixes2-6.8' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/phy/linux-phy
 
->> vmlinux.o: warning: objtool: exynos_sysmmu_irq() falls through to next function exynos_iommu_identity_attach()
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/132541
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 (debug) - xfstests - cifsv3.11
+      x86_64 (debug) - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
