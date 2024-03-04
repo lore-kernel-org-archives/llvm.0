@@ -1,54 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B80217E9;
-	Mon,  4 Mar 2024 01:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0292B23BF;
+	Mon,  4 Mar 2024 03:10:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709515660; cv=none; b=tOZbLju5swFSUHY9iJTMH1GsioKoWdbzmqO7LABEnO/f+CNDK5ePRZKc0gSQfM1vjFiiwCWk0HqvYcDg6vb/7WoeHrqt09X4vrfB9i9Jb9bv+/J/YoVt8QcC6hFNDm6zTyKWGeLjNxOyqIXisfEgKvcz9Q5eZkDy0eiCYd4+rk0=
+	t=1709521807; cv=none; b=GKDmIdjf2zGjx8zZeO+9Tb5PBz047SXYTpntvIfQ0wm7VT8VaaxghpNd2aT+38JFhxyIrgpL1bPkFR9Lw0czaaWJBRo2dt1wAq+nhPxyNelgaE67A/9SqG3QWUoGIiZoJyAjHfPVzOhUZWpNtG4VoaWqzcgRoCkp1BJSu6ZLQkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709515660; c=relaxed/simple;
-	bh=0q26ncL5TG6jVVgDr3Je51b0MMBosiL7vsYphsVjxjw=;
+	s=arc-20240116; t=1709521807; c=relaxed/simple;
+	bh=wVuCYpDAsGh1mDkU3pHFAt+TqMwi/alzNvRAJrg0+c4=;
 	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pH+WQR4naMiO0XtCYhplYJrtz/ne5TKc66Zyav5j8r9igQMjoQJ4L4eAZ2QpuwSXWje7/uGVlD5u6GniXgdKsVH5+WuIdMHp09oOJVdRa8TlNYRKcAIgDsmP3zE5UNyORjj57rmWChazEJGtV/v8wpZyTYXzgK/QSiZhwrjAqDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gwtx38uv; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=Q2qo2tXaOboQdmVAg4uwINx5Rv79irg4PBBlnxuy/Z3VgAuirPBYkdgBRtDDeEn4PU1urYqEpW0i+5OE5/rf6Ikon2mkPrXGawV36Prv3dYhatdZnQPZeMdUktGZcHXYfm0BB7WRXZDBpr3ggUgf5pf0bYYrnqkVSRcwDChtzR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eEFFY8cE; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gwtx38uv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eEFFY8cE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709515659; x=1741051659;
+  t=1709521805; x=1741057805;
   h=date:from:cc:subject:message-id:mime-version;
-  bh=0q26ncL5TG6jVVgDr3Je51b0MMBosiL7vsYphsVjxjw=;
-  b=gwtx38uvs6/BEFLSrECZ+bHzMxAPrMRa6HywgWE1ekwaKYS17R59SFAi
-   yGH86nIDeOTzDAnnDL/ijj/jPybE6vQ14ncQ1P1lgWDvmJ/hCvvrMBPVL
-   HNG/Bn40a3HyHoTSkBd0L99vHoZDeU9nniIbOxpvWULRQlaDyzDh3CTlN
-   lM3Ig/ym4AkvAns0/E+u0+NXjQdXXbFu8uw9DdFHTb0eEbTjRB1gd2LBq
-   voMPfRPZbxCyToFQayZGd02yro0S2y02iok2zs8dPind/0tyHqVTcwsWn
-   pTgGUypwmd9rol0g1PZTYG+xa2AHu5C6UvHM26p99out4XiZIGR8B9B51
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="4115236"
-X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="4115236"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 17:27:38 -0800
+  bh=wVuCYpDAsGh1mDkU3pHFAt+TqMwi/alzNvRAJrg0+c4=;
+  b=eEFFY8cEJB7Hiz28eUv1WkxBQd0gedMZYpXcU62EAiJUH0/v9cZQXEuu
+   LpWIdpEN0WqMPyUfWTcvD2CewPnKYICnQUG/rILAHXQKc43wXUYG13L5t
+   ynzQxBf8uB+QGJAMaMFZ7KlbyeeJAWqj+l6XD5Vg99eDeE6kKxWv9/uWs
+   O27ulNNxemb6TYeeVdNVu1tEH4hFz3IBpHUTDI/CKggdOJh6GRnIONqE6
+   1UOPEHzLYHnMwbFTmHObjTUOggNsJzkGo2NyoSu7NUNeJfwy6fxOU1Scz
+   Z5FSHoSJLCsXSvfbCp5Kuz6bVyFTJt/1gVwsvMV1LsxLpBdyRJgjcONzn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="4574080"
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="4574080"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 19:10:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="9014293"
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="13500761"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 03 Mar 2024 17:27:36 -0800
+  by orviesa003.jf.intel.com with ESMTP; 03 Mar 2024 19:10:02 -0800
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rgx78-0002F9-1o;
-	Mon, 04 Mar 2024 01:27:34 +0000
-Date: Mon, 4 Mar 2024 09:26:41 +0800
+	id 1rgyiG-0002Ip-0F;
+	Mon, 04 Mar 2024 03:10:00 +0000
+Date: Mon, 4 Mar 2024 11:09:54 +0800
 From: kernel test robot <lkp@intel.com>
 Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: fs/bcachefs/btree_write_buffer.c:262:26: warning: bitwise operation
- between different enumeration types ('enum bch_watermark' and 'enum
- bch_trans_commit_flags')
-Message-ID: <202403040934.34jM6TvV-lkp@intel.com>
+Subject: kernel/bpf/log.c:425:11: warning: bitwise operation between
+ different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag')
+Message-ID: <202403041127.Bhwvvo7z-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,207 +58,180 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 CC: linux-kernel@vger.kernel.org
-TO: Kent Overstreet <kent.overstreet@linux.dev>
+TO: Andrii Nakryiko <andrii@kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>
+
+Hi Andrii,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   90d35da658da8cff0d4ecbb5113f5fac9d00eb72
-commit: 183bcc89b855c412bfefa545b799006d66f689a6 bcachefs: Clean up btree write buffer write ref handling
-date:   9 weeks ago
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240304/202403040934.34jM6TvV-lkp@intel.com/config)
+commit: 42feb6620accded89cad5f455665e21281813d79 bpf: move verifier state printing code to kernel/bpf/log.c
+date:   4 months ago
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240304/202403041127.Bhwvvo7z-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403040934.34jM6TvV-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403041127.Bhwvvo7z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403040934.34jM6TvV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403041127.Bhwvvo7z-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/btree_write_buffer.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
+   In file included from kernel/bpf/log.c:9:
+   In file included from include/linux/bpf.h:21:
+   In file included from include/linux/kallsyms.h:13:
    In file included from include/linux/mm.h:2177:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/btree_write_buffer.c:262:26: warning: bitwise operation between different enumeration types ('enum bch_watermark' and 'enum bch_trans_commit_flags') [-Wenum-enum-conversion]
-     262 |                                 BCH_WATERMARK_reclaim|
-         |                                 ~~~~~~~~~~~~~~~~~~~~~^
-     263 |                                 BCH_TRANS_COMMIT_no_check_rw|
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/btree_update.h:138:23: note: expanded from macro 'commit_do'
-     138 |                                         (_journal_seq), (_flags)))
-         |                                                          ^~~~~~
-   fs/bcachefs/btree_iter.h:679:12: note: expanded from macro 'lockrestart_do'
-     679 |                 _ret2 = (_do);                                          \
-         |                          ^~~
-   6 warnings generated.
+   In file included from kernel/bpf/log.c:9:
+   include/linux/bpf.h:726:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     726 |         ARG_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | ARG_PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:727:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     727 |         ARG_PTR_TO_MEM_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:728:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     728 |         ARG_PTR_TO_CTX_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_CTX,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:729:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     729 |         ARG_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:730:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     730 |         ARG_PTR_TO_STACK_OR_NULL        = PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:731:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     731 |         ARG_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:735:38: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     735 |         ARG_PTR_TO_UNINIT_MEM           = MEM_UNINIT | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:737:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     737 |         ARG_PTR_TO_FIXED_SIZE_MEM       = MEM_FIXED_SIZE | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:760:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     760 |         RET_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | RET_PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:761:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     761 |         RET_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:762:47: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     762 |         RET_PTR_TO_TCP_SOCK_OR_NULL     = PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:763:50: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     763 |         RET_PTR_TO_SOCK_COMMON_OR_NULL  = PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:765:49: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     765 |         RET_PTR_TO_DYNPTR_MEM_OR_NULL   = PTR_MAYBE_NULL | RET_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:766:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     766 |         RET_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:767:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     767 |         RET_PTR_TO_BTF_ID_TRUSTED       = PTR_TRUSTED    | RET_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~    ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:878:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     878 |         PTR_TO_MAP_VALUE_OR_NULL        = PTR_MAYBE_NULL | PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:879:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     879 |         PTR_TO_SOCKET_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+   include/linux/bpf.h:880:46: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     880 |         PTR_TO_SOCK_COMMON_OR_NULL      = PTR_MAYBE_NULL | PTR_TO_SOCK_COMMON,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:881:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     881 |         PTR_TO_TCP_SOCK_OR_NULL         = PTR_MAYBE_NULL | PTR_TO_TCP_SOCK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~
+   include/linux/bpf.h:882:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     882 |         PTR_TO_BTF_ID_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+>> kernel/bpf/log.c:425:11: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     425 |         if (type & PTR_MAYBE_NULL) {
+         |             ~~~~ ^ ~~~~~~~~~~~~~~
+   kernel/bpf/log.c:433:9: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     433 |                  type & MEM_RDONLY ? "rdonly_" : "",
+         |                  ~~~~ ^ ~~~~~~~~~~
+   kernel/bpf/log.c:434:9: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     434 |                  type & MEM_RINGBUF ? "ringbuf_" : "",
+         |                  ~~~~ ^ ~~~~~~~~~~~
+   kernel/bpf/log.c:435:9: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     435 |                  type & MEM_USER ? "user_" : "",
+         |                  ~~~~ ^ ~~~~~~~~
+   kernel/bpf/log.c:436:9: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     436 |                  type & MEM_PERCPU ? "percpu_" : "",
+         |                  ~~~~ ^ ~~~~~~~~~~
+   kernel/bpf/log.c:437:9: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     437 |                  type & MEM_RCU ? "rcu_" : "",
+         |                  ~~~~ ^ ~~~~~~~
+   kernel/bpf/log.c:438:9: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     438 |                  type & PTR_UNTRUSTED ? "untrusted_" : "",
+         |                  ~~~~ ^ ~~~~~~~~~~~~~
+   kernel/bpf/log.c:439:9: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     439 |                  type & PTR_TRUSTED ? "trusted_" : ""
+         |                  ~~~~ ^ ~~~~~~~~~~~
+   29 warnings generated.
 
 
-vim +262 fs/bcachefs/btree_write_buffer.c
+vim +425 kernel/bpf/log.c
 
-   139	
-   140	int __bch2_btree_write_buffer_flush(struct btree_trans *trans, bool locked)
-   141	{
-   142		struct bch_fs *c = trans->c;
-   143		struct journal *j = &c->journal;
-   144		struct btree_write_buffer *wb = &c->btree_write_buffer;
-   145		struct journal_entry_pin pin;
-   146		struct btree_write_buffered_key *i, *keys;
-   147		struct btree_iter iter = { NULL };
-   148		size_t nr = 0, skipped = 0, fast = 0, slowpath = 0;
-   149		bool write_locked = false;
-   150		union btree_write_buffer_state s;
-   151		int ret = 0;
-   152	
-   153		memset(&pin, 0, sizeof(pin));
-   154	
-   155		if (!locked && !mutex_trylock(&wb->flush_lock))
-   156			return 0;
-   157	
-   158		bch2_journal_pin_copy(j, &pin, &wb->journal_pin,
-   159				      bch2_btree_write_buffer_journal_flush);
-   160		bch2_journal_pin_drop(j, &wb->journal_pin);
-   161	
-   162		s = btree_write_buffer_switch(wb);
-   163		keys = wb->keys[s.idx];
-   164		nr = s.nr;
-   165	
-   166		if (race_fault())
-   167			goto slowpath;
-   168	
-   169		/*
-   170		 * We first sort so that we can detect and skip redundant updates, and
-   171		 * then we attempt to flush in sorted btree order, as this is most
-   172		 * efficient.
-   173		 *
-   174		 * However, since we're not flushing in the order they appear in the
-   175		 * journal we won't be able to drop our journal pin until everything is
-   176		 * flushed - which means this could deadlock the journal if we weren't
-   177		 * passing BCH_TRANS_COMMIT_journal_reclaim. This causes the update to fail
-   178		 * if it would block taking a journal reservation.
-   179		 *
-   180		 * If that happens, simply skip the key so we can optimistically insert
-   181		 * as many keys as possible in the fast path.
-   182		 */
-   183		sort(keys, nr, sizeof(keys[0]),
-   184		     btree_write_buffered_key_cmp, NULL);
-   185	
-   186		for (i = keys; i < keys + nr; i++) {
-   187			if (i + 1 < keys + nr &&
-   188			    i[0].btree == i[1].btree &&
-   189			    bpos_eq(i[0].k.k.p, i[1].k.k.p)) {
-   190				skipped++;
-   191				i->journal_seq = 0;
-   192				continue;
-   193			}
-   194	
-   195			if (write_locked &&
-   196			    (iter.path->btree_id != i->btree ||
-   197			     bpos_gt(i->k.k.p, iter.path->l[0].b->key.k.p))) {
-   198				bch2_btree_node_unlock_write(trans, iter.path, iter.path->l[0].b);
-   199				write_locked = false;
-   200			}
-   201	
-   202			if (!iter.path || iter.path->btree_id != i->btree) {
-   203				bch2_trans_iter_exit(trans, &iter);
-   204				bch2_trans_iter_init(trans, &iter, i->btree, i->k.k.p,
-   205						     BTREE_ITER_INTENT|BTREE_ITER_ALL_SNAPSHOTS);
-   206			}
-   207	
-   208			bch2_btree_iter_set_pos(&iter, i->k.k.p);
-   209			iter.path->preserve = false;
-   210	
-   211			do {
-   212				ret = bch2_btree_write_buffer_flush_one(trans, &iter, i, 0,
-   213									&write_locked, &fast);
-   214				if (!write_locked)
-   215					bch2_trans_begin(trans);
-   216			} while (bch2_err_matches(ret, BCH_ERR_transaction_restart));
-   217	
-   218			if (ret == -BCH_ERR_journal_reclaim_would_deadlock) {
-   219				slowpath++;
-   220				continue;
-   221			}
-   222			if (ret)
-   223				break;
-   224	
-   225			i->journal_seq = 0;
-   226		}
-   227	
-   228		if (write_locked)
-   229			bch2_btree_node_unlock_write(trans, iter.path, iter.path->l[0].b);
-   230		bch2_trans_iter_exit(trans, &iter);
-   231	
-   232		trace_write_buffer_flush(trans, nr, skipped, fast, wb->size);
-   233	
-   234		if (slowpath)
-   235			goto slowpath;
-   236	
-   237		bch2_fs_fatal_err_on(ret, c, "%s: insert error %s", __func__, bch2_err_str(ret));
-   238	out:
-   239		bch2_journal_pin_drop(j, &pin);
-   240		mutex_unlock(&wb->flush_lock);
-   241		return ret;
-   242	slowpath:
-   243		trace_and_count(c, write_buffer_flush_slowpath, trans, slowpath, nr);
-   244	
-   245		/*
-   246		 * Now sort the rest by journal seq and bump the journal pin as we go.
-   247		 * The slowpath zapped the seq of keys that were successfully flushed so
-   248		 * we can skip those here.
-   249		 */
-   250		sort(keys, nr, sizeof(keys[0]),
-   251		     btree_write_buffered_journal_cmp,
-   252		     NULL);
-   253	
-   254		for (i = keys; i < keys + nr; i++) {
-   255			if (!i->journal_seq)
-   256				continue;
-   257	
-   258			bch2_journal_pin_update(j, i->journal_seq, &pin,
-   259				      bch2_btree_write_buffer_journal_flush);
-   260	
-   261			ret = commit_do(trans, NULL, NULL,
- > 262					BCH_WATERMARK_reclaim|
-   263					BCH_TRANS_COMMIT_no_check_rw|
-   264					BCH_TRANS_COMMIT_no_enospc|
-   265					BCH_TRANS_COMMIT_no_journal_res|
-   266					BCH_TRANS_COMMIT_journal_reclaim,
-   267					btree_write_buffered_insert(trans, i));
-   268			if (bch2_fs_fatal_err_on(ret, c, "%s: insert error %s", __func__, bch2_err_str(ret)))
-   269				break;
-   270		}
-   271	
-   272		goto out;
-   273	}
-   274	
+   392	
+   393	/* string representation of 'enum bpf_reg_type'
+   394	 *
+   395	 * Note that reg_type_str() can not appear more than once in a single verbose()
+   396	 * statement.
+   397	 */
+   398	const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
+   399	{
+   400		char postfix[16] = {0}, prefix[64] = {0};
+   401		static const char * const str[] = {
+   402			[NOT_INIT]		= "?",
+   403			[SCALAR_VALUE]		= "scalar",
+   404			[PTR_TO_CTX]		= "ctx",
+   405			[CONST_PTR_TO_MAP]	= "map_ptr",
+   406			[PTR_TO_MAP_VALUE]	= "map_value",
+   407			[PTR_TO_STACK]		= "fp",
+   408			[PTR_TO_PACKET]		= "pkt",
+   409			[PTR_TO_PACKET_META]	= "pkt_meta",
+   410			[PTR_TO_PACKET_END]	= "pkt_end",
+   411			[PTR_TO_FLOW_KEYS]	= "flow_keys",
+   412			[PTR_TO_SOCKET]		= "sock",
+   413			[PTR_TO_SOCK_COMMON]	= "sock_common",
+   414			[PTR_TO_TCP_SOCK]	= "tcp_sock",
+   415			[PTR_TO_TP_BUFFER]	= "tp_buffer",
+   416			[PTR_TO_XDP_SOCK]	= "xdp_sock",
+   417			[PTR_TO_BTF_ID]		= "ptr_",
+   418			[PTR_TO_MEM]		= "mem",
+   419			[PTR_TO_BUF]		= "buf",
+   420			[PTR_TO_FUNC]		= "func",
+   421			[PTR_TO_MAP_KEY]	= "map_key",
+   422			[CONST_PTR_TO_DYNPTR]	= "dynptr_ptr",
+   423		};
+   424	
+ > 425		if (type & PTR_MAYBE_NULL) {
+   426			if (base_type(type) == PTR_TO_BTF_ID)
+   427				strncpy(postfix, "or_null_", 16);
+   428			else
+   429				strncpy(postfix, "_or_null", 16);
+   430		}
+   431	
+   432		snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
+   433			 type & MEM_RDONLY ? "rdonly_" : "",
+   434			 type & MEM_RINGBUF ? "ringbuf_" : "",
+   435			 type & MEM_USER ? "user_" : "",
+   436			 type & MEM_PERCPU ? "percpu_" : "",
+   437			 type & MEM_RCU ? "rcu_" : "",
+   438			 type & PTR_UNTRUSTED ? "untrusted_" : "",
+   439			 type & PTR_TRUSTED ? "trusted_" : ""
+   440		);
+   441	
+   442		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s%s%s",
+   443			 prefix, str[base_type(type)], postfix);
+   444		return env->tmp_str_buf;
+   445	}
+   446	
 
 -- 
 0-DAY CI Kernel Test Service
