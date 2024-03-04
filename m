@@ -1,80 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6E33F8C8;
-	Mon,  4 Mar 2024 13:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3566168A
+	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 18:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709559685; cv=none; b=QOctCK1gQMYqi2d6N/heMdvMyJMe/Y7cqA/Efx5c0Ob4AA9SVtNy/OT20EjmCpBSCHJNhEVhbkbkK52OcmNlsD9WCjbwfMTO05+AzbjENXcYrrIOIKHM2kqY+Rf2ZQwGuAgG5ZLsGpvseyUCxk9PUrt0VjwWfL5QsfJ9sCD3jSo=
+	t=1709575911; cv=none; b=E9tTHubrB/HG+7zDtH6SJrb7J6k7nvtRwryepGAAxv7YKX6wVlycsnjX3Nc/gv6XgabfhZJV6KYalnD1v6AKwJ5NtVGhSPBAxladi+dZLJ0+HaipGJO0bZRpEy/h5tInXm2MgiyhJAFqIDxTDa3DMttClmzcbhAFHW/0d0rZg+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709559685; c=relaxed/simple;
-	bh=4PKnYEG8L0X+Wp1CY0SR1GBVZMalfPoIaGfMeCCjp0k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xc1rG5mI30+Bps8+Q0adXX3u0YOsCLYMls6AmhR/jLHcQbbzUczZ0kjisMA+IF1NXraKuQYaAcVWUaGqKlPMSKw+nx+Y63X+cK92MsOun4ckDUXlZkqPR93WihtMlSmRRDLEpftUSuBUvAYG/IoPwrBV7M3NVeq9sVI9GSUbSzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dROnP1oN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709575911; c=relaxed/simple;
+	bh=tcDiqbccYHi4AinqQLgnM+VghsYJV2IrozkELxqhwLE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=SDjVRj/3y8nITUxEYB2a4k0F54J/tXSZDbSypjjeFm+UDoUzD04d9GbYe+QIivRCLUlnD6JxTzWMbBEBIVt8eZf4M++hFBJHl2l8fYMOsukPWiwmdTp946Z3l7VQelcbn6/xFmpDVw0qzAl8+PCFb5ms5vpfsTJ9G34pruwVWzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hr6kICOH; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dROnP1oN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9812DC43390;
-	Mon,  4 Mar 2024 13:41:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709559684;
-	bh=4PKnYEG8L0X+Wp1CY0SR1GBVZMalfPoIaGfMeCCjp0k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dROnP1oNY2n9RgCuft2wiRjW6gonTtpSIXpHyG0LJDDv6GR/NqTgsU9ZOz9fYo+Cf
-	 HcgSVCe5VNVcGBl0TsToeAxXX00xMMSHPEr9ty+0GiUckX5WaMIanuarfC17orVxlc
-	 Yv7RVjHdh1QACdLkY6ImAbX5ToStPduFoG7yw0RENoxv09fXVGoCttqWQ40GjgMVEM
-	 oYn1bMHrVnj7sT9C7ad51BqHSRNd6+FQeqE1KAhViirA+exzz+cB6fEwpgvrckzxft
-	 H/DTwkhH8E6JhoHV9WrnL2Tl5Q1o5kAMmSyDt5fpHSnwA8Z4lzfJeLkWbSrJXcXOmV
-	 6WPfbkMBlr1cA==
-From: Will Deacon <will@kernel.org>
-To: catalin.marinas@arm.com,
-	nathan@kernel.org,
-	mark.rutland@arm.com,
-	broonie@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Puranjay Mohan <puranjay12@gmail.com>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] arm64: prohibit probing on arch_kunwind_consume_entry()
-Date: Mon,  4 Mar 2024 13:41:16 +0000
-Message-Id: <170955720098.2136218.47711104039103934.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20240229231620.24846-1-puranjay12@gmail.com>
-References: <20240229231620.24846-1-puranjay12@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hr6kICOH"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6dbdcfd39so9238831276.2
+        for <llvm@lists.linux.dev>; Mon, 04 Mar 2024 10:11:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709575909; x=1710180709; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4kLD90+hXSvFb0+fALtfseiTDbKyQ30y8gjmVqCojkg=;
+        b=hr6kICOHjcZAflCbCY6eUYELbHP9ty1rZlOUgt8uTplquI4oZcLwf8vW3jgtaBrtam
+         V0DhJpafbaJ7BoW1jbJKUOGvCFSkeAZRGKcaZcK33ZSFBo4XJ6MkoSEvrJHAQnkM+wMl
+         I/e2Rq7OMGSjuAOR02T/0Ad3+IR7Q1N+Aq5lS+C2Xzsa1lXpu5HkkHDN2zl16AoAtQHz
+         az8CXROgzIhk2DWe1iua7U9oLydRUHpZqnBsNnsJ26VMSBm4yQg8HEBDINYXRNdJqj0x
+         HH1VFj+HOzKu8i0KzWWJ8mecgK/QXSG3ff6NjAULK8KvASC0U78bGY6JkqWK8D9miFx4
+         gg9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709575909; x=1710180709;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4kLD90+hXSvFb0+fALtfseiTDbKyQ30y8gjmVqCojkg=;
+        b=MbL+nN+7fELklZRiCL6mDg+5I4C7W72sl+IaMcuM4fai+Zjro0Ken5KCGyO4e4bX+J
+         cVacwaZEAj+eGDTFdLBCqT3RC/+BLYKomStiasTK8q5jEZCH5v7FUreRgDbbRXWUfT3M
+         KAI82H4zgD4cz98/irHk5Gc9MmGj6TVWcTiKqcHJsRb6ZIZEV8ypW0OQFMUcioMD/rjV
+         zxmkNOHK5qLU7YobTNiLOa/50pzG9WJX7wbU63oCqopENNk4UigvGyfYSXgoxZ92KhJe
+         lt/dfCq3yyDa3inRXQzNrtEhpClcRijfiCPCa+Q3SvTkEfS3UEJz6sXbBePuozdaBkuO
+         dm/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV4FGe9RnEPyxEKlaRg6UpwBYQoP2WdPO66sLgyZWEs2Y1kAXtzi/lDMcWFRgHd1zou9nKT30ZOSDalrfvHUmJ+ME346Q==
+X-Gm-Message-State: AOJu0YwM0JU7lM4pMUK1laEQCV02tdr99/HJDxmKNSSe0XXWuj2fYnH6
+	HoAm8F8CV/Xy+YCcLMUb/WVvQ2BiOpitvOt4ryEwcFkzuimUJXcH1kzy1SaZ3Lyj/yjJ5N9ChuS
+	rsw==
+X-Google-Smtp-Source: AGHT+IHxwF/zU5cb5Vfvw5bR+wuloHPq0SidEq3LQN1W2vemc6jjWhYsFXPGqLxGNUu4w4mRsgdxwWFh/pQ=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a25:c786:0:b0:dc2:466a:23c4 with SMTP id
+ w128-20020a25c786000000b00dc2466a23c4mr2575853ybe.4.1709575908874; Mon, 04
+ Mar 2024 10:11:48 -0800 (PST)
+Date: Mon,  4 Mar 2024 18:11:31 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
+Message-ID: <20240304181140.644212-1-edliaw@google.com>
+Subject: [PATCH v1 0/3] selftests/timers/posix_timers: various cleanups
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 29 Feb 2024 23:16:20 +0000, Puranjay Mohan wrote:
-> Make arch_kunwind_consume_entry() as __always_inline otherwise the
-> compiler might not inline it and allow attaching probes to it.
-> 
-> Without this, just probing arch_kunwind_consume_entry() via
-> <tracefs>/kprobe_events will crash the kernel on arm64.
-> 
-> The crash can be reproduced using the following compiler and kernel
-> combination:
-> clang version 19.0.0git (https://github.com/llvm/llvm-project.git d68d29516102252f6bf6dc23fb22cef144ca1cb3)
-> commit 87adedeba51a ("Merge tag 'net-6.8-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
-> 
-> [...]
+I'm sending some patches that were orignally in
+https://lore.kernel.org/lkml/20230606132949.068951363@linutronix.de/
+to prevent the timer_distribution test from hanging and also fix some
+format inconsistencies.
 
-Applied to arm64 (for-next/fixes), thanks!
+Edward Liaw (3):
+  selftests/timers/posix_timers: Make signal distribution test less
+    fragile
+  selftests/timers/posix_timers: Use TAP reporting format
+  selftests/timers/posix_timers: Use llabs for long long
 
-[1/1] arm64: prohibit probing on arch_kunwind_consume_entry()
-      https://git.kernel.org/arm64/c/2c79bd34af13
+ tools/testing/selftests/timers/posix_timers.c | 196 ++++++++----------
+ 1 file changed, 89 insertions(+), 107 deletions(-)
 
-Cheers,
--- 
-Will
+--
+2.44.0.rc1.240.g4c46232300-goog
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
