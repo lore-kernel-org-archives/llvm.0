@@ -1,61 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD66A364CF;
-	Mon,  4 Mar 2024 10:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6E33F8C8;
+	Mon,  4 Mar 2024 13:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709548969; cv=none; b=HzFZUHuW3Dc+5LhPMoYGGwRwyV91/gztUX4YVtNMJteyG9ko5nwSOvjY48VysVD0KVK2+6yrOOVFCGXxEDPOY34+riAdWdqXDJpR8oMKyiQ5/mRliCWXlBak9nCsc6xsqDTwwN9x/0deykJSkgibOoNMHGgJzQiV7DMMlTvRF14=
+	t=1709559685; cv=none; b=QOctCK1gQMYqi2d6N/heMdvMyJMe/Y7cqA/Efx5c0Ob4AA9SVtNy/OT20EjmCpBSCHJNhEVhbkbkK52OcmNlsD9WCjbwfMTO05+AzbjENXcYrrIOIKHM2kqY+Rf2ZQwGuAgG5ZLsGpvseyUCxk9PUrt0VjwWfL5QsfJ9sCD3jSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709548969; c=relaxed/simple;
-	bh=V5fcT4xKaaljAl/3SVxmCZ7qFbY1AvXsibo4PeR1n2w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r7jQ/h66g7zTp+Xu5G71pDSzav8I2ezdKx3cXOZEB8EMlkgo7lSAOCImVVKOC9PFQj3QcfVNqNVkrGF1mXmoziFBXridYkDaJTl34h/gsCn2CPWG6OVCTpxrYQIKzXUpWVtsILBy4fq0apPDAMk9f9LK0u9f4NqSCNkWAvm1n5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=P4s0sK4x; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709559685; c=relaxed/simple;
+	bh=4PKnYEG8L0X+Wp1CY0SR1GBVZMalfPoIaGfMeCCjp0k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xc1rG5mI30+Bps8+Q0adXX3u0YOsCLYMls6AmhR/jLHcQbbzUczZ0kjisMA+IF1NXraKuQYaAcVWUaGqKlPMSKw+nx+Y63X+cK92MsOun4ckDUXlZkqPR93WihtMlSmRRDLEpftUSuBUvAYG/IoPwrBV7M3NVeq9sVI9GSUbSzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dROnP1oN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="P4s0sK4x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17ECBC433C7;
-	Mon,  4 Mar 2024 10:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709548968;
-	bh=V5fcT4xKaaljAl/3SVxmCZ7qFbY1AvXsibo4PeR1n2w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P4s0sK4xISCq6LtGbcEioHxTeDFVSSEMdHoL+p4dQcMak25CyxHh7C4WimnXl/mxJ
-	 u/2mCaEUtxwKMm3QPsc2DQ7GevUTCbUW7EyJ/qreyZlVZu1Xccs76BCkItY79LX3HS
-	 nrFqX2ds+pvE+XseDAIRLPfycxeJdo8fSsItLK3I=
-Date: Mon, 4 Mar 2024 11:42:45 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>, amd-gfx@lists.freedesktop.org,
-	stable@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: Please apply commit 5b750b22530fe53bf7fd6a30baacd53ada26911b to
- linux-6.1.y
-Message-ID: <2024030439-setback-dandruff-edfb@gregkh>
-References: <20240228014555.GA2678858@dev-arch.thelio-3990X>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dROnP1oN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9812DC43390;
+	Mon,  4 Mar 2024 13:41:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709559684;
+	bh=4PKnYEG8L0X+Wp1CY0SR1GBVZMalfPoIaGfMeCCjp0k=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=dROnP1oNY2n9RgCuft2wiRjW6gonTtpSIXpHyG0LJDDv6GR/NqTgsU9ZOz9fYo+Cf
+	 HcgSVCe5VNVcGBl0TsToeAxXX00xMMSHPEr9ty+0GiUckX5WaMIanuarfC17orVxlc
+	 Yv7RVjHdh1QACdLkY6ImAbX5ToStPduFoG7yw0RENoxv09fXVGoCttqWQ40GjgMVEM
+	 oYn1bMHrVnj7sT9C7ad51BqHSRNd6+FQeqE1KAhViirA+exzz+cB6fEwpgvrckzxft
+	 H/DTwkhH8E6JhoHV9WrnL2Tl5Q1o5kAMmSyDt5fpHSnwA8Z4lzfJeLkWbSrJXcXOmV
+	 6WPfbkMBlr1cA==
+From: Will Deacon <will@kernel.org>
+To: catalin.marinas@arm.com,
+	nathan@kernel.org,
+	mark.rutland@arm.com,
+	broonie@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Puranjay Mohan <puranjay12@gmail.com>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] arm64: prohibit probing on arch_kunwind_consume_entry()
+Date: Mon,  4 Mar 2024 13:41:16 +0000
+Message-Id: <170955720098.2136218.47711104039103934.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20240229231620.24846-1-puranjay12@gmail.com>
+References: <20240229231620.24846-1-puranjay12@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240228014555.GA2678858@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 27, 2024 at 06:45:55PM -0700, Nathan Chancellor wrote:
-> Hi Greg and Sasha,
+On Thu, 29 Feb 2024 23:16:20 +0000, Puranjay Mohan wrote:
+> Make arch_kunwind_consume_entry() as __always_inline otherwise the
+> compiler might not inline it and allow attaching probes to it.
 > 
-> Please apply upstream commit 5b750b22530f ("drm/amd/display: Increase
-> frame warning limit with KASAN or KCSAN in dml") to linux-6.1.y, as it
-> is needed to avoid instances of -Wframe-larger-than in allmodconfig,
-> which has -Werror enabled. It applies cleanly for me and it is already
-> in 6.6 and 6.7. The fixes tag is not entirely accurate and commit
-> e63e35f0164c ("drm/amd/display: Increase frame-larger-than for all
-> display_mode_vba files"), which was recently applied to that tree,
-> depends on it (I should have made that clearer in the patch).
+> Without this, just probing arch_kunwind_consume_entry() via
+> <tracefs>/kprobe_events will crash the kernel on arm64.
 > 
-> If there are any issues, please let me know.
+> The crash can be reproduced using the following compiler and kernel
+> combination:
+> clang version 19.0.0git (https://github.com/llvm/llvm-project.git d68d29516102252f6bf6dc23fb22cef144ca1cb3)
+> commit 87adedeba51a ("Merge tag 'net-6.8-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
+> 
+> [...]
 
-Now queued up, thanks.
+Applied to arm64 (for-next/fixes), thanks!
 
-greg k-h
+[1/1] arm64: prohibit probing on arch_kunwind_consume_entry()
+      https://git.kernel.org/arm64/c/2c79bd34af13
+
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
