@@ -1,63 +1,67 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3566168A
-	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 18:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFEB6214E
+	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 18:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709575911; cv=none; b=E9tTHubrB/HG+7zDtH6SJrb7J6k7nvtRwryepGAAxv7YKX6wVlycsnjX3Nc/gv6XgabfhZJV6KYalnD1v6AKwJ5NtVGhSPBAxladi+dZLJ0+HaipGJO0bZRpEy/h5tInXm2MgiyhJAFqIDxTDa3DMttClmzcbhAFHW/0d0rZg+A=
+	t=1709575914; cv=none; b=A18067VRfpCBtjec4cc/e5AtbzJONeomXcbQ0jqbOncWhaJ4lZFZgqQ6UgxBiUZAQ7J0ppkm+tCeju8RICBp7SlsGgLGXAkFKnsW4A2JeOLadbFFIJ5Y9hvOpO8hciQvIRUZsD669k73xWXv6tGYawGeW6N2snXkDerzeTnVS4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709575911; c=relaxed/simple;
-	bh=tcDiqbccYHi4AinqQLgnM+VghsYJV2IrozkELxqhwLE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=SDjVRj/3y8nITUxEYB2a4k0F54J/tXSZDbSypjjeFm+UDoUzD04d9GbYe+QIivRCLUlnD6JxTzWMbBEBIVt8eZf4M++hFBJHl2l8fYMOsukPWiwmdTp946Z3l7VQelcbn6/xFmpDVw0qzAl8+PCFb5ms5vpfsTJ9G34pruwVWzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hr6kICOH; arc=none smtp.client-ip=209.85.219.202
+	s=arc-20240116; t=1709575914; c=relaxed/simple;
+	bh=CC+iy3zkI7zBVRFWIq21TO6LNko9XBBY5WLB//p8GHg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=fo986BRF0RghVELnBcV+TS44QDETAqMW7r6hqOkOQoTDjWfCOboFY3GZ6aZPNiAcjt/O43HZ8V6/tx0RyfUXD4C68e5Mxd0D9X/owwUEv0JWK3Z4QF1rRVkQGRsYWY2Dcca5TkqgT1GKRwqnZB9ABv55+jVZagf4Y0TeYRD+TmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FbdN1Z1f; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hr6kICOH"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6dbdcfd39so9238831276.2
-        for <llvm@lists.linux.dev>; Mon, 04 Mar 2024 10:11:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FbdN1Z1f"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1dc4f385c16so47421715ad.1
+        for <llvm@lists.linux.dev>; Mon, 04 Mar 2024 10:11:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709575909; x=1710180709; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4kLD90+hXSvFb0+fALtfseiTDbKyQ30y8gjmVqCojkg=;
-        b=hr6kICOHjcZAflCbCY6eUYELbHP9ty1rZlOUgt8uTplquI4oZcLwf8vW3jgtaBrtam
-         V0DhJpafbaJ7BoW1jbJKUOGvCFSkeAZRGKcaZcK33ZSFBo4XJ6MkoSEvrJHAQnkM+wMl
-         I/e2Rq7OMGSjuAOR02T/0Ad3+IR7Q1N+Aq5lS+C2Xzsa1lXpu5HkkHDN2zl16AoAtQHz
-         az8CXROgzIhk2DWe1iua7U9oLydRUHpZqnBsNnsJ26VMSBm4yQg8HEBDINYXRNdJqj0x
-         HH1VFj+HOzKu8i0KzWWJ8mecgK/QXSG3ff6NjAULK8KvASC0U78bGY6JkqWK8D9miFx4
-         gg9w==
+        d=google.com; s=20230601; t=1709575912; x=1710180712; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LIR4tpXfm1Zf9xB2dvSMHOKf+DsIJbzUCheSmbqVnZ4=;
+        b=FbdN1Z1fy79FYgIfYlW/LWWjqpg02c/aBqX43mb+FUUZOxp6slMn7Tu6gXjpGeppsP
+         vFmn0RvCYmU3i/NFsSrJtEB0s89/dfqUEOSCAYa0BaB/gF+cCb60icnpBn/USdE3dcp6
+         tiAHYng5okLZOQtlIXuleF9GZkKL0mgby7CiJJl0ckHpEm4HPbvc3763vRNSbP1ANCwY
+         8gtvkjRbNdIo0YElN5do6F/yef656KAvputAO7zsK2lWMXCY1QEpS2j1O506qzdjBURO
+         f/MksPnaM68JBbXRNupdRwbao+pWhDW9RwAHkYpv9EbSXrWCMfVMuo6FVK1X99f2U4qw
+         Fjlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709575909; x=1710180709;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4kLD90+hXSvFb0+fALtfseiTDbKyQ30y8gjmVqCojkg=;
-        b=MbL+nN+7fELklZRiCL6mDg+5I4C7W72sl+IaMcuM4fai+Zjro0Ken5KCGyO4e4bX+J
-         cVacwaZEAj+eGDTFdLBCqT3RC/+BLYKomStiasTK8q5jEZCH5v7FUreRgDbbRXWUfT3M
-         KAI82H4zgD4cz98/irHk5Gc9MmGj6TVWcTiKqcHJsRb6ZIZEV8ypW0OQFMUcioMD/rjV
-         zxmkNOHK5qLU7YobTNiLOa/50pzG9WJX7wbU63oCqopENNk4UigvGyfYSXgoxZ92KhJe
-         lt/dfCq3yyDa3inRXQzNrtEhpClcRijfiCPCa+Q3SvTkEfS3UEJz6sXbBePuozdaBkuO
-         dm/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV4FGe9RnEPyxEKlaRg6UpwBYQoP2WdPO66sLgyZWEs2Y1kAXtzi/lDMcWFRgHd1zou9nKT30ZOSDalrfvHUmJ+ME346Q==
-X-Gm-Message-State: AOJu0YwM0JU7lM4pMUK1laEQCV02tdr99/HJDxmKNSSe0XXWuj2fYnH6
-	HoAm8F8CV/Xy+YCcLMUb/WVvQ2BiOpitvOt4ryEwcFkzuimUJXcH1kzy1SaZ3Lyj/yjJ5N9ChuS
-	rsw==
-X-Google-Smtp-Source: AGHT+IHxwF/zU5cb5Vfvw5bR+wuloHPq0SidEq3LQN1W2vemc6jjWhYsFXPGqLxGNUu4w4mRsgdxwWFh/pQ=
+        d=1e100.net; s=20230601; t=1709575912; x=1710180712;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LIR4tpXfm1Zf9xB2dvSMHOKf+DsIJbzUCheSmbqVnZ4=;
+        b=oEuJzn9g0TVwkaipR0uo+kg+O8+YVzOQNbjXkayBz+mx2XgBrEjuhcMqc0WBlUh7SV
+         wdVrfMFr7h5xIHkTWR+KSXG7iptf+rCSz/5E/fZBChfR0qUx2DjZ4M+w4krpuFsP+4CN
+         Obuo8GUzxdfoqSh1UasOdGpfN+S/di9w6qoUudXOD5AvInnT+1V++dhjjSP+jFGKouoe
+         RzVqXuo8Q61ENXKTgpwz8ZMvwpuzf6UVoaDVD7Hy5Kvsd4IcYu/xu0g4H2uKvzPKpNso
+         wKvhjZjL6uSqNN/L/OoVHI6ZPpIfHDO9F3ipV62b/DL3woIakwAGqjeMul2rwzNddOHB
+         tkdw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3wNbLnQEzss5vP8bDN6JfRmPy9DctEEv3Z/i8flNHiTQs47slhVIA9bXBc+vudaWNLAaH266UCbbJhS+fF3/AP8tmhA==
+X-Gm-Message-State: AOJu0YzTNGKlkSif8LdNDenbPP1rvDwPJv9ubQIY8UlkBjSoc9efIJo1
+	sDkn8UMHEej69ksPXpzNMGJrXjPZmMOzsQdl9D/OF/LAAL1FCt/GbPZ63jbrrsP6LuM2S/QVK+I
+	u+w==
+X-Google-Smtp-Source: AGHT+IGIW0ufgJvmiSiJkJzOrk9GFG7bJv+6od4sTBFNYKROiEAkCjdjVmtZBIbw5QLdFBP3IxMZvCRuZms=
 X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a25:c786:0:b0:dc2:466a:23c4 with SMTP id
- w128-20020a25c786000000b00dc2466a23c4mr2575853ybe.4.1709575908874; Mon, 04
- Mar 2024 10:11:48 -0800 (PST)
-Date: Mon,  4 Mar 2024 18:11:31 +0000
+ (user=edliaw job=sendgmr) by 2002:a17:902:db02:b0:1dc:b7d2:453e with SMTP id
+ m2-20020a170902db0200b001dcb7d2453emr168006plx.0.1709575911467; Mon, 04 Mar
+ 2024 10:11:51 -0800 (PST)
+Date: Mon,  4 Mar 2024 18:11:32 +0000
+In-Reply-To: <20240304181140.644212-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20240304181140.644212-1-edliaw@google.com>
 X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240304181140.644212-1-edliaw@google.com>
-Subject: [PATCH v1 0/3] selftests/timers/posix_timers: various cleanups
+Message-ID: <20240304181140.644212-2-edliaw@google.com>
+Subject: [PATCH v1 1/3] selftests/timers/posix_timers: Make signal
+ distribution test less fragile
 From: Edward Liaw <edliaw@google.com>
 To: linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>, 
 	Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>, 
@@ -67,20 +71,127 @@ Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com,
 	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-I'm sending some patches that were orignally in
-https://lore.kernel.org/lkml/20230606132949.068951363@linutronix.de/
-to prevent the timer_distribution test from hanging and also fix some
-format inconsistencies.
+The signal distribution test has a tendency to hang for a long time as the
+signal delivery is not really evenly distributed.
 
-Edward Liaw (3):
-  selftests/timers/posix_timers: Make signal distribution test less
-    fragile
-  selftests/timers/posix_timers: Use TAP reporting format
-  selftests/timers/posix_timers: Use llabs for long long
+Increasing the timer interval to 10ms makes this less likely. Add a timeout
+to catch the case where it hangs and terminate the test gracefully.
 
- tools/testing/selftests/timers/posix_timers.c | 196 ++++++++----------
- 1 file changed, 89 insertions(+), 107 deletions(-)
+While at it get rid of the pointless atomic operation on a the thread local
+variable in the signal handler.
 
---
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+[edliaw: Rebase and fix checkpatch recommendations]
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/timers/posix_timers.c | 43 ++++++++++++-------
+ 1 file changed, 27 insertions(+), 16 deletions(-)
+
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index d49dd3ffd0d9..03779b6b3c20 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -24,7 +24,8 @@ static volatile int done;
+ /* Busy loop in userspace to elapse ITIMER_VIRTUAL */
+ static void user_loop(void)
+ {
+-	while (!done);
++	while (!done)
++		continue;
+ }
+ 
+ /*
+@@ -184,18 +185,19 @@ static int check_timer_create(int which)
+ 	return 0;
+ }
+ 
+-int remain;
+-__thread int got_signal;
++static int remain;
++static __thread int got_signal;
+ 
+ static void *distribution_thread(void *arg)
+ {
+-	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++	while (__atomic_load_n(&remain, __ATOMIC_RELAXED) && !done)
++		continue;
+ 	return NULL;
+ }
+ 
+ static void distribution_handler(int nr)
+ {
+-	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
++	if (++got_signal == 1)
+ 		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
+ }
+ 
+@@ -205,17 +207,19 @@ static void distribution_handler(int nr)
+  */
+ static int check_timer_distribution(void)
+ {
+-	int err, i;
+-	timer_t id;
+ 	const int nthreads = 10;
+ 	pthread_t threads[nthreads];
+ 	struct itimerspec val = {
+ 		.it_value.tv_sec = 0,
+-		.it_value.tv_nsec = 1000 * 1000,
++		.it_value.tv_nsec = 20 * 1000 * 1000,
+ 		.it_interval.tv_sec = 0,
+-		.it_interval.tv_nsec = 1000 * 1000,
++		.it_interval.tv_nsec = 20 * 1000 * 1000,
+ 	};
++	time_t start, now;
++	int err, i;
++	timer_t id;
+ 
++	done = 0;
+ 	remain = nthreads + 1;  /* worker threads + this thread */
+ 	signal(SIGALRM, distribution_handler);
+ 	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
+@@ -240,7 +244,18 @@ static int check_timer_distribution(void)
+ 	}
+ 
+ 	/* Wait for all threads to receive the signal. */
+-	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++	now = start = time(NULL);
++	while (__atomic_load_n(&remain, __ATOMIC_RELAXED)) {
++		now = time(NULL);
++		if (now - start > 5)
++			break;
++	}
++	done = 1;
++
++	if (timer_delete(id)) {
++		ksft_perror("Can't delete timer\n");
++		return -1;
++	}
+ 
+ 	for (i = 0; i < nthreads; i++) {
+ 		err = pthread_join(threads[i], NULL);
+@@ -251,12 +266,8 @@ static int check_timer_distribution(void)
+ 		}
+ 	}
+ 
+-	if (timer_delete(id)) {
+-		ksft_perror("Can't delete timer");
+-		return -1;
+-	}
++	ksft_test_result((now - start <= 5), "%s\n", __func__);
+ 
+-	ksft_test_result_pass("check_timer_distribution\n");
+ 	return 0;
+ }
+ 
+@@ -265,7 +276,7 @@ int main(int argc, char **argv)
+ 	ksft_print_header();
+ 	ksft_set_plan(6);
+ 
+-	ksft_print_msg("Testing posix timers. False negative may happen on CPU execution \n");
++	ksft_print_msg("Testing posix timers. False negative may happen on CPU execution\n");
+ 	ksft_print_msg("based timers if other threads run on the CPU...\n");
+ 
+ 	if (check_itimer(ITIMER_VIRTUAL) < 0)
+-- 
 2.44.0.rc1.240.g4c46232300-goog
 
