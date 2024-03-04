@@ -1,193 +1,266 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B94210F2
-	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 01:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B80217E9;
+	Mon,  4 Mar 2024 01:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709515279; cv=none; b=UEd3wjm7Jpbr88RabTI0xh1Ccu2Y4Q4Lt4roIaKVDv8kyjVcqjAi02yR1qswxqwpO6B1rYshec5Pm9pSYgxtiBjr3UIvutitaIo6OCNbP4x7yEnpwVqCdi9++4YVEs4sF9iEkaoTsfgb6QH1MT1DHXG1oOsAIjGSUio1cxFMhfA=
+	t=1709515660; cv=none; b=tOZbLju5swFSUHY9iJTMH1GsioKoWdbzmqO7LABEnO/f+CNDK5ePRZKc0gSQfM1vjFiiwCWk0HqvYcDg6vb/7WoeHrqt09X4vrfB9i9Jb9bv+/J/YoVt8QcC6hFNDm6zTyKWGeLjNxOyqIXisfEgKvcz9Q5eZkDy0eiCYd4+rk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709515279; c=relaxed/simple;
-	bh=c3JyhYekyt8bBDifCtxQwuiwVaYjbBS0RlJ4DHhTu3U=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QXe2xslQZYhXyFe8zhiRgKreGja36RCHfOZfJ99A6b6FLaY9g1yz8pMDuYGaxcMykJMiRLklHgygRoGUB0o6tN4VYYUJWXBNyGQ63npu7XWcsbcvqSGAFp/HIf+IoqXMKo1Cxcn0QcaxkCWl6fBQUkRURktJXoCzLhLBzsV0i6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QJ7KZcSx; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709515660; c=relaxed/simple;
+	bh=0q26ncL5TG6jVVgDr3Je51b0MMBosiL7vsYphsVjxjw=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pH+WQR4naMiO0XtCYhplYJrtz/ne5TKc66Zyav5j8r9igQMjoQJ4L4eAZ2QpuwSXWje7/uGVlD5u6GniXgdKsVH5+WuIdMHp09oOJVdRa8TlNYRKcAIgDsmP3zE5UNyORjj57rmWChazEJGtV/v8wpZyTYXzgK/QSiZhwrjAqDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gwtx38uv; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QJ7KZcSx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709515274;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mqI9l5DchlDkai/zVN3u7vCXMg3sBpqFOvMqiov0l1Q=;
-	b=QJ7KZcSxug9xWg+e5rhdhMxGW5bMOAMqlTgoWSQ/8jZ5XfJqm6fJ8sWqsrBwE61CQb6vkf
-	uH6YNVZDgBu0uTHyApA9VC3aMN2ynQrwCZ/LTfqAvShWvY0XqAdLcG+b1bLWCbIFv40jyW
-	1Dfj6sm0DA1rR/d0HNo5fUB6Cxdbjyk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-650-Z1a6FPkIO7WS_JpCBm2wgQ-1; Sun, 03 Mar 2024 20:21:13 -0500
-X-MC-Unique: Z1a6FPkIO7WS_JpCBm2wgQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 531FC1064DA2
-	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 01:21:13 +0000 (UTC)
-Received: from [172.64.4.41] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 06601492BE2;
-	Mon,  4 Mar 2024 01:21:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.8.0-rc6, mainline.kernel.org-clang, e4f79000)
-Date: Mon, 04 Mar 2024 01:21:12 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gwtx38uv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709515659; x=1741051659;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=0q26ncL5TG6jVVgDr3Je51b0MMBosiL7vsYphsVjxjw=;
+  b=gwtx38uvs6/BEFLSrECZ+bHzMxAPrMRa6HywgWE1ekwaKYS17R59SFAi
+   yGH86nIDeOTzDAnnDL/ijj/jPybE6vQ14ncQ1P1lgWDvmJ/hCvvrMBPVL
+   HNG/Bn40a3HyHoTSkBd0L99vHoZDeU9nniIbOxpvWULRQlaDyzDh3CTlN
+   lM3Ig/ym4AkvAns0/E+u0+NXjQdXXbFu8uw9DdFHTb0eEbTjRB1gd2LBq
+   voMPfRPZbxCyToFQayZGd02yro0S2y02iok2zs8dPind/0tyHqVTcwsWn
+   pTgGUypwmd9rol0g1PZTYG+xa2AHu5C6UvHM26p99out4XiZIGR8B9B51
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="4115236"
+X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
+   d="scan'208";a="4115236"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 17:27:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
+   d="scan'208";a="9014293"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 03 Mar 2024 17:27:36 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rgx78-0002F9-1o;
+	Mon, 04 Mar 2024 01:27:34 +0000
+Date: Mon, 4 Mar 2024 09:26:41 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: fs/bcachefs/btree_write_buffer.c:262:26: warning: bitwise operation
+ between different enumeration types ('enum bch_watermark' and 'enum
+ bch_trans_commit_flags')
+Message-ID: <202403040934.34jM6TvV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <33103.124030320211300650@us-mta-650.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+CC: linux-kernel@vger.kernel.org
+TO: Kent Overstreet <kent.overstreet@linux.dev>
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   90d35da658da8cff0d4ecbb5113f5fac9d00eb72
+commit: 183bcc89b855c412bfefa545b799006d66f689a6 bcachefs: Clean up btree write buffer write ref handling
+date:   9 weeks ago
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240304/202403040934.34jM6TvV-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403040934.34jM6TvV-lkp@intel.com/reproduce)
 
-Tested-by: CKI Project <cki-project@redhat.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403040934.34jM6TvV-lkp@intel.com/
 
-Kernel information:
-    Commit message: Merge tag 'powerpc-6.8-5' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/powerpc/linux
+All warnings (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/132540
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
+   In file included from fs/bcachefs/btree_write_buffer.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/powerpc/include/asm/cacheflush.h:7:
+   In file included from include/linux/mm.h:2177:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/bcachefs/btree_write_buffer.c:262:26: warning: bitwise operation between different enumeration types ('enum bch_watermark' and 'enum bch_trans_commit_flags') [-Wenum-enum-conversion]
+     262 |                                 BCH_WATERMARK_reclaim|
+         |                                 ~~~~~~~~~~~~~~~~~~~~~^
+     263 |                                 BCH_TRANS_COMMIT_no_check_rw|
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/btree_update.h:138:23: note: expanded from macro 'commit_do'
+     138 |                                         (_journal_seq), (_flags)))
+         |                                                          ^~~~~~
+   fs/bcachefs/btree_iter.h:679:12: note: expanded from macro 'lockrestart_do'
+     679 |                 _ret2 = (_do);                                          \
+         |                          ^~~
+   6 warnings generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
+vim +262 fs/bcachefs/btree_write_buffer.c
 
+   139	
+   140	int __bch2_btree_write_buffer_flush(struct btree_trans *trans, bool locked)
+   141	{
+   142		struct bch_fs *c = trans->c;
+   143		struct journal *j = &c->journal;
+   144		struct btree_write_buffer *wb = &c->btree_write_buffer;
+   145		struct journal_entry_pin pin;
+   146		struct btree_write_buffered_key *i, *keys;
+   147		struct btree_iter iter = { NULL };
+   148		size_t nr = 0, skipped = 0, fast = 0, slowpath = 0;
+   149		bool write_locked = false;
+   150		union btree_write_buffer_state s;
+   151		int ret = 0;
+   152	
+   153		memset(&pin, 0, sizeof(pin));
+   154	
+   155		if (!locked && !mutex_trylock(&wb->flush_lock))
+   156			return 0;
+   157	
+   158		bch2_journal_pin_copy(j, &pin, &wb->journal_pin,
+   159				      bch2_btree_write_buffer_journal_flush);
+   160		bch2_journal_pin_drop(j, &wb->journal_pin);
+   161	
+   162		s = btree_write_buffer_switch(wb);
+   163		keys = wb->keys[s.idx];
+   164		nr = s.nr;
+   165	
+   166		if (race_fault())
+   167			goto slowpath;
+   168	
+   169		/*
+   170		 * We first sort so that we can detect and skip redundant updates, and
+   171		 * then we attempt to flush in sorted btree order, as this is most
+   172		 * efficient.
+   173		 *
+   174		 * However, since we're not flushing in the order they appear in the
+   175		 * journal we won't be able to drop our journal pin until everything is
+   176		 * flushed - which means this could deadlock the journal if we weren't
+   177		 * passing BCH_TRANS_COMMIT_journal_reclaim. This causes the update to fail
+   178		 * if it would block taking a journal reservation.
+   179		 *
+   180		 * If that happens, simply skip the key so we can optimistically insert
+   181		 * as many keys as possible in the fast path.
+   182		 */
+   183		sort(keys, nr, sizeof(keys[0]),
+   184		     btree_write_buffered_key_cmp, NULL);
+   185	
+   186		for (i = keys; i < keys + nr; i++) {
+   187			if (i + 1 < keys + nr &&
+   188			    i[0].btree == i[1].btree &&
+   189			    bpos_eq(i[0].k.k.p, i[1].k.k.p)) {
+   190				skipped++;
+   191				i->journal_seq = 0;
+   192				continue;
+   193			}
+   194	
+   195			if (write_locked &&
+   196			    (iter.path->btree_id != i->btree ||
+   197			     bpos_gt(i->k.k.p, iter.path->l[0].b->key.k.p))) {
+   198				bch2_btree_node_unlock_write(trans, iter.path, iter.path->l[0].b);
+   199				write_locked = false;
+   200			}
+   201	
+   202			if (!iter.path || iter.path->btree_id != i->btree) {
+   203				bch2_trans_iter_exit(trans, &iter);
+   204				bch2_trans_iter_init(trans, &iter, i->btree, i->k.k.p,
+   205						     BTREE_ITER_INTENT|BTREE_ITER_ALL_SNAPSHOTS);
+   206			}
+   207	
+   208			bch2_btree_iter_set_pos(&iter, i->k.k.p);
+   209			iter.path->preserve = false;
+   210	
+   211			do {
+   212				ret = bch2_btree_write_buffer_flush_one(trans, &iter, i, 0,
+   213									&write_locked, &fast);
+   214				if (!write_locked)
+   215					bch2_trans_begin(trans);
+   216			} while (bch2_err_matches(ret, BCH_ERR_transaction_restart));
+   217	
+   218			if (ret == -BCH_ERR_journal_reclaim_would_deadlock) {
+   219				slowpath++;
+   220				continue;
+   221			}
+   222			if (ret)
+   223				break;
+   224	
+   225			i->journal_seq = 0;
+   226		}
+   227	
+   228		if (write_locked)
+   229			bch2_btree_node_unlock_write(trans, iter.path, iter.path->l[0].b);
+   230		bch2_trans_iter_exit(trans, &iter);
+   231	
+   232		trace_write_buffer_flush(trans, nr, skipped, fast, wb->size);
+   233	
+   234		if (slowpath)
+   235			goto slowpath;
+   236	
+   237		bch2_fs_fatal_err_on(ret, c, "%s: insert error %s", __func__, bch2_err_str(ret));
+   238	out:
+   239		bch2_journal_pin_drop(j, &pin);
+   240		mutex_unlock(&wb->flush_lock);
+   241		return ret;
+   242	slowpath:
+   243		trace_and_count(c, write_buffer_flush_slowpath, trans, slowpath, nr);
+   244	
+   245		/*
+   246		 * Now sort the rest by journal seq and bump the journal pin as we go.
+   247		 * The slowpath zapped the seq of keys that were successfully flushed so
+   248		 * we can skip those here.
+   249		 */
+   250		sort(keys, nr, sizeof(keys[0]),
+   251		     btree_write_buffered_journal_cmp,
+   252		     NULL);
+   253	
+   254		for (i = keys; i < keys + nr; i++) {
+   255			if (!i->journal_seq)
+   256				continue;
+   257	
+   258			bch2_journal_pin_update(j, i->journal_seq, &pin,
+   259				      bch2_btree_write_buffer_journal_flush);
+   260	
+   261			ret = commit_do(trans, NULL, NULL,
+ > 262					BCH_WATERMARK_reclaim|
+   263					BCH_TRANS_COMMIT_no_check_rw|
+   264					BCH_TRANS_COMMIT_no_enospc|
+   265					BCH_TRANS_COMMIT_no_journal_res|
+   266					BCH_TRANS_COMMIT_journal_reclaim,
+   267					btree_write_buffered_insert(trans, i));
+   268			if (bch2_fs_fatal_err_on(ret, c, "%s: insert error %s", __func__, bch2_err_str(ret)))
+   269				break;
+   270		}
+   271	
+   272		goto out;
+   273	}
+   274	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
