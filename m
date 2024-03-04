@@ -1,376 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC381DFC6;
-	Sun,  3 Mar 2024 22:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B94210F2
+	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 01:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709506587; cv=none; b=ua8sJY3OxsXgUBYXeot7Ri5IQpOHyogDiTIz3QCceiZUhC+zz477QNTfgHgXc7oced6j5ApzhvmJuCTHhZ+H9BpyCcaX+3PdfAkhScBeKKe7is0LmKb8X2hvrNVZ/Bi94Q5KCTclXQ1W2g0zNuAE4OnyoaU6ILWHCZfN//OKW0Q=
+	t=1709515279; cv=none; b=UEd3wjm7Jpbr88RabTI0xh1Ccu2Y4Q4Lt4roIaKVDv8kyjVcqjAi02yR1qswxqwpO6B1rYshec5Pm9pSYgxtiBjr3UIvutitaIo6OCNbP4x7yEnpwVqCdi9++4YVEs4sF9iEkaoTsfgb6QH1MT1DHXG1oOsAIjGSUio1cxFMhfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709506587; c=relaxed/simple;
-	bh=kSLt4h/GbkmQHjLADq6EU92fkgOQTutJY4Qu6S1Krpg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oUr31pHpcoBPFqz0KEruJz87Pnh9dt+Cfd/RX5+hxuDzDPeBeGEXvJzKraq0y1XmDu1R2wAY3lKGYFShAler1cq6rMTvnctyQcFb+t0Am57uftj2crk35apbyAuOsOb/yiyJBZ3nnfq7VTiS65h84VAz+n5epPpXjkSlyOhTV4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mH3VMfKm; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709515279; c=relaxed/simple;
+	bh=c3JyhYekyt8bBDifCtxQwuiwVaYjbBS0RlJ4DHhTu3U=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QXe2xslQZYhXyFe8zhiRgKreGja36RCHfOZfJ99A6b6FLaY9g1yz8pMDuYGaxcMykJMiRLklHgygRoGUB0o6tN4VYYUJWXBNyGQ63npu7XWcsbcvqSGAFp/HIf+IoqXMKo1Cxcn0QcaxkCWl6fBQUkRURktJXoCzLhLBzsV0i6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QJ7KZcSx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mH3VMfKm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709506585; x=1741042585;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kSLt4h/GbkmQHjLADq6EU92fkgOQTutJY4Qu6S1Krpg=;
-  b=mH3VMfKmzwRSLHF0RowqQfY7nQT2vgHokX1B5fL1TB6IASkGy9PBujTK
-   gJj+KJZ/ENHovvc8UuHgH/B8gz+nkptj7bjb1e2j4LxIPBzNQHZ5f/bHP
-   AMkUoCajZpGThunB4K8V23KsbudTChj2JTY1oA5FfvbHPIu7Qr/vcnT8X
-   3ap5ZwF6DgN5YHmKQqT6JEkL+bWj8d8kh1wxu+esPCxLM8EZzy/xN/QRL
-   QNWgPFFwfekIKqiZbouNUjm+5JhPj59f9caXuBD4SIQVZDSUmEqGYe5PB
-   tCA+3XzBL4v8MbTCBuhocO5Yq6n9ITKudtGRd1iSNWTiOTle+9XhwOk5r
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="7756389"
-X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="7756389"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2024 14:56:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,201,1705392000"; 
-   d="scan'208";a="31958628"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Mar 2024 14:56:19 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rgukj-0002A0-23;
-	Sun, 03 Mar 2024 22:56:17 +0000
-Date: Mon, 4 Mar 2024 06:55:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Canfeng Zhuang <quic_czhuang@quicinc.com>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Canfeng Zhuang <quic_czhuang@quicinc.com>
-Subject: Re: [PATCH 1/2] misc: qualcomm: QRC driver for Robotic SDK MCU
-Message-ID: <202403040603.Dtb2fV1b-lkp@intel.com>
-References: <20240304-qcom_qrc-v1-1-2a709f95fd61@quicinc.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QJ7KZcSx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709515274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=mqI9l5DchlDkai/zVN3u7vCXMg3sBpqFOvMqiov0l1Q=;
+	b=QJ7KZcSxug9xWg+e5rhdhMxGW5bMOAMqlTgoWSQ/8jZ5XfJqm6fJ8sWqsrBwE61CQb6vkf
+	uH6YNVZDgBu0uTHyApA9VC3aMN2ynQrwCZ/LTfqAvShWvY0XqAdLcG+b1bLWCbIFv40jyW
+	1Dfj6sm0DA1rR/d0HNo5fUB6Cxdbjyk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-650-Z1a6FPkIO7WS_JpCBm2wgQ-1; Sun, 03 Mar 2024 20:21:13 -0500
+X-MC-Unique: Z1a6FPkIO7WS_JpCBm2wgQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 531FC1064DA2
+	for <llvm@lists.linux.dev>; Mon,  4 Mar 2024 01:21:13 +0000 (UTC)
+Received: from [172.64.4.41] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 06601492BE2;
+	Mon,  4 Mar 2024 01:21:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0-rc6, mainline.kernel.org-clang, e4f79000)
+Date: Mon, 04 Mar 2024 01:21:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240304-qcom_qrc-v1-1-2a709f95fd61@quicinc.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <33103.124030320211300650@us-mta-650.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Canfeng,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on 805d849d7c3cc1f38efefd48b2480d62b7b5dcb7]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Canfeng-Zhuang/misc-qualcomm-QRC-driver-for-Robotic-SDK-MCU/20240304-005601
-base:   805d849d7c3cc1f38efefd48b2480d62b7b5dcb7
-patch link:    https://lore.kernel.org/r/20240304-qcom_qrc-v1-1-2a709f95fd61%40quicinc.com
-patch subject: [PATCH 1/2] misc: qualcomm: QRC driver for Robotic SDK MCU
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240304/202403040603.Dtb2fV1b-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240304/202403040603.Dtb2fV1b-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'powerpc-6.8-5' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/powerpc/linux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403040603.Dtb2fV1b-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/132540
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
 
-   In file included from drivers/misc/qrc/qrc_uart.c:10:
-   In file included from include/linux/serdev.h:10:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/misc/qrc/qrc_uart.c:10:
-   In file included from include/linux/serdev.h:10:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/misc/qrc/qrc_uart.c:10:
-   In file included from include/linux/serdev.h:10:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/misc/qrc/qrc_uart.c:13:
-   In file included from drivers/misc/qrc/qrc_core.h:14:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/misc/qrc/qrc_uart.c:203:61: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     203 |                 dev_err(dev->dev, "qrcuart transmit date overflow %ld\n", data_length);
-         |                                                                   ~~~     ^~~~~~~~~~~
-         |                                                                   %zu
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   8 warnings generated.
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
 
 
-vim +203 drivers/misc/qrc/qrc_uart.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-  > 13	#include "qrc_core.h"
-    14	
-    15	#define QRC_RX_FIFO_SIZE 0x400
-    16	#define QRC_TX_BUFF_SIZE 0x400
-    17	#define QRCUART_DRV_NAME "qrcuart"
-    18	#define QRC_DRV_VERSION "0.1.0"
-    19	
-    20	static int qrcuart_setup(struct qrc_dev *dev);
-    21	
-    22	static int
-    23	qrc_uart_receive(struct serdev_device *serdev, const unsigned char *data,
-    24			 size_t count)
-    25	{
-    26		struct qrcuart *qrc = serdev_device_get_drvdata(serdev);
-    27		struct qrc_dev *qrc_dev = qrc->qrc_dev;
-    28		int ret;
-    29	
-    30		/* check count */
-    31		ret = kfifo_avail(&qrc->qrc_rx_fifo);
-    32		if (!ret)
-    33			return 0;
-    34	
-    35		if (count > ret)
-    36			count = ret;
-    37	
-    38		ret = kfifo_in(&qrc->qrc_rx_fifo, data, count);
-    39		if (!ret)
-    40			return 0;
-    41	
-    42		wake_up_interruptible(&qrc_dev->r_wait);
-    43	
-    44		return count;
-    45	}
-    46	
-    47	/* Write out any remaining transmit buffer. Scheduled when tty is writable */
-    48	static void qrcuart_transmit(struct work_struct *work)
-    49	{
-    50		struct qrcuart *qrc = container_of(work, struct qrcuart, tx_work);
-    51		int written;
-    52	
-    53		spin_lock_bh(&qrc->lock);
-    54	
-    55		if (qrc->tx_left <= 0) {
-    56			/* Now serial buffer is almost free & we can start
-    57			 * transmission of another packet
-    58			 */
-    59			spin_unlock_bh(&qrc->lock);
-    60			return;
-    61		}
-    62	
-    63		written = serdev_device_write_buf(qrc->serdev, qrc->tx_head,
-    64						  qrc->tx_left);
-    65		if (written > 0) {
-    66			qrc->tx_left -= written;
-    67			qrc->tx_head += written;
-    68		}
-    69		spin_unlock_bh(&qrc->lock);
-    70	}
-    71	
-    72	/* Called by the driver when there's room for more data.
-    73	 * Schedule the transmit.
-    74	 */
-    75	static void qrc_uart_wakeup(struct serdev_device *serdev)
-    76	{
-    77		struct qrcuart *qrc = serdev_device_get_drvdata(serdev);
-    78	
-    79		schedule_work(&qrc->tx_work);
-    80	}
-    81	
-    82	static struct serdev_device_ops qrc_serdev_ops = {
-    83		.receive_buf = qrc_uart_receive,
-    84		.write_wakeup = qrc_uart_wakeup,
-    85	};
-    86	
-    87	/*----------------Interface to QRC core -----------------------------*/
-    88	
-    89	static int qrcuart_open(struct qrc_dev *dev)
-    90	{
-    91		struct qrcuart *qrc = qrc_get_data(dev);
-    92		struct serdev_device *serdev = qrc->serdev;
-    93		int ret;
-    94	
-    95		if (!qrc->is_open) {
-    96			ret = serdev_device_open(serdev);
-    97			if (ret) {
-    98				dev_err(dev->dev, "qrcuart :Unable to open device\n");
-    99				return ret;
-   100			}
-   101			serdev_device_set_baudrate(serdev, 115200);
-   102			serdev_device_set_flow_control(serdev, false);
-   103			qrc->is_open = true;
-   104		}
-   105	
-   106		return 0;
-   107	}
-   108	
-   109	static int qrcuart_close(struct qrc_dev *dev)
-   110	{
-   111		struct qrcuart *qrc = qrc_get_data(dev);
-   112		struct serdev_device *serdev = qrc->serdev;
-   113	
-   114		flush_work(&qrc->tx_work);
-   115		spin_lock_bh(&qrc->lock);
-   116		qrc->tx_left = 0;
-   117		spin_unlock_bh(&qrc->lock);
-   118	
-   119		if (qrc->is_open) {
-   120			serdev_device_close(serdev);
-   121			qrc->is_open = false;
-   122		}
-   123	
-   124		return 0;
-   125	}
-   126	
-   127	static int qrcuart_init(struct qrc_dev *dev)
-   128	{
-   129		struct qrcuart *qrc = qrc_get_data(dev);
-   130		size_t len;
-   131		int ret;
-   132	
-   133		/* Finish setting up the device info. */
-   134		len = QRC_TX_BUFF_SIZE;
-   135		qrc->tx_buffer = devm_kmalloc(&qrc->serdev->dev, len, GFP_KERNEL);
-   136	
-   137		if (!qrc->tx_buffer)
-   138			return -ENOMEM;
-   139	
-   140		qrc->tx_head = qrc->tx_buffer;
-   141		qrc->tx_left = 0;
-   142	
-   143		ret = kfifo_alloc(&qrc->qrc_rx_fifo, QRC_RX_FIFO_SIZE,
-   144				  GFP_KERNEL);
-   145		if (ret)
-   146			return -ENOMEM;
-   147	
-   148		return 0;
-   149	}
-   150	
-   151	static void qrcuart_uninit(struct qrc_dev *dev)
-   152	{
-   153		struct qrcuart *qrc = qrc_get_data(dev);
-   154	
-   155		kfifo_free(&qrc->qrc_rx_fifo);
-   156	}
-   157	
-   158	/*put data from kfifo to qrc fifo */
-   159	static int qrcuart_receive(struct qrc_dev *dev, char __user *buf,
-   160				   size_t count)
-   161	{
-   162		struct qrcuart *qrc = qrc_get_data(dev);
-   163		u32 fifo_len, trans_len;
-   164	
-   165		if (!kfifo_is_empty(&qrc->qrc_rx_fifo)) {
-   166			fifo_len = kfifo_len(&qrc->qrc_rx_fifo);
-   167			if (count > fifo_len)
-   168				count = fifo_len;
-   169			if (kfifo_to_user(&qrc->qrc_rx_fifo,
-   170					  (void *)buf, count, &trans_len))
-   171				return -EFAULT;
-   172			return trans_len;
-   173		}
-   174		return 0;
-   175	}
-   176	
-   177	static int qrcuart_data_status(struct qrc_dev *dev)
-   178	{
-   179		struct qrcuart *qrc = qrc_get_data(dev);
-   180	
-   181		return kfifo_len(&qrc->qrc_rx_fifo);
-   182	}
-   183	
-   184	static void qrcuart_data_clean(struct qrc_dev *dev)
-   185	{
-   186		struct qrcuart *qrc = qrc_get_data(dev);
-   187	
-   188		kfifo_reset(&qrc->qrc_rx_fifo);
-   189	}
-   190	
-   191	static enum qrcdev_tx qrcuart_xmit(const char __user  *buf,
-   192					   size_t data_length, struct qrc_dev *dev)
-   193	{
-   194		struct qrcuart *qrc = qrc_get_data(dev);
-   195		struct qrc_device_stats *n_stats = &dev->stats;
-   196		size_t written;
-   197		u8 *pos;
-   198	
-   199		WARN_ON(qrc->tx_left);
-   200	
-   201		pos = qrc->tx_buffer + qrc->tx_left;
-   202		if ((data_length + qrc->tx_left) > QRC_TX_BUFF_SIZE) {
- > 203			dev_err(dev->dev, "qrcuart transmit date overflow %ld\n", data_length);
-   204			return __QRCDEV_TX_MIN;
-   205		}
-   206	
-   207		if (copy_from_user(pos, buf, data_length))
-   208			return __QRCDEV_TX_MIN;
-   209	
-   210		pos += data_length;
-   211	
-   212		spin_lock(&qrc->lock);
-   213	
-   214		written = serdev_device_write_buf(qrc->serdev, qrc->tx_buffer,
-   215						  pos - qrc->tx_buffer);
-   216		if (written > 0) {
-   217			qrc->tx_left = (pos - qrc->tx_buffer) - written;
-   218			qrc->tx_head = qrc->tx_buffer + written;
-   219			n_stats->tx_bytes += written;
-   220		}
-   221	
-   222		spin_unlock(&qrc->lock);
-   223	
-   224		return QRCDEV_TX_OK;
-   225	}
-   226	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
