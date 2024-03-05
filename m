@@ -1,81 +1,149 @@
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfout6-smtp.messagingengine.com (wfout6-smtp.messagingengine.com [64.147.123.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED1910949
-	for <llvm@lists.linux.dev>; Tue,  5 Mar 2024 20:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0C012CD85;
+	Tue,  5 Mar 2024 21:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709670065; cv=none; b=GyFNsSqYNc6Q93I4oEtCxmH+JVgW3sVe2Nfu6z4F/D1y8BeBAogohRdYoZlm1rte1VUDnegdkREdOQAqgfxsyV8BLb6nfjqQmQZixvadcXYv+d7Lp7tNtGkFH/aK6a5Huk/SyXpgMuWwaG8SomIJvnpiTcAxZBfAitJ/DxL+KLA=
+	t=1709675598; cv=none; b=dTwOkGu8e+PmvSpBxEmCjzBDEwHgIxFQdVgvaxnd6pQ1Cinl+LkLzA2An76MEMxgHx6wWTy/eXy8lZiuTyvZnCmAUYRn8AQL1LPO6wIKOgQkEferCEsI9NJSCo5BsZ9rDJy0RN1idKmmPA9Rzt7zAuieQTPb/lfoIQZB7uv3bfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709670065; c=relaxed/simple;
-	bh=6/AYUfzDqzkrxKkZjplJh9OD3V2IdKBUYScD8zp5YJg=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=V/iCzzHiUmzFlRlSHViWJOY73J0RnOheFfQ2yzHzbO4lXGyK23OJeTNJNHUfWb4cNCp9jvMqdeB2TpUGt3z3Pbpa7IpsenqGKD1ZtQ2o/BHA4arkPidbxmTJVNRjEOrEZChWa42j0Erz/sbeChwUwr0OcPj91pzaY6QiDq/s0/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-365bde344ebso69511185ab.0
-        for <llvm@lists.linux.dev>; Tue, 05 Mar 2024 12:21:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709670062; x=1710274862;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yUtUYHZsCEOa7X6Z+H+o0TaVUl7jsvxTuXTfFKtx4Og=;
-        b=DEWdjYfXKMa3Xzt8JJ25wARVPRkne0yeBzcFvdp4r9Hu1uJfmuSAbaN9Sgt6Oa6Nz+
-         grA6d44J3BrjDcVqNo1SvxqjUngLteh4T6wYlzKmTWHpxNa/VFbH1qFmp398uXM1zO20
-         N/xWxtQQY1lOGAHYZlScHoP8iVQdkqWUvlthTnBnvpuIn1vmtEBNz22XwK5dXZGnT7rY
-         JRUTLX5PlDa7LMFGkxnSPZbV3jQdNtLm9gsI2BUr/wM2WahpnWaxm9CsBkxx35tP9JGT
-         7079R9TLZLthIzYal1nzSg2Ypt+yeld+Qh/w0WNKTqU4DUtjCr7wMAbBQW8GHTB15b11
-         JD8A==
-X-Forwarded-Encrypted: i=1; AJvYcCWHTZK8MTbKEk0vy75hdmyV5pZDluoDojUNkBpT8Hgl6iNypxitl13QA4NyUPGNdIu3rlD2avqmpWJD7cSeQ7vi7RhSRg==
-X-Gm-Message-State: AOJu0YxzYQFfW+GKM2bbYcJYS4L3Hh6wcK1Bja98XtIriwEKZ41P3nlU
-	14yG74VAvGe80/ih7TT3WmVzk9vwgl1GY/f1oqDv0ykvIaRtD2oEMnXivYnHwDjR9CUOJNA9vCb
-	K+irJu0uIg6CjkAbbmE/WEDmboKTcx2sB0JHZZPhXFDLIGVhtQaD7eFw=
-X-Google-Smtp-Source: AGHT+IG0HrTjf9tSzpW5mhEYahI6I+CdKvynp0WSCF6pQbzs6aTIrDo95uQZixM6D1ufLCf+gnTifAlBvx8apq0D07TCgFJ6wpLj
+	s=arc-20240116; t=1709675598; c=relaxed/simple;
+	bh=w69YwNhhJUWrKvltEutpZXr1WsKvyjIHwp0BdHZURa4=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=nhe/t/OOo8DDuhI2nB1Q6FgvUB0agcol8yXjr9d9GTnGSDrV2TCWjM+qPKhfKRQJS05gbmfbCSOjn361HKYv5thKzZJSMveRyGN7twnXysdlc97x/S0aOZQM+rt3Q+2Vl0+j7i++RafkCvNF0Q/i7ApikWZG/qng6HmahI9JXPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kBCfIsc1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PGmqYldx; arc=none smtp.client-ip=64.147.123.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kBCfIsc1";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PGmqYldx"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.west.internal (Postfix) with ESMTP id C3C751C00087;
+	Tue,  5 Mar 2024 16:53:15 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 05 Mar 2024 16:53:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1709675595;
+	 x=1709761995; bh=QNEfkKLf+YoFMOvLOLaHBOHhoGsBFLnvQ4LA5YChDe8=; b=
+	kBCfIsc13o0inkSJN6s2rCCZXlGtZUy85CUt4VWoUMzRnosFKOqxHm4IaDnxJToM
+	+io8+RDJVMkqJLa0KZqiPoOeZ7d6Lm1yz9S777ouuGXBmiUkkVuV6Id+g2/FtdNq
+	b0/ro4rgslsftvSoPwLsoEoOt6ijY2ja4ts9Ta3F4XtR1ONVx85xl4Zj9niW5MLd
+	Dn6eSAoi3ooaI5X4Fgmj0dWwYUOr6lOgBEohlVGZ8DwK24YaJDpwVH9LZkRJrx8v
+	GR4mRa9gnFL32RZGP0GorrSyaJu64TXpa+y517eFq7JmAPI3oEjJKRRnEVMI64cP
+	rPxXmjCMQ5pCUDWhoNZ/lw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1709675595; x=
+	1709761995; bh=QNEfkKLf+YoFMOvLOLaHBOHhoGsBFLnvQ4LA5YChDe8=; b=P
+	GmqYldxrcCLZebRG8Vo3qC6IDi4t/zGYIEFtqJEMvDNnIC9VBkBGGTEFkyu7dHOL
+	vMkiJpIp0iBIEXL5aIU0RHsnepdPMk6RJ8e8kjeNvhhAQ1PcVoJsayCpf9iEKeAj
+	8jJYR99p6QF99qL8JqAIfKGI5VCqPGHgJL71i6IDbiWsAkpJSBdYVVyo1fULia/j
+	m7Fd4nO+MWVHxptn4/5oB1J0cMoiEiofYfUrb1Tn+XpdGAHt7UwiDp9Q1Cro7pxz
+	PjBNZoDWR7O6xemHkW6J2TJF1JexdH8O6jUmmsrFsow6QhvG9ezHeOodq+KWPaoM
+	voEVjTvKDwzL4iyYoatTQ==
+X-ME-Sender: <xms:SpTnZdv_DZhYWD2X8sI750_zGOOHPFz1jvfwKfL850W6xedWTO2P6w>
+    <xme:SpTnZWfOrmFSlUCfVRkJOZNgcVWMC9q5j929x0oAymJkLlGbQEfzL-3EBYB8hqN1O
+    2gmJi9QdhwtPU1dZWY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheelgdduhedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:SpTnZQzEMjXCFglOKvTUq5O22x49kx-sveEWFm8IKxqCwLmQh8Efhg>
+    <xmx:SpTnZUOts6r1M9eM2F0eb_gKBH8ni69laCfZKpSroFnzcADLT8vU2A>
+    <xmx:SpTnZd-7MiyVNAK78opOGnMi-ur4reLRre-blpeEBJJ5yPBisljBHw>
+    <xmx:S5TnZe0DzO9qODO5JCHeijulFefAapAWDeMSF-u9Z_qhrG9K13bGNXXa1HA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 6AD1BB6008F; Tue,  5 Mar 2024 16:53:14 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a92:6f0b:0:b0:365:fe09:6450 with SMTP id
- k11-20020a926f0b000000b00365fe096450mr104480ilc.4.1709670062725; Tue, 05 Mar
- 2024 12:21:02 -0800 (PST)
-Date: Tue, 05 Mar 2024 12:21:02 -0800
-In-Reply-To: <0000000000000424f205fcf9a132@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c5b2ae0612ef94a9@google.com>
-Subject: Re: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in ntfs_iget
-From: syzbot <syzbot+4768a8f039aa677897d0@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, anton@tuxera.com, 
-	axboe@kernel.dk, brauner@kernel.org, ghandatmanas@gmail.com, 
-	gregkh@linuxfoundation.org, jack@suse.cz, linkinjeon@kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net, 
-	lkp@intel.com, llvm@lists.linux.dev, ntfs3@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, syzkaller-bugs@googlegroups.com, 
-	syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <5b4fa755-571e-4a99-8614-ca0df1db1563@app.fastmail.com>
+In-Reply-To: <20240305193015.GA1173426@dev-arch.thelio-3990X>
+References: 
+ <20240305-disable-extra-clang-enum-warnings-v1-1-6a93ef3d35ff@kernel.org>
+ <57abd8e9-3177-4260-b423-38d5cdcda44e@app.fastmail.com>
+ <CAKwvOd=V_Qtd2pK8AKc6bv=zMPnAaCf08=QO74ckqH26A3sefA@mail.gmail.com>
+ <20240305193015.GA1173426@dev-arch.thelio-3990X>
+Date: Tue, 05 Mar 2024 22:52:54 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>
+Cc: "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nicolas Schier" <nicolas@fjasle.eu>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Yonghong Song" <yonghong.song@linux.dev>, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] kbuild: Disable two Clang specific enumeration warnings
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-syzbot suspects this issue was fixed by commit:
+On Tue, Mar 5, 2024, at 20:30, Nathan Chancellor wrote:
+> On Tue, Mar 05, 2024 at 10:52:16AM -0800, Nick Desaulniers wrote:
+>> On Tue, Mar 5, 2024 at 10:50=E2=80=AFAM Arnd Bergmann <arnd@arndb.de>=
+ wrote:
+>> >
+>> > On Tue, Mar 5, 2024, at 18:42, Nathan Chancellor wrote:
+>> > >
+>> > > As the warnings do not appear to have a high signal to noise rati=
+o and
+>> > > the source level silencing options are not sustainable, disable t=
+he
+>> > > warnings unconditionally, as they will be enabled with -Wenum-con=
+version
+>> > > and are supported in all versions of clang that can build the ker=
+nel.
+>> >
+>> > I took a look at a sample of warnings in an allmodconfig build
+>> > and found a number that need attention. I would much prefer to
+>> > leave these turned on at the W=3D1 level and only disable them
+>> > at the default warning level.
+>>=20
+>> Sounds like these new diagnostics are very noisy. 0day bot sends
+>> people reports at W=3D1. Perhaps W=3D2?
 
-commit 6f861765464f43a71462d52026fbddfc858239a5
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Nov 1 17:43:10 2023 +0000
+It feels like this is not a great reason for moving it to W=3D2
+instead of W=3D1, but W=3D2 is still better than always disabling
+it I think.
 
-    fs: Block writes to mounted block devices
+Specifically, the 0day bot warns for newly added W=3D1 warnings
+but not for preexisting ones, and I think there are other warnings
+at the W=3D1 level that are similarly noisy to this one.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12be09f2180000
-start commit:   afead42fdfca Merge tag 'perf-tools-fixes-for-v6.4-2-2023-0..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
-dashboard link: https://syzkaller.appspot.com/bug?extid=4768a8f039aa677897d0
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12da9bbd280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=174e8115280000
+> A number of subsystems test with W=3D1 as well and while opting into W=
+=3D1
+> means that you are potentially asking for new warnings across newer
+> compiler releases, a warning with this number of instances is going to
+> cause a lot of issues (I think of netdev for example).
 
-If the result looks correct, please mark the issue as fixed by replying with:
+I only see a handful of warnings in net (devlink, bpf) and
+drivers/net (ethernet/{3com,amd8111e,funeth,hns,idpf,jme,mlx4} and
+wireless/{iwlwifi,mt76,rtw88,rtw89}).=20
 
-#syz fix: fs: Block writes to mounted block devices
+These are also some of the ones that I think need a closer look.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> Fundamentally, I do not really care which avenue we take (either this
+> change or off by default, on at W=3D1), I am happy to do whatever.
+> Unfortunately, CONFIG_WERROR makes these decisions much more urgent
+> because it is either disable it and have other warnings creep in among=
+st
+> the sprawl of these warnings or leave it on and miss other errors for
+> the same reason.
+
+Agreed.
+
+       Arnd
