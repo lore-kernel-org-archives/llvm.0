@@ -1,145 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0C484A48;
-	Tue,  5 Mar 2024 13:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483EFBE4D;
+	Tue,  5 Mar 2024 17:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709645869; cv=none; b=YIqhS1cWrBmWf6Mh3sqF6vL7CB5OXsgZDGTToc1Zo9XVyE2wenbwXqPoaUAMqqY9Trtgt6qaFcNqh2ZOum993mA7poVfUzKU8P2AipU/LMSdO2LzyCL/pj4Bj2SY50Zi02StkxnnNJx3fRH1OITPJ9/RKSWe5i0/why82AEAJHk=
+	t=1709660582; cv=none; b=Py5pTH9EZpejl1KvaR8BOjEi2eJ2Uy7N1wgRaI0meY4qEP2HyuBa5C8Oru0RhlquZe9hwkYX66Ysvq5wjW46K8EAaDdbtTeaolR+4lLtH5lH/mojvbN4hPzlAWqCsJGI2NleH4/yu8siaDRIfJ8Y2CjkvIHBYSo8HGFN7stPz0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709645869; c=relaxed/simple;
-	bh=ax/AzGyHbaXf9JUnZYDYcZScwOSIjDgnlEjR07TqFE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CxClHjV9eoahaMzteKDQfKkp32K4T9k0TZKgqJFY2A74IB5m8G3xp8MogQh891i2Nic4+rujNmiJ0ztTnA4Uk+atG0/67aLUiGEMucsbJFb7wBdd8zdVxak/m7zfCOT33nUaQxmSbyCpdLIF/hR0BvP6q4i1QD/TrCupJL0hfd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fjuq1jod; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709660582; c=relaxed/simple;
+	bh=oVW3xti/oddK+lHR7km/I+gcOqSZgwQguCcVLgi7iQ8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VPYzxGd0rqtPo1Oh0a/oWQYfpfbLQE71HfUbBKJd5K65wy6IlpwTdnqLUhozvV1FBV4Lh4co6u36kH/YyOsBBFzDyTYxjOAsyOuAOZR84V/6suRfqXa6PA/RC+i3bYsMg4hvPfVJSeblrXOKGkvehqcjS1jgQCrS6ajZ7RezNhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIRW9gzq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fjuq1jod"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709645867; x=1741181867;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ax/AzGyHbaXf9JUnZYDYcZScwOSIjDgnlEjR07TqFE0=;
-  b=Fjuq1jodADrJvEkxU5yeQvyzV9Lwl8cPef6jHR8WA46Khxo2/9Iqg3bA
-   BeNWV4U98QRAPVnOkIh3Edyu30PbokApfhLSTuy5PqhiokKKDbcENkT2H
-   YXMqQcuGBz1D8AzhBStTlruKLtPvMVbNzz7FXyVbi5QBSD6YrDxkqXnOz
-   Z4lY51opH8tEBAJlhcoiUJy4TMD6Pc50iqKTZTN8yVViVNO0oNBFSu5WQ
-   IUmUHIsaA6m4KiBZ9CG2i2gUzV9ZJqsQNBkuTK4oLNcfp8+v8lt1AM2Nn
-   G/KE2gheo45Wsgq87NNYmnipzJKoM5MUepaADDG1V9XOj4Dv5Yjryx1Ro
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="4076134"
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="4076134"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 05:37:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="9439917"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 05 Mar 2024 05:37:45 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rhUzF-0003KH-2g;
-	Tue, 05 Mar 2024 13:37:41 +0000
-Date: Tue, 5 Mar 2024 21:37:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chaitanya Kulkarni <kch@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>
-Subject: [leon-rdma:rdma-next 26/28] block/blk-merge.c:597:9: warning: format
- specifies type 'unsigned long long' but the argument has type 'dma_addr_t'
- (aka 'unsigned int')
-Message-ID: <202403052151.hPT88XvP-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kIRW9gzq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1771FC433C7;
+	Tue,  5 Mar 2024 17:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709660581;
+	bh=oVW3xti/oddK+lHR7km/I+gcOqSZgwQguCcVLgi7iQ8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=kIRW9gzq4jKNT7Z1GAadTz+GbpnBPW/O80H3suGrswIK7olLKDNd1QNDRBv1ACxfB
+	 Rw3OJlysQLqKOHivUsJvk38AcxhlQTl3TXlcJaAobh5tEUbFM5IT4QW1bYL0rLpMsZ
+	 +jFWB8bAQvcAlseJmAZllZBGADV0QbJ466ywkNs5NIvYugIs8qWK7A7osrt3HwYBex
+	 ZTPRIRML7oNYZjIbXeZpAmc8i9JFjrdzhEb4VSuw/+iXh5/w4UALAQyhgSF49jN8ai
+	 cZZO5mdJDEmSEUtMYGPb4SQM7zU51HdPL5U1TTKGWV3MjjwYoEJ66sNz96StQAb8Di
+	 luGol5SeEfwPA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 05 Mar 2024 10:42:50 -0700
+Subject: [PATCH] kbuild: Disable two Clang specific enumeration warnings
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240305-disable-extra-clang-enum-warnings-v1-1-6a93ef3d35ff@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJlZ52UC/x2NywqDMBAAf0X23IWoKWJ/pfQQk41dsGvZ9QXiv
+ zf0ODDMnGCkTAaP6gSljY1nKVDfKojvICMhp8LQuMa71nlMbGGYCOlYNGCcioMk6wf3oMIyGg7
+ 53vnYxb7PCUrnq5T5+D+er+v6ARre46NzAAAA
+To: masahiroy@kernel.org
+Cc: nicolas@fjasle.eu, ndesaulniers@google.com, morbo@google.com, 
+ justinstitt@google.com, arnd@arndb.de, yonghong.song@linux.dev, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3911; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=oVW3xti/oddK+lHR7km/I+gcOqSZgwQguCcVLgi7iQ8=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKnPI5c0rNBNXppi3vty7mbjafkHuCbLxD2p/76SV3qn1
+ erDy/Yu6ChlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATcZjAyNAzzUX+dsCjVZuU
+ I3+p9nEEHTcv3H9F7O6loH5RlqikybYM/10DD7Il7pXoscg8ymbS0/jaterLYbFyzeQKc8OCIG8
+ bFgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   9a1309977ab77599d5c66aa6a77b5b308f4f4379
-commit: d6bc00edad972dc9c214c239e8d253c7ba370a4a [26/28] block: add dma_link_range() based API
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240305/202403052151.hPT88XvP-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240305/202403052151.hPT88XvP-lkp@intel.com/reproduce)
+Clang enables -Wenum-enum-conversion and -Wenum-compare-conditional
+under -Wenum-conversion. A recent change in Clang strengthened these
+warnings and they appear frequently in common builds, primarily due to
+several instances in common headers but there are quite a few drivers
+that have individual instances as well.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403052151.hPT88XvP-lkp@intel.com/
+  include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+    508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+        |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+    509 |                            item];
+        |                            ~~~~
 
-All warnings (new ones prefixed by >>):
+  drivers/net/wireless/intel/iwlwifi/mvm/mac-ctxt.c:955:24: warning: conditional expression between different enumeration types ('enum iwl_mac_beacon_flags' and 'enum iwl_mac_beacon_flags_v1') [-Wenum-compare-conditional]
+    955 |                 flags |= is_new_rate ? IWL_MAC_BEACON_CCK
+        |                                      ^ ~~~~~~~~~~~~~~~~~~
+    956 |                           : IWL_MAC_BEACON_CCK_V1;
+        |                             ~~~~~~~~~~~~~~~~~~~~~
+  drivers/net/wireless/intel/iwlwifi/mvm/mac-ctxt.c:1120:21: warning: conditional expression between different enumeration types ('enum iwl_mac_beacon_flags' and 'enum iwl_mac_beacon_flags_v1') [-Wenum-compare-conditional]
+   1120 |                                                0) > 10 ?
+        |                                                        ^
+   1121 |                         IWL_MAC_BEACON_FILS :
+        |                         ~~~~~~~~~~~~~~~~~~~
+   1122 |                         IWL_MAC_BEACON_FILS_V1;
+        |                         ~~~~~~~~~~~~~~~~~~~~~~
 
-   In file included from block/blk-merge.c:7:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> block/blk-merge.c:597:9: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     596 |                 pr_err("dma_mapping_err %d dma_addr 0x%llx dma_offset %llu\n",
-         |                                                       ~~~~
-         |                                                       %x
-     597 |                         ret, dma_addr, dma_offset);
-         |                              ^~~~~~~~
-   include/linux/printk.h:498:33: note: expanded from macro 'pr_err'
-     498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   block/blk-merge.c:597:19: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-     596 |                 pr_err("dma_mapping_err %d dma_addr 0x%llx dma_offset %llu\n",
-         |                                                                       ~~~~
-         |                                                                       %u
-     597 |                         ret, dma_addr, dma_offset);
-         |                                        ^~~~~~~~~~
-   include/linux/printk.h:498:33: note: expanded from macro 'pr_err'
-     498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-     455 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   3 warnings generated.
+While doing arithmetic with different types of enums may be potentially
+problematic, inspecting several instances of the warning does not reveal
+any obvious problems. To silence the warnings at the source level, an
+integral cast must be added to each mismatched enum (which is incredibly
+ugly when done frequently) or the value must moved out of the enum to a
+macro, which can remove the type safety offered by enums in other
+places, such as assignments that would trigger -Wenum-conversion.
 
+As the warnings do not appear to have a high signal to noise ratio and
+the source level silencing options are not sustainable, disable the
+warnings unconditionally, as they will be enabled with -Wenum-conversion
+and are supported in all versions of clang that can build the kernel.
 
-vim +597 block/blk-merge.c
+Cc: stable@vger.kernel.org
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2002
+Link: https://github.com/llvm/llvm-project/commit/8c2ae42b3e1c6aa7c18f873edcebff7c0b45a37e
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/Makefile.extrawarn | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-   585	
-   586	static dma_addr_t blk_dma_link_page(struct page *page, unsigned int page_offset,
-   587					    struct dma_iova_attrs *iova,
-   588					    dma_addr_t dma_offset)
-   589	{
-   590		dma_addr_t dma_addr;
-   591		int ret;
-   592	
-   593		dma_addr = dma_link_range(page, page_offset, iova, dma_offset);
-   594		ret = dma_mapping_error(iova->dev, dma_addr);
-   595		if (ret) {
-   596			pr_err("dma_mapping_err %d dma_addr 0x%llx dma_offset %llu\n",
- > 597				ret, dma_addr, dma_offset);
-   598			/* better way ? */
-   599			dma_addr = 0;
-   600		}
-   601		return dma_addr;
-   602	}
-   603	
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index a9e552a1e910..6053aa22b8f5 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -81,6 +81,14 @@ KBUILD_CFLAGS += $(call cc-option,-Werror=designated-init)
+ 
+ # Warn if there is an enum types mismatch
+ KBUILD_CFLAGS += $(call cc-option,-Wenum-conversion)
++ifdef CONFIG_CC_IS_CLANG
++# Clang enables these extra warnings under -Wenum-conversion but the kernel
++# performs arithmetic using or has conditionals returning enums of different
++# types in several different places, which is rarely a bug in the kernel's
++# case, so disable the warnings.
++KBUILD_CFLAGS += -Wno-enum-compare-conditional
++KBUILD_CFLAGS += -Wno-enum-enum-conversion
++endif
+ 
+ #
+ # W=1 - warnings which may be relevant and do not occur too often
 
+---
+base-commit: 90d35da658da8cff0d4ecbb5113f5fac9d00eb72
+change-id: 20240304-disable-extra-clang-enum-warnings-bf574c7c99fd
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
